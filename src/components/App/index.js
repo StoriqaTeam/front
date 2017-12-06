@@ -1,17 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './index.css';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
-const App = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Welcome to React</h1>
-    </header>
-    <p className="App-intro">
-      To get started, edit <code>src/App.js</code> and save to reload.
-    </p>
-  </div>
-);
+// import logo from './logo.svg';
+// import './index.css';
+
+class App extends PureComponent {
+  static defaultProps = {
+    someData: 'test',
+  };
+
+  render() {
+    const { someData } = this.props;
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1 className="App-title">Welcome to React</h1>
+        </header>
+        <p className="App-intro">{someData}</p>
+      </div>
+    );
+  }
+}
+
+App.propTypes = {
+  someData: PropTypes.string,
+};
+
 
 export default App;

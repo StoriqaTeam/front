@@ -1,22 +1,34 @@
+import createInitialBrowserRouter from 'found/lib/createInitialBrowserRouter';
+import createRender from 'found/lib/createRender';
+import makeRouteConfig from 'found/lib/makeRouteConfig';
+import Route from 'found/lib/Route';
 import React from 'react';
 import ReactDOM from 'react-dom';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { AppContainer } from 'react-hot-loader';
 
-import './index.css';
-import AppRouter from './routes';
+// import './index.css';
 
-import registerServiceWorker from './registerServiceWorker';
+import App from './components/App';
 
-const render = (Component) => {
+(async () => {
+  const BrowserRouter = await createInitialBrowserRouter({
+    routeConfig: makeRouteConfig((
+      <Route path="/">
+        <Route Component={App} />
+        <Route path="/info" render={() => <div>Some useful info.</div>} />
+        <Route path="/login" render={() => <div>Login here.</div>} />
+      </Route>
+    )),
+    render: createRender({
+      renderError: ({ error }) => ( // eslint-disable-line react/prop-types
+        <div>
+          {error.status === 404 ? 'Not found' : 'Error'}
+        </div>
+      ),
+    }),
+  });
+
   ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
+    <BrowserRouter />,
     document.getElementById('root'),
   );
-};
-
-render(AppRouter);
-
-registerServiceWorker();
+})();
