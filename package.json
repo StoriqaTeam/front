@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
     "express": "^4.16.2",
     "found": "^0.3.5",
+    "morgan": "^1.9.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -53,9 +56,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js && yarn build-server",
-    "build-server": "NODE_ENV=production babel --source-maps --out-dir build-lib src",
-    "server": "node ./build-lib/server.js",
+    "build": "node scripts/build.js",
+    "server": "NODE_ENV=production BABEL_ENV=$NODE_ENV babel-node ./server/index.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
@@ -90,13 +92,6 @@
       "web.jsx",
       "jsx",
       "node"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react",
-      "react-app"
     ]
   }
 }

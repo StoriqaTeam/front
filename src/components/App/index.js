@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-// import logo from './logo.svg';
 // import './index.css';
 
 class App extends PureComponent {
@@ -14,7 +13,7 @@ class App extends PureComponent {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Mainpage here</h1>
         </header>
         <p className="App-intro">{someData}</p>
       </div>
