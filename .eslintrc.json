@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "react-app",
     "airbnb"
@@ -7,5 +8,13 @@
     "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
     "jsx-a11y/href-no-hash": "off",
     "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {},
+      "node": {
+        "paths": ["src"]
+      }
+    }
   }
 }

@@ -3,5 +3,10 @@
     "es2015",
     "react",
     "react-app"
+  ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./src"]
+    }]
   ]
 }

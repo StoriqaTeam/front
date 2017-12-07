@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-// import './index.css';
-
 class App extends PureComponent {
   static defaultProps = {
     someData: 'test',
