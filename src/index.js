@@ -1,26 +1,35 @@
-import createInitialBrowserRouter from 'found/lib/createInitialBrowserRouter';
-import createRender from 'found/lib/createRender';
-import makeRouteConfig from 'found/lib/makeRouteConfig';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createProvider as createReduxProvider } from 'react-redux';
+import { resolver, getStoreRenderArgs } from 'found/lib';
+import { BrowserProtocol, Actions as FarceActions } from 'farce';
+
+import generateStore from 'redux/createReduxStore';
+import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 
 import './index.scss';
-import routes from './routes';
+
+// eslint-disable-next-line
+const store = generateStore(new BrowserProtocol());
+const matchContext = { store };
+store.dispatch(FarceActions.init());
+
+const ReduxProvider = createReduxProvider();
 
 (async () => {
-  const BrowserRouter = await createInitialBrowserRouter({
-    routeConfig: makeRouteConfig(routes),
-    render: createRender({
-      renderError: ({ error }) => ( // eslint-disable-line react/prop-types
-        <div>
-          {error.status === 404 ? 'Not found' : 'Error'}
-        </div>
-      ),
-    }),
+  const initialRenderArgs = await getStoreRenderArgs({
+    store,
+    matchContext,
+    resolver,
   });
-
   ReactDOM.render(
-    <BrowserRouter />,
+    <ReduxProvider store={store}>
+      <FoundConnectedRouter
+        matchContext={matchContext}
+        resolver={resolver}
+        initialRenderArgs={initialRenderArgs}
+      />
+    </ReduxProvider>,
     document.getElementById('root'),
   );
 })();

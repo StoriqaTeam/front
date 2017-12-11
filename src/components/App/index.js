@@ -1,27 +1,47 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { changeWithValue } from 'redux/reducers/dummy';
+import Button from 'components/Button';
 
 class App extends PureComponent {
   static defaultProps = {
-    someData: 'test',
+    inChanging: false,
   };
+  handleBtnClick = () => this.props.changeValue('asdf');
 
   render() {
-    const { someData } = this.props;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Mainpage here</h1>
         </header>
-        <p className="App-intro">{someData}</p>
+        {!this.props.inChanging && (
+          <Button
+            title="Press me"
+            onClick={this.handleBtnClick}
+          />
+        )}
       </div>
     );
   }
 }
 
 App.propTypes = {
-  someData: PropTypes.string,
+  inChanging: PropTypes.bool,
+  changeValue: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = state => ({
+  inChanging: state.dummy.inChanging,
+});
 
-export default App;
+const mapDispatchToProps = ({
+  changeValue: changeWithValue,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);

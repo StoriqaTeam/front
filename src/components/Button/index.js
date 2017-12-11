@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-const Button = ({ title }) => (
-  <button type="button">{title}</button>
-);
+class Button extends PureComponent {
+  static defaultProps = {
+    onClick: () => {},
+  };
+
+  render() {
+    const { title, onClick } = this.props;
+    return <button type="button" onClick={onClick}>{title}</button>;
+  }
+}
 
 Button.propTypes = {
   title: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default Button;
