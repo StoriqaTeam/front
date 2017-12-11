@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { createHistoryEnhancer, queryMiddleware } from 'farce/lib';
 import { createMatchEnhancer, Matcher, makeRouteConfig } from 'found/lib';
 
@@ -20,15 +20,29 @@ const makeReducersHotReloadable = (store) => {
 };
 
 const generateStore = (historyProtocol, initialState) => {
-  const composedEnhancers = compose(
+  const middlewares = [
+    thunk,
+  ];
+  if (process.env.NODE_ENV !== 'production') {
+    const logger = createLogger({ collapsed: true });
+    middlewares.push(logger);
+  }
+  let composedEnhancers = compose(
     createHistoryEnhancer({
       protocol: historyProtocol,
       middlewares: [queryMiddleware],
     }),
     createMatchEnhancer(new Matcher(makeRouteConfig(routes))),
-    applyMiddleware(thunk),
-    applyMiddleware(logger),
+    applyMiddleware(...middlewares),
   );
+  // eslint-disable-next-line
+  if (process.browser && window.__REDUX_DEVTOOLS_EXTENSION__) {
+    composedEnhancers = compose(
+      composedEnhancers,
+      // eslint-disable-next-line
+      window.__REDUX_DEVTOOLS_EXTENSION__(),
+    );
+  }
 
   const reducers = createReducers();
   const store = createStore(
