@@ -19,7 +19,7 @@ const makeReducersHotReloadable = (store) => {
   });
 };
 
-const generateStore = (historyProtocol) => {
+const generateStore = (historyProtocol, initialState) => {
   const composedEnhancers = compose(
     createHistoryEnhancer({
       protocol: historyProtocol,
@@ -33,8 +33,9 @@ const generateStore = (historyProtocol) => {
   const reducers = createReducers();
   const store = createStore(
     reducers,
+    initialState,
     // eslint-disable-next-line
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     composedEnhancers,
   );
   makeReducersHotReloadable(store);

@@ -5,12 +5,16 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
-import { getFarceResult } from 'found/lib/server';
-import createRender from 'found/lib/createRender';
-import makeRouteConfig from 'found/lib/makeRouteConfig';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import routes from '../src/routes';
+import { Actions as FarceActions, ServerProtocol } from 'farce';
+import { getStoreRenderArgs, resolver, RedirectException } from 'found';
+import { RouterProvider } from 'found/lib/server';
+import createRender from 'found/lib/createRender';
+import serialize from 'serialize-javascript';
+import { Provider } from 'react-redux';
+
+import createReduxStore from 'redux/createReduxStore';
 
 var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
 var config;
@@ -26,6 +30,14 @@ try {
 require('babel-register')(config);
 
 const app = express();
+
+const render = createRender({
+  renderError: ({ error }) => ( // eslint-disable-line react/prop-types
+    <div>
+      {error.status === 404 ? 'Not found' : 'Error'}
+    </div>
+  ),
+});
 
 // Support Gzip
 app.use(compression());
@@ -45,32 +57,42 @@ app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 
 
 app.use('/', async (req, res) => {
   const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
-  const { redirect, status, element } = await getFarceResult({
-    url: req.url,
-    routeConfig: makeRouteConfig(routes),
-    render: createRender({
-      renderError: ({ error }) => ( // eslint-disable-line react/prop-types
-        <div>
-          {error.status === 404 ? 'Not found' : 'Error'}
-        </div>
-      ),
-    }),
-  });
+  const store = createReduxStore(new ServerProtocol(req.url));
+  store.dispatch(FarceActions.init());
+  const matchContext = { store };
+  let renderArgs;
+  try {
+    renderArgs = await getStoreRenderArgs({
+      store,
+      matchContext,
+      resolver,
+    });
+  } catch (e) {
+    if (e instanceof RedirectException) {
+      res.redirect(302, store.farce.createHref(e.location));
+      return;
+    }
+
+    throw e;
+  }
   fs.readFile(filePath, 'utf8', (err, htmlData) => {
     if (err) {
       console.error('read err', err);
       return res.status(404).end();
     }
-    if (redirect) {
-      res.redirect(302, redirect.url);
-      return;
-    }
 
-    const RenderedApp = htmlData.replace(
-      '<div id="root"></div>',
-      `<div id="root">${ReactDOMServer.renderToString(element)}</div>`,
-    );
-    res.status(status).send(RenderedApp);
+    const element = <Provider store={store}><RouterProvider router={renderArgs.router}>{render(renderArgs)}</RouterProvider></Provider>;
+    const renderedEl = ReactDOMServer.renderToString(element);
+    const RenderedApp = htmlData
+      .replace(
+        '<div id="root"></div>',
+        `<div id="root">${renderedEl}</div>`,
+      )
+      .replace(
+        '<script>window.__PRELOADED_STATE__=null</script>',
+        `<script>window.__PRELOADED_STATE__=${serialize(store.getState(), { isJSON: true })}</script>`
+      );
+    res.status(renderArgs.error ? renderArgs.error.status : 200).send(RenderedApp);
   });
 });
 
