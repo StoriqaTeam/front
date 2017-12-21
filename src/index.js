@@ -1,35 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createProvider as createReduxProvider } from 'react-redux';
-import { resolver, getStoreRenderArgs } from 'found/lib';
-import { BrowserProtocol, Actions as FarceActions } from 'farce';
+const fetchUser = () => Promise.resolve(`John`);
+const fetchItem = user => Promise.resolve(`${user} has ice cream`);
 
-import createReduxStore from 'redux/createReduxStore';
-import FoundConnectedRouter from 'routes/FoundConnectedRouter';
+function logItems() {
+  Promise.resolve()
+    .then(fetchUser)
+    .then(
+      user =>
+        new Promise((resolve, reject) => {
+          Promise.resolve(fetchItem(user))
+            .then(item => resolve([user, item]))
+            .catch(reject);
+        })
+    )
+    .then(([user, item]) => consoleё.log(`${user} has ${item}`))
+    .catch(error => console.error(error));
+}
 
-import './index.scss';
-
-// eslint-disable-next-line
-const store = createReduxStore(new BrowserProtocol(), window.__PRELOADED_STATE__ || {});
-const matchContext = { store };
-store.dispatch(FarceActions.init());
-
-const ReduxProvider = createReduxProvider();
-
-(async () => {
-  const initialRenderArgs = await getStoreRenderArgs({
-    store,
-    matchContext,
-    resolver,
-  });
-  ReactDOM.render(
-    <ReduxProvider store={store}>
-      <FoundConnectedRouter
-        matchContext={matchContext}
-        resolver={resolver}
-        initialRenderArgs={initialRenderArgs}
-      />
-    </ReduxProvider>,
-    document.getElementById('root'),
-  );
-})();
+logItems();
