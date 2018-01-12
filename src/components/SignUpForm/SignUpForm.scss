@@ -29,10 +29,18 @@
   padding: 16px 0;
 }
 
+.SignUpFormGoogleButton {
+  @include simple-button($background: #F7F7F7, $color: #505050);
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+}
+
 .signUpFormSignUp {
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .signUpFormPolicy {

@@ -15,6 +15,10 @@ class SignUpForm extends PureComponent {
    * @desc handles onClick event
    */
   handleClick = () => {};
+  /**
+   * @desc handles handleGoogleClick event
+   */
+  handleGoogleClick = () => {};
 
   render() {
     return (
@@ -23,6 +27,7 @@ class SignUpForm extends PureComponent {
         <input type="text" className="signUpFormInput" placeholder="Username" />
         <input type="email" className="signUpFormInput" placeholder="Email" />
         <input type="password" className="signUpFormInput" placeholder="Password" />
+        <Button buttonClass="SignUpFormGoogleButton" title="Sign up with google" onClick={this.handleGoogleClick} />
         <div className="signUpFormSignUp">
           <Button buttonClass="SignUpFormButton" title="Sign Up" onClick={this.handleClick} />
           <span className="signUpFormPolicy">{this.policy}</span>
