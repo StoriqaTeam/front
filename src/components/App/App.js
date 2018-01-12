@@ -3,13 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { changeWithValue } from 'redux/reducers/dummy';
-import { Button } from 'components/Button';
 import { SignUpForm } from 'components/SignUpForm';
 
 class App extends PureComponent {
-  static defaultProps = {
-    inChanging: false,
-  };
   handleBtnClick = () => this.props.changeValue('asdf');
 
   render() {
@@ -19,19 +15,12 @@ class App extends PureComponent {
           <h1 className="App-title">Mainpage here</h1>
         </header>
         <SignUpForm />
-        {!this.props.inChanging && (
-          <Button
-            title="Press me"
-            onClick={this.handleBtnClick}
-          />
-        )}
       </div>
     );
   }
 }
 
 App.propTypes = {
-  inChanging: PropTypes.bool,
   changeValue: PropTypes.func.isRequired,
 };
 

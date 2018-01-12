@@ -1,10 +1,20 @@
 import React, { PureComponent } from 'react';
+import { Button } from '../Button';
 
 class SignUpForm extends PureComponent {
+  /**
+   * @desc Storiqa's anti-span policy
+   * @type {String}
+   */
+  policy = 'By clicking this button, you agree to Storiqa’s Anti-spam Policy & Terms of Use.';
   /**
    * @desc handles onSubmit event
    */
   handleSubmit = () => {};
+  /**
+   * @desc handles onClick event
+   */
+  handleClick = () => {};
 
   render() {
     return (
@@ -13,7 +23,10 @@ class SignUpForm extends PureComponent {
         <input type="text" className="signUpFormInput" placeholder="Username" />
         <input type="email" className="signUpFormInput" placeholder="Email" />
         <input type="password" className="signUpFormInput" placeholder="Password" />
-        <button type="button">Sign Up</button>
+        <div className="signUpFormSignUp">
+          <Button title="Sign Up" onClick={this.handleClick} />
+          <span className="signUpFormPolicy">{this.policy}</span>
+        </div>
       </form>
     );
   }

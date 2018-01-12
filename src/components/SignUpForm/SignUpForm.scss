@@ -7,6 +7,7 @@
   h1 {
     color: #505050;
     font-size: 24px;
+    font-weight: normal;
     margin: 0 0 48px 0;
     text-align: left;
   }
@@ -18,5 +19,20 @@
   font-size: 14px;
   line-height: 24px;
   margin-bottom: 32px;
+  text-align: left;
+}
+
+.signUpFormSignUp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.signUpFormPolicy {
+  color: #505050;
+  font-size: 11px;
+  line-height: 16px;
+  max-width: 46%;
+  padding: 0 0 0 6px;
   text-align: left;
 }
