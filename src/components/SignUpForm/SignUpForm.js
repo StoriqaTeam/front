@@ -24,7 +24,7 @@ class SignUpForm extends PureComponent {
         <input type="email" className="signUpFormInput" placeholder="Email" />
         <input type="password" className="signUpFormInput" placeholder="Password" />
         <div className="signUpFormSignUp">
-          <Button title="Sign Up" onClick={this.handleClick} />
+          <Button buttonClass="SignUpFormButton" title="Sign Up" onClick={this.handleClick} />
           <span className="signUpFormPolicy">{this.policy}</span>
         </div>
       </form>

@@ -1,5 +1,5 @@
 .Button {
-  @include simple-button($background: #2FBAFD, $color: #ffffff);
+  @include simple-button;
   border-radius: 4px;
   font-size: 16px;
   padding: 16px 0;
