@@ -1,0 +1,22 @@
+.signUpForm {
+  background: #ffffff;
+  height: 408px;
+  padding: 32px;
+  width: 304px;
+
+  h1 {
+    color: #505050;
+    font-size: 24px;
+    margin: 0 0 48px 0;
+    text-align: left;
+  }
+
+}
+
+.signUpFormInput {
+  @include form-input;
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 32px;
+  text-align: left;
+}

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { changeWithValue } from 'redux/reducers/dummy';
 import { Button } from 'components/Button';
+import { SignUpForm } from 'components/SignUpForm';
 
 class App extends PureComponent {
   static defaultProps = {
@@ -17,6 +18,7 @@ class App extends PureComponent {
         <header className="App-header">
           <h1 className="App-title">Mainpage here</h1>
         </header>
+        <SignUpForm />
         {!this.props.inChanging && (
           <Button
             title="Press me"
