@@ -36,7 +36,7 @@
   line-height: 24px;
   text-align: left;
 
-  &:focus ~ .signUpFormLabel	{
+  &:focus ~ .signUpFormLabel {
     color: #A7A7A7;
     font-size: 14px;
     top: -20px;
@@ -44,19 +44,26 @@
 
 }
 
-.SignUpFormButton {
+.signUpFormButton {
   @include simple-button($background: #2FBAFD, $color: #ffffff);
   border-radius: 4px;
   font-size: 16px;
   padding: 16px 0;
 }
 
-.SignUpFormGoogleButton {
+.signUpFormGoogleButton {
   @include simple-button($background: #F7F7F7, $color: #505050);
   border-radius: 4px;
-  font-size: 12px;
-  margin-bottom: 24px;
-  padding: 16px 0;
+  font-size: 16px;
+  padding: 14px 0;
+}
+
+.signUpFormGoogleIcon {
+  height: 22px;
+  left: 16%;
+  position: absolute;
+  top: 12px;
+  width: 22px;
 }
 
 .signUpFormSignUp {

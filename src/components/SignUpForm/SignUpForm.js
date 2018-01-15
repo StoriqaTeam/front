@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button } from '../Button';
+import googleIcon from '../../assets/svg/google-icon.svg';
 
 class SignUpForm extends PureComponent {
   /**
@@ -36,9 +37,12 @@ class SignUpForm extends PureComponent {
           <input type="password" id="password" className="signUpFormInput" name="password" />
           <label className="signUpFormLabel" htmlFor="password">Password</label>
         </div>
-        <Button buttonClass="SignUpFormGoogleButton" title="Sign up with google" onClick={this.handleGoogleClick} />
+        <div className="signUpFormGroup">
+          <img className="signUpFormGoogleIcon" src={googleIcon} alt="google icon" />
+          <Button buttonClass="signUpFormGoogleButton" title="Sign up with google" onClick={this.handleGoogleClick} />
+        </div>
         <div className="signUpFormSignUp">
-          <Button buttonClass="SignUpFormButton" title="Sign Up" onClick={this.handleClick} />
+          <Button buttonClass="signUpFormButton" title="Sign Up" onClick={this.handleClick} />
           <span className="signUpFormPolicy">{this.policy}</span>
         </div>
       </form>
