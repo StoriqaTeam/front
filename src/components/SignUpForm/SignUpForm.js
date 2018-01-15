@@ -24,9 +24,18 @@ class SignUpForm extends PureComponent {
     return (
       <form className="signUpForm" onSubmit={this.handleSubmit}>
         <h1>Sign Up</h1>
-        <input type="text" className="signUpFormInput" placeholder="Username" />
-        <input type="email" className="signUpFormInput" placeholder="Email" />
-        <input type="password" className="signUpFormInput" placeholder="Password" />
+        <div className="signUpFormGroup">
+          <input type="text" id="username" className="signUpFormInput" name="username" />
+          <label className="signUpFormLabel" htmlFor="username">Username</label>
+        </div>
+        <div className="signUpFormGroup">
+          <input type="email" id="email" className="signUpFormInput" name="email" />
+          <label className="signUpFormLabel" htmlFor="email">Email</label>
+        </div>
+        <div className="signUpFormGroup">
+          <input type="password" id="password" className="signUpFormInput" name="password" />
+          <label className="signUpFormLabel" htmlFor="password">Password</label>
+        </div>
         <Button buttonClass="SignUpFormGoogleButton" title="Sign up with google" onClick={this.handleGoogleClick} />
         <div className="signUpFormSignUp">
           <Button buttonClass="SignUpFormButton" title="Sign Up" onClick={this.handleClick} />
