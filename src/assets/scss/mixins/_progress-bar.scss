@@ -1,0 +1,24 @@
+@mixin progress-bar($value: red, $background: #ffffff, $width: 100%, $height: 5px) {
+
+  &[value] {
+    /* Reset the default appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Get rid of default border in Firefox. */
+    border: none;
+
+    width: $width;
+    height: $height;
+  }
+
+  &[value]::-webkit-progress-bar {
+    background-color: $background;
+    border-radius: 2px;
+  }
+
+  &[value]::-webkit-progress-value {
+    background: $value;
+  }
+
+}

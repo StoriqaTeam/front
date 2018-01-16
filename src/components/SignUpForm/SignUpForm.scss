@@ -44,11 +44,24 @@
 
 }
 
+.signUpFormInputPassword {
+  @extend .signUpFormInput;
+
+  border-bottom: none;
+  &:focus {
+    border-bottom: none;
+  }
+}
+
 .signUpFormButton {
   @include simple-button($background: #2FBAFD, $color: #ffffff);
   border-radius: 4px;
   font-size: 16px;
   padding: 16px 0;
+  &:disabled {
+    background: #EFEFEF !important;
+    color: #FFFFFF !important;
+  }
 }
 
 .signUpFormGoogleButton {
@@ -79,4 +92,26 @@
   max-width: 46%;
   padding: 0 0 0 6px;
   text-align: left;
+}
+
+.signUpFormShowPassword {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  img {
+    height: 18px;
+  }
+
+  span {
+    color: #505050;
+    font-size: 14px;
+    position: relative;
+    right: -4px;
+    top: -4px;
+  }
+
 }

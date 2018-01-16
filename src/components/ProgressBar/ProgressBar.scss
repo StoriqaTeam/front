@@ -1,0 +1,46 @@
+$simpleColor: #FD7DAA;
+$goodColor: #EFAA29;
+$excellentColor: #9FC63C;
+$progressBarHeight: 1px;
+
+.progressBarWrapper {
+  height: $progressBarHeight;
+  position: relative;
+  top: -17px;
+}
+
+.progressBar {
+  @include progress-bar($value: #0D3349, $background: #E2E2E2, $height: $progressBarHeight);
+}
+
+.progressBar.simple {
+  @include progress-bar($value: $simpleColor, $background: #E2E2E2, $height: $progressBarHeight);
+}
+
+.progressBar.good {
+  @include progress-bar($value: $goodColor, $background: #E2E2E2, $height: $progressBarHeight);
+}
+
+.progressBar.excellent {
+  @include progress-bar($value: $excellentColor, $background: #E2E2E2, $height: $progressBarHeight);
+}
+
+.progressBarMessage {
+  font-size: 14px;
+  text-align: center;
+}
+
+.progressBarMessage.simple {
+  @extend .progressBarMessage;
+  color: $simpleColor;
+}
+
+.progressBarMessage.good {
+  @extend .progressBarMessage;
+  color: $goodColor;
+}
+
+.progressBarMessage.excellent {
+  @extend .progressBarMessage;
+  color: $excellentColor;
+}
