@@ -8,13 +8,21 @@ const fs = require('fs');
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Actions as FarceActions, ServerProtocol } from 'farce';
+import queryMiddleware from 'farce/lib/queryMiddleware';
 import { getStoreRenderArgs, resolver, RedirectException } from 'found';
-import { RouterProvider } from 'found/lib/server';
+import makeRouteConfig from 'found/lib/makeRouteConfig';
+import { RouterProvider, getFarceResult } from 'found/lib/server';
 import createRender from 'found/lib/createRender';
 import serialize from 'serialize-javascript';
 import { Provider } from 'react-redux';
+import webpack from 'webpack';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackConfig from '../config/webpack.config.dev';
 
 import createReduxStore from 'redux/createReduxStore';
+import { ServerFetcher } from 'relay/fetcher';
+import routes from 'routes';
+import createResolver from 'relay/createResolver';
 
 var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
 var config;
@@ -31,14 +39,6 @@ require('babel-register')(config);
 
 const app = express();
 
-const render = createRender({
-  renderError: ({ error }) => ( // eslint-disable-line react/prop-types
-    <div>
-      {error.status === 404 ? 'Not found' : 'Error'}
-    </div>
-  ),
-});
-
 // Support Gzip
 app.use(compression());
 
@@ -46,54 +46,97 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Setup logger
-const logger = morgan('combined');
-app.use(logger);
-
 // Serve static assets
-app.use('/static', express.static(path.resolve(__dirname, '..', 'build', 'static')));
+if (process.env.NODE_ENV === 'production') {
+  app.use('/static', express.static(path.resolve(__dirname, '..', 'build', 'static')));
+} else if (process.env.NODE_ENV === 'development') {
+  // Setup logger
+  const logger = morgan('combined');
+  app.use(logger);
+}
+
 app.use('/favicon.ico', express.static(path.resolve(__dirname, '..', 'build', 'favicon.ico')));
 app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 'manifest.json')));
 
-app.use('/', async (req, res) => {
-  const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
-  const store = createReduxStore(new ServerProtocol(req.url));
-  store.dispatch(FarceActions.init());
-  const matchContext = { store };
-  let renderArgs;
-  try {
-    renderArgs = await getStoreRenderArgs({
-      store,
-      matchContext,
-      resolver,
-    });
-  } catch (e) {
-    if (e instanceof RedirectException) {
-      res.redirect(302, store.farce.createHref(e.location));
-      return;
-    }
+if (process.env.NODE_ENV === 'development') {
+  app.use(
+    webpackMiddleware(webpack(webpackConfig), {
+      stats: { colors: true },
+    }),
+  );
+}
 
-    throw e;
-  }
-  fs.readFile(filePath, 'utf8', (err, htmlData) => {
-    if (err) {
-      console.error('read err', err);
-      return res.status(404).end();
-    }
-
-    const element = <Provider store={store}><RouterProvider router={renderArgs.router}>{render(renderArgs)}</RouterProvider></Provider>;
-    const renderedEl = ReactDOMServer.renderToString(element);
-    const RenderedApp = htmlData
-      .replace(
-        '<div id="root"></div>',
-        `<div id="root">${renderedEl}</div>`,
-      )
-      .replace(
-        '<script>window.__PRELOADED_STATE__=null</script>',
-        `<script>window.__PRELOADED_STATE__=${serialize(store.getState(), { isJSON: true })}</script>`
-      );
-    res.status(renderArgs.error ? renderArgs.error.status : 200).send(RenderedApp);
+app.use(async (req, res) => {
+  // const store = createReduxStore(new ServerProtocol(req.url));
+  // store.dispatch(FarceActions.init());
+  // const matchContext = { store };
+  // let renderArgs;
+  // try {
+  //   renderArgs = await getStoreRenderArgs({
+  //     store,
+  //     matchContext,
+  //     resolver,
+  //   });
+  // } catch (e) {
+  //   if (e instanceof RedirectException) {
+  //     res.redirect(302, store.farce.createHref(e.location));
+  //     return;
+  //   }
+  //
+  //   throw e;
+  // }
+  const fetcher = new ServerFetcher(process.env.REACT_APP_GRAPHQL_ENDPOINT);
+  const { redirect, status, element } = await getFarceResult({
+    url: req.url,
+    historyMiddlewares: [queryMiddleware],
+    routeConfig: makeRouteConfig(routes),
+    resolver: createResolver(fetcher),
+    render: createRender({}),
   });
+
+  if (redirect) {
+    res.redirect(302, redirect.url);
+    return;
+  }
+  if (process.env.NODE_ENV === 'development') {
+    res.status(status).send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+      </head>
+      <body>
+      <div id="root">${ReactDOMServer.renderToString(element)}</div>
+      <script>
+        window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
+      </script>
+      <script src="static/js/bundle.js"></script>
+      </body>  
+      </html>
+    `);
+  } else if (process.env.NODE_ENV === 'production') {
+    const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
+    fs.readFile(filePath, 'utf8', (err, htmlData) => {
+      if (err) {
+        console.error('read err', err);
+        return res.status(404).end();
+      }
+
+      const renderedEl = ReactDOMServer.renderToString(element);
+      const RenderedApp = htmlData
+        .replace(
+          '<div id="root"></div>',
+          `<div id="root">${renderedEl}</div>`,
+        )
+        .replace(
+          '<script>window.__RELAY_PAYLOADS__</script>',
+          `<script>window.__RELAY_PAYLOADS__=${serialize(fetcher, { isJSON: true })}</script>`
+        );
+      res.status(status).send(RenderedApp);
+    });
+  } else {
+    return res.status(404).end();
+  }
 });
 
 module.exports = app;
