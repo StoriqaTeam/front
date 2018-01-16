@@ -8,9 +8,7 @@ const fs = require('fs');
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Actions as FarceActions, ServerProtocol } from 'farce';
-import queryMiddleware from 'farce/lib/queryMiddleware';
 import { getStoreRenderArgs, resolver, RedirectException } from 'found';
-import makeRouteConfig from 'found/lib/makeRouteConfig';
 import { RouterProvider, getFarceResult } from 'found/lib/server';
 import createRender from 'found/lib/createRender';
 import serialize from 'serialize-javascript';
@@ -21,7 +19,6 @@ import webpackConfig from '../config/webpack.config.dev';
 
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
-import routes from 'routes';
 import createResolver from 'relay/createResolver';
 
 var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
@@ -67,39 +64,36 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(async (req, res) => {
-  // const store = createReduxStore(new ServerProtocol(req.url));
-  // store.dispatch(FarceActions.init());
-  // const matchContext = { store };
-  // let renderArgs;
-  // try {
-  //   renderArgs = await getStoreRenderArgs({
-  //     store,
-  //     matchContext,
-  //     resolver,
-  //   });
-  // } catch (e) {
-  //   if (e instanceof RedirectException) {
-  //     res.redirect(302, store.farce.createHref(e.location));
-  //     return;
-  //   }
-  //
-  //   throw e;
-  // }
+  const store = createReduxStore(new ServerProtocol(req.url));
   const fetcher = new ServerFetcher(process.env.REACT_APP_GRAPHQL_ENDPOINT);
-  const { redirect, status, element } = await getFarceResult({
-    url: req.url,
-    historyMiddlewares: [queryMiddleware],
-    routeConfig: makeRouteConfig(routes),
-    resolver: createResolver(fetcher),
-    render: createRender({}),
-  });
 
-  if (redirect) {
-    res.redirect(302, redirect.url);
-    return;
+  store.dispatch(FarceActions.init());
+
+  const matchContext = { store };
+
+  let renderArgs;
+  try {
+    renderArgs = await getStoreRenderArgs({
+      store,
+      matchContext,
+      resolver: createResolver(fetcher),
+    });
+  } catch (e) {
+    if (e instanceof RedirectException) {
+      res.redirect(302, store.farce.createHref(e.location));
+      return;
+    }
+    throw e;
   }
+  const element = (
+    <Provider store={store}>
+      <RouterProvider router={renderArgs.router}>
+        {createRender(renderArgs)}
+      </RouterProvider>
+    </Provider>
+  );
   if (process.env.NODE_ENV === 'development') {
-    res.status(status).send(`
+    res.status(renderArgs.error ? renderArgs.error.status : 200).send(`
       <!DOCTYPE html>
       <html>
       <head>
@@ -109,6 +103,7 @@ app.use(async (req, res) => {
       <div id="root">${ReactDOMServer.renderToString(element)}</div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
+        window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}
       </script>
       <script src="static/js/bundle.js"></script>
       </body>  
@@ -129,10 +124,14 @@ app.use(async (req, res) => {
           `<div id="root">${renderedEl}</div>`,
         )
         .replace(
-          '<script>window.__RELAY_PAYLOADS__</script>',
+          '<script>window.__RELAY_PAYLOADS__=null</script>',
           `<script>window.__RELAY_PAYLOADS__=${serialize(fetcher, { isJSON: true })}</script>`
+        )
+        .replace(
+          '<script>window.__PRELOADED_STATE__=null</script>',
+          `<script>window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}</script>`
         );
-      res.status(status).send(RenderedApp);
+      res.status(renderArgs.error ? renderArgs.error.status : 200).send(RenderedApp);
     });
   } else {
     return res.status(404).end();

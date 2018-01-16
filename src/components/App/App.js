@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
+import { changeWithValue } from 'redux/reducers/dummy';
 import { Button } from 'components/Button';
 
 class App extends PureComponent {
-  handleBtnClick = () => {};
+  handleBtnClick = () => this.props.changeValue('asdf');
 
   render() {
     return (
@@ -12,10 +14,12 @@ class App extends PureComponent {
         <header className="App-header">
           <h1 className="App-title">{`Mainpage here (${this.props.apiVersion})`}</h1>
         </header>
-        <Button
-          title="Press me"
-          onClick={this.handleBtnClick}
-        />
+        {!this.props.inChanging && (
+          <Button
+            title="Press me"
+            onClick={this.handleBtnClick}
+          />
+        )}
       </div>
     );
   }
@@ -23,10 +27,21 @@ class App extends PureComponent {
 
 App.defaultProps = {
   apiVersion: '',
+  inChanging: false,
 };
 
 App.propTypes = {
   apiVersion: PropTypes.string,
+  inChanging: PropTypes.bool,
+  changeValue: PropTypes.func.isRequired,
 };
 
-export default App;
+const mapStateToProps = state => ({
+  inChanging: state.dummy.inChanging,
+});
+
+const mapDispatchToProps = ({
+  changeValue: changeWithValue,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
