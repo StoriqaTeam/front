@@ -7,22 +7,16 @@
 
 **Запуск версии для разработки:**
 
-`yarn start`
+`yarn server:dev`
 
-*http://localhost:3000/*
-
----
-
-**Server-side-rendering версия:**
-
-`yarn build && yarn server`
+`yarn relay` (в отдельном терминале)
 
 *http://localhost:3003/*
 
 ---
 
-**Продакшн-билд:**
+**Продакшн-версия:**
 
-`yarn build`
+`yarn server:prod`
 
 ---

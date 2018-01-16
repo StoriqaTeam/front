@@ -77,13 +77,12 @@
     "farce": "^0.2.5"
   },
   "scripts": {
-    "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "server:prod": "yarn build && NODE_ENV=production BABEL_ENV=production babel-node ./server/index.js",
     "server:dev": "NODE_ENV=development BABEL_ENV=development babel-node ./server/index.js",
     "test": "node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "relay": "yarn updateSchema && relay-compiler --src ./src --schema ./src/relay/schema.json",
+    "relay": "yarn updateSchema && relay-compiler --src ./src --schema ./src/relay/schema.json --watch",
     "updateSchema": "BABEL_ENV=development NODE_ENV=development babel-node scripts/updateSchema.js"
   },
   "jest": {
