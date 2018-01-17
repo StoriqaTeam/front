@@ -6,16 +6,13 @@ import { changeWithValue } from 'redux/reducers/dummy';
 import { Button } from 'components/Button';
 
 class App extends PureComponent {
-  static defaultProps = {
-    inChanging: false,
-  };
   handleBtnClick = () => this.props.changeValue('asdf');
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Mainpage here</h1>
+          <h1 className="App-title">{`Mainpage here (${this.props.apiVersion})`}</h1>
         </header>
         {!this.props.inChanging && (
           <Button
@@ -28,7 +25,13 @@ class App extends PureComponent {
   }
 }
 
+App.defaultProps = {
+  apiVersion: '',
+  inChanging: false,
+};
+
 App.propTypes = {
+  apiVersion: PropTypes.string,
   inChanging: PropTypes.bool,
   changeValue: PropTypes.func.isRequired,
 };
@@ -41,7 +44,4 @@ const mapDispatchToProps = ({
   changeValue: changeWithValue,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,13 +1,28 @@
 import React from 'react';
 import { Route } from 'found';
+import { graphql } from 'react-relay';
 
 import { App } from 'components/App';
 
 const routes = (
-  <Route path="/">
-    <Route Component={App} />
-    <Route path="/info" render={() => <div>Some useful info.</div>} />
-    <Route path="/login" render={() => <div>Login here.</div>} />
+  <Route>
+    <Route
+      path="/"
+      Component={App}
+      query={graphql`
+        query routes_App_Query {
+          apiVersion
+        }
+      `}
+    />
+    <Route
+      path="/info"
+      render={() => <div>INFO</div>}
+    />
+    <Route
+      path="/login"
+      render={() => <div>Login here.</div>}
+    />
   </Route>
 );
 
