@@ -2,11 +2,14 @@
   "presets": [
     ["es2015", { "loose": true }],
     "react",
-    "react-app"
+    "react-app",
+    "flow"
   ],
   "plugins": [
     ["module-resolver", {
       "root": ["./src"]
-    }]
+    }],
+    ["relay", {"schema": "./src/relay/schema.json"}],
+    "inline-react-svg"
   ]
 }

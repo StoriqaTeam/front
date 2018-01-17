@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { changeWithValue } from 'redux/reducers/dummy';
-import { SignUpForm } from 'components/SignUpForm';
+import { Button } from 'components/Button';
 
 class App extends PureComponent {
   handleBtnClick = () => this.props.changeValue('asdf');
@@ -12,15 +12,27 @@ class App extends PureComponent {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Mainpage here</h1>
+          <h1 className="App-title">{`Mainpage here (${this.props.apiVersion})`}</h1>
         </header>
-        <SignUpForm />
+        {!this.props.inChanging && (
+          <Button
+            title="Press me"
+            onClick={this.handleBtnClick}
+          />
+        )}
       </div>
     );
   }
 }
 
+App.defaultProps = {
+  apiVersion: '',
+  inChanging: false,
+};
+
 App.propTypes = {
+  apiVersion: PropTypes.string,
+  inChanging: PropTypes.bool,
   changeValue: PropTypes.func.isRequired,
 };
 
@@ -32,7 +44,4 @@ const mapDispatchToProps = ({
   changeValue: changeWithValue,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
