@@ -1,0 +1,13 @@
+.signUpFormInput {
+  @include form-input;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: left;
+
+}
+
+.signUpFormInputLabelFloat {
+  color: #A7A7A7;
+  font-size: 14px;
+  top: -20px;
+}
