@@ -8,10 +8,6 @@ import { SignUpFormInput } from '../SignUpFormInput';
 
 class SignUpForm extends PureComponent {
   state = {
-    // username: '',
-    // email: '',
-    // password: '',
-    // formErrors: { username: '', email: '', password: '' },
     usernameValid: false,
     emailValid: false,
     passwordValid: false,
@@ -46,12 +42,6 @@ class SignUpForm extends PureComponent {
     this.setState({ formValid: usernameValid && emailValid && passwordValid });
   };
   /**
-   * @desc applies the corresponding error class
-   * @param {String} error
-   * @return {String}
-   */
-  errorClass = error => (error.length === 0 ? 'valid-input' : 'has-error');
-  /**
    * @desc handles onClick event
    */
   handleClick = () => {};
@@ -80,7 +70,6 @@ class SignUpForm extends PureComponent {
           <Button type="submit" buttonClass="signUpFormButton" title="Sign Up" onClick={this.handleSubmit} disabled={!this.state.formValid} />
           <span className="signUpFormPolicy">{this.policy}</span>
         </div>
-        <pre>{JSON.stringify(this.state, null, 2)}</pre>
       </form>
     );
   }

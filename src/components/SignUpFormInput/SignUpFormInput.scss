@@ -1,8 +1,14 @@
+$colorError: #FD7DAA;
+
 .signUpFormInput {
   @include form-input;
   font-size: 14px;
   line-height: 24px;
   text-align: left;
+
+  &.invalidInput {
+    border-bottom: 1px solid $colorError;
+  }
 
 }
 
@@ -10,4 +16,33 @@
   color: #A7A7A7;
   font-size: 14px;
   top: -20px;
+}
+
+.signUpFormInputMessage {
+  color: $colorError;
+  font-size: 13px;
+  text-align: center;
+}
+
+.signUpFormInputShowPassword {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  img {
+    height: 18px;
+  }
+
+  span {
+    color: #505050;
+    font-size: 14px;
+    position: relative;
+    right: -4px;
+    top: -4px;
+  }
+
 }

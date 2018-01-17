@@ -18,6 +18,7 @@ class SignUpFormInput extends PureComponent {
     validModel: false,
     showPassword: false,
     showPasswordButton: false,
+    formError: '',
     passwordQuality: {
       percentage: 0,
       message: '',
@@ -61,7 +62,7 @@ class SignUpFormInput extends PureComponent {
   validateField = (value) => {
     // const fieldValidationErrors = this.state.formErrors;
     // eslint-disable-next-line
-    let { validModel } = this.state;
+    let { validModel, formError } = this.state;
     const { validate } = this.props;
     switch (validate) {
       case 'text':
@@ -69,6 +70,9 @@ class SignUpFormInput extends PureComponent {
         break;
       case 'email':
         validModel = value.match(this.emailRegex);
+        formError = validModel ? '' : ' Invalid Email';
+        // fallback
+        formError = value === '' ? '' : formError;
         break;
       case 'password':
         validModel = value.length >= 3;
@@ -77,7 +81,7 @@ class SignUpFormInput extends PureComponent {
       default:
         break;
     }
-    this.props.onChange(validModel);
+    this.setState({ formError }, this.props.onChange(validModel));
   };
   /**
    * @desc show password to the user
@@ -108,6 +112,7 @@ class SignUpFormInput extends PureComponent {
       quality.message = 'Excellent';
       quality.qualityClass = 'excellent';
     }
+    // Fallback
     if (value.length === 0) {
       quality.percentage = 0;
       quality.message = '';
@@ -115,13 +120,24 @@ class SignUpFormInput extends PureComponent {
     }
     this.setState({ passwordQuality: quality });
   };
+  /**
+   * @desc applies the corresponding error class
+   * @param {String} error
+   * @return {String}
+   */
+  errorClass = error => (error.length === 0 ? '' : 'invalidInput');
   render() {
     const { name, type } = this.props;
-    const { labelFloat, showPassword, showPasswordButton } = this.state;
+    const {
+      labelFloat,
+      showPassword,
+      showPasswordButton,
+      formError,
+    } = this.state;
     // check only when the input is password to make it work when 'showPasswordButton' is enabled
     const isPassword = type === 'password' ? 'password' : type;
     const passwordButton = (
-      <button className="signUpFormShowPassword" onClick={this.handleShowPassword}>
+      <button className="signUpFormInputShowPassword" onClick={this.handleShowPassword}>
         <img src={eyeOpen} alt="show password" /> <span>Show</span>
       </button>
     );
@@ -140,14 +156,15 @@ class SignUpFormInput extends PureComponent {
       <span>
         <input
           type={showPassword ? 'text' : isPassword}
-          className="signUpFormInput"
+          className={`signUpFormInput ${this.errorClass(formError)}`}
           name={name}
           value={this.state.model}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}
         />
-        <label className={`signUpFormLabel ${labelFloat}`} htmlFor={name}>{name}</label>
+        <label className={`signUpFormLabel ${labelFloat}`} htmlFor={name}>{ name }</label>
+        <span className="signUpFormInputMessage">{ formError }</span>
         { showPasswordContent }
         { progressBarContent }
       </span>
