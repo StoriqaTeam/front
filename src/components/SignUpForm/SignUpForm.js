@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button } from '../Button';
-// import { ProgressBar } from '../ProgressBar';
 import googleIcon from '../../assets/svg/google-icon.svg';
-// import eyeOpen from '../../assets/svg/eye-open.svg';
 
 import { SignUpFormInput } from '../SignUpFormInput';
 

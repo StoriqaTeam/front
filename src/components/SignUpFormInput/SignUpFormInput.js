@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { ProgressBar } from '../ProgressBar';
 import eyeOpen from '../../assets/svg/eye-open.svg';
 
-
 class SignUpFormInput extends PureComponent {
   static defaultProps = {
     onChange: () => {},
@@ -26,12 +25,22 @@ class SignUpFormInput extends PureComponent {
       qualityClass: '',
     },
   };
+  /**
+   * @desc Handles the onChange event by setting the model's value
+   * @param {SyntheticEvent} evt
+   * @return {void}
+   */
   handleChange = (evt) => {
     const { value } = evt.target;
     this.setState({ model: value }, () => {
       this.validateField(value);
     });
   };
+  /**
+   * @desc make the label floats if the model isn't empty
+   * and toggles 'showPasswordButton'
+   * @return {void}
+   */
   handleFocus = () => {
     const { model, showPasswordButton } = this.state;
     if (model === '') {
@@ -41,6 +50,10 @@ class SignUpFormInput extends PureComponent {
       });
     }
   };
+  /**
+   * @desc Puts back the label to its original position if the model is empty
+   * @return {void}
+   */
   handleBlur = () => {
     const { model, showPasswordButton } = this.state;
     if (model === '') {
