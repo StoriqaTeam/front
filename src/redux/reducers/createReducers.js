@@ -5,7 +5,7 @@ import dummy from './dummy';
 
 const rootReducer = combineReducers({
   found,
-  dummy,
+  dummy, // example reducer
 });
 
 const createReducers = () => rootReducer;

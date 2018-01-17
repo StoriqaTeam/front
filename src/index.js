@@ -18,17 +18,16 @@ store.dispatch(FarceActions.init());
 
 const ReduxProvider = createReduxProvider();
 
-(async () => {
-  const fetcher = new ClientFetcher(
-    process.env.REACT_APP_GRAPHQL_ENDPOINT,
-    window.__RELAY_PAYLOADS__ || [], // eslint-disable-line no-underscore-dangle
-  );
-  const resolver = createResolver(fetcher);
-  const initialRenderArgs = await getStoreRenderArgs({
-    store,
-    matchContext,
-    resolver,
-  });
+const fetcher = new ClientFetcher(
+  process.env.REACT_APP_GRAPHQL_ENDPOINT,
+  window.__RELAY_PAYLOADS__ || [], // eslint-disable-line no-underscore-dangle
+);
+const resolver = createResolver(fetcher);
+getStoreRenderArgs({
+  store,
+  matchContext,
+  resolver,
+}).then((initialRenderArgs) => {
   ReactDOM.hydrate(
     <ReduxProvider store={store}>
       <FoundConnectedRouter
@@ -39,4 +38,5 @@ const ReduxProvider = createReduxProvider();
     </ReduxProvider>,
     document.getElementById('root'),
   );
-})();
+});
+
