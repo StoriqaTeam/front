@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Route } from 'found';
 import { graphql } from 'react-relay';

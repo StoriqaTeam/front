@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createProvider as createReduxProvider } from 'react-redux';
@@ -9,6 +11,7 @@ import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 import createResolver from 'relay/createResolver';
 import { ClientFetcher } from 'relay/fetcher';
 
+// $FlowIgnore
 import './index.scss';
 
 // eslint-disable-next-line
@@ -28,6 +31,7 @@ getStoreRenderArgs({
   matchContext,
   resolver,
 }).then((initialRenderArgs) => {
+  // $FlowIgnore (see https://github.com/facebook/flow/pull/5074)
   ReactDOM.hydrate(
     <ReduxProvider store={store}>
       <FoundConnectedRouter
