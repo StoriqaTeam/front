@@ -7,12 +7,14 @@ $progressBarBackground: #E2E2E2;
 .progressBarWrapper {
   height: $progressBarHeight;
   position: relative;
-  top: -17px;
+  top: -1px;
 }
 
 // Initial style
 .progressBar {
   @include progress-bar(#0D3349, $progressBarBackground, $progressBarHeight);
+  position: absolute;
+  left: 0;
 }
 
 $progressBar: (simple, $simpleColor, $progressBarBackground, $progressBarHeight),
@@ -23,6 +25,8 @@ $progressBar: (simple, $simpleColor, $progressBarBackground, $progressBarHeight)
 @each $pbClass, $strengthColor, $pbBackground, $pbHeight in $progressBar {
   .progressBar.#{$pbClass} {
     @include progress-bar($strengthColor, $pbBackground, $pbHeight);
+    position: absolute;
+    left: 0;
   }
 }
 
