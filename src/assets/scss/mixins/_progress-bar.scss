@@ -13,7 +13,7 @@
   }
 
   &[value]::-webkit-progress-bar {
-    background-color: $background;
+    background: $background;
     border-radius: 2px;
   }
 

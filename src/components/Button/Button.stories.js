@@ -15,7 +15,25 @@ storiesOf('Button', module)
     // eslint-disable-next-line
     <Button buttonClass="Button" title="Storiqa" />
   ))
-  .add('with "buttonClass" as "SignUpFormButton" ', () => (
+  .add('with "buttonClass" as "signUpFormButton" ', () => (
     // eslint-disable-next-line
-    <Button buttonClass="SignUpFormButton" title="Storiqa" />
+    <Button buttonClass="signUpFormButton" title="Storiqa" />
+  ))
+  .add('with "disabled" prop', () => (
+    // eslint-disable-next-line
+    <Button buttonClass="signUpFormButton" title="Storiqa" disabled={true} />
+  ))
+  .add('with "buttonClass" as "signUpFormButton" and "onClick" handler', () => (
+    // eslint-disable-next-line
+    <Button buttonClass="signUpFormButton" title="Storiqa" onClick={() => console.log('click')} />
+  ))
+  .add('with "buttonClass" as "signUpFormButton" and type "submit"', () => (
+    // eslint-disable-next-line
+    <form onSubmit={e => {
+      e.preventDefault();
+      alert('submit');
+    }}
+    >
+      <Button buttonClass="signUpFormButton" type="submit" title="Storiqa" />
+    </form>
   ));
