@@ -5,6 +5,7 @@ import { Route } from 'found';
 import { graphql } from 'react-relay';
 
 import { App } from 'components/App';
+import { Login } from 'components/Login';
 
 const routes = (
   <Route>
@@ -23,7 +24,7 @@ const routes = (
     />
     <Route
       path="/login"
-      render={() => <div>Login here.</div>}
+      Component={Login}
     />
   </Route>
 );
