@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { changeWithValue } from 'redux/reducers/dummy';
 import { Button } from 'components/Button';
@@ -44,4 +45,15 @@ const mapDispatchToProps = ({
   changeValue: changeWithValue,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default createFragmentContainer(
+  connect(mapStateToProps, mapDispatchToProps)(App),
+  graphql`
+    fragment App_currentUser on Viewer {
+      user(id: "") {
+        id,
+        rawId,
+        email
+      }
+    }
+  `,
+);

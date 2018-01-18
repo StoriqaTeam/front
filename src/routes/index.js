@@ -1,11 +1,13 @@
 // @flow
 
 import React from 'react';
-import { Route } from 'found';
+import { Route, RedirectException } from 'found';
 import { graphql } from 'react-relay';
+import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
 import { Login } from 'components/Login';
+import { Registration } from 'components/Registration';
 
 const routes = (
   <Route>
@@ -14,13 +16,25 @@ const routes = (
       Component={App}
       query={graphql`
         query routes_App_Query {
-          apiVersion
+          viewer {
+            ...App_currentUser
+          }
         }
       `}
+      render={({ Component, error, props }) => {
+        if (error) {
+          const errors = pathOr(null, ['source', 'errors'], error);
+          if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
+            throw new RedirectException('/login');
+          }
+          return null;
+        }
+        return <Component {...props} />;
+      }}
     />
     <Route
-      path="/info"
-      render={() => <div>INFO</div>}
+      path="/registration"
+      Component={Registration}
     />
     <Route
       path="/login"
