@@ -2,6 +2,7 @@ $simpleColor: #FD7DAA;
 $goodColor: #EFAA29;
 $excellentColor: #9FC63C;
 $progressBarHeight: 1px;
+$progressBarBackground: #E2E2E2;
 
 .progressBarWrapper {
   height: $progressBarHeight;
@@ -9,20 +10,20 @@ $progressBarHeight: 1px;
   top: -17px;
 }
 
+// Initial style
 .progressBar {
-  @include progress-bar($value: #0D3349, $background: #E2E2E2, $height: $progressBarHeight);
+  @include progress-bar(#0D3349, $progressBarBackground, $progressBarHeight);
 }
 
-.progressBar.simple {
-  @include progress-bar($value: $simpleColor, $background: #E2E2E2, $height: $progressBarHeight);
-}
+$progressBar: (simple, $simpleColor, $progressBarBackground, $progressBarHeight),
+              (good, $goodColor, $progressBarBackground, $progressBarHeight),
+              (excellent, $excellentColor, $progressBarBackground, $progressBarHeight);
 
-.progressBar.good {
-  @include progress-bar($value: $goodColor, $background: #E2E2E2, $height: $progressBarHeight);
-}
-
-.progressBar.excellent {
-  @include progress-bar($value: $excellentColor, $background: #E2E2E2, $height: $progressBarHeight);
+// $pb stands for progress bar
+@each $pbClass, $strengthColor, $pbBackground, $pbHeight in $progressBar {
+  .progressBar.#{$pbClass} {
+    @include progress-bar($strengthColor, $pbBackground, $pbHeight);
+  }
 }
 
 .progressBarMessage {
@@ -30,17 +31,11 @@ $progressBarHeight: 1px;
   text-align: center;
 }
 
-.progressBarMessage.simple {
-  @extend .progressBarMessage;
-  color: $simpleColor;
-}
+$progressBarMessageColors: (simple, $simpleColor) (good, $goodColor) (excellent, $excellentColor);
 
-.progressBarMessage.good {
-  @extend .progressBarMessage;
-  color: $goodColor;
-}
-
-.progressBarMessage.excellent {
-  @extend .progressBarMessage;
-  color: $excellentColor;
+@each $strength, $strengthColor in $progressBarMessageColors {
+  .progressBarMessage.#{$strength} {
+    @extend .progressBarMessage;
+    color: $strengthColor;
+  }
 }
