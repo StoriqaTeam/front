@@ -1,5 +1,5 @@
 .Slider {
-  padding: 16px;
+  padding: 16px 0 8px;
   overflow: hidden;
 
   .Slider--title {
@@ -8,18 +8,42 @@
 
   .Slider--wrapper {
     position: relative;
+    top: 0;
+    left: 0;
     white-space: nowrap;
+    margin: 8px;
+    transition: left 0.5s ease-out;
 
     .Slider--wrapper--slide {
       display: inline-block;
-      width: 25%;
-      min-height: 320px;
-      border: 1px solid red;
+      padding: 0 8px;
+
+      .Slider--wrapper--slide--body {
+        min-height: 320px;
+        border-radius: 4px;
+        box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, .16);
+        overflow: hidden;
+
+        .Slider--wrapper--slide--top {
+          min-height: 200px;
+          background-color: #A2A2A2;
+        }
+
+        .Slider--wrapper--slide--bottom {
+          padding: 8px;
+        }
+      }
     }
   }
 
   .Slider--nav {
-
+    .Slider--nav--button {
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, .16);
+      border-radius: 50%;
+    }
   }
 
   .Slider--reveal {

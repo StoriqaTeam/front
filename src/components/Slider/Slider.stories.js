@@ -3,6 +3,8 @@ import { storiesOf } from '@storybook/react';
 
 import { Slider } from 'components/Slider';
 
+import mostPopularGoods from './mostPopularGoods.json';
+
 storiesOf('Slider', module)
   .add('Most popular', () => (
     <div
@@ -15,6 +17,7 @@ storiesOf('Slider', module)
       <Slider
         title="Most popular"
         color="#9239C9"
+        items={mostPopularGoods}
       />
     </div>
   ));
