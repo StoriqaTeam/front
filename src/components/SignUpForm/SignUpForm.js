@@ -6,8 +6,11 @@ import { SignUpFormInput } from '../SignUpFormInput';
 
 class SignUpForm extends PureComponent {
   state = {
+    username: '',
     usernameValid: false,
+    email: '',
     emailValid: false,
+    password: '',
     passwordValid: false,
     formValid: false,
   };
@@ -24,12 +27,14 @@ class SignUpForm extends PureComponent {
   };
   /**
    * @desc handles onChange event by setting the validity of the desired input
-   * @param {String} name
-   * @param {any} value
+   * @param {SyntheticEvent} evt
+   * @param {String} evt.name
+   * @param {any} evt.value
+   * @param {Boolean} evt.validity
    * @return {void}
    */
-  handleChange = (name, value) => {
-    this.setState({ [name]: value }, () => this.validateForm());
+  handleChange = ({ name, value, validity}) => {
+    this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
   };
   /**
    * @desc Validates the form based on its values
@@ -48,30 +53,37 @@ class SignUpForm extends PureComponent {
    */
   handleGoogleClick = () => {};
   render() {
+    const { username, email, password } = this.state;
     return (
-      <form className="signUpForm" onSubmit={this.handleSubmit}>
+      <form className="signUpForm" noValidate onSubmit={this.handleSubmit}>
         <h1>Sign Up</h1>
         <div className="signUpFormGroup">
           <SignUpFormInput
-            name="Username"
+            label="Username"
+            name="username"
             type="text"
-            onChange={e => this.handleChange('usernameValid', e)}
+            model={username}
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <div className="signUpFormGroup">
           <SignUpFormInput
-            name="Email"
+            label="Email"
+            name="email"
             type="email"
+            model={email}
             validate="email"
-            onChange={e => this.handleChange('emailValid', e)}
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <div className="signUpFormGroup">
           <SignUpFormInput
-            name="Password"
+            label="Password"
+            name="password"
             type="password"
+            model={password}
             validate="password"
-            onChange={e => this.handleChange('passwordValid', e)}
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <div className="signUpFormGroup">

@@ -7,12 +7,13 @@ import EyeOpenIcon from '../../assets/svg/eye-open.svg';
 class SignUpFormInput extends PureComponent {
   static defaultProps = {
     onChange: () => {},
+    label: '',
     type: 'text',
+    model: '',
     name: 'signUpFormInput',
     validate: 'text',
   };
   state = {
-    model: '',
     labelFloat: '',
     validModel: false,
     showPassword: false,
@@ -31,10 +32,8 @@ class SignUpFormInput extends PureComponent {
    * @return {void}
    */
   handleChange = (evt) => {
-    const { value } = evt.target;
-    this.setState({ model: value }, () => {
-      this.validateField(value);
-    });
+    const { name, value } = evt.target;
+    this.validateField(name, value);
   };
   /**
    * @desc make the label floats if the model isn't empty
@@ -42,7 +41,8 @@ class SignUpFormInput extends PureComponent {
    * @return {void}
    */
   handleFocus = () => {
-    const { model, showPasswordButton } = this.state;
+    const { showPasswordButton } = this.state;
+    const { model } = this.props;
     if (model === '') {
       this.setState({
         labelFloat: 'signUpFormInputLabelFloat',
@@ -55,7 +55,8 @@ class SignUpFormInput extends PureComponent {
    * @return {void}
    */
   handleBlur = () => {
-    const { model, showPasswordButton } = this.state;
+    const { showPasswordButton } = this.state;
+    const { model } = this.props;
     if (model === '') {
       this.setState({
         labelFloat: '',
@@ -69,10 +70,11 @@ class SignUpFormInput extends PureComponent {
    */
   emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
   /**
-   * @param {any} value
+   * @param {String} name - input's name
+   * @param {any} value - input's value
    * @return {void}
    */
-  validateField = (value) => {
+  validateField = (name, value) => {
     // eslint-disable-next-line
     let { validModel, formError } = this.state;
     const { validate } = this.props;
@@ -93,7 +95,11 @@ class SignUpFormInput extends PureComponent {
       default:
         break;
     }
-    this.setState({ formError }, this.props.onChange(validModel));
+    this.setState({ formError }, this.props.onChange({
+      name,
+      value,
+      validity: validModel,
+    }));
   };
   /**
    * @desc show password to the user
@@ -139,7 +145,12 @@ class SignUpFormInput extends PureComponent {
    */
   errorClass = error => (error.length === 0 ? '' : 'invalidInput');
   render() {
-    const { name, type } = this.props;
+    const {
+      name,
+      type,
+      label,
+      model,
+    } = this.props;
     const {
       labelFloat,
       showPassword,
@@ -165,18 +176,19 @@ class SignUpFormInput extends PureComponent {
     const showPasswordContent = (showPasswordButton && type === 'password') ? passwordButton : null;
     // ONLY when type is password, so the user can see the progress bar
     const progressBarContent = type === 'password' ? progressBar : null;
+    //
     return (
       <span>
         <input
           type={showPassword ? 'text' : isPassword}
           className={`signUpFormInput ${this.errorClass(formError)}`}
           name={name}
-          value={this.state.model}
+          value={model}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}
         />
-        <label className={`signUpFormLabel ${labelFloat}`} htmlFor={name}>{ name }</label>
+        <label className={`signUpFormLabel ${labelFloat}`} htmlFor={name}>{ label }</label>
         <span className="signUpFormInputMessage">{ formError }</span>
         { showPasswordContent }
         { progressBarContent }
@@ -186,7 +198,9 @@ class SignUpFormInput extends PureComponent {
 }
 
 SignUpFormInput.propTypes = {
+  label: PropTypes.string,
   name: PropTypes.string,
+  model: PropTypes.string,
   type: PropTypes.string,
   validate: PropTypes.string,
   onChange: PropTypes.func,
