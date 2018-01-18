@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button } from '../Button';
-import googleIcon from '../../assets/svg/google-icon.svg';
+import GoogleIcon from '../../assets/svg/google-icon.svg';
 
 import { SignUpFormInput } from '../SignUpFormInput';
 
@@ -52,20 +52,44 @@ class SignUpForm extends PureComponent {
       <form className="signUpForm" onSubmit={this.handleSubmit}>
         <h1>Sign Up</h1>
         <div className="signUpFormGroup">
-          <SignUpFormInput name="Username" type="text" onChange={e => this.handleChange('usernameValid', e)} />
+          <SignUpFormInput
+            name="Username"
+            type="text"
+            onChange={e => this.handleChange('usernameValid', e)}
+          />
         </div>
         <div className="signUpFormGroup">
-          <SignUpFormInput name="Email" type="email" validate="email" onChange={e => this.handleChange('emailValid', e)} />
+          <SignUpFormInput
+            name="Email"
+            type="email"
+            validate="email"
+            onChange={e => this.handleChange('emailValid', e)}
+          />
         </div>
         <div className="signUpFormGroup">
-          <SignUpFormInput name="Password" type="password" validate="password" onChange={e => this.handleChange('passwordValid', e)} />
+          <SignUpFormInput
+            name="Password"
+            type="password"
+            validate="password"
+            onChange={e => this.handleChange('passwordValid', e)}
+          />
         </div>
         <div className="signUpFormGroup">
-          <img className="signUpFormGoogleIcon" src={googleIcon} alt="google icon" />
-          <Button buttonClass="signUpFormGoogleButton" title="Sign up with google" onClick={this.handleGoogleClick} />
+          <GoogleIcon className="signUpFormGoogleIcon" />
+          <Button
+            buttonClass="signUpFormGoogleButton"
+            title="Sign up with google"
+            onClick={this.handleGoogleClick}
+          />
         </div>
         <div className="signUpFormSignUp">
-          <Button type="submit" buttonClass="signUpFormButton" title="Sign Up" onClick={this.handleSubmit} disabled={!this.state.formValid} />
+          <Button
+            type="submit"
+            buttonClass="signUpFormButton"
+            title="Sign Up"
+            onClick={this.handleSubmit}
+            disabled={!this.state.formValid}
+          />
           <span className="signUpFormPolicy">{this.policy}</span>
         </div>
       </form>

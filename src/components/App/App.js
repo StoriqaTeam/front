@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { changeWithValue } from 'redux/reducers/dummy';
 import { Button } from 'components/Button';
+import { SignUpForm } from '../SignUpForm';
 
 class App extends PureComponent {
   handleBtnClick = () => this.props.changeValue('asdf');
@@ -20,6 +21,7 @@ class App extends PureComponent {
             onClick={this.handleBtnClick}
           />
         )}
+        <SignUpForm />
       </div>
     );
   }
