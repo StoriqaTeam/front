@@ -1,8 +1,51 @@
+// Fonts
+$Open_Sans: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$Open_Sans_Light: 'Open_Sans_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
+$Open_Sans_Bold: 'Open_Sans_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
+$Open_Sans_SemiBold: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+
+// Colors
+$color_primary: #505050;
+$color_white: #ffffff;
+$color_grey: #A7A7A7;
+
+// shadows
+$shadow_1: 0px 2px 6px 0 rgba(0, 0, 0, .16);
+
+@font-face {
+  font-family: 'Open_Sans';
+  src: url('fonts/Open_Sans/OpenSans-Regular.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Open_Sans_Light';
+  src: url('fonts/Open_Sans/OpenSans-Light.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Open_Sans_Bold';
+  src: url('fonts/Open_Sans/OpenSans-Bold.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Open_Sans_SemiBold';
+  src: url('fonts/Open_Sans/OpenSans-SemiBold.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
 * {
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 16px;
+  font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
   outline: none;
@@ -10,6 +53,13 @@
 
 body {
   height: 100%;
+  font-family: $Open_Sans;
+  line-height: 18px;
+  color: $color_primary;
+}
+
+b {
+  font-family: $Open_Sans_Bold;
 }
 
 @import "components/App/index.scss";

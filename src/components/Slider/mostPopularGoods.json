@@ -1,72 +1,76 @@
 [
   {
+    "id": "1",
     "title": "Chromecast 2015 dfabeba",
     "img": "",
     "prices": {
       "btc": {
-        "id": "btc",
+        "charCode": "BTC",
         "actualPrice": 0.00000995,
-        "undiscountedPrice": 0.000000052,
+        "undiscountedPrice": 0.00000052,
         "discount": 12
       },
       "stq": {
-        "id": "stq",
+        "charCode": "STQ",
         "actualPrice": 345475467,
         "undiscountedPrice": 345475467,
         "discount": 12
       },
       "eur": {
-        "id": "eur",
+        "charCode": "EUR",
         "actualPrice": 2537,
         "undiscountedPrice": 3860,
         "discount": 12
       }
     },
-    "qualityAssurance": false
+    "qualityAssurance": true,
+    "sellerDiscount": 15
   },
   {
+    "id": "2",
     "title": "Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
     "img": "",
     "prices": {
       "btc": {
-        "id": "btc",
+        "charCode": "BTC",
         "actualPrice": 0.00000995,
         "undiscountedPrice": 0.000000052,
         "discount": 12
       },
       "stq": {
-        "id": "stq",
+        "charCode": "STQ",
         "actualPrice": 345475467,
         "undiscountedPrice": 345475467,
         "discount": 12
       },
       "eur": {
-        "id": "eur",
+        "charCode": "EUR",
         "actualPrice": 2537,
         "undiscountedPrice": 3860,
         "discount": 12
       }
     },
-    "qualityAssurance": false
+    "qualityAssurance": true
   },
   {
+    "id": "3",
     "title": "Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
     "img": "",
     "prices": {
       "btc": {
-        "id": "btc",
+        "charCode": "BTC",
         "actualPrice": 0.00000995,
         "undiscountedPrice": 0.000000052,
         "discount": 12
       },
       "stq": {
-        "id": "stq",
+        "charCode": "STQ",
         "actualPrice": 345475467,
         "undiscountedPrice": 345475467,
         "discount": 12
       },
       "eur": {
-        "id": "eur",
+        "charCode": "EUR",
         "actualPrice": 2537,
         "undiscountedPrice": 3860,
         "discount": 12
@@ -75,23 +79,24 @@
     "qualityAssurance": false
   },
   {
+    "id": "4",
     "title": "Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
     "img": "",
     "prices": {
       "btc": {
-        "id": "btc",
+        "charCode": "BTC",
         "actualPrice": 0.00000995,
         "undiscountedPrice": 0.000000052,
         "discount": 12
       },
       "stq": {
-        "id": "stq",
+        "charCode": "STQ",
         "actualPrice": 345475467,
         "undiscountedPrice": 345475467,
         "discount": 12
       },
       "eur": {
-        "id": "eur",
+        "charCode": "EUR",
         "actualPrice": 2537,
         "undiscountedPrice": 3860,
         "discount": 12
@@ -100,23 +105,24 @@
     "qualityAssurance": false
   },
   {
+    "id": "5",
     "title": "Chromecast 2015 dfabeba",
     "img": "",
     "prices": {
       "btc": {
-        "id": "btc",
+        "charCode": "BTC",
         "actualPrice": 0.00000995,
         "undiscountedPrice": 0.000000052,
         "discount": 12
       },
       "stq": {
-        "id": "stq",
+        "charCode": "STQ",
         "actualPrice": 345475467,
         "undiscountedPrice": 345475467,
         "discount": 12
       },
       "eur": {
-        "id": "eur",
+        "charCode": "EUR",
         "actualPrice": 2537,
         "undiscountedPrice": 3860,
         "discount": 12
@@ -125,23 +131,24 @@
     "qualityAssurance": false
   },
   {
+    "id": "6",
     "title": "Chromecast 2015 dfabeba",
     "img": "",
     "prices": {
       "btc": {
-        "id": "btc",
+        "charCode": "BTC",
         "actualPrice": 0.00000995,
         "undiscountedPrice": 0.000000052,
         "discount": 12
       },
       "stq": {
-        "id": "stq",
+        "charCode": "STQ",
         "actualPrice": 345475467,
         "undiscountedPrice": 345475467,
         "discount": 12
       },
       "eur": {
-        "id": "eur",
+        "charCode": "EUR",
         "actualPrice": 2537,
         "undiscountedPrice": 3860,
         "discount": 12

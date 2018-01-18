@@ -1,16 +1,18 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+import formatNumber from 'helpers/formatNumber';
+
 class Slider extends PureComponent {
   state = {
     sliderWrapperWidth: {},
     visibleSlidesAmount: null,
     totalSlidesAmount: null,
     slidesOffset: 0,
+    showAllSlides: false,
   };
 
   componentWillMount() {
-    console.log('componentWillMount');
     window.addEventListener('resize', this.sliderPropsCalc);
   }
 
@@ -24,25 +26,32 @@ class Slider extends PureComponent {
 
   sliderPropsCalc = () => {
     const { sliderWrapper } = this.refs; // eslint-disable-line
-    const { items } = this.props;
+    const totalSlidesAmount = this.props.items.length;
     const sliderWrapperWidth = sliderWrapper.getBoundingClientRect().width;
+    let visibleSlidesAmount;
 
-    const visibleSlidesAmountCalc = (sliderWrapperWidth) => { // eslint-disable-line
-      if (sliderWrapperWidth >= 1200) {
-        return 4;
-      } else if (sliderWrapperWidth < 1200 && sliderWrapperWidth >= 900) {
-        return 3;
-      } else if (sliderWrapperWidth < 900 && sliderWrapperWidth >= 576) {
-        return 2;
-      } else if (sliderWrapperWidth < 576) {
-        return 1;
-      }
-    };
+    if (sliderWrapperWidth >= 1200) {
+      visibleSlidesAmount = 4;
+    } else if (sliderWrapperWidth < 1200 && sliderWrapperWidth >= 900) {
+      visibleSlidesAmount = 3;
+    } else if (sliderWrapperWidth < 900 && sliderWrapperWidth >= 576) {
+      visibleSlidesAmount = 2;
+    } else if (sliderWrapperWidth < 576) {
+      visibleSlidesAmount = 1;
+    }
 
     this.setState({
-      sliderWrapperWidth: sliderWrapperWidth, // eslint-disable-line
-      visibleSlidesAmount: visibleSlidesAmountCalc(sliderWrapperWidth),
-      totalSlidesAmount: items.length,
+      sliderWrapperWidth,
+      visibleSlidesAmount,
+      totalSlidesAmount,
+      showAllSlides: visibleSlidesAmount >= totalSlidesAmount,
+    });
+  }
+
+  handlerShowSlides = () => {
+    this.setState({
+      showAllSlides: !this.state.showAllSlides,
+      slidesOffset: 0,
     });
   }
 
@@ -66,38 +75,61 @@ class Slider extends PureComponent {
 
   render() {
     const { title, color, items } = this.props;
-    const { visibleSlidesAmount, slidesOffset } = this.state;
+    const {
+      visibleSlidesAmount,
+      slidesOffset,
+      showAllSlides,
+      totalSlidesAmount,
+    } = this.state;
     const slideWidth = 100 / visibleSlidesAmount;
+    const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
+    const toggleAllText = showAllSlides ? 'Hide some' : 'See all';
+
     return (
       <div className="Slider">
-        <div className="Slider--title" style={{color}}>{title}</div>
-        <div className="Slider--nav">
-          <button
-            direction="prev"
-            className="Slider--nav--button Slider--nav--button-prev"
-            onClick={() => this.handleSlide('prev')}
-          >
-            <img src={require('assets/img/prev-button.svg')} alt="prev" />
-          </button>
-          <button
-            direction="next"
-            className="Slider--nav--button Slider--nav--button-next"
-            onClick={() => this.handleSlide('next')}
-          >
-            <img src={require('assets/img/next-button.svg')} alt="next" />
-          </button>
+        <div className="Slider--header">
+          <div className="Slider--header--title" style={{ color }}>{title}</div>
+          {isRevealButton &&
+            <div
+              className="Slider--header--reveal"
+              style={{ color }}
+              onClick={this.handlerShowSlides}
+            >
+              {toggleAllText}
+            </div>
+          }
+          {!showAllSlides &&
+            <div className="Slider--header--nav">
+              <button
+                direction="prev"
+                className="Slider--header--nav--button Slider--header--nav--button-prev"
+                onClick={() => this.handleSlide('prev')}
+              >
+                <img src={require('assets/img/prev-button-icon.svg')} alt="prev" />
+              </button>
+              <button
+                direction="next"
+                className="Slider--header--nav--button Slider--header--nav--button-next"
+                onClick={() => this.handleSlide('next')}
+              >
+                <img src={require('assets/img/next-button-icon.svg')} alt="next" />
+              </button>
+            </div>
+          }
         </div>
-        <div className="Slider--reveal" style={{color}}>See all</div>
         <div
           ref="sliderWrapper"
           className="Slider--wrapper"
           style={{
             left: slidesOffset,
+            whiteSpace: showAllSlides ? 'normal' : 'nowrap',
           }}
         >
           {items.map((item) => { // eslint-disable-line
+            const { title, qualityAssurance, sellerDiscount, prices } = item; // eslint-disable-line
             return (
               <div
+                key={item.id}
                 className="Slider--wrapper--slide"
                 style={{
                   width: `${slideWidth}%`,
@@ -105,13 +137,38 @@ class Slider extends PureComponent {
               >
                 <div className="Slider--wrapper--slide--body">
                   <div className="Slider--wrapper--slide--top">
-                    <div className="Slider--wrapper--slide--label">...</div>
+                    <div className="Slider--wrapper--slide--labels">
+                      {sellerDiscount &&
+                        <div className="Slider--wrapper--slide--labels--discount">
+                          {`-${sellerDiscount}%`}
+                        </div>
+                      }
+                      {qualityAssurance &&
+                        <div className="Slider--wrapper--slide--labels--qa">
+                          <img src={require('assets/img/qa-icon.svg')} alt="qa" />
+                        </div>
+                      }
+                    </div>
                   </div>
                   <div className="Slider--wrapper--slide--bottom">
-                    <div className="Slider--wrapper--slide--title">{item.title}</div>
+                    <div className="Slider--wrapper--slide--title">{title}</div>
                     <div className="Slider--wrapper--slide--price">
-                      <div className="Slider--wrapper--slide--price--left"></div>
-                      <div className="Slider--wrapper--slide--price--right"></div>
+                      <div className="Slider--wrapper--slide--price--left">
+                        <div className="Slider--wrapper--slide--price--left--actual-price">
+                          <b>{formatNumber(prices.btc.actualPrice)}</b> {prices.btc.charCode}
+                        </div>
+                        <div className="Slider--wrapper--slide--price--left--undiscounted-price">
+                          {formatNumber(prices.btc.undiscountedPrice)} {prices.btc.charCode}
+                        </div>
+                      </div>
+                      <div className="Slider--wrapper--slide--price--right">
+                        <div className="Slider--wrapper--slide--price--right--discount">
+                          {`-${prices.stq.discount}%`}
+                        </div>
+                        <div className="Slider--wrapper--slide--price--right--actual-price">
+                          {prices.stq.charCode} {formatNumber(prices.stq.actualPrice)}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

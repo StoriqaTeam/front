@@ -11,7 +11,7 @@ storiesOf('Slider', module)
       style={{
         maxWidth: '1360px',
         margin: '50px auto 0',
-        border: '1px solid grey',
+        // border: '1px solid grey',
       }}
     >
       <Slider
