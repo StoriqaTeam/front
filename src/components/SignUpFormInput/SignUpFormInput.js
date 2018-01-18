@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { ProgressBar } from '../ProgressBar';
-import eyeOpen from '../../assets/svg/eye-open.svg';
+import EyeOpenIcon from '../../assets/svg/eye-open.svg';
 
 class SignUpFormInput extends PureComponent {
   static defaultProps = {
@@ -73,7 +73,6 @@ class SignUpFormInput extends PureComponent {
    * @return {void}
    */
   validateField = (value) => {
-    // const fieldValidationErrors = this.state.formErrors;
     // eslint-disable-next-line
     let { validModel, formError } = this.state;
     const { validate } = this.props;
@@ -151,7 +150,7 @@ class SignUpFormInput extends PureComponent {
     const isPassword = type === 'password' ? 'password' : type;
     const passwordButton = (
       <button className="signUpFormInputShowPassword" onClick={this.handleShowPassword}>
-        <img src={eyeOpen} alt="show password" /> <span>Show</span>
+        <EyeOpenIcon /> <small>Show</small>
       </button>
     );
     const progressBar = (
@@ -162,6 +161,7 @@ class SignUpFormInput extends PureComponent {
       />
     );
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
+    // eslint-disable-next-line
     const showPasswordContent = (showPasswordButton && type === 'password') ? passwordButton : null;
     // ONLY when type is password, so the user can see the progress bar
     const progressBarContent = type === 'password' ? progressBar : null;

@@ -33,15 +33,16 @@ $colorError: #FD7DAA;
   right: 0;
   top: 0;
 
-  img {
+  svg {
     height: 18px;
+    width: 18px;
   }
 
-  span {
+  small {
     color: #505050;
-    font-size: 14px;
+    font-size: 13px;
     position: relative;
-    right: -4px;
+    right: -3px;
     top: -4px;
   }
 
