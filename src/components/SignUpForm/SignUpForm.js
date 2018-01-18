@@ -33,7 +33,7 @@ class SignUpForm extends PureComponent {
    * @param {Boolean} evt.validity
    * @return {void}
    */
-  handleChange = ({ name, value, validity}) => {
+  handleChange = ({ name, value, validity }) => {
     this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
   };
   /**

@@ -9,8 +9,6 @@ class SignUpFormInput extends PureComponent {
     onChange: () => {},
     label: '',
     type: 'text',
-    model: '',
-    name: 'signUpFormInput',
     validate: 'text',
   };
   state = {
@@ -199,8 +197,8 @@ class SignUpFormInput extends PureComponent {
 
 SignUpFormInput.propTypes = {
   label: PropTypes.string,
-  name: PropTypes.string,
-  model: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  model: PropTypes.string.isRequired,
   type: PropTypes.string,
   validate: PropTypes.string,
   onChange: PropTypes.func,
