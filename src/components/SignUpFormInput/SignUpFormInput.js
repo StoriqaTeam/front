@@ -20,7 +20,6 @@ class SignUpFormInput extends PureComponent {
     passwordQuality: {
       percentage: 0,
       message: '',
-      color: '',
       qualityClass: '',
     },
   };
