@@ -63,17 +63,11 @@ class SignUpFormInput extends PureComponent {
     }
   };
   /**
-   * @desc Strong email regular expression
-   * @type {RegExp}
-   */
-  emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
-  /**
    * @param {String} name - input's name
    * @param {any} value - input's value
    * @return {void}
    */
   validateField = (name, value) => {
-    // eslint-disable-next-line
     let { validModel, formError } = this.state;
     const { validate } = this.props;
     switch (validate) {
@@ -85,7 +79,7 @@ class SignUpFormInput extends PureComponent {
         formError = this.errorMessage(value, validModel, 'Only numbers');
         break;
       case 'email':
-        validModel = value.match(this.emailRegex);
+        validModel = this.validateEmail(value);
         formError = this.errorMessage(value, validModel, 'Invalid Email');
         break;
       case 'password':
@@ -116,8 +110,18 @@ class SignUpFormInput extends PureComponent {
     return formError;
   };
   /**
+   * @desc validates that the value is an email
+   * @param {String} value
+   * @return {Array|null}
+   */
+  validateEmail = (value) => {
+    const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
+    return value.match(emailRegex);
+  };
+  /**
    * @desc validates that the value is a number
-   * @param value
+   * @param {String} value
+   * @return {Array|null}
    */
   validateNumber = (value) => {
     const numberRegex = /\d/;
