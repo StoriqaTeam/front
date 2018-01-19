@@ -13,8 +13,14 @@ class Button extends PureComponent {
     const { title, onClick, buttonClass } = this.props;
     const { type, disabled } = this.props;
     return (
-      // eslint-disable-next-line
-      <button type={type} disabled={disabled} className={buttonClass} onClick={onClick}>{title}</button>
+      <button
+        type={type}
+        disabled={disabled}
+        className={buttonClass}
+        onClick={onClick}
+      >
+        {title}
+      </button>
     );
   }
 }
