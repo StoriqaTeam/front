@@ -10,6 +10,7 @@ class SignUpFormInput extends PureComponent {
     label: '',
     type: 'text',
     validate: 'text',
+    autocomplete: 'on',
   };
   state = {
     labelFloat: '',
@@ -147,6 +148,7 @@ class SignUpFormInput extends PureComponent {
       type,
       label,
       model,
+      autocomplete,
     } = this.props;
     const {
       labelFloat,
@@ -181,6 +183,7 @@ class SignUpFormInput extends PureComponent {
           className={`signUpFormInput ${this.errorClass(formError)}`}
           name={name}
           value={model}
+          autoComplete={autocomplete}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}
@@ -200,6 +203,7 @@ SignUpFormInput.propTypes = {
   model: PropTypes.string.isRequired,
   type: PropTypes.string,
   validate: PropTypes.string,
+  autocomplete: PropTypes.string,
   onChange: PropTypes.func,
 };
 

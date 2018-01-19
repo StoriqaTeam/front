@@ -47,4 +47,18 @@ storiesOf('SignUpFormInput', module)
         />
       </div>
     );
+  })
+  .add('with "autocomplete" off', () => {
+    const username = text('Username', '');
+    return (
+      <div style={{ position: 'relative', top: 22 }}>
+        <SignUpFormInput
+          model={username}
+          name="username"
+          label="Username"
+          autocomplete="off"
+          onChange={action('onChange')}
+        />
+      </div>
+    );
   });
