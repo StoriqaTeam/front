@@ -26,19 +26,16 @@ class Slider extends PureComponent {
 
   sliderPropsCalc = () => {
     const { sliderWrapper } = this.refs; // eslint-disable-line
+    const { slidesToShow, responsive } = this.props;
     const totalSlidesAmount = this.props.items.length;
     const sliderWrapperWidth = sliderWrapper.getBoundingClientRect().width;
-    let visibleSlidesAmount;
+    let visibleSlidesAmount = slidesToShow;
 
-    if (sliderWrapperWidth >= 1200) {
-      visibleSlidesAmount = 4;
-    } else if (sliderWrapperWidth < 1200 && sliderWrapperWidth >= 900) {
-      visibleSlidesAmount = 3;
-    } else if (sliderWrapperWidth < 900 && sliderWrapperWidth >= 576) {
-      visibleSlidesAmount = 2;
-    } else if (sliderWrapperWidth < 576) {
-      visibleSlidesAmount = 1;
-    }
+    responsive.forEach((i) => {
+      if (sliderWrapperWidth + 16 < i.breakpoint) {
+        visibleSlidesAmount = i.slidesToShow;
+      }
+    });
 
     this.setState({
       sliderWrapperWidth,
@@ -184,6 +181,8 @@ class Slider extends PureComponent {
 Slider.propTypes = {
   title: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
+  slidesToShow: PropTypes.number.isRequired,
+  responsive: PropTypes.array.isRequired, // eslint-disable-line
   items: PropTypes.array.isRequired, // eslint-disable-line
 };
 

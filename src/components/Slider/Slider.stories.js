@@ -18,6 +18,12 @@ storiesOf('Slider', module)
         title="Most popular"
         color="#9239C9"
         items={mostPopularGoods}
+        slidesToShow={4}
+        responsive={[
+          { breakpoint: 1200, slidesToShow: 3 },
+          { breakpoint: 992, slidesToShow: 2 },
+          { breakpoint: 576, slidesToShow: 1 },
+        ]}
       />
     </div>
   ));
