@@ -45,10 +45,6 @@ class SignUpForm extends PureComponent {
     this.setState({ formValid: usernameValid && emailValid && passwordValid });
   };
   /**
-   * @desc handles onClick event
-   */
-  handleClick = () => {};
-  /**
    * @desc handles handleGoogleClick event
    */
   handleGoogleClick = () => {};
