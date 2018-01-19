@@ -1,59 +1,44 @@
+// @flow
+
 import React, { PureComponent } from 'react';
+import type { Node } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import { changeWithValue } from 'redux/reducers/dummy';
-import { Button } from 'components/Button';
+type PropsType = {
+  apiVersion: string,
+  children: Node,
+  relay: Object,
+};
 
-class App extends PureComponent {
-  handleBtnClick = () => this.props.changeValue('asdf');
-
+class App extends PureComponent<PropsType> {
+  getChildContext() {
+    return {
+      environment: this.props.relay.environment,
+    };
+  }
   render() {
+    const { children } = this.props;
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">{`Mainpage here (${this.props.apiVersion})`}</h1>
+          <h1 className="App-title">{`App here (${this.props.apiVersion || ''})`}</h1>
         </header>
-        {!this.props.inChanging && (
-          <Button
-            title="Press me"
-            onClick={this.handleBtnClick}
-          />
-        )}
+        {children}
       </div>
     );
   }
 }
 
-App.defaultProps = {
-  apiVersion: '',
-  inChanging: false,
+App.childContextTypes = {
+  environment: PropTypes.object.isRequired,
 };
-
-App.propTypes = {
-  apiVersion: PropTypes.string,
-  inChanging: PropTypes.bool,
-  changeValue: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  inChanging: state.dummy.inChanging,
-});
-
-const mapDispatchToProps = ({
-  changeValue: changeWithValue,
-});
 
 export default createFragmentContainer(
-  connect(mapStateToProps, mapDispatchToProps)(App),
+  App,
   graphql`
-    fragment App_currentUser on Viewer {
-      user(id: "") {
-        id,
-        rawId,
-        email
-      }
+    fragment App_apiVersion on Query {
+      apiVersion
     }
   `,
 );

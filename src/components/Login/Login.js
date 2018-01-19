@@ -1,8 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'found';
+
+import { GetJWTByEmailMutation } from 'relay/mutations';
 
 type PropsType = {};
+
 type StateType = {
   login: string,
   password: string,
@@ -14,15 +19,29 @@ class Login extends Component<PropsType, StateType> {
     password: '',
   };
 
-  handleLoginChange = (e: any) => this.setState({ login: e.target.value });
+  handleInputChange = (e: Object) => {
+    const { target } = e;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { name } = target;
 
-  handlePasswordChange = (e: any) => this.setState({ password: e.target.value });
+    this.setState({
+      [name]: value,
+    });
+  };
 
   handleSubmitClick = () => {
     const { login, password } = this.state;
-    if (login && login.length > 0 && password && password.length > 0) {
-      //
-    }
+    GetJWTByEmailMutation.commit({
+      login,
+      password,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        console.log({ response, errors });
+      },
+      onError: (error: Error) => {
+        console.log({ error });
+      },
+    });
   };
 
   render() {
@@ -32,10 +51,10 @@ class Login extends Component<PropsType, StateType> {
           Login
           <br />
           <input
-            id="login"
+            name="login"
             type="text"
             value={this.state.login}
-            onChange={this.handleLoginChange}
+            onChange={this.handleInputChange}
           />
         </label>
         <br />
@@ -43,10 +62,10 @@ class Login extends Component<PropsType, StateType> {
           Password
           <br />
           <input
-            id="password"
+            name="password"
             type="password"
             value={this.state.password}
-            onChange={this.handlePasswordChange}
+            onChange={this.handleInputChange}
           />
         </label>
         <br />
@@ -56,9 +75,15 @@ class Login extends Component<PropsType, StateType> {
         >
           Login
         </button>
+        <br />
+        <Link to="/registration">Register</Link>
       </form>
     );
   }
 }
+
+Login.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default Login;

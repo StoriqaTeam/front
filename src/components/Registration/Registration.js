@@ -3,71 +3,78 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { CreateUserMutation } from 'relay/mutations';
+
 type StateType = {
   login: string,
   password: string,
-  passwordConfirmation: string,
 };
-type PropsType = {
-  // viewer: ?PropTypes.object,
-  data: ?Array<Object>,
-  errors?: Array<Object>,
-  relay: PropTypes.object,
-};
+
+type PropsType = {};
 
 class Registration extends Component<PropsType, StateType> {
   state: StateType = {
     login: '',
     password: '',
-    passwordConfirmation: '',
   };
 
   handleRegistrationClick = () => {
-    const { data, relay } = this.props;
-    console.log({ data, relay });
+    const { login, password } = this.state;
+    CreateUserMutation.commit({
+      login,
+      password,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => console.log({ response, errors }),
+      onError: (error: Error) => console.log({ error }),
+    });
+  };
+
+  handleInputChange = (e: Object) => {
+    const { target } = e;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { name } = target;
+
+    this.setState({
+      [name]: value,
+    });
   };
 
   render() {
-    const { data, errors } = this.props;
-    console.log({ data, errors });
-    if (errors) {
-      return (
-        <div className="test">{errors}</div>
-      );
-    }
     return (
       <form>
         <label htmlFor="login">
           Login
           <input
+            name="login"
             type="text"
             value={this.state.login}
-            id="login"
+            onChange={this.handleInputChange}
           />
         </label>
         <br />
         <label htmlFor="password">
           Password
           <input
-            id="password"
+            name="password"
             type="password"
             value={this.state.password}
+            onChange={this.handleInputChange}
           />
         </label>
         <br />
-        <label htmlFor="passwordConfirmation">
-          Password confirmation
-          <input
-            id="passwordConfirmation"
-            type="password"
-            value={this.state.passwordConfirmation}
-          />
-        </label>
-        <br />
-        <button type="button">Register</button>
+        <button
+          type="button"
+          onClick={this.handleRegistrationClick}
+        >
+          Register
+        </button>
       </form>
     );
   }
 }
+
+Registration.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default Registration;
