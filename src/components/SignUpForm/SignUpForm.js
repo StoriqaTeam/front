@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Button } from '../Button';
-import GoogleIcon from '../../assets/svg/google-icon.svg';
+import GoogleIcon from 'assets/svg/google-icon.svg';
+import { SignUpFormInput } from 'components/SignUpFormInput';
 
-import { SignUpFormInput } from '../SignUpFormInput';
+import { Button } from '../Button';
 
 class SignUpForm extends PureComponent {
   state = {
@@ -48,6 +48,7 @@ class SignUpForm extends PureComponent {
    * @desc handles handleGoogleClick event
    */
   handleGoogleClick = () => {};
+
   render() {
     const { username, email, password } = this.state;
     return (
@@ -59,7 +60,7 @@ class SignUpForm extends PureComponent {
             name="username"
             type="text"
             model={username}
-            onChange={e => this.handleChange(e)}
+            onChange={this.handleChange}
           />
         </div>
         <div className="signUpFormGroup">
@@ -69,7 +70,7 @@ class SignUpForm extends PureComponent {
             type="email"
             model={email}
             validate="email"
-            onChange={e => this.handleChange(e)}
+            onChange={this.handleChange}
           />
         </div>
         <div className="signUpFormGroup">
@@ -79,7 +80,7 @@ class SignUpForm extends PureComponent {
             type="password"
             model={password}
             validate="password"
-            onChange={e => this.handleChange(e)}
+            onChange={this.handleChange}
           />
         </div>
         <div className="signUpFormGroup">
