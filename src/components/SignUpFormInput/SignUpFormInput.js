@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { ProgressBar } from 'components/ProgressBar';
+import EyeOpenIcon from 'assets/svg/eye-open.svg';
 
-import { ProgressBar } from '../ProgressBar';
-import EyeOpenIcon from '../../assets/svg/eye-open.svg';
+import utils from './utils';
 
 class SignUpFormInput extends PureComponent {
   static defaultProps = {
@@ -32,7 +33,7 @@ class SignUpFormInput extends PureComponent {
    */
   handleChange = (evt) => {
     const { name, value } = evt.target;
-    this.validateField(name, value);
+    this.validate(name, value);
   };
   /**
    * @desc make the label floats if the model isn't empty
@@ -64,72 +65,22 @@ class SignUpFormInput extends PureComponent {
     }
   };
   /**
-   * @param {String} name - input's name
-   * @param {any} value - input's value
+   * @param {String} inputName - input's name
+   * @param {any} inputValue - input's value
    * @return {void}
    */
-  validateField = (name, value) => {
-    let { validModel, formError } = this.state;
-    const { validate } = this.props;
-    switch (validate) {
-      case 'text':
-        validModel = value !== '';
-        break;
-      case 'number':
-        validModel = this.validateNumber(value);
-        formError = this.setErrorMessage(value, validModel, 'Only numbers');
-        break;
-      case 'email':
-        validModel = this.validateEmail(value);
-        formError = this.setErrorMessage(value, validModel, 'Invalid Email');
-        break;
-      case 'password':
-        validModel = value.length >= 3;
-        this.passwordQuality(value);
-        break;
-      default:
-        break;
-    }
+  validate = (inputName, inputValue) => {
+    const {
+      name,
+      value,
+      validity,
+      formError,
+    } = utils.validateField(inputName, inputValue, this.props, this.state);
     this.setState({ formError }, this.props.onChange({
       name,
       value,
-      validity: validModel,
+      validity,
     }));
-  };
-  /**
-   * @desc Set form error message based on its validation
-   * @param {String} value
-   * @param {String} validModel
-   * @param {String} message = 'Invalid'
-   * @return {string}
-   */
-  setErrorMessage = (value, validModel, message = 'Invalid') => {
-    const { errorMessage } = this.props;
-    // check for enabling custom error message.
-    const error = (errorMessage !== '') ? errorMessage : message;
-    let formError = '';
-    formError = validModel ? '' : ` ${error}`;
-    // fallback
-    formError = value === '' ? '' : formError;
-    return formError;
-  };
-  /**
-   * @desc validates that the value is an email
-   * @param {String} value
-   * @return {Array|null}
-   */
-  validateEmail = (value) => {
-    const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
-    return value.match(emailRegex);
-  };
-  /**
-   * @desc validates that the value is a number
-   * @param {String} value
-   * @return {Array|null}
-   */
-  validateNumber = (value) => {
-    const numberRegex = /\d/;
-    return value.match(numberRegex);
   };
   /**
    * @desc show password to the user
@@ -137,42 +88,6 @@ class SignUpFormInput extends PureComponent {
    */
   handleShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
-  };
-  /**
-   * @desc applies the password quality based on the length.
-   * @param {String} value
-   * @return {void}
-   */
-  passwordQuality = (value) => {
-    /**
-     * @desc applies the corresponding strength value
-     * @param {Object} qualityObj
-     * @param {Array} strengthValues = [0, '', '']
-     * @return {{}}
-     */
-    // eslint-disable-next-line
-    const applyStrength = (qualityObj, strengthValues = [0, '', '']) => {
-      return Object.keys(qualityObj).reduce((next, key, idx) => {
-        // eslint-disable-next-line
-        next[key] = strengthValues[idx];
-        return next;
-      }, {});
-    };
-    let quality = this.state.passwordQuality;
-    if (value.length >= 3) {
-      quality = applyStrength(quality, [20, 'Too simple', 'simple']);
-    }
-    if (value.length >= 8) {
-      quality = applyStrength(quality, [60, 'Good', 'good']);
-    }
-    if (value.length >= 12) {
-      quality = applyStrength(quality, [100, 'Excellent', 'excellent']);
-    }
-    // Fallback
-    if (value.length === 0) {
-      quality = applyStrength(quality);
-    }
-    this.setState({ passwordQuality: quality });
   };
   /**
    * @desc applies the corresponding error class
