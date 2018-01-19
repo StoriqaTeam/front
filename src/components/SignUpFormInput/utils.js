@@ -49,10 +49,14 @@ function applyStrength(qualityObj, strengthValues = [0, '', '']) {
 /**
  * @desc applies the password quality based on the length.
  * @param {String} value
- * @return {void}
+ * @return {Object}
  */
 function passwordQuality(value) {
-  let quality = this.state.passwordQuality;
+  let quality = {
+    percentage: 0,
+    message: '',
+    qualityClass: '',
+  };
   if (value.length >= 3) {
     quality = applyStrength(quality, [20, 'Too simple', 'simple']);
   }
@@ -66,7 +70,7 @@ function passwordQuality(value) {
   if (value.length === 0) {
     quality = applyStrength(quality);
   }
-  this.setState({ passwordQuality: quality });
+  return quality;
 }
 /**
  * @param {String} name - input's name
@@ -80,6 +84,8 @@ function validateField(name, value, props, state) {
   let { validModel, formError } = { ...state };
   // clone 'props' and destructure some of its properties
   const { validate, errorMessage } = { ...props };
+  //
+  let passwordQualityResult = {};
   switch (validate) {
     case 'text':
       validModel = value !== '';
@@ -94,7 +100,7 @@ function validateField(name, value, props, state) {
       break;
     case 'password':
       validModel = value.length >= 3;
-      passwordQuality(value);
+      passwordQualityResult = passwordQuality(value);
       break;
     default:
       break;
@@ -104,6 +110,7 @@ function validateField(name, value, props, state) {
     name,
     value,
     validity: validModel,
+    passwordQuality: passwordQualityResult,
   };
 }
 

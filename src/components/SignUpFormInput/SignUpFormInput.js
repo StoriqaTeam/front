@@ -75,8 +75,9 @@ class SignUpFormInput extends PureComponent {
       value,
       validity,
       formError,
+      passwordQuality,
     } = utils.validateField(inputName, inputValue, this.props, this.state);
-    this.setState({ formError }, this.props.onChange({
+    this.setState({ formError, passwordQuality }, this.props.onChange({
       name,
       value,
       validity,
