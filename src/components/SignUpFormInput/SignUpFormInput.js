@@ -135,32 +135,38 @@ class SignUpFormInput extends PureComponent {
     this.setState({ showPassword: !this.state.showPassword });
   };
   /**
-   * @desc applies the passwrod quality based on the length.
+   * @desc applies the password quality based on the length.
    * @param {String} value
    * @return {void}
    */
   passwordQuality = (value) => {
-    const quality = this.state.passwordQuality;
+    /**
+     * @desc applies the corresponding strength value
+     * @param {Object} qualityObj
+     * @param {Array} strengthValues
+     * @return {{}}
+     */
+    // eslint-disable-next-line
+    const applyStrength = (qualityObj, strengthValues = [0, '', '']) => {
+      return Object.keys(qualityObj).reduce((next, key, idx) => {
+        // eslint-disable-next-line
+        next[key] = strengthValues[idx];
+        return next;
+      }, {});
+    };
+    let quality = this.state.passwordQuality;
     if (value.length >= 3) {
-      quality.percentage = 20;
-      quality.message = 'Too simple';
-      quality.qualityClass = 'simple';
+      quality = applyStrength(quality, [20, 'Too simple', 'simple']);
     }
     if (value.length >= 8) {
-      quality.percentage = 60;
-      quality.message = 'Good';
-      quality.qualityClass = 'good';
+      quality = applyStrength(quality, [60, 'Good', 'good']);
     }
     if (value.length >= 12) {
-      quality.percentage = 100;
-      quality.message = 'Excellent';
-      quality.qualityClass = 'excellent';
+      quality = applyStrength(quality, [100, 'Excellent', 'excellent']);
     }
     // Fallback
     if (value.length === 0) {
-      quality.percentage = 0;
-      quality.message = '';
-      quality.qualityClass = '';
+      quality = applyStrength(quality);
     }
     this.setState({ passwordQuality: quality });
   };
