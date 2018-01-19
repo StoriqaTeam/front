@@ -11,6 +11,7 @@ class SignUpFormInput extends PureComponent {
     type: 'text',
     validate: 'text',
     autocomplete: 'on',
+    errorMessage: '',
   };
   state = {
     labelFloat: '',
@@ -76,11 +77,11 @@ class SignUpFormInput extends PureComponent {
         break;
       case 'number':
         validModel = this.validateNumber(value);
-        formError = this.errorMessage(value, validModel, 'Only numbers');
+        formError = this.setErrorMessage(value, validModel, 'Only numbers');
         break;
       case 'email':
         validModel = this.validateEmail(value);
-        formError = this.errorMessage(value, validModel, 'Invalid Email');
+        formError = this.setErrorMessage(value, validModel, 'Invalid Email');
         break;
       case 'password':
         validModel = value.length >= 3;
@@ -99,12 +100,15 @@ class SignUpFormInput extends PureComponent {
    * @desc Set form error message based on its validation
    * @param {String} value
    * @param {String} validModel
-   * @param {String} errorMessage = 'Invalid'
+   * @param {String} message = 'Invalid'
    * @return {string}
    */
-  errorMessage = (value, validModel, errorMessage = 'Invalid') => {
+  setErrorMessage = (value, validModel, message = 'Invalid') => {
+    const { errorMessage } = this.props;
+    // check for enabling custom error message.
+    const error = (errorMessage !== '') ? errorMessage : message;
     let formError = '';
-    formError = validModel ? '' : ` ${errorMessage}`;
+    formError = validModel ? '' : ` ${error}`;
     // fallback
     formError = value === '' ? '' : formError;
     return formError;
@@ -143,7 +147,7 @@ class SignUpFormInput extends PureComponent {
     /**
      * @desc applies the corresponding strength value
      * @param {Object} qualityObj
-     * @param {Array} strengthValues
+     * @param {Array} strengthValues = [0, '', '']
      * @return {{}}
      */
     // eslint-disable-next-line
@@ -238,6 +242,7 @@ SignUpFormInput.propTypes = {
   type: PropTypes.string,
   validate: PropTypes.string,
   autocomplete: PropTypes.string,
+  errorMessage: PropTypes.string,
   onChange: PropTypes.func,
 };
 
