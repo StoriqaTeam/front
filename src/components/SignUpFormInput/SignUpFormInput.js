@@ -80,11 +80,13 @@ class SignUpFormInput extends PureComponent {
       case 'text':
         validModel = value !== '';
         break;
+      case 'number':
+        validModel = this.validateNumber(value);
+        formError = this.errorMessage(value, validModel, 'Only numbers');
+        break;
       case 'email':
         validModel = value.match(this.emailRegex);
-        formError = validModel ? '' : ' Invalid Email';
-        // fallback
-        formError = value === '' ? '' : formError;
+        formError = this.errorMessage(value, validModel, 'Invalid Email');
         break;
       case 'password':
         validModel = value.length >= 3;
@@ -98,6 +100,28 @@ class SignUpFormInput extends PureComponent {
       value,
       validity: validModel,
     }));
+  };
+  /**
+   * @desc Set form error message based on its validation
+   * @param {String} value
+   * @param {String} validModel
+   * @param {String} errorMessage = 'Invalid'
+   * @return {string}
+   */
+  errorMessage = (value, validModel, errorMessage = 'Invalid') => {
+    let formError = '';
+    formError = validModel ? '' : ` ${errorMessage}`;
+    // fallback
+    formError = value === '' ? '' : formError;
+    return formError;
+  };
+  /**
+   * @desc validates that the value is a number
+   * @param value
+   */
+  validateNumber = (value) => {
+    const numberRegex = /\d/;
+    return value.match(numberRegex);
   };
   /**
    * @desc show password to the user
