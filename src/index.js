@@ -31,8 +31,7 @@ getStoreRenderArgs({
   matchContext,
   resolver,
 }).then((initialRenderArgs) => {
-  // $FlowIgnore (see https://github.com/facebook/flow/pull/5074)
-  ReactDOM.hydrate(
+  ReactDOM.render(
     <ReduxProvider store={store}>
       <FoundConnectedRouter
         matchContext={matchContext}
@@ -40,6 +39,7 @@ getStoreRenderArgs({
         initialRenderArgs={initialRenderArgs}
       />
     </ReduxProvider>,
+    // $FlowIgnore
     document.getElementById('root'),
   );
 });
