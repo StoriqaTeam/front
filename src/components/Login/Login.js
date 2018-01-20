@@ -44,40 +44,59 @@ class Login extends Component<PropsType, StateType> {
     });
   };
 
+  facebookLoginString = () => {
+    // $FlowIgnore
+    const appId = `${process.env.REACT_APP_FB_APP_ID}`;
+    const redirectUri = 'http://localhost:3003/fb';
+    const stateParam = '{someKey=asdfajslkjsdf}';
+    return `https://www.facebook.com/v2.11/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&state=${stateParam}&auth_type=rerequest`;
+  };
+
   render() {
     return (
-      <form>
-        <label htmlFor="login">
-          Login
+      <div>
+        <form>
+          <label htmlFor="login">
+            Login
+            <br />
+            <input
+              name="login"
+              type="text"
+              value={this.state.login}
+              onChange={this.handleInputChange}
+            />
+          </label>
           <br />
-          <input
-            name="login"
-            type="text"
-            value={this.state.login}
-            onChange={this.handleInputChange}
-          />
-        </label>
-        <br />
-        <label htmlFor="password">
-          Password
+          <label htmlFor="password">
+            Password
+            <br />
+            <input
+              name="password"
+              type="password"
+              value={this.state.password}
+              onChange={this.handleInputChange}
+            />
+          </label>
           <br />
-          <input
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleInputChange}
-          />
-        </label>
+          <button
+            type="button"
+            onClick={this.handleSubmitClick}
+          >
+            Login
+          </button>
+        </form>
         <br />
-        <button
-          type="button"
-          onClick={this.handleSubmitClick}
+        <br />
+        <a
+          href={this.facebookLoginString()}
+          target="_blank"
         >
-          Login
-        </button>
+          Facebook login
+        </a>
+        <br />
         <br />
         <Link to="/registration">Register</Link>
-      </form>
+      </div>
     );
   }
 }
