@@ -1,46 +1,25 @@
 // @flow
 
-import React from 'react';
 import ReactDOM from 'react-dom';
-import { createProvider as createReduxProvider } from 'react-redux';
-import { getStoreRenderArgs } from 'found/lib';
-import { BrowserProtocol, Actions as FarceActions } from 'farce';
 
-import createReduxStore from 'redux/createReduxStore';
-import FoundConnectedRouter from 'routes/FoundConnectedRouter';
-import createResolver from 'relay/createResolver';
-import { ClientFetcher } from 'relay/fetcher';
+import buildApp from 'components/entry';
 
-// $FlowIgnore
-import './index.scss';
-
-// eslint-disable-next-line
-const store = createReduxStore(new BrowserProtocol(), window.__PRELOADED_STATE__ || {});
-const matchContext = { store };
-store.dispatch(FarceActions.init());
-
-const ReduxProvider = createReduxProvider();
-
-const fetcher = new ClientFetcher(
-  process.env.REACT_APP_GRAPHQL_ENDPOINT,
-  window.__RELAY_PAYLOADS__ || [], // eslint-disable-line no-underscore-dangle
-);
-const resolver = createResolver(fetcher);
-getStoreRenderArgs({
-  store,
-  matchContext,
-  resolver,
-}).then((initialRenderArgs) => {
-  ReactDOM.render(
-    <ReduxProvider store={store}>
-      <FoundConnectedRouter
-        matchContext={matchContext}
-        resolver={resolver}
-        initialRenderArgs={initialRenderArgs}
-      />
-    </ReduxProvider>,
+buildApp()
+  .then((App) => {
     // $FlowIgnore
-    document.getElementById('root'),
-  );
-});
-
+    ReactDOM.render(App, document.getElementById('root'));
+    if (process.env.NODE_ENV === 'development' && module.hot) {
+      // $FlowIgnore
+      module.hot.accept('./components/entry.js', () => {
+        import('./components/entry.js')
+          .then((newInstance) => {
+            const rebuildApp = newInstance.default;
+            rebuildApp()
+              .then((NewApp) => {
+                // $FlowIgnore
+                ReactDOM.render(NewApp, document.getElementById('root'));
+              });
+          });
+      });
+    }
+  });
