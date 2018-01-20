@@ -9,8 +9,6 @@
 
 `yarn server:dev`
 
-`yarn relay` (в отдельном терминале)
-
 *http://localhost:3003/*
 
 ---

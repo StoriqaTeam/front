@@ -7188,6 +7188,10 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
+relay-compiler-webpack-plugin@^0.5.11:
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/relay-compiler-webpack-plugin/-/relay-compiler-webpack-plugin-0.5.11.tgz#34fb3ee9e4157a510285afd0d8e697e203a93b84"
+
 relay-compiler@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/relay-compiler/-/relay-compiler-1.4.1.tgz#10e83f0f5de8db3d000851a4c0e435e7dd1deb95"
