@@ -9,6 +9,7 @@ class SignUpFormInput extends PureComponent {
   static defaultProps = {
     onChange: () => {},
     label: '',
+    placeholder: '',
     type: 'text',
     validate: 'text',
     autocomplete: 'on',
@@ -98,11 +99,12 @@ class SignUpFormInput extends PureComponent {
   errorClass = error => (error.length === 0 ? '' : 'invalidInput');
   render() {
     const {
-      name,
-      type,
+      autocomplete,
       label,
       model,
-      autocomplete,
+      name,
+      placeholder,
+      type,
     } = this.props;
     const {
       labelFloat,
@@ -112,6 +114,14 @@ class SignUpFormInput extends PureComponent {
     } = this.state;
     // check only when the input is password to make it work when 'showPasswordButton' is enabled
     const isPassword = type === 'password' ? 'password' : type;
+    const inputLabel = (
+      <label
+        className={`signUpFormLabel ${labelFloat}`}
+        htmlFor={name}
+      >
+        { label }
+      </label>
+    );
     const passwordButton = (
       <button className="signUpFormInputShowPassword" onClick={this.handleShowPassword}>
         <EyeOpenIcon /> <small>Show</small>
@@ -124,12 +134,12 @@ class SignUpFormInput extends PureComponent {
         qualityClass={this.state.passwordQuality.qualityClass}
       />
     );
+    const inputLabelContent = (label) ? inputLabel : null;
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
     // eslint-disable-next-line
     const showPasswordContent = (showPasswordButton && type === 'password') ? passwordButton : null;
     // ONLY when type is password, so the user can see the progress bar
     const progressBarContent = type === 'password' ? progressBar : null;
-    //
     return (
       <span>
         <input
@@ -141,9 +151,12 @@ class SignUpFormInput extends PureComponent {
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}
+          placeholder={placeholder}
         />
-        <label className={`signUpFormLabel ${labelFloat}`} htmlFor={name}>{ label }</label>
-        <span className="signUpFormInputMessage">{ formError }</span>
+        { inputLabelContent }
+        <span className="signUpFormInputMessage">
+          { formError }
+        </span>
         { showPasswordContent }
         { progressBarContent }
       </span>
@@ -153,6 +166,7 @@ class SignUpFormInput extends PureComponent {
 
 SignUpFormInput.propTypes = {
   label: PropTypes.string,
+  placeholder: PropTypes.string,
   name: PropTypes.string.isRequired,
   model: PropTypes.string.isRequired,
   type: PropTypes.string,

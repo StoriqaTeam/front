@@ -84,7 +84,6 @@ function validateField(name, value, props, state) {
   let { validModel, formError } = { ...state };
   // clone 'props' and destructure some of its properties
   const { validate, errorMessage } = { ...props };
-  //
   let passwordQualityResult = {};
   switch (validate) {
     case 'text':

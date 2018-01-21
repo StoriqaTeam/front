@@ -7,6 +7,44 @@ import SignUpFormInput from './SignUpFormInput';
 
 storiesOf('SignUpFormInput', module)
   .addDecorator(withKnobs)
+  .add('no label, no placeholder', () => {
+    const username = text('Username', '');
+    return (
+      <div style={{ position: 'relative', top: 22 }}>
+        <SignUpFormInput
+          model={username}
+          name="username"
+          onChange={action('onChange')}
+        />
+      </div>
+    );
+  })
+  .add('no label, placeholder', () => {
+    const username = text('Username', '');
+    return (
+      <div style={{ position: 'relative', top: 22 }}>
+        <SignUpFormInput
+          model={username}
+          name="username"
+          placeholder="Username"
+          onChange={action('onChange')}
+        />
+      </div>
+    );
+  })
+  .add('label, no placeholder', () => {
+    const username = text('Username', '');
+    return (
+      <div style={{ position: 'relative', top: 22 }}>
+        <SignUpFormInput
+          model={username}
+          name="username"
+          label="Username"
+          onChange={action('onChange')}
+        />
+      </div>
+    );
+  })
   .add('default type "text" validation', () => {
     const username = text('Username', '');
     return (
