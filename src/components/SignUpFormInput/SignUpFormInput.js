@@ -17,7 +17,6 @@ class SignUpFormInput extends PureComponent {
   };
   state = {
     labelFloat: '',
-    validModel: false,
     showPassword: false,
     showPasswordButton: false,
     formError: '',
