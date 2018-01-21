@@ -1,0 +1,81 @@
+.signUpForm {
+  background: #ffffff;
+  height: 408px;
+  padding: 32px;
+  width: 304px;
+
+  h1 {
+    color: #505050;
+    font-size: 24px;
+    font-weight: normal;
+    margin: 0 0 48px 0;
+    text-align: left;
+  }
+
+}
+
+.signUpFormGroup {
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.signUpFormLabel {
+  color: #999;
+  font-size: 16px;
+  font-weight: normal;
+  left: 5px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transition: 0.2s ease top;
+}
+
+.signUpFormInputPassword {
+  @extend .signUpFormInput;
+  border-bottom: none;
+
+  &:focus {
+    border-bottom: none;
+  }
+}
+
+.signUpFormButton {
+  @include simple-button($background: #2FBAFD, $color: #ffffff);
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 16px 0;
+  &:disabled {
+    background: #EFEFEF !important;
+    color: #FFFFFF !important;
+  }
+}
+
+.signUpFormGoogleButton {
+  @include simple-button($background: #F7F7F7, $color: #505050);
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 14px 0;
+}
+
+.signUpFormGoogleIcon {
+  height: 22px;
+  left: 16%;
+  position: absolute;
+  top: 12px;
+  width: 22px;
+}
+
+.signUpFormSignUp {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.signUpFormPolicy {
+  color: #505050;
+  font-size: 11px;
+  line-height: 16px;
+  max-width: 46%;
+  padding: 0 0 0 6px;
+  text-align: left;
+}

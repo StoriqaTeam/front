@@ -1,4 +1,11 @@
+// Import Bootstrap overrides
+@import "assets/scss/custom";
+
 @import "components/App/index.scss";
+@import "components/Button/Button.scss";
+@import "components/SignUpForm/SignUpForm.scss";
+@import "components/SignUpFormInput/SignUpFormInput.scss";
+@import "components/ProgressBar/ProgressBar.scss";
 
 body {
   margin: 0;

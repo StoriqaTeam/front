@@ -1,0 +1,6 @@
+.Button {
+  @include simple-button;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 16px 0;
+}
