@@ -70,13 +70,14 @@ class SignUpFormInput extends PureComponent {
    * @return {void}
    */
   validate = (inputName, inputValue) => {
+    const { validate, errorMessage } = this.props;
     const {
       name,
       value,
       validity,
       formError,
       passwordQuality,
-    } = utils.validateField(inputName, inputValue, this.props, this.state);
+    } = utils.validateField(inputName, inputValue, validate, errorMessage);
     this.setState({ formError, passwordQuality }, this.props.onChange({
       name,
       value,

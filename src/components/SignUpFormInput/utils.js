@@ -75,15 +75,13 @@ function passwordQuality(value) {
 /**
  * @param {String} name - input's name
  * @param {any} value - input's value
- * @param {Object} props
- * @param {Object} state
+ * @param {String} validate - What kind of validation it should be used
+ * @param {String} errorMessage - The custom error message given by the user
  * @return {Object}
  */
-function validateField(name, value, props, state) {
-  // clone 'state' and destructure some of its properties
-  let { validModel, formError } = { ...state };
-  // clone 'props' and destructure some of its properties
-  const { validate, errorMessage } = { ...props };
+function validateField(name, value, validate, errorMessage) {
+  let validModel = '';
+  let formError = '';
   let passwordQualityResult = {};
   switch (validate) {
     case 'text':
