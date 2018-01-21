@@ -3,10 +3,15 @@ services:
   stq-front-js:
     image: "node:6"
     container_name: stq-front-js
-    command: ["sh", "-c", "yarn ; yarn start"]
+    command: ["sh", "-c", "yarn ; yarn server:dev"]
     working_dir: "/app"
     volumes:
       - ~/.ssh:/root/.ssh
       - ..:/app
     ports:
-      - 3000:3000
+      - 3003:3003
+
+networks:
+  default:
+    external:
+      name: storiqa
