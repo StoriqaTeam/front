@@ -84,8 +84,8 @@
   "scripts": {
     "build": "node scripts/build.js",
     "server:prod": "yarn build && NODE_ENV=production BABEL_ENV=production ./node_modules/.bin/babel-node ./server/index.js",
-    "server:dev": "yarn updateSchema && NODE_ENV=development BABEL_ENV=development ./node_modules/.bin/babel-node ./server/index.js",
-    "docker": "cp .env.docker .env.development && cd docker && docker-compose up",
+    "server:dev": "cp .env.dev-manual .env.development && yarn updateSchema && NODE_ENV=development BABEL_ENV=development ./node_modules/.bin/babel-node ./server/index.js",
+    "docker": "cp .env.dev-docker .env.development && cd docker && docker-compose up",
     "test": "./node_modules/.bin/node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "updateSchema": "BABEL_ENV=development NODE_ENV=development ./node_modules/.bin/babel-node scripts/updateSchema.js"
