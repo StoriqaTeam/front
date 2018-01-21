@@ -7,9 +7,7 @@
 
 ### Запуск версии для разработки:
 #### Docker:
-Переименуйте `.env.docker` в `.env.development`
-
-`cd docker && docker-compose up`
+`yarn docker`
 
 
 #### "Вручную"
