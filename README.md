@@ -13,7 +13,7 @@
 #### "Вручную"
 установите зависимости: `yarn`
 
-`yarn server:dev`
+`yarn dev`
 
 *http://localhost:3003/*
 
