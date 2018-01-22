@@ -14,18 +14,18 @@ const routes = (
     path="/"
     Component={App}
     query={graphql`
-        query routes_App_Query {
-          ...App_apiVersion
-        }
-      `}
-      render={({ Component, props, error }) => {
-        if (error) {
-          // eslint-disable-next-line
-          console.error(error);
-        }
-        return <Component {...props} />;
-      }}
-  />
+      query routes_App_Query {
+        ...App_apiVersion
+      }
+    `}
+    render={({ Component, props, error }) => {
+      if (error) {
+        // eslint-disable-next-line
+        console.error(error);
+      }
+      return <Component {...props} />;
+    }}
+  >
     <Route
       path="/fb"
       Component={({ location: { query: { code } } }) => <div>{JSON.stringify(code)}</div>}
