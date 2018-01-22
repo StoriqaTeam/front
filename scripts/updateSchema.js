@@ -2,11 +2,18 @@ import fs from 'fs';
 import path from 'path';
 import { introspectionQuery } from 'graphql/utilities';
 import fetch from 'isomorphic-fetch';
+import getClientEnvironment from '../config/env';
 
 // Save JSON of full schema introspection for Babel Relay Plugin to use
 
 const run = () => {
-  fetch('http://localhost:8000/graphql', {
+  console.log('Start GraphQL schema update.');
+  const graphqlEndpoint = getClientEnvironment('').raw.REACT_APP_GRAPHQL_ENDPOINT;
+  if (!graphqlEndpoint) {
+    console.error(`Please check 'graphqlEndpoint' var in ${__filename}`);
+    process.exit(1);
+  }
+  fetch(graphqlEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -25,13 +32,14 @@ const run = () => {
           path.join(__dirname, '../src/relay/schema.json'),
           JSON.stringify(result, null, 2)
         );
-        // fs.writeFileSync(
-        //   path.join(__dirname, '../schema.graphql'),
-        //   printSchema(result)
-        // );
+        console.log('GraphQL schema updated.');
       }
     })
-    .catch(err => console.error(err));
+    .catch((err) => {
+      console.error(`Error in ${__filename}`);
+      console.error(err);
+      process.exit(1);
+    });
 };
 
 run();

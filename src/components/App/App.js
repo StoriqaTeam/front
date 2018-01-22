@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'found';
 
 import { changeWithValue } from 'redux/reducers/dummy';
 import { Button } from 'components/Button';
@@ -20,6 +21,9 @@ class App extends PureComponent {
             onClick={this.handleBtnClick}
           />
         )}
+        <br />
+        <br />
+        <Link to="/login" >Login</Link>
       </div>
     );
   }
