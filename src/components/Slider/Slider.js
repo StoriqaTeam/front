@@ -25,10 +25,10 @@ class Slider extends PureComponent {
   }
 
   sliderPropsCalc = () => {
-    const { sliderWrapper } = this.refs; // eslint-disable-line
     const { slidesToShow, responsive } = this.props;
+    const { showAllSlides } = this.state;
     const totalSlidesAmount = this.props.items.length;
-    const sliderWrapperWidth = sliderWrapper.getBoundingClientRect().width;
+    const sliderWrapperWidth = this.sliderWrapper.getBoundingClientRect().width;
     let visibleSlidesAmount = slidesToShow;
 
     responsive.forEach((i) => {
@@ -41,7 +41,7 @@ class Slider extends PureComponent {
       sliderWrapperWidth,
       visibleSlidesAmount,
       totalSlidesAmount,
-      showAllSlides: visibleSlidesAmount >= totalSlidesAmount,
+      showAllSlides: showAllSlides || visibleSlidesAmount >= totalSlidesAmount,
     });
   }
 
@@ -89,8 +89,8 @@ class Slider extends PureComponent {
           {isRevealButton &&
             <div
               className="Slider--header--reveal"
-              style={{ color }}
               onClick={this.handlerShowSlides}
+              style={{ color }}
             >
               {toggleAllText}
             </div>
@@ -115,7 +115,7 @@ class Slider extends PureComponent {
           }
         </div>
         <div
-          ref="sliderWrapper"
+          ref={(sliderWrapper) => { this.sliderWrapper = sliderWrapper; }}
           className="Slider--wrapper"
           style={{
             left: slidesOffset,
@@ -182,7 +182,7 @@ Slider.propTypes = {
   title: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   slidesToShow: PropTypes.number.isRequired,
-  responsive: PropTypes.array.isRequired, // eslint-disable-line
+  responsive: PropTypes.array.isRequired,
   items: PropTypes.array.isRequired, // eslint-disable-line
 };
 
