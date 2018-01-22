@@ -8,7 +8,7 @@ import getClientEnvironment from '../config/env';
 
 const run = () => {
   console.log('Start GraphQL schema update.');
-  const graphqlEndpoint = getClientEnvironment('').raw.REACT_APP_GRAPHQL_ENDPOINT;
+  const graphqlEndpoint = getClientEnvironment('').raw.REACT_APP_SERVER_GRAPHQL_ENDPOINT;
   if (!graphqlEndpoint) {
     console.error(`Please check 'graphqlEndpoint' var in ${__filename}`);
     process.exit(1);

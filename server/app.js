@@ -64,7 +64,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(async (req, res) => {
   const store = createReduxStore(new ServerProtocol(req.url));
-  const fetcher = new ServerFetcher(process.env.REACT_APP_GRAPHQL_ENDPOINT);
+  const fetcher = new ServerFetcher(process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT);
 
   store.dispatch(FarceActions.init());
 
