@@ -46,7 +46,7 @@ class Login extends Component<PropsType, StateType> {
 
   facebookLoginString = () => {
     // $FlowIgnore
-    const appId = `${process.env.REACT_APP_FB_APP_ID}`;
+    const appId = `${process.env.REACT_APP_FACEBOOK_APP_ID}`;
     const redirectUri = 'http://localhost:3003/fb';
     const stateParam = '{someKey=asdfajslkjsdf}';
     return `https://www.facebook.com/v2.11/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&state=${stateParam}&auth_type=rerequest`;

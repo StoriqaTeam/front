@@ -23,7 +23,7 @@ const routes = (
         // eslint-disable-next-line
         console.error(error);
       }
-      return <Component {...props} />;
+      return <Component apiVersion={null} {...props} />;
     }}
   >
     <Route
