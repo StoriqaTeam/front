@@ -15,6 +15,7 @@ import serialize from 'serialize-javascript';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../config/webpack.config.dev';
 
 import createReduxStore from 'redux/createReduxStore';
@@ -56,11 +57,9 @@ app.use('/favicon.ico', express.static(path.resolve(__dirname, '..', 'build', 'f
 app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 'manifest.json')));
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(
-    webpackMiddleware(webpack(webpackConfig), {
-      stats: { colors: true },
-    }),
-  );
+  const compiler = webpack(webpackConfig);
+  app.use(webpackMiddleware(compiler, {stats: {colors: true}}));
+  app.use(webpackHotMiddleware(compiler));
 }
 
 app.use(async (req, res) => {

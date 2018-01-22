@@ -16,6 +16,13 @@ const routes = (
           apiVersion
         }
       `}
+      render={({ Component, props, error }) => {
+        if (error) {
+          // eslint-disable-next-line
+          console.error(error);
+        }
+        return <Component {...props} />;
+      }}
     />
     <Route
       path="/info"
