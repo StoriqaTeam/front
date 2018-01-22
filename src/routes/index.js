@@ -23,6 +23,10 @@ const routes = (
       `}
   >
     <Route
+      path="/fb"
+      Component={({ location: { query: { code } } }) => <div>{JSON.stringify(code)}</div>}
+    />
+    <Route
       path="/registration"
       Component={Registration}
     />

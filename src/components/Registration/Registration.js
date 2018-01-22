@@ -44,6 +44,7 @@ class Registration extends Component<PropsType, StateType> {
       <form>
         <label htmlFor="login">
           Login
+          <br />
           <input
             name="login"
             type="text"
@@ -52,8 +53,10 @@ class Registration extends Component<PropsType, StateType> {
           />
         </label>
         <br />
+        <br />
         <label htmlFor="password">
           Password
+          <br />
           <input
             name="password"
             type="password"
@@ -61,6 +64,7 @@ class Registration extends Component<PropsType, StateType> {
             onChange={this.handleInputChange}
           />
         </label>
+        <br />
         <br />
         <button
           type="button"
