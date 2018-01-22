@@ -29,7 +29,7 @@ export default OriginalComponent => class HandlerSlideDecorator extends PureComp
     let visibleSlidesAmount = slidesToShow;
 
     responsive.forEach((i) => {
-      if (sliderWrapperWidth + 16 < i.breakpoint) {
+      if (sliderWrapperWidth < i.breakpoint) {
         visibleSlidesAmount = i.slidesToShow;
       }
     });

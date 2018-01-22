@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class SliderHeader extends PureComponent {
+class SliderHeader extends Component {
   render() {
     const {
       color,

@@ -1,11 +1,11 @@
-import React, { PureComponent, Children, cloneElement } from 'react';
+import React, { Component, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 
 import handlerSlide from './handlerSlidesDecorator';
 
 import SliderHeader from '../SliderHeader';
 
-class SliderContainer extends PureComponent {
+class SliderContainer extends Component {
   render() {
     const {
       color,

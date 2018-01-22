@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import formatPrice from 'helpers/formatPrice';
+import formatPrice from '../utils/formatPrice';
 
-class Slide extends PureComponent {
+class Slide extends Component {
   render() {
     const {
       slideWidth,
