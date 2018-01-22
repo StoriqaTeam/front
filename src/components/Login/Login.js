@@ -4,12 +4,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'found';
 import { pathOr } from 'ramda';
-import { withCookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 import { GetJWTByEmailMutation } from 'relay/mutations';
 
 type PropsType = {
-  cookies: Object,
   router: Object,
 };
 
@@ -44,7 +43,8 @@ class Login extends Component<PropsType, StateType> {
         console.log({ response, errors }); // eslint-disable-line
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
-          this.props.cookies.set('_jwt', { value: jwt });
+          const cookies = new Cookies();
+          cookies.set('__jwt', { value: jwt });
           this.props.router.push('/');
         }
       },
@@ -115,4 +115,4 @@ Login.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withRouter(withCookies(Login));
+export default withRouter(Login);
