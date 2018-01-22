@@ -24,8 +24,8 @@ class Registration extends Component<PropsType, StateType> {
       login,
       password,
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => console.log({ response, errors }),
-      onError: (error: Error) => console.log({ error }),
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => console.log({ response, errors }), // eslint-disable-line
+      onError: (error: Error) => console.log({ error }), // eslint-disable-line
     });
   };
 

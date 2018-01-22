@@ -36,10 +36,10 @@ class Login extends Component<PropsType, StateType> {
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-        console.log({ response, errors });
+        console.log({ response, errors }); // eslint-disable-line
       },
       onError: (error: Error) => {
-        console.log({ error });
+        console.log({ error }); // eslint-disable-line
       },
     });
   };
