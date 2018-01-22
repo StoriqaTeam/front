@@ -1,0 +1,40 @@
+.SliderHeader {
+  margin-bottom: 4px;
+  padding: 16px 16px 0;
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .SliderHeader--title {
+    float: left;
+    font-size: 20px;
+    line-height: 32px;
+    font-family: $Open_Sans_SemiBold;
+  }
+
+  .SliderHeader--nav {
+    height: 32px;
+    float: right;
+  }
+
+  .SliderHeader--nav--button {
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+    cursor: pointer;
+    box-shadow: $shadow_1;
+    border-radius: 50%;
+  }
+
+  .SliderHeader--reveal {
+    margin-left: 16px;
+    font-size: 14px;
+    line-height: 32px;
+    white-space: nowrap;
+    cursor: pointer;
+    float: right;
+  }
+}
