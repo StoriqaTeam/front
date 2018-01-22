@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import formatNumber from 'helpers/formatNumber';
+import formatPrice from 'helpers/formatPrice';
 
 class Slider extends PureComponent {
   state = {
@@ -152,10 +152,10 @@ class Slider extends PureComponent {
                     <div className="Slider--wrapper--slide--price">
                       <div className="Slider--wrapper--slide--price--left">
                         <div className="Slider--wrapper--slide--price--left--actual-price">
-                          <b>{formatNumber(prices.btc.actualPrice)}</b> {prices.btc.charCode}
+                          <b>{formatPrice(prices.btc.actualPrice)}</b> {prices.btc.charCode}
                         </div>
                         <div className="Slider--wrapper--slide--price--left--undiscounted-price">
-                          {formatNumber(prices.btc.undiscountedPrice)} {prices.btc.charCode}
+                          {formatPrice(prices.btc.undiscountedPrice)} {prices.btc.charCode}
                         </div>
                       </div>
                       <div className="Slider--wrapper--slide--price--right">
@@ -163,7 +163,7 @@ class Slider extends PureComponent {
                           {`-${prices.stq.discount}%`}
                         </div>
                         <div className="Slider--wrapper--slide--price--right--actual-price">
-                          {prices.stq.charCode} {formatNumber(prices.stq.actualPrice)}
+                          {prices.stq.charCode} {formatPrice(prices.stq.actualPrice)}
                         </div>
                       </div>
                     </div>
