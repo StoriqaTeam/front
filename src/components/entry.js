@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { createProvider as createReduxProvider } from 'react-redux';
 import { getStoreRenderArgs } from 'found/lib';
 import { BrowserProtocol } from 'farce';
@@ -31,11 +32,13 @@ export default () => getStoreRenderArgs({
   matchContext,
   resolver,
 }).then(initialRenderArgs => (
-  <ReduxProvider store={store}>
-    <FoundConnectedRouter
-      matchContext={matchContext}
-      resolver={resolver}
-      initialRenderArgs={initialRenderArgs}
-    />
-  </ReduxProvider>
+  <CookiesProvider>
+    <ReduxProvider store={store}>
+      <FoundConnectedRouter
+        matchContext={matchContext}
+        resolver={resolver}
+        initialRenderArgs={initialRenderArgs}
+      />
+    </ReduxProvider>
+  </CookiesProvider>
 ));
