@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-import SliderContainer from './SliderContainer';
-import Slide from './Slide';
+import { SliderContainer, Slide } from 'components/Slider';
 
-class Slider extends Component {
+class Slider extends PureComponent {
   render() {
     return (
       <div className="Slider">

@@ -1,9 +1,9 @@
 import React, { Component, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 
-import handlerSlide from './handlerSlidesDecorator';
+import { SliderHeader } from 'components/Slider';
 
-import SliderHeader from '../SliderHeader';
+import handlerSlide from './handlerSlidesDecorator';
 
 class SliderContainer extends Component {
   render() {
@@ -17,7 +17,6 @@ class SliderContainer extends Component {
       handlerShowSlides,
       handleSlide,
     } = this.props;
-
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
 

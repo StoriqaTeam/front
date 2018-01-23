@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
-export default OriginalComponent => class HandlerSlideDecorator extends PureComponent {
+export default OriginalComponent => class HandlerSlideDecorator extends Component {
   state = {
     sliderWrapperWidth: {},
-    visibleSlidesAmount: null,
-    totalSlidesAmount: null,
+    visibleSlidesAmount: 0,
+    totalSlidesAmount: 0,
     slidesOffset: 0,
     showAllSlides: false,
   };

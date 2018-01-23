@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 
-import formatPrice from '../utils/formatPrice';
+import { formatPrice } from './utils';
 
-class Slide extends Component {
+class Slide extends PureComponent {
   render() {
     const {
       slideWidth,
@@ -63,10 +62,5 @@ class Slide extends Component {
     );
   }
 }
-
-Slide.propTypes = {
-  slideWidth: PropTypes.number.isRequired,
-  item: PropTypes.object.isRequired, // eslint-disable-line
-};
 
 export default Slide;
