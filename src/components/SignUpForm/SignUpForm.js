@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import GoogleIcon from 'assets/svg/google-icon.svg';
 import { SignUpFormInput } from 'components/SignUpFormInput';
 
-import { Button } from '../Button';
+import { Button } from 'components/Button';
 
 class SignUpForm extends PureComponent {
   state = {
