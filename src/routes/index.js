@@ -67,6 +67,11 @@ const routes = (
       render={({ props, Component }) => <Component provider="FACEBOOK" {...props} />}
     />
     <Route
+      path="/oauth_callback/google"
+      Component={OAuthLogin}
+      render={({ props, Component }) => <Component provider="GOOGLE" {...props} />}
+    />
+    <Route
       path="/profile"
       Component={Profile}
     />

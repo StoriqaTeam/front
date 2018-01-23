@@ -14,11 +14,13 @@ type PropsType = {
 
 type StateType = {
   isFetching: boolean,
+  message: any,
 };
 
 class OAuthLogin extends Component<PropsType, StateType> {
   state = {
     isFetching: false,
+    message: '',
   };
 
   componentDidMount() {
@@ -36,20 +38,23 @@ class OAuthLogin extends Component<PropsType, StateType> {
             window.location.href = '/';
           }
         },
-        onError: (error: Error) => console.error(error), // eslint-disable-line
+        onError: (error: Error) => {
+          console.error(error); // eslint-disable-line
+          this.setState({ isFetching: false, message: error });
+        },
       });
     }
   }
 
   render() {
-    const { isFetching } = this.state;
+    const { isFetching, message } = this.state;
     if (isFetching) {
       return (
         <div>Please wait...</div>
       );
     }
     return (
-      <div />
+      <div>{JSON.stringify(message)}</div>
     );
   }
 }
