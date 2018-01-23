@@ -3,11 +3,20 @@
 import React from 'react';
 import { Route } from 'found';
 import { graphql } from 'react-relay';
+import Cookies from 'universal-cookie';
+import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
 import { Login } from 'components/Login';
 import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
+
+/*
+email: "test@test.test" (pass: test)
+id: "dXNlcnNfdXNlcl8yMw=="
+isActive: true
+rawId: "23"
+*/
 
 const routes = (
   <Route
@@ -16,14 +25,23 @@ const routes = (
     query={graphql`
       query routes_App_Query {
         ...App_apiVersion
+        viewer {
+          currentUser {
+            id
+            email
+          }
+        }
       }
     `}
     render={({ Component, props, error }) => {
       if (error) {
-        // eslint-disable-next-line
-        console.error(error);
+        const errors = pathOr(null, ['source', 'errors'], error);
+        if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
+          return <Component {...props} apiVersion={null} />;
+        }
+        return null;
       }
-      return <Component apiVersion={null} {...props} />;
+      return <Component {...props} apiVersion={null} />;
     }}
   >
     <Route
@@ -37,6 +55,15 @@ const routes = (
     <Route
       path="/login"
       Component={Login}
+    />
+    <Route
+      path="/logout"
+      Component={null}
+      render={() => {
+        const cookies = new Cookies();
+        cookies.remove('__jwt');
+        window.location.href = '/';
+      }}
     />
     <Route
       path="/profile"

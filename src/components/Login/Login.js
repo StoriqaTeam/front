@@ -9,7 +9,6 @@ import Cookies from 'universal-cookie';
 import { GetJWTByEmailMutation } from 'relay/mutations';
 
 type PropsType = {
-  router: Object,
 };
 
 type StateType = {
@@ -45,7 +44,7 @@ class Login extends Component<PropsType, StateType> {
         if (jwt) {
           const cookies = new Cookies();
           cookies.set('__jwt', { value: jwt });
-          this.props.router.push('/');
+          window.location.href = '/';
         }
       },
       onError: (error: Error) => {

@@ -13,14 +13,11 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
     const jwt = this.getJWTFromCookies();
-    console.log({ headers: jwt ? assoc('Authorization', `Bearer ${jwt}`, headers) : headers });
+    const headers = { 'Content-Type': 'application/json' };
     const response = await fetch(this.url, {
       method: 'POST',
-      headers: jwt ? assoc('Authorization', `Bearer ${jwt}`) : headers,
+      headers: jwt ? assoc('Authorization', `Bearer ${jwt}`, headers) : headers,
       body: JSON.stringify({ query: operation.text, variables }),
     });
     return response.json();
