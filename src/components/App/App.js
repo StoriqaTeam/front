@@ -1,5 +1,3 @@
-// @flow
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -19,7 +17,7 @@ class App extends PureComponent {
         </header>
         {!this.props.inChanging && (
           <Button
-            title ="Press me"
+            title="Press me"
             onClick={this.handleBtnClick}
           />
         )}
