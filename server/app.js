@@ -111,7 +111,7 @@ app.use(async (req, res) => {
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}
       </script>
-      <script src="static/js/bundle.js"></script>
+      <script src="/static/js/bundle.js"></script>
       </body>  
       </html>
     `);

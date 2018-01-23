@@ -1,0 +1,61 @@
+// @flow
+
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { pathOr } from 'ramda';
+import Cookies from 'universal-cookie';
+
+import { GetJWTByProviderMutation } from 'relay/mutations';
+
+type PropsType = {
+  location: Object,
+  provider: string,
+};
+
+type StateType = {
+  isFetching: boolean,
+};
+
+class OAuthLogin extends Component<PropsType, StateType> {
+  state = {
+    isFetching: false,
+  };
+
+  componentDidMount() {
+    const { location: { query: { code } } } = this.props;
+    if (code) {
+      GetJWTByProviderMutation.commit({
+        provider: this.props.provider,
+        token: code,
+        environment: this.context.environment,
+        onCompleted: (response: ?Object) => {
+          const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
+          if (jwt) {
+            const cookies = new Cookies();
+            cookies.set('__jwt', { value: jwt }, { path: '/' });
+            window.location.href = '/';
+          }
+        },
+        onError: (error: Error) => console.error(error), // eslint-disable-line
+      });
+    }
+  }
+
+  render() {
+    const { isFetching } = this.state;
+    if (isFetching) {
+      return (
+        <div>Please wait...</div>
+      );
+    }
+    return (
+      <div />
+    );
+  }
+}
+
+OAuthLogin.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
+
+export default OAuthLogin;

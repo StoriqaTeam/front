@@ -7,7 +7,7 @@ import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
-import { Login } from 'components/Login';
+import { Login, OAuthLogin } from 'components/Login';
 import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
 
@@ -45,10 +45,6 @@ const routes = (
     }}
   >
     <Route
-      path="/fb"
-      Component={({ location: { query: { code } } }) => <div>{JSON.stringify(code)}</div>}
-    />
-    <Route
       path="/registration"
       Component={Registration}
     />
@@ -64,6 +60,11 @@ const routes = (
         cookies.remove('__jwt');
         window.location.href = '/';
       }}
+    />
+    <Route
+      path="/oauth_callback/fb"
+      Component={OAuthLogin}
+      render={({ props, Component }) => <Component provider="FACEBOOK" {...props} />}
     />
     <Route
       path="/profile"
