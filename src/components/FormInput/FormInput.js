@@ -116,7 +116,7 @@ class FormInput extends PureComponent {
     const isPassword = type === 'password' ? 'password' : type;
     const inputLabel = (
       <label
-        className={`signUpFormLabel ${labelFloat}`}
+        className={`formInputLabel ${labelFloat}`}
         htmlFor={name}
       >
         { label }

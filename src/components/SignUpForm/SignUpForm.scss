@@ -19,17 +19,6 @@
   position: relative;
 }
 
-.signUpFormLabel {
-  color: #999;
-  font-size: 16px;
-  font-weight: normal;
-  left: 5px;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  transition: 0.2s ease top;
-}
-
 .signUpFormInputPassword {
   @extend .formInput;
   border-bottom: none;
