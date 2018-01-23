@@ -5,7 +5,7 @@ import EyeOpenIcon from 'assets/svg/eye-open.svg';
 
 import utils from './utils';
 
-class SignUpFormInput extends PureComponent {
+class FormInput extends PureComponent {
   static defaultProps = {
     onChange: () => {},
     label: '',
@@ -45,7 +45,7 @@ class SignUpFormInput extends PureComponent {
     const { model } = this.props;
     if (model === '') {
       this.setState({
-        labelFloat: 'signUpFormInputLabelFloat',
+        labelFloat: 'formInputLabelFloat',
         showPasswordButton: !showPasswordButton,
       });
     }
@@ -123,7 +123,7 @@ class SignUpFormInput extends PureComponent {
       </label>
     );
     const passwordButton = (
-      <button className="signUpFormInputShowPassword" onClick={this.handleShowPassword}>
+      <button className="formInputShowPassword" onClick={this.handleShowPassword}>
         <EyeOpenIcon /> <small>Show</small>
       </button>
     );
@@ -144,7 +144,7 @@ class SignUpFormInput extends PureComponent {
       <span>
         <input
           type={showPassword ? 'text' : isPassword}
-          className={`signUpFormInput ${this.errorClass(formError)}`}
+          className={`formInput ${this.errorClass(formError)}`}
           name={name}
           value={model}
           autoComplete={autocomplete}
@@ -154,7 +154,7 @@ class SignUpFormInput extends PureComponent {
           placeholder={placeholder}
         />
         { inputLabelContent }
-        <span className="signUpFormInputMessage">
+        <span className="formInputMessage">
           { formError }
         </span>
         { showPasswordContent }
@@ -164,7 +164,7 @@ class SignUpFormInput extends PureComponent {
   }
 }
 
-SignUpFormInput.propTypes = {
+FormInput.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   name: PropTypes.string.isRequired,
@@ -176,4 +176,4 @@ SignUpFormInput.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default SignUpFormInput;
+export default FormInput;

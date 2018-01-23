@@ -1,6 +1,6 @@
 $colorError: #FD7DAA;
 
-.signUpFormInput {
+.formInput {
   @include form-input;
   font-size: 14px;
   line-height: 24px;
@@ -12,19 +12,19 @@ $colorError: #FD7DAA;
 
 }
 
-.signUpFormInputLabelFloat {
+.formInputLabelFloat {
   color: #A7A7A7;
   font-size: 14px;
   top: -20px;
 }
 
-.signUpFormInputMessage {
+.formInputMessage {
   color: $colorError;
   font-size: 13px;
   text-align: center;
 }
 
-.signUpFormInputShowPassword {
+.formInputShowPassword {
   background: none;
   border: none;
   cursor: pointer;

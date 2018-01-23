@@ -3,15 +3,15 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, text } from '@storybook/addon-knobs/react';
 
-import SignUpFormInput from './SignUpFormInput';
+import FormInput from './FormInput';
 
-storiesOf('SignUpFormInput', module)
+storiesOf('FormInput', module)
   .addDecorator(withKnobs)
   .add('no label, no placeholder', () => {
     const username = text('Username', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={username}
           name="username"
           onChange={action('onChange')}
@@ -23,7 +23,7 @@ storiesOf('SignUpFormInput', module)
     const username = text('Username', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={username}
           name="username"
           placeholder="Username"
@@ -36,7 +36,7 @@ storiesOf('SignUpFormInput', module)
     const username = text('Username', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={username}
           name="username"
           label="Username"
@@ -49,7 +49,7 @@ storiesOf('SignUpFormInput', module)
     const username = text('Username', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={username}
           name="username"
           label="Username"
@@ -62,7 +62,7 @@ storiesOf('SignUpFormInput', module)
     const email = text('Email', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={email}
           type="email"
           name="email"
@@ -76,7 +76,7 @@ storiesOf('SignUpFormInput', module)
     const password = text('Email', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={password}
           type="password"
           name="password"
@@ -90,7 +90,7 @@ storiesOf('SignUpFormInput', module)
     const username = text('Username', '');
     return (
       <div style={{ position: 'relative', top: 22 }}>
-        <SignUpFormInput
+        <FormInput
           model={username}
           name="username"
           label="Username"

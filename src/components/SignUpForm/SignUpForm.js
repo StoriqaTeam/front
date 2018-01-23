@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import GoogleIcon from 'assets/svg/google-icon.svg';
-import { SignUpFormInput } from 'components/SignUpFormInput';
 
+import { FormInput } from 'components/FormInput';
 import { Button } from 'components/Button';
 
 class SignUpForm extends PureComponent {
@@ -55,7 +55,7 @@ class SignUpForm extends PureComponent {
       <form className="signUpForm" noValidate onSubmit={this.handleSubmit}>
         <h1>Sign Up</h1>
         <div className="signUpFormGroup">
-          <SignUpFormInput
+          <FormInput
             label="Username"
             name="username"
             type="text"
@@ -64,7 +64,7 @@ class SignUpForm extends PureComponent {
           />
         </div>
         <div className="signUpFormGroup">
-          <SignUpFormInput
+          <FormInput
             label="Email"
             name="email"
             type="email"
@@ -74,7 +74,7 @@ class SignUpForm extends PureComponent {
           />
         </div>
         <div className="signUpFormGroup">
-          <SignUpFormInput
+          <FormInput
             label="Password"
             name="password"
             type="password"
