@@ -19,7 +19,7 @@ class App extends PureComponent {
         </header>
         {!this.props.inChanging && (
           <Button
-            title="Press me"
+            title ="Press me"
             onClick={this.handleBtnClick}
           />
         )}
