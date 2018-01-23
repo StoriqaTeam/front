@@ -14,6 +14,7 @@ class FormInput extends PureComponent {
     validate: 'text',
     autocomplete: 'on',
     errorMessage: '',
+    className: 'formInput',
   };
   state = {
     labelFloat: '',
@@ -105,6 +106,7 @@ class FormInput extends PureComponent {
       name,
       placeholder,
       type,
+      className,
     } = this.props;
     const {
       labelFloat,
@@ -144,7 +146,7 @@ class FormInput extends PureComponent {
       <span>
         <input
           type={showPassword ? 'text' : isPassword}
-          className={`formInput ${this.errorClass(formError)}`}
+          className={`${className} ${this.errorClass(formError)}`}
           name={name}
           value={model}
           autoComplete={autocomplete}
@@ -167,6 +169,7 @@ class FormInput extends PureComponent {
 FormInput.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  className: PropTypes.string,
   name: PropTypes.string.isRequired,
   model: PropTypes.string.isRequired,
   type: PropTypes.string,
