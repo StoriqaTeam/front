@@ -1,7 +1,13 @@
+// Settings
+@import "styles/variables.scss";
+@import "styles/fonts.scss";
+@import "styles/default.scss";
+
+// App
 @import "components/App/index.scss";
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+// Slider
+@import "components/Slider/Slider.scss";
+@import "components/Slider/Slide.scss";
+@import "components/Slider/SliderContainer.scss";
+@import "components/Slider/SliderHeader.scss";
