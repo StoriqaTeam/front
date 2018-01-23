@@ -1,6 +1,7 @@
 .CardProduct {
   position: relative;
   display: inline-block;
+  width: 100%;
   padding: 8px;
 
   &:before {
@@ -29,6 +30,11 @@
   .CardProduct--labels {
     position: absolute;
     top: 8px;
+  }
+
+  .CardProduct--img {
+    width: 100%;
+    display: block;
   }
 
   .CardProduct--labels--discount {
@@ -64,6 +70,8 @@
     position: relative;
     height: 37.5%;
     padding: 8px;
+    background-color: $color_white;
+    z-index: 1;
   }
 
   .CardProduct--title {

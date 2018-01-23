@@ -9,7 +9,7 @@ storiesOf('Card Product', module)
   .add('Default', () => (
     <div
       style={{
-        width: '320px',
+        maxWidth: '328px',
         margin: '0 auto',
       }}
     >
