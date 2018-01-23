@@ -1,0 +1,27 @@
+{
+  "id": "1",
+  "title": "Chromecast 2015 dfabeba",
+  "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShIYnwBTi2jdqhnHaJCPF8KGYXyfahN_Gc2Vz6-y_IO2Ry3oKS",
+  "prices": {
+    "btc": {
+      "charCode": "BTC",
+      "actualPrice": 0.00000995,
+      "undiscountedPrice": 0.00000052,
+      "discount": 12
+    },
+    "stq": {
+      "charCode": "STQ",
+      "actualPrice": 345475467,
+      "undiscountedPrice": 345475467,
+      "discount": 12
+    },
+    "eur": {
+      "charCode": "EUR",
+      "actualPrice": 2537,
+      "undiscountedPrice": 3860,
+      "discount": 12
+    }
+  },
+  "qualityAssurance": true,
+  "sellerDiscount": 15
+}
