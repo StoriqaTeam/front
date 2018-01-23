@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { SliderContainer, Slide } from 'components/Slider';
+import { CardProduct } from 'components/CardProduct';
 
 class Slider extends PureComponent {
   render() {
@@ -8,9 +9,9 @@ class Slider extends PureComponent {
       <div className="Slider">
         <SliderContainer {...this.props}>
           {this.props.items.map(item => ( // eslint-disable-line
-            <Slide
+            <CardProduct
               key={item.id}
-              item={item}
+              data={item}
             />
           ))}
         </SliderContainer>

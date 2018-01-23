@@ -1,7 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 
-class SliderHeader extends Component {
+type PropsTypes = {
+  color: number,
+  title: string,
+  isRevealButton: boolean,
+  showAllSlides: boolean,
+  handleSlide: Function,
+};
+
+class SliderHeader extends PureComponent<PropsTypes> {
   render() {
     const {
       color,
@@ -9,21 +16,19 @@ class SliderHeader extends Component {
       isRevealButton,
       showAllSlides,
       handleSlide,
-      handlerShowSlides,
     } = this.props;
-    const toggleAllText = showAllSlides ? 'Hide some' : 'See all';
 
     return (
       <div className="SliderHeader">
         <div className="SliderHeader--title" style={{ color }}>{title}</div>
         {isRevealButton &&
-        <button
+        <a
+          href="#"
           className="SliderHeader--reveal"
-          onClick={handlerShowSlides}
           style={{ color }}
         >
-          {toggleAllText}
-        </button>
+          See all
+        </a>
         }
         {isRevealButton && !showAllSlides &&
         <div className="SliderHeader--nav">
@@ -53,14 +58,5 @@ class SliderHeader extends Component {
     );
   }
 }
-
-SliderHeader.propTypes = {
-  color: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  isRevealButton: PropTypes.bool.isRequired,
-  showAllSlides: PropTypes.bool.isRequired,
-  handleSlide: PropTypes.func.isRequired,
-  handlerShowSlides: PropTypes.func.isRequired,
-};
 
 export default SliderHeader;

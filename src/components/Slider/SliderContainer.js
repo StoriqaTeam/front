@@ -1,11 +1,25 @@
+// @flow
+
 import React, { Component, Children, cloneElement } from 'react';
-import PropTypes from 'prop-types';
+import type { Node } from 'react';
 
 import { SliderHeader } from 'components/Slider';
 
 import handlerSlide from './handlerSlidesDecorator';
 
-class SliderContainer extends Component {
+type PropsTypes = {
+  color: string,
+  title: string,
+  showAllSlides: boolean,
+  slidesOffset: number,
+  visibleSlidesAmount: number,
+  totalSlidesAmount: number,
+  handleSlide: Function,
+  originalComponentRef: Function,
+  children: Node,
+};
+
+class SliderContainer extends Component<PropsTypes> {
   render() {
     const {
       color,
@@ -14,7 +28,6 @@ class SliderContainer extends Component {
       slidesOffset,
       visibleSlidesAmount,
       totalSlidesAmount,
-      handlerShowSlides,
       handleSlide,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
@@ -27,7 +40,6 @@ class SliderContainer extends Component {
           title={title}
           isRevealButton={isRevealButton}
           showAllSlides={showAllSlides}
-          handlerShowSlides={handlerShowSlides}
           handleSlide={handleSlide}
         />
         <div
@@ -38,24 +50,20 @@ class SliderContainer extends Component {
             whiteSpace: showAllSlides ? 'normal' : 'nowrap',
           }}
         >
-          {Children.map(this.props.children, child => cloneElement(child, { slideWidth }))}
+          {Children.map(this.props.children, child => (
+            <div
+              className="SliderContainer--wrapper--item"
+              style={{
+                width: `${slideWidth}%`,
+              }}
+            >
+              {cloneElement(child)}
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 }
-
-SliderContainer.propTypes = {
-  color: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  showAllSlides: PropTypes.bool.isRequired,
-  slidesOffset: PropTypes.number.isRequired,
-  visibleSlidesAmount: PropTypes.number.isRequired,
-  totalSlidesAmount: PropTypes.number.isRequired,
-  handlerShowSlides: PropTypes.func.isRequired,
-  handleSlide: PropTypes.func.isRequired,
-  originalComponentRef: PropTypes.func.isRequired,
-  children: PropTypes.array.isRequired, // eslint-disable-line
-};
 
 export default handlerSlide(SliderContainer);

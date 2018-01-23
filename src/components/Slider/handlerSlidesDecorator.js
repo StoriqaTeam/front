@@ -61,13 +61,6 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     this.setState({ slidesOffset: direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth });
   }
 
-  handlerShowSlides = () => {
-    this.setState({
-      showAllSlides: !this.state.showAllSlides,
-      slidesOffset: 0,
-    });
-  }
-
   render() {
     return (
       <OriginalComponent
@@ -75,7 +68,6 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
         {...this.props}
         {...this.state}
         handleSlide={this.handleSlide}
-        handlerShowSlides={this.handlerShowSlides}
       />
     );
   }

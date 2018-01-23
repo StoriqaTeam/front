@@ -24,4 +24,9 @@
     margin: 8px;
     transition: left 0.5s ease-out;
   }
+
+  .SliderContainer--wrapper--item {
+    position: relative;
+    display: inline-block;
+  }
 }
