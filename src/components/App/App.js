@@ -1,18 +1,21 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import type { Node } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Link } from 'found';
 import { pathOr } from 'ramda';
+import type { Node } from 'react';
+import type { Environment } from 'relay-runtime';
 
 type PropsType = {
   viewer: ?{
     currentUser: {},
   },
   children: Node,
-  relay: {},
+  relay: {
+    environment: Environment,
+  },
 };
 
 class App extends PureComponent<PropsType> {
