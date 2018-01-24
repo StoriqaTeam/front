@@ -6,7 +6,7 @@ const PasswordHints = () => (
     <ul>
       <li>One lower case character</li>
       <li>One upper case character</li>
-      <li>One upper number</li>
+      <li>One number</li>
       <li>One upper special character</li>
       <li>8 characters minimum</li>
     </ul>
