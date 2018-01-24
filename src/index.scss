@@ -1,8 +1,19 @@
+// Settings
+@import "styles/variables.scss";
+@import "styles/fonts.scss";
+@import "styles/default.scss";
+
+// App
 @import "components/App/index.scss";
 @import "components/Dropdown/Dropdown.scss";
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+// Slider
+@import "components/Slider/Slider.scss";
+@import "components/Slider/SliderContainer.scss";
+@import "components/Slider/SliderHeader.scss";
+
+// CardProduct
+@import "components/CardProduct/CardProduct.scss";
+
+// Icon
+@import "components/Icon/Icon.scss";

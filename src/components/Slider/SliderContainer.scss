@@ -1,0 +1,32 @@
+.SliderContainer {
+  position: relative;
+  padding-top: 16px;
+  overflow: hidden;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background-color: $color_white;
+    z-index: 1;
+  }
+
+  &:before {left: 0;}
+  &:after {right: 0;}
+
+  .SliderContainer--wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    margin: 8px;
+    transition: left 0.5s ease-out;
+  }
+
+  .SliderContainer--wrapper--item {
+    position: relative;
+    display: inline-block;
+  }
+}

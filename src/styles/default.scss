@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 16px;
+  font: inherit;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  outline: none;
+}
+
+body {
+  height: 100%;
+  font-family: $Open_Sans;
+  line-height: 18px;
+  color: $color_primary;
+}
+
+b {
+  font-family: $Open_Sans_Bold;
+}
+
+svg {
+  & g, & path {
+    fill: $color_primary;
+  }
+}
