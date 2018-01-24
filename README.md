@@ -41,3 +41,8 @@ info_url = "https://graph.facebook.com/me"
 code_to_token_url= "https://graph.facebook.com/v2.11/oauth/access_token"
 redirect_url="http://localhost:3003/oauth_callback/fb"
 ```
+
+---
+
+#### Отключение pre-push хука
+Ключ `--no-verify`
