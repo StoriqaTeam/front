@@ -60,7 +60,7 @@ class OAuthCallback extends Component<PropsType, StateType> {
       );
     }
     return (
-      <div>{JSON.stringify(message)}</div>
+      <div>{log.debug(JSON.stringify(message))}</div>
     );
   }
 }
