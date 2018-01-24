@@ -1,0 +1,42 @@
+.Dropdown {
+  position: relative;
+}
+
+.DropdownTrigger {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.DropdownContent {
+  position: absolute;
+  display: block;
+  margin-top: 12px;
+  width: 232px;
+  min-height: 232px;
+  padding: 16px 8px;
+  background-color: #fff;
+  box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, .16);
+  z-index: 99;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 19px;
+    width: 13px;
+    height: 13px;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, .16);
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 8px;
+    width: 32px;
+    height: 12px;
+    background-color: #fff;
+  }
+}
