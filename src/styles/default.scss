@@ -19,3 +19,9 @@ body {
 b {
   font-family: $Open_Sans_Bold;
 }
+
+svg {
+  & g, & path {
+    fill: $color_primary;
+  }
+}
