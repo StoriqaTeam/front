@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { log } from 'utils';
 import { CreateUserMutation } from 'relay/mutations';
 
 type StateType = {
@@ -24,8 +25,8 @@ class Registration extends Component<PropsType, StateType> {
       login,
       password,
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => console.log({ response, errors }), // eslint-disable-line
-      onError: (error: Error) => console.log({ error }), // eslint-disable-line
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => log.debug({ response, errors }),
+      onError: (error: Error) => log.error({ error }),
     });
   };
 

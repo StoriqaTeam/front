@@ -6,6 +6,7 @@ import { Link, withRouter } from 'found';
 import { pathOr } from 'ramda';
 import Cookies from 'universal-cookie';
 
+import { log } from 'utils';
 import { GetJWTByEmailMutation } from 'relay/mutations';
 
 type PropsType = {
@@ -39,7 +40,7 @@ class Login extends Component<PropsType, StateType> {
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-        console.log({ response, errors }); // eslint-disable-line
+        log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
           const cookies = new Cookies();
@@ -48,7 +49,7 @@ class Login extends Component<PropsType, StateType> {
         }
       },
       onError: (error: Error) => {
-        console.log({ error }); // eslint-disable-line
+        log.error({ error });
       },
     });
   };

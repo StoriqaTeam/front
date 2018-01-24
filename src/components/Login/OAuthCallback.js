@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
 import Cookies from 'universal-cookie';
 
+import { log } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 
 type PropsType = {
@@ -44,7 +45,7 @@ class OAuthCallback extends Component<PropsType, StateType> {
           }
         },
         onError: (error: Error) => {
-          console.error(error); // eslint-disable-line
+          log.error(error);
           this.setState({ isFetching: false, message: error });
         },
       });
