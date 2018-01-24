@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import GoogleIcon from 'assets/svg/google-icon.svg';
+import FacebookIcon from 'assets/svg/facebook-icon.svg';
 
 import { FormInput } from 'components/FormInput';
 import { Button } from 'components/Button';
+import { Separator } from 'components/Separator';
 
 class SignUpForm extends PureComponent {
   state = {
@@ -18,7 +20,12 @@ class SignUpForm extends PureComponent {
    * @desc Storiqa's anti-span policy
    * @type {String}
    */
-  policy = 'By clicking this button, you agree to Storiqa’s Anti-spam Policy & Terms of Use.';
+  policy = (
+    <span>
+      <span style={{ color: '#939393' }}>By clicking this button, you agree to Storiqa’s </span>
+      <span style={{ color: '#505050' }}>Anti-spam Policy & Terms of Use.</span>
+    </span>
+  );
   /**
    * @desc handles onSubmit event
    */
@@ -45,15 +52,36 @@ class SignUpForm extends PureComponent {
     this.setState({ formValid: usernameValid && emailValid && passwordValid });
   };
   /**
-   * @desc handles handleGoogleClick event
+   * @desc handles handleProviderAuth event
    */
-  handleGoogleClick = () => {};
+  handleProviderAuth = () => {};
 
   render() {
-    const { username, email, password } = this.state;
+    const {
+      username,
+      email,
+      password,
+      formValid,
+    } = this.state;
+    const singUp = (
+      <div className="signUpFormSignUp">
+        <Button
+          type="submit"
+          buttonClass="signUpFormButton"
+          title="Sign Up"
+          onClick={this.handleSubmit}
+        />
+        <span className="signUpFormPolicy">{ this.policy }</span>
+      </div>
+    );
+    // Show only when the form is valid
+    const singUpContent = formValid ? singUp : null;
     return (
       <form className="signUpForm" noValidate onSubmit={this.handleSubmit}>
-        <h1>Sign Up</h1>
+        <header className="signUpFormHeader">
+          <h1>Sign Up</h1>
+          <a href="#">Sign In</a>
+        </header>
         <div className="signUpFormGroup">
           <FormInput
             label="Username"
@@ -83,23 +111,23 @@ class SignUpForm extends PureComponent {
             onChange={this.handleChange}
           />
         </div>
-        <div className="signUpFormGroup">
-          <GoogleIcon className="signUpFormGoogleIcon" />
+        { singUpContent }
+        <Separator text="or" />
+        <div className="signUpFormAuthProvider">
+          <GoogleIcon className="signUpFormButtonIcon" />
           <Button
             buttonClass="signUpFormGoogleButton"
-            title="Sign up with google"
-            onClick={this.handleGoogleClick}
+            title="Sign up with Google"
+            onClick={this.handleProviderAuth}
           />
         </div>
-        <div className="signUpFormSignUp">
+        <div className="signUpFormAuthProvider">
+          <FacebookIcon className="signUpFormButtonIcon" />
           <Button
-            type="submit"
-            buttonClass="signUpFormButton"
-            title="Sign Up"
-            onClick={this.handleSubmit}
-            disabled={!this.state.formValid}
+            buttonClass="signUpFormGoogleButton"
+            title="Sign up with Facebook"
+            onClick={this.handleProviderAuth}
           />
-          <span className="signUpFormPolicy">{this.policy}</span>
         </div>
       </form>
     );

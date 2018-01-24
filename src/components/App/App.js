@@ -21,7 +21,9 @@ class App extends PureComponent {
             onClick={this.handleBtnClick}
           />
         )}
-        <SignUpForm />
+        <div style={{ display: 'flex', justifyContent: 'center', padding: 20 }}>
+          <SignUpForm />
+        </div>
       </div>
     );
   }
