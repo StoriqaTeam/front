@@ -12,7 +12,7 @@ type PropsType = {
     currentUser: {},
   },
   children: Node,
-  relay: Object,
+  relay: {},
 };
 
 class App extends PureComponent<PropsType> {

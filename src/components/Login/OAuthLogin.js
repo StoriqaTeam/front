@@ -8,7 +8,7 @@ import Cookies from 'universal-cookie';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 
 type PropsType = {
-  location: Object,
+  location: {},
   provider: string,
 };
 
