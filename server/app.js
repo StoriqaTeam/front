@@ -11,7 +11,7 @@ import { Actions as FarceActions, ServerProtocol } from 'farce';
 import { getStoreRenderArgs, resolver, RedirectException } from 'found';
 import { RouterProvider } from 'found/lib/server';
 import createRender from 'found/lib/createRender';
-import serialize from 'serialize-javascript';
+import serialize from '../libs/serialize-javascript';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
