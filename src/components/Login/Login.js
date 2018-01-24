@@ -69,7 +69,7 @@ class Login extends Component<PropsType, StateType> {
     const redirectUri = `${process.env.REACT_APP_OAUTH_GOOGLE_REDIRECT_URI}`;
     // $FlowIgnore
     const scopes = `${process.env.REACT_APP_OAUTH_GOOGLE_SCOPES}`;
-    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code`;
+    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code&access_type=offline`;
   };
 
   render() {
