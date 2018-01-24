@@ -1,4 +1,4 @@
-.CardProduct {
+.cardProduct {
   position: relative;
   padding: 8px;
 
@@ -7,113 +7,115 @@
     display: block;
     padding-top: 100%;
   }
+}
 
-  .CardProduct--body {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    bottom: 8px;
-    right: 8px;
-    border-radius: 4px;
-    box-shadow: $shadow_1;
-    overflow: hidden;
-  }
+.body {
+  composes: boxShadow1 from global;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  bottom: 8px;
+  right: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
 
-  .CardProduct--top {
-    position: relative;
-    height: 62.5%;
-    background-color: $color_grey;
-  }
+.top {
+  composes: bgGrey from global;
+  position: relative;
+  height: 62.5%;
+}
 
-  .CardProduct--labels {
-    position: absolute;
-    top: 8px;
-  }
+.labels {
+  position: absolute;
+  top: 8px;
+}
 
-  .CardProduct--img {
-    width: 100%;
+.img {
+  width: 100%;
+  display: block;
+}
+
+.labels--discount {
+  composes: OpenSans_SemiBold colorWhite bgPink from global;
+  width: 40px;
+  height: 32px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 32px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.labels--qa {
+  composes: bgWhite from global;
+  width: 40px;
+  height: 32px;
+  padding-top: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+
+  img {
     display: block;
+    margin: 0 auto;
+    width: 24px;
+    height: 24px;
   }
+}
 
-  .CardProduct--labels--discount {
-    width: 40px;
-    height: 32px;
-    font-family: $Open_Sans_SemiBold;
-    font-size: 14px;
-    text-align: center;
-    line-height: 32px;
-    color: $color_white;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    background-color: $color_pink;
-  }
+.bottom {
+  composes: bgWhite from global;
+  position: relative;
+  height: 37.5%;
+  padding: 8px;
+  z-index: 1;
+}
 
-  .CardProduct--labels--qa {
-    width: 40px;
-    height: 32px;
-    padding-top: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    background-color: $color_white;
+.title {
+  padding-right: 54px;
+  font-size: 14px;
+  white-space: normal;
+}
 
-    img {
-      display: block;
-      margin: 0 auto;
-      width: 24px;
-      height: 24px;
-    }
-  }
+.price {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 16px;
+}
 
-  .CardProduct--bottom {
-    position: relative;
-    height: 37.5%;
-    padding: 8px;
-    background-color: $color_white;
-    z-index: 1;
-  }
+.price--left {
+  display: inline-block;
+  width: 50%;
+}
 
-  .CardProduct--title {
-    padding-right: 54px;
-    font-size: 14px;
-    white-space: normal;
-  }
+.price--left--undiscounted-price {
+  composes: colorGrey from global;
+  margin-top: 8px;
+  font-size: 12px;
+  text-decoration: line-through;
+}
 
-  .CardProduct--price {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 16px;
-  }
+.price--right {
+  display: inline-block;
+  width: 50%;
+  text-align: right;
+  font-size: 12px;
+}
 
-  .CardProduct--price--left {
-    display: inline-block;
-    width: 50%;
-  }
+.price--right--discount {
+  composes: colorWhite bgBlue from global;
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 4px;
+}
 
-  .CardProduct--price--left--undiscounted-price {
-    margin-top: 8px;
-    font-size: 12px;
-    color: $color_grey;
-    text-decoration: line-through;
-  }
+.price--right--actual-price {
+  display: inline-block;
+  margin-left: 4px;
+}
 
-  .CardProduct--price--right {
-    display: inline-block;
-    width: 50%;
-    text-align: right;
-    font-size: 12px;
-  }
-
-  .CardProduct--price--right--discount {
-    display: inline-block;
-    padding: 0 8px;
-    border-radius: 4px;
-    color: $color_white;
-    background-color: $color_blue;
-  }
-
-  .CardProduct--price--right--actual-price {
-    display: inline-block;
-    margin-left: 4px;
-  }
+.price--left--actual-price {
+  display: inline-block;
+  margin-left: 4px;
 }

@@ -10,8 +10,13 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const RelayCompilerWebpackPlugin = require('relay-compiler-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+
+const extractCSS = new ExtractTextPlugin('styles.css');
+const extractSCSS = new ExtractTextPlugin('styles.css');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -145,13 +150,19 @@ module.exports = {
           },
           {
             test: /\.scss$/,
-            use: [{
-              loader: "style-loader" // creates style nodes from JS strings
-            }, {
-              loader: "css-loader" // translates CSS into CommonJS
-            }, {
-              loader: "sass-loader" // compiles Sass to CSS
-            }]
+            use: extractSCSS.extract({
+              use: [{
+                loader: "css-loader", // translates CSS into CommonJS
+                options: {
+                  importLoaders: 1,
+                  modules: true,
+                  sourceMap: true,
+                  localIdentName: '[name]__[local]___[hash:base64:5]'
+                }
+              }, {
+                loader: "sass-loader" // compiles Sass to CSS
+              }]
+            })
           },
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -160,35 +171,37 @@ module.exports = {
           // in development "style" loader enables hot editing of CSS.
           {
             test: /\.css$/,
-            use: [
-              require.resolve('style-loader'),
-              {
-                loader: require.resolve('css-loader'),
-                options: {
-                  importLoaders: 1,
+            use: extractCSS.extract({
+              fallback: 'style-loader',
+              use: [
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    importLoaders: 1,
+                  },
                 },
-              },
-              {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  // Necessary for external CSS imports to work
-                  // https://github.com/facebookincubator/create-react-app/issues/2677
-                  ident: 'postcss',
-                  plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9', // React doesn't support IE8 anyway
-                      ],
-                      flexbox: 'no-2009',
-                    }),
-                  ],
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: {
+                    // Necessary for external CSS imports to work
+                    // https://github.com/facebookincubator/create-react-app/issues/2677
+                    ident: 'postcss',
+                    plugins: () => [
+                      require('postcss-flexbugs-fixes'),
+                      autoprefixer({
+                        browsers: [
+                          '>1%',
+                          'last 4 versions',
+                          'Firefox ESR',
+                          'not ie < 9', // React doesn't support IE8 anyway
+                        ],
+                        flexbox: 'no-2009',
+                      }),
+                    ],
+                  },
                 },
-              },
-            ],
+              ],
+            }),
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
@@ -252,6 +265,8 @@ module.exports = {
       schema: path.resolve(__dirname, '../src/relay/schema.json'),
       src: path.resolve(__dirname, '../src'),
     }),
+    extractCSS,
+    extractSCSS
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

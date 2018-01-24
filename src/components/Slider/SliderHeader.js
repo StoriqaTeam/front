@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import './SliderHeader.scss';
+
 type PropsTypes = {
   color: number,
   title: string,
@@ -19,22 +21,22 @@ class SliderHeader extends PureComponent<PropsTypes> {
     } = this.props;
 
     return (
-      <div className="SliderHeader">
-        <div className="SliderHeader--title" style={{ color }}>{title}</div>
+      <div styleName="sliderHeader">
+        <div styleName="title" style={{ color }}>{title}</div>
         {isRevealButton &&
         <a
           href="#"
-          className="SliderHeader--reveal"
+          styleName="reveal"
           style={{ color }}
         >
           See all
         </a>
         }
         {isRevealButton && !showAllSlides &&
-        <div className="SliderHeader--nav">
+        <div styleName="nav">
           <button
             direction="prev"
-            className="SliderHeader--nav--button SliderHeader--nav--button-prev"
+            styleName="nav-button"
             onClick={() => handleSlide('prev')}
           >
             <img
@@ -44,7 +46,7 @@ class SliderHeader extends PureComponent<PropsTypes> {
           </button>
           <button
             direction="next"
-            className="SliderHeader--nav--button SliderHeader--nav--button-next"
+            styleName="nav-button"
             onClick={() => handleSlide('next')}
           >
             <img

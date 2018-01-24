@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 
 import { formatPrice } from './utils';
 
+import './CardProduct.scss';
+
 type PricesTypes = {
   charCode: number,
   actualPrice: number,
@@ -36,39 +38,39 @@ class CardProduct extends PureComponent<PropsTypes> {
     } = this.props;
 
     return (
-      <div className="CardProduct">
-        <div className="CardProduct--body">
-          <div className="CardProduct--top">
-            <img className="CardProduct--img" src={img} />
-            <div className="CardProduct--labels">
+      <div styleName="cardProduct">
+        <div styleName="body">
+          <div styleName="top">
+            <img styleName="img" src={img} />
+            <div styleName="labels">
               {sellerDiscount &&
-              <div className="CardProduct--labels--discount">
+              <div styleName="labels--discount">
                 {`-${sellerDiscount}%`}
               </div>
               }
               {qualityAssurance &&
-              <div className="CardProduct--labels--qa">
+              <div styleName="labels--qa">
                 <img src={require('assets/img/qa-icon.svg')} alt="qa" />
               </div>
               }
             </div>
           </div>
-          <div className="CardProduct--bottom">
-            <div className="CardProduct--title">{title}</div>
-            <div className="CardProduct--price">
-              <div className="CardProduct--price--left">
-                <div className="CardProduct--price--left--actual-price">
+          <div styleName="bottom">
+            <div styleName="title">{title}</div>
+            <div styleName="price">
+              <div styleName="price--left">
+                <div styleName="price--left--actual-price">
                   <b>{formatPrice(prices.btc.actualPrice)}</b> {prices.btc.charCode}
                 </div>
-                <div className="CardProduct--price--left--undiscounted-price">
+                <div styleName="price--left--undiscounted-price">
                   {formatPrice(prices.btc.undiscountedPrice)} {prices.btc.charCode}
                 </div>
               </div>
-              <div className="CardProduct--price--right">
-                <div className="CardProduct--price--right--discount">
+              <div styleName="price--right">
+                <div styleName="price--right--discount">
                   {`-${prices.stq.discount}%`}
                 </div>
-                <div className="CardProduct--price--right--actual-price">
+                <div styleName="price--right--actual-price">
                   {prices.stq.charCode} {formatPrice(prices.stq.actualPrice)}
                 </div>
               </div>

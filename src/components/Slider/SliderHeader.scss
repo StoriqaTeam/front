@@ -1,4 +1,4 @@
-.SliderHeader {
+.sliderHeader {
   margin-bottom: 4px;
   padding: 16px 16px 0;
 
@@ -7,35 +7,35 @@
     display: block;
     clear: both;
   }
+}
 
-  .SliderHeader--title {
-    float: left;
-    font-size: 20px;
-    line-height: 32px;
-    font-family: $Open_Sans_SemiBold;
-  }
+.title {
+  composes: OpenSans_SemiBold from global;
+  float: left;
+  font-size: 20px;
+  line-height: 32px;
+}
 
-  .SliderHeader--nav {
-    height: 32px;
-    float: right;
-  }
+.nav {
+  height: 32px;
+  float: right;
+}
 
-  .SliderHeader--nav--button {
-    width: 32px;
-    height: 32px;
-    margin-left: 8px;
-    cursor: pointer;
-    box-shadow: $shadow_1;
-    border-radius: 50%;
-  }
+.nav-button {
+  composes: boxShadow1 from global;
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+}
 
-  .SliderHeader--reveal {
-    margin-left: 16px;
-    font-size: 14px;
-    line-height: 32px;
-    white-space: nowrap;
-    text-decoration: none;
-    cursor: pointer;
-    float: right;
-  }
+.reveal {
+  margin-left: 16px;
+  font-size: 14px;
+  line-height: 32px;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  float: right;
 }
