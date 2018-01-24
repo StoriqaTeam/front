@@ -1,16 +1,23 @@
 import fetch from 'isomorphic-fetch';
+import Cookies from 'universal-cookie';
+import { assoc, pathOr } from 'ramda';
 
 class FetcherBase {
   constructor(url) {
     this.url = url;
   }
 
+  // eslint-disable-next-line
+  getJWTFromCookies() {
+    throw new Error('should be implemented in subclasses');
+  }
+
   async fetch(operation, variables) {
+    const jwt = this.getJWTFromCookies();
+    const headers = { 'Content-Type': 'application/json' };
     const response = await fetch(this.url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: jwt ? assoc('Authorization', `Bearer ${jwt}`, headers) : headers,
       body: JSON.stringify({ query: operation.text, variables }),
     });
     return response.json();
@@ -18,10 +25,15 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url) {
+  constructor(url, jwt) {
     super(url);
 
+    this.jwt = jwt;
     this.payloads = [];
+  }
+
+  getJWTFromCookies() {
+    return this.jwt;
   }
 
   async fetch(...args) {
@@ -42,6 +54,12 @@ export class ClientFetcher extends FetcherBase {
     super(url);
 
     this.payloads = payloads;
+  }
+
+  // eslint-disable-next-line
+  getJWTFromCookies() {
+    const cookies = new Cookies();
+    return pathOr(null, ['value'], cookies.get('__jwt'));
   }
 
   async fetch(...args) {
