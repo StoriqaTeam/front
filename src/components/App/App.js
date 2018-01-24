@@ -8,7 +8,9 @@ import { Link } from 'found';
 import { pathOr } from 'ramda';
 
 type PropsType = {
-  viewer: Object,
+  viewer: ?{
+    currentUser: {},
+  },
   children: Node,
   relay: Object,
 };
@@ -39,6 +41,8 @@ App.childContextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
+// fragment just need for working `createFragmentContainer`
+// `createFragmentContainer` need for having `environment` in context
 export default createFragmentContainer(
   App,
   graphql`
