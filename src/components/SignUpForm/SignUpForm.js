@@ -80,7 +80,7 @@ class SignUpForm extends PureComponent {
       <form className="signUpForm" noValidate onSubmit={this.handleSubmit}>
         <header className="signUpFormHeader">
           <h1>Sign Up</h1>
-          <a href="#">Sign In</a>
+          <a>Sign In</a>
         </header>
         <div className="signUpFormGroup">
           <FormInput

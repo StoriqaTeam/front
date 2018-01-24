@@ -42,7 +42,7 @@ $colorError: #FD7DAA;
   outline: none;
   position: absolute;
   right: 0;
-  top: 0;
+  top: -20px;
 
   svg {
     height: 18px;
@@ -50,7 +50,7 @@ $colorError: #FD7DAA;
   }
 
   small {
-    color: #505050;
+    color: #939393;
     font-size: 13px;
     position: relative;
     right: -3px;

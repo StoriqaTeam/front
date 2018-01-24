@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { ProgressBar } from 'components/ProgressBar';
+import { PasswordHints } from 'components/PasswordHints';
 import EyeOpenIcon from 'assets/svg/eye-open.svg';
 
 import utils from './utils';
@@ -113,6 +113,7 @@ class FormInput extends PureComponent {
       showPassword,
       showPasswordButton,
       formError,
+      passwordQuality,
     } = this.state;
     // check only when the input is password to make it work when 'showPasswordButton' is enabled
     const isPassword = type === 'password' ? 'password' : type;
@@ -129,19 +130,16 @@ class FormInput extends PureComponent {
         <EyeOpenIcon /> <small>Show</small>
       </button>
     );
-    const progressBar = (
-      <ProgressBar
-        percentage={this.state.passwordQuality.percentage}
-        message={this.state.passwordQuality.message}
-        qualityClass={this.state.passwordQuality.qualityClass}
-      />
+    const passwordHints = (
+      <PasswordHints strenght={passwordQuality} />
     );
     const inputLabelContent = (label) ? inputLabel : null;
+    //
+    const showPasswordButtonAndHints = (showPasswordButton && type === 'password');
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
-    // eslint-disable-next-line
-    const showPasswordContent = (showPasswordButton && type === 'password') ? passwordButton : null;
-    // ONLY when type is password, so the user can see the progress bar
-    const progressBarContent = type === 'password' ? progressBar : null;
+    const showPasswordContent = showPasswordButtonAndHints ? passwordButton : null;
+    // ONLY when type is password, so the user can see the password hints
+    const passwordHintsContent = showPasswordButtonAndHints ? passwordHints : null;
     return (
       <span>
         <input
@@ -160,7 +158,7 @@ class FormInput extends PureComponent {
           { formError }
         </span>
         { showPasswordContent }
-        { progressBarContent }
+        { passwordHintsContent }
       </span>
     );
   }
