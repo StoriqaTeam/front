@@ -35,7 +35,7 @@ class OAuthLogin extends Component<PropsType, StateType> {
           if (jwt) {
             const cookies = new Cookies();
             cookies.set('__jwt', { value: jwt }, { path: '/' });
-            window.location.href = '/';
+            window.location.href = '/'; // TODO: use refetch or store update
           }
         },
         onError: (error: Error) => {
