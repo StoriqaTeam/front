@@ -23,3 +23,6 @@
 `yarn server:prod`
 
 ---
+
+#### Отключение pre-push хука
+Ключ `--no-verify`
