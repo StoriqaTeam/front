@@ -8,7 +8,11 @@ import Cookies from 'universal-cookie';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 
 type PropsType = {
-  location: {},
+  location: {
+    query: {
+      code: any,
+    }
+  },
   provider: string,
 };
 
@@ -17,7 +21,8 @@ type StateType = {
   message: any,
 };
 
-class OAuthLogin extends Component<PropsType, StateType> {
+// Component that handles code from oauth-providers and fetches jwt token.
+class OAuthCallback extends Component<PropsType, StateType> {
   state = {
     isFetching: false,
     message: '',
@@ -59,8 +64,8 @@ class OAuthLogin extends Component<PropsType, StateType> {
   }
 }
 
-OAuthLogin.contextTypes = {
+OAuthCallback.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default OAuthLogin;
+export default OAuthCallback;

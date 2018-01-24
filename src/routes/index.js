@@ -7,16 +7,9 @@ import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
-import { Login, OAuthLogin } from 'components/Login';
+import { Login, OAuthCallback } from 'components/Login';
 import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
-
-/*
-email: "test@test.test" (pass: test)
-id: "dXNlcnNfdXNlcl8yMw=="
-isActive: true
-rawId: "23"
-*/
 
 const routes = (
   <Route
@@ -63,12 +56,12 @@ const routes = (
     />
     <Route
       path="/oauth_callback/fb"
-      Component={OAuthLogin}
+      Component={OAuthCallback}
       render={({ props, Component }) => <Component provider="FACEBOOK" {...props} />}
     />
     <Route
       path="/oauth_callback/google"
-      Component={OAuthLogin}
+      Component={OAuthCallback}
       render={({ props, Component }) => <Component provider="GOOGLE" {...props} />}
     />
     <Route
