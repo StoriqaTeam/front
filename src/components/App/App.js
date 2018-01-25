@@ -10,8 +10,6 @@ import type { Environment } from 'relay-runtime';
 
 import './App.scss';
 
-import { Button } from 'components/Button';
-
 type PropsType = {
   viewer: ?{
     currentUser: {},
