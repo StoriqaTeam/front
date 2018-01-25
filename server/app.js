@@ -9,12 +9,15 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Actions as FarceActions, ServerProtocol } from 'farce';
 import { getStoreRenderArgs, resolver, RedirectException } from 'found';
-import { RouterProvider, getFarceResult } from 'found/lib/server';
+import { RouterProvider } from 'found/lib/server';
 import createRender from 'found/lib/createRender';
-import serialize from 'serialize-javascript';
+import serialize from '../libs/serialize-javascript';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+const cookiesMiddleware = require('universal-cookie-express');
+
 import webpackConfig from '../config/webpack.config.dev';
 
 import createReduxStore from 'redux/createReduxStore';
@@ -39,6 +42,9 @@ const app = express();
 // Support Gzip
 app.use(compression());
 
+// Cookies
+app.use(cookiesMiddleware());
+
 // Support post requests with body data (doesn't support multipart, use multer)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -56,16 +62,16 @@ app.use('/favicon.ico', express.static(path.resolve(__dirname, '..', 'build', 'f
 app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 'manifest.json')));
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(
-    webpackMiddleware(webpack(webpackConfig), {
-      stats: { colors: true },
-    }),
-  );
+  const compiler = webpack(webpackConfig);
+  app.use(webpackMiddleware(compiler, {stats: {colors: true}}));
+  app.use(webpackHotMiddleware(compiler));
 }
 
 app.use(async (req, res) => {
   const store = createReduxStore(new ServerProtocol(req.url));
-  const fetcher = new ServerFetcher(process.env.REACT_APP_GRAPHQL_ENDPOINT);
+  const jwtCookie = req.universalCookies.get('__jwt');
+  const jwt = (typeof jwtCookie === 'object') && jwtCookie.value;
+  const fetcher = new ServerFetcher(process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT, jwt);
 
   store.dispatch(FarceActions.init());
 
@@ -98,6 +104,7 @@ app.use(async (req, res) => {
       <html>
       <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="/styles.css">
       </head>
       <body>
       <div id="root">${ReactDOMServer.renderToString(element)}</div>
@@ -105,7 +112,7 @@ app.use(async (req, res) => {
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}
       </script>
-      <script src="static/js/bundle.js"></script>
+      <script src="/static/js/bundle.js"></script>
       </body>  
       </html>
     `);

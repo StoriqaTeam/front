@@ -6,7 +6,7 @@ const extractTextPluginOptions = { publicPath: Array(cssFilename.split('/').leng
 
 const extractSass = new ExtractTextPlugin({
   filename: "static/css/[name].[contenthash:8].css",
-  disable: process.env.NODE_ENV === "development"
+  // disable: process.env.NODE_ENV === "development"
 });
 
 module.exports = {
@@ -16,7 +16,13 @@ module.exports = {
         test: /\.scss$/,
         use: extractSass.extract({
           use: [{
-            loader: "css-loader"
+            loader: "css-loader", // translates CSS into CommonJS
+            options: {
+              importLoaders: 1,
+              modules: true,
+              sourceMap: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
           }, {
             loader: "sass-loader"
           }],
@@ -82,6 +88,14 @@ module.exports = {
           )
         ),
         // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000',
+        loader: require.resolve('url-loader'),
+        options: {
+          limit: 10000,
+          name: 'static/media/[name].[hash:8].[ext]',
+        },
       }
     ],
   },

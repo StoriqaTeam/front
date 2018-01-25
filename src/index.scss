@@ -1,16 +1,7 @@
 // Import Bootstrap overrides
 @import "assets/scss/custom";
 
-@import "components/App/index.scss";
-@import "components/Button/Button.scss";
-@import "components/SignUpForm/SignUpForm.scss";
-@import "components/FormInput/FormInput.scss";
-@import "components/ProgressBar/ProgressBar.scss";
-@import "components/Separator/Separator.scss";
-@import "components/PasswordHints/PasswordHints.scss";
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+// Settings
+@import "styles/variables.scss";
+@import "styles/fonts.scss";
+@import "styles/default.scss";

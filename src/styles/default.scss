@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 16px;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  outline: none;
+}
+
+body {
+  compose: OpenSans from global;
+  height: 100%;
+  line-height: 18px;
+  color: $color_primary;
+}
+
+b {
+  compose: OpenSans_Bold;
+}

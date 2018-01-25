@@ -1,51 +1,60 @@
+// @flow
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { Link } from 'found';
+import { pathOr } from 'ramda';
+import type { Node } from 'react';
+import type { Environment } from 'relay-runtime';
 
-import { changeWithValue } from 'redux/reducers/dummy';
+import './App.scss';
+
 import { Button } from 'components/Button';
-import { SignUpForm } from 'components/SignUpForm';
 
-class App extends PureComponent {
-  handleBtnClick = () => this.props.changeValue('asdf');
+type PropsType = {
+  viewer: ?{
+    currentUser: {},
+  },
+  children: Node,
+  relay: {
+    environment: Environment,
+  },
+};
 
+class App extends PureComponent<PropsType> {
+  getChildContext() {
+    return {
+      environment: this.props.relay.environment,
+    };
+  }
   render() {
+    const { children, viewer } = this.props;
+    const currentUser = pathOr(null, ['currentUser'], viewer);
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">{`Mainpage here (${this.props.apiVersion})`}</h1>
+      <div styleName="root">
+        <header styleName="header">
+          <h1 styleName="title">App here</h1>
+          {currentUser && (<Link to="/logout">Logout</Link>)}
+          {!currentUser && (<Link to="/login">Login</Link>)}
         </header>
-        {!this.props.inChanging && (
-          <Button
-            title="Press me"
-            onClick={this.handleBtnClick}
-          />
-        )}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: 20 }}>
-          <SignUpForm />
-        </div>
+        {children}
       </div>
     );
   }
 }
 
-App.defaultProps = {
-  apiVersion: '',
-  inChanging: false,
+App.childContextTypes = {
+  environment: PropTypes.object.isRequired,
 };
 
-App.propTypes = {
-  apiVersion: PropTypes.string,
-  inChanging: PropTypes.bool,
-  changeValue: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  inChanging: state.dummy.inChanging,
-});
-
-const mapDispatchToProps = ({
-  changeValue: changeWithValue,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+// fragment just need for working `createFragmentContainer`
+// `createFragmentContainer` need for having `environment` in context
+export default createFragmentContainer(
+  App,
+  graphql`
+    fragment App_apiVersion on Query {
+      apiVersion
+    }
+  `,
+);

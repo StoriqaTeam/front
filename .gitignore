@@ -24,3 +24,6 @@ yarn-error.log*
 
 **/__generated__
 /src/relay/schema.json
+
+.env.development
+.env.production
