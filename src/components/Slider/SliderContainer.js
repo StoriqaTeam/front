@@ -6,6 +6,7 @@ import type { Node } from 'react';
 import { SliderHeader } from 'components/Slider';
 
 import handlerSlide from './handlerSlidesDecorator';
+import './SliderContainer.scss';
 
 type PropsTypes = {
   color: string,
@@ -34,7 +35,7 @@ class SliderContainer extends Component<PropsTypes> {
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
 
     return (
-      <div className="SliderContainer">
+      <div styleName="sliderContainer">
         <SliderHeader
           color={color}
           title={title}
@@ -44,7 +45,7 @@ class SliderContainer extends Component<PropsTypes> {
         />
         <div
           ref={this.props.originalComponentRef}
-          className="SliderContainer--wrapper"
+          styleName="wrapper"
           style={{
             left: slidesOffset,
             whiteSpace: showAllSlides ? 'normal' : 'nowrap',
@@ -52,7 +53,7 @@ class SliderContainer extends Component<PropsTypes> {
         >
           {Children.map(this.props.children, child => (
             <div
-              className="SliderContainer--wrapper--item"
+              styleName="item"
               style={{
                 width: `${slideWidth}%`,
               }}

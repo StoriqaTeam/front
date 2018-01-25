@@ -1,32 +1,27 @@
-$Open_Sans: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-$Open_Sans_Light: 'Open_Sans_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
-$Open_Sans_Bold: 'Open_Sans_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
-$Open_Sans_SemiBold: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
-
 @font-face {
   font-family: 'Open_Sans';
-  src: url('styles/fonts/Open_Sans/OpenSans-Regular.ttf');
+  src: url('./styles/fonts/Open_Sans/OpenSans-Regular.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Open_Sans_Light';
-  src: url('styles/fonts/Open_Sans/OpenSans-Light.ttf');
+  src: url('./styles/fonts/Open_Sans/OpenSans-Light.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Open_Sans_Bold';
-  src: url('styles/fonts/Open_Sans/OpenSans-Bold.ttf');
+  src: url('./styles/fonts/Open_Sans/OpenSans-Bold.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Open_Sans_SemiBold';
-  src: url('styles/fonts/Open_Sans/OpenSans-SemiBold.ttf');
+  src: url('./styles/fonts/Open_Sans/OpenSans-SemiBold.ttf');
   font-style: normal;
   font-weight: normal;
 }

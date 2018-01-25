@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react';
 
-import { SliderContainer, Slide } from 'components/Slider';
+import { SliderContainer } from 'components/Slider';
 import { CardProduct } from 'components/CardProduct';
+
+import './Slider.scss';
 
 class Slider extends PureComponent {
   render() {
     return (
-      <div className="Slider">
+      <div styleName="slider">
         <SliderContainer {...this.props}>
           {this.props.items.map(item => ( // eslint-disable-line
             <CardProduct

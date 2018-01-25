@@ -104,6 +104,7 @@ app.use(async (req, res) => {
       <html>
       <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="/styles.css">
       </head>
       <body>
       <div id="root">${ReactDOMServer.renderToString(element)}</div>

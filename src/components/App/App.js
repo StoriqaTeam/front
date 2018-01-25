@@ -8,6 +8,8 @@ import { pathOr } from 'ramda';
 import type { Node } from 'react';
 import type { Environment } from 'relay-runtime';
 
+import './App.scss';
+
 type PropsType = {
   viewer: ?{
     currentUser: {},
@@ -28,9 +30,9 @@ class App extends PureComponent<PropsType> {
     const { children, viewer } = this.props;
     const currentUser = pathOr(null, ['currentUser'], viewer);
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">App here</h1>
+      <div styleName="root">
+        <header styleName="header">
+          <h1 styleName="title">App here</h1>
           {currentUser && (<Link to="/logout">Logout</Link>)}
           {!currentUser && (<Link to="/login">Login</Link>)}
         </header>
