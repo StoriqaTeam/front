@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
+
+import { Icon } from 'components/Icon';
 
 import './SliderHeader.scss';
 
 type PropsTypes = {
-  color: number,
+  type: 'most-popular' | 'sale' | 'smart-reviews',
   title: string,
   isRevealButton: boolean,
   showAllSlides: boolean,
@@ -13,21 +16,25 @@ type PropsTypes = {
 class SliderHeader extends PureComponent<PropsTypes> {
   render() {
     const {
-      color,
+      type,
       title,
       isRevealButton,
       showAllSlides,
       handleSlide,
     } = this.props;
 
+    const titleCls = classNames('title', `${type}-color`);
+    const revealCls = classNames('reveal', `${type}-color`);
+
     return (
-      <div styleName="sliderHeader">
-        <div styleName="title" style={{ color }}>{title}</div>
+      <div styleName="container">
+        <div styleName={titleCls}>
+          <strong>{title}</strong>
+        </div>
         {isRevealButton &&
         <a
           href="#"
-          styleName="reveal"
-          style={{ color }}
+          styleName={revealCls}
         >
           See all
         </a>
@@ -36,23 +43,17 @@ class SliderHeader extends PureComponent<PropsTypes> {
         <div styleName="nav">
           <button
             direction="prev"
-            styleName="nav-button"
+            styleName="button"
             onClick={() => handleSlide('prev')}
           >
-            <img
-              src={/* eslint-disable */require('assets/img/prev-button-icon.svg')/* eslint-enable */}
-              alt="prev"
-            />
+            <Icon type="prev" size="32" />
           </button>
           <button
             direction="next"
-            styleName="nav-button"
+            styleName="button"
             onClick={() => handleSlide('next')}
           >
-            <img
-              src={/* eslint-disable */require('assets/img/next-button-icon.svg')/* eslint-enable */}
-              alt="next"
-            />
+            <Icon type="next" size="32" />
           </button>
         </div>
         }
