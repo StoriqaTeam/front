@@ -1,6 +1,23 @@
+@mixin form-input($color: #A7A7A7, $background: #ffffff, $width: 100%) {
+
+  & {
+    color: $color;
+    background: $background;
+    border: none;
+    border-bottom: 1px solid #E2E2E2;
+    outline: 0;
+    width: $width;
+  }
+
+  &:focus {
+    border-bottom: 1px solid #9FC63C;
+  }
+
+}
+
 $colorError: #FD7DAA;
 
-.formInput {
+.root {
   @include form-input;
   font-size: 14px;
   line-height: 24px;
@@ -12,7 +29,7 @@ $colorError: #FD7DAA;
 
 }
 
-.formInputLabel {
+.label {
   color: #999;
   font-size: 16px;
   font-weight: normal;
@@ -23,19 +40,19 @@ $colorError: #FD7DAA;
   transition: 0.2s ease top;
 }
 
-.formInputLabelFloat {
+.labelFloat {
   color: #A7A7A7;
   font-size: 14px;
   top: -20px;
 }
 
-.formInputMessage {
+.message {
   color: $colorError;
   font-size: 13px;
   text-align: center;
 }
 
-.formInputShowPassword {
+.showPassword {
   background: none;
   border: none;
   cursor: pointer;

@@ -1,16 +1,1 @@
-@mixin form-input($color: #A7A7A7, $background: #ffffff, $width: 100%) {
 
-  & {
-    color: $color;
-    background: $background;
-    border: none;
-    border-bottom: 1px solid #E2E2E2;
-    outline: 0;
-    width: $width;
-  }
-
-  &:focus {
-    border-bottom: 1px solid #9FC63C;
-  }
-
-}

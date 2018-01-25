@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, text } from '@storybook/addon-knobs/react';
 
-import FormInput from './FormInput';
+import { FormInput } from 'components/FormInput';
 
 storiesOf('FormInput', module)
   .addDecorator(withKnobs)

@@ -1,23 +1,29 @@
+// @flow
+
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+
 import { PasswordHints } from 'components/PasswordHints';
 import EyeOpenIcon from 'assets/svg/eye-open.svg';
 
+import './FormInput.scss';
 import utils from './utils';
 
-class FormInput extends PureComponent {
-  static defaultProps = {
-    onChange: () => {},
-    label: '',
-    placeholder: '',
-    type: 'text',
-    validate: 'text',
-    autocomplete: 'on',
-    errorMessage: '',
-    className: 'formInput',
-  };
-  state = {
-    labelFloat: '',
+type PropsType = {
+  label: ?string,
+  placeholder: ?string,
+  className: string,
+  name: string,
+  model: string,
+  type: ?string,
+  validate: ?string,
+  autocomplete: ?string,
+  errorMessage: ?string,
+  onChange: ?Function,
+};
+
+class FormInput extends PureComponent<PropsType> {
+  state = { // TODO: Jero, pls add type for state too. StateType.
+    labelFloat: null,
     showPassword: false,
     showPasswordButton: false,
     formError: '',
@@ -27,6 +33,7 @@ class FormInput extends PureComponent {
       qualityClass: '',
     },
   };
+
   /**
    * @desc Handles the onChange event by setting the model's value
    * @param {SyntheticEvent} evt
@@ -36,6 +43,7 @@ class FormInput extends PureComponent {
     const { name, value } = evt.target;
     this.validate(name, value);
   };
+
   /**
    * @desc make the label floats if the model isn't empty
    * and toggles 'showPasswordButton'
@@ -46,11 +54,12 @@ class FormInput extends PureComponent {
     const { model } = this.props;
     if (model === '') {
       this.setState({
-        labelFloat: 'formInputLabelFloat',
+        labelFloat: 'labelFloat',
         showPasswordButton: !showPasswordButton,
       });
     }
   };
+
   /**
    * @desc Puts back the label to its original position if the model is empty
    * @return {void}
@@ -60,11 +69,12 @@ class FormInput extends PureComponent {
     const { model } = this.props;
     if (model === '') {
       this.setState({
-        labelFloat: '',
+        labelFloat: null,
         showPasswordButton: !showPasswordButton,
       });
     }
   };
+
   /**
    * @param {String} inputName - input's name
    * @param {any} inputValue - input's value
@@ -85,6 +95,7 @@ class FormInput extends PureComponent {
       validity,
     }));
   };
+
   /**
    * @desc show password to the user
    * @return {void}
@@ -92,6 +103,7 @@ class FormInput extends PureComponent {
   handleShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
+
   /**
    * @desc applies the corresponding error class
    * @param {String} error
@@ -108,6 +120,7 @@ class FormInput extends PureComponent {
       type,
       className,
     } = this.props;
+
     const {
       labelFloat,
       showPassword,
@@ -119,14 +132,14 @@ class FormInput extends PureComponent {
     const isPassword = type === 'password' ? 'password' : type;
     const inputLabel = (
       <label
-        className={`formInputLabel ${labelFloat}`}
+        styleName={`label ${labelFloat || ''}`}
         htmlFor={name}
       >
-        { label }
+        {label}
       </label>
     );
     const passwordButton = (
-      <button className="formInputShowPassword" onClick={this.handleShowPassword}>
+      <button styleName="showPassword" onClick={this.handleShowPassword}>
         <EyeOpenIcon /> <small>Show</small>
       </button>
     );
@@ -144,7 +157,7 @@ class FormInput extends PureComponent {
       <span>
         <input
           type={showPassword ? 'text' : isPassword}
-          className={`${className} ${this.errorClass(formError)}`}
+          styleName={`${className || ''} ${this.errorClass(formError)}`}
           name={name}
           value={model}
           autoComplete={autocomplete}
@@ -153,28 +166,26 @@ class FormInput extends PureComponent {
           onChange={this.handleChange}
           placeholder={placeholder}
         />
-        { inputLabelContent }
-        <span className="formInputMessage">
-          { formError }
+        {inputLabelContent}
+        <span styleName="message">
+          {formError}
         </span>
-        { showPasswordContent }
-        { passwordHintsContent }
+        {showPasswordContent}
+        {passwordHintsContent}
       </span>
     );
   }
 }
 
-FormInput.propTypes = {
-  label: PropTypes.string,
-  placeholder: PropTypes.string,
-  className: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  model: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  validate: PropTypes.string,
-  autocomplete: PropTypes.string,
-  errorMessage: PropTypes.string,
-  onChange: PropTypes.func,
+FormInput.defaultProps = {
+  onChange: () => {},
+  label: '',
+  placeholder: '',
+  type: 'text',
+  validate: 'text',
+  autocomplete: 'on',
+  errorMessage: '',
+  className: 'root',
 };
 
 export default FormInput;
