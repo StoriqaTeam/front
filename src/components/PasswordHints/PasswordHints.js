@@ -1,8 +1,10 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 
+import './PasswordHints.scss';
+
 const PasswordHints = () => (
-  <aside className="passwordHints">
+  <aside styleName="passwordHints">
     <ul>
       <li>One lower case character</li>
       <li>One upper case character</li>
