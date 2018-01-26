@@ -21,8 +21,20 @@ type PropsType = {
   onChange: ?Function,
 };
 
-class FormInput extends PureComponent<PropsType> {
-  state = { // TODO: Jero, pls add type for state too. StateType.
+type StateType = {
+  label: string,
+  showPassword: boolean,
+  showPasswordButton: boolean,
+  formError: string,
+  passwordQuality: {
+    percentage: number,
+    message: string,
+    qualityClass: string,
+  },
+}
+
+class FormInput extends PureComponent<PropsType, StateType> {
+  state = {
     labelFloat: null,
     showPassword: false,
     showPasswordButton: false,
@@ -36,10 +48,10 @@ class FormInput extends PureComponent<PropsType> {
 
   /**
    * @desc Handles the onChange event by setting the model's value
-   * @param {SyntheticEvent} evt
+   * @param {SyntheticEvent<HTMLInputElement>} evt
    * @return {void}
    */
-  handleChange = (evt) => {
+  handleChange = (evt: SyntheticEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
     this.validate(name, value);
   };
@@ -80,7 +92,7 @@ class FormInput extends PureComponent<PropsType> {
    * @param {any} inputValue - input's value
    * @return {void}
    */
-  validate = (inputName, inputValue) => {
+  validate = (inputName: string, inputValue: any) => {
     const { validate, errorMessage } = this.props;
     const {
       name,
@@ -109,7 +121,7 @@ class FormInput extends PureComponent<PropsType> {
    * @param {String} error
    * @return {String}
    */
-  errorClass = error => (error.length === 0 ? '' : 'invalidInput');
+  errorClass = (error: string) => (error.length === 0 ? '' : 'invalidInput');
   render() {
     const {
       autocomplete,
