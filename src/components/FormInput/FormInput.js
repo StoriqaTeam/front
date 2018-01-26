@@ -34,7 +34,7 @@ type StateType = {
 }
 
 class FormInput extends PureComponent<PropsType, StateType> {
-  state = {
+  state: StateType = {
     labelFloat: null,
     showPassword: false,
     showPasswordButton: false,
