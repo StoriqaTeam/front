@@ -60,7 +60,7 @@ class OAuthCallback extends PureComponent<PropsType> {
     return pipe(
       replace(`${fbCallbackUri}?#`, ''), // access_token=<token_here>&expires_in=6232
       split('&'), // [access_token=<token_here>, expires_in=6232]
-      map(split('=')), // [{access_token: <token_here>}, {expires_in: 6232}]
+      map(split('=')), // [[access_token, <token_here>], [expires_in, 6232]]
       fromPairs, // {access_token: <token_here>, expires_in: 6232}
       pathOr(null, ['access_token']), // <token_here>
     )(url);
@@ -73,7 +73,7 @@ class OAuthCallback extends PureComponent<PropsType> {
     return pipe(
       replace(`${googleCallbackUri}#`, ''), // access_token=<token_here>&expires_in=6232
       split('&'), // [access_token=<token_here>, expires_in=6232]
-      map(split('=')), // [{access_token: <token_here>}, {expires_in: 6232}]
+      map(split('=')), // [[access_token, <token_here>], [expires_in, 6232]]
       fromPairs, // {access_token: <token_here>, expires_in: 6232}
       pathOr(null, ['access_token']), // <token_here>
     )(url);
