@@ -1,3 +1,5 @@
+@import "../../assets/scss/mixins";
+
 $blackText: #505050;
 
 .signUpForm {
@@ -39,7 +41,7 @@ $blackText: #505050;
 }
 
 .signUpFormInputPassword {
-  @extend .formInput;
+  // @extend .formInput;
   border-bottom: none;
 
   &:focus {

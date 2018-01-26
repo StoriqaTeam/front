@@ -1,3 +1,5 @@
+@import "../../assets/scss/mixins";
+
 .Button {
   @include simple-button;
   border-radius: 4px;

@@ -1,7 +1,18 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+// @flow
 
-class Button extends PureComponent {
+import React, { PureComponent } from 'react';
+
+import './Button.scss';
+
+type PropsTypes = {
+  title: string,
+  buttonClass: PropTypes.string,
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+};
+
+class Button extends PureComponent<PropsTypes> {
   static defaultProps = {
     onClick: () => {},
     buttonClass: 'Button',
@@ -16,7 +27,7 @@ class Button extends PureComponent {
       <button
         type={type}
         disabled={disabled}
-        className={buttonClass}
+        styleName={`${buttonClass || ''}`}
         onClick={onClick}
       >
         {title}
@@ -24,13 +35,5 @@ class Button extends PureComponent {
     );
   }
 }
-
-Button.propTypes = {
-  title: PropTypes.string.isRequired,
-  buttonClass: PropTypes.string,
-  type: PropTypes.string,
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool,
-};
 
 export default Button;
