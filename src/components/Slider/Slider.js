@@ -8,7 +8,7 @@ import './Slider.scss';
 class Slider extends PureComponent {
   render() {
     return (
-      <div styleName="slider">
+      <div styleName="container">
         <SliderContainer {...this.props}>
           {this.props.items.map(item => ( // eslint-disable-line
             <CardProduct

@@ -1,0 +1,33 @@
+.container {
+  display: inline-block;
+
+  &.size-16 {
+    width: 16px;
+    height: 16px;
+
+    & svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &.size-24 {
+    width: 24px;
+    height: 24px;
+
+    & svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &.size-32 {
+    width: 32px;
+    height: 32px;
+
+    & svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
