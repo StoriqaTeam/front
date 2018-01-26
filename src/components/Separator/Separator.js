@@ -1,12 +1,15 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const Separator = ({ text = '' }) => (
-  <hr className="separator" text={text} />
-);
+import './Separator.scss';
 
-Separator.propTypes = {
-  text: PropTypes.string.isRequired,
+type PropTypes = {
+  text: string,
 };
+
+const Separator = (props: PropTypes) => (
+  <hr styleName="separator" text={props.text} />
+);
 
 export default Separator;
