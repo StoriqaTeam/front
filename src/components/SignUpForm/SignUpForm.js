@@ -1,13 +1,26 @@
+// @flow
+
 import React, { PureComponent } from 'react';
+
 import GoogleIcon from 'assets/svg/google-icon.svg';
 import FacebookIcon from 'assets/svg/facebook-icon.svg';
 
 import { FormInput } from 'components/FormInput';
 import { Button } from 'components/Button';
 import { Separator } from 'components/Separator';
+import './SignUpForm.scss';
 
-class SignUpForm extends PureComponent {
-  state = {
+type StateType = {
+  username: string,
+  usernameValid: boolean,
+  email: string,
+  emailValid: boolean,
+  passwordValid: boolean,
+  formValid: boolean
+}
+
+class SignUpForm extends PureComponent<{}, StateType> {
+  state: StateType = {
     username: '',
     usernameValid: false,
     email: '',
@@ -64,25 +77,25 @@ class SignUpForm extends PureComponent {
       formValid,
     } = this.state;
     const singUp = (
-      <div className="signUpFormSignUp">
+      <div styleName="signUpFormSignUp">
         <Button
           type="submit"
           buttonClass="signUpFormButton"
           title="Sign Up"
           onClick={this.handleSubmit}
         />
-        <span className="signUpFormPolicy">{ this.policy }</span>
+        <span styleName="signUpFormPolicy">{ this.policy }</span>
       </div>
     );
     // Show only when the form is valid
     const singUpContent = formValid ? singUp : null;
     return (
-      <form className="signUpForm" noValidate onSubmit={this.handleSubmit}>
-        <header className="signUpFormHeader">
+      <form styleName="signUpForm" noValidate onSubmit={this.handleSubmit}>
+        <header styleName="signUpFormHeader">
           <h1>Sign Up</h1>
           <a>Sign In</a>
         </header>
-        <div className="signUpFormGroup">
+        <div styleName="signUpFormGroup">
           <FormInput
             label="Username"
             name="username"
@@ -91,7 +104,7 @@ class SignUpForm extends PureComponent {
             onChange={this.handleChange}
           />
         </div>
-        <div className="signUpFormGroup">
+        <div styleName="signUpFormGroup">
           <FormInput
             label="Email"
             name="email"
@@ -101,7 +114,7 @@ class SignUpForm extends PureComponent {
             onChange={this.handleChange}
           />
         </div>
-        <div className="signUpFormGroup">
+        <div styleName="signUpFormGroup">
           <FormInput
             label="Password"
             name="password"
@@ -113,18 +126,18 @@ class SignUpForm extends PureComponent {
         </div>
         { singUpContent }
         <Separator text="or" />
-        <div className="signUpFormAuthProvider">
-          <GoogleIcon className="signUpFormButtonIcon" />
+        <div styleName="signUpFormAuthProvider">
+          <GoogleIcon styleName="signUpFormButtonIcon" />
           <Button
-            buttonClass="signUpFormGoogleButton"
+            buttonClass=""
             title="Sign up with Google"
             onClick={this.handleProviderAuth}
           />
         </div>
-        <div className="signUpFormAuthProvider">
-          <FacebookIcon className="signUpFormButtonIcon" />
+        <div styleName="signUpFormAuthProvider">
+          <FacebookIcon styleName="signUpFormButtonIcon" />
           <Button
-            buttonClass="signUpFormGoogleButton"
+            buttonClass=""
             title="Sign up with Facebook"
             onClick={this.handleProviderAuth}
           />

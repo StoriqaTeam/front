@@ -8,8 +8,9 @@ import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
-import { Registration } from 'components/Registration';
+// import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
+import { SignUpForm } from 'components/SignUpForm';
 
 const routes = (
   <Route
@@ -39,7 +40,7 @@ const routes = (
   >
     <Route
       path="/registration"
-      Component={Registration}
+      Component={SignUpForm}
     />
     <Route
       path="/login"

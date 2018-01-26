@@ -27,7 +27,7 @@ class Button extends PureComponent<PropsTypes> {
       <button
         type={type}
         disabled={disabled}
-        styleName={`${buttonClass || ''}`}
+        styleName={buttonClass}
         onClick={onClick}
       >
         {title}
