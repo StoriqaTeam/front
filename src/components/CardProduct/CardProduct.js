@@ -43,7 +43,7 @@ class CardProduct extends PureComponent<PropsTypes> {
       <div styleName="container">
         <div styleName="body">
           <div styleName="top">
-            <img styleName="img" src={img} />
+            <img styleName="img" src={img} alt="img" />
             <div styleName="labels">
               {sellerDiscount &&
               <div styleName="seller-discount">

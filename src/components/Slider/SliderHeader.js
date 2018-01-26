@@ -33,7 +33,6 @@ class SliderHeader extends PureComponent<PropsTypes> {
         </div>
         {isRevealButton &&
         <a
-          href="#"
           styleName={revealCls}
         >
           See all
