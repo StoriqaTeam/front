@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
+import { pathOr } from 'ramda';
 
 import Person from 'components/Icon/svg/person.svg';
 import Cart from 'components/Icon/svg/cart.svg';
@@ -16,6 +17,14 @@ type PropsTypes = {
   size: 16 | 24 | 32,
 };
 
+const iconsMap = {
+  person: <Person />,
+  cart: <Cart />,
+  qa: <QA />,
+  prev: <Prev />,
+  next: <Next />,
+};
+
 class Icon extends PureComponent<PropsTypes> {
   render() {
     const { type, size } = this.props;
@@ -23,16 +32,7 @@ class Icon extends PureComponent<PropsTypes> {
 
     return (
       <div styleName={className}>
-        {(() => {
-          switch (type) {
-            case 'person': return <Person />;
-            case 'cart': return <Cart />;
-            case 'qa': return <QA />;
-            case 'prev': return <Prev />;
-            case 'next': return <Next />;
-            default: return null;
-          }
-        })()}
+        {pathOr(null, [type], iconsMap)}
       </div>
     );
   }

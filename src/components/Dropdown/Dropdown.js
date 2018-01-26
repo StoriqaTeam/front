@@ -39,9 +39,8 @@ class Dropdown extends Component<PropsTypes> {
                 {child.props.children}
               </div>
             );
-          } else { // eslint-disable-line
-            return null;
           }
+          return null;
         })}
       </div>
     );
