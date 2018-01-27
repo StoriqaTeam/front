@@ -2,55 +2,44 @@
 
 $blackText: #505050;
 
-.signUpForm {
+.container {
   composes: OpenSans from global;
   background: #ffffff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
   padding: 15px 27px;
   width: 336px;
-
-  .signUpFormHeader {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin: 0 0 40px 0;
-
-    h1 {
-      color: $blackText;
-      font-size: 24px;
-      font-weight: normal;
-      margin: 0;
-    }
-
-    a {
-      border-bottom: 1px solid $blackText;
-      color: $blackText;
-      text-decoration: yellow;
-    }
-
-  }
 }
 
-.signUpFormGroup {
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 40px 0;
+}
+
+.signUpTitle {
+  color: $blackText;
+  font-size: 24px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.signInLink {
+  border-bottom: 1px solid $blackText;
+  color: $blackText;
+}
+
+.group {
   margin-bottom: 40px;
   position: relative;
 }
 
-.signUpFormAuthProvider {
+.providerGroup {
   margin-bottom: 24px;
   position: relative;
 }
 
-.signUpFormInputPassword {
-  // @extend .formInput;
-  border-bottom: none;
-
-  &:focus {
-    border-bottom: none;
-  }
-}
-
-.signUpFormButton {
+.signUpButton {
   @include simple-button($background: #2FBAFD, $color: #ffffff);
   border-radius: 4px;
   font-size: 16px;
@@ -69,7 +58,7 @@ $blackText: #505050;
   text-align: left;
 }
 
-.signUpFormButtonIcon {
+.providerIcon {
   height: 22px;
   left: 16px;
   position: absolute;
@@ -77,14 +66,14 @@ $blackText: #505050;
   width: 22px;
 }
 
-.signUpFormSignUp {
+.signUpGroup {
   align-items: center;
   display: flex;
   margin: 36px 0;
   justify-content: space-between;
 }
 
-.signUpFormPolicy {
+.policy {
   color: $blackText;
   font-size: 11px;
   line-height: 16px;

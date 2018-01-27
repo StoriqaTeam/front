@@ -77,25 +77,25 @@ class SignUpForm extends PureComponent<{}, StateType> {
       formValid,
     } = this.state;
     const singUp = (
-      <div styleName="signUpFormSignUp">
+      <div styleName="signUpGroup">
         <Button
           type="submit"
-          buttonClass="signUpFormButton"
+          buttonClass="signUpButton"
           title="Sign Up"
           onClick={this.handleSubmit}
         />
-        <span styleName="signUpFormPolicy">{ this.policy }</span>
+        <span styleName="policy">{ this.policy }</span>
       </div>
     );
     // Show only when the form is valid
     const singUpContent = formValid ? singUp : null;
     return (
-      <form styleName="signUpForm" noValidate onSubmit={this.handleSubmit}>
-        <header styleName="signUpFormHeader">
-          <h1>Sign Up</h1>
-          <a>Sign In</a>
+      <form styleName="container" noValidate onSubmit={this.handleSubmit}>
+        <header styleName="header">
+          <h1 styleName="signUpTitle">Sign Up</h1>
+          <a styleName="signInLink">Sign In</a>
         </header>
-        <div styleName="signUpFormGroup">
+        <div styleName="group">
           <FormInput
             label="Username"
             name="username"
@@ -104,7 +104,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
             onChange={this.handleChange}
           />
         </div>
-        <div styleName="signUpFormGroup">
+        <div styleName="group">
           <FormInput
             label="Email"
             name="email"
@@ -114,7 +114,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
             onChange={this.handleChange}
           />
         </div>
-        <div styleName="signUpFormGroup">
+        <div styleName="group">
           <FormInput
             label="Password"
             name="password"
@@ -126,16 +126,16 @@ class SignUpForm extends PureComponent<{}, StateType> {
         </div>
         { singUpContent }
         <Separator text="or" />
-        <div styleName="signUpFormAuthProvider">
-          <GoogleIcon styleName="signUpFormButtonIcon" />
+        <div styleName="providerGroup">
+          <GoogleIcon styleName="providerIcon" />
           <Button
             buttonClass=""
             title="Sign up with Google"
             onClick={this.handleProviderAuth}
           />
         </div>
-        <div styleName="signUpFormAuthProvider">
-          <FacebookIcon styleName="signUpFormButtonIcon" />
+        <div styleName="providerGroup">
+          <FacebookIcon styleName="providerIcon" />
           <Button
             buttonClass=""
             title="Sign up with Facebook"
