@@ -80,7 +80,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
       <div styleName="signUpGroup">
         <Button
           type="submit"
-          buttonClass="signUpButton"
+          buttonClass="signUp"
           title="Sign Up"
           onClick={this.handleSubmit}
         />
@@ -129,7 +129,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
         <div styleName="providerGroup">
           <GoogleIcon styleName="providerIcon" />
           <Button
-            buttonClass=""
+            buttonClass="buttonProvider"
             title="Sign up with Google"
             onClick={this.handleProviderAuth}
           />
@@ -137,7 +137,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
         <div styleName="providerGroup">
           <FacebookIcon styleName="providerIcon" />
           <Button
-            buttonClass=""
+            buttonClass="buttonProvider"
             title="Sign up with Facebook"
             onClick={this.handleProviderAuth}
           />

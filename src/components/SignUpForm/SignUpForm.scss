@@ -39,25 +39,6 @@ $blackText: #505050;
   position: relative;
 }
 
-.signUpButton {
-  @include simple-button($background: #2FBAFD, $color: #ffffff);
-  border-radius: 4px;
-  font-size: 16px;
-  padding: 16px 0;
-  &:disabled {
-    background: #EFEFEF !important;
-    color: #FFFFFF !important;
-  }
-}
-
-.signUpFormGoogleButton {
-  @include simple-button($background: #F7F7F7, $color: $blackText);
-  border-radius: 4px;
-  font-size: 16px;
-  padding: 14px 0 14px 14%;
-  text-align: left;
-}
-
 .providerIcon {
   height: 22px;
   left: 16px;
