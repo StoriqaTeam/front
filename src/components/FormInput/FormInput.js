@@ -34,6 +34,16 @@ type StateType = {
 }
 
 class FormInput extends PureComponent<PropsType, StateType> {
+  static defaultProps = {
+    onChange: () => {},
+    label: '',
+    placeholder: '',
+    type: 'text',
+    validate: 'text',
+    autocomplete: 'on',
+    errorMessage: '',
+    className: 'root',
+  };
   state: StateType = {
     labelFloat: null,
     showPassword: false,
@@ -188,16 +198,5 @@ class FormInput extends PureComponent<PropsType, StateType> {
     );
   }
 }
-
-FormInput.defaultProps = {
-  onChange: () => {},
-  label: '',
-  placeholder: '',
-  type: 'text',
-  validate: 'text',
-  autocomplete: 'on',
-  errorMessage: '',
-  className: 'root',
-};
 
 export default FormInput;
