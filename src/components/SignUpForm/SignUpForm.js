@@ -6,6 +6,7 @@ import GoogleIcon from 'assets/svg/google-icon.svg';
 import FacebookIcon from 'assets/svg/facebook-icon.svg';
 
 import { Form } from 'components/Form';
+import { FormHeader } from 'components/FormHeader';
 import { FormInput } from 'components/FormInput';
 import { FormGroup } from 'components/FormGroup';
 import { Button } from 'components/Button';
@@ -97,10 +98,10 @@ class SignUpForm extends PureComponent<{}, StateType> {
         wrapperClass="auth"
         onSubmit={this.handleSubmit}
       >
-        <header styleName="header">
-          <h1 styleName="signUpTitle">Sign Up</h1>
-          <a styleName="signInLink">Sign In</a>
-        </header>
+        <FormHeader
+          title="Sign Up"
+          linkTitle="Sign In"
+        />
         <FormGroup>
           <FormInput
             label="Username"
