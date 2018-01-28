@@ -8,4 +8,10 @@ storiesOf('Separator', module)
     <Separator
       text="or"
     />
+  ))
+  .add('with "marginBottom" ', () => (
+    <Separator
+      text="or"
+      marginBottom="30"
+    />
   ));
