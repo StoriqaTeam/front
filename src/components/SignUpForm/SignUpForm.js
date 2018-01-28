@@ -34,9 +34,9 @@ class SignUpForm extends PureComponent<{}, StateType> {
    * @type {String}
    */
   policy = (
-    <span>
-      <span style={{ color: '#939393' }}>By clicking this button, you agree to Storiqa’s </span>
-      <span style={{ color: '#505050' }}>Anti-spam Policy & Terms of Use.</span>
+    <span styleName="policy">
+      <small styleName="policyAgreement">By clicking this button, you agree to Storiqa’s </small>
+      <small styleName="policyAntiSpam">Anti-spam Policy & Terms of Use.</small>
     </span>
   );
   /**
@@ -84,7 +84,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
           title="Sign Up"
           onClick={this.handleSubmit}
         />
-        <span styleName="policy">{ this.policy }</span>
+        { this.policy }
       </div>
     );
     // Show only when the form is valid
