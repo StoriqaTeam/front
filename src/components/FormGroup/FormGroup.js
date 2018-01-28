@@ -6,7 +6,7 @@ import './FormGroup.scss';
 
 type PropTypes = {
   marginBottom?: number,
-  children: Reac.Node
+  children: React.Node
 };
 
 const FormGroup = (props: PropTypes) => (
