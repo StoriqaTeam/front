@@ -19,6 +19,7 @@ type PropsType = {
   autocomplete: ?string,
   errorMessage: ?string,
   onChange: ?Function,
+  focus: boolean,
 };
 
 type StateType = {
@@ -43,6 +44,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     autocomplete: 'on',
     errorMessage: '',
     className: 'root',
+    focus: false,
   };
   state: StateType = {
     labelFloat: null,
@@ -55,6 +57,16 @@ class FormInput extends PureComponent<PropsType, StateType> {
       qualityClass: '',
     },
   };
+  //
+  componentDidMount() {
+    this.focus();
+  }
+
+  /**
+   * @desc this is where we're going to put HTMLInput ref
+   * @type {{}}
+   */
+  input = {};
 
   /**
    * @desc Handles the onChange event by setting the model's value
@@ -79,6 +91,15 @@ class FormInput extends PureComponent<PropsType, StateType> {
         labelFloat: 'labelFloat',
         showPasswordButton: !showPasswordButton,
       });
+    }
+  };
+
+  /**
+   * @return {void}
+   */
+  focus = () => {
+    if (this.props.focus) {
+      this.input.focus();
     }
   };
 
@@ -182,10 +203,11 @@ class FormInput extends PureComponent<PropsType, StateType> {
           styleName={`${className || ''} ${this.errorClass(formError)}`}
           name={name}
           value={model}
+          ref={(node) => { this.input = node; }}
           autoComplete={autocomplete}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
-          onChange={this.handleChange}
+          onKeyPress={this.handleChange}
           placeholder={placeholder}
         />
         {inputLabelContent}
