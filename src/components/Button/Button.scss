@@ -5,19 +5,29 @@
   border-radius: 4px;
   font-size: 16px;
   padding: 16px 0;
+  &:disabled {
+    background: #EFEFEF !important;
+    color: #FFFFFF !important;
+  }
 }
 
 .buttonProvider {
   @include simple-button($background: #F7F7F7, $color: #505050);
-  border-radius: 4px;
-  font-size: 16px;
+  composes: container;
   padding: 14px 0 14px 16%;
   text-align: left;
+  &:disabled {
+    background: #EFEFEF !important;
+    color: #FFFFFF !important;
+  }
 }
 
 .signUp {
   @include simple-button($background: #2FBAFD, $color: #ffffff);
-  border-radius: 4px;
-  font-size: 16px;
+  composes: container;
   padding: 12px 0;
+  &:disabled {
+    background: #EFEFEF !important;
+    color: #FFFFFF !important;
+  }
 }

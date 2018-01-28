@@ -5,35 +5,34 @@ import { action } from '@storybook/addon-actions';
 import Button from './Button';
 
 storiesOf('Button', module)
-  .add('with "buttonClass" as default', () => (
+  .add('with default class', () => (
     <Button
-      buttonClass="Button"
       title="Storiqa"
     />
   ))
-  .add('with "buttonClass" as "signUpFormButton" ', () => (
+  .add('with "buttonClass" as "signUp" ', () => (
     <Button
-      buttonClass="signUpFormButton"
+      buttonClass="signUp"
       title="Storiqa"
     />
   ))
   .add('with "disabled" prop', () => (
     <Button
-      buttonClass="signUpFormButton"
+      buttonClass="signUp"
       title="Storiqa"
       disabled={true}
     />
   ))
-  .add('with "buttonClass" as "signUpFormButton" and "onClick" handler', () => (
+  .add('with "buttonClass" as "signUp" and "onClick" handler', () => (
     <Button
-      buttonClass="signUpFormButton"
+      buttonClass="signUp"
       title="Storiqa"
       onClick={action('click')}
     />
   ))
-  .add('with "buttonClass" as "signUpFormButton" and type "submit"', () => (
+  .add('with "buttonClass" as "signUp" and type "submit"', () => (
     <Button
-      buttonClass="signUpFormButton"
+      buttonClass="signUp"
       type="submit"
       title="Storiqa"
       onClick={action('submit')}
