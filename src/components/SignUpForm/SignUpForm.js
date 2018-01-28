@@ -7,6 +7,7 @@ import FacebookIcon from 'assets/svg/facebook-icon.svg';
 
 import { Form } from 'components/Form';
 import { FormInput } from 'components/FormInput';
+import { FormGroup } from 'components/FormGroup';
 import { Button } from 'components/Button';
 import { Separator } from 'components/Separator';
 import './SignUpForm.scss';
@@ -100,7 +101,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
           <h1 styleName="signUpTitle">Sign Up</h1>
           <a styleName="signInLink">Sign In</a>
         </header>
-        <div styleName="group">
+        <FormGroup>
           <FormInput
             label="Username"
             name="username"
@@ -108,8 +109,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
             model={username}
             onChange={this.handleChange}
           />
-        </div>
-        <div styleName="group">
+        </FormGroup>
+        <FormGroup>
           <FormInput
             label="Email"
             name="email"
@@ -118,8 +119,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
             validate="email"
             onChange={this.handleChange}
           />
-        </div>
-        <div styleName="group">
+        </FormGroup>
+        <FormGroup>
           <FormInput
             label="Password"
             name="password"
@@ -128,25 +129,25 @@ class SignUpForm extends PureComponent<{}, StateType> {
             validate="password"
             onChange={this.handleChange}
           />
-        </div>
+        </FormGroup>
         { singUpContent }
         <Separator text="or" />
-        <div styleName="providerGroup">
+        <FormGroup marginBottom={24}>
           <GoogleIcon styleName="providerIcon" />
           <Button
             buttonClass="buttonProvider"
             title="Sign up with Google"
             onClick={this.handleProviderAuth}
           />
-        </div>
-        <div styleName="providerGroup">
+        </FormGroup>
+        <FormGroup marginBottom={24}>
           <FacebookIcon styleName="providerIcon" />
           <Button
             buttonClass="buttonProvider"
             title="Sign up with Facebook"
             onClick={this.handleProviderAuth}
           />
-        </div>
+        </FormGroup>
       </Form>
     );
   }
