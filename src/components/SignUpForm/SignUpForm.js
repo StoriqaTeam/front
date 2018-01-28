@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import GoogleIcon from 'assets/svg/google-icon.svg';
 import FacebookIcon from 'assets/svg/facebook-icon.svg';
 
+import { Form } from 'components/Form';
 import { FormInput } from 'components/FormInput';
 import { Button } from 'components/Button';
 import { Separator } from 'components/Separator';
@@ -42,8 +43,9 @@ class SignUpForm extends PureComponent<{}, StateType> {
   /**
    * @desc handles onSubmit event
    */
-  handleSubmit = (evt) => {
-    evt.preventDefault();
+  handleSubmit = () => {
+    // eslint-disable-next-line
+    console.log('submited');
   };
   /**
    * @desc handles onChange event by setting the validity of the desired input
@@ -90,7 +92,10 @@ class SignUpForm extends PureComponent<{}, StateType> {
     // Show only when the form is valid
     const singUpContent = formValid ? singUp : null;
     return (
-      <form styleName="container" noValidate onSubmit={this.handleSubmit}>
+      <Form
+        wrapperClass="auth"
+        onSubmit={this.handleSubmit}
+      >
         <header styleName="header">
           <h1 styleName="signUpTitle">Sign Up</h1>
           <a styleName="signInLink">Sign In</a>
@@ -142,7 +147,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
             onClick={this.handleProviderAuth}
           />
         </div>
-      </form>
+      </Form>
     );
   }
 }
