@@ -187,7 +187,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
       </button>
     );
     const passwordHints = (
-      <PasswordHints strenght={passwordQuality} />
+      <PasswordHints {...passwordQuality} />
     );
     const inputLabelContent = (label) ? inputLabel : null;
     //
@@ -207,7 +207,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
           autoComplete={autocomplete}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
-          onKeyPress={this.handleChange}
+          onChange={this.handleChange}
           placeholder={placeholder}
         />
         {inputLabelContent}

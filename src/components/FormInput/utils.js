@@ -34,43 +34,18 @@ function validateNumber(value) {
   return value.match(numberRegex);
 }
 /**
- * @desc applies the corresponding strength value
- * @param {Object} qualityObj
- * @param {Array} strengthValues = [0, '', '']
- * @return {{}}
- */
-function applyStrength(qualityObj, strengthValues = [0, '', '']) {
-  return Object.keys(qualityObj).reduce((next, key, idx) => {
-    // eslint-disable-next-line
-    next[key] = strengthValues[idx];
-    return next;
-  }, {});
-}
-/**
  * @desc applies the password quality based on the length.
  * @param {String} value
  * @return {Object}
  */
 function passwordQuality(value) {
-  let quality = {
-    percentage: 0,
-    message: '',
-    qualityClass: '',
+  return {
+    lowerCase: value.match(/(?=.*?[a-z])/),
+    upperCase: value.match(/(?=.*?[A-Z])/),
+    digit: value.match(/(?=.*?[0-9])/),
+    specialCharacter: value.match(/(?=.*?[#?!@$%^&*-])/),
+    length: value.length >= 8,
   };
-  if (value.length >= 3) {
-    quality = applyStrength(quality, [20, 'Too simple', 'simple']);
-  }
-  if (value.length >= 8) {
-    quality = applyStrength(quality, [60, 'Good', 'good']);
-  }
-  if (value.length >= 12) {
-    quality = applyStrength(quality, [100, 'Excellent', 'excellent']);
-  }
-  // Fallback
-  if (value.length === 0) {
-    quality = applyStrength(quality);
-  }
-  return quality;
 }
 /**
  * @param {String} name - input's name
