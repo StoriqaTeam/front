@@ -1,20 +1,24 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 
-class Button extends PureComponent {
-  static defaultProps = {
-    onClick: () => {},
-  };
+import './Button.scss';
 
+type PropsTypes = {
+  title: string,
+  onClick: Function,
+};
+
+class Button extends PureComponent<PropsTypes> {
   render() {
     const { title, onClick } = this.props;
-    return <button type="button" onClick={onClick}>{title}</button>;
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+      >
+        {title}
+      </button>
+    );
   }
 }
-
-Button.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
 
 export default Button;

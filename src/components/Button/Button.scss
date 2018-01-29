@@ -1,0 +1,17 @@
+button {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 32px;
+  color: #fff;
+  background-color: #2FBAFD;
+
+  &:hover {
+    background-color: #2FBAFD;
+  }
+
+  &:active {
+    background-color: #2FBAFD;
+  }
+}

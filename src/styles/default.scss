@@ -33,9 +33,7 @@ input[type="button"]:active,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus,
-button,
-button:active,
-button:focus {
+button {
   background: none;
   border: 0;
   color: inherit;
