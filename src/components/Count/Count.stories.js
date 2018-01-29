@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { Count } from 'components/Count';
 
 storiesOf('Count', module)
-  .add('Blue', () => (
+  .add('Blue & two symbols', () => (
     <div
       style={{
         margin: '50px',
@@ -12,11 +12,11 @@ storiesOf('Count', module)
     >
       <Count
         amount={32}
-        type="blue"
+        styles="blue"
       />
     </div>
   ))
-  .add('Green', () => (
+  .add('Green & three symbols', () => (
     <div
       style={{
         margin: '50px',
@@ -24,7 +24,7 @@ storiesOf('Count', module)
     >
       <Count
         amount={321}
-        type="green"
+        styles="green"
       />
     </div>
   ));

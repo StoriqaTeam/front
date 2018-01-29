@@ -7,11 +7,11 @@ import './Count.scss';
 
 type PropsTypes = {
   amount: number,
-  type: string,
+  styles: string,
 };
 
-const Count = ({ amount, type }: PropsTypes) => (
-  <div styleName={classNames('container', type && type)}>{amount}</div>
+const Count = ({ amount, styles }: PropsTypes) => (
+  <div styleName={classNames('container', styles && styles)}>{amount}</div>
 );
 
 export default Count;
