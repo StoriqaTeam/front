@@ -1,4 +1,18 @@
 /**
+ * @desc Detects whether or not CAPS LOCK is on.
+ * @param {SyntheticEvent<HTMLInputElement>} e
+ * @return {boolean}
+ */
+function isCapsLockOn(e: SyntheticEvent<HTMLInputElement>) {
+  const keyCode = e.which ? e.charCode : e.which;
+  const shiftKey = e.shiftKey ? e.shiftKey : (keyCode === 16);
+  return (
+    ((keyCode >= 65 && keyCode <= 90) && !shiftKey) ||
+    ((keyCode >= 97 && keyCode <= 122) && shiftKey)
+  );
+}
+
+/**
  * @desc Set form error message based on its validation
  * @param {String} value
  * @param {String} validModel
@@ -71,7 +85,7 @@ function validateField(name, value, validate, errorMessage) {
       formError = setErrorMessage(value, validModel, 'Invalid Email', errorMessage);
       break;
     case 'password':
-      validModel = value.length >= 3;
+      validModel = value.length >= 8;
       passwordQualityResult = passwordQuality(value);
       break;
     default:
@@ -88,4 +102,5 @@ function validateField(name, value, validate, errorMessage) {
 
 export default {
   validateField,
+  isCapsLockOn,
 };

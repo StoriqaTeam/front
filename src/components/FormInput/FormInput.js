@@ -3,7 +3,9 @@
 import React, { PureComponent } from 'react';
 
 import { PasswordHints } from 'components/PasswordHints';
+import { Tooltip } from 'components/Tooltip';
 import EyeOpenIcon from 'assets/svg/eye-open.svg';
+
 
 import './FormInput.scss';
 import utils from './utils';
@@ -20,6 +22,7 @@ type PropsType = {
   errorMessage: ?string,
   onChange: ?Function,
   focus: boolean,
+  detectCapsLock: boolean,
 };
 
 type StateType = {
@@ -32,6 +35,7 @@ type StateType = {
     message: string,
     qualityClass: string,
   },
+  isCapsLockOn: boolean,
 }
 
 class FormInput extends PureComponent<PropsType, StateType> {
@@ -45,6 +49,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     errorMessage: '',
     className: 'root',
     focus: false,
+    detectCapsLock: false,
   };
   state: StateType = {
     labelFloat: null,
@@ -56,6 +61,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
       message: '',
       qualityClass: '',
     },
+    isCapsLockOn: false,
   };
   //
   componentDidMount() {
@@ -76,6 +82,21 @@ class FormInput extends PureComponent<PropsType, StateType> {
   handleChange = (evt: SyntheticEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
     this.validate(name, value);
+  };
+  /**
+   * @desc Handles the onKeyPress event
+   * @param {SyntheticEvent<HTMLInputElement>} evt
+   * @return {void}
+   */
+  handleKeyPress = (evt: SyntheticEvent<HTMLInputElement>) => {
+    // eslint-disable-next-line
+    if (this.props.detectCapsLock) {
+      this.setState({
+        isCapsLockOn: utils.isCapsLockOn(evt),
+      });
+      // eslint-disable-next-line
+      console.log('utils.isCapsLockOn(evt)', utils.isCapsLockOn(evt));
+    }
   };
 
   /**
@@ -162,6 +183,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
       placeholder,
       type,
       className,
+      detectCapsLock,
     } = this.props;
 
     const {
@@ -170,6 +192,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
       showPasswordButton,
       formError,
       passwordQuality,
+      isCapsLockOn,
     } = this.state;
     // check only when the input is password to make it work when 'showPasswordButton' is enabled
     const isPassword = type === 'password' ? 'password' : type;
@@ -178,8 +201,13 @@ class FormInput extends PureComponent<PropsType, StateType> {
         styleName={`label ${labelFloat || ''}`}
         htmlFor={name}
       >
-        {label}
+        { label }
       </label>
+    );
+    const capsLockMessage = (
+      <div styleName="tooltip">
+        <Tooltip text="CAPS LOCK is on" />
+      </div>
     );
     const passwordButton = (
       <button styleName="showPassword" onClick={this.handleShowPassword}>
@@ -190,6 +218,8 @@ class FormInput extends PureComponent<PropsType, StateType> {
       <PasswordHints {...passwordQuality} />
     );
     const inputLabelContent = (label) ? inputLabel : null;
+    // Only when 'detectCapsLock', 'isCapsLockOn' are true
+    const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? capsLockMessage : null;
     //
     const showPasswordButtonAndHints = (showPasswordButton && type === 'password');
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
@@ -208,14 +238,16 @@ class FormInput extends PureComponent<PropsType, StateType> {
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}
+          onKeyPress={this.handleKeyPress}
           placeholder={placeholder}
         />
-        {inputLabelContent}
+        { inputLabelContent }
         <span styleName="message">
-          {formError}
+          { formError }
         </span>
-        {showPasswordContent}
-        {passwordHintsContent}
+        { capsLockMessageContent }
+        { showPasswordContent }
+        { passwordHintsContent }
       </span>
     );
   }
