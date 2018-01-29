@@ -14,6 +14,7 @@
     "prop-types": "^15.6.0",
     "ramda": "^0.25.0",
     "react": "^16.2.0",
+    "react-autocomplete": "^1.7.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-relay": "^1.4.1",
