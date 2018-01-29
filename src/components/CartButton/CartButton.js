@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { Icon } from 'components/Icon';
+import { Count } from 'components/Count';
 
 import './CartButton.scss';
 
@@ -15,7 +16,14 @@ class CartButton extends PureComponent<PropsTypes> {
 
     return (
       <a href={href} styleName="container">
-        {amount && <div styleName="amount">{amount}</div>}
+        {amount &&
+          <div styleName="amount">
+            <Count
+              amount={32}
+              type="blue"
+            />
+          </div>
+        }
         <div styleName="icon">
           <Icon type="cart" size="16" />
         </div>
