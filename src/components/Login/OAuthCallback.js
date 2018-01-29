@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fromPairs, map, pathOr, pipe, replace, split } from 'ramda';
+import { fromPairs, map, pathOr, prop, pipe, replace, split } from 'ramda';
 import Cookies from 'universal-cookie';
 import { routerShape } from 'found';
 
@@ -57,27 +57,25 @@ class OAuthCallback extends PureComponent<PropsType> {
     // <callback_url from .env>?#access_token=<token_here>&expires_in=6232
     // $FlowIgnore
     const fbCallbackUri: string = process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI;
-    return pipe(
-      replace(`${fbCallbackUri}?#`, ''), // access_token=<token_here>&expires_in=6232
-      split('&'), // [access_token=<token_here>, expires_in=6232]
-      map(split('=')), // [[access_token, <token_here>], [expires_in, 6232]]
-      fromPairs, // {access_token: <token_here>, expires_in: 6232}
-      pathOr(null, ['access_token']), // <token_here>
-    )(url);
+    const queryString = replace(`${fbCallbackUri}?#`, '', url);
+    return this.extractToken(queryString);
   };
 
   extractGoogleAccessToken = (url: string) => {
     // <callback_url from .env>#access_token=<token_here>&token_type=Bearer&expires_in=3600
     // $FlowIgnore
     const googleCallbackUri: string = process.env.REACT_APP_OAUTH_GOOGLE_REDIRECT_URI;
-    return pipe(
-      replace(`${googleCallbackUri}#`, ''), // access_token=<token_here>&expires_in=6232
-      split('&'), // [access_token=<token_here>, expires_in=6232]
-      map(split('=')), // [[access_token, <token_here>], [expires_in, 6232]]
-      fromPairs, // {access_token: <token_here>, expires_in: 6232}
-      pathOr(null, ['access_token']), // <token_here>
-    )(url);
+    const queryString = replace(`${googleCallbackUri}#`, '', url);
+    return this.extractToken(queryString);
   };
+
+  // pass query string here
+  extractToken = pipe(
+    split('&'), // [access_token=<token_here>, expires_in=6232]
+    map(split('=')), // [[access_token, <token_here>], [expires_in, 6232]]
+    fromPairs, // {access_token: <token_here>, expires_in: 6232}
+    prop('access_token'), // <token_here>
+  );
 
   render() {
     return (
