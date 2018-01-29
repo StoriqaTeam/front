@@ -28,10 +28,10 @@ const iconsMap = {
 class Icon extends PureComponent<PropsTypes> {
   render() {
     const { type, size } = this.props;
-    const className = classNames('container', `size-${size || '16'}`);
+    const styleName = classNames('container', `size-${size || '16'}`);
 
     return (
-      <div styleName={className}>
+      <div styleName={styleName}>
         {pathOr(null, [type], iconsMap)}
       </div>
     );

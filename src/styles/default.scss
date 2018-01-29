@@ -54,3 +54,9 @@ button::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
+
+a {
+  color: $color_primary;
+  text-decoration: none;
+  transition: all .3s ease;
+}
