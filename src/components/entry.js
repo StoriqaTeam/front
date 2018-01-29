@@ -10,7 +10,6 @@ import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 import createResolver from 'relay/createResolver';
 import { ClientFetcher } from 'relay/fetcher';
 
-// $FlowIgnore
 import '../index.scss';
 
 // eslint-disable-next-line
