@@ -128,6 +128,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
             type="password"
             model={password}
             validate="password"
+            showHints
             onChange={this.handleChange}
           />
         </FormGroup>

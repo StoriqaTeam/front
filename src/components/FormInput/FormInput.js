@@ -23,6 +23,7 @@ type PropsType = {
   onChange: ?Function,
   focus: boolean,
   detectCapsLock: boolean,
+  showHints: boolean,
 };
 
 type StateType = {
@@ -50,6 +51,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     className: 'root',
     focus: false,
     detectCapsLock: false,
+    showHints: false,
   };
   state: StateType = {
     labelFloat: null,
@@ -184,6 +186,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
       type,
       className,
       detectCapsLock,
+      showHints,
     } = this.props;
 
     const {
@@ -221,7 +224,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     // Only when 'detectCapsLock', 'isCapsLockOn' are true
     const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? capsLockMessage : null;
     //
-    const showPasswordButtonAndHints = (showPasswordButton && type === 'password');
+    const showPasswordButtonAndHints = (showHints && showPasswordButton && type === 'password');
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
     const showPasswordContent = showPasswordButtonAndHints ? passwordButton : null;
     // ONLY when type is password, so the user can see the password hints
