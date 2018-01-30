@@ -48,16 +48,21 @@ function validateNumber(value) {
   return value.match(numberRegex);
 }
 /**
- * @desc applies the password quality based on the length.
+ * @desc Checks that the password contains at least the following:
+ * one lower case character
+ * one upper case character
+ * one digit
+ * one special character
+ * 8 characters
  * @param {String} value
  * @return {Object}
  */
 function passwordQuality(value) {
   return {
-    lowerCase: value.match(/(?=.*?[a-z])/),
-    upperCase: value.match(/(?=.*?[A-Z])/),
-    digit: value.match(/(?=.*?[0-9])/),
-    specialCharacter: value.match(/(?=.*?[#?!@$%^&*-])/),
+    lowerCase: /(?=.*?[a-z])/.test(value),
+    upperCase: /(?=.*?[A-Z])/.test(value),
+    digit: /(?=.*?[0-9])/.test(value),
+    specialCharacter: /(?=.*?[#?!@$%^&*-])/.test(value),
     length: value.length >= 8,
   };
 }
@@ -87,6 +92,8 @@ function validateField(name, value, validate, errorMessage) {
     case 'password':
       validModel = value.length >= 8;
       passwordQualityResult = passwordQuality(value);
+      // eslint-disable-next-line
+      console.log(passwordQualityResult);
       break;
     default:
       break;
