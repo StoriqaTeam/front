@@ -62,18 +62,18 @@ class DropdownSelect extends Component<PropsType, StateType> {
         key={item.id}
         styleName="item"
       >
-        <input
-          styleName={classNames('itemInput')}
-          type="radio"
-          name={inputId}
-          id={inputId}
-          checked={checked}
-          onChange={() => this.handleSelectItem(item.id)}
-        />
         <label
           htmlFor={inputId}
           styleName={classNames('itemLabel', { inputChecked: checked })}
         >
+          <input
+            styleName={classNames('itemInput')}
+            type="radio"
+            name={inputId}
+            id={inputId}
+            checked={checked}
+            onChange={() => this.handleSelectItem(item.id)}
+          />
           {item.label}
         </label>
       </div>
@@ -85,7 +85,7 @@ class DropdownSelect extends Component<PropsType, StateType> {
     const { isExpanded } = this.state;
     return (
       <div styleName={`container ${isExpanded ? 'expanded' : 'collapsed'}`}>
-        <div
+        <buttonyar
           styleName="toggleExpand"
           onClick={this.handleToggleExpand}
         />
