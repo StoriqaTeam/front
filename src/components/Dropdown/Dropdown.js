@@ -2,6 +2,7 @@
 
 import React, { Component, Children } from 'react';
 import type { Node } from 'react';
+import classNames from 'classnames';
 
 import handlerDropdown from './handleDropdownDecorator';
 
@@ -12,10 +13,13 @@ type PropsTypes = {
   contentRef: Function,
   children: Node,
   isContentOpen: boolean,
+  round: boolean | void
 };
 
 class Dropdown extends Component<PropsTypes> {
   render() {
+    const { round } = this.props;
+
     return (
       <div
         styleName="container"
@@ -25,7 +29,7 @@ class Dropdown extends Component<PropsTypes> {
             return (
               <div
                 ref={this.props.triggerRef}
-                styleName="trigger"
+                styleName={classNames('trigger', { round })}
               >
                 {child.props.children}
               </div>

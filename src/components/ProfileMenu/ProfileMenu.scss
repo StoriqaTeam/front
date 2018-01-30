@@ -1,0 +1,64 @@
+.container {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.avatar {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  &:hover {
+    background-color: #EDEDED;
+  }
+}
+
+.is-avatar:hover {
+  background-color: transparent;
+}
+
+.low {
+  border: 1px solid #BFBFBF;
+}
+
+.high {
+  border: 1px solid #28D66B;
+}
+
+.avatar-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.avatar-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -9px 0 0 -8px;
+}
+
+.menu {
+  position: relative;
+}
+
+.name {
+  padding: 0 8px;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: block;
+  font-size: 14px;
+}
+
+.logout {
+  font-size: 14px;
+}
