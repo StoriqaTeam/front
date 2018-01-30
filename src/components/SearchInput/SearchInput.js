@@ -5,6 +5,8 @@ import Autocomplete from 'react-autocomplete';
 import { filter, startsWith, toUpper } from 'ramda';
 import classNames from 'classnames';
 
+import { DropdownSelect } from 'components/DropdownSelect';
+
 import SearchIcon from './svg/search.svg';
 import './SearchInput.scss';
 
@@ -13,6 +15,7 @@ type PropsType = {};
 type StateType = {
   inputValue: string,
   items: Array<any>,
+  searchCategoryId: ?number,
 };
 
 const data: Array<{id: number, label: string}> = [
@@ -28,6 +31,7 @@ class SearchInput extends Component<PropsType, StateType> {
   state = {
     inputValue: '',
     items: [],
+    searchCategoryId: null,
   };
 
   handleInputChange = (e: any) => {
@@ -44,9 +48,24 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
+  handleSearchDropdownSelect = (id: number) => {
+    this.setState(() => ({ searchCategoryId: id }));
+  };
+
   render() {
     return (
       <div styleName="container">
+        <div styleName="searchCategorySelect">
+          <DropdownSelect
+            namePrefix="search"
+            items={[
+              { id: 1, label: 'Shops' },
+              { id: 2, label: 'Products' },
+              { id: 3, label: 'All' },
+            ]}
+            onDropdownSelect={this.handleSearchDropdownSelect}
+          />
+        </div>
         <Autocomplete
           renderInput={props => (<input styleName="input" {...props} />)}
           items={this.state.items}

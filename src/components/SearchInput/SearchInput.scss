@@ -1,6 +1,12 @@
 .container {
   composes: OpenSans from global;
   color: #505050;
+  display: flex;
+}
+
+.searchCategorySelect {
+  position: relative;
+  width: 110px;
 }
 
 .highlighted {
