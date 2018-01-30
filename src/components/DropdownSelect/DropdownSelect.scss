@@ -1,0 +1,57 @@
+.container {
+  border: 1px solid #BFBFBF;
+  border-radius: 4px;
+  position: relative;
+}
+
+.expanded {
+  position: absolute;
+  background-color: red;
+  width: 100%;
+  .item:hover {
+    background-color: transparent;
+  }
+  .inputChecked {
+    color: white;
+  }
+}
+
+.collapsed {
+  position: relative;
+  min-height: 24px;
+  max-height: 24px;
+  overflow: hidden;
+}
+
+.toggleExpand {
+  background: url('./svg/expand_arrow.svg');
+  height: 5px;
+  width: 5px;
+  margin: 5px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+}
+
+.item {
+  height: 24px;
+  font-size: 14px;
+}
+
+.item:hover {
+  background-color: #F7F7F7;
+}
+
+.itemInput {
+  display: none;
+}
+
+.itemLabel {
+  cursor: pointer;
+  width: 100%;
+}
+
+.inputChecked {
+  color: red;
+}
