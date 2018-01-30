@@ -85,7 +85,7 @@ class DropdownSelect extends Component<PropsType, StateType> {
     const { isExpanded } = this.state;
     return (
       <div styleName={`container ${isExpanded ? 'expanded' : 'collapsed'}`}>
-        <buttonyar
+        <button
           styleName="toggleExpand"
           onClick={this.handleToggleExpand}
         />
