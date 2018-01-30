@@ -17,10 +17,10 @@ function isCapsLockOn(e: SyntheticEvent<HTMLInputElement>) {
  * @param {String} value
  * @param {String} validModel
  * @param {String} message = 'Invalid'
- * @param {String} errorMessage'
+ * @param {String} errorMessage = ''
  * @return {string}
  */
-function setErrorMessage(value, validModel, message = 'Invalid', errorMessage) {
+function setErrorMessage(value, validModel, message = 'Invalid', errorMessage = '') {
   // check for enabling custom error message.
   const error = (errorMessage !== '') ? errorMessage : message;
   let formError = '';
@@ -90,10 +90,10 @@ function validateField(name, value, validate, errorMessage) {
       formError = setErrorMessage(value, validModel, 'Invalid Email', errorMessage);
       break;
     case 'password':
-      validModel = value.length >= 8;
       passwordQualityResult = passwordQuality(value);
-      // eslint-disable-next-line
-      console.log(passwordQualityResult);
+      // check that every value is true.
+      validModel = Object.values(passwordQualityResult).every(p => p === true);
+      formError = setErrorMessage(value, validModel, '');
       break;
     default:
       break;
