@@ -1,5 +1,6 @@
 /**
  * @desc Detects whether or not CAPS LOCK is on.
+ * @link http://jsfiddle.net/Mottie/a6nhqvv0/
  * @param {SyntheticEvent} evt
  * @return {boolean}
  */
@@ -26,6 +27,7 @@ function setErrorMessage(value, validModel, message = 'Invalid', errorMessage = 
 }
 /**
  * @desc validates that the value is an email
+ * @link https://github.com/angular/angular/blob/5.2.2/packages/forms/src/validators.ts#L57-L43
  * @param {String} value
  * @return {Array|null}
  */
