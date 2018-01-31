@@ -17,9 +17,12 @@ class Form extends PureComponent<PropsType> {
 
   /**
    * @desc handles onSubmit event
+   * @return {void}
    */
   handleSubmit = (evt) => {
+    // prevent the browser from refreshing when the form is submitted.
     evt.preventDefault();
+    // extract the callBack that's given from the parent.
     const { onSubmit } = this.props;
     onSubmit();
   };
