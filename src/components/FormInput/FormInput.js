@@ -78,10 +78,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
 
   /**
    * @desc Handles the onChange event by setting the model's value
-   * @param {SyntheticEvent<HTMLInputElement>} evt
+   * @param {SyntheticEvent} evt
    * @return {void}
    */
-  handleChange = (evt: SyntheticEvent<HTMLInputElement>) => {
+  handleChange = (evt: SyntheticEvent) => {
     const { name, value } = evt.target;
     this.validate(name, value);
   };
