@@ -1,7 +1,6 @@
 * {
   margin: 0;
   padding: 0;
-  font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
   outline: none;
@@ -36,9 +35,7 @@ input[type="button"]:focus,
 button {
   background: none;
   border: 0;
-  color: inherit;
   cursor: pointer;
-  font: inherit;
   line-height: normal;
   overflow: visible;
   padding: 0;

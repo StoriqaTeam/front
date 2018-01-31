@@ -51,7 +51,7 @@ class CardProduct extends PureComponent<PropsTypes> {
               </div>
               }
               {qualityAssurance &&
-              <div styleName="qa">
+              <div styleName="qa-icon">
                 <Icon type="qa" size="24" />
               </div>
               }

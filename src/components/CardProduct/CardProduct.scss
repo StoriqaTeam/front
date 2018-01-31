@@ -47,9 +47,9 @@
   border-bottom-right-radius: 4px;
 }
 
-.qa {
-  position: relative;
+.qa-icon {
   composes: bgWhite from global;
+  position: relative;
   width: 40px;
   height: 32px;
   text-align: center;
