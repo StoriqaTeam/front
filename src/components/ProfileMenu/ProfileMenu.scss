@@ -8,6 +8,7 @@
   position: relative;
   width: 32px;
   height: 32px;
+  margin-left: 8px;
   padding: 1px;
   border-radius: 50%;
   overflow: hidden;
@@ -54,11 +55,48 @@
   overflow: hidden;
 }
 
-.menu-item {
+.items {
+  margin-top: 24px;
+}
+
+.item {
+  position: relative;
   display: block;
+  height: 40px;
+  margin: 0 -8px;
+  padding: 0 16px;
+  line-height: 40px;
   font-size: 14px;
+
+  &:hover {
+    background-color: #F7F7F7;
+  }
 }
 
 .logout {
+  position: relative;
+  display: block;
+  margin: 24px -8px -16px;
+  padding: 16px;
   font-size: 14px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 8px;
+    right: 8px;
+    height: 1px;
+    border-top: 1px solid #F7F7F7;
+  }
+
+  &:hover {
+    background-color: #F7F7F7;
+  }
+}
+
+.count {
+  display: inline-block;
+  margin-top: -1px;
+  float: right;
 }

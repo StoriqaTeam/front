@@ -16,7 +16,7 @@ type PropsTypes = {
     messagesCount: number,
     shopsCount: number,
     avatar: string,
-    level: string,
+    level: 'low' | 'high',
   }
 };
 
@@ -33,7 +33,7 @@ class ProfileMenu extends PureComponent<PropsTypes> {
       <div styleName="container">
         <Dropdown round>
           <trigger>
-            <div styleName={classNames('avatar', level && level, { 'is-avatar': avatar })}>
+            <div styleName={classNames('avatar', level, { 'is-avatar': avatar })}>
               {avatar ?
                 <img
                   styleName="avatar-img"
@@ -51,26 +51,33 @@ class ProfileMenu extends PureComponent<PropsTypes> {
               <div styleName="name">
                 <strong>{name}</strong>
               </div>
-              <a href="#" styleName="menu-item">
-                <span>Messages</span>
-                {messagesCount &&
-                  <Count
-                    amount={messagesCount}
-                    styles="blue"
-                  />
-                }
-              </a>
-              <a href="#" styleName="menu-item">Profile settings</a>
-              <a href="#" styleName="menu-item">History</a>
-              <a href="#" styleName="menu-item">
-                <span>My shops</span>
-                {shopsCount &&
-                  <Count
-                    amount={shopsCount}
-                    styles="green"
-                  />
-                }
-              </a>
+              <div styleName="items">
+                <a href="#" styleName="item">
+                  <span>Messages</span>
+                  {Boolean(messagesCount) &&
+                  <div styleName="count">
+                    <Count
+                      tip
+                      amount={messagesCount}
+                      styles="blue"
+                    />
+                  </div>
+                  }
+                </a>
+                <a href="#" styleName="item">Profile settings</a>
+                <a href="#" styleName="item">History</a>
+                <a href="#" styleName="item">
+                  <span>My shops</span>
+                  {Boolean(shopsCount) &&
+                  <div styleName="count">
+                    <Count
+                      amount={shopsCount}
+                      styles="green"
+                    />
+                  </div>
+                  }
+                </a>
+              </div>
               <a href="#" styleName="logout">Logout</a>
             </div>
           </content>
