@@ -49,7 +49,6 @@ function validateNumber(value) {
  * one lower case character
  * one upper case character
  * one digit
- * one special character
  * 8 characters
  * @param {String} value
  * @return {Object}
