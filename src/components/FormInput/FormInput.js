@@ -87,10 +87,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
   };
   /**
    * @desc Handles the onKeyPress event
-   * @param {SyntheticEvent<HTMLInputElement>} evt
+   * @param {SyntheticEvent} evt
    * @return {void}
    */
-  handleKeyPress = (evt: SyntheticEvent<HTMLInputElement>) => {
+  handleKeyPress = (evt: SyntheticEvent) => {
     // eslint-disable-next-line
     if (this.props.detectCapsLock) {
       this.setState({

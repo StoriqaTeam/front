@@ -1,15 +1,10 @@
 /**
  * @desc Detects whether or not CAPS LOCK is on.
- * @param {SyntheticEvent<HTMLInputElement>} e
+ * @param {SyntheticEvent} evt
  * @return {boolean}
  */
-function isCapsLockOn(e: SyntheticEvent<HTMLInputElement>) {
-  const keyCode = e.which ? e.charCode : e.which;
-  const shiftKey = e.shiftKey ? e.shiftKey : (keyCode === 16);
-  return (
-    ((keyCode >= 65 && keyCode <= 90) && !shiftKey) ||
-    ((keyCode >= 97 && keyCode <= 122) && shiftKey)
-  );
+function isCapsLockOn(evt: SyntheticEvent) {
+  return evt.getModifierState && evt.getModifierState('CapsLock');
 }
 
 /**
