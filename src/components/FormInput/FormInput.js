@@ -197,8 +197,6 @@ class FormInput extends PureComponent<PropsType, StateType> {
       passwordQuality,
       isCapsLockOn,
     } = this.state;
-    // check only when the input is password to make it work when 'showPasswordButton' is enabled
-    const isPassword = type === 'password' ? 'password' : type;
     const inputLabel = (
       <label
         styleName={`label ${labelFloat || ''}`}
@@ -232,7 +230,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     return (
       <span>
         <input
-          type={showPassword ? 'text' : isPassword}
+          type={showPassword ? 'text' : type}
           styleName={`${className || ''} ${this.errorClass(formError)}`}
           name={name}
           value={model}
