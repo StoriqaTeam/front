@@ -14,7 +14,7 @@
 .buttonProvider {
   @include simple-button($background: #F7F7F7, $color: #505050);
   composes: container;
-  padding: 14px 0 14px 16%;
+  padding: 14px 0 14px 45px;
   text-align: left;
   &:disabled {
     background: #EFEFEF !important;
