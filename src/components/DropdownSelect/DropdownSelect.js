@@ -35,12 +35,15 @@ class DropdownSelect extends Component<PropsType, StateType> {
 
   node: any;
 
-  handleClick = () => {
+  handleClick = (e: { target: any }) => {
+    if (this.node.contains(e.target)) {
+      return;
+    }
     this.setState(() => ({ isExpanded: false }));
   };
 
   handleSelectItem = (id: number) => {
-    this.setState(() => ({ checkedDropdownItemId: id }), () => {
+    this.setState(() => ({ checkedDropdownItemId: id, isExpanded: false }), () => {
       const { onDropdownSelect } = this.props;
       if (onDropdownSelect) {
         onDropdownSelect(id);

@@ -31,7 +31,8 @@ class SearchInput extends Component<PropsType, StateType> {
   state = {
     inputValue: '',
     items: [],
-    searchCategoryId: null,
+    // eslint-disable-next-line
+    searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`
   };
 
   handleInputChange = (e: any) => {
