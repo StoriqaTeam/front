@@ -25,13 +25,26 @@ class DropdownSelect extends Component<PropsType, StateType> {
     isExpanded: false,
   };
 
+  componentWillMount() {
+    document.addEventListener('mousedown', this.handleClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClick);
+  }
+
+  node: any;
+
+  handleClick = () => {
+    this.setState(() => ({ isExpanded: false }));
+  };
+
   handleSelectItem = (id: number) => {
     this.setState(() => ({ checkedDropdownItemId: id }), () => {
       const { onDropdownSelect } = this.props;
       if (onDropdownSelect) {
         onDropdownSelect(id);
       }
-      this.handleToggleExpand();
     });
   };
 
@@ -61,10 +74,13 @@ class DropdownSelect extends Component<PropsType, StateType> {
       <div
         key={item.id}
         styleName="item"
+        ref={(node) => {
+          this.node = node;
+        }}
       >
         <label
           htmlFor={inputId}
-          styleName={classNames('itemLabel', { inputChecked: checked })}
+          styleName={`itemLabel ${checked ? 'inputChecked' : ''}`}
         >
           <input
             styleName={classNames('itemInput')}

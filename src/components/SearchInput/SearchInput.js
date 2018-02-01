@@ -19,12 +19,12 @@ type StateType = {
 };
 
 const data: Array<{id: number, label: string}> = [
-  { id: 1, label: 'Стол' },
-  { id: 2, label: 'Стол письменный' },
-  { id: 3, label: 'Стол журнальный' },
-  { id: 4, label: 'Стул' },
-  { id: 5, label: 'Стул 1' },
-  { id: 6, label: 'Стул 2' },
+  { id: 1, label: 'asdfСтол' },
+  { id: 2, label: 'asdfСтол письменный' },
+  { id: 3, label: 'asdfСтол журнальный' },
+  { id: 4, label: 'asdfСтул' },
+  { id: 5, label: 'asdfСтул 1' },
+  { id: 6, label: 'asdfСтул 2' },
 ];
 
 class SearchInput extends Component<PropsType, StateType> {
