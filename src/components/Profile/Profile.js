@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr } from 'ramda';
 
 import { Button } from 'components/Button';
@@ -9,7 +10,7 @@ import { log } from 'utils';
 import './Profile.scss';
 
 type PropsTypes = {
-  profileData: {
+  currentUser: {
     firstName: string,
     lastName: string,
   },
@@ -28,9 +29,10 @@ class Profile extends PureComponent<PropsTypes, StateTypes> {
   };
 
   componentWillMount() {
-    const { profileData } = this.props;
-    const firstName = pathOr('', ['firstName'], profileData);
-    const lastName = pathOr('', ['lastName'], profileData);
+    // console.log('-----process.env', process.env);
+    const { currentUser } = this.props;
+    const firstName = pathOr('', ['firstName'], currentUser);
+    const lastName = pathOr('', ['lastName'], currentUser);
     this.setState({ firstName, lastName });
   }
 
@@ -47,6 +49,7 @@ class Profile extends PureComponent<PropsTypes, StateTypes> {
   render() {
     const { admin } = this.props;
     const { firstName, lastName } = this.state;
+    log.info('-----this.props.currentUser', this.props.currentUser);
     return (
       <div styleName="container">
         Profile settings ({admin && 'admin'})<br /><br />
@@ -75,4 +78,12 @@ class Profile extends PureComponent<PropsTypes, StateTypes> {
   }
 }
 
-export default Profile;
+export default createFragmentContainer(
+  Profile,
+  graphql`
+    fragment Profile_currentUser on User {
+      firstName
+      lastName
+    }
+  `,
+);
