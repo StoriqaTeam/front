@@ -3,9 +3,8 @@
 import React, { PureComponent } from 'react';
 
 import { PasswordHints } from 'components/PasswordHints';
-import { Tooltip } from 'components/Tooltip';
-import EyeOpenIcon from 'assets/svg/eye-open.svg';
-
+import { CapsLockMessage } from 'components/CapsLockMessage';
+import { ShowPassword } from 'components/ShowPassword';
 
 import './FormInput.scss';
 import utils from './utils';
@@ -205,22 +204,15 @@ class FormInput extends PureComponent<PropsType, StateType> {
         { label }
       </label>
     );
-    const capsLockMessage = (
-      <div styleName="tooltip">
-        <Tooltip text="CAPS LOCK is on" />
-      </div>
-    );
     const passwordButton = (
-      <button styleName="showPassword" onClick={this.handleShowPassword}>
-        <EyeOpenIcon /> <small>Show</small>
-      </button>
+      <ShowPassword onClick={this.handleShowPassword} />
     );
     const passwordHints = (
       <PasswordHints {...passwordQuality} />
     );
     const inputLabelContent = (label) ? inputLabel : null;
     // Only when 'detectCapsLock', 'isCapsLockOn' are true
-    const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? capsLockMessage : null;
+    const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? CapsLockMessage : null;
     //
     const showPasswordButtonAndHints = (showHints && showPasswordButton && type === 'password');
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
