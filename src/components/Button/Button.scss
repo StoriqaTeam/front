@@ -1,33 +1,32 @@
-@import "../../styles/mixins";
+@import "../../styles/variables";
 
 .container {
-  @include simple-button;
+  background: $color_white;
   border-radius: 4px;
+  border: none;
+  color: $color_grey;
+  cursor: pointer;
   font-size: 16px;
+  outline: 0;
   padding: 16px 0;
-  &:disabled {
-    background: #EFEFEF !important;
-    color: #FFFFFF !important;
-  }
-}
+  width: 100%;
 
-.buttonProvider {
-  @include simple-button($background: #F7F7F7, $color: #505050);
-  composes: container;
-  padding: 14px 0 14px 45px;
-  text-align: left;
-  &:disabled {
-    background: #EFEFEF !important;
-    color: #FFFFFF !important;
+  &.buttonProvider {
+    background: #F7F7F7;
+    color: $color_primary;
+    padding: 14px 0 14px 45px;
+    text-align: left;
   }
-}
 
-.signUp {
-  @include simple-button($background: #2FBAFD, $color: #ffffff);
-  composes: container;
-  padding: 12px 0;
+  .signUp {
+    background: $color_blue;
+    color: $color_white;
+    padding: 12px 0;
+  }
+
   &:disabled {
     background: #EFEFEF !important;
-    color: #FFFFFF !important;
+    color: $color_white !important;
   }
+
 }

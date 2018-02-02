@@ -15,7 +15,7 @@ type PropsTypes = {
 class Button extends PureComponent<PropsTypes> {
   static defaultProps = {
     onClick: () => {},
-    buttonClass: 'container',
+    buttonClass: '',
     type: 'button',
     disabled: false,
   };
@@ -27,7 +27,7 @@ class Button extends PureComponent<PropsTypes> {
       <button
         type={type}
         disabled={disabled}
-        styleName={buttonClass}
+        styleName={`container ${buttonClass}`}
         onClick={onClick}
       >
         {title}
