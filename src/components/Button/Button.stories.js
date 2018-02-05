@@ -20,7 +20,7 @@ storiesOf('Button', module)
     <Button
       buttonClass="signUp"
       title="Storiqa"
-      disabled={true}
+      disabled
     />
   ))
   .add('with "buttonClass" as "signUp" and "onClick" handler', () => (

@@ -1,13 +1,14 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import type { Node } from 'react';
 
 import './Form.scss';
 
 type PropsType = {
   wrapperClass: string,
   onSubmit: Function,
-  children: Array
+  children: Node,
 }
 
 class Form extends PureComponent<PropsType> {
@@ -19,7 +20,7 @@ class Form extends PureComponent<PropsType> {
    * @desc handles onSubmit event
    * @return {void}
    */
-  handleSubmit = (evt) => {
+  handleSubmit = (evt: SyntheticEvent<HTMLFormElement>) => {
     // prevent the browser from refreshing when the form is submitted.
     evt.preventDefault();
     // extract the callBack that's given from the parent.

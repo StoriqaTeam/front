@@ -19,14 +19,14 @@ type PropsType = {
   validate: ?string,
   autocomplete: ?string,
   errorMessage: ?string,
-  onChange: ?Function,
+  onChange: Function,
   focus: boolean,
   detectCapsLock: boolean,
   showHints: boolean,
 };
 
 type StateType = {
-  label: string,
+  labelFloat: string | null,
   showPassword: boolean,
   showPasswordButton: boolean,
   formError: string,
@@ -80,7 +80,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @param {SyntheticEvent} evt
    * @return {void}
    */
-  handleChange = (evt: SyntheticEvent) => {
+  handleChange = (evt: { target: { name: string, value: string } }) => {
     const { name, value } = evt.target;
     this.validate(name, value);
   };
@@ -89,7 +89,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @param {SyntheticEvent} evt
    * @return {void}
    */
-  handleKeyPress = (evt: SyntheticEvent) => {
+  handleKeyPress = (evt: {}) => {
     // eslint-disable-next-line
     if (this.props.detectCapsLock) {
       this.setState({
@@ -120,7 +120,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   focus = () => {
-    if (this.props.focus) {
+    if (this.input && this.props.focus) {
       this.input.focus();
     }
   };

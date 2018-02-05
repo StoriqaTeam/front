@@ -6,10 +6,10 @@ import './Button.scss';
 
 type PropsTypes = {
   title: string,
-  buttonClass: PropTypes.string,
-  type: PropTypes.string,
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool,
+  buttonClass: string,
+  type: string,
+  onClick: Function,
+  disabled: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {

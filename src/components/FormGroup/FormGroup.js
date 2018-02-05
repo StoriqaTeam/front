@@ -1,12 +1,13 @@
 // @flow
 
 import React from 'react';
+import type { Node } from 'react';
 
 import './FormGroup.scss';
 
 type PropTypes = {
   marginBottom?: number,
-  children: React.Node
+  children: Node,
 };
 
 const FormGroup = (props: PropTypes) => (

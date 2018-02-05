@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { FormInput } from 'components/FormInput';
 import Form from './Form';
-import { FormInput } from 'components/FormInput'
 
 storiesOf('Form', module)
   .add('with default "wrapperClass" ', () => (

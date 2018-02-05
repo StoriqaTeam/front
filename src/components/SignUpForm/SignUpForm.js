@@ -18,6 +18,7 @@ type StateType = {
   usernameValid: boolean,
   email: string,
   emailValid: boolean,
+  password: string,
   passwordValid: boolean,
   formValid: boolean
 }
@@ -57,7 +58,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
    * @param {Boolean} evt.validity
    * @return {void}
    */
-  handleChange = ({ name, value, validity }) => {
+  handleChange = (data: { name: string, value: any, validity: boolean }) => {
+    const { name, value, validity } = data;
     this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
   };
   /**
