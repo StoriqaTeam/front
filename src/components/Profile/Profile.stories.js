@@ -3,17 +3,18 @@ import { storiesOf } from '@storybook/react';
 
 import { Profile } from 'components/Profile';
 
-import profileData from './profileData.json';
+import users from './users.json';
+import currentUser from './currentUser.json';
 
 storiesOf('Profile', module)
   .add('User', () => (
     <Profile
-      profileData={profileData}
+      currentUser={currentUser}
     />
   ))
   .add('Admin', () => (
     <Profile
       admin
-      profileData={profileData}
+      users={users}
     />
   ));

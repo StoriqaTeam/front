@@ -12,6 +12,7 @@ class Button extends PureComponent<PropsTypes> {
     const { title, onClick } = this.props;
     return (
       <button
+        styleName="button"
         type="button"
         onClick={onClick}
       >

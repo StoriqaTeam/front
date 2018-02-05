@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "firstName": "Marianna",
+    "lastName": "Krestovozdvizhenskaya",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "firstName": "Vasya",
+    "lastName": "Popov",
+    "isActive": false
+  },
+  {
+    "id": "3",
+    "firstName": "Petya",
+    "lastName": "Sidorov",
+    "isActive": false
+  },
+  {
+    "id": "4",
+    "firstName": "Katya",
+    "lastName": "Ivanova",
+    "isActive": true
+  }
+]

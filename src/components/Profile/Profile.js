@@ -1,89 +1,48 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr } from 'ramda';
+// import { createFragmentContainer, graphql } from 'react-relay';
 
-import { Button } from 'components/Button';
-import { log } from 'utils';
+import { Form, UsersTable } from 'components/Profile';
 
 import './Profile.scss';
 
 type PropsTypes = {
+  admin: boolean,
+  users: Array<{
+    id: string,
+    firstName: string,
+    lastName: string,
+    isActive: boolean,
+  }>,
   currentUser: {
+    id: string,
     firstName: string,
     lastName: string,
   },
-  admin: boolean,
 };
 
-type StateTypes = {
-  firstName: string,
-  lastName: string,
-};
-
-class Profile extends PureComponent<PropsTypes, StateTypes> {
-  state: StateType = {
-    firstName: '',
-    lastName: '',
-  };
-
-  componentWillMount() {
-    // console.log('-----process.env', process.env);
-    const { currentUser } = this.props;
-    const firstName = pathOr('', ['firstName'], currentUser);
-    const lastName = pathOr('', ['lastName'], currentUser);
-    this.setState({ firstName, lastName });
-  }
-
-  handleInputChange = (e: Object) => {
-    const { target } = e;
-    this.setState({ [target.name]: target.value });
-  };
-
-  saveData = () => {
-    const { firstName, lastName } = this.state;
-    log.info('firstName: ', firstName, ', lastName: ', lastName);
-  }
-
+class Profile extends PureComponent<PropsTypes> {
   render() {
-    const { admin } = this.props;
-    const { firstName, lastName } = this.state;
-    log.info('-----this.props.currentUser', this.props.currentUser);
+    const { admin, users, currentUser } = this.props;
     return (
       <div styleName="container">
-        Profile settings ({admin && 'admin'})<br /><br />
-        First name<br />
-        <input
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={this.handleInputChange}
-        /><br /><br />
-        Last name<br />
-        <input
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={this.handleInputChange}
-        />
-        <div>
-          <Button
-            title="Save"
-            onClick={this.saveData}
-          />
-        </div>
+        Profile settings {admin && '(admin)'}<br /><br />
+        {admin && <UsersTable users={users} />}<br /><br />
+        {!admin && <Form user={currentUser} />}
       </div>
     );
   }
 }
 
-export default createFragmentContainer(
-  Profile,
-  graphql`
-    fragment Profile_currentUser on User {
-      firstName
-      lastName
-    }
-  `,
-);
+export default Profile;
+
+// export default createFragmentContainer(
+//   Profile,
+//   graphql`
+//     fragment Profile_currentUser on User {
+//       firstName
+//       lastName
+//     }
+//   `,
+// );

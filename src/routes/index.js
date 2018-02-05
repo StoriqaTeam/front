@@ -20,7 +20,6 @@ const routes = (
         ...App_apiVersion
         viewer {
           currentUser {
-            ...Profile_currentUser
             id
             email
           }
