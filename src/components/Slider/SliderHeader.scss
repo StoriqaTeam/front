@@ -1,4 +1,4 @@
-.sliderHeader {
+.container {
   margin-bottom: 4px;
   padding: 16px 16px 0;
 
@@ -9,8 +9,11 @@
   }
 }
 
+.most-popular-color { color: #9239C9; }
+.sale-color { color: #FF508E; }
+.smart-reviews-color { color: #2FBAFD; }
+
 .title {
-  composes: OpenSans_SemiBold from global;
   float: left;
   font-size: 20px;
   line-height: 32px;
@@ -21,7 +24,7 @@
   float: right;
 }
 
-.nav-button {
+.button {
   composes: boxShadow1 from global;
   width: 32px;
   height: 32px;

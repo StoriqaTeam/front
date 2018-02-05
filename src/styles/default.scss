@@ -1,20 +1,59 @@
 * {
   margin: 0;
   padding: 0;
-  font: inherit;
-  font-size: 16px;
   vertical-align: baseline;
   box-sizing: border-box;
   outline: none;
 }
 
 body {
-  compose: OpenSans from global;
+  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   height: 100%;
+  font-size: 16px;
   line-height: 18px;
   color: $color_primary;
 }
 
 b {
-  compose: OpenSans_Bold;
+  font-family: 'Open_Sans_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
+}
+
+strong {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+}
+
+/* Reset `button` and button-style `input` default styles */
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="submit"]:active,
+input[type="reset"]:active,
+input[type="button"]:active,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus,
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  line-height: normal;
+  overflow: visible;
+  padding: 0;
+  outline: none;
+  -webkit-appearance: button; /* for input */
+  -webkit-user-select: none; /* for button */
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+input::-moz-focus-inner,
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+a {
+  color: $color_primary;
+  text-decoration: none;
+  transition: all .3s ease;
 }

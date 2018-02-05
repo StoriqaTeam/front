@@ -9,7 +9,7 @@ import handlerSlide from './handlerSlidesDecorator';
 import './SliderContainer.scss';
 
 type PropsTypes = {
-  color: string,
+  type: 'most-popular' | 'sale' | 'smart-reviews',
   title: string,
   showAllSlides: boolean,
   slidesOffset: number,
@@ -23,7 +23,7 @@ type PropsTypes = {
 class SliderContainer extends Component<PropsTypes> {
   render() {
     const {
-      color,
+      type,
       title,
       showAllSlides,
       slidesOffset,
@@ -35,9 +35,9 @@ class SliderContainer extends Component<PropsTypes> {
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
 
     return (
-      <div styleName="sliderContainer">
+      <div styleName="container">
         <SliderHeader
-          color={color}
+          type={type}
           title={title}
           isRevealButton={isRevealButton}
           showAllSlides={showAllSlides}

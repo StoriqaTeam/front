@@ -1,0 +1,46 @@
+.container {
+  position: relative;
+  display: inline-block;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 5px 1px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 8px;
+  background-color: #2FBAFD;
+}
+
+.blue {
+  background-color: #2FBAFD;
+}
+
+.green {
+  background-color: #7DC74E;
+}
+
+.tip {
+  &:before {
+    content: '';
+    position: absolute;
+    right: 6px;
+    bottom: -4px;
+    display: block;
+    width: 6px;
+    height: 5px;
+    background-repeat: no-repeat;
+  }
+}
+
+.tip.blue {
+  &:before {
+    background-image: url('./img/tip-blue.svg');
+  }
+}
+
+.tip.green {
+  &:before {
+    background-image: url('./img/tip-green.svg');
+  }
+}
