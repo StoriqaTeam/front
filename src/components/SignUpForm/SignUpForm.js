@@ -38,10 +38,9 @@ class SignUpForm extends PureComponent<{}, StateType> {
    * @type {String}
    */
   policy = (
-    <span styleName="policy">
-      <small styleName="policyAgreement">By clicking this button, you agree to Storiqa’s </small>
-      <small styleName="policyAntiSpam">Anti-spam Policy & Terms of Use.</small>
-    </span>
+    <div styleName="policy">
+      By clicking this button, you agree to Storiqa’s <a href="/" styleName="link">Anti-spam Policy</a> & <a href="/" styleName="link">Terms of Use</a>.
+    </div>
   );
   /**
    * @desc handles onSubmit event
@@ -84,12 +83,13 @@ class SignUpForm extends PureComponent<{}, StateType> {
     } = this.state;
     const singUp = (
       <div styleName="signUpGroup">
-        <Button
-          type="submit"
-          buttonClass="signUp"
-          title="Sign Up"
-          onClick={this.handleSubmit}
-        />
+        <div styleName="signUpButton">
+          <Button
+            type="submit"
+            title="Sign Up"
+            onClick={this.handleSubmit}
+          />
+        </div>
         { this.policy }
       </div>
     );
@@ -123,20 +123,22 @@ class SignUpForm extends PureComponent<{}, StateType> {
             onChange={this.handleChange}
           />
         </FormGroup>
-        <FormGroup>
+        <FormGroup marginBottom={32}>
           <FormInput
             label="Password"
             name="password"
             type="password"
             model={password}
             validate="password"
-            showHints
             onChange={this.handleChange}
           />
         </FormGroup>
         { singUpContent }
-        <Separator text="or" />
-        <FormGroup marginBottom={24}>
+        <Separator
+          text="or"
+          marginBottom={16}
+        />
+        <FormGroup marginBottom={16}>
           <GoogleIcon styleName="providerIcon" />
           <Button
             buttonClass="buttonProvider"
@@ -144,7 +146,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
             onClick={this.handleProviderAuth}
           />
         </FormGroup>
-        <FormGroup marginBottom={24}>
+        <FormGroup marginBottom={0}>
           <FacebookIcon styleName="providerIcon" />
           <Button
             buttonClass="buttonProvider"

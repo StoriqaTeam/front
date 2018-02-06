@@ -1,15 +1,14 @@
 @import "../../styles/variables";
 
 .container {
-  background: $color_white;
+  background: #2FBAFD;
   border-radius: 4px;
-  border: none;
-  color: $color_grey;
+  line-height: 32px;
+  color: #fff;
   cursor: pointer;
   font-size: 16px;
-  outline: 0;
-  padding: 16px 0;
-  width: 100%;
+  padding: 0 16px;
+  min-width: 128px;
 
   &.buttonProvider {
     background: #F7F7F7;
