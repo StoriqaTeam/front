@@ -6,6 +6,7 @@ import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
+import { log } from 'utils';
 import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
 import { Registration } from 'components/Registration';
@@ -17,13 +18,10 @@ const routes = (
     Component={App}
     query={graphql`
       query routes_App_Query {
-        ...App_apiVersion
+        apiVersion
         viewer {
-          currentUser {
-            ...Profile_currentUser
-            id
-            email
-          }
+          id
+          ...App_viewer
         }
       }
     `}
@@ -31,20 +29,33 @@ const routes = (
       if (error) {
         const errors = pathOr(null, ['source', 'errors'], error);
         if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
-          return <Component {...props} apiVersion={null} />;
+          return <Component {...props} viewer={null} />;
         }
-        return null;
+        log.debug('App unhandled error', { error });
+        return (
+          <Component {...props} >
+            <div>Some error happened!</div>
+          </Component>
+        );
       }
-      return <Component {...props} apiVersion={null} />;
+      log.debug('Routes -> App', { props });
+      return <Component {...props} />;
     }}
   >
     <Route
-      path="/registration"
+      Component={() => (<div>Main page</div>)}
+    />
+    <Route
+      path="registration"
       Component={Registration}
     />
     <Route
-      path="/login"
+      path="login"
       Component={Login}
+      render={({ props, Component }) => {
+        log.debug('Login render', { props });
+        return <Component {...props} />;
+      }}
     />
     <Route
       path="/logout"
