@@ -1,0 +1,30 @@
+.container {
+  border: 0;
+  color: black;
+  height: 1.5em;
+  line-height: 1em;
+  outline: 0;
+  position: relative;
+  text-align: center;
+
+  &:before {
+    background: #E2E2E2;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+  }
+
+  &:after {
+    background: #FFFFFF;
+    color: #505050;
+    content: attr(text);
+    display: inline-block;
+    line-height: 1.5em;
+    padding: 0 .5em;
+    position: relative;
+  }
+
+}

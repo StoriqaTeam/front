@@ -1,0 +1,39 @@
+@import "../../styles/mixins";
+
+$blackText: #505050;
+
+.container {
+  composes: OpenSans from global;
+}
+
+.providerIcon {
+  height: 22px;
+  left: 16px;
+  position: absolute;
+  top: 12px;
+  width: 22px;
+}
+
+.signUpGroup {
+  align-items: center;
+  display: flex;
+  margin: 36px 0;
+  justify-content: space-between;
+}
+
+.policy {
+  line-height: 13px;
+  max-width: 46%;
+  padding: 0 0 0 6px;
+  text-align: left;
+}
+
+.policyAgreement {
+  color: #939393;
+  font-size: 10px;
+}
+
+.policyAntiSpam {
+  color: $blackText;
+  font-size: 10px;
+}

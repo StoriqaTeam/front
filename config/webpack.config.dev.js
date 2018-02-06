@@ -160,6 +160,16 @@ module.exports = {
                   localIdentName: '[name]__[local]___[hash:base64:5]'
                 }
               }, {
+                loader: 'postcss-loader', // Run post css actions
+                options: {
+                  plugins() { // post css plugins, can be exported to postcss.config.js
+                    return [
+                      require('precss'),
+                      require('autoprefixer')
+                    ];
+                  }
+                }
+              }, {
                 loader: "sass-loader" // compiles Sass to CSS
               }]
             })
