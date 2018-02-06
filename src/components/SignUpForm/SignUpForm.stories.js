@@ -5,5 +5,11 @@ import SignUpForm from './SignUpForm';
 
 storiesOf('SignUpForm', module)
   .add('with Initial looking', () => (
-    <SignUpForm />
+    <div
+      style={{
+        margin: '50px',
+      }}
+    >
+      <SignUpForm />
+    </div>
   ));

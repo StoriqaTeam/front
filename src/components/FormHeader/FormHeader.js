@@ -11,8 +11,9 @@ type PropTypes = {
 
 const FormHeader = (props: PropTypes) => (
   <header styleName="container">
-    <h1 styleName="title">{ props.title }</h1>
+    <strong styleName="title">{ props.title }</strong>
     <a
+      href="/login"
       styleName="linkTitle"
     >
       { props.linkTitle }

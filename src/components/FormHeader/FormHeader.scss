@@ -1,21 +1,23 @@
 @import "../../styles/variables";
 
 .container {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 40px 0;
+  margin-bottom: 32px;
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
 }
 
 .title {
-  color: $color_primary;
-  font-size: 24px;
-  font-weight: normal;
-  margin: 0;
+  font-size: 20px;
+  line-height: 24px;
+  float: left;
 }
 
 .linkTitle {
-  border-bottom: 1px solid $color_primary;
-  color: $color_primary;
-  cursor: pointer;
+  font-size: 12px;
+  line-height: 24px;
+  float: right;
 }

@@ -22,6 +22,12 @@ strong {
   font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
 }
 
+input {
+  border: 0;
+  background-color: transparent;
+  outline: none;
+}
+
 /* Reset `button` and button-style `input` default styles */
 input[type="submit"],
 input[type="reset"],
@@ -33,7 +39,7 @@ input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus,
 button {
-  background: none;
+  background-color: transparent;
   border: 0;
   cursor: pointer;
   line-height: normal;
@@ -52,8 +58,7 @@ button::-moz-focus-inner {
   padding: 0;
 }
 
-a {
+a, a:visited {
   color: $color_primary;
-  text-decoration: none;
   transition: all .3s ease;
 }
