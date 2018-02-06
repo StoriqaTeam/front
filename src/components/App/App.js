@@ -38,7 +38,7 @@ class App extends PureComponent<PropsType> {
           {!currentUser && (<Link to="/login">Login</Link>)}
           {currentUser && (<Link to="/profile">Profile</Link>)}
         </header>
-        {children}
+        {children && React.cloneElement(children, { viewer })}
       </div>
     );
   }
@@ -53,8 +53,11 @@ App.childContextTypes = {
 export default createFragmentContainer(
   App,
   graphql`
-    fragment App_apiVersion on Query {
-      apiVersion
+    fragment App_viewer on Viewer {
+      ...Profile_viewer
+      currentUser {
+        id
+      }
     }
   `,
 );

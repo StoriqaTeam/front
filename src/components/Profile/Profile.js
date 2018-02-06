@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-// import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { Form, UsersTable } from 'components/Profile';
 
@@ -35,14 +35,17 @@ class Profile extends PureComponent<PropsTypes> {
   }
 }
 
-export default Profile;
+// export default Profile;
 
-// export default createFragmentContainer(
-//   Profile,
-//   graphql`
-//     fragment Profile_currentUser on User {
-//       firstName
-//       lastName
-//     }
-//   `,
-// );
+export default createFragmentContainer(
+  Profile,
+  graphql`
+    fragment Profile_viewer on Viewer {
+      currentUser {
+        id
+        firstName
+        lastName
+      }
+    }
+  `,
+);

@@ -17,12 +17,10 @@ const routes = (
     Component={App}
     query={graphql`
       query routes_App_Query {
-        ...App_apiVersion
+        apiVersion
         viewer {
-          currentUser {
-            id
-            email
-          }
+          id
+          ...App_viewer
         }
       }
     `}
@@ -37,6 +35,7 @@ const routes = (
       return <Component {...props} apiVersion={null} />;
     }}
   >
+    <Route Component={() => (<div>Mainpage here</div>)} />
     <Route
       path="/registration"
       Component={Registration}
