@@ -17,7 +17,12 @@ type PropsTypes = {
   },
 };
 
-class Form extends PureComponent<PropsTypes> {
+type StateType = {
+  firstName: string,
+  lastName: string,
+};
+
+class Form extends PureComponent<PropsTypes, StateType> {
   state: StateType = {
     firstName: '',
     lastName: '',

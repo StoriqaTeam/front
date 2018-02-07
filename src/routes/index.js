@@ -51,9 +51,6 @@ const routes = (
     <Route
       path="login"
       Component={Login}
-      render={({ props, Component }) => {
-        return <Component {...props} />;
-      }}
     />
     <Route
       path="/logout"

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'found';
+import { Link, withRouter, routerShape } from 'found';
 import { pathOr } from 'ramda';
 import Cookies from 'universal-cookie';
 
