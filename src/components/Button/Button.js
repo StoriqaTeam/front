@@ -9,7 +9,7 @@ import './Button.scss';
 type PropsTypes = {
   children: Node,
   type: string,
-  onClick: Function,
+  onClick: ?Function,
   disabled: boolean,
   iconic: boolean,
 };

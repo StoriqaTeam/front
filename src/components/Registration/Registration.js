@@ -1,28 +1,46 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import { Icon } from 'components/Icon';
+import { Form } from 'components/Form';
+import { FormHeader } from 'components/FormHeader';
+import { FormInput } from 'components/FormInput';
+import { Button } from 'components/Button';
+import { Separator } from 'components/Separator';
 
 import { log } from 'utils';
 import { CreateUserMutation } from 'relay/mutations';
 
+import './Registration.scss';
+
 type StateType = {
-  login: string,
+  username: string,
+  usernameValid: boolean,
+  email: string,
+  emailValid: boolean,
   password: string,
-};
+  passwordValid: boolean,
+  formValid: boolean
+}
 
-type PropsType = {};
-
-class Registration extends Component<PropsType, StateType> {
+class SignUpForm extends PureComponent<{}, StateType> {
   state: StateType = {
-    login: '',
+    username: '',
+    usernameValid: false,
+    email: '',
+    emailValid: false,
     password: '',
+    passwordValid: false,
+    formValid: false,
   };
 
   handleRegistrationClick = () => {
-    const { login, password } = this.state;
+    const { email, password } = this.state;
+
     CreateUserMutation.commit({
-      login,
+      email,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => log.debug({ response, errors }),
@@ -30,56 +48,126 @@ class Registration extends Component<PropsType, StateType> {
     });
   };
 
-  handleInputChange = (e: Object) => {
-    const { target } = e;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
+  /**
+   * @desc Storiqa's anti-span policy
+   * @type {String}
+   */
+  policy = (
+    <div styleName="policy">
+      By clicking this button, you agree to Storiqa’s <a href="/" styleName="link">Anti-spam Policy</a> & <a href="/" styleName="link">Terms of Use</a>.
+    </div>
+  );
 
-    this.setState({
-      [name]: value,
-    });
+  /**
+   * @desc handles onChange event by setting the validity of the desired input
+   * @param {SyntheticEvent} evt
+   * @param {String} evt.name
+   * @param {any} evt.value
+   * @param {Boolean} evt.validity
+   * @return {void}
+   */
+  handleChange = (data: { name: string, value: any, validity: boolean }) => {
+    const { name, value, validity } = data;
+    this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
   };
+  /**
+   * @desc Validates the form based on its values
+   * @return {void}
+   */
+  validateForm = () => {
+    const { usernameValid, emailValid, passwordValid } = this.state;
+    this.setState({ formValid: usernameValid && emailValid && passwordValid });
+  };
+  /**
+   * @desc handles handleProviderAuth event
+   */
+  handleProviderAuth = () => {};
 
   render() {
+    const {
+      username,
+      email,
+      password,
+      formValid,
+    } = this.state;
+
+    const singUp = (
+      <div styleName="signUpGroup">
+        <div styleName="signUpButton">
+          <Button
+            type="submit"
+          >
+            <span>Sign Up</span>
+          </Button>
+        </div>
+        { this.policy }
+      </div>
+    );
+
     return (
-      <form>
-        <label htmlFor="login">
-          Login
-          <br />
-          <input
-            name="login"
+      <Form onSubmit={this.handleRegistrationClick}>
+        <FormHeader
+          title="Sign Up"
+          linkTitle="Sign In"
+        />
+        <div styleName="inputBlock">
+          <FormInput
+            label="Username"
+            name="username"
             type="text"
-            value={this.state.login}
-            onChange={this.handleInputChange}
+            model={username}
+            onChange={this.handleChange}
           />
-        </label>
-        <br />
-        <br />
-        <label htmlFor="password">
-          Password
-          <br />
-          <input
+        </div>
+        <div styleName="inputBlock">
+          <FormInput
+            label="Email"
+            name="email"
+            type="email"
+            model={email}
+            validate="email"
+            onChange={this.handleChange}
+          />
+        </div>
+        <div styleName="inputBlock">
+          <FormInput
+            label="Password"
             name="password"
             type="password"
-            value={this.state.password}
-            onChange={this.handleInputChange}
+            model={password}
+            validate="password"
+            onChange={this.handleChange}
           />
-        </label>
-        <br />
-        <br />
-        <button
-          type="button"
-          onClick={this.handleRegistrationClick}
-        >
-          Register
-        </button>
-      </form>
+        </div>
+        {formValid && singUp}
+        <div className="separatorBlock">
+          <Separator text="or" />
+        </div>
+        <div styleName="firstButtonBlock">
+          <Button
+            iconic
+            onClick={this.handleProviderAuth}
+          >
+            <Icon type="facebook" />
+            <span>Sign Up with Facebook</span>
+          </Button>
+        </div>
+        <div>
+          <Button
+            iconic
+            onClick={this.handleProviderAuth}
+          >
+            <Icon type="google" />
+            <span>Sign Up with Google</span>
+          </Button>
+        </div>
+      </Form>
     );
   }
 }
 
-Registration.contextTypes = {
+SignUpForm.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Registration;
+export default SignUpForm;

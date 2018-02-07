@@ -71,7 +71,11 @@ class FormInput extends PureComponent<PropsType, StateType> {
   };
 
   componentDidMount() {
-    this.focus();
+    const { input } = this;
+
+    if (input && input.name === 'username') {
+      input.focus();
+    }
   }
 
   /**
@@ -90,7 +94,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     this.validate(name, value);
 
     this.setState({
-      showPasswordButton: name === 'password' && value.length,
+      showPasswordButton: name === 'password' && value.length > 0,
     });
   };
   /**
@@ -192,7 +196,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   handleShowPassword = () => {
-    this.input.focus();
+    if (this.input) {
+      this.input.focus();
+    }
+
     this.setState({ showPassword: !this.state.showPassword });
   };
 
