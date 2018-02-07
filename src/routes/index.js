@@ -18,6 +18,7 @@ const routes = (
     Component={App}
     query={graphql`
       query routes_App_Query {
+        id
         apiVersion
         viewer {
           id
@@ -25,10 +26,11 @@ const routes = (
         }
       }
     `}
-    render={({ Component, props, error }) => {
+    render={({ Component, props, errors: error }) => {
       if (error) {
         const errors = pathOr(null, ['source', 'errors'], error);
         if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
+          log.debug('handle auth error');
           return <Component {...props} viewer={null} />;
         }
         log.debug('App unhandled error', { error });

@@ -38,7 +38,7 @@ class App extends PureComponent<PropsType> {
 
   handleLogin = () => {
     log.debug('App handleLogin');
-    this.props.relay.refetch({ itemID: 0 }, null, () => {}, { force: true });
+    this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
   render() {
@@ -74,6 +74,7 @@ export default createRefetchContainer(
   App,
   graphql`
     fragment App_viewer on Viewer {
+      id
       currentUser {
         id
         email
@@ -82,11 +83,10 @@ export default createRefetchContainer(
     }
   `,
   graphql`
-    query App_viewer_Query($itemID:ID!) {
-      viewer: node(id: $itemID) {
-        ... on Viewer {
-          ...App_viewer
-        }
+    query App_viewer_Query {
+      id
+      viewer {
+        ...App_viewer
       }
     }
   `,

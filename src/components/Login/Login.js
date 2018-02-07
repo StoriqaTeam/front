@@ -10,6 +10,7 @@ import { log } from 'utils';
 import { GetJWTByEmailMutation } from 'relay/mutations';
 
 type PropsType = {
+  router: routerShape,
 };
 
 type StateType = {
@@ -47,6 +48,7 @@ class Login extends Component<PropsType, StateType> {
           cookies.set('__jwt', { value: jwt });
           if (this.context.handleLogin) {
             this.context.handleLogin();
+            this.props.router.replace('/');
           }
         }
       },
