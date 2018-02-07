@@ -1,88 +1,82 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr } from 'ramda';
 
 import { Button } from 'components/Button';
-
-import { log } from 'utils';
 
 import './Form.scss';
 
 type PropsTypes = {
-  user: {
-    id: string,
-    firstName: string,
-    lastName: string,
-  },
+  onSaveClick: Function,
 };
 
 type StateTypes = {
-  firstName: string,
-  lastName: string,
+  [key: string]: ?any,
 };
 
 class Form extends Component<PropsTypes, StateTypes> {
-  state: StateTypes = {
-    firstName: '',
-    lastName: '',
-  };
-
-  componentWillMount() {
-    const { user } = this.props;
-    const firstName = pathOr('', ['firstName'], user);
-    const lastName = pathOr('', ['lastName'], user);
-    this.setState({ firstName, lastName });
-  }
-
-  componentWillReceiveProps(nextProps: Object) {
-    const { user } = nextProps;
-
-    if (user && user !== this.props.user) {
-      this.setState({
-        firstName: user.firstName,
-        lastName: user.lastName,
-      });
-    }
-  }
-
+  state = {};
   handleInputChange = (e: Object) => {
     const { target } = e;
     this.setState({ [target.name]: target.value });
   };
 
-  saveData = () => {
-    const { firstName, lastName } = this.state;
-    log.info('      firstName: ', firstName, ', lastName: ', lastName);
-  }
+  handleClick = () => {
+    this.props.onSaveClick(this.state);
+  };
+
+  renderInput = (id: string) => {
+    const value = this.state[id] || '';
+    return (
+      <label htmlFor={id}>
+        {id}
+        <br />
+        <input
+          id={id}
+          type="text"
+          name={id}
+          value={value}
+          onChange={this.handleInputChange}
+        />
+      </label>
+    );
+  };
 
   render() {
-    const { firstName, lastName } = this.state;
     return (
       <div styleName="container">
-        First name<br />
-        <input
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={this.handleInputChange}
-        /><br /><br />
-        Last name<br />
-        <input
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={this.handleInputChange}
-        /><br /><br />
+        {this.renderInput('phone')}
+        <br />
+        {this.renderInput('firstName')}
+        <br />
+        {this.renderInput('lastName')}
+        <br />
+        {this.renderInput('middleName')}
+        <br />
+        {this.renderInput('birthdate')}
+        <br />
         <div>
           <Button
             title="Save"
-            onClick={this.saveData}
+            onClick={this.handleClick}
           />
         </div>
       </div>
     );
   }
 }
+
+/*
+updateUser(
+  id: ID!
+  email: String!
+  phone: String = null
+  firstName: String = null
+  lastName: String = null
+  middleName: String = null
+  gender: Gender = null
+  birthdate: String = null
+): User!
+*/
 
 export default Form;

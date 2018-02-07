@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 
+import { log } from 'utils';
 import { Form, UsersTable } from 'components/Profile';
 
 import './Profile.scss';
@@ -15,27 +16,20 @@ type PropsTypes = {
     lastName: string,
     isActive: boolean,
   }>,
-  currentUser: {
-    id: string,
-    firstName: string,
-    lastName: string,
-  },
 };
 
 class Profile extends PureComponent<PropsTypes> {
   render() {
-    const { admin, users, currentUser } = this.props;
+    const { admin, users } = this.props;
     return (
       <div styleName="container">
         Profile settings {admin && '(admin)'}<br /><br />
         {admin && <UsersTable users={users} />}<br /><br />
-        {!admin && <Form user={currentUser} />}
+        {!admin && <Form onSaveClick={data => log.debug({ data })} />}
       </div>
     );
   }
 }
-
-// export default Profile;
 
 export default createFragmentContainer(
   Profile,
@@ -43,6 +37,7 @@ export default createFragmentContainer(
     fragment Profile_viewer on Viewer {
       currentUser {
         id
+        email
         firstName
         lastName
       }
