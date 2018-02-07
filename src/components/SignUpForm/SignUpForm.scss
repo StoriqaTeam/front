@@ -1,9 +1,5 @@
-@import "../../styles/mixins";
-
-$blackText: #505050;
-
 .container {
-  composes: OpenSans from global;
+  position: relative;
 }
 
 .signUpGroup {
@@ -27,4 +23,17 @@ $blackText: #505050;
 
 .signUpButton {
   width: 128px;
+}
+
+.inputBlock {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.separatorBlock {
+  margin-bottom: 16px;
+}
+
+.firstButtonBlock {
+  margin-bottom: 16px;
 }

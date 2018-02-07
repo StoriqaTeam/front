@@ -69,7 +69,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
     isCapsLockOn: false,
     validity: null,
   };
-  //
+
   componentDidMount() {
     this.focus();
   }
@@ -87,12 +87,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
    */
   handleChange = (evt: { target: { name: string, value: string } }) => {
     const { name, value } = evt.target;
-    // const { validity } = this.state;
     this.validate(name, value);
 
     this.setState({
       showPasswordButton: name === 'password' && value.length,
-      // showHints: validity,
     });
   };
   /**
@@ -101,12 +99,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   handleKeyPress = (evt: {}) => {
-    // eslint-disable-next-line
     if (this.props.detectCapsLock) {
       this.setState({
         isCapsLockOn: utils.isCapsLockOn(evt),
       });
-      // eslint-disable-next-line
       log.info('utils.isCapsLockOn(evt)', utils.isCapsLockOn(evt));
     }
   };
@@ -248,8 +244,6 @@ class FormInput extends PureComponent<PropsType, StateType> {
     const inputLabelContent = (label) ? inputLabel : null;
     // Only when 'detectCapsLock', 'isCapsLockOn' are true
     const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? CapsLockMessage : null;
-    //
-    // const showPasswordButtonAndHints = (showHints && showPasswordButton && type === 'password');
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
     const showPasswordContent = showPasswordButton ? passwordButton : null;
     // ONLY when type is password, so the user can see the password hints

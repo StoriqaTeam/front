@@ -6,9 +6,10 @@ import { Icon } from 'components/Icon';
 import { Form } from 'components/Form';
 import { FormHeader } from 'components/FormHeader';
 import { FormInput } from 'components/FormInput';
-import { FormGroup } from 'components/FormGroup';
 import { Button } from 'components/Button';
 import { Separator } from 'components/Separator';
+
+import { log } from 'utils';
 
 import './SignUpForm.scss';
 
@@ -45,8 +46,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
    * @desc handles onSubmit event
    */
   handleSubmit = () => {
-    // eslint-disable-next-line
-    console.log('submited');
+    log.info('submited');
   };
   /**
    * @desc handles onChange event by setting the validity of the desired input
@@ -80,6 +80,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
       password,
       formValid,
     } = this.state;
+
     const singUp = (
       <div styleName="signUpGroup">
         <div styleName="signUpButton">
@@ -93,8 +94,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
         { this.policy }
       </div>
     );
-    // Show only when the form is valid
-    const singUpContent = formValid ? singUp : null;
+
     return (
       <Form
         wrapperClass="auth"
@@ -104,7 +104,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
           title="Sign Up"
           linkTitle="Sign In"
         />
-        <FormGroup>
+        <div styleName="inputBlock">
           <FormInput
             label="Username"
             name="username"
@@ -112,8 +112,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
             model={username}
             onChange={this.handleChange}
           />
-        </FormGroup>
-        <FormGroup>
+        </div>
+        <div styleName="inputBlock">
           <FormInput
             label="Email"
             name="email"
@@ -122,8 +122,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
             validate="email"
             onChange={this.handleChange}
           />
-        </FormGroup>
-        <FormGroup marginBottom={32}>
+        </div>
+        <div styleName="inputBlock">
           <FormInput
             label="Password"
             name="password"
@@ -132,13 +132,12 @@ class SignUpForm extends PureComponent<{}, StateType> {
             validate="password"
             onChange={this.handleChange}
           />
-        </FormGroup>
-        { singUpContent }
-        <Separator
-          text="or"
-          marginBottom={16}
-        />
-        <FormGroup marginBottom={16}>
+        </div>
+        {formValid && singUp}
+        <div className="separatorBlock">
+          <Separator text="or" />
+        </div>
+        <div styleName="firstButtonBlock">
           <Button
             iconic
             onClick={this.handleProviderAuth}
@@ -146,8 +145,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
             <Icon type="facebook" />
             <span>Sign Up with Facebook</span>
           </Button>
-        </FormGroup>
-        <FormGroup marginBottom={0}>
+        </div>
+        <div>
           <Button
             iconic
             onClick={this.handleProviderAuth}
@@ -155,7 +154,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
             <Icon type="google" />
             <span>Sign Up with Google</span>
           </Button>
-        </FormGroup>
+        </div>
       </Form>
     );
   }

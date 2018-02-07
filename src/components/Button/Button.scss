@@ -1,32 +1,30 @@
-@import "../../styles/variables";
-
 .container {
   width: 100%;
-  background: #2FBAFD;
-  border-radius: 4px;
-  line-height: 32px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 16px;
   min-width: 128px;
+  padding: 0 16px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 32px;
+  background: #2FBAFD;
+  cursor: pointer;
 }
 
 .buttonProvider {
-  background: #F7F7F7;
-  color: $color_primary;
   padding: 14px 0 14px 45px;
+  color: #505050;
   text-align: left;
+  background: #F7F7F7;
 }
 
 .signUp {
-  background: $color_blue;
-  color: $color_white;
   padding: 12px 0;
+  color: #fff;
+  background: #2FBAFD;
 
   &:disabled {
     background: #EFEFEF !important;
-    color: $color_white !important;
+    color: #fff !important;
   }
 }
 
