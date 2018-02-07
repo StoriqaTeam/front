@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { pathOr } from 'ramda';
 
 import { Button } from 'components/Button';
@@ -17,8 +17,13 @@ type PropsTypes = {
   },
 };
 
-class Form extends PureComponent<PropsTypes> {
-  state: StateType = {
+type StateTypes = {
+  firstName: string,
+  lastName: string,
+};
+
+class Form extends Component<PropsTypes, StateTypes> {
+  state: StateTypes = {
     firstName: '',
     lastName: '',
   };
@@ -30,7 +35,9 @@ class Form extends PureComponent<PropsTypes> {
     this.setState({ firstName, lastName });
   }
 
-  componentWillReceiveProps({ user }) {
+  componentWillReceiveProps(nextProps: Object) {
+    const { user } = nextProps;
+
     if (user && user !== this.props.user) {
       this.setState({
         firstName: user.firstName,

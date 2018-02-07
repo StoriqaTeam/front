@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { find, propEq } from 'ramda';
 
 import { Checkbox } from 'components/Checkbox';
@@ -17,8 +17,17 @@ type PropsTypes = {
   }>
 };
 
-class UsersTable extends PureComponent<PropsTypes> {
-  state = {
+type StateTypes = {
+  user: ?{
+    id: string,
+    firstName: string,
+    lastName: string,
+    isActive: boolean,
+  }
+};
+
+class UsersTable extends Component<PropsTypes, StateTypes> {
+  state: StateTypes = {
     user: null,
   };
 
@@ -26,11 +35,11 @@ class UsersTable extends PureComponent<PropsTypes> {
     this.setState({ user: this.props.users[0] });
   }
 
-  handleCheckboxChange = (id) => {
+  handleCheckboxChange = (id: string) => {
     log.info('      User id', id);
   }
 
-  handleUserChoice = (e) => {
+  handleUserChoice = (e: Object) => {
     const user = find(propEq('id', e.target.id))(this.props.users);
     this.setState({ user });
   }
@@ -58,7 +67,7 @@ class UsersTable extends PureComponent<PropsTypes> {
             </span>
           </div>
         ))}<br /><br />
-        {user.id && <Form user={user} />}
+        {user && user.id && <Form user={user} />}
       </div>
     );
   }
