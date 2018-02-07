@@ -1,10 +1,13 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 
 import { PasswordHints } from 'components/PasswordHints';
 import { CapsLockMessage } from 'components/CapsLockMessage';
 import { ShowPassword } from 'components/ShowPassword';
+
+import { log } from 'utils';
 
 import './FormInput.scss';
 import utils from './utils';
@@ -22,13 +25,13 @@ type PropsType = {
   onChange: Function,
   focus: boolean,
   detectCapsLock: boolean,
-  showHints: boolean,
 };
 
 type StateType = {
   labelFloat: string | null,
   showPassword: boolean,
   showPasswordButton: boolean,
+  showHints: boolean,
   formError: string,
   passwordQuality: {
     percentage: number,
@@ -36,6 +39,7 @@ type StateType = {
     qualityClass: string,
   },
   isCapsLockOn: boolean,
+  validity: ?boolean,
 }
 
 class FormInput extends PureComponent<PropsType, StateType> {
@@ -50,12 +54,12 @@ class FormInput extends PureComponent<PropsType, StateType> {
     className: 'root',
     focus: false,
     detectCapsLock: false,
-    showHints: false,
   };
   state: StateType = {
     labelFloat: null,
     showPassword: false,
     showPasswordButton: false,
+    showHints: false,
     formError: '',
     passwordQuality: {
       percentage: 0,
@@ -63,8 +67,9 @@ class FormInput extends PureComponent<PropsType, StateType> {
       qualityClass: '',
     },
     isCapsLockOn: false,
+    validity: null,
   };
-  //
+
   componentDidMount() {
     this.focus();
   }
@@ -83,6 +88,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
   handleChange = (evt: { target: { name: string, value: string } }) => {
     const { name, value } = evt.target;
     this.validate(name, value);
+
+    this.setState({
+      showPasswordButton: name === 'password' && value.length,
+    });
   };
   /**
    * @desc Handles the onKeyPress event
@@ -90,13 +99,11 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   handleKeyPress = (evt: {}) => {
-    // eslint-disable-next-line
     if (this.props.detectCapsLock) {
       this.setState({
         isCapsLockOn: utils.isCapsLockOn(evt),
       });
-      // eslint-disable-next-line
-      console.log('utils.isCapsLockOn(evt)', utils.isCapsLockOn(evt));
+      log.info('utils.isCapsLockOn(evt)', utils.isCapsLockOn(evt));
     }
   };
 
@@ -105,13 +112,21 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * and toggles 'showPasswordButton'
    * @return {void}
    */
-  handleFocus = () => {
-    const { showPasswordButton } = this.state;
+  handleFocus = (evt: { target: { name: string, value: string } }) => {
+    const { name, value } = evt.target;
     const { model } = this.props;
+    const { validity } = this.state;
+    this.validate(name, value);
+
     if (model === '') {
       this.setState({
         labelFloat: 'labelFloat',
-        showPasswordButton: !showPasswordButton,
+      });
+    }
+
+    if (name === 'password' && !validity) {
+      this.setState({
+        showHints: true,
       });
     }
   };
@@ -130,12 +145,17 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   handleBlur = () => {
-    const { showPasswordButton } = this.state;
-    const { model } = this.props;
+    const { model, name } = this.props;
+
     if (model === '') {
       this.setState({
         labelFloat: null,
-        showPasswordButton: !showPasswordButton,
+      });
+    }
+
+    if (name === 'password') {
+      this.setState({
+        showHints: false,
       });
     }
   };
@@ -154,7 +174,13 @@ class FormInput extends PureComponent<PropsType, StateType> {
       formError,
       passwordQuality,
     } = utils.validateField(inputName, inputValue, validate, errorMessage);
-    this.setState({ formError, passwordQuality }, this.props.onChange({
+
+    this.setState({
+      formError,
+      passwordQuality,
+      validity,
+      showHints: inputName === 'password' && !validity,
+    }, this.props.onChange({
       name,
       value,
       validity,
@@ -166,6 +192,7 @@ class FormInput extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   handleShowPassword = () => {
+    this.input.focus();
     this.setState({ showPassword: !this.state.showPassword });
   };
 
@@ -185,16 +212,17 @@ class FormInput extends PureComponent<PropsType, StateType> {
       type,
       className,
       detectCapsLock,
-      showHints,
     } = this.props;
 
     const {
       labelFloat,
       showPassword,
       showPasswordButton,
+      showHints,
       formError,
       passwordQuality,
       isCapsLockOn,
+      validity,
     } = this.state;
     const inputLabel = (
       <label
@@ -205,7 +233,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
       </label>
     );
     const passwordButton = (
-      <ShowPassword onClick={this.handleShowPassword} />
+      <ShowPassword
+        show={showPassword}
+        onClick={this.handleShowPassword}
+      />
     );
     const passwordHints = (
       <PasswordHints {...passwordQuality} />
@@ -213,17 +244,18 @@ class FormInput extends PureComponent<PropsType, StateType> {
     const inputLabelContent = (label) ? inputLabel : null;
     // Only when 'detectCapsLock', 'isCapsLockOn' are true
     const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? CapsLockMessage : null;
-    //
-    const showPasswordButtonAndHints = (showHints && showPasswordButton && type === 'password');
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
-    const showPasswordContent = showPasswordButtonAndHints ? passwordButton : null;
+    const showPasswordContent = showPasswordButton ? passwordButton : null;
     // ONLY when type is password, so the user can see the password hints
-    const passwordHintsContent = showPasswordButtonAndHints ? passwordHints : null;
+    const passwordHintsContent = showHints ? passwordHints : null;
     return (
       <span>
         <input
           type={showPassword ? 'text' : type}
-          styleName={`${className || ''} ${this.errorClass(formError)}`}
+          styleName={classNames(className, {
+            invalidInput: formError.length !== 0,
+            validInput: validity,
+          })}
           name={name}
           value={model}
           ref={(node) => { this.input = node; }}

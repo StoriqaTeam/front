@@ -1,21 +1,27 @@
 import React from 'react';
+import classNames from 'classnames';
 
-import EyeOpenIcon from 'assets/svg/eye-open.svg';
+import { Icon } from 'components/Icon';
 
 import './ShowPassword.scss';
 
 type PropTypes = {
+  show: boolean,
   onClick: Function,
 }
 
-const ShowPassword = (props: PropTypes) => (
-  <button
-    type="button"
-    styleName="container"
-    onClick={props.onClick}
-  >
-    <EyeOpenIcon /> <small>Show</small>
-  </button>
-);
+const ShowPassword = (props: PropTypes) => {
+  const { show, onClick } = props;
+  const iconType = show ? 'eyeBlue' : 'eye';
+  return (
+    <button
+      type="button"
+      styleName="container"
+      onClick={onClick}
+    >
+      <Icon type={iconType} /> <small styleName={classNames({ show })}>Show</small>
+    </button>
+  );
+};
 
 export default ShowPassword;
