@@ -118,7 +118,6 @@ class FormInput extends PureComponent<PropsType, StateType> {
    */
   handleFocus = (evt: { target: { name: string, value: string } }) => {
     const { name, value } = evt.target;
-    log.info('-----name, value', name, value);
     const { model } = this.props;
     const { validity } = this.state;
     this.validate(name, value);
@@ -238,7 +237,10 @@ class FormInput extends PureComponent<PropsType, StateType> {
       </label>
     );
     const passwordButton = (
-      <ShowPassword onClick={this.handleShowPassword} />
+      <ShowPassword
+        show={showPassword}
+        onClick={this.handleShowPassword}
+      />
     );
     const passwordHints = (
       <PasswordHints {...passwordQuality} />

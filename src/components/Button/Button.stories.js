@@ -2,39 +2,52 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
+import { Icon } from 'components/Icon';
+
 import Button from './Button';
 
 storiesOf('Button', module)
   .add('with default class', () => (
-    <Button
-      title="Storiqa"
-    />
+    <Button>
+      <span>Storiqa</span>
+    </Button>
   ))
-  .add('with "buttonClass" as "signUp" ', () => (
-    <Button
-      buttonClass="signUp"
-      title="Storiqa"
-    />
+  .add('signUp', () => (
+    <Button>
+      <span>Storiqa</span>
+    </Button>
   ))
   .add('with "disabled" prop', () => (
-    <Button
-      buttonClass="signUp"
-      title="Storiqa"
-      disabled
-    />
+    <Button disabled>
+      <span>Storiqa</span>
+    </Button>
   ))
-  .add('with "buttonClass" as "signUp" and "onClick" handler', () => (
-    <Button
-      buttonClass="signUp"
-      title="Storiqa"
-      onClick={action('click')}
-    />
+  .add('signUp and onClick handler', () => (
+    <Button onClick={action('click')}>
+      <span>Storiqa</span>
+    </Button>
   ))
-  .add('with "buttonClass" as "signUp" and type "submit"', () => (
+  .add('signUp and type submit', () => (
     <Button
-      buttonClass="signUp"
       type="submit"
-      title="Storiqa"
       onClick={action('submit')}
-    />
+    >
+      <span>Storiqa</span>
+    </Button>
+  ))
+  .add('Social', () => (
+    <div
+      style={{
+        margin: '50px',
+        width: '200px',
+      }}
+    >
+      <Button
+        iconic
+        onClick={action('click')}
+      >
+        <Icon type="google" />
+        <span>Sign Up with Google</span>
+      </Button>
+    </div>
   ));

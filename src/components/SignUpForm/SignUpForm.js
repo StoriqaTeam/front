@@ -2,15 +2,14 @@
 
 import React, { PureComponent } from 'react';
 
-import GoogleIcon from 'assets/svg/google-icon.svg';
-import FacebookIcon from 'assets/svg/facebook-icon.svg';
-
+import { Icon } from 'components/Icon';
 import { Form } from 'components/Form';
 import { FormHeader } from 'components/FormHeader';
 import { FormInput } from 'components/FormInput';
 import { FormGroup } from 'components/FormGroup';
 import { Button } from 'components/Button';
 import { Separator } from 'components/Separator';
+
 import './SignUpForm.scss';
 
 type StateType = {
@@ -86,9 +85,10 @@ class SignUpForm extends PureComponent<{}, StateType> {
         <div styleName="signUpButton">
           <Button
             type="submit"
-            title="Sign Up"
             onClick={this.handleSubmit}
-          />
+          >
+            <span>Sign Up</span>
+          </Button>
         </div>
         { this.policy }
       </div>
@@ -139,20 +139,22 @@ class SignUpForm extends PureComponent<{}, StateType> {
           marginBottom={16}
         />
         <FormGroup marginBottom={16}>
-          <GoogleIcon styleName="providerIcon" />
           <Button
-            buttonClass="buttonProvider"
-            title="Sign up with Google"
+            iconic
             onClick={this.handleProviderAuth}
-          />
+          >
+            <Icon type="facebook" />
+            <span>Sign Up with Facebook</span>
+          </Button>
         </FormGroup>
         <FormGroup marginBottom={0}>
-          <FacebookIcon styleName="providerIcon" />
           <Button
-            buttonClass="buttonProvider"
-            title="Sign up with Facebook"
+            iconic
             onClick={this.handleProviderAuth}
-          />
+          >
+            <Icon type="google" />
+            <span>Sign Up with Google</span>
+          </Button>
         </FormGroup>
       </Form>
     );

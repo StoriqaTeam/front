@@ -1,6 +1,7 @@
 @import "../../styles/variables";
 
 .container {
+  width: 100%;
   background: #2FBAFD;
   border-radius: 4px;
   line-height: 32px;
@@ -9,23 +10,35 @@
   font-size: 16px;
   padding: 0 16px;
   min-width: 128px;
+}
 
-  &.buttonProvider {
-    background: #F7F7F7;
-    color: $color_primary;
-    padding: 14px 0 14px 45px;
-    text-align: left;
-  }
+.buttonProvider {
+  background: #F7F7F7;
+  color: $color_primary;
+  padding: 14px 0 14px 45px;
+  text-align: left;
+}
 
-  .signUp {
-    background: $color_blue;
-    color: $color_white;
-    padding: 12px 0;
-  }
+.signUp {
+  background: $color_blue;
+  color: $color_white;
+  padding: 12px 0;
 
   &:disabled {
     background: #EFEFEF !important;
     color: $color_white !important;
   }
+}
 
+.iconic {
+  text-align: left;
+  color: #505050;
+  font-size: 14px;
+  line-height: 40px;
+  background-color: #F7F7F7;
+}
+
+.iconic > *:first-child {
+  display: inline-block;
+  margin-right: 8px;
 }
