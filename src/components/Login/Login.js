@@ -10,6 +10,7 @@ import { log } from 'utils';
 import { GetJWTByEmailMutation } from 'relay/mutations';
 
 type PropsType = {
+  router: routerShape,
 };
 
 type StateType = {
@@ -19,8 +20,8 @@ type StateType = {
 
 class Login extends Component<PropsType, StateType> {
   state: StateType = {
-    login: '',
-    password: '',
+    login: 'test@test.test',
+    password: 'test',
   };
 
   handleInputChange = (e: Object) => {
@@ -45,7 +46,10 @@ class Login extends Component<PropsType, StateType> {
         if (jwt) {
           const cookies = new Cookies();
           cookies.set('__jwt', { value: jwt });
-          window.location.href = '/'; // TODO: use refetch or store update
+          if (this.context.handleLogin) {
+            this.context.handleLogin();
+            this.props.router.replace('/');
+          }
         }
       },
       onError: (error: Error) => {
@@ -73,6 +77,7 @@ class Login extends Component<PropsType, StateType> {
   };
 
   render() {
+    log.debug('Login render', { props: this.props });
     return (
       <div>
         <form>
@@ -128,6 +133,7 @@ class Login extends Component<PropsType, StateType> {
 
 Login.contextTypes = {
   environment: PropTypes.object.isRequired,
+  handleLogin: PropTypes.func,
 };
 
 export default withRouter(Login);

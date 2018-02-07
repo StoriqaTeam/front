@@ -2,21 +2,19 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createRefetchContainer, graphql } from 'react-relay';
 import { Link } from 'found';
-import { pathOr } from 'ramda';
 import type { Node } from 'react';
 import type { Environment } from 'relay-runtime';
 
 import './App.scss';
 
 type PropsType = {
-  viewer: ?{
-    currentUser: {},
-  },
+  viewer: ?any,
   children: Node,
   relay: {
     environment: Environment,
+    refetch: Function,
   },
 };
 
@@ -24,21 +22,32 @@ class App extends PureComponent<PropsType> {
   getChildContext() {
     return {
       environment: this.props.relay.environment,
+      handleLogin: this.handleLogin,
     };
   }
 
+  handleLogin = () => {
+    log.debug('App handleLogin');
+    this.props.relay.refetch({}, null, () => {}, { force: true });
+  };
+
   render() {
-    const { children, viewer } = this.props;
-    const currentUser = pathOr(null, ['currentUser'], viewer);
+    const { viewer } = this.props;
     return (
       <div styleName="root">
         <header styleName="header">
-          <h1 styleName="title">App here</h1>
-          {currentUser && (<Link to="/logout">Logout</Link>)}
-          {!currentUser && (<Link to="/login">Login</Link>)}
-          {currentUser && (<Link to="/profile">Profile</Link>)}
+          <h1 styleName="title">
+            <Link to="/">App</Link>
+          </h1>
+          <br />
+          <Link to="/logout">Logout</Link>
+          <br />
+          <Link to="/login">Login</Link>
+          <br />
+          <Link to="/profile">Profile</Link>
+          <br />
         </header>
-        {children && React.cloneElement(children, { viewer })}
+        {this.props.children && React.cloneElement(this.props.children, { viewer })}
       </div>
     );
   }
@@ -46,17 +55,28 @@ class App extends PureComponent<PropsType> {
 
 App.childContextTypes = {
   environment: PropTypes.object.isRequired,
+  handleLogin: PropTypes.func,
 };
 
 // fragment just need for working `createFragmentContainer`
 // `createFragmentContainer` need for having `environment` in context
-export default createFragmentContainer(
+export default createRefetchContainer(
   App,
   graphql`
     fragment App_viewer on Viewer {
-      ...Profile_viewer
+      id
       currentUser {
         id
+        email
+      }
+      ...Profile_viewer
+    }
+  `,
+  graphql`
+    query App_viewer_Query {
+      id
+      viewer {
+        ...App_viewer
       }
     }
   `,
