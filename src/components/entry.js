@@ -15,7 +15,6 @@ import '../index.scss';
 // eslint-disable-next-line
 const store = createReduxStore(new BrowserProtocol(), window.__PRELOADED_STATE__ || {});
 const matchContext = { store };
-// store.dispatch(FarceActions.init());
 
 const ReduxProvider = createReduxProvider();
 
