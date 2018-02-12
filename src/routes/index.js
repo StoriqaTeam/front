@@ -10,7 +10,7 @@ import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
 // import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
-import { SignUpForm } from 'components/SignUpForm';
+import { Registration } from 'components/Registration';
 
 const routes = (
   <Route
@@ -40,7 +40,7 @@ const routes = (
   >
     <Route
       path="/registration"
-      Component={SignUpForm}
+      Component={Registration}
     />
     <Route
       path="/login"

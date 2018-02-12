@@ -2,12 +2,12 @@
 
 .container {
   margin-bottom: 32px;
+}
 
-  &:after {
-    content: '';
-    display: block;
-    clear: both;
-  }
+.container:after {
+  content: '';
+  display: block;
+  clear: both;
 }
 
 .title {
@@ -20,4 +20,5 @@
   font-size: 12px;
   line-height: 24px;
   float: right;
+  text-decoration: underline;
 }

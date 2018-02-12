@@ -60,5 +60,6 @@ button::-moz-focus-inner {
 
 a, a:visited {
   color: $color_primary;
+  text-decoration: none;
   transition: all .3s ease;
 }

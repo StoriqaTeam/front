@@ -25,7 +25,7 @@ type StateType = {
   formValid: boolean
 }
 
-class SignUpForm extends PureComponent<{}, StateType> {
+class Registration extends PureComponent<{}, StateType> {
   state: StateType = {
     username: '',
     usernameValid: false,
@@ -78,10 +78,24 @@ class SignUpForm extends PureComponent<{}, StateType> {
     const { usernameValid, emailValid, passwordValid } = this.state;
     this.setState({ formValid: usernameValid && emailValid && passwordValid });
   };
-  /**
-   * @desc handles handleProviderAuth event
-   */
-  handleProviderAuth = () => {};
+
+  facebookLoginString = () => {
+    // $FlowIgnore
+    const appId = `${process.env.REACT_APP_OAUTH_FACEBOOK_APP_ID}`;
+    // $FlowIgnore
+    const redirectUri = `${process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI}`;
+    return `https://www.facebook.com/v2.11/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&scope=email,public_profile&response_type=token`;
+  };
+
+  googleLoginString = () => {
+    // $FlowIgnore
+    const appId = `${process.env.REACT_APP_OAUTH_GOOGLE_CLIENT_ID}`;
+    // $FlowIgnore
+    const redirectUri = `${process.env.REACT_APP_OAUTH_GOOGLE_REDIRECT_URI}`;
+    // $FlowIgnore
+    const scopes = `${process.env.REACT_APP_OAUTH_GOOGLE_SCOPES}`;
+    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
+  };
 
   render() {
     const {
@@ -146,7 +160,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
         <div styleName="firstButtonBlock">
           <Button
             iconic
-            onClick={this.handleProviderAuth}
+            href={this.facebookLoginString()}
           >
             <Icon type="facebook" />
             <span>Sign Up with Facebook</span>
@@ -155,7 +169,7 @@ class SignUpForm extends PureComponent<{}, StateType> {
         <div>
           <Button
             iconic
-            onClick={this.handleProviderAuth}
+            href={this.googleLoginString()}
           >
             <Icon type="google" />
             <span>Sign Up with Google</span>
@@ -166,8 +180,8 @@ class SignUpForm extends PureComponent<{}, StateType> {
   }
 }
 
-SignUpForm.contextTypes = {
+Registration.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default SignUpForm;
+export default Registration;
