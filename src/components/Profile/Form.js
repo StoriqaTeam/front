@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import { Button } from 'components/Button';
+import { Text } from 'components/Forms';
 
 import './Form.scss';
 
@@ -25,43 +26,18 @@ class Form extends Component<PropsTypes, StateTypes> {
     this.props.onSaveClick(this.state);
   };
 
-  renderInput = (id: string) => {
-    const value = this.state[id] || '';
-    return (
-      <label htmlFor={id}>
-        {id}
-        <br />
-        <input
-          id={id}
-          type="text"
-          name={id}
-          value={value}
-          onChange={this.handleInputChange}
-        />
-      </label>
-    );
-  };
-
+  // gender, isActive
   render() {
     return (
-      <div styleName="container">
-        {this.renderInput('phone')}
-        <br />
-        {this.renderInput('firstName')}
-        <br />
-        {this.renderInput('lastName')}
-        <br />
-        {this.renderInput('middleName')}
-        <br />
-        {this.renderInput('birthdate')}
-        <br />
-        <div>
-          <Button
-            title="Save"
-            onClick={this.handleClick}
-          />
-        </div>
-      </div>
+      <form styleName="container">
+        <Text
+          id="phone"
+          label="Phone"
+          value={this.state.phone}
+          onChange={this.handleInputChange}
+        />
+        <Button onClick={this.handleClick}>Save</Button>
+      </form>
     );
   }
 }

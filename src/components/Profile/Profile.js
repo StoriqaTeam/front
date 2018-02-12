@@ -8,14 +8,22 @@ import { Form, UsersTable } from 'components/Profile';
 
 import './Profile.scss';
 
+type GraphQLUserType = {
+  id: string,
+  email: string,
+  firstName: ?string,
+  lastName: ?string,
+  middleName: ?string,
+  isActive: boolean,
+  phone: ?string,
+  birthdate: ?string,
+  gender: "MALE" | "FEMALE" | "UNDEFINED"
+};
+
 type PropsTypes = {
+  // me: GraphQLUserType,
   admin: boolean,
-  users: Array<{
-    id: string,
-    firstName: string,
-    lastName: string,
-    isActive: boolean,
-  }>,
+  users: Array<GraphQLUserType>,
 };
 
 class Profile extends PureComponent<PropsTypes> {
@@ -37,8 +45,13 @@ export default createFragmentContainer(
     fragment Profile_me on User {
       id
       email
+      phone
       firstName
       lastName
+      middleName
+      birthdate
+      gender
+      isActive
     }
   `,
 );

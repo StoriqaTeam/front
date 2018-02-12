@@ -1,5 +1,7 @@
 // @flow
 
+// TODO: do refactoring after tests
+
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 
