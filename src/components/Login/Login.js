@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'found';
+import { withRouter, routerShape } from 'found';
 import { pathOr } from 'ramda';
 import Cookies from 'universal-cookie';
 
@@ -16,6 +16,10 @@ import { GetJWTByEmailMutation } from 'relay/mutations';
 
 import './Login.scss';
 
+type PropsType = {
+  router: routerShape,
+};
+
 type StateType = {
   username: string,
   usernameValid: boolean,
@@ -25,7 +29,7 @@ type StateType = {
   autocomplete: boolean,
 };
 
-class Login extends Component<{}, StateType> {
+class Login extends Component<PropsType, StateType> {
   state: StateType = {
     username: '',
     usernameValid: false,
@@ -47,7 +51,10 @@ class Login extends Component<{}, StateType> {
         if (jwt) {
           const cookies = new Cookies();
           cookies.set('__jwt', { value: jwt });
-          window.location.href = '/'; // TODO: use refetch or store update
+          if (this.context.handleLogin) {
+            this.context.handleLogin();
+            this.props.router.replace('/');
+          }
         }
       },
       onError: (error: Error) => {
@@ -166,6 +173,7 @@ class Login extends Component<{}, StateType> {
 
 Login.contextTypes = {
   environment: PropTypes.object.isRequired,
+  handleLogin: PropTypes.func,
 };
 
 export default withRouter(Login);
