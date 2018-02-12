@@ -9,6 +9,10 @@ import Cart from 'components/Icon/svg/cart.svg';
 import QA from 'components/Icon/svg/qa.svg';
 import Prev from 'components/Icon/svg/prev.svg';
 import Next from 'components/Icon/svg/next.svg';
+import Eye from 'components/Icon/svg/eye.svg';
+import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
+import Facebook from 'components/Icon/svg/facebook.svg';
+import Google from 'components/Icon/svg/google.svg';
 
 import './Icon.scss';
 
@@ -23,6 +27,10 @@ const iconsMap = {
   qa: <QA />,
   prev: <Prev />,
   next: <Next />,
+  eye: <Eye />,
+  eyeBlue: <EyeBlue />,
+  facebook: <Facebook />,
+  google: <Google />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

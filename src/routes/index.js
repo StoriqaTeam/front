@@ -18,10 +18,9 @@ const routes = (
     query={graphql`
       query routes_App_Query {
         id
-        apiVersion
-        viewer {
+        me {
           id
-          ...App_viewer
+          ...App_me
         }
       }
     `}
@@ -29,27 +28,19 @@ const routes = (
       if (error) {
         const errors = pathOr(null, ['source', 'errors'], error);
         if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
-          return <Component {...props} viewer={null} />;
+          return <Component {...props} />;
         }
-        return (
-          <Component {...props} >
-            <div>Some error happened!</div>
-          </Component>
-        );
       }
       return <Component {...props} />;
     }}
   >
-    <Route Component={() => (<div>Mainpage here</div>)} />
+    <Route Component={() => <div />} />
     <Route
-      Component={() => (<div>Main page</div>)}
-    />
-    <Route
-      path="registration"
+      path="/registration"
       Component={Registration}
     />
     <Route
-      path="login"
+      path="/login"
       Component={Login}
     />
     <Route

@@ -1,0 +1,45 @@
+.container {
+  position: relative;
+  width: 336px;
+  margin: 10% auto 0;
+  padding: 24px 32px 32px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
+}
+
+.signUpGroup {
+  margin: 32px 0 16px;
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+}
+
+.policy {
+  margin-left: 8px;
+  color: #939393;
+  font-size: 10px;
+  line-height: 13px;
+  text-align: left;
+}
+
+.link {
+  color: #505050;
+}
+
+.signUpButton {
+  width: 128px;
+}
+
+.inputBlock {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.separatorBlock {
+  margin-bottom: 16px;
+}
+
+.firstButtonBlock {
+  margin-bottom: 16px;
+}

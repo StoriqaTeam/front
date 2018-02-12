@@ -1,17 +1,43 @@
-.button {
-  height: 32px;
-  padding: 0 10px;
+.container {
+  display: inline-block;
+  width: 100%;
+  min-width: 128px;
+  padding: 0 16px;
   border-radius: 4px;
-  font-size: 14px;
-  line-height: 32px;
   color: #fff;
-  background-color: #2FBAFD;
+  font-size: 16px;
+  line-height: 32px;
+  background: #2FBAFD;
+  cursor: pointer;
+}
 
-  &:hover {
-    background-color: #2FBAFD;
-  }
+.buttonProvider {
+  padding: 14px 0 14px 45px;
+  color: #505050;
+  text-align: left;
+  background: #F7F7F7;
+}
 
-  &:active {
-    background-color: #2FBAFD;
+.signUp {
+  padding: 12px 0;
+  color: #fff;
+  background: #2FBAFD;
+
+  &:disabled {
+    background: #EFEFEF !important;
+    color: #fff !important;
   }
+}
+
+.iconic {
+  text-align: left;
+  color: #505050;
+  font-size: 14px;
+  line-height: 40px;
+  background-color: #F7F7F7;
+}
+
+.iconic > *:first-child {
+  display: inline-block;
+  margin-right: 8px;
 }

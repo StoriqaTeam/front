@@ -1,0 +1,22 @@
+.container {
+  margin-bottom: 32px;
+}
+
+.container:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.title {
+  font-size: 20px;
+  line-height: 24px;
+  float: left;
+}
+
+.linkTitle {
+  font-size: 12px;
+  line-height: 24px;
+  float: right;
+  text-decoration: underline;
+}

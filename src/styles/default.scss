@@ -1,7 +1,6 @@
 * {
   margin: 0;
   padding: 0;
-  font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
   outline: none;
@@ -23,6 +22,12 @@ strong {
   font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
 }
 
+input {
+  border: 0;
+  background-color: transparent;
+  outline: none;
+}
+
 /* Reset `button` and button-style `input` default styles */
 input[type="submit"],
 input[type="reset"],
@@ -34,11 +39,9 @@ input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus,
 button {
-  background: none;
+  background-color: transparent;
   border: 0;
-  color: inherit;
   cursor: pointer;
-  font: inherit;
   line-height: normal;
   overflow: visible;
   padding: 0;
@@ -55,7 +58,7 @@ button::-moz-focus-inner {
   padding: 0;
 }
 
-a {
+a, a:visited {
   color: $color_primary;
   text-decoration: none;
   transition: all .3s ease;

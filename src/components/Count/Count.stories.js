@@ -27,4 +27,17 @@ storiesOf('Count', module)
         styles="green"
       />
     </div>
+  ))
+  .add('For messages', () => (
+    <div
+      style={{
+        margin: '50px',
+      }}
+    >
+      <Count
+        tip
+        amount={321}
+        styles="blue"
+      />
+    </div>
   ));
