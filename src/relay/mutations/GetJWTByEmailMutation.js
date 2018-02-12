@@ -4,8 +4,8 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation GetJWTByEmailMutation($email: String!, $password: String!) {
-    getJWTByEmail(email:$email, password: $password) {
+  mutation GetJWTByEmailMutation($input: CreateJWTEmailInput!) {
+    getJWTByEmail(input: $input) {
       token
     }
   }
@@ -22,8 +22,11 @@ type MutationParamsType = {
 const commit = (params: MutationParamsType) => commitMutation(params.environment, {
   mutation,
   variables: {
-    email: params.login,
-    password: params.password,
+    input: {
+      clientMutationId: '',
+      email: params.login,
+      password: params.password,
+    },
   },
   onCompleted: params.onCompleted,
   onError: params.onError,
