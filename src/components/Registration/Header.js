@@ -2,14 +2,14 @@
 
 import React from 'react';
 
-import './FormHeader.scss';
+import './Header.scss';
 
 type PropTypes = {
   title: string,
   linkTitle: string,
 };
 
-const FormHeader = (props: PropTypes) => (
+const Header = (props: PropTypes) => (
   <header styleName="container">
     <strong styleName="title">{ props.title }</strong>
     <a
@@ -21,4 +21,4 @@ const FormHeader = (props: PropTypes) => (
   </header>
 );
 
-export default FormHeader;
+export default Header;

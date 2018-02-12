@@ -1,15 +1,15 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import SignUpForm from './SignUpForm';
+import Registration from './Registration';
 
-storiesOf('SignUpForm', module)
+storiesOf('Registration', module)
   .add('with Initial looking', () => (
     <div
       style={{
         margin: '50px',
       }}
     >
-      <SignUpForm />
+      <Registration />
     </div>
   ));
