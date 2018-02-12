@@ -7,8 +7,6 @@ import { Link } from 'found';
 import type { Node } from 'react';
 import type { Environment } from 'relay-runtime';
 
-// import { log } from 'utils';
-
 import './App.scss';
 
 type PropsType = {
@@ -29,7 +27,7 @@ class App extends PureComponent<PropsType> {
   }
 
   handleLogin = () => {
-    this.props.relay.refetch({ itemID: 0 }, null, () => {}, { force: true });
+    this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
   render() {
