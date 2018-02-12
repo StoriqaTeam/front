@@ -8,11 +8,14 @@
   background-color: #ffffff;
 }
 
-.policy {
+.inputBlock {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.checkbox {
   margin-left: 8px;
-  color: #939393;
-  font-size: 10px;
-  line-height: 13px;
+  font-size: 14px;
   text-align: left;
 }
 
@@ -25,15 +28,6 @@
 
 .signUpButton {
   width: 128px;
-}
-
-.link {
-  color: #505050;
-}
-
-.inputBlock {
-  position: relative;
-  margin-bottom: 32px;
 }
 
 .separatorBlock {

@@ -20,11 +20,11 @@ type PropsType = {
   model: string,
   type: ?string,
   validate: ?string,
-  autocomplete: ?string,
   errorMessage: ?string,
   onChange: Function,
   focus: boolean,
   detectCapsLock: boolean,
+  autocomplete: ?boolean,
 };
 
 type StateType = {
@@ -49,7 +49,7 @@ class Input extends PureComponent<PropsType, StateType> {
     placeholder: '',
     type: 'text',
     validate: 'text',
-    autocomplete: 'on',
+    autocomplete: false,
     errorMessage: '',
     className: 'root',
     focus: false,
@@ -132,15 +132,6 @@ class Input extends PureComponent<PropsType, StateType> {
       this.setState({
         showHints: true,
       });
-    }
-  };
-
-  /**
-   * @return {void}
-   */
-  focus = () => {
-    if (this.input && this.props.focus) {
-      this.input.focus();
     }
   };
 
@@ -266,7 +257,7 @@ class Input extends PureComponent<PropsType, StateType> {
           name={name}
           value={model}
           ref={(node) => { this.input = node; }}
-          autoComplete={autocomplete}
+          autoComplete={autocomplete ? 'on' : 'off'}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}

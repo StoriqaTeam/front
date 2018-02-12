@@ -2,16 +2,14 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
 import { Button } from 'components/Button';
+import { Header, Input, Separator } from 'components/Registration';
 
 import { log } from 'utils';
 import { CreateUserMutation } from 'relay/mutations';
-
-import Header from './Header';
-import Input from './Input';
-import Separator from './Separator';
 
 import './Registration.scss';
 
@@ -105,7 +103,7 @@ class Registration extends PureComponent<{}, StateType> {
       formValid,
     } = this.state;
 
-    const singUp = (
+    const signUp = (
       <div styleName="signUpGroup">
         <div styleName="signUpButton">
           <Button onClick={this.handleRegistrationClick}>
@@ -117,10 +115,11 @@ class Registration extends PureComponent<{}, StateType> {
     );
 
     return (
-      <div styleName="container">
+      <form styleName="container">
         <Header
           title="Sign Up"
           linkTitle="Sign In"
+          link="/login"
         />
         <div styleName="inputBlock">
           <Input
@@ -151,7 +150,7 @@ class Registration extends PureComponent<{}, StateType> {
             onChange={this.handleChange}
           />
         </div>
-        {formValid && singUp}
+        {formValid && signUp}
         <div className="separatorBlock">
           <Separator text="or" />
         </div>
@@ -173,7 +172,7 @@ class Registration extends PureComponent<{}, StateType> {
             <span>Sign Up with Google</span>
           </Button>
         </div>
-      </div>
+      </form>
     );
   }
 }
@@ -182,4 +181,4 @@ Registration.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Registration;
+export default withRouter(Registration);

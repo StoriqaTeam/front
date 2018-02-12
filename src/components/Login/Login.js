@@ -2,38 +2,40 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'found';
+import { withRouter } from 'found';
 import { pathOr } from 'ramda';
 import Cookies from 'universal-cookie';
+
+import { Icon } from 'components/Icon';
+import { Button } from 'components/Button';
+import { Header, Input, Separator } from 'components/Registration';
+import { Checkbox } from 'components/Checkbox';
 
 import { log } from 'utils';
 import { GetJWTByEmailMutation } from 'relay/mutations';
 
-type PropsType = {
-};
+import './Login.scss';
 
 type StateType = {
-  login: string,
+  username: string,
+  usernameValid: boolean,
   password: string,
+  passwordValid: boolean,
+  formValid: boolean,
+  autocomplete: boolean,
 };
 
-class Login extends Component<PropsType, StateType> {
+class Login extends Component<{}, StateType> {
   state: StateType = {
-    login: '',
+    username: '',
+    usernameValid: false,
     password: '',
+    passwordValid: false,
+    formValid: false,
+    autocomplete: false,
   };
 
-  handleInputChange = (e: Object) => {
-    const { target } = e;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleSubmitClick = () => {
+  handleLoginClick = () => {
     const { login, password } = this.state;
     GetJWTByEmailMutation.commit({
       login,
@@ -54,6 +56,20 @@ class Login extends Component<PropsType, StateType> {
     });
   };
 
+  handleChange = (data: { name: string, value: any, validity: boolean }) => {
+    const { name, value, validity } = data;
+    this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
+  };
+
+  validateForm = () => {
+    const { usernameValid, passwordValid } = this.state;
+    this.setState({ formValid: usernameValid && passwordValid });
+  };
+
+  handleCheckboxChange = () => {
+    this.setState({ autocomplete: !this.state.autocomplete });
+  }
+
   facebookLoginString = () => {
     // $FlowIgnore
     const appId = `${process.env.REACT_APP_OAUTH_FACEBOOK_APP_ID}`;
@@ -73,55 +89,77 @@ class Login extends Component<PropsType, StateType> {
   };
 
   render() {
-    return (
-      <div>
-        <form>
-          <label htmlFor="login">
-            Login
-            <br />
-            <input
-              name="login"
-              type="text"
-              value={this.state.login}
-              onChange={this.handleInputChange}
-            />
-          </label>
-          <br />
-          <label htmlFor="password">
-            Password
-            <br />
-            <input
-              name="password"
-              type="password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
-            />
-          </label>
-          <br />
-          <button
-            type="button"
-            onClick={this.handleSubmitClick}
-          >
-            Login
-          </button>
-        </form>
-        <br />
-        <br />
-        <a
-          href={this.facebookLoginString()}
-        >
-          Facebook login
-        </a>
-        <br />
-        <a
-          href={this.googleLoginString()}
-        >
-          Google login
-        </a>
-        <br />
-        <br />
-        <Link to="/registration">Register</Link>
+    const {
+      username,
+      password,
+      formValid,
+      autocomplete,
+    } = this.state;
+
+    const signIn = (
+      <div styleName="signUpGroup">
+        <div styleName="signUpButton">
+          <Button onClick={this.handleLoginClick}>
+            <span>Sign In</span>
+          </Button>
+        </div>
+        <div styleName="checkbox">
+          <Checkbox handleCheckboxChange={this.handleCheckboxChange} /> <span>Remember Me</span>
+        </div>
       </div>
+    );
+
+    return (
+      <form styleName="container">
+        <Header
+          title="Sign In"
+          linkTitle="Sign Up"
+          link="/registration"
+        />
+        <div styleName="inputBlock">
+          <Input
+            label="Username"
+            name="username"
+            type="text"
+            model={username}
+            onChange={this.handleChange}
+            autocomplete={autocomplete}
+          />
+        </div>
+        <div styleName="inputBlock">
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            model={password}
+            validate="password"
+            onChange={this.handleChange}
+            autocomplete={autocomplete}
+          />
+        </div>
+        {!formValid && signIn}
+        <div className="separatorBlock">
+          <Separator text="or" />
+        </div>
+        <div styleName="firstButtonBlock">
+          <Button
+            iconic
+            href={this.facebookLoginString()}
+          >
+            <Icon type="facebook" />
+            <span>Sign In with Facebook</span>
+          </Button>
+        </div>
+        <div>
+          <Button
+            iconic
+            href={this.googleLoginString()}
+          >
+            <Icon type="google" />
+            <span>Sign In with Google</span>
+          </Button>
+        </div>
+      </form>
     );
   }
 }
