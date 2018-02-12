@@ -104,14 +104,19 @@ class Login extends Component<PropsType, StateType> {
     } = this.state;
 
     const signIn = (
-      <div styleName="signUpGroup">
-        <div styleName="signUpButton">
+      <div styleName="signInGroup">
+        <div styleName="signInButton">
           <Button onClick={this.handleLoginClick}>
             <span>Sign In</span>
           </Button>
         </div>
-        <div styleName="checkbox">
-          <Checkbox handleCheckboxChange={this.handleCheckboxChange} /> <span>Remember Me</span>
+        <div styleName="signInCheckbox">
+          <Checkbox
+            id="login"
+            label="Remember Me"
+            isChecked={autocomplete}
+            handleCheckboxChange={this.handleCheckboxChange}
+          />
         </div>
       </div>
     );
@@ -144,7 +149,7 @@ class Login extends Component<PropsType, StateType> {
             autocomplete={autocomplete}
           />
         </div>
-        {!formValid && signIn}
+        {formValid && signIn}
         <div className="separatorBlock">
           <Separator text="or" />
         </div>
