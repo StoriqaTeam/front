@@ -34,13 +34,11 @@ class Profile extends PureComponent<PropsTypes> {
 export default createFragmentContainer(
   Profile,
   graphql`
-    fragment Profile_viewer on Viewer {
-      currentUser {
-        id
-        email
-        firstName
-        lastName
-      }
+    fragment Profile_me on User {
+      id
+      email
+      firstName
+      lastName
     }
   `,
 );
