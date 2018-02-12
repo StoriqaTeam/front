@@ -4,14 +4,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'components/Icon';
-import { Form } from 'components/Form';
-import { FormHeader } from 'components/FormHeader';
-import { FormInput } from 'components/FormInput';
 import { Button } from 'components/Button';
-import { Separator } from 'components/Separator';
 
 import { log } from 'utils';
 import { CreateUserMutation } from 'relay/mutations';
+
+import Header from './Header';
+import Input from './Input';
+import Separator from './Separator';
 
 import './Registration.scss';
 
@@ -108,9 +108,7 @@ class Registration extends PureComponent<{}, StateType> {
     const singUp = (
       <div styleName="signUpGroup">
         <div styleName="signUpButton">
-          <Button
-            type="submit"
-          >
+          <Button onClick={this.handleRegistrationClick}>
             <span>Sign Up</span>
           </Button>
         </div>
@@ -119,13 +117,13 @@ class Registration extends PureComponent<{}, StateType> {
     );
 
     return (
-      <Form onSubmit={this.handleRegistrationClick}>
-        <FormHeader
+      <div styleName="container">
+        <Header
           title="Sign Up"
           linkTitle="Sign In"
         />
         <div styleName="inputBlock">
-          <FormInput
+          <Input
             label="Username"
             name="username"
             type="text"
@@ -134,7 +132,7 @@ class Registration extends PureComponent<{}, StateType> {
           />
         </div>
         <div styleName="inputBlock">
-          <FormInput
+          <Input
             label="Email"
             name="email"
             type="email"
@@ -144,7 +142,7 @@ class Registration extends PureComponent<{}, StateType> {
           />
         </div>
         <div styleName="inputBlock">
-          <FormInput
+          <Input
             label="Password"
             name="password"
             type="password"
@@ -175,7 +173,7 @@ class Registration extends PureComponent<{}, StateType> {
             <span>Sign Up with Google</span>
           </Button>
         </div>
-      </Form>
+      </div>
     );
   }
 }

@@ -12,7 +12,7 @@ type PropsTypes = {
   onClick: ?Function,
   disabled: boolean,
   iconic: boolean,
-  href: string,
+  href: ?string,
 };
 
 class Button extends PureComponent<PropsTypes> {

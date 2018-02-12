@@ -9,7 +9,7 @@ import { ShowPassword } from 'components/ShowPassword';
 
 import { log } from 'utils';
 
-import './FormInput.scss';
+import './Input.scss';
 import utils from './utils';
 
 type PropsType = {
@@ -42,7 +42,7 @@ type StateType = {
   validity: ?boolean,
 }
 
-class FormInput extends PureComponent<PropsType, StateType> {
+class Input extends PureComponent<PropsType, StateType> {
   static defaultProps = {
     onChange: () => {},
     label: '',
@@ -285,4 +285,4 @@ class FormInput extends PureComponent<PropsType, StateType> {
   }
 }
 
-export default FormInput;
+export default Input;

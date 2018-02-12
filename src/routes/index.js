@@ -8,7 +8,6 @@ import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
-// import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
 import { Registration } from 'components/Registration';
 
