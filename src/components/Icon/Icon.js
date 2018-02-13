@@ -13,6 +13,7 @@ import Eye from 'components/Icon/svg/eye.svg';
 import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
 import Facebook from 'components/Icon/svg/facebook.svg';
 import Google from 'components/Icon/svg/google.svg';
+import Spiner from 'components/Icon/svg/spiner.svg';
 
 import './Icon.scss';
 
@@ -31,6 +32,7 @@ const iconsMap = {
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
   google: <Google />,
+  spiner: <Spiner />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

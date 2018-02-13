@@ -10,6 +10,7 @@ import { Icon } from 'components/Icon';
 import { Button } from 'components/Button';
 import { Header, Input, Separator } from 'components/Registration';
 import { Checkbox } from 'components/Checkbox';
+import { Spiner } from 'components/Spiner';
 
 import { log } from 'utils';
 import { GetJWTByEmailMutation } from 'relay/mutations';
@@ -27,6 +28,7 @@ type StateType = {
   passwordValid: boolean,
   formValid: boolean,
   autocomplete: boolean,
+  errors: ?Array,
 };
 
 class Login extends Component<PropsType, StateType> {
@@ -37,15 +39,19 @@ class Login extends Component<PropsType, StateType> {
     passwordValid: false,
     formValid: false,
     autocomplete: false,
+    isLoad: false,
+    errors: null,
   };
 
   handleLoginClick = () => {
+    this.setState({ isLoad: true });
     const { username, password } = this.state;
     GetJWTByEmailMutation.commit({
-      login: username,
+      email: username,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        this.setState({ isLoad: false });
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
@@ -58,6 +64,10 @@ class Login extends Component<PropsType, StateType> {
         }
       },
       onError: (error: Error) => {
+        this.setState({
+          isLoad: false,
+          errors: error.source.errors,
+        });
         log.error({ error });
       },
     });
@@ -101,6 +111,8 @@ class Login extends Component<PropsType, StateType> {
       password,
       formValid,
       autocomplete,
+      isLoad,
+      errors,
     } = this.state;
 
     const signIn = (
@@ -123,6 +135,11 @@ class Login extends Component<PropsType, StateType> {
 
     return (
       <form styleName="container">
+        {isLoad &&
+          <div styleName="spiner">
+            <Spiner size={32} />
+          </div>
+        }
         <Header
           title="Sign In"
           linkTitle="Sign Up"
@@ -147,6 +164,7 @@ class Login extends Component<PropsType, StateType> {
             validate="password"
             onChange={this.handleChange}
             autocomplete={autocomplete}
+            errors={errors}
           />
         </div>
         {formValid && signIn}

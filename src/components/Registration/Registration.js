@@ -20,7 +20,8 @@ type StateType = {
   emailValid: boolean,
   password: string,
   passwordValid: boolean,
-  formValid: boolean
+  formValid: boolean,
+  errors: ?Array,
 }
 
 class Registration extends PureComponent<{}, StateType> {
@@ -32,6 +33,7 @@ class Registration extends PureComponent<{}, StateType> {
     password: '',
     passwordValid: false,
     formValid: false,
+    errors: null,
   };
 
   handleRegistrationClick = () => {
@@ -101,6 +103,7 @@ class Registration extends PureComponent<{}, StateType> {
       email,
       password,
       formValid,
+      errors,
     } = this.state;
 
     const signUp = (
@@ -148,6 +151,7 @@ class Registration extends PureComponent<{}, StateType> {
             model={password}
             validate="password"
             onChange={this.handleChange}
+            errors={errors}
           />
         </div>
         {formValid && signUp}

@@ -25,6 +25,7 @@ type PropsType = {
   focus: boolean,
   detectCapsLock: boolean,
   autocomplete: ?boolean,
+  errors: ?Array,
 };
 
 type StateType = {
@@ -210,6 +211,7 @@ class Input extends PureComponent<PropsType, StateType> {
       type,
       className,
       detectCapsLock,
+      errors,
     } = this.props;
 
     const {
@@ -271,6 +273,13 @@ class Input extends PureComponent<PropsType, StateType> {
         { capsLockMessageContent }
         { showPasswordContent }
         { passwordHintsContent }
+        {errors &&
+          <div styleName="errors">
+            {errors.map(error => (
+              <p key={error.message.trim()} styleName="error">{error.message}</p>
+            ))}
+          </div>
+        }
       </span>
     );
   }
