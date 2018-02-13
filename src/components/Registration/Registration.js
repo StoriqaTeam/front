@@ -21,7 +21,7 @@ type StateType = {
   password: string,
   passwordValid: boolean,
   formValid: boolean,
-  errors: ?Array,
+  errors: ?Array<string>,
 }
 
 class Registration extends PureComponent<{}, StateType> {

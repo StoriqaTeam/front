@@ -28,7 +28,7 @@ type StateType = {
   passwordValid: boolean,
   formValid: boolean,
   autocomplete: boolean,
-  errors: ?Array,
+  errors: ?Array<string>,
 };
 
 class Login extends Component<PropsType, StateType> {
@@ -66,7 +66,7 @@ class Login extends Component<PropsType, StateType> {
       onError: (error: Error) => {
         this.setState({
           isLoad: false,
-          errors: error.source.errors,
+          errors: pathOr(null, ['source', 'errors'], error),
         });
         log.error({ error });
       },
@@ -135,11 +135,11 @@ class Login extends Component<PropsType, StateType> {
 
     return (
       <form styleName="container">
-        {isLoad &&
+        {isLoad && (
           <div styleName="spiner">
             <Spiner size={32} />
           </div>
-        }
+        )}
         <Header
           title="Sign In"
           linkTitle="Sign Up"
