@@ -13,6 +13,7 @@ const mutation = graphql`
       lastName
       middleName
       birthdate
+      gender
       isActive
     }
   }

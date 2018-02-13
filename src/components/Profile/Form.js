@@ -5,7 +5,7 @@ import { assocPath, pick } from 'ramda';
 
 // import { log } from 'utils';
 import { Button } from 'components/Button';
-import { Text, Checkbox } from 'components/Forms';
+import { Text, Checkbox, RadioGroup } from 'components/Forms';
 
 import './Form.scss';
 
@@ -72,6 +72,14 @@ class Form extends Component<PropsType, StateType> {
           label="Middle name"
           value={this.state.form.middleName || ''}
           onChange={this.handleInputChange('middleName')}
+        />
+        <br />
+        <RadioGroup
+          id="gender"
+          label="Gender"
+          items={['MALE', 'FEMALE', 'UNDEFINED'].map(val => ({ id: val, value: val }))}
+          checked={this.state.form.gender}
+          onChange={this.handleInputChange('gender')}
         />
         <br />
         <Checkbox

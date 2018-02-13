@@ -54,7 +54,7 @@ class Profile extends PureComponent<PropsTypes> {
         {!admin && (
           <Form
             onSaveClick={this.handleSave}
-            profileData={this.props.me}
+            profileData={this.props.me || {}}
           />
         )}
       </div>
