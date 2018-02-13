@@ -4,7 +4,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { Link } from 'found';
-// import type { Node } from 'react';
 import type { Environment } from 'relay-runtime';
 
 import './App.scss';

@@ -25,9 +25,7 @@ type PropsType = {
   focus: boolean,
   detectCapsLock: boolean,
   autocomplete: ?boolean,
-  errors: ?[
-    { message: string }
-  ],
+  errors: ?Array<{ message: string }>,
 };
 
 type StateType = {
@@ -277,8 +275,8 @@ class Input extends PureComponent<PropsType, StateType> {
         { passwordHintsContent }
         {errors &&
           <div styleName="errors">
-            {errors.map(error => (
-              <p key={error && error.message} styleName="error">{error.message}</p>
+            {errors.map((item, idx) => (
+              <p key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item.message}</p>
             ))}
           </div>
         }
