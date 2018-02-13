@@ -20,11 +20,12 @@ type PropsType = {
   model: string,
   type: ?string,
   validate: ?string,
-  autocomplete: ?string,
   errorMessage: ?string,
   onChange: Function,
   focus: boolean,
   detectCapsLock: boolean,
+  autocomplete: ?boolean,
+  errors: ?Array<{ message: string }>,
 };
 
 type StateType = {
@@ -49,7 +50,7 @@ class Input extends PureComponent<PropsType, StateType> {
     placeholder: '',
     type: 'text',
     validate: 'text',
-    autocomplete: 'on',
+    autocomplete: false,
     errorMessage: '',
     className: 'root',
     focus: false,
@@ -136,15 +137,6 @@ class Input extends PureComponent<PropsType, StateType> {
   };
 
   /**
-   * @return {void}
-   */
-  focus = () => {
-    if (this.input && this.props.focus) {
-      this.input.focus();
-    }
-  };
-
-  /**
    * @desc Puts back the label to its original position if the model is empty
    * @return {void}
    */
@@ -219,6 +211,7 @@ class Input extends PureComponent<PropsType, StateType> {
       type,
       className,
       detectCapsLock,
+      errors,
     } = this.props;
 
     const {
@@ -266,7 +259,7 @@ class Input extends PureComponent<PropsType, StateType> {
           name={name}
           value={model}
           ref={(node) => { this.input = node; }}
-          autoComplete={autocomplete}
+          autoComplete={autocomplete ? 'on' : 'off'}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           onChange={this.handleChange}
@@ -280,6 +273,13 @@ class Input extends PureComponent<PropsType, StateType> {
         { capsLockMessageContent }
         { showPasswordContent }
         { passwordHintsContent }
+        {errors &&
+          <div styleName="errors">
+            {errors.map((item, idx) => (
+              <p key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item.message}</p>
+            ))}
+          </div>
+        }
       </span>
     );
   }
