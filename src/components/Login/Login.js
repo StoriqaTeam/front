@@ -40,9 +40,9 @@ class Login extends Component<PropsType, StateType> {
   };
 
   handleLoginClick = () => {
-    const { login, password } = this.state;
+    const { username, password } = this.state;
     GetJWTByEmailMutation.commit({
-      login,
+      login: username,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
@@ -75,7 +75,7 @@ class Login extends Component<PropsType, StateType> {
 
   handleCheckboxChange = () => {
     this.setState({ autocomplete: !this.state.autocomplete });
-  }
+  };
 
   facebookLoginString = () => {
     // $FlowIgnore
@@ -106,7 +106,7 @@ class Login extends Component<PropsType, StateType> {
     const signIn = (
       <div styleName="signInGroup">
         <div styleName="signInButton">
-          <Button onClick={this.handleLoginClick}>
+          <Button onClick={this.handleLoginClick} type="button">
             <span>Sign In</span>
           </Button>
         </div>
