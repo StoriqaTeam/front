@@ -1,36 +1,27 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
 import './Text.scss';
 
 type PropsType = {
   id: string,
-  label: string,
-  styles: string,
-  errors: Array<string>,
-  onChange?: Function,
-};
-
-type StateType = {
   value: string,
+  label: string,
+  errors: Array<string>,
+  onChange: Function,
 };
 
-class Text extends Component<PropsType, StateType> {
-  state: StateType = {
-    value: '',
-  };
-
+class Text extends PureComponent<PropsType> {
   handleChange = (e: {target: { value: ?string }}) => {
-    this.setState({ value: e.target.value });
     this.props.onChange(e.target.value);
   };
 
   render() {
     const {
       id,
+      value,
       label,
-      styles = 'default',
       errors,
     } = this.props;
 
@@ -42,9 +33,9 @@ class Text extends Component<PropsType, StateType> {
           id={id}
           name={id}
           type="text"
-          value={this.state.value}
+          value={value}
           onChange={this.handleChange}
-          styleName={styles}
+          styleName="default"
         />
         {errors && errors.length > 0 && (
           <Fragment>

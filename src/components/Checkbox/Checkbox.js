@@ -13,7 +13,7 @@ class Checkbox extends PureComponent<PropsTypes> {
   handleCheckboxChange = () => {
     const { id, handleCheckboxChange } = this.props;
     handleCheckboxChange(id);
-  }
+  };
 
   render() {
     const { label, isChecked } = this.props;
