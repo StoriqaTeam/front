@@ -4,8 +4,6 @@ import { action } from '@storybook/addon-actions';
 
 import { Text } from 'components/Forms';
 
-import textStyle from './Text.stories.scss';
-
 storiesOf('Forms/Text', module)
   .add('default', () => (
     <Text
@@ -13,6 +11,14 @@ storiesOf('Forms/Text', module)
       label="Name:"
       value="test"
       onChange={action('text-change')}
-      styleName={textStyle.textInput}
+    />
+  ))
+  .add('with error', () => (
+    <Text
+      id="some_id2"
+      label="Name:"
+      value="test"
+      onChange={action('text-change')}
+      errors={['Some error text']}
     />
   ));
