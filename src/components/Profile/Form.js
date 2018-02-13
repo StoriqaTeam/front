@@ -1,27 +1,39 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath } from 'ramda';
+import { assocPath, pick } from 'ramda';
 
-import { log } from 'utils';
+// import { log } from 'utils';
 import { Button } from 'components/Button';
 import { Text, Checkbox } from 'components/Forms';
 
 import './Form.scss';
 
-type PropsTypes = {
+type PropsType = {
   onSaveClick: Function,
+  profileData: {},
 };
 
-type StateTypes = {
+type StateType = {
   form: {
     [key: string]: ?any
   },
 };
 
-class Form extends Component<PropsTypes, StateTypes> {
+class Form extends Component<PropsType, StateType> {
   state = {
-    form: {},
+    form: pick(
+      [
+        'phone',
+        'firstName',
+        'lastName',
+        'middleName',
+        'birthdate',
+        'gender',
+        'isActive',
+      ],
+      this.props.profileData,
+    ),
   };
   handleInputChange = (id: string) => (value: any) => {
     this.setState(prevState => assocPath(['form', id], value, prevState));
@@ -32,9 +44,8 @@ class Form extends Component<PropsTypes, StateTypes> {
   };
 
   render() {
-    log.debug({ form: this.state.form });
     return (
-      <form styleName="container" noValidate>
+      <div styleName="container">
         <Text
           id="phone"
           label="Phone"
@@ -66,11 +77,11 @@ class Form extends Component<PropsTypes, StateTypes> {
         <Checkbox
           id="active"
           label="Is active"
-          checked={!!this.state.form.active}
-          onChange={this.handleInputChange('active')}
+          checked={!!this.state.form.isActive}
+          onChange={this.handleInputChange('isActive')}
         />
         <Button onClick={this.handleClick}>Save</Button>
-      </form>
+      </div>
     );
   }
 }

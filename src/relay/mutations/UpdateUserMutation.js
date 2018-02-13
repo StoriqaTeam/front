@@ -13,13 +13,19 @@ const mutation = graphql`
       lastName
       middleName
       birthdate
+      isActive
     }
   }
 `;
 
 type MutationParamsType = {
   input: {
-    //
+    id: string,
+    phone: ?string,
+    firstName: ?string,
+    lastName: ?string,
+    middleName: ?string,
+    birthdate: ?string,
   },
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
