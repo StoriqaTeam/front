@@ -4,14 +4,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { Link } from 'found';
-import type { Node } from 'react';
+// import type { Node } from 'react';
 import type { Environment } from 'relay-runtime';
 
 import './App.scss';
 
 type PropsType = {
   me: ?{},
-  children: Node,
+  children: any,
   relay: {
     environment: Environment,
     refetch: Function,
@@ -31,7 +31,7 @@ class App extends PureComponent<PropsType> {
   };
 
   render() {
-    const { me } = this.props;
+    const { me, children } = this.props;
     return (
       <div styleName="root">
         <header styleName="header">
@@ -39,7 +39,7 @@ class App extends PureComponent<PropsType> {
           {me && (<Link to="/logout">Logout</Link>)}
           {!me && (<Link to="/login">Login</Link>)}
         </header>
-        {this.props.children && React.cloneElement(this.props.children, { me })}
+        {children && React.cloneElement(children, { me })}
       </div>
     );
   }

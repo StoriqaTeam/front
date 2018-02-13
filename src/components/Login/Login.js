@@ -29,6 +29,7 @@ type StateType = {
   formValid: boolean,
   autocomplete: boolean,
   errors: ?Array<string>,
+  isLoad: boolean,
 };
 
 class Login extends Component<PropsType, StateType> {
