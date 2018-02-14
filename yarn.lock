@@ -6662,6 +6662,10 @@ podda@^1.2.2:
     babel-runtime "^6.11.6"
     immutable "^3.8.1"
 
+popper.js@^1.12.5:
+  version "1.12.9"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
+
 portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -7348,6 +7352,10 @@ raf@3.4.0:
   dependencies:
     performance-now "^2.1.0"
 
+ramda@^0.24.1:
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
+
 ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
@@ -7412,6 +7420,15 @@ react-color@^2.11.4:
     prop-types "^15.5.10"
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
+
+react-datepicker@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-1.1.0.tgz#af3892384fb6d1dcafc30b48e81cc7fb976806f4"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.6.0"
+    react-onclickoutside "^6.7.1"
+    react-popper "^0.7.4"
 
 react-datetime@^2.11.1:
   version "2.11.1"
@@ -7522,9 +7539,16 @@ react-modal@^3.1.4:
     prop-types "^15.5.10"
     warning "^3.0.0"
 
-react-onclickoutside@^6.5.0:
+react-onclickoutside@^6.5.0, react-onclickoutside@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
+
+react-popper@^0.7.4:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.5.tgz#71c25946f291db381231281f6b95729e8b801596"
+  dependencies:
+    popper.js "^1.12.5"
+    prop-types "^15.5.10"
 
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
@@ -8523,6 +8547,12 @@ spdy@^3.4.1:
     safe-buffer "^5.0.1"
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
+
+spected@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/spected/-/spected-0.7.0.tgz#6fa3a4b92d65f1f398730c67c8ca50995984336c"
+  dependencies:
+    ramda "^0.24.1"
 
 speedometer@~0.1.2:
   version "0.1.4"

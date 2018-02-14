@@ -1,7 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, pick } from 'ramda';
+import { assocPath, omit, pick } from 'ramda';
+import DatePicker from 'react-datepicker';
 
 // import { log } from 'utils';
 import { Button } from 'components/Button';
@@ -40,7 +41,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleClick = () => {
-    this.props.onSaveClick(this.state.form);
+    this.props.onSaveClick(omit(['birthdateRaw'], this.state.form));
   };
 
   render() {
@@ -80,6 +81,14 @@ class Form extends Component<PropsType, StateType> {
           items={['MALE', 'FEMALE', 'UNDEFINED'].map(val => ({ id: val, value: val }))}
           checked={this.state.form.gender}
           onChange={this.handleInputChange('gender')}
+        />
+        <br />
+        <DatePicker
+          onChange={(e:any) => {
+            this.handleInputChange('birthdate')(e.toDate().toISOString());
+            this.handleInputChange('birthdateRaw')(e);
+          }}
+          selected={this.state.form.birthdateRaw}
         />
         <br />
         <Checkbox
