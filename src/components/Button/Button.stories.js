@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Icon } from 'components/Icon';
 
 import Button from './Button';
@@ -12,27 +13,17 @@ stories.addDecorator(withKnobs);
 
 stories
   .add('Default', () => (
-    <div
-      style={{
-        margin: '50px',
-        width: '200px',
-      }}
-    >
+    <StoriesDecorator>
       <Button
         disabled={boolean('Disabled', false)}
         onClick={action('click')}
       >
         <span>Storiqa</span>
       </Button>
-    </div>
+    </StoriesDecorator>
   ))
   .add('Social', () => (
-    <div
-      style={{
-        margin: '50px',
-        width: '200px',
-      }}
-    >
+    <StoriesDecorator>
       <Button
         iconic
         onClick={action('click')}
@@ -40,5 +31,5 @@ stories
         <Icon type="google" />
         <span>Sign Up with Google</span>
       </Button>
-    </div>
+    </StoriesDecorator>
   ));

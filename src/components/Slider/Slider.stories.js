@@ -1,18 +1,14 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Slider } from 'components/Slider';
 
 import mostPopularGoods from './mostPopularGoods.json';
 
 storiesOf('Slider', module)
   .add('Most popular', () => (
-    <div
-      style={{
-        maxWidth: '1360px',
-        margin: '50px auto 0',
-      }}
-    >
+    <StoriesDecorator type="slider">
       <Slider
         title="Most popular"
         type="most-popular"
@@ -24,15 +20,10 @@ storiesOf('Slider', module)
           { breakpoint: 576, slidesToShow: 1 },
         ]}
       />
-    </div>
+    </StoriesDecorator>
   ))
   .add('Sale', () => (
-    <div
-      style={{
-        maxWidth: '1360px',
-        margin: '50px auto 0',
-      }}
-    >
+    <StoriesDecorator type="slider">
       <Slider
         title="Sale"
         type="sale"
@@ -44,15 +35,10 @@ storiesOf('Slider', module)
           { breakpoint: 576, slidesToShow: 1 },
         ]}
       />
-    </div>
+    </StoriesDecorator>
   ))
   .add('Smart Reviews', () => (
-    <div
-      style={{
-        maxWidth: '1360px',
-        margin: '50px auto 0',
-      }}
-    >
+    <StoriesDecorator type="slider">
       <Slider
         title="Smart Reviews"
         type="smart-reviews"
@@ -64,5 +50,5 @@ storiesOf('Slider', module)
           { breakpoint: 576, slidesToShow: 1 },
         ]}
       />
-    </div>
+    </StoriesDecorator>
   ));

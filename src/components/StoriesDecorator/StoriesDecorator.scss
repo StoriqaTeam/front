@@ -1,0 +1,37 @@
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding-top: 100px;
+}
+
+.cell {
+  position: relative;
+}
+
+/* SLIDER */
+
+.slider {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.slider .cell {
+  width: 100%;
+}
+
+/* ICONS */
+
+.icons .cell > * {
+  display: inline-block;
+  width: 70px;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.icons .cell > * > * {
+  display: inline-block;
+}

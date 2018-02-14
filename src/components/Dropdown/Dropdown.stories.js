@@ -1,15 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Dropdown } from 'components/Dropdown';
 
 storiesOf('Dropdown', module)
   .add('Default', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Dropdown>
         <trigger>
           <div>Trigger</div>
@@ -18,5 +15,5 @@ storiesOf('Dropdown', module)
           <div>Content</div>
         </content>
       </Dropdown>
-    </div>
+    </StoriesDecorator>
   ));

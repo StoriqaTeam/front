@@ -1,39 +1,24 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { linkTo } from '@storybook/addon-links'
+import { linkTo } from '@storybook/addon-links';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import ShowPassword from './ShowPassword';
 
 storiesOf('ShowPassword', module)
-  .add('Inactive', () => { // eslint-disable-line
-    return (
-      <div
-        style={{
-          position: 'relative',
-          width: '100px',
-          margin: '50px',
-        }}
-      >
-        <ShowPassword
-          show={false}
-          onClick={linkTo('ShowPassword', 'Active')}
-        />
-      </div>
-    );
-  })
-  .add('Active', () => { // eslint-disable-line
-    return (
-      <div
-        style={{
-          position: 'relative',
-          width: '100px',
-          margin: '50px',
-        }}
-      >
-        <ShowPassword
-          show
-          onClick={linkTo('ShowPassword', 'Inactive')}
-        />
-      </div>
-    );
-  });
+  .add('Inactive', () => (
+    <StoriesDecorator>
+      <ShowPassword
+        show={false}
+        onClick={linkTo('ShowPassword', 'Active')}
+      />
+    </StoriesDecorator>
+  ))
+  .add('Active', () => (
+    <StoriesDecorator>
+      <ShowPassword
+        show
+        onClick={linkTo('ShowPassword', 'Inactive')}
+      />
+    </StoriesDecorator>
+  ));

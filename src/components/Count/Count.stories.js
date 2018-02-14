@@ -1,43 +1,32 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Count } from 'components/Count';
 
 storiesOf('Count', module)
   .add('Blue & two symbols', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Count
         amount={32}
         styles="blue"
       />
-    </div>
+    </StoriesDecorator>
   ))
   .add('Green & three symbols', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Count
         amount={321}
         styles="green"
       />
-    </div>
+    </StoriesDecorator>
   ))
   .add('For messages', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Count
         tip
         amount={321}
         styles="blue"
       />
-    </div>
+    </StoriesDecorator>
   ));

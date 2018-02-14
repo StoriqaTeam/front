@@ -5,12 +5,16 @@ import { CardProduct } from 'components/CardProduct';
 
 import './Slider.scss';
 
-class Slider extends PureComponent {
+type PropsTypes = {
+  items: Array<{}>,
+};
+
+class Slider extends PureComponent<PropsTypes> {
   render() {
     return (
       <div styleName="container">
         <SliderContainer {...this.props}>
-          {this.props.items.map(item => ( // eslint-disable-line
+          {this.props.items.map(item => (
             <CardProduct
               key={item.id}
               data={item}

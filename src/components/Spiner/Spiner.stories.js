@@ -1,36 +1,22 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Spiner } from 'components/Spiner';
 
 storiesOf('Spiner', module)
   .add('Size 16', () => (
-    <div
-      style={{
-        position: 'relative',
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Spiner size={16} />
-    </div>
+    </StoriesDecorator>
   ))
   .add('Size 24', () => (
-    <div
-      style={{
-        position: 'relative',
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Spiner size={24} />
-    </div>
+    </StoriesDecorator>
   ))
   .add('Size 32', () => (
-    <div
-      style={{
-        position: 'relative',
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Spiner size={32} />
-    </div>
+    </StoriesDecorator>
   ));

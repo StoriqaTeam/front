@@ -1,19 +1,16 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Checkbox } from 'components/Checkbox';
 
 storiesOf('Checkbox', module)
   .add('Default', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
+    <StoriesDecorator>
       <Checkbox
         id="katya_ivanova"
         label="Katya Ivanova"
         handleCheckboxChange={() => {}}
       />
-    </div>
+    </StoriesDecorator>
   ));

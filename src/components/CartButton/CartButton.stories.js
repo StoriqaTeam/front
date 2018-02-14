@@ -1,16 +1,17 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import { StoriesDecorator } from 'components/StoriesDecorator';
 import { CartButton } from 'components/CartButton';
 
 storiesOf('Cart button', module)
   .add('With goods', () => (
-    <div style={{ margin: '50px' }}>
+    <StoriesDecorator>
       <CartButton amount={32} />
-    </div>
+    </StoriesDecorator>
   ))
   .add('Without goods', () => (
-    <div style={{ margin: '50px' }}>
+    <StoriesDecorator>
       <CartButton href="#" />
-    </div>
+    </StoriesDecorator>
   ));
