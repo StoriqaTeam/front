@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { specs, validate } from '@storiqa/validation_specs';
 
 import { log } from 'utils';
 import { UpdateUserMutation } from 'relay/mutations';
@@ -30,6 +31,11 @@ type PropsTypes = {
 
 class Profile extends PureComponent<PropsTypes> {
   handleSave = (data: {}) => {
+    const { isValid, errors } = validate(specs.profile, data);
+    console.log({isValid, errors})
+    if (errors) {
+      log.error({ errors });
+    }
     UpdateUserMutation.commit({
       input: {
         clientMutationId: '',

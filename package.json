@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@storiqa/validation_specs": "file:/Users/ilya/dev/storiqa/shared/validation",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
