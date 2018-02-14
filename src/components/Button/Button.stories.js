@@ -1,13 +1,16 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { boolean } from '@storybook/addon-knobs';
+import { withKnobs, boolean } from '@storybook/addon-knobs';
 
 import { Icon } from 'components/Icon';
 
 import Button from './Button';
 
-storiesOf('Button', module)
+const stories = storiesOf('Button', module);
+stories.addDecorator(withKnobs);
+
+stories
   .add('Default', () => (
     <div
       style={{
