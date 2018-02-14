@@ -18,10 +18,12 @@
 }
 
 .iconic {
-  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40px;
   color: #505050;
   font-size: 14px;
-  line-height: 40px;
   background-color: #F7F7F7;
 }
 

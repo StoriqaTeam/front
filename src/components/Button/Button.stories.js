@@ -18,19 +18,10 @@ stories
         width: '200px',
       }}
     >
-      <Button onClick={action('click')}>
-        <span>Storiqa</span>
-      </Button>
-    </div>
-  ))
-  .add('Disabled', () => (
-    <div
-      style={{
-        margin: '50px',
-        width: '200px',
-      }}
-    >
-      <Button disabled={boolean('Disabled', false)}>
+      <Button
+        disabled={boolean('Disabled', false)}
+        onClick={action('click')}
+      >
         <span>Storiqa</span>
       </Button>
     </div>

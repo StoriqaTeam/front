@@ -1,17 +1,38 @@
 import React from 'react';
-import { action, decorateAction } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
-import { boolean } from '@storybook/addon-knobs';
+import { linkTo } from '@storybook/addon-links'
 
 import ShowPassword from './ShowPassword';
 
 storiesOf('ShowPassword', module)
-  .add('triggers "onClick" event', () => { // eslint-disable-line
+  .add('Inactive', () => { // eslint-disable-line
     return (
-      <div style={{ position: 'relative', top: 30, width: 100 }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100px',
+          margin: '50px',
+        }}
+      >
         <ShowPassword
-          show={boolean('Is show', false)}
-          onClick={action('click')}
+          show={false}
+          onClick={linkTo('ShowPassword', 'Active')}
+        />
+      </div>
+    );
+  })
+  .add('Active', () => { // eslint-disable-line
+    return (
+      <div
+        style={{
+          position: 'relative',
+          width: '100px',
+          margin: '50px',
+        }}
+      >
+        <ShowPassword
+          show
+          onClick={linkTo('ShowPassword', 'Inactive')}
         />
       </div>
     );
