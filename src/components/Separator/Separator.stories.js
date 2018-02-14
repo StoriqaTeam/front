@@ -4,14 +4,13 @@ import { storiesOf } from '@storybook/react';
 import Separator from './Separator';
 
 storiesOf('Separator', module)
-  .add('with "text" ', () => (
-    <Separator
-      text="or"
-    />
-  ))
-  .add('with "marginBottom" ', () => (
-    <Separator
-      text="or"
-      marginBottom="30"
-    />
+  .add('Default', () => (
+    <div
+      style={{
+        margin: '50px',
+        width: '336px',
+      }}
+    >
+      <Separator text="or" />
+    </div>
   ));

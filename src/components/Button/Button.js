@@ -34,12 +34,16 @@ class Button extends PureComponent<PropsTypes> {
       children,
     };
 
-    const styleName = classNames('container', { iconic });
+    const styleName = classNames('container', iconic && 'iconic', disabled && 'disabled');
 
     if (href) {
       return (<a styleName={styleName} {...props}>{children}</a>);
     }
-    return (<button styleName={styleName} {...props} />);
+    return (<button
+      styleName={styleName}
+      disabled={disabled}
+      {...props}
+    />);
   }
 }
 

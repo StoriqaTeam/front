@@ -11,6 +11,7 @@ storiesOf('Checkbox', module)
       }}
     >
       <Checkbox
+        id="katya_ivanova"
         label="Katya Ivanova"
         handleCheckboxChange={() => {}}
       />
