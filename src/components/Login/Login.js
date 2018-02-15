@@ -2,45 +2,57 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter, routerShape } from 'found';
+import { withRouter, routerShape } from 'found';
 import { pathOr } from 'ramda';
 import Cookies from 'universal-cookie';
 
+import { Icon } from 'components/Icon';
+import { Button } from 'components/Button';
+import { Header, Input, Separator } from 'components/Registration';
+import { Checkbox } from 'components/Checkbox';
+import { Spiner } from 'components/Spiner';
+
 import { log } from 'utils';
 import { GetJWTByEmailMutation } from 'relay/mutations';
+
+import './Login.scss';
 
 type PropsType = {
   router: routerShape,
 };
 
 type StateType = {
-  login: string,
+  username: string,
+  usernameValid: boolean,
   password: string,
+  passwordValid: boolean,
+  formValid: boolean,
+  autocomplete: boolean,
+  errors: ?Array<string>,
+  isLoad: boolean,
 };
 
 class Login extends Component<PropsType, StateType> {
   state: StateType = {
-    login: 'test@test.test',
-    password: 'test',
+    username: '',
+    usernameValid: false,
+    password: '',
+    passwordValid: false,
+    formValid: false,
+    autocomplete: false,
+    isLoad: false,
+    errors: null,
   };
 
-  handleInputChange = (e: Object) => {
-    const { target } = e;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleSubmitClick = () => {
-    const { login, password } = this.state;
+  handleLoginClick = () => {
+    this.setState({ isLoad: true });
+    const { username, password } = this.state;
     GetJWTByEmailMutation.commit({
-      login,
+      email: username,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        this.setState({ isLoad: false });
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
@@ -53,9 +65,27 @@ class Login extends Component<PropsType, StateType> {
         }
       },
       onError: (error: Error) => {
+        this.setState({
+          isLoad: false,
+          errors: pathOr(null, ['source', 'errors'], error),
+        });
         log.error({ error });
       },
     });
+  };
+
+  handleChange = (data: { name: string, value: any, validity: boolean }) => {
+    const { name, value, validity } = data;
+    this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
+  };
+
+  validateForm = () => {
+    const { usernameValid, passwordValid } = this.state;
+    this.setState({ formValid: usernameValid && passwordValid });
+  };
+
+  handleCheckboxChange = () => {
+    this.setState({ autocomplete: !this.state.autocomplete });
   };
 
   facebookLoginString = () => {
@@ -77,56 +107,90 @@ class Login extends Component<PropsType, StateType> {
   };
 
   render() {
-    log.debug('Login render', { props: this.props });
-    return (
-      <div>
-        <form>
-          <label htmlFor="login">
-            Login
-            <br />
-            <input
-              name="login"
-              type="text"
-              value={this.state.login}
-              onChange={this.handleInputChange}
-            />
-          </label>
-          <br />
-          <label htmlFor="password">
-            Password
-            <br />
-            <input
-              name="password"
-              type="password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
-            />
-          </label>
-          <br />
-          <button
-            type="button"
-            onClick={this.handleSubmitClick}
-          >
-            Login
-          </button>
-        </form>
-        <br />
-        <br />
-        <a
-          href={this.facebookLoginString()}
-        >
-          Facebook login
-        </a>
-        <br />
-        <a
-          href={this.googleLoginString()}
-        >
-          Google login
-        </a>
-        <br />
-        <br />
-        <Link to="/registration">Register</Link>
+    const {
+      username,
+      password,
+      formValid,
+      autocomplete,
+      isLoad,
+      errors,
+    } = this.state;
+
+    const signIn = (
+      <div styleName="signInGroup">
+        <div styleName="signInButton">
+          <Button onClick={this.handleLoginClick} type="button">
+            <span>Sign In</span>
+          </Button>
+        </div>
+        <div styleName="signInCheckbox">
+          <Checkbox
+            id="login"
+            label="Remember Me"
+            isChecked={autocomplete}
+            handleCheckboxChange={this.handleCheckboxChange}
+          />
+        </div>
       </div>
+    );
+
+    return (
+      <form styleName="container">
+        {isLoad && (
+          <div styleName="spiner">
+            <Spiner size={32} />
+          </div>
+        )}
+        <Header
+          title="Sign In"
+          linkTitle="Sign Up"
+          link="/registration"
+        />
+        <div styleName="inputBlock">
+          <Input
+            label="Username"
+            name="username"
+            type="text"
+            model={username}
+            onChange={this.handleChange}
+            autocomplete={autocomplete}
+          />
+        </div>
+        <div styleName="inputBlock">
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            model={password}
+            validate="password"
+            onChange={this.handleChange}
+            autocomplete={autocomplete}
+            errors={errors}
+          />
+        </div>
+        {formValid && signIn}
+        <div className="separatorBlock">
+          <Separator text="or" />
+        </div>
+        <div styleName="firstButtonBlock">
+          <Button
+            iconic
+            href={this.facebookLoginString()}
+          >
+            <Icon type="facebook" />
+            <span>Sign In with Facebook</span>
+          </Button>
+        </div>
+        <div>
+          <Button
+            iconic
+            href={this.googleLoginString()}
+          >
+            <Icon type="google" />
+            <span>Sign In with Google</span>
+          </Button>
+        </div>
+      </form>
     );
   }
 }

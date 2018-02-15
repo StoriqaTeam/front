@@ -13,18 +13,22 @@ class Checkbox extends PureComponent<PropsTypes> {
   handleCheckboxChange = () => {
     const { id, handleCheckboxChange } = this.props;
     handleCheckboxChange(id);
-  };
+  }
 
   render() {
-    const { label, isChecked } = this.props;
+    const { id, label, isChecked } = this.props;
     return (
       <div styleName="container">
         <input
+          styleName="input"
+          id={id}
           type="checkbox"
           checked={isChecked}
           onChange={this.handleCheckboxChange}
         />
-        <span styleName="label">{label}</span>
+        <label htmlFor={id} styleName="label">
+          <span styleName="labelText">{label}</span>
+        </label>
       </div>
     );
   }

@@ -106,4 +106,5 @@ function validateField(name, value, validate, errorMessage) {
 export default {
   validateField,
   isCapsLockOn,
+  setErrorMessage,
 };

@@ -12,7 +12,7 @@ const mutation = graphql`
 `;
 
 type MutationParamsType = {
-  login: string,
+  email: string,
   password: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
@@ -24,7 +24,7 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
   variables: {
     input: {
       clientMutationId: '',
-      email: params.login,
+      email: params.email,
       password: params.password,
     },
   },
