@@ -1,12 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Icon } from 'components/Icon';
 
 storiesOf('Icons', module)
-  .add('Person', () => (
-    <StoriesDecorator type="icons">
+  .add('All', () => (
+    <div>
       <div><Icon type="person" size="32" /><br />person</div>
       <div><Icon type="cart" size="32" /><br />cart</div>
       <div><Icon type="prev" size="32" /><br />prev</div>
@@ -17,5 +16,5 @@ storiesOf('Icons', module)
       <div><Icon type="spiner" size="32" /><br />spiner</div>
       <div><Icon type="facebook" size="32" /><br />facebook</div>
       <div><Icon type="google" size="32" /><br />google</div>
-    </StoriesDecorator>
+    </div>
   ));
