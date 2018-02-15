@@ -45,7 +45,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { errors = {} } = this.props;
+    // flow не умеет в `const { errors = {} } = this.props`
+    // ругается на записи типа `errors.phone`
+    const { errors: errorsFromProps } = this.props;
+    const errors: any = errorsFromProps || {};
     return (
       <div styleName="container">
         <Text

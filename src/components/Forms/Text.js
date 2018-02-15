@@ -8,7 +8,7 @@ type PropsType = {
   id: string,
   value: string,
   label: string,
-  errors: Array<string>,
+  errors: ?Array<string>,
   onChange: Function,
 };
 
