@@ -1,0 +1,33 @@
+.container {
+  display: inline-block;
+  width: 100%;
+  min-width: 128px;
+  padding: 0 16px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 32px;
+  background: #2FBAFD;
+  cursor: pointer;
+}
+
+.disabled {
+  background: #EFEFEF;
+  color: #FFFFFF;
+  cursor: default;
+}
+
+.iconic {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40px;
+  color: #505050;
+  font-size: 14px;
+  background-color: #F7F7F7;
+}
+
+.iconic > *:first-child {
+  display: inline-block;
+  margin-right: 8px;
+}

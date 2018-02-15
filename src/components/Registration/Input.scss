@@ -1,0 +1,59 @@
+.root {
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid #A7A7A7;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: left;
+  background-color: transparent;
+  z-index: 2;
+
+  &:focus {
+    border-bottom: 1px solid #505050;
+  }
+}
+
+.validInput {
+  border-bottom: 1px solid #9FC63C;
+}
+
+.invalidInput {
+  border-bottom: 1px solid #FD7DAA;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #A7A7A7;
+  font-size: 14px;
+  line-height: 16px;
+  transition: all .3s ease;
+  z-index: 1;
+}
+
+.labelFloat {
+  top: -16px;
+  font-size: 10px;
+}
+
+.message {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  color: #FF62A4;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.errors {
+  position: relative;
+  margin-top: 4px;
+  color: #FF62A4;
+  font-size: 10px;
+  text-align: left;
+}
+
+.error {
+  position: relative;
+}

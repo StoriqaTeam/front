@@ -1,20 +1,50 @@
+// @flow
+
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import type { Node } from 'react';
+import classNames from 'classnames';
 
-class Button extends PureComponent {
-  static defaultProps = {
-    onClick: () => {},
-  };
+import './Button.scss';
 
+type PropsTypes = {
+  children: Node,
+  type: string,
+  onClick: ?Function,
+  disabled: boolean,
+  iconic: boolean,
+  href: ?string,
+};
+
+class Button extends PureComponent<PropsTypes> {
   render() {
-    const { title, onClick } = this.props;
-    return <button type="button" onClick={onClick}>{title}</button>;
+    const {
+      type,
+      onClick,
+      disabled,
+      children,
+      iconic,
+      href,
+    } = this.props;
+
+    const props = {
+      type,
+      disabled,
+      onClick,
+      href,
+      children,
+    };
+
+    const styleName = classNames('container', iconic && 'iconic', disabled && 'disabled');
+
+    if (href) {
+      return (<a styleName={styleName} {...props}>{children}</a>);
+    }
+    return (<button
+      styleName={styleName}
+      disabled={disabled}
+      {...props}
+    />);
   }
 }
-
-Button.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
 
 export default Button;

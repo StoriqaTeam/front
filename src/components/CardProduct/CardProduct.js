@@ -51,7 +51,7 @@ class CardProduct extends PureComponent<PropsTypes> {
               </div>
               }
               {qualityAssurance &&
-              <div styleName="qa">
+              <div styleName="qa-icon">
                 <Icon type="qa" size="24" />
               </div>
               }
@@ -61,7 +61,7 @@ class CardProduct extends PureComponent<PropsTypes> {
             <div styleName="title">{title}</div>
             <div styleName="price">
               <div styleName="left">
-                <div styleName="actual-price">
+                <div styleName="left-actual-price">
                   <b>{formatPrice(prices.btc.actualPrice)}</b> {prices.btc.charCode}
                 </div>
                 <div styleName="undiscounted-price">
@@ -72,7 +72,7 @@ class CardProduct extends PureComponent<PropsTypes> {
                 <div styleName="price-discount">
                   {`-${prices.stq.discount}%`}
                 </div>
-                <div styleName="actual-price">
+                <div styleName="right-actual-price">
                   {prices.stq.charCode} {formatPrice(prices.stq.actualPrice)}
                 </div>
               </div>

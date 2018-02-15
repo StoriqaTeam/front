@@ -1,0 +1,27 @@
+.container {
+  margin-bottom: 16px;
+  border: 0;
+  color: black;
+  position: relative;
+  text-align: center;
+}
+
+.container:before {
+  background: #E2E2E2;
+  content: '';
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
+
+.container:after {
+  font-size: 14px;
+  background: #FFFFFF;
+  color: #505050;
+  content: attr(text);
+  display: inline-block;
+  padding: 0 8px;
+  position: relative;
+}
