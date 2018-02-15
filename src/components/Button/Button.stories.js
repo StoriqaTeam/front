@@ -3,7 +3,6 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 
-// import { StoriesDecorator } from 'components/StoriesDecorator';
 import { Icon } from 'components/Icon';
 
 import Button from './Button';
