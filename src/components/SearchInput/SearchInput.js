@@ -1,5 +1,7 @@
 // @flow
 
+// this component in development (WIP)
+
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { filter, startsWith, toUpper } from 'ramda';
@@ -10,22 +12,16 @@ import { DropdownSelect } from 'components/DropdownSelect';
 import SearchIcon from './svg/search.svg';
 import './SearchInput.scss';
 
-type PropsType = {};
+type PropsType = {
+  items: ?Array<any>,
+  searchCategories: ?Array<any>
+};
 
 type StateType = {
   inputValue: string,
   items: Array<any>,
   searchCategoryId: ?number,
 };
-
-const data: Array<{id: number, label: string}> = [
-  { id: 1, label: 'asdfСтол' },
-  { id: 2, label: 'asdfСтол письменный' },
-  { id: 3, label: 'asdfСтол журнальный' },
-  { id: 4, label: 'asdfСтул' },
-  { id: 5, label: 'asdfСтул 1' },
-  { id: 6, label: 'asdfСтул 2' },
-];
 
 class SearchInput extends Component<PropsType, StateType> {
   state = {
@@ -43,8 +39,11 @@ class SearchInput extends Component<PropsType, StateType> {
       this.setState(() => ({ items: [] }));
     } else {
       setTimeout(() => {
-        const result = filter(item => startsWith(toUpper(value), toUpper(item.label)), data);
-        this.setState(() => ({ items: result }));
+        const result = filter(
+          item => startsWith(toUpper(value), toUpper(item.label)),
+          this.props.items,
+        );
+        this.setState({ items: result });
       }, 300);
     }
   };
@@ -59,11 +58,7 @@ class SearchInput extends Component<PropsType, StateType> {
         <div styleName="searchCategorySelect">
           <DropdownSelect
             namePrefix="search"
-            items={[
-              { id: 1, label: 'Shops' },
-              { id: 2, label: 'Products' },
-              { id: 3, label: 'All' },
-            ]}
+            items={this.props.searchCategories}
             onDropdownSelect={this.handleSearchDropdownSelect}
           />
         </div>
