@@ -58,7 +58,7 @@ class SearchInput extends Component<PropsType, StateType> {
         <div styleName="searchCategorySelect">
           <DropdownSelect
             namePrefix="search"
-            items={this.props.searchCategories}
+            items={this.props.searchCategories || []}
             onDropdownSelect={this.handleSearchDropdownSelect}
           />
         </div>
