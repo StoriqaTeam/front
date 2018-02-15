@@ -5,12 +5,8 @@ import { CartButton } from 'components/CartButton';
 
 storiesOf('Cart button', module)
   .add('With goods', () => (
-    <div style={{ margin: '50px' }}>
-      <CartButton amount={32} />
-    </div>
+    <CartButton amount={32} />
   ))
   .add('Without goods', () => (
-    <div style={{ margin: '50px' }}>
-      <CartButton href="#" />
-    </div>
+    <CartButton href="#" />
   ));

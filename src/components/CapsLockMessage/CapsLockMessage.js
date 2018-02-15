@@ -1,12 +1,16 @@
-import React from 'react';
+// @flow
 
-import { Tooltip } from 'components/Tooltip';
+import React from 'react';
 
 import './CapsLockMessage.scss';
 
-const CapsLockMessage = () => (
+type PropTypes = {
+  text: string
+};
+
+const CapsLockMessage = (props: PropTypes) => (
   <div styleName="container">
-    <Tooltip text="CAPS LOCK is on" />
+    { props.text }
   </div>
 );
 

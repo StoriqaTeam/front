@@ -1,0 +1,48 @@
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding-top: 50px;
+}
+
+.cell {
+  position: relative;
+}
+
+/* CARD PRODUCT */
+
+.cardProduct {
+  width: 350px;
+  margin: 0 auto;
+}
+
+.cardProduct .cell {
+  width: 100%;
+}
+
+/* ICONS */
+
+.icons .cell > div > * {
+  display: inline-block;
+  width: 70px;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.icons .cell > div > * > * {
+  display: inline-block;
+}
+
+/* SLIDER */
+
+.slider {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.slider .cell {
+  width: 100%;
+}

@@ -11,29 +11,19 @@
   cursor: pointer;
 }
 
-.buttonProvider {
-  padding: 14px 0 14px 45px;
-  color: #505050;
-  text-align: left;
-  background: #F7F7F7;
-}
-
-.signUp {
-  padding: 12px 0;
-  color: #fff;
-  background: #2FBAFD;
-
-  &:disabled {
-    background: #EFEFEF !important;
-    color: #fff !important;
-  }
+.disabled {
+  background: #EFEFEF;
+  color: #FFFFFF;
+  cursor: default;
 }
 
 .iconic {
-  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40px;
   color: #505050;
   font-size: 14px;
-  line-height: 40px;
   background-color: #F7F7F7;
 }
 
