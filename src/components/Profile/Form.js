@@ -13,6 +13,7 @@ import './Form.scss';
 type PropsType = {
   onSaveClick: Function,
   profileData: {},
+  errors: ?{}
 };
 
 type StateType = {
@@ -45,6 +46,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { errors = {} } = this.props;
     return (
       <div styleName="container">
         <Text
@@ -52,6 +54,7 @@ class Form extends Component<PropsType, StateType> {
           label="Phone"
           value={this.state.form.phone || ''}
           onChange={this.handleInputChange('phone')}
+          errors={errors.phone}
         />
         <br />
         <Text
@@ -59,6 +62,7 @@ class Form extends Component<PropsType, StateType> {
           label="First name"
           value={this.state.form.firstName || ''}
           onChange={this.handleInputChange('firstName')}
+          errors={errors.firstName}
         />
         <br />
         <Text
@@ -66,6 +70,7 @@ class Form extends Component<PropsType, StateType> {
           label="Last name"
           value={this.state.form.lastName || ''}
           onChange={this.handleInputChange('lastName')}
+          errors={errors.lastName}
         />
         <br />
         <Text
@@ -73,6 +78,7 @@ class Form extends Component<PropsType, StateType> {
           label="Middle name"
           value={this.state.form.middleName || ''}
           onChange={this.handleInputChange('middleName')}
+          errors={errors.middleName}
         />
         <br />
         <RadioGroup
@@ -81,6 +87,7 @@ class Form extends Component<PropsType, StateType> {
           items={['MALE', 'FEMALE', 'UNDEFINED'].map(val => ({ id: val, value: val }))}
           checked={this.state.form.gender}
           onChange={this.handleInputChange('gender')}
+          errors={errors.gender}
         />
         <br />
         <DatePicker
@@ -89,6 +96,7 @@ class Form extends Component<PropsType, StateType> {
             this.handleInputChange('birthdateRaw')(e);
           }}
           selected={this.state.form.birthdateRaw}
+          errors={errors.birthdate}
         />
         <br />
         <Checkbox
@@ -96,24 +104,12 @@ class Form extends Component<PropsType, StateType> {
           label="Is active"
           checked={!!this.state.form.isActive}
           onChange={this.handleInputChange('isActive')}
+          errors={errors.isActive}
         />
         <Button onClick={this.handleClick}>Save</Button>
       </div>
     );
   }
 }
-
-/*
-updateUser(
-  id: ID!
-  email: String!
-  phone: String = null
-  firstName: String = null
-  lastName: String = null
-  middleName: String = null
-  gender: Gender = null
-  birthdate: String = null
-): User!
-*/
 
 export default Form;

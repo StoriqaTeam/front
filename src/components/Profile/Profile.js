@@ -1,11 +1,11 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { specs, validate } from '@storiqa/validation_specs';
 
-import { log } from 'utils';
+import { log, fromRelayError } from 'utils';
 import { UpdateUserMutation } from 'relay/mutations';
 import { Form, UsersTable } from 'components/Profile';
 
@@ -29,13 +29,22 @@ type PropsTypes = {
   users: Array<GraphQLUserType>,
 };
 
-class Profile extends PureComponent<PropsTypes> {
+type StateType = {
+  formErrors: {},
+};
+
+class Profile extends Component<PropsTypes, StateType> {
+  state: StateType = {
+    formErrors: {},
+  };
+
   handleSave = (data: {}) => {
-    const { isValid, errors } = validate(specs.profile, data);
-    console.log({isValid, errors})
-    if (errors) {
-      log.error({ errors });
+    const { errors: formErrors } = validate(specs.profile, data);
+    if (formErrors) {
+      this.setState({ formErrors });
+      return;
     }
+    this.setState({ formErrors: {} });
     UpdateUserMutation.commit({
       input: {
         clientMutationId: '',
@@ -43,16 +52,17 @@ class Profile extends PureComponent<PropsTypes> {
         ...data,
       },
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-        log.debug({ response, errors });
+      onCompleted: (response: ?Object, mutationErrors: ?Array<Error>) => {
+        log.debug({ response, mutationErrors });
       },
       onError: (error: Error) => {
-        log.debug({ error });
+        alert(JSON.stringify(fromRelayError(error))); // TODO: move to more appropriate place
       },
     });
   };
   render() {
     const { admin, users } = this.props;
+    const { formErrors } = this.state;
     return (
       <div styleName="container">
         Profile settings {admin && '(admin)'}<br /><br />
@@ -61,6 +71,7 @@ class Profile extends PureComponent<PropsTypes> {
           <Form
             onSaveClick={this.handleSave}
             profileData={this.props.me || {}}
+            errors={formErrors}
           />
         )}
       </div>
