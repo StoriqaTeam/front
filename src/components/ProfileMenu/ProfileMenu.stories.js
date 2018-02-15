@@ -8,20 +8,8 @@ import profile2 from './profile_without_avatar.json';
 
 storiesOf('ProfileMenu', module)
   .add('With avatar', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
-      <ProfileMenu profile={profile1} />
-    </div>
+    <ProfileMenu profile={profile1} />
   ))
   .add('Without avatar', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
-      <ProfileMenu profile={profile2} />
-    </div>
+    <ProfileMenu profile={profile2} />
   ));

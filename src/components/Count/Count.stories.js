@@ -5,39 +5,21 @@ import { Count } from 'components/Count';
 
 storiesOf('Count', module)
   .add('Blue & two symbols', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
-      <Count
-        amount={32}
-        styles="blue"
-      />
-    </div>
+    <Count
+      amount={32}
+      styles="blue"
+    />
   ))
   .add('Green & three symbols', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
-      <Count
-        amount={321}
-        styles="green"
-      />
-    </div>
+    <Count
+      amount={321}
+      styles="green"
+    />
   ))
   .add('For messages', () => (
-    <div
-      style={{
-        margin: '50px',
-      }}
-    >
-      <Count
-        tip
-        amount={321}
-        styles="blue"
-      />
-    </div>
+    <Count
+      tip
+      amount={321}
+      styles="blue"
+    />
   ));

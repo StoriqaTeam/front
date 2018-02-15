@@ -1,5 +1,20 @@
 .container {
+  position: relative;
+  display: inline-block;
+  padding: 0 16px 0 8px;
+  color: #FFFFFF;
+  font-size: 12px;
+  line-height: 24px;
+  background-color: #FF62A4;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
+}
+
+.container:before {
+  content: '';
   position: absolute;
-  right: -43%;
   top: 0;
+  left: -24px;
+  display: block;
+  border: 12px solid transparent;
+  border-right: 12px solid #FF62A4;
 }

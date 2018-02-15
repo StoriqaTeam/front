@@ -86,9 +86,9 @@
     react-inspector "^2.2.2"
     uuid "^3.1.0"
 
-"@storybook/addon-knobs@^3.3.9":
-  version "3.3.9"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-knobs/-/addon-knobs-3.3.9.tgz#855575557868a97c00ce8de8e2e6960f1580f21c"
+"@storybook/addon-knobs@^3.3.13":
+  version "3.3.13"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-knobs/-/addon-knobs-3.3.13.tgz#21e1bf22dfb83a62c74223f6e01620225dbff219"
   dependencies:
     babel-runtime "^6.26.0"
     deep-equal "^1.0.1"
@@ -107,6 +107,14 @@
   resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-3.2.17.tgz#fb1d5f5f16575e56d560955d70c2a756c9f5b612"
   dependencies:
     "@storybook/addons" "^3.2.17"
+
+"@storybook/addon-links@^3.3.13":
+  version "3.3.13"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-3.3.13.tgz#ea27db37e609a9036e4e6164ed52edf768b99eef"
+  dependencies:
+    "@storybook/components" "^3.3.13"
+    global "^4.3.2"
+    prop-types "^15.5.10"
 
 "@storybook/addons@^3.2.17":
   version "3.2.17"
@@ -130,6 +138,14 @@
   dependencies:
     glamor "^2.20.40"
     glamorous "^4.11.0"
+    prop-types "^15.6.0"
+
+"@storybook/components@^3.3.13":
+  version "3.3.13"
+  resolved "https://registry.yarnpkg.com/@storybook/components/-/components-3.3.13.tgz#003addacf9c98d61a35246eb7c76908d38d323c4"
+  dependencies:
+    glamor "^2.20.40"
+    glamorous "^4.11.2"
     prop-types "^15.6.0"
 
 "@storybook/mantra-core@^1.7.0":
@@ -2975,6 +2991,10 @@ dom-helpers@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.3.1.tgz#fc1a4e15ffdf60ddde03a480a9c0fece821dd4a6"
 
+dom-scroll-into-view@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/dom-scroll-into-view/-/dom-scroll-into-view-1.0.1.tgz#32abb92f0d8feca6215162aef43e4b449ab8d99c"
+
 dom-serializer@0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-0.1.0.tgz#073c697546ce0780ce23be4a28e293e40bc30c82"
@@ -4084,6 +4104,18 @@ glamor@^2.20.40:
 glamorous@^4.11.0:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.11.0.tgz#cb846dda1450c895c59a34060fb19e3251ed619f"
+  dependencies:
+    brcast "^3.0.0"
+    fast-memoize "^2.2.7"
+    html-tag-names "^1.1.1"
+    is-function "^1.0.1"
+    is-plain-object "^2.0.4"
+    react-html-attributes "^1.3.0"
+    svg-tag-names "^1.1.0"
+
+glamorous@^4.11.2:
+  version "4.11.4"
+  resolved "https://registry.yarnpkg.com/glamorous/-/glamorous-4.11.4.tgz#61b333e1ec552abbe48e2fea48fea89fc0026149"
   dependencies:
     brcast "^3.0.0"
     fast-memoize "^2.2.7"
@@ -7416,6 +7448,13 @@ rc@^1.1.2:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-autocomplete@^1.7.2:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/react-autocomplete/-/react-autocomplete-1.8.1.tgz#ebbbc400006aa91ad538b2d14727b9e7e5d06310"
+  dependencies:
+    dom-scroll-into-view "1.0.1"
+    prop-types "^15.5.10"
 
 react-color@^2.11.4:
   version "2.13.8"
