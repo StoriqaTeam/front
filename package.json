@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@storybook/addon-links": "^3.3.13",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
@@ -15,6 +14,7 @@
     "prop-types": "^15.6.0",
     "ramda": "^0.25.0",
     "react": "^16.2.0",
+    "react-autocomplete": "^1.7.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-relay": "^1.4.1",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@storybook/addon-actions": "^3.3.9",
     "@storybook/addon-knobs": "^3.3.13",
+    "@storybook/addon-links": "^3.3.13",
     "@storybook/react": "^3.2.17",
     "autoprefixer": "7.1.6",
     "babel-cli": "^6.26.0",
