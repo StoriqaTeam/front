@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { assocPath, omit, pick } from 'ramda';
 import DatePicker from 'react-datepicker';
 
-// import { log } from 'utils';
 import { Button } from 'components/Button';
 import { Text, Checkbox, RadioGroup } from 'components/Forms';
 

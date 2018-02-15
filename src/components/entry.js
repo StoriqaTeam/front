@@ -4,15 +4,12 @@ import React from 'react';
 import { createProvider as createReduxProvider } from 'react-redux';
 import { getStoreRenderArgs } from 'found/lib';
 import { BrowserProtocol } from 'farce';
-// import { installRelayDevTools } from 'relay-devtools'; // eslint-disable-line
 import createReduxStore from 'redux/createReduxStore';
 import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 import createResolver from 'relay/createResolver';
 import { ClientFetcher } from 'relay/fetcher';
 
 import '../index.scss';
-
-// installRelayDevTools();
 
 // eslint-disable-next-line
 const store = createReduxStore(new BrowserProtocol(), window.__PRELOADED_STATE__ || {});
