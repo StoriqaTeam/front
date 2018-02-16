@@ -13,6 +13,8 @@ type PropsTypes = {
   disabled: boolean,
   iconic: boolean,
   href: ?string,
+  isDefault?: boolean,
+  wireframe?: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -24,6 +26,8 @@ class Button extends PureComponent<PropsTypes> {
       children,
       iconic,
       href,
+      isDefault,
+      wireframe,
     } = this.props;
 
     const props = {
@@ -34,7 +38,7 @@ class Button extends PureComponent<PropsTypes> {
       children,
     };
 
-    const styleName = classNames('container', iconic && 'iconic', disabled && 'disabled');
+    const styleName = classNames('container', { iconic, disabled, isDefault, wireframe });
 
     if (href) {
       return (<a styleName={styleName} {...props}>{children}</a>);

@@ -1,3 +1,13 @@
 .container {
   height: 12rem;
+  background-color: #fff;
+  display: flex;
+  align-items: flex-end;
+}
+
+.logo {
+  width: 26rem;
+  height: 4rem;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
 }
