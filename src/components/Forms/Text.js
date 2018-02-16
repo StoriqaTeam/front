@@ -9,11 +9,12 @@ type PropsType = {
   value: string,
   label: string,
   errors: ?Array<string>,
-  onChange: (e: {target: { value: ?string }}) => void,
+  // $FlowIgnore
+  onChange: (e: {target: { value: ?any }}) => void,
 };
 
 class Text extends PureComponent<PropsType> {
-  handleChange = (e: {target: { value: ?string }}) => {
+  handleChange = (e: {target: { value: ?any }}) => {
     this.props.onChange(e.target.value);
   };
 
