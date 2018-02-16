@@ -4,7 +4,6 @@ import React from 'react';
 import { createProvider as createReduxProvider } from 'react-redux';
 import { getStoreRenderArgs } from 'found/lib';
 import { BrowserProtocol } from 'farce';
-
 import createReduxStore from 'redux/createReduxStore';
 import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 import createResolver from 'relay/createResolver';

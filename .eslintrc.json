@@ -19,7 +19,8 @@
     "import/no-extraneous-dependencies": [
       "error",
       {"devDependencies": ["**/*.test.js", "**/*.stories.js"]}
-    ]
+    ],
+    "import/prefer-default-export": 0
   },
   "settings": {
     "import/resolver": {

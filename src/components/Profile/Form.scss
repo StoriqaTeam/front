@@ -1,0 +1,15 @@
+@import "react-datepicker/dist/react-datepicker-cssmodules.css";
+
+.container {
+  position: relative;
+}
+
+.input {
+  border: 1px #000 solid;
+}
+
+.react-datepicker-wrapper {
+  input {
+    border: 1px #000 solid;
+  }
+}

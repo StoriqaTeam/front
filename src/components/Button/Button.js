@@ -42,6 +42,7 @@ class Button extends PureComponent<PropsTypes> {
     return (<button
       styleName={styleName}
       disabled={disabled}
+      type="button"
       {...props}
     />);
   }

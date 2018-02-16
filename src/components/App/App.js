@@ -53,6 +53,7 @@ export default createRefetchContainer(
   App,
   graphql`
     fragment App_me on User {
+      ...Profile_me
       id
     }
   `,

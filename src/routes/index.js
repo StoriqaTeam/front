@@ -8,8 +8,8 @@ import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
-import { Profile } from 'components/Profile';
 import { Registration } from 'components/Registration';
+import { Profile } from 'components/Profile';
 
 const routes = (
   <Route
@@ -30,7 +30,6 @@ const routes = (
         if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
           return <Component {...props} />;
         }
-        return null;
       }
       return <Component {...props} />;
     }}
