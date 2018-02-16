@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+}
+
+.item {
+  display: inline-block;
+  width: 300px;
+  margin-bottom: 30px;
+  font-size: 12px;
+}
+
+.var {
+  margin-bottom: 8px;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.box {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+}
+
+.desc {
+  margin-left: 8px;
+}
+
+.name {
+  position: relative;
+}
+
+.code {
+  position: relative;
+}
