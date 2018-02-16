@@ -2,19 +2,19 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { Text } from 'components/Forms';
+import { Input } from 'components/Forms';
 
-storiesOf('Forms/Text', module)
+storiesOf('Forms/Input', module)
   .add('default', () => (
-    <Text
+    <Input
       id="some_id"
       label="Name:"
-      value="test"
       onChange={action('text-change')}
+      withStateChanges
     />
   ))
   .add('with error', () => (
-    <Text
+    <Input
       id="some_id2"
       label="Name:"
       value="test"

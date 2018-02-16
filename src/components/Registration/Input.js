@@ -226,14 +226,14 @@ class Input extends PureComponent<PropsType, StateType> {
       isCapsLockOn,
       validity,
     } = this.state;
-    const inputLabel = (
-      <label
-        styleName={`label ${labelFloat || ''}`}
-        htmlFor={name}
-      >
-        { label }
-      </label>
-    );
+    // const inputLabel = (
+    //   <label
+    //     styleName={`label ${labelFloat || ''}`}
+    //     htmlFor={name}
+    //   >
+    //     { label }
+    //   </label>
+    // );
     const passwordButton = (
       <ShowPassword
         show={showPassword}
@@ -243,7 +243,7 @@ class Input extends PureComponent<PropsType, StateType> {
     const passwordHints = (
       <PasswordHints {...passwordQuality} />
     );
-    const inputLabelContent = (label) ? inputLabel : null;
+    // const inputLabelContent = (label) ? inputLabel : null;
     // Only when 'detectCapsLock', 'isCapsLockOn' are true
     const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? CapsLockMessage : null;
     // ONLY when type is password and showPasswordButton so the user can see the password is typing
@@ -268,7 +268,14 @@ class Input extends PureComponent<PropsType, StateType> {
           onKeyPress={this.handleKeyPress}
           placeholder={placeholder}
         />
-        { inputLabelContent }
+        {label &&
+          <label
+            styleName={`label ${labelFloat || ''}`}
+            htmlFor={name}
+          >
+            { label }
+          </label>
+        }
         <span styleName="message">
           { formError }
         </span>
