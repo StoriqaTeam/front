@@ -1,17 +1,18 @@
 // Colors
-$color_primary: #505050;
-$color_white: #ffffff;
-$color_grey: #A7A7A7;
-$color_blue: #2FBAFD;
+$color_primary: #2FBAFD;
 $color_pink: #FF508E;
+$color_green: #9FC63C;
+$color_grey_text: #505050;
+$color_grey_bg: #A7A7A7;
+$color_white: #FFFFFF;
 
 :global {
   .bgWhite { background-color: $color_white }
-  .bgBlue { background-color: $color_blue }
-  .bgGrey { background-color: $color_grey }
+  .bgBlue { background-color: $color_primary }
+  .bgGrey { background-color: $color_grey_bg }
   .bgPink { background-color: $color_pink }
   .colorWhite { color: $color_white }
-  .colorGrey { color: $color_grey }
+  .colorGrey { color: $color_grey_bg }
   .boxShadow1 { box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .16) }
 
   // fonts

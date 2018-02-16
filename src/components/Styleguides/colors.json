@@ -1,0 +1,27 @@
+[
+  {
+    "code": "#2FBAFD",
+    "name": "Storiqa blue",
+    "var": "$color_primary"
+  }, {
+    "code": "#FF508E",
+    "name": "Marked for sale/incorrect/error alert",
+    "var": "$color_pink"
+  }, {
+    "code": "#9FC63C",
+    "name": "Granted/online/correct",
+    "var": "$color_green"
+  }, {
+    "code": "#505050",
+    "name": "Font grey",
+    "var": "$color_grey_text"
+  }, {
+    "code": "#A7A7A7",
+    "name": "Background grey",
+    "var": "$color_grey_bg"
+  }, {
+    "code": "#FFFFFF",
+    "name": "White",
+    "var": "$color_white"
+  }
+]
