@@ -9,7 +9,7 @@ type PropsType = {
   value: string,
   label: string,
   errors: ?Array<string>,
-  onChange: Function,
+  onChange: (e: {target: { value: ?string }}) => void,
 };
 
 class Text extends PureComponent<PropsType> {
