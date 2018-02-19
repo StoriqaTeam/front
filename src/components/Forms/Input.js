@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+// import type { Node } from 'react';
 import classNames from 'classnames';
 
 import './Input.scss';
@@ -26,7 +27,9 @@ class Input extends Component<PropsType, StateType> {
     this.setState({ labelFloat: Boolean(this.props.value) });
   }
 
-  handleChange = (e: {target: { value: string }}) => {
+  input: ?HTMLInputElement;
+
+  handleChange = (e: any) => {
     this.props.onChange(e.target.value);
   };
 
@@ -35,20 +38,19 @@ class Input extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
-    this.setState({ labelFloat: this.props.value });
+    const { value } = this.props;
+    this.setState({ labelFloat: Boolean(value) && value.length > 0 });
   };
 
   render() {
     const {
       id,
-      name,
       value,
       label,
       errors,
     } = this.props;
 
     const {
-      value: stateValue,
       labelFloat,
     } = this.state;
 
@@ -63,15 +65,11 @@ class Input extends Component<PropsType, StateType> {
           id={id}
           name={id}
           type="text"
-          value={value || stateValue}
+          value={value}
           styleName="input"
           onChange={this.handleChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
-        />
-        <div
-          ref={(node) => { this.value = node; }}
-          styleName="value"
         />
         {errors && errors.length > 0 &&
           <div className="errors">
