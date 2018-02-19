@@ -1,7 +1,8 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
+// import { specs, validate } from '@storiqa/validation_specs';
 
 // import { log } from 'utils';
 
@@ -91,8 +92,8 @@ class Input extends Component<PropsType, StateType> {
         />
         {errors && errors.length > 0 &&
           <div className="errors">
-            {errors.map(item => (
-              <div styleName="error">{item}</div>
+            {errors.map((item, idx) => (
+              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
             ))}
           </div>
         }
