@@ -58,9 +58,9 @@
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@hypnosphi/fuse.js/-/fuse.js-3.0.9.tgz#ea99f6121b4a8f065b4c71f85595db2714498807"
 
-"@storiqa/validation_specs@https://github.com/StoriqaTeam/share_validation#feature/initial_functionality":
+"@storiqa/validation_specs@git+ssh://git@github.com/StoriqaTeam/share_validation#feature/initial_functionality":
   version "0.0.1"
-  resolved "https://github.com/StoriqaTeam/share_validation#ffad849829a58d74fa9d1a4a409586b9e3dca45b"
+  resolved "git+ssh://git@github.com/StoriqaTeam/share_validation#ffad849829a58d74fa9d1a4a409586b9e3dca45b"
   dependencies:
     spected "^0.7.0"
 
