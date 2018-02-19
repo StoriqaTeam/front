@@ -2,31 +2,24 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-// import { specs, validate } from '@storiqa/validation_specs';
-
-// import { log } from 'utils';
 
 import './Input.scss';
 
 type PropsType = {
   id: string,
-  name: string,
   value: string,
   label: string,
   errors: ?Array<string>,
   // $FlowIgnore
   onChange: (e: {target: { value: string }}) => void,
-  withStateChanges: boolean,
 };
 
 type StateType = {
-  value: string,
   labelFloat: boolean,
 };
 
 class Input extends Component<PropsType, StateType> {
   state = {
-    value: '',
     labelFloat: false,
   }
 
@@ -35,16 +28,10 @@ class Input extends Component<PropsType, StateType> {
   }
 
   handleChange = (e: {target: { value: string }}) => {
-    const { value } = e.target;
-
-    if (this.props.withStateChanges) {
-      this.setState({ value });
-      // this.value.innerHTML = value;
-      // const valueOffsetWidth = this.value.offsetWidth;
-      // this.input.style.minWidth = valueOffsetWidth < 240 ? '240px' : `${valueOffsetWidth}px`;
-    } else {
-      this.props.onChange(value);
-    }
+    this.props.onChange(e.target.value);
+    // this.value.innerHTML = value;
+    // const valueOffsetWidth = this.value.offsetWidth;
+    // this.input.style.minWidth = valueOffsetWidth < 240 ? '240px' : `${valueOffsetWidth}px`;
   };
 
   handleFocus = () => {
@@ -52,7 +39,7 @@ class Input extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
-    this.setState({ labelFloat: this.state.value || this.props.value });
+    this.setState({ labelFloat: this.props.value });
   };
 
   render() {
@@ -78,7 +65,7 @@ class Input extends Component<PropsType, StateType> {
         <input
           ref={(node) => { this.input = node; }}
           id={id}
-          name={name}
+          name={id}
           type="text"
           value={value || stateValue}
           styleName="input"

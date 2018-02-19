@@ -10,7 +10,6 @@ storiesOf('Forms/Input', module)
       id="some_id"
       label="Name"
       onChange={action('text-change')}
-      withStateChanges
     />
   ))
   .add('with error', () => (
