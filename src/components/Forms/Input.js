@@ -10,7 +10,6 @@ type PropsType = {
   value: string,
   label: string,
   errors: ?Array<string>,
-  // $FlowIgnore
   onChange: (e: {target: { value: string }}) => void,
 };
 
@@ -29,9 +28,6 @@ class Input extends Component<PropsType, StateType> {
 
   handleChange = (e: {target: { value: string }}) => {
     this.props.onChange(e.target.value);
-    // this.value.innerHTML = value;
-    // const valueOffsetWidth = this.value.offsetWidth;
-    // this.input.style.minWidth = valueOffsetWidth < 240 ? '240px' : `${valueOffsetWidth}px`;
   };
 
   handleFocus = () => {
