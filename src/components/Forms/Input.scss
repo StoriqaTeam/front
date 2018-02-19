@@ -33,15 +33,15 @@
 }
 
 .input:focus {
-  border-bottom: 1px solid #626262;
+  border-bottom: 1px solid !important;
 }
 
-.isErrors {
+.isError .label {
   color: #E62C6D;
 }
 
-.errors {
-  position: relative;
+.isError .input {
+  border-bottom: 1px solid #E62C6D;
 }
 
 .value {
@@ -50,4 +50,14 @@
   height: 0;
   visibility: hidden;
   font-size: 14px;
+}
+
+.errors {
+  position: relative;
+}
+
+.error {
+  font-size: 12px;
+  color: #E62C6D;
+  line-height: 24px;
 }

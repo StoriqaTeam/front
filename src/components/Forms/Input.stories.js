@@ -8,7 +8,7 @@ storiesOf('Forms/Input', module)
   .add('default', () => (
     <Input
       id="some_id"
-      label="Name:"
+      label="Name"
       onChange={action('text-change')}
       withStateChanges
     />
@@ -16,7 +16,7 @@ storiesOf('Forms/Input', module)
   .add('with error', () => (
     <Input
       id="some_id2"
-      label="Name:"
+      label="Name"
       value="test"
       onChange={action('text-change')}
       errors={['Some error text']}

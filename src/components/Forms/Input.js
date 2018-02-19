@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 
-import { log } from 'utils';
+// import { log } from 'utils';
 
 import './Input.scss';
 
@@ -71,9 +71,9 @@ class Input extends Component<PropsType, StateType> {
     return (
       <label
         htmlFor={id}
-        styleName="container"
+        styleName={classNames('container', { isError: errors })}
       >
-        <span styleName={classNames('label', { labelFloat, isErrors: errors })}>{label}</span>
+        <span styleName={classNames('label', { labelFloat })}>{label}</span>
         <input
           ref={(node) => { this.input = node; }}
           id={id}
@@ -89,12 +89,13 @@ class Input extends Component<PropsType, StateType> {
           ref={(node) => { this.value = node; }}
           styleName="value"
         />
-        {errors && errors.length > 0 && (
-          <Fragment>
-            <br />
-            <span styleName="errors">{errors}</span>
-          </Fragment>
-        )}
+        {errors && errors.length > 0 &&
+          <div className="errors">
+            {errors.map(item => (
+              <div styleName="error">{item}</div>
+            ))}
+          </div>
+        }
       </label>
     );
   }
