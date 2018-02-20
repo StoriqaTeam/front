@@ -15,8 +15,8 @@ type StateType = {
 };
 
 type PropsType = {
-  isItem: boolean,
-  isDropdawn: boolean,
+  isItem: ?boolean,
+  isDropdawn: ?boolean,
   items: Array<{ id: number, label: string }>,
   onSelect?: (id: number) => void,
   label: ?string,
