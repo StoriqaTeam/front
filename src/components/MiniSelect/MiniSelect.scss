@@ -1,0 +1,101 @@
+.container {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 20px;
+  padding: 0 24px 0 8px;
+  border-radius: 2px;
+  color: #505050;
+  background-color: #FAFAFA;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.isItem {
+  padding-right: 28px;
+  font-size: 16px;
+  background-color: transparent;
+}
+
+.isDropdawn {
+  color: #939393;
+  background-color: transparent;
+}
+
+.selected {
+  position: relative;
+  z-index: 2;
+}
+
+.icon {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.isItem .icon {
+  background-color: #FAFAFA;
+}
+
+.items {
+  position: absolute;
+  top: -4px;
+  left: 100%;
+  margin-left: -20px;
+  padding: 4px 0;
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .16);
+  overflow: hidden;
+  cursor: default;
+  z-index: 3;
+}
+
+.isItem .items {
+  top: -8px;
+}
+
+.isDropdawn .items {
+  top: 24px;
+  left: auto;
+  right: 0;
+  z-index: 1;
+}
+
+.wrap {
+  position: relative;
+}
+
+.item {
+  padding: 2px 8px;
+  text-align: left;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.isItem .item {
+  line-height: 24px;
+}
+
+.isDropdawn .item {
+  white-space: nowrap;
+}
+
+.item:hover {
+  background-color: #F7F7F7;
+}
+
+.active {
+  display: none;
+}
+
+.isDropdawn .active {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
