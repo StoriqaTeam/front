@@ -16,8 +16,8 @@ type StateType = {
 
 type PropsType = {
   isItem: ?boolean,
-  isDropdawn: ?boolean,
-  items: Array<{ id: number, label: string }>,
+  isDropdown: ?boolean,
+  items: Array<{ id: string, label: string }>,
   onSelect?: (id: number) => void,
   label: ?string,
 };
@@ -29,7 +29,8 @@ class MiniSelect extends Component<PropsType, StateType> {
   };
 
   componentWillMount() {
-    this.setState({ activeItem: this.props.items[0] });
+    const { items } = this.props;
+    this.setState({ activeItem: items && items[0] });
     window.addEventListener('click', this.handleToggleExpand);
     window.addEventListener('keydown', this.handleToggleExpand);
   }
@@ -39,7 +40,11 @@ class MiniSelect extends Component<PropsType, StateType> {
     window.removeEventListener('keydown', this.handleToggleExpand);
   }
 
-  handleToggleExpand = (e) => {
+  button: any;
+  itemsWrap: any;
+  items: any;
+
+  handleToggleExpand = (e: any) => {
     const isButtonClick = this.button.contains(e.target);
     const isItemsWrap = this.itemsWrap.contains(e.target);
     const isItems = this.items.contains(e.target);
@@ -54,8 +59,8 @@ class MiniSelect extends Component<PropsType, StateType> {
     }
   };
 
-  handleItemClick = (e) => {
-    if (this.props.isDropdawn) {
+  handleItemClick = (e: any) => {
+    if (this.props.isDropdown) {
       log.info('id', e.target.id);
     } else {
       const activeItem = find(propEq('id', e.target.id))(this.props.items);
@@ -74,7 +79,7 @@ class MiniSelect extends Component<PropsType, StateType> {
     const {
       items,
       isItem,
-      isDropdawn,
+      isDropdown,
       label,
     } = this.props;
     const { isExpanded, activeItem } = this.state;
@@ -82,10 +87,10 @@ class MiniSelect extends Component<PropsType, StateType> {
     return (
       <div
         ref={(node) => { this.button = node; }}
-        styleName={classNames('container', { isItem, isDropdawn })}
+        styleName={classNames('container', { isItem, isDropdown })}
       >
         <div styleName="selected">
-          { isDropdawn ? label : activeItem.label }
+          { isDropdown ? label : activeItem && activeItem.label }
         </div>
         <div styleName="icon">
           <Icon type="arrowExpand" />
@@ -110,7 +115,7 @@ class MiniSelect extends Component<PropsType, StateType> {
                 <div
                   key={id}
                   id={id}
-                  styleName={classNames('item', { active: activeItem.id === id })}
+                  styleName={classNames('item', { active: activeItem && activeItem.id === id })}
                 >
                   {item.label}
                 </div>

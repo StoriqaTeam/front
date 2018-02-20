@@ -38,8 +38,8 @@ storiesOf('MiniSelect', module)
   ))
   .add('Menu', () => (
     <MiniSelect
-      isDropdawn
-      label="Dropdawn"
+      isDropdown
+      label="Dropdown"
       items={[
         { id: '1', label: 'Punkt #1' },
         { id: '2', label: 'Delivery' },
