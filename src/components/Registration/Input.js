@@ -203,6 +203,7 @@ class Input extends PureComponent<PropsType, StateType> {
    * @return {String}
    */
   errorClass = (error: string) => (error.length === 0 ? '' : 'invalidInput');
+
   render() {
     const {
       autocomplete,
@@ -226,30 +227,7 @@ class Input extends PureComponent<PropsType, StateType> {
       isCapsLockOn,
       validity,
     } = this.state;
-    const inputLabel = (
-      <label
-        styleName={`label ${labelFloat || ''}`}
-        htmlFor={name}
-      >
-        { label }
-      </label>
-    );
-    const passwordButton = (
-      <ShowPassword
-        show={showPassword}
-        onClick={this.handleShowPassword}
-      />
-    );
-    const passwordHints = (
-      <PasswordHints {...passwordQuality} />
-    );
-    const inputLabelContent = (label) ? inputLabel : null;
-    // Only when 'detectCapsLock', 'isCapsLockOn' are true
-    const capsLockMessageContent = (detectCapsLock && isCapsLockOn) ? CapsLockMessage : null;
-    // ONLY when type is password and showPasswordButton so the user can see the password is typing
-    const showPasswordContent = showPasswordButton ? passwordButton : null;
-    // ONLY when type is password, so the user can see the password hints
-    const passwordHintsContent = showHints ? passwordHints : null;
+
     return (
       <span>
         <input
@@ -268,13 +246,29 @@ class Input extends PureComponent<PropsType, StateType> {
           onKeyPress={this.handleKeyPress}
           placeholder={placeholder}
         />
-        { inputLabelContent }
+        {label && (
+          <label
+            styleName={`label ${labelFloat || ''}`}
+            htmlFor={name}
+          >
+            { label }
+          </label>
+        )}
         <span styleName="message">
           { formError }
         </span>
-        { capsLockMessageContent }
-        { showPasswordContent }
-        { passwordHintsContent }
+        {detectCapsLock && isCapsLockOn && (
+          <CapsLockMessage />
+        )}
+        {showPasswordButton && (
+          <ShowPassword
+            show={showPassword}
+            onClick={this.handleShowPassword}
+          />
+        )}
+        {showHints && (
+          <PasswordHints {...passwordQuality} />
+        )}
         {errors &&
           <div styleName="errors">
             {errors.map((item, idx) => (

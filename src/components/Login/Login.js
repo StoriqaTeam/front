@@ -116,24 +116,6 @@ class Login extends Component<PropsType, StateType> {
       errors,
     } = this.state;
 
-    const signIn = (
-      <div styleName="signInGroup">
-        <div styleName="signInButton">
-          <Button onClick={this.handleLoginClick} type="button">
-            <span>Sign In</span>
-          </Button>
-        </div>
-        <div styleName="signInCheckbox">
-          <Checkbox
-            id="login"
-            label="Remember Me"
-            isChecked={autocomplete}
-            handleCheckboxChange={this.handleCheckboxChange}
-          />
-        </div>
-      </div>
-    );
-
     return (
       <form styleName="container">
         {isLoad && (
@@ -168,7 +150,23 @@ class Login extends Component<PropsType, StateType> {
             errors={errors}
           />
         </div>
-        {formValid && signIn}
+        {formValid && (
+          <div styleName="signInGroup">
+            <div styleName="signInButton">
+              <Button onClick={this.handleLoginClick} type="button">
+                <span>Sign In</span>
+              </Button>
+            </div>
+            <div styleName="signInCheckbox">
+              <Checkbox
+                id="login"
+                label="Remember Me"
+                isChecked={autocomplete}
+                handleCheckboxChange={this.handleCheckboxChange}
+              />
+            </div>
+          </div>
+        )}
         <div className="separatorBlock">
           <Separator text="or" />
         </div>
