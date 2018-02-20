@@ -21,8 +21,14 @@
   cursor: pointer;
 }
 
+.inputWrapper {
+  display: flex;
+  flex: 1;
+}
+
 .input {
   height: 32px;
+  width: 100%;
   border-left: 0;
   border-top: 1px solid #BFBFBF;
   border-bottom: 1px solid #BFBFBF;

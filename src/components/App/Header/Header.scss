@@ -1,13 +1,33 @@
 .container {
+  width: 170rem;
   height: 12rem;
   background-color: #fff;
   display: flex;
   align-items: flex-end;
+  padding: 2rem;
 }
 
 .logo {
   width: 26rem;
   height: 4rem;
-  margin-left: 2rem;
-  margin-bottom: 2rem;
+}
+
+.searchInput {
+  margin-left: 16rem;
+  flex: 1;
+}
+
+.buttonWrapper {
+  width: 12rem;
+  margin-left: 3rem;
+}
+
+.profileIcon {
+  width: 4rem;
+  margin-left: 16rem;
+}
+
+.cartIcon {
+  width: 4rem;
+  margin-left: 3rem;
 }

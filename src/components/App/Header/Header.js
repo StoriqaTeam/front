@@ -20,16 +20,30 @@ class Header extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="logo">
-          <Logo />
+          <Logo styleName="logo" />
         </div>
-        <SearchInput />
-        <ProfileMenu />
-        <CartButton />
-        <Button
-          wireframe
-        >
-          Start selling
-        </Button>
+        <div styleName="searchInput">
+          <SearchInput
+            searchCategories={[
+              { id: 0, label: 'Shops' },
+              { id: 1, label: 'Products' },
+              { id: 2, label: 'All' },
+            ]}
+          />
+        </div>
+        <div styleName="profileIcon">
+          <ProfileMenu />
+        </div>
+        <div styleName="cartIcon">
+          <CartButton />
+        </div>
+        <div styleName="buttonWrapper">
+          <Button
+            wireframe
+          >
+            Start selling
+          </Button>
+        </div>
       </div>
     );
   }

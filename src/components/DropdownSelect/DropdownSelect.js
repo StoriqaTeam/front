@@ -36,7 +36,7 @@ class DropdownSelect extends Component<PropsType, StateType> {
   node: any;
 
   handleClick = (e: { target: any }) => {
-    if (this.node.contains(e.target)) {
+    if (this.node && this.node.contains(e.target)) {
       return;
     }
     this.setState(() => ({ isExpanded: false }));
