@@ -2,22 +2,22 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { Input } from 'components/Forms';
+import { Textarea } from 'components/Forms';
 import OnChangeDecorator from '../../../.storybook/OnChangeDecorator';
 
-storiesOf('Forms/Input', module)
+storiesOf('Forms/Textarea', module)
   .add('Default', () => (
     <OnChangeDecorator>
-      <Input
+      <Textarea
         id="some_id"
-        label="Input"
+        label="Textarea"
       />
     </OnChangeDecorator>
   ))
   .add('with error', () => (
-    <Input
+    <Textarea
       id="some_id2"
-      label="Input"
+      label="Textarea"
       value="test"
       onChange={action('text-change')}
       errors={['Some error text']}
