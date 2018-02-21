@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath } from 'ramda';
+import { assocPath, propOr } from 'ramda';
 
 import { MiniSelect } from 'components/MiniSelect';
 import { Input } from 'components/Forms';
@@ -25,8 +25,19 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   handleInputChange = (id: string) => (value: any) => {
-    this.setState(prevState => assocPath(['form', id], value, prevState));
+    this.setState(assocPath(['form', id], value));
   };
+
+  // TODO: extract to helper
+  // TODO: add handling errors
+  renderInput = (id: string, label: string) => (
+    <Input
+      id={id}
+      value={propOr('', id, this.state.form)}
+      label={label}
+      onChange={this.handleInputChange(id)}
+    />
+  );
 
   render() {
     return (
@@ -36,6 +47,7 @@ class EditStore extends Component<PropsType, StateType> {
           <div styleName="langSelect">
             <MiniSelect
               items={[
+                // FIXME: fill with actual data
                 { id: '1', label: 'English' },
                 { id: '2', label: 'Russian' },
                 { id: '3', label: 'Chinese' },
@@ -47,38 +59,13 @@ class EditStore extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="formContainer">
-          <Input
-            id="name"
-            value={this.state.form.name || ''}
-            label="Название магазина"
-            onChange={this.handleInputChange('name')}
-          />
+          {this.renderInput('name', 'Название магазина')}
           {/* Shop language */}
           {/* Currency */}
-          <Input
-            id="tagline"
-            value={this.state.form.tagline || ''}
-            label="Слоган магазина"
-            onChange={this.handleInputChange('tagline')}
-          />
-          <Input
-            id="slug"
-            value={this.state.form.slug || ''}
-            label="Slug"
-            onChange={this.handleInputChange('slug')}
-          />
-          <Input
-            id="short_desc"
-            value={this.state.form.short_desc || ''}
-            label="Краткое описание магазина"
-            onChange={this.handleInputChange('short_desc')}
-          />
-          <Input
-            id="full_desc"
-            value={this.state.form.full_desc || ''}
-            label="Полное описание магазина"
-            onChange={this.handleInputChange('full_desc')}
-          />
+          {this.renderInput('tagline', 'Слоган магазина')}
+          {this.renderInput('slug', 'Slug')}
+          {this.renderInput('short_desc', 'Краткое описание магазина')}
+          {this.renderInput('full_desc', 'Полное описание магазина')}
         </div>
       </div>
     );
