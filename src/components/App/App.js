@@ -3,10 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
-import { Link } from 'found';
 import type { Environment } from 'relay-runtime';
-
-import './App.scss';
 
 type PropsType = {
   me: ?{},
@@ -32,12 +29,7 @@ class App extends PureComponent<PropsType> {
   render() {
     const { me, children } = this.props;
     return (
-      <div styleName="root">
-        <header styleName="header">
-          <h1 styleName="title">App here</h1>
-          {me && (<Link to="/logout">Logout</Link>)}
-          {!me && (<Link to="/login">Login</Link>)}
-        </header>
+      <div>
         {children && React.cloneElement(children, { me })}
       </div>
     );

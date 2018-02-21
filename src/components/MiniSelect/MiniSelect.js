@@ -18,7 +18,7 @@ type PropsType = {
   isItem: ?boolean,
   isDropdown: ?boolean,
   items: Array<{ id: string, label: string }>,
-  onSelect?: (id: number) => void,
+  onSelect?: (id: string) => void,
   label: ?string,
 };
 

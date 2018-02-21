@@ -3,11 +3,11 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 20px;
+  height: 100%;
   padding: 0 24px 0 8px;
   border-radius: 2px;
   color: #505050;
-  background-color: #FAFAFA;
+  background-color: inherit;
   font-size: 12px;
   cursor: pointer;
 }
