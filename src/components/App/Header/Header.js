@@ -12,7 +12,7 @@ import './Header.scss';
 import Logo from './svg/logo.svg';
 
 type PropsType = {
-  //
+  user: ?{},
 };
 
 class Header extends PureComponent<PropsType> {
@@ -43,6 +43,12 @@ class Header extends PureComponent<PropsType> {
           >
             Start selling
           </Button>
+          <Container>
+            <Row>
+              <Col size={2} />
+              <Col size={10}/>
+            </Row>
+          </Container>
         </div>
       </div>
     );

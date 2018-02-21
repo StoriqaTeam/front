@@ -77,6 +77,7 @@ class SearchInput extends Component<PropsType, StateType> {
           )}
           value={this.state.inputValue}
           onChange={this.handleInputChange}
+          open={false}
         />
         <button styleName="searchButton">
           <SearchIcon styleName="searchButtonIcon" />
