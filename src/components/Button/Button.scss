@@ -1,14 +1,27 @@
+@import "../../styles/variables.scss";
+
 .container {
+  height: 4rem;
   display: inline-block;
   width: 100%;
-  min-width: 128px;
-  padding: 0 16px;
   border-radius: 4px;
+  line-height: 32px;
+  cursor: pointer;
   color: #fff;
   font-size: 16px;
-  line-height: 32px;
-  background: #2FBAFD;
-  cursor: pointer;
+  background: $color_primary;
+}
+
+.wireframe {
+  background: transparent;
+  font-family: Open_Sans, "Helvetica Neue", sans-serif;
+  font-size:  14px;
+  border: $color_primary 1px solid;
+  color: $color_primary;
+  &:hover {
+    background: $color_primary;
+    color: #fff;
+  }
 }
 
 .disabled {

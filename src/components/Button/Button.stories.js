@@ -27,4 +27,12 @@ stories
       <Icon type="google" />
       <span>Sign Up with Google</span>
     </Button>
+  ))
+  .add('Wireframe', () => (
+    <Button
+      onClick={action('click')}
+      wireframe
+    >
+      Start selling
+    </Button>
   ));

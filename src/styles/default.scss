@@ -64,7 +64,8 @@ button::-moz-focus-inner {
 }
 
 a, a:visited {
-  color: $color_grey_text;
+  font-size: 12px;
+  color: $color_grey_link;
   text-decoration: none;
   transition: all .3s ease;
 }

@@ -14,7 +14,7 @@ import './SearchInput.scss';
 
 type PropsType = {
   items: ?Array<any>,
-  searchCategories: ?Array<any>
+  searchCategories: ?Array<{ id: number, label: string }>
 };
 
 type StateType = {
@@ -63,7 +63,8 @@ class SearchInput extends Component<PropsType, StateType> {
           />
         </div>
         <Autocomplete
-          renderInput={props => (<input styleName="input" {...props} />)}
+          wrapperStyle={{ display: 'flex', width: '100%' }}
+          renderInput={props => (<div styleName="inputWrapper"><input styleName="input" {...props} /></div>)}
           items={this.state.items}
           getItemValue={item => item.label}
           renderItem={(item, isHighlighted) => (
@@ -76,6 +77,7 @@ class SearchInput extends Component<PropsType, StateType> {
           )}
           value={this.state.inputValue}
           onChange={this.handleInputChange}
+          open={false}
         />
         <button styleName="searchButton">
           <SearchIcon styleName="searchButtonIcon" />
