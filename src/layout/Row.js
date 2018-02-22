@@ -4,11 +4,11 @@ import React, { PureComponent } from 'react';
 
 import './Row.scss';
 
-type PricesTypes = {
+type PropsTypes = {
   children: any,
 }
 
-class Row extends PureComponent<PricesTypes> {
+class Row extends PureComponent<PropsTypes> {
   render() {
     return (
       <div styleName="container">

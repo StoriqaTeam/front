@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Container, Row, Col } from 'containers';
+import { Container, Row, Col } from 'layout';
 
 import './Footer.scss';
 

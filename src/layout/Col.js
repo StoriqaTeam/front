@@ -5,12 +5,12 @@ import classNames from 'classnames';
 
 import './Col.scss';
 
-type PricesTypes = {
+type PropsTypes = {
   children: any,
   size: number,
 }
 
-class Col extends PureComponent<PricesTypes> {
+class Col extends PureComponent<PropsTypes> {
   render() {
     const { size } = this.props;
 
