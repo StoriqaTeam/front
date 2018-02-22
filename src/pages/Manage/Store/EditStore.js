@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { assocPath, propOr } from 'ramda';
 
+import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
 import { Input } from 'components/Forms';
 import { Container, Row, Col } from 'layout';
@@ -103,6 +104,12 @@ class EditStore extends Component<PropsType, StateType> {
                 {this.renderInput('slug', 'Slug')}
                 {this.renderInput('short_desc', 'Краткое описание магазина')}
                 {this.renderInput('full_desc', 'Полное описание магазина')}
+                <Button
+                  type="button"
+                  onClick={() => {}}
+                >
+                  Save
+                </Button>
               </div>
             </div>
           </Col>
