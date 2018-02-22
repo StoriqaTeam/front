@@ -26,3 +26,11 @@
 .formContainer {
   //
 }
+
+.inputWrapper {
+  height: 7rem;
+}
+
+.inputWrapper + .inputWrapper {
+  margin-top: 3rem;
+}

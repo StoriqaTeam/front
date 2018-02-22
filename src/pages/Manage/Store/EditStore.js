@@ -30,13 +30,16 @@ class EditStore extends Component<PropsType, StateType> {
 
   // TODO: extract to helper
   // TODO: add handling errors
-  renderInput = (id: string, label: string) => (
-    <Input
-      id={id}
-      value={propOr('', id, this.state.form)}
-      label={label}
-      onChange={this.handleInputChange(id)}
-    />
+  renderInput = (id: string, label: string, errors: ?Array<string>) => (
+    <div styleName="inputWrapper">
+      <Input
+        id={id}
+        value={propOr('', id, this.state.form)}
+        label={label}
+        onChange={this.handleInputChange(id)}
+        errors={errors}
+      />
+    </div>
   );
 
   render() {
