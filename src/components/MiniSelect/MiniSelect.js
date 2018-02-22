@@ -20,6 +20,7 @@ type PropsType = {
   items: Array<{ id: string, label: string }>,
   onSelect?: (id: string) => void,
   label: ?string,
+  withTwoArrows?: boolean,
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
@@ -81,6 +82,7 @@ class MiniSelect extends Component<PropsType, StateType> {
       isItem,
       isDropdown,
       label,
+      withTwoArrows,
     } = this.props;
     const { isExpanded, activeItem } = this.state;
 
@@ -93,7 +95,8 @@ class MiniSelect extends Component<PropsType, StateType> {
           { isDropdown ? label : activeItem && activeItem.label }
         </div>
         <div styleName="icon">
-          <Icon type="arrowExpand" />
+          {withTwoArrows && (<Icon type="arrowsExpand" size="8" />)}
+          {!withTwoArrows && (<Icon type="arrowExpand" />)}
         </div>
         <div
           ref={(node) => { this.items = node; }}

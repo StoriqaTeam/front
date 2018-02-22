@@ -63,8 +63,34 @@ class EditStore extends Component<PropsType, StateType> {
         </div>
         <div styleName="formContainer">
           {this.renderInput('name', 'Название магазина')}
-          {/* Shop language */}
-          {/* Currency */}
+          <div styleName="selectWrapper">
+            <MiniSelect
+              items={[
+                // FIXME: fill with actual data
+                { id: '1', label: 'English' },
+                { id: '2', label: 'Russian' },
+                { id: '3', label: 'Chinese' },
+              ]}
+              onSelect={(id: string) => {
+                log.debug({ id });
+              }}
+              withTwoArrows
+            />
+          </div>
+          <div styleName="selectWrapper">
+            <MiniSelect
+              items={[
+                // FIXME: fill with actual data
+                { id: '3', label: 'STQ' },
+                { id: '1', label: 'ETH' },
+                { id: '2', label: 'BTC' },
+              ]}
+              onSelect={(id: string) => {
+                log.debug({ id });
+              }}
+              withTwoArrows
+            />
+          </div>
           {this.renderInput('tagline', 'Слоган магазина')}
           {this.renderInput('slug', 'Slug')}
           {this.renderInput('short_desc', 'Краткое описание магазина')}

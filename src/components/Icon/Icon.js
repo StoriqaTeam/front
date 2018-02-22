@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import { pathOr } from 'ramda';
 
 import Person from 'components/Icon/svg/person.svg';
@@ -15,12 +14,13 @@ import Facebook from 'components/Icon/svg/facebook.svg';
 import Google from 'components/Icon/svg/google.svg';
 import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
+import ArrowsExpand from 'components/Icon/svg/arrowsExpand.svg';
 
 import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 16 | 24 | 32,
+  size: 8 | 16 | 24 | 32,
 };
 
 const iconsMap = {
@@ -35,15 +35,15 @@ const iconsMap = {
   google: <Google />,
   spiner: <Spiner />,
   arrowExpand: <ArrowExpand />,
+  arrowsExpand: <ArrowsExpand />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
   render() {
     const { type, size } = this.props;
-    const styleName = classNames('container', `size-${size || '16'}`);
 
     return (
-      <div styleName={styleName}>
+      <div styleName={`container size-${size || '16'}`}>
         {pathOr(null, [type], iconsMap)}
       </div>
     );
