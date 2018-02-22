@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 
-import Header from './Header/Header';
+import Header from './Header';
 
 import './App.scss';
 
@@ -33,7 +33,7 @@ class App extends PureComponent<PropsType> {
   render() {
     const { me, children } = this.props;
     return (
-      <div styleName="root">
+      <div>
         <Header user={me} />
         {children && React.cloneElement(children, { me })}
       </div>

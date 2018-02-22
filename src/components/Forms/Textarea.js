@@ -2,9 +2,9 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import InputAutosize from 'react-input-autosize';
+import TextareaAutosize from 'react-autosize-textarea';
 
-import './Input.scss';
+import './Textarea.scss';
 
 type PropsType = {
   id: string,
@@ -18,7 +18,7 @@ type StateType = {
   labelFloat: boolean,
 };
 
-class Input extends Component<PropsType, StateType> {
+class Textarea extends Component<PropsType, StateType> {
   state = {
     labelFloat: false,
   }
@@ -26,8 +26,6 @@ class Input extends Component<PropsType, StateType> {
   componentWillMount() {
     this.setState({ labelFloat: Boolean(this.props.value) });
   }
-
-  input: ?HTMLInputElement;
 
   handleChange = (e: any) => {
     const { value } = e.target;
@@ -61,13 +59,11 @@ class Input extends Component<PropsType, StateType> {
         styleName={classNames('container', { isError: errors })}
       >
         <span styleName={classNames('label', { labelFloat })}>{label}</span>
-        <div className="input">
-          <InputAutosize
+        <div styleName="textarea">
+          <TextareaAutosize
             id={id}
             name={id}
-            type="text"
             value={value}
-            styleName="input"
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
@@ -85,4 +81,4 @@ class Input extends Component<PropsType, StateType> {
   }
 }
 
-export default Input;
+export default Textarea;

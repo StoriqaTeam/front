@@ -10,6 +10,7 @@ import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
 import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
+import { StoreSettingsPage } from 'pages/StoreSettingsPage';
 
 const routes = (
   <Route
@@ -65,6 +66,10 @@ const routes = (
     <Route
       path="/profile"
       Component={Profile}
+    />
+    <Route
+      path="/store-settings"
+      Component={StoreSettingsPage}
     />
   </Route>
 );
