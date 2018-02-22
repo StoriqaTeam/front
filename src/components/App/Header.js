@@ -19,6 +19,8 @@ type PropsType = {
 
 class Header extends PureComponent<PropsType> {
   render() {
+    const { user } = this.props;
+
     return (
       <header styleName="container">
         <Container>
@@ -38,7 +40,7 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="profileIcon">
-                  <ProfileMenu />
+                  <ProfileMenu user={user} />
                 </div>
                 <div styleName="cartIcon">
                   <CartButton />
