@@ -2,13 +2,22 @@
   position: relative;
 }
 
-.wrap {
-  width: 170rem;
-  height: 12rem;
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 1rem;
+}
+
+.item {
+  margin-left: 4rem;
+}
+
+.bottom {
   background-color: #fff;
   display: flex;
   align-items: flex-end;
-  padding: 2rem;
+  margin-top: 3rem;
 }
 
 .logo {
