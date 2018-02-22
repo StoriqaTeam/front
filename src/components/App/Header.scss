@@ -1,3 +1,46 @@
 .container {
   position: relative;
- }
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 1rem;
+}
+
+.item {
+  margin-left: 4rem;
+}
+
+.bottom {
+  background-color: #fff;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 3rem;
+}
+
+.logo {
+  width: 26rem;
+  height: 4rem;
+}
+
+.searchInput {
+  margin-left: 16rem;
+  flex: 1;
+}
+
+.buttonWrapper {
+  width: 12rem;
+  margin-left: 3rem;
+}
+
+.profileIcon {
+  width: 4rem;
+  margin-left: 16rem;
+}
+
+.cartIcon {
+  width: 4rem;
+  margin-left: 3rem;
+}

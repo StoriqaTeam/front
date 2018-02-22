@@ -118,7 +118,7 @@ class Registration extends PureComponent<{}, StateType> {
     );
 
     return (
-      <form styleName="container">
+      <div styleName="container">
         <Header
           title="Sign Up"
           linkTitle="Sign In"
@@ -176,7 +176,7 @@ class Registration extends PureComponent<{}, StateType> {
             <span>Sign Up with Google</span>
           </Button>
         </div>
-      </form>
+      </div>
     );
   }
 }
