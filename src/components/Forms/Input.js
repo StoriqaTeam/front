@@ -21,10 +21,10 @@ type StateType = {
 class Input extends Component<PropsType, StateType> {
   state = {
     labelFloat: false,
-  }
+  };
 
   componentWillMount() {
-    this.setState({ labelFloat: Boolean(this.props.value) });
+    this.setState({ labelFloat: !!this.props.value });
   }
 
   input: ?HTMLInputElement;

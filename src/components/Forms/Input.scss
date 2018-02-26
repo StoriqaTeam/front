@@ -1,39 +1,44 @@
+@import "../../styles/variables";
+
 .container {
   position: relative;
 }
 
 .label {
   position: absolute;
-  top: 4px;
+  top: 2rem;
   left: 0;
-  color: #505050;
+  color: $color_grey_text;
   font-size: 14px;
-  line-height: 16px;
+  line-height: 3rem;
   transition: all .3s ease;
+  white-space: nowrap;
 }
 
 .labelFloat {
-  top: -16px;
-  color: #A7A7A7;
+  top: 0;
+  color: $color_grey_bg;
   font-size: 12px;
+  line-height: 2rem;
   font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  white-space: nowrap;
 }
 
 .input input {
   font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: relative;
   width: 100%;
-  min-width: 240px;
-  max-width: 752px !important;
-  border-bottom: 1px solid #A7A7A7;
+  min-width: 30rem;
+  max-width: 94rem !important;
+  border-bottom: 1px solid rgba($color_grey_bg, 0.2);
   font-size: 14px;
-  line-height: 24px;
+  line-height: 3rem;
   text-align: left;
   background-color: transparent;
 }
 
 .input input:focus {
-  border-bottom: 1px solid !important;
+  border-bottom: 1px solid rgba($color_grey_bg, 0.2) !important;
 }
 
 .isError .label {
@@ -41,7 +46,7 @@
 }
 
 .isError .input input {
-  border-bottom: 1px solid #E62C6D;
+  border-bottom: 2px solid #E62C6D;
 }
 
 .errors {
@@ -51,5 +56,5 @@
 .error {
   font-size: 12px;
   color: #E62C6D;
-  line-height: 24px;
+  line-height: 3rem;
 }
