@@ -1,7 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, propOr } from 'ramda';
+import PropTypes from 'prop-types';
+import { assocPath, curry, reduce, assoc, keys, propOr, map } from 'ramda';
 
 import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
@@ -31,6 +32,21 @@ class EditStore extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', id], value));
   };
 
+
+  // TODO: extract to helper
+  /**
+   * Creates a new object with the own properties of the provided object, but the
+   * keys renamed according to the keysMap object as `{oldKey: newKey}`.
+   * When some key is not found in the keysMap, then it's passed as-is.
+   *
+   * Keep in mind that in the case of keys conflict is behaviour undefined and
+   * the result may vary between various JS engines!
+   *
+   * @sig {a: b} -> {a: *} -> {b: *}
+   */
+  renameKeys = curry((keysMap, obj) =>
+    reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj)));
+
   // TODO: extract to helper
   // TODO: add handling errors
   renderInput = (id: string, label: string, errors: ?Array<string>) => (
@@ -46,6 +62,7 @@ class EditStore extends Component<PropsType, StateType> {
   );
 
   render() {
+    const { directories: { languages, currencies } } = this.context;
     return (
       <Container>
         <Row>
@@ -58,12 +75,7 @@ class EditStore extends Component<PropsType, StateType> {
                 <span styleName="title">Настройки</span>
                 <div styleName="langSelect">
                   <MiniSelect
-                    items={[
-                      // FIXME: fill with actual data
-                      { id: '1', label: 'English' },
-                      { id: '2', label: 'Russian' },
-                      { id: '3', label: 'Chinese' },
-                    ]}
+                    items={map(this.renameKeys({ key: 'id', name: 'label' }), languages)}
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
@@ -74,12 +86,7 @@ class EditStore extends Component<PropsType, StateType> {
                 {this.renderInput('name', 'Название магазина')}
                 <div styleName="selectWrapper">
                   <MiniSelect
-                    items={[
-                      // FIXME: fill with actual data
-                      { id: '1', label: 'English' },
-                      { id: '2', label: 'Russian' },
-                      { id: '3', label: 'Chinese' },
-                    ]}
+                    items={map(this.renameKeys({ key: 'id', name: 'label' }), languages)}
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
@@ -88,12 +95,7 @@ class EditStore extends Component<PropsType, StateType> {
                 </div>
                 <div styleName="selectWrapper">
                   <MiniSelect
-                    items={[
-                      // FIXME: fill with actual data
-                      { id: '3', label: 'STQ' },
-                      { id: '1', label: 'ETH' },
-                      { id: '2', label: 'BTC' },
-                    ]}
+                    items={map(this.renameKeys({ key: 'id', name: 'label' }), currencies)}
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
@@ -118,5 +120,9 @@ class EditStore extends Component<PropsType, StateType> {
     );
   }
 }
+
+EditStore.contextTypes = {
+  directories: PropTypes.object,
+};
 
 export default Page(EditStore);

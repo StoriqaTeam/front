@@ -5,10 +5,14 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 
+import { log } from 'utils';
+
 import './App.scss';
 
 type PropsType = {
   me: ?{},
+  languages: ?Array<{ id: number, name: string }>,
+  currencies: ?Array<{ id: number, name: string }>,
   children: any,
   relay: {
     environment: Environment,
@@ -18,9 +22,14 @@ type PropsType = {
 
 class App extends PureComponent<PropsType> {
   getChildContext() {
+    const { languages, currencies, relay } = this.props;
     return {
-      environment: this.props.relay.environment,
+      environment: relay.environment,
       handleLogin: this.handleLogin,
+      directories: {
+        languages,
+        currencies,
+      },
     };
   }
 
@@ -41,6 +50,7 @@ class App extends PureComponent<PropsType> {
 App.childContextTypes = {
   environment: PropTypes.object.isRequired,
   handleLogin: PropTypes.func,
+  directories: PropTypes.object,
 };
 
 export default createRefetchContainer(
@@ -49,6 +59,7 @@ export default createRefetchContainer(
     fragment App_me on User {
       ...Profile_me
       id
+      rawId
     }
   `,
   graphql`
