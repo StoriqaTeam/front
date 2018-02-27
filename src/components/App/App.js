@@ -4,8 +4,9 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
+import { pick } from 'ramda';
 
-import { log } from 'utils';
+import { currentUserShape } from 'utils/shapes';
 
 import './App.scss';
 
@@ -22,10 +23,16 @@ type PropsType = {
 
 class App extends PureComponent<PropsType> {
   getChildContext() {
-    const { languages, currencies, relay } = this.props;
+    const {
+      languages,
+      currencies,
+      relay,
+      me = {},
+    } = this.props;
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
+      currentUser: pick(['id', 'rawId'], me),
       directories: {
         languages,
         currencies,
@@ -53,6 +60,7 @@ App.childContextTypes = {
   // TODO: create HOC that extract directories from context to props
   // withDirectories(directoriesNames: Array<string> = [])(Component)
   directories: PropTypes.object,
+  currentUser: currentUserShape,
 };
 
 export default createRefetchContainer(

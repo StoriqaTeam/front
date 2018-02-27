@@ -10,6 +10,7 @@ import { Input, Dropdown } from 'components/Forms';
 import { Container, Row, Col } from 'layout';
 import { Page } from 'components/App';
 import { log } from 'utils';
+import { CreateStoreMutation } from 'relay/mutations';
 
 import './EditStore.scss';
 
@@ -41,6 +42,17 @@ class EditStore extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', id], value));
   };
 
+  handleSave = () => {
+    /*
+     name: string,
+     userId: string,
+     currencyId: string,
+     shortDescription: string,
+     longDescription: string,
+     slug: string,
+    */
+    CreateStoreMutation.commit();
+  };
 
   // TODO: extract to helper
   /**
@@ -122,7 +134,7 @@ class EditStore extends Component<PropsType, StateType> {
                 {this.renderInput('full_desc', 'Полное описание магазина')}
                 <Button
                   type="button"
-                  onClick={() => {}}
+                  onClick={this.handleSave}
                 >
                   Save
                 </Button>
