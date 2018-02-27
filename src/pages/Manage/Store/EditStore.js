@@ -23,6 +23,15 @@ type StateType = {
   },
 };
 
+const currenciesDic = {
+  rouble: 'RUB',
+  euro: 'EUR',
+  dollar: 'USD',
+  bitcoin: 'BTC',
+  etherium: 'ETH',
+  stq: 'STQ',
+};
+
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
     form: {},
@@ -95,7 +104,12 @@ class EditStore extends Component<PropsType, StateType> {
                 </div>
                 <div styleName="selectWrapper">
                   <MiniSelect
-                    items={map(this.renameKeys({ key: 'id', name: 'label' }), currencies)}
+                    items={
+                      map((item) => {
+                        const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
+                        return assoc('label', currenciesDic[withCorrectKeys.label], withCorrectKeys);
+                      }, currencies)
+                    }
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}

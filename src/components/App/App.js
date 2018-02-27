@@ -50,6 +50,8 @@ class App extends PureComponent<PropsType> {
 App.childContextTypes = {
   environment: PropTypes.object.isRequired,
   handleLogin: PropTypes.func,
+  // TODO: create HOC that extract directories from context to props
+  // withDirectories(directoriesNames: Array<string> = [])(Component)
   directories: PropTypes.object,
 };
 
