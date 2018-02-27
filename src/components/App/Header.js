@@ -1,9 +1,10 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import Cookies from 'universal-cookie';
 
 import { SearchInput } from 'components/SearchInput';
-import { ProfileMenu } from 'components/ProfileMenu';
+import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
 import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
@@ -18,9 +19,24 @@ type PropsType = {
   user: ?{},
 };
 
-class Header extends PureComponent<PropsType> {
+type StateType = {
+  notLogged: ?boolean,
+};
+
+class Header extends PureComponent<PropsType, StateType> {
+  state = {
+    notLogged: false,
+  }
+
+  componentWillMount() {
+    const cookies = new Cookies();
+    const notLogged = !cookies.get('__jwt');
+    this.setState({ notLogged });
+  }
+
   render() {
     const { user } = this.props;
+    const { notLogged } = this.state;
 
     return (
       <header styleName="container">
@@ -91,7 +107,10 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="profileIcon">
-                  <ProfileMenu user={user} />
+                  <UserDropdown
+                    notLogged={notLogged}
+                    user={user}
+                  />
                 </div>
                 <div styleName="cartIcon">
                   <CartButton />

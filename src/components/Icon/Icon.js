@@ -15,6 +15,7 @@ import Facebook from 'components/Icon/svg/facebook.svg';
 import Google from 'components/Icon/svg/google.svg';
 import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
+import Cross from 'components/Icon/svg/cross.svg';
 
 import './Icon.scss';
 
@@ -35,6 +36,7 @@ const iconsMap = {
   google: <Google />,
   spiner: <Spiner />,
   arrowExpand: <ArrowExpand />,
+  cross: <Cross />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
