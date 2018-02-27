@@ -1,8 +1,11 @@
-import React, { PureComponent } from 'react';
-import Portal from 'react-minimalist-portal';
-import noScroll from 'no-scroll';
+// @flow
 
+import React, { PureComponent } from 'react';
+
+import { noScroll } from 'utils';
 import { Icon } from 'components/Icon';
+
+import Portal from './Portal';
 
 import './Modal.scss';
 

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
 
 import { SearchInput } from 'components/SearchInput';
@@ -23,15 +23,13 @@ type StateType = {
   notLogged: ?boolean,
 };
 
-class Header extends PureComponent<PropsType, StateType> {
+class Header extends Component<PropsType, StateType> {
   state = {
     notLogged: false,
   }
 
   componentWillMount() {
-    const cookies = new Cookies();
-    const notLogged = !cookies.get('__jwt');
-    this.setState({ notLogged });
+    this.setState({ notLogged: !this.props.user });
   }
 
   render() {

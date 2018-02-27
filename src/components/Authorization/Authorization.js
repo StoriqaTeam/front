@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
 import { withRouter } from 'found';
@@ -35,7 +35,7 @@ type StateType = {
   isSignUp: ?boolean,
 }
 
-class Authorization extends PureComponent<PropsType, StateType> {
+class Authorization extends Component<PropsType, StateType> {
   state: StateType = {
     username: '',
     usernameValid: false,
