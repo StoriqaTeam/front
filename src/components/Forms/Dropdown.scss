@@ -1,0 +1,14 @@
+@import "../../styles/variables";
+
+.container {
+  height: 5rem;
+  border-bottom: 1px solid rgba($color_grey_bg, 0.2);
+}
+
+.label {
+  color: $color_grey_bg;
+  font-size: 12px;
+  line-height: 2rem;
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  white-space: nowrap;
+}

@@ -31,10 +31,12 @@
   height: 7rem;
 }
 
-.inputWrapper + .inputWrapper {
-  margin-top: 3rem;
+.dropdownWrapper + .inputWrapper,
+.dropdownWrapper + .dropdownWrapper {
+  margin-top: 5rem;
 }
 
-.selectWrapper {
-  height: 5rem;
+.inputWrapper + .dropdownWrapper,
+.inputWrapper + .inputWrapper {
+  margin-top: 3rem;
 }

@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .container {
   position: relative;
   display: flex;
@@ -10,6 +12,11 @@
   background-color: inherit;
   font-size: 12px;
   cursor: pointer;
+}
+
+.containerForForm {
+  height: 3rem;
+  padding: 0;
 }
 
 .isItem {
@@ -34,6 +41,13 @@
   right: 4px;
   border-radius: 2px;
   z-index: 2;
+}
+
+.iconForForm {
+  margin-left: 1rem;
+  top: 0;
+  right: 0;
+  position: relative;
 }
 
 .isItem .icon {
@@ -98,4 +112,12 @@
 
 .hidden {
   display: none;
+}
+
+.isForForm {
+  font-size: 14px;
+  line-height: 3rem;
+  text-align: left;
+  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: $color_grey_text,
 }

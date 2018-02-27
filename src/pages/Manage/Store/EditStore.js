@@ -6,7 +6,7 @@ import { assocPath, curry, reduce, assoc, keys, propOr, map } from 'ramda';
 
 import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
-import { Input } from 'components/Forms';
+import { Input, Dropdown } from 'components/Forms';
 import { Container, Row, Col } from 'layout';
 import { Page } from 'components/App';
 import { log } from 'utils';
@@ -93,17 +93,18 @@ class EditStore extends Component<PropsType, StateType> {
               </div>
               <div styleName="formContainer">
                 {this.renderInput('name', 'Название магазина')}
-                <div styleName="selectWrapper">
-                  <MiniSelect
+                <div styleName="dropdownWrapper">
+                  <Dropdown
+                    label="Язык магазина"
                     items={map(this.renameKeys({ key: 'id', name: 'label' }), languages)}
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
-                    withTwoArrows
                   />
                 </div>
-                <div styleName="selectWrapper">
-                  <MiniSelect
+                <div styleName="dropdownWrapper">
+                  <Dropdown
+                    label="Валюта магазина"
                     items={
                       map((item) => {
                         const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
@@ -113,7 +114,6 @@ class EditStore extends Component<PropsType, StateType> {
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
-                    withTwoArrows
                   />
                 </div>
                 {this.renderInput('tagline', 'Слоган магазина')}

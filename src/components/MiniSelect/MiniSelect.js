@@ -21,6 +21,7 @@ type PropsType = {
   onSelect?: (id: string) => void,
   label: ?string,
   withTwoArrows?: boolean,
+  forForm?: boolean,
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
@@ -83,18 +84,23 @@ class MiniSelect extends Component<PropsType, StateType> {
       isDropdown,
       label,
       withTwoArrows,
+      forForm,
     } = this.props;
     const { isExpanded, activeItem } = this.state;
 
     return (
       <div
         ref={(node) => { this.button = node; }}
-        styleName={classNames('container', { isItem, isDropdown })}
+        styleName={classNames('container', {
+          isItem,
+          isDropdown,
+          containerForForm: forForm,
+        })}
       >
-        <div styleName="selected">
+        <div styleName={classNames('selected', { isForForm: forForm })}>
           { isDropdown ? label : activeItem && activeItem.label }
         </div>
-        <div styleName="icon">
+        <div styleName={classNames('icon', { iconForForm: forForm })}>
           {withTwoArrows && (<Icon type="arrowsExpand" size="8" />)}
           {!withTwoArrows && (<Icon type="arrowExpand" />)}
         </div>
