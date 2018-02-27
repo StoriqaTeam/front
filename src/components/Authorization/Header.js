@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { Link } from 'found';
 
 import './Header.scss';
 

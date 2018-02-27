@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { log } from 'utils';
 
 export default OriginalComponent => class HandlerDropdownDecorator extends Component {
   state = {

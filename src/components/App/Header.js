@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import Cookies from 'universal-cookie';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';

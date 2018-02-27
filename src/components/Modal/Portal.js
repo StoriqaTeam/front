@@ -3,12 +3,20 @@
 import { Component } from 'react';
 import ReactDom from 'react-dom';
 
+type PropsType = {
+  children: any,
+};
+
 const useCreatePortal = typeof ReactDom.createPortal === 'function';
 
-class Portal extends Component {
+class Portal extends Component<PropsType> {
   componentWillMount() {
     this.popup = document.createElement('div');
-    document.body.appendChild(this.popup);
+
+    if (document.body) {
+      document.body.appendChild(this.popup);
+    }
+
     this.renderLayer();
   }
 
@@ -20,8 +28,13 @@ class Portal extends Component {
     if (!useCreatePortal) {
       ReactDom.unmountComponentAtNode(this.popup);
     }
-    document.body.removeChild(this.popup);
+
+    if (document.body) {
+      document.body.removeChild(this.popup);
+    }
   }
+
+  popup: any;
 
   renderLayer() {
     if (!useCreatePortal) {

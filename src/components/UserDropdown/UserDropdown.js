@@ -11,8 +11,6 @@ import { Authorization } from 'components/Authorization';
 
 import { ProfileMenu, LoginMenu } from 'components/UserDropdown';
 
-import { log } from 'utils';
-
 import './UserDropdown.scss';
 
 type PropsTypes = {
@@ -27,16 +25,17 @@ type PropsTypes = {
 };
 
 type StateTypes = {
-  isOpenModal: boolean,
+  showModal: boolean,
   isSignUp: ?boolean,
 };
 
 class UserDropdown extends Component<PropsTypes, StateTypes> {
   state = {
+    showModal: false,
     isSignUp: false,
   }
 
-  onOpenModal = (isSignUp) => {
+  onOpenModal = (isSignUp: ?boolean) => {
     this.setState({
       showModal: true,
       isSignUp,

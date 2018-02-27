@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
-import { withRouter } from 'found';
+import { withRouter, routerShape } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
@@ -115,7 +115,7 @@ class Authorization extends Component<PropsType, StateType> {
    * @param {Boolean} evt.validity
    * @return {void}
    */
-  handleChange = (data: { name: string, value: any, validity: boolean }, isSignUp) => {
+  handleChange = (data: { name: string, value: any, validity: boolean }) => {
     const { name, value, validity } = data;
     this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
   };

@@ -1,5 +1,3 @@
-// @flow
-
 let isOn = false;
 let scrollbarSize;
 let scrollTop;
@@ -14,11 +12,9 @@ const getScrollbarSize = () => {
   scrollbarSize = dummyScroller.offsetWidth - dummyScroller.clientWidth;
   doc.removeChild(dummyScroller);
   return scrollbarSize;
-}
+};
 
-const hasScrollbar = () => {
-  return document.documentElement.scrollHeight > window.innerHeight;
-}
+const hasScrollbar = () => document.documentElement.scrollHeight > window.innerHeight;
 
 const on = () => {
   if (typeof document === 'undefined') return;
@@ -33,7 +29,7 @@ const on = () => {
   doc.style.top = `${-scrollTop}px`;
   doc.style.overflow = 'hidden';
   isOn = true;
-}
+};
 
 const off = () => {
   if (typeof document === 'undefined') return;
@@ -44,7 +40,7 @@ const off = () => {
   doc.style.overflow = '';
   window.scroll(0, scrollTop);
   isOn = false;
-}
+};
 
 const toggle = () => {
   if (isOn) {
@@ -52,7 +48,7 @@ const toggle = () => {
     return;
   }
   on();
-}
+};
 
 export default {
   getScrollbarSize,

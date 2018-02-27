@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
 import { noScroll } from 'utils';
 import { Icon } from 'components/Icon';
@@ -15,7 +15,11 @@ type PropsTypes = {
   onClose: Function,
 };
 
-class Modal extends PureComponent<PropsTypes> {
+type StateTypes = {
+  showModal: ?boolean,
+};
+
+class Modal extends Component<PropsTypes, StateTypes> {
   state = {
     showModal: false,
   };
@@ -23,11 +27,13 @@ class Modal extends PureComponent<PropsTypes> {
   componentWillMount() {
     this.setState({ showModal: this.props.showModal });
 
-    document.addEventListener('click', this.onClickPast);
-    document.addEventListener('keydown', this.handleKeydown);
+    window.addEventListener('click', this.onClickPast);
+    window.addEventListener('keydown', this.handleKeydown);
   }
 
-  componentWillReceiveProps({ showModal }) {
+  componentWillReceiveProps(nextProps: Object) {
+    const { showModal } = nextProps;
+
     if (this.props.showModal !== showModal) {
       this.setState(
         { showModal },
@@ -37,11 +43,11 @@ class Modal extends PureComponent<PropsTypes> {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.onClickPast);
-    document.removeEventListener('keydown', this.handleKeydown);
+    window.removeEventListener('click', this.onClickPast);
+    window.removeEventListener('keydown', this.handleKeydown);
   }
 
-  onClickPast = (e) => {
+  onClickPast = (e: any) => {
     const isContainerClick = this.container && this.container.contains(e.target);
     const isInnerClick = this.inner && this.inner.contains(e.target);
 
@@ -54,7 +60,10 @@ class Modal extends PureComponent<PropsTypes> {
     this.props.onClose();
   };
 
-  toggleScroll = (showModal) => {
+  container: any;
+  inner: any;
+
+  toggleScroll = (showModal: ?boolean) => {
     if (showModal) {
       noScroll.on();
     } else {
@@ -62,7 +71,7 @@ class Modal extends PureComponent<PropsTypes> {
     }
   }
 
-  handleKeydown = (e) => {
+  handleKeydown = (e: any) => {
     if (e.keyCode === 27) {
       this.props.onClose();
     }
