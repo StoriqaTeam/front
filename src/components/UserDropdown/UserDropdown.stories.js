@@ -16,6 +16,6 @@ storiesOf('UserDropdown', module)
   .add('Not logged', () => (
     <UserDropdown
       profile={null}
-      notLogged
+      user
     />
   ));

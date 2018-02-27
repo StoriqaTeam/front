@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -18,22 +18,9 @@ type PropsType = {
   user: ?{},
 };
 
-type StateType = {
-  notLogged: ?boolean,
-};
-
-class Header extends Component<PropsType, StateType> {
-  state = {
-    notLogged: false,
-  }
-
-  componentWillMount() {
-    this.setState({ notLogged: !this.props.user });
-  }
-
+class Header extends PureComponent<PropsType> {
   render() {
     const { user } = this.props;
-    const { notLogged } = this.state;
 
     return (
       <header styleName="container">
@@ -104,10 +91,7 @@ class Header extends Component<PropsType, StateType> {
                   />
                 </div>
                 <div styleName="profileIcon">
-                  <UserDropdown
-                    notLogged={notLogged}
-                    user={user}
-                  />
+                  <UserDropdown user={user} />
                 </div>
                 <div styleName="cartIcon">
                   <CartButton />

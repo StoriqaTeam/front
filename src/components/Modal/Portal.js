@@ -7,8 +7,6 @@ type PropsType = {
   children: any,
 };
 
-const useCreatePortal = typeof ReactDom.createPortal === 'function';
-
 class Portal extends Component<PropsType> {
   componentWillMount() {
     this.popup = document.createElement('div');
@@ -16,19 +14,9 @@ class Portal extends Component<PropsType> {
     if (document.body) {
       document.body.appendChild(this.popup);
     }
-
-    this.renderLayer();
-  }
-
-  componentDidUpdate() {
-    this.renderLayer();
   }
 
   componentWillUnmount() {
-    if (!useCreatePortal) {
-      ReactDom.unmountComponentAtNode(this.popup);
-    }
-
     if (document.body) {
       document.body.removeChild(this.popup);
     }
@@ -36,17 +24,8 @@ class Portal extends Component<PropsType> {
 
   popup: any;
 
-  renderLayer() {
-    if (!useCreatePortal) {
-      ReactDom.unstable_renderSubtreeIntoContainer(this, this.props.children, this.popup);
-    }
-  }
-
   render() {
-    if (useCreatePortal) {
-      return ReactDom.createPortal(this.props.children, this.popup);
-    }
-    return null;
+    return ReactDom.createPortal(this.props.children, this.popup);
   }
 }
 

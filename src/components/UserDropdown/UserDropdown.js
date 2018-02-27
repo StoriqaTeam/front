@@ -14,14 +14,13 @@ import { ProfileMenu, LoginMenu } from 'components/UserDropdown';
 import './UserDropdown.scss';
 
 type PropsTypes = {
-  profile: {
+  user: {
     name: string,
     messagesCount: number,
     shopsCount: number,
     avatar: string,
     level: 'low' | 'high',
   },
-  notLogged: ?boolean,
 };
 
 type StateTypes = {
@@ -47,13 +46,13 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
   }
 
   render() {
-    const { profile, notLogged } = this.props;
+    const { user } = this.props;
     const { showModal, isSignUp } = this.state;
-    const name = pathOr(null, ['name'], profile);
-    const messagesCount = pathOr(null, ['messagesCount'], profile);
-    const shopsCount = pathOr(null, ['shopsCount'], profile);
-    const avatar = pathOr(null, ['avatar'], profile);
-    const level = pathOr(null, ['level'], profile);
+    const name = pathOr(null, ['name'], user);
+    const messagesCount = pathOr(null, ['messagesCount'], user);
+    const shopsCount = pathOr(null, ['shopsCount'], user);
+    const avatar = pathOr(null, ['avatar'], user);
+    const level = pathOr(null, ['level'], user);
 
     return (
       <div styleName="container">
@@ -63,7 +62,7 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
               {avatar ?
                 <img
                   styleName="avatar-img"
-                  src={profile.avatar}
+                  src={user.avatar}
                   alt="img"
                 /> :
                 <div styleName="avatar-icon">
@@ -73,13 +72,13 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
             </div>
           </trigger>
           <content>
-            {notLogged ?
-              <LoginMenu onClick={this.onOpenModal} /> :
+            {user ?
               <ProfileMenu
                 name={name}
                 messagesCount={messagesCount}
                 shopsCount={shopsCount}
-              />
+              /> :
+              <LoginMenu onClick={this.onOpenModal} />
             }
           </content>
         </Dropdown>
