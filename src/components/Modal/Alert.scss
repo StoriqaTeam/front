@@ -1,0 +1,43 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #9FC63C;
+  z-index: 100;
+}
+
+.isError {
+  background-color: #FF62A4;
+}
+
+.wrap {
+  width: 1360px;
+  height: 12rem;
+  margin: 0 auto;
+}
+
+.inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.icon {
+  display: block;
+  width: 3rem;
+  height: 5.5rem;
+  margin-right: 2rem;
+}
+
+.text {
+  width: 100%;
+  color: #fff;
+}
+
+.cross {
+  margin-left: 2rem;
+  cursor: pointer;
+}
