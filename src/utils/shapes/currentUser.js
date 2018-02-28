@@ -3,8 +3,8 @@
 import PropTypes from 'prop-types';
 
 const shape = PropTypes.shape({
-  id: PropTypes.number,
-  rawId: PropTypes.number,
+  id: PropTypes.string,
+  rawId: PropTypes.string,
 });
 
 export default shape;

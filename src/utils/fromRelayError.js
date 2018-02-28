@@ -12,10 +12,15 @@ export default pipe(
     const code = prop('code', error);
     const status = pathOr('', ['details', 'status'], error);
     const messageRaw = pathOr('', ['details', 'message'], error);
-    const message = map(pipe(
-      head,
-      prop('message'),
-    ))(JSON.parse(messageRaw));
+    let message = {};
+    try {
+      message = map(pipe(
+        head,
+        prop('message'),
+      ))(JSON.parse(messageRaw));
+    } catch (e) {
+      //
+    }
     return [toString(code), {
       status,
       message,

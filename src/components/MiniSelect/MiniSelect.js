@@ -18,7 +18,7 @@ type PropsType = {
   isItem: ?boolean,
   isDropdown: ?boolean,
   items: Array<{ id: string, label: string }>,
-  onSelect?: (id: string) => void,
+  onSelect: (id: string) => void,
   label: ?string,
   withTwoArrows?: boolean,
   forForm?: boolean,
@@ -65,13 +65,12 @@ class MiniSelect extends Component<PropsType, StateType> {
     if (this.props.isDropdown) {
       log.info('id', e.target.id);
     } else {
-      const activeItem = find(propEq('id', e.target.id))(this.props.items);
+      const activeItem = find(propEq('id', e.target.id), this.props.items);
       if (activeItem) {
         this.setState({ activeItem });
         const { onSelect } = this.props;
-
         if (onSelect) {
-          onSelect(activeItem);
+          onSelect(activeItem.id);
         }
       }
     }

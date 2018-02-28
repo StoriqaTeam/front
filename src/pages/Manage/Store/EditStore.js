@@ -2,14 +2,16 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, curry, reduce, assoc, keys, propOr, map } from 'ramda';
+import { assocPath, pathOr, propOr, map, toString } from 'ramda';
+import { validate } from '@storiqa/validation_specs';
 
 import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
 import { Input, Dropdown } from 'components/Forms';
 import { Container, Row, Col } from 'layout';
 import { Page } from 'components/App';
-import { log } from 'utils';
+import { log, fromRelayError } from 'utils';
+import { currentUserShape } from 'utils/shapes';
 import { CreateStoreMutation } from 'relay/mutations';
 
 import './EditStore.scss';
@@ -20,6 +22,9 @@ type PropsType = {
 
 type StateType = {
   form: {
+    [string]: ?any,
+  },
+  formErrors: {
     [string]: ?any,
   },
 };
@@ -43,46 +48,85 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   handleSave = () => {
-    /*
-     name: string,
-     userId: string,
-     currencyId: string,
-     shortDescription: string,
-     longDescription: string,
-     slug: string,
-    */
-    CreateStoreMutation.commit();
+    const { currentUser, environment } = this.context;
+    if (!currentUser || !currentUser.rawId) {
+      return;
+    }
+
+    const {
+      form: {
+        name,
+        currencyId,
+        languageId,
+        longDescription,
+        shortDescription,
+        slug,
+        slogan,
+      },
+    } = this.state;
+
+    // TODO: вынести в либу спеки
+    const { errors: formErrors } = validate({
+      name: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+      shortDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+      slug: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+    }, {
+      name,
+      currencyId,
+      languageId,
+      longDescription,
+      shortDescription,
+      slug,
+      slogan,
+    });
+    if (formErrors) {
+      this.setState({ formErrors });
+      return;
+    }
+
+    this.setState({ formErrors: {} });
+    CreateStoreMutation.commit({
+      userId: parseInt(currentUser.rawId, 10),
+      name,
+      currencyId: parseInt(currencyId, 10),
+      languageId: parseInt(languageId, 10),
+      longDescription,
+      shortDescription,
+      slug,
+      slogan,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        log.debug({ response, errors });
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'message'], error);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
+        alert('Something going wrong :(');
+      },
+    });
   };
 
   // TODO: extract to helper
-  /**
-   * Creates a new object with the own properties of the provided object, but the
-   * keys renamed according to the keysMap object as `{oldKey: newKey}`.
-   * When some key is not found in the keysMap, then it's passed as-is.
-   *
-   * Keep in mind that in the case of keys conflict is behaviour undefined and
-   * the result may vary between various JS engines!
-   *
-   * @sig {a: b} -> {a: *} -> {b: *}
-   */
-  renameKeys = curry((keysMap, obj) =>
-    reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj)));
+  capitalizeString = (s: string) => s && s[0] && s[0].toUpperCase() + s.slice(1);
 
   // TODO: extract to helper
-  // TODO: add handling errors
-  renderInput = (id: string, label: string, errors: ?Array<string>) => (
+  renderInput = (id: string, label: string) => (
     <div styleName="inputWrapper">
       <Input
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
         onChange={this.handleInputChange(id)}
-        errors={errors}
+        errors={propOr(null, id, this.state.formErrors)}
       />
     </div>
   );
-
-  capitalizeString = (s: string) => s && s[0] && s[0].toUpperCase() + s.slice(1);
 
   render() {
     const { directories: { languages, currencies } } = this.context;
@@ -99,10 +143,10 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="langSelect">
                   <MiniSelect
                     items={
-                      map((item) => {
-                        const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
-                        return assoc('label', this.capitalizeString(withCorrectKeys.label), withCorrectKeys);
-                      }, languages)
+                      map(item => ({
+                        id: toString(item.key),
+                        label: this.capitalizeString(item.name),
+                      }), languages)
                     }
                     onSelect={(id: string) => {
                       log.debug({ id });
@@ -116,34 +160,30 @@ class EditStore extends Component<PropsType, StateType> {
                   <Dropdown
                     label="Язык магазина"
                     items={
-                      map((item) => {
-                        const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
-                        return assoc('label', this.capitalizeString(withCorrectKeys.label), withCorrectKeys);
-                      }, languages)
+                      map(item => ({
+                        id: toString(item.key),
+                        label: this.capitalizeString(item.name),
+                      }), languages)
                     }
-                    onSelect={(id: string) => {
-                      log.debug({ id });
-                    }}
+                    onSelect={this.handleInputChange('languageId')}
                   />
                 </div>
                 <div styleName="dropdownWrapper">
                   <Dropdown
                     label="Валюта магазина"
                     items={
-                      map((item) => {
-                        const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
-                        return assoc('label', currenciesDic[withCorrectKeys.label], withCorrectKeys);
-                      }, currencies)
+                      map(item => ({
+                        id: toString(item.key),
+                        label: currenciesDic[item.name],
+                      }), currencies)
                     }
-                    onSelect={(id: string) => {
-                      log.debug({ id });
-                    }}
+                    onSelect={this.handleInputChange('currencyId')}
                   />
                 </div>
-                {this.renderInput('tagline', 'Слоган магазина')}
+                {this.renderInput('slogan', 'Слоган магазина')}
                 {this.renderInput('slug', 'Slug')}
-                {this.renderInput('short_desc', 'Краткое описание магазина')}
-                {this.renderInput('full_desc', 'Полное описание магазина')}
+                {this.renderInput('shortDescription', 'Краткое описание магазина')}
+                {this.renderInput('longDescription', 'Полное описание магазина')}
                 <Button
                   type="button"
                   onClick={this.handleSave}
@@ -160,7 +200,9 @@ class EditStore extends Component<PropsType, StateType> {
 }
 
 EditStore.contextTypes = {
+  environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
+  currentUser: currentUserShape,
 };
 
 export default Page(EditStore);
