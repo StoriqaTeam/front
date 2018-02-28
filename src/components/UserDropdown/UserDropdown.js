@@ -56,7 +56,7 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
 
     return (
       <div styleName="container">
-        <Dropdown round>
+        <Dropdown withIcon>
           <trigger>
             <div styleName={classNames('avatar', level, { 'is-avatar': avatar })}>
               {avatar ?

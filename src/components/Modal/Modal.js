@@ -27,7 +27,6 @@ class Modal extends Component<PropsTypes, StateTypes> {
   componentWillMount() {
     this.setState({ showModal: this.props.showModal });
 
-    window.addEventListener('click', this.onClickPast);
     window.addEventListener('keydown', this.handleKeydown);
   }
 
@@ -43,25 +42,12 @@ class Modal extends Component<PropsTypes, StateTypes> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('click', this.onClickPast);
     window.removeEventListener('keydown', this.handleKeydown);
   }
-
-  onClickPast = (e: any) => {
-    const isContainerClick = this.container && this.container.contains(e.target);
-    const isInnerClick = this.inner && this.inner.contains(e.target);
-
-    if (isContainerClick && !isInnerClick) {
-      this.props.onClose();
-    }
-  };
 
   onCloseModal = () => {
     this.props.onClose();
   };
-
-  container: any;
-  inner: any;
 
   toggleScroll = (showModal: ?boolean) => {
     if (showModal) {
@@ -82,15 +68,9 @@ class Modal extends Component<PropsTypes, StateTypes> {
 
     return (
       <Portal>
-        <div
-          ref={(node) => { this.container = node; }}
-          styleName="container"
-        >
+        <div styleName="container">
           <div styleName="wrap">
-            <div
-              ref={(node) => { this.inner = node; }}
-              styleName="inner"
-            >
+            <div styleName="inner">
               <div
                 styleName="close"
                 onClick={this.onCloseModal}
