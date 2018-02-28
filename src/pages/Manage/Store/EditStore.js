@@ -82,6 +82,8 @@ class EditStore extends Component<PropsType, StateType> {
     </div>
   );
 
+  capitalizeString = (s: string) => s && s[0] && s[0].toUpperCase() + s.slice(1);
+
   render() {
     const { directories: { languages, currencies } } = this.context;
     return (
@@ -96,7 +98,12 @@ class EditStore extends Component<PropsType, StateType> {
                 <span styleName="title">Настройки</span>
                 <div styleName="langSelect">
                   <MiniSelect
-                    items={map(this.renameKeys({ key: 'id', name: 'label' }), languages)}
+                    items={
+                      map((item) => {
+                        const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
+                        return assoc('label', this.capitalizeString(withCorrectKeys.label), withCorrectKeys);
+                      }, languages)
+                    }
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
@@ -108,7 +115,12 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="dropdownWrapper">
                   <Dropdown
                     label="Язык магазина"
-                    items={map(this.renameKeys({ key: 'id', name: 'label' }), languages)}
+                    items={
+                      map((item) => {
+                        const withCorrectKeys = this.renameKeys({ key: 'id', name: 'label' })(item);
+                        return assoc('label', this.capitalizeString(withCorrectKeys.label), withCorrectKeys);
+                      }, languages)
+                    }
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}

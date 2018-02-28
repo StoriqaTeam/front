@@ -32,7 +32,7 @@ class App extends PureComponent<PropsType> {
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
-      currentUser: pick(['id', 'rawId'], me),
+      currentUser: pick(['id', 'rawId'], me || {}),
       directories: {
         languages,
         currencies,
