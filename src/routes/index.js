@@ -11,6 +11,7 @@ import { Login, OAuthCallback } from 'components/Login';
 import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
 import { StoreSettingsPage } from 'pages/StoreSettingsPage';
+import EditStore from 'pages/Manage/Store/EditStore';
 
 const routes = (
   <Route
@@ -36,6 +37,14 @@ const routes = (
     }}
   >
     <Route Component={() => <div />} />
+    <Route path="/manage">
+      <Route path="/store">
+        <Route
+          path="/new"
+          Component={EditStore}
+        />
+      </Route>
+    </Route>
     <Route
       path="/registration"
       Component={Registration}
