@@ -20,26 +20,17 @@
   line-height: 8rem; // should equals to font-size
 }
 
-.langSelect {
-  background-color: $color_white;
-  height: 3rem;
-  margin-left: 2rem;
-}
-
+// TODO: DRY!!!
 .formContainer {
   background-color: $color_white;
 }
 
+// TODO: DRY!!!
 .inputWrapper {
   height: 7rem;
 }
 
-.dropdownWrapper + .inputWrapper,
-.dropdownWrapper + .dropdownWrapper {
-  margin-top: 5rem;
-}
-
-.inputWrapper + .dropdownWrapper,
+// TODO: DRY!!!
 .inputWrapper + .inputWrapper {
   margin-top: 3rem;
 }

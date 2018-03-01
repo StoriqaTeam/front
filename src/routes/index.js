@@ -13,6 +13,7 @@ import { Login, OAuthCallback } from 'components/Login';
 import { Registration } from 'components/Registration';
 import { Profile } from 'components/Profile';
 import EditStore from 'pages/Manage/Store/EditStore';
+import Contacts from 'pages/Manage/Store/Contacts';
 
 const routes = (
   <Route
@@ -56,6 +57,10 @@ const routes = (
         <Route
           path="/new"
           Component={EditStore}
+        />
+        <Route
+          path="/contacts"
+          Component={Contacts}
         />
       </Route>
     </Route>

@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr, map, toString } from 'ramda';
 import { validate } from '@storiqa/validation_specs';
 
-import { Button } from 'components/Button';
+import { currentUserShape } from 'utils/shapes';
+import { Page } from 'components/App';
 import { MiniSelect } from 'components/MiniSelect';
 import { Input, Dropdown } from 'components/Forms';
-import { Container, Row, Col } from 'layout';
-import { Page } from 'components/App';
-import { log, fromRelayError } from 'utils';
-import { currentUserShape } from 'utils/shapes';
 import { CreateStoreMutation } from 'relay/mutations';
+import { Button } from 'components/Button';
+import { Container, Row, Col } from 'layout';
+import { log, fromRelayError } from 'utils';
 
 import './EditStore.scss';
 
@@ -134,7 +134,7 @@ class EditStore extends Component<PropsType, StateType> {
       <Container>
         <Row>
           <Col size={2}>
-            <div>main</div>
+            <div>menu</div>
           </Col>
           <Col size={10}>
             <div styleName="container">
