@@ -1,11 +1,12 @@
 // @flow
 
 import React from 'react';
-import { Route } from 'found';
+import { Route, RedirectException } from 'found';
 import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
+import PrivateRoute from 'routes/PrivateRoute';
 import { log } from 'utils';
 import { App } from 'components/App';
 import { Login, OAuthCallback } from 'components/Login';
@@ -47,7 +48,10 @@ const routes = (
   >
     <Route Component={() => <div />} />
 
-    <Route path="/manage">
+    <Route
+      path="/manage"
+      Component={PrivateRoute}
+    >
       <Route path="/store">
         <Route
           path="/new"
@@ -70,7 +74,7 @@ const routes = (
       render={() => {
         const cookies = new Cookies();
         cookies.remove('__jwt');
-        window.location.href = '/';
+        throw new RedirectException('/');
       }}
     />
     <Route
