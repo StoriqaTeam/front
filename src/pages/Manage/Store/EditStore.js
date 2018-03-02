@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr, map, toString } from 'ramda';
+import { addIndex, assocPath, pathOr, propOr, map, toString } from 'ramda';
 import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
@@ -29,6 +29,20 @@ type StateType = {
   },
 };
 
+// TODO: extract to shared lib
+const languagesDic = {
+  en: 'en',
+  ch: 'ch',
+  de: 'de',
+  ru: 'ru',
+  es: 'es',
+  fr: 'fr',
+  ko: 'ko',
+  po: 'po',
+  ja: 'ja',
+};
+
+// TODO: extract to shared lib
 const currenciesDic = {
   rouble: 'RUB',
   euro: 'EUR',
@@ -37,6 +51,8 @@ const currenciesDic = {
   etherium: 'ETH',
   stq: 'STQ',
 };
+
+const indexedMap = addIndex(map);
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
@@ -143,9 +159,9 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="langSelect">
                   <MiniSelect
                     items={
-                      map(item => ({
-                        id: toString(item.key),
-                        label: this.capitalizeString(item.name),
+                      indexedMap((item, idx) => ({
+                        id: toString(idx),
+                        label: languagesDic[item.isoCode],
                       }), languages)
                     }
                     onSelect={(id: string) => {
@@ -160,9 +176,9 @@ class EditStore extends Component<PropsType, StateType> {
                   <Dropdown
                     label="Язык магазина"
                     items={
-                      map(item => ({
-                        id: toString(item.key),
-                        label: this.capitalizeString(item.name),
+                      indexedMap((item, idx) => ({
+                        id: toString(idx),
+                        label: languagesDic[item.isoCode],
                       }), languages)
                     }
                     onSelect={this.handleInputChange('languageId')}
