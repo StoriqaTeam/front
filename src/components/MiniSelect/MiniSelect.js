@@ -37,7 +37,7 @@ class MiniSelect extends Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    if (this.props.onSelect) {
+    if (this.props.onSelect && this.state.activeItem) {
       this.props.onSelect(this.state.activeItem.id);
     }
   }

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addIndex, assocPath, pathOr, propOr, map, toString, toUpper } from 'ramda';
+import { assocPath, pathOr, propOr, map, toString, toUpper } from 'ramda';
 import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
@@ -52,11 +52,10 @@ const currenciesDic = {
   stq: 'STQ',
 };
 
-const indexedMap = addIndex(map);
-
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
     form: {},
+    formErrors: {},
   };
 
   handleInputChange = (id: string) => (value: any) => {
@@ -150,7 +149,7 @@ class EditStore extends Component<PropsType, StateType> {
 
   render() {
     const { directories: { languages, currencies } } = this.context;
-    const langItems = indexedMap((item, idx) => ({
+    const langItems = map(item => ({
       id: item.isoCode,
       label: languagesDic[item.isoCode],
     }), languages);

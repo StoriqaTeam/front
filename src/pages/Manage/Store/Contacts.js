@@ -27,6 +27,7 @@ type StateType = {
 class Contacts extends Component<PropsType, StateType> {
   state: StateType = {
     form: {},
+    formErrors: {},
   };
 
   handleInputChange = (id: string) => (value: any) => {

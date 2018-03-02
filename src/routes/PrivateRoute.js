@@ -1,13 +1,14 @@
 // @flow
 
-import { PureComponent, Children } from 'react';
+import { PureComponent } from 'react';
+import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 
 type PropsType = {
-  children: Children,
+  children: Node,
 };
 
 class PrivateRoute extends PureComponent<PropsType> {
