@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addIndex, assocPath, pathOr, propOr, map, toString } from 'ramda';
+import { addIndex, assocPath, pathOr, propOr, map, toString, toUpper } from 'ramda';
 import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
@@ -73,7 +73,7 @@ class EditStore extends Component<PropsType, StateType> {
       form: {
         name,
         currencyId,
-        languageId,
+        defaultLanguage,
         longDescription,
         shortDescription,
         slug,
@@ -89,7 +89,7 @@ class EditStore extends Component<PropsType, StateType> {
     }, {
       name,
       currencyId,
-      languageId,
+      defaultLanguage,
       longDescription,
       shortDescription,
       slug,
@@ -103,11 +103,15 @@ class EditStore extends Component<PropsType, StateType> {
     this.setState({ formErrors: {} });
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
-      name,
+      name: [
+        { lang: 'EN', text: name },
+      ],
       currencyId: parseInt(currencyId, 10),
-      languageId: parseInt(languageId, 10),
+      defaultLanguage: toUpper(defaultLanguage),
       longDescription,
-      shortDescription,
+      shortDescription: [
+        { lang: 'EN', text: shortDescription },
+      ],
       slug,
       slogan,
       environment,
@@ -146,6 +150,14 @@ class EditStore extends Component<PropsType, StateType> {
 
   render() {
     const { directories: { languages, currencies } } = this.context;
+    const langItems = indexedMap((item, idx) => ({
+      id: item.isoCode,
+      label: languagesDic[item.isoCode],
+    }), languages);
+    const currencyItems = map(item => ({
+      id: toString(item.key),
+      label: currenciesDic[item.name],
+    }), currencies);
     return (
       <Container>
         <Row>
@@ -158,12 +170,7 @@ class EditStore extends Component<PropsType, StateType> {
                 <span styleName="title">Настройки</span>
                 <div styleName="langSelect">
                   <MiniSelect
-                    items={
-                      indexedMap((item, idx) => ({
-                        id: toString(idx),
-                        label: languagesDic[item.isoCode],
-                      }), languages)
-                    }
+                    items={langItems}
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
@@ -175,24 +182,14 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="dropdownWrapper">
                   <Dropdown
                     label="Язык магазина"
-                    items={
-                      indexedMap((item, idx) => ({
-                        id: toString(idx),
-                        label: languagesDic[item.isoCode],
-                      }), languages)
-                    }
-                    onSelect={this.handleInputChange('languageId')}
+                    items={langItems}
+                    onSelect={this.handleInputChange('defaultLanguage')}
                   />
                 </div>
                 <div styleName="dropdownWrapper">
                   <Dropdown
                     label="Валюта магазина"
-                    items={
-                      map(item => ({
-                        id: toString(item.key),
-                        label: currenciesDic[item.name],
-                      }), currencies)
-                    }
+                    items={currencyItems}
                     onSelect={this.handleInputChange('currencyId')}
                   />
                 </div>

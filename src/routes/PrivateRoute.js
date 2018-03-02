@@ -13,7 +13,7 @@ type PropsType = {
 class PrivateRoute extends PureComponent<PropsType> {
   render() {
     if (!pathOr(false, ['currentUser', 'id'], this.context)) {
-      this.context.router.push('/login');
+      this.context.router.replace('/login');
       return null;
     }
     return this.props.children;
