@@ -13,6 +13,9 @@ import { CreateStoreMutation } from 'relay/mutations';
 import { Button } from 'components/Button';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
+import Menu from './Menu';
+
+import menuItems from './menuItems.json';
 
 import './EditStore.scss';
 
@@ -27,6 +30,7 @@ type StateType = {
   formErrors: {
     [string]: ?any,
   },
+  activeItem: string,
 };
 
 const currenciesDic = {
@@ -41,6 +45,7 @@ const currenciesDic = {
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
     form: {},
+    activeItem: 'orders',
   };
 
   handleInputChange = (id: string) => (value: any) => {
@@ -112,6 +117,10 @@ class EditStore extends Component<PropsType, StateType> {
     });
   };
 
+  switchMenu = (activeItem) => {
+    this.setState({ activeItem });
+  };
+
   // TODO: extract to helper
   capitalizeString = (s: string) => s && s[0] && s[0].toUpperCase() + s.slice(1);
 
@@ -130,11 +139,16 @@ class EditStore extends Component<PropsType, StateType> {
 
   render() {
     const { directories: { languages, currencies } } = this.context;
+    const { activeItem } = this.state;
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <div>menu</div>
+            <Menu
+              menuItems={menuItems}
+              activeItem={activeItem}
+              switchMenu={this.switchMenu}
+            />
           </Col>
           <Col size={10}>
             <div styleName="container">

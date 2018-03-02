@@ -9,8 +9,7 @@ import { find, pathEq, pathOr } from 'ramda';
 import PrivateRoute from 'routes/PrivateRoute';
 import { log } from 'utils';
 import { App } from 'components/App';
-import { Login, OAuthCallback } from 'components/Login';
-import { Registration } from 'components/Registration';
+import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
@@ -67,11 +66,20 @@ const routes = (
 
     <Route
       path="/registration"
-      Component={Registration}
+      Component={Authorization}
+      render={({ Component, props, error }) => {
+        if (error) {
+          const errors = pathOr(null, ['source', 'errors'], error);
+          if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
+            return <Component isSignUp {...props} />;
+          }
+        }
+        return <Component isSignUp {...props} />;
+      }}
     />
     <Route
       path="/login"
-      Component={Login}
+      Component={Authorization}
     />
     <Route
       path="/logout"

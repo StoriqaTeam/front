@@ -1,0 +1,26 @@
+[
+  {
+    "id": "orders",
+    "title": "Заказы"
+  },
+  {
+    "id": "goods",
+    "title": "Товары"
+  },
+  {
+    "id": "settings",
+    "title": "Настройки"
+  },
+  {
+    "id": "contacts",
+    "title": "Контакты"
+  },
+  {
+    "id": "employees",
+    "title": "Сотрудники"
+  },
+  {
+    "id": "warehouses",
+    "title": "Склады"
+  }
+]
