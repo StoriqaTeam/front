@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import { SearchInput } from 'components/SearchInput';
-import { ProfileMenu } from 'components/ProfileMenu';
+import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
 import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
@@ -91,7 +91,7 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="profileIcon">
-                  <ProfileMenu user={user} />
+                  <UserDropdown user={user} />
                 </div>
                 <div styleName="cartIcon">
                   <CartButton />
