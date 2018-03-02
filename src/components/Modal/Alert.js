@@ -21,7 +21,7 @@ type StateTypes = {
   showAlert: ?boolean,
 };
 
-class Modal extends Component<PropsTypes, StateTypes> {
+class Alert extends Component<PropsTypes, StateTypes> {
   state = {
     showAlert: false,
   };
@@ -71,4 +71,4 @@ class Modal extends Component<PropsTypes, StateTypes> {
   }
 }
 
-export default Modal;
+export default Alert;
