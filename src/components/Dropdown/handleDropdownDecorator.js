@@ -16,8 +16,9 @@ export default OriginalComponent => class HandlerDropdownDecorator extends Compo
   }
 
   handleDropdown = (e) => {
+    const { localName } = e.target;
     const { isContentOpen } = this.state;
-    const isTriggerClick = this.triggerElement.contains(e.target);
+    const isTriggerClick = this.triggerElement && this.triggerElement.contains(e.target);
     const isContentClick = this.contentElement && this.contentElement.contains(e.target);
 
     if (isTriggerClick && !isContentOpen) {
@@ -25,7 +26,7 @@ export default OriginalComponent => class HandlerDropdownDecorator extends Compo
       return;
     }
 
-    if (e.keyCode === 27 || !isContentClick) {
+    if (e.keyCode === 27 || !isContentClick || (localName && localName === 'a')) {
       this.setState({ isContentOpen: false });
     }
   }

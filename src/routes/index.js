@@ -7,8 +7,7 @@ import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
 import { App } from 'components/App';
-import { Login, OAuthCallback } from 'components/Login';
-import { Registration } from 'components/Registration';
+import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import { StoreSettingsPage } from 'pages/StoreSettingsPage';
 import EditStore from 'pages/Manage/Store/EditStore';
@@ -47,11 +46,20 @@ const routes = (
     </Route>
     <Route
       path="/registration"
-      Component={Registration}
+      Component={Authorization}
+      render={({ Component, props, error }) => {
+        if (error) {
+          const errors = pathOr(null, ['source', 'errors'], error);
+          if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
+            return <Component isSignUp {...props} />;
+          }
+        }
+        return <Component isSignUp {...props} />;
+      }}
     />
     <Route
       path="/login"
-      Component={Login}
+      Component={Authorization}
     />
     <Route
       path="/logout"
