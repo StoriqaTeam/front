@@ -59,7 +59,7 @@ const routes = (
           Component={EditStore}
         />
         <Route
-          path="/contacts"
+          path=":storeId/contacts"
           Component={Contacts}
         />
       </Route>

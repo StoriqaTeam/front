@@ -8,10 +8,19 @@ const mutation = graphql`
     createStore(input: $input) {
       id
       rawId
-      name
+      name {
+        lang
+        text
+      }
       currencyId
-      shortDescription
-      longDescription
+      shortDescription {
+        lang
+        text
+      }
+      longDescription {
+        lang
+        text
+      }
       slug
     }
   }
@@ -51,15 +60,3 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
 });
 
 export default { commit };
-
-/* {
- "input":{
- "clientMutationId": "",
- "name": "1q1q1q1q",
- "userId": 6,
- "currencyId": 1,
- "shortDescription": "short desc here",
- "longDescription": "long desc here",
- "slug": "1q1q1q1q"
- }
- } */

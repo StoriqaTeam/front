@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { propOr } from 'ramda';
+import { assocPath, propOr } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -62,7 +62,33 @@ class Contacts extends Component<PropsType, StateType> {
                 {this.renderInput('email', 'Email')}
                 {this.renderInput('phone', 'Phone')}
                 {this.renderInput('social', 'Social')}
-                {this.renderInput('address', 'Address')}
+                <div styleName="rowWrapper">
+                  <Row>
+                    <Col size={3}>
+                      {this.renderInput('address', 'Address')}
+                    </Col>
+                  </Row>
+                </div>
+                <div styleName="rowWrapper">
+                  <Row>
+                    <Col size={3}>
+                      {this.renderInput('city', 'City')}
+                    </Col>
+                    <Col size={3}>
+                      {this.renderInput('state', 'State / Province / Region')}
+                    </Col>
+                  </Row>
+                </div>
+                <div styleName="rowWrapper">
+                  <Row>
+                    <Col size={3}>
+                      {this.renderInput('zip', 'ZIP / Postal code')}
+                    </Col>
+                    <Col size={3}>
+                      {this.renderInput('country', 'Country')}
+                    </Col>
+                  </Row>
+                </div>
               </div>
             </div>
           </Col>

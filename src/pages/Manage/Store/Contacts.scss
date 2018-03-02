@@ -22,6 +22,7 @@
 
 // TODO: DRY!!!
 .formContainer {
+  padding-top: 4rem;
   background-color: $color_white;
 }
 
@@ -31,6 +32,8 @@
 }
 
 // TODO: DRY!!!
-.inputWrapper + .inputWrapper {
+.inputWrapper + .inputWrapper,
+.inputWrapper + .rowWrapper,
+.rowWrapper + .rowWrapper {
   margin-top: 3rem;
 }
