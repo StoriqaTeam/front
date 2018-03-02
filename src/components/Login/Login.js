@@ -57,7 +57,7 @@ class Login extends Component<PropsType, StateType> {
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
           const cookies = new Cookies();
-          cookies.set('__jwt', { value: jwt });
+          cookies.set('__jwt', { value: jwt }, { path: '/' });
           if (this.context.handleLogin) {
             this.context.handleLogin();
             this.props.router.replace('/');
