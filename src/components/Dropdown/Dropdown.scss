@@ -41,6 +41,11 @@
   }
 }
 
-.round {
+.withIconTrigger {
   border-radius: 50%;
+}
+
+.withIconContent {
+  position: relative;
+  left: -1rem;
 }

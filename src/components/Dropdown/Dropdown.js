@@ -13,12 +13,12 @@ type PropsTypes = {
   contentRef: Function,
   children: Node,
   isContentOpen: boolean,
-  round: boolean | void
+  withIcon: boolean | void
 };
 
 class Dropdown extends Component<PropsTypes> {
   render() {
-    const { round } = this.props;
+    const { withIcon } = this.props;
 
     return (
       <div
@@ -29,7 +29,7 @@ class Dropdown extends Component<PropsTypes> {
             return (
               <div
                 ref={this.props.triggerRef}
-                styleName={classNames('trigger', { round })}
+                styleName={classNames('trigger', { withIconTrigger: withIcon })}
               >
                 {child.props.children}
               </div>
@@ -38,7 +38,7 @@ class Dropdown extends Component<PropsTypes> {
             return (
               <div
                 ref={this.props.contentRef}
-                styleName="content"
+                styleName={classNames('content', { withIconContent: withIcon })}
               >
                 {child.props.children}
               </div>
