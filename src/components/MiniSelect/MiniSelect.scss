@@ -1,22 +1,31 @@
-@import "../../styles/variables";
-
 .container {
+  position: relative;
+  display: inline-block;
+}
+
+.label {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  color: #A7A7A7;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.wrap {
   position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 100%;
+  height: 20px;
   padding: 0 24px 0 8px;
   border-radius: 2px;
   color: #505050;
-  background-color: inherit;
+  background-color: #FAFAFA;
   font-size: 12px;
   cursor: pointer;
 }
 
-.containerForForm {
-  height: 3rem;
-  padding: 0;
+.isWhite {
+  background-color: #FFFFFF;
 }
 
 .isItem {
@@ -41,13 +50,6 @@
   right: 4px;
   border-radius: 2px;
   z-index: 2;
-}
-
-.iconForForm {
-  margin-left: 1rem;
-  top: 0;
-  right: 0;
-  position: relative;
 }
 
 .isItem .icon {
@@ -79,7 +81,7 @@
   z-index: 1;
 }
 
-.wrap {
+.itemsWrap {
   position: relative;
 }
 
@@ -87,6 +89,7 @@
   padding: 2px 8px;
   text-align: left;
   line-height: 16px;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -112,12 +115,4 @@
 
 .hidden {
   display: none;
-}
-
-.isForForm {
-  font-size: 14px;
-  line-height: 3rem;
-  text-align: left;
-  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: $color_grey_text,
 }

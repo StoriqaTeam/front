@@ -3,13 +3,15 @@
 .container {
   height: 4rem;
   display: inline-block;
-  width: 100%;
+  min-width: 96px;
+  padding: 0 16px;
   border-radius: 4px;
   line-height: 32px;
   cursor: pointer;
   color: #fff;
   font-size: 16px;
   background: $color_primary;
+  white-space: nowrap;
 }
 
 .wireframe {

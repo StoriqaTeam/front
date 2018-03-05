@@ -17,11 +17,11 @@ type StateType = {
 type PropsType = {
   isItem: ?boolean,
   isDropdown: ?boolean,
+  isWhite: ?boolean,
   items: Array<{ id: string, label: string }>,
-  onSelect: (id: string) => void,
+  onSelect?: (id: number) => void,
+  title: ?string,
   label: ?string,
-  withTwoArrows?: boolean,
-  forForm?: boolean,
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
@@ -65,12 +65,13 @@ class MiniSelect extends Component<PropsType, StateType> {
     if (this.props.isDropdown) {
       log.info('id', e.target.id);
     } else {
-      const activeItem = find(propEq('id', e.target.id), this.props.items);
+      const activeItem = find(propEq('id', e.target.id))(this.props.items);
       if (activeItem) {
         this.setState({ activeItem });
         const { onSelect } = this.props;
+
         if (onSelect) {
-          onSelect(activeItem.id);
+          onSelect(activeItem);
         }
       }
     }
@@ -81,54 +82,52 @@ class MiniSelect extends Component<PropsType, StateType> {
       items,
       isItem,
       isDropdown,
+      title,
+      isWhite,
       label,
-      withTwoArrows,
-      forForm,
     } = this.props;
     const { isExpanded, activeItem } = this.state;
 
     return (
       <div
         ref={(node) => { this.button = node; }}
-        styleName={classNames('container', {
-          isItem,
-          isDropdown,
-          containerForForm: forForm,
-        })}
+        styleName={classNames('container', { isItem, isDropdown })}
       >
-        <div styleName={classNames('selected', { isForForm: forForm })}>
-          { isDropdown ? label : activeItem && activeItem.label }
-        </div>
-        <div styleName={classNames('icon', { iconForForm: forForm })}>
-          {withTwoArrows && (<Icon type="arrowsExpand" size="8" />)}
-          {!withTwoArrows && (<Icon type="arrowExpand" />)}
-        </div>
-        <div
-          ref={(node) => { this.items = node; }}
-          styleName={classNames('items', {
-            hidden: !isExpanded,
-          })}
-        >
+        {label && <div styleName="label">{label}</div>}
+        <div styleName={classNames('wrap', { isWhite })}>
+          <div styleName="selected">
+            { isDropdown ? title : activeItem && activeItem.label }
+          </div>
+          <div styleName="icon">
+            <Icon type="arrowExpand" />
+          </div>
           <div
-            ref={(node) => { this.itemsWrap = node; }}
-            styleName="wrap"
-            onClick={this.handleItemClick}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            {items.map((item) => {
-              const { id } = item;
-              return (
-                <div
-                  key={id}
-                  id={id}
-                  styleName={classNames('item', { active: activeItem && activeItem.id === id })}
-                >
-                  {item.label}
-                </div>
-              );
+            ref={(node) => { this.items = node; }}
+            styleName={classNames('items', {
+              hidden: !isExpanded,
             })}
+          >
+            <div
+              ref={(node) => { this.itemsWrap = node; }}
+              styleName="itemsWrap"
+              onClick={this.handleItemClick}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
+              {items.map((item) => {
+                const { id } = item;
+                return (
+                  <div
+                    key={id}
+                    id={id}
+                    styleName={classNames('item', { active: activeItem && activeItem.id === id })}
+                  >
+                    {item.label}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

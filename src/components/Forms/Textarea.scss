@@ -4,17 +4,17 @@
 
 .label {
   position: absolute;
-  top: 4px;
+  top: 0.5rem;
   left: 0;
-  color: #505050;
+  color: #A7A7A7;
   font-size: 14px;
-  line-height: 16px;
+  line-height: 2rem;
+  white-space: nowrap;
   transition: all .3s ease;
 }
 
 .labelFloat {
-  top: -16px;
-  color: #A7A7A7;
+  top: -2rem;
   font-size: 12px;
   font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
 }
@@ -22,7 +22,7 @@
 .textarea textarea {
   font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: relative;
-  width: 768px;
+  width: 96rem;
   border-bottom: 1px solid #A7A7A7;
   font-size: 14px;
   line-height: 24px;

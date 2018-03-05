@@ -1,46 +1,22 @@
 @import "../../../styles/variables";
 
-// TODO: DRY!!!
 .container {
-  background-color: #FAFAFA;
-}
-
-// TODO: DRY!!!
-.header {
   display: flex;
-  height: 7rem;
-  align-items: center;
-}
-
-// TODO: DRY!!!
-.title {
-  composes: OpenSans_SemiBold from global;
-  color: $color_grey_text;
-  font-size: 24px;
-  line-height: 8rem; // should equals to font-size
+  flex-direction: column;
+  height: 100%;
 }
 
 .langSelect {
-  background-color: $color_white;
-  height: 3rem;
   margin-left: 2rem;
 }
 
-.formContainer {
-  padding-top: 4rem;
+.form {
+  height: 100%;
+  margin-top: 2rem;
+  padding: 4rem 2rem 2rem;
   background-color: $color_white;
 }
 
-.inputWrapper {
-  height: 7rem;
-}
-
-.dropdownWrapper + .inputWrapper,
-.dropdownWrapper + .dropdownWrapper {
-  margin-top: 5rem;
-}
-
-.inputWrapper + .dropdownWrapper,
-.inputWrapper + .inputWrapper {
-  margin-top: 3rem;
+.formItem + .formItem {
+  margin-top: 6rem;
 }

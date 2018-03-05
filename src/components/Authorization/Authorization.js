@@ -140,7 +140,13 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   handleToggle = () => {
-    this.setState({ isSignUp: !this.state.isSignUp });
+    this.setState({
+      isSignUp: !this.state.isSignUp,
+      username: '',
+      email: '',
+      password: '',
+      errors: null,
+    });
   }
 
   render() {

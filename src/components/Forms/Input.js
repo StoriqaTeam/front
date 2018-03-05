@@ -21,10 +21,10 @@ type StateType = {
 class Input extends Component<PropsType, StateType> {
   state = {
     labelFloat: false,
-  };
+  }
 
   componentWillMount() {
-    this.setState({ labelFloat: !!this.props.value });
+    this.setState({ labelFloat: Boolean(this.props.value) });
   }
 
   input: ?HTMLInputElement;
@@ -74,11 +74,11 @@ class Input extends Component<PropsType, StateType> {
           />
         </div>
         {errors && errors.length > 0 &&
-          <div className="errors">
-            {errors.map((item, idx) => (
-              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
-            ))}
-          </div>
+        <div className="errors">
+          {errors.map((item, idx) => (
+            <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
+          ))}
+        </div>
         }
       </label>
     );

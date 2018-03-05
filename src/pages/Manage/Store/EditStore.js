@@ -8,14 +8,13 @@ import { validate } from '@storiqa/validation_specs';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { MiniSelect } from 'components/MiniSelect';
-import { Input, Dropdown } from 'components/Forms';
+import { Input, Textarea } from 'components/Forms';
 import { CreateStoreMutation } from 'relay/mutations';
 import { Button } from 'components/Button';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
+import Header from './Header';
 import Menu from './Menu';
-
-import menuItems from './menuItems.json';
 
 import './EditStore.scss';
 
@@ -33,19 +32,19 @@ type StateType = {
   activeItem: string,
 };
 
-const currenciesDic = {
-  rouble: 'RUB',
-  euro: 'EUR',
-  dollar: 'USD',
-  bitcoin: 'BTC',
-  etherium: 'ETH',
-  stq: 'STQ',
-};
+// const currenciesDic = {
+//   rouble: 'RUB',
+//   euro: 'EUR',
+//   dollar: 'USD',
+//   bitcoin: 'BTC',
+//   etherium: 'ETH',
+//   stq: 'STQ',
+// };
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
     form: {},
-    activeItem: 'orders',
+    activeItem: 'settings',
   };
 
   handleInputChange = (id: string) => (value: any) => {
@@ -126,8 +125,20 @@ class EditStore extends Component<PropsType, StateType> {
 
   // TODO: extract to helper
   renderInput = (id: string, label: string) => (
-    <div styleName="inputWrapper">
+    <div styleName="formItem">
       <Input
+        id={id}
+        value={propOr('', id, this.state.form)}
+        label={label}
+        onChange={this.handleInputChange(id)}
+        errors={propOr(null, id, this.state.formErrors)}
+      />
+    </div>
+  );
+
+  renderTextarea = (id: string, label: string) => (
+    <div styleName="formItem">
+      <Textarea
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -145,17 +156,16 @@ class EditStore extends Component<PropsType, StateType> {
         <Row>
           <Col size={2}>
             <Menu
-              menuItems={menuItems}
               activeItem={activeItem}
               switchMenu={this.switchMenu}
             />
           </Col>
           <Col size={10}>
             <div styleName="container">
-              <div styleName="header">
-                <span styleName="title">Настройки</span>
+              <Header title="Настройки">
                 <div styleName="langSelect">
                   <MiniSelect
+                    isWhite
                     items={
                       map(item => ({
                         id: toString(item.key),
@@ -167,11 +177,11 @@ class EditStore extends Component<PropsType, StateType> {
                     }}
                   />
                 </div>
-              </div>
-              <div styleName="formContainer">
+              </Header>
+              <div styleName="form">
                 {this.renderInput('name', 'Название магазина')}
-                <div styleName="dropdownWrapper">
-                  <Dropdown
+                <div styleName="formItem">
+                  <MiniSelect
                     label="Язык магазина"
                     items={
                       map(item => ({
@@ -179,16 +189,18 @@ class EditStore extends Component<PropsType, StateType> {
                         label: this.capitalizeString(item.name),
                       }), languages)
                     }
-                    onSelect={this.handleInputChange('languageId')}
+                    onSelect={(id: string) => {
+                      log.debug({ id });
+                    }}
                   />
                 </div>
-                <div styleName="dropdownWrapper">
-                  <Dropdown
+                <div styleName="formItem">
+                  <MiniSelect
                     label="Валюта магазина"
                     items={
                       map(item => ({
                         id: toString(item.key),
-                        label: currenciesDic[item.name],
+                        label: this.capitalizeString(item.name),
                       }), currencies)
                     }
                     onSelect={this.handleInputChange('currencyId')}
@@ -196,14 +208,16 @@ class EditStore extends Component<PropsType, StateType> {
                 </div>
                 {this.renderInput('slogan', 'Слоган магазина')}
                 {this.renderInput('slug', 'Slug')}
-                {this.renderInput('shortDescription', 'Краткое описание магазина')}
-                {this.renderInput('longDescription', 'Полное описание магазина')}
-                <Button
-                  type="button"
-                  onClick={this.handleSave}
-                >
-                  Save
-                </Button>
+                {this.renderTextarea('shortDescription', 'Краткое описание магазина')}
+                {this.renderTextarea('longDescription', 'Полное описание магазина')}
+                <div styleName="formItem">
+                  <Button
+                    type="button"
+                    onClick={this.handleSave}
+                  >
+                    Save
+                  </Button>
+                </div>
               </div>
             </div>
           </Col>

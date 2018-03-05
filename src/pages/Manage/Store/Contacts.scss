@@ -1,39 +1,18 @@
 @import "../../../styles/variables";
 
-// TODO: DRY!!!
 .container {
-  background-color: #FAFAFA;
-}
-
-// TODO: DRY!!!
-.header {
   display: flex;
-  height: 7rem;
-  align-items: center;
+  flex-direction: column;
+  height: 100%;
 }
 
-// TODO: DRY!!!
-.title {
-  composes: OpenSans_SemiBold from global;
-  color: $color_grey_text;
-  font-size: 24px;
-  line-height: 8rem; // should equals to font-size
-}
-
-// TODO: DRY!!!
-.formContainer {
-  padding-top: 4rem;
+.form {
+  height: 100%;
+  margin-top: 2rem;
+  padding: 4rem 2rem 2rem;
   background-color: $color_white;
 }
 
-// TODO: DRY!!!
-.inputWrapper {
-  height: 7rem;
-}
-
-// TODO: DRY!!!
-.inputWrapper + .inputWrapper,
-.inputWrapper + .rowWrapper,
-.rowWrapper + .rowWrapper {
-  margin-top: 3rem;
+.formItem + .formItem {
+  margin-top: 6rem;
 }

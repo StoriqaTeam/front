@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import MultiClamp from 'react-multi-clamp';
 
+import menuItems from './menuItems.json';
+
 import './Menu.scss';
 
 type PropsType = {
@@ -18,7 +20,7 @@ type StateType = {
 
 class Menu extends PureComponent<PropsType, StateType> {
   render() {
-    const { menuItems, activeItem } = this.props;
+    const { activeItem } = this.props;
 
     return (
       <div styleName="menu">

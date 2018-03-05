@@ -10,7 +10,7 @@ storiesOf('Forms/Input', module)
     <OnChangeDecorator>
       <Input
         id="some_id"
-        label="Input"
+        label="Input more words"
       />
     </OnChangeDecorator>
   ))

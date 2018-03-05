@@ -2,12 +2,18 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, propOr } from 'ramda';
+import { assocPath, pathOr, propOr } from 'ramda';
+import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { Input } from 'components/Forms';
+import { Button } from 'components/Button';
+import { log, fromRelayError } from 'utils';
+
+import Header from './Header';
+import Menu from './Menu';
 
 import './Contacts.scss';
 
@@ -22,20 +28,88 @@ type StateType = {
   formErrors: {
     [string]: ?any,
   },
+  activeItem: string,
 };
 
 class Contacts extends Component<PropsType, StateType> {
   state: StateType = {
     form: {},
+    activeItem: 'contacts',
   };
 
   handleInputChange = (id: string) => (value: any) => {
     this.setState(assocPath(['form', id], value));
   };
 
+  handleSave = () => {
+    const { currentUser, environment } = this.context;
+    if (!currentUser || !currentUser.rawId) {
+      return;
+    }
+
+    const {
+      form: {
+        email,
+        phone,
+        social,
+        address,
+        city,
+        state,
+        zip,
+        country,
+      },
+    } = this.state;
+
+    // TODO: вынести в либу спеки
+    const { errors: formErrors } = validate({
+      email: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+    }, {
+      email,
+      phone,
+      social,
+      address,
+      city,
+      state,
+      zip,
+      country,
+    });
+    if (formErrors) {
+      this.setState({ formErrors });
+      return;
+    }
+
+    this.setState({ formErrors: {} });
+    currentUserShape.commit({
+      userId: parseInt(currentUser.rawId, 10),
+      email,
+      phone,
+      social,
+      address,
+      city,
+      state,
+      zip,
+      country,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        log.debug({ response, errors });
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'message'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
+        alert('Something going wrong :(');
+      },
+    });
+  };
+
   // TODO: extract to helper
   renderInput = (id: string, label: string) => (
-    <div styleName="inputWrapper">
+    <div styleName="formItem">
       <Input
         id={id}
         value={propOr('', id, this.state.form)}
@@ -47,29 +121,26 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
+    const { activeItem } = this.state;
+
     return (
       <Container>
         <Row>
           <Col size={2}>
-            menu
+            <Menu
+              activeItem={activeItem}
+              switchMenu={this.switchMenu}
+            />
           </Col>
           <Col size={10}>
-            <div>
-              <div styleName="header">
-                <span styleName="title">Контакты</span>
-              </div>
-              <div styleName="formContainer">
+            <div styleName="container">
+              <Header title="Контакты" />
+              <div styleName="form">
                 {this.renderInput('email', 'Email')}
                 {this.renderInput('phone', 'Phone')}
                 {this.renderInput('social', 'Social')}
-                <div styleName="rowWrapper">
-                  <Row>
-                    <Col size={3}>
-                      {this.renderInput('address', 'Address')}
-                    </Col>
-                  </Row>
-                </div>
-                <div styleName="rowWrapper">
+                {this.renderInput('address', 'Address')}
+                <div styleName="formItem">
                   <Row>
                     <Col size={3}>
                       {this.renderInput('city', 'City')}
@@ -79,7 +150,7 @@ class Contacts extends Component<PropsType, StateType> {
                     </Col>
                   </Row>
                 </div>
-                <div styleName="rowWrapper">
+                <div styleName="formItem">
                   <Row>
                     <Col size={3}>
                       {this.renderInput('zip', 'ZIP / Postal code')}
@@ -88,6 +159,14 @@ class Contacts extends Component<PropsType, StateType> {
                       {this.renderInput('country', 'Country')}
                     </Col>
                   </Row>
+                </div>
+                <div styleName="formItem">
+                  <Button
+                    type="button"
+                    onClick={this.handleSave}
+                  >
+                    Save
+                  </Button>
                 </div>
               </div>
             </div>

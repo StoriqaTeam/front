@@ -30,7 +30,6 @@ class Header extends PureComponent<PropsType> {
               <div styleName="top">
                 <div styleName="item">
                   <MiniSelect
-                    label="Dropdown"
                     items={[
                       { id: '1', label: 'BTC' },
                       { id: '2', label: 'ETH' },
@@ -43,7 +42,6 @@ class Header extends PureComponent<PropsType> {
                 </div>
                 <div styleName="item">
                   <MiniSelect
-                    label="Dropdown"
                     items={[
                       { id: '1', label: 'ENG' },
                       { id: '2', label: 'CHN' },
@@ -54,7 +52,7 @@ class Header extends PureComponent<PropsType> {
                 <div styleName="item">
                   <MiniSelect
                     isDropdown
-                    label="Terms & Conditions"
+                    title="Terms & Conditions"
                     items={[
                       { id: '1', label: 'Punkt #1' },
                       { id: '2', label: 'Punkt #2' },
@@ -65,7 +63,7 @@ class Header extends PureComponent<PropsType> {
                 <div styleName="item">
                   <MiniSelect
                     isDropdown
-                    label="Delivery"
+                    title="Delivery"
                     items={[
                       { id: '1', label: 'Punkt #1' },
                       { id: '2', label: 'Punkt #2' },
