@@ -26,8 +26,7 @@ const routes = (
           ...App_me
         }
         languages {
-          key
-          name
+          isoCode
         }
         currencies {
           key

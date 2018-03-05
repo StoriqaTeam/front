@@ -15,7 +15,6 @@ type StateType = {
 };
 
 type PropsType = {
-  isItem: ?boolean,
   isDropdown: ?boolean,
   isWhite: ?boolean,
   items: Array<{ id: string, label: string }>,
@@ -35,6 +34,12 @@ class MiniSelect extends Component<PropsType, StateType> {
     this.setState({ activeItem: items && items[0] });
     window.addEventListener('click', this.handleToggleExpand);
     window.addEventListener('keydown', this.handleToggleExpand);
+  }
+
+  componentDidMount() {
+    if (this.props.onSelect && this.state.activeItem) {
+      this.props.onSelect(this.state.activeItem.id);
+    }
   }
 
   componentWillUnmount() {
@@ -80,7 +85,6 @@ class MiniSelect extends Component<PropsType, StateType> {
   render() {
     const {
       items,
-      isItem,
       isDropdown,
       title,
       isWhite,
@@ -91,7 +95,7 @@ class MiniSelect extends Component<PropsType, StateType> {
     return (
       <div
         ref={(node) => { this.button = node; }}
-        styleName={classNames('container', { isItem, isDropdown })}
+        styleName={classNames('container', { isDropdown })}
       >
         {label && <div styleName="label">{label}</div>}
         <div styleName={classNames('wrap', { isWhite })}>

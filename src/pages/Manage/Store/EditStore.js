@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr, map, toString } from 'ramda';
+import { assocPath, pathOr, propOr, map, toString, toUpper } from 'ramda';
 import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
@@ -32,14 +32,28 @@ type StateType = {
   activeItem: string,
 };
 
-// const currenciesDic = {
-//   rouble: 'RUB',
-//   euro: 'EUR',
-//   dollar: 'USD',
-//   bitcoin: 'BTC',
-//   etherium: 'ETH',
-//   stq: 'STQ',
-// };
+// TODO: extract to shared lib
+const languagesDic = {
+  en: 'en',
+  ch: 'ch',
+  de: 'de',
+  ru: 'ru',
+  es: 'es',
+  fr: 'fr',
+  ko: 'ko',
+  po: 'po',
+  ja: 'ja',
+};
+
+// TODO: extract to shared lib
+const currenciesDic = {
+  rouble: 'RUB',
+  euro: 'EUR',
+  dollar: 'USD',
+  bitcoin: 'BTC',
+  etherium: 'ETH',
+  stq: 'STQ',
+};
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
@@ -61,7 +75,7 @@ class EditStore extends Component<PropsType, StateType> {
       form: {
         name,
         currencyId,
-        languageId,
+        defaultLanguage,
         longDescription,
         shortDescription,
         slug,
@@ -77,7 +91,7 @@ class EditStore extends Component<PropsType, StateType> {
     }, {
       name,
       currencyId,
-      languageId,
+      defaultLanguage,
       longDescription,
       shortDescription,
       slug,
@@ -91,11 +105,15 @@ class EditStore extends Component<PropsType, StateType> {
     this.setState({ formErrors: {} });
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
-      name,
+      name: [
+        { lang: 'EN', text: name },
+      ],
       currencyId: parseInt(currencyId, 10),
-      languageId: parseInt(languageId, 10),
+      defaultLanguage: toUpper(defaultLanguage),
       longDescription,
-      shortDescription,
+      shortDescription: [
+        { lang: 'EN', text: shortDescription },
+      ],
       slug,
       slogan,
       environment,
@@ -151,6 +169,14 @@ class EditStore extends Component<PropsType, StateType> {
   render() {
     const { directories: { languages, currencies } } = this.context;
     const { activeItem } = this.state;
+    const langItems = map(item => ({
+      id: item.isoCode,
+      label: languagesDic[item.isoCode],
+    }), languages);
+    const currencyItems = map(item => ({
+      id: toString(item.key),
+      label: currenciesDic[item.name],
+    }), currencies);
     return (
       <Container>
         <Row>
@@ -166,12 +192,7 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="langSelect">
                   <MiniSelect
                     isWhite
-                    items={
-                      map(item => ({
-                        id: toString(item.key),
-                        label: this.capitalizeString(item.name),
-                      }), languages)
-                    }
+                    items={langItems}
                     onSelect={(id: string) => {
                       log.debug({ id });
                     }}
@@ -183,26 +204,14 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="formItem">
                   <MiniSelect
                     label="Язык магазина"
-                    items={
-                      map(item => ({
-                        id: toString(item.key),
-                        label: this.capitalizeString(item.name),
-                      }), languages)
-                    }
-                    onSelect={(id: string) => {
-                      log.debug({ id });
-                    }}
+                    items={langItems}
+                    onSelect={this.handleInputChange('defaultLanguage')}
                   />
                 </div>
                 <div styleName="formItem">
                   <MiniSelect
                     label="Валюта магазина"
-                    items={
-                      map(item => ({
-                        id: toString(item.key),
-                        label: this.capitalizeString(item.name),
-                      }), currencies)
-                    }
+                    items={currencyItems}
                     onSelect={this.handleInputChange('currencyId')}
                   />
                 </div>
