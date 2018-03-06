@@ -2,7 +2,17 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr, map, toString, toUpper } from 'ramda';
+import {
+  assocPath,
+  pathOr,
+  propOr,
+  map,
+  toString,
+  toUpper,
+  toLower,
+  find,
+  propEq,
+} from 'ramda';
 import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
@@ -23,26 +33,44 @@ type PropsType = {
 };
 
 type StateType = {
-  form: {
-    [string]: ?any,
+  form: ?{
+    name: {
+      lang: string,
+      text: string,
+    },
+    currencyId: number,
+    defaultLanguage: string,
+    longDescription: {
+      lang: string,
+      text: string,
+    },
+    shortDescription: {
+      lang: string,
+      text: string,
+    },
+    slug: string,
+    slogan: string,
   },
   formErrors: {
     [string]: ?any,
   },
   activeItem: string,
+  langItems: ?Array<{ id: string, label: string }>,
+  currencyItems: ?Array<{ id: string, label: string }>,
+  shopLanguage: string,
 };
 
 // TODO: extract to shared lib
 const languagesDic = {
-  en: 'en',
-  ch: 'ch',
-  de: 'de',
-  ru: 'ru',
-  es: 'es',
-  fr: 'fr',
-  ko: 'ko',
-  po: 'po',
-  ja: 'ja',
+  en: 'English',
+  ch: 'Chinese',
+  de: 'German',
+  ru: 'Russian',
+  es: 'Spanish',
+  fr: 'French',
+  ko: 'Korean',
+  po: 'Portuguese',
+  ja: 'Japanese',
 };
 
 // TODO: extract to shared lib
@@ -57,8 +85,39 @@ const currenciesDic = {
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
-    form: {},
-    activeItem: 'settings',
+    form: {
+      defaultLanguage: 'EN',
+      currencyId: 1,
+    },
+    langItems: null,
+    currencyItems: null,
+    shopLanguage: 'EN',
+  };
+
+  componentWillMount() {
+    const { directories: { languages, currencies } } = this.context;
+    const langItems = map(item => ({
+      id: item.isoCode,
+      label: languagesDic[item.isoCode],
+    }), languages);
+    const currencyItems = map(item => ({
+      id: toString(item.key),
+      label: currenciesDic[item.name],
+    }), currencies);
+
+    this.setState({ langItems, currencyItems });
+  }
+
+  handleDefaultLanguage = (defaultLanguage: string) => {
+    this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
+  };
+
+  handleShopLanguage = (shopLanguage: string) => {
+    this.setState({ shopLanguage: toUpper(shopLanguage.id) });
+  };
+
+  handleShopCurrency = (shopCurrency: string) => {
+    this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
   };
 
   handleInputChange = (id: string) => (value: any) => {
@@ -67,6 +126,7 @@ class EditStore extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { currentUser, environment } = this.context;
+
     if (!currentUser || !currentUser.rawId) {
       return;
     }
@@ -167,16 +227,18 @@ class EditStore extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { directories: { languages, currencies } } = this.context;
-    const { activeItem } = this.state;
-    const langItems = map(item => ({
-      id: item.isoCode,
-      label: languagesDic[item.isoCode],
-    }), languages);
-    const currencyItems = map(item => ({
-      id: toString(item.key),
-      label: currenciesDic[item.name],
-    }), currencies);
+    const {
+      activeItem,
+      langItems,
+      currencyItems,
+      form,
+      shopLanguage,
+    } = this.state;
+
+    const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
+    const shopLanguageValue = find(propEq('id', toLower(shopLanguage)))(langItems);
+    const shopCurrencyValue = find(propEq('id', String(form.currencyId)))(currencyItems);
+
     return (
       <Container>
         <Row>
@@ -192,10 +254,9 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="langSelect">
                   <MiniSelect
                     isWhite
+                    activeItem={defaultLanguageValue}
                     items={langItems}
-                    onSelect={(id: string) => {
-                      log.debug({ id });
-                    }}
+                    onSelect={this.handleDefaultLanguage}
                   />
                 </div>
               </Header>
@@ -204,15 +265,17 @@ class EditStore extends Component<PropsType, StateType> {
                 <div styleName="formItem">
                   <MiniSelect
                     label="Язык магазина"
+                    activeItem={shopLanguageValue}
                     items={langItems}
-                    onSelect={this.handleInputChange('defaultLanguage')}
+                    onSelect={this.handleShopLanguage}
                   />
                 </div>
                 <div styleName="formItem">
                   <MiniSelect
                     label="Валюта магазина"
+                    activeItem={shopCurrencyValue}
                     items={currencyItems}
-                    onSelect={this.handleInputChange('currencyId')}
+                    onSelect={this.handleShopCurrency}
                   />
                 </div>
                 {this.renderInput('slogan', 'Слоган магазина')}

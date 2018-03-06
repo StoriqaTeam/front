@@ -21,26 +21,27 @@ type PropsType = {
   onSelect?: (id: number) => void,
   title: ?string,
   label: ?string,
+  activeItem: ?{ id: string, label: string },
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
   state = {
-    activeItem: null,
+    // activeItem: null,
     isExpanded: false,
   };
 
   componentWillMount() {
-    const { items } = this.props;
-    this.setState({ activeItem: items && items[0] });
+    // const { items, activeItem } = this.props;
+    // this.setState({ activeItem: activeItem || (items && items[0]) });
     window.addEventListener('click', this.handleToggleExpand);
     window.addEventListener('keydown', this.handleToggleExpand);
   }
 
-  componentDidMount() {
-    if (this.props.onSelect && this.state.activeItem) {
-      this.props.onSelect(this.state.activeItem.id);
-    }
-  }
+  // componentDidMount() {
+  //   if (this.props.onSelect && this.state.activeItem) {
+  //     this.props.onSelect(this.state.activeItem.id);
+  //   }
+  // }
 
   componentWillUnmount() {
     window.removeEventListener('click', this.handleToggleExpand);
@@ -52,9 +53,9 @@ class MiniSelect extends Component<PropsType, StateType> {
   items: any;
 
   handleToggleExpand = (e: any) => {
-    const isButtonClick = this.button.contains(e.target);
-    const isItemsWrap = this.itemsWrap.contains(e.target);
-    const isItems = this.items.contains(e.target);
+    const isButtonClick = this.button && this.button.contains(e.target);
+    const isItemsWrap = this.itemsWrap && this.itemsWrap.contains(e.target);
+    const isItems = this.items && this.items.contains(e.target);
 
     if (isButtonClick && !isItems && !isItemsWrap) {
       this.setState({ isExpanded: !this.state.isExpanded });
@@ -71,14 +72,17 @@ class MiniSelect extends Component<PropsType, StateType> {
       log.info('id', e.target.id);
     } else {
       const activeItem = find(propEq('id', e.target.id))(this.props.items);
-      if (activeItem) {
-        this.setState({ activeItem });
-        const { onSelect } = this.props;
-
-        if (onSelect) {
-          onSelect(activeItem);
-        }
-      }
+      //
+      // if (activeItem) {
+      //   this.setState({ activeItem });
+      //   const { onSelect } = this.props;
+      //
+      //   if (onSelect) {
+      //     onSelect(activeItem);
+      //   }
+      // }
+      const { onSelect } = this.props;
+      onSelect(activeItem);
     }
   };
 
@@ -89,8 +93,9 @@ class MiniSelect extends Component<PropsType, StateType> {
       title,
       isWhite,
       label,
+      activeItem,
     } = this.props;
-    const { isExpanded, activeItem } = this.state;
+    const { isExpanded } = this.state;
 
     return (
       <div
