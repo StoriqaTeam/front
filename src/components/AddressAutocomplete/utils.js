@@ -3,12 +3,14 @@
 import { replace } from 'ramda';
 
 export const getScriptURL = () => {
-  // const urlTemplate = process.env.REACT_APP_GOOGLE_PLACES_API_URL;
-  // const keyPlaceholder = process.env.REACT_APP_GOOGLE_PLACES_API_KEY_PLACEHOLDER;
-  // const apiKey = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
-  const urlTemplate = 'https://maps.googleapis.com/maps/api/js?key=#API_KEY#&libraries=places';
-  const keyPlaceholder = '#API_KEY#';
-  const apiKey = 'AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs';
+  // workaround for storybook
+  if (!process.env.REACT_APP_GOOGLE_PLACES_API_URL) {
+    return 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&libraries=places';
+  }
+
+  const urlTemplate = process.env.REACT_APP_GOOGLE_PLACES_API_URL;
+  const keyPlaceholder = process.env.REACT_APP_GOOGLE_PLACES_API_KEY_PLACEHOLDER;
+  const apiKey = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
   return replace(keyPlaceholder, apiKey, urlTemplate);
 };
 

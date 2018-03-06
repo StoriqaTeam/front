@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 
+import { AddressAutocomplete } from 'components/AddressAutocomplete';
+
 import Header from './Header';
 
 import './App.scss';
@@ -36,6 +38,9 @@ class App extends PureComponent<PropsType> {
       <div>
         <Header user={me} />
         {children && React.cloneElement(children, { me })}
+        <br />
+        <br />
+        <AddressAutocomplete />
       </div>
     );
   }
