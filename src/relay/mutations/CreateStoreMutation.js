@@ -27,12 +27,12 @@ const mutation = graphql`
 `;
 
 type MutationParamsType = {
-  name: string,
-  userId: string,
-  currencyId: string,
+  name: Array<{ lang: string, text: string }>,
+  userId: number,
+  currencyId: number,
   defaultLanguage: string,
-  shortDescription: string,
-  longDescription: string,
+  shortDescription: Array<{ lang: string, text: string }>,
+  longDescription: Array<{ lang: string, text: string }>,
   slug: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,

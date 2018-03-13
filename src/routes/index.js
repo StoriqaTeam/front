@@ -59,6 +59,15 @@ const routes = (
         <Route
           path=":storeId/contacts"
           Component={Contacts}
+          render={({ Component, props }) => {
+            const variables = { storeId: props.params.storeId };
+            return (
+              <Component
+                variables={variables}
+                {...props}
+              />
+            );
+          }}
         />
       </Route>
     </Route>

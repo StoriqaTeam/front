@@ -1,6 +1,6 @@
 // @flow
 
-import { PureComponent } from 'react';
+import { PureComponent, cloneElement } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { routerShape } from 'found';
@@ -17,7 +17,7 @@ class PrivateRoute extends PureComponent<PropsType> {
       this.context.router.replace('/login');
       return null;
     }
-    return this.props.children;
+    return cloneElement(this.props.children, { ...this.props });
   }
 }
 

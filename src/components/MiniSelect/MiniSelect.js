@@ -10,13 +10,12 @@ import { Icon } from 'components/Icon';
 import './MiniSelect.scss';
 
 type StateType = {
-  activeItem: ?{ id: string, label: string },
   isExpanded: boolean,
 };
 
 type PropsType = {
   isDropdown: ?boolean,
-  isWhite: ?boolean,
+  transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
   onSelect?: (id: number) => void,
   title: ?string,
@@ -26,22 +25,13 @@ type PropsType = {
 
 class MiniSelect extends Component<PropsType, StateType> {
   state = {
-    // activeItem: null,
     isExpanded: false,
   };
 
   componentWillMount() {
-    // const { items, activeItem } = this.props;
-    // this.setState({ activeItem: activeItem || (items && items[0]) });
     window.addEventListener('click', this.handleToggleExpand);
     window.addEventListener('keydown', this.handleToggleExpand);
   }
-
-  // componentDidMount() {
-  //   if (this.props.onSelect && this.state.activeItem) {
-  //     this.props.onSelect(this.state.activeItem.id);
-  //   }
-  // }
 
   componentWillUnmount() {
     window.removeEventListener('click', this.handleToggleExpand);
@@ -72,15 +62,6 @@ class MiniSelect extends Component<PropsType, StateType> {
       log.info('id', e.target.id);
     } else {
       const activeItem = find(propEq('id', e.target.id))(this.props.items);
-      //
-      // if (activeItem) {
-      //   this.setState({ activeItem });
-      //   const { onSelect } = this.props;
-      //
-      //   if (onSelect) {
-      //     onSelect(activeItem);
-      //   }
-      // }
       const { onSelect } = this.props;
       onSelect(activeItem);
     }
@@ -91,7 +72,7 @@ class MiniSelect extends Component<PropsType, StateType> {
       items,
       isDropdown,
       title,
-      isWhite,
+      transparent,
       label,
       activeItem,
     } = this.props;
@@ -103,7 +84,7 @@ class MiniSelect extends Component<PropsType, StateType> {
         styleName={classNames('container', { isDropdown })}
       >
         {label && <div styleName="label">{label}</div>}
-        <div styleName={classNames('wrap', { isWhite })}>
+        <div styleName={classNames('wrap', { transparent })}>
           <div styleName="selected">
             { isDropdown ? title : activeItem && activeItem.label }
           </div>

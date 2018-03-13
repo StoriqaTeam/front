@@ -1,6 +1,7 @@
 .container {
   position: relative;
   display: inline-block;
+  cursor: pointer;
 }
 
 .label {
@@ -12,20 +13,18 @@
 
 .wrap {
   position: relative;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  display: inline-block;
   height: 20px;
   padding: 0 24px 0 8px;
   border-radius: 2px;
   color: #505050;
   background-color: #FAFAFA;
   font-size: 12px;
-  cursor: pointer;
 }
 
-.isWhite {
-  background-color: #FFFFFF;
+.transparent {
+  padding-left: 0;
+  background-color: transparent;
 }
 
 .isItem {
@@ -46,7 +45,7 @@
 
 .icon {
   position: absolute;
-  top: 2px;
+  top: 3px;
   right: 4px;
   border-radius: 2px;
   z-index: 2;
@@ -58,9 +57,9 @@
 
 .items {
   position: absolute;
-  top: -4px;
+  top: -2px;
   left: 100%;
-  margin-left: -20px;
+  margin-left: -18px;
   padding: 4px 0;
   border-radius: 2px;
   background-color: #FFFFFF;

@@ -28,10 +28,6 @@ import Menu from './Menu';
 
 import './EditStore.scss';
 
-type PropsType = {
-  //
-};
-
 type StateType = {
   form: ?{
     name: {
@@ -57,7 +53,7 @@ type StateType = {
   activeItem: string,
   langItems: ?Array<{ id: string, label: string }>,
   currencyItems: ?Array<{ id: string, label: string }>,
-  shopLanguage: string,
+  optionLanguage: string,
 };
 
 // TODO: extract to shared lib
@@ -83,7 +79,7 @@ const currenciesDic = {
   stq: 'STQ',
 };
 
-class EditStore extends Component<PropsType, StateType> {
+class EditStore extends Component<{}, StateType> {
   state: StateType = {
     form: {
       defaultLanguage: 'EN',
@@ -91,7 +87,7 @@ class EditStore extends Component<PropsType, StateType> {
     },
     langItems: null,
     currencyItems: null,
-    shopLanguage: 'EN',
+    optionLanguage: 'EN',
   };
 
   componentWillMount() {
@@ -108,12 +104,12 @@ class EditStore extends Component<PropsType, StateType> {
     this.setState({ langItems, currencyItems });
   }
 
-  handleDefaultLanguage = (defaultLanguage: string) => {
-    this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
+  handleOptionLanguage = (optionLanguage: string) => {
+    this.setState({ optionLanguage: toUpper(optionLanguage.id) });
   };
 
-  handleShopLanguage = (shopLanguage: string) => {
-    this.setState({ shopLanguage: toUpper(shopLanguage.id) });
+  handleDefaultLanguage = (defaultLanguage: string) => {
+    this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
   };
 
   handleShopCurrency = (shopCurrency: string) => {
@@ -126,6 +122,7 @@ class EditStore extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { currentUser, environment } = this.context;
+    const { optionLanguage } = this.state;
 
     if (!currentUser || !currentUser.rawId) {
       return;
@@ -157,22 +154,25 @@ class EditStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     });
+
     if (formErrors) {
       this.setState({ formErrors });
       return;
     }
-
     this.setState({ formErrors: {} });
+
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
       name: [
-        { lang: 'EN', text: name },
+        { lang: optionLanguage, text: name },
       ],
       currencyId: parseInt(currencyId, 10),
       defaultLanguage: toUpper(defaultLanguage),
-      longDescription,
+      longDescription: [
+        { lang: optionLanguage, text: longDescription },
+      ],
       shortDescription: [
-        { lang: 'EN', text: shortDescription },
+        { lang: optionLanguage, text: shortDescription },
       ],
       slug,
       slogan,
@@ -205,6 +205,7 @@ class EditStore extends Component<PropsType, StateType> {
   renderInput = (id: string, label: string) => (
     <div styleName="formItem">
       <Input
+        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -217,6 +218,7 @@ class EditStore extends Component<PropsType, StateType> {
   renderTextarea = (id: string, label: string) => (
     <div styleName="formItem">
       <Textarea
+        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -232,11 +234,11 @@ class EditStore extends Component<PropsType, StateType> {
       langItems,
       currencyItems,
       form,
-      shopLanguage,
+      optionLanguage,
     } = this.state;
 
     const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
-    const shopLanguageValue = find(propEq('id', toLower(shopLanguage)))(langItems);
+    const optionLanguageValue = find(propEq('id', toLower(optionLanguage)))(langItems);
     const shopCurrencyValue = find(propEq('id', String(form.currencyId)))(currencyItems);
 
     return (
@@ -253,10 +255,10 @@ class EditStore extends Component<PropsType, StateType> {
               <Header title="Настройки">
                 <div styleName="langSelect">
                   <MiniSelect
-                    isWhite
-                    activeItem={defaultLanguageValue}
+                    transparent
+                    activeItem={optionLanguageValue}
                     items={langItems}
-                    onSelect={this.handleDefaultLanguage}
+                    onSelect={this.handleOptionLanguage}
                   />
                 </div>
               </Header>
@@ -264,14 +266,16 @@ class EditStore extends Component<PropsType, StateType> {
                 {this.renderInput('name', 'Название магазина')}
                 <div styleName="formItem">
                   <MiniSelect
+                    transparent
                     label="Язык магазина"
-                    activeItem={shopLanguageValue}
+                    activeItem={defaultLanguageValue}
                     items={langItems}
-                    onSelect={this.handleShopLanguage}
+                    onSelect={this.handleDefaultLanguage}
                   />
                 </div>
                 <div styleName="formItem">
                   <MiniSelect
+                    transparent
                     label="Валюта магазина"
                     activeItem={shopCurrencyValue}
                     items={currencyItems}

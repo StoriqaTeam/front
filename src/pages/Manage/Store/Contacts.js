@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr } from 'ramda';
 import { validate } from '@storiqa/validation_specs';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -179,7 +180,21 @@ class Contacts extends Component<PropsType, StateType> {
 
 Contacts.contextTypes = {
   environment: PropTypes.object.isRequired,
-  currentUser: currentUserShape,
 };
 
-export default Page(Contacts);
+// export default Page(Contacts);
+
+export default createFragmentContainer(
+  Page(Contacts),
+  graphql`
+    fragment Contacts_me on User {
+      store(id: $storeId) {
+        id
+        name {
+          lang
+          text
+        }
+      }
+    }
+  `,
+);
