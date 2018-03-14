@@ -10,20 +10,18 @@ const mutation = graphql`
       rawId
       email
       phone
+      address
       facebookUrl
       twitterUrl
       instagramUrl
-      address
     }
   }
 `;
 
 type MutationParamsType = {
+  id: string,
   email: string,
   phone: string,
-  facebookUrl: string,
-  twitterUrl: string,
-  instagramUrl: string,
   address: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
@@ -34,12 +32,14 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
   mutation,
   variables: {
     input: {
-      email: '',
-      phone: '',
-      facebookUrl: '',
-      twitterUrl: '',
-      instagramUrl: '',
-      address: '',
+      clientMutationId: '',
+      id: params.id,
+      email: params.email,
+      phone: params.phone,
+      address: params.address,
+      facebookUrl: params.facebookUrl,
+      twitterUrl: params.twitterUrl,
+      instagramUrl: params.instagramUrl,
     },
   },
   onCompleted: params.onCompleted,

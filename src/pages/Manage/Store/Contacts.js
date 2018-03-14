@@ -2,15 +2,16 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr } from 'ramda';
-import { validate } from '@storiqa/validation_specs';
+import { assocPath, pathOr, propOr, pick } from 'ramda';
+// import { validate } from '@storiqa/validation_specs';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { Input } from 'components/Forms';
+import { Input, SocialInputs } from 'components/Forms';
 import { Button } from 'components/Button';
+import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
 import Header from './Header';
@@ -19,12 +20,17 @@ import Menu from './Menu';
 import './Contacts.scss';
 
 type PropsType = {
-  //
+  variables: any,
 };
 
 type StateType = {
-  form: {
-    [string]: ?any,
+  form: ?{
+    email: string,
+    phone: string,
+    address: string,
+    facebookUrl: string,
+    instagramUrl: string,
+    twitterUrl: string,
   },
   formErrors: {
     [string]: ?any,
@@ -38,12 +44,31 @@ class Contacts extends Component<PropsType, StateType> {
     activeItem: 'contacts',
   };
 
+  componentWillMount() {
+    const store = pathOr({}, ['me', 'store'], this.props);
+    this.setState({
+      form: pick([
+        'email',
+        'phone',
+        'address',
+        'facebookUrl',
+        'instagramUrl',
+        'twitterUrl',
+      ], store),
+    });
+  }
+
   handleInputChange = (id: string) => (value: any) => {
     this.setState(assocPath(['form', id], value));
   };
 
-  handleSave = () => {
+  handleSocialInputsChange = (id: string, value: any) => {
+    this.setState(assocPath(['form', id], value));
+  }
+
+  handleUpdate = () => {
     const { currentUser, environment } = this.context;
+    const { variables } = this.props;
     if (!currentUser || !currentUser.rawId) {
       return;
     }
@@ -52,44 +77,24 @@ class Contacts extends Component<PropsType, StateType> {
       form: {
         email,
         phone,
-        social,
         address,
-        city,
-        state,
-        zip,
-        country,
+        facebookUrl,
+        twitterUrl,
+        instagramUrl,
       },
     } = this.state;
 
-    // TODO: вынести в либу спеки
-    const { errors: formErrors } = validate({
-      email: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-    }, {
-      email,
-      phone,
-      social,
-      address,
-      city,
-      state,
-      zip,
-      country,
-    });
-    if (formErrors) {
-      this.setState({ formErrors });
-      return;
-    }
-
     this.setState({ formErrors: {} });
-    currentUserShape.commit({
+
+    UpdateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
+      id: variables.storeId,
       email,
       phone,
-      social,
       address,
-      city,
-      state,
-      zip,
-      country,
+      facebookUrl,
+      twitterUrl,
+      instagramUrl,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
@@ -112,6 +117,7 @@ class Contacts extends Component<PropsType, StateType> {
   renderInput = (id: string, label: string) => (
     <div styleName="formItem">
       <Input
+        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -122,7 +128,7 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem } = this.state;
+    const { activeItem, form } = this.state;
 
     return (
       <Container>
@@ -139,7 +145,16 @@ class Contacts extends Component<PropsType, StateType> {
               <div styleName="form">
                 {this.renderInput('email', 'Email')}
                 {this.renderInput('phone', 'Phone')}
-                {this.renderInput('social', 'Social')}
+                <div styleName="formItem">
+                  <SocialInputs
+                    socialsValues={{
+                      facebookUrl: propOr('', 'facebookUrl', form),
+                      instagramUrl: propOr('', 'instagramUrl', form),
+                      twitterUrl: propOr('', 'twitterUrl', form),
+                    }}
+                    handleSocialInputsChange={this.handleSocialInputsChange}
+                  />
+                </div>
                 {this.renderInput('address', 'Address')}
                 <div styleName="formItem">
                   <Row>
@@ -164,7 +179,7 @@ class Contacts extends Component<PropsType, StateType> {
                 <div styleName="formItem">
                   <Button
                     type="button"
-                    onClick={this.handleSave}
+                    onClick={this.handleUpdate}
                   >
                     Save
                   </Button>
@@ -180,20 +195,25 @@ class Contacts extends Component<PropsType, StateType> {
 
 Contacts.contextTypes = {
   environment: PropTypes.object.isRequired,
+  currentUser: currentUserShape,
 };
-
-// export default Page(Contacts);
 
 export default createFragmentContainer(
   Page(Contacts),
   graphql`
     fragment Contacts_me on User {
-      store(id: $storeId) {
+      store(id: "c3RvcmVzX3N0b3JlXzE=") {
         id
         name {
           lang
           text
         }
+        email
+        phone
+        facebookUrl
+        twitterUrl
+        instagramUrl
+        address
       }
     }
   `,

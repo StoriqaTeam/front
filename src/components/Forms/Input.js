@@ -14,6 +14,7 @@ type PropsType = {
   errors: ?Array<string>,
   onChange: (e: {target: { value: string }}) => void,
   forForm: ?boolean,
+  imgLabel: ?string,
 };
 
 type StateType = {
@@ -60,6 +61,7 @@ class Input extends Component<PropsType, StateType> {
       label,
       errors,
       forForm,
+      imgLabel,
     } = this.props;
 
     const {
@@ -72,15 +74,27 @@ class Input extends Component<PropsType, StateType> {
         htmlFor={id}
         styleName={classNames('container', { isError: errors })}
       >
-        <span styleName={classNames('label', { labelFloat })}>
-          {label}
-          {forForm && !isFocus &&
-            <div styleName="editIcon">
-              <Icon type="pencil" />
-            </div>
-          }
-        </span>
-        <div styleName={classNames('input', { inputForForm: forForm })}>
+        {label &&
+          <span styleName={classNames('label', { labelFloat })}>
+            {label}
+            {forForm && !isFocus && !imgLabel &&
+              <div styleName="editIcon">
+                <Icon type="pencil" />
+              </div>
+            }
+          </span>
+        }
+        {imgLabel &&
+          <div styleName="imgLabel">
+            <Icon type={imgLabel} />
+          </div>
+        }
+        <div styleName={classNames(
+            'input',
+            value && 'isFilledInput',
+            imgLabel && 'withImgInput',
+          )}
+        >
           <InputAutosize
             id={id}
             name={id}
@@ -93,11 +107,11 @@ class Input extends Component<PropsType, StateType> {
           />
         </div>
         {errors && errors.length > 0 &&
-        <div className="errors">
-          {errors.map((item, idx) => (
-            <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
-          ))}
-        </div>
+          <div className="errors">
+            {errors.map((item, idx) => (
+              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
+            ))}
+          </div>
         }
       </label>
     );

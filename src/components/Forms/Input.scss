@@ -4,7 +4,7 @@
   transition: all .3s ease;
 }
 
-.container:hover .editIcon {
+.container:hover .labelFloat .editIcon {
   opacity: 1;
   transition: all .3s ease;
 }
@@ -29,12 +29,17 @@
 .editIcon {
   position: absolute;
   top: -2px;
-  right: -30px;
+  right: -24px;
   opacity: 0;
 }
 
+.imgLabel {
+  position: absolute;
+  top: 0.625rem;
+  left: 0;
+}
+
 .input input {
-  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: relative;
   width: 100%;
   min-width: 30rem;
@@ -47,21 +52,21 @@
   background-color: transparent;
 }
 
-.inputForForm input {
+.withImgInput input {
+  min-width: 27rem;
+}
+
+.isFilledInput input {
   border-color: transparent;
+}
+
+.withImgInput {
+  padding-left: 3rem;
 }
 
 .input input:focus {
   border-color: #626262;
 }
-
-//.isError .label {
-//  color: #E62C6D;
-//}
-//
-//.isError .input input {
-//  color: #E62C6D;
-//}
 
 .isError .input input {
   border-bottom: 1px solid #E62C6D;

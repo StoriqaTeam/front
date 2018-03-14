@@ -78,7 +78,7 @@ class Textarea extends Component<PropsType, StateType> {
           </div>
           }
         </span>
-        <div styleName={classNames('textarea', { textareaForForm: forForm })}>
+        <div styleName={classNames('textarea', value && 'isFilledTextarea')}>
           <TextareaAutosize
             id={id}
             name={id}

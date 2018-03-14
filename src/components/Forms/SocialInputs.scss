@@ -1,0 +1,37 @@
+.container {
+  position: relative;
+  display: inline-block;
+  transition: all .3s ease;
+}
+
+.container:hover .icon {
+  opacity: 1;
+}
+
+.isValues {
+  position: relative;
+}
+
+.label {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  position: absolute;
+  top: -3rem;
+  left: 0;
+  font-size: 12px;
+  color: #A7A7A7;
+  line-height: 3rem;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.icon {
+  position: absolute;
+  top: 2px;
+  right: -24px;
+  opacity: 0;
+  transition: all .3s ease;
+}
+
+.input {
+  display: inline-block;
+}

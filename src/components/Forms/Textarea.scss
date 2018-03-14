@@ -3,7 +3,7 @@
   display: inline-block;
 }
 
-.container:hover .editIcon {
+.container:hover .labelFloat .editIcon {
   opacity: 1;
   transition: all .3s ease;
 }
@@ -33,7 +33,6 @@
 }
 
 .textarea textarea {
-  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: relative;
   width: 96rem;
   border-bottom: 1px solid;
@@ -45,17 +44,13 @@
   resize: none !important;
 }
 
-.textareaForForm textarea {
+.isFilledTextarea textarea {
   border-color: transparent;
 }
 
 .textarea textarea:focus {
   border-color: #626262;
 }
-
-//.isError .label {
-//  color: #E62C6D;
-//}
 
 .isError .textarea textarea {
   border-bottom: 1px solid #E62C6D;
