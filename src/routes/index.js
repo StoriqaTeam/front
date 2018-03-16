@@ -19,12 +19,11 @@ const routes = (
     path="/"
     Component={App}
     query={graphql`
-      query routes_App_Query($storeId: ID!) {
+      query routes_App_Query {
         id
         me {
           id
           ...App_me
-          ...Contacts_me @arguments(storeId: $storeId)
         }
         languages {
           isoCode
@@ -36,7 +35,6 @@ const routes = (
       }
     `}
     render={(args) => {
-      log.debug({ args });
       const { error, Component, props } = args;
       if (error) {
         log.error({ error });
@@ -47,7 +45,6 @@ const routes = (
       }
       return <Component {...props} />;
     }}
-    prepareVariables={({ storeId }) => { log.debug({ storeId }); return { storeId }; }}
   >
     <Route Component={() => <div />} />
 
@@ -63,6 +60,16 @@ const routes = (
         <Route
           path="/:storeId/contacts"
           Component={Contacts}
+          query={graphql`
+            query routes_Contacts_Query($storeID: ID!) {
+              me {
+                ...Contacts_me @arguments(storeId: $storeID)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => {
+            return { storeID: params.storeId };
+          }}
         />
       </Route>
     </Route>

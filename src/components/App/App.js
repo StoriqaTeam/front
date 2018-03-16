@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 import { pick } from 'ramda';
+import { withRouter } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 
@@ -15,6 +16,7 @@ type PropsType = {
   languages: ?Array<{ id: number, name: string }>,
   currencies: ?Array<{ id: number, name: string }>,
   children: any,
+  router: any,
   relay: {
     environment: Environment,
     refetch: Function,
@@ -48,6 +50,7 @@ class App extends PureComponent<PropsType> {
     const { me, children } = this.props;
     return (
       <Fragment>
+        <span style={{ cursor: 'pointer' }} onClick={() => this.props.router.push('/manage/store/new')}>new store</span>
         {children && React.cloneElement(children, { me })}
       </Fragment>
     );
@@ -63,14 +66,15 @@ App.childContextTypes = {
   currentUser: currentUserShape,
 };
 
-export default createRefetchContainer(
+
+const AppComponent = createRefetchContainer(
   App,
   graphql`
-    fragment App_me on User {
-      ...Profile_me
-      ...Contacts_me
+    fragment App_me on User
+    {
       id
       rawId
+      ...Profile_me
     }
   `,
   graphql`
@@ -82,3 +86,5 @@ export default createRefetchContainer(
     }
   `,
 );
+
+export default withRouter(AppComponent);
