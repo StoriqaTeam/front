@@ -38,6 +38,9 @@ class Contacts extends Component<PropsType, StateType> {
     activeItem: 'contacts',
   };
 
+  componentDidMount() {
+    this.props.relay.refetch({ storeId: this.props.params.storeId });
+  }
   handleInputChange = (id: string) => (value: any) => {
     this.setState(assocPath(['form', id], value));
   };
@@ -182,12 +185,16 @@ Contacts.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-// export default Page(Contacts);
+// @argumentDefinitions(
+//   count: {type: "Int", defaultValue: 10},  # Optional argument
+// userID: {type: "ID"},                    # Required argument
+// )
 
 export default createFragmentContainer(
   Page(Contacts),
   graphql`
-    fragment Contacts_me on User {
+    fragment Contacts_me on User @argumentDefinitions(storeId: { type: "ID!", defaultValue: "0" }) {
+      id
       store(id: $storeId) {
         id
         name {
