@@ -184,7 +184,7 @@ class EditStore extends Component<{}, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        const validationErrors = pathOr(null, ['100', 'message'], relayErrors);
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
