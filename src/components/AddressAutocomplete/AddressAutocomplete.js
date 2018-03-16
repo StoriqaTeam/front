@@ -8,12 +8,15 @@ import debounce from 'lodash.debounce';
 import { log } from 'utils';
 import LoadScript from 'libs/react-load-script';
 
+
 import { getScriptURL } from './utils';
 
 type PropsType = {
-  isCities: boolean,
+  country: string,
   onSelect: Function,
-  forCity?: string,
+  searchType: '(cities)' | 'geocode',
+  // isCities: boolean,
+  // forCity?: string,
 };
 
 type StateType= {
@@ -47,7 +50,7 @@ class AddressAutocomplete extends Component<PropsType, StateType> {
       mainText: pathOr(null, ['structured_formatting', 'main_text'], item),
       secondaryText: pathOr(null, ['structured_formatting', 'secondary_text'], item),
     }), predictions);
-    log.debug({ formattedResult });
+    // log.debug({ formattedResult });
     this.setState({ predictions: formattedResult });
   };
 
@@ -56,20 +59,21 @@ class AddressAutocomplete extends Component<PropsType, StateType> {
       this.setState({ predictions: [] });
       return;
     }
-    log.debug({ value });
+    // log.debug({ value });
     this.autocompleteService.getPlacePredictions(
       {
         input: value,
         componentRestrictions: {
-          country: 'KZ',
+          country: this.props.country,
         },
-        types: this.props.isCities ? ['(cities)'] : null,
+        types: this.props.searchType ? [this.props.searchType] : null,
       },
       this.handleSearch,
     );
   };
 
   renderComponent = () => (
+
     <Autocomplete
       id="someId"
       items={this.state.predictions}
@@ -83,8 +87,8 @@ class AddressAutocomplete extends Component<PropsType, StateType> {
       }}
       value={this.state.value}
       onSelect={(value, item) => {
-        log.debug({ value, item });
         this.setState({ value });
+        this.props.onSelect(value, item);
       }}
     />
   );

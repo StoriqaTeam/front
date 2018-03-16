@@ -39,11 +39,21 @@ storiesOf('MiniSelect', module)
   .add('Menu', () => (
     <MiniSelect
       isDropdown
-      label="Dropdown"
+      title="Dropdown"
       items={[
         { id: '1', label: 'Punkt #1' },
         { id: '2', label: 'Delivery' },
         { id: '3', label: 'Quality Assurance' },
+      ]}
+    />
+  ))
+  .add('With label', () => (
+    <MiniSelect
+      label="Language"
+      items={[
+        { id: '1', label: 'Punkt #1' },
+        { id: '2', label: 'Punkt #2' },
+        { id: '3', label: 'Punkt #3' },
       ]}
     />
   ));

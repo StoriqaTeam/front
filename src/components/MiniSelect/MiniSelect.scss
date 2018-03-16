@@ -1,15 +1,30 @@
 .container {
   position: relative;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.label {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  color: #A7A7A7;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.wrap {
+  position: relative;
+  display: inline-block;
   height: 20px;
   padding: 0 24px 0 8px;
   border-radius: 2px;
   color: #505050;
   background-color: #FAFAFA;
   font-size: 12px;
-  cursor: pointer;
+}
+
+.transparent {
+  padding-left: 0;
+  background-color: transparent;
 }
 
 .isItem {
@@ -30,7 +45,7 @@
 
 .icon {
   position: absolute;
-  top: 2px;
+  top: 3px;
   right: 4px;
   border-radius: 2px;
   z-index: 2;
@@ -42,9 +57,9 @@
 
 .items {
   position: absolute;
-  top: -4px;
+  top: -2px;
   left: 100%;
-  margin-left: -20px;
+  margin-left: -18px;
   padding: 4px 0;
   border-radius: 2px;
   background-color: #FFFFFF;
@@ -65,7 +80,7 @@
   z-index: 1;
 }
 
-.wrap {
+.itemsWrap {
   position: relative;
 }
 
@@ -73,6 +88,7 @@
   padding: 2px 8px;
   text-align: left;
   line-height: 16px;
+  white-space: nowrap;
   cursor: pointer;
 }
 
