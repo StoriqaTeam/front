@@ -24,13 +24,13 @@ type PropsType = {
 };
 
 type StateType = {
-  form: ?{
-    email: string,
-    phone: string,
-    address: string,
-    facebookUrl: string,
-    instagramUrl: string,
-    twitterUrl: string,
+  form: {
+    email: ?string,
+    phone: ?string,
+    address: ?string,
+    facebookUrl: ?string,
+    instagramUrl: ?string,
+    twitterUrl: ?string,
   },
   formErrors: {
     [string]: ?any,
@@ -39,8 +39,16 @@ type StateType = {
 };
 
 class Contacts extends Component<PropsType, StateType> {
-  state: StateType = {
-    form: {},
+  state = {
+    form: {
+      email: '',
+      phone: '',
+      address: '',
+      facebookUrl: '',
+      instagramUrl: '',
+      twitterUrl: '',
+    },
+    formErrors: {},
     activeItem: 'contacts',
   };
 
@@ -111,6 +119,10 @@ class Contacts extends Component<PropsType, StateType> {
         alert('Something going wrong :(');
       },
     });
+  };
+
+  switchMenu = (activeItem) => {
+    this.setState({ activeItem });
   };
 
   // TODO: extract to helper

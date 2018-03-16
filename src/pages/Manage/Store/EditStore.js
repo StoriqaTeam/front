@@ -29,21 +29,12 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type StateType = {
-  form: ?{
-    name: {
-      lang: string,
-      text: string,
-    },
+  form: {
+    name: string,
     currencyId: number,
     defaultLanguage: string,
-    longDescription: {
-      lang: string,
-      text: string,
-    },
-    shortDescription: {
-      lang: string,
-      text: string,
-    },
+    longDescription: string,
+    shortDescription: string,
     slug: string,
     slogan: string,
   },
@@ -80,14 +71,21 @@ const currenciesDic = {
 };
 
 class EditStore extends Component<{}, StateType> {
-  state: StateType = {
+  state = {
     form: {
-      defaultLanguage: 'EN',
+      name: '',
+      longDescription: '',
+      shortDescription: '',
       currencyId: 1,
+      defaultLanguage: 'EN',
+      slug: '',
+      slogan: '',
     },
+    activeItem: 'settings',
     langItems: null,
     currencyItems: null,
     optionLanguage: 'EN',
+    formErrors: {},
   };
 
   componentWillMount() {
@@ -104,15 +102,15 @@ class EditStore extends Component<{}, StateType> {
     this.setState({ langItems, currencyItems });
   }
 
-  handleOptionLanguage = (optionLanguage: string) => {
+  handleOptionLanguage = (optionLanguage: { id: string, label: string }) => {
     this.setState({ optionLanguage: toUpper(optionLanguage.id) });
   };
 
-  handleDefaultLanguage = (defaultLanguage: string) => {
+  handleDefaultLanguage = (defaultLanguage: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
   };
 
-  handleShopCurrency = (shopCurrency: string) => {
+  handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
   };
 
@@ -144,6 +142,7 @@ class EditStore extends Component<{}, StateType> {
     const { errors: formErrors } = validate({
       name: [[(value: string) => value && value.length > 0, 'Should not be empty']],
       shortDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+      longDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
       slug: [[(value: string) => value && value.length > 0, 'Should not be empty']],
     }, {
       name,

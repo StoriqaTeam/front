@@ -9,7 +9,6 @@ import menuItems from './menuItems.json';
 import './Menu.scss';
 
 type PropsType = {
-  menuItems: Array<{ id: string, title: string }>,
   activeItem: string,
   switchMenu: Function,
 };

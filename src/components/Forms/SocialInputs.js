@@ -19,16 +19,21 @@ type PropsType = {
 };
 
 class SocialInputs extends Component<PropsType> {
-
   handleSocialInputsChange = (id: string) => (value: any) => {
     this.props.handleSocialInputsChange(id, value);
   };
+
+  // facebookUrl: any;
+  // twitterUrl: any;
+  // instagramUrl: any;
 
   renderItem = (type: string) => {
     const id = `${type}Url`;
     return (
       <div>
         <Input
+          // TODO: fix it
+          // $FlowIgnore
           ref={(node) => { this[type] = node; }}
           forForm
           imgLabel={type}

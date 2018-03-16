@@ -63,7 +63,10 @@ class MiniSelect extends Component<PropsType, StateType> {
     } else {
       const activeItem = find(propEq('id', e.target.id))(this.props.items);
       const { onSelect } = this.props;
-      onSelect(activeItem);
+
+      if (onSelect) {
+        onSelect(activeItem);
+      }
     }
   };
 

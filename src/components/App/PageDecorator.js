@@ -6,7 +6,7 @@ import { Header, Main, Footer } from 'components/App';
 
 import './Page.scss';
 
-export default OriginalComponent => class Page extends PureComponent {
+export default (OriginalComponent: any) => class Page extends PureComponent<{}> {
   render() {
     return (
       <div styleName="container">
