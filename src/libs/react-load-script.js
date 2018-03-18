@@ -4,7 +4,7 @@
 import React from 'react';
 import { PropTypes as RPT } from 'prop-types';
 
-export default class LoadScript extends React.Component {
+export default class LoadScript extends React.Component<any, any> {
   static propTypes = {
     attributes: RPT.object, // eslint-disable-line react/forbid-prop-types
     onCreate: RPT.func,
@@ -35,7 +35,7 @@ export default class LoadScript extends React.Component {
   // ScriptLoaderMixin.
   static idCount = 0;
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.scriptLoaderId = `id${this.constructor.idCount++}`; // eslint-disable-line space-unary-ops, no-plusplus
   }
@@ -77,6 +77,8 @@ export default class LoadScript extends React.Component {
     }
   }
 
+  scriptLoaderId: string;
+
   createScript() {
     const { onCreate, url, attributes } = this.props;
     const script = document.createElement('script');
@@ -92,7 +94,7 @@ export default class LoadScript extends React.Component {
 
     // default async to true if not set with custom attributes
     if (!script.hasAttribute('async')) {
-      script.async = 1;
+      script.async = true;
     }
 
     const callObserverFuncAndRemoveObserver = (shouldRemoveObserver) => {
@@ -119,7 +121,9 @@ export default class LoadScript extends React.Component {
       });
     };
 
-    document.body.appendChild(script);
+    if (document.body) {
+      document.body.appendChild(script);
+    }
   }
 
   render() {
