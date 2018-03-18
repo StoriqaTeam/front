@@ -13,11 +13,16 @@ type StateType = {
   isExpanded: boolean,
 };
 
+type SelectType = {
+  id: string,
+  label: string,
+}
+
 type PropsType = {
   isDropdown: ?boolean,
   transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
-  onSelect?: (id: number) => void,
+  onSelect?: (item: ?SelectType) => void,
   title: ?string,
   label: ?string,
   activeItem: ?{ id: string, label: string },
@@ -62,8 +67,11 @@ class MiniSelect extends Component<PropsType, StateType> {
       log.info('id', e.target.id);
     } else {
       const activeItem = find(propEq('id', e.target.id))(this.props.items);
+      // console.log('^^^^ acitveItem: ', activeItem);
       const { onSelect } = this.props;
-      onSelect(activeItem);
+      if (onSelect !== undefined) {
+        onSelect(activeItem);
+      }
     }
   };
 

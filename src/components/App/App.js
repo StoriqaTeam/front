@@ -24,8 +24,13 @@ type PropsType = {
   },
 };
 
+type SelectType = {
+  id: string,
+  label: string,
+}
+
 type StateType = {
-  country: string,
+  country: ?SelectType,
 }
 
 class App extends Component<PropsType, StateType> {
@@ -49,7 +54,28 @@ class App extends Component<PropsType, StateType> {
 
   render() {
     const { me, children } = this.props;
+    const { country } = this.state;
     const countriesArr = getIndexedCountries(countries);
+    const label = country ? country.label : '';
+    const addressBlock = !label ? null : (
+      <div>
+        <AddressAutocomplete
+          country={getCountryByName(label, countries).Code}
+          searchType="(cities)"
+          onSelect={(value, item) => {
+            log.debug('search for sities: ', { value, item });
+          }}
+        />
+        <br />
+        <AddressAutocomplete
+          country={getCountryByName(label, countries).Code}
+          searchType="geocode"
+          onSelect={(value, item) => {
+            log.debug('search for geocode: ', { value, item });
+          }}
+        />
+      </div>
+    );
     return (
       <div>
         <Header user={me} />
@@ -59,32 +85,14 @@ class App extends Component<PropsType, StateType> {
           <MiniSelect
             label="Select your country"
             items={countriesArr}
-            onSelect={(value) => {
-              log.debug('**** on countries select: ', value, typeof id === 'string');
+            onSelect={(value: ?SelectType) => {
+              // log.debug('**** on countries select: ', value);
               this.setState({ country: value });
             }}
             activeItem={this.state.country}
           />
           <br />
-          {this.state.country &&
-            <div>
-              <AddressAutocomplete
-                country={getCountryByName(this.state.country.label, countries).Code}
-                searchType="(cities)"
-                onSelect={(value, item) => {
-                  log.debug('search for sities: ', { value, item });
-                }}
-              />
-              <br />
-              <AddressAutocomplete
-                country={getCountryByName(this.state.country.label, countries).Code}
-                searchType="geocode"
-                onSelect={(value, item) => {
-                  log.debug('search for geocode: ', { value, item });
-                }}
-              />
-            </div>
-          }
+          {addressBlock }
         </div>
       </div>
     );

@@ -15,8 +15,6 @@ type PropsType = {
   country: string,
   onSelect: Function,
   searchType: '(cities)' | 'geocode',
-  // isCities: boolean,
-  // forCity?: string,
 };
 
 type StateType= {
@@ -27,7 +25,7 @@ type StateType= {
 };
 
 class AddressAutocomplete extends Component<PropsType, StateType> {
-  constructor(props) {
+  constructor(props: PropsType) {
     super(props);
     this.handleInputChange = debounce(this.handleInputChange, 250);
   }
@@ -39,12 +37,14 @@ class AddressAutocomplete extends Component<PropsType, StateType> {
     predictions: [],
   };
 
-  handleSearch = (predictions, status) => {
-    log.debug({ predictions });
-    // eslint-disable-next-line
+  handleSearch = (predictions: any, status: string) => {
+    // log.debug({ predictions, status });
+    /* eslint-disable */
+    // $FlowIgnore
     if (status !== google.maps.places.PlacesServiceStatus.OK) {
       return;
     }
+    /* eslint-enable */
 
     const formattedResult = map(item => ({
       mainText: pathOr(null, ['structured_formatting', 'main_text'], item),
@@ -54,13 +54,16 @@ class AddressAutocomplete extends Component<PropsType, StateType> {
     this.setState({ predictions: formattedResult });
   };
 
-  handleInputChange = (value) => {
+  handleInputChange = (value: string) => {
     if (isEmpty(value)) {
       this.setState({ predictions: [] });
       return;
     }
-    // log.debug({ value });
+    log.debug('***** value', { value });
+    /* eslint-disable */
+    // $FlowIgnore
     this.autocompleteService.getPlacePredictions(
+    /* eslint-enable */
       {
         input: value,
         componentRestrictions: {
@@ -108,6 +111,7 @@ class AddressAutocomplete extends Component<PropsType, StateType> {
               isGoogleMapsApiScriptLoading: false,
             });
             /* eslint-disable */
+            // $FlowIgnore
             this.autocompleteService = new google.maps.places.AutocompleteService();
             //this.placesService = google.maps.places.PlacesService(document.getElementById('someId'));
             /* eslint-enable */
