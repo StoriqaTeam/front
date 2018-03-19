@@ -97,7 +97,7 @@ class Input extends Component<PropsType, StateType> {
             id={id}
             name={id}
             type="text"
-            value={value}
+            value={value || ''}
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
@@ -114,10 +114,10 @@ class Input extends Component<PropsType, StateType> {
         {isFocus && !isUrl &&
           <div styleName={classNames(
               'valueLength',
-              { maxValueLength: value.length === 50 },
+              { maxValueLength: value && value.length === 50 },
             )}
           >
-            {value.length} / 50
+            {value ? value.length : 0} / 50
           </div>
         }
       </label>
