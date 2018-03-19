@@ -126,10 +126,11 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   // TODO: extract to helper
-  renderInput = (id: string, label: string) => (
+  renderInput = (id: string, label: string, icon: string) => (
     <div styleName="formItem">
       <Input
-        forForm
+        isUrl={Boolean(icon)}
+        icon={icon}
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -157,33 +158,26 @@ class Contacts extends Component<PropsType, StateType> {
               <div styleName="form">
                 {this.renderInput('email', 'Email')}
                 {this.renderInput('phone', 'Phone')}
-                <div styleName="formItem">
-                  <SocialInputs
-                    socialsValues={{
-                      facebookUrl: propOr('', 'facebookUrl', form),
-                      instagramUrl: propOr('', 'instagramUrl', form),
-                      twitterUrl: propOr('', 'twitterUrl', form),
-                    }}
-                    handleSocialInputsChange={this.handleSocialInputsChange}
-                  />
-                </div>
+                {this.renderInput('facebookUrl', 'Facebook', 'facebook')}
+                {this.renderInput('instagramUrl', 'Instagram', 'instagram')}
+                {this.renderInput('twitterUrl', 'Twitter', 'twitter')}
                 {this.renderInput('address', 'Address')}
                 <div styleName="formItem">
                   <Row>
-                    <Col size={3}>
+                    <Col size={4}>
                       {this.renderInput('city', 'City')}
                     </Col>
-                    <Col size={3}>
+                    <Col size={4}>
                       {this.renderInput('state', 'State / Province / Region')}
                     </Col>
                   </Row>
                 </div>
                 <div styleName="formItem">
                   <Row>
-                    <Col size={3}>
+                    <Col size={4}>
                       {this.renderInput('zip', 'ZIP / Postal code')}
                     </Col>
-                    <Col size={3}>
+                    <Col size={4}>
                       {this.renderInput('country', 'Country')}
                     </Col>
                   </Row>

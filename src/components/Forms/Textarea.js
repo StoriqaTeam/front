@@ -13,7 +13,6 @@ type PropsType = {
   label: string,
   errors: ?Array<string>,
   onChange: (e: {target: { value: string }}) => void,
-  forForm: ?boolean,
 };
 
 type StateType = {
@@ -57,7 +56,6 @@ class Textarea extends Component<PropsType, StateType> {
       value,
       label,
       errors,
-      forForm,
     } = this.props;
 
     const {
@@ -68,17 +66,16 @@ class Textarea extends Component<PropsType, StateType> {
     return (
       <label
         htmlFor={id}
-        styleName={classNames('container', { isError: errors })}
+        styleName={classNames(
+          'container',
+          errors && 'isError',
+          isFocus && 'isFocus',
+        )}
       >
         <span styleName={classNames('label', { labelFloat })}>
           {label}
-          {forForm && !isFocus &&
-          <div styleName="editIcon">
-            <Icon type="pencil" />
-          </div>
-          }
         </span>
-        <div styleName={classNames('textarea', value && 'isFilledTextarea')}>
+        <div styleName={classNames('textarea')}>
           <TextareaAutosize
             id={id}
             name={id}
@@ -87,6 +84,7 @@ class Textarea extends Component<PropsType, StateType> {
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
           />
+          <hr />
         </div>
         {errors && errors.length > 0 &&
           <div className="errors">

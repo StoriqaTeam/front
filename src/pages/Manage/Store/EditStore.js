@@ -204,7 +204,6 @@ class EditStore extends Component<{}, StateType> {
   renderInput = (id: string, label: string) => (
     <div styleName="formItem">
       <Input
-        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -217,7 +216,6 @@ class EditStore extends Component<{}, StateType> {
   renderTextarea = (id: string, label: string) => (
     <div styleName="formItem">
       <Textarea
-        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}

@@ -1,15 +1,11 @@
 .container {
   position: relative;
-  display: inline-block;
-}
-
-.container:hover .labelFloat .editIcon {
-  opacity: 1;
-  transition: all .3s ease;
+  display: block;
+  width: 96rem;
+  margin-top: 3rem;
 }
 
 .label {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
   position: absolute;
   top: 0.5rem;
   left: 0;
@@ -25,18 +21,18 @@
   font-size: 12px;
 }
 
-.editIcon {
-  position: absolute;
-  top: -2px;
-  right: -30px;
-  opacity: 0;
+.isError.isFocus .labelFloat {
+  color: #E62C6D;
+}
+
+.textarea {
+  position: relative;
+  line-height: 24px;
 }
 
 .textarea textarea {
-  position: relative;
-  width: 96rem;
-  border-bottom: 1px solid;
-  border-color: #A7A7A7;
+  width: 100%;
+  border-bottom: 1px solid #A7A7A7;
   font-size: 14px;
   line-height: 24px;
   text-align: left;
@@ -44,12 +40,23 @@
   resize: none !important;
 }
 
-.isFilledTextarea textarea {
-  border-color: transparent;
+.textarea hr {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border: 1px solid #A7A7A7;
+  transform: scaleX(0);
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
 
-.textarea textarea:focus {
-  border-color: #626262;
+.isFocus .textarea hr {
+  transform: scaleX(1);
+}
+
+.isError .textarea hr {
+  border: 1px solid #E62C6D;
+  transform: scaleX(1);
 }
 
 .isError .textarea textarea {
