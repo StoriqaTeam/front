@@ -19,7 +19,7 @@ import Menu from './Menu';
 import './Contacts.scss';
 
 type PropsType = {
-  variables: any,
+  me: { store: {} },
 };
 
 type StateType = {
@@ -71,7 +71,7 @@ class Contacts extends Component<PropsType, StateType> {
 
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
-    const { variables } = this.props;
+    const { me: { store } } = this.props;
     if (!currentUser || !currentUser.rawId) {
       return;
     }
@@ -91,7 +91,8 @@ class Contacts extends Component<PropsType, StateType> {
 
     UpdateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
-      id: variables.storeId,
+      rawId: store.rawId,
+      id: store.id,
       email,
       phone,
       address,
@@ -202,9 +203,11 @@ Contacts.contextTypes = {
 export default createFragmentContainer(
   Page(Contacts),
   graphql`
-    fragment Contacts_me on User {
-      store(id: "c3RvcmVzX3N0b3JlXzE=") {
+    fragment Contacts_me on User
+    @argumentDefinitions(storeId: { type: "ID!" }) {
+      store(id: $storeId) {
         id
+        rawId
         name {
           lang
           text
