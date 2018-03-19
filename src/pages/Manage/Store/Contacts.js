@@ -69,10 +69,6 @@ class Contacts extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', id], value));
   };
 
-  handleSocialInputsChange = (id: string, value: any) => {
-    this.setState(assocPath(['form', id], value));
-  }
-
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
     const { variables } = this.props;

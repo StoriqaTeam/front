@@ -13,7 +13,6 @@ import {
   find,
   propEq,
 } from 'ramda';
-import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -138,26 +137,6 @@ class EditStore extends Component<{}, StateType> {
       },
     } = this.state;
 
-    // TODO: вынести в либу спеки
-    const { errors: formErrors } = validate({
-      name: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      shortDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      longDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      slug: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-    }, {
-      name,
-      currencyId,
-      defaultLanguage,
-      longDescription,
-      shortDescription,
-      slug,
-      slogan,
-    });
-
-    if (formErrors) {
-      this.setState({ formErrors });
-      return;
-    }
     this.setState({ formErrors: {} });
 
     CreateStoreMutation.commit({
