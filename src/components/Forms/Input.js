@@ -75,9 +75,11 @@ class Input extends Component<PropsType, StateType> {
         htmlFor={id}
         styleName={classNames(
           'container',
-          errors && 'isError',
-          isFocus && 'isFocus',
-          icon && 'isIcon',
+          {
+            isError: errors,
+            isFocus,
+            isIcon: icon,
+          },
         )}
       >
         {label &&
@@ -105,14 +107,14 @@ class Input extends Component<PropsType, StateType> {
         {errors && errors.length > 0 &&
           <div styleName="errors">
             {errors.map((item, idx) => (
-              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
+              <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
             ))}
           </div>
         }
         {isFocus && !isUrl &&
           <div styleName={classNames(
               'valueLength',
-              value.length === 50 && 'maxValueLength',
+              { maxValueLength: value.length === 50 },
             )}
           >
             {value.length} / 50

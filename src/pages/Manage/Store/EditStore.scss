@@ -1,8 +1,8 @@
 @import "../../../styles/variables";
 
 .container {
-   display: flex;
-   flex-direction: column;
+  display: flex;
+  flex-direction: column;
   flex: 1 0 auto;
 }
 
@@ -11,7 +11,6 @@
 }
 
 .form {
-  // height: 100%;
   margin-top: 2rem;
   padding: 2rem;
   background-color: $color_white;

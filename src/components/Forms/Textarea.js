@@ -35,10 +35,10 @@ class Textarea extends Component<PropsType, StateType> {
   };
 
   handleFocus = () => {
-    this.setState({
-      labelFloat: !this.state.labelFloat || true,
+    this.setState(prevState => ({
+      labelFloat: !prevState.labelFloat || true,
       isFocus: true,
-    });
+    }));
   };
 
   handleBlur = () => {
@@ -67,14 +67,16 @@ class Textarea extends Component<PropsType, StateType> {
         htmlFor={id}
         styleName={classNames(
           'container',
-          errors && 'isError',
-          isFocus && 'isFocus',
+          {
+            isError: errors,
+            isFocus,
+          }
         )}
       >
         <span styleName={classNames('label', { labelFloat })}>
           {label}
         </span>
-        <div styleName={classNames('textarea')}>
+        <div styleName="textarea">
           <TextareaAutosize
             id={id}
             name={id}
@@ -88,7 +90,7 @@ class Textarea extends Component<PropsType, StateType> {
         {errors && errors.length > 0 &&
           <div className="errors">
             {errors.map((item, idx) => (
-              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
+              <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
             ))}
           </div>
         }

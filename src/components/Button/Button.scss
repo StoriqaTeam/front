@@ -3,12 +3,12 @@
 .container {
   height: 4rem;
   display: inline-block;
-  min-width: 96px;
-  padding: 0 16px;
-  border-radius: 4px;
-  line-height: 32px;
+  min-width: 12rem;
+  padding: 0 2rem;
+  border-radius: 0.5rem;
+  line-height: 4rem;
   cursor: pointer;
-  color: #fff;
+  color: $color_white;
   font-size: 16px;
   background: $color_primary;
   white-space: nowrap;
@@ -22,13 +22,13 @@
   color: $color_primary;
   &:hover {
     background: $color_primary;
-    color: #fff;
+    color: $color_white;
   }
 }
 
 .disabled {
   background: #EFEFEF;
-  color: #FFFFFF;
+  color: $color_white;
   cursor: default;
 }
 
@@ -36,13 +36,13 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 40px;
-  color: #505050;
+  height: 5rem;
+  color: $color_grey_text;
   font-size: 14px;
   background-color: #F7F7F7;
 }
 
 .iconic > *:first-child {
   display: inline-block;
-  margin-right: 8px;
+  margin-right: 1rem;
 }

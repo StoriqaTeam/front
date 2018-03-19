@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .container {
   position: relative;
   padding-bottom: 2rem;
@@ -15,7 +17,7 @@
 }
 
 .bottom {
-  background-color: #fff;
+  background-color: $color_white;
   display: flex;
   align-items: flex-end;
   margin-top: 3rem;
