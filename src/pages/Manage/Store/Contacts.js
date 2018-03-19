@@ -3,13 +3,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr, pick } from 'ramda';
-// import { validate } from '@storiqa/validation_specs';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { Input, SocialInputs } from 'components/Forms';
+import { Input } from 'components/Forms';
 import { Button } from 'components/Button';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
@@ -126,7 +125,7 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   // TODO: extract to helper
-  renderInput = (id: string, label: string, icon: string) => (
+  renderInput = (id: string, label: string, icon?: string) => (
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -141,7 +140,7 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem, form } = this.state;
+    const { activeItem } = this.state;
 
     return (
       <Container>

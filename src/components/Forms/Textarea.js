@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
-import { Icon } from 'components/Icon';
 
 import './Textarea.scss';
 

@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import InputAutosize from 'react-input-autosize';
 import { Icon } from 'components/Icon';
 
 import './Input.scss';
