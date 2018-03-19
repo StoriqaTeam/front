@@ -12,7 +12,13 @@ export default pipe(
     const code = prop('code', error);
     const status = pathOr('', ['details', 'status'], error);
     const messagesRaw = pathOr('', ['details', 'message'], error);
-    const messagesData = JSON.parse(messagesRaw);
+    let messagesData;
+
+    try {
+      messagesData = JSON.parse(messagesRaw);
+    } catch (e) {
+      //
+    }
 
     const messages = {};
     try {
