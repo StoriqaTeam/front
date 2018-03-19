@@ -6,7 +6,9 @@ import './Main.scss';
 
 const Main = (props: any) => (
   <main styleName="container">
-    { props.children }
+    <div styleName="wrap">
+      { props.children }
+    </div>
   </main>
 );
 

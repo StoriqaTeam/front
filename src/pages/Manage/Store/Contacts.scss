@@ -9,10 +9,29 @@
 .form {
   height: 100%;
   margin-top: 2rem;
-  padding: 4rem 2rem 2rem;
+  padding: 2rem;
   background-color: $color_white;
 }
 
 .formItem + .formItem {
   margin-top: 6rem;
+}
+
+.label {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  margin-bottom: 1rem;
+  color: #A7A7A7;
+  font-size: 12px;
+  line-height: 2rem;
+  white-space: nowrap;
+}
+
+.socialItem {
+  position: relative;
+  // padding-right: 50px;
+}
+
+.icon {
+  position: absolute;
+  top: 0.625rem;
 }

@@ -1,9 +1,12 @@
 .col {
   position: relative;
   width: 100%;
+  max-width: 100%;
   min-height: 1px;
   padding-right: 1rem;
   padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .col-1 {

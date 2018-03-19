@@ -13,7 +13,6 @@ import {
   find,
   propEq,
 } from 'ramda';
-import { validate } from '@storiqa/validation_specs';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -29,21 +28,12 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type StateType = {
-  form: ?{
-    name: {
-      lang: string,
-      text: string,
-    },
+  form: {
+    name: string,
     currencyId: number,
     defaultLanguage: string,
-    longDescription: {
-      lang: string,
-      text: string,
-    },
-    shortDescription: {
-      lang: string,
-      text: string,
-    },
+    longDescription: string,
+    shortDescription: string,
     slug: string,
     slogan: string,
   },
@@ -80,14 +70,21 @@ const currenciesDic = {
 };
 
 class EditStore extends Component<{}, StateType> {
-  state: StateType = {
+  state = {
     form: {
-      defaultLanguage: 'EN',
+      name: '',
+      longDescription: '',
+      shortDescription: '',
       currencyId: 1,
+      defaultLanguage: 'EN',
+      slug: '',
+      slogan: '',
     },
+    activeItem: 'settings',
     langItems: null,
     currencyItems: null,
     optionLanguage: 'EN',
+    formErrors: {},
   };
 
   componentWillMount() {
@@ -104,15 +101,15 @@ class EditStore extends Component<{}, StateType> {
     this.setState({ langItems, currencyItems });
   }
 
-  handleOptionLanguage = (optionLanguage: string) => {
+  handleOptionLanguage = (optionLanguage: { id: string, label: string }) => {
     this.setState({ optionLanguage: toUpper(optionLanguage.id) });
   };
 
-  handleDefaultLanguage = (defaultLanguage: string) => {
+  handleDefaultLanguage = (defaultLanguage: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
   };
 
-  handleShopCurrency = (shopCurrency: string) => {
+  handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
   };
 
@@ -140,25 +137,6 @@ class EditStore extends Component<{}, StateType> {
       },
     } = this.state;
 
-    // TODO: вынести в либу спеки
-    const { errors: formErrors } = validate({
-      name: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      shortDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      slug: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-    }, {
-      name,
-      currencyId,
-      defaultLanguage,
-      longDescription,
-      shortDescription,
-      slug,
-      slogan,
-    });
-
-    if (formErrors) {
-      this.setState({ formErrors });
-      return;
-    }
     this.setState({ formErrors: {} });
 
     CreateStoreMutation.commit({
@@ -184,7 +162,7 @@ class EditStore extends Component<{}, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        const validationErrors = pathOr(null, ['100', 'message'], relayErrors);
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
@@ -205,7 +183,6 @@ class EditStore extends Component<{}, StateType> {
   renderInput = (id: string, label: string) => (
     <div styleName="formItem">
       <Input
-        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -218,7 +195,6 @@ class EditStore extends Component<{}, StateType> {
   renderTextarea = (id: string, label: string) => (
     <div styleName="formItem">
       <Textarea
-        forForm
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
@@ -266,7 +242,7 @@ class EditStore extends Component<{}, StateType> {
                 {this.renderInput('name', 'Название магазина')}
                 <div styleName="formItem">
                   <MiniSelect
-                    transparent
+                    forForm
                     label="Язык магазина"
                     activeItem={defaultLanguageValue}
                     items={langItems}
@@ -275,7 +251,7 @@ class EditStore extends Component<{}, StateType> {
                 </div>
                 <div styleName="formItem">
                   <MiniSelect
-                    transparent
+                    forForm
                     label="Валюта магазина"
                     activeItem={shopCurrencyValue}
                     items={currencyItems}

@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import InputAutosize from 'react-input-autosize';
 import { Icon } from 'components/Icon';
 
 import './Input.scss';
@@ -13,7 +12,8 @@ type PropsType = {
   label: string,
   errors: ?Array<string>,
   onChange: (e: {target: { value: string }}) => void,
-  forForm: ?boolean,
+  icon: ?string,
+  isUrl: ?boolean,
 };
 
 type StateType = {
@@ -35,7 +35,9 @@ class Input extends Component<PropsType, StateType> {
 
   handleChange = (e: any) => {
     const { value } = e.target;
-    this.props.onChange(value);
+    if (value.length <= 50 || this.props.isUrl) {
+      this.props.onChange(value.replace(/\s\s/, ' '));
+    }
   };
 
   handleFocus = () => {
@@ -59,7 +61,8 @@ class Input extends Component<PropsType, StateType> {
       value,
       label,
       errors,
-      forForm,
+      icon,
+      isUrl,
     } = this.props;
 
     const {
@@ -70,34 +73,50 @@ class Input extends Component<PropsType, StateType> {
     return (
       <label
         htmlFor={id}
-        styleName={classNames('container', { isError: errors })}
+        styleName={classNames(
+          'container',
+          errors && 'isError',
+          isFocus && 'isFocus',
+          icon && 'isIcon',
+        )}
       >
-        <span styleName={classNames('label', { labelFloat })}>
-          {label}
-          {forForm && !isFocus &&
-            <div styleName="editIcon">
-              <Icon type="pencil" />
-            </div>
-          }
-        </span>
-        <div styleName={classNames('input', { inputForForm: forForm })}>
-          <InputAutosize
+        {label &&
+          <span styleName={classNames('label', { labelFloat })}>
+            {label}
+          </span>
+        }
+        {icon &&
+          <div styleName="icon">
+            <Icon type={icon} />
+          </div>
+        }
+        <div styleName="input">
+          <input
             id={id}
             name={id}
             type="text"
             value={value}
-            styleName="input"
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
           />
+          <hr />
         </div>
         {errors && errors.length > 0 &&
-        <div className="errors">
-          {errors.map((item, idx) => (
-            <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
-          ))}
-        </div>
+          <div styleName="errors">
+            {errors.map((item, idx) => (
+              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
+            ))}
+          </div>
+        }
+        {isFocus && !isUrl &&
+          <div styleName={classNames(
+              'valueLength',
+              value.length === 50 && 'maxValueLength',
+            )}
+          >
+            {value.length} / 50
+          </div>
         }
       </label>
     );
