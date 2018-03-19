@@ -1,9 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { AddressAutocomplete } from 'components/AddressAutocomplete';
+import { GoogleAPIWrapper, AutocompleteComponent } from 'components/AddressAutocomplete';
 
 storiesOf('AddressAutocomplete', module)
   .add('Default', () => (
-    <AddressAutocomplete />
+    <GoogleAPIWrapper>
+      <AutocompleteComponent />
+    </GoogleAPIWrapper>
   ));
