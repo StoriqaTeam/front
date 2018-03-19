@@ -16,6 +16,7 @@ import Instagram from 'components/Icon/svg/instagram.svg';
 import Twitter from 'components/Icon/svg/twitter.svg';
 import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
+import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
 
@@ -40,6 +41,7 @@ const iconsMap = {
   twitter: <Twitter />,
   spiner: <Spiner />,
   arrowExpand: <ArrowExpand />,
+  arrowSelect: <ArrowSelect />,
   cross: <Cross />,
   pencil: <Pencil />,
 };

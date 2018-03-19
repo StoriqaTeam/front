@@ -4,6 +4,19 @@
   cursor: pointer;
 }
 
+.forForm {
+  display: block;
+  width: 41rem;
+}
+
+.forForm .hr {
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  width: 100%;
+  border-bottom: 1px solid #A7A7A7;
+}
+
 .label {
   font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
   color: #A7A7A7;
@@ -22,7 +35,12 @@
   font-size: 12px;
 }
 
-.transparent {
+.forForm .wrap {
+  position: static;
+}
+
+.transparent,
+.forForm .wrap {
   padding-left: 0;
   background-color: transparent;
 }
@@ -40,15 +58,21 @@
 
 .selected {
   position: relative;
+  line-height: 20px;
   z-index: 2;
 }
 
 .icon {
   position: absolute;
-  top: 3px;
+  top: 2px;
   right: 4px;
   border-radius: 2px;
   z-index: 2;
+}
+
+.forForm .icon {
+  top: auto;
+  bottom: 4px;
 }
 
 .isItem .icon {
@@ -67,6 +91,12 @@
   overflow: hidden;
   cursor: default;
   z-index: 3;
+}
+
+.forForm .items {
+  top: 24px;
+  left: 0;
+  margin-left: 0;
 }
 
 .isItem .items {

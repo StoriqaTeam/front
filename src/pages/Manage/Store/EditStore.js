@@ -263,7 +263,7 @@ class EditStore extends Component<{}, StateType> {
                 {this.renderInput('name', 'Название магазина')}
                 <div styleName="formItem">
                   <MiniSelect
-                    transparent
+                    forForm
                     label="Язык магазина"
                     activeItem={defaultLanguageValue}
                     items={langItems}
@@ -272,7 +272,7 @@ class EditStore extends Component<{}, StateType> {
                 </div>
                 <div styleName="formItem">
                   <MiniSelect
-                    transparent
+                    forForm
                     label="Валюта магазина"
                     activeItem={shopCurrencyValue}
                     items={currencyItems}
