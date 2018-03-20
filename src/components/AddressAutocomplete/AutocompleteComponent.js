@@ -2,13 +2,13 @@
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
-import { isEmpty, any, reduce, pathOr, map, pick } from 'ramda';
+import { isEmpty, pathOr, map, pick } from 'ramda';
 import debounce from 'lodash.debounce';
 import { log } from 'utils';
-import PropTypes from 'prop-types';
 
 
 type PropsType = {
+  autocompleteService: any,
   country: string,
   onSelect: Function,
   searchType: '(cities)' | 'geocode',
@@ -37,11 +37,11 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
       return;
     }
     /* eslint-enable */
-    console.log('%%%% predic: ', predictions);
+    // console.log('%%%% predic: ', predictions);
     const formattedResult = map(item => ({
       mainText: pathOr(null, ['structured_formatting', 'main_text'], item),
       secondaryText: pathOr(null, ['structured_formatting', 'secondary_text'], item),
-      ...pick(['place_id', 'terms'], item),
+      ...pick(['place_id'], item),
     }), predictions);
     this.setState({ predictions: formattedResult });
   };
@@ -54,7 +54,7 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
     log.debug('***** value', { value });
     /* eslint-disable */
     // $FlowIgnore
-    this.context.autocompleteService.getPlacePredictions(
+    this.props.autocompleteService.getPlacePredictions(
     /* eslint-enable */
       {
         input: value,
@@ -66,26 +66,6 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
       this.handleSearch,
     );
   };
-
-  handleGetGeocode = (value, item) => {
-    const componentRestrictions = {
-      administrativeArea: item.terms.length > 2 ? item.terms[item.terms.length - 2].value : undefined,
-      country: this.props.country,
-    };
-    console.log('^^^^ handleGetGeocode value item: ', { value, item, componentRestrictions });
-    this.context.geocoderService.geocode(
-    /* eslint-enable */
-
-      {
-        address: value,
-        componentRestrictions: {
-          // administrativeArea: item.terms.length > 2 ? item.terms[item.terms.length - 2].value : undefined,
-          country: this.props.country,
-        },
-      },
-      result => console.log('**** geocode result: ', result),
-    );
-  }
 
   render() {
     return (
@@ -107,17 +87,11 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
         value={this.state.value}
         onSelect={(value, item) => {
           this.setState({ value });
-          this.props.onSelect(item);
-          this.handleGetGeocode(value, item);
+          this.props.onSelect(value, item);
         }}
       />
     );
   }
 }
-
-AutocompleteComponent.contextTypes = {
-  autocompleteService: PropTypes.object,
-  geocoderService: PropTypes.object,
-};
 
 export default AutocompleteComponent;

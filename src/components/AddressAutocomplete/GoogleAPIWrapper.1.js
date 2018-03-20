@@ -4,7 +4,9 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import { log } from 'utils';
 import LoadScript from 'libs/react-load-script';
+import PropTypes from 'prop-types';
 import { getScriptURL } from './utils';
+// import AutocompleteComponent from './AutocompleteComponent';
 
 
 type StateType= {
@@ -17,24 +19,24 @@ type PropsType = {
 }
 
 class GoogleAPIWrapper extends Component<PropsType, StateType> {
-
-  // autocompleteService: any;
-  // geocoderService: any;
-
-  // constructor(props: PropsType) {
-  //   super(props);
-  //   this.autocompleteService = this.autocompleteService;
-  //   this.geocoderService = this.geocoderService;
-  // }
-
   state: StateType = {
     isGoogleMapsApiScriptLoaded: false,
     isGoogleMapsApiScriptLoading: false,
   };
 
+  getChildContext() {
+    /* eslint-disable */
+    return {
+      autocompleteService: this.autocompleteService,
+      geocoderService: this.geocoderService,
+    };
+    /* eslint-enable */
+  }
+
   render() {
     const { children } = this.props;
     const { isGoogleMapsApiScriptLoading, isGoogleMapsApiScriptLoaded } = this.state;
+    // children.forEach(c => console.log('&&& child type', typeof c, {type: c.type}));
     if (!isGoogleMapsApiScriptLoading && !isGoogleMapsApiScriptLoaded) {
       return (
         <LoadScript
@@ -47,10 +49,13 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
               isGoogleMapsApiScriptLoaded: true,
               isGoogleMapsApiScriptLoading: false,
             });
+            /* eslint-disable */
             // $FlowIgnore
             this.autocompleteService = new google.maps.places.AutocompleteService();
             // $FlowIgnore
             this.geocoderService = new google.maps.Geocoder();
+            console.log('^^^^^ GoogleAPIWrapper geocoderService: ', this.geocoderService);
+            /* eslint-enable */
           }}
         />
       );
@@ -59,16 +64,15 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
         <div>loading</div>
       );
     } else if (isGoogleMapsApiScriptLoaded) {
-      return React.Children.map(children, child =>
-        React.cloneElement(child, {
-          // $FlowIgnore
-          autocompleteService: this.autocompleteService,
-          // $FlowIgnore
-          geocoderService: this.geocoderService,
-        }));
+      return children;
     }
     return null;
   }
 }
+
+GoogleAPIWrapper.childContextTypes = {
+  autocompleteService: PropTypes.object,
+  geocoderService: PropTypes.object,
+};
 
 export default GoogleAPIWrapper;

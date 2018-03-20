@@ -1,9 +1,9 @@
 import GoogleAPIWrapper from './GoogleAPIWrapper';
 import AutocompleteComponent from './AutocompleteComponent';
-// import AddressAutocomplete from './AddressAutocomplete';
+import AddressForm from './AddressForm';
 
 export {
-  // AddressAutocomplete,
+  AddressForm,
   AutocompleteComponent,
   GoogleAPIWrapper,
 }

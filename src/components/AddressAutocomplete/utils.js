@@ -1,6 +1,18 @@
 // @flow
 
-import { replace } from 'ramda';
+import { replace, map, addIndex, find, propEq } from 'ramda';
+
+
+type CountriesType = Array<{ Code: string, Name: string }>;
+
+export const getIndexedCountries = (countries: CountriesType) => {
+  const mapIndexed = addIndex(map);
+  return mapIndexed((country, index) =>
+    ({ id: index.toString(), label: country.Name }), countries);
+};
+
+export const getCountryByName = (name: string, countries: CountriesType) =>
+  find(propEq('Name', name))(countries);
 
 export const getScriptURL = () => {
   // workaround for storybook
@@ -14,21 +26,3 @@ export const getScriptURL = () => {
   return replace(keyPlaceholder, apiKey, urlTemplate);
 };
 
-// const geocodeByAddress = (address) => {
-//   /* eslint-disable */
-//   const geocoder = new google.maps.Geocoder();
-//   const { OK } = google.maps.GeocoderStatus;
-//   /* eslint-enable */
-//
-//   return new Promise((resolve, reject) => {
-//     geocoder.geocode({ address }, (results, status) => {
-//       if (status !== OK) {
-//         reject(status);
-//       }
-//
-//       resolve(results);
-//     });
-//   });
-// };
-
-// export default { geocodeByAddress };
