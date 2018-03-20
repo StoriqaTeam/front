@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import { pathOr } from 'ramda';
 
 import Person from 'components/Icon/svg/person.svg';
@@ -13,15 +12,19 @@ import Eye from 'components/Icon/svg/eye.svg';
 import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
 import Facebook from 'components/Icon/svg/facebook.svg';
 import Google from 'components/Icon/svg/google.svg';
+import Instagram from 'components/Icon/svg/instagram.svg';
+import Twitter from 'components/Icon/svg/twitter.svg';
 import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
+import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import Cross from 'components/Icon/svg/cross.svg';
+import Pencil from 'components/Icon/svg/pencil.svg';
 
 import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 16 | 24 | 32,
+  size: 8 | 16 | 24 | 32,
 };
 
 const iconsMap = {
@@ -34,18 +37,21 @@ const iconsMap = {
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
   google: <Google />,
+  instagram: <Instagram />,
+  twitter: <Twitter />,
   spiner: <Spiner />,
   arrowExpand: <ArrowExpand />,
+  arrowSelect: <ArrowSelect />,
   cross: <Cross />,
+  pencil: <Pencil />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
   render() {
     const { type, size } = this.props;
-    const styleName = classNames('container', `size-${size || '16'}`);
 
     return (
-      <div styleName={styleName}>
+      <div styleName={`container size-${size || '16'}`}>
         {pathOr(null, [type], iconsMap)}
       </div>
     );

@@ -1,15 +1,18 @@
 // @flow
 
 import React from 'react';
-import { Route } from 'found';
+import { Route, RedirectException } from 'found';
 import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
+import PrivateRoute from 'routes/PrivateRoute';
+import { log } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
-import { StoreSettingsPage } from 'pages/StoreSettingsPage';
+import EditStore from 'pages/Manage/Store/EditStore';
+import Contacts from 'pages/Manage/Store/Contacts';
 
 const routes = (
   <Route
@@ -22,11 +25,20 @@ const routes = (
           id
           ...App_me
         }
+        languages {
+          isoCode
+        }
+        currencies {
+          key
+          name
+        }
       }
     `}
-    render={({ Component, props, error }) => {
+    render={(args) => {
+      const { error, Component, props } = args;
       if (error) {
-        const errors = pathOr(null, ['source', 'errors'], error);
+        log.error({ error });
+        const errors = pathOr([], ['source', 'errors'], error);
         if (find(pathEq(['data', 'details', 'code'], '401'))(errors)) {
           return <Component {...props} />;
         }
@@ -35,6 +47,33 @@ const routes = (
     }}
   >
     <Route Component={() => <div />} />
+
+    <Route
+      path="/manage"
+      Component={PrivateRoute}
+    >
+      <Route path="/store">
+        <Route
+          path="/new"
+          Component={EditStore}
+        />
+        <Route
+          path="/:storeId/contacts"
+          Component={Contacts}
+          query={graphql`
+            query routes_Contacts_Query($storeID: ID!) {
+              me {
+                ...Contacts_me @arguments(storeId: $storeID)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => {
+            return { storeID: params.storeId };
+          }}
+        />
+      </Route>
+    </Route>
+
     <Route
       path="/registration"
       Component={Authorization}
@@ -58,7 +97,7 @@ const routes = (
       render={() => {
         const cookies = new Cookies();
         cookies.remove('__jwt');
-        window.location.href = '/';
+        throw new RedirectException('/');
       }}
     />
     <Route
@@ -74,10 +113,6 @@ const routes = (
     <Route
       path="/profile"
       Component={Profile}
-    />
-    <Route
-      path="/store-settings"
-      Component={StoreSettingsPage}
     />
   </Route>
 );

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import InputAutosize from 'react-input-autosize';
+import { Icon } from 'components/Icon';
 
 import './Input.scss';
 
@@ -12,15 +12,19 @@ type PropsType = {
   label: string,
   errors: ?Array<string>,
   onChange: (e: {target: { value: string }}) => void,
+  icon: ?string,
+  isUrl: ?boolean,
 };
 
 type StateType = {
   labelFloat: boolean,
+  isFocus: boolean,
 };
 
 class Input extends Component<PropsType, StateType> {
   state = {
     labelFloat: false,
+    isFocus: false,
   }
 
   componentWillMount() {
@@ -31,16 +35,24 @@ class Input extends Component<PropsType, StateType> {
 
   handleChange = (e: any) => {
     const { value } = e.target;
-    this.props.onChange(value);
+    if (value.length <= 50 || this.props.isUrl) {
+      this.props.onChange(value.replace(/\s\s/, ' '));
+    }
   };
 
   handleFocus = () => {
-    this.setState({ labelFloat: !this.state.labelFloat || true });
+    this.setState({
+      labelFloat: !this.state.labelFloat || true,
+      isFocus: true,
+    });
   };
 
   handleBlur = () => {
     const { value } = this.props;
-    this.setState({ labelFloat: Boolean(value) && value.length > 0 });
+    this.setState({
+      labelFloat: Boolean(value) && value.length > 0,
+      isFocus: false,
+    });
   };
 
   render() {
@@ -49,35 +61,63 @@ class Input extends Component<PropsType, StateType> {
       value,
       label,
       errors,
+      icon,
+      isUrl,
     } = this.props;
 
     const {
       labelFloat,
+      isFocus,
     } = this.state;
 
     return (
       <label
         htmlFor={id}
-        styleName={classNames('container', { isError: errors })}
+        styleName={classNames(
+          'container',
+          {
+            isError: errors,
+            isFocus,
+            isIcon: icon,
+          },
+        )}
       >
-        <span styleName={classNames('label', { labelFloat })}>{label}</span>
-        <div className="input">
-          <InputAutosize
+        {label &&
+          <span styleName={classNames('label', { labelFloat })}>
+            {label}
+          </span>
+        }
+        {icon &&
+          <div styleName="icon">
+            <Icon type={icon} />
+          </div>
+        }
+        <div styleName="input">
+          <input
             id={id}
             name={id}
             type="text"
-            value={value}
-            styleName="input"
+            value={value || ''}
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
           />
+          <hr />
         </div>
         {errors && errors.length > 0 &&
-          <div className="errors">
+          <div styleName="errors">
             {errors.map((item, idx) => (
-              <div key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</div>
+              <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
             ))}
+          </div>
+        }
+        {isFocus && !isUrl &&
+          <div styleName={classNames(
+              'valueLength',
+              { maxValueLength: value && value.length === 50 },
+            )}
+          >
+            {value ? value.length : 0} / 50
           </div>
         }
       </label>

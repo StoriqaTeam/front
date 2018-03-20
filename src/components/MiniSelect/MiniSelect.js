@@ -10,27 +10,26 @@ import { Icon } from 'components/Icon';
 import './MiniSelect.scss';
 
 type StateType = {
-  activeItem: ?{ id: string, label: string },
   isExpanded: boolean,
 };
 
 type PropsType = {
-  isItem: ?boolean,
   isDropdown: ?boolean,
+  transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
   onSelect?: (id: number) => void,
+  title: ?string,
   label: ?string,
+  activeItem: ?{ id: string, label: string },
+  forForm: ?boolean,
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
   state = {
-    activeItem: null,
     isExpanded: false,
   };
 
   componentWillMount() {
-    const { items } = this.props;
-    this.setState({ activeItem: items && items[0] });
     window.addEventListener('click', this.handleToggleExpand);
     window.addEventListener('keydown', this.handleToggleExpand);
   }
@@ -45,9 +44,9 @@ class MiniSelect extends Component<PropsType, StateType> {
   items: any;
 
   handleToggleExpand = (e: any) => {
-    const isButtonClick = this.button.contains(e.target);
-    const isItemsWrap = this.itemsWrap.contains(e.target);
-    const isItems = this.items.contains(e.target);
+    const isButtonClick = this.button && this.button.contains(e.target);
+    const isItemsWrap = this.itemsWrap && this.itemsWrap.contains(e.target);
+    const isItems = this.items && this.items.contains(e.target);
 
     if (isButtonClick && !isItems && !isItemsWrap) {
       this.setState({ isExpanded: !this.state.isExpanded });
@@ -64,13 +63,10 @@ class MiniSelect extends Component<PropsType, StateType> {
       log.info('id', e.target.id);
     } else {
       const activeItem = find(propEq('id', e.target.id))(this.props.items);
-      if (activeItem) {
-        this.setState({ activeItem });
-        const { onSelect } = this.props;
+      const { onSelect } = this.props;
 
-        if (onSelect) {
-          onSelect(activeItem);
-        }
+      if (onSelect) {
+        onSelect(activeItem);
       }
     }
   };
@@ -78,51 +74,58 @@ class MiniSelect extends Component<PropsType, StateType> {
   render() {
     const {
       items,
-      isItem,
       isDropdown,
+      title,
+      transparent,
       label,
+      activeItem,
+      forForm,
     } = this.props;
-    const { isExpanded, activeItem } = this.state;
+    const { isExpanded } = this.state;
 
     return (
       <div
         ref={(node) => { this.button = node; }}
-        styleName={classNames('container', { isItem, isDropdown })}
+        styleName={classNames('container', { isDropdown, forForm })}
       >
-        <div styleName="selected">
-          { isDropdown ? label : activeItem && activeItem.label }
-        </div>
-        <div styleName="icon">
-          <Icon type="arrowExpand" />
-        </div>
-        <div
-          ref={(node) => { this.items = node; }}
-          styleName={classNames('items', {
-            hidden: !isExpanded,
-          })}
-        >
+        {label && <div styleName="label">{label}</div>}
+        <div styleName={classNames('wrap', { transparent })}>
+          <div styleName="selected">
+            { isDropdown ? title : activeItem && activeItem.label }
+          </div>
+          <div styleName="icon">
+            <Icon type="arrowSelect" />
+          </div>
           <div
-            ref={(node) => { this.itemsWrap = node; }}
-            styleName="wrap"
-            onClick={this.handleItemClick}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            {items.map((item) => {
-              const { id } = item;
-              return (
-                <div
-                  key={id}
-                  id={id}
-                  styleName={classNames('item', { active: activeItem && activeItem.id === id })}
-                >
-                  {item.label}
-                </div>
-              );
+            ref={(node) => { this.items = node; }}
+            styleName={classNames('items', {
+              hidden: !isExpanded,
             })}
+          >
+            <div
+              ref={(node) => { this.itemsWrap = node; }}
+              styleName="itemsWrap"
+              onClick={this.handleItemClick}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
+              {items.map((item) => {
+                const { id } = item;
+                return (
+                  <div
+                    key={id}
+                    id={id}
+                    styleName={classNames('item', { active: activeItem && activeItem.id === id })}
+                  >
+                    {item.label}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
+        {forForm && <div styleName="hr" />}
       </div>
     );
   }
