@@ -13,6 +13,7 @@ import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
+import Product from 'pages/Manage/Store/Product';
 
 const routes = (
   <Route
@@ -67,9 +68,11 @@ const routes = (
               }
             }
           `}
-          prepareVariables={(_, { params }) => {
-            return { storeID: params.storeId };
-          }}
+          prepareVariables={(_, { params }) => ({ storeID: params.storeId })}
+        />
+        <Route
+          path="/:storeId/product/new"
+          Component={({ params }) => (<Product storeId={params.storeId} />)}
         />
       </Route>
     </Route>

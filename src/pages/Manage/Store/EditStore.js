@@ -22,6 +22,7 @@ import { CreateStoreMutation } from 'relay/mutations';
 import { Button } from 'components/Button';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
+
 import Header from './Header';
 import Menu from './Menu';
 
@@ -175,9 +176,6 @@ class EditStore extends Component<{}, StateType> {
   switchMenu = (activeItem) => {
     this.setState({ activeItem });
   };
-
-  // TODO: extract to helper
-  capitalizeString = (s: string) => s && s[0] && s[0].toUpperCase() + s.slice(1);
 
   // TODO: extract to helper
   renderInput = (id: string, label: string) => (

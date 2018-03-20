@@ -4,3 +4,4 @@ export { default as GetJWTByProviderMutation } from './GetJWTByProviderMutation'
 export { default as UpdateUserMutation } from './UpdateUserMutation';
 export { default as CreateStoreMutation } from './CreateStoreMutation';
 export { default as UpdateStoreMutation } from './UpdateStoreMutation';
+export { default as CreateBaseProductMutation } from './CreateBaseProductMutation';
