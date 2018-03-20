@@ -4,8 +4,6 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { isEmpty, pathOr, map, pick } from 'ramda';
 import debounce from 'lodash.debounce';
-import { log } from 'utils';
-
 
 type PropsType = {
   autocompleteService: any,
@@ -37,7 +35,6 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
       return;
     }
     /* eslint-enable */
-    // console.log('%%%% predic: ', predictions);
     const formattedResult = map(item => ({
       mainText: pathOr(null, ['structured_formatting', 'main_text'], item),
       secondaryText: pathOr(null, ['structured_formatting', 'secondary_text'], item),
@@ -51,11 +48,7 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
       this.setState({ predictions: [] });
       return;
     }
-    log.debug('***** value', { value });
-    /* eslint-disable */
-    // $FlowIgnore
     this.props.autocompleteService.getPlacePredictions(
-    /* eslint-enable */
       {
         input: value,
         componentRestrictions: {

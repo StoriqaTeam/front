@@ -1,12 +1,12 @@
 // @flow
 import React, { Component } from 'react';
+import { forEach } from 'ramda';
+
 import { AutocompleteComponent } from 'components/AddressAutocomplete';
 import { MiniSelect } from 'components/MiniSelect';
-import { log } from 'utils';
-import { find, any, forEach } from 'ramda';
+
 import countries from './countries.json';
 import { getIndexedCountries, getCountryByName } from './utils';
-
 
 type PropsType = {
   autocompleteService: any,
@@ -53,7 +53,6 @@ class AddressForm extends Component<PropsType, StateType> {
   }
 
   handleOnSetAddress = (value: string, item: AutocompleteItemType) => {
-    // console.log('**** handleOnSetAddress: ', { value, item });
     const { country } = this.state;
     const label = country ? country.label : '';
     const componentRestrictions = {
@@ -85,11 +84,15 @@ class AddressForm extends Component<PropsType, StateType> {
         />
       </div>
     );
-    const autocompleteResult = (
+    const autocompleteResult = address && (
       <div>
-        {address && dataTypes.map(type => (
+        {dataTypes.map(type => (
           <div>
-            <input value={address[type]} key={address[type]} style={{ margin: 6, padding: 5, border: '1px solid #333' }} />
+            <input
+              value={address[type]}
+              key={address[type]}
+              style={{ margin: 6, padding: 5, border: '1px solid #333' }}
+            />
           </div>
         ))}
       </div>
@@ -100,7 +103,6 @@ class AddressForm extends Component<PropsType, StateType> {
           label="Select your country"
           items={countriesArr}
           onSelect={(value: ?SelectType) => {
-            log.debug('**** on countries select: ', value);
             this.setState({ country: value });
           }}
           activeItem={this.state.country}

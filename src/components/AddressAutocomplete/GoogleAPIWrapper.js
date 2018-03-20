@@ -17,20 +17,13 @@ type PropsType = {
 }
 
 class GoogleAPIWrapper extends Component<PropsType, StateType> {
-
-  // autocompleteService: any;
-  // geocoderService: any;
-
-  // constructor(props: PropsType) {
-  //   super(props);
-  //   this.autocompleteService = this.autocompleteService;
-  //   this.geocoderService = this.geocoderService;
-  // }
-
   state: StateType = {
     isGoogleMapsApiScriptLoaded: false,
     isGoogleMapsApiScriptLoading: false,
   };
+
+  autocompleteService: { getPlacePredictions: Function };
+  geocoderService: { geocode: Function };
 
   render() {
     const { children } = this.props;
@@ -47,10 +40,11 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
               isGoogleMapsApiScriptLoaded: true,
               isGoogleMapsApiScriptLoading: false,
             });
+            /* eslint-disable */
             // $FlowIgnore
             this.autocompleteService = new google.maps.places.AutocompleteService();
-            // $FlowIgnore
             this.geocoderService = new google.maps.Geocoder();
+            /* eslint-enable */
           }}
         />
       );
@@ -61,9 +55,7 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
     } else if (isGoogleMapsApiScriptLoaded) {
       return React.Children.map(children, child =>
         React.cloneElement(child, {
-          // $FlowIgnore
           autocompleteService: this.autocompleteService,
-          // $FlowIgnore
           geocoderService: this.geocoderService,
         }));
     }
