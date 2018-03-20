@@ -10,6 +10,7 @@ import { currentUserShape } from 'utils/shapes';
 
 import './App.scss';
 
+
 type PropsType = {
   me: ?{},
   languages: ?Array<{ id: number, name: string }>,
@@ -21,7 +22,23 @@ type PropsType = {
   },
 };
 
-class App extends PureComponent<PropsType> {
+type SelectType = {
+  id: string,
+  label: string,
+}
+
+type AddressType = {
+  country: string,
+  region: ?string,
+  city: string,
+}
+
+type StateType = {
+  country: ?SelectType,
+  address: ?AddressType,
+}
+
+class App extends Component<PropsType, StateType> {
   getChildContext() {
     const {
       languages,
