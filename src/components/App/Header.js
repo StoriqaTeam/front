@@ -30,7 +30,7 @@ class Header extends PureComponent<PropsType> {
               <div styleName="top">
                 <div styleName="item">
                   <MiniSelect
-                    label="Dropdown"
+                    activeItem={{ id: '1', label: 'BTC' }}
                     items={[
                       { id: '1', label: 'BTC' },
                       { id: '2', label: 'ETH' },
@@ -39,33 +39,36 @@ class Header extends PureComponent<PropsType> {
                       { id: '5', label: 'NEM' },
                       { id: '6', label: 'STRAT' },
                     ]}
+                    onSelect={() => {}}
                   />
                 </div>
                 <div styleName="item">
                   <MiniSelect
-                    label="Dropdown"
+                    activeItem={{ id: '1', label: 'ENG' }}
                     items={[
                       { id: '1', label: 'ENG' },
                       { id: '2', label: 'CHN' },
                       { id: '3', label: 'RUS' },
                     ]}
+                    onSelect={() => {}}
                   />
                 </div>
                 <div styleName="item">
                   <MiniSelect
                     isDropdown
-                    label="Terms & Conditions"
+                    title="Terms & Conditions"
                     items={[
                       { id: '1', label: 'Punkt #1' },
                       { id: '2', label: 'Punkt #2' },
                       { id: '3', label: 'Punkt #3' },
                     ]}
+                    onSelect={() => {}}
                   />
                 </div>
                 <div styleName="item">
                   <MiniSelect
                     isDropdown
-                    label="Delivery"
+                    title="Delivery"
                     items={[
                       { id: '1', label: 'Punkt #1' },
                       { id: '2', label: 'Punkt #2' },

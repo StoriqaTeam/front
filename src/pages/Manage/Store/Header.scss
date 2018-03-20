@@ -1,0 +1,13 @@
+@import "../../../styles/variables";
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.title {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  color: $color_grey_text;
+  font-size: 24px;
+}

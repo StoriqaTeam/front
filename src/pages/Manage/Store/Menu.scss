@@ -1,0 +1,53 @@
+.menu {
+  position: relative;
+}
+
+.imgWrap {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.title {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  max-height: 6rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.items {
+  position: relative;
+}
+
+.item {
+  margin-left: -2rem;
+  padding: 2rem 0 2rem 2rem;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.item:hover {
+  background-color: #FFFFFF;
+}
+
+.isActive {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  position: relative;
+  background-color: #FFFFFF;
+}
+
+.isActive:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.25rem;
+  display: block;
+  border-left: 2px solid #2FBAFD;
+}

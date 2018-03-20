@@ -1,8 +1,8 @@
 .container {
   position: relative;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: space-between;
+  width: 170rem;
+  margin: 0 auto;
+  min-height: 100%;
 }
