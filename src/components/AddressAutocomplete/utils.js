@@ -3,16 +3,16 @@
 import { replace, map, addIndex, find, propEq } from 'ramda';
 
 
-type CountriesType = Array<{ Code: string, Name: string }>;
+type CountriesType = Array<{ code: string, name: string }>;
 
 export const getIndexedCountries = (countries: CountriesType) => {
   const mapIndexed = addIndex(map);
   return mapIndexed((country, index) =>
-    ({ id: index.toString(), label: country.Name }), countries);
+    ({ id: index.toString(), label: country.name }), countries);
 };
 
 export const getCountryByName = (name: string, countries: CountriesType) =>
-  find(propEq('Name', name))(countries);
+  find(propEq('name', name))(countries);
 
 export const getScriptURL = () => {
   // workaround for storybook

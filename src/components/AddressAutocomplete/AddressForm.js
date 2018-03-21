@@ -29,6 +29,14 @@ type StateType = {
   address: ?any,
 }
 
+type GeocoderType = {
+  address_components: Array<{ long_name: string, short_name: string, types: Array<string> }>,
+  formatted_address: string,
+  geometry: any,
+  types: Array<string>,
+  place_id: string,
+}
+
 const dataTypes = ['street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'country', 'postal_code'];
 
 class AddressForm extends Component<PropsType, StateType> {
@@ -40,12 +48,17 @@ class AddressForm extends Component<PropsType, StateType> {
     };
   }
 
-  handleOnReceiveAddress = (result: any) => {
+  handleOnReceiveAddress = (result: Array<GeocoderType>) => {
     const geocoderResult = result[0];
     if (geocoderResult && geocoderResult.address_components) {
       const address = {};
       const populateAddressField = (addressComponent) => {
-        address[addressComponent.types[0]] = addressComponent.long_name;
+        const type = addressComponent.types && Array.isArray(addressComponent.types)
+          ? addressComponent.types[0]
+          : null;
+        if (type) {
+          address[type] = addressComponent.long_name;
+        }
       };
       forEach(populateAddressField, geocoderResult.address_components);
       this.setState({ address });
@@ -55,8 +68,9 @@ class AddressForm extends Component<PropsType, StateType> {
   handleOnSetAddress = (value: string, item: AutocompleteItemType) => {
     const { country } = this.state;
     const label = country ? country.label : '';
+    const countryFromResource = getCountryByName(label, countries);
     const componentRestrictions = {
-      country: getCountryByName(label, countries).Code,
+      country: countryFromResource ? countryFromResource.code : '',
     };
     this.props.geocoderService.geocode(
       {
@@ -72,11 +86,12 @@ class AddressForm extends Component<PropsType, StateType> {
     const { country, address } = this.state;
     const { autocompleteService } = this.props;
     const label = country ? country.label : '';
-    const addressBlock = !label ? null : (
+    const countryFromResource = getCountryByName(label, countries);
+    const addressBlock = !label || !countryFromResource ? null : (
       <div>
         <AutocompleteComponent
           autocompleteService={autocompleteService}
-          country={getCountryByName(label, countries).Code}
+          country={countryFromResource.code}
           searchType="geocode"
           onSelect={(value, item) => {
             this.handleOnSetAddress(value, item);
@@ -90,7 +105,7 @@ class AddressForm extends Component<PropsType, StateType> {
           <div>
             <input
               value={address[type]}
-              key={address[type]}
+              key={type}
               style={{ margin: 6, padding: 5, border: '1px solid #333' }}
             />
           </div>
