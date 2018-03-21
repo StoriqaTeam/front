@@ -6,7 +6,7 @@ import { find, propEq } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
-import './Menu.scss';
+import './CategoriesMenu.scss';
 
 type PropsType = {
   categories: Array<{
@@ -19,7 +19,7 @@ type PropsType = {
   }>
 }
 
-class Menu extends Component<PropsType> {
+class CategoriesMenu extends Component<PropsType> {
   renderMenu(categories: any, isRoot: ?boolean) {
     const lang = 'EN';
     return categories.map((category) => {
@@ -76,4 +76,4 @@ class Menu extends Component<PropsType> {
   }
 }
 
-export default Menu;
+export default CategoriesMenu;

@@ -8,7 +8,7 @@ import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 
-import Menu from './Menu';
+import CategoriesMenu from './CategoriesMenu';
 
 import './Start.scss';
 
@@ -17,9 +17,7 @@ class Start extends PureComponent<{}> {
     const categories = pathOr({}, ['categories', 'children'], this.context.directories);
     return (
       <div styleName="container">
-        <Menu
-          categories={categories}
-        />
+        <CategoriesMenu categories={categories} />
         <Container>
           <Row>
             <Col size={4}>
