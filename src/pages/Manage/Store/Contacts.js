@@ -19,7 +19,7 @@ import Menu from './Menu';
 import './Contacts.scss';
 
 type PropsType = {
-  me: { store: {} },
+  me: { store: { rawId: string, id: string } },
 };
 
 type StateType = {

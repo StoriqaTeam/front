@@ -14,6 +14,7 @@ type PropsType = {
   me: ?{},
   languages: ?Array<{ id: number, name: string }>,
   currencies: ?Array<{ id: number, name: string }>,
+  categories: any,
   children: any,
   relay: {
     environment: Environment,
@@ -26,6 +27,7 @@ class App extends PureComponent<PropsType> {
     const {
       languages,
       currencies,
+      categories,
       relay,
       me = {},
     } = this.props;
@@ -36,6 +38,7 @@ class App extends PureComponent<PropsType> {
       directories: {
         languages,
         currencies,
+        categories,
       },
     };
   }

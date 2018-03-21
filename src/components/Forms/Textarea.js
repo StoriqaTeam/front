@@ -70,7 +70,7 @@ class Textarea extends Component<PropsType, StateType> {
           {
             isError: errors,
             isFocus,
-          }
+          },
         )}
       >
         <span styleName={classNames('label', { labelFloat })}>
