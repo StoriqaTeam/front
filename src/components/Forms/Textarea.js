@@ -88,7 +88,7 @@ class Textarea extends Component<PropsType, StateType> {
           <hr />
         </div>
         {errors && errors.length > 0 &&
-          <div className="errors">
+          <div styleName="errors">
             {errors.map((item, idx) => (
               <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
             ))}
