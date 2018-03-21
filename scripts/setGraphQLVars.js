@@ -6,7 +6,6 @@ const fs = require('fs');
 const updateEnvFile = (graphqQLEndpoint) => {
   fs.readFile(__dirname + '/../.env.dev-manual', "utf8", (err, data) => {
     const dataArray = data.split('\n');
-    console.log(dataArray);
     let buffer = [];
     for (let i = 0; i < dataArray.length; i++) {
       const line = dataArray[i];
