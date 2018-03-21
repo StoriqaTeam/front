@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@storiqa/validation_specs": "git+ssh://git@github.com/StoriqaTeam/share_validation#feature/initial_functionality",
+    "@storiqa/shared": "git+ssh://git@github.com/StoriqaTeam/share_validation#feature/initial_functionality",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
