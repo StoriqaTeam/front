@@ -13,11 +13,16 @@ type StateType = {
   isExpanded: boolean,
 };
 
+type SelectType = {
+  id: string,
+  label: string,
+}
+
 type PropsType = {
   isDropdown: ?boolean,
   transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
-  onSelect?: (id: number) => void,
+  onSelect?: (item: ?SelectType) => void,
   title: ?string,
   label: ?string,
   activeItem: ?{ id: string, label: string },
