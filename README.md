@@ -1,6 +1,6 @@
 **Пререквизиты:**
 
-0. запустите бэкенд-сервисы (gateway & users)
+0. запустите бэкенд-сервисы (gateway & users) или с kubernetes (https://github.com/StoriqaTeam/backend/blob/master/setup_k8s.md).
 1. склонируйте репозиторий
 2. перейдите в созданную папку
 ---
@@ -13,7 +13,9 @@
 #### "Вручную"
 установите зависимости: `yarn`
 
-`yarn dev`
+`yarn dev` -- если запускается бэк руками.
+
+`yarn dev:kube` -- если бэк запускается с kubernetes.
 
 *http://localhost:3003/*
 
