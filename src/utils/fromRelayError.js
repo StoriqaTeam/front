@@ -10,6 +10,11 @@ export default pipe(
   map((item) => {
     const error = prop('data', item);
     const code = prop('code', error);
+
+    if (code !== 100) {
+      return [toString(code), { message: error.details }];
+    }
+
     const status = pathOr('', ['details', 'status'], error);
     const messagesRaw = pathOr('', ['details', 'message'], error);
     let messagesData;

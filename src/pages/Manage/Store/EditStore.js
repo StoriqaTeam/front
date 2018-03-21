@@ -13,6 +13,7 @@ import {
   find,
   propEq,
 } from 'ramda';
+import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -137,6 +138,24 @@ class EditStore extends Component<{}, StateType> {
       },
     } = this.state;
 
+    // TODO: вынести в либу спеки
+    const { errors: formErrors } = validate({
+      name: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+      shortDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+      longDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+      slug: [[(value: string) => value && value.length > 0, 'Should not be empty']],
+    }, {
+      name,
+      longDescription,
+      shortDescription,
+      slug,
+    });
+
+    if (formErrors) {
+      this.setState({ formErrors });
+      return;
+    }
+
     this.setState({ formErrors: {} });
 
     CreateStoreMutation.commit({
@@ -162,11 +181,19 @@ class EditStore extends Component<{}, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
+
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          return;
+        }
+
         alert('Something going wrong :(');
       },
     });
