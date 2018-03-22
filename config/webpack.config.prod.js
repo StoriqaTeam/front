@@ -46,9 +46,14 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
     { publicPath: Array(cssFilename.split('/').length).join('../') }
   : {};
 
+// css
+const extractCss = new ExtractTextPlugin({
+  filename: cssFilename,
+  disable: process.env.NODE_ENV === "development"
+});
 // sass
 const extractSass = new ExtractTextPlugin({
-  filename: "static/css/[name].[contenthash:8].css",
+  filename: cssFilename,
   disable: process.env.NODE_ENV === "development"
 });
 
@@ -155,7 +160,6 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
               compact: true,
             },
           },
@@ -254,6 +258,8 @@ module.exports = {
   plugins: [
     // sass
     extractSass,
+    // css
+    extractCss,
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
