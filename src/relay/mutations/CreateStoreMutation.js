@@ -12,7 +12,6 @@ const mutation = graphql`
         lang
         text
       }
-      currencyId
       shortDescription {
         lang
         text
@@ -29,7 +28,6 @@ const mutation = graphql`
 type MutationParamsType = {
   name: Array<{ lang: string, text: string }>,
   userId: number,
-  currencyId: number,
   defaultLanguage: string,
   shortDescription: Array<{ lang: string, text: string }>,
   longDescription: Array<{ lang: string, text: string }>,
@@ -46,7 +44,6 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
       clientMutationId: '',
       name: params.name,
       userId: params.userId,
-      currencyId: params.currencyId,
       defaultLanguage: params.defaultLanguage,
       shortDescription: params.shortDescription,
       longDescription: params.longDescription,
