@@ -7,13 +7,13 @@ import {
   pathOr,
   propOr,
   map,
-  toString,
   toUpper,
   toLower,
   find,
   propEq,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -45,6 +45,10 @@ type StateType = {
   optionLanguage: string,
 };
 
+type PropsType = {
+  store?: {},
+};
+
 // TODO: extract to shared lib
 const languagesDic = {
   en: 'English',
@@ -58,7 +62,7 @@ const languagesDic = {
   ja: 'Japanese',
 };
 
-class EditStore extends Component<{}, StateType> {
+class EditStore extends Component<PropsType, StateType> {
   state = {
     form: {
       name: '',
@@ -82,6 +86,19 @@ class EditStore extends Component<{}, StateType> {
     }), languages);
 
     this.setState({ langItems });
+    const store = pathOr(null, ['me', 'store'], this.props);
+    if (store) {
+      this.setState({
+        form: {
+          name: pathOr(null, ['name', 0, 'text'], store),
+          longDescription: pathOr(null, ['longDescription', 0, 'text'], store),
+          shortDescription: pathOr(null, ['shortDescription', 0, 'text'], store),
+          defaultLanguage: pathOr(null, ['defaultLanguage'], store),
+          slug: pathOr(null, ['slug'], store),
+          slogan: pathOr(null, ['slogan'], store),
+        },
+      });
+    }
   }
 
   handleOptionLanguage = (optionLanguage: { id: string, label: string }) => {
@@ -275,10 +292,36 @@ class EditStore extends Component<{}, StateType> {
   }
 }
 
+export default createFragmentContainer(
+  Page(EditStore),
+  graphql`
+    fragment EditStore_me on User
+    @argumentDefinitions(storeId: { type: "ID!" }) {
+      store(id: $storeId) {
+        id
+        rawId
+        name {
+          lang
+          text
+        }
+        slogan
+        defaultLanguage
+        slug
+        shortDescription {
+          lang
+          text
+        }
+        longDescription {
+          lang
+          text
+        }
+      }
+    }
+  `,
+);
+
 EditStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
 };
-
-export default Page(EditStore);

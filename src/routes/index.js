@@ -81,6 +81,20 @@ const routes = (
     >
       <Route path="/store">
         <Route
+          path="/:storeId"
+          Component={EditStore}
+          query={graphql`
+            query routes_Store_Query($storeID: ID!) {
+              me {
+                ...EditStore_me @arguments(storeId: $storeID)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => (
+            { storeID: params.storeId }
+          )}
+        />
+        <Route
           path="/new"
           Component={EditStore}
         />
