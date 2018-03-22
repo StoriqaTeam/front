@@ -18,6 +18,7 @@ type PropsTypes = {
   handleSlide: Function,
   originalComponentRef: Function,
   children: Node,
+  isTransition: boolean,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -30,6 +31,7 @@ class SliderContainer extends Component<PropsTypes> {
       visibleSlidesAmount,
       totalSlidesAmount,
       handleSlide,
+      isTransition,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
@@ -47,20 +49,23 @@ class SliderContainer extends Component<PropsTypes> {
           ref={this.props.originalComponentRef}
           styleName="wrapper"
           style={{
-            left: slidesOffset,
-            whiteSpace: showAllSlides ? 'normal' : 'nowrap',
+            left: slidesOffset || '',
+            whiteSpace: showAllSlides ? 'nowrap' : 'nowrap',
+            transition: isTransition ? 'left 0.5s ease-out' : '',
           }}
         >
-          {Children.map(this.props.children, child => (
-            <div
-              styleName="item"
-              style={{
-                width: `${slideWidth}%`,
-              }}
-            >
-              {cloneElement(child)}
-            </div>
-          ))}
+          {Children.map(this.props.children, (child, idx) => {
+            return (
+              <div
+                styleName="item"
+                style={{
+                  width: `${slideWidth}%`,
+                }}
+              >
+                {cloneElement(child)}
+              </div>
+            );
+          })}
         </div>
       </div>
     );

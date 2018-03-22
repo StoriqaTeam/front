@@ -8,6 +8,7 @@ import mostPopularGoods from './mostPopularGoods.json';
 storiesOf('Slider', module)
   .add('Most popular', () => (
     <Slider
+      isInfinity
       title="Most popular"
       type="most-popular"
       items={mostPopularGoods}

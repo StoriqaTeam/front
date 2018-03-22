@@ -28,10 +28,14 @@
   left: 0;
   white-space: nowrap;
   margin: 8px;
-  transition: left 0.5s ease-out;
 }
 
 .item {
   position: relative;
   display: inline-block;
+  //border: 1px solid red;
+  //height: 200px;
+  //line-height: 200px;
+  //font-size: 50px;
+  //text-align: center;
 }
