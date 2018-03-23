@@ -39,3 +39,26 @@
   //font-size: 50px;
   //text-align: center;
 }
+
+.dots {
+  position: absolute;
+  top: 20px;
+  right: 200px;
+  display: inline-block;
+  z-index: 2;
+}
+
+.dot {
+  display: inline-block;
+  border: 2px solid green;
+  background-color: green;
+  margin: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot:hover {
+  background-color: blue;
+}

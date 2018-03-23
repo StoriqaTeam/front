@@ -32,6 +32,7 @@ class SliderContainer extends Component<PropsTypes> {
       totalSlidesAmount,
       handleSlide,
       isTransition,
+      handleDot,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
@@ -64,6 +65,16 @@ class SliderContainer extends Component<PropsTypes> {
               >
                 {cloneElement(child)}
               </div>
+            );
+          })}
+        </div>
+        <div styleName="dots">
+          {Children.map(this.props.children, (child, idx) => {
+            return (
+              <div
+                styleName="dot"
+                onClick={() => { handleSlide(null, idx); }}
+              />
             );
           })}
         </div>

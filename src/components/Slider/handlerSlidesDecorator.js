@@ -63,7 +63,7 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     }
   }
 
-  handleSlide = (direction) => {
+  handleSlide = (direction, dotIdx) => {
     const { isInfinity } = this.props;
     const {
       sliderWrapperWidth,
@@ -75,7 +75,9 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
       isTransition,
     } = this.state;
 
-    if (isTransition && isInfinity) {
+    console.log('-----dotIdx', dotIdx);
+
+    if (isTransition && isInfinity && !direction) {
       return;
     }
 
@@ -132,6 +134,10 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     });
   }
 
+  handleDot = () => {
+    //
+  }
+
   render() {
     return (
       <OriginalComponent
@@ -139,6 +145,7 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
         {...this.props}
         {...this.state}
         handleSlide={this.handleSlide}
+        handleDot={this.handleDot}
       />
     );
   }
