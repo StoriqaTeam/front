@@ -9,6 +9,7 @@
     ["module-resolver", {
       "root": ["./src"]
     }],
+    "dynamic-import-node",
     ["relay", {"schema": "./src/relay/schema.json"}],
     "inline-react-svg",
     ["react-css-modules", {

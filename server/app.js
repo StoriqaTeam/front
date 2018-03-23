@@ -18,24 +18,22 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 const cookiesMiddleware = require('universal-cookie-express');
 
-import webpackConfig from '../config/webpack.config.dev';
-
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 
-var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
-var config;
-
-try {
-  config = JSON.parse(babelrc);
-  config.ignore = /\/(build|node_modules)\//;
-} catch (err) {
-  console.error('==>     ERROR: Error parsing your .babelrc.');
-  console.error(err);
+if (process.env.NODE_ENV === 'development') {
+  var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
+  var config;
+  try {
+    config = JSON.parse(babelrc);
+    config.ignore = /\/(build|node_modules)\//;
+  } catch (err) {
+    console.error('==>     ERROR: Error parsing your .babelrc.');
+    console.error(err);
+  }
+  require('babel-register')(config);
 }
-
-require('babel-register')(config);
 
 const app = express();
 
@@ -51,7 +49,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static assets
 if (process.env.NODE_ENV === 'production') {
-  app.use('/static', express.static(path.resolve(__dirname, '..', 'build', 'static')));
+  app.use('/static', express.static(path.resolve('/Users/ilya/dev/storiqa/frontend', 'build', 'static')));
 } else if (process.env.NODE_ENV === 'development') {
   // Setup logger
   const logger = morgan('combined');
@@ -62,6 +60,7 @@ app.use('/favicon.ico', express.static(path.resolve(__dirname, '..', 'build', 'f
 app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 'manifest.json')));
 
 if (process.env.NODE_ENV === 'development') {
+  const webpackConfig = require('../config/webpack.config.dev');
   const compiler = webpack(webpackConfig);
   app.use(webpackMiddleware(compiler, {stats: {colors: true}}));
   app.use(webpackHotMiddleware(compiler));
@@ -117,7 +116,8 @@ app.use(async (req, res) => {
       </html>
     `);
   } else if (process.env.NODE_ENV === 'production') {
-    const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
+    console.log(path.resolve('/Users/ilya/dev/storiqa/frontend/build/index.html'));
+    const filePath = path.resolve('/Users/ilya/dev/storiqa/frontend', 'build', 'index.html');
     fs.readFile(filePath, 'utf8', (err, htmlData) => {
       if (err) {
         console.error('read err', err);
