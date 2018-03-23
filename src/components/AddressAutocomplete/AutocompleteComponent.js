@@ -4,11 +4,13 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { isEmpty, pathOr, map, pick, propOr, forEachObjIndexed } from 'ramda';
 import debounce from 'lodash.debounce';
+import classNames from 'classnames';
 
 import { Input } from 'components/Forms';
 
 // import AutocompleteInput from './AutocompleteInput';
 import './AutocompleteComponent.scss';
+
 
 type PropsType = {
   autocompleteService: any,
@@ -67,39 +69,44 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
 
   render() {
     return (
-      <Autocomplete
-        id="someId"
-        items={this.state.predictions}
-        getItemValue={item => item.mainText}
-        renderItem={item => (
-          <div key={`${item.mainText}-${item.secondaryText}`}>
-            {`${item.mainText}, ${item.secondaryText}`}
-          </div>
-        )}
-        renderInput={props => (
-          <Input
-            inputRef={props.ref}
-            label="Address"
-            isAutocomplete
-            {...pick(['onChange', 'onBlur', 'onFocus', 'onKeyDown', 'onClick', 'value'], props)}
-          />
-        )}
-        renderMenu={(items, value, style) => {
-          console.log('^^^^^ render menu: ', { items, value, style });
 
-          return <div style={{ backgroundColor: 'white' }} children={items} />;
-        }}
-        onChange={(e) => {
-          const { value } = e.target;
-          this.setState({ value });
-          this.handleInputChange(value);
-        }}
-        value={this.state.value}
-        onSelect={(value, item) => {
-          this.setState({ value });
-          this.props.onSelect(value, item);
-        }}
-      />
+      <div styleName="wrapper">
+        <Autocomplete
+          autoHighlight
+          id="someId"
+          wrapperStyle={{ position: 'relative' }}
+          items={this.state.predictions}
+          getItemValue={item => item.mainText}
+          renderItem={(item, isHighlighted) => (
+            <div key={`${item.mainText}-${item.secondaryText}`} styleName={classNames('item', { isHighlighted })}>
+              {`${item.mainText}, ${item.secondaryText}`}
+            </div>
+          )}
+          renderInput={props => (
+            <Input
+              inputRef={props.ref}
+              label="Address"
+              isAutocomplete
+              {...pick(['onChange', 'onBlur', 'onFocus', 'onKeyDown', 'onClick', 'value'], props)}
+            />
+          )}
+
+          renderMenu={(items, value, style) => {
+            console.log('^^^^^ render menu: ', { items, value, style });
+            return <div styleName="items"><div styleName="itemsWrap" children={items} /></div>;
+          }}
+          onChange={(e) => {
+            const { value } = e.target;
+            this.setState({ value });
+            this.handleInputChange(value);
+          }}
+          value={this.state.value}
+          onSelect={(value, item) => {
+            this.setState({ value });
+            this.props.onSelect(value, item);
+          }}
+        />
+      </div>
     );
   }
 }

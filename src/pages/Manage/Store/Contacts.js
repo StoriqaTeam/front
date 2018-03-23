@@ -19,6 +19,15 @@ import Menu from './Menu';
 
 import './Contacts.scss';
 
+/* eslint-disable */
+type InputType = {
+  id: string,
+  label: string,
+  icon?: string,
+  limit?: number,
+}
+/* eslint-enable */
+
 type PropsType = {
   me: { store: {} },
 };
@@ -71,14 +80,6 @@ class Contacts extends Component<PropsType, StateType> {
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
     }
-  };
-
-  handleAddressChange = (id: string) => (e: any) => {
-    const { value } = e.target;
-    // console.log('^^^^ handle Address Change value: ', value);
-    // if (value.length <= 50) {
-    //   this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
-    // }
   };
 
   handleUpdate = () => {
@@ -134,7 +135,12 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   // TODO: extract to helper
-  renderInput = (id: string, label: string, icon?: string) => (
+  renderInput = ({
+    id,
+    label,
+    icon,
+    limit,
+  }: InputType) => (
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -144,6 +150,7 @@ class Contacts extends Component<PropsType, StateType> {
         label={label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        limit={limit}
       />
     </div>
   );
@@ -164,35 +171,31 @@ class Contacts extends Component<PropsType, StateType> {
             <div styleName="container">
               <Header title="Контакты" />
               <div styleName="form">
-                {this.renderInput('email', 'Email')}
-                {this.renderInput('phone', 'Phone')}
-                {this.renderInput('facebookUrl', 'Facebook', 'facebook')}
-                {this.renderInput('instagramUrl', 'Instagram', 'instagram')}
-                {this.renderInput('twitterUrl', 'Twitter', 'twitter')}
-
+                {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
+                {this.renderInput({ id: 'phone', label: 'Phone' })}
+                {this.renderInput({ id: 'facebookUrl', label: 'Facebook', icon: 'facebook' })}
+                {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
+                {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
                 <GoogleAPIWrapper>
                   <AddressForm />
                 </GoogleAPIWrapper>
-
-                {/* {this.renderInput('address', 'Address')} */}
-
                 <div styleName="formItem">
                   <Row>
                     <Col size={4}>
-                      {this.renderInput('city', 'City')}
+                      {this.renderInput({ id: 'city', label: 'City', limit: 50 })}
                     </Col>
                     <Col size={4}>
-                      {this.renderInput('state', 'State / Province / Region')}
+                      {this.renderInput({ id: 'state', label: 'State / Province / Region', limit: 50 })}
                     </Col>
                   </Row>
                 </div>
                 <div styleName="formItem">
                   <Row>
                     <Col size={4}>
-                      {this.renderInput('zip', 'ZIP / Postal code')}
+                      {this.renderInput({ id: 'zip', label: 'ZIP / Postal code', limit: 50 })}
                     </Col>
                     <Col size={4}>
-                      {this.renderInput('country', 'Country')}
+                      {this.renderInput({ id: 'country', label: 'Country', limit: 50 })}
                     </Col>
                   </Row>
                 </div>

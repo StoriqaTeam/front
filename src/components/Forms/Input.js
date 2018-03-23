@@ -14,10 +14,13 @@ type PropsType = {
   onChange: (e: {target: { value: string }}) => void,
   onBlur: () => void,
   onFocus: () => void,
+  onKeyDown: () => void,
+  onClick: () => void,
   icon: ?string,
   isUrl: ?boolean,
   inputRef: ?(e: any) => void,
   isAutocomplete: ?boolean,
+  limit: ?number,
 };
 
 type StateType = {
@@ -69,14 +72,12 @@ class Input extends Component<PropsType, StateType> {
       value,
     } = this.props;
     return (isAutocomplete ?
-      // this.props.component :
-
       <input
         id={id}
         name={id}
         type="text"
         ref={inputRef}
-        value={this.props.value}
+        value={this.props.value || ''}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
@@ -103,6 +104,7 @@ class Input extends Component<PropsType, StateType> {
       errors,
       icon,
       isUrl,
+      limit
     } = this.props;
     const {
       labelFloat,
@@ -141,13 +143,13 @@ class Input extends Component<PropsType, StateType> {
             ))}
           </div>
         }
-        {isFocus && !isUrl &&
+        {(isFocus && !isUrl && limit) &&
           <div styleName={classNames(
               'valueLength',
-              { maxValueLength: value && value.length === 50 },
+              { maxValueLength: value && value.length === limit },
             )}
           >
-            {value ? value.length : 0} / 50
+            {value ? value.length : 0} / {limit}
           </div>
         }
       </label>

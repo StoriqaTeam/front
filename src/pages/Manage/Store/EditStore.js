@@ -183,7 +183,9 @@ class EditStore extends Component<{}, StateType> {
   capitalizeString = (s: string) => s && s[0] && s[0].toUpperCase() + s.slice(1);
 
   // TODO: extract to helper
-  renderInput = (id: string, label: string) => (
+  /* eslint-disable */
+  renderInput = ({ id, label, limit }: { id: string, label: string, limit?: number }) => (
+  /* eslint-enabel */
     <div styleName="formItem">
       <Input
         id={id}
@@ -191,6 +193,7 @@ class EditStore extends Component<{}, StateType> {
         label={label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        limit={limit}
       />
     </div>
   );
@@ -242,7 +245,7 @@ class EditStore extends Component<{}, StateType> {
                 </div>
               </Header>
               <div styleName="form">
-                {this.renderInput('name', 'Название магазина')}
+                {this.renderInput({ id: 'name', label: 'Название магазина', limit: 50 })}
                 <div styleName="formItem">
                   <MiniSelect
                     forForm
@@ -261,10 +264,10 @@ class EditStore extends Component<{}, StateType> {
                     onSelect={this.handleShopCurrency}
                   />
                 </div>
-                {this.renderInput('slogan', 'Слоган магазина')}
-                {this.renderInput('slug', 'Slug')}
-                {this.renderTextarea('shortDescription', 'Краткое описание магазина')}
-                {this.renderTextarea('longDescription', 'Полное описание магазина')}
+                {this.renderInput({ id: 'slogan', label: 'Слоган магазина', limit: 50 })}
+                {this.renderInput({ id: 'slug', label: 'Slug', limit: 50 })}
+                {this.renderInput({ id: 'shortDescription', label: 'Краткое описание магазина', limit: 50 })}
+                {this.renderInput({ id: 'longDescription', label: 'Полное описание магазина', limit: 50 })}
                 <div styleName="formItem">
                   <Button
                     type="button"
