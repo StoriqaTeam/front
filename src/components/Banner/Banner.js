@@ -5,22 +5,29 @@ import React, { PureComponent } from 'react';
 import './Banner.scss';
 
 type PropsTypes = {
-  count: number,
-  img: string,
+  banner: {
+    count: number,
+    img: string,
+    link: string,
+  },
 }
 
 class Banner extends PureComponent<PropsTypes> {
   render() {
-    const { count, img } = this.props;
+    const { banner } = this.props;
     return (
-      <div styleName="container">
+      <a
+        href={banner.link}
+        styleName="container"
+        target="_blank"
+      >
         <div styleName="wrap">
           <img
-            src={img}
+            src={banner.img}
             alt="img"
           />
         </div>
-      </div>
+      </a>
     );
   }
 }

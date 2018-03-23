@@ -21,7 +21,7 @@ class Slider extends PureComponent<PropsTypes> {
           {this.props.items.map(item => (
             <Fragment key={item.id}>
               {type === 'cardProduct' && <CardProduct data={item} />}
-              {type === 'banners' && <Banner img={item.img} />}
+              {type === 'banners' && <Banner banner={item} />}
             </Fragment>
           ))}
         </SliderContainer>
