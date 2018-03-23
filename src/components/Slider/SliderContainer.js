@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, Children, cloneElement } from 'react';
+import classNames from 'classnames';
 import type { Node } from 'react';
 
 import { SliderHeader } from 'components/Slider';
@@ -9,7 +10,8 @@ import handlerSlide from './handlerSlidesDecorator';
 import './SliderContainer.scss';
 
 type PropsTypes = {
-  type: 'most-popular' | 'sale' | 'smart-reviews',
+  type: string,
+  headerType: 'most-popular' | 'sale' | 'smart-reviews',
   title: string,
   showAllSlides: boolean,
   slidesOffset: number,
@@ -19,12 +21,18 @@ type PropsTypes = {
   originalComponentRef: Function,
   children: Node,
   isTransition: boolean,
+  slidesToShow: number,
+  // handleDot: Function,
+  num: number,
+  animationSpeed: number,
+  isDots: ?boolean,
 };
 
 class SliderContainer extends Component<PropsTypes> {
   render() {
     const {
       type,
+      headerType,
       title,
       showAllSlides,
       slidesOffset,
@@ -32,52 +40,58 @@ class SliderContainer extends Component<PropsTypes> {
       totalSlidesAmount,
       handleSlide,
       isTransition,
-      handleDot,
+      // handleDot,
+      slidesToShow,
+      num,
+      animationSpeed,
+      isDots,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
+    const animationSpeedSec = animationSpeed / 1000;
 
     return (
       <div styleName="container">
-        <SliderHeader
-          type={type}
+        {type === 'cardProduct' && <SliderHeader
+          type={headerType}
           title={title}
           isRevealButton={isRevealButton}
           showAllSlides={showAllSlides}
           handleSlide={handleSlide}
-        />
+        />}
         <div
           ref={this.props.originalComponentRef}
           styleName="wrapper"
           style={{
             left: slidesOffset || '',
             whiteSpace: showAllSlides ? 'nowrap' : 'nowrap',
-            transition: isTransition ? 'left 0.5s ease-out' : '',
+            transition: isTransition ? `left ${animationSpeedSec}s ease-out` : '',
           }}
         >
-          {Children.map(this.props.children, (child, idx) => {
-            return (
-              <div
-                styleName="item"
-                style={{
-                  width: `${slideWidth}%`,
-                }}
-              >
-                {cloneElement(child)}
-              </div>
-            );
-          })}
+          {Children.map(this.props.children, child => (
+            <div
+              styleName="item"
+              style={{
+                width: `${slideWidth}%`,
+              }}
+            >
+              {cloneElement(child)}
+            </div>
+          ))}
         </div>
-        <div styleName="dots">
-          {Children.map(this.props.children, (child, idx) => {
-            return (
+        {isDots && slidesToShow === 1 &&
+          <div styleName="dots">
+            {Children.map(this.props.children, (child, idx) => (
               <div
-                styleName="dot"
-                onClick={() => { handleSlide(null, idx); }}
+                styleName={classNames('dot', { active: idx === num })}
+                onClick={() => {}}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
               />
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        }
       </div>
     );
   }

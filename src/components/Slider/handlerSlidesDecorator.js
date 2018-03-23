@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 import { head, last, slice, append, concat } from 'ramda';
 
-export default OriginalComponent => class HandlerSlideDecorator extends Component {
+type PropsTypes = {
+  slidesToShow: number,
+  responsive: Object,
+  items: Array,
+  children: Array,
+  isInfinity: ?boolean,
+  autoplaySpeed: ?number,
+  animationSpeed: number,
+};
+
+export default (OriginalComponent: any) => class HandlerSlideDecorator extends Component<PropsTypes> {// eslint-disable-line
   state = {
     sliderWrapperWidth: {},
     visibleSlidesAmount: 0,
@@ -15,6 +25,10 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
 
   componentWillMount() {
     window.addEventListener('resize', this.sliderPropsCalc);
+
+    if (this.props.autoplaySpeed) {
+      this.activateAutoplayTimer();
+    }
   }
 
   componentDidMount() {
@@ -23,10 +37,33 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.sliderPropsCalc);
+
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+    }
+    if (this.swapTimer) {
+      clearTimeout(this.swapTimer);
+    }
+  }
+
+  activateAutoplayTimer = () => {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+    }
+    this.autoplayInterval = setInterval(() => {
+      this.handleSlide('next');
+    }, this.props.autoplaySpeed);
   }
 
   sliderPropsCalc = () => {
-    const { slidesToShow, responsive, items, children, isInfinity } = this.props; // eslint-disable-line
+    const {
+      slidesToShow,
+      responsive,
+      items,
+      children,
+      isInfinity,
+      animationSpeed,
+    } = this.props;
     const { showAllSlides, num } = this.state;
     const totalSlidesAmount = items.length;
     const sliderWrapperWidth = this.originalComponentElement.getBoundingClientRect().width;
@@ -49,13 +86,13 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     });
 
     if (isInfinity) {
-      if (this.timer) {
-        clearTimeout(this.timer);
+      if (this.swapTimer) {
+        clearTimeout(this.swapTimer);
       }
 
-      this.timer = setTimeout(() => {
+      this.swapTimer = setTimeout(() => {
         this.swapArray(num, children);
-      }, 500);
+      }, animationSpeed);
 
       this.setState({ slidesOffset: -slideWidth });
     } else {
@@ -63,8 +100,8 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     }
   }
 
-  handleSlide = (direction, dotIdx) => {
-    const { isInfinity } = this.props;
+  handleSlide = (direction) => {
+    const { isInfinity, animationSpeed, autoplaySpeed } = this.props;
     const {
       sliderWrapperWidth,
       visibleSlidesAmount,
@@ -75,11 +112,8 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
       isTransition,
     } = this.state;
 
-    console.log('-----dotIdx', dotIdx);
-
-    if (isTransition && isInfinity && !direction) {
-      return;
-    }
+    if (isTransition && isInfinity) { return; }
+    if (autoplaySpeed) { this.activateAutoplayTimer(); }
 
     const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
     const possibleOffset = ((totalSlidesAmount - visibleSlidesAmount) + 1) * slideWidth;
@@ -95,23 +129,23 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     });
 
     if (isInfinity) {
-      const newNum = direction === 'next' ? num + 1 : num - 1;
-
-      if (this.timer) {
-        clearTimeout(this.timer);
+      if (this.swapTimer) {
+        clearTimeout(this.swapTimer);
       }
 
-      this.timer = setTimeout(() => {
-        this.swapArray(newNum, children, direction);
-      }, 500);
+      this.swapTimer = setTimeout(() => {
+        this.swapArray(direction === 'next' ? num + 1 : num - 1, children, direction);
+      }, animationSpeed);
     }
   }
 
   swapArray = (num, arr, direction) => {
     let newChildren;
+
     const {
       sliderWrapperWidth,
       visibleSlidesAmount,
+      totalSlidesAmount,
     } = this.state;
 
     const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
@@ -126,16 +160,66 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
       newChildren = append(firstItem, slicedItems);
     }
 
+    let newNum;
+    if (direction === 'next') {
+      newNum = num === totalSlidesAmount ? 0 : num;
+    } else {
+      newNum = num === -1 ? totalSlidesAmount - 1 : num;
+    }
+
     this.setState({
       children: newChildren,
-      num,
+      num: newNum,
       slidesOffset: -slideWidth,
       isTransition: false,
     });
   }
 
-  handleDot = () => {
-    //
+  handleDot = (dotIdx) => {
+    const { isInfinity } = this.props;
+    const {
+      sliderWrapperWidth,
+      visibleSlidesAmount,
+      slidesOffset,
+      children,
+      num,
+      isTransition,
+    } = this.state;
+
+    const diff = dotIdx - num;
+
+    if (!diff || (isTransition && isInfinity)) {
+      return;
+    }
+
+    let direction;
+
+    if (diff > 0) {
+      direction = 'next';
+    }
+
+    if (diff < 0) {
+      direction = 'prev';
+    }
+
+    const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
+
+    this.setState({
+      slidesOffset: direction === 'next' ?
+        slidesOffset - (slideWidth * diff) :
+        slidesOffset - (slideWidth * diff),
+      isTransition: true,
+    });
+
+    if (isInfinity) {
+      if (this.swapTimer) {
+        clearTimeout(this.swapTimer);
+      }
+
+      this.swapTimer = setTimeout(() => {
+        this.swapArray(num + diff, children, direction, diff);
+      }, 500);
+    }
   }
 
   render() {
