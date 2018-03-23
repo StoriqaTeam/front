@@ -113,8 +113,11 @@ class EditStore extends Component<{}, StateType> {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
   };
 
-  handleInputChange = (id: string) => (value: any) => {
-    this.setState(assocPath(['form', id], value));
+  handleInputChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    if (value.length <= 50) {
+      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    }
   };
 
   handleSave = () => {

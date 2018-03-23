@@ -2,8 +2,13 @@
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
-import { isEmpty, pathOr, map, pick } from 'ramda';
+import { isEmpty, pathOr, map, pick, propOr, forEachObjIndexed } from 'ramda';
 import debounce from 'lodash.debounce';
+
+import { Input } from 'components/Forms';
+
+// import AutocompleteInput from './AutocompleteInput';
+import './AutocompleteComponent.scss';
 
 type PropsType = {
   autocompleteService: any,
@@ -71,7 +76,19 @@ class AutocompleteComponent extends Component<PropsType, StateType> {
             {`${item.mainText}, ${item.secondaryText}`}
           </div>
         )}
-        renderInput={props => (<input {...props} style={{ border: 'red 1px solid' }} />)}
+        renderInput={props => (
+          <Input
+            inputRef={props.ref}
+            label="Address"
+            isAutocomplete
+            {...pick(['onChange', 'onBlur', 'onFocus', 'onKeyDown', 'onClick', 'value'], props)}
+          />
+        )}
+        renderMenu={(items, value, style) => {
+          console.log('^^^^^ render menu: ', { items, value, style });
+
+          return <div style={{ backgroundColor: 'white' }} children={items} />;
+        }}
         onChange={(e) => {
           const { value } = e.target;
           this.setState({ value });

@@ -12,8 +12,12 @@ type PropsType = {
   label: string,
   errors: ?Array<string>,
   onChange: (e: {target: { value: string }}) => void,
+  onBlur: () => void,
+  onFocus: () => void,
   icon: ?string,
   isUrl: ?boolean,
+  inputRef: ?(e: any) => void,
+  isAutocomplete: ?boolean,
 };
 
 type StateType = {
@@ -34,26 +38,62 @@ class Input extends Component<PropsType, StateType> {
   input: ?HTMLInputElement;
 
   handleChange = (e: any) => {
-    const { value } = e.target;
-    if (value.length <= 50 || this.props.isUrl) {
-      this.props.onChange(value.replace(/\s\s/, ' '));
-    }
+    const { onChange } = this.props;
+    onChange(e);
   };
 
   handleFocus = () => {
+    const { onFocus } = this.props;
     this.setState({
       labelFloat: !this.state.labelFloat || true,
       isFocus: true,
     });
+    if (onFocus) onFocus();
   };
 
   handleBlur = () => {
-    const { value } = this.props;
+    const { value, onBlur } = this.props;
     this.setState({
       labelFloat: Boolean(value) && value.length > 0,
       isFocus: false,
     });
+    if (onBlur) onBlur();
   };
+
+  renderInput() {
+    const {
+      onChange,
+      inputRef,
+      isAutocomplete,
+      id,
+      value,
+    } = this.props;
+    return (isAutocomplete ?
+      // this.props.component :
+
+      <input
+        id={id}
+        name={id}
+        type="text"
+        ref={inputRef}
+        value={this.props.value}
+        onChange={onChange}
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
+        onKeyDown={this.props.onKeyDown}
+        onClick={this.props.onClick}
+      /> :
+      <input
+        id={id}
+        name={id}
+        type="text"
+        value={value || ''}
+        onChange={onChange}
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
+      />
+    );
+  }
 
   render() {
     const {
@@ -64,12 +104,10 @@ class Input extends Component<PropsType, StateType> {
       icon,
       isUrl,
     } = this.props;
-
     const {
       labelFloat,
       isFocus,
     } = this.state;
-
     return (
       <label
         htmlFor={id}
@@ -93,15 +131,7 @@ class Input extends Component<PropsType, StateType> {
           </div>
         }
         <div styleName="input">
-          <input
-            id={id}
-            name={id}
-            type="text"
-            value={value || ''}
-            onChange={this.handleChange}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-          />
+          {this.renderInput()}
           <hr />
         </div>
         {errors && errors.length > 0 &&

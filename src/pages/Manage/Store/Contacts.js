@@ -10,6 +10,7 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { Input } from 'components/Forms';
 import { Button } from 'components/Button';
+import { GoogleAPIWrapper, AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
@@ -65,8 +66,19 @@ class Contacts extends Component<PropsType, StateType> {
     });
   }
 
-  handleInputChange = (id: string) => (value: any) => {
-    this.setState(assocPath(['form', id], value));
+  handleInputChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    if (value.length <= 50) {
+      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    }
+  };
+
+  handleAddressChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    // console.log('^^^^ handle Address Change value: ', value);
+    // if (value.length <= 50) {
+    //   this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    // }
   };
 
   handleUpdate = () => {
@@ -157,7 +169,13 @@ class Contacts extends Component<PropsType, StateType> {
                 {this.renderInput('facebookUrl', 'Facebook', 'facebook')}
                 {this.renderInput('instagramUrl', 'Instagram', 'instagram')}
                 {this.renderInput('twitterUrl', 'Twitter', 'twitter')}
-                {this.renderInput('address', 'Address')}
+
+                <GoogleAPIWrapper>
+                  <AddressForm />
+                </GoogleAPIWrapper>
+
+                {/* {this.renderInput('address', 'Address')} */}
+
                 <div styleName="formItem">
                   <Row>
                     <Col size={4}>

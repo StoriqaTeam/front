@@ -88,24 +88,23 @@ class AddressForm extends Component<PropsType, StateType> {
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
     const addressBlock = !label || !countryFromResource ? null : (
-      <div>
-        <AutocompleteComponent
-          autocompleteService={autocompleteService}
-          country={countryFromResource.code}
-          searchType="geocode"
-          onSelect={(value, item) => {
-            this.handleOnSetAddress(value, item);
-          }}
-        />
-      </div>
+      <AutocompleteComponent
+        autocompleteService={autocompleteService}
+        country={countryFromResource.code}
+        searchType="geocode"
+        onSelect={(value, item) => {
+          this.handleOnSetAddress(value, item);
+        }}
+      />
     );
     const autocompleteResult = address && (
       <div>
         {dataTypes.map(type => (
-          <div>
+          <div
+            key={type}
+          >
             <input
               value={address[type]}
-              key={type}
               style={{ margin: 6, padding: 5, border: '1px solid #333' }}
             />
           </div>
@@ -115,6 +114,7 @@ class AddressForm extends Component<PropsType, StateType> {
     return (
       <div>
         <MiniSelect
+          forForm
           label="Select your country"
           items={countriesArr}
           onSelect={(value: ?SelectType) => {
