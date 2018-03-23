@@ -4,12 +4,16 @@ import { storiesOf } from '@storybook/react';
 import { Slider } from 'components/Slider';
 
 import mostPopularGoods from './mostPopularGoods.json';
+import staticBanners from './staticBanners.json';
 
 storiesOf('Slider', module)
   .add('Most popular', () => (
     <Slider
+      isInfinity
+      animationSpeed={500}
       title="Most popular"
-      type="most-popular"
+      headerType="most-popular"
+      type="cardProduct"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -21,8 +25,10 @@ storiesOf('Slider', module)
   ))
   .add('Sale', () => (
     <Slider
+      animationSpeed={500}
       title="Sale"
-      type="sale"
+      headerType="sale"
+      type="cardProduct"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -34,8 +40,10 @@ storiesOf('Slider', module)
   ))
   .add('Smart Reviews', () => (
     <Slider
+      animationSpeed={500}
       title="Smart Reviews"
-      type="smart-reviews"
+      headerType="smart-reviews"
+      type="cardProduct"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -43,5 +51,16 @@ storiesOf('Slider', module)
         { breakpoint: 992, slidesToShow: 2 },
         { breakpoint: 576, slidesToShow: 1 },
       ]}
+    />
+  ))
+  .add('Static Banners', () => (
+    <Slider
+      isDots
+      isInfinity
+      autoplaySpeed={15000}
+      animationSpeed={500}
+      type="banners"
+      items={staticBanners}
+      slidesToShow={1}
     />
   ));
