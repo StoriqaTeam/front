@@ -4,13 +4,17 @@ import { forEach } from 'ramda';
 
 import { AutocompleteComponent } from 'components/AddressAutocomplete';
 import { MiniSelect } from 'components/MiniSelect';
+import { Input } from 'components/Forms';
 
 import countries from './countries.json';
 import { getIndexedCountries, getCountryByName } from './utils';
 
+
 type PropsType = {
   autocompleteService: any,
   geocoderService: any,
+  onChangeFormInput: (type: string) => (e: any) => void,
+  onUpdateForm: (form: any) => void,
 }
 
 type SelectType = {
@@ -37,6 +41,7 @@ type GeocoderType = {
   place_id: string,
 }
 
+
 const dataTypes = ['street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'country', 'postal_code'];
 
 class AddressForm extends Component<PropsType, StateType> {
@@ -49,6 +54,7 @@ class AddressForm extends Component<PropsType, StateType> {
   }
 
   handleOnReceiveAddress = (result: Array<GeocoderType>) => {
+    const { onUpdateForm } = this.props;
     const geocoderResult = result[0];
     if (geocoderResult && geocoderResult.address_components) {
       const address = {};
@@ -62,6 +68,7 @@ class AddressForm extends Component<PropsType, StateType> {
       };
       forEach(populateAddressField, geocoderResult.address_components);
       this.setState({ address });
+      onUpdateForm(address);
     }
   }
 
@@ -79,6 +86,17 @@ class AddressForm extends Component<PropsType, StateType> {
       },
       this.handleOnReceiveAddress,
     );
+  }
+
+  handleOnChangeForm = (type: string) => (e: any) => {
+    const { onChangeFormInput } = this.props;
+    onChangeFormInput(type)(e);
+    this.setState({
+      address: {
+        ...this.state.address,
+        [type]: e.target.value,
+      },
+    });
   }
 
   render() {
@@ -103,9 +121,12 @@ class AddressForm extends Component<PropsType, StateType> {
           <div
             key={type}
           >
-            <input
+            <Input
+              id={type}
+              label={type}
+              onChange={this.handleOnChangeForm(type)}
               value={address[type]}
-              style={{ margin: 6, padding: 5, border: '1px solid #333' }}
+              limit={50}
             />
           </div>
         ))}

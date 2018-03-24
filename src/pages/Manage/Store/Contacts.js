@@ -76,11 +76,21 @@ class Contacts extends Component<PropsType, StateType> {
   }
 
   handleInputChange = (id: string) => (e: any) => {
+    console.log('^^^^ handleInputChange id: ', id);
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
     }
   };
+
+  handleUpdateForm = (form: any) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        ...form,
+      },
+    });
+  }
 
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
@@ -176,9 +186,14 @@ class Contacts extends Component<PropsType, StateType> {
                 {this.renderInput({ id: 'facebookUrl', label: 'Facebook', icon: 'facebook' })}
                 {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
                 {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
-                <GoogleAPIWrapper>
-                  <AddressForm />
-                </GoogleAPIWrapper>
+                <div styleName="formItem">
+                  <GoogleAPIWrapper>
+                    <AddressForm
+                      onChangeFormInput={this.handleInputChange}
+                      onUpdateForm={this.handleUpdateForm}
+                    />
+                  </GoogleAPIWrapper>
+                </div>
                 <div styleName="formItem">
                   <Row>
                     <Col size={4}>
