@@ -1,11 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { GoogleAPIWrapper, AddressForm } from 'components/AddressAutocomplete';
+import { googleApiWrapper, AddressForm } from 'components/AddressAutocomplete';
+
+const form = googleApiWrapper(AddressForm);
 
 storiesOf('AddressAutocomplete', module)
   .add('Default', () => (
-    <GoogleAPIWrapper>
-      <AddressForm />
-    </GoogleAPIWrapper>
+    form
   ));

@@ -1,6 +1,6 @@
 import AddressAutocomplete from './AddressAutocomplete';
-import GoogleAPIWrapper from './GoogleAPIWrapper';
 import AutocompleteComponent from './AutocompleteComponent';
+import googleApiWrapper from './GoogleAPIWrapper';
 import AddressForm from './AddressForm';
 
 export default AddressAutocomplete;
@@ -8,5 +8,5 @@ export default AddressAutocomplete;
 export {
   AddressForm,
   AutocompleteComponent,
-  GoogleAPIWrapper,
+  googleApiWrapper,
 }

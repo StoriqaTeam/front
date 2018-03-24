@@ -10,7 +10,7 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { Input } from 'components/Forms';
 import { Button } from 'components/Button';
-import { GoogleAPIWrapper, AddressForm } from 'components/AddressAutocomplete';
+import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
@@ -187,14 +187,14 @@ class Contacts extends Component<PropsType, StateType> {
                 {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
                 {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
                 <div styleName="formItem">
-                  <GoogleAPIWrapper>
-                    <AddressForm
-                      onChangeFormInput={this.handleInputChange}
-                      onUpdateForm={this.handleUpdateForm}
-                    />
-                  </GoogleAPIWrapper>
+
+                  <AddressForm
+                    onChangeFormInput={this.handleInputChange}
+                    onUpdateForm={this.handleUpdateForm}
+                  />
                 </div>
-                <div styleName="formItem">
+
+                {/* <div styleName="formItem">
                   <Row>
                     <Col size={4}>
                       {this.renderInput({ id: 'city', label: 'City', limit: 50 })}
@@ -213,7 +213,7 @@ class Contacts extends Component<PropsType, StateType> {
                       {this.renderInput({ id: 'country', label: 'Country', limit: 50 })}
                     </Col>
                   </Row>
-                </div>
+                </div> */}
                 <div styleName="formItem">
                   <Button
                     type="button"

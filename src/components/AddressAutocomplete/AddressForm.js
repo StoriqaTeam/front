@@ -6,6 +6,7 @@ import { AutocompleteComponent } from 'components/AddressAutocomplete';
 import { MiniSelect } from 'components/MiniSelect';
 import { Input } from 'components/Forms';
 
+import googleApiWrapper from './GoogleAPIWrapper';
 import countries from './countries.json';
 import { getIndexedCountries, getCountryByName } from './utils';
 
@@ -44,7 +45,7 @@ type GeocoderType = {
 
 const dataTypes = ['street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'country', 'postal_code'];
 
-class AddressForm extends Component<PropsType, StateType> {
+class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -150,5 +151,6 @@ class AddressForm extends Component<PropsType, StateType> {
   }
 }
 
+const AddressForm = googleApiWrapper(Form);
 
 export default AddressForm;
