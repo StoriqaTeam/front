@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
+import { Button } from 'components/Button';
 
 import './Footer.scss';
 
@@ -13,38 +14,62 @@ const Footer = () => (
       <Row>
         <Col size={12}>
           <div styleName="navBlock">
-            <div>
-              Logo
-              <div>
+            <div styleName="navBlockItem">
+              <Icon type="logo" />
+              <div styleName="description">
                 Storiqa is a global marketplace for any kind
                 of legal goods supporting cryptocurrency payments
               </div>
             </div>
-            <div>
-              <div className="navHeader">Storiqa market</div>
-              <div className="navItem">Распродажа</div>
-              <div className="navItem">Рекумендуемое</div>
-              <div className="navItem">Популярное</div>
-              <div className="navItem">Обзоры</div>
+            <div styleName="navBlockItem">
+              <div styleName="navHeader">
+                <b>Storiqa market</b>
+              </div>
+              <a href="#" styleName="navItem">Распродажа</a>
+              <a href="#" styleName="navItem">Рекумендуемое</a>
+              <a href="#" styleName="navItem">Популярное</a>
+              <a href="#" styleName="navItem">Обзоры</a>
             </div>
-            <div>
-              <div className="navHeader">Разделы</div>
-              <div className="navItem">Витрина</div>
-              <div className="navItem">Товары</div>
-              <div className="navItem">Магазины</div>
-              <div className="navItem">Storiqa Community</div>
+            <div styleName="navBlockItem">
+              <div styleName="navHeader">
+                <b>Разделы</b>
+              </div>
+              <a href="#" styleName="navItem">Витрина</a>
+              <a href="#" styleName="navItem">Товары</a>
+              <a href="#" styleName="navItem">Магазины</a>
+              <a href="#" styleName="navItem">Storiqa Community</a>
             </div>
-            <div>
-              <div className="navHeader">Сервисы</div>
-              <div className="navItem">Quality Assurance</div>
-              <div className="navItem">Storiqa wallet</div>
+            <div styleName="navBlockItem">
+              <div styleName="navHeader">
+                <b>Сервисы</b>
+              </div>
+              <a href="#" styleName="navItem">Quality Assurance</a>
+              <a href="#" styleName="navItem">Storiqa wallet</a>
             </div>
-            <div></div>
+            <div styleName="navBlockItem">
+              <Button onClick={() => {}}>
+                Стать продавцом
+              </Button>
+            </div>
           </div>
           <div styleName="infoBlock">
-            <div></div>
-            <div></div>
-            <div>
+            <div styleName="address">Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287</div>
+            <a href="mailto:support@storiqa.com" styleName="email">support@storiqa.com</a>
+            <div styleName="aboutNavBlock">
+              <div styleName="aboutNavItem">
+                <a href="#">About Storiqa</a>
+              </div>
+              <div styleName="aboutNavItem">
+                <a href="#">Privacy Policy</a>
+              </div>
+              <div styleName="aboutNavItem">
+                <a href="#">Help</a>
+              </div>
+              <div styleName="aboutNavItem">
+                <a href="#">Conditions of use</a>
+              </div>
+            </div>
+            <div styleName="icons">
               <Icon type="facebookG" size="32" />
               <Icon type="pinterestG" size="32" />
               <Icon type="twitterG" size="32" />

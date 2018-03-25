@@ -2,7 +2,9 @@
 
 import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
+import classNames from 'classnames';
 
+import Logo from 'components/Icon/svg/logo.svg';
 import Person from 'components/Icon/svg/person.svg';
 import Cart from 'components/Icon/svg/cart.svg';
 import QA from 'components/Icon/svg/qa.svg';
@@ -34,6 +36,7 @@ type PropsTypes = {
 };
 
 const iconsMap = {
+  logo: <Logo />,
   person: <Person />,
   cart: <Cart />,
   qa: <QA />,
@@ -63,7 +66,12 @@ class Icon extends PureComponent<PropsTypes> {
     const { type, size } = this.props;
 
     return (
-      <div styleName={`container size-${size || '16'}`}>
+      <div
+        styleName={classNames('container', {
+          [`size-${size || '16'}`]: type !== 'logo',
+          isLogo: type === 'logo',
+        })}
+      >
         {pathOr(null, [type], iconsMap)}
       </div>
     );
