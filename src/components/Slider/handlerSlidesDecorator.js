@@ -1,34 +1,42 @@
+// @flow
+
 import React, { Component } from 'react';
-import { head, last, slice, append, concat } from 'ramda';
+import { head, last, slice, append, prepend } from 'ramda';
 
 type PropsTypes = {
   slidesToShow: number,
   responsive: Object,
-  items: Array,
-  children: Array,
+  children: Array<{}>,
   isInfinity: ?boolean,
   autoplaySpeed: ?number,
   animationSpeed: number,
 };
 
-export default (OriginalComponent: any) => class HandlerSlideDecorator extends Component<PropsTypes> {// eslint-disable-line
+type StateTypes = {
+  sliderWrapperWidth: number,
+  visibleSlidesAmount: number,
+  totalSlidesAmount: number,
+  slidesOffset: number,
+  num: number,
+  children: Array<{}>,
+  isTransition: boolean,
+  slideWidth: number,
+};
+
+export default (OriginalComponent: any) => class HandlerSlideDecorator extends Component<PropsTypes, StateTypes> {// eslint-disable-line
   state = {
-    sliderWrapperWidth: {},
+    sliderWrapperWidth: 0,
     visibleSlidesAmount: 0,
     totalSlidesAmount: 0,
     slidesOffset: 0,
-    showAllSlides: false,
     num: 0,
     children: [],
     isTransition: false,
+    slideWidth: 0,
   };
 
   componentWillMount() {
     window.addEventListener('resize', this.sliderPropsCalc);
-
-    if (this.props.autoplaySpeed) {
-      this.activateAutoplayTimer();
-    }
   }
 
   componentDidMount() {
@@ -41,34 +49,43 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     if (this.autoplayInterval) {
       clearInterval(this.autoplayInterval);
     }
-    if (this.swapTimer) {
-      clearTimeout(this.swapTimer);
+    if (this.animationTimer) {
+      clearTimeout(this.animationTimer);
+    }
+    if (this.refreshArrayTimer) {
+      clearTimeout(this.refreshArrayTimer);
     }
   }
 
+  autoplayInterval: IntervalID;
+  animationTimer: TimeoutID;
+  refreshArrayTimer: TimeoutID;
+  originalComponentElement: Element;
+
   activateAutoplayTimer = () => {
-    if (this.autoplayInterval) {
-      clearInterval(this.autoplayInterval);
+    const { autoplaySpeed } = this.props;
+
+    if (autoplaySpeed) {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+      }
+      this.autoplayInterval = setInterval(() => {
+        this.handleSlide('next');
+      }, autoplaySpeed);
     }
-    this.autoplayInterval = setInterval(() => {
-      this.handleSlide('next');
-    }, this.props.autoplaySpeed);
   }
 
   sliderPropsCalc = () => {
     const {
+      isInfinity,
       slidesToShow,
       responsive,
-      items,
       children,
-      isInfinity,
-      animationSpeed,
+      autoplaySpeed,
     } = this.props;
-    const { showAllSlides, num } = this.state;
-    const totalSlidesAmount = items.length;
+    const totalSlidesAmount = children.length;
     const sliderWrapperWidth = this.originalComponentElement.getBoundingClientRect().width;
     let visibleSlidesAmount = slidesToShow;
-    const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
 
     if (responsive) {
       responsive.forEach((i) => {
@@ -78,149 +95,231 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       });
     }
 
+    const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
+
+    if (isInfinity && autoplaySpeed && (visibleSlidesAmount < totalSlidesAmount)) {
+      this.activateAutoplayTimer();
+    }
+
     this.setState({
       sliderWrapperWidth,
       visibleSlidesAmount,
       totalSlidesAmount,
-      showAllSlides: showAllSlides || visibleSlidesAmount >= totalSlidesAmount,
+      children,
+      slideWidth,
+      slidesOffset: 0,
     });
-
-    if (isInfinity) {
-      if (this.swapTimer) {
-        clearTimeout(this.swapTimer);
-      }
-
-      this.swapTimer = setTimeout(() => {
-        this.swapArray(num, children);
-      }, animationSpeed);
-
-      this.setState({ slidesOffset: -slideWidth });
-    } else {
-      this.setState({ children });
-    }
   }
 
-  handleSlide = (direction) => {
-    const { isInfinity, animationSpeed, autoplaySpeed } = this.props;
+  handleSlide = (direction: 'prev' | 'next') => {
     const {
-      sliderWrapperWidth,
+      isInfinity,
+      autoplaySpeed,
+      animationSpeed,
+      slidesToShow,
+    } = this.props;
+    const {
       visibleSlidesAmount,
       slidesOffset,
       totalSlidesAmount,
-      children,
       num,
       isTransition,
+      slideWidth,
     } = this.state;
 
-    if (isTransition && isInfinity) { return; }
+    if (isTransition) { return; }
+
     if (autoplaySpeed) { this.activateAutoplayTimer(); }
 
-    const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
     const possibleOffset = ((totalSlidesAmount - visibleSlidesAmount) + 1) * slideWidth;
 
-    if ((slidesOffset >= 0 && direction === 'prev') ||
-      (-possibleOffset >= (slidesOffset - slideWidth) && direction === 'next')) {
+    if (!isInfinity &&
+      ((slidesOffset >= 0 && direction === 'prev') ||
+      (-possibleOffset >= (slidesOffset - slideWidth) && direction === 'next'))) {
       return;
     }
 
-    this.setState({
-      slidesOffset: direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth,
-      isTransition: true,
-    });
-
-    if (isInfinity) {
-      if (this.swapTimer) {
-        clearTimeout(this.swapTimer);
-      }
-
-      this.swapTimer = setTimeout(() => {
-        this.swapArray(direction === 'next' ? num + 1 : num - 1, children, direction);
-      }, animationSpeed);
-    }
-  }
-
-  swapArray = (num, arr, direction) => {
-    let newChildren;
-
-    const {
-      sliderWrapperWidth,
-      visibleSlidesAmount,
-      totalSlidesAmount,
-    } = this.state;
-
-    const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
-
-    if (num === 0 || direction === 'prev') {
-      const lastItem = last(arr);
-      const slicedItems = slice(0, arr.length - 1, arr);
-      newChildren = concat([lastItem], slicedItems);
-    } else {
-      const firstItem = head(arr);
-      const slicedItems = slice(1, arr.length, arr);
-      newChildren = append(firstItem, slicedItems);
-    }
-
-    let newNum;
+    let newNum = direction === 'next' ? num + 1 : num - 1;
     if (direction === 'next') {
-      newNum = num === totalSlidesAmount ? 0 : num;
+      newNum = newNum === totalSlidesAmount ? 0 : newNum;
     } else {
-      newNum = num === -1 ? totalSlidesAmount - 1 : num;
+      newNum = newNum === -1 ? totalSlidesAmount - 1 : newNum;
     }
 
-    this.setState({
-      children: newChildren,
-      num: newNum,
-      slidesOffset: -slideWidth,
-      isTransition: false,
-    });
-  }
-
-  handleDot = (dotIdx) => {
-    const { isInfinity } = this.props;
-    const {
-      sliderWrapperWidth,
-      visibleSlidesAmount,
-      slidesOffset,
-      children,
-      num,
-      isTransition,
-    } = this.state;
-
-    const diff = dotIdx - num;
-
-    if (!diff || (isTransition && isInfinity)) {
-      return;
-    }
-
-    let direction;
-
-    if (diff > 0) {
-      direction = 'next';
-    }
-
-    if (diff < 0) {
-      direction = 'prev';
-    }
-
-    const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
-
-    this.setState({
-      slidesOffset: direction === 'next' ?
-        slidesOffset - (slideWidth * diff) :
-        slidesOffset - (slideWidth * diff),
-      isTransition: true,
-    });
+    const newSlidesOffset = direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth;
 
     if (isInfinity) {
-      if (this.swapTimer) {
-        clearTimeout(this.swapTimer);
+      if (slidesToShow !== 1) {
+        this.swapArray(direction, newNum);
+      } else {
+        this.singleSliderSwapArray(direction, newNum);
       }
-
-      this.swapTimer = setTimeout(() => {
-        this.swapArray(num + diff, children, direction, diff);
-      }, 500);
+    } else {
+      this.setState({
+        slidesOffset: newSlidesOffset,
+        isTransition: true,
+        num: newNum,
+      });
+      this.startAnimation();
     }
+
+    if (this.animationTimer) { clearTimeout(this.animationTimer); }
+    this.animationTimer = setTimeout(this.endAnimation, animationSpeed);
   }
+
+  handleDot = (dotIdx: number) => {
+    const { animationSpeed, autoplaySpeed } = this.props;
+    const {
+      num,
+      slidesOffset,
+      isTransition,
+      slideWidth,
+    } = this.state;
+
+    if (isTransition) { return; }
+    if (autoplaySpeed) { this.activateAutoplayTimer(); }
+
+    let direction = null;
+    if (dotIdx > num) { direction = 'next'; }
+    if (dotIdx < num) { direction = 'prev'; }
+    if (!direction) return;
+
+    const count = direction === 'prev' ? num - dotIdx : dotIdx - num;
+
+    this.setState({
+      num: dotIdx,
+      slidesOffset: direction === 'next' ? slidesOffset - (slideWidth * count) : slidesOffset + (slideWidth * count),
+    });
+
+    this.startAnimation();
+
+    if (this.animationTimer) { clearTimeout(this.animationTimer); }
+    this.animationTimer = setTimeout(this.endAnimation, animationSpeed);
+  }
+
+  startAnimation = () => { this.setState({ isTransition: true }); };
+  endAnimation = () => { this.setState({ isTransition: false }); };
+
+  singleSliderSwapArray = (direction: string, newNum: number) => {
+    const {
+      children,
+      slidesOffset,
+      totalSlidesAmount,
+      slideWidth,
+    } = this.state;
+
+    let newChildren = children;
+    let newSlidesOffset = slidesOffset;
+
+    if (direction === 'prev' && newNum === totalSlidesAmount - 1) {
+      const lastItem = last(children);
+      const slicedItems = slice(0, totalSlidesAmount - 1, children);
+      newChildren = prepend(lastItem, slicedItems);
+      newSlidesOffset = slidesOffset - slideWidth;
+    }
+    if (direction === 'next' && newNum === 0) {
+      const firstItem = head(children);
+      const slicedItems = slice(1, totalSlidesAmount, children);
+      newChildren = append(firstItem, slicedItems);
+      newSlidesOffset = slidesOffset + slideWidth;
+    }
+
+    this.setState(() => ({
+      slidesOffset: newSlidesOffset,
+      num: newNum,
+      children: newChildren,
+    }), () => {
+      setTimeout(() => {
+        this.startAnimation();
+        this.setState(() => ({
+          slidesOffset: direction === 'next' ? newSlidesOffset - slideWidth : newSlidesOffset + slideWidth,
+        }));
+      }, 0);
+    });
+
+    this.activateRefreshArray(direction, newNum);
+  };
+
+  swapArray = (direction: string, newNum: number) => {
+    const {
+      children,
+      slidesOffset,
+      totalSlidesAmount,
+      slideWidth,
+    } = this.state;
+
+    let newChildren = children;
+    let newSlidesOffset = slidesOffset;
+
+    if (direction === 'prev') {
+      const lastItem = last(children);
+      const slicedItems = slice(0, totalSlidesAmount - 1, children);
+      newChildren = prepend(lastItem, slicedItems);
+      newSlidesOffset = slidesOffset - slideWidth;
+    }
+    if (direction === 'next') {
+      this.activateRefreshArray(direction, newNum);
+    }
+
+    this.setState(() => ({
+      slidesOffset: newSlidesOffset,
+      num: newNum,
+      children: newChildren,
+    }), () => {
+      setTimeout(() => {
+        this.startAnimation();
+        this.setState(() => ({
+          slidesOffset: direction === 'next' ? newSlidesOffset - slideWidth : newSlidesOffset + slideWidth,
+        }));
+      }, 0);
+    });
+  };
+
+  activateRefreshArray = (direction: string, newNum: number) => {
+    const { animationSpeed } = this.props;
+    const refreshArray = () => { this.refreshArray(direction, newNum); };
+
+    if (this.refreshArrayTimer) { clearTimeout(this.refreshArrayTimer); }
+    this.refreshArrayTimer = setTimeout(refreshArray, animationSpeed);
+  }
+
+  refreshArray = (direction: string, newNum: number) => {
+    const { slidesToShow } = this.props;
+    const {
+      children,
+      slidesOffset,
+      totalSlidesAmount,
+      slideWidth,
+    } = this.state;
+
+    let newChildren = children;
+    let newSlidesOffset = slidesOffset;
+
+    if (direction === 'prev' && newNum === totalSlidesAmount - 1) {
+      const firstItem = head(children);
+      const slicedItems = slice(1, totalSlidesAmount, children);
+      newChildren = append(firstItem, slicedItems);
+      newSlidesOffset = -(slideWidth * (totalSlidesAmount - 1));
+    }
+    if (direction === 'next' && newNum === 0) {
+      const lastItem = last(children);
+      const slicedItems = slice(0, totalSlidesAmount - 1, children);
+      newChildren = prepend(lastItem, slicedItems);
+      newSlidesOffset = 0;
+    }
+    if (direction === 'next' && slidesToShow > 1) {
+      const firstItem = head(children);
+      const slicedItems = slice(1, totalSlidesAmount, children);
+      newChildren = append(firstItem, slicedItems);
+      newSlidesOffset = 0;
+    }
+
+    this.setState({
+      slidesOffset: newSlidesOffset,
+      num: newNum,
+      children: newChildren,
+    });
+  };
 
   render() {
     return (

@@ -9,7 +9,6 @@ type PropsTypes = {
   type: 'most-popular' | 'sale' | 'smart-reviews',
   title: string,
   isRevealButton: boolean,
-  showAllSlides: boolean,
   handleSlide: Function,
 };
 
@@ -19,7 +18,6 @@ class SliderHeader extends PureComponent<PropsTypes> {
       type,
       title,
       isRevealButton,
-      showAllSlides,
       handleSlide,
     } = this.props;
 
@@ -31,30 +29,24 @@ class SliderHeader extends PureComponent<PropsTypes> {
         <div styleName={titleCls}>
           <strong>{title}</strong>
         </div>
+        <a styleName={revealCls}>See all</a>
         {isRevealButton &&
-        <a
-          styleName={revealCls}
-        >
-          See all
-        </a>
-        }
-        {isRevealButton && !showAllSlides &&
-        <div styleName="nav">
-          <button
-            direction="prev"
-            styleName="button"
-            onClick={() => handleSlide('prev')}
-          >
-            <Icon type="prev" size="32" />
-          </button>
-          <button
-            direction="next"
-            styleName="button"
-            onClick={() => handleSlide('next')}
-          >
-            <Icon type="next" size="32" />
-          </button>
-        </div>
+          <div styleName="nav">
+            <button
+              direction="prev"
+              styleName="button"
+              onClick={() => handleSlide('prev')}
+            >
+              <Icon type="prev" size="32" />
+            </button>
+            <button
+              direction="next"
+              styleName="button"
+              onClick={() => handleSlide('next')}
+            >
+              <Icon type="next" size="32" />
+            </button>
+          </div>
         }
       </div>
     );

@@ -13,7 +13,6 @@ type PropsTypes = {
   type: string,
   headerType: 'most-popular' | 'sale' | 'smart-reviews',
   title: string,
-  showAllSlides: boolean,
   slidesOffset: number,
   visibleSlidesAmount: number,
   totalSlidesAmount: number,
@@ -22,9 +21,9 @@ type PropsTypes = {
   children: Node,
   isTransition: boolean,
   slidesToShow: number,
-  // handleDot: Function,
+  handleDot: Function,
   num: number,
-  animationSpeed: number,
+  animationSpeed: ?number,
   isDots: ?boolean,
 };
 
@@ -34,13 +33,12 @@ class SliderContainer extends Component<PropsTypes> {
       type,
       headerType,
       title,
-      showAllSlides,
       slidesOffset,
       visibleSlidesAmount,
       totalSlidesAmount,
       handleSlide,
       isTransition,
-      // handleDot,
+      handleDot,
       slidesToShow,
       num,
       animationSpeed,
@@ -48,15 +46,14 @@ class SliderContainer extends Component<PropsTypes> {
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
-    const animationSpeedSec = animationSpeed / 1000;
+    const animationSpeedSec = animationSpeed ? animationSpeed / 1000 : 0.5;
 
     return (
       <div styleName="container">
-        {type === 'cardProduct' && <SliderHeader
+        {type === 'products' && <SliderHeader
           type={headerType}
           title={title}
           isRevealButton={isRevealButton}
-          showAllSlides={showAllSlides}
           handleSlide={handleSlide}
         />}
         <div
@@ -64,7 +61,6 @@ class SliderContainer extends Component<PropsTypes> {
           styleName="wrapper"
           style={{
             left: slidesOffset || '',
-            whiteSpace: showAllSlides ? 'nowrap' : 'nowrap',
             transition: isTransition ? `left ${animationSpeedSec}s ease-out` : '',
           }}
         >
@@ -84,7 +80,7 @@ class SliderContainer extends Component<PropsTypes> {
             {Children.map(this.props.children, (child, idx) => (
               <div
                 styleName={classNames('dot', { active: idx === num })}
-                onClick={() => {}}
+                onClick={() => { handleDot(idx); }}
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"

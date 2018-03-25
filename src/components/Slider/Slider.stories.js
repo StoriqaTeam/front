@@ -13,7 +13,7 @@ storiesOf('Slider', module)
       animationSpeed={500}
       title="Most popular"
       headerType="most-popular"
-      type="cardProduct"
+      type="products"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -28,7 +28,7 @@ storiesOf('Slider', module)
       animationSpeed={500}
       title="Sale"
       headerType="sale"
-      type="cardProduct"
+      type="products"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -43,7 +43,7 @@ storiesOf('Slider', module)
       animationSpeed={500}
       title="Smart Reviews"
       headerType="smart-reviews"
-      type="cardProduct"
+      type="products"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -55,6 +55,7 @@ storiesOf('Slider', module)
   ))
   .add('Static Banners', () => (
     <Slider
+      headerType="smart-reviews"
       isDots
       isInfinity
       autoplaySpeed={15000}
