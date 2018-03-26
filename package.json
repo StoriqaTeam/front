@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@storiqa/shared": "git+ssh://git@github.com/StoriqaTeam/libstqfrontend",
+    "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL#d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
