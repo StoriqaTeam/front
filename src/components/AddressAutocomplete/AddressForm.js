@@ -1,13 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { pick, pathOr, forEach, isEmpty, map, reduce, addIndex } from 'ramda';
+import { pick, pathOr, forEach, isEmpty, map } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
 import { MiniSelect } from 'components/MiniSelect';
 import debounce from 'lodash.debounce';
 import { AutocompleteInput } from 'components/Forms';
-import { rename } from 'utils';
+import { renameCamelCase } from 'utils';
 
 import googleApiWrapper from './GoogleAPIWrapper';
 import AddressResultForm from './AddressResultForm';
@@ -93,14 +93,7 @@ class Form extends Component<PropsType, StateType> {
         componentRestrictions,
       },
       (result: any) => {
-        const reduceIndexed = addIndex(reduce);
-        const func = val =>
-          reduceIndexed((acc, next, index) => {
-            if (index === 0) return next;
-            return acc + next[0].toUpperCase() + next.slice(1).toLowerCase();
-          }, '', val.split('_'));
-        const renamedObj = rename(func, result[0]);
-        this.handleOnReceiveAddress(renamedObj);
+        this.handleOnReceiveAddress(renameCamelCase(result[0]));
       },
     );
   }
