@@ -21,6 +21,7 @@ class BannersRow extends PureComponent<PropsTypes> {
       <div styleName="container">
         {visibleBanners.map(item => (
           <div
+            key={item.id}
             style={{ width: `${width}%` }}
             styleName="item"
           >

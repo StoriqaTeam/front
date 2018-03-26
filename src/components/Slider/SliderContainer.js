@@ -10,9 +10,12 @@ import handlerSlide from './handlerSlidesDecorator';
 import './SliderContainer.scss';
 
 type PropsTypes = {
-  type: string,
-  headerType: 'most-popular' | 'sale' | 'smart-reviews',
-  title: string,
+  type: string, // Slider type, for example: banners, product card etc.
+  headerType: 'most-popular' | 'sale' | 'smart-reviews', // Header type for product card type
+  title: string, // Title for product card header
+  slidesToShow: number, // Number of displayed slides
+  animationSpeed: ?number, // Animation speed (ms), default: 500ms
+  dots: ?boolean, // Has dots navigation
   slidesOffset: number,
   visibleSlidesAmount: number,
   totalSlidesAmount: number,
@@ -20,11 +23,8 @@ type PropsTypes = {
   originalComponentRef: Function,
   children: Node,
   isTransition: boolean,
-  slidesToShow: number,
   handleDot: Function,
   num: number,
-  animationSpeed: ?number,
-  isDots: ?boolean,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -42,7 +42,7 @@ class SliderContainer extends Component<PropsTypes> {
       slidesToShow,
       num,
       animationSpeed,
-      isDots,
+      dots,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
@@ -75,7 +75,7 @@ class SliderContainer extends Component<PropsTypes> {
             </div>
           ))}
         </div>
-        {isDots && slidesToShow === 1 &&
+        {dots && slidesToShow === 1 &&
           <div styleName="dots">
             {Children.map(this.props.children, (child, idx) => (
               <div

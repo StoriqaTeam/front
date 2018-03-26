@@ -56,8 +56,8 @@ storiesOf('Slider', module)
   .add('Static Banners', () => (
     <Slider
       headerType="smart-reviews"
-      isDots
-      isInfinity
+      dots
+      infinity
       autoplaySpeed={15000}
       animationSpeed={500}
       type="banners"

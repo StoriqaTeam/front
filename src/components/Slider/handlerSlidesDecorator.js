@@ -5,9 +5,9 @@ import { head, last, slice, append, prepend } from 'ramda';
 
 type PropsTypes = {
   slidesToShow: number,
-  responsive: Object,
+  responsive: Object, // Match the breakpoint to the number of slides
   children: Array<{}>,
-  isInfinity: ?boolean,
+  infinity: ?boolean,
   autoplaySpeed: ?number,
   animationSpeed: number,
 };
@@ -36,7 +36,9 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   };
 
   componentWillMount() {
-    window.addEventListener('resize', this.sliderPropsCalc);
+    if (process.env.BROWSER) {
+      window.addEventListener('resize', this.sliderPropsCalc);
+    }
   }
 
   componentDidMount() {
@@ -44,7 +46,9 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.sliderPropsCalc);
+    if (process.env.BROWSER) {
+      window.removeEventListener('resize', this.sliderPropsCalc);
+    }
 
     if (this.autoplayInterval) {
       clearInterval(this.autoplayInterval);
@@ -55,11 +59,15 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     if (this.refreshArrayTimer) {
       clearTimeout(this.refreshArrayTimer);
     }
+    if (this.animationAndMoveTimer) {
+      clearTimeout(this.animationAndMoveTimer);
+    }
   }
 
   autoplayInterval: IntervalID;
   animationTimer: TimeoutID;
   refreshArrayTimer: TimeoutID;
+  animationAndMoveTimer: TimeoutID;
   originalComponentElement: Element;
 
   activateAutoplayTimer = () => {
@@ -77,7 +85,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
   sliderPropsCalc = () => {
     const {
-      isInfinity,
+      infinity,
       slidesToShow,
       responsive,
       children,
@@ -97,7 +105,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
     const slideWidth = sliderWrapperWidth / visibleSlidesAmount;
 
-    if (isInfinity && autoplaySpeed && (visibleSlidesAmount < totalSlidesAmount)) {
+    if (infinity && autoplaySpeed && (visibleSlidesAmount < totalSlidesAmount)) {
       this.activateAutoplayTimer();
     }
 
@@ -113,7 +121,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
   handleSlide = (direction: 'prev' | 'next') => {
     const {
-      isInfinity,
+      infinity,
       autoplaySpeed,
       animationSpeed,
       slidesToShow,
@@ -133,7 +141,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
     const possibleOffset = ((totalSlidesAmount - visibleSlidesAmount) + 1) * slideWidth;
 
-    if (!isInfinity &&
+    if (!infinity &&
       ((slidesOffset >= 0 && direction === 'prev') ||
       (-possibleOffset >= (slidesOffset - slideWidth) && direction === 'next'))) {
       return;
@@ -148,7 +156,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
     const newSlidesOffset = direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth;
 
-    if (isInfinity) {
+    if (infinity) {
       if (slidesToShow !== 1) {
         this.swapArray(direction, newNum);
       } else {
@@ -197,8 +205,13 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     this.animationTimer = setTimeout(this.endAnimation, animationSpeed);
   }
 
-  startAnimation = () => { this.setState({ isTransition: true }); };
-  endAnimation = () => { this.setState({ isTransition: false }); };
+  startAnimation = () => {
+    this.setState({ isTransition: true });
+  };
+
+  endAnimation = () => {
+    this.setState({ isTransition: false });
+  };
 
   singleSliderSwapArray = (direction: string, newNum: number) => {
     const {
@@ -229,7 +242,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       num: newNum,
       children: newChildren,
     }), () => {
-      setTimeout(() => {
+      this.animationAndMoveTimer = setTimeout(() => {
         this.startAnimation();
         this.setState(() => ({
           slidesOffset: direction === 'next' ? newSlidesOffset - slideWidth : newSlidesOffset + slideWidth,
@@ -266,7 +279,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       num: newNum,
       children: newChildren,
     }), () => {
-      setTimeout(() => {
+      this.animationAndMoveTimer = setTimeout(() => {
         this.startAnimation();
         this.setState(() => ({
           slidesOffset: direction === 'next' ? newSlidesOffset - slideWidth : newSlidesOffset + slideWidth,

@@ -12,8 +12,8 @@ type PropsTypes = {
 const BannersSlider = (props: PropsTypes) => (
   <div styleName="container">
     <Slider
-      isDots
-      isInfinity
+      dots
+      infinity
       autoplaySpeed={15000}
       animationSpeed={500}
       type="banners"

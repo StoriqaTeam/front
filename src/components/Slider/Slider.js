@@ -1,3 +1,5 @@
+// @flow
+
 import React, { PureComponent, Fragment } from 'react';
 
 import { SliderContainer } from 'components/Slider';
@@ -7,7 +9,9 @@ import { Banner } from 'components/Banner';
 import './Slider.scss';
 
 type PropsTypes = {
-  items: Array<{}>,
+  items: Array<{
+    id: string,
+  }>,
   type: string,
   slidesToShow: ?number,
 };
