@@ -7,7 +7,6 @@ import {
   pathOr,
   propOr,
   map,
-  toString,
   toUpper,
   toLower,
   find,
