@@ -70,11 +70,11 @@ const Footer = () => (
               </div>
             </div>
             <div styleName="icons">
-              <Icon type="facebookG" size="32" />
-              <Icon type="pinterestG" size="32" />
-              <Icon type="twitterG" size="32" />
-              <Icon type="instagramG" size="32" />
-              <Icon type="vkG" size="32" />
+              <Icon type="facebookGray" size="32" />
+              <Icon type="pinterestGray" size="32" />
+              <Icon type="twitterGray" size="32" />
+              <Icon type="instagramGray" size="32" />
+              <Icon type="vkGray" size="32" />
             </div>
           </div>
           <div styleName="rightsBlock">© Storiqa Marketplace. All rights reserved. 2018</div>
