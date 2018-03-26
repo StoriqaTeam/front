@@ -14,10 +14,10 @@ import './Start.scss';
 
 class Start extends PureComponent<{}> {
   render() {
-    const categories = pathOr({}, ['categories', 'children'], this.context.directories);
+    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
     return (
       <div styleName="container">
-        <CategoriesMenu categories={categories} />
+        {categories && <CategoriesMenu categories={categories} />}
         <Container>
           <Row>
             <Col size={4}>
