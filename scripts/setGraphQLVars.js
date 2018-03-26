@@ -25,7 +25,7 @@ const updateEnvFile = (graphqQLEndpoint) => {
 };
 
 const run = () => {
-  exec('minikube service list | grep gateway | awk \'{print $6}\'', (err, stdout, stderr) => {
+  exec('minikube service list | grep gateway | awk \'{print $6}\'  | grep http', (err, stdout, stderr) => {
     if (err) {
       console.error('Error while locating gateway URL\nMake sure kubernetes is running', { err });
       process.exit(1);
