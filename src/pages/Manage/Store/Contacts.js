@@ -187,7 +187,6 @@ class Contacts extends Component<PropsType, StateType> {
                 {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
                 {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
                 <div styleName="formItem">
-
                   <AddressForm
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
