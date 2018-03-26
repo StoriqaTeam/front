@@ -15,7 +15,7 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
-    log.debug('GraphQL request', { operation, variables });
+    log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
     const headers = { 'Content-Type': 'application/json' };
     try {

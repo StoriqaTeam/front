@@ -49,15 +49,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static assets
 if (process.env.NODE_ENV === 'production') {
-  app.use('/static', express.static(path.resolve('/Users/ilya/dev/storiqa/frontend', 'build', 'static')));
+  app.use('/static', express.static('./build/static'));
 } else if (process.env.NODE_ENV === 'development') {
   // Setup logger
   const logger = morgan('combined');
   app.use(logger);
 }
 
-app.use('/favicon.ico', express.static(path.resolve(__dirname, '..', 'build', 'favicon.ico')));
-app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 'manifest.json')));
+app.use('/favicon.ico', express.static(path.resolve('./build/favicon.ico')));
+app.use('/manifest.json', express.static(path.resolve('./build/manifest.json')));
 
 if (process.env.NODE_ENV === 'development') {
   const webpackConfig = require('../config/webpack.config.dev');
@@ -74,7 +74,7 @@ app.use(async (req, res) => {
 
   store.dispatch(FarceActions.init());
 
-  const matchContext = { store };
+  const matchContext = { store, jwt };
 
   let renderArgs;
   try {
@@ -90,13 +90,24 @@ app.use(async (req, res) => {
     }
     throw e;
   }
-  const element = (
-    <Provider store={store}>
-      <RouterProvider router={renderArgs.router}>
-        {createRender(renderArgs)}
-      </RouterProvider>
-    </Provider>
-  );
+
+  let element;
+  try {
+    const rendered = createRender({
+      renderPending: () => (<div>loading</div>),
+      renderError: ({ error }) => (<div>{error.status === 404 ? 'Not found' : 'Error'}</div>),
+    })(renderArgs);
+    element = (
+      <Provider store={store}>
+        <RouterProvider router={renderArgs.router}>
+          {rendered}
+        </RouterProvider>
+      </Provider>
+    );
+  } catch (e) {
+    element = (<div>ERROR :-(</div>)
+  }
+
   if (process.env.NODE_ENV === 'development') {
     res.status(renderArgs.error ? renderArgs.error.status : 200).send(`
       <!DOCTYPE html>
@@ -116,9 +127,7 @@ app.use(async (req, res) => {
       </html>
     `);
   } else if (process.env.NODE_ENV === 'production') {
-    console.log(path.resolve('/Users/ilya/dev/storiqa/frontend/build/index.html'));
-    const filePath = path.resolve('/Users/ilya/dev/storiqa/frontend', 'build', 'index.html');
-    fs.readFile(filePath, 'utf8', (err, htmlData) => {
+    fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
       if (err) {
         console.error('read err', err);
         return res.status(404).end();
@@ -127,8 +136,8 @@ app.use(async (req, res) => {
       const renderedEl = ReactDOMServer.renderToString(element);
       const RenderedApp = htmlData
         .replace(
-          '<div id="root" style="height: 100%;"></div>',
-          `<div id="root" style="height: 100%;">${renderedEl}</div>`,
+          '<div id="root" style="height:100%"></div>',
+          `<div id="root" style="height:100%;">${renderedEl}</div>`,
         )
         .replace(
           '<script>window.__RELAY_PAYLOADS__=null</script>',
