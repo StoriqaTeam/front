@@ -10,7 +10,9 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
   };
 
   componentWillMount() {
-    window.addEventListener('resize', this.sliderPropsCalc);
+    if (process.env.BROWSER) {
+      window.addEventListener('resize', this.sliderPropsCalc);
+    }
   }
 
   componentDidMount() {
@@ -18,7 +20,9 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.sliderPropsCalc);
+    if (process.env.BROWSER) {
+      window.removeEventListener('resize', this.sliderPropsCalc);
+    }
   }
 
   sliderPropsCalc = () => {
@@ -40,7 +44,7 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
       totalSlidesAmount,
       showAllSlides: showAllSlides || visibleSlidesAmount >= totalSlidesAmount,
     });
-  }
+  };
 
   handleSlide = (direction) => {
     const {
@@ -59,7 +63,7 @@ export default OriginalComponent => class HandlerSlideDecorator extends Componen
     }
 
     this.setState({ slidesOffset: direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth });
-  }
+  };
 
   render() {
     return (

@@ -6,7 +6,6 @@ import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
-import PrivateRoute from 'routes/PrivateRoute';
 import { log } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
@@ -77,7 +76,12 @@ const routes = (
 
     <Route
       path="/manage"
-      Component={PrivateRoute}
+      render={({ match }) => {
+        if (match.context.jwt) {
+          return null;
+        }
+        throw new RedirectException('/login');
+      }}
     >
       <Route path="/store">
         <Route

@@ -27,7 +27,9 @@ class Modal extends Component<PropsTypes, StateTypes> {
   componentWillMount() {
     this.setState({ showModal: this.props.showModal });
 
-    window.addEventListener('keydown', this.handleKeydown);
+    if (process.env.BROWSER) {
+      window.addEventListener('keydown', this.handleKeydown);
+    }
   }
 
   componentWillReceiveProps(nextProps: Object) {
@@ -42,7 +44,9 @@ class Modal extends Component<PropsTypes, StateTypes> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeydown);
+    if (process.env.BROWSER) {
+      window.removeEventListener('keydown', this.handleKeydown);
+    }
   }
 
   onCloseModal = () => {
@@ -55,7 +59,7 @@ class Modal extends Component<PropsTypes, StateTypes> {
     } else {
       noScroll.off();
     }
-  }
+  };
 
   handleKeydown = (e: any) => {
     if (e.keyCode === 27) {

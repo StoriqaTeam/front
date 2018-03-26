@@ -6,13 +6,17 @@ export default OriginalComponent => class HandlerDropdownDecorator extends Compo
   };
 
   componentWillMount() {
-    document.addEventListener('click', this.handleDropdown);
-    document.addEventListener('keydown', this.handleDropdown);
+    if (process.env.BROWSER) {
+      document.addEventListener('click', this.handleDropdown);
+      document.addEventListener('keydown', this.handleDropdown);
+    }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDropdown);
-    document.removeEventListener('keydown', this.handleDropdown);
+    if (process.env.BROWSER) {
+      document.removeEventListener('click', this.handleDropdown);
+      document.removeEventListener('keydown', this.handleDropdown);
+    }
   }
 
   handleDropdown = (e) => {
@@ -29,7 +33,7 @@ export default OriginalComponent => class HandlerDropdownDecorator extends Compo
     if (e.keyCode === 27 || !isContentClick || (localName && localName === 'a')) {
       this.setState({ isContentOpen: false });
     }
-  }
+  };
 
   render() {
     return (
