@@ -1,5 +1,14 @@
 FROM node:9.9-slim
 
+# Installing dependencies
+RUN apt-get update
+RUN apt-get install -y git
+
+# Cleaning up
+RUN apt-get clean -y
+RUN rm -rf /var/lib/apt/lists/
+
+# Running as user "app"
 RUN mkdir /app
 RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
 
@@ -9,6 +18,7 @@ RUN chown -R app:app /app
 USER app
 WORKDIR /app
 
+# Building app
 RUN yarn -s --no-progress --non-interactive
 RUN yarn cache clean
 
