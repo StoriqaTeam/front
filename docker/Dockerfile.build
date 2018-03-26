@@ -22,4 +22,6 @@ WORKDIR /app
 RUN yarn -s --no-progress --non-interactive
 RUN yarn cache clean
 
+EXPOSE 3003
+
 ENTRYPOINT yarn server:prod
