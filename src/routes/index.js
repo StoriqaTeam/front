@@ -50,7 +50,7 @@ const routes = (
 
     <Route
       path="/manage"
-      // Component={PrivateRoute}
+      Component={PrivateRoute}
     >
       <Route path="/store">
         <Route
