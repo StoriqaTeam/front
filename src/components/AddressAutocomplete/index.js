@@ -9,4 +9,4 @@ export {
   AddressForm,
   AutocompleteComponent,
   GoogleAPIWrapper,
-}
+};
