@@ -1,0 +1,15 @@
+FROM node:9.9-slim
+
+RUN mkdir /app
+RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
+
+COPY . /app
+RUN chown -R app:app /app
+
+USER app
+WORKDIR /app
+
+RUN yarn -s --no-progress --non-interactive
+RUN yarn cache clean
+
+ENTRYPOINT yarn server:prod
