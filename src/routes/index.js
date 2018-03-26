@@ -11,6 +11,7 @@ import { log } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
+import Start from 'pages/Start/Start';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 
@@ -32,6 +33,32 @@ const routes = (
           key
           name
         }
+        categories {
+          name {
+            text
+          }
+          children {
+            rawId
+            name {
+              lang
+              text
+            }
+            children {
+              rawId
+              name {
+                lang
+                text
+              }
+              children {
+                rawId
+                name {
+                  lang
+                  text
+                }
+              }
+            }
+          }
+        }
       }
     `}
     render={(args) => {
@@ -46,7 +73,7 @@ const routes = (
       return <Component {...props} />;
     }}
   >
-    <Route Component={() => <div />} />
+    <Route Component={Start} />
 
     <Route
       path="/manage"
@@ -67,9 +94,9 @@ const routes = (
               }
             }
           `}
-          prepareVariables={(_, { params }) => {
-            return { storeID: params.storeId };
-          }}
+          prepareVariables={(_, { params }) => (
+            { storeID: params.storeId }
+          )}
         />
       </Route>
     </Route>
