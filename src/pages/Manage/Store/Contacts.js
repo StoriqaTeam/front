@@ -167,7 +167,6 @@ class Contacts extends Component<PropsType, StateType> {
 
   render() {
     const { activeItem } = this.state;
-
     return (
       <Container>
         <Row>
@@ -192,27 +191,6 @@ class Contacts extends Component<PropsType, StateType> {
                     onUpdateForm={this.handleUpdateForm}
                   />
                 </div>
-
-                {/* <div styleName="formItem">
-                  <Row>
-                    <Col size={4}>
-                      {this.renderInput({ id: 'city', label: 'City', limit: 50 })}
-                    </Col>
-                    <Col size={4}>
-                      {this.renderInput({ id: 'state', label: 'State / Province / Region', limit: 50 })}
-                    </Col>
-                  </Row>
-                </div>
-                <div styleName="formItem">
-                  <Row>
-                    <Col size={4}>
-                      {this.renderInput({ id: 'zip', label: 'ZIP / Postal code', limit: 50 })}
-                    </Col>
-                    <Col size={4}>
-                      {this.renderInput({ id: 'country', label: 'Country', limit: 50 })}
-                    </Col>
-                  </Row>
-                </div> */}
                 <div styleName="formItem">
                   <Button
                     type="button"

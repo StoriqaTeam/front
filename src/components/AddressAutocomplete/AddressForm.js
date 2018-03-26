@@ -6,9 +6,10 @@ import classNames from 'classnames';
 
 import { MiniSelect } from 'components/MiniSelect';
 import debounce from 'lodash.debounce';
-import { AutocompleteInput, Input } from 'components/Forms';
+import { AutocompleteInput } from 'components/Forms';
 
 import googleApiWrapper from './GoogleAPIWrapper';
+import AddressResultForm from './AddressResultForm';
 import countries from './countries.json';
 import { getIndexedCountries, getCountryByName } from './utils';
 
@@ -47,8 +48,6 @@ type GeocoderType = {
   place_id: string,
 }
 
-const dataTypes = ['street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'country', 'postal_code'];
-
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
@@ -64,6 +63,7 @@ class Form extends Component<PropsType, StateType> {
   handleOnReceiveAddress = (result: Array<GeocoderType>) => {
     const { onUpdateForm } = this.props;
     const geocoderResult = result[0];
+    console.log('^^^^^ result: ', result);
     if (geocoderResult && geocoderResult.address_components) {
       const address = {};
       const populateAddressField = (addressComponent) => {
@@ -112,7 +112,6 @@ class Form extends Component<PropsType, StateType> {
     /* eslint-disable */
     // $FlowIgnore
     if (status !== google.maps.places.PlacesServiceStatus.OK) {
-      console.log('******* handleSearch formattedResult: ', { predictions, status });
       return;
     }
     /* eslint-enable */
@@ -131,7 +130,7 @@ class Form extends Component<PropsType, StateType> {
     const countryFromResource = getCountryByName(label, countries);
     if (isEmpty(value)) {
       this.setState({ predictions: [] });
-      return; // TODO: wtf?
+      return;
     }
     const inputObj = {
       input: value,
@@ -194,34 +193,32 @@ class Form extends Component<PropsType, StateType> {
       </div>
     );
     const autocompleteResult = address && (
-      <div>
-        {dataTypes.map(type => (
-          <div
-            key={type}
-          >
-            <Input
-              id={type}
-              label={type}
-              onChange={this.handleOnChangeForm(type)}
-              value={address[type]}
-              limit={50}
-            />
-          </div>
-        ))}
-      </div>
+      <AddressResultForm
+        onChangeForm={this.handleOnChangeForm}
+        address={address}
+      />
     );
     return (
       <div>
-        <MiniSelect
-          forForm
-          label="Select your country"
-          items={countriesArr}
-          onSelect={(value: ?SelectType) => {
-            this.setState({ country: value, address: null });
-          }}
-          activeItem={this.state.country}
-        />
-        {addressBlock}
+        <div styleName="wrapper">
+          <MiniSelect
+            forForm
+            label="Country"
+            items={countriesArr}
+            onSelect={(value: ?SelectType) => {
+              this.setState({
+                country: value,
+                address: null,
+                autocompleteValue: '',
+                predictions: [],
+              });
+            }}
+            activeItem={this.state.country}
+          />
+          <div styleName="wrapper">
+            {addressBlock}
+          </div>
+        </div>
         {autocompleteResult}
       </div>
     );
