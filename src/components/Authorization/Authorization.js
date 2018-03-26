@@ -95,7 +95,6 @@ class Authorization extends Component<PropsType, StateType> {
             this.props.router.replace('/');
           }
         }
-        window.location.reload();
       },
       onError: (error: Error) => {
         this.setState({
@@ -147,7 +146,7 @@ class Authorization extends Component<PropsType, StateType> {
       password: '',
       errors: null,
     });
-  }
+  };
 
   render() {
     const {
@@ -161,7 +160,7 @@ class Authorization extends Component<PropsType, StateType> {
     } = this.state;
 
     return (
-      <form styleName="container">
+      <div styleName="container">
         {isLoad && (
           <div styleName="spiner">
             <Spiner size={32} />
@@ -211,7 +210,7 @@ class Authorization extends Component<PropsType, StateType> {
             <span>Sign Up with Google</span>
           </Button>
         </div>
-      </form>
+      </div>
     );
   }
 }

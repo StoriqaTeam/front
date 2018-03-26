@@ -26,11 +26,15 @@ class DropdownSelect extends Component<PropsType, StateType> {
   };
 
   componentWillMount() {
-    document.addEventListener('mousedown', this.handleClick);
+    if (process.env.BROWSER) {
+      document.addEventListener('mousedown', this.handleClick);
+    }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClick);
+    if (process.env.BROWSER) {
+      document.removeEventListener('mousedown', this.handleClick);
+    }
   }
 
   node: any;

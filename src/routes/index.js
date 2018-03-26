@@ -6,11 +6,11 @@ import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
-import PrivateRoute from 'routes/PrivateRoute';
 import { log } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
+import Start from 'pages/Start/Start';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import Product from 'pages/Manage/Store/Product';
@@ -33,6 +33,32 @@ const routes = (
           key
           name
         }
+        categories {
+          name {
+            text
+          }
+          children {
+            rawId
+            name {
+              lang
+              text
+            }
+            children {
+              rawId
+              name {
+                lang
+                text
+              }
+              children {
+                rawId
+                name {
+                  lang
+                  text
+                }
+              }
+            }
+          }
+        }
       }
     `}
     render={(args) => {
@@ -47,11 +73,16 @@ const routes = (
       return <Component {...props} />;
     }}
   >
-    <Route Component={() => <div />} />
+    <Route Component={Start} />
 
     <Route
       path="/manage"
-      Component={PrivateRoute}
+      render={({ match }) => {
+        if (match.context.jwt) {
+          return null;
+        }
+        throw new RedirectException('/login');
+      }}
     >
       <Route path="/store">
         <Route

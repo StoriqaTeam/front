@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { specs, validate } from '@storiqa/validation_specs';
+import { specs, validate } from '@storiqa/shared';
 
 import { log, fromRelayError } from 'utils';
 import { UpdateUserMutation } from 'relay/mutations';

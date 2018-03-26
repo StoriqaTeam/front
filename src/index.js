@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 
 import buildApp from 'components/entry';
 
+import './index.scss';
+
 buildApp()
   .then((App) => {
     // $FlowIgnore

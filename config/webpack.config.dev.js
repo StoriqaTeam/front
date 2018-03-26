@@ -251,7 +251,10 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
-    new webpack.DefinePlugin(env.stringified),
+    new webpack.DefinePlugin({
+      ...env.stringified,
+      'process.env.BROWSER': JSON.stringify(true),
+    }),
     // for HMR
     new webpack.HotModuleReplacementPlugin(),
     // for HMR
