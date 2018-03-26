@@ -14,7 +14,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
       <div styleName="itemWrapper">
         <Input
           id="street-number"
-          label="Street number"
+          label="Apt / Suite / Other"
           onChange={onChangeForm('street_number')}
           value={address.street_number}
           limit={50}
@@ -23,7 +23,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
       <div styleName="itemWrapper">
         <Input
           id="route"
-          label="Route"
+          label="Street address"
           onChange={onChangeForm('route')}
           value={address.route}
           limit={50}
@@ -34,7 +34,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
       <div styleName="itemWrapper">
         <Input
           id="locality"
-          label="Locality"
+          label="City"
           onChange={onChangeForm('locality')}
           value={address.locality}
           limit={50}
@@ -43,7 +43,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
       <div styleName="itemWrapper">
         <Input
           id="administrative_area_level_2"
-          label="Administrative area level 2"
+          label="Region / State"
           onChange={onChangeForm('administrative_area_level_2')}
           value={address.administrative_area_level_2}
           limit={50}
@@ -54,7 +54,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
       <div styleName="itemWrapper">
         <Input
           id="administrative_area_level_1"
-          label="Administrative area level 1"
+          label="Area / District"
           onChange={onChangeForm('administrative_area_level_1')}
           value={address.administrative_area_level_1}
           limit={50}

@@ -63,7 +63,6 @@ class Form extends Component<PropsType, StateType> {
   handleOnReceiveAddress = (result: Array<GeocoderType>) => {
     const { onUpdateForm } = this.props;
     const geocoderResult = result[0];
-    console.log('^^^^^ result: ', result);
     if (geocoderResult && geocoderResult.address_components) {
       const address = {};
       const populateAddressField = (addressComponent) => {
