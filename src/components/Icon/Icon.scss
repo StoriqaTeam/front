@@ -1,5 +1,6 @@
 .container {
   position: relative;
+  display: inline-block;
 }
 
 .container > svg {
@@ -28,6 +29,6 @@
   height: 4rem;
 }
 
-.position {
-  position: relative;
+.isLogo {
+  width: 24rem;
 }

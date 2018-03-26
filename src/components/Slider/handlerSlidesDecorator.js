@@ -143,7 +143,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
     if (!infinity &&
       ((slidesOffset >= 0 && direction === 'prev') ||
-      (-possibleOffset >= (slidesOffset - slideWidth) && direction === 'next'))) {
+        (-possibleOffset >= (slidesOffset - slideWidth) && direction === 'next'))) {
       return;
     }
 

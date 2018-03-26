@@ -2,6 +2,8 @@ import fetch from 'isomorphic-fetch';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
 
+import { log } from 'utils';
+
 class FetcherBase {
   constructor(url) {
     this.url = url;
@@ -13,14 +15,21 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
+    log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
     const headers = { 'Content-Type': 'application/json' };
-    const response = await fetch(this.url, {
-      method: 'POST',
-      headers: jwt ? assoc('Authorization', `Bearer ${jwt}`, headers) : headers,
-      body: JSON.stringify({ query: operation.text, variables }),
-    });
-    return response.json();
+    try {
+      const response = await fetch(this.url, {
+        method: 'POST',
+        headers: jwt ? assoc('Authorization', `Bearer ${jwt}`, headers) : headers,
+        body: JSON.stringify({ query: operation.text, variables }),
+      });
+      log.debug('GraphQL response', { response });
+      return response.json();
+    } catch (e) {
+      log.error('GraphQL fetching error: ', { error: e });
+      return {};
+    }
   }
 }
 
