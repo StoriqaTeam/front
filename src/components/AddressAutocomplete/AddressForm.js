@@ -1,12 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { pick, pathOr, forEach, isEmpty, map } from 'ramda';
+import { pick, pathOr, forEach, isEmpty, map, reduce, addIndex } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
 import { MiniSelect } from 'components/MiniSelect';
 import debounce from 'lodash.debounce';
 import { AutocompleteInput } from 'components/Forms';
+import { rename } from 'utils';
 
 import googleApiWrapper from './GoogleAPIWrapper';
 import AddressResultForm from './AddressResultForm';
@@ -41,11 +42,11 @@ type StateType = {
 }
 
 type GeocoderType = {
-  address_components: Array<{ long_name: string, short_name: string, types: Array<string> }>,
-  formatted_address: string,
+  addressComponents: Array<{ long_name: string, short_name: string, types: Array<string> }>,
+  formattedAddress: string,
   geometry: any,
   types: Array<string>,
-  place_id: string,
+  placeId: string,
 }
 
 class Form extends Component<PropsType, StateType> {
@@ -60,10 +61,9 @@ class Form extends Component<PropsType, StateType> {
     this.handleAutocomplete = debounce(this.handleAutocomplete, 250);
   }
 
-  handleOnReceiveAddress = (result: Array<GeocoderType>) => {
+  handleOnReceiveAddress = (result: GeocoderType) => {
     const { onUpdateForm } = this.props;
-    const geocoderResult = result[0];
-    if (geocoderResult && geocoderResult.address_components) {
+    if (result && result.addressComponents) {
       const address = {};
       const populateAddressField = (addressComponent) => {
         const type = addressComponent.types && Array.isArray(addressComponent.types)
@@ -73,7 +73,7 @@ class Form extends Component<PropsType, StateType> {
           address[type] = addressComponent.long_name;
         }
       };
-      forEach(populateAddressField, geocoderResult.address_components);
+      forEach(populateAddressField, result.addressComponents);
       this.setState({ address });
       onUpdateForm(address);
     }
@@ -92,7 +92,16 @@ class Form extends Component<PropsType, StateType> {
         address: `${item.mainText}, ${item.secondaryText}`,
         componentRestrictions,
       },
-      this.handleOnReceiveAddress,
+      (result: any) => {
+        const reduceIndexed = addIndex(reduce);
+        const func = val =>
+          reduceIndexed((acc, next, index) => {
+            if (index === 0) return next;
+            return acc + next[0].toUpperCase() + next.slice(1).toLowerCase();
+          }, '', val.split('_'));
+        const renamedObj = rename(func, result[0]);
+        this.handleOnReceiveAddress(renamedObj);
+      },
     );
   }
 

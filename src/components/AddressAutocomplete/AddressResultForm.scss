@@ -3,11 +3,10 @@
 .row {
   display: flex;
   flow-direction: row;
-  flex: 1,
+  flex: 1;
 }
 
 .itemWrapper {
-  // position: relative;
   width: 41rem;
   margin-top: 3rem;
   margin-right: 2rem;
