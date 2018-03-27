@@ -20,7 +20,7 @@
 }
 
 .label {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  font-family: $font_medium;
   color: $color_grey_bg;
   font-size: 12px;
   white-space: nowrap;

@@ -16,7 +16,7 @@
 
 .wireframe {
   background: transparent;
-  font-family: Open_Sans, "Helvetica Neue", sans-serif;
+  font-family: $font_regular;
   font-size:  14px;
   border: $color_primary 1px solid;
   color: $color_primary;

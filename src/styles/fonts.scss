@@ -1,27 +1,34 @@
 @font-face {
-  font-family: 'Open_Sans';
-  src: url('./styles/fonts/Open_Sans/OpenSans-Regular.ttf');
+  font-family: 'Roboto';
+  src: url('./styles/fonts/Roboto/Roboto-Regular.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Open_Sans_Light';
-  src: url('./styles/fonts/Open_Sans/OpenSans-Light.ttf');
+  font-family: 'Roboto_Light';
+  src: url('./styles/fonts/Roboto/Roboto-Light.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Open_Sans_Bold';
-  src: url('./styles/fonts/Open_Sans/OpenSans-Bold.ttf');
+  font-family: 'Roboto_Bold';
+  src: url('./styles/fonts/Roboto/Roboto-Bold.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Open_Sans_SemiBold';
-  src: url('./styles/fonts/Open_Sans/OpenSans-SemiBold.ttf');
+  font-family: 'Roboto_Italic';
+  src: url('./styles/fonts/Roboto/Roboto-Italic.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Medium';
+  src: url('./styles/fonts/Roboto/Roboto-Medium.ttf');
   font-style: normal;
   font-weight: normal;
 }

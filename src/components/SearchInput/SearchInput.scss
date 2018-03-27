@@ -1,7 +1,7 @@
 @import "../../styles/variables";
 
 .container {
-  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: $font_regular;
   color: #505050;
   display: flex;
 }
@@ -29,7 +29,7 @@
 }
 
 .input {
-  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: $font_regular;
   font-size: 14px;
   color: $color_grey_text;
   height: 4rem;
