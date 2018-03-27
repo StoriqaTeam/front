@@ -33,6 +33,28 @@ module.exports = {
           presets: ['react', 'es2015', "react-app"]
         }
       },
+      {
+        oneOf: [
+          {
+            test: /\.scss$/,
+            use: [{
+              loader: "css-loader", // translates CSS into CommonJS
+              options: {
+                importLoaders: 1,
+                modules: true,
+                sourceMap: true,
+                localIdentName: '[name]__[local]___[hash:base64:5]'
+              }
+            }, {
+              loader: "sass-loader"
+            }],
+          },
+          {
+            loader: require.resolve('file-loader'),
+            exclude: [/\.js$/, /\.html$/, /\.json$/],
+          }
+        ]
+      },
     ]
   },
   externals: [nodeExternals()],
