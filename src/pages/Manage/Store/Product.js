@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, propOr, pathOr, isEmpty } from 'ramda';
-import { validate } from '@storiqa/validation_specs';
+import { validate } from '@storiqa/shared';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -25,7 +25,7 @@ type StateType = {
   form: {
     name: string,
     seoTitle: string,
-    seoDesc: string,
+    seoDescription: string,
     short_description: string,
     fullDesc: string,
     categoryId: number,
@@ -37,7 +37,7 @@ class Product extends Component<PropsType, StateType> {
     form: {
       name: '',
       seoTitle: '',
-      seoDesc: '',
+      seoDescription: '',
       short_description: '',
       fullDesc: '',
       categoryId: '',
@@ -63,7 +63,7 @@ class Product extends Component<PropsType, StateType> {
       form: {
         name,
         seoTitle,
-        seoDesc,
+        seoDescription,
         short_description,
         fullDesc,
         categoryId,
@@ -77,6 +77,8 @@ class Product extends Component<PropsType, StateType> {
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
       categoryId: 1,
+      seoTitle,
+      seoDescription,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
@@ -137,7 +139,7 @@ class Product extends Component<PropsType, StateType> {
               <div styleName="form">
                 {this.renderInput('name', 'Product name')}
                 {this.renderInput('seoTitle', 'SEO title')}
-                {this.renderInput('seoDesc', 'SEO description')}
+                {this.renderTextarea('seoDescription', 'SEO description')}
                 {this.renderTextarea('short_description', 'Short description')}
                 {this.renderTextarea('fullDesc', 'Full description')}
                 { /* category selector here */ }
