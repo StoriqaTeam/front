@@ -1,5 +1,7 @@
 // @flow
 
+// TODO: rename to UpdateStoreContactsMutation
+
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 

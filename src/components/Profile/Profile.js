@@ -56,6 +56,7 @@ class Profile extends Component<PropsTypes, StateType> {
         log.debug({ response, mutationErrors });
       },
       onError: (error: Error) => {
+        // eslint-disable-next-line
         alert(JSON.stringify(fromRelayError(error))); // TODO: move to more appropriate place
       },
     });

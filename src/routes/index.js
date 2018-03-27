@@ -11,6 +11,7 @@ import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import Start from 'pages/Start/Start';
+import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 
@@ -85,6 +86,11 @@ const routes = (
     >
       <Route path="/store">
         <Route
+          path="/new"
+          exact
+          Component={NewStore}
+        />
+        <Route
           path="/:storeId"
           Component={EditStore}
           query={graphql`
@@ -99,15 +105,13 @@ const routes = (
           )}
         />
         <Route
-          path="/new"
-          Component={EditStore}
-        />
-        <Route
           path="/:storeId/contacts"
           Component={Contacts}
           query={graphql`
             query routes_Contacts_Query($storeID: ID!) {
               me {
+              id
+              rawId
                 ...Contacts_me @arguments(storeId: $storeID)
               }
             }

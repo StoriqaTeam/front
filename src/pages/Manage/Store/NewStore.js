@@ -3,14 +3,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  assocPath,
   pathOr,
   toUpper,
 } from 'ramda';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
-import { UpdateStoreMainMutation } from 'relay/mutations';
+import { CreateStoreMutation } from 'relay/mutations';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
 
@@ -19,22 +20,29 @@ import Menu from './Menu';
 
 import './EditStore.scss';
 
-type PropsType = {
-  me?: { store?: {} },
-};
-
 type StateType = {
   serverValidationErrors: any,
 };
 
-class EditStore extends Component<PropsType, StateType> {
+type PropsType = {
+  router: routerShape,
+};
+
+class NewStore extends Component<PropsType, StateType> {
   state = {
     activeItem: 'settings',
     serverValidationErrors: {},
   };
 
+  handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
+    this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
+  };
+
   handleSave = ({ form, optionLanguage }) => {
-    const { environment } = this.context;
+    const {
+      environment,
+      currentUser,
+    } = this.context;
     const {
       name,
       longDescription,
@@ -43,9 +51,9 @@ class EditStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
-    const id = pathOr(null, ['me', 'store', 'id'], this.props);
-    UpdateStoreMainMutation.commit({
-      id,
+
+    CreateStoreMutation.commit({
+      userId: parseInt(currentUser.rawId, 10),
       name: [
         { lang: optionLanguage, text: name },
       ],
@@ -59,8 +67,9 @@ class EditStore extends Component<PropsType, StateType> {
       slug,
       slogan,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-        log.debug({ response, errors });
+      onCompleted: (response: ?Object) => {
+        const storeId = pathOr(null, ['createStore', 'rawId'], response);
+        this.props.router.push(`/manage/store/${storeId}`);
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -93,11 +102,6 @@ class EditStore extends Component<PropsType, StateType> {
       activeItem,
     } = this.state;
 
-    let store;
-    const { me } = this.props;
-    if (me) {
-      store = me.store; // eslint-disable-line
-    }
     return (
       <Container>
         <Row>
@@ -110,7 +114,6 @@ class EditStore extends Component<PropsType, StateType> {
           <Col size={10}>
             <div styleName="container">
               <Form
-                store={store}
                 onSave={this.handleSave}
                 serverValidationErrors={this.state.serverValidationErrors}
               />
@@ -122,35 +125,9 @@ class EditStore extends Component<PropsType, StateType> {
   }
 }
 
-export default createFragmentContainer(
-  Page(EditStore),
-  graphql`
-    fragment EditStore_me on User
-    @argumentDefinitions(storeId: { type: "ID!" }) {
-      store(id: $storeId) {
-        id
-        rawId
-        name {
-          lang
-          text
-        }
-        slogan
-        defaultLanguage
-        slug
-        shortDescription {
-          lang
-          text
-        }
-        longDescription {
-          lang
-          text
-        }
-      }
-    }
-  `,
-);
+export default withRouter(Page(NewStore));
 
-EditStore.contextTypes = {
+NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
