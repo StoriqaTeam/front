@@ -2,7 +2,6 @@
 
 import { replace, map, addIndex, find, propEq } from 'ramda';
 
-
 type CountriesType = Array<{ code: string, name: string }>;
 
 export const getIndexedCountries = (countries: CountriesType) => {

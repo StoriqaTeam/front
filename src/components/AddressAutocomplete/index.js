@@ -1,12 +1,3 @@
-import AddressAutocomplete from './AddressAutocomplete';
-import GoogleAPIWrapper from './GoogleAPIWrapper';
-import AutocompleteComponent from './AutocompleteComponent';
-import AddressForm from './AddressForm';
-
-export default AddressAutocomplete;
-
-export {
-  AddressForm,
-  AutocompleteComponent,
-  GoogleAPIWrapper,
-}
+export { default as AddressAutocomplete } from './AddressAutocomplete';
+export { default as googleApiWrapper } from './GoogleAPIWrapper';
+export { default as AddressForm } from './AddressForm';

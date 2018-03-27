@@ -63,4 +63,10 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
   }
 }
 
-export default GoogleAPIWrapper;
+const wrapper = (WrappedComponent: Class<React$Component<*, *>>) => (props: any) => (
+  <GoogleAPIWrapper>
+    <WrappedComponent {...props} />
+  </GoogleAPIWrapper>
+);
+
+export default wrapper;

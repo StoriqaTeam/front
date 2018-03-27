@@ -35,13 +35,17 @@ class MiniSelect extends Component<PropsType, StateType> {
   };
 
   componentWillMount() {
-    window.addEventListener('click', this.handleToggleExpand);
-    window.addEventListener('keydown', this.handleToggleExpand);
+    if (process.env.BROWSER) {
+      window.addEventListener('click', this.handleToggleExpand);
+      window.addEventListener('keydown', this.handleToggleExpand);
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('click', this.handleToggleExpand);
-    window.removeEventListener('keydown', this.handleToggleExpand);
+    if (process.env.BROWSER) {
+      window.removeEventListener('click', this.handleToggleExpand);
+      window.removeEventListener('keydown', this.handleToggleExpand);
+    }
   }
 
   button: any;

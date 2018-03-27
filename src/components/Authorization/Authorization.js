@@ -95,7 +95,6 @@ class Authorization extends Component<PropsType, StateType> {
             this.props.router.replace('/');
           }
         }
-        window.location.reload();
       },
       onError: (error: Error) => {
         this.setState({
