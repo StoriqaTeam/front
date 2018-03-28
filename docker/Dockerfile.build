@@ -13,6 +13,7 @@ RUN mkdir /app
 RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
 
 COPY . /app
+RUN rm -f /app/yarn.lock || true
 RUN chown -R app:app /app
 
 USER app
