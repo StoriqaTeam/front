@@ -48,7 +48,7 @@ class CategoriesMenu extends Component<PropsType> {
               {renderInnerLink()}
             </div> :
             <a
-              href="#"
+              href="/"
               styleName="link"
             >
               {renderInnerLink()}

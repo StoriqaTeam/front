@@ -20,7 +20,7 @@
 }
 
 .label {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  font-family: $font_medium;
   color: $color_grey_bg;
   font-size: 12px;
   white-space: nowrap;
@@ -34,7 +34,7 @@
   border-radius: 0.25rem;
   color: $color_grey_text;
   background-color: #FAFAFA;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .forForm .wrap {
@@ -60,7 +60,7 @@
 
 .selected {
   position: relative;
-  line-height: 2.5rem;
+  line-height: 2.75rem;
   z-index: 2;
 }
 
@@ -74,7 +74,7 @@
 
 .forForm .icon {
   top: auto;
-  bottom: 0.5rem;
+  bottom: -0.75rem;
 }
 
 .isItem .icon {
@@ -83,7 +83,7 @@
 
 .items {
   position: absolute;
-  top: -2px;
+  top: -0.5rem;
   left: 100%;
   margin-left: -2.25rem;
   padding: 0.5rem 0;
@@ -117,9 +117,10 @@
 }
 
 .item {
-  padding: 0.25rem 1rem;
+  height: 2.5rem;
+  padding: 0 1rem;
   text-align: left;
-  line-height: 2rem;
+  line-height: 2.75rem;
   white-space: nowrap;
   cursor: pointer;
 }

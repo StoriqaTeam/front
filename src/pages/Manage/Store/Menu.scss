@@ -1,3 +1,5 @@
+@import "../../../styles/variables.scss";
+
 .menu {
   position: relative;
 }
@@ -14,7 +16,7 @@
 }
 
 .title {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  font-family: $font_medium;
   max-height: 6rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -36,9 +38,9 @@
 }
 
 .isActive {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  font-family: $font_medium;
   position: relative;
-  background-color: #FFFFFF;
+  background-color: $color_white;
 }
 
 .isActive:before {
@@ -49,5 +51,5 @@
   left: 0;
   width: 0.25rem;
   display: block;
-  border-left: 2px solid #2FBAFD;
+  border-left: 2px solid $color_primary;
 }
