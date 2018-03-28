@@ -9,21 +9,17 @@
   line-height: 4rem;
   cursor: pointer;
   color: $color_white;
-  font-size: 16px;
+  font-size: 11px;
   background: $color_primary;
   white-space: nowrap;
 }
 
 .wireframe {
   background: transparent;
-  font-family: Open_Sans, "Helvetica Neue", sans-serif;
+  font-family: $font_regular;
   font-size:  14px;
   border: $color_primary 1px solid;
   color: $color_primary;
-  &:hover {
-    background: $color_primary;
-    color: $color_white;
-  }
 }
 
 .disabled {
