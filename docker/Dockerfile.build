@@ -21,6 +21,7 @@ WORKDIR /app
 # Building app
 RUN yarn -s --no-progress --non-interactive
 RUN yarn cache clean
+RUN yarn updateSchema
 
 EXPOSE 3003
 
