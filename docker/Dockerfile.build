@@ -24,4 +24,4 @@ RUN yarn cache clean
 
 EXPOSE 3003
 
-ENTRYPOINT sh -c "yarn updateSchema:prod && yarn server:prod"
+ENTRYPOINT sh -c "yarn updateSchema:prod && yarn relay && yarn server:prod"
