@@ -19,7 +19,7 @@ const ProfileMenu = ({ name, messagesCount, shopsCount }: PropsTypes) => (
       <strong>{name}</strong>
     </div>
     <div styleName="items">
-      <a href="#" styleName="item">
+      <a href="/" styleName="item">
         <span>Messages</span>
         {Boolean(messagesCount) &&
           <div styleName="count">
@@ -31,9 +31,9 @@ const ProfileMenu = ({ name, messagesCount, shopsCount }: PropsTypes) => (
           </div>
         }
       </a>
-      <a href="#" styleName="item">Profile settings</a>
-      <a href="#" styleName="item">History</a>
-      <a href="#" styleName="item">
+      <a href="/" styleName="item">Profile settings</a>
+      <a href="/" styleName="item">History</a>
+      <a href="/" styleName="item">
         <span>My shops</span>
         {Boolean(shopsCount) &&
           <div styleName="count">

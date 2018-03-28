@@ -1,5 +1,6 @@
 {
   "name": "storiqa_frontend",
+  "homepage": "http://storiqa.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
