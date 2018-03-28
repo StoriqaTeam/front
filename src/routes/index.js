@@ -14,6 +14,7 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
+import { Product } from 'pages/Manage/Store/Product';
 
 const routes = (
   <Route
@@ -103,6 +104,10 @@ const routes = (
           prepareVariables={(_, { params }) => (
             { storeID: params.storeId }
           )}
+        />
+        <Route
+          path="/:storeId/product/:productId"
+          Component={Product}
         />
         <Route
           path="/:storeId/contacts"
