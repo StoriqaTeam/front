@@ -167,7 +167,13 @@ module.exports = {
             test: /\.scss$/,
             use: extractSass.extract({
               use: [{
-                loader: "css-loader"
+                loader: "css-loader", // translates CSS into CommonJS
+                options: {
+                  importLoaders: 1,
+                  modules: true,
+                  sourceMap: true,
+                  localIdentName: '[name]__[local]___[hash:base64:5]'
+                }
               }, {
                 loader: "sass-loader"
               }],

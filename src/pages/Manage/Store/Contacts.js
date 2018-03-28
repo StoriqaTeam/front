@@ -142,6 +142,7 @@ class Contacts extends Component<PropsType, StateType> {
           return;
         }
 
+        // eslint-disable-next-line
         alert('Something going wrong :(');
       },
     });
