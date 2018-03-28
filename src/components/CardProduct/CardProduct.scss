@@ -10,7 +10,7 @@
 }
 
 .body {
-  composes: boxShadow1 from global;
+  // composes: boxShadow1 from global;
   position: absolute;
   top: 8px;
   left: 8px;
@@ -21,7 +21,7 @@
 }
 
 .top {
-  composes: bgGrey from global;
+  // composes: bgGrey from global;
   position: relative;
   height: 62.5%;
 }
@@ -37,7 +37,7 @@
 }
 
 .seller-discount {
-  composes: colorWhite bgPink from global;
+  // composes: colorWhite bgPink from global;
   width: 40px;
   height: 32px;
   font-size: 14px;
@@ -48,7 +48,7 @@
 }
 
 .qa-icon {
-  composes: bgWhite from global;
+  // composes: bgWhite from global;
   position: relative;
   display: flex;
   justify-content: center;
@@ -60,7 +60,7 @@
 }
 
 .bottom {
-  composes: bgWhite from global;
+  // composes: bgWhite from global;
   position: relative;
   height: 37.5%;
   padding: 8px;
@@ -90,7 +90,7 @@
 }
 
 .undiscounted-price {
-  composes: colorGrey from global;
+  // composes: colorGrey from global;
   margin-top: 8px;
   font-size: 12px;
   text-decoration: line-through;
@@ -104,7 +104,7 @@
 }
 
 .price-discount {
-  composes: colorWhite bgBlue from global;
+  //composes: colorWhite bgBlue from global;
   display: inline-block;
   padding: 0 8px;
   border-radius: 4px;

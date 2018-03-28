@@ -10,6 +10,7 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { Input } from 'components/Forms';
 import { Button } from 'components/Button';
+import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
@@ -17,6 +18,15 @@ import Header from './Header';
 import Menu from './Menu';
 
 import './Contacts.scss';
+
+/* eslint-disable */
+type InputType = {
+  id: string,
+  label: string,
+  icon?: string,
+  limit?: number,
+}
+/* eslint-enable */
 
 type PropsType = {
   me: { store: { rawId: string, id: string } },
@@ -65,9 +75,21 @@ class Contacts extends Component<PropsType, StateType> {
     });
   }
 
-  handleInputChange = (id: string) => (value: any) => {
-    this.setState(assocPath(['form', id], value));
+  handleInputChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    if (value.length <= 50) {
+      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    }
   };
+
+  handleUpdateForm = (form: any) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        ...form,
+      },
+    });
+  }
 
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
@@ -120,6 +142,7 @@ class Contacts extends Component<PropsType, StateType> {
           return;
         }
 
+        // eslint-disable-next-line
         alert('Something going wrong :(');
       },
     });
@@ -130,7 +153,12 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   // TODO: extract to helper
-  renderInput = (id: string, label: string, icon?: string) => (
+  renderInput = ({
+    id,
+    label,
+    icon,
+    limit,
+  }: InputType) => (
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -140,13 +168,13 @@ class Contacts extends Component<PropsType, StateType> {
         label={label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        limit={limit}
       />
     </div>
   );
 
   render() {
     const { activeItem } = this.state;
-
     return (
       <Container>
         <Row>
@@ -160,31 +188,16 @@ class Contacts extends Component<PropsType, StateType> {
             <div styleName="container">
               <Header title="Контакты" />
               <div styleName="form">
-                {this.renderInput('email', 'Email')}
-                {this.renderInput('phone', 'Phone')}
-                {this.renderInput('facebookUrl', 'Facebook', 'facebook')}
-                {this.renderInput('instagramUrl', 'Instagram', 'instagram')}
-                {this.renderInput('twitterUrl', 'Twitter', 'twitter')}
-                {this.renderInput('address', 'Address')}
+                {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
+                {this.renderInput({ id: 'phone', label: 'Phone' })}
+                {this.renderInput({ id: 'facebookUrl', label: 'Facebook', icon: 'facebook' })}
+                {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
+                {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
                 <div styleName="formItem">
-                  <Row>
-                    <Col size={4}>
-                      {this.renderInput('city', 'City')}
-                    </Col>
-                    <Col size={4}>
-                      {this.renderInput('state', 'State / Province / Region')}
-                    </Col>
-                  </Row>
-                </div>
-                <div styleName="formItem">
-                  <Row>
-                    <Col size={4}>
-                      {this.renderInput('zip', 'ZIP / Postal code')}
-                    </Col>
-                    <Col size={4}>
-                      {this.renderInput('country', 'Country')}
-                    </Col>
-                  </Row>
+                  <AddressForm
+                    onChangeFormInput={this.handleInputChange}
+                    onUpdateForm={this.handleUpdateForm}
+                  />
                 </div>
                 <div styleName="formItem">
                   <Button

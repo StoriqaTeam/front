@@ -6,12 +6,12 @@ import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr } from 'ramda';
 
-import PrivateRoute from 'routes/PrivateRoute';
 import { log } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import Start from 'pages/Start/Start';
+import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 
@@ -77,12 +77,32 @@ const routes = (
 
     <Route
       path="/manage"
-      Component={PrivateRoute}
+      render={({ match }) => {
+        if (match.context.jwt) {
+          return null;
+        }
+        throw new RedirectException('/login');
+      }}
     >
       <Route path="/store">
         <Route
           path="/new"
+          exact
+          Component={NewStore}
+        />
+        <Route
+          path="/:storeId"
           Component={EditStore}
+          query={graphql`
+            query routes_Store_Query($storeID: ID!) {
+              me {
+                ...EditStore_me @arguments(storeId: $storeID)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => (
+            { storeID: params.storeId }
+          )}
         />
         <Route
           path="/:storeId/contacts"
@@ -90,6 +110,8 @@ const routes = (
           query={graphql`
             query routes_Contacts_Query($storeID: ID!) {
               me {
+              id
+              rawId
                 ...Contacts_me @arguments(storeId: $storeID)
               }
             }
