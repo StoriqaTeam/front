@@ -42,7 +42,14 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   }
 
   componentDidMount() {
-    this.sliderPropsCalc();
+    // this.sliderPropsCalc();
+    this.sliderPropsCalc(this.props.children);
+  }
+
+  componentWillReceiveProps(nextProps: PropsTypes) {
+    if (this.props.children && this.props.children.length !== nextProps.children.length) {
+      this.sliderPropsCalc(nextProps.children);
+    }
   }
 
   componentWillUnmount() {
@@ -83,12 +90,13 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     }
   }
 
-  sliderPropsCalc = () => {
+  sliderPropsCalc = (children: Array<{}>) => {
+  // sliderPropsCalc = () => {
     const {
       infinity,
       slidesToShow,
       responsive,
-      children,
+      // children,
       autoplaySpeed,
     } = this.props;
     const totalSlidesAmount = children.length;
@@ -342,7 +350,10 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
         {...this.state}
         handleSlide={this.handleSlide}
         handleDot={this.handleDot}
-      />
+        // children={}
+      >
+        {this.state.children}
+      </OriginalComponent>
     );
   }
 };

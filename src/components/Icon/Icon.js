@@ -27,6 +27,7 @@ import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import ArrowRight from 'components/Icon/svg/arrowRight.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
+import Camera from 'components/Icon/svg/camera.svg';
 
 import './Icon.scss';
 
@@ -59,12 +60,12 @@ const iconsMap = {
   arrowRight: <ArrowRight />,
   cross: <Cross />,
   pencil: <Pencil />,
+  camera: <Camera />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
   render() {
     const { type, size } = this.props;
-
     return (
       <div
         styleName={classNames('container', {
