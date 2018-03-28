@@ -7,12 +7,11 @@ import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
 import { Button } from 'components/Button';
 import { MiniSelect } from 'components/MiniSelect';
+import { Icon } from 'components/Icon';
 
 import { Container, Row, Col } from 'layout';
 
 import './Header.scss';
-
-import Logo from './svg/logo.svg';
 
 type PropsType = {
   user: ?{},
@@ -77,12 +76,17 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="item">
-                  <a href="/">Quality Assurance</a>
+                  <a href="/">
+                    <span styleName="qaIcon">
+                      <Icon type="qualityAssurance" />
+                    </span>
+                    Quality Assurance
+                  </a>
                 </div>
               </div>
               <div styleName="bottom">
                 <div styleName="logo">
-                  <Logo styleName="logo" />
+                  <Icon type="logo" />
                 </div>
                 <div styleName="searchInput">
                   <SearchInput
@@ -100,11 +104,7 @@ class Header extends PureComponent<PropsType> {
                   <CartButton />
                 </div>
                 <div styleName="buttonWrapper">
-                  <Button
-                    wireframe
-                  >
-                    Start selling
-                  </Button>
+                  <Button>Start selling</Button>
                 </div>
               </div>
             </Col>
