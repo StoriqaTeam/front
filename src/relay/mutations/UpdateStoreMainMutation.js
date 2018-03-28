@@ -4,15 +4,10 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation CreateStoreMutation($input: CreateStoreInput!) {
-    createStore(input: $input) {
+  mutation UpdateStoreMainMutation($input: UpdateStoreInput!) {
+    updateStore(input: $input) {
       id
-      rawId
       name {
-        lang
-        text
-      }
-      shortDescription {
         lang
         text
       }
@@ -20,17 +15,23 @@ const mutation = graphql`
         lang
         text
       }
+      shortDescription {
+        lang
+        text
+      }
+      defaultLanguage
       slug
+      slogan
     }
   }
 `;
 
 type MutationParamsType = {
-  name: Array<{ lang: string, text: string }>,
-  userId: number,
+  id: string,
+  name: string,
+  longDescription: string,
+  shortDescription: string,
   defaultLanguage: string,
-  shortDescription: Array<{ lang: string, text: string }>,
-  longDescription: Array<{ lang: string, text: string }>,
   slug: string,
   slogan: string,
   environment: Environment,
@@ -43,11 +44,11 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
   variables: {
     input: {
       clientMutationId: '',
+      id: params.id,
       name: params.name,
-      userId: params.userId,
-      defaultLanguage: params.defaultLanguage,
-      shortDescription: params.shortDescription,
       longDescription: params.longDescription,
+      shortDescription: params.shortDescription,
+      defaultLanguage: params.defaultLanguage,
       slug: params.slug,
       slogan: params.slogan,
     },
