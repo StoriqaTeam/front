@@ -10,7 +10,6 @@ import classNames from 'classnames';
 import { DropdownSelect } from 'components/DropdownSelect';
 import { Icon } from 'components/Icon';
 
-import SearchIcon from './svg/search.svg';
 import './SearchInput.scss';
 
 type PropsType = {

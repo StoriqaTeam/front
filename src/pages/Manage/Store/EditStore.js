@@ -25,6 +25,7 @@ type PropsType = {
 
 type StateType = {
   serverValidationErrors: any,
+  activeItem: string,
 };
 
 class EditStore extends Component<PropsType, StateType> {
