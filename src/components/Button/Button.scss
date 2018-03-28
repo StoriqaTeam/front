@@ -9,7 +9,7 @@
   line-height: 4rem;
   cursor: pointer;
   color: $color_white;
-  font-size: 16px;
+  font-size: 11px;
   background: $color_primary;
   white-space: nowrap;
 }
@@ -20,10 +20,6 @@
   font-size:  14px;
   border: $color_primary 1px solid;
   color: $color_primary;
-  &:hover {
-    background: $color_primary;
-    color: $color_white;
-  }
 }
 
 .disabled {

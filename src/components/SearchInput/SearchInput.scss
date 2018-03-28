@@ -28,6 +28,10 @@
   flex: 1;
 }
 
+.searchInput {
+  width: 54.5rem;
+}
+
 .input {
   font-family: $font_regular;
   font-size: 14px;
@@ -43,14 +47,11 @@
 
 .searchButton {
   height: 4rem;
-  width: 8rem;
-  background-color: $color_primary;
+  width: 12.5rem;
+  margin-left: -1px;
+  border: 1px solid $color_primary;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
-}
-
-.searchButton:hover {
-  background-color: $color_primary;
 }
 
 .searchButtonIcon {
