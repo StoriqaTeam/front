@@ -1,0 +1,22 @@
+@import "../../styles/variables";
+
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.scrollWrapper {
+  display: flex;
+}
+
+.item {
+  flex: 0 0 auto;
+  height: 15rem;
+  width: 15rem;
+  margin-right: 2rem;
+  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
