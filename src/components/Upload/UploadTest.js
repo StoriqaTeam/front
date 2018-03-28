@@ -6,26 +6,12 @@ import UploadWrapper from './UploadWrapper';
 import { uploadFile } from './utils';
 
 type StateType = {
-  serverIsUp: boolean,
   items: Array<{ id: string, image: string }>,
 };
 
 class UploadTest extends React.Component<{}, StateType> {
   state = {
     items: [],
-    serverIsUp: false,
-  }
-
-  componentDidMount() {
-    this.handleCheckServer();
-  }
-
-  handleCheckServer = async () => {
-    const health = await fetch('http://192.168.99.100:8010/healthcheck');
-    const healthResult = await health.json();
-    this.setState({
-      serverIsUp: healthResult === 'Ok',
-    });
   }
 
   handleOnUpload = async (e) => {
@@ -45,10 +31,9 @@ class UploadTest extends React.Component<{}, StateType> {
   }
 
   render() {
-    const { items, serverIsUp } = this.state;
+    const { items } = this.state;
     return (
       <UploadWrapper
-        isReady={serverIsUp}
         onUpload={this.handleOnUpload}
         buttonHeight={120}
         buttonWidth={120}

@@ -5,7 +5,8 @@ import { log } from 'utils';
 export async function uploadFile(file: File) {
   const body = new FormData();
   body.append('file', file);
-  const response = await fetch('http://192.168.99.100:8010/images', {
+  if (!process.env.REACT_APP_STATIC_IMAGES_ENDPOINT) return null;
+  const response = await fetch(process.env.REACT_APP_STATIC_IMAGES_ENDPOINT, {
     method: 'POST',
     body,
   });
