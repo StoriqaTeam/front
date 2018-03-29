@@ -19,4 +19,4 @@ ENV BABEL_ENV=production
 ENV NODE_ENV=production
 EXPOSE 3003
 
-ENTRYPOINT BABEL_ENV=production ENV NODE_ENV=production node ./dist/server.js
+ENTRYPOINT node ./dist/server.js
