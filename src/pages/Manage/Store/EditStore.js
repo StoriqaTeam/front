@@ -24,6 +24,7 @@ type PropsType = {
 };
 
 type StateType = {
+  activeItem: string,
   serverValidationErrors: any,
 };
 

@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 
 import './SliderHeader.scss';
 
 type PropsTypes = {
-  type: 'most-popular' | 'sale' | 'smart-reviews',
   title: string,
   isRevealButton: boolean,
   handleSlide: Function,
@@ -15,21 +13,16 @@ type PropsTypes = {
 class SliderHeader extends PureComponent<PropsTypes> {
   render() {
     const {
-      type,
       title,
       isRevealButton,
       handleSlide,
     } = this.props;
 
-    const titleCls = classNames('title', `${type}-color`);
-    const revealCls = classNames('reveal', `${type}-color`);
-
     return (
       <div styleName="container">
-        <div styleName={titleCls}>
+        <div styleName="title">
           <strong>{title}</strong>
         </div>
-        <a styleName={revealCls}>See all</a>
         {isRevealButton &&
           <div styleName="nav">
             <button
@@ -48,6 +41,8 @@ class SliderHeader extends PureComponent<PropsTypes> {
             </button>
           </div>
         }
+        <a styleName="reveal">Смотреть все</a>
+        {false && <a styleName="settings">Настроить рекомендации</a>}
       </div>
     );
   }

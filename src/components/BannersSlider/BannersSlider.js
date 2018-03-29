@@ -6,7 +6,7 @@ import { Slider } from 'components/Slider';
 import './BannersSlider.scss';
 
 type PropsTypes = {
-  banners: Array<{}>,
+  items: Array<{}>,
 };
 
 const BannersSlider = (props: PropsTypes) => (
@@ -17,7 +17,7 @@ const BannersSlider = (props: PropsTypes) => (
       autoplaySpeed={15000}
       animationSpeed={500}
       type="banners"
-      items={props.banners}
+      items={props.items}
       slidesToShow={1}
     />
   </div>
