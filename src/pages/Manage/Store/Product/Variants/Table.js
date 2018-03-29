@@ -2,10 +2,33 @@
 
 import React, { Component } from 'react';
 
-class Table extends Component {
+import { log } from 'utils';
+
+// import TableRow from './TableRow';
+import Form from './Form';
+
+type PropsType = {
+  onSave: Function,
+};
+
+type StateType = {
+  //
+};
+
+class Table extends Component<PropsType, StateType> {
+  state: StateType = {
+    //
+  };
+
+  handleSave = (variant: {}) => {
+    this.props.onSave(variant);
+  };
+
   render() {
     return (
-      <div>Hi!</div>
+      <Form
+        onSave={this.handleSave}
+      />
     );
   }
 }

@@ -1,0 +1,41 @@
+@import '../../../../../styles/variables';
+
+.formHeader {
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inputComponent {
+  display: flex;
+}
+
+.input {
+  border: 0;
+  border-bottom: 1px solid $color_grey_bg;
+  font-family: Roboto;
+  font-size: 14px;
+  color: $color_grey_text;
+  text-align: right;
+  height: 3rem;
+}
+
+.inputPostfix {
+  font-family: Roboto;
+  font-size: 14px;
+  color: $color_grey_text;
+  margin-left: 5px;
+}
+
+.cashbackInput {
+  width: 2.5rem;
+}
+
+.vendorCodeInput {
+  width: 15rem;
+}
+
+.priceInput {
+  width: 12rem;
+}

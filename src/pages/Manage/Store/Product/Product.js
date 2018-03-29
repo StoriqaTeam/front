@@ -4,11 +4,25 @@ import React, { Component } from 'react';
 
 import { log } from 'utils';
 
-class Product extends Component {
+import Variants from './Variants/Variants';
+
+type PropsType = {
+  //
+};
+
+type StateType = {
+  //
+};
+
+class Product extends Component<PropsType, StateType> {
+  state: StateType = {
+    //
+  };
+
   render() {
     log.debug({ props: this.props });
     return (
-      <div>Hi!</div>
+      <Variants productId={this.props.params.productId} />
     );
   }
 }

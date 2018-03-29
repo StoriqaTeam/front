@@ -1,13 +1,64 @@
 // @flow
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-class Variants extends Component {
+import { CreateProductWithAttributesMutation } from 'relay/mutations';
+import { log } from 'utils';
+
+import Table from './Table';
+
+import './Variants.scss';
+
+type PropsType = {
+  productId: number,
+};
+
+type StateType = {
+  //
+};
+
+class Variants extends Component<PropsType, StateType> {
+  state: StateType = {
+    //
+  };
+
+  handleSave = (variant: {}) => {
+    const {
+      vendorCode,
+      cashback,
+      discount,
+    } = variant;
+
+    const { environment } = this.context;
+
+    CreateProductWithAttributesMutation.commit({
+      baseProductId: parseInt(this.props.productId, 10),
+      vendorCode,
+      cashback,
+      discount,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        log.debug({
+          response,
+          errors,
+        });
+      },
+    });
+  };
+
   render() {
     return (
-      <div>Hi!</div>
+      <div styleName="container">
+        <span>Варианты товара</span>
+        <Table onSave={this.handleSave} />
+      </div>
     );
   }
 }
+
+Variants.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default Variants;
