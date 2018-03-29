@@ -16,6 +16,7 @@ USER app
 WORKDIR /app
 
 COPY . /app
+RUN chown -R app: /app
 RUN rm -f /app/yarn.lock || true
 
 # Getting ready
