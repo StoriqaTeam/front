@@ -3,15 +3,15 @@ FROM node:9.9-slim
 RUN mkdir -p /app/build
 RUN mkdir -p /app/dist
 
-# Running as user "app"
-RUN mkdir /app
-RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
-RUN chown -R app: /app
-
 COPY build /app/build
 COPY dist /app/dist
 
+# Running as user "app"
+RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
+RUN chown -R app: /app
+
 # Setting up env
+USER app
 WORKDIR /app
 ENV BABEL_ENV=production
 ENV NODE_ENV=production
