@@ -17,6 +17,7 @@ node {
     stage('Fetch artifacts') {
         sh "docker run -i -u root --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/build /mnt"
         sh "docker run -i -u root --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/dist /mnt"
+        sh "docker run -i -u root --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/node_modules /mnt"
     }
 
     stage('Build images') {
@@ -40,7 +41,7 @@ node {
     }
 
     stage('Clean up') {
-        sh 'sudo /bin/rm -rf build dist'
+        sh 'sudo /bin/rm -rf build dist node_modules'
         sh "docker rmi registry.hub.docker.com/storiqateam/stq-static:${env.BRANCH_NAME} registry.hub.docker.com/storiqateam/stq-static:${env.BRANCH_NAME}${env.BUILD_NUMBER}"
         sh "docker rmi registry.hub.docker.com/storiqateam/stq-front:${env.BRANCH_NAME} registry.hub.docker.com/storiqateam/stq-front:${env.BRANCH_NAME}${env.BUILD_NUMBER}"
         sh "docker rmi storiqateam/stq-front-intrm:${env.BRANCH_NAME}"
