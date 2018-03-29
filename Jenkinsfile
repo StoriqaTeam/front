@@ -15,8 +15,8 @@ node {
     }
 
     stage('Fetch artifacts') {
-        sh "docker run -i --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/build /mnt"
-        sh "docker run -i --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/dist /mnt"
+        sh "docker run -i -u root --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/build /mnt"
+        sh "docker run -i -u root --rm --volume ${env.WORKSPACE}:/mnt/ storiqateam/stq-front-intrm:${env.BRANCH_NAME} cp -rf /app/dist /mnt"
     }
 
     stage('Build images') {
