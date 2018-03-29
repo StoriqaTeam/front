@@ -12,17 +12,20 @@ RUN rm -rf /var/lib/apt/lists/
 RUN mkdir /app
 RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
 
-COPY . /app
-RUN rm -f /app/yarn.lock || true
-RUN chown -R app:app /app
-
 USER app
 WORKDIR /app
 
-# Building app
+COPY . /app
+RUN rm -f /app/yarn.lock || true
+
+# Getting ready
 RUN yarn -s --no-progress --non-interactive
 RUN yarn cache clean
+RUN yarn updateSchema:prod
+RUN yarn relay
+
+# Building app
+RUN yarn build
+RUN yarn server:dist:build
 
 EXPOSE 3003
-
-ENTRYPOINT sh -c "yarn updateSchema:prod && yarn relay && yarn server:prod"

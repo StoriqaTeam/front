@@ -1,0 +1,6 @@
+FROM nginx:1.13
+
+COPY docker/nginx /etc/nginx
+
+RUN mkdir -p /app/build/static
+COPY build/static /app/build/static
