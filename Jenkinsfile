@@ -43,6 +43,6 @@ node {
         sh 'sudo /bin/rm -rf build dist'
         sh "docker rmi registry.hub.docker.com/storiqateam/stq-static:${env.BRANCH_NAME} registry.hub.docker.com/storiqateam/stq-static:${env.BRANCH_NAME}${env.BUILD_NUMBER}"
         sh "docker rmi registry.hub.docker.com/storiqateam/stq-front:${env.BRANCH_NAME} registry.hub.docker.com/storiqateam/stq-front:${env.BRANCH_NAME}${env.BUILD_NUMBER}"
-        sh "docker rmi registry.hub.docker.com/storiqateam/stq-front-interm:${env.BRANCH_NAME}"
+        sh "docker rmi storiqateam/stq-front-intrm:${env.BRANCH_NAME}"
     }
 }
