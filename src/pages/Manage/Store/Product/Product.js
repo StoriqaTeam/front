@@ -77,7 +77,7 @@ class Product extends Component<PropsType, StateType> {
       shortDescription: [{ lang: 'EN', text: short_description }],
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
-      categoryId: 1,
+      categoryId,
       seoTitle,
       seoDescription,
       environment: this.context.environment,
