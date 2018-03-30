@@ -25,18 +25,18 @@ class Variants extends Component<PropsType, StateType> {
 
   handleSave = (variant: {}) => {
     const {
+      price,
       vendorCode,
       cashback,
-      discount,
     } = variant;
 
     const { environment } = this.context;
 
     CreateProductWithAttributesMutation.commit({
       baseProductId: parseInt(this.props.productId, 10),
+      price,
       vendorCode,
       cashback,
-      discount,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({

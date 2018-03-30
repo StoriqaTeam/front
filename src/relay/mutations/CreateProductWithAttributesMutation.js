@@ -17,9 +17,10 @@ const mutation = graphql`
 
 type MutationParamsType = {
   baseProductId: number,
+  price: number,
   vendorCode: string,
   cashback: number,
-  discount: number,
+  // discount: number,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
@@ -31,10 +32,11 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
     input: {
       clientMutationId: '',
       product: {
+        price: params.price,
         baseProductId: params.baseProductId,
         vendorCode: params.vendorCode,
         cashback: params.cashback,
-        discount: params.discount,
+        // discount: params.discount,
       },
       attributes: [],
     },
