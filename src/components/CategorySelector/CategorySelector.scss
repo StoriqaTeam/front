@@ -21,6 +21,10 @@
   color: $color_grey_bg;
 }
 
+.breadcrumbsWrapper {
+  display: inline-block;
+}
+
 .breadcrumbs {
   display: inline-block;
   color: $color_primary;
@@ -36,6 +40,14 @@
 
 .level {
   flex: 1;
+}
+
+.items {
+  background-color: bisque;
+}
+
+.hidden {
+  display: none;
 }
 
 .item {

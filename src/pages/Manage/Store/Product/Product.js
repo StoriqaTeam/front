@@ -45,8 +45,11 @@ class Product extends Component<PropsType, StateType> {
     },
   };
 
-  handleInputChange = (id: string) => (value: any) => {
-    this.setState(assocPath(['form', id], value));
+  handleInputChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    if (value.length <= 50) {
+      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    }
   };
 
   handleSave = () => {
@@ -98,7 +101,19 @@ class Product extends Component<PropsType, StateType> {
     });
   };
 
-  renderInput = (id: string, label: string, icon?: string) => (
+  /* eslint-disable */
+  renderInput = ({
+    id,
+    label,
+    limit,
+    icon,
+  }: {
+    id: string,
+    label: string,
+    icon?: string,
+    limit?: number
+  }) => (
+  /* eslint-enable */
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -108,11 +123,20 @@ class Product extends Component<PropsType, StateType> {
         label={label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        limit={limit}
       />
     </div>
   );
 
-  renderTextarea = (id: string, label: string) => (
+  /* eslint-disable */
+  renderTextarea = ({
+    id,
+    label,
+  }: {
+    id: string,
+    label: string,
+  }) => (
+  /* eslint-enable */
     <div styleName="formItem">
       <Textarea
         id={id}
@@ -138,11 +162,11 @@ class Product extends Component<PropsType, StateType> {
             <div styleName="container">
               <Header title="Товары" />
               <div styleName="form">
-                {this.renderInput('name', 'Product name')}
-                {this.renderInput('seoTitle', 'SEO title')}
-                {this.renderTextarea('seoDescription', 'SEO description')}
-                {this.renderTextarea('short_description', 'Short description')}
-                {this.renderTextarea('fullDesc', 'Full description')}
+                {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
+                {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
+                {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
+                {this.renderTextarea({ id: 'short_description', label: 'Short description' })}
+                {this.renderTextarea({ id: 'fullDesc', label: 'Full description' })}
                 { /* category selector here */ }
                 <div styleName="formItem">
                   <CategorySelector

@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import classNames from 'classnames';
 
 import LevelList from './LevelList';
 import { getNameText } from './utils';
@@ -29,6 +30,11 @@ type StateType = {
   level1Item: ?CategoryType,
   level2Item: ?CategoryType,
   level3Item: ?CategoryType,
+  snapshot: ?{
+    level1Item: ?CategoryType,
+    level2Item: ?CategoryType,
+    level3Item: ?CategoryType,
+  }
 }
 
 class CategorySelector extends React.Component<PropsType, StateType> {
@@ -40,8 +46,44 @@ class CategorySelector extends React.Component<PropsType, StateType> {
       level1Item: null,
       level2Item: null,
       level3Item: null,
+      snapshot: null,
     };
   }
+
+  componentWillMount() {
+    if (process.env.BROWSER) {
+      window.addEventListener('click', this.handleToggleExpand);
+    }
+  }
+
+  componentWillUnmount() {
+    if (process.env.BROWSER) {
+      window.removeEventListener('click', this.handleToggleExpand);
+    }
+  }
+
+  categoryWrapp: any;
+  items: any;
+  button: any;
+
+  handleToggleExpand = (e: any) => {
+    const { snapshot } = this.state;
+    const isCategoryWrap = this.categoryWrapp && this.categoryWrapp.contains(e.target);
+    const isButton = this.button && this.button.contains(e.target);
+    if (isButton && !isCategoryWrap) {
+      this.setState({
+        isShow: true,
+        ...snapshot,
+      });
+      return;
+    }
+    if (!isCategoryWrap) {
+      this.setState({
+        isShow: false,
+      });
+      return;
+    }
+  };
 
   handleOnChoose = (category: any) => () => {
     const { onSelect } = this.props;
@@ -63,6 +105,11 @@ class CategorySelector extends React.Component<PropsType, StateType> {
       case 3:
         this.setState({
           isShow: false,
+          snapshot: {
+            level1Item: this.state.level1Item,
+            level2Item: this.state.level2Item,
+            level3Item: category,
+          },
         });
         onSelect(parseInt(category.rawId, 10));
         break;
@@ -74,9 +121,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   renderPath = () => {
     const {
       lang,
-      level1Item,
-      level2Item,
-      level3Item,
+      snapshot,
     } = this.state;
     return (
       <div
@@ -86,8 +131,8 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         role="button"
         tabIndex="0"
       >
-        {level1Item && [level1Item, level2Item, level3Item].map((item, index) => (item ? <span key={item.rawId}>{index !== 0 && ' / '}{getNameText(item.name, lang)}</span> : null))}
-        {!level1Item && 'Выбрать категорию'}
+        {snapshot && [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map((item, index) => (item ? <span key={item.rawId}>{index !== 0 && ' / '}{getNameText(item.name, lang)}</span> : null))}
+        {!snapshot && 'Выбрать категорию'}
       </div>
     );
   }
@@ -104,9 +149,21 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     return (
       <div styleName="wrapper">
         <p styleName="label">Category</p>
-        {this.renderPath()}
-        {isShow &&
-          <div styleName="menuContainer">
+        <div
+          styleName="breadcrumbsWrapper"
+          ref={(node) => { this.button = node; }}
+        >
+          {this.renderPath()}
+        </div>
+        <div
+          styleName={classNames('items', {
+            hidden: !isShow,
+          })}
+        >
+          <div
+            styleName="menuContainer"
+            ref={(node) => { this.categoryWrapp = node; }}
+          >
             <div styleName="label">Категории</div>
             <div styleName="levelWrapper">
               <div styleName="level">
@@ -139,7 +196,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
               </div>
             </div>
           </div>
-        }
+        </div>
       </div>
     );
   }
