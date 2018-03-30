@@ -56,6 +56,23 @@ const routes = (
                   lang
                   text
                 }
+                getAttributes {
+                  id
+                  rawId
+                  name {
+                    lang
+                    text
+                  }
+                  valueType
+                  metaField {
+                    values
+                    uiElement
+                    translatedValues {
+                      lang
+                      text
+                    }
+                  }
+                }
               }
             }
           }
@@ -108,6 +125,15 @@ const routes = (
         <Route
           path="/:storeId/product/:productId"
           Component={Product}
+          query={graphql`
+            query routes_Product_Query($productID: Int!) {
+              me {
+                id
+                ...Product_me @arguments(productId: $productID)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => ({ productID: parseInt(params.productId, 10) })}
         />
         <Route
           path="/:storeId/contacts"
@@ -115,8 +141,8 @@ const routes = (
           query={graphql`
             query routes_Contacts_Query($storeID: Int!) {
               me {
-              id
-              rawId
+                id
+                rawId
                 ...Contacts_me @arguments(storeId: $storeID)
               }
             }
