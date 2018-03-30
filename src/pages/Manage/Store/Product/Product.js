@@ -8,13 +8,14 @@ import { validate } from '@storiqa/shared';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { Input, Textarea } from 'components/Forms';
+import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/Button';
-import { MiniSelect } from 'components/MiniSelect';
+// import { MiniSelect } from 'components/MiniSelect';
 import { log, fromRelayError } from 'utils';
 import { CreateBaseProductMutation } from 'relay/mutations';
 
-import Header from './Header';
-import Menu from './Menu';
+import Header from '../Header';
+import Menu from '../Menu';
 import './Product.scss';
 
 type PropsType = {
@@ -40,7 +41,7 @@ class Product extends Component<PropsType, StateType> {
       seoDescription: '',
       short_description: '',
       fullDesc: '',
-      categoryId: '',
+      categoryId: null,
     },
   };
 
@@ -144,6 +145,19 @@ class Product extends Component<PropsType, StateType> {
                 {this.renderTextarea('fullDesc', 'Full description')}
                 { /* category selector here */ }
                 <div styleName="formItem">
+                  <CategorySelector
+                    categories={this.context.directories.categories}
+                    onSelect={(categoryId) => {
+                      this.setState({
+                        form: {
+                          ...this.state.form,
+                          categoryId,
+                        },
+                      });
+                    }}
+                  />
+                </div>
+                <div styleName="formItem">
                   <Button
                     type="button"
                     onClick={this.handleSave}
@@ -162,6 +176,7 @@ class Product extends Component<PropsType, StateType> {
 
 Product.contextTypes = {
   environment: PropTypes.object.isRequired,
+  directories: PropTypes.object.isRequired,
 };
 
 export default Page(Product);

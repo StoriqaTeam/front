@@ -14,7 +14,7 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
-import Product from 'pages/Manage/Store/Product';
+import { Product } from 'pages/Manage/Store/Product';
 
 const routes = (
   <Route
@@ -40,18 +40,24 @@ const routes = (
           }
           children {
             rawId
+            parentId
+            level
             name {
               lang
               text
             }
             children {
               rawId
+              parentId
+              level
               name {
                 lang
                 text
               }
               children {
                 rawId
+                parentId
+                level
                 name {
                   lang
                   text
