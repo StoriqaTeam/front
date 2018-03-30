@@ -36,8 +36,10 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   };
 
   componentWillMount() {
-    if (process.env.BROWSER) {
-      window.addEventListener('resize', this.sliderPropsCalc);
+    if (document.body) {
+      document.body.onresize = () => {
+        this.sliderPropsCalc();
+      };
     }
   }
 
@@ -52,8 +54,8 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   }
 
   componentWillUnmount() {
-    if (process.env.BROWSER) {
-      window.removeEventListener('resize', this.sliderPropsCalc);
+    if (document.body) {
+      document.body.onresize = null;
     }
 
     if (this.autoplayInterval) {
