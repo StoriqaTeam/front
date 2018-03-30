@@ -101,7 +101,7 @@ const routes = (
             }
           `}
           prepareVariables={(_, { params }) => (
-            { storeID: params.storeId }
+            { storeID: parseInt(params.storeId, 10) }
           )}
         />
         <Route
@@ -117,7 +117,7 @@ const routes = (
             }
           `}
           prepareVariables={(_, { params }) => (
-            { storeID: params.storeId }
+            { storeID: parseInt(params.storeId, 10) }
           )}
         />
       </Route>
