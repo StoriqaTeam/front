@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   margin-bottom: 4px;
   padding: 16px 16px 0;
@@ -10,8 +12,8 @@
 }
 
 .most-popular-color { color: #9239C9; }
-.sale-color { color: #FF508E; }
-.smart-reviews-color { color: #2FBAFD; }
+.sale-color { color: $color_pink; }
+.smart-reviews-color { color: $color_primary; }
 
 .title {
   float: left;
@@ -25,12 +27,12 @@
 }
 
 .button {
-  composes: boxShadow1 from global;
   width: 32px;
   height: 32px;
   margin-left: 8px;
   cursor: pointer;
   border-radius: 50%;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .16);
 }
 
 .reveal {

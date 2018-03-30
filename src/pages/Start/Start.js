@@ -9,6 +9,7 @@ import { Page } from 'components/App';
 import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import { Container, Row, Col } from 'layout';
+import { UploadTest } from 'components/Upload';
 
 import CategoriesMenu from './CategoriesMenu';
 
@@ -44,6 +45,7 @@ class Start extends PureComponent<{}> {
               Block
             </Col>
           </Row>
+          <UploadTest />
         </Container>
       </div>
     );

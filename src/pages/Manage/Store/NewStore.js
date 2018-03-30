@@ -21,6 +21,7 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type StateType = {
+  activeItem: string,
   serverValidationErrors: any,
 };
 

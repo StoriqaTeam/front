@@ -25,26 +25,26 @@ const Footer = () => (
               <div styleName="navHeader">
                 <b>Storiqa market</b>
               </div>
-              <a href="#" styleName="navItem">Распродажа</a>
-              <a href="#" styleName="navItem">Рекумендуемое</a>
-              <a href="#" styleName="navItem">Популярное</a>
-              <a href="#" styleName="navItem">Обзоры</a>
+              <a href="/" styleName="navItem">Распродажа</a>
+              <a href="/" styleName="navItem">Рекумендуемое</a>
+              <a href="/" styleName="navItem">Популярное</a>
+              <a href="/" styleName="navItem">Обзоры</a>
             </div>
             <div styleName="navBlockItem">
               <div styleName="navHeader">
                 <b>Разделы</b>
               </div>
-              <a href="#" styleName="navItem">Витрина</a>
-              <a href="#" styleName="navItem">Товары</a>
-              <a href="#" styleName="navItem">Магазины</a>
-              <a href="#" styleName="navItem">Storiqa Community</a>
+              <a href="/" styleName="navItem">Витрина</a>
+              <a href="/" styleName="navItem">Товары</a>
+              <a href="/" styleName="navItem">Магазины</a>
+              <a href="/" styleName="navItem">Storiqa Community</a>
             </div>
             <div styleName="navBlockItem">
               <div styleName="navHeader">
                 <b>Сервисы</b>
               </div>
-              <a href="#" styleName="navItem">Quality Assurance</a>
-              <a href="#" styleName="navItem">Storiqa wallet</a>
+              <a href="/" styleName="navItem">Quality Assurance</a>
+              <a href="/" styleName="navItem">Storiqa wallet</a>
             </div>
             <div styleName="navBlockItem">
               <Button onClick={() => {}}>
@@ -57,16 +57,16 @@ const Footer = () => (
             <a href="mailto:support@storiqa.com" styleName="email">support@storiqa.com</a>
             <div styleName="aboutNavBlock">
               <div styleName="aboutNavItem">
-                <a href="#">About Storiqa</a>
+                <a href="/">About Storiqa</a>
               </div>
               <div styleName="aboutNavItem">
-                <a href="#">Privacy Policy</a>
+                <a href="/">Privacy Policy</a>
               </div>
               <div styleName="aboutNavItem">
-                <a href="#">Help</a>
+                <a href="/">Help</a>
               </div>
               <div styleName="aboutNavItem">
-                <a href="#">Conditions of use</a>
+                <a href="/">Conditions of use</a>
               </div>
             </div>
             <div styleName="icons">

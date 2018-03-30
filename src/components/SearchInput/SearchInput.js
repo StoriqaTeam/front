@@ -8,8 +8,8 @@ import { filter, startsWith, toUpper } from 'ramda';
 import classNames from 'classnames';
 
 import { DropdownSelect } from 'components/DropdownSelect';
+import { Icon } from 'components/Icon';
 
-import SearchIcon from './svg/search.svg';
 import './SearchInput.scss';
 
 type PropsType = {
@@ -62,25 +62,27 @@ class SearchInput extends Component<PropsType, StateType> {
             onDropdownSelect={this.handleSearchDropdownSelect}
           />
         </div>
-        <Autocomplete
-          wrapperStyle={{ display: 'flex', width: '100%' }}
-          renderInput={props => (<div styleName="inputWrapper"><input styleName="input" {...props} /></div>)}
-          items={this.state.items}
-          getItemValue={item => item.label}
-          renderItem={(item, isHighlighted) => (
-            <div
-              key={item.id}
-              styleName={classNames('searchMenuItem', { highlighted: isHighlighted })}
-            >
-              {item.label}
-            </div>
-          )}
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          open={false}
-        />
+        <div styleName="searchInput">
+          <Autocomplete
+            wrapperStyle={{ display: 'flex', width: '100%' }}
+            renderInput={props => (<div styleName="inputWrapper"><input styleName="input" {...props} /></div>)}
+            items={this.state.items}
+            getItemValue={item => item.label}
+            renderItem={(item, isHighlighted) => (
+              <div
+                key={item.id}
+                styleName={classNames('searchMenuItem', { highlighted: isHighlighted })}
+              >
+                {item.label}
+              </div>
+            )}
+            value={this.state.inputValue}
+            onChange={this.handleInputChange}
+            open={false}
+          />
+        </div>
         <button styleName="searchButton">
-          <SearchIcon styleName="searchButtonIcon" />
+          <Icon type="magnifier" size="16" />
         </button>
       </div>
     );

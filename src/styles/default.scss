@@ -1,3 +1,5 @@
+@import "../styles/variables.scss";
+
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +14,7 @@ html {
 }
 
 body {
-  font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: $font_regular;
   height: 100%;
   font-size: 16px;
   line-height: 24px;
@@ -20,11 +22,15 @@ body {
 }
 
 b {
-  font-family: 'Open_Sans_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
+  font-family: $font_bold;
 }
 
 strong {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  font-family: $font_medium;
+}
+
+i {
+  font-family: $font_italic;
 }
 
 input,

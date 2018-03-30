@@ -3,23 +3,15 @@ $color_primary: #2FBAFD;
 $color_pink: #FF508E;
 $color_green: #9FC63C;
 $color_grey_text: #505050;
+$color_grey_light: #EFEFEF;
 $color_grey_bg: #A7A7A7;
 $color_grey_link: #939393;
 $color_red_error: #E62C6D;
 $color_white: #FFFFFF;
 
-:global {
-  .bgWhite { background-color: $color_white }
-  .bgBlue { background-color: $color_primary }
-  .bgGrey { background-color: $color_grey_bg }
-  .bgPink { background-color: $color_pink }
-  .colorWhite { color: $color_white }
-  .colorGrey { color: $color_grey_bg }
-  .boxShadow1 { box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .16) }
-
-  // fonts
-  .OpenSans { font-family: 'Open_Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif }
-  .OpenSans_Light { font-family: 'Open_Sans_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif }
-  .OpenSans_Bold { font-family: 'Open_Sans_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif }
-  .OpenSans_SemiBold { font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif }
-}
+// Fonts
+$font_regular: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font_light: 'Roboto_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
+$font_bold: 'Roboto_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
+$font_italic: 'Roboto_Italic', 'Helvetica Neue Italic', Helvetica, Arial, sans-serif;
+$font_medium: 'Roboto_Medium', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;

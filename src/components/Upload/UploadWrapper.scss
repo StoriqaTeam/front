@@ -1,0 +1,44 @@
+@import "../../styles/variables";
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.upoloadContainer {
+  // height: 100%;
+  padding-bottom: 2rem;
+  margin-right: 2rem;
+}
+
+.uploadButton {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: $color_grey_light;
+  border-radius: 0.5rem;
+}
+
+.buttonLabel {
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-top: 0.4rem;
+  color: $color_grey_bg;
+}
+
+.childrenConainer {
+  height: 100%;
+  flex: 1;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 2rem;
+}
+
+.upoloadChildren {
+  // flex: 1;
+}

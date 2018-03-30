@@ -4,7 +4,7 @@ const app = require('./app');
 const PORT = process.env.PORT || 3003;
 
 // Why don't I need http createServer
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`App listening on port ${PORT}!`)
 });
 app.on('error', onError);
