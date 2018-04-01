@@ -1,8 +1,8 @@
 // @flow
 
-import * as R from 'ramda';
+import { find, whereEq, reduce } from 'ramda';
 
-export const byLang = (lang: string) => R.find(R.whereEq({ lang }));
+export const byLang = (lang: string) => find(whereEq({ lang }));
 
 type NameType = {
   lang: string,
@@ -15,7 +15,7 @@ export const getNameText = (arr: Array<NameType>, lang: string) => {
   return name ? name.text : null;
 };
 
-export const flattenFunc = R.reduce((acc, nextItem) => {
+export const flattenFunc = reduce((acc, nextItem) => {
   if (nextItem.children) {
     return [
       ...acc,

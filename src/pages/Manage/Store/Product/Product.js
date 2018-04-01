@@ -10,7 +10,6 @@ import { Container, Row, Col } from 'layout';
 import { Input, Textarea } from 'components/Forms';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/Button';
-// import { MiniSelect } from 'components/MiniSelect';
 import { log, fromRelayError } from 'utils';
 import { CreateBaseProductMutation } from 'relay/mutations';
 
@@ -29,7 +28,7 @@ type StateType = {
     seoDescription: string,
     short_description: string,
     fullDesc: string,
-    categoryId: number,
+    categoryId: ?number,
   },
 };
 
@@ -43,6 +42,7 @@ class Product extends Component<PropsType, StateType> {
       fullDesc: '',
       categoryId: null,
     },
+    formErrors: undefined,
   };
 
   handleInputChange = (id: string) => (e: any) => {
