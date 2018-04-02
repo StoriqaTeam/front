@@ -26,7 +26,7 @@ type StateType = {
     name: string,
     seoTitle: string,
     seoDescription: string,
-    short_description: string,
+    shortDescription: string,
     fullDesc: string,
     categoryId: ?number,
   },
@@ -39,7 +39,7 @@ class Product extends Component<PropsType, StateType> {
       name: '',
       seoTitle: '',
       seoDescription: '',
-      short_description: '',
+      shortDescription: '',
       fullDesc: '',
       categoryId: null,
     },
@@ -56,7 +56,7 @@ class Product extends Component<PropsType, StateType> {
   handleSave = () => {
     const { errors: preValidationErrors } = validate({
       name: [[val => !isEmpty(val), 'Should not be empty']],
-      short_description: [[val => !isEmpty(val), 'Should not be empty']],
+      shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
     }, this.state.form);
     if (preValidationErrors) {
       this.setState({ formErrors: preValidationErrors });
@@ -69,7 +69,7 @@ class Product extends Component<PropsType, StateType> {
         name,
         seoTitle,
         seoDescription,
-        short_description,
+        shortDescription,
         fullDesc,
         categoryId,
       },
@@ -78,7 +78,7 @@ class Product extends Component<PropsType, StateType> {
     CreateBaseProductMutation.commit({
       name: [{ lang: 'EN', text: name }],
       storeId: parseInt(this.props.storeId, 10),
-      shortDescription: [{ lang: 'EN', text: short_description }],
+      shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
       categoryId,
@@ -166,7 +166,7 @@ class Product extends Component<PropsType, StateType> {
                 {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
                 {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
                 {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
-                {this.renderTextarea({ id: 'short_description', label: 'Short description' })}
+                {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
                 {this.renderTextarea({ id: 'fullDesc', label: 'Full description' })}
                 { /* category selector here */ }
                 <div styleName="formItem">
