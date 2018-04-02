@@ -33,7 +33,6 @@ type StateType = {
   errors: ?Array<string>,
   isLoad: boolean,
   isSignUp: ?boolean,
-  serverValidationErrors: any,
 }
 
 class Authorization extends Component<PropsType, StateType> {
@@ -48,7 +47,6 @@ class Authorization extends Component<PropsType, StateType> {
     isLoad: false,
     errors: null,
     isSignUp: false,
-    serverValidationErrors: {},
   };
 
   componentWillMount() {
@@ -59,7 +57,8 @@ class Authorization extends Component<PropsType, StateType> {
   }
 
   handleRegistrationClick = () => {
-    this.setState({ isLoad: true });
+    this.setState({ isLoad: true, errors: null });
+    const { alone } = this.props;
     const { email, password } = this.state;
 
     CreateUserMutation.commit({
@@ -68,13 +67,20 @@ class Authorization extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         this.setState({ isLoad: false });
-        window.location.reload();
+        if (alone) {
+          window.location = '/';
+        } else {
+          window.location.reload();
+        }
         log.debug({ response, errors });
       },
       onError: (error: Error) => {
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
-          errors: pathOr(null, ['source', 'errors'], error),
+          errors: validationErrors,
         });
         log.error({ error });
       },
@@ -82,7 +88,8 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   handleLoginClick = () => {
-    this.setState({ isLoad: true });
+    this.setState({ isLoad: true, errors: null });
+    const { alone } = this.props;
     const { username, password } = this.state;
     GetJWTByEmailMutation.commit({
       email: username,
@@ -90,12 +97,6 @@ class Authorization extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         this.setState({ isLoad: false });
-        // console.log('---errors', errors);
-        // const relayErrors = fromRelayError(errors);
-        // log.debug({ relayErrors });
-        // const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        // console.log('---validationErrors', validationErrors);
-
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
@@ -103,20 +104,21 @@ class Authorization extends Component<PropsType, StateType> {
           cookies.set('__jwt', { value: jwt });
           if (this.context.handleLogin) {
             this.context.handleLogin();
-            window.location.reload(true);
+            if (alone) {
+              window.location = '/';
+            } else {
+              window.location.reload();
+            }
           }
         }
       },
       onError: (error: Error) => {
-        // console.log('---error', error);
-        // const relayErrors = fromRelayError(error);
-        // log.debug({ relayErrors });
-        // const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        // console.log('---validationErrors', validationErrors);
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
-          // serverValidationErrors: validationErrors,
-          errors: pathOr(null, ['source', 'errors'], error),
+          errors: validationErrors,
         });
         log.error({ error });
       },
@@ -165,7 +167,7 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
-  handleKeydown = (e) => {
+  handleKeydown = (e: any) => {
     const { formValid, isSignUp } = this.state;
     if (e.keyCode === 13 && formValid) {
       if (isSignUp) {
@@ -186,7 +188,6 @@ class Authorization extends Component<PropsType, StateType> {
       isLoad,
       errors,
       isSignUp,
-      serverValidationErrors,
     } = this.state;
 
     return (
@@ -207,7 +208,7 @@ class Authorization extends Component<PropsType, StateType> {
               username={username}
               email={email}
               password={password}
-              errors={serverValidationErrors}
+              errors={errors}
               formValid={formValid}
               handleRegistrationClick={this.handleRegistrationClick}
               handleChange={this.handleChange}
@@ -215,7 +216,7 @@ class Authorization extends Component<PropsType, StateType> {
             <SignIn
               username={username}
               password={password}
-              errors={serverValidationErrors}
+              errors={errors}
               formValid={formValid}
               handleLoginClick={this.handleLoginClick}
               handleChange={this.handleChange}

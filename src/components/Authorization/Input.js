@@ -254,9 +254,11 @@ class Input extends PureComponent<PropsType, StateType> {
             { label }
           </label>
         )}
-        <span styleName="message">
-          { formError }
-        </span>
+        {formError && name === 'email' &&
+          <span styleName="message">
+            {formError}
+          </span>
+        }
         {detectCapsLock && isCapsLockOn && (
           <CapsLockMessage />
         )}
@@ -272,7 +274,7 @@ class Input extends PureComponent<PropsType, StateType> {
         {errors && errors.length > 0 &&
           <div styleName="errors">
             {errors.map((item, idx) => (
-              <p key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item.message}</p>
+              <p key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</p>
             ))}
           </div>
         }
