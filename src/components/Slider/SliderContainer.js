@@ -11,7 +11,6 @@ import './SliderContainer.scss';
 
 type PropsTypes = {
   type: string, // Slider type, for example: banners, product card etc.
-  headerType: 'most-popular' | 'sale' | 'smart-reviews', // Header type for product card type
   title: string, // Title for product card header
   slidesToShow: number, // Number of displayed slides
   animationSpeed: ?number, // Animation speed (ms), default: 500ms
@@ -31,7 +30,6 @@ class SliderContainer extends Component<PropsTypes> {
   render() {
     const {
       type,
-      headerType,
       title,
       slidesOffset,
       visibleSlidesAmount,
@@ -51,7 +49,6 @@ class SliderContainer extends Component<PropsTypes> {
     return (
       <div styleName="container">
         {type === 'products' && <SliderHeader
-          type={headerType}
           title={title}
           isRevealButton={isRevealButton}
           handleSlide={handleSlide}

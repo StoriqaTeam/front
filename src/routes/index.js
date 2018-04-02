@@ -27,6 +27,9 @@ const routes = (
           id
           ...App_me
         }
+        mainPage {
+          ...Start_mostViewedProducts
+        }
         languages {
           isoCode
         }

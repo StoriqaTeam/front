@@ -11,6 +11,7 @@ import './Slider.scss';
 type PropsTypes = {
   items: Array<{
     id: string,
+    rawId: string,
   }>,
   type: string,
   slidesToShow: ?number,
@@ -23,9 +24,9 @@ class Slider extends PureComponent<PropsTypes> {
       <div styleName="container">
         <SliderContainer {...this.props}>
           {this.props.items.map(item => (
-            <Fragment key={item.id}>
-              {type === 'products' && <CardProduct data={item} />}
-              {type === 'banners' && <Banner banner={item} />}
+            <Fragment key={item.rawId || item.id}>
+              {type === 'products' && <CardProduct item={item} />}
+              {type === 'banners' && <Banner item={item} />}
             </Fragment>
           ))}
         </SliderContainer>
