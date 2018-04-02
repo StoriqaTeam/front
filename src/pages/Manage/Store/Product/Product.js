@@ -30,6 +30,7 @@ type StateType = {
     fullDesc: string,
     categoryId: ?number,
   },
+  formErrors: {},
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -42,7 +43,7 @@ class Product extends Component<PropsType, StateType> {
       fullDesc: '',
       categoryId: null,
     },
-    formErrors: undefined,
+    formErrors: {},
   };
 
   handleInputChange = (id: string) => (e: any) => {
@@ -62,7 +63,7 @@ class Product extends Component<PropsType, StateType> {
       return;
     }
 
-    this.setState({ formErrors: [] });
+    this.setState({ formErrors: {} });
     const {
       form: {
         name,
