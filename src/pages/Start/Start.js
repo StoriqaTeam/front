@@ -71,8 +71,6 @@ Start.contextTypes = {
   currentUser: currentUserShape,
 };
 
-// export default Page(Start);
-
 export default createFragmentContainer(
   Page(Start),
   graphql`

@@ -32,7 +32,6 @@ class GoodsSlider extends PureComponent<PropsTypes> {
       <div styleName="container">
         <Slider
           infinity
-          startPage
           animationSpeed={500}
           title={title}
           type="products"

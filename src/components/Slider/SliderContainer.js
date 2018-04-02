@@ -24,7 +24,6 @@ type PropsTypes = {
   isTransition: boolean,
   handleDot: Function,
   num: number,
-  startPage: ?boolean,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -42,14 +41,13 @@ class SliderContainer extends Component<PropsTypes> {
       num,
       animationSpeed,
       dots,
-      startPage,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
     const animationSpeedSec = animationSpeed ? animationSpeed / 1000 : 0.5;
 
     return (
-      <div styleName={classNames('container', { forStartPage: startPage })}>
+      <div styleName="container">
         {type === 'products' && <SliderHeader
           title={title}
           isRevealButton={isRevealButton}

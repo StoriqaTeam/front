@@ -35,20 +35,17 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     slideWidth: 0,
   };
 
-  componentWillMount() {
-    if (document.body) {
+  componentDidMount() {
+    this.sliderPropsCalc();
+    if (document.body && process.env.BROWSER) {
       document.body.onresize = () => {
         this.sliderPropsCalc();
       };
     }
   }
 
-  componentDidMount() {
-    this.sliderPropsCalc();
-  }
-
   componentWillUnmount() {
-    if (document.body) {
+    if (document.body && process.env.BROWSER) {
       document.body.onresize = null;
     }
 
