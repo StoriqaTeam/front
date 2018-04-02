@@ -37,10 +37,12 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
   componentDidMount() {
     this.sliderPropsCalc(this.props.children);
-    if (document.body && process.env.BROWSER) {
-      document.body.onresize = () => {
-        this.sliderPropsCalc(this.props.children);
-      };
+    if (process.env.BROWSER) {
+      if (document.body) {
+        document.body.onresize = () => {
+          this.sliderPropsCalc(this.props.children);
+        };
+      }
     }
   }
 
@@ -51,8 +53,10 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   }
 
   componentWillUnmount() {
-    if (document.body && process.env.BROWSER) {
-      document.body.onresize = null;
+    if (process.env.BROWSER) {
+      if (document.body) {
+        document.body.onresize = null;
+      }
     }
 
     if (this.autoplayInterval) {
