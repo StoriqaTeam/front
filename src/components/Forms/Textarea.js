@@ -30,8 +30,8 @@ class Textarea extends Component<PropsType, StateType> {
   }
 
   handleChange = (e: any) => {
-    const { value } = e.target;
-    this.props.onChange(value);
+    const { onChange } = this.props;
+    onChange(e);
   };
 
   handleFocus = () => {
