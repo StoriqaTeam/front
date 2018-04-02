@@ -105,7 +105,7 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ langItems });
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: PropsType) {
     const currentFormErrors = this.state.formErrors;
     const nextFormErrors = nextProps.serverValidationErrors;
     if (isEmpty(currentFormErrors) && complement(isEmpty(nextFormErrors))) {

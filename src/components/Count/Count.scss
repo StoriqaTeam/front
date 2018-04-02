@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   position: relative;
   display: inline-block;
@@ -9,11 +11,11 @@
   font-size: 12px;
   line-height: 16px;
   border-radius: 8px;
-  background-color: #2FBAFD;
+  background-color: $color_primary;
 }
 
 .blue {
-  background-color: #2FBAFD;
+  background-color: $color_primary;
 }
 
 .green {

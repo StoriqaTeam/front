@@ -1,9 +1,10 @@
 {
   "name": "storiqa_frontend",
+  "homepage": "http://storiqa.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@storiqa/shared": "git+ssh://git@github.com/StoriqaTeam/libstqfrontend",
+    "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
@@ -117,7 +118,9 @@
     "lint": "./node_modules/.bin/eslint ./src",
     "test": "jest",
     "storybook": "yarn updateSchema && start-storybook -p 9001 -c .storybook",
+    "relay": "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
     "updateSchema": "BABEL_ENV=development NODE_ENV=development ./node_modules/.bin/babel-node scripts/updateSchema.js",
+    "updateSchema:prod": "BABEL_ENV=production NODE_ENV=production ./node_modules/.bin/babel-node scripts/updateSchema.js",
     "setGraphQLVars": "BABEL_ENV=development NODE_ENV=development ./node_modules/.bin/babel-node scripts/setGraphQLVars.js"
   },
   "prepush": "ci",

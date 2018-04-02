@@ -6,21 +6,19 @@
     "flow"
   ],
   "plugins": [
-    ["module-resolver", {
-      "root": ["./src"]
-    }],
-    "dynamic-import-node",
-    ["relay", {"schema": "./src/relay/schema.json"}],
-    "inline-react-svg",
     ["react-css-modules", {
       "filetypes": {
         ".scss": {
           "syntax": "postcss-scss"
         }
       },
-      "generateScopedName": "[name]__[local]___[hash:base64:5]",
-      "removeImport": true,
-      "webpackHotModuleReloading": true
-    }]
+      "generateScopedName": "[name]__[local]___[hash:base64:5]"
+    }],
+    ["module-resolver", {
+      "root": ["./src"]
+    }],
+    "dynamic-import-node",
+    ["relay", {"schema": "./src/relay/schema.json"}],
+    "inline-react-svg"
   ]
 }

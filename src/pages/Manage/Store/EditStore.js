@@ -26,6 +26,7 @@ type PropsType = {
 type StateType = {
   activeItem: string,
   serverValidationErrors: any,
+  activeItem: string,
 };
 
 class EditStore extends Component<PropsType, StateType> {
@@ -127,7 +128,7 @@ export default createFragmentContainer(
   Page(EditStore),
   graphql`
     fragment EditStore_me on User
-    @argumentDefinitions(storeId: { type: "ID!" }) {
+    @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         id
         rawId

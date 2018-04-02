@@ -103,7 +103,7 @@ class MiniSelect extends Component<PropsType, StateType> {
             { isDropdown ? title : activeItem && activeItem.label }
           </div>
           <div styleName="icon">
-            <Icon type="arrowSelect" />
+            <Icon type="arrowExpand" />
           </div>
           <div
             ref={(node) => { this.items = node; }}

@@ -97,21 +97,21 @@ const routes = (
           path="/:storeId"
           Component={EditStore}
           query={graphql`
-            query routes_Store_Query($storeID: ID!) {
+            query routes_Store_Query($storeID: Int!) {
               me {
                 ...EditStore_me @arguments(storeId: $storeID)
               }
             }
           `}
           prepareVariables={(_, { params }) => (
-            { storeID: params.storeId }
+            { storeID: parseInt(params.storeId, 10) }
           )}
         />
         <Route
           path="/:storeId/contacts"
           Component={Contacts}
           query={graphql`
-            query routes_Contacts_Query($storeID: ID!) {
+            query routes_Contacts_Query($storeID: Int!) {
               me {
               id
               rawId
@@ -120,7 +120,7 @@ const routes = (
             }
           `}
           prepareVariables={(_, { params }) => (
-            { storeID: params.storeId }
+            { storeID: parseInt(params.storeId, 10) }
           )}
         />
       </Route>
