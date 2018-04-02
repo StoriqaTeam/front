@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, pathOr } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -9,69 +8,74 @@ import { formatPrice } from './utils';
 
 import './CardProduct.scss';
 
+type PricesTypes = {
+  charCode: number,
+  actualPrice: number,
+  undiscountedPrice: number,
+  discount: number,
+}
+
 type PropsTypes = {
-  item: {
-    baseProduct: {
-      name: string,
-      currencyId: string,
+  data: {
+    title: string,
+    qualityAssurance: boolean,
+    sellerDiscount: number,
+    prices: {
+      [any]: PricesTypes,
     },
-    variants: {
-      discount: string,
-      photoMain: string,
-      cashback: string,
-      price: string,
-    },
+    img: string,
   },
 };
 
 class CardProduct extends PureComponent<PropsTypes> {
   render() {
     const {
-      item: {
-        baseProduct,
-        variants,
+      data: {
+        title,
+        qualityAssurance,
+        sellerDiscount,
+        prices,
+        img,
       },
     } = this.props;
-
-    const title = baseProduct ? baseProduct.name : null;
-    const img = pathOr(null, ['product', 'photoMain'], head(variants));
-    const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
-    const discount = pathOr(null, ['product', 'discount'], head(variants));
-    const price = undiscountedPrice * (1 - discount);
-    // const currencyId = baseProduct ? baseProduct.currencyId : null;
-    const cashback = pathOr(null, ['product', 'discount'], head(variants)) * 100;
 
     return (
       <div styleName="container">
         <div styleName="body">
           <div styleName="top">
-            {img &&
-              <div>
-                <img styleName="img" src={img} alt="img" />
+            <img styleName="img" src={img} alt="img" />
+            <div styleName="labels">
+              {sellerDiscount &&
+              <div styleName="seller-discount">
+                <strong>{`-${sellerDiscount}%`}</strong>
               </div>
-            }
+              }
+              {qualityAssurance &&
+              <div styleName="qa-icon">
+                <Icon type="qa" size="24" />
+              </div>
+              }
+            </div>
           </div>
           <div styleName="bottom">
-            <div styleName="icon">
-              <Icon type="qa" size="16" />
-            </div>
-            {title && <div styleName="title">{title}</div>}
+            <div styleName="title">{title}</div>
             <div styleName="price">
-              {undiscountedPrice &&
-                <div styleName="undiscountedPrice">
-                  {formatPrice(undiscountedPrice)} STQ
+              <div styleName="left">
+                <div styleName="left-actual-price">
+                  <b>{formatPrice(prices.btc.actualPrice)}</b> {prices.btc.charCode}
                 </div>
-              }
-              {price &&
-                <div styleName="actualPrice">
-                  <strong>{formatPrice(price)} STQ</strong>
+                <div styleName="undiscounted-price">
+                  {formatPrice(prices.btc.undiscountedPrice)} {prices.btc.charCode}
                 </div>
-              }
-              {cashback &&
-                <div styleName="cashbackWrap">
-                  <div styleName="cashback">Cashback {`${cashback}%`}</div>
+              </div>
+              <div styleName="right">
+                <div styleName="price-discount">
+                  {`-${prices.stq.discount}%`}
                 </div>
-              }
+                <div styleName="right-actual-price">
+                  {prices.stq.charCode} {formatPrice(prices.stq.actualPrice)}
+                </div>
+              </div>
             </div>
           </div>
         </div>

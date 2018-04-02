@@ -5,4 +5,3 @@ export { default as UpdateUserMutation } from './UpdateUserMutation';
 export { default as CreateStoreMutation } from './CreateStoreMutation';
 export { default as UpdateStoreMutation } from './UpdateStoreMutation'; // contacts
 export { default as UpdateStoreMainMutation } from './UpdateStoreMainMutation'; // main info
-export { default as FindMostViewedProductsQuery } from './FindMostViewedProducts';

@@ -39,7 +39,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     this.sliderPropsCalc(this.props.children);
     if (document.body && process.env.BROWSER) {
       document.body.onresize = () => {
-        this.sliderPropsCalc();
+        this.sliderPropsCalc(this.props.children);
       };
     }
   }
