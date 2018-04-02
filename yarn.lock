@@ -62,9 +62,9 @@
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
 
-"@storiqa/shared@git+ssh://git@github.com/StoriqaTeam/libstqfrontend":
+"@storiqa/shared@git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend":
   version "0.0.1"
-  resolved "git+ssh://git@github.com/StoriqaTeam/libstqfrontend#079aca28c7b9dc139afc1ae9d95b9b657a19c28a"
+  resolved "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend#079aca28c7b9dc139afc1ae9d95b9b657a19c28a"
   dependencies:
     spected "^0.7.0"
 

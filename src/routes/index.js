@@ -14,6 +14,7 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
+import { Product } from 'pages/Manage/Store/Product';
 
 const routes = (
   <Route
@@ -25,6 +26,9 @@ const routes = (
         me {
           id
           ...App_me
+        }
+        mainPage {
+          ...Start_mostViewedProducts
         }
         languages {
           isoCode
@@ -39,18 +43,24 @@ const routes = (
           }
           children {
             rawId
+            parentId
+            level
             name {
               lang
               text
             }
             children {
               rawId
+              parentId
+              level
               name {
                 lang
                 text
               }
               children {
                 rawId
+                parentId
+                level
                 name {
                   lang
                   text
@@ -94,21 +104,21 @@ const routes = (
           path="/:storeId"
           Component={EditStore}
           query={graphql`
-            query routes_Store_Query($storeID: ID!) {
+            query routes_Store_Query($storeID: Int!) {
               me {
                 ...EditStore_me @arguments(storeId: $storeID)
               }
             }
           `}
           prepareVariables={(_, { params }) => (
-            { storeID: params.storeId }
+            { storeID: parseInt(params.storeId, 10) }
           )}
         />
         <Route
           path="/:storeId/contacts"
           Component={Contacts}
           query={graphql`
-            query routes_Contacts_Query($storeID: ID!) {
+            query routes_Contacts_Query($storeID: Int!) {
               me {
               id
               rawId
@@ -117,8 +127,12 @@ const routes = (
             }
           `}
           prepareVariables={(_, { params }) => (
-            { storeID: params.storeId }
+            { storeID: parseInt(params.storeId, 10) }
           )}
+        />
+        <Route
+          path="/:storeId/product/new"
+          Component={({ params }) => (<Product storeId={params.storeId} />)}
         />
       </Route>
     </Route>
