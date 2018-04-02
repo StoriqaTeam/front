@@ -2,10 +2,6 @@
 
 import React, { Component } from 'react';
 import type { Node } from 'react';
-import { log } from 'utils';
-import LoadScript from 'libs/react-load-script';
-import { getScriptURL } from './utils';
-
 
 type StateType= {
   isGoogleMapsApiScriptLoaded: boolean,
@@ -22,33 +18,32 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
     isGoogleMapsApiScriptLoading: false,
   };
 
+  componentDidMount() {
+    this.fetchGoogleApi();
+  }
+
   autocompleteService: { getPlacePredictions: Function };
   geocoderService: { geocode: Function };
+
+  fetchGoogleApi = async () => {
+    /* eslint-disable */ 
+    // $FlowIgnore
+    this.autocompleteService = new google.maps.places.AutocompleteService();
+    this.geocoderService = new google.maps.Geocoder();
+    /* eslint-disable */ 
+    const isGoogleMapsApiScriptLoaded = !!this.autocompleteService && !!this.geocoderService;
+    const isGoogleMapsApiScriptLoading = !this.autocompleteService || !this.geocoderService;
+    this.setState({
+      isGoogleMapsApiScriptLoaded,
+      isGoogleMapsApiScriptLoading,
+    });
+  }
 
   render() {
     const { children } = this.props;
     const { isGoogleMapsApiScriptLoading, isGoogleMapsApiScriptLoaded } = this.state;
-    if (!isGoogleMapsApiScriptLoading && !isGoogleMapsApiScriptLoaded) {
-      return (
-        <LoadScript
-          url={getScriptURL()}
-          onCreate={() => this.setState({ isGoogleMapsApiScriptLoading: true })}
-          onError={() => log.error('Loading error')}
-          onLoad={() => {
-            log.debug('loaded');
-            this.setState({
-              isGoogleMapsApiScriptLoaded: true,
-              isGoogleMapsApiScriptLoading: false,
-            });
-            /* eslint-disable */
-            // $FlowIgnore
-            this.autocompleteService = new google.maps.places.AutocompleteService();
-            this.geocoderService = new google.maps.Geocoder();
-            /* eslint-enable */
-          }}
-        />
-      );
-    } else if (isGoogleMapsApiScriptLoading) {
+    if ((isGoogleMapsApiScriptLoading && !isGoogleMapsApiScriptLoaded)
+    || (isGoogleMapsApiScriptLoading && !isGoogleMapsApiScriptLoaded)) {
       return (
         <div>loading</div>
       );
