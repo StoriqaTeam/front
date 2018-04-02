@@ -21,6 +21,8 @@ import bannersRow from './bannersRow.json';
 class Start extends PureComponent<{}> {
   render() {
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    // console.log('---this.props', this.props);
+    // console.log('---this.context', this.context);
     return (
       <div styleName="container">
         {categories && <CategoriesMenu categories={categories} />}

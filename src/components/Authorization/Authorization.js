@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
-import { withRouter, routerShape } from 'found';
+import { withRouter } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
@@ -11,15 +11,15 @@ import { Button } from 'components/Button';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import { Spiner } from 'components/Spiner';
 
-import { log, socialStrings } from 'utils';
+import { log, socialStrings, fromRelayError } from 'utils';
 
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
 
 import './Authorization.scss';
 
 type PropsType = {
-  router: routerShape,
   isSignUp: ?boolean,
+  alone: ?boolean,
 };
 
 type StateType = {
@@ -33,6 +33,7 @@ type StateType = {
   errors: ?Array<string>,
   isLoad: boolean,
   isSignUp: ?boolean,
+  serverValidationErrors: any,
 }
 
 class Authorization extends Component<PropsType, StateType> {
@@ -47,10 +48,14 @@ class Authorization extends Component<PropsType, StateType> {
     isLoad: false,
     errors: null,
     isSignUp: false,
+    serverValidationErrors: {},
   };
 
   componentWillMount() {
     this.setState({ isSignUp: this.props.isSignUp });
+    if (process.env.BROWSER) {
+      document.addEventListener('keydown', this.handleKeydown);
+    }
   }
 
   handleRegistrationClick = () => {
@@ -85,6 +90,12 @@ class Authorization extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         this.setState({ isLoad: false });
+        // console.log('---errors', errors);
+        // const relayErrors = fromRelayError(errors);
+        // log.debug({ relayErrors });
+        // const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        // console.log('---validationErrors', validationErrors);
+
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
@@ -92,13 +103,19 @@ class Authorization extends Component<PropsType, StateType> {
           cookies.set('__jwt', { value: jwt });
           if (this.context.handleLogin) {
             this.context.handleLogin();
-            this.props.router.replace('/');
+            window.location.reload(true);
           }
         }
       },
       onError: (error: Error) => {
+        // console.log('---error', error);
+        // const relayErrors = fromRelayError(error);
+        // log.debug({ relayErrors });
+        // const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        // console.log('---validationErrors', validationErrors);
         this.setState({
           isLoad: false,
+          // serverValidationErrors: validationErrors,
           errors: pathOr(null, ['source', 'errors'], error),
         });
         log.error({ error });
@@ -148,7 +165,19 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
+  handleKeydown = (e) => {
+    const { formValid, isSignUp } = this.state;
+    if (e.keyCode === 13 && formValid) {
+      if (isSignUp) {
+        this.handleRegistrationClick();
+      } else {
+        this.handleLoginClick();
+      }
+    }
+  }
+
   render() {
+    const { alone } = this.props;
     const {
       username,
       email,
@@ -157,58 +186,62 @@ class Authorization extends Component<PropsType, StateType> {
       isLoad,
       errors,
       isSignUp,
+      serverValidationErrors,
     } = this.state;
 
     return (
       <div styleName="container">
-        {isLoad && (
-          <div styleName="spiner">
-            <Spiner size={32} />
-          </div>
-        )}
-        <Header
-          isSignUp={isSignUp}
-          handleToggle={this.handleToggle}
-        />
-        {isSignUp ?
-          <SignUp
-            username={username}
-            email={email}
-            password={password}
-            errors={errors}
-            formValid={formValid}
-            handleRegistrationClick={this.handleRegistrationClick}
-            handleChange={this.handleChange}
-          /> :
-          <SignIn
-            username={username}
-            password={password}
-            errors={errors}
-            formValid={formValid}
-            handleLoginClick={this.handleLoginClick}
-            handleChange={this.handleChange}
+        <div styleName="wrap">
+          {isLoad && (
+            <div styleName="spiner">
+              <Spiner size={32} />
+            </div>
+          )}
+          <Header
+            isSignUp={isSignUp}
+            alone={alone}
+            handleToggle={this.handleToggle}
           />
-        }
-        <div className="separatorBlock">
-          <Separator text="or" />
-        </div>
-        <div styleName="firstButtonBlock">
-          <Button
-            iconic
-            href={socialStrings.facebookLoginString()}
-          >
-            <Icon type="facebook" />
-            <span>Sign Up with Facebook</span>
-          </Button>
-        </div>
-        <div>
-          <Button
-            iconic
-            href={socialStrings.googleLoginString()}
-          >
-            <Icon type="google" />
-            <span>Sign Up with Google</span>
-          </Button>
+          {isSignUp ?
+            <SignUp
+              username={username}
+              email={email}
+              password={password}
+              errors={serverValidationErrors}
+              formValid={formValid}
+              handleRegistrationClick={this.handleRegistrationClick}
+              handleChange={this.handleChange}
+            /> :
+            <SignIn
+              username={username}
+              password={password}
+              errors={serverValidationErrors}
+              formValid={formValid}
+              handleLoginClick={this.handleLoginClick}
+              handleChange={this.handleChange}
+            />
+          }
+          <div className="separatorBlock">
+            <Separator text="or" />
+          </div>
+          <div styleName="firstButtonBlock">
+            <Button
+              iconic
+              href={socialStrings.facebookLoginString()}
+            >
+              <Icon type="facebook" />
+              <span>Sign Up with Facebook</span>
+            </Button>
+          </div>
+          <div>
+            <Button
+              iconic
+              href={socialStrings.googleLoginString()}
+            >
+              <Icon type="google" />
+              <span>Sign Up with Google</span>
+            </Button>
+          </div>
         </div>
       </div>
     );

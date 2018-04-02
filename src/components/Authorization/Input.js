@@ -269,7 +269,7 @@ class Input extends PureComponent<PropsType, StateType> {
         {showHints && (
           <PasswordHints {...passwordQuality} />
         )}
-        {errors &&
+        {errors && errors.length > 0 &&
           <div styleName="errors">
             {errors.map((item, idx) => (
               <p key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item.message}</p>

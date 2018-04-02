@@ -1,7 +1,6 @@
 .container {
   display: block;
   margin-bottom: 32px;
-  cursor: pointer;
 }
 
 .container:after {
@@ -21,4 +20,5 @@
   line-height: 24px;
   float: right;
   text-decoration: underline;
+  cursor: pointer;
 }

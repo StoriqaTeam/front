@@ -47,6 +47,7 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
 
   render() {
     const { user } = this.props;
+    console.log('---user', user);
     const { showModal, isSignUp } = this.state;
     const name = pathOr(null, ['name'], user);
     const messagesCount = pathOr(null, ['messagesCount'], user);

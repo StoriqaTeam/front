@@ -49,7 +49,7 @@ class OAuthCallback extends PureComponent<PropsType> {
         },
       });
     } else {
-      window.location.href = '/login';
+      window.location.href = '/authorization';
     }
   }
 

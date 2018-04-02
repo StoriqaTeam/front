@@ -133,12 +133,15 @@ const routes = (
             return <Component isSignUp {...props} />;
           }
         }
-        return <Component isSignUp {...props} />;
+        return <Component isSignUp alone {...props} />;
       }}
     />
     <Route
       path="/login"
       Component={Authorization}
+      render={({ Component, props }) => (
+        <Component alone {...props} />
+      )}
     />
     <Route
       path="/logout"
@@ -146,7 +149,7 @@ const routes = (
       render={() => {
         const cookies = new Cookies();
         cookies.remove('__jwt');
-        throw new RedirectException('/');
+        window.location = '/';
       }}
     />
     <Route
