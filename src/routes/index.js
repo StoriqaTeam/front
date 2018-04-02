@@ -27,6 +27,9 @@ const routes = (
           id
           ...App_me
         }
+        mainPage {
+          ...Start_mostViewedProducts
+        }
         languages {
           isoCode
         }
@@ -40,18 +43,24 @@ const routes = (
           }
           children {
             rawId
+            parentId
+            level
             name {
               lang
               text
             }
             children {
               rawId
+              parentId
+              level
               name {
                 lang
                 text
               }
               children {
                 rawId
+                parentId
+                level
                 name {
                   lang
                   text
@@ -150,6 +159,10 @@ const routes = (
           prepareVariables={(_, { params }) => (
             { storeID: parseInt(params.storeId, 10) }
           )}
+        />
+        <Route
+          path="/:storeId/product/new"
+          Component={({ params }) => (<Product storeId={params.storeId} />)}
         />
       </Route>
     </Route>

@@ -35,14 +35,15 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     slideWidth: 0,
   };
 
-  componentWillMount() {
-    if (process.env.BROWSER) {
-      window.addEventListener('resize', this.sliderPropsCalc);
-    }
-  }
-
   componentDidMount() {
     this.sliderPropsCalc(this.props.children);
+    if (process.env.BROWSER) {
+      if (document.body) {
+        document.body.onresize = () => {
+          this.sliderPropsCalc(this.props.children);
+        };
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps: PropsTypes) {
@@ -53,7 +54,9 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
   componentWillUnmount() {
     if (process.env.BROWSER) {
-      window.removeEventListener('resize', this.sliderPropsCalc);
+      if (document.body) {
+        document.body.onresize = null;
+      }
     }
 
     if (this.autoplayInterval) {
@@ -144,19 +147,17 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
 
     if (autoplaySpeed) { this.activateAutoplayTimer(); }
 
-    const possibleOffset = ((totalSlidesAmount - visibleSlidesAmount) + 1) * slideWidth;
-
-    if (!infinity &&
-      ((slidesOffset >= 0 && direction === 'prev') ||
-        (-possibleOffset >= (slidesOffset - slideWidth) && direction === 'next'))) {
-      return;
-    }
-
     let newNum = direction === 'next' ? num + 1 : num - 1;
     if (direction === 'next') {
       newNum = newNum === totalSlidesAmount ? 0 : newNum;
     } else {
       newNum = newNum === -1 ? totalSlidesAmount - 1 : newNum;
+    }
+
+    if (!infinity &&
+       ((direction === 'prev' && newNum === totalSlidesAmount - 1) ||
+       (direction === 'next' && (newNum + visibleSlidesAmount) > totalSlidesAmount))) {
+      return;
     }
 
     const newSlidesOffset = direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth;

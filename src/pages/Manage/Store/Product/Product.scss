@@ -1,0 +1,27 @@
+@import "../../../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.form {
+  height: 100%;
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: $color_white;
+}
+
+.formItem + .formItem {
+  margin-top: 6rem;
+}
+
+.label {
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  margin-bottom: 1rem;
+  color: $color_grey_bg;
+  font-size: 12px;
+  line-height: 2rem;
+  white-space: nowrap;
+}
