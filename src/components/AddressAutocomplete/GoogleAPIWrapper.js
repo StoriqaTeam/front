@@ -28,15 +28,17 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
   fetchGoogleApi = async () => {
     /* eslint-disable */ 
     // $FlowIgnore
-    this.autocompleteService = new google.maps.places.AutocompleteService();
-    this.geocoderService = new google.maps.Geocoder();
-    /* eslint-disable */ 
-    const isGoogleMapsApiScriptLoaded = !!this.autocompleteService && !!this.geocoderService;
-    const isGoogleMapsApiScriptLoading = !this.autocompleteService || !this.geocoderService;
-    this.setState({
-      isGoogleMapsApiScriptLoaded,
-      isGoogleMapsApiScriptLoading,
-    });
+    if (google) {
+      this.autocompleteService = new google.maps.places.AutocompleteService();
+      this.geocoderService = new google.maps.Geocoder();
+      /* eslint-disable */ 
+      const isGoogleMapsApiScriptLoaded = !!this.autocompleteService && !!this.geocoderService;
+      const isGoogleMapsApiScriptLoading = !this.autocompleteService || !this.geocoderService;
+      this.setState({
+        isGoogleMapsApiScriptLoaded,
+        isGoogleMapsApiScriptLoading,
+      });
+    }
   }
 
   render() {
