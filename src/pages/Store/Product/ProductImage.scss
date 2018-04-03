@@ -2,8 +2,27 @@
   align-items: flex-start;
   display: flex;
   justify-content: center;
-  img {
+
+  figure > img {
     height: 462px;
     width: 462px;
   }
+
+  .imageDetail {
+    color: #a29f9a;
+    font-size: 13px;
+    letter-spacing: 0.1px;
+    text-align: center;
+  }
+
+  .zoom {
+    svg {
+      height: 17px;
+      left: 3px;
+      position: relative;
+      top: 3px;
+      width: 17px;
+    }
+  }
+
 }
