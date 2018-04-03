@@ -1,8 +1,11 @@
  .container {
    display: flex;
    flex-flow: column;
+   padding: 16px;
    img {
+     border-radius: 4px;
      height: 80px;
+     padding-bottom: 16px;
      width: 80px;
    }
  }
