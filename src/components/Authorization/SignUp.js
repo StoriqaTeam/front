@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { propOr } from 'ramda';
 
 import { Button } from 'components/Button';
 import { Input } from 'components/Authorization';
@@ -38,6 +39,7 @@ class SignUp extends PureComponent<PropsType> {
             type="text"
             model={username}
             onChange={handleChange}
+            errors={propOr(null, 'email', errors)}
           />
         </div>
         <div styleName="inputBlock">
@@ -48,6 +50,7 @@ class SignUp extends PureComponent<PropsType> {
             model={email}
             validate="email"
             onChange={handleChange}
+            errors={propOr(null, 'email', errors)}
           />
         </div>
         <div styleName="inputBlock">
@@ -58,7 +61,7 @@ class SignUp extends PureComponent<PropsType> {
             model={password}
             validate="password"
             onChange={handleChange}
-            errors={errors}
+            errors={propOr(null, 'email', errors)}
           />
         </div>
         {formValid &&
