@@ -8,6 +8,7 @@ import { currentUserShape } from 'utils/shapes';
 import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
+import { Ranger } from 'components/Ranger';
 import { searchPathByParent, flattenFunc, getNameText } from 'utils';
 
 import CategoriesMenu from './CategoriesMenu';
@@ -60,6 +61,7 @@ class Search extends PureComponent<PropsType> {
                 activeRowId={10}
                 onClick={this.handleOnChangeCategory}
               />
+              <Ranger />
             </Sidebar>
           </div>
           <div styleName="contentContainer">
