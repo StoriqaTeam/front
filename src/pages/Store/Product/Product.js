@@ -4,9 +4,9 @@ import React, { PureComponent } from 'react';
 
 import { Header } from 'components/App';
 
-import './ProductCard.scss';
+import './Product.scss';
 
-class ProductCard extends PureComponent<{}> {
+class Product extends PureComponent<{}> {
   handleLightBox = {};
   render() {
     return (
@@ -17,4 +17,4 @@ class ProductCard extends PureComponent<{}> {
   }
 }
 
-export default ProductCard;
+export default Product;
