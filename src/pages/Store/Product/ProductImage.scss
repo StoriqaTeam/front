@@ -3,9 +3,12 @@
   display: flex;
   justify-content: center;
 
-  figure > img {
-    height: 462px;
-    width: 462px;
+  figure {
+    position: relative;
+    & > img {
+      height: 462px;
+      width: 462px;
+    }
   }
 
   .imageDetail {
@@ -13,6 +16,16 @@
     font-size: 13px;
     letter-spacing: 0.1px;
     text-align: center;
+  }
+
+  .expand {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    svg {
+      height: 27px;
+      width: 27px;
+    }
   }
 
   .zoom {

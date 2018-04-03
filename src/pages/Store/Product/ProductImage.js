@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import { ProductThumbnails } from 'pages/Store/Product';
 
 import Zoom from './svg/zoom.svg';
+import Expand from './svg/expand.svg';
 
 import './ProductImage.scss';
 
@@ -31,6 +32,9 @@ class ProductImage extends PureComponent<{}, stateTypes> {
       <div styleName="container">
         <ProductThumbnails thumbnails={thumbnails} />
         <figure>
+          <span styleName="expand">
+            <Expand />
+          </span>
           <img
             src="https://www.studio-88.co.za/wp-content/uploads/2017/10/NIKE-JORDAN-AIR-JORDAN-1-MID-BLACK-BLACK-NKK961BP-V4.jpg"
             alt="nike air jordan"
