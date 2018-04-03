@@ -36,11 +36,6 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   };
 
   componentDidMount() {
-    if (document.body && process.env.BROWSER) {
-      document.body.onresize = () => {
-        this.sliderPropsCalc(this.props.children);
-      };
-    }
     this.sliderPropsCalc(this.props.children);
     if (process.env.BROWSER) {
       if (document.body) {
