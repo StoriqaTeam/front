@@ -1,4 +1,12 @@
 .container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrap {
   position: relative;
   width: 336px;
   padding: 24px 32px 32px;
@@ -42,6 +50,10 @@
 
 .signInButton {
   width: 128px;
+
+  & > * {
+    width: 100%;
+  }
 }
 
 .policy {

@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 import './Banner.scss';
 
 type PropsTypes = {
-  banner: {
+  item: {
     count: number,
     img: string,
     link: string,
@@ -14,16 +14,16 @@ type PropsTypes = {
 
 class Banner extends PureComponent<PropsTypes> {
   render() {
-    const { banner } = this.props;
+    const { item } = this.props;
     return (
       <a
-        href={banner.link}
+        href={item.link}
         styleName="container"
         target="_blank"
       >
         <div styleName="wrap">
           <img
-            src={banner.img}
+            src={item.img}
             alt="img"
           />
         </div>

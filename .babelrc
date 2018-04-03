@@ -11,16 +11,34 @@
     }],
     "dynamic-import-node",
     ["relay", {"schema": "./src/relay/schema.json"}],
-    "inline-react-svg",
-    ["react-css-modules", {
-      "filetypes": {
-        ".scss": {
-          "syntax": "postcss-scss"
-        }
-      },
-      "generateScopedName": "[name]__[local]___[hash:base64:5]",
-      "removeImport": true,
-      "webpackHotModuleReloading": true
-    }]
-  ]
+    "inline-react-svg"
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        ["react-css-modules", {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss"
+            }
+          },
+          "generateScopedName": "[name]__[local]___[hash:base64:5]"
+        }]
+      ]
+    },
+    "development": {
+      "plugins": [
+        ["react-css-modules", {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss"
+            }
+          },
+          "generateScopedName": "[name]__[local]___[hash:base64:5]",
+          "removeImport": true,
+          "webpackHotModuleReloading": true
+        }]
+      ]
+    }
+  }
 }
