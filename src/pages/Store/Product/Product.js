@@ -14,16 +14,18 @@ class Product extends PureComponent<{}> {
     return (
       <div styleName="container">
         <Header />
-        <Container>
-          <Row>
-            <Col size={6}>
-              <ProductImage />
-            </Col>
-            <Col size={6}>
-              <h1>Product description</h1>
-            </Col>
-          </Row>
-        </Container>
+        <div styleName="ProductBackground">
+          <Container>
+            <Row>
+              <Col size={6}>
+                <ProductImage />
+              </Col>
+              <Col size={6}>
+                <h1>Product description</h1>
+              </Col>
+            </Row>
+          </Container>
+        </div>
         <Footer />
       </div>
     );
