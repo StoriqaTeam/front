@@ -1,0 +1,24 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-left: 2rem;
+  margin-top: 2rem;
+}
+
+.sidebarContainer {
+  width: 25.95rem;
+  // background-color: beige;
+}
+
+.contentContainer {
+  flex: 1;
+  margin-left: 2rem;
+}

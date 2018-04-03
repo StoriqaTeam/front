@@ -11,6 +11,7 @@ import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import Start from 'pages/Start/Start';
+import Search from 'pages/Search/Search';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
@@ -81,6 +82,7 @@ const routes = (
     }}
   >
     <Route Component={Start} />
+    <Route path="/search" Component={Search} />
 
     <Route
       path="/manage"
