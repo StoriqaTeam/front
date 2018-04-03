@@ -15,6 +15,7 @@ import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import { Product } from 'pages/Manage/Store/Product';
+import { Product as ProductCard } from 'pages/Store/Product';
 
 const routes = (
   <Route
@@ -26,9 +27,6 @@ const routes = (
         me {
           id
           ...App_me
-        }
-        mainPage {
-          ...Start_mostViewedProducts
         }
         languages {
           isoCode
@@ -136,7 +134,14 @@ const routes = (
         />
       </Route>
     </Route>
-
+    <Route
+      path="/store"
+    >
+      <Route
+        path="/:storeId/product/:productId"
+        Component={() => (<ProductCard />)}
+      />
+    </Route>
     <Route
       path="/registration"
       Component={Authorization}
