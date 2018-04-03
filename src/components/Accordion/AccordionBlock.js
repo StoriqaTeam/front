@@ -66,8 +66,6 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
           </div>
           {isExpanded && <Icon type="minus" size={16} />}
           {!isExpanded && <Icon type="plus" size={16} />}
-          {/* {isExpanded && '-'}
-          {!isExpanded && '+'} */}
         </div>
         {isExpanded &&
           <div styleName="childrenContainer">

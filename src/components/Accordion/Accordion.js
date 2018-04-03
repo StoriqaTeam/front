@@ -20,15 +20,15 @@ type PropsType = {
 
 const Accordion = ({ activeRowId, onClick, tree }: PropsType) => (
   <div styleName="wrapper">
-    {/* {(tree[1] && tree[1].name) && getNameText(tree[1].name, 'EN')} */}
     {tree.map((item, index) => (
-      <div key={item.id} styleName="block">
+      <div key={item.id} styleName="blockWrapper">
         <AccordionBlock
           tree={item}
           isExpanded={index < 3}
           active={activeRowId}
           onClick={onClick}
         />
+        <div styleName="separator" />
       </div>
     ))}
   </div>

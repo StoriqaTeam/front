@@ -5,7 +5,15 @@
   flex-direction: column;
 }
 
-.block {
+.blockWrapper {
   display: flex;
   flex-direction: column;
+}
+
+.separator {
+  height: 1px;
+  width: 100%;
+  background-color: $color_grey_border;
+  opacity: 0.2;
+  margin: 2rem 0;
 }
