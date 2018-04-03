@@ -23,12 +23,12 @@ const routes = (
     query={graphql`
       query routes_App_Query {
         id
+        mainPage {
+          ...Start_mainPage
+        }
         me {
           id
           ...App_me
-        }
-        mainPage {
-          ...Start_mostViewedProducts
         }
         languages {
           isoCode
@@ -177,12 +177,15 @@ const routes = (
             return <Component isSignUp {...props} />;
           }
         }
-        return <Component isSignUp {...props} />;
+        return <Component isSignUp alone {...props} />;
       }}
     />
     <Route
       path="/login"
       Component={Authorization}
+      render={({ Component, props }) => (
+        <Component alone {...props} />
+      )}
     />
     <Route
       path="/logout"
@@ -190,7 +193,7 @@ const routes = (
       render={() => {
         const cookies = new Cookies();
         cookies.remove('__jwt');
-        throw new RedirectException('/');
+        window.location = '/';
       }}
     />
     <Route
