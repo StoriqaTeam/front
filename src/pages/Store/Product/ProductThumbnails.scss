@@ -1,6 +1,8 @@
  .container {
+   display: flex;
+   flex-flow: column;
    img {
-     height: 77px;
-     width: 77px;
+     height: 80px;
+     width: 80px;
    }
  }
