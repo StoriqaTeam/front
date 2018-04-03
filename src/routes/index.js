@@ -23,12 +23,12 @@ const routes = (
     query={graphql`
       query routes_App_Query {
         id
+        mainPage {
+          ...Start_mainPage
+        }
         me {
           id
           ...App_me
-        }
-        mainPage {
-          ...Start_mostViewedProducts
         }
         languages {
           isoCode

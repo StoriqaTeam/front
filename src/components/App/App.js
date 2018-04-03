@@ -12,6 +12,7 @@ import './App.scss';
 
 type PropsType = {
   me: ?{},
+  mainPage: ?{},
   languages: ?Array<{ id: number, name: string }>,
   currencies: ?Array<{ id: number, name: string }>,
   categories: any,
@@ -48,10 +49,10 @@ class App extends PureComponent<PropsType> {
   };
 
   render() {
-    const { me, children } = this.props;
+    const { me, mainPage, children } = this.props;
     return (
       <Fragment>
-        {children && React.cloneElement(children, { me })}
+        {children && React.cloneElement(children, { me, mainPage })}
       </Fragment>
     );
   }

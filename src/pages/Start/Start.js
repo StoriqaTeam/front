@@ -74,15 +74,8 @@ Start.contextTypes = {
 export default createFragmentContainer(
   Page(Start),
   graphql`
-    fragment Start_mostViewedProducts on MainPage {
-      findMostViewedProducts(
-        searchTerm: {
-          options: {
-            attrFilters: [],
-            categoriesIds: [1]
-          }
-        }
-      ) {
+    fragment Start_mainPage on MainPage {
+      findMostViewedProducts(searchTerm: {options: {attrFilters: [],categoriesIds: [1]}}) {
         edges {
           node {
             id
