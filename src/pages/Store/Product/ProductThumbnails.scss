@@ -5,7 +5,9 @@
    img {
      border-radius: 4px;
      height: 80px;
-     padding-bottom: 16px;
+     margin-bottom: 16px;
+     // https://css-tricks.com/almanac/properties/o/object-fit/
+     object-fit: cover;
      width: 80px;
    }
  }
