@@ -1,6 +1,6 @@
 // @flow
 
-import { find, whereEq, reduce } from 'ramda';
+import { find, whereEq } from 'ramda';
 
 export const byLang = (lang: string) => find(whereEq({ lang }));
 
