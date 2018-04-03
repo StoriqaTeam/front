@@ -27,7 +27,7 @@ type PropsType = {
   focus: boolean,
   detectCapsLock: boolean,
   autocomplete: ?boolean,
-  errors: ?Array<{ message: string }>,
+  errors: ?Array<string>,
 };
 
 type StateType = {
@@ -274,7 +274,7 @@ class Input extends PureComponent<PropsType, StateType> {
         {errors && errors.length > 0 &&
           <div styleName="errors">
             {errors.map((item, idx) => (
-              <p key={/* eslint-disable */idx/* eslint-enable */} styleName="error">{item}</p>
+              <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
             ))}
           </div>
         }
