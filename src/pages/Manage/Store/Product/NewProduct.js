@@ -24,27 +24,6 @@ type PropsType = {
 };
 
 class NewProduct extends Component<PropsType, StateType> {
-  constructor(props: PropTypes) {
-    super(props);
-
-    // const product = pathOr(null, ['me', 'baseProduct'], this.props);
-    // if (!product) {
-    //   return;
-    // }
-
-    this.state = {
-      // form: {
-      //   name: pathOr('', ['name', 0, 'text'], product),
-      //   seoTitle: pathOr('', ['seoTitle', 0, 'text'], product),
-      //   seoDescription: pathOr('', ['seoDescription', 0, 'text'], product),
-      //   shortDescription: pathOr('', ['shortDescription', 0, 'text'], product),
-      //   fullDesc: pathOr('', ['longDescription', 0, 'text'], product),
-      //   categoryId: product.categoryId,
-      // },
-      formErrors: {},
-    };
-  }
-
   state: StateType = {
     formErrors: {},
   };
@@ -68,8 +47,8 @@ class NewProduct extends Component<PropsType, StateType> {
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
       categoryId,
-      seoTitle,
-      seoDescription,
+      seoTitle: [{ lang: 'EN', text: seoTitle }],
+      seoDescription: [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
@@ -92,9 +71,6 @@ class NewProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    // const productId = pathOr(null, ['me', 'baseProduct', 'rawId'], this.props);
-    // const categoryId = pathOr(null, ['me', 'baseProduct', 'categoryId'], this.props);
-    const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
     return (
       <Container>
         <Row>
@@ -106,7 +82,6 @@ class NewProduct extends Component<PropsType, StateType> {
           </Col>
           <Col size={10}>
             <Form
-              baseProduct={baseProduct}
               onSave={this.handleSave}
               validationErrors={this.state.formErrors}
               categories={this.context.directories.categories}

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, propOr, isEmpty, complement } from 'ramda';
+import { assocPath, propOr, isEmpty, complement, pathOr } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { CategorySelector } from 'components/CategorySelector';
@@ -34,6 +34,25 @@ type StateType = {
 };
 
 class Form extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    const { baseProduct } = this.props;
+    if (!baseProduct) {
+      return;
+    }
+    this.state = {
+      form: {
+        name: pathOr('', ['name', 0, 'text'], baseProduct),
+        seoTitle: pathOr('', ['seoTitle', 0, 'text'], baseProduct),
+        seoDescription: pathOr('', ['seoDescription', 0, 'text'], baseProduct),
+        shortDescription: pathOr('', ['shortDescription', 0, 'text'], baseProduct),
+        fullDesc: pathOr('', ['longDescription', 0, 'text'], baseProduct),
+        categoryId: baseProduct.categoryId,
+      },
+      formErrors: {},
+    };
+  }
+
   state: StateType = {
     form: {
       name: '',

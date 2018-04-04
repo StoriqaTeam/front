@@ -1,9 +1,17 @@
 // @flow
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { pathOr } from 'ramda';
 
 import { Page } from 'components/App';
+import { Container, Row, Col } from 'layout';
+import { log, fromRelayError } from 'utils';
+
+import Form from './Form';
+
+import Menu from '../Menu';
 
 type PropsType = {
   //
@@ -18,11 +26,33 @@ class EditProduct extends Component<PropsType, StateType> {
     //
   };
   render() {
+    const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
     return (
-      <div>Hi!</div>
+      <Container>
+        <Row>
+          <Col size={2}>
+            <Menu
+              activeItem=""
+              switchMenu={() => {}}
+            />
+          </Col>
+          <Col size={10}>
+            <Form
+              baseProduct={baseProduct}
+              onSave={this.handleSave}
+              validationErrors={this.state.formErrors}
+              categories={this.context.directories.categories}
+            />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
+
+EditProduct.contextTypes = {
+  directories: PropTypes.object.isRequired,
+};
 
 export default createFragmentContainer(
   Page(EditProduct),
