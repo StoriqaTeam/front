@@ -13,7 +13,7 @@
       display: block;
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
     }
-    .rangesliderHandle {
+    .rangesliderHandle, .rangesliderHandle2 {
       background: #fff;
       border: 1px solid #ccc;
       cursor: pointer;
@@ -65,7 +65,7 @@
       border-radius: 10px;
       top: 0;
     }
-    .rangesliderHandle {
+    .rangesliderHandle, .rangesliderHandle2 {
       width: 30px;
       height: 30px;
       border-radius: 30px;
@@ -107,7 +107,7 @@
     background-color: transparent;
   
     .rangesliderFill,
-    .rangesliderHandle {
+    .rangesliderHandle, .rangesliderHandle2 {
       position: absolute;
     }
   
@@ -117,7 +117,7 @@
       box-shadow: none;
       bottom: 0;
     }
-    .rangesliderHandle {
+    .rangesliderHandle, .rangesliderHandle2 {
       width: 30px;
       height: 10px;
       left: -10px;

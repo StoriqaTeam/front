@@ -17,6 +17,7 @@ type PropsType = {
 
 type StateType = {
   volume: number,
+  volume2: number,
 }
 
 class Ranger extends React.Component<PropsType, StateType> {
@@ -24,27 +25,30 @@ class Ranger extends React.Component<PropsType, StateType> {
     super(props);
     this.state = {
       volume: 0,
+      volume2: 0,
     };
   }
 
-  handleOnChange = (volume: number) => {
-    console.log('^^^^ handler on change value: ', { volume })
+  handleOnChange = (value: number, fieldName: string) => {
     this.setState({
-      volume,
+      [fieldName]: value,
     });
   }
 
   render() {
-    const { volume } = this.state;
+    const { volume, volume2 } = this.state;
+    console.log('***** value: ', { volume, volume2 });
     return (
       <div styleName="wrapper">
         <div styleName="rangerContainer">
           <RangerSlider
             min={0}
-            max={100}
+            max={1000}
             value={volume}
+            value2={volume2}
             orientation="horizontal"
-            onChange={this.handleOnChange}
+            onChange={value => this.handleOnChange(value, 'volume')}
+            onChange2={value => this.handleOnChange(value, 'volume2')}
           />
           {/* <Slider
             min={0}
@@ -53,8 +57,8 @@ class Ranger extends React.Component<PropsType, StateType> {
             orientation="horizontal"
             onChange={this.handleOnChange}
           /> */}
-          <div styleName="leftControll" />
-          <div styleName="rightControll" />
+          <div styleName="leftControll">{volume}</div>
+          <div styleName="rightControll">{volume2}</div>
         </div>
       </div>
     );
