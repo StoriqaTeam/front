@@ -1,5 +1,8 @@
+@import "../../../styles/variables";
+
 .container {
   align-items: flex-start;
+  background: $color_white;
   display: flex;
   justify-content: center;
 
@@ -7,7 +10,6 @@
     position: relative;
     & > img {
       height: 462px;
-      padding: 44px 48px 0 48px;
       width: 462px;
     }
   }
