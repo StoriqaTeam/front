@@ -11,12 +11,17 @@
   width: 41rem;
 }
 
-.forForm .hr {
+.forForm .hr, .forSearch .hr {
   display: block;
   position: absolute;
   bottom: -0.375rem;
   width: 100%;
   border-bottom: 1px solid $color_grey_bg;
+}
+
+.forSearch {
+  display: block;
+  width: 100%;
 }
 
 .label {
@@ -37,12 +42,13 @@
   font-size: 11px;
 }
 
-.forForm .wrap {
+.forForm .wrap, .forSearch .wrap {
   position: static;
 }
 
 .transparent,
-.forForm .wrap {
+.forForm .wrap,
+.forSearch .wrap{
   padding-left: 0;
   background-color: transparent;
 }
@@ -72,7 +78,7 @@
   z-index: 2;
 }
 
-.forForm .icon {
+.forForm .icon, .forSearch .icon {
   top: auto;
   bottom: -0.75rem;
 }
@@ -95,7 +101,7 @@
   z-index: 3;
 }
 
-.forForm .items {
+.forForm .items, .forSearch .items {
   top: 3rem;
   left: 0;
   margin-left: 0;

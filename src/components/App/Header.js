@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -85,9 +86,9 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <div styleName="logo">
+                <Link to="/" styleName="logo">
                   <Icon type="logo" />
-                </div>
+                </Link>
                 <div styleName="searchInput">
                   <SearchInput
                     searchCategories={[

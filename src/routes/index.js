@@ -4,7 +4,7 @@ import React from 'react';
 import { Route, RedirectException } from 'found';
 import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
-import { find, pathEq, pathOr } from 'ramda';
+import { find, pathEq, pathOr, last } from 'ramda';
 
 import { log } from 'utils';
 import { App } from 'components/App';
@@ -15,6 +15,7 @@ import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import { Product } from 'pages/Manage/Store/Product';
+import Stores from 'pages/Stores/Stores';
 
 const routes = (
   <Route
@@ -84,7 +85,23 @@ const routes = (
     }}
   >
     <Route Component={Start} />
-
+    <Route
+      path="/stores"
+      Component={Stores}
+      // query={graphql`
+      //   query routes_Stores_Query($input: SearchStoreInput!) {
+      //     search {
+      //       findStore(searchTerm: $input) {
+      //         ...Stores_findStore
+      //       }
+      //     }
+      //   }
+      // `}
+      prepareVariables={(...args) => {
+        const searchValue = pathOr('', ['query', 'search'], last(args).location);
+        return ({ input: { name: searchValue } });
+      }}
+    />
     <Route
       path="/manage"
       render={({ match }) => {

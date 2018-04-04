@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -12,20 +11,16 @@ import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
 import { Container, Row, Col } from 'layout';
 
-import CategoriesMenu from './CategoriesMenu';
-
 import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 import mostPopularGoods from './mostPopularGoods.json';
 
-class Start extends PureComponent<{}> {
+class Start extends PureComponent<{}> {// eslint-disable-line
   render() {
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
     return (
       <div styleName="container">
-        {categories && <CategoriesMenu categories={categories} />}
         <div styleName="item">
           <BannersSlider items={bannersSlider} />
         </div>

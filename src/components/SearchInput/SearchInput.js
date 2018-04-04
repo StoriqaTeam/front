@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { filter, startsWith, toUpper } from 'ramda';
 import classNames from 'classnames';
+import { withRouter } from 'found';
 
 import { DropdownSelect } from 'components/DropdownSelect';
 import { Icon } from 'components/Icon';
@@ -14,7 +15,8 @@ import './SearchInput.scss';
 
 type PropsType = {
   items: ?Array<any>,
-  searchCategories: ?Array<{ id: number, label: string }>
+  searchCategories: ?Array<{ id: number, label: string }>,
+  router: Object,
 };
 
 type StateType = {
@@ -52,6 +54,11 @@ class SearchInput extends Component<PropsType, StateType> {
     this.setState(() => ({ searchCategoryId: id }));
   };
 
+  handleSearch = () => {
+    const { inputValue } = this.state;
+    this.props.router.push(inputValue ? `/stores?search=${inputValue}` : '/stores');
+  }
+
   render() {
     return (
       <div styleName="container">
@@ -81,7 +88,7 @@ class SearchInput extends Component<PropsType, StateType> {
             open={false}
           />
         </div>
-        <button styleName="searchButton">
+        <button styleName="searchButton" onClick={this.handleSearch}>
           <Icon type="magnifier" size="16" />
         </button>
       </div>
@@ -89,4 +96,4 @@ class SearchInput extends Component<PropsType, StateType> {
   }
 }
 
-export default SearchInput;
+export default withRouter(SearchInput);
