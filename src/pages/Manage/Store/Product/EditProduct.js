@@ -19,12 +19,12 @@ type PropsType = {
 };
 
 type StateType = {
-  //
+  formErrors: {},
 };
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
-    //
+    formErrors: {},
   };
 
   handleSave = (form: ?{}) => {
