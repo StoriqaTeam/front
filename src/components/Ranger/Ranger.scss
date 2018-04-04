@@ -5,15 +5,14 @@
   flex-direction: column;
 }
 
-.blockWrapper {
-  display: flex;
-  flex-direction: column;
+.rangerContainer {
+  display: block;
 }
 
-.separator {
-  height: 1px;
-  width: 100%;
-  background-color: $color_grey_border;
-  opacity: 0.2;
-  margin: 2rem 0;
+.leftControll {
+
+}
+
+.rightControll {
+
 }
