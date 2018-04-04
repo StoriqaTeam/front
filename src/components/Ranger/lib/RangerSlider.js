@@ -174,13 +174,14 @@ class Slider extends Component<PropsType, StateType> {
     e.stopPropagation();
     const { onChange } = this.props;
     const { target: { className, classList, dataset } } = e;
-    if (!onChange || className === 'rangeslider__labels') return;
+    console.log('^^^ handleDrag ', { className, classList, dataset });
+    if (!onChange || className === 'rangesliderLabels') return;
 
     let value = this.position(e);
 
     if (
       classList &&
-      classList.contains('rangeslider__label-item') &&
+      classList.contains('rangesliderLabelItem') &&
       dataset.value
     ) {
       value = parseFloat(dataset.value);
@@ -257,6 +258,15 @@ class Slider extends Component<PropsType, StateType> {
       ? direction - coordinate - grab
       : coordinate - direction - grab;
     const value = this.getValueFromPosition(pos);
+    console.log('^^^ position clientCoordinateStyle: ', {
+      clientCoordinateStyle,
+      directionStyle,
+      coordinateStyle,
+      coordinate,
+      direction,
+      pos,
+      value,
+    });
     return value;
   };
 
@@ -286,7 +296,7 @@ class Slider extends Component<PropsType, StateType> {
       ref={(sl) => {
         this.labels = sl;
       }}
-      className={cx('rangeslider__labels')}
+      styleName={cx('rangesliderLabels')}
     >
       {labels}
     </ul>
@@ -331,7 +341,7 @@ class Slider extends Component<PropsType, StateType> {
           <li
             key={key}
             role="presentation"
-            className={cx('rangeslider__label-item')}
+            styleName="rangesliderLabelItem"
             data-value={key}
             onMouseDown={this.handleDrag}
             onTouchStart={this.handleStart}
@@ -351,10 +361,11 @@ class Slider extends Component<PropsType, StateType> {
         ref={(s) => {
           this.slider = s;
         }}
-        className={cx(
+        styleName={cx(
           'rangeslider',
-          `rangeslider-${orientation}`,
-          { 'rangeslider-reverse': reverse },
+          { rangesliderHorizontal: orientation === 'horizontal' },
+          { rangesliderVertical: orientation === 'vertical' },
+          { rangesliderReverse: reverse },
           className,
         )}
         onMouseDown={this.handleDrag}
@@ -366,13 +377,13 @@ class Slider extends Component<PropsType, StateType> {
         aria-valuenow={value}
         aria-orientation={orientation}
       >
-        <div className="rangeslider__fill" style={fillStyle} />
+        <div styleName="rangesliderFill" style={fillStyle} />
         <div
           role="button"
           ref={(sh) => {
             this.handle = sh;
           }}
-          className="rangeslider__handle"
+          styleName="rangesliderHandle"
           onMouseDown={this.handleStart}
           onTouchMove={this.handleDrag}
           onTouchEnd={this.handleEnd}
@@ -380,17 +391,18 @@ class Slider extends Component<PropsType, StateType> {
           style={handleStyle}
           tabIndex={0}
         >
-          {showTooltip ?
+          {/* {showTooltip ?
             <div
               ref={(st) => {
                 this.tooltip = st;
               }}
-              className="rangeslider__handle-tooltip"
+              styleName="rangesliderHandleTooltip"
             >
               <span>{this.handleFormat(value)}</span>
             </div>
-            : null}
-          <div className="rangeslider__handle-label">{handleLabel}</div>
+            : null} */}
+          {/* <div styleName="rangesliderHandleLabel">{handleLabel}</div> */}
+          {/* <div>{handleLabel}</div> */}
         </div>
         {labels ? this.renderLabels(labelItems) : null}
       </div>
