@@ -1,13 +1,21 @@
- .container {
-   display: flex;
-   flex-flow: column;
-   padding: 16px;
-   img {
-     border-radius: 4px;
-     height: 80px;
-     margin-bottom: 16px;
-     // https://css-tricks.com/almanac/properties/o/object-fit/
-     object-fit: cover;
-     width: 80px;
-   }
+@import "../../../styles/variables";
+
+.container {
+ display: flex;
+ flex-flow: column;
+ padding: 16px;
+
+ img[src] {
+   border-radius: 4px;
+   height: 80px;
+   margin-bottom: 16px;
+   // https://css-tricks.com/almanac/properties/o/object-fit/
+   object-fit: cover;
+   width: 80px;
  }
+
+ .clicked {
+   border: 2px solid $color_primary;
+ }
+
+}
