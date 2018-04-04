@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import { Header, Footer, Main } from 'components/App';
-import { ProductImage, ProductShare } from 'pages/Store/Product';
+import { ProductImage, ProductShare, ProductDetails } from 'pages/Store/Product';
 import { Container, Col, Row } from 'layout';
 
 import './Product.scss';
@@ -23,7 +23,7 @@ class Product extends PureComponent<{}> {
                   <ProductShare />
                 </Col>
                 <Col size={6}>
-                  <h1>Product description</h1>
+                  <ProductDetails />
                 </Col>
               </Row>
             </Container>

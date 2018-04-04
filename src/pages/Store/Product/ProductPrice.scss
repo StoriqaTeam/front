@@ -1,0 +1,35 @@
+@import "../../../styles/variables";
+
+.container {
+  span:first-child {
+    display: block;
+  }
+
+  button {
+    background: $color_primary;
+    border-radius: 2px;
+    color: $color_white;
+    font-size: 11px;
+    margin-left: 15px;
+    padding: 3px 10px;
+  }
+
+}
+
+.stq {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 38px;
+}
+
+.stqLast {
+  color: #9a9a9a;
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+.stqPresent {
+  color: #505050;
+  font-size: 20px;
+}

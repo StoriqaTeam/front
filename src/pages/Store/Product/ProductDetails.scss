@@ -1,0 +1,28 @@
+@import "../../../styles/variables";
+
+.container {
+  background: $color_white;
+}
+
+.title {
+  color: $color_black;
+  font-family: $font_regular;
+  font-size: 30px;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  line-height: normal;
+  margin-bottom: 65px;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.description {
+  color: #a1a1a1;
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+  text-align: left;
+  width: 494px;
+}
