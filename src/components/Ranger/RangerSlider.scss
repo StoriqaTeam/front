@@ -1,7 +1,11 @@
-@import "../../../styles/variables";
+@import "../../styles/variables";
+
+.rangerContainer {
+  display: block;
+}
 
 .rangeslider {
-  margin: 20px 0;
+  margin: 1.5rem 0 2rem;
   position: relative;
   background: $color_grey_ranger;
   -ms-touch-action: none;
@@ -53,4 +57,31 @@
       bottom: inherit;
     }
   }
+}
+
+.valuesContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.value {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  border-radius: 3px;
+  background-color: $color_grey_ranger_value;
+  font-size: 1.75rem;
+  color: $color_grey_ranger_value_number;
+}
+
+.leftValue {
+  margin-right: 1rem;
+}
+
+.rightValue {
+  margin-left: 1rem;
 }

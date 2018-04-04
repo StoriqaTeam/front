@@ -115,7 +115,6 @@ app.use(async (req, res) => {
       <head>
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="/styles.css">
-        <link rel="stylesheet" href="https://unpkg.com/react-rangeslider/umd/rangeslider.min.css" />
       </head>
       <body>
       <div id="root" style="height: 100%;">${ReactDOMServer.renderToString(element)}</div>

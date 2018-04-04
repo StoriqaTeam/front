@@ -1,1 +1,1 @@
-export { default as Ranger } from './Ranger';
+export { default as RangerSlider } from './RangerSlider';

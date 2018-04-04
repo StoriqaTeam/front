@@ -1,8 +1,9 @@
 // @flow
 
+import React from 'react';
 import cx from 'classnames';
-import React, { Component } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
+
 import { capitalize, clamp } from './utils';
 
 import './RangerSlider.scss';
@@ -12,13 +13,11 @@ const constants = {
     horizontal: {
       dimension: 'width',
       direction: 'left',
-      reverseDirection: 'right',
       coordinate: 'x',
     },
     vertical: {
       dimension: 'height',
       direction: 'top',
-      reverseDirection: 'bottom',
       coordinate: 'y',
     },
   },
@@ -31,12 +30,10 @@ type PropsType = {
   value: number,
   value2: number,
   orientation: string,
-  reverse: boolean,
   className: string,
-  format: Function,
-  onChangeStart: Function,
   onChange: Function,
   onChange2: Function,
+  onChangeStart: Function,
   onChangeComplete: Function,
 };
 
@@ -45,7 +42,7 @@ type StateType = {
   grab: number,
 }
 
-class Slider extends Component<PropsType, StateType> {
+class RangerSlider extends React.Component<PropsType, StateType> {
   static defaultProps = {
     min: 0,
     max: 100,
@@ -53,10 +50,6 @@ class Slider extends Component<PropsType, StateType> {
     value: 0,
     value2: 0,
     orientation: 'horizontal',
-    tooltip: true,
-    reverse: false,
-    labels: {},
-    handleLabel: '',
   };
 
   constructor(props: PropsType, context: any) {
@@ -111,11 +104,6 @@ class Slider extends Component<PropsType, StateType> {
   handle2: any;
   labels: any;
   tooltip: any;
-
-  handleFormat = (value: number) => {
-    const { format } = this.props;
-    return format ? format(value) : value;
-  };
 
   handleUpdate = () => {
     if (!this.slider) {
@@ -176,20 +164,16 @@ class Slider extends Component<PropsType, StateType> {
 
   position = (e: any, buttonNumber: number) => {
     const { grab } = this.state;
-    const { orientation, reverse } = this.props;
+    const { orientation } = this.props;
     const node = this.slider;
     const coordinateStyle = constants.orientation[orientation].coordinate;
-    const directionStyle = reverse
-      ? constants.orientation[orientation].reverseDirection
-      : constants.orientation[orientation].direction;
+    const directionStyle = constants.orientation[orientation].direction;
     const clientCoordinateStyle = `client${capitalize(coordinateStyle)}`;
     const coordinate = !e.touches
       ? e[clientCoordinateStyle]
       : e.touches[0][clientCoordinateStyle];
     const direction = node.getBoundingClientRect()[directionStyle];
-    const pos = reverse
-      ? direction - coordinate - grab
-      : coordinate - direction - grab;
+    const pos = coordinate - direction - grab;
     const newValue = this.getValueFromPosition(pos, buttonNumber);
     return newValue;
   };
@@ -216,13 +200,10 @@ class Slider extends Component<PropsType, StateType> {
       value2,
       orientation,
       className,
-      reverse,
       min,
       max,
     } = this.props;
-    const direction = reverse
-      ? constants.orientation[orientation].reverseDirection
-      : constants.orientation[orientation].direction;
+    const { direction } = constants.orientation[orientation];
     const position = this.getPositionFromValue(value);
     const position2 = this.getPositionFromValue(value2);
     const coords = this.coordinates(position, 1);
@@ -232,52 +213,57 @@ class Slider extends Component<PropsType, StateType> {
     const handleStyle2 = { [direction]: `${coords2.handle}px` };
 
     return (
-      <div
-        role="slider"
-        tabIndex="-1"
-        ref={(s) => {
-          this.slider = s;
-        }}
-        styleName={cx(
-          'rangeslider',
-          { rangesliderHorizontal: orientation === 'horizontal' },
-          { rangesliderVertical: orientation === 'vertical' },
-          { rangesliderReverse: reverse },
-          className,
-        )}
-        aria-valuemin={min}
-        aria-valuemax={max}
-        aria-valuenow={value}
-        aria-orientation={orientation}
-      >
-        <div styleName="rangesliderFill" style={fillStyle} />
+      <div styleName="rangerContainer">
         <div
-          role="button"
-          ref={(sh) => {
-            this.handle = sh;
+          role="slider"
+          tabIndex="-1"
+          ref={(s) => {
+            this.slider = s;
           }}
-          styleName="rangesliderHandle"
-          onMouseDown={this.handleStart}
-          onTouchMove={this.handleDrag}
-          onTouchEnd={this.handleEnd}
-          style={handleStyle}
-          tabIndex={0}
-        />
-        <div
-          role="button"
-          ref={(sh) => {
-            this.handle2 = sh;
-          }}
-          styleName="rangesliderHandle2"
-          onMouseDown={this.handleStart2}
-          onTouchMove={this.handleDrag2}
-          onTouchEnd={this.handleEnd2}
-          style={handleStyle2}
-          tabIndex={0}
-        />
+          styleName={cx(
+            'rangeslider',
+            { rangesliderHorizontal: orientation === 'horizontal' },
+            { rangesliderVertical: orientation === 'vertical' },
+            className,
+          )}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value}
+          aria-orientation={orientation}
+        >
+          <div styleName="rangesliderFill" style={fillStyle} />
+          <div
+            role="button"
+            ref={(sh) => {
+              this.handle = sh;
+            }}
+            styleName="rangesliderHandle"
+            onMouseDown={this.handleStart}
+            onTouchMove={this.handleDrag}
+            onTouchEnd={this.handleEnd}
+            style={handleStyle}
+            tabIndex={0}
+          />
+          <div
+            role="button"
+            ref={(sh) => {
+              this.handle2 = sh;
+            }}
+            styleName="rangesliderHandle2"
+            onMouseDown={this.handleStart2}
+            onTouchMove={this.handleDrag2}
+            onTouchEnd={this.handleEnd2}
+            style={handleStyle2}
+            tabIndex={0}
+          />
+        </div>
+        <div styleName="valuesContainer">
+          <div styleName="leftValue value">{value}</div>
+          <div styleName="rightValue value">{value2}</div>
+        </div>
       </div>
     );
   }
 }
 
-export default Slider;
+export default RangerSlider;
