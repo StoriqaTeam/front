@@ -36,6 +36,27 @@ type StateType = {
 };
 
 class Product extends Component<PropsType, StateType> {
+  constructor(props: PropTypes) {
+    super(props);
+
+    const product = pathOr(null, ['me', 'baseProduct'], this.props);
+    if (!product) {
+      return;
+    }
+
+    this.state = {
+      form: {
+        name: pathOr('', ['name', 0, 'text'], product),
+        seoTitle: pathOr('', ['seoTitle', 0, 'text'], product),
+        seoDescription: pathOr('', ['seoDescription', 0, 'text'], product),
+        shortDescription: pathOr('', ['shortDescription', 0, 'text'], product),
+        fullDesc: pathOr('', ['longDescription', 0, 'text'], product),
+        categoryId: product.categoryId,
+      },
+      formErrors: {},
+    };
+  }
+
   state: StateType = {
     form: {
       name: '',
@@ -56,6 +77,7 @@ class Product extends Component<PropsType, StateType> {
   };
 
   handleSave = () => {
+    // TODO: вынести спеки
     const { errors: preValidationErrors } = validate({
       name: [[val => !isEmpty(val), 'Should not be empty']],
       shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
@@ -172,7 +194,6 @@ class Product extends Component<PropsType, StateType> {
                 {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
                 {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
                 {this.renderTextarea({ id: 'fullDesc', label: 'Full description' })}
-                { /* category selector here */ }
                 <div styleName="formItem">
                   <CategorySelector
                     categories={this.context.directories.categories}
@@ -220,11 +241,28 @@ export default createFragmentContainer(
       baseProduct(id:$productId) {
         id
         rawId
+        categoryId
+        storeId
         name {
           lang
           text
         }
-        categoryId
+        shortDescription {
+          lang
+          text
+        }
+        longDescription {
+          lang
+          text
+        }
+        seoTitle {
+          lang
+          text
+        }
+        seoDescription {
+          lang
+          text
+        }
       }
     }
   `,

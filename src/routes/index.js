@@ -14,7 +14,7 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
-import { Product } from 'pages/Manage/Store/Product';
+import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 
 const routes = (
   <Route
@@ -132,13 +132,17 @@ const routes = (
           )}
         />
         <Route
-          path="/:storeId/product/:productId"
-          Component={Product}
+          path="/:storeId/product/new"
+          Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
+        />
+        <Route
+          path="/:storeId/products/:productId"
+          Component={EditProduct}
           query={graphql`
             query routes_Product_Query($productID: Int!) {
               me {
                 id
-                ...Product_me @arguments(productId: $productID)
+                ...EditProduct_me @arguments(productId: $productID)
               }
             }
           `}
@@ -159,10 +163,6 @@ const routes = (
           prepareVariables={(_, { params }) => (
             { storeID: parseInt(params.storeId, 10) }
           )}
-        />
-        <Route
-          path="/:storeId/product/new"
-          Component={({ params }) => (<Product storeId={params.storeId} />)}
         />
       </Route>
     </Route>
