@@ -2,8 +2,8 @@
 
 import React, { PureComponent } from 'react';
 
-import { Header, Footer } from 'components/App';
-import { ProductImage } from 'pages/Store/Product';
+import { Header, Footer, Main } from 'components/App';
+import { ProductImage, ProductShare } from 'pages/Store/Product';
 import { Container, Col, Row } from 'layout';
 
 import './Product.scss';
@@ -14,18 +14,21 @@ class Product extends PureComponent<{}> {
     return (
       <div styleName="container">
         <Header />
-        <div styleName="ProductBackground">
-          <Container>
-            <Row>
-              <Col size={6}>
-                <ProductImage />
-              </Col>
-              <Col size={6}>
-                <h1>Product description</h1>
-              </Col>
-            </Row>
-          </Container>
-        </div>
+        <Main>
+          <div styleName="ProductBackground">
+            <Container>
+              <Row>
+                <Col size={6}>
+                  <ProductImage />
+                  <ProductShare />
+                </Col>
+                <Col size={6}>
+                  <h1>Product description</h1>
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        </Main>
         <Footer />
       </div>
     );
