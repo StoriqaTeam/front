@@ -3,11 +3,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr } from 'ramda';
+import { pathOr, isEmpty } from 'ramda';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
+import { UpdateBaseProductMutation } from 'relay/mutations';
 
 import Form from './Form';
 
@@ -25,6 +26,46 @@ class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
     //
   };
+
+  handleSave = (form: ?{}) => {
+    if (!form) {
+      return;
+    }
+    const {
+      name,
+      categoryId,
+      seoTitle,
+      seoDescription,
+      shortDescription,
+      fullDesc,
+    } = form;
+    const id = pathOr(null, ['me', 'baseProduct', 'id'], this.props);
+    UpdateBaseProductMutation.commit({
+      id,
+      name: [{ lang: 'EN', text: name }],
+      shortDescription: isEmpty(shortDescription) ? [] : [{ lang: 'EN', text: shortDescription }],
+      longDescription: isEmpty(fullDesc) ? [] : [{ lang: 'EN', text: fullDesc }],
+      categoryId,
+      seoTitle: isEmpty(seoTitle) ? [] : [{ lang: 'EN', text: seoTitle }],
+      seoDescription: isEmpty(seoDescription) ? [] : [{ lang: 'EN', text: seoDescription }],
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        log.debug({ response, errors });
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
+        alert('Something going wrong :(');
+      },
+    });
+  };
+
   render() {
     const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
     return (
@@ -52,6 +93,7 @@ class EditProduct extends Component<PropsType, StateType> {
 
 EditProduct.contextTypes = {
   directories: PropTypes.object.isRequired,
+  environment: PropTypes.object.isRequired,
 };
 
 export default createFragmentContainer(
