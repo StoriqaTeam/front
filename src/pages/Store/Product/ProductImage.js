@@ -2,9 +2,8 @@
 
 import React, { PureComponent } from 'react';
 
-import { ProductThumbnails } from 'pages/Store/Product';
+import { ProductThumbnails, ImageDetail } from 'pages/Store/Product';
 
-import Zoom from './svg/zoom.svg';
 import Expand from './svg/expand.svg';
 
 import './ProductImage.scss';
@@ -51,11 +50,7 @@ class ProductImage extends PureComponent<{}, stateTypes> {
             src="https://www.studio-88.co.za/wp-content/uploads/2017/10/NIKE-JORDAN-AIR-JORDAN-1-MID-BLACK-BLACK-NKK961BP-V4.jpg"
             alt="nike air jordan"
           />
-          <p styleName="imageDetail">
-            <span styleName="zoom">
-              <Zoom />
-            </span>Наведите курсором, чтобы рассмотреть детали
-          </p>
+          <ImageDetail />
         </figure>
       </div>
     );
