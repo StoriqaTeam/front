@@ -1,7 +1,9 @@
+// @flow
+
 /* eslint no-debugger: "warn" */
 import cx from 'classnames';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import ResizeObserver from 'resize-observer-polyfill';
 import { capitalize, clamp } from './utils';
 
@@ -28,23 +30,33 @@ const constants = {
   },
 };
 
-class Slider extends Component {
-  static propTypes = {
-    min: PropTypes.number,
-    max: PropTypes.number,
-    step: PropTypes.number,
-    value: PropTypes.number,
-    orientation: PropTypes.string,
-    tooltip: PropTypes.bool,
-    reverse: PropTypes.bool,
-    labels: PropTypes.object,
-    handleLabel: PropTypes.string,
-    format: PropTypes.func,
-    onChangeStart: PropTypes.func,
-    onChange: PropTypes.func,
-    onChangeComplete: PropTypes.func,
-  };
+type PropsType = {
+  min: number,
+  max: number,
+  step: number,
+  value: number,
+  orientation: string,
+  tooltip: boolean,
+  reverse: boolean,
+  labels: {},
+  // labels: PropTypes.shape({
+  //   foo: { bar: {} },
+  // }),
+  handleLabel: string,
+  className: string,
+  format: Function,
+  onChangeStart: Function,
+  onChange: Function,
+  onChangeComplete: Function,
+};
 
+type StateType = {
+  active: boolean,
+  limit: number,
+  grab: number,
+}
+
+class Slider extends Component<PropsType, StateType> {
   static defaultProps = {
     min: 0,
     max: 100,
@@ -57,7 +69,7 @@ class Slider extends Component {
     handleLabel: '',
   };
 
-  constructor(props, context) {
+  constructor(props: PropsType, context: any) {
     super(props, context);
     this.state = {
       active: false,
@@ -77,7 +89,7 @@ class Slider extends Component {
    * @param  {number} value - Current value of slider
    * @return {position} pos - Calculated position of slider based on value
    */
-  getPositionFromValue = (value) => {
+  getPositionFromValue = (value: number) => {
     const { limit } = this.state;
     const { min, max } = this.props;
     const diffMaxMin = max - min;
@@ -92,7 +104,7 @@ class Slider extends Component {
    * @param  {number} pos - Current position/coordinates of slider
    * @return {number} value - Slider value
    */
-  getValueFromPosition = (pos) => {
+  getValueFromPosition = (pos: number) => {
     const { limit } = this.state;
     const {
       orientation,
@@ -106,12 +118,17 @@ class Slider extends Component {
     return clamp(value, min, max);
   };
 
+  slider: any;
+  handle: any;
+  labels: any;
+  tooltip: any;
+
   /**
    * Format label/tooltip value
    * @param  {Number} - value
    * @return {Formatted Number}
    */
-  handleFormat = (value) => {
+  handleFormat = (value: number) => {
     const { format } = this.props;
     return format ? format(value) : value;
   };
@@ -139,7 +156,7 @@ class Slider extends Component {
    * Attach event listeners to mousemove/mouseup events
    * @return {void}
    */
-  handleStart = (e) => {
+  handleStart = (e: Event) => {
     const { onChangeStart } = this.props;
     document.addEventListener('mousemove', this.handleDrag);
     document.addEventListener('mouseup', this.handleEnd);
@@ -153,7 +170,7 @@ class Slider extends Component {
    * @param  {Object} e - Event object
    * @return {void}
    */
-  handleDrag = (e) => {
+  handleDrag = (e: any) => {
     e.stopPropagation();
     const { onChange } = this.props;
     const { target: { className, classList, dataset } } = e;
@@ -175,7 +192,7 @@ class Slider extends Component {
    * Detach event listeners to mousemove/mouseup events
    * @return {void}
    */
-  handleEnd = (e) => {
+  handleEnd = (e: Event) => {
     const { onChangeComplete } = this.props;
     this.setState({
       active: false,
@@ -189,7 +206,7 @@ class Slider extends Component {
    * @param  {Object} e - Event object
    * @return {void}
    */
-  handleKeyDown = (e) => {
+  handleKeyDown = (e: any) => {
     e.preventDefault();
     const { keyCode } = e;
     const {
@@ -222,7 +239,7 @@ class Slider extends Component {
    * @param  {Object} e - Event object
    * @return {number} value - Slider value
    */
-  position = (e) => {
+  position = (e: any) => {
     const { grab } = this.state;
     const { orientation, reverse } = this.props;
 
@@ -248,7 +265,7 @@ class Slider extends Component {
    * @param  {Object} pos - Position object
    * @return {Object} - Slider fill/handle coordinates
    */
-  coordinates = (pos) => {
+  coordinates = (pos: number) => {
     const { limit, grab } = this.state;
     const { orientation } = this.props;
     const value = this.getValueFromPosition(pos);
@@ -264,7 +281,7 @@ class Slider extends Component {
     };
   };
 
-  renderLabels = labels => (
+  renderLabels = (labels: any) => (
     <ul
       ref={(sl) => {
         this.labels = sl;
@@ -300,6 +317,8 @@ class Slider extends Component {
 
     let labelItems = [];
     let labelKeys = Object.keys(labels);
+
+    // console.log('&&&& labels: ', { labels });
 
     if (labelKeys.length > 0) {
       labelKeys = labelKeys.sort((a, b) => (reverse ? a - b : b - a));
