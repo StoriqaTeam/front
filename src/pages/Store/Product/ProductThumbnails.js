@@ -5,7 +5,9 @@ import React, { Component } from 'react';
 import './ProductThumbnails.scss';
 
 type propsTypes = {
+  title: string,
   thumbnails: {img: string, alt: string}[],
+  row: boolean,
 }
 
 type stateTypes = {
@@ -13,6 +15,10 @@ type stateTypes = {
 }
 
 class ProductThumbnails extends Component<propsTypes, stateTypes> {
+  static defaultProps = {
+    title: '',
+    row: false,
+  };
   state = {
     clicked: null,
   };
@@ -27,24 +33,27 @@ class ProductThumbnails extends Component<propsTypes, stateTypes> {
     });
   };
   render() {
-    const { thumbnails } = this.props;
+    const { thumbnails, row, title } = this.props;
     const { clicked } = this.state;
     return (
-      <div styleName="container">
-        {thumbnails.map(({ id, src, alt }, index) => (
-          <button
-            key={id}
-            onClick={() => this.handleClick(index)}
-          >
-            <figure>
-              <img
-                styleName={clicked === index ? 'clicked' : ''}
-                src={src}
-                alt={alt}
-              />
-            </figure>
-          </button>
-        ))}
+      <div>
+        { title !== '' ? (<h4 styleName="title">{ title }</h4>) : null }
+        <div styleName={`container ${row ? 'row' : 'column'}`}>
+          {thumbnails.map(({ id, src, alt }, index) => (
+            <button
+              key={id}
+              onClick={() => this.handleClick(index)}
+            >
+              <figure>
+                <img
+                  styleName={clicked === index ? 'clicked' : ''}
+                  src={src}
+                  alt={alt}
+                />
+              </figure>
+            </button>
+          ))}
+        </div>
       </div>
     );
   }

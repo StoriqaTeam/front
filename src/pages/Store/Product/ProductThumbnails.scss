@@ -2,13 +2,10 @@
 
 .container {
  display: flex;
- flex-flow: column;
- padding: 16px;
 
  img[src] {
    border-radius: 4px;
    height: 80px;
-   margin-bottom: 16px;
    // https://css-tricks.com/almanac/properties/o/object-fit/
    object-fit: cover;
    width: 80px;
@@ -18,4 +15,25 @@
    border: 2px solid $color_primary;
  }
 
+}
+
+.title {
+  color: $color_grey_text;
+  font-size: 14px;
+  margin: 15px 0;
+  text-transform: uppercase;
+}
+
+.column {
+  flex-flow: column;
+  img[src] {
+    margin-bottom: 16px;
+  }
+}
+
+.row {
+  flex-flow: row;
+  img[src] {
+    margin-right: 16px;
+  }
 }
