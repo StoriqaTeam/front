@@ -1,0 +1,12 @@
+@import "../../../styles/variables";
+
+.container {
+  width: 65px;
+}
+
+.title {
+  color: $color_grey_text;
+  font-size: 14px;
+  margin: 15px 0;
+  text-transform: uppercase;
+}
