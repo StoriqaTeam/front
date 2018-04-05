@@ -1,0 +1,28 @@
+@import "../../../styles/variables";
+
+.container {
+  display: inline-block;
+}
+
+.title {
+  color: $color_grey_text;
+  font-size: 14px;
+}
+
+.sizes {
+  align-items: center;
+  display: flex;
+}
+
+.size {
+  align-self: center;
+  border: solid 2px #e1e1e1;
+  height: 40px;
+  line-height: 36px;
+  text-align: center;
+  width: 58px;
+}
+// apply transparent border-right except the last one
+.size:not(:last-child) {
+  border-right: transparent;
+}

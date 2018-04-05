@@ -2,16 +2,20 @@
 
 import React, { PureComponent } from 'react';
 
-import { ProductPrice } from 'pages/Store/Product';
+import { ProductPrice, ProductSize } from 'pages/Store/Product';
 
 import './ProductDetails.scss';
 
 type stateTypes = {
-  thumbnails: {img: string, alt: string}[],
+  sizes: string | number[]
 }
 
 class ProductDetails extends PureComponent<{}, stateTypes> {
+  state = {
+    sizes: [2, 34, 56, 12, 45],
+  };
   render() {
+    const { sizes } = this.state;
     return (
       <div styleName="container">
         <h2 styleName="title">Nike Air Jordan</h2>
@@ -20,6 +24,7 @@ class ProductDetails extends PureComponent<{}, stateTypes> {
           {/* eslint-disable max-len */}
           Наушники Bluetooth Beats Beats Solo3 Wireless On-Ear Violet (MNEQ2ZE/A) Объемное звучание на всех частотах, отлично подходит для прослушивания музыки, фильмов.
         </p>
+        <ProductSize sizes={sizes} />
       </div>
     );
   }
