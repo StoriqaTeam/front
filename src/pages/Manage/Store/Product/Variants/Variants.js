@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, map, prop, flatten, filter, reduce, merge } from 'ramda';
 
 import { CreateProductWithAttributesMutation } from 'relay/mutations';
 import { log } from 'utils';
@@ -23,15 +22,6 @@ type StateType = {
 class Variants extends Component<PropsType, StateType> {
   state: StateType = {
     //
-  };
-
-  getCategoriesWithAttributes = (categories: {}) => {
-    const lvl1Childs = prop('children', categories);
-    const lvl2Childs = flatten(map(prop('children'), lvl1Childs));
-    const lvl3Childs = flatten(map(prop('children'), lvl2Childs));
-    const categoriesWithAttrs = filter(item => prop('length', prop('getAttributes', item)) > 0, lvl3Childs);
-    const filtered = map(item => ({ [item.rawId]: item.getAttributes }), categoriesWithAttrs);
-    return reduce(merge, {}, filtered);
   };
 
   handleSave = (variant: {}) => {
@@ -59,16 +49,13 @@ class Variants extends Component<PropsType, StateType> {
   };
 
   render() {
-    log.debug('Variants', { props: this.props });
-    const categoriesWithAttrs = this.getCategoriesWithAttributes(
-      this.context.directories.categories,
-    );
-    log.debug({ categoriesWithAttrs });
-    // log.debug({ category: categoriesWithAttrs[this.props.categoryId] })
     return (
       <div styleName="container">
         <span>Варианты товара</span>
-        <Table onSave={this.handleSave} />
+        <Table
+          onSave={this.handleSave}
+          categoryId={this.props.categoryId}
+        />
       </div>
     );
   }

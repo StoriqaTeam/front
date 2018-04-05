@@ -6,6 +6,8 @@ import { Button } from 'components/Button';
 import { Checkbox } from 'components/Forms';
 import { log } from 'utils';
 
+import Characteristics from './Characteristics';
+
 import './Form.scss';
 
 type PropsType = {
@@ -15,6 +17,7 @@ type PropsType = {
   cashback?: number,
   characteristics?: Array<{}>,
   onSave: Function,
+  categoryId: number,
 };
 
 type StateType = {
@@ -122,6 +125,9 @@ class Form extends Component<PropsType, StateType> {
             <span styleName="inputPostfix">%</span>
           </div>
         </div>
+        <Characteristics
+          onChange={values => log.debug('Form', { values })}
+        />
         <Button
           type="button"
           onClick={this.handleSave}

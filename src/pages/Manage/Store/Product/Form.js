@@ -10,7 +10,6 @@ import { Input, Textarea } from 'components/Forms';
 import { renameKeys } from 'utils/ramda';
 
 import Header from '../Header';
-// import Variants from './Variants/Variants';
 
 import './Product.scss';
 
@@ -47,7 +46,7 @@ class Form extends Component<PropsType, StateType> {
         seoDescription: pathOr('', ['seoDescription', 0, 'text'], baseProduct),
         shortDescription: pathOr('', ['shortDescription', 0, 'text'], baseProduct),
         fullDesc: pathOr('', ['longDescription', 0, 'text'], baseProduct),
-        categoryId: baseProduct.categoryId,
+        categoryId: baseProduct.category.rawId,
       },
       formErrors: {},
     };
@@ -165,10 +164,6 @@ class Form extends Component<PropsType, StateType> {
             </Button>
           </div>
         </div>
-        {/* <Variants
-          productId={productId}
-          categoryId={categoryId}
-        /> */}
       </div>
     );
   }

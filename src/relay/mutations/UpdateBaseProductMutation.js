@@ -8,7 +8,9 @@ const mutation = graphql`
     updateBaseProduct(input: $input) {
       id
       rawId
-      categoryId
+      category {
+        rawId
+      }
       storeId
       name {
         lang

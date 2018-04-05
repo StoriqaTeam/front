@@ -10,6 +10,7 @@ import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
 import { UpdateBaseProductMutation } from 'relay/mutations';
 
+import Variants from './Variants/Variants';
 import Form from './Form';
 
 import Menu from '../Menu';
@@ -84,6 +85,10 @@ class EditProduct extends Component<PropsType, StateType> {
               validationErrors={this.state.formErrors}
               categories={this.context.directories.categories}
             />
+            <Variants
+              productId={baseProduct.rawId}
+              categoryId={baseProduct.categoryId}
+            />
           </Col>
         </Row>
       </Container>
@@ -104,7 +109,9 @@ export default createFragmentContainer(
       baseProduct(id:$productId) {
         id
         rawId
-        categoryId
+        category {
+          rawId
+        }
         storeId
         name {
           lang

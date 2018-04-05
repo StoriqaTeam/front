@@ -72,15 +72,6 @@ const routes = (
                     lang
                     text
                   }
-                  valueType
-                  metaField {
-                    values
-                    uiElement
-                    translatedValues {
-                      lang
-                      text
-                    }
-                  }
                 }
               }
             }

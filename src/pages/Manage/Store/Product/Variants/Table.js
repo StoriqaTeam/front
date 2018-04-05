@@ -9,6 +9,7 @@ import Form from './Form';
 
 type PropsType = {
   onSave: Function,
+  categoryId: number,
 };
 
 type StateType = {
@@ -28,6 +29,7 @@ class Table extends Component<PropsType, StateType> {
     return (
       <Form
         onSave={this.handleSave}
+        categoryId={this.props.categoryId}
       />
     );
   }
