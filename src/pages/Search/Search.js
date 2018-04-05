@@ -49,6 +49,10 @@ class Search extends PureComponent<PropsType, StateType> {
     });
   }
 
+  handleOnCompleteRange = (value: number, value2: number, e: Event) => {
+    log.info({ value, value2 }, e);
+  }
+
   renderBreadcrumbs = () => {
     const { categoryRowId } = this.props;
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
@@ -90,6 +94,7 @@ class Search extends PureComponent<PropsType, StateType> {
                 value2={volume2}
                 onChange={value => this.handleOnRangeChange(value, 'volume')}
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
+                onChangeComplete={this.handleOnCompleteRange}
               />
             </Sidebar>
           </div>
