@@ -1,12 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { map, find, propEq, pathOr, head } from 'ramda';
 import { Link } from 'found';
 
-import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { MiniSelect } from 'components/MiniSelect';
 import { Icon } from 'components/Icon';
@@ -18,7 +16,8 @@ import './Stores.scss';
 import storesData from './stores.json';
 
 type PropsType = {
-  //
+  search: {},
+  categories: any,
 };
 
 type StateType = {
@@ -69,18 +68,15 @@ class Stores extends Component<PropsType, StateType> {
 
   storesRefetch = () => {
     // Uncomment after the back
-    // this.props.relay.refetch(
-    //   {},
-    //   {
-    //     first: 8,
-    //     after: 0,
-    //   },
-    //   () => {},
-    //   { force: true },
-    // );
-  }
+    this.props.relay.refetch(
+      { first: 8, after: 0, searchTerm: { name: 'asdfasf', getStoresTotalCount: true } },
+      {},
+      () => {},
+      { force: true },
+    );
+  };
 
-  handleСategory = (category: { id: string, label: string }) => {
+  handleCategory = (category: { id: string, label: string }) => {
     this.setState({ category });
   };
 
@@ -103,6 +99,9 @@ class Stores extends Component<PropsType, StateType> {
     return (
       <Container>
         <Row>
+          {/* <> */}
+        </Row>
+        <Row>
           <Col size={2}>
             <div styleName="countInfo">
               <b>2 741</b> магазинов найдено с trade в названии
@@ -116,7 +115,7 @@ class Stores extends Component<PropsType, StateType> {
                   { id: '1', label: 'Детские товары' },
                   { id: '2', label: 'Недетские товары' },
                 ]}
-                onSelect={this.handleСategory}
+                onSelect={this.handleCategory}
               />
             </div>
             <div styleName="filterItem">
@@ -230,42 +229,43 @@ class Stores extends Component<PropsType, StateType> {
   }
 }
 
-Stores.contextTypes = {
-  environment: PropTypes.object.isRequired,
-  currentUser: currentUserShape,
-};
-
 export default createRefetchContainer(
   Page(Stores),
   graphql`
-    fragment Stores_findStore on StoresConnection {
-      edges {
-        node {
-          id
-          rawId
-          name {
-            lang
-            text
-          }
-          logo
-          cover
-          slug
-          shortDescription {
-            lang
-            text
+    fragment Stores_search on Search
+    @argumentDefinitions(
+      text: { type: "SearchStoreInput!" },
+      firstId: { type: "Int", defaultValue: null },
+      afterId: { type: "Int", defaultValue: null }
+    ) {
+      findStore(searchTerm: $text, first: $firstId, after: $afterId) {
+        stores {
+          edges {
+            node {
+              id
+              rawId
+              name {
+                lang
+                text
+              }
+              logo
+              cover
+              slug
+              shortDescription {
+                lang
+                text
+              }
+            }
           }
         }
       }
     }
   `,
-  // Uncomment after the back
-  // graphql`
-  //   query Stores_edges_Query($input: SearchStoreInput!) {
-  //     search {
-  //       findStore(first: $first, after: $after, searchTerm: $input) {
-  //         ...Stores_findStore
-  //       }
-  //     }
-  //   }
-  // `,
+  graphql`
+    query Stores_edges_Query($first: Int, $after: Int, $searchTerm: SearchStoreInput!) {
+      search {
+        ...Stores_search @arguments(firstId: $first, afterId: $after, text: $searchTerm)
+      }
+    }
+  `,
 );
