@@ -17,15 +17,17 @@ class Product extends PureComponent<{}> {
         <Main>
           <div styleName="ProductBackground">
             <Container>
-              <Row>
-                <Col size={6}>
-                  <ProductImage />
-                  <ProductShare />
-                </Col>
-                <Col size={6}>
-                  <ProductDetails />
-                </Col>
-              </Row>
+              <div styleName="whiteBackground">
+                <Row>
+                  <Col size={6}>
+                    <ProductImage />
+                    <ProductShare />
+                  </Col>
+                  <Col size={6}>
+                    <ProductDetails />
+                  </Col>
+                </Row>
+              </div>
             </Container>
           </div>
         </Main>
