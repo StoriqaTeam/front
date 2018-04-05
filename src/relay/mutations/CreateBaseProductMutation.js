@@ -22,7 +22,9 @@ const mutation = graphql`
         text
       }
       currencyId
-      categoryId
+      category {
+        id
+      }
     }
   }
 `;

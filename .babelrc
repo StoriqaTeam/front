@@ -16,6 +16,9 @@
   "env": {
     "production": {
       "plugins": [
+        ["module-resolver", {
+          "root": ["./src"]
+        }],
         ["react-css-modules", {
           "filetypes": {
             ".scss": {
@@ -28,6 +31,9 @@
     },
     "development": {
       "plugins": [
+        ["module-resolver", {
+          "root": ["./src"]
+        }],
         ["react-css-modules", {
           "filetypes": {
             ".scss": {
