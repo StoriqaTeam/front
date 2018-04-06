@@ -1,12 +1,19 @@
 @import "../../../styles/variables";
 
 .container {
-  width: 65px;
+  margin-top: 3.625rem;
 }
 
-.title {
+h4 {
   color: $color_grey_text;
   font-size: 14px;
-  margin: 15px 0;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 2.75rem;
+  letter-spacing: 1.2px;
+  line-height: normal;
+  text-align: left;
   text-transform: uppercase;
+  width: 12.125rem;
 }
