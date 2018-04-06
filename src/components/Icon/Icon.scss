@@ -1,5 +1,9 @@
 .container {
   position: relative;
+  display: block;
+}
+
+.container.inline {
   display: inline-block;
 }
 
@@ -17,6 +21,11 @@
 .size-16 {
   width: 2rem;
   height: 2rem;
+}
+
+.size-20 {
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .size-24 {

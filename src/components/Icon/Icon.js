@@ -37,7 +37,8 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 24 | 32,
+  size: 8 | 16 | 20 | 24 | 32,
+  inline: ?boolean,
 };
 
 const iconsMap = {
@@ -73,12 +74,13 @@ const iconsMap = {
 
 class Icon extends PureComponent<PropsTypes> {
   render() {
-    const { type, size } = this.props;
+    const { type, size, inline } = this.props;
     return (
       <div
         styleName={classNames('container', {
           [`size-${size || '16'}`]: type !== 'logo',
           isLogo: type === 'logo',
+          inline,
         })}
       >
         {pathOr(null, [type], iconsMap)}
