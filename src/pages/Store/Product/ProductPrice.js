@@ -2,23 +2,44 @@
 
 import React from 'react';
 
-
 import './ProductPrice.scss';
 
-const ProductPrice = () => (
-  <div styleName="container">
-    <span styleName="stqLast">
-      0.000290 STQ
-    </span>
-    <div styleName="stq">
-      <span styleName="stqPresent">
-        0.000123 STQ
+type propTypes = {
+  currency?: string,
+  lastPrice: string,
+  currentPrice: string,
+  percentage: string,
+  buttonText?: string,
+}
+
+const ProductPrice = (props: propTypes) => {
+  const {
+    currency,
+    lastPrice,
+    currentPrice,
+    percentage,
+    buttonText,
+  } = props;
+  return (
+    <div styleName="container">
+      <span styleName="lasPrice">
+        { lastPrice } { currency }
       </span>
-      <button>
-        Cashback 12%
-      </button>
+      <div styleName="stq">
+        <span styleName="currentPrice">
+          { currentPrice } { currency }
+        </span>
+        <button>
+          { buttonText } {`${percentage}%`}
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+ProductPrice.defaultProps = {
+  currency: 'STQ',
+  buttonText: 'Cashback',
+};
 
 export default ProductPrice;
