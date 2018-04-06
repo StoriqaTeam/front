@@ -20,7 +20,10 @@ const run = () => {
       query: introspectionQuery,
     }),
   })
-    .then(result => result.json())
+    .then(result => {
+      console.log('Result status from graphql: ', result.statusText);
+      return result.json();
+    })
     .then(result => {
       if (result.errors) {
         console.error(
