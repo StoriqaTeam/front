@@ -2,15 +2,7 @@
   align-items: flex-start;
   border-right: 1px solid #efefef;
   display: flex;
-  justify-content: center;
-
-  figure {
-    position: relative;
-    & > img {
-      height: 462px;
-      width: 462px;
-    }
-  }
+  justify-content: space-between;
 
   .expand {
     position: absolute;
@@ -22,4 +14,17 @@
     }
   }
 
+}
+
+.bigImage {
+  position: relative;
+  & > img {
+    // https://github.com/twbs/bootstrap/blob/v4-dev/scss/mixins/_image.scss
+    height: auto;
+    max-width: 100%;
+  }
+}
+
+.thumbnailsWrapper {
+  padding: 2.375rem 2.125rem 0 2.125rem ;
 }

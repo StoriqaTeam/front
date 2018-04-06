@@ -10,6 +10,7 @@ import './ProductImage.scss';
 
 type stateTypes = {
   thumbnails: {id: string | number, img: string, alt: string}[],
+  selectedImage: string,
 }
 
 class ProductImage extends PureComponent<{}, stateTypes> {
@@ -17,7 +18,7 @@ class ProductImage extends PureComponent<{}, stateTypes> {
     thumbnails: [
       {
         id: 0,
-        src: 'https://www.flightclub.com/media/catalog/product/cache/1/image/1600x1140/9df78eab33525d08d6e5fb8d27136e95/8/0/801640_1.jpg',
+        src: 'https://images.solecollector.com/complex/image/upload/f2ojbxfvdy6hwb039sru.jpg',
         alt: 'air jordan sideways',
       },
       {
@@ -36,18 +37,23 @@ class ProductImage extends PureComponent<{}, stateTypes> {
         alt: 'air jordan back right',
       },
     ],
+    selectedImage: null,
   };
   render() {
-    const { thumbnails } = this.state;
+    const { thumbnails, selectedImage } = this.state;
     return (
       <div styleName="container">
-        <ProductThumbnails thumbnails={thumbnails} />
-        <figure>
+        <div styleName="thumbnailsWrapper">
+          <ProductThumbnails
+            thumbnails={thumbnails}
+          />
+        </div>
+        <figure styleName="bigImage">
           <span styleName="expand">
             <Expand />
           </span>
           <img
-            src="https://www.studio-88.co.za/wp-content/uploads/2017/10/NIKE-JORDAN-AIR-JORDAN-1-MID-BLACK-BLACK-NKK961BP-V4.jpg"
+            src={selectedImage || thumbnails[0].src}
             alt="nike air jordan"
           />
           <ImageDetail />
