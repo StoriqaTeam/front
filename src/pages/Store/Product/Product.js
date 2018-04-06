@@ -10,9 +10,11 @@ import {
   ProductDetails,
   Tab,
   Tabs,
+  TabRow,
 } from 'pages/Store/Product';
 
 import './Product.scss';
+import mockData from './mockData.json';
 
 type stateTypes = {
   tabs: {id: string | number, label: string, content: any}[]
@@ -24,22 +26,7 @@ class Product extends PureComponent<{}, stateTypes> {
       {
         id: 0,
         label: 'Описание',
-        content: 'lorem ipsum',
-      },
-      {
-        id: 1,
-        label: 'Характеристики',
-        content: 'storiqa rules',
-      },
-      {
-        id: 2,
-        label: 'Отзывы',
-        content: 'I want your money',
-      },
-      {
-        id: 3,
-        label: 'Гарантии',
-        content: 'sisa papi',
+        content: (<TabRow row={mockData.row} />),
       },
     ],
   };
