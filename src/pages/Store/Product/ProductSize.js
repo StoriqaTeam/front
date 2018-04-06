@@ -31,7 +31,7 @@ class ProductSize extends Component<propTypes, stateTypes> {
     const { clicked } = this.state;
     return (
       <div styleName="container">
-        <h4 styleName="title">
+        <h4>
           Размер
         </h4>
         <div styleName="sizes">
