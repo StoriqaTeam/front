@@ -81,7 +81,6 @@ class CategorySelector extends React.Component<PropsType, StateType> {
       this.setState({
         isShow: false,
       });
-      return;
     }
   };
 

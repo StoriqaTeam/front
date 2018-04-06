@@ -53,7 +53,7 @@ class CardProduct extends PureComponent<PropsTypes> {
           </div>
           <div styleName="bottom">
             <div styleName="icon">
-              <Icon type="qa" size="16" />
+              <Icon type="qa" size="20" />
             </div>
             {title && <div styleName="title">{title}</div>}
             <div styleName="price">

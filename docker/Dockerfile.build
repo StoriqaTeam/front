@@ -4,18 +4,8 @@ FROM node:9.9-slim
 RUN apt-get update
 RUN apt-get install -y git
 
-# Cleaning up
-RUN apt-get clean -y
-RUN rm -rf /var/lib/apt/lists/
-
-# Running as user "app"
 RUN mkdir /app
-RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app
-
 COPY . /app
-RUN chown -R app: /app
-
-USER app
 WORKDIR /app
 
 RUN rm -f /app/yarn.lock || true

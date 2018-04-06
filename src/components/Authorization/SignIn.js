@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { propOr } from 'ramda';
 
 import { Button } from 'components/Button';
 import { Input } from 'components/Authorization';
@@ -51,6 +52,7 @@ class SignIn extends Component<PropsType, StateType> {
             model={username}
             onChange={handleChange}
             autocomplete={autocomplete}
+            errors={propOr(null, 'email', errors)}
           />
         </div>
         <div styleName="inputBlock">
@@ -62,7 +64,7 @@ class SignIn extends Component<PropsType, StateType> {
             validate="password"
             onChange={handleChange}
             autocomplete={autocomplete}
-            errors={errors}
+            errors={propOr(null, 'password', errors)}
           />
         </div>
         {formValid && (
