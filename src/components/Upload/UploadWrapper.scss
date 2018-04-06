@@ -45,11 +45,23 @@
   // flex: 1;
 }
 
-.overPicture {
+.overPictureWrap {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  display: block;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+
+  & > img {
+    display: inline-block;
+    height: 100%;
+    vertical-align: bottom;
+  }
+}
+
+.overPicture {
+  //
 }

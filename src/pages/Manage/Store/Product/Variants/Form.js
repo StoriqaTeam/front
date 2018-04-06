@@ -3,7 +3,6 @@
 import React, { Component, Fragment } from 'react';
 
 import { Button } from 'components/Button';
-// import { Checkbox } from 'components/Forms';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { log } from 'utils';
@@ -58,7 +57,9 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  handleCheckboxClick = () => this.setState(prevState => ({ checked: !prevState.checked }));
+  handleCheckboxClick = (id) => {
+    log.info('id', id);
+  };
 
   handleVendorCodeChange = (e: any) => {
     this.setState({ vendorCode: e.target.value });
@@ -95,7 +96,7 @@ class Form extends Component<PropsType, StateType> {
       <div styleName="headerItem tdCheckbox">
         <Checkbox
           id="id-header"
-          onChange={() => {}}
+          onChange={this.handleCheckboxClick}
         />
       </div>
       <div styleName="headerItem tdDropdawn" />
@@ -149,7 +150,7 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="variantItem tdCheckbox">
           <Checkbox
             id="id-variant"
-            onChange={() => {}}
+            onChange={this.handleCheckboxClick}
           />
         </div>
         <div styleName="variantItem tdDropdawn">

@@ -39,12 +39,16 @@ const UploadWrapper = ({
         {(buttonIconType && !overPicture && <Icon type={buttonIconType} size={32} />)}
         {!overPicture && <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>}
         {overPicture &&
-          <img
-            styleName="overPicture"
-            src={overPicture}
+          <div
+            styleName="overPictureWrap"
             style={{ height: buttonHeight, width: buttonWidth }}
-            alt="img"
-          />
+          >
+            <img
+              styleName="overPicture"
+              src={overPicture}
+              alt="img"
+            />
+          </div>
         }
       </label>
       <input style={{ display: 'none' }} id={id} type="file" onChange={onUpload} />
