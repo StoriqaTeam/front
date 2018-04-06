@@ -36,9 +36,9 @@ class ProductThumbnails extends Component<propsTypes, stateTypes> {
     const { thumbnails, row, title } = this.props;
     const { clicked } = this.state;
     return (
-      <div>
-        { title !== '' ? (<h4 styleName="title">{ title }</h4>) : null }
-        <div styleName={`container ${row ? 'row' : 'column'}`}>
+      <div styleName="container">
+        { title !== '' ? (<h4>{ title }</h4>) : null }
+        <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {thumbnails.map(({ id, src, alt }, index) => (
             <button
               key={id}
