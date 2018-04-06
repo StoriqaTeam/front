@@ -71,9 +71,9 @@ class ProductDetails extends PureComponent<{}, stateTypes> {
     } = this.state;
     return (
       <div styleName="container">
-        <h2 styleName="title">Nike Air Jordan</h2>
+        <h2>Nike Air Jordan</h2>
         <ProductPrice />
-        <p styleName="description">
+        <p>
           {/* eslint-disable max-len */}
           Наушники Bluetooth Beats Beats Solo3 Wireless On-Ear Violet (MNEQ2ZE/A) Объемное звучание на всех частотах, отлично подходит для прослушивания музыки, фильмов.
         </p>
