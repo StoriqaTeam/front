@@ -3,17 +3,16 @@
   border-right: 1px solid #efefef;
   display: flex;
   justify-content: space-between;
+}
 
-  .expand {
-    position: absolute;
-    right: 24px;
-    top: 24px;
-    svg {
-      height: 27px;
-      width: 27px;
-    }
+.expand {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  svg {
+    height: 27px;
+    width: 27px;
   }
-
 }
 
 .bigImage {

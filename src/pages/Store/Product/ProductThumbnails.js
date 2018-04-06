@@ -8,6 +8,7 @@ type propsTypes = {
   title: string,
   thumbnails: {img: string, alt: string}[],
   row: boolean,
+  onClick: Function,
 }
 
 type stateTypes = {
@@ -18,6 +19,7 @@ class ProductThumbnails extends Component<propsTypes, stateTypes> {
   static defaultProps = {
     title: '',
     row: false,
+    onClick: () => {},
   };
   state = {
     clicked: null,
@@ -25,12 +27,14 @@ class ProductThumbnails extends Component<propsTypes, stateTypes> {
   /**
    * Highlights img's border when clicked
    * @param {number} index
+   * @param {{src: string, alt: string }} img
    * @return {void}
    */
-  handleClick = (index: number): void => {
+  handleClick = (index: number, img): void => {
+    const { onClick } = this.props;
     this.setState({
       clicked: index,
-    });
+    }, onClick(img));
   };
   render() {
     const { thumbnails, row, title } = this.props;
@@ -42,7 +46,7 @@ class ProductThumbnails extends Component<propsTypes, stateTypes> {
           {thumbnails.map(({ id, src, alt }, index) => (
             <button
               key={id}
-              onClick={() => this.handleClick(index)}
+              onClick={() => this.handleClick(index, { src, alt })}
             >
               <figure>
                 <img

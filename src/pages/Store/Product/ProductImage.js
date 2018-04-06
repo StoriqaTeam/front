@@ -10,7 +10,7 @@ import './ProductImage.scss';
 
 type stateTypes = {
   thumbnails: {id: string | number, img: string, alt: string}[],
-  selectedImage: string,
+  selectedImage: {src: string, alt: string },
 }
 
 class ProductImage extends PureComponent<{}, stateTypes> {
@@ -37,7 +37,15 @@ class ProductImage extends PureComponent<{}, stateTypes> {
         alt: 'air jordan back right',
       },
     ],
-    selectedImage: null,
+    selectedImage: {},
+  };
+  /**
+   * Sets the clicked image as the big one.
+   * @param {string} selectedImage
+   * @return {void}
+   */
+  handleClick = (selectedImage: string): void => {
+    this.setState({ selectedImage });
   };
   render() {
     const { thumbnails, selectedImage } = this.state;
@@ -45,6 +53,7 @@ class ProductImage extends PureComponent<{}, stateTypes> {
       <div styleName="container">
         <div styleName="thumbnailsWrapper">
           <ProductThumbnails
+            onClick={this.handleClick}
             thumbnails={thumbnails}
           />
         </div>
@@ -53,8 +62,8 @@ class ProductImage extends PureComponent<{}, stateTypes> {
             <Expand />
           </span>
           <img
-            src={selectedImage || thumbnails[0].src}
-            alt="nike air jordan"
+            src={selectedImage.src || thumbnails[0].src}
+            alt={selectedImage.alt || thumbnails[0].alt}
           />
           <ImageDetail />
         </figure>
