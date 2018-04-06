@@ -14,13 +14,13 @@ import Foto from './Foto';
 import './Form.scss';
 
 type PropsType = {
-  id: string,
+  // id: string,
   vendorCode?: string,
   price?: number,
   cashback?: number,
-  characteristics?: Array<{}>,
+  // characteristics?: Array<{}>,
   onSave: Function,
-  categoryId: number,
+  // categoryId: number,
 };
 
 type StateType = {

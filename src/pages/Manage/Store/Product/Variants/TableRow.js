@@ -7,11 +7,12 @@ import { log } from 'utils';
 
 type PropsType = {
   id: string,
-  vendorCode: string,
-  price: number,
-  cashback: number,
-  characteristics: any,
-  quantity: {},
+  expanded: boolean,
+  // vendorCode: string,
+  // price: number,
+  // cashback: number,
+  // characteristics: any,
+  // quantity: {},
 };
 
 type StateType = {

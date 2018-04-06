@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { log } from 'utils';
+// import { log } from 'utils';
 
 // import TableRow from './TableRow';
 import Form from './Form';

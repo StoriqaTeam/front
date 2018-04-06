@@ -9,15 +9,15 @@ import attrs from './attrs.json';
 
 import './Characteristics.scss';
 
-type StateType = {
-  items: Array<({ attrId: number, value: string })>,
-};
+// type StateType = {
+//   items: Array<({ attrId: number, value: string })>,
+// };
 
 type PropsType = {
   onChange: (Array<({ attrId: number, value: string })>) => void,
 };
 
-class Characteristics extends Component<PropsType, StateType> {
+class Characteristics extends Component<PropsType> {
   state = {
     items: [],
   };

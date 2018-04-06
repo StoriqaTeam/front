@@ -1,12 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
+// import { createRefetchContainer, graphql } from 'react-relay';
 import { pathOr, map, addIndex, filter, complement, isNil } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { MiniSelect } from 'components/MiniSelect';
-import { log, uploadFile } from 'utils';
+import { uploadFile } from 'utils';
 
 import './Characteristics.scss';
 
