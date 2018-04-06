@@ -4,11 +4,19 @@
   display: inline-block;
 }
 
-.title {
+h4 {
   color: $color_grey_text;
-  font-size: 14px;
+  font-size: 1.75rem;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 2.625rem;
+  letter-spacing: 1.2px;
+  line-height: normal;
   margin: 15px 0;
+  text-align: left;
   text-transform: uppercase;
+  width: 9.75rem;
 }
 
 .sizes {
@@ -18,13 +26,24 @@
 
 .size {
   align-self: center;
-  border: solid 2px #e1e1e1;
+  border: solid 1px #e1e1e1;
+  color: #a1a1a1;
+  font-size: 16px;
   height: 40px;
   line-height: 36px;
   text-align: center;
   width: 58px;
+
+  &.clicked {
+    border: 1px solid $color_primary !important;
+  }
+
+  &.clicked + button {
+    border-left: 1px solid transparent;
+  }
+
 }
 // apply transparent border-right except the last one
 .size:not(:last-child) {
-  border-right: transparent;
+  border-right: 1px solid transparent;
 }
