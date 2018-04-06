@@ -82,7 +82,7 @@ class SearchInput extends Component<PropsType, StateType> {
           />
         </div>
         <button styleName="searchButton">
-          <Icon type="magnifier" size="16" />
+          <Icon inline type="magnifier" size="16" />
         </button>
       </div>
     );

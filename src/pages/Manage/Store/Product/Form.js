@@ -72,6 +72,8 @@ class Form extends Component<PropsType, StateType> {
       const formErrors = renameKeys({
         long_description: 'fullDesc',
         short_description: 'shortDescription',
+        seo_title: 'seoTitle',
+        seo_description: 'seoDescription',
       }, nextFormErrors);
       this.setState({ formErrors });
     }

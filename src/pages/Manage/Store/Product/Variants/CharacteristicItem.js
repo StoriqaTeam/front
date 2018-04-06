@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { pathOr, map, addIndex, filter, complement, isNil } from 'ramda';
 
+import { UploadWrapper } from 'components/Upload';
 import { MiniSelect } from 'components/MiniSelect';
-import { log } from 'utils';
+import { log, uploadFile } from 'utils';
+
+import './Characteristics.scss';
 
 type PropsType = {
   attribute: { rawId: number },
@@ -15,6 +18,7 @@ type PropsType = {
 type StateType = {
   items: Array<[]>,
   selectedItem: ?{},
+  characteristicImg: ?string,
 };
 
 class CharacteristicItem extends Component<PropsType, StateType> {
@@ -33,6 +37,7 @@ class CharacteristicItem extends Component<PropsType, StateType> {
   state: StateType = {
     selectedItem: null,
     items: [],
+    characteristicImg: null,
   };
 
   componentDidMount() {
@@ -72,14 +77,34 @@ class CharacteristicItem extends Component<PropsType, StateType> {
     });
   };
 
+  handleOnUpload = async (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    this.setState({ characteristicImg: result.url });
+  }
+
   render() {
     const { attribute } = this.props;
+    const { characteristicImg } = this.state;
     const name = pathOr('', ['name', 0, 'text'], attribute);
     return (
-      <div>
-        <span>{name}</span>
+      <div styleName="item">
+        <div styleName="characteristicImg">
+          <UploadWrapper
+            id={attribute.id}
+            onUpload={this.handleOnUpload}
+            buttonHeight={80}
+            buttonWidth={80}
+            buttonIconType="upload"
+            overPicture={characteristicImg}
+          />
+        </div>
         <MiniSelect
-          transparent
+          forForm
+          fullWidth
+          label={name}
           activeItem={this.state.selectedItem}
           items={this.state.items}
           onSelect={this.handleSelect}

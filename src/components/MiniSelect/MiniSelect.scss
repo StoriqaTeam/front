@@ -11,6 +11,10 @@
   width: 41rem;
 }
 
+.fullWidth {
+  width: 100%;
+}
+
 .forForm .hr {
   display: block;
   position: absolute;
@@ -74,7 +78,7 @@
 
 .forForm .icon {
   top: auto;
-  bottom: -0.75rem;
+  bottom: 0.25rem;
 }
 
 .isItem .icon {

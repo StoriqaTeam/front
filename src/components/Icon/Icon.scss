@@ -1,6 +1,11 @@
 .container {
   position: relative;
+  display: block;
+}
+
+.inline {
   display: inline-block;
+  vertical-align: middle;
 }
 
 .container > svg {

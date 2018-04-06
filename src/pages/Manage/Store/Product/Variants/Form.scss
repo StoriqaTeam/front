@@ -1,14 +1,46 @@
 @import '../../../../../styles/variables';
 
-.formHeader {
-  height: 8rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.variants {
+  //
 }
 
-.inputComponent {
+.header {
   display: flex;
+}
+
+.headerItem {
+  font-size: 12px;
+  color: #848484;
+}
+
+.headerItemWrap {
+  & > span {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+}
+
+.variantItem {
+  font-size: 12px;
+}
+
+.tdCheckbox {width: 5%;}
+.tdDropdawn {width: 5%;}
+.tdArticle {width: 20%;}
+.tdPrice {width: 20%;}
+.tdCashback {width: 15%;}
+.tdCharacteristics {width: 15%;}
+.tdCount {width: 15%;}
+.tdBasket {width: 5%;}
+
+.variant {
+  display: flex;
+  padding: 2rem 0;
+}
+
+.variant + .variant {
+  border-bottom: 1px solid #EFEFEF;
 }
 
 .input {
@@ -29,13 +61,24 @@
 }
 
 .cashbackInput {
+  display: inline-block;
   width: 2.5rem;
 }
 
 .vendorCodeInput {
+  display: inline-block;
   width: 15rem;
 }
 
 .priceInput {
+  display: inline-block;
   width: 12rem;
+}
+
+.checkbox {
+  //
+}
+
+.label {
+
 }

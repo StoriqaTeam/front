@@ -1,0 +1,33 @@
+@import "../../../../../styles/variables";
+
+.container {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 16px;
+  color: $color_grey_text;
+}
+
+.items {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.item + .item {
+  margin-left: 2rem;
+}
+
+.characteristicImg {
+  width: 10rem;
+  height: 10rem;
+  margin-right: 2rem;
+}
