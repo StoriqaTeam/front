@@ -1,14 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createPaginationContainer, graphql } from 'react-relay';
-import { map, find, propEq, pathOr, head } from 'ramda';
-import { Link } from 'found';
+import { createPaginationContainer, graphql, Relay } from 'react-relay';
+import { map, pathOr } from 'ramda';
 
 import { Page } from 'components/App';
 import { MiniSelect } from 'components/MiniSelect';
 import { Button } from 'components/Button';
-import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
 
 import StoreRow from './StoreRow';
@@ -18,39 +16,10 @@ import './Stores.scss';
 import storesData from './stores.json';
 
 type PropsType = {
-  search: {},
-  categories: any,
-  searchTerm: string,
+  relay: Relay
 };
 
 type StateType = {
-  stores: ?Array<{
-    node: {
-      id: string,
-      rawId: string,
-      name: Array<{
-        lang: string,
-        text: string,
-      }>,
-      logo: string,
-      productsCount: string,
-      baseProductsWithVariants: {
-        edges: Array<{
-          node: {
-            id: string,
-            rawId: string,
-            variants: Array<{
-              id: string,
-              rawId: string,
-              product: {
-                photoMain: string,
-              }
-            }>,
-          }
-        }>,
-      },
-    }
-  }>,
   category: { id: string, label: string },
   location: { id: string, label: string },
   sortItem: { id: string, label: string },
@@ -63,7 +32,6 @@ class Stores extends Component<PropsType, StateType> {
     super(props);
     if (storesData) {
       this.state = {
-        stores: storesData,
         category: { id: '1', label: 'Детские товары' },
         location: { id: '1', label: 'Россия' },
         sortItem: { id: '1', label: 'Цена (убывание)' },
@@ -71,32 +39,8 @@ class Stores extends Component<PropsType, StateType> {
     }
   }
 
-  componentWillReceiveProps(nextProps: PropsType) {
-    console.log({ nextProps });
-  }
   storesRefetch = () => {
-    this.props.relay.loadMore(1);
-    // const query = pathOr('', ['location', 'query', 'search'], this.props);
-    // const stores = pathOr([], ['search', 'findStore', 'stores', 'edges'], this.props);
-    // this.props.relay.refetch({
-    //   first: 3,
-    //   after: stores.length,
-    //   text: {
-    //     name: query,
-    //     getStoresTotalCount: false,
-    //   },
-    // },
-    // {
-    //   first: 100,
-    //   after: null,
-    //   text: {
-    //     name: query,
-    //     getStoresTotalCount: false,
-    //   },
-    // },
-    // () => {},
-    // null,
-    // );
+    this.props.relay.loadMore(storesPerRequest);
   };
 
   handleCategory = (category: { id: string, label: string }) => {

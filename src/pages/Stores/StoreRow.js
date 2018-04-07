@@ -2,17 +2,15 @@
 
 import React, { Component } from 'react';
 import { map, find, propEq, pathOr, head } from 'ramda';
-import { createFragmentContainer, graphql } from 'react-relay';
 
 import { Icon } from 'components/Icon';
-import { Container, Row, Col } from 'layout';
+import { Row, Col } from 'layout';
 import { Link } from 'found';
 
 import './Stores.scss';
 
 type PropsType = {
-  store: {},
-  key: any,
+  store: { name: {}, rawId: any, id: any, productsCount: number, logo: ?string, },
 };
 
 type StateType = {
@@ -78,23 +76,3 @@ class StoreRow extends Component<PropsType, StateType> {
 }
 
 export default StoreRow;
-// export default createFragmentContainer(
-//   StoreRow,
-//   graphql`
-//     fragment StoreRow_store on Store {
-//       id
-//       rawId
-//       name {
-//         lang
-//         text
-//       }
-//       logo
-//       cover
-//       slug
-//       shortDescription {
-//         lang
-//         text
-//       }
-//     }
-//   `,
-// );
