@@ -1,15 +1,17 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
+import { createPaginationContainer, graphql } from 'react-relay';
 import { map, find, propEq, pathOr, head } from 'ramda';
 import { Link } from 'found';
 
 import { Page } from 'components/App';
 import { MiniSelect } from 'components/MiniSelect';
-import { Icon } from 'components/Icon';
 import { Button } from 'components/Button';
+import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
+
+import StoreRow from './StoreRow';
 
 import './Stores.scss';
 
@@ -18,6 +20,7 @@ import storesData from './stores.json';
 type PropsType = {
   search: {},
   categories: any,
+  searchTerm: string,
 };
 
 type StateType = {
@@ -53,6 +56,8 @@ type StateType = {
   sortItem: { id: string, label: string },
 };
 
+const storesPerRequest = 1;
+
 class Stores extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
@@ -66,14 +71,32 @@ class Stores extends Component<PropsType, StateType> {
     }
   }
 
+  componentWillReceiveProps(nextProps: PropsType) {
+    console.log({ nextProps });
+  }
   storesRefetch = () => {
-    // Uncomment after the back
-    this.props.relay.refetch(
-      { first: 8, after: 0, searchTerm: { name: 'asdfasf', getStoresTotalCount: true } },
-      {},
-      () => {},
-      { force: true },
-    );
+    this.props.relay.loadMore(1);
+    // const query = pathOr('', ['location', 'query', 'search'], this.props);
+    // const stores = pathOr([], ['search', 'findStore', 'stores', 'edges'], this.props);
+    // this.props.relay.refetch({
+    //   first: 3,
+    //   after: stores.length,
+    //   text: {
+    //     name: query,
+    //     getStoresTotalCount: false,
+    //   },
+    // },
+    // {
+    //   first: 100,
+    //   after: null,
+    //   text: {
+    //     name: query,
+    //     getStoresTotalCount: false,
+    //   },
+    // },
+    // () => {},
+    // null,
+    // );
   };
 
   handleCategory = (category: { id: string, label: string }) => {
@@ -90,12 +113,11 @@ class Stores extends Component<PropsType, StateType> {
 
   render() {
     const {
-      stores,
       category,
       location,
       sortItem,
     } = this.state;
-    const lang = 'EN';
+    const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
     return (
       <Container>
         <Row>
@@ -159,60 +181,18 @@ class Stores extends Component<PropsType, StateType> {
             </div>
             <div styleName="stores">
               {(stores && stores.length > 0) ?
-                map(storesItem => storesItem.node, stores).map((store) => {
-                  const name = find(propEq('lang', lang))(store.name).text;
-                  const products = pathOr(null, ['baseProductsWithVariants', 'edges'], store);
-                  const storeId = store.rawId;
-                  const { productsCount } = store;
-                  return (
-                    <div key={storeId} styleName="store">
-                      <Row key={store.rawId}>
-                        <Col size={6}>
-                          <div styleName="storeData">
-                            <div styleName="storeLogo">
-                              <div>
-                                <img src={store.logo} alt="img" />
-                              </div>
-                            </div>
-                            <div styleName="storeInfo">
-                              <div styleName="storeName">{name}</div>
-                              <div styleName="storeAdd">
-                                <span>97,5% пол. отзывов</span>
-                                <span styleName="productsCount">{productsCount} товаров</span>
-                              </div>
-                            </div>
-                            <div styleName="storeElect">
-                              <Icon type="heart" size="32" />
-                            </div>
-                          </div>
-                        </Col>
-                        <Col size={6}>
-                          {products &&
-                            <div styleName="productsData">
-                              <div styleName="productsWrap">
-                                {map(productsItem => productsItem.node, products).map((product) => {
-                                  const photoMain = pathOr(null, ['product', 'photoMain'], head(product.variants));
-                                  const productId = product.rawId;
-                                  return (
-                                    <Link key={productId} to={`/store/${storeId}/product/${productId}`} styleName="productFoto">
-                                      <div styleName="productFotoWrap">
-                                        <img src={photoMain} alt="img" />
-                                      </div>
-                                    </Link>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          }
-                        </Col>
-                      </Row>
-                    </div>
-                  );
-                }) :
+                map(storesItem => (
+                  <div key={storesItem.node.id}>
+                    <StoreRow
+                      store={storesItem.node}
+                      key={storesItem.node.id}
+                    />
+                  </div>
+                ), stores) :
                 <div>No stores found</div>
               }
             </div>
-            {(stores && stores.length > 0) &&
+            {this.props.relay.hasMore() && (
               <div styleName="button">
                 <Button
                   onClick={this.storesRefetch}
@@ -221,7 +201,7 @@ class Stores extends Component<PropsType, StateType> {
                   Загрузить
                 </Button>
               </div>
-            }
+            )}
           </Col>
         </Row>
       </Container>
@@ -229,43 +209,51 @@ class Stores extends Component<PropsType, StateType> {
   }
 }
 
-export default createRefetchContainer(
+export default createPaginationContainer(
   Page(Stores),
   graphql`
     fragment Stores_search on Search
     @argumentDefinitions(
-      text: { type: "SearchStoreInput!" },
-      firstId: { type: "Int", defaultValue: null },
-      afterId: { type: "Int", defaultValue: null }
+      text: { type: "SearchStoreInput!" }
+      first: { type: "Int", defaultValue: 1 }
+      after: { type: "ID", defaultValue: null }
     ) {
-      findStore(searchTerm: $text, first: $firstId, after: $afterId) {
-        stores {
-          edges {
-            node {
-              id
-              rawId
-              name {
-                lang
-                text
-              }
-              logo
-              cover
-              slug
-              shortDescription {
-                lang
-                text
-              }
+      findStore(searchTerm: $text, first: $first, after: $after) @connection(key: "Stores_findStore") {
+        edges {
+          cursor
+          node {
+            id
+            rawId
+            name {
+              lang
+              text
+            }
+            logo
+            cover
+            slug
+            shortDescription {
+              lang
+              text
             }
           }
         }
       }
     }
   `,
-  graphql`
-    query Stores_edges_Query($first: Int, $after: Int, $searchTerm: SearchStoreInput!) {
-      search {
-        ...Stores_search @arguments(firstId: $first, afterId: $after, text: $searchTerm)
+  {
+    direction: 'forward',
+    getConnectionFromProps: props => props.search && props.search.findStore,
+    getVariables: (props, { count }, prevFragmentVars) => ({
+      text: prevFragmentVars.text,
+      after: props.search.findStore.pageInfo.endCursor,
+      first: count + storesPerRequest,
+    }),
+    query: graphql`
+      query Stores_edges_Query($first: Int, $after: ID, $text: SearchStoreInput!) {
+        search {
+          ...Stores_search @arguments(first: $first, after: $after, text: $text)
+        }
       }
-    }
-  `,
+    `,
+  },
 );

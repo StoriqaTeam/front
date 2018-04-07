@@ -27,38 +27,6 @@ const routes = (
           search {
             ...Stores_search @arguments(text: $input)
           }
-          categories {
-            name {
-              text
-            }
-            children {
-              rawId
-              parentId
-              level
-              name {
-                lang
-                text
-              }
-              children {
-                rawId
-                parentId
-                level
-                name {
-                  lang
-                  text
-                }
-                children {
-                  rawId
-                  parentId
-                  level
-                  name {
-                    lang
-                    text
-                  }
-                }
-              }
-            }
-          }
         }
       `}
       prepareVariables={(...args) => {
