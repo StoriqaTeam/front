@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { append } from 'ramda';
+import {append, filter, head, pathOr, propEq, map} from 'ramda';
 
 import { Button } from 'components/Button';
 import { Checkbox } from 'components/Checkbox';
@@ -33,6 +33,7 @@ type StateType = {
   isOpenVariantData: boolean,
   mainPhoto: ?string,
   photos: Array<string>,
+  attributeValues: Array<{ attrId: string, value: string, metaField?: string }>,
 };
 
 type VariantType = {
@@ -59,6 +60,10 @@ class Form extends Component<PropsType, StateType> {
       isOpenVariantData: true,
       mainPhoto: null,
       photos: [],
+      attributeValues: map(item => ({
+        attrId: item.rawId,
+        value: this.valueForAttribute(item),
+      }), this.props.category.getAttributes),
     };
   }
 
@@ -135,6 +140,19 @@ class Form extends Component<PropsType, StateType> {
     this.setState({isOpenVariantData: !this.state.isOpenVariantData});
   };
 
+  valueForAttribute =(attribute: {}) => {
+    if (attribute.value) {
+      return attribute.value;
+    }
+    const { values, translatedValues } = attribute.metaField;
+    if (values) {
+      return head(values);
+    } else if (translatedValues) {
+      return pathOr('', [0, 'text'], translatedValues);
+    }
+    return '';
+  };
+
   renderVariant = () => {
     const {
       vendorCode,
@@ -201,7 +219,8 @@ class Form extends Component<PropsType, StateType> {
         </div>
         <Characteristics
           category={this.props.category}
-          onChange={values => log.debug('Form', { values })}
+          values={this.state.attributeValues}
+          onChange={values => this.setState({ attributeValues: values })}
         />
         <Photos
           photos={mainPhoto ? append(mainPhoto, photos) : photos}

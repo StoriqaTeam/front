@@ -173,6 +173,7 @@ export default createFragmentContainer(
             cashback
           }
           attributes {
+            value
             attribute {
               id
               rawId

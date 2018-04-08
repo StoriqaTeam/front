@@ -71,13 +71,8 @@ class MiniSelect extends Component<PropsType, StateType> {
   handleItemClick = (e: any) => {
     if (this.props.isDropdown) {
       log.info('id', e.target.id);
-    } else {
-      const activeItem = find(propEq('id', e.target.id))(this.props.items);
-      const { onSelect } = this.props;
-
-      if (onSelect) {
-        onSelect(activeItem);
-      }
+    } else if (this.props.onSelect) {
+      this.props.onSelect(find(propEq('id', e.target.id))(this.props.items));
     }
   };
 

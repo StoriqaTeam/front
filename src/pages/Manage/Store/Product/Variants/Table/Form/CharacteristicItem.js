@@ -1,8 +1,7 @@
 // @flow
 
-import React, { Component } from 'react';
-// import { createRefetchContainer, graphql } from 'react-relay';
-import { pathOr, map, addIndex, filter, complement, isNil } from 'ramda';
+import React, { PureComponent } from 'react';
+import { assoc, pathOr, map, propEq, addIndex, findIndex, filter, complement, isNil } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { MiniSelect } from 'components/MiniSelect';
@@ -13,43 +12,13 @@ import './Characteristics.scss';
 type PropsType = {
   attribute: { rawId: number },
   onSelect: ({ attrId: number, value: string }) => void,
+  value: { attrId: number, value: string, metaField?: string },
 };
 
-type StateType = {
-  items: Array<[]>,
-  selectedItem: ?{},
-  characteristicImg: ?string,
-};
-
-class CharacteristicItem extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    if (this.state.items.length === 0) {
-      const { attribute } = props;
-      const selectItems = this.getSelectItems(attribute);
-      this.state = {
-        items: selectItems,
-        selectedItem: selectItems[0],
-      };
-    }
-  }
-
-  state: StateType = {
-    selectedItem: null,
-    items: [],
-    characteristicImg: null,
-  };
-
-  componentDidMount() {
-    this.props.onSelect({
-      attrId: this.props.attribute.rawId,
-      value: this.state.selectedItem.label,
-    });
-  }
-
-  getSelectItems = (attributes: {}) => {
-    const values = pathOr(null, ['metaField', 'values'], attributes);
-    const translatedValues = pathOr(null, ['metaField', 'translatedValues'], attributes);
+class CharacteristicItem extends PureComponent<PropsType> {
+  getSelectItems = (attribute: {}) => {
+    const values = pathOr(null, ['metaField', 'values'], attribute);
+    const translatedValues = pathOr(null, ['metaField', 'translatedValues'], attribute);
     const mapIndexed = addIndex(map);
 
     if (values) {
@@ -69,11 +38,11 @@ class CharacteristicItem extends Component<PropsType, StateType> {
     return filter(complement(isNil), items);
   };
 
-  handleSelect = (value: string) => {
-    this.setState({ selectedItem: value });
+  handleSelect = (value: {}) => {
     this.props.onSelect({
-      attrId: this.props.attribute.rawId,
+      ...this.props.value,
       value: value.label,
+      attrId: this.props.attribute.rawId,
     });
   };
 
@@ -82,12 +51,14 @@ class CharacteristicItem extends Component<PropsType, StateType> {
     const file = e.target.files[0];
     const result = await uploadFile(file);
     if (!result.url) return;
-    this.setState({ characteristicImg: result.url });
-  }
+    this.props.onSelect(assoc('metaField', result.url, this.props.value));
+  };
 
   render() {
-    const { attribute } = this.props;
-    const { characteristicImg } = this.state;
+    const { attribute, value } = this.props;
+    const items = this.getSelectItems(attribute);
+    const selectedItem = { id: `${findIndex(propEq('label', value.value), items)}`, label: value.value };
+    const { metaField: characteristicImg } = this.props.value;
     const name = pathOr('', ['name', 0, 'text'], attribute);
     return (
       <div styleName="item">
@@ -105,8 +76,8 @@ class CharacteristicItem extends Component<PropsType, StateType> {
           forForm
           fullWidth
           label={name}
-          activeItem={this.state.selectedItem}
-          items={this.state.items}
+          activeItem={selectedItem}
+          items={items}
           onSelect={this.handleSelect}
         />
       </div>
@@ -115,35 +86,3 @@ class CharacteristicItem extends Component<PropsType, StateType> {
 }
 
 export default CharacteristicItem;
-
-// export default createRefetchContainer(
-//   CharacteristicItem,
-//   graphql`
-//     fragment CharacteristicItem_me on User {
-//       id
-//     }
-//   `,
-//   graphql`
-//     query CharacteristicItemQuery($attrId: ID!) {
-//       node(id: $attrId) {
-//         ... on Attribute {
-//           id
-//           rawId
-//           name {
-//             lang
-//             text
-//           }
-//           valueType
-//           metaField {
-//             values
-//             translatedValues {
-//               lang
-//               text
-//             }
-//             uiElement
-//           }
-//         }
-//       }
-//     }
-//   `,
-// );
