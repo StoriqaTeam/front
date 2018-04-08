@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { pathOr, map } from 'ramda';
+import { pathOr, map, filter } from 'ramda';
 
 import { getNameText } from 'utils';
 import { Checkbox } from 'components/Checkbox';
@@ -48,27 +48,36 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     value: null,
   }
 
-  handleOnChange = (value: string) => {
+  handleOnChange = (val: string) => {
     const { onChange } = this.props;
     const { attrFilter } = this.props;
+    const { value } = this.state;
     const uiElement = pathOr(null, ['attribute', 'metaField', 'uiElement'], attrFilter);
     const isMultiSelectable = uiElement === 'CHECKBOX' || uiElement === 'COLOR_PICKER';
-    if (isMultiSelectable) {
-      const valResult = this.state.value ? [
-        ...this.state.value,
-        value,
-      ] : [value];
+    if (isMultiSelectable && value) {
+      const valResult = !value.includes(val) ? [
+        ...value,
+        val,
+      ] : [
+        ...filter(v => v !== val, value),
+      ];
       this.setState({
         ...this.state,
         value: valResult,
       });
       onChange(valResult);
+    } else if (isMultiSelectable && !value) {
+      this.setState({
+        ...this.state,
+        value: [val],
+      });
+      onChange([val]);
     } else {
       this.setState({
         ...this.state,
-        value,
+        value: val,
       });
-      onChange(value);
+      onChange(val);
     }
   }
 
