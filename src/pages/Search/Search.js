@@ -9,10 +9,12 @@ import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { RangerSlider } from 'components/Ranger';
+import { AttributeControll } from 'components/AttributeSelector';
 import { searchPathByParent, flattenFunc, getNameText } from 'utils';
 
 import CategoriesMenu from './CategoriesMenu';
 import Sidebar from './Sidebar';
+import data from './data.json';
 
 import './Search.scss';
 
@@ -23,6 +25,21 @@ type PropsType = {
 type StateType = {
   volume: number,
   volume2: number,
+}
+
+type TranslateType = {
+  text: string,
+  lang: string
+}
+
+type AttrFilterType = {
+  id: string,
+  name: Array<TranslateType>,
+  metaField: ?{
+    values: ?Array<string>,
+    translatedValues: ?Array<TranslateType>,
+    uiElement: string,
+  },
 }
 
 class Search extends PureComponent<PropsType, StateType> {
@@ -53,6 +70,17 @@ class Search extends PureComponent<PropsType, StateType> {
     log.info({ value, value2 }, e);
   }
 
+  handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
+    const id = pathOr(null, ['attribute', 'id'], attrFilter);
+    return (value: string) => {
+      if (id) {
+        this.setState({
+          [id]: value,
+        });
+      }
+    };
+  }
+
   renderBreadcrumbs = () => {
     const { categoryRowId } = this.props;
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
@@ -73,7 +101,9 @@ class Search extends PureComponent<PropsType, StateType> {
 
   render() {
     const { volume, volume2 } = this.state;
+    const { categoryRowId } = this.props;
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], data);
     return (
       <div styleName="container">
         {categories && <CategoriesMenu categories={categories} />}
@@ -82,7 +112,7 @@ class Search extends PureComponent<PropsType, StateType> {
             <Sidebar>
               <Accordion
                 tree={this.generateTree()}
-                activeRowId={10}
+                activeRowId={categoryRowId}
                 onClick={this.handleOnChangeCategory}
               />
               <div styleName="blockTitle">Цена (STQ)</div>
@@ -96,6 +126,15 @@ class Search extends PureComponent<PropsType, StateType> {
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}
               />
+              {/* <AttributeSelector attrFilters={this.getAttributes()} /> */}
+              {attrFilters && attrFilters.map(attrFilter => (
+                <div key={attrFilter.attribute.id} styleName="attrBlock">
+                  <AttributeControll
+                    attrFilter={attrFilter}
+                    onChange={this.handleOnChangeAttribute(attrFilter)}
+                  />
+                </div>
+              ))}
             </Sidebar>
           </div>
           <div styleName="contentContainer">

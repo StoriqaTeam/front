@@ -1,0 +1,367 @@
+{
+  "data": {
+    "search": {
+      "findProduct": {
+        "baseProductWithVariants": {
+          "edges": [
+            {
+              "node": {
+                "id": "c3RvcmVzfGJhc2VfcHJvZHVjdHw1",
+                "rawId": 5,
+                "baseProduct": {
+                  "name": [
+                    {
+                      "text": "testproduct18"
+                    },
+                    {
+                      "text": "тестпродукт18"
+                    }
+                  ]
+                },
+                "variants": [
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "id": "c3RvcmVzfGF0dHJpYnV0ZXwxMQ==",
+                          "rawId": 11,
+                          "name": [
+                            {
+                              "text": "Material"
+                            },
+                            {
+                              "text": "Материал"
+                            }
+                          ]
+                        },
+                        "value": "Black satin"
+                      },
+                      {
+                        "attribute": {
+                          "id": "c3RvcmVzfGF0dHJpYnV0ZXwxMg==",
+                          "rawId": 12,
+                          "name": [
+                            {
+                              "text": "Location"
+                            },
+                            {
+                              "text": "Расположение"
+                            }
+                          ]
+                        },
+                        "value": "Tokio"
+                      },
+                      {
+                        "attribute": {
+                          "id": "c3RvcmVzfGF0dHJpYnV0ZXwxMw==",
+                          "rawId": 13,
+                          "name": [
+                            {
+                              "text": "Location"
+                            },
+                            {
+                              "text": "Расположение"
+                            }
+                          ]
+                        },
+                        "value": "#505050"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "id": "c3RvcmVzfGJhc2VfcHJvZHVjdHwy",
+                "rawId": 2,
+                "baseProduct": {
+                  "name": [
+                    {
+                      "text": "testproduct15"
+                    },
+                    {
+                      "text": "тестпродукт15"
+                    }
+                  ]
+                },
+                "variants": [
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "id": "c3RvcmVzfGJhc2VfcHJvZHVjdHw0",
+                "rawId": 4,
+                "baseProduct": {
+                  "name": [
+                    {
+                      "text": "testproduct17"
+                    },
+                    {
+                      "text": "тестпродукт17"
+                    }
+                  ]
+                },
+                "variants": [
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "id": "c3RvcmVzfGJhc2VfcHJvZHVjdHwx",
+                "rawId": 1,
+                "baseProduct": {
+                  "name": [
+                    {
+                      "text": "testproduct14"
+                    },
+                    {
+                      "text": "тестпродукт14"
+                    }
+                  ]
+                },
+                "variants": [
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "id": "c3RvcmVzfGJhc2VfcHJvZHVjdHwz",
+                "rawId": 3,
+                "baseProduct": {
+                  "name": [
+                    {
+                      "text": "testproduct16"
+                    },
+                    {
+                      "text": "тестпродукт16"
+                    }
+                  ]
+                },
+                "variants": [
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  {
+                    "product": {
+                      "price": 200
+                    },
+                    "attributes": [
+                      {
+                        "attribute": {
+                          "name": [
+                            {
+                              "text": "unknown"
+                            }
+                          ]
+                        },
+                        "value": "1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "searchFilters": {
+          "categoriesIds": [
+            6
+          ],
+          "attrFilters": [
+            {
+              "attribute": {
+                "id": "c3RvcmVzfGF0dHJpYnV0ZXwxMQ==",
+                "name": [
+                  {
+                    "lang": "EN",
+                    "text": "Material"
+                  },
+                  {
+                    "lang": "RU",
+                    "text": "Материал"
+                  }
+                ],
+                "metaField": {
+                  "uiElement": "CHECKBOX"
+                }
+              },
+              "equal": {
+                "values": ["Black satin", "Red satin", "Blue satin", "Brown satin"]
+              },
+              "range": null
+            },
+            {
+              "attribute": {
+                "id": "c3RvcmVzfGF0dHJpYnV0ZXwxMg==",
+                "name": [
+                  {
+                    "lang": "EN",
+                    "text": "Location"
+                  },
+                  {
+                    "lang": "RU",
+                    "text": "Расположение"
+                  }
+                ],
+                "metaField": {
+                  "uiElement": "COMBOBOX"
+                }
+              },
+              "equal": {
+                "values": ["Tokio", "Moscow", "New Yourk", "London"]
+              },
+              "range": null
+            },
+            {
+              "attribute": {
+                "id": "c3RvcmVzfGF0dHJpYnV0ZXwxMw==",
+                "name": [
+                  {
+                    "lang": "EN",
+                    "text": "Color"
+                  },
+                  {
+                    "lang": "RU",
+                    "text": "Цвет"
+                  }
+                ],
+                "metaField": {
+                  "uiElement": "COLOR_PICKER"
+                }
+              },
+              "equal": {
+                "values": ["#505050", "#03a9ff", "#4c4c4c", "#e55959", "#fceadd", "#7e957d", "#745031", "#d4973e", "#694f7c"]
+              },
+              "range": null
+            }
+          ],
+          "priceFilter": {
+            "minValue": 100,
+            "maxValue": 100
+          }
+        }
+      }
+    }
+  }
+}

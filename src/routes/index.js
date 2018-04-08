@@ -87,7 +87,7 @@ const routes = (
     <Route Component={Start} />
     <Route
       path="/search"
-      Component={() => (<Search categoryRowId={10} />)}
+      Component={() => (<Search categoryRowId={6} />)}
     />
 
     <Route
