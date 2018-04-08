@@ -31,6 +31,7 @@ type StateType = {
   price: number,
   cashback: number,
   isOpenVariantData: boolean,
+  mainPhoto: ?string,
   photos: Array<string>,
 };
 
@@ -56,6 +57,7 @@ class Form extends Component<PropsType, StateType> {
       price: props.price,
       cashback: props.cashback,
       isOpenVariantData: true,
+      mainPhoto: null,
       photos: [],
     };
   }
@@ -122,7 +124,11 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleAddPhoto = (url: string) => {
-    this.setState(prevState => ({ photos: append(url, prevState.photos) }));
+    if (!this.state.mainPhoto) {
+      this.setState({ mainPhoto: url });
+    } else {
+      this.setState(prevState => ({ photos: append(url, prevState.photos) }));
+    }
   };
 
   toggleDropdownVariant = () => {
@@ -187,6 +193,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { photos, mainPhoto } = this.state;
     return (
       <div>
         <div styleName="variants">
@@ -197,7 +204,7 @@ class Form extends Component<PropsType, StateType> {
           onChange={values => log.debug('Form', { values })}
         />
         <Photos
-          photos={this.state.photos}
+          photos={mainPhoto ? append(mainPhoto, photos) : photos}
           onAddPhoto={this.handleAddPhoto}
         />
         <Button
