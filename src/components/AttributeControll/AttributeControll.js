@@ -26,7 +26,7 @@ type AttributeType = {
 }
 
 type PropsType = {
-  onChange: (value: string) => void,
+  onChange: (value: string | Array<string>) => void,
   attrFilter: {
     attribute: AttributeType,
     equal: ?{
@@ -40,7 +40,7 @@ type PropsType = {
 }
 
 type StateType = {
-  value: ?string,
+  value: ?string | ?Array<string>,
 }
 
 class AttributeControll extends React.Component<PropsType, StateType> {
@@ -50,11 +50,26 @@ class AttributeControll extends React.Component<PropsType, StateType> {
 
   handleOnChange = (value: string) => {
     const { onChange } = this.props;
-    this.setState({
-      ...this.state,
-      value,
-    });
-    onChange(value);
+    const { attrFilter } = this.props;
+    const uiElement = pathOr(null, ['attribute', 'metaField', 'uiElement'], attrFilter);
+    const isMultiSelectable = uiElement === 'CHECKBOX' || uiElement === 'COLOR_PICKER';
+    if (isMultiSelectable) {
+      const valResult = this.state.value ? [
+        ...this.state.value,
+        value,
+      ] : [value];
+      this.setState({
+        ...this.state,
+        value: valResult,
+      });
+      onChange(valResult);
+    } else {
+      this.setState({
+        ...this.state,
+        value,
+      });
+      onChange(value);
+    }
   }
 
   renderControll = () => {
@@ -69,7 +84,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
             <Checkbox
               id={v}
               label={v}
-              isChecked={v === value}
+              isChecked={value && value.includes(v)}
               handleCheckboxChange={this.handleOnChange}
             />
           </div>
@@ -99,7 +114,6 @@ class AttributeControll extends React.Component<PropsType, StateType> {
 
   render() {
     const { attrFilter } = this.props;
-    console.log('^^^^ AttributeSelector attrFilter: ', attrFilter);
     return (
       <div styleName="container">
         <div styleName="blockTitle">{getNameText(attrFilter.attribute.name, 'EN')}</div>

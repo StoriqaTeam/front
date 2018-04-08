@@ -9,7 +9,7 @@ import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { RangerSlider } from 'components/Ranger';
-import { AttributeControll } from 'components/AttributeSelector';
+import { AttributeControll } from 'components/AttributeControll';
 import { searchPathByParent, flattenFunc, getNameText } from 'utils';
 
 import CategoriesMenu from './CategoriesMenu';

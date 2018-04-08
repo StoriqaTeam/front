@@ -6,7 +6,7 @@ import './ColorPicker.scss';
 
 type PropsType = {
   items: Array<string>,
-  value: string,
+  value: ?Array<string>,
   onSelect: (value: string) => void,
 };
 
@@ -21,7 +21,7 @@ const Checkbox = ({
         key={color}
         styleName="itemWrapper"
         style={{
-          borderColor: value === color ? color : 'transparent',
+          borderColor: value && value.includes(color) ? color : 'transparent',
         }}
       >
         <div
