@@ -1,25 +1,29 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { append } from 'ramda';
 
 import { Button } from 'components/Button';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { log } from 'utils';
+import { CreateProductWithAttributesMutation } from 'relay/mutations';
 
 import Characteristics from './Characteristics';
-import Foto from './Foto';
+import Photos from './Photos';
 
 import './Form.scss';
 
 type PropsType = {
-  // id: string,
+  productId: string,
   vendorCode?: string,
   price?: number,
   cashback?: number,
   // characteristics?: Array<{}>,
   onSave: Function,
-  // categoryId: number,
+  category: {},
+  variant: ?{},
 };
 
 type StateType = {
@@ -27,6 +31,21 @@ type StateType = {
   price: number,
   cashback: number,
   isOpenVariantData: boolean,
+  photos: Array<string>,
+};
+
+type VariantType = {
+  productId?: number,
+  product: {
+    baseProductId: number,
+    price: number,
+    vendorCode: string,
+    photoMain?: string,
+    additionalPhotos?: Array<string>,
+    cashback: number,
+    discount: number,
+  },
+  attributes: Array<{ attrId: number, value: string, metaField?: string }>
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -36,7 +55,8 @@ class Form extends Component<PropsType, StateType> {
       vendorCode: props.vendorCode,
       price: props.price,
       cashback: props.cashback,
-      isOpenVariantData: false,
+      isOpenVariantData: true,
+      photos: [],
     };
   }
 
@@ -44,7 +64,7 @@ class Form extends Component<PropsType, StateType> {
     //
   };
 
-  handleSave = () => {
+  handleUpdate = () => {
     const {
       vendorCode,
       price,
@@ -55,6 +75,20 @@ class Form extends Component<PropsType, StateType> {
       price,
       cashback,
     });
+  };
+
+  handleCreate = () => {
+    log.debug({ variant: this.state });
+    // CreateProductWithAttributesMutation.commit({
+    //   ...variant,
+    //   environment: this.context.environment,
+    //   onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+    //     log.debug({ response, errors });
+    //   },
+    //   onError: (error: Error) => {
+    //     log.debug({ error });
+    //   },
+    // });
   };
 
   handleCheckboxClick = (id) => {
@@ -87,56 +121,13 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ cashback: parseFloat(value) });
   };
 
-  toggleDropdownVariant = () => {
-    this.setState({ isOpenVariantData: !this.state.isOpenVariantData });
-  }
+  handleAddPhoto = (url: string) => {
+    this.setState(prevState => ({ photos: append(url, prevState.photos) }));
+  };
 
-  renderHeader = () => (
-    <div styleName="header">
-      <div styleName="headerItem tdCheckbox">
-        <Checkbox
-          id="id-header"
-          onChange={this.handleCheckboxClick}
-        />
-      </div>
-      <div styleName="headerItem tdDropdawn" />
-      <div styleName="headerItem tdArticle">
-        <div styleName="headerItemWrap">
-          <span>Article</span>
-          <Icon inline type="arrowExpand" />
-        </div>
-      </div>
-      <div styleName="headerItem tdPrice">
-        <div styleName="headerItemWrap">
-          <span>Price</span>
-          <Icon inline type="arrowExpand" />
-        </div>
-      </div>
-      <div styleName="headerItem tdCashback">
-        <div styleName="headerItemWrap">
-          <span>Cashback</span>
-          <Icon inline type="arrowExpand" />
-        </div>
-      </div>
-      <div styleName="headerItem tdCharacteristics">
-        <div styleName="headerItemWrap">
-          <span>Characteristics</span>
-          <Icon inline type="arrowExpand" />
-        </div>
-      </div>
-      <div styleName="headerItem tdCount">
-        <div styleName="headerItemWrap">
-          <span>Count</span>
-          <Icon inline type="arrowExpand" />
-        </div>
-      </div>
-      <div styleName="headerItem tdBasket">
-        <button>
-          <Icon type="basket" />
-        </button>
-      </div>
-    </div>
-  )
+  toggleDropdownVariant = () => {
+    this.setState({isOpenVariantData: !this.state.isOpenVariantData});
+  };
 
   renderVariant = () => {
     const {
@@ -193,27 +184,25 @@ class Form extends Component<PropsType, StateType> {
         </div>
       </div>
     );
-  }
+  };
 
   render() {
-    const { isOpenVariantData } = this.state;
     return (
       <div>
         <div styleName="variants">
-          {this.renderHeader()}
           {this.renderVariant()}
         </div>
-        {isOpenVariantData &&
-          <Fragment>
-            <Characteristics
-              onChange={values => log.debug('Form', { values })}
-            />
-            <Foto />
-          </Fragment>
-        }
+        <Characteristics
+          category={this.props.category}
+          onChange={values => log.debug('Form', { values })}
+        />
+        <Photos
+          photos={this.state.photos}
+          onAddPhoto={this.handleAddPhoto}
+        />
         <Button
           type="button"
-          onClick={this.handleSave}
+          onClick={this.props.productId ? this.handleUpdate : this.handleCreate}
         >
           Save
         </Button>
@@ -221,5 +210,9 @@ class Form extends Component<PropsType, StateType> {
     );
   }
 }
+
+Form.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default Form;

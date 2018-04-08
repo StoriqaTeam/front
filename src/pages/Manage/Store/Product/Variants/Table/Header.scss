@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+}
+
+.headerItem {
+  font-size: 12px;
+  color: #848484;
+}
+
+.headerItemWrap {
+  & > span {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+}
+
+.tdCheckbox {width: 5%;}
+.tdCashback {width: 15%;}
+.tdCharacteristics {width: 15%;}
+.tdDropdawn {width: 5%;}
+.tdArticle {width: 20%;}
+.tdPrice {width: 20%;}
+.tdCount {width: 15%;}
+.tdBasket {width: 5%;}

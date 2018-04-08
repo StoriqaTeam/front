@@ -23,6 +23,9 @@ type StateType = {
   formErrors: {},
 };
 
+const baseProductFromProps = pathOr(null, ['me', 'baseProductWithVariants', 'baseProduct']);
+const variantsFromProps = pathOr(null, ['me', 'baseProductWithVariants', 'variants']);
+
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
@@ -40,7 +43,7 @@ class EditProduct extends Component<PropsType, StateType> {
       shortDescription,
       fullDesc,
     } = form;
-    const id = pathOr(null, ['me', 'baseProduct', 'id'], this.props);
+    const id = pathOr(null, ['id'], baseProductFromProps(this.props));
     UpdateBaseProductMutation.commit({
       id,
       name: [{ lang: 'EN', text: name }],
@@ -62,13 +65,14 @@ class EditProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
+        // eslint-disable-next-line
         alert('Something going wrong :(');
       },
     });
   };
 
   render() {
-    const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
+    const baseProduct = baseProductFromProps(this.props);
     return (
       <Container>
         <Row>
@@ -87,7 +91,8 @@ class EditProduct extends Component<PropsType, StateType> {
             />
             <Variants
               productId={baseProduct.rawId}
-              categoryId={baseProduct.categoryId}
+              category={baseProduct.category}
+              variants={variantsFromProps(this.props)}
             />
           </Col>
         </Row>
@@ -106,65 +111,88 @@ export default createFragmentContainer(
   graphql`
     fragment EditProduct_me on User
     @argumentDefinitions(productId: { type: "Int!" }) {
-      baseProduct(id:$productId) {
-        id
-        rawId
-        category {
-          rawId
-        }
-        storeId
-        name {
-          lang
-          text
-        }
-        shortDescription {
-          lang
-          text
-        }
-        longDescription {
-          lang
-          text
-        }
-        seoTitle {
-          lang
-          text
-        }
-        seoDescription {
-          lang
-          text
-        }
-      }
-    }
-  `,
-);
-
-/* categories {
-  children {
-    children {
-      children {
-        rawId
-        name {
-          lang
-          text
-        }
-        getAttributes {
+      baseProductWithVariants(id: $productID) {
+        baseProduct {
           id
           rawId
+          category {
+            rawId
+            id
+            getAttributes {
+              id
+              rawId
+              name {
+                lang
+                text
+              }
+              valueType
+              metaField {
+                values
+                translatedValues {
+                  lang
+                  text
+                }
+                uiElement
+              }
+            }
+          }
+          storeId
           name {
             lang
             text
           }
-          valueType
-          metaField {
-            values
-            translatedValues {
-              lang
-              text
+          shortDescription {
+            lang
+            text
+          }
+          longDescription {
+            lang
+            text
+          }
+          seoTitle {
+            lang
+            text
+          }
+          seoDescription {
+            lang
+            text
+          }
+        }
+        variants {
+          id
+          rawId
+          product {
+            id
+            rawId
+            isActive
+            discount
+            photoMain
+            additionalPhotos
+            vendorCode
+            price
+            cashback
+          }
+          attributes {
+            attribute {
+              id
+              rawId
+              name {
+                lang
+                text
+              }
+              valueType
+              metaField {
+                values
+                translatedValues {
+                  lang
+                  text
+                }
+                uiElement
+              }
             }
-            uiElement
           }
         }
       }
     }
-  }
-} */
+    `,
+);

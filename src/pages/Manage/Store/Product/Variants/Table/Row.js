@@ -19,7 +19,7 @@ type StateType = {
   checked: boolean,
 };
 
-class TableRow extends Component<PropsType, StateType> {
+class Row extends Component<PropsType, StateType> {
   state: StateType = {
     //
   };
@@ -54,4 +54,4 @@ class TableRow extends Component<PropsType, StateType> {
   }
 }
 
-export default TableRow;
+export default Row;

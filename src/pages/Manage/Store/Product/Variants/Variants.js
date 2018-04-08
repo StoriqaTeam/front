@@ -6,13 +6,14 @@ import PropTypes from 'prop-types';
 import { CreateProductWithAttributesMutation } from 'relay/mutations';
 import { log } from 'utils';
 
-import Table from './Table';
+import Table from './Table/Table';
 
 import './Variants.scss';
 
 type PropsType = {
   productId: number,
-  categoryId: number,
+  category: {},
+  variants: Array<{}>,
 };
 
 type StateType = {
@@ -54,7 +55,8 @@ class Variants extends Component<PropsType, StateType> {
         <div styleName="title">Варианты товара</div>
         <Table
           onSave={this.handleSave}
-          categoryId={this.props.categoryId}
+          category={this.props.category}
+          variants={this.props.variants}
         />
       </div>
     );

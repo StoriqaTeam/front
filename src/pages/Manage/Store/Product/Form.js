@@ -36,6 +36,7 @@ class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { baseProduct } = this.props;
+    console.log({baseProduct})
     if (!baseProduct) {
       return;
     }

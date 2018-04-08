@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@import '../../../../../../../styles/variables';
 
 .container {
   margin-bottom: 2rem;
@@ -37,4 +37,10 @@
   & > img {
     height: 100%;
   }
+}
+
+.labelSmall {
+  font-family: Roboto;
+  color: $color_grey_bg;
+  font-size: 12px;
 }
