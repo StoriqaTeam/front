@@ -21,7 +21,7 @@ const Checkbox = ({
         key={color}
         styleName="itemWrapper"
         style={{
-          borderColor: value && value.includes(color) ? color : 'transparent',
+          borderColor: value && value.includes(color) ? '#2FBAFD' : 'transparent',
         }}
       >
         <div
