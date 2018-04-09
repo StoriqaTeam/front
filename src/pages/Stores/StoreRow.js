@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { map, find, propEq, pathOr, head } from 'ramda';
 
 import { Icon } from 'components/Icon';
@@ -13,14 +13,7 @@ type PropsType = {
   store: { name: {}, rawId: any, id: any, productsCount: number, logo: ?string, },
 };
 
-type StateType = {
-  //
-};
-
-class StoreRow extends Component<PropsType, StateType> {
-  state: StateType = {
-    //
-  };
+class StoreRow extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
     const lang = 'EN';
@@ -33,16 +26,20 @@ class StoreRow extends Component<PropsType, StateType> {
         <Row>
           <Col size={6}>
             <div styleName="storeData">
-              <div styleName="storeLogo">
-                <div>
-                  <img src={store.logo} alt="img" />
-                </div>
-              </div>
+              <Link
+                to={`/store/${store.rawId}`}
+                styleName="storeLogo"
+              >
+                {store.logo ?
+                  <img src={store.logo} alt="img" /> :
+                  <Icon type="camera" size="32" />
+                }
+              </Link>
               <div styleName="storeInfo">
                 <div styleName="storeName">{name}</div>
                 <div styleName="storeAdd">
                   <span>97,5% пол. отзывов</span>
-                  <span styleName="productsCount">{productsCount} товаров</span>
+                  {productsCount && <span styleName="productsCount">{productsCount} товаров</span>}
                 </div>
               </div>
               <div styleName="storeElect">
@@ -52,21 +49,28 @@ class StoreRow extends Component<PropsType, StateType> {
           </Col>
           <Col size={6}>
             {products &&
-            <div styleName="productsData">
-              <div styleName="productsWrap">
-                {map(productsItem => productsItem.node, products).map((product) => {
-                  const photoMain = pathOr(null, ['product', 'photoMain'], head(product.variants));
-                  const productId = product.rawId;
-                  return (
-                    <Link key={productId} to={`/store/${storeId}/product/${productId}`} styleName="productFoto">
-                      <div styleName="productFotoWrap">
-                        <img src={photoMain} alt="img" />
-                      </div>
-                    </Link>
-                  );
-                })}
+              <div styleName="productsData">
+                <div styleName="productsWrap">
+                  {map(productsItem => productsItem.node, products).map((product) => {
+                    const photoMain = pathOr(null, ['product', 'photoMain'], head(product.variants));
+                    const productId = product.rawId;
+                    return (
+                      <Link
+                        key={productId}
+                        to={`/store/${storeId}/product/${productId}`}
+                        styleName="productFoto"
+                      >
+                        <div styleName="productFotoWrap">
+                          {photoMain ?
+                            <img src={photoMain} alt="img" /> :
+                            <Icon type="camera" size="32" />
+                          }
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
             }
           </Col>
         </Row>

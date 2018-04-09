@@ -1,7 +1,7 @@
 @import "../../styles/variables";
 
 .countInfo {
-  margin-top: 3rem;
+  margin-top: 2rem;
   font-size: 14px;
   line-height: 2rem;
   padding-bottom: 3rem;
@@ -13,7 +13,7 @@
 }
 
 .header {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .breadcrumbs {
@@ -56,12 +56,15 @@
 
 .storeLogo {
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: center;
   width: 10rem;
   height: 10rem;
+  background-color: $color_grey_light;
+  overflow: hidden;
 
   & img {
-    width: 100%;
+    height: 100%;
     display: block;
   }
 }
@@ -70,6 +73,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 35rem;
+  max-width: 45rem;
   margin-left: 2rem;
   padding-right: 3rem;
   border-right: 1px solid rgba(186,186,186,.17);
@@ -120,12 +125,15 @@
   & .productFotoWrap {
     display: flex;
     align-items: center;
-    background-color: $color_white;
+    justify-content: center;
+    width: 100%;
+    background-color: $color_grey_light;
+    overflow: hidden;
   }
 
   & img {
-    width: 100%;
     display: block;
+    height: 100%;
   }
 }
 

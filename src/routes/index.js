@@ -20,32 +20,17 @@ import Stores from 'pages/Stores/Stores';
 const routes = (
   <Route>
     <Route
-      path="/stores"
-      Component={Stores}
-      query={graphql`
-        query routes_Stores_Query($input: SearchStoreInput!) {
-          search {
-            ...Stores_search @arguments(text: $input)
-          }
-        }
-      `}
-      prepareVariables={(...args) => {
-        const searchValue = pathOr('', ['query', 'search'], last(args).location);
-        return ({ input: { name: searchValue, getStoresTotalCount: true } });
-      }}
-    />
-    <Route
       path="/"
       Component={App}
       query={graphql`
       query routes_App_Query {
         id
-        mainPage {
-          ...Start_mainPage
-        }
         me {
           id
           ...App_me
+        }
+        mainPage {
+          ...Start_mainPage
         }
         languages {
           isoCode
@@ -101,6 +86,21 @@ const routes = (
       }}
     >
       <Route Component={Start} />
+      <Route
+        path="/stores"
+        Component={Stores}
+        query={graphql`
+        query routes_Stores_Query($input: SearchStoreInput!) {
+          search {
+            ...Stores_search @arguments(text: $input)
+          }
+        }
+      `}
+        prepareVariables={(...args) => {
+          const searchValue = pathOr('', ['query', 'search'], last(args).location);
+          return ({ input: { name: searchValue, getStoresTotalCount: true } });
+        }}
+      />
       <Route
         path="/manage"
         render={({ match }) => {

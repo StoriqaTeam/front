@@ -25,8 +25,6 @@ type StateType = {
   sortItem: { id: string, label: string },
 };
 
-const storesPerRequest = 1;
-
 class Stores extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
@@ -40,7 +38,7 @@ class Stores extends Component<PropsType, StateType> {
   }
 
   storesRefetch = () => {
-    this.props.relay.loadMore(storesPerRequest);
+    this.props.relay.loadMore(8);
   };
 
   handleCategory = (category: { id: string, label: string }) => {
@@ -62,15 +60,15 @@ class Stores extends Component<PropsType, StateType> {
       sortItem,
     } = this.state;
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
+    const totalCount = pathOr(0, ['search', 'findStore', 'pageInfo', 'totalCount'], this.props);
+    const searchValue = pathOr(null, ['location', 'query', 'search'], this.props);
     return (
       <Container>
         <Row>
-          {/* <> */}
-        </Row>
-        <Row>
           <Col size={2}>
             <div styleName="countInfo">
-              <b>2 741</b> магазинов найдено с trade в названии
+              <b>{totalCount}</b> магазинов найдено
+              {searchValue && <span> с {searchValue} в названии</span>}
             </div>
             <div styleName="filterItem">
               <MiniSelect
@@ -159,10 +157,13 @@ export default createPaginationContainer(
     fragment Stores_search on Search
     @argumentDefinitions(
       text: { type: "SearchStoreInput!" }
-      first: { type: "Int", defaultValue: 1 }
+      first: { type: "Int", defaultValue: 8 }
       after: { type: "ID", defaultValue: null }
     ) {
       findStore(searchTerm: $text, first: $first, after: $after) @connection(key: "Stores_findStore") {
+        pageInfo {
+          totalCount
+        }
         edges {
           cursor
           node {
@@ -179,6 +180,21 @@ export default createPaginationContainer(
               lang
               text
             }
+            baseProductsWithVariants {
+              edges {
+                node {
+                  id
+                  rawId
+                  variants {
+                    id
+                    rawId
+                    product {
+                      photoMain
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -190,7 +206,7 @@ export default createPaginationContainer(
     getVariables: (props, { count }, prevFragmentVars) => ({
       text: prevFragmentVars.text,
       after: props.search.findStore.pageInfo.endCursor,
-      first: count + storesPerRequest,
+      first: count + 1,
     }),
     query: graphql`
       query Stores_edges_Query($first: Int, $after: ID, $text: SearchStoreInput!) {

@@ -16,12 +16,12 @@ import './Header.scss';
 
 type PropsType = {
   user: ?{},
+  searchValue: string,
 };
 
 class Header extends PureComponent<PropsType> {
   render() {
-    const { user } = this.props;
-
+    const { user, searchValue } = this.props;
     return (
       <header styleName="container">
         <Container>
@@ -96,6 +96,7 @@ class Header extends PureComponent<PropsType> {
                       { id: 1, label: 'Products' },
                       { id: 2, label: 'All' },
                     ]}
+                    searchValue={searchValue}
                   />
                 </div>
                 <div styleName="profileIcon">
