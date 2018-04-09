@@ -23,6 +23,13 @@ import mostPopularGoods from './mostPopularGoods.json';
 class Start extends PureComponent<{}> {
   render() {
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const mostViewedProducts = pathOr(null, [
+      'mainPage',
+      'findMostViewedProducts',
+      'edges',
+    ], this.props);
+    console.log('---this.props', this.props);
+    console.log('---mostViewedProducts', mostViewedProducts);
     return (
       <div styleName="container">
         {categories && <CategoriesMenu categories={categories} />}
@@ -31,13 +38,13 @@ class Start extends PureComponent<{}> {
         </div>
         <div styleName="item">
           <GoodsSlider
-            items={mostPopularGoods}
+            items={mostViewedProducts}
             title="Популярное"
           />
         </div>
         <div styleName="item">
           <GoodsSlider
-            items={mostPopularGoods}
+            items={mostViewedProducts}
             title="Распродажа"
           />
         </div>
@@ -75,11 +82,32 @@ export default createFragmentContainer(
   Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
-      findMostViewedProducts(searchTerm: {options: {attrFilters: [],categoriesIds: [1]}}) {
+      findMostViewedProducts(searchTerm: {options: {attrFilters: [],categoriesIds: []}}) {
         edges {
           node {
             id
             rawId
+            baseProduct {
+              id
+              rawId
+              name {
+                lang
+                text
+              }
+              currencyId
+            }
+            variants {
+              id
+              rawId
+              product {
+                id
+                rawId
+                discount
+                photoMain
+                cashback
+                price
+              }
+            }
           }
         }
       }

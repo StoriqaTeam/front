@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, pathOr } from 'ramda';
+import { head, pathOr, find, propEq } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -32,14 +32,17 @@ class CardProduct extends PureComponent<PropsTypes> {
         variants,
       },
     } = this.props;
+    const lang = 'EN';
 
-    const title = baseProduct ? baseProduct.name : null;
+    const name = baseProduct ? baseProduct.name : null;
+    const title = find(propEq('lang', lang))(name).text;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
     const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
     const discount = pathOr(null, ['product', 'discount'], head(variants));
     const price = undiscountedPrice * (1 - discount);
     // const currencyId = baseProduct ? baseProduct.currencyId : null;
-    const cashback = pathOr(null, ['product', 'discount'], head(variants)) * 100;
+    const cashback = pathOr(null, ['product', 'cashback'], head(variants)) * 100;
+    console.log('---cashback', cashback);
 
     return (
       <div styleName="container">
@@ -58,19 +61,19 @@ class CardProduct extends PureComponent<PropsTypes> {
             {title && <div styleName="title">{title}</div>}
             <div styleName="price">
               {undiscountedPrice &&
-              <div styleName="undiscountedPrice">
-                {formatPrice(undiscountedPrice)} STQ
-              </div>
+                <div styleName="undiscountedPrice">
+                  {formatPrice(undiscountedPrice)} STQ
+                </div>
               }
               {price &&
               <div styleName="actualPrice">
                 <strong>{formatPrice(price)} STQ</strong>
               </div>
               }
-              {cashback &&
-              <div styleName="cashbackWrap">
-                <div styleName="cashback">Cashback {`${cashback}%`}</div>
-              </div>
+              {cashback && cashback > 0 &&
+                <div styleName="cashbackWrap">
+                  <div styleName="cashback">Cashback {`${cashback}%`}</div>
+                </div>
               }
             </div>
           </div>

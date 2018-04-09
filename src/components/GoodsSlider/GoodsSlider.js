@@ -28,6 +28,7 @@ type PropsTypes = {
 class GoodsSlider extends PureComponent<PropsTypes> {
   render() {
     const { items, title } = this.props;
+    console.log('---items', items);
     return (
       <div styleName="container">
         <Slider
