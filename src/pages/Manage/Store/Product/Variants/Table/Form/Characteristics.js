@@ -16,9 +16,9 @@ type PropsType = {
 
 class Characteristics extends PureComponent<PropsType> {
   handleItemChange = (attribute: { attrId: number, value: string }) => {
-    const { attrId, value } = attribute;
+    const { attrId, value, metaField } = attribute;
     const filteredItems = filter(item => item.attrId !== attrId, this.props.values);
-    filteredItems.push({ attrId, value });
+    filteredItems.push({ attrId, value, metaField });
     this.props.onChange(filteredItems);
   };
 

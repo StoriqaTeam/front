@@ -13,6 +13,7 @@ type PropsType = {
   onSave: Function,
   category: {},
   variants: Array<{}>,
+  productId: number,
 };
 
 type StateType = {
@@ -36,19 +37,30 @@ class Table extends Component<PropsType, StateType> {
     // TODO:
   };
 
+  expandRow = (id: string) => {
+    this.setState({ expandedItemId: id });
+  };
+
   renderRows = () => {
     const { expandedItemId } = this.state;
-    map((item) => {
-      if (propEq('rawId', expandedItemId)) {
+    return map((item) => {
+      console.log({ expandedItemId, item })
+      if (propEq('rawId', expandedItemId, item)) {
         return (
           <Form
-            onSave={this.handleSave}
             category={this.props.category}
             variant={item}
+            productId={this.props.productId}
+            key={item.id}
           />
         );
       }
-      return (<Row variant={item} />);
+      return (
+        <Row
+          key={item.id}
+          variant={item}
+          onExpandClick={this.expandRow}
+        />);
     }, this.props.variants);
   };
 
@@ -59,8 +71,8 @@ class Table extends Component<PropsType, StateType> {
         {this.renderRows()}
         {!this.state.expandedItemId && (
           <Form
-            onSave={this.handleCreateVariant}
             category={this.props.category}
+            productId={this.props.productId}
           />
         )}
       </div>

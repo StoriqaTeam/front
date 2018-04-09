@@ -16,11 +16,7 @@ import Photos from './Photos';
 import './Form.scss';
 
 type PropsType = {
-  productId: string,
-  vendorCode?: string,
-  price?: number,
-  cashback?: number,
-  // characteristics?: Array<{}>,
+  productId: number,
   onSave: Function,
   category: {},
   variant: ?{},
@@ -34,20 +30,6 @@ type StateType = {
   mainPhoto: ?string,
   photos: Array<string>,
   attributeValues: Array<{ attrId: string, value: string, metaField?: string }>,
-};
-
-type VariantType = {
-  productId?: number,
-  product: {
-    baseProductId: number,
-    price: number,
-    vendorCode: string,
-    photoMain?: string,
-    additionalPhotos?: Array<string>,
-    cashback: number,
-    discount: number,
-  },
-  attributes: Array<{ attrId: number, value: string, metaField?: string }>
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -84,18 +66,45 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
+  /* {
+      "vendorCode": "asdfasdf",
+      "price": 123,
+      "cashback": 11,
+      "isOpenVariantData": true,
+      "mainPhoto": "https://s3.amazonaws.com/storiqa-dev/img-zP4BrAI0HNcC.png",
+      "photos": [
+        "https://s3.amazonaws.com/storiqa-dev/img-LhNA4aWDbAkC.png"
+      ],
+      "attributeValues": [
+        {
+          "attrId": 1,
+          "value": "50",
+          "metaField": "https://s3.amazonaws.com/storiqa-dev/img-mzcqk7BUenkC.png"
+        }
+      ]
+    } */
   handleCreate = () => {
-    log.debug({ variant: this.state });
-    // CreateProductWithAttributesMutation.commit({
-    //   ...variant,
-    //   environment: this.context.environment,
-    //   onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-    //     log.debug({ response, errors });
-    //   },
-    //   onError: (error: Error) => {
-    //     log.debug({ error });
-    //   },
-    // });
+    const variant = this.state;
+    log.debug({ variant });
+    CreateProductWithAttributesMutation.commit({
+      product: {
+        baseProductId: this.props.productId,
+        price: variant.price,
+        vendorCode: variant.vendorCode,
+        photoMain: variant.mainPhoto,
+        additionalPhotos: variant.photos,
+        cashback: variant.cashback,
+      },
+      attributes: variant.attributeValues,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        log.debug({ response, errors });
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+      },
+    });
   };
 
   handleCheckboxClick = (id) => {
@@ -228,7 +237,7 @@ class Form extends Component<PropsType, StateType> {
         />
         <Button
           type="button"
-          onClick={this.props.productId ? this.handleUpdate : this.handleCreate}
+          onClick={this.props.variant ? this.handleUpdate : this.handleCreate}
         >
           Save
         </Button>

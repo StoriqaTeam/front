@@ -57,6 +57,7 @@ class Variants extends Component<PropsType, StateType> {
           onSave={this.handleSave}
           category={this.props.category}
           variants={this.props.variants}
+          productId={this.props.productId}
         />
       </div>
     );
