@@ -8,6 +8,7 @@ import { currentUserShape } from 'utils/shapes';
 import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
+import { MiniSelect } from 'components/MiniSelect';
 import { RangerSlider } from 'components/Ranger';
 import { AttributeControll } from 'components/AttributeControll';
 import { searchPathByParent, flattenFunc, getNameText } from 'utils';
@@ -15,8 +16,9 @@ import { searchPathByParent, flattenFunc, getNameText } from 'utils';
 import CategoriesMenu from './CategoriesMenu';
 import Sidebar from './Sidebar';
 import data from './data.json';
+import categoriesMock from './categories.json';
 
-import './Search.scss';
+import './Products.scss';
 
 type PropsType = {
   categoryRowId: number,
@@ -52,7 +54,9 @@ class Search extends PureComponent<PropsType, StateType> {
   }
 
   generateTree = () => {
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    // const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
+    if (!categories) return null;
     const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
     const res = level2Filter(flattenFunc(categories));
     return prepareForAccordion(res);
@@ -83,15 +87,24 @@ class Search extends PureComponent<PropsType, StateType> {
 
   renderBreadcrumbs = () => {
     const { categoryRowId } = this.props;
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    // const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
+    if (!categories) {
+      return (
+        <div styleName="breadcrumbs">
+          <p styleName="item">path not found</p>
+        </div>
+      );
+    }
     const arr = flattenFunc(categories);
     const pathArr = searchPathByParent(arr, categoryRowId);
     return (
       <div styleName="breadcrumbs">
+        <p styleName="item">Все категрии</p>
         {pathArr.length !== 0 &&
-          pathArr.map((item, index) => (
+          pathArr.map(item => (
             <p key={item.rawId} styleName="item">
-              {index > 0 && ' / '}{getNameText(item.name, 'EN')}
+              <span styleName="separator">/</span>{getNameText(item.name, 'EN')}
             </p>
           ))
         }
@@ -99,22 +112,54 @@ class Search extends PureComponent<PropsType, StateType> {
     );
   }
 
+  renderSorting = () => {
+    return (
+      <div styleName="sortingContainer">
+        <div>Сортировать по:</div>
+        <MiniSelect
+          forForm
+          items={[
+            {
+              id: 'byPriceDecrease',
+              label: 'Цена(уменьшение)',
+            },
+            {
+              id: 'byPriceIncrease',
+              label: 'Цена(увеличение)',
+            },
+          ]}
+          onSelect={console.log}
+          activeItem={{
+            id: 'byPriceDecrease',
+            label: 'Цена(уменьшение)',
+          }}
+          containerStyle={{
+            width: '100%',
+          }}
+        />
+      </div>
+    );
+  }
+
   render() {
     const { volume, volume2 } = this.state;
     const { categoryRowId } = this.props;
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], data);
+    const catTree = this.generateTree();
     return (
       <div styleName="container">
-        {categories && <CategoriesMenu categories={categories} />}
+        {/* {categories && <CategoriesMenu categories={categories} />} */}
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <Sidebar>
-              <Accordion
-                tree={this.generateTree()}
-                activeRowId={categoryRowId}
-                onClick={this.handleOnChangeCategory}
-              />
+              {catTree &&
+                <Accordion
+                  tree={catTree}
+                  activeRowId={categoryRowId}
+                  onClick={this.handleOnChangeCategory}
+                />
+              }
               <div styleName="blockTitle">Цена (STQ)</div>
               <RangerSlider
                 min={0}
@@ -126,7 +171,6 @@ class Search extends PureComponent<PropsType, StateType> {
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}
               />
-              {/* <AttributeSelector attrFilters={this.getAttributes()} /> */}
               {attrFilters && attrFilters.map(attrFilter => (
                 <div key={attrFilter.attribute.id} styleName="attrBlock">
                   <AttributeControll
@@ -138,7 +182,10 @@ class Search extends PureComponent<PropsType, StateType> {
             </Sidebar>
           </div>
           <div styleName="contentContainer">
-            {this.renderBreadcrumbs()}
+            <div styleName="topContentContainer">
+              {this.renderBreadcrumbs()}
+              {this.renderSorting()}
+            </div>
           </div>
         </div>
       </div>
@@ -147,7 +194,7 @@ class Search extends PureComponent<PropsType, StateType> {
 }
 
 Search.contextTypes = {
-  environment: PropTypes.object.isRequired,
+  // environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
 };
