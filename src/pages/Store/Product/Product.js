@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
@@ -16,11 +17,15 @@ import {
 import './Product.scss';
 import mockData from './mockData.json';
 
+type PropsType = {
+  me?: {}
+};
+
 type stateTypes = {
   tabs: {id: string | number, label: string, content: any}[]
 }
 
-class Product extends PureComponent<{}, stateTypes> {
+class Product extends PureComponent<PropsType, stateTypes> {
   state = {
     tabs: [
       {
@@ -30,7 +35,6 @@ class Product extends PureComponent<{}, stateTypes> {
       },
     ],
   };
-  handleLightBox = {};
   render() {
     const { tabs } = this.state;
     return (
@@ -71,4 +75,17 @@ class Product extends PureComponent<{}, stateTypes> {
   }
 }
 
-export default Product;
+export default createFragmentContainer(
+  Product,
+  graphql`
+    fragment Product_me on User
+    @argumentDefinitions(productId: { type: "Int!" }) {
+      baseProduct(id: $productID) {
+        name {
+          text
+          lang
+        }
+      }
+    }
+  `,
+);
