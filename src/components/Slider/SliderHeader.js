@@ -20,9 +20,7 @@ class SliderHeader extends PureComponent<PropsTypes> {
 
     return (
       <div styleName="container">
-        <div styleName="title">
-          {title}
-        </div>
+        <div styleName="title">{title}</div>
         {isRevealButton &&
           <div styleName="nav">
             <button

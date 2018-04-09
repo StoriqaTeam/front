@@ -65,9 +65,7 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
                   src={user.avatar}
                   alt="img"
                 /> :
-                <div styleName="avatar-icon">
-                  <Icon type="person" size="16" />
-                </div>
+                <Icon type="person" size="16" />
               }
             </div>
           </trigger>

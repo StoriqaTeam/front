@@ -22,17 +22,15 @@
 
 .nav {
   height: 4rem;
-  margin-left: 3rem;
+  margin-left: 4rem;
   float: right;
 }
 
 .button {
-  width: 4rem;
-  height: 4rem;
   cursor: pointer;
 
   & + .button {
-    margin-left: 2rem;
+    margin-left: 0.75rem;
   }
 }
 
