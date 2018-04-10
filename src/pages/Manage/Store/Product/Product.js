@@ -97,6 +97,7 @@ class Product extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
+        // eslint-disable-next-line
         alert('Something going wrong :(');
       },
     });

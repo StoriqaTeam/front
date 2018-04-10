@@ -15,6 +15,7 @@ type PropsTypes = {
   href: ?string,
   isDefault?: boolean,
   wireframe?: boolean,
+  forLoad?: boolean,
   white: ?boolean,
 };
 
@@ -29,6 +30,7 @@ class Button extends PureComponent<PropsTypes> {
       href,
       isDefault,
       wireframe,
+      forLoad,
       white,
     } = this.props;
 
@@ -38,7 +40,6 @@ class Button extends PureComponent<PropsTypes> {
       onClick,
       href,
       children,
-      white,
     };
 
     const styleName = classNames('container', {
@@ -46,6 +47,7 @@ class Button extends PureComponent<PropsTypes> {
       disabled,
       isDefault,
       wireframe,
+      forLoad,
       white,
     });
 

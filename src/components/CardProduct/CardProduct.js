@@ -41,7 +41,8 @@ class CardProduct extends PureComponent<PropsTypes> {
     const discount = pathOr(null, ['product', 'discount'], head(variants));
     const price = undiscountedPrice * (1 - discount);
     // const currencyId = baseProduct ? baseProduct.currencyId : null;
-    const cashback = pathOr(null, ['product', 'cashback'], head(variants)) * 100;
+    const cashback = pathOr(0, ['product', 'cashback'], head(variants));
+    const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
 
     return (
       <div styleName="container">
@@ -58,7 +59,7 @@ class CardProduct extends PureComponent<PropsTypes> {
             </div>
             {title && <div styleName="title">{title}</div>}
             <div styleName="price">
-              {undiscountedPrice &&
+              {Boolean(discount) &&
                 <div styleName="undiscountedPrice">
                   {formatPrice(undiscountedPrice)} STQ
                 </div>
@@ -70,7 +71,7 @@ class CardProduct extends PureComponent<PropsTypes> {
               }
               {Boolean(cashback) &&
                 <div styleName="cashbackWrap">
-                  <div styleName="cashback">Cashback {`${cashback}%`}</div>
+                  <div styleName="cashback">Cashback {`${cashbackValue}%`}</div>
                 </div>
               }
             </div>

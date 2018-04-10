@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -15,12 +16,12 @@ import './Header.scss';
 
 type PropsType = {
   user: ?{},
+  searchValue: string,
 };
 
 class Header extends PureComponent<PropsType> {
   render() {
-    const { user } = this.props;
-
+    const { user, searchValue } = this.props;
     return (
       <header styleName="container">
         <Container>
@@ -85,9 +86,9 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <div styleName="logo">
+                <Link to="/" styleName="logo">
                   <Icon type="logo" />
-                </div>
+                </Link>
                 <div styleName="searchInput">
                   <SearchInput
                     searchCategories={[
@@ -95,6 +96,7 @@ class Header extends PureComponent<PropsType> {
                       { id: 'products', label: 'Products' },
                       { id: 'all', label: 'All' },
                     ]}
+                    searchValue={searchValue}
                   />
                 </div>
                 <div styleName="profileIcon">

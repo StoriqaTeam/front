@@ -27,6 +27,7 @@ type PropsType = {
   label: ?string,
   activeItem: ?{ id: string, label: string },
   forForm: ?boolean,
+  forSearch: ?boolean,
   forAutocomlete: ?boolean,
 };
 
@@ -90,6 +91,7 @@ class MiniSelect extends Component<PropsType, StateType> {
       label,
       activeItem,
       forForm,
+      forSearch,
       forAutocomlete,
     } = this.props;
     const { isExpanded } = this.state;
@@ -100,6 +102,7 @@ class MiniSelect extends Component<PropsType, StateType> {
         styleName={classNames('container', {
           isDropdown,
           forForm,
+          forSearch,
           forAutocomlete,
         })}
       >
@@ -140,7 +143,7 @@ class MiniSelect extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        {forForm && <div styleName="hr" />}
+        {(forForm || forSearch) && <div styleName="hr" />}
       </div>
     );
   }
