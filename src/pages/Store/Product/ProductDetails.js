@@ -91,7 +91,7 @@ class ProductDetails extends PureComponent<{}, StateType> {
                 percentage="12"
               />
               <p>
-                { extractText(longDescription, 'EN', 'Не описание') }
+                { extractText(longDescription, 'EN', 'Нет описания') }
               </p>
               <ProductSize sizes={sizes} />
               <ProductMaterial
