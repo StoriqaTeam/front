@@ -71,7 +71,8 @@ class MiniSelect extends Component<PropsType, StateType> {
   handleItemClick = (e: any) => {
     if (this.props.isDropdown) {
       log.info('id', e.target.id);
-    } else if (this.props.onSelect) {
+    } else if (this.props && this.props.onSelect) {
+      // $FlowIgnoreMe
       this.props.onSelect(find(propEq('id', e.target.id))(this.props.items));
     }
   };

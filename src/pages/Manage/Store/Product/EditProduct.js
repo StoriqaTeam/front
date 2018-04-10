@@ -31,7 +31,7 @@ class EditProduct extends Component<PropsType, StateType> {
     formErrors: {},
   };
 
-  handleSave = (form: ?{}) => {
+  handleSave = (form: ?{ [string]: any }) => {
     if (!form) {
       return;
     }

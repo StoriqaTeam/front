@@ -14,7 +14,7 @@ type PropsType = {
 };
 
 class Photos extends PureComponent<PropsType> {
-  handleOnUpload = async (e) => {
+  handleOnUpload = async (e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);

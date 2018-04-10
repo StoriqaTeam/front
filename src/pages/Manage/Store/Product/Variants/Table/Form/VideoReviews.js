@@ -1,13 +1,9 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 
-class VideoReviews extends Component {
-  render() {
-    return (
-      <div>Hi!</div>
-    );
-  }
-}
+const VideoReviews = () => (
+  <div>Hi!</div>
+);
 
 export default VideoReviews;

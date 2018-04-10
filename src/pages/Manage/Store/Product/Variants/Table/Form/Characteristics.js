@@ -9,13 +9,13 @@ import CharacteristicItem from './CharacteristicItem';
 import './Characteristics.scss';
 
 type PropsType = {
-  onChange: (Array<({ attrId: number, value: string })>) => void,
-  values: Array<{ attrId: string, value: string }>,
+  onChange: Function => void,
+  values: Array<{ attrId: string, value: string, metaField?: string }>,
   category: { getAttributes: Array<{}> },
 };
 
 class Characteristics extends PureComponent<PropsType> {
-  handleItemChange = (attribute: { attrId: number, value: string }) => {
+  handleItemChange = (attribute: { attrId: number, value: string, metaField?: string }) => {
     const { attrId, value, metaField } = attribute;
     const filteredItems = filter(item => item.attrId !== attrId, this.props.values);
     filteredItems.push({ attrId, value, metaField });

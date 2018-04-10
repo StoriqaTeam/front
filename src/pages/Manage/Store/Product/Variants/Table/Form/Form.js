@@ -16,14 +16,15 @@ import Photos from './Photos';
 import './Form.scss';
 
 type StateType = {
-  productId: string,
-  vendorCode: string,
-  price: number,
-  cashback: number,
-  isOpenVariantData: boolean,
-  mainPhoto: ?string,
-  photos: Array<string>,
-  attributeValues: Array<{ attrId: string, value: string, metaField?: string }>,
+  productId?: string,
+  vendorCode?: string,
+  price?: number,
+  cashback?: ?number,
+  isOpenVariantData?: boolean,
+  mainPhoto?: ?string,
+  photos?: Array<string>,
+  attributeValues?: Array<{ attrId: string, value: string, metaField?: string }>,
+  price?: ?number,
 };
 
 type PropsType = {
@@ -112,7 +113,7 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  handleCheckboxClick = (id) => {
+  handleCheckboxClick = (id: any) => {
     log.info('id', id);
   };
 
@@ -155,7 +156,8 @@ class Form extends Component<PropsType, StateType> {
     this.props.onExpandClick(id);
   };
 
-  valueForAttribute =({ attr, variant }): { value: string, metaField?: string } => {
+  valueForAttribute = ({ attr, variant }: { [string]: any }):
+    { value: string, metaField?: string } => {
     const attrFromVariant =
       variant && find(item => item.attribute.rawId === attr.rawId, variant.attributes);
     if (attrFromVariant && attrFromVariant.value) {
@@ -238,11 +240,15 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="variants">
           {this.renderVariant()}
         </div>
+        {/* $FlowIgnoreMe */}
         <Characteristics
           category={this.props.category}
-          values={this.state.attributeValues}
-          onChange={values => this.setState({ attributeValues: values })}
+          values={this.state.attributeValues || []}
+          onChange={(values: Array<{ attrId: string, value: string, metaField?: string }>) => {
+            this.setState({ attributeValues: values });
+          }}
         />
+        {/* $FlowIgnoreMe */}
         <Photos
           photos={mainPhoto ? append(mainPhoto, photos) : photos}
           onAddPhoto={this.handleAddPhoto}

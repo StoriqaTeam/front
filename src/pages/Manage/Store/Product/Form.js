@@ -14,7 +14,7 @@ import Header from '../Header';
 import './Product.scss';
 
 type PropsType = {
-  baseProduct: ?{},
+  baseProduct: ?{ [string]: any },
   onSave: Function,
   validationErrors: ?{},
   categories: Array<{}>,
@@ -36,7 +36,6 @@ class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { baseProduct } = this.props;
-    console.log({baseProduct})
     if (!baseProduct) {
       return;
     }
@@ -108,7 +107,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   // eslint-disable-next-line
-  renderInput = ({ id, label, limit, icon }) => (
+  renderInput = ({ id, label, limit, icon }: { [string]: any }) => (
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -123,7 +122,7 @@ class Form extends Component<PropsType, StateType> {
     </div>
   );
 
-  renderTextarea = ({ id, label }) => (
+  renderTextarea = ({ id, label }: { [string]: any }) => (
     <div styleName="formItem">
       <Textarea
         id={id}

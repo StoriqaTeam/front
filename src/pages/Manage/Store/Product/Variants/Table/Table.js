@@ -50,6 +50,7 @@ class Table extends Component<PropsType, StateType> {
     return map((item) => {
       if (propEq('rawId', expandedItemId, item)) {
         return (
+          /* $FlowIgnoreMe */
           <Form
             category={this.props.category}
             variant={item}
@@ -75,6 +76,7 @@ class Table extends Component<PropsType, StateType> {
         <Header onSelectAllClick={this.handleSelectAll} />
         {this.renderRows()}
         {!this.state.expandedItemId && (
+          /* $FlowIgnoreMe */
           <Form
             category={this.props.category}
             productId={this.props.productId}

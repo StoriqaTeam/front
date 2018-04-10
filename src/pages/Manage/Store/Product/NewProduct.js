@@ -28,7 +28,7 @@ class NewProduct extends Component<PropsType, StateType> {
     formErrors: {},
   };
 
-  handleSave = (form: ?{}) => {
+  handleSave = (form: ?{ [string]: any }) => {
     if (!form) {
       return;
     }
@@ -65,7 +65,7 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
-        alert('Something going wrong :(');
+        alert('Something going wrong :('); // eslint-disable-line
       },
     });
   };
@@ -85,6 +85,7 @@ class NewProduct extends Component<PropsType, StateType> {
               onSave={this.handleSave}
               validationErrors={this.state.formErrors}
               categories={this.context.directories.categories}
+              baseProduct={null}
             />
           </Col>
         </Row>

@@ -25,7 +25,7 @@ class Variants extends Component<PropsType, StateType> {
     //
   };
 
-  handleSave = (variant: {}) => {
+  handleSave = (variant: { [string]: any }) => {
     const {
       price,
       vendorCode,

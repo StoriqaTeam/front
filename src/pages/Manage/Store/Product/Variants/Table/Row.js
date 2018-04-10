@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
-import { log } from 'utils';
 
 import './Row.scss';
 
@@ -17,20 +16,20 @@ type PropsType = {
       cashback: number,
     },
   },
-  onExpandClick: (id: string) => void;
+  onExpandClick: Function;
 };
 
 type StateType = {
-  checked: boolean,
+  // checked: boolean,
 };
 
 class Row extends Component<PropsType, StateType> {
   state: StateType = {
-    //
+    // checked: false,
   };
 
   handleCheckboxClick = () => {
-    this.setState(prevState => ({ checked: !prevState.checked }));
+    // this.setState(prevState => ({ checked: !prevState.checked }));
   };
 
   handleExpandClick = () => {

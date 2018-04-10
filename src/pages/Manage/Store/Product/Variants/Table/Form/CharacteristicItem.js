@@ -10,8 +10,8 @@ import { uploadFile, log } from 'utils';
 import './Characteristics.scss';
 
 type PropsType = {
-  attribute: { rawId: number },
-  onSelect: ({ attrId: number, value: string }) => void,
+  attribute: { rawId: number, id: string },
+  onSelect: Function,
   value: { attrId: number, value: string, metaField?: string },
 };
 
@@ -38,7 +38,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
     return filter(complement(isNil), items);
   };
 
-  handleSelect = (value: {}) => {
+  handleSelect = (value: { label: string }) => {
     this.props.onSelect({
       ...this.props.value,
       value: value.label,
@@ -46,7 +46,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
     });
   };
 
-  handleOnUpload = async (e) => {
+  handleOnUpload = async (e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
