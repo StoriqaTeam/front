@@ -45,7 +45,7 @@ class Row extends Component<PropsType, StateType> {
       },
     } = this.props.variant;
     return (
-      <div>
+      <div styleName="container">
         <div styleName="variant">
           <div styleName="variantItem tdCheckbox">
             <Checkbox

@@ -15,13 +15,6 @@ import Photos from './Photos';
 
 import './Form.scss';
 
-type PropsType = {
-  productId: number,
-  onSave: Function,
-  category: {},
-  variant: ?{},
-};
-
 type StateType = {
   vendorCode: string,
   price: number,
@@ -32,15 +25,26 @@ type StateType = {
   attributeValues: Array<{ attrId: string, value: string, metaField?: string }>,
 };
 
+type PropsType = {
+  productId: number,
+  onSave: Function,
+  category: {},
+  variant: ?{},
+};
+
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    console.log({ props })
+    const product = pathOr(null, ['variant', 'product'], props);
+    if (!product) {
+      return;
+    }
     this.state = {
-      vendorCode: props.vendorCode,
-      price: props.price,
-      cashback: props.cashback,
-      isOpenVariantData: true,
-      mainPhoto: null,
+      vendorCode: product.vendorCode,
+      price: product.price,
+      cashback: product.cashback,
+      mainPhoto: product.photoMain,
       photos: [],
       attributeValues: map(item => ({
         attrId: item.rawId,

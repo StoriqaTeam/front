@@ -45,16 +45,16 @@ class Table extends Component<PropsType, StateType> {
     const { expandedItemId } = this.state;
     return map((item) => {
       console.log({ expandedItemId, item })
-      if (propEq('rawId', expandedItemId, item)) {
-        return (
-          <Form
-            category={this.props.category}
-            variant={item}
-            productId={this.props.productId}
-            key={item.id}
-          />
-        );
-      }
+      // if (propEq('rawId', expandedItemId, item)) {
+      //   return (
+      //     <Form
+      //       category={this.props.category}
+      //       variant={item}
+      //       productId={this.props.productId}
+      //       key={item.id}
+      //     />
+      //   );
+      // }
       return (
         <Row
           key={item.id}

@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { filter, propEq, head } from 'ramda';
+import { filter, propEq, head, pathOr } from 'ramda';
 
 import CharacteristicItem from './CharacteristicItem';
 
@@ -23,16 +23,18 @@ class Characteristics extends PureComponent<PropsType> {
   };
 
   render() {
+    console.log({ props: this.props })
+    const attributes = pathOr([], ['category', 'getAttributes'], this.props);
     return (
       <div styleName="container">
         <div styleName="title">Характеристики</div>
         <div styleName="items">
-          {this.props.category.getAttributes.map(item => (
+          {attributes.map(item => (
             <CharacteristicItem
               key={item.id}
               attribute={item}
               onSelect={this.handleItemChange}
-              value={head(filter(propEq('attrId', item.rawId), this.props.values))}
+              value={head(filter(propEq('attrId', item.rawId), [this.props.values || []]))}
             />
           ))}
         </div>
