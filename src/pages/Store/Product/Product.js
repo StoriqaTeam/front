@@ -22,11 +22,11 @@ type PropsType = {
   me?: {}
 };
 
-type stateTypes = {
+type StateType = {
   tabs: {id: string | number, label: string, content: any}[]
 }
 
-class Product extends PureComponent<PropsType, stateTypes> {
+class Product extends PureComponent<PropsType, StateType> {
   state = {
     tabs: [
       {

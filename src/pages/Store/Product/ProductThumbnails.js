@@ -4,18 +4,18 @@ import React, { Component } from 'react';
 
 import './ProductThumbnails.scss';
 
-type propsTypes = {
+type PropsType = {
   title: string,
   thumbnails: {img: string, alt: string}[],
   row: boolean,
   onClick: Function,
 }
 
-type stateTypes = {
+type StateType = {
   isClicked: number
 }
 
-class ProductThumbnails extends Component<propsTypes, stateTypes> {
+class ProductThumbnails extends Component<PropsType, StateType> {
   static defaultProps = {
     title: '',
     row: false,

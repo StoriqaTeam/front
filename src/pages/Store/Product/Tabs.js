@@ -2,16 +2,16 @@ import * as React from 'react';
 
 import './Tabs.scss';
 
-type propsType = {
+type PropsType = {
   selected?: number,
   children: React.Node,
 }
 
-type stateType = {
+type StateType = {
   selected: number,
 }
 
-class Tabs extends React.Component<propsType, stateType> {
+class Tabs extends React.Component<PropsType, StateType> {
   /**
    * @static
    * @type {{selected: number}}

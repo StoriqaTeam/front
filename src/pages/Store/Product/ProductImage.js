@@ -8,12 +8,12 @@ import Expand from './svg/expand.svg';
 
 import './ProductImage.scss';
 
-type stateTypes = {
+type StateType = {
   thumbnails: {id: string | number, img: string, alt: string}[],
   selectedImage: {src: string, alt: string },
 }
 
-class ProductImage extends PureComponent<{}, stateTypes> {
+class ProductImage extends PureComponent<{}, StateType> {
   state = {
     thumbnails: [
       {

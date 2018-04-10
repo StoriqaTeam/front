@@ -4,11 +4,11 @@ import React from 'react';
 
 import './TabColumn.scss';
 
-type propsTypes = {
+type PropsType = {
   items: {id: string | number, label: string, text: string}[],
 }
 
-const TabColumn = (props: propsTypes) => (
+const TabColumn = (props: PropsType) => (
   <div styleName="container">
     {props.items.map(({ label, text }) => (
       <div styleName="columnItem">

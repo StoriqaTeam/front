@@ -8,13 +8,13 @@ import './ProductMaterial.scss';
 
 type material = {id: string | number, label: string};
 
-type propTypes = {
+type PropsType = {
   selected: material,
   materials: material[],
   onSelect: Function,
 }
 
-const ProductMaterial = (props: propTypes) => (
+const ProductMaterial = (props: PropsType) => (
   <div styleName="container">
     <h4>
       Материал

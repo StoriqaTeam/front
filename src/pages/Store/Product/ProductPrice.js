@@ -4,7 +4,7 @@ import React from 'react';
 
 import './ProductPrice.scss';
 
-type propTypes = {
+type PropTypes = {
   currency?: string,
   lastPrice: string,
   currentPrice: string,
@@ -12,7 +12,7 @@ type propTypes = {
   buttonText?: string,
 }
 
-const ProductPrice = (props: propTypes) => {
+const ProductPrice = (props: PropTypes) => {
   const {
     currency,
     lastPrice,

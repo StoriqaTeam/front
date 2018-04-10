@@ -4,15 +4,15 @@ import React, { Component } from 'react';
 
 import './ProductSize.scss';
 
-type propTypes = {
+type PropsType = {
   sizes: string | number[],
 }
 
-type stateTypes = {
+type StateType = {
   clicked: number
 }
 
-class ProductSize extends Component<propTypes, stateTypes> {
+class ProductSize extends Component<PropsType, StateType> {
   state = {
     clicked: null,
   };

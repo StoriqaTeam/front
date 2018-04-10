@@ -2,28 +2,28 @@
 
 import React, { PureComponent } from 'react';
 
+import { extractText } from 'utils';
+
 import {
   ProductContext,
   ProductPrice,
   ProductSize,
   ProductMaterial,
   ProductThumbnails,
-} from 'pages/Store/Product';
-
-import { extractText } from 'utils';
+} from './Product';
 
 import './ProductDetails.scss';
 
-type material = {id: string | number, label: string}
+type MaterialType = {id: string | number, label: string}
 
-type stateTypes = {
+type StateType = {
   sizes: string | number[],
-  selected: material,
-  materials: material[],
+  selected: MaterialType,
+  materials: MaterialType[],
   thumbnails: {id: string | number, img: string, alt: string}[],
 }
 
-class ProductDetails extends PureComponent<{}, stateTypes> {
+class ProductDetails extends PureComponent<{}, StateType> {
   state = {
     sizes: [2, 34, 56, 12, 45],
     selected: null,
@@ -59,10 +59,10 @@ class ProductDetails extends PureComponent<{}, stateTypes> {
     ],
   };
   /**
-   * @param {material} selected
+   * @param {MaterialType} selected
    * @return {void}
    */
-  handleSelected = (selected: material): void => {
+  handleSelected = (selected: MaterialType): void => {
     this.setState({ selected });
   };
   render() {
