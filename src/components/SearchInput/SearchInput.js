@@ -9,6 +9,7 @@ import classNames from 'classnames';
 
 import { DropdownSelect } from 'components/DropdownSelect';
 import { Icon } from 'components/Icon';
+import { MiniSelect } from 'components/MiniSelect';
 
 import './SearchInput.scss';
 
@@ -21,6 +22,7 @@ type StateType = {
   inputValue: string,
   items: Array<any>,
   searchCategoryId: ?number,
+  activeItem: { id: string, label: srting },
 };
 
 class SearchInput extends Component<PropsType, StateType> {
@@ -28,7 +30,8 @@ class SearchInput extends Component<PropsType, StateType> {
     inputValue: '',
     items: [],
     // eslint-disable-next-line
-    searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`
+    searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
+    activeItem: { id: 0, label: 'Shops' },
   };
 
   handleInputChange = (e: any) => {
@@ -56,10 +59,15 @@ class SearchInput extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
-          <DropdownSelect
+          {false && <DropdownSelect
             namePrefix="search"
             items={this.props.searchCategories || []}
             onDropdownSelect={this.handleSearchDropdownSelect}
+          />}
+          <MiniSelect
+            activeItem={this.state.activeItem}
+            items={this.props.searchCategories || []}
+            onSelect={this.handleSearchDropdownSelect}
           />
         </div>
         <div styleName="searchInput">
