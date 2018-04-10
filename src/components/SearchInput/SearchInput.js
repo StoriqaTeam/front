@@ -20,7 +20,7 @@ type PropsType = {
 type StateType = {
   inputValue: string,
   items: Array<any>,
-  activeItem: { id: string, label: srting },
+  activeItem: { id: string, label: string },
 };
 
 class SearchInput extends Component<PropsType, StateType> {
@@ -48,7 +48,7 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleSearchDropdownSelect = (activeItem) => {
+  handleSearchDropdownSelect = (activeItem: { id: string, label: string }) => {
     this.setState(() => ({ activeItem }));
   };
 
