@@ -25,7 +25,6 @@ type StateType = {
 
 class ProductDetails extends PureComponent<{}, StateType> {
   state = {
-    sizes: [2, 34, 56, 12, 45],
     selected: null,
     materials: [
       { id: '1', label: 'BTC' },
@@ -67,7 +66,6 @@ class ProductDetails extends PureComponent<{}, StateType> {
   };
   render() {
     const {
-      sizes,
       materials,
       selected,
       thumbnails,
