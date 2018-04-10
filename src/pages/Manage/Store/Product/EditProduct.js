@@ -132,8 +132,10 @@ export default createFragmentContainer(
               metaField {
                 values
                 translatedValues {
-                  lang
-                  text
+                  translations {
+                    lang
+                    text
+                  }
                 }
                 uiElement
               }
@@ -189,8 +191,10 @@ export default createFragmentContainer(
               metaField {
                 values
                 translatedValues {
-                  lang
-                  text
+                  translations {
+                    lang
+                    text
+                  }
                 }
                 uiElement
               }

@@ -171,7 +171,7 @@ class Form extends Component<PropsType, StateType> {
       };
     } else if (translatedValues && complement(isEmpty(translatedValues))) {
       return {
-        value: pathOr('', [0, 'text'], translatedValues),
+        value: pathOr('', [0, 'translations', 0, 'text'], translatedValues),
       };
     }
     return {

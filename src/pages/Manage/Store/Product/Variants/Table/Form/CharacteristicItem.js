@@ -26,7 +26,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
     }
 
     const items = mapIndexed((item, idx) => {
-      const text = pathOr(null, [0, 'text'], item);
+      const text = pathOr(null, ['translations', 0, 'text'], item);
       if (text) {
         return {
           id: `${idx}`,
