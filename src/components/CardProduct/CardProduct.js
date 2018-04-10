@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, pathOr } from 'ramda';
+import { head, pathOr, find, propEq } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { getNameText } from 'utils';
@@ -47,6 +47,7 @@ class CardProduct extends PureComponent<PropsTypes> {
         variants,
       },
     } = this.props;
+    const lang = 'EN';
 
     const nameArr = baseProduct ? baseProduct.name : null;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
@@ -54,16 +55,15 @@ class CardProduct extends PureComponent<PropsTypes> {
     const discount = pathOr(null, ['product', 'discount'], head(variants));
     const price = undiscountedPrice * (1 - discount);
     // const currencyId = baseProduct ? baseProduct.currencyId : null;
-    const cashback = pathOr(null, ['product', 'discount'], head(variants)) * 100;
+    const cashback = pathOr(null, ['product', 'cashback'], head(variants)) * 100;
 
     return (
       <div styleName="container">
         <div styleName="body">
           <div styleName="top">
-            {img &&
-            <div>
+            {!img ?
+              <Icon type="camera" size="40" /> :
               <img styleName="img" src={img} alt="img" />
-            </div>
             }
           </div>
           <div styleName="bottom">
@@ -73,19 +73,19 @@ class CardProduct extends PureComponent<PropsTypes> {
             {nameArr && <div styleName="title">{getNameText(nameArr, 'EN')}</div>}
             <div styleName="price">
               {undiscountedPrice &&
-              <div styleName="undiscountedPrice">
-                {formatPrice(undiscountedPrice)} STQ
-              </div>
+                <div styleName="undiscountedPrice">
+                  {formatPrice(undiscountedPrice)} STQ
+                </div>
               }
               {price &&
-              <div styleName="actualPrice">
-                <strong>{formatPrice(price)} STQ</strong>
-              </div>
+                <div styleName="actualPrice">
+                  <strong>{formatPrice(price)} STQ</strong>
+                </div>
               }
-              {cashback &&
-              <div styleName="cashbackWrap">
-                <div styleName="cashback">Cashback {`${cashback}%`}</div>
-              </div>
+              {Boolean(cashback) &&
+                <div styleName="cashbackWrap">
+                  <div styleName="cashback">Cashback {`${cashback}%`}</div>
+                </div>
               }
             </div>
           </div>

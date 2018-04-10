@@ -10,7 +10,6 @@ import { Page } from 'components/App';
 import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
-import { Container, Row, Col } from 'layout';
 
 import CategoriesMenu from './CategoriesMenu';
 
@@ -18,11 +17,20 @@ import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
-import mostPopularGoods from './mostPopularGoods.json';
 
 class Start extends PureComponent<{}> {
   render() {
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const mostViewedProducts = pathOr(null, [
+      'mainPage',
+      'findMostViewedProducts',
+      'edges',
+    ], this.props);
+    const mostDiscountProducts = pathOr(null, [
+      'mainPage',
+      'findMostDiscountProducts',
+      'edges',
+    ], this.props);
     return (
       <div styleName="container">
         {categories && <CategoriesMenu categories={categories} />}
@@ -31,13 +39,13 @@ class Start extends PureComponent<{}> {
         </div>
         <div styleName="item">
           <GoodsSlider
-            items={mostPopularGoods}
+            items={mostViewedProducts}
             title="Популярное"
           />
         </div>
         <div styleName="item">
           <GoodsSlider
-            items={mostPopularGoods}
+            items={mostDiscountProducts}
             title="Распродажа"
           />
         </div>
@@ -47,19 +55,6 @@ class Start extends PureComponent<{}> {
             count={2}
           />
         </div>
-        <Container>
-          <Row>
-            <Col size={4}>
-              Block
-            </Col>
-            <Col size={4}>
-              Block
-            </Col>
-            <Col size={4}>
-              Block
-            </Col>
-          </Row>
-        </Container>
       </div>
     );
   }
@@ -75,11 +70,61 @@ export default createFragmentContainer(
   Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
-      findMostViewedProducts(searchTerm: {options: {attrFilters: [],categoriesIds: [1]}}) {
+      findMostViewedProducts(searchTerm: {options: {attrFilters: [],categoriesIds: []}}) {
         edges {
           node {
             id
             rawId
+            baseProduct {
+              id
+              rawId
+              name {
+                lang
+                text
+              }
+              currencyId
+            }
+            variants {
+              id
+              rawId
+              product {
+                id
+                rawId
+                discount
+                photoMain
+                cashback
+                price
+              }
+            }
+          }
+        }
+      }
+      findMostDiscountProducts(searchTerm: {options: {attrFilters: [],categoriesIds: []}}) {
+        edges {
+          node {
+            id
+            rawId
+            baseProduct {
+              id
+              rawId
+              name {
+                lang
+                text
+              }
+              currencyId
+            }
+            variants {
+              id
+              rawId
+              product {
+                id
+                rawId
+                discount
+                photoMain
+                cashback
+                price
+              }
+            }
           }
         }
       }

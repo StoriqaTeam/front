@@ -37,7 +37,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32,
+  size: 8 | 16 | 20 | 24 | 32 | 40,
   inline: ?boolean,
 };
 
