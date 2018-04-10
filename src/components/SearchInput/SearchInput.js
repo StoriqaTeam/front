@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { filter, startsWith, toUpper } from 'ramda';
 import classNames from 'classnames';
+import { withRouter } from 'found';
 
 import { DropdownSelect } from 'components/DropdownSelect';
 import { Icon } from 'components/Icon';
@@ -14,22 +15,49 @@ import './SearchInput.scss';
 
 type PropsType = {
   items: ?Array<any>,
-  searchCategories: ?Array<{ id: number, label: string }>
+  searchCategories: ?Array<{ id: number, label: string }>,
+  router: Object,
+  searchValue: string,
 };
 
 type StateType = {
   inputValue: string,
   items: Array<any>,
   searchCategoryId: ?number,
+  isFocus: boolean,
 };
 
 class SearchInput extends Component<PropsType, StateType> {
-  state = {
-    inputValue: '',
-    items: [],
-    // eslint-disable-next-line
-    searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`
-  };
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      inputValue: this.props.searchValue,
+      items: [],
+      // eslint-disable-next-line
+      searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
+      isFocus: false,
+    };
+  }
+
+  componentWillMount() {
+    if (process.env.BROWSER) {
+      document.addEventListener('keydown', this.handleKeydown);
+    }
+  }
+
+  componentWillUnmount() {
+    if (process.env.BROWSER) {
+      document.removeEventListener('keydown', this.handleKeydown);
+    }
+  }
+
+  onFocus = () => {
+    this.setState({ isFocus: true });
+  }
+
+  onBlur = () => {
+    this.setState({ isFocus: false });
+  }
 
   handleInputChange = (e: any) => {
     e.persist();
@@ -52,6 +80,17 @@ class SearchInput extends Component<PropsType, StateType> {
     this.setState(() => ({ searchCategoryId: id }));
   };
 
+  handleSearch = () => {
+    const { inputValue } = this.state;
+    this.props.router.push(inputValue ? `/stores?search=${inputValue}` : '/stores');
+  }
+
+  handleKeydown = (e: any) => {
+    if (e.keyCode === 13 && this.state.isFocus) {
+      this.handleSearch();
+    }
+  }
+
   render() {
     return (
       <div styleName="container">
@@ -65,7 +104,16 @@ class SearchInput extends Component<PropsType, StateType> {
         <div styleName="searchInput">
           <Autocomplete
             wrapperStyle={{ display: 'flex', width: '100%' }}
-            renderInput={props => (<div styleName="inputWrapper"><input styleName="input" {...props} /></div>)}
+            renderInput={props => (
+              <div styleName="inputWrapper">
+                <input
+                  {...props}
+                  styleName="input"
+                  onFocus={this.onFocus}
+                  onBlur={this.onBlur}
+                />
+              </div>
+            )}
             items={this.state.items}
             getItemValue={item => item.label}
             renderItem={(item, isHighlighted) => (
@@ -81,7 +129,7 @@ class SearchInput extends Component<PropsType, StateType> {
             open={false}
           />
         </div>
-        <button styleName="searchButton">
+        <button styleName="searchButton" onClick={this.handleSearch}>
           <Icon
             inline
             type="magnifier"
@@ -93,4 +141,4 @@ class SearchInput extends Component<PropsType, StateType> {
   }
 }
 
-export default SearchInput;
+export default withRouter(SearchInput);

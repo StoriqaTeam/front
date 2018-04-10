@@ -30,6 +30,7 @@ import Pencil from 'components/Icon/svg/pencil.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
 import Camera from 'components/Icon/svg/camera.svg';
+import Heart from 'components/Icon/svg/heart.svg';
 
 import './Icon.scss';
 
@@ -66,6 +67,7 @@ const iconsMap = {
   magnifier: <Magnifier />,
   qualityAssurance: <QualityAssurance />,
   camera: <Camera />,
+  heart: <Heart />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

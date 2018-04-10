@@ -1,0 +1,971 @@
+[
+  {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 1,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #1"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-1",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #1 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 2,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #2"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-2",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #2 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 3,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #3"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-3",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #3 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 4,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #4"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-4",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #4 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 5,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #5"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-5",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #5 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 6,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #6"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-6",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #6 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 7,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #7"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-7",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #7 short."
+        }
+      ],
+      "productsCount": "13",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }, {
+    "node": {
+      "id": "c3RvcmVzfHN0b3JlfDI=",
+      "rawId": 8,
+      "name": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #8"
+        }
+      ],
+      "logo": "https://image.ibb.co/isVHNH/35e3138162918f3eb2af0c5738423bf5.png",
+      "cover": "https://preview.ibb.co/bGDRGc/boutique_shop_free_cute_facebook_timeline_cover1.jpg",
+      "slug": "sneakers-shop-8",
+      "shortDescription": [
+        {
+          "lang": "EN",
+          "text": "Sneakers «K» Shop #8 short."
+        }
+      ],
+      "productsCount": "14",
+      "baseProductsWithVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "id-1",
+              "rawId": "1",
+              "baseProduct": {
+                "id": "baseProductId-1",
+                "rawId": "baseProductRawId-1",
+                "name": "1. Chromecast 2015 dfabeba",
+                "currencyId": "1"
+              },
+              "variants": [{
+                "id": "variantId-1",
+                "rawId": "variantRawId-1",
+                "product": {
+                  "id": "productId-1",
+                  "rawId": "productRawId-1",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/k66QZn/1.jpg",
+                  "cashback": "0.12",
+                  "price": "123456"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-2",
+              "rawId": "2",
+              "baseProduct": {
+                "id": "baseProductId-2",
+                "rawId": "baseProductRawId-2",
+                "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "2"
+              },
+              "variants": [{
+                "id": "variantId-2",
+                "rawId": "variantRawId-2",
+                "product": {
+                  "id": "productId-2",
+                  "rawId": "productRawId-2",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/eRz177/2.jpg",
+                  "cashback": "0.12",
+                  "price": "7891011"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-3",
+              "rawId": "3",
+              "baseProduct": {
+                "id": "baseProductId-3",
+                "rawId": "baseProductRawId-3",
+                "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+                "currencyId": "3"
+              },
+              "variants": [{
+                "id": "variantId-3",
+                "rawId": "variantRawId-3",
+                "product": {
+                  "id": "productId-3",
+                  "rawId": "productRawId-3",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/bWz177/3.jpg",
+                  "cashback": "0.12",
+                  "price": "12131415"
+                }
+              }]
+            }
+          },
+          {
+            "node": {
+              "id": "id-4",
+              "rawId": "4",
+              "baseProduct": {
+                "id": "baseProductId-4",
+                "rawId": "baseProductRawId-4",
+                "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+                "currencyId": "4"
+              },
+              "variants": [{
+                "id": "variantId-4",
+                "rawId": "variantRawId-4",
+                "product": {
+                  "id": "productId-4",
+                  "rawId": "productRawId-4",
+                  "discount": "0.3",
+                  "photoMain": "https://image.ibb.co/g1CSfS/4.jpg",
+                  "cashback": "0.12",
+                  "price": "16171819"
+                }
+              }]
+            }
+          }
+        ]
+      }
+    }
+  }
+]

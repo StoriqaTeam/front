@@ -3,23 +3,17 @@
 .container {
   position: relative;
   height: 5rem;
-  margin-top: -2rem;
 }
 
 .root {
   position: relative;
   z-index: 10;
-
-  &:after {
-    content: '';
-    display: block;
-    clear: both;
-  }
+  white-space: nowrap;
 }
 
 .rootItem {
-  width: 23.625rem;
-  float: left;
+  display: inline-block;
+  width: 24.2857rem;
   cursor: pointer;
 }
 
