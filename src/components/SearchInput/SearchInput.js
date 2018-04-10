@@ -7,7 +7,6 @@ import Autocomplete from 'react-autocomplete';
 import { filter, startsWith, toUpper } from 'ramda';
 import classNames from 'classnames';
 
-import { DropdownSelect } from 'components/DropdownSelect';
 import { Icon } from 'components/Icon';
 import { MiniSelect } from 'components/MiniSelect';
 
@@ -21,7 +20,6 @@ type PropsType = {
 type StateType = {
   inputValue: string,
   items: Array<any>,
-  searchCategoryId: ?number,
   activeItem: { id: string, label: srting },
 };
 
@@ -30,8 +28,7 @@ class SearchInput extends Component<PropsType, StateType> {
     inputValue: '',
     items: [],
     // eslint-disable-next-line
-    searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
-    activeItem: { id: 0, label: 'Shops' },
+    activeItem: { id: 'stores', label: 'Shops' },
   };
 
   handleInputChange = (e: any) => {
@@ -51,20 +48,16 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleSearchDropdownSelect = (id: number) => {
-    this.setState(() => ({ searchCategoryId: id }));
+  handleSearchDropdownSelect = (activeItem) => {
+    this.setState(() => ({ activeItem }));
   };
 
   render() {
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
-          {false && <DropdownSelect
-            namePrefix="search"
-            items={this.props.searchCategories || []}
-            onDropdownSelect={this.handleSearchDropdownSelect}
-          />}
           <MiniSelect
+            forAutocomlete
             activeItem={this.state.activeItem}
             items={this.props.searchCategories || []}
             onSelect={this.handleSearchDropdownSelect}

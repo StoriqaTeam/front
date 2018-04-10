@@ -42,3 +42,12 @@
   display: inline-block;
   margin-right: 1rem;
 }
+
+.white {
+  padding: 0 4rem;
+  font-size: 16px;
+  color: $color_primary;
+  height: 5.5rem;
+  line-height: 5.5rem;
+  background-color: $color_white;
+}

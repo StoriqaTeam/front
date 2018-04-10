@@ -15,6 +15,7 @@ type PropsTypes = {
   href: ?string,
   isDefault?: boolean,
   wireframe?: boolean,
+  white: ?boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -28,6 +29,7 @@ class Button extends PureComponent<PropsTypes> {
       href,
       isDefault,
       wireframe,
+      white,
     } = this.props;
 
     const props = {
@@ -36,6 +38,7 @@ class Button extends PureComponent<PropsTypes> {
       onClick,
       href,
       children,
+      white,
     };
 
     const styleName = classNames('container', {
@@ -43,6 +46,7 @@ class Button extends PureComponent<PropsTypes> {
       disabled,
       isDefault,
       wireframe,
+      white,
     });
 
     if (href) {

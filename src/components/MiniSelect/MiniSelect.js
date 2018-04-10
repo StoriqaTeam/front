@@ -27,6 +27,7 @@ type PropsType = {
   label: ?string,
   activeItem: ?{ id: string, label: string },
   forForm: ?boolean,
+  forAutocomlete: ?boolean,
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
@@ -89,13 +90,18 @@ class MiniSelect extends Component<PropsType, StateType> {
       label,
       activeItem,
       forForm,
+      forAutocomlete,
     } = this.props;
     const { isExpanded } = this.state;
 
     return (
       <div
         ref={(node) => { this.button = node; }}
-        styleName={classNames('container', { isDropdown, forForm })}
+        styleName={classNames('container', {
+          isDropdown,
+          forForm,
+          forAutocomlete,
+        })}
       >
         {label && <div styleName="label">{label}</div>}
         <div styleName={classNames('wrap', { transparent })}>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Slider } from 'components/Slider';
+import { Button } from 'components/Button';
 
 import './BannersSlider.scss';
 
@@ -20,6 +21,9 @@ const BannersSlider = (props: PropsTypes) => (
       items={props.items}
       slidesToShow={1}
     />
+    <div styleName="button">
+      <Button white>Стать продавцом</Button>
+    </div>
   </div>
 );
 
