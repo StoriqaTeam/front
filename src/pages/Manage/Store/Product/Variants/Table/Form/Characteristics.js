@@ -23,8 +23,7 @@ class Characteristics extends PureComponent<PropsType> {
   };
 
   render() {
-    console.log({ props: this.props })
-    const attributes = pathOr([], ['category', 'getAttributes'], this.props);
+    const attributes = pathOr([], ['getAttributes'], this.props.category);
     return (
       <div styleName="container">
         <div styleName="title">Характеристики</div>
@@ -34,7 +33,7 @@ class Characteristics extends PureComponent<PropsType> {
               key={item.id}
               attribute={item}
               onSelect={this.handleItemChange}
-              value={head(filter(propEq('attrId', item.rawId), [this.props.values || []]))}
+              value={head(filter(propEq('attrId', item.rawId), this.props.values))}
             />
           ))}
         </div>

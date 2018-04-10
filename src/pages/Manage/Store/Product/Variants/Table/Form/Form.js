@@ -1,8 +1,8 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {append, filter, head, pathOr, propEq, map} from 'ramda';
+import { find, append, head, pathOr, map, complement, isEmpty } from 'ramda';
 
 import { Button } from 'components/Button';
 import { Checkbox } from 'components/Checkbox';
@@ -28,29 +28,34 @@ type StateType = {
 type PropsType = {
   productId: number,
   onSave: Function,
-  category: {},
+  category: { getAttributes: Array<{}> },
   variant: ?{},
+  isExpanded?: boolean,
+  onExpandClick: (id: string) => void,
 };
 
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log({ props })
     const product = pathOr(null, ['variant', 'product'], props);
+    const attributeValues = map(item => ({
+      attrId: item.rawId,
+      value: this.valueForAttribute({ attr: item, variant: props.variant }),
+    }), props.category.getAttributes);
     if (!product) {
-      return;
+      this.state = {
+        attributeValues,
+      };
+    } else {
+      this.state = {
+        vendorCode: product.vendorCode,
+        price: product.price,
+        cashback: product.cashback,
+        mainPhoto: product.photoMain,
+        photos: product.additionalPhotos,
+        attributeValues,
+      };
     }
-    this.state = {
-      vendorCode: product.vendorCode,
-      price: product.price,
-      cashback: product.cashback,
-      mainPhoto: product.photoMain,
-      photos: [],
-      attributeValues: map(item => ({
-        attrId: item.rawId,
-        value: this.valueForAttribute(item),
-      }), this.props.category.getAttributes),
-    };
   }
 
   state: StateType = {
@@ -70,23 +75,6 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  /* {
-      "vendorCode": "asdfasdf",
-      "price": 123,
-      "cashback": 11,
-      "isOpenVariantData": true,
-      "mainPhoto": "https://s3.amazonaws.com/storiqa-dev/img-zP4BrAI0HNcC.png",
-      "photos": [
-        "https://s3.amazonaws.com/storiqa-dev/img-LhNA4aWDbAkC.png"
-      ],
-      "attributeValues": [
-        {
-          "attrId": 1,
-          "value": "50",
-          "metaField": "https://s3.amazonaws.com/storiqa-dev/img-mzcqk7BUenkC.png"
-        }
-      ]
-    } */
   handleCreate = () => {
     const variant = this.state;
     log.debug({ variant });
@@ -150,29 +138,27 @@ class Form extends Component<PropsType, StateType> {
   };
 
   toggleDropdownVariant = () => {
-    this.setState({isOpenVariantData: !this.state.isOpenVariantData});
+    const id = pathOr(null, ['variant', 'rawId'], this.props);
+    this.props.onExpandClick(id);
   };
 
-  valueForAttribute =(attribute: {}) => {
-    if (attribute.value) {
-      return attribute.value;
+  valueForAttribute =({ attr, variant }) => {
+    const attrFromVariant =
+      variant && find(item => item.attribute.rawId === attr.rawId, variant.attributes);
+    if (attrFromVariant && attrFromVariant.value) {
+      return attrFromVariant.value;
     }
-    const { values, translatedValues } = attribute.metaField;
+    const { values, translatedValues } = attr.metaField;
     if (values) {
       return head(values);
-    } else if (translatedValues) {
+    } else if (translatedValues && complement(isEmpty(translatedValues))) {
       return pathOr('', [0, 'text'], translatedValues);
     }
     return '';
   };
 
   renderVariant = () => {
-    const {
-      vendorCode,
-      price,
-      cashback,
-      isOpenVariantData,
-    } = this.state;
+    const { vendorCode, price, cashback } = this.state;
     return (
       <div styleName="variant">
         <div styleName="variantItem tdCheckbox">
@@ -183,7 +169,7 @@ class Form extends Component<PropsType, StateType> {
         </div>
         <div styleName="variantItem tdDropdawn">
           <button onClick={this.toggleDropdownVariant}>
-            <Icon inline type={isOpenVariantData ? 'openArrow' : 'closeArrow'} />
+            <Icon inline type="openArrow" />
           </button>
         </div>
         <div styleName="variantItem tdArticle">

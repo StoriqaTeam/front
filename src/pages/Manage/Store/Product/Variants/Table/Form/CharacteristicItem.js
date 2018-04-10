@@ -5,7 +5,7 @@ import { assoc, pathOr, map, propEq, addIndex, findIndex, filter, complement, is
 
 import { UploadWrapper } from 'components/Upload';
 import { MiniSelect } from 'components/MiniSelect';
-import { uploadFile } from 'utils';
+import { uploadFile, log } from 'utils';
 
 import './Characteristics.scss';
 
@@ -56,6 +56,10 @@ class CharacteristicItem extends PureComponent<PropsType> {
 
   render() {
     const { attribute, value } = this.props;
+    if (!value) {
+      log.warn('CharacteristicItem', 'value is nil');
+      return null;
+    }
     const items = this.getSelectItems(attribute);
     const selectedItem = { id: `${findIndex(propEq('label', value.value), items)}`, label: value.value };
     const { metaField: characteristicImg } = this.props.value;

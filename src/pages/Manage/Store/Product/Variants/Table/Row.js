@@ -10,6 +10,7 @@ import './Row.scss';
 
 type PropsType = {
   variant: {
+    rawId: number,
     product: {
       vendorCode: string,
       price: number,

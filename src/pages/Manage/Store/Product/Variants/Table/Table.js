@@ -38,23 +38,28 @@ class Table extends Component<PropsType, StateType> {
   };
 
   expandRow = (id: string) => {
-    this.setState({ expandedItemId: id });
+    if (this.state.expandedItemId && this.state.expandedItemId === id) {
+      this.setState({ expandedItemId: null });
+    } else {
+      this.setState({ expandedItemId: id });
+    }
   };
 
   renderRows = () => {
     const { expandedItemId } = this.state;
     return map((item) => {
-      console.log({ expandedItemId, item })
-      // if (propEq('rawId', expandedItemId, item)) {
-      //   return (
-      //     <Form
-      //       category={this.props.category}
-      //       variant={item}
-      //       productId={this.props.productId}
-      //       key={item.id}
-      //     />
-      //   );
-      // }
+      if (propEq('rawId', expandedItemId, item)) {
+        return (
+          <Form
+            category={this.props.category}
+            variant={item}
+            productId={this.props.productId}
+            key={item.id}
+            isExpanded
+            onExpandClick={this.expandRow}
+          />
+        );
+      }
       return (
         <Row
           key={item.id}

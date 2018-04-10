@@ -73,6 +73,9 @@ class EditProduct extends Component<PropsType, StateType> {
 
   render() {
     const baseProduct = baseProductFromProps(this.props);
+    if (!baseProduct) {
+      return (<span>Product not found</span>);
+    }
     return (
       <Container>
         <Row>
