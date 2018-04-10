@@ -83,8 +83,10 @@ class SearchInput extends Component<PropsType, StateType> {
   };
 
   handleSearch = () => {
-    const { inputValue } = this.state;
-    this.props.router.push(inputValue ? `/stores?search=${inputValue}` : '/stores');
+    const { inputValue, activeItem } = this.state;
+    if (activeItem.id === 'stores') {
+      this.props.router.push(inputValue ? `/stores?search=${inputValue}` : '/stores');
+    }
   }
 
   handleKeydown = (e: any) => {
