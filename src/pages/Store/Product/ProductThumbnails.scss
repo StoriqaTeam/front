@@ -39,14 +39,14 @@ h4 {
 
 .column {
   flex-flow: column;
-  img[src] {
-    margin-bottom: 16px;
+  button {
+    margin-bottom: 2rem;
   }
 }
 
 .row {
   flex-flow: row;
-  img[src] {
-    margin-right: 16px;
+  button {
+    margin-right: 2rem;
   }
 }
