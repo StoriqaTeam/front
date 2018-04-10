@@ -2,6 +2,10 @@
 
 .container {
   height: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
 }
 
 .variantItem {
@@ -10,7 +14,6 @@
 
 .variant {
   display: flex;
-  padding: 2rem 0;
 }
 
 .variant + .variant {
@@ -21,7 +24,6 @@
   font-family: Roboto;
   font-size: 14px;
   color: $color_grey_text;
-  text-align: right;
   height: 3rem;
 }
 
@@ -45,6 +47,16 @@
 .priceText {
   display: inline-block;
   width: 12rem;
+}
+
+.line {
+  position: absolute;
+  background-color: $color_grey_light;
+  height: 1px;
+  width: 100%;
+  padding-right: 8rem;
+  padding-left: 8rem;
+  bottom: 0;
 }
 
 .tdCheckbox {width: 5%;}

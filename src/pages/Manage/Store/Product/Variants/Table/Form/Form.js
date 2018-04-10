@@ -8,7 +8,7 @@ import { Button } from 'components/Button';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { log } from 'utils';
-import { CreateProductWithAttributesMutation } from 'relay/mutations';
+import { CreateProductWithAttributesMutation, UpdateProductMutation } from 'relay/mutations';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
@@ -16,6 +16,7 @@ import Photos from './Photos';
 import './Form.scss';
 
 type StateType = {
+  productId: string,
   vendorCode: string,
   price: number,
   cashback: number,
@@ -27,10 +28,8 @@ type StateType = {
 
 type PropsType = {
   productId: number,
-  onSave: Function,
   category: { getAttributes: Array<{}> },
   variant: ?{},
-  isExpanded?: boolean,
   onExpandClick: (id: string) => void,
 };
 
@@ -40,7 +39,7 @@ class Form extends Component<PropsType, StateType> {
     const product = pathOr(null, ['variant', 'product'], props);
     const attributeValues = map(item => ({
       attrId: item.rawId,
-      value: this.valueForAttribute({ attr: item, variant: props.variant }),
+      ...this.valueForAttribute({ attr: item, variant: props.variant }),
     }), props.category.getAttributes);
     if (!product) {
       this.state = {
@@ -48,6 +47,7 @@ class Form extends Component<PropsType, StateType> {
       };
     } else {
       this.state = {
+        productId: product.id,
         vendorCode: product.vendorCode,
         price: product.price,
         cashback: product.cashback,
@@ -63,15 +63,27 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleUpdate = () => {
-    const {
-      vendorCode,
-      price,
-      cashback,
-    } = this.state;
-    this.props.onSave({
-      vendorCode,
-      price,
-      cashback,
+    const variant = this.state;
+    log.debug({ variant });
+    UpdateProductMutation.commit({
+      id: variant.productId,
+      product: {
+        price: variant.price,
+        vendorCode: variant.vendorCode,
+        photoMain: variant.mainPhoto,
+        additionalPhotos: variant.photos,
+        cashback: variant.cashback,
+      },
+      attributes: variant.attributeValues,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        log.debug({ response, errors });
+        window.location.reload(); // TODO: fix it!
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+      },
     });
   };
 
@@ -91,6 +103,7 @@ class Form extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
+        window.location.reload(); // TODO: fix it!
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -142,19 +155,28 @@ class Form extends Component<PropsType, StateType> {
     this.props.onExpandClick(id);
   };
 
-  valueForAttribute =({ attr, variant }) => {
+  valueForAttribute =({ attr, variant }): { value: string, metaField?: string } => {
     const attrFromVariant =
       variant && find(item => item.attribute.rawId === attr.rawId, variant.attributes);
     if (attrFromVariant && attrFromVariant.value) {
-      return attrFromVariant.value;
+      return {
+        value: attrFromVariant.value,
+        metaField: attrFromVariant.metaField,
+      };
     }
     const { values, translatedValues } = attr.metaField;
     if (values) {
-      return head(values);
+      return {
+        value: head(values),
+      };
     } else if (translatedValues && complement(isEmpty(translatedValues))) {
-      return pathOr('', [0, 'text'], translatedValues);
+      return {
+        value: pathOr('', [0, 'text'], translatedValues),
+      };
     }
-    return '';
+    return {
+      value: '',
+    };
   };
 
   renderVariant = () => {

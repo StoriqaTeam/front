@@ -4,8 +4,8 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation CreateProductWithAttributesMutation($input:CreateProductWithAttributesInput!) {
-    createProduct(input:$input) {
+  mutation UpdateProductMutation($input:UpdateProductWithAttributesInput!) {
+    updateProduct(input:$input) {
       id
       rawId
       discount
@@ -19,7 +19,9 @@ const mutation = graphql`
 `;
 
 type MutationParamsType = {
+  id: number,
   product: {
+    baseProductId: number,
     price: number,
     vendorCode: string,
     photoMain?: string,
@@ -38,6 +40,7 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
   variables: {
     input: {
       clientMutationId: '',
+      id: params.id,
       product: params.product,
       attributes: params.attributes,
     },
@@ -47,22 +50,3 @@ const commit = (params: MutationParamsType) => commitMutation(params.environment
 });
 
 export default { commit };
-
-/* {
-  "input": {
-    "clientMutationId": "",
-    "product": {
-      "baseProductId": 1,
-      "discount": 12,
-      "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png",
-      "additionalPhotos": ["https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png","https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png"],
-      "vendorCode": "1q11q1q-1q1q1",
-      "cashback": 22,
-      "price": 123123123
-    },
-    "attributes": [
-      { "attrId": 1, "value": "44", "metaField": "https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png" },
-      { "attrId": 1, "value": "52", "metaField": "https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png" }
-    ]
-  }
-} */

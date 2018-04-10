@@ -177,6 +177,7 @@ export default createFragmentContainer(
           }
           attributes {
             value
+            metaField
             attribute {
               id
               rawId

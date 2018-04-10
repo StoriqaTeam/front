@@ -63,12 +63,10 @@ class Row extends Component<PropsType, StateType> {
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
           </div>
           <div styleName="variantItem tdPrice">
-            <span styleName="text priceText">{price || ''}</span>
-            <span styleName="textPostfix">STQ</span>
+            <span styleName="text priceText">{`${price} STQ`}</span>
           </div>
           <div styleName="variantItem tdCashback">
-            <span styleName="text cashbackText">{cashback || ''}</span>
-            <span styleName="textPostfix">%</span>
+            <span styleName="text cashbackText">{`${cashback}%`}</span>
           </div>
           <div styleName="variantItem tdCharacteristics">Characteristics</div>
           <div styleName="variantItem tdCount">8</div>
@@ -78,6 +76,7 @@ class Row extends Component<PropsType, StateType> {
             </button>
           </div>
         </div>
+        <div styleName="line" />
       </div>
     );
   }

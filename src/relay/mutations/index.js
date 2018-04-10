@@ -8,3 +8,4 @@ export { default as UpdateStoreMainMutation } from './UpdateStoreMainMutation'; 
 export { default as CreateBaseProductMutation } from './CreateBaseProductMutation';
 export { default as UpdateBaseProductMutation } from './UpdateBaseProductMutation';
 export { default as CreateProductWithAttributesMutation } from './CreateProductWithAttributesMutation';
+export { default as UpdateProductMutation } from './UpdateProductMutation';
