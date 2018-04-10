@@ -69,7 +69,7 @@ class CardProduct extends PureComponent<PropsTypes> {
                   <strong>{formatPrice(price)} STQ</strong>
                 </div>
               }
-              {Boolean(cashback) &&
+              {cashbackValue &&
                 <div styleName="cashbackWrap">
                   <div styleName="cashback">Cashback {`${cashbackValue}%`}</div>
                 </div>
