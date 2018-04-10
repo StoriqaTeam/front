@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { TabColumn } from 'pages/Store/Product';
+import { TabColumn } from './index';
 
 import './TabRow.scss';
 

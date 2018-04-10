@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 
-import { ProductThumbnails, ImageDetail } from 'pages/Store/Product';
+import { ProductThumbnails, ImageDetail } from './index';
 
 import Expand from './svg/expand.svg';
 

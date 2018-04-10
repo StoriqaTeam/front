@@ -13,7 +13,7 @@ import {
   Tab,
   Tabs,
   TabRow,
-} from 'pages/Store/Product';
+} from './index';
 
 import './Product.scss';
 import mockData from './mockData.json';

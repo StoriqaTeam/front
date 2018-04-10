@@ -10,7 +10,7 @@ import {
   ProductSize,
   ProductMaterial,
   ProductThumbnails,
-} from './Product';
+} from './index';
 
 import './ProductDetails.scss';
 
