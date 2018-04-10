@@ -106,7 +106,7 @@ class MiniSelect extends Component<PropsType, StateType> {
           forAutocomlete,
         })}
       >
-        {label && <div styleName="label">{label}</div>}
+        {label && <div styleName={classNames('label')}>{label}</div>}
         <div styleName={classNames('wrap', { transparent })}>
           <div styleName="selected">
             { isDropdown ? title : activeItem && activeItem.label }

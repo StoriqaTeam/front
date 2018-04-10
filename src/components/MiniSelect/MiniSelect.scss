@@ -142,6 +142,8 @@
 
 .itemsWrap {
   position: relative;
+  max-height: 25rem;
+  overflow-y: auto;
 }
 
 .item {

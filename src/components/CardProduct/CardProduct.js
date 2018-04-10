@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
 import { head, pathOr, find, propEq } from 'ramda';
 
 import { Icon } from 'components/Icon';
@@ -12,14 +13,19 @@ import './CardProduct.scss';
 type PropsTypes = {
   item: {
     baseProduct: {
-      name: string,
-      currencyId: string,
+      rawId: number,
+      storeId: number,
+      name: {
+        lang: string,
+        text: string,
+      },
+      currencyId: number,
     },
     variants: {
-      discount: string,
-      photoMain: string,
-      cashback: string,
-      price: string,
+      discount: ?string,
+      photoMain: ?string,
+      cashback: ?string,
+      price: ?string,
     },
   },
 };
@@ -34,6 +40,9 @@ class CardProduct extends PureComponent<PropsTypes> {
     } = this.props;
     const lang = 'EN';
 
+    const productId = baseProduct ? baseProduct.rawId : null;
+    const storeId = baseProduct ? baseProduct.storeId : null;
+    const productLink = (productId && storeId) ? `stores/${storeId}/products/${productId}` : '/';
     const name = baseProduct ? baseProduct.name : null;
     const title = find(propEq('lang', lang))(name).text;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
@@ -46,7 +55,10 @@ class CardProduct extends PureComponent<PropsTypes> {
 
     return (
       <div styleName="container">
-        <div styleName="body">
+        <Link
+          to={productLink}
+          styleName="body"
+        >
           <div styleName="top">
             {!img ?
               <Icon type="camera" size="40" /> :
@@ -76,7 +88,7 @@ class CardProduct extends PureComponent<PropsTypes> {
               }
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     );
   }

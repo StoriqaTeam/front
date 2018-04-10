@@ -22,6 +22,7 @@ type PropsType = {
 class Header extends PureComponent<PropsType> {
   render() {
     const { user, searchValue } = this.props;
+    // const sellingLing =
     return (
       <header styleName="container">
         <Container>
@@ -106,7 +107,9 @@ class Header extends PureComponent<PropsType> {
                   <CartButton />
                 </div>
                 <div styleName="buttonWrapper">
-                  <Button>Start selling</Button>
+                  <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
+                    Start selling
+                  </Button>
                 </div>
               </div>
             </Col>
