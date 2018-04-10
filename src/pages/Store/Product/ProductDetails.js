@@ -3,11 +3,14 @@
 import React, { PureComponent } from 'react';
 
 import {
+  ProductContext,
   ProductPrice,
   ProductSize,
   ProductMaterial,
   ProductThumbnails,
 } from 'pages/Store/Product';
+
+import { extractText } from 'utils';
 
 import './ProductDetails.scss';
 
@@ -70,29 +73,41 @@ class ProductDetails extends PureComponent<{}, stateTypes> {
       thumbnails,
     } = this.state;
     return (
-      <div styleName="container">
-        <h2>Nike Air Jordan</h2>
-        <ProductPrice
-          lastPrice="0.000290"
-          currentPrice="0.000123"
-          percentage="12"
-        />
-        <p>
-          {/* eslint-disable max-len */}
-          Наушники Bluetooth Beats Beats Solo3 Wireless On-Ear Violet (MNEQ2ZE/A) Объемное звучание на всех частотах, отлично подходит для прослушивания музыки, фильмов.
-        </p>
-        <ProductSize sizes={sizes} />
-        <ProductMaterial
-          selected={selected || materials[0]}
-          materials={materials}
-          onSelect={this.handleSelected}
-        />
-        <ProductThumbnails
-          title="Цвет"
-          row
-          thumbnails={thumbnails}
-        />
-      </div>
+      <ProductContext.Consumer>
+        {(context) => {
+          const {
+            baseProduct: {
+              name,
+              longDescription,
+            },
+          } = context;
+          // const [nameEN] = name;
+          return (
+            <div styleName="container">
+              <h2>{ extractText(name) }</h2>
+              <ProductPrice
+                lastPrice="0.000290"
+                currentPrice="0.000123"
+                percentage="12"
+              />
+              <p>
+                { extractText(longDescription, 'EN', 'Не описание') }
+              </p>
+              <ProductSize sizes={sizes} />
+              <ProductMaterial
+                selected={selected || materials[0]}
+                materials={materials}
+                onSelect={this.handleSelected}
+              />
+              <ProductThumbnails
+                title="Цвет"
+                row
+                thumbnails={thumbnails}
+              />
+            </div>
+          );
+        }}
+      </ProductContext.Consumer>
     );
   }
 }

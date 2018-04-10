@@ -6,6 +6,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
 import {
+  ProductContext,
   ProductImage,
   ProductShare,
   ProductDetails,
@@ -36,6 +37,7 @@ class Product extends PureComponent<PropsType, stateTypes> {
     ],
   };
   render() {
+    const { me } = this.props;
     const { tabs } = this.state;
     return (
       <div styleName="container">
@@ -44,15 +46,17 @@ class Product extends PureComponent<PropsType, stateTypes> {
           <div styleName="ProductBackground">
             <Container>
               <div styleName="whiteBackground">
-                <Row>
-                  <Col size={6}>
-                    <ProductImage />
-                    <ProductShare />
-                  </Col>
-                  <Col size={6}>
-                    <ProductDetails />
-                  </Col>
-                </Row>
+                <ProductContext.Provider value={me}>
+                  <Row>
+                    <Col size={6}>
+                      <ProductImage />
+                      <ProductShare />
+                    </Col>
+                    <Col size={6}>
+                      <ProductDetails />
+                    </Col>
+                  </Row>
+                </ProductContext.Provider>
               </div>
             </Container>
           </div>
@@ -82,6 +86,10 @@ export default createFragmentContainer(
     @argumentDefinitions(productId: { type: "Int!" }) {
       baseProduct(id: $productID) {
         name {
+          text
+          lang
+        }
+        longDescription {
           text
           lang
         }
