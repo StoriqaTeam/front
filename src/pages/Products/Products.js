@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, filter, where, equals } from 'ramda';
+import { createPaginationContainer, graphql, Relay } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
 import log from 'utils/log';
@@ -10,6 +11,7 @@ import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { MiniSelect } from 'components/MiniSelect';
 import { RangerSlider } from 'components/Ranger';
+import { CardProduct } from 'components/CardProduct';
 import { AttributeControll } from 'components/AttributeControll';
 import { searchPathByParent, flattenFunc, getNameText } from 'utils';
 
@@ -22,6 +24,7 @@ import './Products.scss';
 
 type PropsType = {
   categoryRowId: number,
+  relay: Relay,
 }
 
 type StateType = {
@@ -44,7 +47,9 @@ type AttrFilterType = {
   },
 }
 
-class Search extends PureComponent<PropsType, StateType> {
+const storesPerRequest = 20;
+
+class Products extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -54,8 +59,7 @@ class Search extends PureComponent<PropsType, StateType> {
   }
 
   generateTree = () => {
-    // const categories = pathOr(null, ['categories', 'children'], this.context.directories);
-    const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
+    const categories = pathOr(null, ['search', 'findProductWithoutCategory', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
     if (!categories) return null;
     const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
     const res = level2Filter(flattenFunc(categories));
@@ -88,7 +92,8 @@ class Search extends PureComponent<PropsType, StateType> {
   renderBreadcrumbs = () => {
     const { categoryRowId } = this.props;
     // const categories = pathOr(null, ['categories', 'children'], this.context.directories);
-    const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
+    // const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
+    const categories = pathOr(null, ['search', 'findProductWithoutCategory', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
     if (!categories) {
       return (
         <div styleName="breadcrumbs">
@@ -147,6 +152,8 @@ class Search extends PureComponent<PropsType, StateType> {
     const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], data);
     const catTree = this.generateTree();
+    const products = pathOr(null, ['search', 'findProductWithoutCategory', 'edges'], this.props);
+    console.log('**** products: ', products[0].node);
     return (
       <div styleName="container">
         {/* {categories && <CategoriesMenu categories={categories} />} */}
@@ -186,6 +193,11 @@ class Search extends PureComponent<PropsType, StateType> {
               {this.renderBreadcrumbs()}
               {this.renderSorting()}
             </div>
+            <div styleName="productsContainer">
+              {products && products.map(item => (
+                <p>product</p>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -193,10 +205,94 @@ class Search extends PureComponent<PropsType, StateType> {
   }
 }
 
-Search.contextTypes = {
+Products.contextTypes = {
   // environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
 };
 
-export default Page(Search);
+export default createPaginationContainer(
+  Page(Products),
+  graphql`
+    fragment Products_search on Search
+    @argumentDefinitions(
+      text: { type: "SearchProductWithoutCategoryInput!" }
+      first: { type: "Int", defaultValue: 20 }
+      after: { type: "ID", defaultValue: null }
+    ) {
+      findProductWithoutCategory(searchTerm: $text, first: $first, after: $after) @connection(key: "Products_findProductWithoutCategory") {
+        edges {
+          cursor
+          node {
+            id
+            rawId
+          }
+        }
+        pageInfo {
+          searchFilters {
+            priceRange {
+              minValue
+              maxValue
+            }
+            categories {
+              id
+              rawId
+              parentId
+              level
+              name {
+                text
+                lang
+              }
+              children {
+                id
+                rawId
+                parentId
+                level
+                name {
+                  text
+                  lang
+                }
+                children {
+                  id
+                  rawId
+                  parentId
+                  level
+                  name {
+                    text
+                    lang
+                  }
+                  children {
+                    id
+                    rawId
+                    parentId
+                    level
+                    name {
+                      text
+                      lang
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+  {
+    direction: 'forward',
+    getConnectionFromProps: props => props.search && props.search.findProductWithoutCategory,
+    getVariables: (props, { count }, prevFragmentVars) => ({
+      text: prevFragmentVars.text,
+      after: props.search.findProductWithoutCategory.pageInfo.endCursor,
+      first: count + storesPerRequest,
+    }),
+    query: graphql`
+      query Products_edges_Query($first: Int, $after: ID, $text: SearchProductWithoutCategoryInput!) {
+        search {
+          ...Products_search @arguments(first: $first, after: $after, text: $text)
+        }
+      }
+    `,
+  },
+);

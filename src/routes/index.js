@@ -21,18 +21,18 @@ const routes = (
   <Route>
     <Route
       path="/products"
-      Component={() => (<Products categoryRowId={9} />)}
-      // query={graphql`
-      //   query routes_Stores_Query($input: SearchStoreInput!) {
-      //     search {
-      //       ...Stores_search @arguments(text: $input)
-      //     }
-      //   }
-      // `}
-      // prepareVariables={(...args) => {
-      //   const searchValue = pathOr('', ['query', 'search'], last(args).location);
-      //   return ({ input: { name: searchValue, getStoresTotalCount: true } });
-      // }}
+      Component={({ search }) => (<Products search={search} categoryRowId={9} />)}
+      query={graphql`
+        query routes_Products_Query($searchTerm: SearchProductWithoutCategoryInput!) {
+          search {
+            ...Products_search @arguments(text: $searchTerm)
+          }
+        }
+      `}
+      prepareVariables={(...args) => {
+        const searchValue = pathOr('', ['query', 'search'], last(args).location);
+        return ({ searchTerm: { name: searchValue } });
+      }}
     />
     <Route
       path="/"

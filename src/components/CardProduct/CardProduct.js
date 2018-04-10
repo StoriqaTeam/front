@@ -4,23 +4,38 @@ import React, { PureComponent } from 'react';
 import { head, pathOr } from 'ramda';
 
 import { Icon } from 'components/Icon';
+import { getNameText } from 'utils';
 
 import { formatPrice } from './utils';
 
 import './CardProduct.scss';
 
+type TranslateType = {
+  text: string,
+  lang: string,
+}
+
+type VariantType = {
+  id: string,
+  rawId: number,
+  product: {
+    id: string,
+    rawId: number,
+    discount: number,
+    photoMain: string,
+    cashback: number,
+    price: number
+  },
+  attributes: Array<AttributeType>
+}
+
 type PropsTypes = {
   item: {
     baseProduct: {
-      name: string,
-      currencyId: string,
+      name: Array<TranslateType>,
+      currencyId: number,
     },
-    variants: {
-      discount: string,
-      photoMain: string,
-      cashback: string,
-      price: string,
-    },
+    variants: Array<VariantType>,
   },
 };
 
@@ -33,7 +48,7 @@ class CardProduct extends PureComponent<PropsTypes> {
       },
     } = this.props;
 
-    const title = baseProduct ? baseProduct.name : null;
+    const nameArr = baseProduct ? baseProduct.name : null;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
     const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
     const discount = pathOr(null, ['product', 'discount'], head(variants));
@@ -55,7 +70,7 @@ class CardProduct extends PureComponent<PropsTypes> {
             <div styleName="icon">
               <Icon type="qa" size="20" />
             </div>
-            {title && <div styleName="title">{title}</div>}
+            {nameArr && <div styleName="title">{getNameText(nameArr, 'EN')}</div>}
             <div styleName="price">
               {undiscountedPrice &&
               <div styleName="undiscountedPrice">
