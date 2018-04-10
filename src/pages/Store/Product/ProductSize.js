@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import './ProductSize.scss';
 
 type PropsType = {
+  title: string,
   sizes: string | number[],
 }
 
@@ -27,12 +28,12 @@ class ProductSize extends Component<PropsType, StateType> {
     });
   };
   render() {
-    const { sizes } = this.props;
+    const { title, sizes } = this.props;
     const { clicked } = this.state;
     return (
       <div styleName="container">
         <h4>
-          Размер
+          { title }
         </h4>
         <div styleName="sizes">
           {sizes.map((size, index) => (

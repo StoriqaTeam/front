@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 
-import { extractText } from 'utils';
+import { extractText, extractAttributes } from 'utils';
 
 import {
   ProductContext,
@@ -76,12 +76,15 @@ class ProductDetails extends PureComponent<{}, StateType> {
       <ProductContext.Consumer>
         {(context) => {
           const {
-            baseProduct: {
-              name,
-              longDescription,
+            baseProductWithVariants: {
+              baseProduct: {
+                name,
+                longDescription,
+              },
+              variants,
             },
           } = context;
-          // const [nameEN] = name;
+          const [size] = extractAttributes(variants, 'Size');
           return (
             <div styleName="container">
               <h2>{ extractText(name) }</h2>
@@ -93,7 +96,10 @@ class ProductDetails extends PureComponent<{}, StateType> {
               <p>
                 { extractText(longDescription, 'EN', 'Нет описания') }
               </p>
-              <ProductSize sizes={sizes} />
+              <ProductSize
+                title={size.name}
+                sizes={size.values}
+              />
               <ProductMaterial
                 selected={selected || materials[0]}
                 materials={materials}

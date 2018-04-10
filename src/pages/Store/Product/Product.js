@@ -84,14 +84,34 @@ export default createFragmentContainer(
   graphql`
     fragment Product_me on User
     @argumentDefinitions(productId: { type: "Int!" }) {
-      baseProduct(id: $productID) {
-        name {
-          text
-          lang
+      baseProductWithVariants(id: $productID) {
+        baseProduct {
+          name {
+            text
+            lang
+          }
+          shortDescription {
+            text
+          }
+          longDescription {
+            text
+          }
         }
-        longDescription {
-          text
-          lang
+        variants {
+          id
+          attributes {
+            metaField
+            attribute {
+              id
+              name {
+                text
+                lang
+              }
+              metaField {
+                values
+              }
+            }
+          }
         }
       }
     }

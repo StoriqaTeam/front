@@ -1,5 +1,6 @@
 // @flow
 
+export { default as extractAttributes } from './extractAttributes';
 export { default as extractText } from './extractText';
 export { default as fromRelayError } from './fromRelayError';
 export { default as log } from './log';
