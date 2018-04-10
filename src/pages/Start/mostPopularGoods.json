@@ -6,7 +6,10 @@
       "baseProduct": {
         "id": "baseProductId-1",
         "rawId": "baseProductRawId-1",
-        "name": "1. Chromecast 2015 dfabeba",
+        "name": {
+          "lang": "EN",
+          "text": "1. Chromecast 2015 dfabeba"
+        },
         "currencyId": "1"
       },
       "variants": [{
@@ -30,7 +33,10 @@
       "baseProduct": {
         "id": "baseProductId-2",
         "rawId": "baseProductRawId-2",
-        "name": "2. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+        "name": {
+          "lang": "EN",
+          "text": "2. Chromecast 2015 dfabeba"
+        },
         "currencyId": "2"
       },
       "variants": [{
@@ -54,7 +60,10 @@
       "baseProduct": {
         "id": "baseProductId-3",
         "rawId": "baseProductRawId-3",
-        "name": "3. Chromecast 2015 dfabeba Handcrafted toys msde of cotton",
+        "name": {
+          "lang": "EN",
+          "text": "3. Chromecast 2015 dfabeba"
+        },
         "currencyId": "3"
       },
       "variants": [{
@@ -78,7 +87,10 @@
       "baseProduct": {
         "id": "baseProductId-4",
         "rawId": "baseProductRawId-4",
-        "name": "4. Планшет Apple iPad 32Gb Wi-Fi Apple iPad 32Gb Wi-Fi",
+        "name": {
+          "lang": "EN",
+          "text": "4. Chromecast 2015 dfabeba"
+        },
         "currencyId": "4"
       },
       "variants": [{
@@ -102,7 +114,10 @@
       "baseProduct": {
         "id": "baseProductId-5",
         "rawId": "baseProductRawId-5",
-        "name": "5. Chromecast 2015 dfabeba",
+        "name": {
+          "lang": "EN",
+          "text": "5. Chromecast 2015 dfabeba"
+        },
         "currencyId": "5"
       },
       "variants": [{
@@ -126,7 +141,10 @@
       "baseProduct": {
         "id": "baseProductId-6",
         "rawId": "baseProductRawId-6",
-        "name": "6. Chromecast 2015 dfabeba",
+        "name": {
+          "lang": "EN",
+          "text": "6. Chromecast 2015 dfabeba"
+        },
         "currencyId": "6"
       },
       "variants": [{

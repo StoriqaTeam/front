@@ -14,7 +14,7 @@ const Footer = () => (
       <Row>
         <Col size={12}>
           <div styleName="navBlock">
-            <div styleName="navBlockItem">
+            <div styleName="navBlockLogo">
               <Icon type="logo" />
               <div styleName="description">
                 Storiqa is a global marketplace for any kind
@@ -46,8 +46,8 @@ const Footer = () => (
               <a href="/" styleName="navItem">Quality Assurance</a>
               <a href="/" styleName="navItem">Storiqa wallet</a>
             </div>
-            <div styleName="navBlockItem">
-              <Button onClick={() => {}}>
+            <div styleName="navBlockButton">
+              <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
                 Стать продавцом
               </Button>
             </div>

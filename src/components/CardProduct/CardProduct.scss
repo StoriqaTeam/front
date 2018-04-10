@@ -25,10 +25,11 @@
 .top {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
   position: relative;
   height: 53.25%;
-  background-color: $color_white;
+  background-color: $color_grey_light;
 }
 
 .img {
@@ -40,8 +41,6 @@
   position: absolute;
   bottom: 2rem;
   right: 2rem;
-  height: 2rem;
-  line-height: 2rem;
 }
 
 .bottom {
@@ -83,12 +82,13 @@
 
 .cashback {
   display: inline-block;
+  height: 2.25rem;
   padding: 0 1rem;
   color: $color_white;
   font-size: 11px;
   text-transform: uppercase;
-  line-height: 2.25rem;
-  vertical-align: middle;
+  line-height: 2.5rem;
+  vertical-align: bottom;
   border-radius: 0.25rem;
   background-color: #03A9FF;
 }

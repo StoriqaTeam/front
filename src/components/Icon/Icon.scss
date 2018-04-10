@@ -3,7 +3,7 @@
   display: block;
 }
 
-.inline {
+.container.inline {
   display: inline-block;
   vertical-align: middle;
 }
@@ -24,6 +24,11 @@
   height: 2rem;
 }
 
+.size-20 {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
 .size-24 {
   width: 3rem;
   height: 3rem;
@@ -32,6 +37,11 @@
 .size-32 {
   width: 4rem;
   height: 4rem;
+}
+
+.size-40 {
+  width: 5rem;
+  height: 5rem;
 }
 
 .isLogo {

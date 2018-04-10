@@ -56,6 +56,12 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
+  componentWillUnmount() {
+    if (process.env.BROWSER) {
+      document.removeEventListener('keydown', this.handleKeydown);
+    }
+  }
+
   handleRegistrationClick = () => {
     this.setState({ isLoad: true, errors: null });
     const { alone } = this.props;

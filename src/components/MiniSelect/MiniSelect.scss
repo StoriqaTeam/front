@@ -11,16 +11,21 @@
   width: 41rem;
 }
 
-.fullWidth {
-  width: 100%;
-}
-
-.forForm .hr {
+.forForm .hr, .forSearch .hr {
   display: block;
   position: absolute;
   bottom: -0.375rem;
   width: 100%;
   border-bottom: 1px solid $color_grey_bg;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.forSearch {
+  display: block;
+  width: 100%;
 }
 
 .label {
@@ -41,14 +46,24 @@
   font-size: 11px;
 }
 
-.forForm .wrap {
+.forForm .wrap, .forSearch .wrap {
   position: static;
 }
 
 .transparent,
-.forForm .wrap {
+.forForm .wrap,
+.forSearch .wrap{
   padding-left: 0;
   background-color: transparent;
+}
+
+.forAutocomlete .wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  vertical-align: bottom;
 }
 
 .isItem {
@@ -60,6 +75,15 @@
 .isDropdown {
   color: $color_grey_link;
   background-color: transparent;
+}
+
+.forAutocomlete {
+  width: 100%;
+  height: 100%;
+}
+
+.forAutocomlete .selected {
+  font-size: 14px;
 }
 
 .selected {
@@ -76,13 +100,17 @@
   z-index: 2;
 }
 
-.forForm .icon {
+.forForm .icon, .forSearch .icon {
   top: auto;
   bottom: 0.25rem;
 }
 
 .isItem .icon {
   background-color: #FAFAFA;
+}
+
+.forAutocomlete .icon {
+  top: 1rem;
 }
 
 .items {
@@ -96,10 +124,10 @@
   box-shadow: 0 0.25rem 0.75rem 0 rgba(0, 0, 0, .16);
   overflow: hidden;
   cursor: default;
-  z-index: 3;
+  z-index: 11;
 }
 
-.forForm .items {
+.forForm .items, .forSearch .items {
   top: 3rem;
   left: 0;
   margin-left: 0;
@@ -118,6 +146,8 @@
 
 .itemsWrap {
   position: relative;
+  max-height: 25rem;
+  overflow-y: auto;
 }
 
 .item {
@@ -135,6 +165,13 @@
 
 .isDropdown .item {
   white-space: nowrap;
+}
+
+.forAutocomlete .item {
+  font-size: 14px;
+  height: 3.75rem;
+  line-height: 3.75rem;
+  padding: 0 2rem;
 }
 
 .item:hover {

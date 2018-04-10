@@ -11,7 +11,10 @@ type PropsTypes = {
   items: Array<{
     node: {
       baseProduct: {
-        name: string,
+        name: {
+          lang: string,
+          text: string,
+        },
         currencyId: string,
       },
       variants: {

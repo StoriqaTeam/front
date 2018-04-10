@@ -11,28 +11,44 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 4rem;
+  padding: 4rem 0 4rem 4rem;
   border-bottom: solid 1px rgba(239,239,239,.41);
 }
 
-.navBlockItem {
+.navBlockItem, .navBlockButton, .navBlockLogo {
   display: flex;
   flex-direction: column;
-  width: 20%;
 }
 
-.navBlockItem + .navBlockItem {
-  padding-left: 6rem;
+.navBlockLogo {
+  align-items: flex-end;
+  width: 25%;
+  padding-right: 10rem;
+}
+
+.navBlockItem {
+  align-items: flex-start;
+  width: 20%;
+  padding-top: 0.5rem;
+  padding-left: 7rem;
+}
+
+.navBlockButton {
+  align-items: flex-end;
+  width: 15%;
 }
 
 .description {
+  max-width: 24rem;
   margin-top: 3rem;
   color: rgba(80,80,80,.43);
   font-size: 13px;
+  text-align: right;
+  line-height: 20px;
 }
 
 .navHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-size: 16px;
   color: #000000;
 }
@@ -54,6 +70,7 @@
 
 .address, .email {
   font-size: 13px;
+  line-height: 13px;
   color: rgba(80,80,80,.43);
 }
 
@@ -85,6 +102,9 @@
 }
 
 .icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 2rem;
 
   & > * + * {

@@ -6,6 +6,6 @@
   flex: 1 0 auto;
 }
 
-.item {
-  margin-bottom: 1rem;
+.item + .item {
+  margin-top: 1rem;
 }
