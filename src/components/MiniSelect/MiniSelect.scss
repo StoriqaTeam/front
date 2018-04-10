@@ -53,6 +53,15 @@
   background-color: transparent;
 }
 
+.forAutocomlete .wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  vertical-align: bottom;
+}
+
 .isItem {
   padding-right: 3.5rem;
   font-size: 16px;
@@ -62,6 +71,15 @@
 .isDropdown {
   color: $color_grey_link;
   background-color: transparent;
+}
+
+.forAutocomlete {
+  width: 100%;
+  height: 100%;
+}
+
+.forAutocomlete .selected {
+  font-size: 14px;
 }
 
 .selected {
@@ -80,11 +98,15 @@
 
 .forForm .icon, .forSearch .icon {
   top: auto;
-  bottom: -0.75rem;
+  bottom: 0.25rem;
 }
 
 .isItem .icon {
   background-color: #FAFAFA;
+}
+
+.forAutocomlete .icon {
+  top: 1rem;
 }
 
 .items {
@@ -98,7 +120,7 @@
   box-shadow: 0 0.25rem 0.75rem 0 rgba(0, 0, 0, .16);
   overflow: hidden;
   cursor: default;
-  z-index: 3;
+  z-index: 11;
 }
 
 .forForm .items, .forSearch .items {
@@ -137,6 +159,13 @@
 
 .isDropdown .item {
   white-space: nowrap;
+}
+
+.forAutocomlete .item {
+  font-size: 14px;
+  height: 3.75rem;
+  line-height: 3.75rem;
+  padding: 0 2rem;
 }
 
 .item:hover {

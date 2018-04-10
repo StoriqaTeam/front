@@ -8,8 +8,8 @@ import { filter, startsWith, toUpper } from 'ramda';
 import classNames from 'classnames';
 import { withRouter } from 'found';
 
-import { DropdownSelect } from 'components/DropdownSelect';
 import { Icon } from 'components/Icon';
+import { MiniSelect } from 'components/MiniSelect';
 
 import './SearchInput.scss';
 
@@ -25,6 +25,7 @@ type StateType = {
   items: Array<any>,
   searchCategoryId: ?number,
   isFocus: boolean,
+  activeItem: { id: string, label: string },
 };
 
 class SearchInput extends Component<PropsType, StateType> {
@@ -36,6 +37,7 @@ class SearchInput extends Component<PropsType, StateType> {
       // eslint-disable-next-line
       searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
       isFocus: false,
+      activeItem: { id: 'stores', label: 'Shops' },
     };
   }
 
@@ -76,8 +78,8 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleSearchDropdownSelect = (id: number) => {
-    this.setState(() => ({ searchCategoryId: id }));
+  handleSearchDropdownSelect = (activeItem: { id: string, label: string }) => {
+    this.setState(() => ({ activeItem }));
   };
 
   handleSearch = () => {
@@ -95,10 +97,11 @@ class SearchInput extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
-          <DropdownSelect
-            namePrefix="search"
+          <MiniSelect
+            forAutocomlete
+            activeItem={this.state.activeItem}
             items={this.props.searchCategories || []}
-            onDropdownSelect={this.handleSearchDropdownSelect}
+            onSelect={this.handleSearchDropdownSelect}
           />
         </div>
         <div styleName="searchInput">

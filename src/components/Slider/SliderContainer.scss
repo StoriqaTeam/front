@@ -21,23 +21,23 @@
 .dots {
   position: absolute;
   bottom: 2rem;
-  right: 2rem;
-  display: inline-block;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
   z-index: 2;
 }
 
 .dot {
   display: inline-block;
-  border: 1px solid #B1B1B1;
-  background-color: rgba(255,255,255,.5);
-  margin-left: 2rem;
-  width: 2rem;
-  height: 2rem;
+  background-color: rgba(255,255,255,.3);
+  margin-left: 1.4rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   cursor: pointer;
 }
 
 .dot.active {
-  border: 1px solid $color_primary;
-  background-color: $color_primary;
+  background-color: $color_white;
 }

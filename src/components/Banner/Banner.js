@@ -16,8 +16,7 @@ class Banner extends PureComponent<PropsTypes> {
   render() {
     const { item } = this.props;
     return (
-      <a
-        href={item.link}
+      <div
         styleName="container"
         target="_blank"
       >
@@ -27,7 +26,7 @@ class Banner extends PureComponent<PropsTypes> {
             alt="img"
           />
         </div>
-      </a>
+      </div>
     );
   }
 }

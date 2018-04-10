@@ -16,6 +16,7 @@ type PropsTypes = {
   isDefault?: boolean,
   wireframe?: boolean,
   forLoad?: boolean,
+  white: ?boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -30,6 +31,7 @@ class Button extends PureComponent<PropsTypes> {
       isDefault,
       wireframe,
       forLoad,
+      white,
     } = this.props;
 
     const props = {
@@ -46,6 +48,7 @@ class Button extends PureComponent<PropsTypes> {
       isDefault,
       wireframe,
       forLoad,
+      white,
     });
 
     if (href) {
