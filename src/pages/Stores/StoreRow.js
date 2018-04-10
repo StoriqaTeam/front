@@ -57,7 +57,7 @@ class StoreRow extends PureComponent<PropsType> {
                     return (
                       <Link
                         key={productId}
-                        to={`/store/${storeId}/product/${productId}`}
+                        to={`/store/${storeId}/products/${productId}`}
                         styleName="productFoto"
                       >
                         <div styleName="productFotoWrap">

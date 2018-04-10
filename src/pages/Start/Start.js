@@ -77,6 +77,7 @@ export default createFragmentContainer(
             id
             rawId
             baseProduct {
+              storeId
               id
               rawId
               name {
@@ -106,6 +107,7 @@ export default createFragmentContainer(
             id
             rawId
             baseProduct {
+              storeId
               id
               rawId
               name {
