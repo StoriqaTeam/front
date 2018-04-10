@@ -106,7 +106,9 @@ class Header extends PureComponent<PropsType> {
                   <CartButton />
                 </div>
                 <div styleName="buttonWrapper">
-                  <Button>Start selling</Button>
+                  <Button href={`${process.env.REACT_APP_HOST}/manage/store/new`}>
+                    Start selling
+                  </Button>
                 </div>
               </div>
             </Col>

@@ -47,7 +47,7 @@ const Footer = () => (
               <a href="/" styleName="navItem">Storiqa wallet</a>
             </div>
             <div styleName="navBlockButton">
-              <Button onClick={() => {}}>
+              <Button href={`${process.env.REACT_APP_HOST}/manage/store/new`}>
                 Стать продавцом
               </Button>
             </div>

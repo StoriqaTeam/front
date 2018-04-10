@@ -22,7 +22,12 @@ const BannersSlider = (props: PropsTypes) => (
       slidesToShow={1}
     />
     <div styleName="button">
-      <Button white>Стать продавцом</Button>
+      <Button
+        white
+        href={`${process.env.REACT_APP_HOST}/manage/store/new`}
+      >
+        Стать продавцом
+      </Button>
     </div>
   </div>
 );
