@@ -2,7 +2,9 @@
 
 import React, { PureComponent } from 'react';
 
-import { ProductThumbnails, ImageDetail } from './index';
+import { extractPhotos, isEmpty } from 'utils';
+
+import { ProductThumbnails, ImageDetail, ProductContext } from './index';
 
 import Expand from './svg/expand.svg';
 
@@ -50,24 +52,36 @@ class ProductImage extends PureComponent<{}, StateType> {
   render() {
     const { thumbnails, selectedImage } = this.state;
     return (
-      <div styleName="container">
-        <div styleName="thumbnailsWrapper">
-          <ProductThumbnails
-            onClick={this.handleClick}
-            thumbnails={thumbnails}
-          />
-        </div>
-        <figure styleName="bigImage">
-          <span styleName="expand">
-            <Expand />
-          </span>
-          <img
-            src={selectedImage.src || thumbnails[0].src}
-            alt={selectedImage.alt || thumbnails[0].alt}
-          />
-          <ImageDetail />
-        </figure>
-      </div>
+      <ProductContext.Consumer>
+        {(context) => {
+          const {
+            variants,
+          } = context;
+          const { photoMain, additionalPhotos } = extractPhotos(variants);
+          return (
+            <div styleName="container">
+              <div styleName="thumbnailsWrapper">
+                {additionalPhotos !== null && additionalPhotos.length ? (
+                  <ProductThumbnails
+                    onClick={this.handleClick}
+                    thumbnails={thumbnails}
+                  />
+                ) : null}
+              </div>
+              <figure styleName="bigImage">
+                <span styleName="expand">
+                  <Expand />
+                </span>
+                <img
+                  src={!isEmpty(selectedImage) ? selectedImage.src : photoMain}
+                  alt=""
+                />
+                <ImageDetail />
+              </figure>
+            </div>
+          );
+        }}
+      </ProductContext.Consumer>
     );
   }
 }

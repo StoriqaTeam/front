@@ -97,6 +97,10 @@ export default createFragmentContainer(
       }
       variants {
         id
+        product {
+          photoMain
+          additionalPhotos
+        }
         attributes {
           metaField
           attribute {
