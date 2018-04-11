@@ -151,6 +151,7 @@ export default createPaginationContainer(
               id
               rawId
               currencyId
+              storeId
               name {
                 text
                 lang
