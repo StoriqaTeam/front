@@ -73,6 +73,14 @@ class Authorization extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         this.setState({ isLoad: false });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ errors: validationErrors });
+          return;
+        }
         if (alone) {
           window.location = '/';
         } else {
@@ -116,7 +124,15 @@ class Authorization extends Component<PropsType, StateType> {
               window.location.reload();
             }
           }
+          return;
         }
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        this.setState({
+          isLoad: false,
+          errors: validationErrors,
+        });
       },
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
