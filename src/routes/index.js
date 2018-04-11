@@ -196,11 +196,12 @@ const routes = (
       />
       <Route
         path="/logout"
-        Component={null}
+        Component={() => null}
         render={() => {
           const cookies = new Cookies();
           cookies.remove('__jwt');
           window.location = '/';
+          return null;
         }}
       />
       <Route

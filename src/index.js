@@ -8,8 +8,13 @@ import './index.scss';
 
 buildApp()
   .then((App) => {
-    // $FlowIgnore
-    ReactDOM.hydrate(App, document.getElementById('root'));
+    if (process.env.NODE_ENV === 'development' && module.hot) {
+      // $FlowIgnore
+      ReactDOM.render(App, document.getElementById('root'));
+    } else {
+      // $FlowIgnore
+      ReactDOM.hydrate(App, document.getElementById('root'));
+    }
     if (process.env.NODE_ENV === 'development' && module.hot) {
       // $FlowIgnore
       module.hot.accept('./components/entry.js', () => {
@@ -19,7 +24,7 @@ buildApp()
             rebuildApp()
               .then((NewApp) => {
                 // $FlowIgnore
-                ReactDOM.hydrate(NewApp, document.getElementById('root'));
+                ReactDOM.render(NewApp, document.getElementById('root'));
               });
           });
       });
