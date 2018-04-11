@@ -52,6 +52,14 @@ class NewProduct extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+        }
+
         const { storeId } = this.props;
         const productId = pathOr(null, ['createBaseProduct', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}/products/${productId}`);
