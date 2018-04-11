@@ -1,0 +1,176 @@
+{
+  "data": {
+    "categories": {
+      "id": "c3RvcmVzfGNhdGVnb3J5fDA=",
+      "rawId": 0,
+      "parentId": null,
+      "level": 0,
+      "children": [
+        {
+          "id": "c3RvcmVzfGNhdGVnb3J5fDE=",
+          "rawId": 1,
+          "parentId": null,
+          "level": 1,
+          "name": [
+            {
+              "text": "category1"
+            },
+            {
+              "text": "category1"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "c3RvcmVzfGNhdGVnb3J5fDI=",
+          "rawId": 2,
+          "parentId": null,
+          "level": 1,
+          "name": [
+            {
+              "text": "category2"
+            },
+            {
+              "text": "category2"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "c3RvcmVzfGNhdGVnb3J5fDM=",
+          "rawId": 3,
+          "parentId": null,
+          "level": 1,
+          "name": [
+            {
+              "text": "category3"
+            },
+            {
+              "text": "category3"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "c3RvcmVzfGNhdGVnb3J5fDQ=",
+          "rawId": 4,
+          "parentId": null,
+          "level": 1,
+          "name": [
+            {
+              "text": "category4"
+            },
+            {
+              "text": "category4"
+            }
+          ],
+          "children": [
+            {
+              "id": "c3RvcmVzfGNhdGVnb3J5fDU=",
+              "rawId": 5,
+              "parentId": 4,
+              "level": 2,
+              "name": [
+                {
+                  "text": "category4.1"
+                },
+                {
+                  "text": "category4.1"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "c3RvcmVzfGNhdGVnb3J5fDc=",
+              "rawId": 7,
+              "parentId": 4,
+              "level": 2,
+              "name": [
+                {
+                  "text": "category4.3"
+                },
+                {
+                  "text": "category4.3"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "c3RvcmVzfGNhdGVnb3J5fDg=",
+              "rawId": 8,
+              "parentId": 4,
+              "level": 2,
+              "name": [
+                {
+                  "text": "category4.4"
+                },
+                {
+                  "text": "category4.4"
+                }
+              ],
+              "children": [
+                {
+                  "id": "c3RvcmVzfGNhdGVnb3J5fDk=",
+                  "rawId": 9,
+                  "parentId": 8,
+                  "level": 3,
+                  "name": [
+                    {
+                      "text": "category4.4.1"
+                    },
+                    {
+                      "text": "category4.4.1"
+                    }
+                  ]
+                },
+                {
+                  "id": "c3RvcmVzfGNhdGVnb3J5fDEw",
+                  "rawId": 10,
+                  "parentId": 8,
+                  "level": 3,
+                  "name": [
+                    {
+                      "text": "category4.4.2"
+                    },
+                    {
+                      "text": "category4.4.2"
+                    }
+                  ]
+                },
+                {
+                  "id": "c3RvcmVzfGNhdGVnb3J5fDEx",
+                  "rawId": 11,
+                  "parentId": 8,
+                  "level": 3,
+                  "name": [
+                    {
+                      "text": "category4.4.3"
+                    },
+                    {
+                      "text": "category4.4.3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "c3RvcmVzfGNhdGVnb3J5fDY=",
+              "rawId": 6,
+              "parentId": 4,
+              "level": 2,
+              "name": [
+                {
+                  "text": "category4.2"
+                },
+                {
+                  "text": "category4.2"
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

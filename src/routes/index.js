@@ -6,17 +6,19 @@ import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr, last } from 'ramda';
 
-import { log } from 'utils';
+import { log, prepareGetUrl } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import Start from 'pages/Start/Start';
+import Products from 'pages/Search/Products';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
+import Categories from 'pages/Search/Categories';
 
 const routes = (
   <Route>
@@ -95,6 +97,43 @@ const routes = (
       }}
     >
       <Route Component={Start} />
+
+      <Route
+        path="/categories"
+        Component={({ search }) => (<Categories search={search} />)}
+        query={graphql`
+          query routes_Categories_Query($searchTerm: SearchProductWithoutCategoryInput!) {
+            search {
+              ...Categories_search @arguments(text: $searchTerm)
+            }
+          }
+        `}
+        prepareVariables={(...args) => {
+          const queryObj = pathOr('', ['query'], last(args).location);
+          const searchTerm = prepareGetUrl(queryObj);
+          return ({ searchTerm });
+        }}
+      />
+      <Route
+        path="/products"
+        Component={({ search }) => (<Products search={search} />)}
+        query={graphql`
+          query routes_Products_Query($searchTerm: SearchProductInsideCategoryInput!) {
+            search {
+              ...Products_search @arguments(text: $searchTerm)
+            }
+          }
+        `}
+        prepareVariables={(...args) => {
+          const queryObj = pathOr('', ['query'], last(args).location);
+          const searchTerm = prepareGetUrl(queryObj);
+          if (!searchTerm.categoryId) {
+            searchTerm.categoryId = 1;
+          }
+          searchTerm.attrFilters = [];
+          return ({ searchTerm });
+        }}
+      />
       <Route
         path="/stores"
         Component={Stores}

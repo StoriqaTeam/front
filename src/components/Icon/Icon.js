@@ -30,6 +30,8 @@ import Pencil from 'components/Icon/svg/pencil.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
 import Camera from 'components/Icon/svg/camera.svg';
+import Minus from 'components/Icon/svg/minus.svg';
+import Plus from 'components/Icon/svg/plus.svg';
 import Upload from 'components/Icon/svg/upload.svg';
 import Basket from 'components/Icon/svg/basket.svg';
 import CloseArrow from 'components/Icon/svg/closeArrow.svg';
@@ -71,6 +73,8 @@ const iconsMap = {
   magnifier: <Magnifier />,
   qualityAssurance: <QualityAssurance />,
   camera: <Camera />,
+  minus: <Minus />,
+  plus: <Plus />,
   heart: <Heart />,
   upload: <Upload />,
   basket: <Basket />,

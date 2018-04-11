@@ -1,3 +1,5 @@
+@import '../../styles/variables';
+
 .container {
   position: relative;
   display: inline-block;
@@ -11,11 +13,14 @@
   left: 0;
   width: 2rem;
   height: 2rem;
-  border: 1px solid #707070;
+  border: 1px solid $color_grey_border2;
   border-radius: 0.5rem;
   line-height: 2rem;
   cursor: pointer;
-  background: #FFFFFF;
+}
+
+.active {
+  border-color: $color_primary;
 }
 
 .label:after {
@@ -25,7 +30,7 @@
   left: 0.375rem;
   width: 0.75rem;
   height: 0.5rem;
-  border: 0.25rem solid #000;
+  border: 0.25rem solid $color_primary;
   border-top: none;
   border-right: none;
   background-color: transparent;
@@ -34,15 +39,18 @@
 }
 
 .label:hover::after {
-  opacity: 0.3;
+  opacity: 1;
+  border-color: $color_grey_link;
 }
 
 .labelText {
   position: relative;
   top: -0.125rem;
-  margin-left: 2.5rem;
+  margin-left: 3rem;
   padding-bottom: 0.25rem;
   white-space: nowrap;
+  color: $color_grey_text;
+  font-size: 1.75rem;
 }
 
 .input {

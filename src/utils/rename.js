@@ -6,6 +6,7 @@ const rename = curry((fn, obj) => pipe(toPairs, map(adjust(fn, 0)), fromPairs)(o
 
 export const renameCamelCase = (obj: any) => {
   const reduceIndexed = addIndex(reduce);
+  // const re = /[p{P}p{S}]/;
   const func = val =>
     reduceIndexed((acc, next, index) => {
       if (index === 0) return next;
