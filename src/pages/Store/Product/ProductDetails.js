@@ -74,13 +74,11 @@ class ProductDetails extends PureComponent<{}, StateType> {
       <ProductContext.Consumer>
         {(context) => {
           const {
-            baseProductWithVariants: {
-              baseProduct: {
-                name,
-                longDescription,
-              },
-              variants,
+            baseProduct: {
+              name,
+              longDescription,
             },
+            variants,
           } = context;
           const [size] = extractAttributes(variants, 'Size');
           return (

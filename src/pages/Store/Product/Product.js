@@ -19,7 +19,7 @@ import './Product.scss';
 import mockData from './mockData.json';
 
 type PropsType = {
-  me?: {}
+  baseProductWithVariants: {}
 };
 
 type StateType = {
@@ -37,7 +37,7 @@ class Product extends PureComponent<PropsType, StateType> {
     ],
   };
   render() {
-    const { me } = this.props;
+    const { baseProductWithVariants } = this.props;
     const { tabs } = this.state;
     return (
       <div styleName="container">
@@ -46,7 +46,7 @@ class Product extends PureComponent<PropsType, StateType> {
           <div styleName="ProductBackground">
             <Container>
               <div styleName="whiteBackground">
-                <ProductContext.Provider value={me}>
+                <ProductContext.Provider value={baseProductWithVariants}>
                   <Row>
                     <Col size={6}>
                       <ProductImage />
@@ -82,34 +82,31 @@ class Product extends PureComponent<PropsType, StateType> {
 export default createFragmentContainer(
   Product,
   graphql`
-    fragment Product_me on User
-    @argumentDefinitions(productId: { type: "Int!" }) {
-      baseProductWithVariants(id: $productID) {
-        baseProduct {
-          name {
-            text
-            lang
-          }
-          shortDescription {
-            text
-          }
-          longDescription {
-            text
-          }
+    fragment Product_baseProductWithVariants on BaseProductWithVariants {
+      baseProduct {
+        name {
+          text
+          lang
         }
-        variants {
-          id
-          attributes {
-            metaField
-            attribute {
-              id
-              name {
-                text
-                lang
-              }
-              metaField {
-                values
-              }
+        shortDescription {
+          text
+        }
+        longDescription {
+          text
+        }
+      }
+      variants {
+        id
+        attributes {
+          metaField
+          attribute {
+            id
+            name {
+              text
+              lang
+            }
+            metaField {
+              values
             }
           }
         }

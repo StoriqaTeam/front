@@ -16,6 +16,7 @@ import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
+import { Product as ProductCard } from 'pages/Store/Product';
 
 const routes = (
   <Route>
@@ -223,19 +224,19 @@ const routes = (
       path="/store/:storeId/product/:productId"
       query={graphql`
         query routes_ProductCard_Query($productID: Int!) {
-          me {
-            ...Product_me @arguments(productId: $productID)
+          baseProductWithVariants(id: $productID) {
+            ...Product_baseProductWithVariants
           }
         }
       `}
       prepareVariables={(_, { params }) => (
         { productID: parseInt(params.productId, 10) }
       )}
-      Component={({ me, params }) => (
+      Component={({ baseProductWithVariants, params }) => (
         <ProductCard
           storeId={params.storeId}
           productId={params.productId}
-          me={me}
+          baseProductWithVariants={baseProductWithVariants}
         />
       )}
     />
