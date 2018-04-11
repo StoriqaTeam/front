@@ -1,4 +1,0 @@
-POST http://192.168.99.100:8010/images
-headers: ['Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.g5ZM3g7XKc8ioRY01eWMpEOSHSN5TgGQP2acUP7MYh8']
-body: 'abcd'
-###
