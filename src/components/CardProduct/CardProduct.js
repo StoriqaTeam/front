@@ -42,7 +42,7 @@ class CardProduct extends PureComponent<PropsTypes> {
 
     const productId = baseProduct ? baseProduct.rawId : null;
     const storeId = baseProduct ? baseProduct.storeId : null;
-    const productLink = (productId && storeId) ? `stores/${storeId}/products/${productId}` : '/';
+    const productLink = (productId && storeId) ? `store/${storeId}/products/${productId}` : '/';
     const name = baseProduct ? baseProduct.name : null;
     const title = find(propEq('lang', lang))(name).text;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
