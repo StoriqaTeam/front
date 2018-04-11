@@ -15,6 +15,8 @@ type PropsType = {
   buttonHeight: number,
   buttonWidth: number,
   buttonIconType: ?string,
+  overPicture: ?string,
+  id: string,
 };
 
 const UploadWrapper = ({
@@ -24,18 +26,32 @@ const UploadWrapper = ({
   buttonHeight,
   buttonWidth,
   buttonIconType,
+  overPicture,
+  id,
 }: PropsType) => (
   <div styleName="wrapper">
     <div styleName="upoloadContainer">
       <label
-        htmlFor="exampleInput"
+        htmlFor={id}
         styleName="uploadButton"
         style={{ height: buttonHeight, width: buttonWidth }}
       >
-        {(buttonIconType && <Icon type={buttonIconType} size={32} />)}
-        <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
+        {(buttonIconType && !overPicture && <Icon type={buttonIconType} size={32} />)}
+        {!overPicture && <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>}
+        {overPicture &&
+          <div
+            styleName="overPictureWrap"
+            style={{ height: buttonHeight, width: buttonWidth }}
+          >
+            <img
+              styleName="overPicture"
+              src={overPicture}
+              alt="img"
+            />
+          </div>
+        }
       </label>
-      <input style={{ display: 'none' }} id="exampleInput" type="file" onChange={onUpload} />
+      <input style={{ display: 'none' }} id={id} type="file" onChange={onUpload} />
     </div>
     <div styleName="childrenConainer">
       <div styleName="upoloadChildren">

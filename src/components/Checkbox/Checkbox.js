@@ -6,13 +6,13 @@ type PropsTypes = {
   id: string,
   label: boolean,
   isChecked: boolean,
-  handleCheckboxChange: Function,
+  onChange: Function,
 };
 
 class Checkbox extends PureComponent<PropsTypes> {
-  handleCheckboxChange = () => {
-    const { id, handleCheckboxChange } = this.props;
-    handleCheckboxChange(id);
+  onChange = () => {
+    const { id, onChange } = this.props;
+    onChange(id);
   }
 
   render() {
@@ -24,7 +24,7 @@ class Checkbox extends PureComponent<PropsTypes> {
           id={id}
           type="checkbox"
           checked={isChecked}
-          onChange={this.handleCheckboxChange}
+          onChange={this.onChange}
         />
         <label htmlFor={id} styleName="label">
           <span styleName="labelText">{label}</span>

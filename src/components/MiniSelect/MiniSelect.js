@@ -29,6 +29,7 @@ type PropsType = {
   forForm: ?boolean,
   forSearch: ?boolean,
   forAutocomlete: ?boolean,
+  fullWidth: ?boolean,
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
@@ -72,13 +73,9 @@ class MiniSelect extends Component<PropsType, StateType> {
   handleItemClick = (e: any) => {
     if (this.props.isDropdown) {
       log.info('id', e.target.id);
-    } else {
-      const activeItem = find(propEq('id', e.target.id))(this.props.items);
-      const { onSelect } = this.props;
-
-      if (onSelect) {
-        onSelect(activeItem);
-      }
+    } else if (this.props && this.props.onSelect) {
+      // $FlowIgnoreMe
+      this.props.onSelect(find(propEq('id', e.target.id))(this.props.items));
     }
   };
 
@@ -91,6 +88,7 @@ class MiniSelect extends Component<PropsType, StateType> {
       label,
       activeItem,
       forForm,
+      fullWidth,
       forSearch,
       forAutocomlete,
     } = this.props;
@@ -104,6 +102,7 @@ class MiniSelect extends Component<PropsType, StateType> {
           forForm,
           forSearch,
           forAutocomlete,
+          fullWidth,
         })}
       >
         {label && <div styleName={classNames('label')}>{label}</div>}

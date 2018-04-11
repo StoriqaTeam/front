@@ -14,8 +14,8 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
-import { Product } from 'pages/Manage/Store/Product';
 import Stores from 'pages/Stores/Stores';
+import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 
 const routes = (
   <Route>
@@ -66,6 +66,14 @@ const routes = (
                 name {
                   lang
                   text
+                }
+                getAttributes {
+                  id
+                  rawId
+                  name {
+                    lang
+                    text
+                  }
                 }
               }
             }
@@ -148,7 +156,20 @@ const routes = (
           />
           <Route
             path="/:storeId/product/new"
-            Component={({ params }) => (<Product storeId={params.storeId} />)}
+            Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
+          />
+          <Route
+            path="/:storeId/products/:productId"
+            Component={EditProduct}
+            query={graphql`
+            query routes_Product_Query($productID: Int!) {
+              me {
+                id
+                ...EditProduct_me @arguments(productId: $productID)
+              }
+            }
+          `}
+            prepareVariables={(_, { params }) => ({ productID: parseInt(params.productId, 10) })}
           />
         </Route>
       </Route>

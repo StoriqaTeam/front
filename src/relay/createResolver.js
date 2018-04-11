@@ -1,6 +1,8 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { Resolver } from 'found-relay';
-import { installRelayDevTools } from 'relay-devtools'; // eslint-disable-line
+// import { installRelayDevTools } from 'relay-devtools'; // eslint-disable-line
+
+// installRelayDevTools();
 
 const createResolver = (fetcher) => {
   if (process.env.NODE_ENV !== 'production') {
