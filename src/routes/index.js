@@ -15,6 +15,8 @@ import Products from 'pages/Search/Products';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
+import Stores from 'pages/Stores/Stores';
+import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product } from 'pages/Manage/Store/Product';
 import Categories from 'pages/Search/Categories';
 
@@ -26,12 +28,12 @@ const routes = (
       query={graphql`
       query routes_App_Query {
         id
-        mainPage {
-          ...Start_mainPage
-        }
         me {
           id
           ...App_me
+        }
+        mainPage {
+          ...Start_mainPage
         }
         languages {
           isoCode
@@ -67,6 +69,14 @@ const routes = (
                 name {
                   lang
                   text
+                }
+                getAttributes {
+                  id
+                  rawId
+                  name {
+                    lang
+                    text
+                  }
                 }
               }
             }
@@ -124,7 +134,21 @@ const routes = (
           return ({ searchTerm });
         }}
       />
-
+      <Route
+        path="/stores"
+        Component={Stores}
+        query={graphql`
+        query routes_Stores_Query($input: SearchStoreInput!) {
+          search {
+            ...Stores_search @arguments(text: $input)
+          }
+        }
+      `}
+        prepareVariables={(...args) => {
+          const searchValue = pathOr('', ['query', 'search'], last(args).location);
+          return ({ input: { name: searchValue, getStoresTotalCount: true } });
+        }}
+      />
       <Route
         path="/manage"
         render={({ match }) => {
@@ -172,7 +196,20 @@ const routes = (
           />
           <Route
             path="/:storeId/product/new"
-            Component={({ params }) => (<Product storeId={params.storeId} />)}
+            Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
+          />
+          <Route
+            path="/:storeId/products/:productId"
+            Component={EditProduct}
+            query={graphql`
+            query routes_Product_Query($productID: Int!) {
+              me {
+                id
+                ...EditProduct_me @arguments(productId: $productID)
+              }
+            }
+          `}
+            prepareVariables={(_, { params }) => ({ productID: parseInt(params.productId, 10) })}
           />
         </Route>
       </Route>
@@ -199,11 +236,12 @@ const routes = (
       />
       <Route
         path="/logout"
-        Component={null}
+        Component={() => null}
         render={() => {
           const cookies = new Cookies();
           cookies.remove('__jwt');
           window.location = '/';
+          return null;
         }}
       />
       <Route

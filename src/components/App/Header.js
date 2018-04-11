@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -15,12 +16,13 @@ import './Header.scss';
 
 type PropsType = {
   user: ?{},
+  searchValue: string,
 };
 
 class Header extends PureComponent<PropsType> {
   render() {
-    const { user } = this.props;
-
+    const { user, searchValue } = this.props;
+    // const sellingLing =
     return (
       <header styleName="container">
         <Container>
@@ -85,16 +87,17 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <div styleName="logo">
+                <Link to="/" styleName="logo">
                   <Icon type="logo" />
-                </div>
+                </Link>
                 <div styleName="searchInput">
                   <SearchInput
                     searchCategories={[
-                      { id: '0', label: 'Shops' },
-                      { id: '1', label: 'Products' },
-                      { id: '2', label: 'All' },
+                      { id: 'stores', label: 'Shops' },
+                      { id: 'products', label: 'Products' },
+                      { id: 'all', label: 'All' },
                     ]}
+                    searchValue={searchValue}
                   />
                 </div>
                 <div styleName="profileIcon">
@@ -104,7 +107,9 @@ class Header extends PureComponent<PropsType> {
                   <CartButton />
                 </div>
                 <div styleName="buttonWrapper">
-                  <Button>Start selling</Button>
+                  <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
+                    Start selling
+                  </Button>
                 </div>
               </div>
             </Col>

@@ -13,6 +13,7 @@
 }
 
 .uploadButton {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -21,6 +22,7 @@
   padding: 2rem;
   background-color: $color_grey_light;
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .buttonLabel {
@@ -41,4 +43,25 @@
 
 .upoloadChildren {
   // flex: 1;
+}
+
+.overPictureWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+
+  & > img {
+    display: inline-block;
+    height: 100%;
+    vertical-align: bottom;
+  }
+}
+
+.overPicture {
+  //
 }

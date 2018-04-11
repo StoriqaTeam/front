@@ -112,6 +112,7 @@ class Form extends Component<PropsType, StateType> {
       this.setState({ formErrors: nextFormErrors });
     }
   }
+
   handleDefaultLanguage = (defaultLanguage: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
   };

@@ -38,10 +38,6 @@ class Input extends Component<PropsType, StateType> {
     this.setState({ labelFloat: Boolean(this.props.value) });
   }
 
-  componentWillReceiveProps(nextProps: PropsType) {
-    this.setState({ labelFloat: Boolean(nextProps.value) });
-  }
-
   input: ?HTMLInputElement;
 
   handleChange = (e: any) => {

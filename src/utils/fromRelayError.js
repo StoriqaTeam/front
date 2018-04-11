@@ -12,7 +12,7 @@ export default pipe(
     const code = prop('code', error);
 
     if (code !== 100) {
-      return [toString(code), { message: error.details }];
+      return [toString(code), { message: (error && error.details) || item }];
     }
 
     const status = pathOr('', ['details', 'status'], error);

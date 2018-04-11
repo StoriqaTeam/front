@@ -11,32 +11,32 @@ type PropsType = {
     [key: string]: any,
   },
   isChecked: boolean,
-  handleCheckboxChange: Function,
+  onChange: Function,
 };
 
-const Checkbox = ({
-  id,
-  label,
-  isChecked,
-  labelStyle,
-  handleCheckboxChange,
-}: PropsType) => (
-  <div styleName="container">
-    <input
-      styleName="input"
-      id={id}
-      type="checkbox"
-      checked={isChecked}
-      onChange={() => handleCheckboxChange(id)}
-    />
-    <label
-      htmlFor={id}
-      styleName={`label ${isChecked ? 'active' : ''}`}
-      style={labelStyle || {}}
-    >
-      <span styleName="labelText">{label}</span>
-    </label>
-  </div>
-);
+class Checkbox extends PureComponent<PropsTypes> {
+  onChange = () => {
+    const { id, onChange } = this.props;
+    onChange(id);
+  }
+
+  render() {
+    const { id, label, isChecked } = this.props;
+    return (
+      <div styleName="container">
+        <input
+          styleName="input"
+          id={id}
+          type="checkbox"
+          checked={isChecked}
+          onChange={this.onChange}
+        />
+        <label htmlFor={id} styleName="label">
+          <span styleName="labelText">{label}</span>
+        </label>
+      </div>
+    );
+  }
+}
 
 export default Checkbox;

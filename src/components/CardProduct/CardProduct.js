@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
 import { head, pathOr, find, propEq } from 'ramda';
 
 import { Icon } from 'components/Icon';
@@ -48,17 +49,26 @@ class CardProduct extends PureComponent<PropsTypes> {
     } = this.props;
     console.log('&&&&& CardProduct item: ', this.props.item);
     const lang = 'EN';
-    const nameArr = baseProduct ? baseProduct.name : null;
+
+    const productId = baseProduct ? baseProduct.rawId : null;
+    const storeId = baseProduct ? baseProduct.storeId : null;
+    const productLink = (productId && storeId) ? `store/${storeId}/products/${productId}` : '/';
+    const name = baseProduct ? baseProduct.name : null;
+    const title = find(propEq('lang', lang))(name).text;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
     const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
     const discount = pathOr(null, ['product', 'discount'], head(variants));
     const price = undiscountedPrice * (1 - discount);
     // const currencyId = baseProduct ? baseProduct.currencyId : null;
-    const cashback = pathOr(null, ['product', 'cashback'], head(variants)) * 100;
+    const cashback = pathOr(0, ['product', 'cashback'], head(variants));
+    const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
 
     return (
       <div styleName="container">
-        <div styleName="body">
+        <Link
+          to={productLink}
+          styleName="body"
+        >
           <div styleName="top">
             {!img ?
               <Icon type="camera" size="40" /> :
@@ -71,7 +81,7 @@ class CardProduct extends PureComponent<PropsTypes> {
             </div>
             {nameArr && <div styleName="title">{getNameText(nameArr, lang)}</div>}
             <div styleName="price">
-              {undiscountedPrice &&
+              {Boolean(discount) &&
                 <div styleName="undiscountedPrice">
                   {formatPrice(undiscountedPrice)} STQ
                 </div>
@@ -81,14 +91,14 @@ class CardProduct extends PureComponent<PropsTypes> {
                   <strong>{formatPrice(price)} STQ</strong>
                 </div>
               }
-              {Boolean(cashback) &&
+              {cashbackValue &&
                 <div styleName="cashbackWrap">
-                  <div styleName="cashback">Cashback {`${cashback}%`}</div>
+                  <div styleName="cashback">Cashback {`${cashbackValue}%`}</div>
                 </div>
               }
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     );
   }

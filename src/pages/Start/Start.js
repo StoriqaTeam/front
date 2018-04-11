@@ -11,44 +11,45 @@ import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
 
-import CategoriesMenu from './CategoriesMenu';
-
 import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
+// import mostPopularGoods from './mostPopularGoods.json';
 
-class Start extends PureComponent<{}> {
+class Start extends PureComponent<{}> {// eslint-disable-line
   render() {
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
-    const mostViewedProducts = pathOr(null, [
+    const mostViewedProducts = pathOr([], [
       'mainPage',
       'findMostViewedProducts',
       'edges',
     ], this.props);
-    const mostDiscountProducts = pathOr(null, [
+    const mostDiscountProducts = pathOr([], [
       'mainPage',
       'findMostDiscountProducts',
       'edges',
     ], this.props);
     return (
       <div styleName="container">
-        {categories && <CategoriesMenu categories={categories} />}
         <div styleName="item">
           <BannersSlider items={bannersSlider} />
         </div>
-        <div styleName="item">
-          <GoodsSlider
-            items={mostViewedProducts}
-            title="Популярное"
-          />
-        </div>
-        <div styleName="item">
-          <GoodsSlider
-            items={mostDiscountProducts}
-            title="Распродажа"
-          />
-        </div>
+        {mostViewedProducts && mostViewedProducts.length > 0 &&
+          <div styleName="item">
+            <GoodsSlider
+              items={mostViewedProducts}
+              title="Популярное"
+            />
+          </div>
+        }
+        {mostDiscountProducts && mostDiscountProducts.length > 0 &&
+          <div styleName="item">
+            <GoodsSlider
+              items={mostDiscountProducts}
+              title="Распродажа"
+            />
+          </div>
+        }
         <div styleName="item">
           <BannersRow
             items={bannersRow}
@@ -76,6 +77,7 @@ export default createFragmentContainer(
             id
             rawId
             baseProduct {
+              storeId
               id
               rawId
               name {
@@ -105,6 +107,7 @@ export default createFragmentContainer(
             id
             rawId
             baseProduct {
+              storeId
               id
               rawId
               name {
