@@ -28,28 +28,59 @@
 .contentContainer {
   flex: 1;
   margin: 0 2rem;
+
   .topContentContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
     .breadcrumbs {
+
       .item {
         display: inline-block;
         color: $color_grey_breadcrumbs;
         font-size: 1.75rem;
         cursor: pointer;
         // border-bottom: 1px dashed $color_primary;
+
         .separator {
           margin: 0 1rem;
         }
       }
     }
+
     .sortingContainer {
       display: flex;
       flex-direction: row;
     }
   }
   .productsContainer {
-    display: flex;
+    // display: flex;
+
+    .loadMoreContainer {
+      display: flex;
+      height: 5rem;
+      margin-top: 2rem;
+      padding: 0 1rem;
+
+      .loadMoreButton {
+        flex: 1;
+        padding: 1rem;
+        border: 1px solid #f4f4f4;
+        color: #505050;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+    }
   }
 }
+
+.cardWrapper {
+  width: 25%;
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+}
+

@@ -1,6 +1,6 @@
 // @flow
 
-import { reduce, find, whereEq } from 'ramda';
+import { reduce, find, whereEq, keys } from 'ramda';
 
 const byLang = (lang: string) => find(whereEq({ lang }));
 
@@ -28,6 +28,34 @@ export const flattenFunc = reduce((acc, nextItem) => {
     nextItem,
   ];
 }, []);
+
+export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
+  switch (next) {
+    case 'search':
+      return { ...acc, name: queryObj[next] };
+    case 'category':
+      return { ...acc, categoryId: parseInt(queryObj[next], 10) || 1 };
+    case 'minValue':
+      return {
+        ...acc,
+        priceRange: {
+          ...acc.priceRange,
+          minValue: parseInt(queryObj[next], 10) || 0,
+        },
+      };
+    case 'maxValue':
+      return {
+        ...acc,
+        priceRange: {
+          ...acc.priceRange,
+          maxValue: parseInt(queryObj[next], 10) || 0,
+        },
+      };
+    default:
+      return { ...acc, [next]: queryObj[next] };
+  }
+}, {}, keys(queryObj));
+
 
 type ChildrenType = {
   parentId: number,

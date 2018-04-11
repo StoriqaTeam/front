@@ -26,7 +26,6 @@ type VariantType = {
     cashback: number,
     price: number
   },
-  attributes: Array<AttributeType>
 }
 
 type PropsTypes = {
@@ -47,8 +46,8 @@ class CardProduct extends PureComponent<PropsTypes> {
         variants,
       },
     } = this.props;
+    console.log('&&&&& CardProduct item: ', this.props.item);
     const lang = 'EN';
-
     const nameArr = baseProduct ? baseProduct.name : null;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
     const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
@@ -70,7 +69,7 @@ class CardProduct extends PureComponent<PropsTypes> {
             <div styleName="icon">
               <Icon type="qa" size="20" />
             </div>
-            {nameArr && <div styleName="title">{getNameText(nameArr, 'EN')}</div>}
+            {nameArr && <div styleName="title">{getNameText(nameArr, lang)}</div>}
             <div styleName="price">
               {undiscountedPrice &&
                 <div styleName="undiscountedPrice">
