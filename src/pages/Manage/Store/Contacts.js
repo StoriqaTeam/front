@@ -124,6 +124,19 @@ class Contacts extends Component<PropsType, StateType> {
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
+
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
