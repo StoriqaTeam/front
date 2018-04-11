@@ -30,6 +30,9 @@ type PropsType = {
   forSearch: ?boolean,
   forAutocomlete: ?boolean,
   fullWidth: ?boolean,
+  containerStyle: ?{
+    [name: string]: any,
+  },
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
