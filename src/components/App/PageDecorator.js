@@ -18,7 +18,7 @@ export default (OriginalComponent: any, withoutCategories: ?boolean) =>
         <div styleName="container">
           <Header
             user={this.props.me}
-            searchValue={pathOr('', ['location', 'query', 'search'], this.props)}
+            searchValue={pathOr('', ['match', 'location', 'query', 'search'], this.props)}
           />
           <Main withoutCategories={withoutCategories}>
             <OriginalComponent {...this.props} />

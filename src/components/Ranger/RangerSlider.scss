@@ -1,0 +1,87 @@
+@import "../../styles/variables";
+
+.rangerContainer {
+  display: block;
+}
+
+.rangeslider {
+  margin: 1.5rem 0 2rem;
+  position: relative;
+  background: $color_grey_ranger;
+  -ms-touch-action: none;
+  touch-action: none;
+
+  &,
+  .rangesliderFill {
+    display: block;
+  }
+  .rangesliderHandle, .rangesliderHandle2 {
+    background: #fff;
+    cursor: pointer;
+    display: inline-block;
+    position: absolute;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    .rangeslider__active {
+      opacity: 1;
+    }
+  }
+}
+  
+.rangesliderHorizontal {
+  height: 3px;
+  border-radius: 4px;
+  .rangesliderFill {
+    height: 100%;
+    background-color: $color_blue_ranger;
+    border-radius: 4px;
+    top: 0;
+  }
+  .rangesliderHandle, .rangesliderHandle2 {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1rem;
+    top: 1px;
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
+
+.rangesliderReverse {
+  &.rangesliderHorizontal {
+    .rangesliderFill {
+      right: 0;
+    }
+  }
+  &.rangesliderVertical {
+    .rangesliderFill {
+      top: 0;
+      bottom: inherit;
+    }
+  }
+}
+
+.valuesContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.value {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  border-radius: 3px;
+  background-color: $color_grey_ranger_value;
+  font-size: 1.75rem;
+  color: $color_grey_ranger_value_number;
+}
+
+.leftValue {
+  margin-right: 1rem;
+}
+
+.rightValue {
+  margin-left: 1rem;
+}

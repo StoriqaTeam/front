@@ -30,6 +30,9 @@ type PropsType = {
   forSearch: ?boolean,
   forAutocomlete: ?boolean,
   fullWidth: ?boolean,
+  containerStyle: ?{
+    [name: string]: any,
+  },
 };
 
 class MiniSelect extends Component<PropsType, StateType> {
@@ -91,6 +94,7 @@ class MiniSelect extends Component<PropsType, StateType> {
       fullWidth,
       forSearch,
       forAutocomlete,
+      containerStyle,
     } = this.props;
     const { isExpanded } = this.state;
 
@@ -104,6 +108,7 @@ class MiniSelect extends Component<PropsType, StateType> {
           forAutocomlete,
           fullWidth,
         })}
+        style={containerStyle}
       >
         {label && <div styleName={classNames('label')}>{label}</div>}
         <div styleName={classNames('wrap', { transparent })}>

@@ -2,31 +2,42 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head, pathOr, find, propEq } from 'ramda';
+import { head, pathOr } from 'ramda';
 
 import { Icon } from 'components/Icon';
+import { getNameText } from 'utils';
 
 import { formatPrice } from './utils';
 
 import './CardProduct.scss';
+
+type TranslateType = {
+  text: string,
+  lang: string,
+}
+
+type VariantType = {
+  id: string,
+  rawId: number,
+  product: {
+    id: string,
+    rawId: number,
+    discount: number,
+    photoMain: string,
+    cashback: number,
+    price: number
+  },
+}
 
 type PropsTypes = {
   item: {
     baseProduct: {
       rawId: number,
       storeId: number,
-      name: {
-        lang: string,
-        text: string,
-      },
+      name: Array<TranslateType>,
       currencyId: number,
     },
-    variants: {
-      discount: ?string,
-      photoMain: ?string,
-      cashback: ?string,
-      price: ?string,
-    },
+    variants: Array<VariantType>,
   },
 };
 
@@ -43,13 +54,11 @@ class CardProduct extends PureComponent<PropsTypes> {
     const productId = baseProduct ? baseProduct.rawId : null;
     const storeId = baseProduct ? baseProduct.storeId : null;
     const productLink = (productId && storeId) ? `store/${storeId}/products/${productId}` : '/';
-    const name = baseProduct ? baseProduct.name : null;
-    const title = find(propEq('lang', lang))(name).text;
+    const nameArr = baseProduct ? baseProduct.name : null;
     const img = pathOr(null, ['product', 'photoMain'], head(variants));
     const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
     const discount = pathOr(null, ['product', 'discount'], head(variants));
     const price = undiscountedPrice * (1 - discount);
-    // const currencyId = baseProduct ? baseProduct.currencyId : null;
     const cashback = pathOr(0, ['product', 'cashback'], head(variants));
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
 
@@ -69,7 +78,7 @@ class CardProduct extends PureComponent<PropsTypes> {
             <div styleName="icon">
               <Icon type="qa" size="20" />
             </div>
-            {title && <div styleName="title">{title}</div>}
+            {nameArr && <div styleName="title">{getNameText(nameArr, lang)}</div>}
             <div styleName="price">
               {Boolean(discount) &&
                 <div styleName="undiscountedPrice">
