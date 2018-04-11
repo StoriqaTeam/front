@@ -1,20 +1,17 @@
 // @flow
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 import './Checkbox.scss';
 
 type PropsType = {
   id: string,
   label: boolean,
-  labelStyle: ?{
-    [key: string]: any,
-  },
   isChecked: boolean,
   onChange: Function,
 };
 
-class Checkbox extends PureComponent<PropsTypes> {
+class Checkbox extends PureComponent<PropsType> {
   onChange = () => {
     const { id, onChange } = this.props;
     onChange(id);

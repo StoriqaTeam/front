@@ -13,7 +13,6 @@ import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
 import { AttributeControll } from 'components/AttributeControll';
 
-import CategoriesMenu from './CategoriesMenu';
 import Sidebar from './Sidebar';
 
 import './Products.scss';
@@ -83,12 +82,10 @@ class Products extends PureComponent<PropsType, StateType> {
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProductInCategory', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
     const products = pathOr(null, ['search', 'findProductInCategory', 'edges'], this.props);
     return (
       <div styleName="container">
-        {categories && <CategoriesMenu categories={categories} />}
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <Sidebar>

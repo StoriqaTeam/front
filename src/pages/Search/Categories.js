@@ -15,7 +15,6 @@ import { CardProduct } from 'components/CardProduct';
 import { AttributeControll } from 'components/AttributeControll';
 import { flattenFunc } from 'utils';
 
-import CategoriesMenu from './CategoriesMenu';
 import Sidebar from './Sidebar';
 
 import './Products.scss';
@@ -98,11 +97,9 @@ class Categories extends Component<PropsType, StateType> {
     const priceRange = pathOr(null, ['search', 'findProductWithoutCategory', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
     const catTree = this.generateTree();
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
     const products = pathOr(null, ['search', 'findProductWithoutCategory', 'edges'], this.props);
     return (
       <div styleName="container">
-        {categories && <CategoriesMenu categories={categories} />}
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <Sidebar>

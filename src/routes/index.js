@@ -17,7 +17,6 @@ import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
-import { Product } from 'pages/Manage/Store/Product';
 import Categories from 'pages/Search/Categories';
 
 const routes = (
