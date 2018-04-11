@@ -107,6 +107,12 @@ export default createFragmentContainer(
             }
             metaField {
               values
+              translatedValues {
+                translations {
+                  lang
+                  text
+                }
+              }
             }
           }
         }

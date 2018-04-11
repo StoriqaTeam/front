@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { has } from 'utils';
 import './TabColumn.scss';
 
 type PropsType = {
@@ -10,10 +11,13 @@ type PropsType = {
 
 const TabColumn = (props: PropsType) => (
   <div styleName="container">
-    {props.items.map(({ label, text }) => (
-      <div styleName="columnItem">
-        <h6>{ label }</h6>
-        <small>{ text }</small>
+    {props.items.map((row, index) => (
+      <div
+        key={has(row, 'id') ? row.id : index}
+        styleName="columnItem"
+      >
+        <h6>{ row.label }</h6>
+        <small>{ row.text }</small>
       </div>
     ))}
   </div>

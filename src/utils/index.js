@@ -3,6 +3,7 @@
 export { default as extractAttributes } from './extractAttributes';
 export { default as extractText } from './extractText';
 export { default as fromRelayError } from './fromRelayError';
+export { default as has } from './has';
 export { default as log } from './log';
 export { default as noScroll } from './noScroll';
 export { default as rename, renameCamelCase } from './rename';

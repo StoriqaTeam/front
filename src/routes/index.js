@@ -221,7 +221,7 @@ const routes = (
       />
     </Route>
     <Route
-      path="/store/:storeId/product/:productId"
+      path="/store/:storeId/products/:productId"
       query={graphql`
         query routes_ProductCard_Query($productID: Int!) {
           baseProductWithVariants(id: $productID) {
