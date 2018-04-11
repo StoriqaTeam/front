@@ -5,6 +5,7 @@
 
 .container.inline {
   display: inline-block;
+  vertical-align: middle;
 }
 
 .container > svg {
@@ -36,6 +37,11 @@
 .size-32 {
   width: 4rem;
   height: 4rem;
+}
+
+.size-40 {
+  width: 5rem;
+  height: 5rem;
 }
 
 .isLogo {

@@ -32,10 +32,6 @@ class AutocompleteInput extends Component<PropsType, StateType> {
     this.setState({ labelFloat: Boolean(this.props.value) });
   }
 
-  componentWillReceiveProps(nextProps: PropsType) {
-    this.setState({ labelFloat: Boolean(nextProps.value) });
-  }
-
   input: ?HTMLInputElement;
 
   handleChange = (e: any) => {
@@ -46,7 +42,7 @@ class AutocompleteInput extends Component<PropsType, StateType> {
   handleFocus = () => {
     const { onFocus } = this.props;
     this.setState({
-      labelFloat: !this.state.labelFloat || true,
+      labelFloat: true,
       isFocus: true,
     });
     if (onFocus) onFocus();

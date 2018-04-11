@@ -30,12 +30,17 @@ import Pencil from 'components/Icon/svg/pencil.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
 import Camera from 'components/Icon/svg/camera.svg';
+import Upload from 'components/Icon/svg/upload.svg';
+import Basket from 'components/Icon/svg/basket.svg';
+import CloseArrow from 'components/Icon/svg/closeArrow.svg';
+import OpenArrow from 'components/Icon/svg/openArrow.svg';
+import Heart from 'components/Icon/svg/heart.svg';
 
 import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32,
+  size: 8 | 16 | 20 | 24 | 32 | 40,
   inline: ?boolean,
 };
 
@@ -66,6 +71,11 @@ const iconsMap = {
   magnifier: <Magnifier />,
   qualityAssurance: <QualityAssurance />,
   camera: <Camera />,
+  heart: <Heart />,
+  upload: <Upload />,
+  basket: <Basket />,
+  closeArrow: <CloseArrow />,
+  openArrow: <OpenArrow />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

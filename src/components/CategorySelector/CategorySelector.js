@@ -1,7 +1,8 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import classNames from 'classnames';
+import { find, propEq } from 'ramda';
 
 import LevelList from './LevelList';
 import { getNameText } from './utils';
@@ -137,6 +138,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   }
 
   render() {
+    const { categories } = this.props;
     const {
       lang,
       level1Item,
@@ -144,7 +146,8 @@ class CategorySelector extends React.Component<PropsType, StateType> {
       level3Item,
       isShow,
     } = this.state;
-    const { categories } = this.props;
+    const level2ItemName = level1Item ? find(propEq('lang', lang))(level1Item.name).text : '';
+    const level3ItemName = level2Item ? find(propEq('lang', lang))(level2Item.name).text : '';
     return (
       <div styleName="wrapper">
         <p styleName="label">Category</p>
@@ -163,34 +166,42 @@ class CategorySelector extends React.Component<PropsType, StateType> {
             styleName="menuContainer"
             ref={(node) => { this.categoryWrapp = node; }}
           >
-            <div styleName="label">Категории</div>
             <div styleName="levelWrapper">
               <div styleName="level">
-                <LevelList
-                  items={categories.children}
-                  lang={lang}
-                  onClick={this.handleOnChoose}
-                  selectedItem={level1Item}
-                />
+                <Fragment>
+                  <div styleName="label">Категории</div>
+                  <LevelList
+                    items={categories.children}
+                    lang={lang}
+                    onClick={this.handleOnChoose}
+                    selectedItem={level1Item}
+                  />
+                </Fragment>
               </div>
               <div styleName="level">
                 {level1Item &&
-                  <LevelList
-                    items={level1Item.children}
-                    lang={lang}
-                    onClick={this.handleOnChoose}
-                    selectedItem={level2Item}
-                  />
+                  <Fragment>
+                    <div styleName="label">{level2ItemName}</div>
+                    <LevelList
+                      items={level1Item.children}
+                      lang={lang}
+                      onClick={this.handleOnChoose}
+                      selectedItem={level2Item}
+                    />
+                  </Fragment>
                 }
               </div>
               <div styleName="level">
                 {level2Item &&
-                  <LevelList
-                    items={level2Item.children}
-                    lang={lang}
-                    onClick={this.handleOnChoose}
-                    selectedItem={level3Item}
-                  />
+                  <Fragment>
+                    <div styleName="label">{level3ItemName}</div>
+                    <LevelList
+                      items={level2Item.children}
+                      lang={lang}
+                      onClick={this.handleOnChoose}
+                      selectedItem={level3Item}
+                    />
+                  </Fragment>
                 }
               </div>
             </div>
