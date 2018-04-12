@@ -5,6 +5,8 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
+const cookiesMiddleware = require('universal-cookie-express');
+
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Actions as FarceActions, ServerProtocol } from 'farce';
@@ -16,8 +18,6 @@ import { Provider } from 'react-redux';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-const cookiesMiddleware = require('universal-cookie-express');
-
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
