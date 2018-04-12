@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
-import { filter, startsWith, toUpper } from 'ramda';
+import { filter, startsWith, toUpper, head } from 'ramda';
 import classNames from 'classnames';
 import { withRouter } from 'found';
 
@@ -31,13 +31,14 @@ type StateType = {
 class SearchInput extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    const { searchValue, searchCategories } = this.props;
     this.state = {
-      inputValue: this.props.searchValue,
+      inputValue: searchValue,
       items: [],
       // eslint-disable-next-line
       searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
       isFocus: false,
-      activeItem: { id: 'stores', label: 'Shops' },
+      activeItem: head(searchCategories),
     };
   }
 

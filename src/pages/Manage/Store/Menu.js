@@ -32,7 +32,7 @@ class Menu extends PureComponent<PropsType, StateType> {
         </div>
         <div styleName="title">
           <MultiClamp ellipsis="..." clamp={2}>
-            {'Длинное название магазина что аж не влезает в две строки'}
+            {'The long name of the store that already does not fit into two lines'}
           </MultiClamp>
         </div>
         <div styleName="items">

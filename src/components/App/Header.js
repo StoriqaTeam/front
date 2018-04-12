@@ -93,9 +93,8 @@ class Header extends PureComponent<PropsType> {
                 <div styleName="searchInput">
                   <SearchInput
                     searchCategories={[
-                      { id: 'stores', label: 'Shops' },
                       { id: 'products', label: 'Products' },
-                      { id: 'all', label: 'All' },
+                      { id: 'stores', label: 'Shops' },
                     ]}
                     searchValue={searchValue}
                   />
