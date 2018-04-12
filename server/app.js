@@ -66,7 +66,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
-app.use(async (req, res) => {
+const wrapAsync = (fn) => (req, res, next) => {
+  // Make sure to `.catch()` any errors and pass them along to the `next()`
+  // middleware in the chain, in this case the error handler.
+  fn(req, res, next).catch(next);
+};
+
+app.use(wrapAsync(async (req, res) => {
   const store = createReduxStore(new ServerProtocol(req.url));
   const jwtCookie = req.universalCookies.get('__jwt');
   const jwt = (typeof jwtCookie === 'object') && jwtCookie.value;
@@ -105,7 +111,16 @@ app.use(async (req, res) => {
       </Provider>
     );
   } catch (e) {
-    element = (<div>ERROR :-(</div>)
+    res.status(200).send(`
+      <html>
+      <head>
+        <meta charset="utf-8">
+      </head>
+      <body>
+      <div id="root" style="height: 100%;">Something going wrong, see logs</div>
+      </body>  
+      </html>
+    `);
   }
 
   if (process.env.NODE_ENV === 'development') {
@@ -153,7 +168,7 @@ app.use(async (req, res) => {
   } else {
     return res.status(404).end();
   }
-});
+}));
 
 module.exports = app;
 
