@@ -1,7 +1,10 @@
 /* eslint-disable */
 const app = require('./app');
+const reload = require('express-reload');
 
 const PORT = process.env.PORT || 3003;
+
+app.use(reload(__dirname + '/../src'));
 
 // Why don't I need http createServer
 app.listen(PORT, '0.0.0.0', () => {
