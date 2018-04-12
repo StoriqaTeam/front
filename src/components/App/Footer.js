@@ -21,34 +21,34 @@ const Footer = () => (
                 of legal goods supporting cryptocurrency payments
               </div>
             </div>
-            <div styleName="navBlockItem">
+            <div styleName="navBlockItem market">
               <div styleName="navHeader">
                 <b>Storiqa market</b>
               </div>
-              <a href="/" styleName="navItem">Распродажа</a>
-              <a href="/" styleName="navItem">Рекумендуемое</a>
-              <a href="/" styleName="navItem">Популярное</a>
-              <a href="/" styleName="navItem">Обзоры</a>
+              <a href="/" styleName="navItem">Sale</a>
+              <a href="/" styleName="navItem">Recommended</a>
+              <a href="/" styleName="navItem">Popular</a>
+              <a href="/" styleName="navItem">Reviews</a>
             </div>
-            <div styleName="navBlockItem">
+            <div styleName="navBlockItem sections">
               <div styleName="navHeader">
-                <b>Разделы</b>
+                <b>Sections</b>
               </div>
-              <a href="/" styleName="navItem">Витрина</a>
-              <a href="/" styleName="navItem">Товары</a>
-              <a href="/" styleName="navItem">Магазины</a>
+              <a href="/" styleName="navItem">Showcase</a>
+              <a href="/" styleName="navItem">Goods</a>
+              <a href="/" styleName="navItem">Shops</a>
               <a href="/" styleName="navItem">Storiqa Community</a>
             </div>
-            <div styleName="navBlockItem">
+            <div styleName="navBlockItem services">
               <div styleName="navHeader">
-                <b>Сервисы</b>
+                <b>Services</b>
               </div>
               <a href="/" styleName="navItem">Quality Assurance</a>
               <a href="/" styleName="navItem">Storiqa wallet</a>
             </div>
             <div styleName="navBlockButton">
               <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
-                Стать продавцом
+                Start selling
               </Button>
             </div>
           </div>

@@ -87,7 +87,7 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <Link to="/" styleName="logo">
+                <Link to="/">
                   <Icon type="logo" />
                 </Link>
                 <div styleName="searchInput">

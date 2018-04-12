@@ -62,6 +62,12 @@ class CardProduct extends PureComponent<PropsTypes> {
     const cashback = pathOr(0, ['product', 'cashback'], head(variants));
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
 
+    console.log('---variants', variants);
+    console.log('---price', undiscountedPrice);
+    console.log('---discount', discount);
+    console.log('---price with discount', price);
+    console.log('****************************************************************************');
+
     return (
       <div styleName="container">
         <Link
