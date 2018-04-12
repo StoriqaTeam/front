@@ -2011,6 +2011,7 @@ braces@^2.3.1:
   dependencies:
     arr-flatten "^1.1.0"
     array-unique "^0.3.2"
+    define-property "^1.0.0"
     extend-shallow "^2.0.1"
     fill-range "^4.0.0"
     isobject "^3.0.1"
@@ -3785,6 +3786,13 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   resolved "https://registry.yarnpkg.com/expand-tilde/-/expand-tilde-2.0.2.tgz#97e801aa052df02454de46b02bf621642cdc8502"
   dependencies:
     homedir-polyfill "^1.0.1"
+
+express-reload@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/express-reload/-/express-reload-1.1.0.tgz#f0655c50ae6ea5d5879a43ced77e2407818e2201"
+  dependencies:
+    chokidar "^1.7.0"
+    debug "^2.6.8"
 
 express@^4.13.3, express@^4.16.2:
   version "4.16.2"
