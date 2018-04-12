@@ -162,7 +162,7 @@ export default createPaginationContainer(
       first: { type: "Int", defaultValue: 20 }
       after: { type: "ID", defaultValue: null }
     ) {
-      findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct", filters: ["searchTerm"]) {
+      findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {
         edges {
           node {
             id

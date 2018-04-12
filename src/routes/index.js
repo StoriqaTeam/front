@@ -32,8 +32,9 @@ const routes = (
         }
       `}
       prepareVariables={(...args) => {
-        const queryObj = pathOr('', ['query'], last(args).location);
-        const searchTerm = prepareGetUrl(queryObj);
+        // const queryObj = pathOr('', ['query'], last(args).location);
+        // const searchTerm = prepareGetUrl(queryObj);
+        const searchTerm = { name: '' };
         return ({ searchTerm });
       }}
     />
