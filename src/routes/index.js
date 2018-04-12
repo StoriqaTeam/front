@@ -124,16 +124,18 @@ const routes = (
           }
         `}
         prepareVariables={(...args) => {
-          // http://localhost:3003/products?search=test&category=13&minValue=0&maxValue=1287.4&attrFilters=equal3=blue;equal1=1,50
+          // http://localhost:3003/products?search=test&category=13&minValue=0&maxValue=1287.4&attrFilters=equal.3=blue;equal.1=1,50
           const queryObj = pathOr('', ['query'], last(args).location);
-          console.log('^^^^ products search queryObj: ', queryObj);
+          // console.log('^^^^ products search queryObj: ', queryObj);
           const searchTerm = prepareGetUrl(queryObj);
-          console.log('^^^^ products search searchTerms: ', searchTerm);
+          // console.log('^^^^ products search searchTerms: ', searchTerm);
           if (!searchTerm.categoryId) {
             searchTerm.categoryId = 1;
           }
-          // searchTerm.attrFilters = [];
-          console.log('^^^^ products search searchTerms: ', searchTerm);
+          if (!searchTerm.attrFilters) {
+            searchTerm.attrFilters = [];
+          }
+          console.log('^^^^ products search searchTerms: ', { ...searchTerm });
           return ({ searchTerm });
         }}
       />

@@ -84,6 +84,7 @@ class Products extends PureComponent<PropsType, StateType> {
     const priceRange = pathOr(null, ['search', 'findProductInCategory', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
     const products = pathOr(null, ['search', 'findProductInCategory', 'edges'], this.props);
+    console.log('***** render priceRange: ', {priceRange, props: this.props});
     return (
       <div styleName="container">
         <div styleName="wrapper">

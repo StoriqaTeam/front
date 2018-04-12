@@ -1,6 +1,6 @@
 // @flow
 
-import { map, reduce, find, whereEq, keys } from 'ramda';
+import { isNil, map, reduce, find, filter, whereEq, keys, pipe, split, complement } from 'ramda';
 
 const byLang = (lang: string) => find(whereEq({ lang }));
 
@@ -32,17 +32,23 @@ export const flattenFunc = reduce((acc, nextItem) => {
 const urlToAttr = (item) => {
   const left = item.split('=').length === 2 ? item.split('=')[0] : null;
   const right = item.split('=').length === 2 ? item.split('=')[1] : null;
-  // const right = item.split('=')[1];
   if (!left || !right) return null;
+  const methodName = left.split('.').length === 2 ? left.split('.')[0] : null;
+  const id = left.split('.').length === 2 ? parseInt(left.split('.')[1], 10) : null;
+  if (!methodName || !id) return null;
   return {
-    id: parseInt(left.split('.')[0], 10),
-    equal: {
+    id,
+    [methodName]: {
       values: right.split(','),
     },
   };
 };
 
-const parseAttrFiltersFromUrl = (str: string) => find(item => item !== null, map(urlToAttr, str.split(';')));
+const parseAttrFiltersFromUrl = pipe(
+  split(';'),
+  map(urlToAttr),
+  filter(complement(isNil)),
+);
 
 export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
   switch (next) {
