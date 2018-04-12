@@ -111,16 +111,7 @@ app.use(wrapAsync(async (req, res) => {
       </Provider>
     );
   } catch (e) {
-    res.status(200).send(`
-      <html>
-      <head>
-        <meta charset="utf-8">
-      </head>
-      <body>
-      <div id="root" style="height: 100%;">Something going wrong, see logs</div>
-      </body>  
-      </html>
-    `);
+    element = (<div>ERROR :-(</div>);
   }
 
   if (process.env.NODE_ENV === 'development') {
