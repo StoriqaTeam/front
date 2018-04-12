@@ -1,5 +1,6 @@
 // @flow
 
+export { default as buildWidgets } from './buildWidgets';
 export { default as extractAttributes } from './extractAttributes';
 export { default as extractPhotos } from './extractPhotos';
 export { default as extractText } from './extractText';
