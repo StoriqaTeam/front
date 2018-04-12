@@ -11,7 +11,7 @@ import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import Start from 'pages/Start/Start';
-import Products from 'pages/Search/Products';
+// import Products from 'pages/Search/Products';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
@@ -21,6 +21,22 @@ import Categories from 'pages/Search/Categories';
 
 const routes = (
   <Route>
+    <Route
+      path="/categories"
+      Component={({ search }) => (<Categories search={search} />)}
+      query={graphql`
+        query routes_Categories_Query($searchTerm: SearchProductInput!) {
+          search {
+            ...Categories_search @arguments(text: $searchTerm)
+          }
+        }
+      `}
+      prepareVariables={(...args) => {
+        const queryObj = pathOr('', ['query'], last(args).location);
+        const searchTerm = prepareGetUrl(queryObj);
+        return ({ searchTerm });
+      }}
+    />
     <Route
       path="/"
       Component={App}
@@ -97,23 +113,7 @@ const routes = (
     >
       <Route Component={Start} />
 
-      <Route
-        path="/categories"
-        Component={({ search }) => (<Categories search={search} />)}
-        query={graphql`
-          query routes_Categories_Query($searchTerm: SearchProductWithoutCategoryInput!) {
-            search {
-              ...Categories_search @arguments(text: $searchTerm)
-            }
-          }
-        `}
-        prepareVariables={(...args) => {
-          const queryObj = pathOr('', ['query'], last(args).location);
-          const searchTerm = prepareGetUrl(queryObj);
-          return ({ searchTerm });
-        }}
-      />
-      <Route
+      {/* <Route
         path="/products"
         Component={({ search }) => (<Products search={search} />)}
         query={graphql`
@@ -138,7 +138,7 @@ const routes = (
           console.log('^^^^ products search searchTerms: ', { ...searchTerm });
           return ({ searchTerm });
         }}
-      />
+      /> */}
       <Route
         path="/stores"
         Component={Stores}
