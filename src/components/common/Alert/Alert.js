@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
+import Portal from 'components/Modal/Portal';
 
-import Portal from './Portal';
 import Sad from './svg/sad.svg';
 import Merry from './svg/merry.svg';
 
@@ -31,10 +31,15 @@ class Alert extends Component<PropsTypes, StateTypes> {
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    const { showAlert } = nextProps;
+    const { showAlert: nextShowAlert, isError: nextIsError } = nextProps;
 
-    if (this.props.showAlert !== showAlert) {
-      this.setState({ showAlert });
+    if (this.props.showAlert !== nextShowAlert || nextIsError !== this.props.isError) {
+      this.setState((prevState) => {
+        if (prevState.showAlert !== nextShowAlert) {
+          return { showAlert: nextShowAlert };
+        }
+        return {};
+      });
     }
   }
 

@@ -62,6 +62,7 @@ class Start extends PureComponent<{}> {// eslint-disable-line
 }
 
 Start.contextTypes = {
+  showAlert: PropTypes.func,
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,

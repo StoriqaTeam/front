@@ -5,6 +5,7 @@
   right: 0;
   background-color: #9FC63C;
   z-index: 100;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
 .isError {
@@ -13,7 +14,7 @@
 
 .wrap {
   width: 1360px;
-  height: 12rem;
+  height: 8rem;
   margin: 0 auto;
 }
 
