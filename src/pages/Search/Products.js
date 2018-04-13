@@ -46,7 +46,7 @@ const storesPerRequest = 20;
 class Products extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const priceRange = pathOr(null, ['search', 'findProductInCategory', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
     this.state = {
       volume: 0,
       volume2: priceRange.maxValue,
@@ -81,10 +81,10 @@ class Products extends PureComponent<PropsType, StateType> {
 
   render() {
     const { volume, volume2 } = this.state;
-    const priceRange = pathOr(null, ['search', 'findProductInCategory', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
+    const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
-    const products = pathOr(null, ['search', 'findProductInCategory', 'edges'], this.props);
-    console.log('***** render priceRange: ', {priceRange, props: this.props});
+    const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
+    // console.log('***** render priceRange: ', {priceRange, props: this.props});
     return (
       <div styleName="container">
         <div styleName="wrapper">
@@ -140,64 +140,14 @@ export default createPaginationContainer(
   graphql`
     fragment Products_search on Search
     @argumentDefinitions(
-      text: { type: "SearchProductInsideCategoryInput!" }
+      text: { type: "SearchProductInput!" }
       first: { type: "Int", defaultValue: 20 }
       after: { type: "ID", defaultValue: null }
     ) {
-      findProductInCategory(searchTerm: $text, first: $first, after: $after) @connection(key: "Products_findProductInCategory", filters: ["searchTerm"]) {
+      findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Products_findProduct", filters: ["searchTerm"]) {
         edges {
           node {
             id
-            baseProduct {
-              id
-              rawId
-              currencyId
-              storeId
-              name {
-                text
-                lang
-              }
-            }
-            variants {
-              id
-              rawId
-              product {
-                id
-                rawId
-                discount
-                photoMain
-                cashback
-                price
-              }
-            }
-          }
-        }
-        pageInfo {
-          searchFilters {
-            priceRange {
-              minValue
-              maxValue
-            }
-            attrFilters {
-              attribute {
-                id
-                name {
-                  text
-                  lang
-                }
-                valueType
-                metaField {
-                  uiElement
-                }
-              }
-              equal {
-                values
-              }
-              range {
-                minValue
-                maxValue
-              }
-            }
           }
         }
       }
@@ -205,14 +155,14 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps: props => props.search && props.search.findProductInCategory,
+    getConnectionFromProps: props => props.search && props.search.findProduct,
     getVariables: (props, { count }, prevFragmentVars) => ({
       text: prevFragmentVars.text,
       first: count + storesPerRequest,
-      after: props.search.findProductInCategory.pageInfo.endCursor,
+      after: props.search.findProduct.pageInfo.endCursor,
     }),
     query: graphql`
-      query Products_edges_Query($first: Int, $after: ID, $text: SearchProductInsideCategoryInput!) {
+      query Products_edges_Query($first: Int, $after: ID, $text: SearchProductInput!) {
         search {
           ...Products_search @arguments(first: $first, after: $after, text: $text)
         }

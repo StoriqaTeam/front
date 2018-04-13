@@ -180,15 +180,15 @@ export default createPaginationContainer(
               lang
               text
             }
-            baseProductsWithVariants {
+            baseProducts {
               edges {
                 node {
                   id
                   rawId
                   variants {
-                    id
-                    rawId
-                    product {
+                    all {
+                      id
+                      rawId
                       photoMain
                     }
                   }

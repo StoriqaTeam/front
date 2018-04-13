@@ -71,25 +71,22 @@ export default createFragmentContainer(
   Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
-      findMostViewedProducts(searchTerm: {options: {attrFilters: [],categoriesIds: []}}) {
+      findMostViewedProducts(searchTerm: {options: {attrFilters: []}}) {
         edges {
           node {
             id
             rawId
-            baseProduct {
-              storeId
+            store {
               id
               rawId
-              name {
-                lang
-                text
-              }
-              currencyId
             }
+            name {
+              lang
+              text
+            }
+            currencyId
             variants {
-              id
-              rawId
-              product {
+              first {
                 id
                 rawId
                 discount
@@ -101,25 +98,22 @@ export default createFragmentContainer(
           }
         }
       }
-      findMostDiscountProducts(searchTerm: {options: {attrFilters: [],categoriesIds: []}}) {
+      findMostDiscountProducts(searchTerm: {options: {attrFilters: []}}) {
         edges {
           node {
             id
             rawId
-            baseProduct {
-              storeId
+            store {
               id
               rawId
-              name {
-                lang
-                text
-              }
-              currencyId
             }
+            name {
+              lang
+              text
+            }
+            currencyId
             variants {
-              id
-              rawId
-              product {
+              mostDiscount {
                 id
                 rawId
                 discount
