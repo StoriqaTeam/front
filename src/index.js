@@ -6,7 +6,8 @@ import buildApp from 'components/entry';
 
 import './index.scss';
 
-if (process.env.BROWSER) {
+if (process.env.BROWSER && buildApp) {
+  // $FlowIgnore
   buildApp()
     .then((App) => {
       if (process.env.NODE_ENV === 'development' && module.hot) {
@@ -22,6 +23,7 @@ if (process.env.BROWSER) {
           import('./components/entry.js')
             .then((newInstance) => {
               const rebuildApp = newInstance.default;
+              // $FlowIgnore
               rebuildApp()
                 .then((NewApp) => {
                   // $FlowIgnore
