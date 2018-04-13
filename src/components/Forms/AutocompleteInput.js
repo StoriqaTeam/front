@@ -90,6 +90,7 @@ class AutocompleteInput extends Component<PropsType, StateType> {
             onBlur={this.handleBlur}
             onKeyDown={this.props.onKeyDown}
             onClick={this.props.onClick}
+            data-test={id}
           />
           <hr />
         </div>

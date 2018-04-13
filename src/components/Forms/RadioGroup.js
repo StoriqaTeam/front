@@ -24,6 +24,7 @@ class RadioGroup extends PureComponent<PropsType> {
         onChange={this.handleCheck}
         value={`${item.id}`}
         checked={this.props.checked === item.id}
+        data-test={item.id}
       />
       {item.value}
     </label>

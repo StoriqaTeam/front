@@ -30,9 +30,9 @@ class Stores extends Component<PropsType, StateType> {
     super(props);
     if (storesData) {
       this.state = {
-        category: { id: '1', label: 'Детские товары' },
-        location: { id: '1', label: 'Россия' },
-        sortItem: { id: '1', label: 'Цена (убывание)' },
+        category: { id: '1', label: 'Childens goods' },
+        location: { id: '1', label: 'Russia' },
+        sortItem: { id: '1', label: 'Price (ascending)' },
       };
     }
   }
@@ -67,8 +67,8 @@ class Stores extends Component<PropsType, StateType> {
         <Row>
           <Col size={2}>
             <div styleName="countInfo">
-              <b>{totalCount}</b> магазинов найдено
-              {searchValue && <span> с {searchValue} в названии</span>}
+              <b>{totalCount}</b> stores found
+              {searchValue && <span> with {searchValue} in the title</span>}
             </div>
             <div styleName="filterItem">
               <MiniSelect
@@ -76,8 +76,8 @@ class Stores extends Component<PropsType, StateType> {
                 label="Категория магазина"
                 activeItem={category}
                 items={[
-                  { id: '1', label: 'Детские товары' },
-                  { id: '2', label: 'Недетские товары' },
+                  { id: '1', label: 'Childens goods' },
+                  { id: '2', label: 'Non-childrens goods' },
                 ]}
                 onSelect={this.handleCategory}
               />
@@ -88,8 +88,8 @@ class Stores extends Component<PropsType, StateType> {
                 label="Расположение магазина"
                 activeItem={location}
                 items={[
-                  { id: '1', label: 'Россия' },
-                  { id: '2', label: 'Норвегия' },
+                  { id: '1', label: 'Russia' },
+                  { id: '2', label: 'Norwey' },
                 ]}
                 onSelect={this.handleLocation}
               />
@@ -105,14 +105,14 @@ class Stores extends Component<PropsType, StateType> {
                 </Col>
                 <Col size={6}>
                   <div styleName="sort">
-                    <div styleName="sortLabel">Сортировать по:</div>
+                    <div styleName="sortLabel">Sort by:</div>
                     <div styleName="sortSelect">
                       <MiniSelect
                         forSearch
                         activeItem={sortItem}
                         items={[
-                          { id: '1', label: 'Цена (убывание)' },
-                          { id: '2', label: 'Цена (возрастание)' },
+                          { id: '1', label: 'Price (decrease)' },
+                          { id: '2', label: 'Price (ascending)' },
                         ]}
                         onSelect={this.handleSort}
                       />

@@ -16,7 +16,7 @@ import '../index.scss';
 const cookies = new Cookies();
 const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
 
-let returnFunc = () => {};
+let returnFunc = () => {}; // eslint-disable-line
 
 if (process.env.BROWSER) {
   // eslint-disable-next-line

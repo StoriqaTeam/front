@@ -38,7 +38,7 @@ class Start extends PureComponent<{}> {// eslint-disable-line
           <div styleName="item">
             <GoodsSlider
               items={mostViewedProducts}
-              title="Популярное"
+              title="Most Popular"
             />
           </div>
         }
@@ -46,7 +46,7 @@ class Start extends PureComponent<{}> {// eslint-disable-line
           <div styleName="item">
             <GoodsSlider
               items={mostDiscountProducts}
-              title="Распродажа"
+              title="Sale"
             />
           </div>
         }
@@ -62,6 +62,7 @@ class Start extends PureComponent<{}> {// eslint-disable-line
 }
 
 Start.contextTypes = {
+  showAlert: PropTypes.func,
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,

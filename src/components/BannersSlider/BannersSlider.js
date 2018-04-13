@@ -15,7 +15,7 @@ const BannersSlider = (props: PropsTypes) => (
     <Slider
       dots
       infinity
-      autoplaySpeed={15000}
+      // autoplaySpeed={15000}
       animationSpeed={500}
       type="banners"
       items={props.items}
@@ -26,7 +26,7 @@ const BannersSlider = (props: PropsTypes) => (
         white
         href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}
       >
-        Стать продавцом
+        Start selling
       </Button>
     </div>
   </div>

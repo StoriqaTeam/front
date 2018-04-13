@@ -245,6 +245,7 @@ class Input extends PureComponent<PropsType, StateType> {
           onChange={this.handleChange}
           onKeyPress={this.handleKeyPress}
           placeholder={placeholder}
+          data-test={name}
         />
         {label && (
           <label
