@@ -9,8 +9,8 @@ import './ProductThumbnails.scss';
 type PropsType = {
   title: string,
   thumbnails: {img: string, alt: string}[],
-  row: boolean,
-  onClick: Function,
+  row?: boolean,
+  onClick?: Function,
   srcProp?: string,
 }
 
