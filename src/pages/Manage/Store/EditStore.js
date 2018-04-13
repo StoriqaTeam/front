@@ -69,6 +69,8 @@ class EditStore extends Component<PropsType, StateType> {
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
+        } else {
+          this.context.showAlert('Successfully saved :)');
         }
       },
       onError: (error: Error) => {
@@ -85,10 +87,10 @@ class EditStore extends Component<PropsType, StateType> {
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
+          this.context.showAlert('Something going wrong.', true);
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.context.showAlert('Something going wrong.', true);
       },
     });
   };
@@ -163,4 +165,5 @@ EditStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
+  showAlert: PropTypes.func,
 };

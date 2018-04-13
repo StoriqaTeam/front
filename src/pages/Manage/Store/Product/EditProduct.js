@@ -61,6 +61,8 @@ class EditProduct extends Component<PropsType, StateType> {
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
+        } else {
+          this.context.showAlert('Successfully saved :)');
         }
       },
       onError: (error: Error) => {
@@ -72,8 +74,7 @@ class EditProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.context.showAlert('Something going wrong.', true);
       },
     });
   };
@@ -114,6 +115,7 @@ class EditProduct extends Component<PropsType, StateType> {
 EditProduct.contextTypes = {
   directories: PropTypes.object.isRequired,
   environment: PropTypes.object.isRequired,
+  showAlert: PropTypes.func,
 };
 
 export default createFragmentContainer(

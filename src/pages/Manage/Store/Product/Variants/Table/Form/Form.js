@@ -83,7 +83,7 @@ class Form extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+        this.context.showAlert('Check that form filled with valid data.', true);
       },
     });
   };
@@ -108,7 +108,7 @@ class Form extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+        this.context.showAlert('Check that form filled with valid data.', true);
       },
     });
   };
@@ -266,6 +266,7 @@ class Form extends Component<PropsType, StateType> {
 
 Form.contextTypes = {
   environment: PropTypes.object.isRequired,
+  showAlert: PropTypes.func,
 };
 
 export default Form;

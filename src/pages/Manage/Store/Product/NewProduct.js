@@ -63,6 +63,7 @@ class NewProduct extends Component<PropsType, StateType> {
         const { storeId } = this.props;
         const productId = pathOr(null, ['createBaseProduct', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}/products/${productId}`);
+        this.context.showAlert('Successfully created :)');
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -73,7 +74,7 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
-        alert('Something going wrong :('); // eslint-disable-line
+        this.context.showAlert('Something going wrong.', true);
       },
     });
   };
@@ -105,6 +106,7 @@ class NewProduct extends Component<PropsType, StateType> {
 NewProduct.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object.isRequired,
+  showAlert: PropTypes.func,
 };
 
 export default withRouter(Page(NewProduct));

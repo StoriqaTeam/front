@@ -44,7 +44,7 @@ class OAuthCallback extends PureComponent<PropsType> {
         },
         onError: (error: Error) => {
           log.error(error);
-          alert('Something going wrong.'); // eslint-disable-line
+          this.context.showAlert('Something going wrong.', true);
           this.props.router.replace('/login');
         },
       });
@@ -86,6 +86,7 @@ class OAuthCallback extends PureComponent<PropsType> {
 
 OAuthCallback.contextTypes = {
   environment: PropTypes.object.isRequired,
+  showAlert: PropTypes.func,
 };
 
 export default OAuthCallback;

@@ -71,6 +71,7 @@ class NewStore extends Component<PropsType, StateType> {
       onCompleted: (response: ?Object) => {
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
+        this.context.showAlert('Successfully created :)');
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -88,8 +89,7 @@ class NewStore extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.context.showAlert('Something going wrong.', true);
       },
     });
   };
@@ -132,4 +132,5 @@ NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
+  showAlert: PropTypes.func,
 };

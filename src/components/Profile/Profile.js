@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { specs, validate } from '@storiqa/shared';
 
-import { log, fromRelayError } from 'utils';
+import { log } from 'utils';
 import { UpdateUserMutation } from 'relay/mutations';
 import { Form, UsersTable } from 'components/Profile';
 
@@ -54,10 +54,11 @@ class Profile extends Component<PropsTypes, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, mutationErrors: ?Array<Error>) => {
         log.debug({ response, mutationErrors });
+        this.context.showAlert('Success');
       },
       onError: (error: Error) => {
-        // eslint-disable-next-line
-        alert(JSON.stringify(fromRelayError(error))); // TODO: move to more appropriate place
+        log.debug({ error });
+        this.context.showAlert('Something going wrong', true);
       },
     });
   };
@@ -82,6 +83,7 @@ class Profile extends Component<PropsTypes, StateType> {
 
 Profile.contextTypes = {
   environment: PropTypes.object.isRequired,
+  showAlert: PropTypes.func,
 };
 
 export default createFragmentContainer(

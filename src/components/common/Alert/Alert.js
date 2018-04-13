@@ -15,6 +15,7 @@ type PropsTypes = {
   showAlert: ?boolean,
   text: string,
   isError: ?boolean,
+  onClose: Function,
 };
 
 type StateTypes = {
@@ -44,7 +45,12 @@ class Alert extends Component<PropsTypes, StateTypes> {
   }
 
   onCloseModal = () => {
-    this.setState({ showAlert: false });
+    this.setState((prevState) => {
+      if (prevState.showAlert) {
+        return { showAlert: false };
+      }
+      return {};
+    }, () => this.props.onClose());
   };
 
   render() {

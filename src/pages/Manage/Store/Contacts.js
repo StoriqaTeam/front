@@ -136,6 +136,7 @@ class Contacts extends Component<PropsType, StateType> {
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
+          this.context.showAlert('Something going wrong', true);
         }
       },
       onError: (error: Error) => {
@@ -156,7 +157,7 @@ class Contacts extends Component<PropsType, StateType> {
         }
 
         // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.context.showAlert('Something going wrong.', true);
       },
     });
   };
@@ -232,6 +233,7 @@ class Contacts extends Component<PropsType, StateType> {
 Contacts.contextTypes = {
   environment: PropTypes.object.isRequired,
   currentUser: currentUserShape,
+  showAlert: PropTypes.func,
 };
 
 export default createFragmentContainer(

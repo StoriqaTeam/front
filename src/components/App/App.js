@@ -79,6 +79,7 @@ class App extends Component<PropsType, StateType> {
           showAlert={isAlertShown}
           text={alertText}
           isError={isError}
+          onClose={() => this.setState({ isAlertShown: false })}
         />
         {children && React.cloneElement(children, { me, mainPage })}
       </Fragment>
