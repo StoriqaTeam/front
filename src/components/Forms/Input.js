@@ -83,6 +83,7 @@ class Input extends Component<PropsType, StateType> {
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
         onClick={this.props.onClick}
+        data-test={id}
       /> :
       <input
         id={id}
@@ -92,6 +93,7 @@ class Input extends Component<PropsType, StateType> {
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        data-test={id}
       />
     );
   }

@@ -84,6 +84,7 @@ class Textarea extends Component<PropsType, StateType> {
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
+            data-test={id}
           />
           <hr />
         </div>
