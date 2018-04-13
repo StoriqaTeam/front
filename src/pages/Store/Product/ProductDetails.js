@@ -19,21 +19,12 @@ type MaterialType = {id: string | number, label: string}
 type StateType = {
   sizes: string | number[],
   selected: MaterialType,
-  materials: MaterialType[],
   thumbnails: {id: string | number, img: string, alt: string}[],
 }
 
 class ProductDetails extends PureComponent<{}, StateType> {
   state = {
     selected: null,
-    materials: [
-      { id: '1', label: 'BTC' },
-      { id: '2', label: 'ETH' },
-      { id: '3', label: 'STQ' },
-      { id: '4', label: 'ADA' },
-      { id: '5', label: 'NEM' },
-      { id: '6', label: 'STRAT' },
-    ],
     thumbnails: [
       {
         id: 0,
@@ -66,7 +57,6 @@ class ProductDetails extends PureComponent<{}, StateType> {
   };
   render() {
     const {
-      materials,
       selected,
       thumbnails,
     } = this.state;
@@ -81,6 +71,9 @@ class ProductDetails extends PureComponent<{}, StateType> {
             variants,
           } = context;
           const [size] = extractAttributes(variants, 'Size');
+          const {
+            Material,
+          } = buildWidgets(variants);
           return (
             <div styleName="container">
               <h2>{ extractText(name) }</h2>
@@ -97,8 +90,9 @@ class ProductDetails extends PureComponent<{}, StateType> {
                 sizes={size.values}
               />
               <ProductMaterial
-                selected={selected || materials[0]}
-                materials={materials}
+                title={Material[0].title}
+                selected={selected || Material[0].translatedValues[0]}
+                materials={Material[0].translatedValues}
                 onSelect={this.handleSelected}
               />
               <ProductThumbnails

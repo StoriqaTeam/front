@@ -64,6 +64,11 @@ type WidgetType = {
   value: string | number,
 }
 
+type WidgetValueType = {
+  id: string,
+  label: string,
+}
+
 /**
  * @desc Groups an array of objects by certain property
  * @param {{}[]} array - Array of objects
@@ -84,10 +89,13 @@ function group(array: [], prop: string): {} {
  * @desc Iterates over a translatedValues array and just returns their corresponding translation
  * @param {TranslatedValueType[]} translatedValues
  * @param {string} [lang] = 'EN'
- * @return {string[]}
+ * @return {WidgetValueType[]}
  */
-function translateValues(translatedValues: TranslatedValueType[], lang: string = 'EN'): string[] {
-  return translatedValues.map(({ translations }) => extractText(translations, lang));
+function translateValues(translatedValues: TranslatedValueType[], lang: string = 'EN'): WidgetValueType[] {
+  return translatedValues.map(({ translations }, index) => ({
+    id: `${index}`,
+    label: extractText(translations, lang),
+  }));
 }
 
 const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';

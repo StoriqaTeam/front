@@ -9,6 +9,7 @@ import './ProductMaterial.scss';
 type material = {id: string | number, label: string};
 
 type PropsType = {
+  title: string,
   selected: material,
   materials: material[],
   onSelect: Function,
@@ -17,7 +18,7 @@ type PropsType = {
 const ProductMaterial = (props: PropsType) => (
   <div styleName="container">
     <h4>
-      Материал
+      { props.title }
     </h4>
     <MiniSelect
       forForm
