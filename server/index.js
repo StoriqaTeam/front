@@ -1,16 +1,11 @@
 /* eslint-disable */
 const app = require('./app');
 const reload = require('express-reload');
+const http = require('http');
 
 const PORT = process.env.PORT || 3003;
 
 app.use(reload(__dirname + '/../src'));
-
-// Why don't I need http createServer
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`App listening on port ${PORT}!`)
-});
-app.on('error', onError);
 
 function onError(error) {
   if (error.syscall !== 'listen') {
@@ -33,4 +28,12 @@ function onError(error) {
       throw error;
   }
 }
+
+// var httpServer = http.createServer(app);
+
+// Why don't I need http createServer
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`App listening on port ${PORT}!`)
+}).on('error', onError);;
+
 /* eslint-enable */
