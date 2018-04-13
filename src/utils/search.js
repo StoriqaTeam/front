@@ -1,6 +1,6 @@
 // @flow
 
-import { reduce, find, whereEq, keys } from 'ramda';
+import { isNil, map, reduce, find, filter, whereEq, keys, pipe, split, complement } from 'ramda';
 
 const byLang = (lang: string) => find(whereEq({ lang }));
 
@@ -29,6 +29,27 @@ export const flattenFunc = reduce((acc, nextItem) => {
   ];
 }, []);
 
+const urlToAttr = (item) => {
+  const left = item.split('=').length === 2 ? item.split('=')[0] : null;
+  const right = item.split('=').length === 2 ? item.split('=')[1] : null;
+  if (!left || !right) return null;
+  const methodName = left.split('.').length === 2 ? left.split('.')[0] : null;
+  const id = left.split('.').length === 2 ? parseInt(left.split('.')[1], 10) : null;
+  if (!methodName || !id) return null;
+  return {
+    id,
+    [methodName]: {
+      values: right.split(','),
+    },
+  };
+};
+
+const parseAttrFiltersFromUrl = pipe(
+  split(';'),
+  map(urlToAttr),
+  filter(complement(isNil)),
+);
+
 export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
   switch (next) {
     case 'search':
@@ -51,11 +72,15 @@ export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
           maxValue: parseInt(queryObj[next], 10) || 0,
         },
       };
+    case 'attrFilters':
+      return {
+        ...acc,
+        attrFilters: parseAttrFiltersFromUrl(queryObj[next]),
+      };
     default:
-      return { ...acc, [next]: queryObj[next] };
+      return acc;
   }
 }, {}, keys(queryObj));
-
 
 type ChildrenType = {
   parentId: number,

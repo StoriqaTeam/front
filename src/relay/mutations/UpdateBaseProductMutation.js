@@ -11,7 +11,10 @@ const mutation = graphql`
       category {
         rawId
       }
-      storeId
+      store {
+        id
+        rawId
+      }
       name {
         lang
         text
