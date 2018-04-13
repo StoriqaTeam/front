@@ -57,14 +57,14 @@ class ProductThumbnails extends Component<PropsType, StateType> {
               key={has(thumbnail, 'id') ? thumbnail.id : index}
               onClick={() => this.handleClick(index, {
                 src: thumbnail[srcProp],
-                alt: thumbnail.title || 'storiqa',
+                alt: thumbnail.label || 'storiqa',
               })}
             >
               <figure>
                 <img
                   styleName={clicked === index ? 'clicked' : ''}
                   src={thumbnail[srcProp]}
-                  alt={thumbnail.alt || 'something'}
+                  alt={thumbnail.label || 'something'}
                 />
               </figure>
             </button>
