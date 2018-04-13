@@ -71,8 +71,11 @@ class ProductDetails extends PureComponent<{}, StateType> {
             variants,
           } = context;
           const [size] = extractAttributes(variants, 'Size');
+          /* eslint-disable no-console */
+          console.log('buildWidgets(variants)', buildWidgets(variants));
           const {
             Material,
+            Colour,
           } = buildWidgets(variants);
           return (
             <div styleName="container">
@@ -96,9 +99,10 @@ class ProductDetails extends PureComponent<{}, StateType> {
                 onSelect={this.handleSelected}
               />
               <ProductThumbnails
-                title="Цвет"
+                title={Colour[0].title}
                 row
-                thumbnails={thumbnails}
+                srcProp="img"
+                thumbnails={Colour[0].translatedValues}
               />
             </div>
           );

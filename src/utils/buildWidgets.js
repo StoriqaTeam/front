@@ -67,6 +67,7 @@ type WidgetType = {
 type WidgetValueType = {
   id: string,
   label: string,
+  img?: string,
 }
 
 /**
@@ -86,19 +87,29 @@ function group(array: [], prop: string): {} {
 }
 
 /**
+ * @param {string} image
+ * @return {string}
+ */
+function setImage(image: string): string {
+  const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
+  return isNil(image) ? defaultImage : image;
+}
+
+/**
  * @desc Iterates over a translatedValues array and just returns their corresponding translation
  * @param {TranslatedValueType[]} translatedValues
  * @param {string} [lang] = 'EN'
+ * @param {string} image
  * @return {WidgetValueType[]}
  */
-function translateValues(translatedValues: TranslatedValueType[], lang: string = 'EN'): WidgetValueType[] {
+function translateValues(translatedValues: TranslatedValueType[], lang: string = 'EN', image: string): WidgetValueType[] {
+  const img = setImage(image);
   return translatedValues.map(({ translations }, index) => ({
     id: `${index}`,
     label: extractText(translations, lang),
+    img,
   }));
 }
-
-const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
 
 /**
  * @param {VariantType[]} variants
@@ -123,9 +134,9 @@ export default function buildWidgets(variants: VariantType[]): WidgetType[] {
       return {
         id,
         value,
-        metaField: isNil(metaField) ? defaultImage : metaField,
+        metaField: setImage(metaField),
         title: extractText(name),
-        translatedValues: translateValues(translatedValues),
+        translatedValues: translateValues(translatedValues, 'EN', metaField),
         uiElement,
       };
     });

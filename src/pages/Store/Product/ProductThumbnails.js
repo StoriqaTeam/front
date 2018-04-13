@@ -4,11 +4,14 @@ import React, { Component } from 'react';
 
 import './ProductThumbnails.scss';
 
+import { has } from 'utils';
+
 type PropsType = {
   title: string,
   thumbnails: {img: string, alt: string}[],
   row: boolean,
   onClick: Function,
+  srcProp?: string,
 }
 
 type StateType = {
@@ -20,6 +23,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     title: '',
     row: false,
     onClick: () => {},
+    srcProp: 'src', // THIS is to point object's property that contains image url
   };
   state = {
     clicked: null,
@@ -37,22 +41,30 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     }, onClick(img));
   };
   render() {
-    const { thumbnails, row, title } = this.props;
+    const {
+      thumbnails,
+      row,
+      title,
+      srcProp,
+    } = this.props;
     const { clicked } = this.state;
     return (
       <div styleName="container">
         { title !== '' ? (<h4>{ title }</h4>) : null }
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
-          {thumbnails.map(({ id, src, alt }, index) => (
+          {thumbnails.map((thumbnail, index) => (
             <button
-              key={id}
-              onClick={() => this.handleClick(index, { src, alt })}
+              key={has(thumbnail, 'id') ? thumbnail.id : index}
+              onClick={() => this.handleClick(index, {
+                src: thumbnail[srcProp],
+                alt: thumbnail.title || 'storiqa',
+              })}
             >
               <figure>
                 <img
                   styleName={clicked === index ? 'clicked' : ''}
-                  src={src}
-                  alt={alt}
+                  src={thumbnail[srcProp]}
+                  alt={thumbnail.alt || 'something'}
                 />
               </figure>
             </button>
