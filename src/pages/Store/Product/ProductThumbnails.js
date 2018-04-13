@@ -2,9 +2,9 @@
 
 import React, { Component } from 'react';
 
-import './ProductThumbnails.scss';
-
 import { has } from 'utils';
+
+import './ProductThumbnails.scss';
 
 type PropsType = {
   title: string,

@@ -6,7 +6,8 @@ import './ProductSize.scss';
 
 type PropsType = {
   title: string,
-  sizes: string | number[],
+  sizes: {id: string, label: string}[],
+  sizeProp: string,
 }
 
 type StateType = {
@@ -14,6 +15,9 @@ type StateType = {
 }
 
 class ProductSize extends Component<PropsType, StateType> {
+  static defaultProps = {
+    sizeProp: 'label',
+  };
   state = {
     clicked: null,
   };
@@ -28,7 +32,7 @@ class ProductSize extends Component<PropsType, StateType> {
     });
   };
   render() {
-    const { title, sizes } = this.props;
+    const { title, sizes, sizeProp } = this.props;
     const { clicked } = this.state;
     return (
       <div styleName="container">
@@ -37,13 +41,12 @@ class ProductSize extends Component<PropsType, StateType> {
         </h4>
         <div styleName="sizes">
           {sizes.map((size, index) => (
-            /* eslint-disable react/no-array-index-key */
             <button
-              key={index}
+              key={size.id}
               onClick={() => this.handleClick(index)}
               styleName={`size ${clicked === index ? 'clicked' : ''}`}
             >
-              { size }
+              { size[sizeProp] }
             </button>
           ))}
         </div>

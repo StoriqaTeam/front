@@ -55,19 +55,19 @@ type VariantType = {
   attributes: AttributeValueType[]
 }
 
-type WidgetType = {
-  id: string,
-  metaField: string,
-  title: string,
-  translatedValues: string[],
-  uiElement: string,
-  value: string | number,
-}
-
 type WidgetValueType = {
   id: string,
   label: string,
   img?: string,
+}
+
+type WidgetType = {
+  id: string,
+  image: string,
+  title: string,
+  values: WidgetValueType[],
+  uiElement: string,
+  value: string | number,
 }
 
 /**
@@ -112,6 +112,43 @@ function translateValues(translatedValues: TranslatedValueType[], lang: string =
 }
 
 /**
+ * @param {any[]} array
+ * @return {WidgetValueType[]}
+ */
+function buildWidgetInterface(array: any[]): WidgetValueType[] {
+  return array.map((value, index) => ({
+    id: `${index}`,
+    label: value,
+  }));
+}
+
+/**
+ * @param {AttributeMetaFieldType} metaField
+ * @param {string} image
+ * @return {{values: WidgetValueType[], uiElement: AttributeMetaFieldType.uiElement}}
+ */
+function buildWidgetValues(
+  metaField: AttributeMetaFieldType,
+  image: string,
+): {value: WidgetValueType[], uiElement: string} {
+  const {
+    values,
+    translatedValues,
+    uiElement,
+  } = metaField;
+  if (isNil(values)) {
+    return {
+      values: translateValues(translatedValues, 'EN', image),
+      uiElement,
+    };
+  }
+  return {
+    values: buildWidgetInterface(values),
+    uiElement,
+  };
+}
+
+/**
  * @param {VariantType[]} variants
  * @return {WidgetType[]}
  */
@@ -122,22 +159,14 @@ export default function buildWidgets(variants: VariantType[]): WidgetType[] {
       const {
         value,
         metaField,
-        attribute: {
-          id,
-          name,
-          metaField: {
-            translatedValues,
-            uiElement,
-          },
-        },
+        attribute,
       } = attr;
       return {
-        id,
+        id: attribute.id,
         value,
-        metaField: setImage(metaField),
-        title: extractText(name),
-        translatedValues: translateValues(translatedValues, 'EN', metaField),
-        uiElement,
+        image: setImage(metaField),
+        title: extractText(attribute.name),
+        ...buildWidgetValues(attribute.metaField),
       };
     });
   });
