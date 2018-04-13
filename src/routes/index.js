@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr, last } from 'ramda';
 
 import { log, prepareGetUrl } from 'utils';
+// import { log } from 'utils';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
@@ -32,9 +33,9 @@ const routes = (
         }
       `}
       prepareVariables={(...args) => {
-        // const queryObj = pathOr('', ['query'], last(args).location);
-        // const searchTerm = prepareGetUrl(queryObj);
-        const searchTerm = { name: '' };
+        const queryObj = pathOr('', ['query'], last(args).location);
+        const searchTerm = prepareGetUrl(queryObj);
+        // const searchTerm = { name: '' };
         return ({ searchTerm });
       }}
     />
