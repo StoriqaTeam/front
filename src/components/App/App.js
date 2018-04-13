@@ -1,14 +1,21 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 import { pick } from 'ramda';
 
+import { Alert } from 'components/common/Alert';
 import { currentUserShape } from 'utils/shapes';
 
 import './App.scss';
+
+type StateType = {
+  isAlertShown: boolean,
+  isError: boolean,
+  alertText: string,
+};
 
 type PropsType = {
   me: ?{},
@@ -23,7 +30,13 @@ type PropsType = {
   },
 };
 
-class App extends PureComponent<PropsType> {
+class App extends Component<PropsType, StateType> {
+  state: StateType = {
+    isAlertShown: false,
+    isError: false,
+    alertText: '',
+  };
+
   getChildContext() {
     const {
       languages,
@@ -35,6 +48,7 @@ class App extends PureComponent<PropsType> {
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
+      showAlert: this.showAlert,
       currentUser: pick(['id', 'rawId'], me || {}),
       directories: {
         languages,
@@ -48,10 +62,24 @@ class App extends PureComponent<PropsType> {
     this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
+  showAlert = (text: string, isError: boolean = false) => {
+    this.setState({
+      isAlertShown: true,
+      isError,
+      alertText: text,
+    });
+  };
+
   render() {
     const { me, mainPage, children } = this.props;
+    const { isAlertShown, alertText, isError } = this.state;
     return (
       <Fragment>
+        <Alert
+          showAlert={isAlertShown}
+          text={alertText}
+          isError={isError}
+        />
         {children && React.cloneElement(children, { me, mainPage })}
       </Fragment>
     );
@@ -61,6 +89,7 @@ class App extends PureComponent<PropsType> {
 App.childContextTypes = {
   environment: PropTypes.object.isRequired,
   handleLogin: PropTypes.func,
+  showAlert: PropTypes.func,
   // TODO: create HOC that extract directories from context to props
   // withDirectories(directoriesNames: Array<string> = [])(Component)
   directories: PropTypes.object,

@@ -37,6 +37,7 @@ import Basket from 'components/Icon/svg/basket.svg';
 import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Heart from 'components/Icon/svg/heart.svg';
+import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 
 import './Icon.scss';
 
@@ -80,6 +81,7 @@ const iconsMap = {
   basket: <Basket />,
   closeArrow: <CloseArrow />,
   openArrow: <OpenArrow />,
+  crossWhite: <CrossWhite />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
