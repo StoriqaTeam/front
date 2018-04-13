@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 4rem 0 4rem 4rem;
+  padding: 5.75rem 0 6rem 4rem;
   border-bottom: solid 1px rgba(239,239,239,.41);
 }
 
@@ -23,14 +23,26 @@
 .navBlockLogo {
   align-items: flex-end;
   width: 25%;
-  padding-right: 10rem;
+  padding-right: 5rem;
 }
 
 .navBlockItem {
   align-items: flex-start;
   width: 20%;
-  padding-top: 0.5rem;
-  padding-left: 7rem;
+
+  // delete this styles, then footer will be ready
+  &.market {
+    padding-left: 11rem;
+  }
+
+  &.sections {
+    padding-left: 7.5rem;
+  }
+
+  &.services {
+    padding-left: 2rem;
+  }
+
 }
 
 .navBlockButton {
@@ -55,6 +67,7 @@
 
 .navItem {
   font-size: 14px;
+  line-height: 3.5rem;
   color: $color_grey_text;
 
   &:hover {
@@ -63,14 +76,14 @@
 }
 
 .infoBlock {
-  padding: 3rem 4rem;
+  padding: 3.5rem 4rem;
   text-align: center;
   border-bottom: solid 1px rgba(239,239,239,.41);
 }
 
 .address, .email {
   font-size: 13px;
-  line-height: 13px;
+  line-height: 1.25rem;
   color: rgba(80,80,80,.43);
 }
 
@@ -113,7 +126,7 @@
 }
 
 .rightsBlock {
-  padding: 3rem 4rem;
+  padding: 2rem;
   font-size: 13px;
   color: rgba(80,80,80,.43);
   text-align: center;

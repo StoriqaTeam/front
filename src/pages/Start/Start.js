@@ -38,7 +38,7 @@ class Start extends PureComponent<{}> {// eslint-disable-line
           <div styleName="item">
             <GoodsSlider
               items={mostViewedProducts}
-              title="Популярное"
+              title="Most Popular"
             />
           </div>
         }
@@ -46,7 +46,7 @@ class Start extends PureComponent<{}> {// eslint-disable-line
           <div styleName="item">
             <GoodsSlider
               items={mostDiscountProducts}
-              title="Распродажа"
+              title="Sale"
             />
           </div>
         }

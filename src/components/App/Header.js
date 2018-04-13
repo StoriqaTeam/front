@@ -87,15 +87,14 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <Link to="/" styleName="logo">
+                <Link to="/">
                   <Icon type="logo" />
                 </Link>
                 <div styleName="searchInput">
                   <SearchInput
                     searchCategories={[
-                      { id: 'stores', label: 'Shops' },
                       { id: 'products', label: 'Products' },
-                      { id: 'all', label: 'All' },
+                      { id: 'stores', label: 'Shops' },
                     ]}
                     searchValue={searchValue}
                   />
