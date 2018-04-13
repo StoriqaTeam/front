@@ -1,5 +1,8 @@
 // @flow
 
+import { flatten, isNil } from 'ramda';
+import { extractText } from './index';
+
 type IdType = {
   id?: string,
   rawId?: number,
@@ -52,9 +55,72 @@ type VariantType = {
   attributes: AttributeValueType[]
 }
 
+type WidgetType = {
+  id: string,
+  metaField: string,
+  title: string,
+  translatedValues: string[],
+  uiElement: string,
+  value: string | number,
+}
+
+/**
+ * @desc Groups an array of objects by certain property
+ * @param {{}[]} array - Array of objects
+ * @param {string} prop - The property which by want to group
+ * @return {{prop: []}}
+ */
+function group(array: [], prop: string): {} {
+  return array.reduce((accumulator, current) => {
+    // clone accumulator to avoid 'parameter reassignment'
+    const item = Object.assign({}, accumulator);
+    item[current[prop]] = item[current[prop]] || [];
+    item[current[prop]].push(current);
+    return item;
+  }, Object.create(null));
+}
+
+/**
+ * @desc Iterates over a translatedValues array and just returns their corresponding translation
+ * @param {TranslatedValueType[]} translatedValues
+ * @param {string} [lang] = 'EN'
+ * @return {string[]}
+ */
+function translateValues(translatedValues: TranslatedValueType[], lang: string = 'EN'): string[] {
+  return translatedValues.map(({ translations }) => extractText(translations, lang));
+}
+
+const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
+
 /**
  * @param {VariantType[]} variants
+ * @return {WidgetType[]}
  */
-export default function buildWidgets(variants: VariantType[]) {
-  return variants;
+export default function buildWidgets(variants: VariantType[]): WidgetType[] {
+  const results = variants.map((variant) => {
+    const { attributes } = variant;
+    return attributes.map((attr: AttributeValueType) => {
+      const {
+        value,
+        metaField,
+        attribute: {
+          id,
+          name,
+          metaField: {
+            translatedValues,
+            uiElement,
+          },
+        },
+      } = attr;
+      return {
+        id,
+        value,
+        metaField: isNil(metaField) ? defaultImage : metaField,
+        title: extractText(name),
+        translatedValues: translateValues(translatedValues),
+        uiElement,
+      };
+    });
+  });
+  return group(flatten(results), 'title');
 }

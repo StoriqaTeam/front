@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 
-import { extractText, extractAttributes } from 'utils';
+import { extractText, extractAttributes, buildWidgets } from 'utils';
 
 import {
   ProductContext,

@@ -90,9 +90,11 @@ export default createFragmentContainer(
         }
         shortDescription {
           text
+          lang
         }
         longDescription {
           text
+          lang
         }
       }
       variants {
@@ -102,6 +104,7 @@ export default createFragmentContainer(
           additionalPhotos
         }
         attributes {
+          value
           metaField
           attribute {
             id
@@ -111,6 +114,7 @@ export default createFragmentContainer(
             }
             metaField {
               values
+              uiElement
               translatedValues {
                 translations {
                   lang

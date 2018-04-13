@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 
-import { extractPhotos, isEmpty } from 'utils';
+import { isEmpty } from 'utils';
 
 import { ProductThumbnails, ImageDetail, ProductContext } from './index';
 
@@ -54,10 +54,12 @@ class ProductImage extends PureComponent<{}, StateType> {
     return (
       <ProductContext.Consumer>
         {(context) => {
+          /* eslint-disable no-empty-pattern */
           const {
-            variants,
+            // variants,
           } = context;
-          const { photoMain, additionalPhotos } = extractPhotos(variants);
+          // const { photoMain, additionalPhotos } = extractPhotos(variants);
+          const additionalPhotos = [];
           return (
             <div styleName="container">
               <div styleName="thumbnailsWrapper">
@@ -72,8 +74,9 @@ class ProductImage extends PureComponent<{}, StateType> {
                 <span styleName="expand">
                   <Expand />
                 </span>
+                {/* 'https://image.ibb.co/bWz177/3.jpg' */}
                 <img
-                  src={!isEmpty(selectedImage) ? selectedImage.src : photoMain}
+                  src={!isEmpty(selectedImage) ? selectedImage.src : 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png'}
                   alt=""
                 />
                 <ImageDetail />
