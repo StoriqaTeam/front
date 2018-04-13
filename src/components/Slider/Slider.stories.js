@@ -4,13 +4,17 @@ import { storiesOf } from '@storybook/react';
 import { Slider } from 'components/Slider';
 
 import mostPopularGoods from './mostPopularGoods.json';
+import mostPopularGoodsNew from './mostPopularGoods_new.json';
+import staticBanners from './staticBanners.json';
 
 storiesOf('Slider', module)
   .add('Most popular', () => (
     <Slider
-      title="Most popular"
-      type="most-popular"
-      items={mostPopularGoods}
+      infinity
+      animationSpeed={500}
+      title="Популярное"
+      type="products"
+      items={mostPopularGoodsNew}
       slidesToShow={4}
       responsive={[
         { breakpoint: 1200, slidesToShow: 3 },
@@ -21,8 +25,9 @@ storiesOf('Slider', module)
   ))
   .add('Sale', () => (
     <Slider
-      title="Sale"
-      type="sale"
+      animationSpeed={500}
+      title="Распродажа"
+      type="products"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -34,8 +39,9 @@ storiesOf('Slider', module)
   ))
   .add('Smart Reviews', () => (
     <Slider
+      animationSpeed={500}
       title="Smart Reviews"
-      type="smart-reviews"
+      type="products"
       items={mostPopularGoods}
       slidesToShow={4}
       responsive={[
@@ -43,5 +49,16 @@ storiesOf('Slider', module)
         { breakpoint: 992, slidesToShow: 2 },
         { breakpoint: 576, slidesToShow: 1 },
       ]}
+    />
+  ))
+  .add('Static Banners', () => (
+    <Slider
+      dots
+      infinity
+      autoplaySpeed={15000}
+      animationSpeed={500}
+      type="banners"
+      items={staticBanners}
+      slidesToShow={1}
     />
   ));

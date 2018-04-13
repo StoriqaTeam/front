@@ -1,0 +1,11 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.item + .item {
+  margin-top: 1rem;
+}

@@ -5,6 +5,8 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
+const cookiesMiddleware = require('universal-cookie-express');
+
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Actions as FarceActions, ServerProtocol } from 'farce';
@@ -16,26 +18,22 @@ import { Provider } from 'react-redux';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-const cookiesMiddleware = require('universal-cookie-express');
-
-import webpackConfig from '../config/webpack.config.dev';
-
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 
-var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
-var config;
-
-try {
-  config = JSON.parse(babelrc);
-  config.ignore = /\/(build|node_modules)\//;
-} catch (err) {
-  console.error('==>     ERROR: Error parsing your .babelrc.');
-  console.error(err);
+if (process.env.NODE_ENV === 'development') {
+  var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
+  var config;
+  try {
+    config = JSON.parse(babelrc);
+    config.ignore = /\/(build|node_modules)\//;
+  } catch (err) {
+    console.error('==>     ERROR: Error parsing your .babelrc.');
+    console.error(err);
+  }
+  require('babel-register')(config);
 }
-
-require('babel-register')(config);
 
 const app = express();
 
@@ -51,23 +49,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static assets
 if (process.env.NODE_ENV === 'production') {
-  app.use('/static', express.static(path.resolve(__dirname, '..', 'build', 'static')));
+  app.use('/static', express.static('./build/static'));
 } else if (process.env.NODE_ENV === 'development') {
   // Setup logger
   const logger = morgan('combined');
   app.use(logger);
 }
 
-app.use('/favicon.ico', express.static(path.resolve(__dirname, '..', 'build', 'favicon.ico')));
-app.use('/manifest.json', express.static(path.resolve(__dirname, '..', 'build', 'manifest.json')));
+app.use('/favicon.ico', express.static(path.resolve('./build/favicon.ico')));
+app.use('/manifest.json', express.static(path.resolve('./build/manifest.json')));
 
 if (process.env.NODE_ENV === 'development') {
+  const webpackConfig = require('../config/webpack.config.dev');
   const compiler = webpack(webpackConfig);
   app.use(webpackMiddleware(compiler, {stats: {colors: true}}));
   app.use(webpackHotMiddleware(compiler));
 }
 
-app.use(async (req, res) => {
+const wrapAsync = (fn) => (req, res, next) => {
+  // Make sure to `.catch()` any errors and pass them along to the `next()`
+  // middleware in the chain, in this case the error handler.
+  fn(req, res, next).catch(next);
+};
+
+app.use(wrapAsync(async (req, res) => {
   const store = createReduxStore(new ServerProtocol(req.url));
   const jwtCookie = req.universalCookies.get('__jwt');
   const jwt = (typeof jwtCookie === 'object') && jwtCookie.value;
@@ -75,7 +80,7 @@ app.use(async (req, res) => {
 
   store.dispatch(FarceActions.init());
 
-  const matchContext = { store };
+  const matchContext = { store, jwt };
 
   let renderArgs;
   try {
@@ -91,13 +96,24 @@ app.use(async (req, res) => {
     }
     throw e;
   }
-  const element = (
-    <Provider store={store}>
-      <RouterProvider router={renderArgs.router}>
-        {createRender(renderArgs)}
-      </RouterProvider>
-    </Provider>
-  );
+
+  let element;
+  try {
+    const rendered = createRender({
+      renderPending: () => (<div>loading</div>),
+      renderError: ({ error }) => (<div>{error.status === 404 ? 'Not found' : 'Error'}</div>),
+    })(renderArgs);
+    element = (
+      <Provider store={store}>
+        <RouterProvider router={renderArgs.router}>
+          {rendered}
+        </RouterProvider>
+      </Provider>
+    );
+  } catch (e) {
+    element = (<div>ERROR :-(</div>);
+  }
+
   if (process.env.NODE_ENV === 'development') {
     res.status(renderArgs.error ? renderArgs.error.status : 200).send(`
       <!DOCTYPE html>
@@ -107,18 +123,18 @@ app.use(async (req, res) => {
         <link rel="stylesheet" type="text/css" href="/styles.css">
       </head>
       <body>
-      <div id="root" style="height: 100%">${ReactDOMServer.renderToString(element)}</div>
+      <div id="root" style="height: 100%;">${ReactDOMServer.renderToString(element)}</div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}
       </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&libraries=places" type="text/javascript"></script>
       <script src="/static/js/bundle.js"></script>
       </body>  
       </html>
     `);
   } else if (process.env.NODE_ENV === 'production') {
-    const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
-    fs.readFile(filePath, 'utf8', (err, htmlData) => {
+    fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
       if (err) {
         console.error('read err', err);
         return res.status(404).end();
@@ -127,8 +143,8 @@ app.use(async (req, res) => {
       const renderedEl = ReactDOMServer.renderToString(element);
       const RenderedApp = htmlData
         .replace(
-          '<div id="root" style="height: 100%"></div>',
-          `<div id="root" style="height: 100%">${renderedEl}</div>`,
+          '<div id="root" style="height:100%"></div>',
+          `<div id="root" style="height:100%;">${renderedEl}</div>`,
         )
         .replace(
           '<script>window.__RELAY_PAYLOADS__=null</script>',
@@ -143,7 +159,7 @@ app.use(async (req, res) => {
   } else {
     return res.status(404).end();
   }
-});
+}));
 
 module.exports = app;
 

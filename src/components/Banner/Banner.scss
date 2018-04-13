@@ -1,0 +1,17 @@
+.container {
+  position: relative;
+  display: block;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.wrap {
+  position: relative;
+  height: 40rem;
+}
+
+.wrap img {
+  position: absolute;
+  display: block;
+  height: 100%;
+}

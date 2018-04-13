@@ -1,21 +1,30 @@
 // @flow
 
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { pathOr } from 'ramda';
 
 import { Header, Main, Footer } from 'components/App';
 
 import './Page.scss';
 
-export default (OriginalComponent: any) => {
-  const PageDecorator = (props: any) => (
-    <div styleName="container">
-      <Header />
-      <Main>
-        <OriginalComponent {...props} />
-      </Main>
-      <Footer />
-    </div>
-  );
-
-  return PageDecorator;
+type PropsType = {
+  me: ?{},
 };
+
+export default (OriginalComponent: any, withoutCategories: ?boolean) =>
+  class Page extends PureComponent<PropsType> {
+    render() {
+      return (
+        <div styleName="container">
+          <Header
+            user={this.props.me}
+            searchValue={pathOr('', ['match', 'location', 'query', 'search'], this.props)}
+          />
+          <Main withoutCategories={withoutCategories}>
+            <OriginalComponent {...this.props} />
+          </Main>
+          <Footer />
+        </div>
+      );
+    }
+  };

@@ -1,18 +1,20 @@
+// @flow
+
 import React, { PureComponent } from 'react';
 
 import './Checkbox.scss';
 
-type PropsTypes = {
+type PropsType = {
   id: string,
   label: boolean,
   isChecked: boolean,
-  handleCheckboxChange: Function,
+  onChange: Function,
 };
 
-class Checkbox extends PureComponent<PropsTypes> {
-  handleCheckboxChange = () => {
-    const { id, handleCheckboxChange } = this.props;
-    handleCheckboxChange(id);
+class Checkbox extends PureComponent<PropsType> {
+  onChange = () => {
+    const { id, onChange } = this.props;
+    onChange(id);
   }
 
   render() {
@@ -24,7 +26,8 @@ class Checkbox extends PureComponent<PropsTypes> {
           id={id}
           type="checkbox"
           checked={isChecked}
-          onChange={this.handleCheckboxChange}
+          onChange={this.onChange}
+          data-test={id}
         />
         <label htmlFor={id} styleName="label">
           <span styleName="labelText">{label}</span>

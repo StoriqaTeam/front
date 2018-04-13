@@ -1,0 +1,23 @@
+FROM node:9.9-slim
+
+# Installing dependencies
+RUN apt-get update
+RUN apt-get install -y git
+
+RUN mkdir /app
+COPY . /app
+WORKDIR /app
+
+RUN rm -f /app/yarn.lock || true
+
+# Getting ready
+RUN yarn -s --no-progress --non-interactive
+RUN yarn cache clean
+RUN yarn updateSchema:prod
+RUN yarn relay
+
+# Building app
+RUN yarn build
+RUN yarn server:dist:build
+
+EXPOSE 3003

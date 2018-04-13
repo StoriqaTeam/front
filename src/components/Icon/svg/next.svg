@@ -1,29 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="15897 8379 32 32">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #fff;
-        stroke: #dedede;
-      }
-
-      .cls-2, .cls-4 {
-        fill: none;
-      }
-
-      .cls-2 {
-        stroke: #c7c7c7;
-      }
-
-      .cls-3 {
-        stroke: none;
-      }
-    </style>
-  </defs>
-  <g id="Group_675" data-name="Group 675" transform="translate(14641 7183)">
-    <g id="Ellipse_55" data-name="Ellipse 55" class="cls-1" transform="translate(1256 1196)">
-      <circle class="cls-3" cx="16" cy="16" r="16"/>
-      <circle class="cls-4" cx="16" cy="16" r="15.5"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" fill-rule="nonzero" fill="#1E201D">
+            <path d="M9.73336417,5.1026267 C9.59337083,4.9657911 9.36969725,4.9657911 9.2297039,5.1026267 C9.09549975,5.2336731 9.09339459,5.44892603 9.22444099,5.58260389 C9.22549357,5.58365647 10.0789618,6.41414331 11.7848456,8.07406442 L3.35261482,8.07406442 C3.15630836,8.07459071 3,8.22668874 3,8.41773229 C3,8.60930213 3.15630836,8.76613678 3.35261482,8.76613678 L11.7848456,8.76613678 L9.2297039,11.2481241 C9.09444717,11.3823282 9.09339459,11.6012652 9.22812503,11.7365219 C9.37074983,11.8754627 9.59810744,11.8754627 9.73336417,11.7381008 L12.8942666,8.66298379 C13.0284707,8.53825288 13.0358388,8.32826286 12.9111079,8.194585 C12.9075993,8.19072554 11.8483514,7.16007277 9.73336417,5.1026267 Z" id="Shape"></path>
+        </g>
     </g>
-    <path id="Path_304" data-name="Path 304" class="cls-2" d="M-4432-11001h5.051v5.051" transform="translate(-3373.913 12121.277) rotate(45)"/>
-  </g>
 </svg>

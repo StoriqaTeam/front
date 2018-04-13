@@ -1,6 +1,8 @@
+@import "../../styles/variables.scss";
+
 .container {
-  margin-bottom: 4px;
-  padding: 16px 16px 0;
+  margin-bottom: 1rem;
+  padding: 1rem 1rem 0;
 
   &:after {
     content: '';
@@ -9,36 +11,39 @@
   }
 }
 
-.most-popular-color { color: #9239C9; }
-.sale-color { color: #FF508E; }
-.smart-reviews-color { color: #2FBAFD; }
-
 .title {
+  color: $color_black;
   float: left;
   font-size: 20px;
-  line-height: 32px;
+  line-height: 4rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
 .nav {
-  height: 32px;
+  height: 4rem;
+  margin-left: 4rem;
   float: right;
 }
 
 .button {
-  composes: boxShadow1 from global;
-  width: 32px;
-  height: 32px;
-  margin-left: 8px;
   cursor: pointer;
-  border-radius: 50%;
+
+  & + .button {
+    margin-left: 0.75rem;
+  }
 }
 
-.reveal {
-  margin-left: 16px;
-  font-size: 14px;
-  line-height: 32px;
+.reveal, .settings {
+  color: #9C9C9C;
+  font-size: 16px;
+  line-height: 4rem;
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   float: right;
+}
+
+.reveal {
+  margin-left: 3rem;
 }

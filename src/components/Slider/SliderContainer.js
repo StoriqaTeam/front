@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, Children, cloneElement } from 'react';
+import classNames from 'classnames';
 import type { Node } from 'react';
 
 import { SliderHeader } from 'components/Slider';
@@ -9,15 +10,20 @@ import handlerSlide from './handlerSlidesDecorator';
 import './SliderContainer.scss';
 
 type PropsTypes = {
-  type: 'most-popular' | 'sale' | 'smart-reviews',
-  title: string,
-  showAllSlides: boolean,
+  type: string, // Slider type, for example: banners, product card etc.
+  title: string, // Title for product card header
+  slidesToShow: number, // Number of displayed slides
+  animationSpeed: ?number, // Animation speed (ms), default: 500ms
+  dots: ?boolean, // Has dots navigation
   slidesOffset: number,
   visibleSlidesAmount: number,
   totalSlidesAmount: number,
   handleSlide: Function,
   originalComponentRef: Function,
   children: Node,
+  isTransition: boolean,
+  handleDot: Function,
+  num: number,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -25,30 +31,34 @@ class SliderContainer extends Component<PropsTypes> {
     const {
       type,
       title,
-      showAllSlides,
       slidesOffset,
       visibleSlidesAmount,
       totalSlidesAmount,
       handleSlide,
+      isTransition,
+      handleDot,
+      slidesToShow,
+      num,
+      animationSpeed,
+      dots,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
+    const animationSpeedSec = animationSpeed ? animationSpeed / 1000 : 0.5;
 
     return (
       <div styleName="container">
-        <SliderHeader
-          type={type}
+        {type === 'products' && <SliderHeader
           title={title}
           isRevealButton={isRevealButton}
-          showAllSlides={showAllSlides}
           handleSlide={handleSlide}
-        />
+        />}
         <div
           ref={this.props.originalComponentRef}
           styleName="wrapper"
           style={{
-            left: slidesOffset,
-            whiteSpace: showAllSlides ? 'normal' : 'nowrap',
+            left: slidesOffset || '',
+            transition: isTransition ? `left ${animationSpeedSec}s ease-out` : '',
           }}
         >
           {Children.map(this.props.children, child => (
@@ -62,6 +72,19 @@ class SliderContainer extends Component<PropsTypes> {
             </div>
           ))}
         </div>
+        {dots && slidesToShow === 1 &&
+          <div styleName="dots">
+            {Children.map(this.props.children, (child, idx) => (
+              <div
+                styleName={classNames('dot', { active: idx === num })}
+                onClick={() => { handleDot(idx); }}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              />
+            ))}
+          </div>
+        }
       </div>
     );
   }

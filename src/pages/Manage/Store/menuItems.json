@@ -1,0 +1,26 @@
+[
+  {
+    "id": "orders",
+    "title": "Orders"
+  },
+  {
+    "id": "goods",
+    "title": "Goods"
+  },
+  {
+    "id": "settings",
+    "title": "Settings"
+  },
+  {
+    "id": "contacts",
+    "title": "Contacts"
+  },
+  {
+    "id": "employees",
+    "title": "Employees"
+  },
+  {
+    "id": "warehouses",
+    "title": "Warehouses"
+  }
+]

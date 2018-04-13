@@ -1,84 +1,103 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
+import { head, pathOr } from 'ramda';
 
 import { Icon } from 'components/Icon';
+import { getNameText } from 'utils';
 
 import { formatPrice } from './utils';
 
 import './CardProduct.scss';
 
-type PricesTypes = {
-  charCode: number,
-  actualPrice: number,
-  undiscountedPrice: number,
-  discount: number,
+type TranslateType = {
+  text: string,
+  lang: string,
+}
+
+type VariantType = {
+  id: string,
+  rawId: number,
+  product: {
+    id: string,
+    rawId: number,
+    discount: number,
+    photoMain: string,
+    cashback: number,
+    price: number
+  },
 }
 
 type PropsTypes = {
-  data: {
-    title: string,
-    qualityAssurance: boolean,
-    sellerDiscount: number,
-    prices: {
-      [any]: PricesTypes,
+  item: {
+    baseProduct: {
+      rawId: number,
+      storeId: number,
+      name: Array<TranslateType>,
+      currencyId: number,
     },
-    img: string,
+    variants: Array<VariantType>,
   },
 };
 
 class CardProduct extends PureComponent<PropsTypes> {
   render() {
     const {
-      data: {
-        title,
-        qualityAssurance,
-        sellerDiscount,
-        prices,
-        img,
+      item: {
+        baseProduct,
+        variants,
       },
     } = this.props;
+    const lang = 'EN';
+
+    const productId = baseProduct ? baseProduct.rawId : null;
+    const storeId = baseProduct ? baseProduct.storeId : null;
+    const productLink = (productId && storeId) ? `store/${storeId}/products/${productId}` : '/';
+    const nameArr = baseProduct ? baseProduct.name : null;
+    const img = pathOr(null, ['product', 'photoMain'], head(variants));
+    const undiscountedPrice = Number(pathOr(null, ['product', 'price'], head(variants)));
+    const discount = pathOr(null, ['product', 'discount'], head(variants));
+    const price = undiscountedPrice * (1 - discount);
+    const cashback = pathOr(0, ['product', 'cashback'], head(variants));
+    const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
 
     return (
       <div styleName="container">
-        <div styleName="body">
+        <Link
+          to={productLink}
+          styleName="body"
+        >
           <div styleName="top">
-            <img styleName="img" src={img} alt="img" />
-            <div styleName="labels">
-              {sellerDiscount &&
-              <div styleName="seller-discount">
-                <strong>{`-${sellerDiscount}%`}</strong>
-              </div>
-              }
-              {qualityAssurance &&
-              <div styleName="qa-icon">
-                <Icon type="qa" size="24" />
-              </div>
-              }
-            </div>
+            {!img ?
+              <Icon type="camera" size="40" /> :
+              <img styleName="img" src={img} alt="img" />
+            }
           </div>
           <div styleName="bottom">
-            <div styleName="title">{title}</div>
+            <div styleName="icon">
+              <Icon type="qa" size="20" />
+            </div>
+            {nameArr && <div styleName="title">{getNameText(nameArr, lang)}</div>}
             <div styleName="price">
-              <div styleName="left">
-                <div styleName="left-actual-price">
-                  <b>{formatPrice(prices.btc.actualPrice)}</b> {prices.btc.charCode}
+              {Boolean(discount) &&
+                <div styleName="undiscountedPrice">
+                  {formatPrice(undiscountedPrice)} STQ
                 </div>
-                <div styleName="undiscounted-price">
-                  {formatPrice(prices.btc.undiscountedPrice)} {prices.btc.charCode}
+              }
+              {price &&
+                <div styleName="actualPrice">
+                  <strong>{formatPrice(price)} STQ</strong>
                 </div>
-              </div>
-              <div styleName="right">
-                <div styleName="price-discount">
-                  {`-${prices.stq.discount}%`}
+              }
+              {cashbackValue &&
+                <div styleName="cashbackWrap">
+                  <div styleName="cashback">Cashback {`${cashbackValue}%`}</div>
                 </div>
-                <div styleName="right-actual-price">
-                  {prices.stq.charCode} {formatPrice(prices.stq.actualPrice)}
-                </div>
-              </div>
+              }
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     );
   }

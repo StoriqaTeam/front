@@ -1,0 +1,46 @@
+@import '../../../../../../../styles/variables';
+
+.container {
+  margin-bottom: 2rem;
+}
+
+.upload {
+  display: inline-block;
+  width: 15rem;
+  height: 15rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  vertical-align: bottom;
+}
+
+.items {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.item {
+  display: inline-block;
+  width: 15rem;
+  height: 15rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  vertical-align: bottom;
+  overflow: hidden;
+}
+
+.itemWrap {
+  display: flex;
+  justify-content: center;
+  height: 15rem;
+
+  & > img {
+    height: 100%;
+  }
+}
+
+.labelSmall {
+  font-family: Roboto;
+  color: $color_grey_bg;
+  font-size: 12px;
+}
