@@ -104,9 +104,9 @@ class Authorization extends Component<PropsType, StateType> {
   handleLoginClick = () => {
     this.setState({ isLoad: true, errors: null });
     const { alone } = this.props;
-    const { username, password } = this.state;
+    const { email, password } = this.state;
     GetJWTByEmailMutation.commit({
-      email: username,
+      email,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
