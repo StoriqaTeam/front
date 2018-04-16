@@ -29,8 +29,6 @@ class ProductSize extends Component<PropsType, StateType> {
    * @return {void}
    */
   handleClick = (index: number, item): void => {
-    /* eslint-disable no-console */
-    console.log('item', item);
     const { onClick } = this.props;
     this.setState({
       clicked: index,

@@ -34,13 +34,27 @@ class ProductDetails extends PureComponent<{}, StateType> {
   /**
    * @param {MaterialType} selected
    * @param {[]} productVariants
+   * @param {string} variantId
    * @return {void}
    */
   handleSelected = (selected: MaterialType, productVariants, variantId: string): void => {
+    this.filter(productVariants, selected, variantId);
+    this.setState({
+      selected
+    });
+  };
+  /**
+   * @param selected
+   * @param productVariants
+   * @param variantId
+   */
+  handleSize = (selected: MaterialType, productVariants, variantId: string): void => {
+    this.filter(productVariants, selected, variantId);
+  };
+  filter = (variants, selected, variantId) => {
     /* eslint-disable no-console */
-    console.log('filterVariants(productVariants, selected, variantId)', filterVariants(productVariants, selected, variantId));
-    console.log('selected', selected);
-    this.setState({ selected });
+    console.log('filterVariants(variants, selected, variantId)', filterVariants(variants, selected, variantId));
+    filterVariants(variants, selected, variantId)
   };
   render() {
     const {

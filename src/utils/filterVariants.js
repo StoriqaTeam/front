@@ -10,6 +10,6 @@ export default function filterVariants(variants, selected, variantId) {
   });
   /* eslint-disable no-console */
   console.log('widgets', widgets);
-  console.log('{ [selected.uiElement]: selected.label }', { [selected.uiElement]: selected.label });
+  console.log('variantId', variantId);
   return findIndex(propEq(selected.uiElement, selected.label))(widgets);
 }

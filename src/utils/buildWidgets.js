@@ -145,6 +145,7 @@ function buildWidgetInterface(array: any[], uiElement: string): WidgetValueType[
 function buildWidgetValues(
   metaField: AttributeMetaFieldType,
   image: string,
+  attributeId: string,
 ): {value: WidgetValueType[], uiElement: string} {
   const {
     values,
@@ -155,11 +156,13 @@ function buildWidgetValues(
     return {
       values: translateValues(translatedValues, 'EN', image, uiElement),
       uiElement,
+      id: attributeId,
     };
   }
   return {
     values: buildWidgetInterface(values, uiElement),
     uiElement,
+    id: attributeId,
   };
 }
 
@@ -179,7 +182,7 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
       value,
       image: setImage(metaField),
       title: extractText(attribute.name),
-      ...buildWidgetValues(attribute.metaField),
+      ...buildWidgetValues(attribute.metaField, attribute.id),
     };
   });
 }
