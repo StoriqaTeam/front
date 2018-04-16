@@ -74,12 +74,18 @@ type WidgetType = {
  * @desc Groups an array of objects by certain property
  * @param {{}[]} array - Array of objects
  * @param {string} prop - The property which by want to group
+ * @param {string} [type] = 'object' - type of object to return could be and object or array
  * @return {{prop: []}}
  */
-function group(array: [], prop: string): {} {
+function group(array: [], prop: string, type: string = 'object'): {} {
   return array.reduce((accumulator, current) => {
     // clone accumulator to avoid 'parameter reassignment'
     const item = Object.assign({}, accumulator);
+    if (type === 'object') {
+      item[current[prop]] = item[current[prop]] || {};
+      item[current[prop]] = current;
+      return item;
+    }
     item[current[prop]] = item[current[prop]] || [];
     item[current[prop]].push(current);
     return item;
@@ -149,26 +155,40 @@ function buildWidgetValues(
 }
 
 /**
+ * @param {AttributeValueType[]} attributes
+ * @return {WidgetType[]}
+ */
+function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
+  return attributes.map((attr: AttributeValueType) => {
+    const {
+      value,
+      metaField,
+      attribute,
+    } = attr;
+    return {
+      id: attribute.id,
+      value,
+      image: setImage(metaField),
+      title: extractText(attribute.name),
+      ...buildWidgetValues(attribute.metaField),
+    };
+  });
+}
+
+/**
  * @param {VariantType[]} variants
  * @return {WidgetType[]}
  */
 export default function buildWidgets(variants: VariantType[]): WidgetType[] {
-  const results = variants.map((variant) => {
-    const { attributes } = variant;
-    return attributes.map((attr: AttributeValueType) => {
-      const {
-        value,
-        metaField,
-        attribute,
-      } = attr;
-      return {
-        id: attribute.id,
-        value,
-        image: setImage(metaField),
-        title: extractText(attribute.name),
-        ...buildWidgetValues(attribute.metaField),
-      };
-    });
-  });
-  return group(flatten(results), 'title');
+  return variants.reduce((current, variant) => {
+    const copy = [...current];
+    const { attributes, id: variantId } = variant;
+    return [
+      ...copy,
+      {
+        variantId,
+        ...group(buildAttribute(attributes), 'uiElement'),
+      },
+    ];
+  }, []);
 }

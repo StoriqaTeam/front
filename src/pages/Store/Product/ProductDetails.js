@@ -20,11 +20,13 @@ type StateType = {
   sizes: string | number[],
   selected: MaterialType,
   thumbnails?: {id: string | number, img: string, alt: string}[],
+  variantSelected: number,
 }
 
 class ProductDetails extends PureComponent<{}, StateType> {
   state = {
     selected: null,
+    variantSelected: 0,
   };
   /**
    * @param {MaterialType} selected
@@ -36,6 +38,7 @@ class ProductDetails extends PureComponent<{}, StateType> {
   render() {
     const {
       selected,
+      variantSelected,
     } = this.state;
     return (
       <ProductContext.Consumer>
@@ -47,11 +50,14 @@ class ProductDetails extends PureComponent<{}, StateType> {
             },
             variants,
           } = context;
+          const productVariants = buildWidgets(variants);
+          /* eslint-disable no-console */
+          console.log('productVariants', productVariants);
           const {
-            Size,
-            Material,
-            Colour,
-          } = buildWidgets(variants);
+            CHECKBOX,
+            COLOR_PICKER,
+            COMBOBOX,
+          } = productVariants[variantSelected];
           return (
             <div styleName="container">
               <h2>{ extractText(name) }</h2>
@@ -64,20 +70,20 @@ class ProductDetails extends PureComponent<{}, StateType> {
                 { extractText(longDescription, 'EN', 'Нет описания') }
               </p>
               <ProductSize
-                title={Size[0].title}
-                sizes={Size[0].values}
+                title={CHECKBOX.title}
+                sizes={CHECKBOX.values}
               />
               <ProductMaterial
-                title={Material[0].title}
-                selected={selected || Material[0].values[0]}
-                materials={Material[0].values}
+                title={COMBOBOX.title}
+                selected={selected || COMBOBOX.values[0]}
+                materials={COMBOBOX.values}
                 onSelect={this.handleSelected}
               />
               <ProductThumbnails
-                title={Colour[0].title}
+                title={COLOR_PICKER.title}
                 row
                 srcProp="img"
-                thumbnails={Colour[0].values}
+                thumbnails={COLOR_PICKER.values}
               />
             </div>
           );
