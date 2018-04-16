@@ -175,7 +175,7 @@ class Authorization extends Component<PropsType, StateType> {
     if (isSignUp) {
       this.setState({ formValid: usernameValid && emailValid && passwordValid });
     } else {
-      this.setState({ formValid: usernameValid && passwordValid });
+      this.setState({ formValid: emailValid && passwordValid });
     }
   };
 

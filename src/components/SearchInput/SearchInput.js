@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
-import { MiniSelect } from 'components/MiniSelect';
 import { Select } from 'components/common/Select';
 
 import './SearchInput.scss';
