@@ -49,6 +49,7 @@ class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    log.info('******* ^^^^^^^ props: ', props);
     this.state = {
       volume: 0,
       volume2: priceRange.maxValue,
