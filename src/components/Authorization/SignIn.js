@@ -46,7 +46,7 @@ class SignIn extends Component<PropsType, StateType> {
       <div styleName="signIn">
         <div styleName="inputBlock">
           <Input
-            label="Username"
+            label="Email"
             name="username"
             type="text"
             model={username}
