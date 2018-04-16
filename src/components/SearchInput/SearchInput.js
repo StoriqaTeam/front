@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
-import { filter, startsWith, toUpper, head } from 'ramda';
+import { filter, startsWith, toUpper, head, pathOr, find, propEq } from 'ramda';
 import classNames from 'classnames';
 import { withRouter } from 'found';
 
@@ -45,6 +45,15 @@ class SearchInput extends Component<PropsType, StateType> {
   componentWillMount() {
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
+    }
+
+    const { searchCategories } = this.props;
+    const pathname = pathOr(null, ['match', 'location', 'pathname'], this.props);
+    const value = pathname.replace('/', '');
+    if (value === 'stores') {
+      this.setState({ activeItem: find(propEq('id', 'stores'))(searchCategories) });
+    } else {
+      this.setState({ activeItem: head(searchCategories) });
     }
   }
 
