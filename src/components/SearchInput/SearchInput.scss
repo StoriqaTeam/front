@@ -10,10 +10,7 @@
   position: relative;
   height: 4rem;
   width: 14rem;
-  border-top: 1px solid #BFBFBF;
-  border-left: 1px solid #BFBFBF;
-  border-bottom: 1px solid #BFBFBF;
-  border-right: 1px solid #e2e2e2; // TODO: optimize
+  border: 1px solid #BFBFBF;
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
 }
@@ -45,13 +42,29 @@
   padding-left: 1.5rem;
 }
 
+.input::-webkit-input-placeholder {color: $color_grey_text; opacity: 0.4;}
+.input::-moz-placeholder {color: $color_grey_text; opacity: 0.4;}
+.input:-ms-input-placeholder {color: $color_grey_text; opacity: 0.4;}
+.input:-moz-placeholder {color: $color_grey_text; opacity: 0.4;}
+
 .searchButton {
   height: 4rem;
   width: 14rem;
   margin-left: -1px;
-  border: 1px solid $color_primary;
+  border: 1px solid $color_blue_1;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  transition: all .3s ease;
+
+  &:hover {
+    background-color: $color_blue_1;
+  }
+
+  & svg {transition: all .3s ease;}
+  &:hover svg {
+    transition: all .3s ease;
+    fill: $color_white;
+  }
 }
 
 .searchButtonIcon {

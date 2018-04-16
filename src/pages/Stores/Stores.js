@@ -5,8 +5,8 @@ import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { map, pathOr } from 'ramda';
 
 import { Page } from 'components/App';
-import { MiniSelect } from 'components/MiniSelect';
-import { Button } from 'components/Button';
+import { Select } from 'components/common/Select';
+import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
 
 import StoreRow from './StoreRow';
@@ -71,9 +71,9 @@ class Stores extends Component<PropsType, StateType> {
               {searchValue && <span> with {searchValue} in the title</span>}
             </div>
             <div styleName="filterItem">
-              <MiniSelect
+              <Select
                 forSearch
-                label="Категория магазина"
+                label="Categories"
                 activeItem={category}
                 items={[
                   { id: '1', label: 'Childens goods' },
@@ -83,9 +83,9 @@ class Stores extends Component<PropsType, StateType> {
               />
             </div>
             <div styleName="filterItem">
-              <MiniSelect
+              <Select
                 forSearch
-                label="Расположение магазина"
+                label="Location"
                 activeItem={location}
                 items={[
                   { id: '1', label: 'Russia' },
@@ -100,14 +100,14 @@ class Stores extends Component<PropsType, StateType> {
               <Row>
                 <Col size={6}>
                   <div styleName="breadcrumbs">
-                    Все магазины / {category.label} / {location.label}
+                    All stores / {category.label}
                   </div>
                 </Col>
                 <Col size={6}>
                   <div styleName="sort">
                     <div styleName="sortLabel">Sort by:</div>
                     <div styleName="sortSelect">
-                      <MiniSelect
+                      <Select
                         forSearch
                         activeItem={sortItem}
                         items={[
@@ -137,10 +137,11 @@ class Stores extends Component<PropsType, StateType> {
             {this.props.relay.hasMore() && (
               <div styleName="button">
                 <Button
+                  big
+                  load
                   onClick={this.storesRefetch}
-                  forLoad
                 >
-                  Загрузить
+                  Load more
                 </Button>
               </div>
             )}

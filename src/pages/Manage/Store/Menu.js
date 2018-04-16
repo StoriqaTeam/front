@@ -25,7 +25,7 @@ class Menu extends PureComponent<PropsType, StateType> {
       <div styleName="menu">
         <div styleName="imgWrap">
           <img
-            src="http://southasia.oneworld.net/ImageCatalog/no-image-icon/image"
+            src="https://i.imgur.com/bY6A3Yz.jpg"
             styleName="img"
             alt="img"
           />
