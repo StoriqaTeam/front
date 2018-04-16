@@ -236,7 +236,7 @@ class Authorization extends Component<PropsType, StateType> {
               handleChange={this.handleChange}
             /> :
             <SignIn
-              username={username}
+              email={email}
               password={password}
               errors={errors}
               formValid={formValid}
