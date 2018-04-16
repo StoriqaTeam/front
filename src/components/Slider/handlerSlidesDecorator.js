@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { head, last, slice, append, prepend } from 'ramda';
 
-type PropsTypes = {
+type PropsType = {
   slidesToShow: number,
   responsive: Object, // Match the breakpoint to the number of slides
   children: Array<{}>,
@@ -12,7 +12,7 @@ type PropsTypes = {
   animationSpeed: number,
 };
 
-type StateTypes = {
+type StateType = {
   sliderWrapperWidth: number,
   visibleSlidesAmount: number,
   totalSlidesAmount: number,
@@ -21,9 +21,11 @@ type StateTypes = {
   children: Array<{}>,
   isTransition: boolean,
   slideWidth: number,
+  isClick: boolean,
 };
 
-export default (OriginalComponent: any) => class HandlerSlideDecorator extends Component<PropsTypes, StateTypes> {// eslint-disable-line
+export default (OriginalComponent: any) =>
+  class HandlerSlideDecorator extends Component<PropsType, StateType> {
   state = {
     sliderWrapperWidth: 0,
     visibleSlidesAmount: 0,
@@ -33,6 +35,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     children: [],
     isTransition: false,
     slideWidth: 0,
+    isClick: false,
   };
 
   componentDidMount() {
@@ -46,7 +49,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     }
   }
 
-  componentWillReceiveProps(nextProps: PropsTypes) {
+  componentWillReceiveProps(nextProps: PropsType) {
     if (this.props.children && this.props.children.length !== nextProps.children.length) {
       this.sliderPropsCalc(nextProps.children);
     }
@@ -314,4 +317,4 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       </OriginalComponent>
     );
   }
-};
+}; // eslint-disable-line
