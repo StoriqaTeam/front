@@ -1,29 +1,35 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { map } from 'ramda';
 
 import { Slider } from 'components/Slider';
 
 import './GoodsSlider.scss';
 
+type ProductType = {
+  rawId: number,
+  store: {
+    rawId: number,
+  },
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  currencyId: number,
+  variants: {
+    first: {
+      rawId: number,
+      discount: number,
+      photoMain: string,
+      cashback: number,
+      price: number,
+    },
+  },
+}
+
 type PropsTypes = {
   items: Array<{
-    node: {
-      baseProduct: {
-        name: {
-          lang: string,
-          text: string,
-        },
-        currencyId: string,
-      },
-      variants: {
-        discount: string,
-        photoMain: string,
-        cashback: string,
-        price: string,
-      },
-    }
+    node: ProductType,
   }>,
   title: string,
 };
@@ -38,7 +44,7 @@ class GoodsSlider extends PureComponent<PropsTypes> {
           animationSpeed={500}
           title={title}
           type="products"
-          items={map(item => item.node, items)}
+          items={items}
           slidesToShow={4}
         />
       </div>

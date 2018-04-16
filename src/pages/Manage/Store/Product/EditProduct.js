@@ -24,7 +24,7 @@ type StateType = {
 };
 
 const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
-const variantsFromProps = pathOr(null, ['me', 'baseProduct', 'variants']);
+const variantsFromProps = pathOr(null, ['me', 'baseProduct', 'variants', 'all']);
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -126,38 +126,38 @@ export default createFragmentContainer(
         rawId
         variants {
           all {
-          id
-          rawId
-          isActive
-          discount
-          photoMain
-          additionalPhotos
-          vendorCode
-          price
-          cashback
-          attributes {
-            value
-            metaField
-            attribute {
-              id
-              rawId
-              name {
-                lang
-                text
-              }
-              valueType
-              metaField {
-                values
-                translatedValues {
-                  translations {
-                    lang
-                    text
-                  }
+            id
+            rawId
+            isActive
+            discount
+            photoMain
+            additionalPhotos
+            vendorCode
+            price
+            cashback
+            attributes {
+              value
+              metaField
+              attribute {
+                id
+                rawId
+                name {
+                  lang
+                  text
                 }
-                uiElement
+                valueType
+                metaField {
+                  values
+                  translatedValues {
+                    translations {
+                      lang
+                      text
+                    }
+                  }
+                  uiElement
+                }
               }
             }
-          }
           }
         }
         category {

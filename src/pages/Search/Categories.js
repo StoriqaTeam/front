@@ -49,6 +49,7 @@ class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    log.info('******* ^^^^^^^ props: ', props);
     this.state = {
       volume: 0,
       volume2: priceRange.maxValue,
@@ -163,12 +164,64 @@ export default createPaginationContainer(
       after: { type: "ID", defaultValue: null }
     ) {
       findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {
+        pageInfo {
+          searchFilters {
+            categories {
+              children {
+                children {
+                  rawId
+                  children {
+                    rawId
+                  }
+                }
+              }
+            }
+            priceRange {
+              minValue
+              maxValue
+            }
+            attrFilters {
+              attribute {
+                id
+              }
+              equal {
+                values
+              }
+              range {
+                minValue
+                maxValue
+              }
+            }
+          }
+        }
         edges {
           node {
             id
             rawId
+            currencyId
             name {
               text
+              lang
+            }
+            category {
+              rawId
+            }
+            variants {
+              all {
+                id
+                rawId
+                discount
+                photoMain
+                cashback
+                price
+                attributes {
+                  attribute {
+                    id
+                  }
+                  value
+                  
+                }
+              }
             }
           }
         }
