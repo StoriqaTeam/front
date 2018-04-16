@@ -1,0 +1,74 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  font-family: $font_medium;
+  height: 4rem;
+  display: inline-block;
+  min-width: 12rem;
+  padding: 0 1rem;
+  border-radius: 0.5rem;
+  line-height: 4rem;
+  text-align: center;
+  cursor: pointer;
+  color: $color_white;
+  font-size: 14px;
+  background: $color_blue_1;
+  white-space: nowrap;
+  transition: all .3s ease;
+
+  &:hover {
+    background: $color_blue_1_hover;
+  }
+}
+
+.big {
+  height: 5rem;
+  line-height: 5rem;
+  padding: 0 4rem;
+  font-size: 16px;
+}
+
+.disabled {
+  background: #EFEFEF;
+  color: $color_white;
+  cursor: default;
+}
+
+.iconic {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 5rem;
+  color: $color_grey_text;
+  font-size: 14px;
+  background-color: #F7F7F7;
+}
+
+.iconic > *:first-child {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.load {
+  font-family: $font_regular;
+  width: 100%;
+  color: $color_grey_text;
+  font-size: 16px;
+  background-color: $color_grey_1;
+
+  &:hover {
+    color: $color_white;
+    background-color: $color_blue_1;
+  }
+}
+
+.contour {
+  color: $color_blue_1;
+  border: 1px solid $color_blue_1;
+  background-color: transparent;
+
+  &:hover {
+    color: $color_white;
+    background-color: $color_blue_1;
+  }
+}

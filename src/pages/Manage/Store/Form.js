@@ -17,8 +17,8 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { Button } from 'components/Button';
-import { MiniSelect } from 'components/MiniSelect';
+import { Button } from 'components/common/Button';
+import { Select } from 'components/common/Select';
 import { Input, Textarea } from 'components/Forms';
 
 import Header from './Header';
@@ -117,10 +117,6 @@ class Form extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
   };
 
-  handleOptionLanguage = (optionLanguage: { id: string, label: string }) => {
-    this.setState({ optionLanguage: toUpper(optionLanguage.id) });
-  };
-
   handleInputChange = (id: string) => (e: any) => {
     const { value } = e.target;
     if (value.length <= 50) {
@@ -211,27 +207,16 @@ class Form extends Component<PropsType, StateType> {
     const {
       langItems,
       form,
-      optionLanguage,
     } = this.state;
     const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
-    const optionLanguageValue = find(propEq('id', toLower(optionLanguage)))(langItems);
 
     return (
       <Fragment>
-        <Header title="Настройки">
-          <div styleName="langSelect">
-            <MiniSelect
-              transparent
-              activeItem={optionLanguageValue}
-              items={langItems}
-              onSelect={this.handleOptionLanguage}
-            />
-          </div>
-        </Header>
+        <Header title="Settings" />
         <div styleName="form">
-          {this.renderInput({ id: 'name', label: 'Название магазина', limit: 50 })}
+          {this.renderInput({ id: 'name', label: 'Store name', limit: 50 })}
           <div styleName="formItem">
-            <MiniSelect
+            <Select
               forForm
               label="Язык магазина"
               activeItem={defaultLanguageValue}
@@ -239,12 +224,13 @@ class Form extends Component<PropsType, StateType> {
               onSelect={this.handleDefaultLanguage}
             />
           </div>
-          {this.renderInput({ id: 'slogan', label: 'Слоган магазина', limit: 50 })}
+          {this.renderInput({ id: 'slogan', label: 'Slogan', limit: 50 })}
           {this.renderInput({ id: 'slug', label: 'Slug', limit: 50 })}
-          {this.renderInput({ id: 'shortDescription', label: 'Краткое описание магазина', limit: 50 })}
-          {this.renderInput({ id: 'longDescription', label: 'Полное описание магазина', limit: 50 })}
+          {this.renderInput({ id: 'shortDescription', label: 'Short description', limit: 50 })}
+          {this.renderInput({ id: 'longDescription', label: 'Long description', limit: 50 })}
           <div styleName="formItem">
             <Button
+              big
               type="button"
               onClick={this.handleSave}
             >

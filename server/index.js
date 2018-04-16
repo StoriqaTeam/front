@@ -3,6 +3,11 @@ const app = require('./app');
 
 const PORT = process.env.PORT || 3003;
 
+if (process.env.NODE_ENV === 'development') {
+  const reload = require('express-reload');
+  app.use(reload(__dirname + '/../src'));
+}
+
 // Why don't I need http createServer
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`App listening on port ${PORT}!`)

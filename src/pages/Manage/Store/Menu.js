@@ -25,14 +25,14 @@ class Menu extends PureComponent<PropsType, StateType> {
       <div styleName="menu">
         <div styleName="imgWrap">
           <img
-            src="http://southasia.oneworld.net/ImageCatalog/no-image-icon/image"
+            src="https://i.imgur.com/bY6A3Yz.jpg"
             styleName="img"
             alt="img"
           />
         </div>
         <div styleName="title">
           <MultiClamp ellipsis="..." clamp={2}>
-            {'Длинное название магазина что аж не влезает в две строки'}
+            {'The long name of the store that already does not fit into two lines'}
           </MultiClamp>
         </div>
         <div styleName="items">

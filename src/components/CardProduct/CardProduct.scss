@@ -3,12 +3,17 @@
 .container {
   position: relative;
   padding: 1rem;
-}
 
-.container:before {
-  content: '';
-  display: block;
-  padding-top: 100%;
+  &:hover .title {
+    transition: all .3s ease;
+    color: $color_blue_1;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
 }
 
 .body {
@@ -24,7 +29,6 @@
 
 .top {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -58,6 +62,7 @@
   color: $color_grey_text;
   font-size: 16px;
   white-space: normal;
+  transition: all .3s ease;
 }
 
 .price {

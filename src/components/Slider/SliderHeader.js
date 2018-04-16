@@ -39,7 +39,7 @@ class SliderHeader extends PureComponent<PropsTypes> {
             </button>
           </div>
         }
-        <a styleName="reveal">Смотреть все</a>
+        <a styleName="reveal">See all</a>
         {false && <a styleName="settings">Настроить рекомендации</a>}
       </div>
     );

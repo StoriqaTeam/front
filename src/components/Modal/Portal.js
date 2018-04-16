@@ -9,23 +9,30 @@ type PropsType = {
 
 class Portal extends Component<PropsType> {
   componentWillMount() {
-    this.popup = document.createElement('div');
+    if (process.env.BROWSER) {
+      this.popup = document.createElement('div');
 
-    if (document.body) {
-      document.body.appendChild(this.popup);
+      if (document.body) {
+        document.body.appendChild(this.popup);
+      }
     }
   }
 
   componentWillUnmount() {
-    if (document.body) {
-      document.body.removeChild(this.popup);
+    if (process.env.BROWSER) {
+      if (document.body) {
+        document.body.removeChild(this.popup);
+      }
     }
   }
 
   popup: any;
 
   render() {
-    return ReactDom.createPortal(this.props.children, this.popup);
+    if (process.env.BROWSER) {
+      return ReactDom.createPortal(this.props.children, this.popup);
+    }
+    return null;
   }
 }
 

@@ -48,7 +48,8 @@ const storesPerRequest = 20;
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const priceRange = pathOr(null, ['search', 'findProductWithoutCategory', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    log.info('******* ^^^^^^^ props: ', props);
     this.state = {
       volume: 0,
       volume2: priceRange.maxValue,
@@ -56,7 +57,7 @@ class Categories extends Component<PropsType, StateType> {
   }
 
   generateTree = () => {
-    const categories = pathOr(null, ['search', 'findProductWithoutCategory', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
+    const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
     if (!categories) return null;
     const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
     const res = level2Filter(flattenFunc(categories));
@@ -94,10 +95,10 @@ class Categories extends Component<PropsType, StateType> {
 
   render() {
     const { volume, volume2 } = this.state;
-    const priceRange = pathOr(null, ['search', 'findProductWithoutCategory', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
+    const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
     const catTree = this.generateTree();
-    const products = pathOr(null, ['search', 'findProductWithoutCategory', 'edges'], this.props);
+    const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
     return (
       <div styleName="container">
         <div styleName="wrapper">
@@ -158,81 +159,67 @@ export default createPaginationContainer(
   graphql`
     fragment Categories_search on Search
     @argumentDefinitions(
-      text: { type: "SearchProductWithoutCategoryInput!" }
+      text: { type: "SearchProductInput!" }
       first: { type: "Int", defaultValue: 20 }
       after: { type: "ID", defaultValue: null }
     ) {
-      findProductWithoutCategory(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProductWithoutCategory", filters: ["searchTerm"]) {
+      findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {
+        pageInfo {
+          searchFilters {
+            categories {
+              children {
+                children {
+                  rawId
+                  children {
+                    rawId
+                  }
+                }
+              }
+            }
+            priceRange {
+              minValue
+              maxValue
+            }
+            attrFilters {
+              attribute {
+                id
+              }
+              equal {
+                values
+              }
+              range {
+                minValue
+                maxValue
+              }
+            }
+          }
+        }
         edges {
           node {
             id
-            baseProduct {
-              id
+            rawId
+            currencyId
+            name {
+              text
+              lang
+            }
+            category {
               rawId
-              currencyId
-              storeId
-              name {
-                text
-                lang
-              }
             }
             variants {
-              id
-              rawId
-              product {
+              all {
                 id
                 rawId
                 discount
                 photoMain
                 cashback
                 price
-              }
-            }
-          }
-        }
-        pageInfo {
-          searchFilters {
-            priceRange {
-              minValue
-              maxValue
-            }
-            categories {
-              id
-              rawId
-              parentId
-              level
-              name {
-                text
-                lang
-              }
-              children {
-                id
-                rawId
-                parentId
-                level
-                name {
-                  text
-                  lang
-                }
-                children {
-                  id
-                  rawId
-                  parentId
-                  level
-                  name {
-                    text
-                    lang
-                  }
-                  children {
+                attributes {
+                  attribute {
                     id
-                    rawId
-                    parentId
-                    level
-                    name {
-                      text
-                      lang
-                    }
                   }
+                  value
+                  
                 }
               }
             }
@@ -243,14 +230,14 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps: props => props.search && props.search.findProductWithoutCategory,
+    getConnectionFromProps: props => props.search && props.search.findProduct,
     getVariables: (props, { count }, prevFragmentVars) => ({
       text: prevFragmentVars.text,
       first: count + storesPerRequest,
-      after: props.search.findProductInCategory.pageInfo.endCursor,
+      after: props.search.findProduct.pageInfo.endCursor,
     }),
     query: graphql`
-      query Categories_edges_Query($first: Int, $after: ID, $text: SearchProductWithoutCategoryInput!) {
+      query Categories_edges_Query($first: Int, $after: ID, $text: SearchProductInput!) {
         search {
           ...Categories_search @arguments(first: $first, after: $after, text: $text)
         }

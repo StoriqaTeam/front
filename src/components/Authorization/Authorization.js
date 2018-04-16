@@ -104,9 +104,9 @@ class Authorization extends Component<PropsType, StateType> {
   handleLoginClick = () => {
     this.setState({ isLoad: true, errors: null });
     const { alone } = this.props;
-    const { username, password } = this.state;
+    const { email, password } = this.state;
     GetJWTByEmailMutation.commit({
-      email: username,
+      email,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
@@ -175,7 +175,7 @@ class Authorization extends Component<PropsType, StateType> {
     if (isSignUp) {
       this.setState({ formValid: usernameValid && emailValid && passwordValid });
     } else {
-      this.setState({ formValid: usernameValid && passwordValid });
+      this.setState({ formValid: emailValid && passwordValid });
     }
   };
 
@@ -236,7 +236,7 @@ class Authorization extends Component<PropsType, StateType> {
               handleChange={this.handleChange}
             /> :
             <SignIn
-              username={username}
+              email={email}
               password={password}
               errors={errors}
               formValid={formValid}

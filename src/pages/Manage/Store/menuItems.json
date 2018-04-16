@@ -1,26 +1,26 @@
 [
   {
     "id": "orders",
-    "title": "Заказы"
+    "title": "Orders"
   },
   {
     "id": "goods",
-    "title": "Товары"
+    "title": "Goods"
   },
   {
     "id": "settings",
-    "title": "Настройки"
+    "title": "Settings"
   },
   {
     "id": "contacts",
-    "title": "Контакты"
+    "title": "Contacts"
   },
   {
     "id": "employees",
-    "title": "Сотрудники"
+    "title": "Employees"
   },
   {
     "id": "warehouses",
-    "title": "Склады"
+    "title": "Warehouses"
   }
 ]

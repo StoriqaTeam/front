@@ -27,6 +27,7 @@ class Checkbox extends PureComponent<PropsType> {
           type="checkbox"
           checked={isChecked}
           onChange={this.onChange}
+          data-test={id}
         />
         <label htmlFor={id} styleName="label">
           <span styleName="labelText">{label}</span>

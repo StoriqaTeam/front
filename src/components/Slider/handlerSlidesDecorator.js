@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { head, last, slice, append, prepend } from 'ramda';
 
-type PropsTypes = {
+type PropsType = {
   slidesToShow: number,
   responsive: Object, // Match the breakpoint to the number of slides
   children: Array<{}>,
@@ -12,7 +12,7 @@ type PropsTypes = {
   animationSpeed: number,
 };
 
-type StateTypes = {
+type StateType = {
   sliderWrapperWidth: number,
   visibleSlidesAmount: number,
   totalSlidesAmount: number,
@@ -21,9 +21,11 @@ type StateTypes = {
   children: Array<{}>,
   isTransition: boolean,
   slideWidth: number,
+  isClick: boolean,
 };
 
-export default (OriginalComponent: any) => class HandlerSlideDecorator extends Component<PropsTypes, StateTypes> {// eslint-disable-line
+export default (OriginalComponent: any) =>
+  class HandlerSlideDecorator extends Component<PropsType, StateType> {
   state = {
     sliderWrapperWidth: 0,
     visibleSlidesAmount: 0,
@@ -33,6 +35,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     children: [],
     isTransition: false,
     slideWidth: 0,
+    isClick: false,
   };
 
   componentDidMount() {
@@ -46,7 +49,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     }
   }
 
-  componentWillReceiveProps(nextProps: PropsTypes) {
+  componentWillReceiveProps(nextProps: PropsType) {
     if (this.props.children && this.props.children.length !== nextProps.children.length) {
       this.sliderPropsCalc(nextProps.children);
     }
@@ -71,12 +74,16 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     if (this.animationAndMoveTimer) {
       clearTimeout(this.animationAndMoveTimer);
     }
+    if (this.refreshTimer) {
+      clearTimeout(this.animationAndMoveTimer);
+    }
   }
 
   autoplayInterval: IntervalID;
   animationTimer: TimeoutID;
   refreshArrayTimer: TimeoutID;
   animationAndMoveTimer: TimeoutID;
+  refreshTimer: TimeoutID;
   originalComponentElement: Element;
 
   activateAutoplayTimer = () => {
@@ -131,19 +138,17 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     const {
       infinity,
       autoplaySpeed,
-      animationSpeed,
-      slidesToShow,
     } = this.props;
     const {
       visibleSlidesAmount,
       slidesOffset,
       totalSlidesAmount,
       num,
-      isTransition,
       slideWidth,
+      isClick,
     } = this.state;
 
-    if (isTransition) { return; }
+    if (isClick) { return; }
 
     if (autoplaySpeed) { this.activateAutoplayTimer(); }
 
@@ -163,22 +168,16 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     const newSlidesOffset = direction === 'next' ? slidesOffset - slideWidth : slidesOffset + slideWidth;
 
     if (infinity) {
-      if (slidesToShow !== 1) {
-        this.swapArray(direction, newNum);
-      } else {
-        this.singleSliderSwapArray(direction, newNum);
-      }
+      this.swapArray(direction, newNum);
+      this.setState({ isClick: true });
     } else {
+      this.startAnimation();
       this.setState({
         slidesOffset: newSlidesOffset,
-        isTransition: true,
         num: newNum,
       });
       this.startAnimation();
     }
-
-    if (this.animationTimer) { clearTimeout(this.animationTimer); }
-    this.animationTimer = setTimeout(this.endAnimation, animationSpeed);
   }
 
   handleDot = (dotIdx: number) => {
@@ -216,47 +215,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
   };
 
   endAnimation = () => {
-    this.setState({ isTransition: false });
-  };
-
-  singleSliderSwapArray = (direction: string, newNum: number) => {
-    const {
-      children,
-      slidesOffset,
-      totalSlidesAmount,
-      slideWidth,
-    } = this.state;
-
-    let newChildren = children;
-    let newSlidesOffset = slidesOffset;
-
-    if (direction === 'prev' && newNum === totalSlidesAmount - 1) {
-      const lastItem = last(children);
-      const slicedItems = slice(0, totalSlidesAmount - 1, children);
-      newChildren = prepend(lastItem, slicedItems);
-      newSlidesOffset = slidesOffset - slideWidth;
-    }
-    if (direction === 'next' && newNum === 0) {
-      const firstItem = head(children);
-      const slicedItems = slice(1, totalSlidesAmount, children);
-      newChildren = append(firstItem, slicedItems);
-      newSlidesOffset = slidesOffset + slideWidth;
-    }
-
-    this.setState(() => ({
-      slidesOffset: newSlidesOffset,
-      num: newNum,
-      children: newChildren,
-    }), () => {
-      this.animationAndMoveTimer = setTimeout(() => {
-        this.startAnimation();
-        this.setState(() => ({
-          slidesOffset: direction === 'next' ? newSlidesOffset - slideWidth : newSlidesOffset + slideWidth,
-        }));
-      }, 0);
-    });
-
-    this.activateRefreshArray(direction, newNum);
+    this.setState({ isTransition: false, isClick: false });
   };
 
   swapArray = (direction: string, newNum: number) => {
@@ -267,6 +226,8 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       slideWidth,
     } = this.state;
 
+    const { animationSpeed } = this.props;
+
     let newChildren = children;
     let newSlidesOffset = slidesOffset;
 
@@ -276,9 +237,6 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       newChildren = prepend(lastItem, slicedItems);
       newSlidesOffset = slidesOffset - slideWidth;
     }
-    if (direction === 'next') {
-      this.activateRefreshArray(direction, newNum);
-    }
 
     this.setState(() => ({
       slidesOffset: newSlidesOffset,
@@ -286,10 +244,19 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       children: newChildren,
     }), () => {
       this.animationAndMoveTimer = setTimeout(() => {
+        if (direction === 'prev') {
+          if (this.animationTimer) { clearTimeout(this.animationTimer); }
+          this.animationTimer = setTimeout(this.endAnimation, animationSpeed);
+        }
         this.startAnimation();
         this.setState(() => ({
-          slidesOffset: direction === 'next' ? newSlidesOffset - slideWidth : newSlidesOffset + slideWidth,
+          slidesOffset: direction === 'next' ? -slideWidth : 0,
         }));
+        this.refreshTimer = setTimeout(() => {
+          if (direction === 'next') {
+            this.activateRefreshArray(direction, newNum);
+          }
+        }, 0);
       }, 0);
     });
   };
@@ -299,11 +266,13 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
     const refreshArray = () => { this.refreshArray(direction, newNum); };
 
     if (this.refreshArrayTimer) { clearTimeout(this.refreshArrayTimer); }
-    this.refreshArrayTimer = setTimeout(refreshArray, animationSpeed);
+    this.refreshArrayTimer = setTimeout(() => {
+      refreshArray();
+      this.endAnimation();
+    }, animationSpeed);
   }
 
   refreshArray = (direction: string, newNum: number) => {
-    const { slidesToShow } = this.props;
     const {
       children,
       slidesOffset,
@@ -320,13 +289,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       newChildren = append(firstItem, slicedItems);
       newSlidesOffset = -(slideWidth * (totalSlidesAmount - 1));
     }
-    if (direction === 'next' && newNum === 0) {
-      const lastItem = last(children);
-      const slicedItems = slice(0, totalSlidesAmount - 1, children);
-      newChildren = prepend(lastItem, slicedItems);
-      newSlidesOffset = 0;
-    }
-    if (direction === 'next' && slidesToShow > 1) {
+    if (direction === 'next') {
       const firstItem = head(children);
       const slicedItems = slice(1, totalSlidesAmount, children);
       newChildren = append(firstItem, slicedItems);
@@ -337,6 +300,7 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       slidesOffset: newSlidesOffset,
       num: newNum,
       children: newChildren,
+      isClick: false,
     });
   };
 
@@ -353,4 +317,4 @@ export default (OriginalComponent: any) => class HandlerSlideDecorator extends C
       </OriginalComponent>
     );
   }
-};
+}; // eslint-disable-line

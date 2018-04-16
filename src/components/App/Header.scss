@@ -28,27 +28,21 @@
 .bottom {
   background-color: $color_white;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   margin-top: 3rem;
 }
 
-.logo {
-  width: 26rem;
-  height: 4rem;
-}
-
 .searchInput {
-  margin-left: 16rem;
+  margin-left: 18rem;
   flex: 1;
 }
 
 .buttonWrapper {
-  margin-left: 2rem;
+  margin-left: 3rem;
 }
 
 .profileIcon {
   width: 4rem;
-  margin-left: 16rem;
 }
 
 .cartIcon {

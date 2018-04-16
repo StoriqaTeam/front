@@ -1,5 +1,6 @@
 [ignore]
 .*/node_modules/webpack-cli/.*
+.*/node_modules/graphql/.*
 
 [include]
 

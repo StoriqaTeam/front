@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   position: relative;
   width: 4rem;
@@ -12,12 +14,13 @@
   width: 4rem;
   height: 4rem;
   padding: 1px;
-  border-radius: 50%;
   overflow: hidden;
-}
 
-.avatar:hover {
-  background-color: #EDEDED;
+  & svg {transition: all .3s ease;}
+  &:hover svg {
+    transition: all .3s ease;
+    fill: $color_blue_1;
+  }
 }
 
 .is-avatar:hover {

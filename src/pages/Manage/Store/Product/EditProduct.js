@@ -23,8 +23,8 @@ type StateType = {
   formErrors: {},
 };
 
-const baseProductFromProps = pathOr(null, ['me', 'baseProductWithVariants', 'baseProduct']);
-const variantsFromProps = pathOr(null, ['me', 'baseProductWithVariants', 'variants']);
+const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
+const variantsFromProps = pathOr(null, ['me', 'baseProduct', 'variants', 'all']);
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -121,59 +121,11 @@ export default createFragmentContainer(
   graphql`
     fragment EditProduct_me on User
     @argumentDefinitions(productId: { type: "Int!" }) {
-      baseProductWithVariants(id: $productID) {
-        baseProduct {
-          id
-          rawId
-          category {
-            rawId
-            id
-            getAttributes {
-              id
-              rawId
-              name {
-                lang
-                text
-              }
-              valueType
-              metaField {
-                values
-                translatedValues {
-                  translations {
-                    lang
-                    text
-                  }
-                }
-                uiElement
-              }
-            }
-          }
-          storeId
-          name {
-            lang
-            text
-          }
-          shortDescription {
-            lang
-            text
-          }
-          longDescription {
-            lang
-            text
-          }
-          seoTitle {
-            lang
-            text
-          }
-          seoDescription {
-            lang
-            text
-          }
-        }
+      baseProduct(id: $productID) {
+        id
+        rawId
         variants {
-          id
-          rawId
-          product {
+          all {
             id
             rawId
             isActive
@@ -183,32 +135,79 @@ export default createFragmentContainer(
             vendorCode
             price
             cashback
-          }
-          attributes {
-            value
-            metaField
-            attribute {
-              id
-              rawId
-              name {
-                lang
-                text
-              }
-              valueType
-              metaField {
-                values
-                translatedValues {
-                  translations {
-                    lang
-                    text
-                  }
+            attributes {
+              value
+              metaField
+              attribute {
+                id
+                rawId
+                name {
+                  lang
+                  text
                 }
-                uiElement
+                valueType
+                metaField {
+                  values
+                  translatedValues {
+                    translations {
+                      lang
+                      text
+                    }
+                  }
+                  uiElement
+                }
               }
             }
           }
         }
+        category {
+          rawId
+          id
+          getAttributes {
+            id
+            rawId
+            name {
+              lang
+              text
+            }
+            valueType
+            metaField {
+              values
+              translatedValues {
+                translations {
+                  lang
+                  text
+                }
+              }
+              uiElement
+            }
+          }
+        }
+        store {
+          id
+          rawId
+        }
+        name {
+          lang
+          text
+        }
+        shortDescription {
+          lang
+          text
+        }
+        longDescription {
+          lang
+          text
+        }
+        seoTitle {
+          lang
+          text
+        }
+        seoDescription {
+          lang
+          text
+        }
       }
     }
-    `,
+  `,
 );
