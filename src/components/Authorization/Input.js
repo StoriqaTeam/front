@@ -73,6 +73,7 @@ class Input extends PureComponent<PropsType, StateType> {
     },
     isCapsLockOn: false,
     validity: null,
+    isFocused: false,
   };
 
   componentDidMount() {
