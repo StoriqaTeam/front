@@ -58,7 +58,6 @@ function passwordQuality(value) {
     lowerCase: /(?=.*?[a-z])/.test(value),
     upperCase: /(?=.*?[A-Z])/.test(value),
     digit: /(?=.*?[0-9])/.test(value),
-    specialCharacter: /(?=.*?[()`=;:'",~{}|<>[\]\\_./#?!@$+%^&*-])/.test(value),
     length: value.length >= 8,
   };
 }
