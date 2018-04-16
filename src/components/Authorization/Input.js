@@ -43,6 +43,7 @@ type StateType = {
   },
   isCapsLockOn: boolean,
   validity: ?boolean,
+  isFocused: boolean,
 }
 
 class Input extends PureComponent<PropsType, StateType> {
@@ -57,6 +58,7 @@ class Input extends PureComponent<PropsType, StateType> {
     className: 'root',
     focus: false,
     detectCapsLock: false,
+    isFocused: false,
   };
   state: StateType = {
     labelFloat: null,
@@ -136,6 +138,7 @@ class Input extends PureComponent<PropsType, StateType> {
         showHints: true,
       });
     }
+    this.setState({ isFocused: true });
   };
 
   /**
@@ -156,6 +159,7 @@ class Input extends PureComponent<PropsType, StateType> {
         showHints: false,
       });
     }
+    this.setState({ isFocused: false });
   };
 
   /**
@@ -226,6 +230,7 @@ class Input extends PureComponent<PropsType, StateType> {
       passwordQuality,
       isCapsLockOn,
       validity,
+      isFocused,
     } = this.state;
 
     return (
@@ -255,7 +260,7 @@ class Input extends PureComponent<PropsType, StateType> {
             { label }
           </label>
         )}
-        {formError && name === 'email' &&
+        {formError && name === 'email' && !isFocused &&
           <span styleName="message">
             {formError}
           </span>
