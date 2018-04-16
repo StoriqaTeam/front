@@ -3,10 +3,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, path, map, pick, pipe, evolve, assoc } from 'ramda';
+import { pathOr, path, map, pipe, evolve, assoc } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
-import { prepareForCardProduct } from 'utils';
 import { Page } from 'components/App';
 import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
