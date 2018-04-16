@@ -177,9 +177,9 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
 
 /**
  * @param {VariantType[]} variants
- * @return {WidgetType[]}
+ * @return {{}[]}
  */
-export default function buildWidgets(variants: VariantType[]): WidgetType[] {
+export default function buildWidgets(variants: VariantType[]) {
   return variants.reduce((current, variant) => {
     const copy = [...current];
     const { attributes, id: variantId } = variant;
