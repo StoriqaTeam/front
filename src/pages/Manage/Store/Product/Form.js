@@ -137,7 +137,7 @@ class Form extends Component<PropsType, StateType> {
   render() {
     return (
       <div styleName="container">
-        <Header title="Товары" />
+        <Header title="Goods" />
         <div styleName="form">
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}

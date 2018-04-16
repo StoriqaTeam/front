@@ -38,7 +38,7 @@ class StoreRow extends PureComponent<PropsType> {
               <div styleName="storeInfo">
                 <div styleName="storeName">{name}</div>
                 <div styleName="storeAdd">
-                  <span>97,5% пол. отзывов</span>
+                  <span>97,5% reviews</span>
                   {productsCount && <span styleName="productsCount">{productsCount} goods</span>}
                 </div>
               </div>

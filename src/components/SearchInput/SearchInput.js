@@ -10,6 +10,7 @@ import { withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
 import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 
 import './SearchInput.scss';
 
@@ -107,7 +108,7 @@ class SearchInput extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
-          <MiniSelect
+          <Select
             forAutocomlete
             activeItem={this.state.activeItem}
             items={this.props.searchCategories || []}
@@ -124,6 +125,7 @@ class SearchInput extends Component<PropsType, StateType> {
                   styleName="input"
                   onFocus={this.onFocus}
                   onBlur={this.onBlur}
+                  placeholder="I find..."
                 />
               </div>
             )}
