@@ -1,6 +1,6 @@
 // @flow
 
-import { flatten, isNil } from 'ramda';
+import { isNil } from 'ramda';
 import { extractText } from './index';
 
 type IdType = {
@@ -106,25 +106,34 @@ function setImage(image: string): string {
  * @param {TranslatedValueType[]} translatedValues
  * @param {string} [lang] = 'EN'
  * @param {string} image
+ * @param {string} uiElement
  * @return {WidgetValueType[]}
  */
-function translateValues(translatedValues: TranslatedValueType[], lang: string = 'EN', image: string): WidgetValueType[] {
+function translateValues(
+  translatedValues: TranslatedValueType[],
+  lang: string = 'EN',
+  image: string,
+  uiElement: string,
+): WidgetValueType[] {
   const img = setImage(image);
   return translatedValues.map(({ translations }, index) => ({
     id: `${index}`,
     label: extractText(translations, lang),
     img,
+    uiElement,
   }));
 }
 
 /**
  * @param {any[]} array
+ * @param {string} uiElement
  * @return {WidgetValueType[]}
  */
-function buildWidgetInterface(array: any[]): WidgetValueType[] {
+function buildWidgetInterface(array: any[], uiElement: string): WidgetValueType[] {
   return array.map((value, index) => ({
     id: `${index}`,
     label: value,
+    uiElement,
   }));
 }
 
@@ -144,12 +153,12 @@ function buildWidgetValues(
   } = metaField;
   if (isNil(values)) {
     return {
-      values: translateValues(translatedValues, 'EN', image),
+      values: translateValues(translatedValues, 'EN', image, uiElement),
       uiElement,
     };
   }
   return {
-    values: buildWidgetInterface(values),
+    values: buildWidgetInterface(values, uiElement),
     uiElement,
   };
 }

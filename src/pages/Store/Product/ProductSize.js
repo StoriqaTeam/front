@@ -8,6 +8,7 @@ type PropsType = {
   title: string,
   sizes: {id: string, label: string}[],
   sizeProp: string,
+  onClick: Function,
 }
 
 type StateType = {
@@ -24,12 +25,16 @@ class ProductSize extends Component<PropsType, StateType> {
   /**
    * Highlights size's border when clicked
    * @param {number} index
+   * @param {{}} item
    * @return {void}
    */
-  handleClick = (index: number): void => {
+  handleClick = (index: number, item): void => {
+    /* eslint-disable no-console */
+    console.log('item', item);
+    const { onClick } = this.props;
     this.setState({
       clicked: index,
-    });
+    }, () => onClick(item));
   };
   render() {
     const { title, sizes, sizeProp } = this.props;
@@ -43,7 +48,7 @@ class ProductSize extends Component<PropsType, StateType> {
           {sizes.map((size, index) => (
             <button
               key={size.id}
-              onClick={() => this.handleClick(index)}
+              onClick={() => this.handleClick(index, size)}
               styleName={`size ${clicked === index ? 'clicked' : ''}`}
             >
               { size[sizeProp] }

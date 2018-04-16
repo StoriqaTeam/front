@@ -2,7 +2,8 @@
 
 import React, { PureComponent } from 'react';
 
-import { extractText, buildWidgets } from 'utils';
+import { extractText, buildWidgets, filterVariants } from 'utils';
+/* eslint-disable */
 
 import {
   ProductContext,
@@ -21,18 +22,24 @@ type StateType = {
   selected: MaterialType,
   thumbnails?: {id: string | number, img: string, alt: string}[],
   variantSelected: number,
+  variants: any[],
 }
 
 class ProductDetails extends PureComponent<{}, StateType> {
   state = {
     selected: null,
     variantSelected: 0,
+    variants: [],
   };
   /**
    * @param {MaterialType} selected
+   * @param {[]} productVariants
    * @return {void}
    */
-  handleSelected = (selected: MaterialType): void => {
+  handleSelected = (selected: MaterialType, productVariants, variantId: string): void => {
+    /* eslint-disable no-console */
+    console.log('filterVariants(productVariants, selected, variantId)', filterVariants(productVariants, selected, variantId));
+    console.log('selected', selected);
     this.setState({ selected });
   };
   render() {
@@ -57,6 +64,7 @@ class ProductDetails extends PureComponent<{}, StateType> {
             CHECKBOX,
             COLOR_PICKER,
             COMBOBOX,
+            variantId,
           } = productVariants[variantSelected];
           return (
             <div styleName="container">
@@ -72,12 +80,13 @@ class ProductDetails extends PureComponent<{}, StateType> {
               <ProductSize
                 title={CHECKBOX.title}
                 sizes={CHECKBOX.values}
+                onClick={val => this.handleSize(val, productVariants, variantId)}
               />
               <ProductMaterial
                 title={COMBOBOX.title}
                 selected={selected || COMBOBOX.values[0]}
                 materials={COMBOBOX.values}
-                onSelect={this.handleSelected}
+                onSelect={val => this.handleSelected(val, productVariants, variantId)}
               />
               <ProductThumbnails
                 title={COLOR_PICKER.title}
