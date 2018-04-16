@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 
 import './Footer.scss';
 

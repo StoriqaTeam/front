@@ -10,12 +10,13 @@ import { Checkbox } from 'components/Checkbox';
 import './Authorization.scss';
 
 type PropsType = {
-  username: string,
+  email: string,
   password: string,
   errors: ?Array<string>,
   formValid: boolean,
   handleLoginClick: Function,
   handleChange: Function,
+  handleBlur: Function,
 }
 
 type StateType = {
@@ -33,12 +34,13 @@ class SignIn extends Component<PropsType, StateType> {
 
   render() {
     const {
-      username,
+      email,
       password,
       errors,
       formValid,
       handleLoginClick,
       handleChange,
+      handleBlur,
     } = this.props;
     const { autocomplete } = this.state;
 
@@ -46,13 +48,15 @@ class SignIn extends Component<PropsType, StateType> {
       <div styleName="signIn">
         <div styleName="inputBlock">
           <Input
-            label="Username"
-            name="username"
+            label="Email"
+            name="email"
             type="text"
-            model={username}
+            model={email}
             onChange={handleChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'email', errors)}
+            onBlur={handleBlur}
+            validate="email"
           />
         </div>
         <div styleName="inputBlock">
