@@ -6,7 +6,6 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
 import {
-  ProductContext,
   ProductImage,
   ProductShare,
   ProductDetails,
@@ -38,8 +37,6 @@ class Product extends PureComponent<PropsType, StateType> {
   };
   render() {
     const { baseProduct } = this.props;
-    /* eslint-disable no-console */
-    console.log('this.props', this.props);
     const { tabs } = this.state;
     return (
       <div styleName="container">
@@ -48,17 +45,18 @@ class Product extends PureComponent<PropsType, StateType> {
           <div styleName="ProductBackground">
             <Container>
               <div styleName="whiteBackground">
-                <ProductContext.Provider value={baseProduct}>
-                  <Row>
-                    <Col size={6}>
-                      <ProductImage />
-                      <ProductShare />
-                    </Col>
-                    <Col size={6}>
-                      <ProductDetails />
-                    </Col>
-                  </Row>
-                </ProductContext.Provider>
+                <Row>
+                  <Col size={6}>
+                    <ProductImage />
+                    <ProductShare />
+                  </Col>
+                  <Col size={6}>
+                    <ProductDetails
+                      baseProduct={baseProduct
+                      }
+                    />
+                  </Col>
+                </Row>
               </div>
             </Container>
           </div>

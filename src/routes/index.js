@@ -207,19 +207,6 @@ const routes = (
             path="/:storeId/product/new"
             Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
           />
-          <Route
-            path=":storeId/products/:productId"
-            Component={EditProduct}
-            query={graphql`
-            query routes_Product_Query($productID: Int!) {
-              me {
-                id
-                ...EditProduct_me @arguments(productId: $productID)
-              }
-            }
-          `}
-            prepareVariables={(_, { params }) => ({ productID: parseInt(params.productId, 10) })}
-          />
         </Route>
       </Route>
 
@@ -277,17 +264,15 @@ const routes = (
           }
         }
       `}
-      prepareVariables={(_, { params }) => {
-        /* eslint-disable no-console */
-        console.log('parseInt(params.productId, 10)', parseInt(params.productId, 10));
-        return { productID: parseInt(params.productId, 10) };
-      }}
-      Component={({ baseProduct, params }) => (
-        <ProductCard
-          storeId={params.storeId}
-          productId={params.productId}
-          baseProduct={baseProduct}
-        />
+      prepareVariables={(_, { params }) => (
+        { productID: parseInt(params.productId, 10) || 0 }
+      )}
+      Component={ProductCard}
+      render={({
+        props,
+        Component,
+      }) => (
+        (Component && props) ? <Component {...props} /> : <div />
       )}
     />
   </Route>
