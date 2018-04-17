@@ -160,8 +160,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   toggleDropdownVariant = () => {
-    // const id = pathOr(null, ['variant', 'rawId'], this.props);
-    // this.props.onExpandClick(id);
+    const id = pathOr(null, ['variant', 'rawId'], this.props);
+    if (this.props.onExpandClick) {
+      this.props.onExpandClick(id);
+    }
   };
 
   valueForAttribute = ({ attr, variant }: { [string]: any }):
