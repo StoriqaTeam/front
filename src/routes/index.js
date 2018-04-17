@@ -271,19 +271,19 @@ const routes = (
       path="/store/:storeId/products/:productId"
       query={graphql`
         query routes_ProductCard_Query($productID: Int!) {
-          baseProductWithVariants(id: $productID) {
-            ...Product_baseProductWithVariants
+          baseProduct(id: $productID) {
+            ...Product_baseProduct
           }
         }
       `}
       prepareVariables={(_, { params }) => (
         { productID: parseInt(params.productId, 10) }
       )}
-      Component={({ baseProductWithVariants, params }) => (
+      Component={({ baseProduct, params }) => (
         <ProductCard
           storeId={params.storeId}
           productId={params.productId}
-          baseProductWithVariants={baseProductWithVariants}
+          baseProductWithVariants={baseProduct}
         />
       )}
     />

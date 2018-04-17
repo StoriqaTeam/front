@@ -19,7 +19,7 @@ import './Product.scss';
 import mockData from './mockData.json';
 
 type PropsType = {
-  baseProductWithVariants: {}
+  baseProduct: {}
 };
 
 type StateType = {
@@ -37,7 +37,9 @@ class Product extends PureComponent<PropsType, StateType> {
     ],
   };
   render() {
-    const { baseProductWithVariants } = this.props;
+    // const { baseProductWithVariants } = this.props;
+    /* eslint-disable no-console */
+    console.log('this.props', this.props);
     const { tabs } = this.state;
     return (
       <div styleName="container">
@@ -46,14 +48,14 @@ class Product extends PureComponent<PropsType, StateType> {
           <div styleName="ProductBackground">
             <Container>
               <div styleName="whiteBackground">
-                <ProductContext.Provider value={baseProductWithVariants}>
+                <ProductContext.Provider value={{}}>
                   <Row>
                     <Col size={6}>
                       <ProductImage />
                       <ProductShare />
                     </Col>
                     <Col size={6}>
-                      <ProductDetails />
+                      {/* <ProductDetails /> */}
                     </Col>
                   </Row>
                 </ProductContext.Provider>
@@ -82,48 +84,18 @@ class Product extends PureComponent<PropsType, StateType> {
 export default createFragmentContainer(
   Product,
   graphql`
-    fragment Product_baseProductWithVariants on BaseProductWithVariants {
-      baseProduct {
-        name {
-          text
-          lang
-        }
-        shortDescription {
-          text
-          lang
-        }
-        longDescription {
-          text
-          lang
-        }
+    fragment Product_baseProduct on BaseProduct {
+      name {
+        text
+        lang
       }
-      variants {
-        id
-        product {
-          photoMain
-          additionalPhotos
-        }
-        attributes {
-          value
-          metaField
-          attribute {
-            id
-            name {
-              text
-              lang
-            }
-            metaField {
-              values
-              uiElement
-              translatedValues {
-                translations {
-                  lang
-                  text
-                }
-              }
-            }
-          }
-        }
+      shortDescription {
+        text
+        lang
+      }
+      longDescription {
+        text
+        lang
       }
     }
   `,
