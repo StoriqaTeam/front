@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr } from 'ramda';
+import { pathOr, map } from 'ramda';
 
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
@@ -41,6 +41,7 @@ class Row extends Component<PropsType, StateType> {
     const vendorCode = pathOr(null, ['vendorCode'], this.props.variant);
     const price = pathOr(null, ['price'], this.props.variant);
     const cashback = pathOr(null, ['cashback'], this.props.variant);
+    const attrs = pathOr([], ['attributes'], this.props.variant);
     return (
       <div styleName="container">
         <div styleName="variant">
@@ -64,7 +65,12 @@ class Row extends Component<PropsType, StateType> {
           <div styleName="variantItem tdCashback">
             <span styleName="text cashbackText">{`${cashback}%`}</span>
           </div>
-          <div styleName="variantItem tdCharacteristics">Characteristics</div>
+          <div styleName="variantItem tdCharacteristics">{map((item) => {
+            const val = pathOr('', ['value'], item);
+            const name = pathOr('', ['attribute', 'name', 0, 'text'], item);
+            return (<div key={`attr-${name}`} styleName="characteristicItem">{`${name}: ${val}`}</div>);
+          }, attrs)}
+          </div>
           <div styleName="variantItem tdCount">8</div>
           <div styleName="variantItem tdBasket">
             <button>
