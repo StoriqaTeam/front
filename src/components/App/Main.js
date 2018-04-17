@@ -20,8 +20,8 @@ class Main extends PureComponent<PropsType> {
     const categories = pathOr(null, ['categories', 'children'], this.context.directories);
     const { withoutCategories } = this.props;
     return (
-      <main styleName="container">
-        <div styleName={classNames('wrap', { isCategories: categories })}>
+      <main styleName={classNames('container', { isCategories: categories })}>
+        <div styleName="wrap">
           {categories && !withoutCategories && <CategoriesMenu categories={categories} />}
           { this.props.children }
         </div>

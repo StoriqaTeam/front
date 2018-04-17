@@ -38,6 +38,7 @@ import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
+import Cats from 'components/Icon/svg/cats.svg';
 
 import './Icon.scss';
 
@@ -82,6 +83,7 @@ const iconsMap = {
   closeArrow: <CloseArrow />,
   openArrow: <OpenArrow />,
   crossWhite: <CrossWhite />,
+  cats: <Cats />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
