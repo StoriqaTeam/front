@@ -43,7 +43,7 @@ type AttrFilterType = {
   },
 }
 
-const storesPerRequest = 20;
+const storesPerRequest = 24;
 
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -114,12 +114,8 @@ class Categories extends Component<PropsType, StateType> {
         },
       }),
     );
-    // const productsWithVariants = map((i) => {
-    //   console.log('^^^^^ i: ', i);
-    //   return variantsToArr('all')(i);
-    // }, products);
     const productsWithVariants = map(variantsToArr('all'), products);
-    console.log('***** Categories products: ', { productsWithVariants });
+    // console.log('***** Categories products: ', { productsWithVariants });
     return (
       <div styleName="container">
         <div styleName="wrapper">
@@ -181,7 +177,7 @@ export default createPaginationContainer(
     fragment Categories_search on Search
     @argumentDefinitions(
       text: { type: "SearchProductInput!" }
-      first: { type: "Int", defaultValue: 20 }
+      first: { type: "Int", defaultValue: 24 }
       after: { type: "ID", defaultValue: null }
     ) {
       findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {

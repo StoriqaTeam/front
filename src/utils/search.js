@@ -1,6 +1,24 @@
 // @flow
 
-import { curry, isNil, map, reduce, find, filter, whereEq, keys, pipe, split, complement, assoc, assocPath, pathOr, evolve, omit } from 'ramda';
+import {
+  when,
+  has,
+  curry,
+  isNil,
+  map,
+  reduce,
+  find,
+  filter,
+  whereEq,
+  keys,
+  pipe,
+  split,
+  complement,
+  assoc,
+  assocPath,
+  path,
+  omit,
+} from 'ramda';
 
 const byLang = (lang: string) => find(whereEq({ lang }));
 
@@ -45,6 +63,7 @@ const urlToAttr = (item) => {
 };
 
 const parseAttrFiltersFromUrl = pipe(
+  path(['attrFilters']),
   split(';'),
   map(urlToAttr),
   filter(complement(isNil)),
@@ -53,53 +72,20 @@ const parseAttrFiltersFromUrl = pipe(
 const renameKeys = curry((keysMap, obj) =>
   reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj)));
 
-export const prepareGetUrl = (queryObj: {}) => {
-  // const search = pathOr('', ['search'], queryObj);
-  const categoryId = pathOr(null, ['category'], queryObj);
-  return pipe(
-    renameKeys({ search: 'name' }),
-    omit(['category']),
-    i => (categoryId ? assocPath(['options', 'categoryId'], parseInt(categoryId, 10), i) : i),
-  )(queryObj);
-};
+const assocInt = (arr, getterValue) => obj =>
+  assocPath(arr, parseInt(getterValue(obj), 10))(obj);
 
-// export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
-//   switch (next) {
-//     case 'search':
-//       return { ...acc, name: queryObj[next] };
-//     case 'category':
-//       return { ...acc, categoryId: parseInt(queryObj[next], 10) || 1 };
-//     case 'minValue':
-//       return {
-//         ...acc,
-//         options: {
-//           ...acc.options,
-//           priceFilter: {
-//             ...acc.options.priceFilter,
-//             minValue: parseInt(queryObj[next], 10) || 0,
-//           },
-//         },
-//       };
-//     case 'maxValue':
-//       return {
-//         ...acc,
-//         options: {
-//           ...acc.options,
-//           priceFilter: {
-//             ...acc.options.priceFilter,
-//             maxValue: parseInt(queryObj[next], 10) || 0,
-//           },
-//         },
-//       };
-//     case 'attrFilters':
-//       return {
-//         ...acc,
-//         attrFilters: parseAttrFiltersFromUrl(queryObj[next]),
-//       };
-//     default:
-//       return acc;
-//   }
-// }, {}, keys(queryObj));
+const assocStr = (arr, getterValue) => obj =>
+  assocPath(arr, getterValue(obj))(obj);
+
+export const prepareGetUrl = (queryObj: {}) => pipe(
+  renameKeys({ search: 'name' }),
+  when(has('category'), assocInt(['options', 'categoryId'], path(['category']))),
+  when(has('maxValue'), assocInt(['options', 'priceFilter', 'maxValue'], path(['maxValue']))),
+  when(has('minValue'), assocInt(['options', 'priceFilter', 'minValue'], path(['minValue']))),
+  when(has('attrFilters'), assocStr(['options', 'attrFilters'], parseAttrFiltersFromUrl)),
+  omit(['category', 'maxValue', 'minValue', 'attrFilters']),
+)(queryObj);
 
 type ChildrenType = {
   parentId: number,

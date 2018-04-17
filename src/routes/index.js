@@ -110,9 +110,10 @@ const routes = (
       `}
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
-          const searchTerm = prepareGetUrl(queryObj);
-          // const searchTerm = { name: '' };
+          log.info('***** queryObj: ', queryObj);
+          let searchTerm = prepareGetUrl(queryObj);
           log.info('***** searchTerm: ', searchTerm);
+          // searchTerm = { name: '' };
           return ({ searchTerm });
         }}
       />
