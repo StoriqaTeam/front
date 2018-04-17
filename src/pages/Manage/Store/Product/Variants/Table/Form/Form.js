@@ -37,7 +37,7 @@ type PropsType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const product = pathOr(null, ['variant', 'product'], props);
+    const product = pathOr(null, ['variant'], props);
     const attributeValues = map(item => ({
       attrId: item.rawId,
       ...this.valueForAttribute({ attr: item, variant: props.variant }),
