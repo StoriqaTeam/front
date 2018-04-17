@@ -1,6 +1,6 @@
 // @flow
 
-import { isNil, map, reduce, find, filter, whereEq, keys, pipe, split, complement } from 'ramda';
+import { curry, isNil, map, reduce, find, filter, whereEq, keys, pipe, split, complement, assoc, assocPath, pathOr, evolve, omit } from 'ramda';
 
 const byLang = (lang: string) => find(whereEq({ lang }));
 
@@ -50,37 +50,56 @@ const parseAttrFiltersFromUrl = pipe(
   filter(complement(isNil)),
 );
 
-export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
-  switch (next) {
-    case 'search':
-      return { ...acc, name: queryObj[next] };
-    case 'category':
-      return { ...acc, categoryId: parseInt(queryObj[next], 10) || 1 };
-    case 'minValue':
-      return {
-        ...acc,
-        priceRange: {
-          ...acc.priceRange,
-          minValue: parseInt(queryObj[next], 10) || 0,
-        },
-      };
-    case 'maxValue':
-      return {
-        ...acc,
-        priceRange: {
-          ...acc.priceRange,
-          maxValue: parseInt(queryObj[next], 10) || 0,
-        },
-      };
-    case 'attrFilters':
-      return {
-        ...acc,
-        attrFilters: parseAttrFiltersFromUrl(queryObj[next]),
-      };
-    default:
-      return acc;
-  }
-}, {}, keys(queryObj));
+const renameKeys = curry((keysMap, obj) =>
+  reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj)));
+
+export const prepareGetUrl = (queryObj: {}) => {
+  // const search = pathOr('', ['search'], queryObj);
+  const categoryId = pathOr(null, ['category'], queryObj);
+  return pipe(
+    renameKeys({ search: 'name' }),
+    omit(['category']),
+    i => (categoryId ? assocPath(['options', 'categoryId'], parseInt(categoryId, 10), i) : i),
+  )(queryObj);
+};
+
+// export const prepareGetUrl = (queryObj: {}) => reduce((acc, next) => {
+//   switch (next) {
+//     case 'search':
+//       return { ...acc, name: queryObj[next] };
+//     case 'category':
+//       return { ...acc, categoryId: parseInt(queryObj[next], 10) || 1 };
+//     case 'minValue':
+//       return {
+//         ...acc,
+//         options: {
+//           ...acc.options,
+//           priceFilter: {
+//             ...acc.options.priceFilter,
+//             minValue: parseInt(queryObj[next], 10) || 0,
+//           },
+//         },
+//       };
+//     case 'maxValue':
+//       return {
+//         ...acc,
+//         options: {
+//           ...acc.options,
+//           priceFilter: {
+//             ...acc.options.priceFilter,
+//             maxValue: parseInt(queryObj[next], 10) || 0,
+//           },
+//         },
+//       };
+//     case 'attrFilters':
+//       return {
+//         ...acc,
+//         attrFilters: parseAttrFiltersFromUrl(queryObj[next]),
+//       };
+//     default:
+//       return acc;
+//   }
+// }, {}, keys(queryObj));
 
 type ChildrenType = {
   parentId: number,

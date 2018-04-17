@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, filter, where, equals } from 'ramda';
+import { pathOr, filter, where, equals, map, evolve, pipe, path, assoc } from 'ramda';
 import { createPaginationContainer, graphql } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
@@ -49,7 +49,6 @@ class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
-    log.info('******* ^^^^^^^ props: ', props);
     this.state = {
       volume: 0,
       volume2: priceRange.maxValue,
@@ -60,8 +59,11 @@ class Categories extends Component<PropsType, StateType> {
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
     if (!categories) return null;
     const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
+    // const fltCats = flattenFunc(categories);
     const res = level2Filter(flattenFunc(categories));
-    return prepareForAccordion(res);
+    const result = prepareForAccordion(res);
+    // console.log('**** fltCats: ', { fltCats, res, result });
+    return result;
   }
 
   handleOnChangeCategory = (item) => {
@@ -99,6 +101,25 @@ class Categories extends Component<PropsType, StateType> {
     const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
     const catTree = this.generateTree();
     const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
+    // prepare arrays
+    const variantsToArr = variantsName => pipe(
+      path(['node']),
+      i => assoc('storeId', i.rawId, i),
+      evolve({
+        variants: (i) => {
+          if (variantsName === 'all') {
+            return path([variantsName], i);
+          }
+          return [path([variantsName], i)];
+        },
+      }),
+    );
+    // const productsWithVariants = map((i) => {
+    //   console.log('^^^^^ i: ', i);
+    //   return variantsToArr('all')(i);
+    // }, products);
+    const productsWithVariants = map(variantsToArr('all'), products);
+    console.log('***** Categories products: ', { productsWithVariants });
     return (
       <div styleName="container">
         <div styleName="wrapper">
@@ -133,9 +154,9 @@ class Categories extends Component<PropsType, StateType> {
           </div>
           <div styleName="contentContainer">
             <div styleName="productsContainer">
-              {products && products.map(item => (
-                <div key={item.node.id} styleName="cardWrapper">
-                  <CardProduct item={item.node} />
+              {productsWithVariants && productsWithVariants.map(item => (
+                <div key={item.id} styleName="cardWrapper">
+                  <CardProduct item={item} />
                 </div>
               ))}
               <div styleName="loadMoreContainer">
@@ -167,11 +188,33 @@ export default createPaginationContainer(
         pageInfo {
           searchFilters {
             categories {
+              rawId
+              level
+              name {
+                text
+                lang
+              }
               children {
+                rawId
+                level
+                name {
+                  text
+                  lang
+                }
                 children {
                   rawId
+                  level
+                  name {
+                    text
+                    lang
+                  }
                   children {
                     rawId
+                    level
+                    name {
+                      text
+                      lang
+                    }
                   }
                 }
               }
@@ -206,6 +249,9 @@ export default createPaginationContainer(
             category {
               rawId
             }
+            store {
+              rawId
+            }
             variants {
               all {
                 id
@@ -219,7 +265,6 @@ export default createPaginationContainer(
                     id
                   }
                   value
-                  
                 }
               }
             }

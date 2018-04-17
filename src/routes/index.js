@@ -23,23 +23,6 @@ import Categories from 'pages/Search/Categories';
 const routes = (
   <Route>
     <Route
-      path="/categories"
-      Component={({ search }) => (<Categories search={search} />)}
-      query={graphql`
-        query routes_Categories_Query($searchTerm: SearchProductInput!) {
-          search {
-            ...Categories_search @arguments(text: $searchTerm)
-          }
-        }
-      `}
-      prepareVariables={(...args) => {
-        const queryObj = pathOr('', ['query'], last(args).location);
-        const searchTerm = prepareGetUrl(queryObj);
-        // const searchTerm = { name: '' };
-        return ({ searchTerm });
-      }}
-    />
-    <Route
       path="/"
       Component={App}
       query={graphql`
@@ -115,6 +98,24 @@ const routes = (
     >
       <Route Component={Start} />
 
+      <Route
+        path="/categories"
+        Component={({ search }) => (<Categories search={search} />)}
+        query={graphql`
+        query routes_Categories_Query($searchTerm: SearchProductInput!) {
+          search {
+            ...Categories_search @arguments(text: $searchTerm)
+          }
+        }
+      `}
+        prepareVariables={(...args) => {
+          const queryObj = pathOr('', ['query'], last(args).location);
+          const searchTerm = prepareGetUrl(queryObj);
+          // const searchTerm = { name: '' };
+          log.info('***** searchTerm: ', searchTerm);
+          return ({ searchTerm });
+        }}
+      />
       {/* <Route
         path="/products"
         Component={({ search }) => (<Products search={search} />)}
