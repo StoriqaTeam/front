@@ -124,6 +124,11 @@ class Form extends Component<PropsType, StateType> {
     }
   };
 
+  handleTextareaChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+  };
+
   handleSave = () => {
     const { currentUser } = this.context;
     const { optionLanguage } = this.state;
@@ -191,13 +196,13 @@ class Form extends Component<PropsType, StateType> {
     </div>
   );
 
-  renderTextarea = (id: string, label: string) => (
+  renderTextarea = ({ id, label }: { [string]: any }) => (
     <div styleName="formItem">
       <Textarea
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
-        onChange={this.handleInputChange(id)}
+        onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
       />
     </div>
@@ -226,8 +231,8 @@ class Form extends Component<PropsType, StateType> {
           </div>
           {this.renderInput({ id: 'slogan', label: 'Slogan', limit: 50 })}
           {this.renderInput({ id: 'slug', label: 'Slug', limit: 50 })}
-          {this.renderInput({ id: 'shortDescription', label: 'Short description', limit: 50 })}
-          {this.renderInput({ id: 'longDescription', label: 'Long description', limit: 50 })}
+          {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
+          {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">
             <Button
               big
