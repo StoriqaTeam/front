@@ -132,7 +132,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         tabIndex="0"
       >
         {snapshot && [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map((item, index) => (item ? <span key={item.rawId}>{index !== 0 && ' / '}{getNameText(item.name, lang)}</span> : null))}
-        {!snapshot && 'Выбрать категорию'}
+        {!snapshot && 'Choose category'}
       </div>
     );
   }
@@ -169,7 +169,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
             <div styleName="levelWrapper">
               <div styleName="level">
                 <Fragment>
-                  <div styleName="label">Категории</div>
+                  <div styleName="label">Categories</div>
                   <LevelList
                     items={categories.children}
                     lang={lang}

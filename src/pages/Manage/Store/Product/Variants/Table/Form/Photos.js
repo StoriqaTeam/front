@@ -35,7 +35,7 @@ class Photos extends PureComponent<PropsType> {
               buttonHeight={120}
               buttonWidth={120}
               buttonIconType="camera"
-              buttonLabel="Добавить фото"
+              buttonLabel="Add photo"
             />
           </div>
           {items && items.length > 0 &&

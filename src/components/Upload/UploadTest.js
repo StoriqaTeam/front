@@ -38,7 +38,7 @@ class UploadTest extends React.Component<{}, StateType> {
         buttonHeight={120}
         buttonWidth={120}
         buttonIconType="camera"
-        buttonLabel="Добавить фото"
+        buttonLabel="Add photo"
       >
         <ImageLine items={items} />
       </UploadWrapper>
