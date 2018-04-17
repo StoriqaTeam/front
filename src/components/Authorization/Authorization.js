@@ -81,6 +81,7 @@ class Authorization extends Component<PropsType, StateType> {
           this.setState({ errors: validationErrors });
           return;
         }
+        alert('Registration successful, login with your data.'); // eslint-disable-line
         if (alone) {
           window.location = '/';
         } else {

@@ -39,7 +39,7 @@ class SignUp extends PureComponent<PropsType> {
             type="text"
             model={username}
             onChange={handleChange}
-            errors={propOr(null, 'email', errors)}
+            errors={propOr(null, 'username', errors)}
           />
         </div>
         <div styleName="inputBlock">
@@ -61,7 +61,7 @@ class SignUp extends PureComponent<PropsType> {
             model={password}
             validate="password"
             onChange={handleChange}
-            errors={propOr(null, 'email', errors)}
+            errors={propOr(null, 'password', errors)}
           />
         </div>
         {formValid &&

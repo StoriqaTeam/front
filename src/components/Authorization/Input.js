@@ -239,7 +239,7 @@ class Input extends PureComponent<PropsType, StateType> {
         <input
           type={showPassword ? 'text' : type}
           styleName={classNames(className, {
-            invalidInput: formError.length !== 0,
+            invalidInput: errors && errors.length !== 0,
             validInput: validity,
           })}
           name={name}
