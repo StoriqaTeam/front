@@ -1,6 +1,6 @@
 // @flow
 
-import { isNil } from 'ramda';
+import { isNil, isEmpty } from 'ramda';
 import { extractText } from './index';
 
 type IdType = {
@@ -192,7 +192,8 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
  * @return {{}[]}
  */
 export default function buildWidgets(variants: VariantType[]) {
-  return variants.reduce((current, variant) => {
+  const filtered = variants.filter(v => !isEmpty(v.attributes));
+  return filtered.filter(v => !isEmpty(v.attributes)).reduce((current, variant) => {
     const copy = [...current];
     const { attributes, id: variantId } = variant;
     return [

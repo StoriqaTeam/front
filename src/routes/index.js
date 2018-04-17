@@ -165,6 +165,7 @@ const routes = (
           }
           throw new RedirectException('/login');
         }}
+        Component={() => <div />}
       >
         <Route path="/store">
           <Route
@@ -207,7 +208,7 @@ const routes = (
             Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
           />
           <Route
-            path="/:storeId/products/:productId"
+            path=":storeId/products/:productId"
             Component={EditProduct}
             query={graphql`
             query routes_Product_Query($productID: Int!) {
@@ -276,14 +277,16 @@ const routes = (
           }
         }
       `}
-      prepareVariables={(_, { params }) => (
-        { productID: parseInt(params.productId, 10) }
-      )}
+      prepareVariables={(_, { params }) => {
+        /* eslint-disable no-console */
+        console.log('parseInt(params.productId, 10)', parseInt(params.productId, 10));
+        return { productID: parseInt(params.productId, 10) };
+      }}
       Component={({ baseProduct, params }) => (
         <ProductCard
           storeId={params.storeId}
           productId={params.productId}
-          baseProductWithVariants={baseProduct}
+          baseProduct={baseProduct}
         />
       )}
     />

@@ -37,7 +37,7 @@ class Product extends PureComponent<PropsType, StateType> {
     ],
   };
   render() {
-    // const { baseProductWithVariants } = this.props;
+    const { baseProduct } = this.props;
     /* eslint-disable no-console */
     console.log('this.props', this.props);
     const { tabs } = this.state;
@@ -48,14 +48,14 @@ class Product extends PureComponent<PropsType, StateType> {
           <div styleName="ProductBackground">
             <Container>
               <div styleName="whiteBackground">
-                <ProductContext.Provider value={{}}>
+                <ProductContext.Provider value={baseProduct}>
                   <Row>
                     <Col size={6}>
                       <ProductImage />
                       <ProductShare />
                     </Col>
                     <Col size={6}>
-                      {/* <ProductDetails /> */}
+                      <ProductDetails />
                     </Col>
                   </Row>
                 </ProductContext.Provider>
@@ -85,6 +85,7 @@ export default createFragmentContainer(
   Product,
   graphql`
     fragment Product_baseProduct on BaseProduct {
+      id
       name {
         text
         lang
@@ -97,6 +98,32 @@ export default createFragmentContainer(
         text
         lang
       }
-    }
+      variants {
+        all {
+          id
+          attributes {
+            value
+            metaField
+            attribute {
+              id
+              name {
+                text
+                lang
+              }
+              metaField {
+                values
+                uiElement
+                translatedValues {
+                  translations {
+                    lang
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }   
   `,
 );

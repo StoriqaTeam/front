@@ -65,13 +65,13 @@ class ProductDetails extends PureComponent<{}, StateType> {
       <ProductContext.Consumer>
         {(context) => {
           const {
-            baseProduct: {
-              name,
-              longDescription,
+            name,
+            longDescription,
+            variants: {
+              all,
             },
-            variants,
           } = context;
-          const productVariants = buildWidgets(variants);
+          const productVariants = buildWidgets(all);
           /* eslint-disable no-console */
           console.log('productVariants', productVariants);
           const {
@@ -91,7 +91,7 @@ class ProductDetails extends PureComponent<{}, StateType> {
               <p>
                 { extractText(longDescription, 'EN', 'Нет описания') }
               </p>
-              <ProductSize
+               <ProductSize
                 title={CHECKBOX.title}
                 sizes={CHECKBOX.values}
                 onClick={val => this.handleSize(val, productVariants, variantId)}
