@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { pathOr } from 'ramda';
 
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
@@ -37,13 +38,9 @@ class Row extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      product: {
-        vendorCode,
-        price,
-        cashback,
-      },
-    } = this.props.variant;
+    const vendorCode = pathOr(null, ['vendorCode'], this.props.variant);
+    const price = pathOr(null, ['price'], this.props.variant);
+    const cashback = pathOr(null, ['cashback'], this.props.variant);
     return (
       <div styleName="container">
         <div styleName="variant">
