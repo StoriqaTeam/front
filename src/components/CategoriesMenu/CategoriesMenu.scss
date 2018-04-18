@@ -2,173 +2,205 @@
 
 .container {
   position: relative;
+  display: flex;
   height: 5rem;
+  top: -2rem;
+  padding: 0 2rem;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  color: $color_grey_text;
+  transition: all .3s ease;
+
+  &:hover {
+    color: $color_blue_2;
+  }
+
+  & svg {transition: all .3s ease;}
+  &:hover svg {fill: $color_blue_1;}
+}
+
+.buttonText {
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 16px;
 }
 
 .root {
   position: relative;
+  width: 100%;
   z-index: 10;
   white-space: nowrap;
 }
 
 .rootItem {
   display: inline-block;
-  width: 24.2857rem;
-  cursor: pointer;
-}
-
-.rootItem:hover {
-  background-color: $color_white;
-}
-
-.rootItem > .link .text {
-  position: relative;
-  display: block;
-  font-size: 16px;
-  color: $color_grey_text;
   line-height: 5rem;
-  text-align: center;
-  z-index: 1;
-  transition: none;
-}
+  vertical-align: bottom;
 
-.rootItem:hover > .link .text:after {
-  content: '';
-  display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border: 1px solid $color_primary;
-}
-
-.rootItem:hover > .itemsWrap {
-  opacity: 1;
-  visibility: visible;
-  margin: 0;
-  z-index: 11;
-}
-
-.rootItem > .itemsWrap {
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  left: 0;
-  width: 100%;
-}
-
-.rootItem > .itemsWrap > ul {
-  position: relative;
-  width: 42rem;
-  height: 40rem;
-  padding: 3rem 2rem;
-  background-color: $color_white;
-}
-
-.rootItem > .itemsWrap > ul > li {
-  height: 5rem;
-}
-
-.rootItem > .itemsWrap > ul > li:hover svg {
-  fill: $color_primary;
-}
-
-.rootItem > .itemsWrap > ul > li > .link {
-  margin: -0.125rem -2rem 0 -2rem;
-  padding-left: 2rem;
-  line-height: 5rem;
-  cursor: pointer;
-}
-
-.rootItem > .itemsWrap > ul > li:hover > .link {
-  &:before, &:after {
-    content: '';
-    display: block;
+  & > .items {
+    display: none;
     position: absolute;
     left: 0;
-    right: 0;
-    border-bottom: 1px solid #EFEFEF;
+    width: 100%;
+    padding: 0 4rem;
+    border-top: 2px solid $color_blue_2;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    background-color: $color_white;
+    box-shadow: $shadow_1;
+
+    & > .itemsWrap {
+      position: relative;
+      width: 40rem;
+      padding-right: 4rem;
+      border-right: 1px solid $color_grey_2;
+
+      & > ul {
+        height: 30.5rem;
+        margin-top: 1rem;
+        padding-bottom: 4rem;
+
+        & > li {
+          font-family: $font_medium;
+          margin-right: -4rem;
+          font-size: 16px;
+          line-height: 4rem;
+
+          & .link {
+            display: block;
+            color: $color_grey_text;
+            transition: all .3s ease;
+
+            & .text {
+              position: relative;
+              font-size: 14px;
+            }
+          }
+
+          & svg {
+            opacity: 0;
+            fill: $color_primary;
+            transition: all .3s ease;
+          }
+
+          &:hover {
+            & > .link {
+              color: $color_blue_2;
+            }
+
+            & svg {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
   }
 
-  &:hover:before {
-    top: 0;
+  & > .link {
+    & > .text {
+      position: relative;
+      display: block;
+      padding: 0 2rem;
+      font-size: 16px;
+      color: $color_grey_text;
+      line-height: 5rem;
+      text-align: center;
+      z-index: 1;
+      transition: none;
+      transition: all .3s ease;
+      cursor: pointer;
+    }
   }
 
-  &:hover:after {
-    bottom: 0;
+  &:hover {
+    & > .items {
+      margin: 0;
+      z-index: 11;
+      display: block;
+    }
+    & > .link {
+      & > .text {
+        color: $color_blue_2;
+      }
+    }
   }
 }
 
-.rootItem > .itemsWrap > ul > li > .link .text {
-  position: relative;
-  display: block;
+.rootButtonItem {
+  padding-right: 2rem;
+  padding-left: 0;
+}
+
+.title {
+  font-family: $font_medium;
   font-size: 14px;
-  color: $color_grey_text;
-}
-
-.rootItem > .itemsWrap > ul > li:hover > .link .text {
-  &:after {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 1px;
-    top: 1px;
-    bottom: 0px;
-    right: -1px;
-    border-right: 1px solid $color_white;
-    z-index: 1;
-  }
+  line-height: 7rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid $color_grey_2;
+  cursor: pointer;
 }
 
 .icon {
   position: absolute;
   top: 1.5rem;
-  right: 1.25rem;
+  right: 3.5rem;
 }
 
 .link {
   position: relative;
 }
 
-.midItem > .itemsWrap {
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 100%;
-}
+.midItem {
+  & > .items {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 118rem;
 
-.midItem:hover > .itemsWrap {
-  opacity: 1;
-  visibility: visible;
-}
+    & > .itemsWrap {
+      width: 100%;
+      padding-left: 4rem;
+    }
+  }
 
-.midItem:hover > .itemsWrap > ul {
-  width: 44rem;
-  height: 40rem;
-  padding: 3rem 2rem;
-  border-left: 1px solid #EFEFEF;
-  background-color: $color_white;
-}
+  &:hover {
+    & > .items {
+      display: block;
 
-.midItem:hover > .itemsWrap > ul > li {
-  height: 5rem;
-  margin: 0 -2rem;
-}
+      & > .itemsWrap {
+        & > ul {
+          width: 80rem;
+          height: 29.5rem;
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
+          margin-top: 1rem;
 
-.midItem:hover > .itemsWrap > ul > li > .link {
-  line-height: 5rem;
-  cursor: pointer;
-}
+          & > li {
+            font-size: 14px;
+            line-height: 4rem;
+            cursor: pointer;
 
-.midItem:hover > .itemsWrap > ul > li:hover > .link .text {
-  text-decoration: underline;
-}
+            & .link {
+              display: block;
+              width: 100%;
+              color: $color_grey_text;
+              transition: all .3s ease;
+            }
 
-.midItem:hover > .itemsWrap > ul > li > .link .text {
-  display: block;
-  padding-left: 2rem;
-  font-size: 14px;
-  color: $color_grey_text;
-  transition: none;
+            &:hover {
+              & > .link {
+                color: $color_blue_2;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

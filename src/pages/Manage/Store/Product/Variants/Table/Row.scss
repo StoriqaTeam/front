@@ -14,6 +14,7 @@
 
 .variant {
   display: flex;
+  align-items: center;
 }
 
 .variant + .variant {
@@ -57,6 +58,10 @@
   padding-right: 8rem;
   padding-left: 8rem;
   bottom: 0;
+}
+
+.characteristicItem {
+  height: 2rem;
 }
 
 .tdCheckbox {width: 5%;}
