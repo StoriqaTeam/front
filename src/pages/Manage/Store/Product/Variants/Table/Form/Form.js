@@ -78,12 +78,16 @@ class Form extends Component<PropsType, StateType> {
       attributes: variant.attributeValues,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        if (errors) {
+          alert('Check that fields are filled.'); // eslint-disable-line
+          return;
+        }
         log.debug({ response, errors });
         window.location.reload(); // TODO: fix it!
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+        alert('Check that fields are filled.'); // eslint-disable-line
       },
     });
   };
@@ -103,6 +107,10 @@ class Form extends Component<PropsType, StateType> {
       attributes: variant.attributeValues,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        if (errors) {
+          alert('Check that fields are filled.'); // eslint-disable-line
+          return;
+        }
         log.debug({ response, errors });
         window.location.reload(); // TODO: fix it!
       },
@@ -153,7 +161,9 @@ class Form extends Component<PropsType, StateType> {
 
   toggleDropdownVariant = () => {
     const id = pathOr(null, ['variant', 'rawId'], this.props);
-    this.props.onExpandClick(id);
+    if (this.props.onExpandClick) {
+      this.props.onExpandClick(id);
+    }
   };
 
   valueForAttribute = ({ attr, variant }: { [string]: any }):
@@ -222,7 +232,7 @@ class Form extends Component<PropsType, StateType> {
           />
           <span styleName="inputPostfix">%</span>
         </div>
-        <div styleName="variantItem tdCharacteristics">Characteristics</div>
+        <div styleName="variantItem tdCharacteristics" />
         <div styleName="variantItem tdCount">8</div>
         <div styleName="variantItem tdBasket">
           <button>

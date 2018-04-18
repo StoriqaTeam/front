@@ -8,6 +8,9 @@ import { routerShape } from 'found';
 
 import { log } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
+import Logo from 'components/Icon/svg/logo.svg';
+
+import './OAuthCallback.scss';
 
 type PropsType = {
   provider: string,
@@ -34,7 +37,8 @@ class OAuthCallback extends PureComponent<PropsType> {
         provider: this.props.provider,
         token: accessToken,
         environment: this.context.environment,
-        onCompleted: (response: ?Object) => {
+        onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+          log.debug({ response, errors });
           const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
           if (jwt) {
             const cookies = new Cookies();
@@ -79,7 +83,17 @@ class OAuthCallback extends PureComponent<PropsType> {
 
   render() {
     return (
-      <div>Please wait...</div>
+      <div styleName="container">
+        <div styleName="logo">
+          <Logo />
+        </div>
+        <span styleName="text">Loading...<br />Please wait.</span>
+        <span styleName="description">- Storiqa team</span>
+        <div styleName="spinner">
+          <div styleName="double-bounce1" />
+          <div styleName="double-bounce2" />
+        </div>
+      </div>
     );
   }
 }
