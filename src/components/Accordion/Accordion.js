@@ -22,6 +22,7 @@ const Accordion = ({ activeRowId, onClick, tree }: PropsType) => (
   <div styleName="wrapper">
     {tree.map((item, index) => (
       <div key={item.id} styleName="blockWrapper">
+        {console.log('******* accordion item: ', item)}
         <AccordionBlock
           tree={item}
           isExpanded={index < 3}

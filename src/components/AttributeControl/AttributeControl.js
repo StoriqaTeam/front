@@ -8,7 +8,7 @@ import { Checkbox } from 'components/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
 import { MiniSelect } from 'components/MiniSelect';
 
-import './AttributeControll.scss';
+import './AttributeControl.scss';
 
 type TranslateType = {
   text: string,
@@ -18,9 +18,9 @@ type TranslateType = {
 type AttributeType = {
   id: string,
   name: Array<TranslateType>,
-  metaField: ?{
+  metaField: {
     values: ?Array<string>,
-    translatedValues: ?Array<TranslateType>,
+    translatedValues: ?Array<{ translations: TranslateType }>,
     uiElement: string,
   },
 }

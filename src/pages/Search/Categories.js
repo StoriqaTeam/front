@@ -12,7 +12,7 @@ import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
-import { AttributeControll } from 'components/AttributeControll';
+import { AttributeControl } from 'components/AttributeControl';
 import { flattenFunc } from 'utils';
 
 import Sidebar from './Sidebar';
@@ -98,7 +98,7 @@ class Categories extends Component<PropsType, StateType> {
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
-    const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
+    const attrFilters = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'], this.props);
     const catTree = this.generateTree();
     const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
     // prepare arrays
@@ -115,7 +115,7 @@ class Categories extends Component<PropsType, StateType> {
       }),
     );
     const productsWithVariants = map(variantsToArr('all'), products);
-    // console.log('***** Categories products: ', { productsWithVariants });
+    // console.log('***** Categories attrFilters: ', { attrFilters });
     return (
       <div styleName="container">
         <div styleName="wrapper">
@@ -140,7 +140,7 @@ class Categories extends Component<PropsType, StateType> {
               />
               {attrFilters && attrFilters.map(attrFilter => (
                 <div key={attrFilter.attribute.id} styleName="attrBlock">
-                  <AttributeControll
+                  <AttributeControl
                     attrFilter={attrFilter}
                     onChange={this.handleOnChangeAttribute(attrFilter)}
                   />
@@ -222,6 +222,14 @@ export default createPaginationContainer(
             attrFilters {
               attribute {
                 id
+                rawId
+                name {
+                  text
+                  lang
+                }
+                metaField {
+                  uiElement
+                }
               }
               equal {
                 values
