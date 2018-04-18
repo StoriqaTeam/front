@@ -19,10 +19,7 @@
   }
 
   & svg {transition: all .3s ease;}
-  &:hover svg {
-    transition: all .3s ease;
-    fill: $color_blue_1;
-  }
+  &:hover svg {fill: $color_blue_1;}
 }
 
 .buttonText {
@@ -53,6 +50,7 @@
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     background-color: $color_white;
+    box-shadow: $shadow_1;
 
     & > .itemsWrap {
       position: relative;
@@ -70,7 +68,6 @@
           margin-right: -4rem;
           font-size: 16px;
           line-height: 4rem;
-          cursor: pointer;
 
           & .link {
             display: block;
