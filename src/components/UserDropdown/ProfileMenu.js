@@ -4,19 +4,45 @@ import React from 'react';
 import { Link } from 'found';
 
 import { Count } from 'components/Count';
+import { Icon } from 'components/Icon';
 
 import './UserDropdown.scss';
 
 type PropsTypes = {
-  name: string,
+  lastName: ?string,
+  firstName: ?string,
   messagesCount: number,
-  shopsCount: number,
+  email: string,
+  avatar: string,
 };
 
-const ProfileMenu = ({ name, messagesCount, shopsCount }: PropsTypes) => (
+const ProfileMenu = ({
+  lastName,
+  firstName,
+  messagesCount,
+  email,
+  avatar,
+}: PropsTypes) => (
   <div styleName="menu">
-    <div styleName="name">
-      <strong>{name}</strong>
+    <div styleName="top">
+      <div styleName="icon">
+        {avatar ?
+          <img
+            styleName="topImg"
+            src={avatar}
+            alt="img"
+          /> :
+          <Icon type="person" size="32" />
+        }
+      </div>
+      <div styleName="personalData">
+        <div styleName="name">
+          <span>{lastName || '\u00A0'}</span>
+          <br />
+          <span>{firstName || '\u00A0'}</span>
+        </div>
+        <div styleName="email">{email}</div>
+      </div>
     </div>
     <div styleName="items">
       <a href="/" styleName="item">
@@ -35,21 +61,18 @@ const ProfileMenu = ({ name, messagesCount, shopsCount }: PropsTypes) => (
       <a href="/" styleName="item">History</a>
       <a href="/" styleName="item">
         <span>My shops</span>
-        {Boolean(shopsCount) &&
-          <div styleName="count">
-            <Count
-              amount={shopsCount}
-              styles="green"
-            />
-          </div>
-        }
       </a>
     </div>
     <Link
       styleName="logout"
       to="/logout"
     >
-      Logout
+      <Icon
+        inline
+        type="logout"
+        size="24"
+      />
+      <span styleName="logoutText">Logout</span>
     </Link>
   </div>
 );

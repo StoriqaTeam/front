@@ -17,8 +17,8 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { Button } from 'components/Button';
-import { MiniSelect } from 'components/MiniSelect';
+import { Button } from 'components/common/Button';
+import { Select } from 'components/common/Select';
 import { Input, Textarea } from 'components/Forms';
 
 import Header from './Header';
@@ -117,15 +117,16 @@ class Form extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
   };
 
-  handleOptionLanguage = (optionLanguage: { id: string, label: string }) => {
-    this.setState({ optionLanguage: toUpper(optionLanguage.id) });
-  };
-
   handleInputChange = (id: string) => (e: any) => {
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
     }
+  };
+
+  handleTextareaChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
   };
 
   handleSave = () => {
@@ -195,13 +196,13 @@ class Form extends Component<PropsType, StateType> {
     </div>
   );
 
-  renderTextarea = (id: string, label: string) => (
+  renderTextarea = ({ id, label }: { [string]: any }) => (
     <div styleName="formItem">
       <Textarea
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
-        onChange={this.handleInputChange(id)}
+        onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
       />
     </div>
@@ -211,27 +212,16 @@ class Form extends Component<PropsType, StateType> {
     const {
       langItems,
       form,
-      optionLanguage,
     } = this.state;
     const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
-    const optionLanguageValue = find(propEq('id', toLower(optionLanguage)))(langItems);
 
     return (
       <Fragment>
-        <Header title="Settings">
-          <div styleName="langSelect">
-            <MiniSelect
-              transparent
-              activeItem={optionLanguageValue}
-              items={langItems}
-              onSelect={this.handleOptionLanguage}
-            />
-          </div>
-        </Header>
+        <Header title="Settings" />
         <div styleName="form">
           {this.renderInput({ id: 'name', label: 'Store name', limit: 50 })}
           <div styleName="formItem">
-            <MiniSelect
+            <Select
               forForm
               label="Язык магазина"
               activeItem={defaultLanguageValue}
@@ -241,10 +231,11 @@ class Form extends Component<PropsType, StateType> {
           </div>
           {this.renderInput({ id: 'slogan', label: 'Slogan', limit: 50 })}
           {this.renderInput({ id: 'slug', label: 'Slug', limit: 50 })}
-          {this.renderInput({ id: 'shortDescription', label: 'Short description', limit: 50 })}
-          {this.renderInput({ id: 'longDescription', label: 'Long description', limit: 50 })}
+          {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
+          {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">
             <Button
+              big
               type="button"
               onClick={this.handleSave}
             >

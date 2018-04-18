@@ -106,6 +106,11 @@ class Form extends Component<PropsType, StateType> {
     }
   };
 
+  handleTextareaChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+  };
+
   // eslint-disable-next-line
   renderInput = ({ id, label, limit, icon }: { [string]: any }) => (
     <div styleName="formItem">
@@ -128,7 +133,7 @@ class Form extends Component<PropsType, StateType> {
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
-        onChange={this.handleInputChange(id)}
+        onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
       />
     </div>
@@ -137,7 +142,7 @@ class Form extends Component<PropsType, StateType> {
   render() {
     return (
       <div styleName="container">
-        <Header title="Товары" />
+        <Header title="Goods" />
         <div styleName="form">
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}

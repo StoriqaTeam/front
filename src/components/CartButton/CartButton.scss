@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   position: relative;
   display: block;
@@ -6,9 +8,8 @@
   border-radius: 50%;
   cursor: pointer;
 
-  &:hover {
-    background-color: #EDEDED;
-  }
+  & svg {transition: all .3s ease;}
+  &:hover svg {fill: $color_blue_1;}
 }
 
 .amount {

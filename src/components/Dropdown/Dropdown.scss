@@ -22,7 +22,7 @@
     content: '';
     position: absolute;
     top: -6px;
-    left: 19px;
+    right: 19px;
     width: 13px;
     height: 13px;
     background-color: #fff;
@@ -34,7 +34,7 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 8px;
+    right: 8px;
     width: 32px;
     height: 12px;
     background-color: #fff;
@@ -47,5 +47,6 @@
 
 .withIconContent {
   position: relative;
-  left: -1rem;
+  left: -30rem;
+  width: 35rem;
 }

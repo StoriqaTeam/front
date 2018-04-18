@@ -6,8 +6,8 @@ import { Link } from 'found';
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
-import { Button } from 'components/Button';
-import { MiniSelect } from 'components/MiniSelect';
+import { Button } from 'components/common/Button';
+import { Select } from 'components/common/Select';
 import { Icon } from 'components/Icon';
 
 import { Container, Row, Col } from 'layout';
@@ -22,7 +22,6 @@ type PropsType = {
 class Header extends PureComponent<PropsType> {
   render() {
     const { user, searchValue } = this.props;
-    // const sellingLing =
     return (
       <header styleName="container">
         <Container>
@@ -30,7 +29,7 @@ class Header extends PureComponent<PropsType> {
             <Col size={12}>
               <div styleName="top">
                 <div styleName="item">
-                  <MiniSelect
+                  <Select
                     activeItem={{ id: '1', label: 'BTC' }}
                     items={[
                       { id: '1', label: 'BTC' },
@@ -38,13 +37,23 @@ class Header extends PureComponent<PropsType> {
                       { id: '3', label: 'STQ' },
                       { id: '4', label: 'ADA' },
                       { id: '5', label: 'NEM' },
-                      { id: '6', label: 'STRAT' },
+                      { id: '6', label: 'NEO' },
+                      { id: '7', label: 'NEM' },
+                      { id: '8', label: 'WAX' },
+                      { id: '9', label: 'PPT' },
+                      { id: '10', label: 'SUB' },
+                      { id: '11', label: 'STRAT' },
+                      { id: '12', label: 'WTC' },
+                      { id: '13', label: 'EOS' },
+                      { id: '14', label: 'LTC' },
+                      { id: '15', label: 'LSK' },
+                      { id: '16', label: 'NXT' },
                     ]}
                     onSelect={() => {}}
                   />
                 </div>
                 <div styleName="item">
-                  <MiniSelect
+                  <Select
                     activeItem={{ id: '1', label: 'ENG' }}
                     items={[
                       { id: '1', label: 'ENG' },
@@ -55,7 +64,7 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="item">
-                  <MiniSelect
+                  <Select
                     isDropdown
                     title="Terms & Conditions"
                     items={[
@@ -67,7 +76,7 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="item">
-                  <MiniSelect
+                  <Select
                     isDropdown
                     title="Delivery"
                     items={[

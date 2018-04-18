@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr } from 'ramda';
+import { pathOr, path, map, pipe, evolve, assoc } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -17,7 +17,45 @@ import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 // import mostPopularGoods from './mostPopularGoods.json';
 
-class Start extends PureComponent<{}> {// eslint-disable-line
+type ProductType = {
+  rawId: number,
+  store: {
+    rawId: number,
+  },
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  currencyId: number,
+  variants: {
+    first: {
+      rawId: number,
+      discount: number,
+      photoMain: string,
+      cashback: number,
+      price: number,
+    },
+  },
+}
+
+/* eslint-disable */
+type PropsType = {
+  mainPage: {
+    findMostViewedProducts: ?{
+      edges: Array<{
+        node: ProductType,
+      }>,
+    },
+    findMostDiscountProducts: ?{
+      edges: Array<{
+        node: ProductType,
+      }>,
+    },
+  },
+}
+/* eslint-enable */
+
+class Start extends PureComponent<PropsType> {
   render() {
     const mostViewedProducts = pathOr([], [
       'mainPage',
@@ -29,23 +67,33 @@ class Start extends PureComponent<{}> {// eslint-disable-line
       'findMostDiscountProducts',
       'edges',
     ], this.props);
+    // prepare arrays
+    const variantsToArr = variantsFieldName => pipe(
+      path(['node']),
+      i => assoc('storeId', i.rawId, i),
+      evolve({
+        variants: i => ([path([variantsFieldName], i)]),
+      }),
+    );
+    const discountProducts = map(variantsToArr('mostDiscount'), mostDiscountProducts);
+    const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
     return (
       <div styleName="container">
         <div styleName="item">
           <BannersSlider items={bannersSlider} />
         </div>
-        {mostViewedProducts && mostViewedProducts.length > 0 &&
+        {viewedProducts && viewedProducts.length > 0 &&
           <div styleName="item">
             <GoodsSlider
-              items={mostViewedProducts}
+              items={viewedProducts}
               title="Most Popular"
             />
           </div>
         }
-        {mostDiscountProducts && mostDiscountProducts.length > 0 &&
+        {discountProducts && discountProducts.length > 0 &&
           <div styleName="item">
             <GoodsSlider
-              items={mostDiscountProducts}
+              items={discountProducts}
               title="Sale"
             />
           </div>
@@ -75,10 +123,8 @@ export default createFragmentContainer(
       findMostViewedProducts(searchTerm: {options: {attrFilters: []}}) {
         edges {
           node {
-            id
             rawId
             store {
-              id
               rawId
             }
             name {
@@ -102,10 +148,8 @@ export default createFragmentContainer(
       findMostDiscountProducts(searchTerm: {options: {attrFilters: []}}) {
         edges {
           node {
-            id
             rawId
             store {
-              id
               rawId
             }
             name {
@@ -115,7 +159,6 @@ export default createFragmentContainer(
             currencyId
             variants {
               mostDiscount {
-                id
                 rawId
                 discount
                 photoMain

@@ -18,7 +18,7 @@
 .title {
   font-family: $font_medium;
   max-height: 6rem;
-  margin-top: 1rem;
+  margin-top: 3.25rem;
   margin-bottom: 2rem;
 }
 
@@ -28,13 +28,14 @@
 
 .item {
   margin-left: -2rem;
-  padding: 2rem 0 2rem 2rem;
+  padding: 1.5rem 0 1.5rem 2rem;
   font-size: 14px;
   cursor: pointer;
-}
+  transition: all .3s ease;
 
-.item:hover {
-  background-color: #FFFFFF;
+  &:hover {
+    background-color: #FFFFFF;
+  }
 }
 
 .isActive {
