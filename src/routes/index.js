@@ -207,9 +207,23 @@ const routes = (
             path="/:storeId/product/new"
             Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
           />
+          <Route
+            path="/:storeId/products/:productId"
+            Component={EditProduct}
+            query={graphql`
+              query routes_Product_Query($productID: Int!) {
+                me {
+                  id
+                  ...EditProduct_me @arguments(productId: $productID)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => (
+              { productID: parseInt(params.productId, 10) || 0 }
+            )}
+          />
         </Route>
       </Route>
-
       <Route
         path="/registration"
         Component={Authorization}
