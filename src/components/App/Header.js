@@ -22,7 +22,6 @@ type PropsType = {
 class Header extends PureComponent<PropsType> {
   render() {
     const { user, searchValue } = this.props;
-    // const sellingLing =
     return (
       <header styleName="container">
         <Container>
