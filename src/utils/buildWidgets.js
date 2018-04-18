@@ -79,7 +79,7 @@ type WidgetType = {
  */
 function group(array: [], prop: string, type: string = 'object'): {} {
   return array.reduce((accumulator, current) => {
-    // clone accumulator to avoid 'parameter reassignment'
+    // copy accumulator to avoid 'parameter reassignment'
     const item = Object.assign({}, accumulator);
     if (type === 'object') {
       item[current[prop]] = item[current[prop]] || {};
@@ -98,7 +98,7 @@ function group(array: [], prop: string, type: string = 'object'): {} {
  */
 function setImage(image: string): string {
   const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
-  return isNil(image) ? defaultImage : image;
+  return !isNil(image) && image.includes('http') ? image : defaultImage;
 }
 
 /**
@@ -140,6 +140,7 @@ function buildWidgetInterface(array: any[], uiElement: string): WidgetValueType[
 /**
  * @param {AttributeMetaFieldType} metaField
  * @param {string} image
+ * @param {string} attributeId
  * @return {{values: WidgetValueType[], uiElement: AttributeMetaFieldType.uiElement}}
  */
 function buildWidgetValues(
@@ -182,7 +183,7 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
       value,
       image: setImage(metaField),
       title: extractText(attribute.name),
-      ...buildWidgetValues(attribute.metaField, attribute.id),
+      ...buildWidgetValues(attribute.metaField, setImage(metaField), attribute.id),
     };
   });
 }
@@ -192,8 +193,11 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
  * @return {{}[]}
  */
 export default function buildWidgets(variants: VariantType[]) {
+  // remove empty attributes
   const filtered = variants.filter(v => !isEmpty(v.attributes));
-  return filtered.filter(v => !isEmpty(v.attributes)).reduce((current, variant) => {
+  //
+  return filtered.reduce((current, variant) => {
+    // copy current to avoid 'parameter reassignment'
     const copy = [...current];
     const { attributes, id: variantId } = variant;
     return [

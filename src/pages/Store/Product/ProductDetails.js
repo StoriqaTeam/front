@@ -56,10 +56,15 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
    * @param selected
    * @param variantId
    */
-  filter = (variants, selected, variantId): number => {
+  filter = (variants, selected, variantId): void => {
     /* eslint-disable no-console */
     console.log('filterVariants(variants, selected, variantId)', filterVariants(variants, selected, variantId));
-    return filterVariants(variants, selected, variantId);
+    const variantIndex = filterVariants(variants, selected, variantId);
+    if (variantIndex >= 0) {
+      this.setState({
+        variantSelected: variantIndex,
+      });
+    }
   };
   render() {
     const {
