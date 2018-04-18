@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { pathOr } from 'ramda';
-import classNames from 'classnames';
 
 import { Dropdown } from 'components/Dropdown';
 import { Icon } from 'components/Icon';
@@ -19,7 +18,6 @@ type PropsTypes = {
     messagesCount: number,
     shopsCount: number,
     avatar: string,
-    level: 'low' | 'high',
   },
 };
 
@@ -48,20 +46,21 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
   render() {
     const { user } = this.props;
     const { showModal, isSignUp } = this.state;
-    const name = pathOr(null, ['name'], user);
+    const lastName = pathOr(null, ['lastName'], user);
+    const firstName = pathOr(null, ['firstName'], user);
+    const email = pathOr(null, ['email'], user);
     const messagesCount = pathOr(null, ['messagesCount'], user);
     const shopsCount = pathOr(null, ['shopsCount'], user);
     const avatar = pathOr(null, ['avatar'], user);
-    const level = pathOr(null, ['level'], user);
 
     return (
       <div styleName="container">
         <Dropdown withIcon>
           <trigger>
-            <div styleName={classNames('avatar', level, { 'is-avatar': avatar })}>
+            <div styleName="avatar">
               {avatar ?
                 <img
-                  styleName="avatar-img"
+                  styleName="avatarImg"
                   src={user.avatar}
                   alt="img"
                 /> :
@@ -72,9 +71,12 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
           <content>
             {user ?
               <ProfileMenu
-                name={name}
+                lastName={lastName}
+                firstName={firstName}
                 messagesCount={messagesCount}
                 shopsCount={shopsCount}
+                email={email}
+                avatar={avatar}
               /> :
               <LoginMenu onClick={this.onOpenModal} />
             }

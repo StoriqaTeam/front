@@ -19,6 +19,9 @@ type PropsType = {
   id: string,
 };
 
+
+// TODO: refactor for avoid use style props
+
 const UploadWrapper = ({
   buttonLabel,
   children,

@@ -14,8 +14,11 @@ $color_grey_ranger_value: #f7f7f7;
 $color_grey_ranger_value_number: #4c4c4c;
 $color_blue_1: #03a9ff;
 $color_blue_1_hover: #51c1fb;
+$color_blue_2: #00b2ff;
 $color_red_error: #E62C6D;
 $color_grey_1: #f6f6f6;
+$color_grey_2: #eaeaea;
+$color_grey_3: #969696;
 $color_white: #FFFFFF;
 $color_black: #000000;
 
@@ -27,4 +30,4 @@ $font_italic: 'Roboto_Italic', 'Helvetica Neue Italic', Helvetica, Arial, sans-s
 $font_medium: 'Roboto_Medium', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
 
 // Shadows
-$shadow_1: 0 0.25rem 0.75rem 0 rgba(0, 0, 0, .16);
+$shadow_1: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, .1);

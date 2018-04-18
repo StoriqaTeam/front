@@ -103,6 +103,9 @@ export default createRefetchContainer(
       ...Profile_me
       id
       rawId
+      email
+      firstName
+      lastName
     }
   `,
   graphql`

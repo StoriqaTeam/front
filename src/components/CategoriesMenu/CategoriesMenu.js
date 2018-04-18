@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { find, propEq } from 'ramda';
+import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
 
@@ -27,11 +28,11 @@ class CategoriesMenu extends Component<PropsType> {
       const name = find(propEq('lang', lang))(category.name);
       const renderInnerLink = () => (
         <Fragment>
-          <div styleName="text">{name.text}</div>
+          <span styleName="text">{name.text}</span>
           {categoryChildren && !isRoot &&
-          <div styleName="icon">
-            <Icon type="arrowRight" />
-          </div>
+            <span styleName="icon">
+              <Icon type="arrowRight" />
+            </span>
           }
         </Fragment>
       );
@@ -43,21 +44,20 @@ class CategoriesMenu extends Component<PropsType> {
             midItem: !isRoot && categoryChildren,
           })}
         >
-          {categoryChildren ?
-            <div styleName="link">
-              {renderInnerLink()}
-            </div> :
-            <a
-              href="/"
-              styleName="link"
-            >
-              {renderInnerLink()}
-            </a>}
+          <a
+            href="/"
+            styleName="link"
+          >
+            {renderInnerLink()}
+          </a>
           {categoryChildren &&
-            <div styleName="itemsWrap">
-              <ul>
-                {this.renderMenu(categoryChildren)}
-              </ul>
+            <div styleName="items">
+              <div styleName="itemsWrap">
+                <div styleName="title">{name.text}</div>
+                <ul>
+                  {this.renderMenu(categoryChildren)}
+                </ul>
+              </div>
             </div>
           }
         </li>
@@ -69,6 +69,19 @@ class CategoriesMenu extends Component<PropsType> {
     return (
       <div styleName="container">
         <ul styleName="root">
+          <li styleName="rootItem rootButtonItem">
+            <Link
+              styleName="button"
+              to="/"
+            >
+              <Icon
+                inline
+                type="cats"
+                size="24"
+              />
+              <span styleName="buttonText">All</span>
+            </Link>
+          </li>
           { this.renderMenu(this.props.categories, true) }
         </ul>
       </div>
