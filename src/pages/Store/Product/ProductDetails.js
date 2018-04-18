@@ -13,15 +13,18 @@ import {
 
 import './ProductDetails.scss';
 
-type MaterialType = {id: string | number, label: string}
-
+type WidgetValueType = {
+  id: string,
+  label: string,
+  img?: string,
+}
 type PropsType = {
   baseProduct: any,
 }
 
 type StateType = {
   sizes: string | number[],
-  selected: MaterialType,
+  selected: WidgetValueType,
   thumbnails?: {id: string | number, img: string, alt: string}[],
   variantSelected: number,
 }
@@ -32,23 +35,32 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
     variantSelected: 0,
   };
   /**
-   * @param {MaterialType} selected
+   * @param {WidgetValueType} selected
    * @param {[]} productVariants
    * @param {string} variantId
    * @return {void}
    */
-  handleSelected = (selected: MaterialType, productVariants, variantId: string): void => {
+  handleSelected = (selected: WidgetValueType, productVariants, variantId: string): void => {
     this.filter(productVariants, selected, variantId);
     this.setState({
       selected,
     });
   };
   /**
+   * @param {WidgetValueType} selected
+   * @param {[]} productVariants
+   * @param {string} variantId
+   * @return {void}
+   */
+  handleColor = (selected: WidgetValueType, productVariants, variantId: string): void => {
+    this.filter(productVariants, selected, variantId);
+  };
+  /**
    * @param selected
    * @param productVariants
    * @param variantId
    */
-  handleSize = (selected: MaterialType, productVariants, variantId: string): void => {
+  handleSize = (selected: WidgetValueType, productVariants, variantId: string): void => {
     this.filter(productVariants, selected, variantId);
   };
   /**
@@ -116,6 +128,7 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
           row
           srcProp="img"
           thumbnails={COLOR_PICKER.values}
+          onClick={val => this.handleColor(val, productVariants, variantId)}
         />
       </div>
     );

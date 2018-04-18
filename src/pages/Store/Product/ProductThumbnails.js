@@ -31,14 +31,14 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   /**
    * Highlights img's border when clicked
    * @param {number} index
-   * @param {{src: string, alt: string }} img
+   * @param {{}} thumbnail
    * @return {void}
    */
-  handleClick = (index: number, img): void => {
+  handleClick = (index: number, thumbnail): void => {
     const { onClick } = this.props;
     this.setState({
       clicked: index,
-    }, onClick(img));
+    }, onClick(thumbnail));
   };
   render() {
     const {
@@ -55,10 +55,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           {thumbnails.map((thumbnail, index) => (
             <button
               key={has(thumbnail, 'id') ? thumbnail.id : index}
-              onClick={() => this.handleClick(index, {
-                src: thumbnail[srcProp],
-                alt: thumbnail.label || 'storiqa',
-              })}
+              onClick={() => this.handleClick(index, thumbnail)}
             >
               <figure>
                 <img

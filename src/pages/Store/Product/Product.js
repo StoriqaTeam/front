@@ -52,8 +52,7 @@ class Product extends PureComponent<PropsType, StateType> {
                   </Col>
                   <Col size={6}>
                     <ProductDetails
-                      baseProduct={baseProduct
-                      }
+                      baseProduct={baseProduct}
                     />
                   </Col>
                 </Row>
