@@ -102,11 +102,13 @@ class EditStore extends Component<PropsType, StateType> {
       activeItem,
     } = this.state;
 
-    let store;
-    const { me } = this.props;
-    if (me) {
-      store = me.store; // eslint-disable-line
+    const store = pathOr(null, ['me', 'store'], this.props);
+
+    if (!store) {
+      return (<div>Store not found :(</div>);
     }
+
+    const name = pathOr('', ['name', 0, 'text'], store);
     return (
       <Container>
         <Row>
@@ -114,6 +116,7 @@ class EditStore extends Component<PropsType, StateType> {
             <Menu
               activeItem={activeItem}
               switchMenu={this.switchMenu}
+              storeName={name}
             />
           </Col>
           <Col size={10}>

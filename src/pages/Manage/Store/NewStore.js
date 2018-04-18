@@ -110,6 +110,7 @@ class NewStore extends Component<PropsType, StateType> {
             <Menu
               activeItem={activeItem}
               switchMenu={this.switchMenu}
+              storeName=""
             />
           </Col>
           <Col size={10}>

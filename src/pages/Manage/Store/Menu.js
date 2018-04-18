@@ -2,7 +2,6 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import MultiClamp from 'react-multi-clamp';
 
 import menuItems from './menuItems.json';
 
@@ -11,6 +10,8 @@ import './Menu.scss';
 type PropsType = {
   activeItem: string,
   switchMenu: Function,
+  storeName?: string,
+  storeLogo?: string,
 };
 
 type StateType = {
@@ -19,22 +20,22 @@ type StateType = {
 
 class Menu extends PureComponent<PropsType, StateType> {
   render() {
-    const { activeItem } = this.props;
+    const { activeItem, storeName, storeLogo } = this.props;
 
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
           <img
-            src="https://i.imgur.com/bY6A3Yz.jpg"
+            src={storeLogo || 'https://i.imgur.com/bY6A3Yz.jpg'}
             styleName="img"
             alt="img"
           />
         </div>
-        <div styleName="title">
-          <MultiClamp ellipsis="..." clamp={2}>
-            {'The long name of the store that already does not fit into two lines'}
-          </MultiClamp>
-        </div>
+        {storeName && (
+          <div styleName="title">
+            {storeName}
+          </div>
+        )}
         <div styleName="items">
           {menuItems.map((item) => {
             const isActive = item.id === activeItem;
