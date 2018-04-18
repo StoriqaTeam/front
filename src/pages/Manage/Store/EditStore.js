@@ -27,6 +27,7 @@ type StateType = {
   activeItem: string,
   serverValidationErrors: any,
   activeItem: string,
+  logoUrl?: string,
 };
 
 class EditStore extends Component<PropsType, StateType> {
@@ -35,7 +36,12 @@ class EditStore extends Component<PropsType, StateType> {
     serverValidationErrors: {},
   };
 
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
+  };
+
   handleSave = ({ form, optionLanguage }) => {
+    const { logoUrl } = this.state;
     const { environment } = this.context;
     const {
       name,
@@ -60,6 +66,7 @@ class EditStore extends Component<PropsType, StateType> {
       ],
       slug,
       slogan,
+      logo: logoUrl,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
@@ -98,9 +105,7 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      activeItem,
-    } = this.state;
+    const { activeItem, logoUrl } = this.state;
 
     const store = pathOr(null, ['me', 'store'], this.props);
 
@@ -109,6 +114,7 @@ class EditStore extends Component<PropsType, StateType> {
     }
 
     const name = pathOr('', ['name', 0, 'text'], store);
+    const { logo } = store;
     return (
       <Container>
         <Row>
@@ -117,6 +123,8 @@ class EditStore extends Component<PropsType, StateType> {
               activeItem={activeItem}
               switchMenu={this.switchMenu}
               storeName={name}
+              storeLogo={logoUrl || logo}
+              onLogoUpload={this.handleLogoUpload}
             />
           </Col>
           <Col size={10}>
@@ -146,6 +154,7 @@ export default createFragmentContainer(
           lang
           text
         }
+        logo
         slogan
         defaultLanguage
         slug

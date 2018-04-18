@@ -23,6 +23,7 @@ import './EditStore.scss';
 type StateType = {
   activeItem: string,
   serverValidationErrors: any,
+  logoUrl?: string,
 };
 
 type PropsType = {
@@ -39,6 +40,10 @@ class NewStore extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
   };
 
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
+  };
+
   handleSave = ({ form, optionLanguage }) => {
     const {
       environment,
@@ -52,6 +57,7 @@ class NewStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
+    const { logoUrl } = this.state;
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
@@ -67,6 +73,7 @@ class NewStore extends Component<PropsType, StateType> {
       ],
       slug,
       slogan,
+      logo: logoUrl,
       environment,
       onCompleted: (response: ?Object) => {
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
@@ -99,10 +106,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      activeItem,
-    } = this.state;
-
+    const { activeItem, logoUrl } = this.state;
     return (
       <Container>
         <Row>
@@ -110,7 +114,8 @@ class NewStore extends Component<PropsType, StateType> {
             <Menu
               activeItem={activeItem}
               switchMenu={this.switchMenu}
-              storeName=""
+              onLogoUpload={this.handleLogoUpload}
+              storeLogo={logoUrl}
             />
           </Col>
           <Col size={10}>

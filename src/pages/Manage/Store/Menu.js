@@ -3,6 +3,9 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 
+import { UploadWrapper } from 'components/Upload';
+import { uploadFile } from 'utils';
+
 import menuItems from './menuItems.json';
 
 import './Menu.scss';
@@ -12,6 +15,7 @@ type PropsType = {
   switchMenu: Function,
   storeName?: string,
   storeLogo?: string,
+  onLogoUpload?: Function,
 };
 
 type StateType = {
@@ -19,16 +23,29 @@ type StateType = {
 };
 
 class Menu extends PureComponent<PropsType, StateType> {
+  handleOnUpload = async (e: any) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    if (this.props.onLogoUpload) {
+      this.props.onLogoUpload(result.url);
+    }
+  };
+
   render() {
     const { activeItem, storeName, storeLogo } = this.props;
 
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
-          <img
-            src={storeLogo || 'https://i.imgur.com/bY6A3Yz.jpg'}
-            styleName="img"
-            alt="img"
+          <UploadWrapper
+            id="new-store-id"
+            onUpload={this.handleOnUpload}
+            buttonHeight={208}
+            buttonWidth={208}
+            buttonIconType="upload"
+            overPicture={storeLogo}
           />
         </div>
         {storeName && (
