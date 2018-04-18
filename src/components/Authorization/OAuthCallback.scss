@@ -16,14 +16,14 @@
 .text {
   text-align: center;
   margin-top: 3.25rem;
-  font-family: Roboto;
+  font-family: $font_regular;
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
 }
 
 .description {
-  font-family: Roboto;
+  font-family: $font_regular;
   font-size: 16px;
   font-weight: 500;
   margin-top: 3rem;
