@@ -45,7 +45,7 @@ type StateType = {
 
 class AttributeControll extends React.Component<PropsType, StateType> {
   state = {
-    value: null,
+    value: '',
   }
 
   handleOnChange = (val: string) => {
@@ -77,7 +77,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         ...this.state,
         value: val,
       });
-      onChange(val);
+      onChange([val]);
     }
   }
 
@@ -94,7 +94,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               id={v}
               label={v}
               isChecked={value && value.includes(v)}
-              handleCheckboxChange={this.handleOnChange}
+              onChange={this.handleOnChange}
             />
           </div>
         )));

@@ -2,11 +2,12 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, filter, where, equals, map, evolve, pipe, path, assoc } from 'ramda';
+import { when, has, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, reduce } from 'ramda';
 import { createPaginationContainer, graphql } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
+import { prepareGetUrl } from 'utils/search';
 import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
@@ -84,9 +85,81 @@ class Categories extends Component<PropsType, StateType> {
     this.props.router.push(`/categories?search=${name}&minValue=${value}&maxValue=${value2}`);
   }
 
+  // handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
+  //   const id = pathOr(null, ['attribute', 'id'], attrFilter);
+  //   // const name = pathOr('', ['match', 'location', 'query', 'search'], this.props);
+  //   // this.props.router.push(`/categories?search=${name}&minValue=${value}&maxValue=${value2}`);
+  //   console.log('****** attribute filter on collback: ', attrFilter);
+  //   return (value: string) => {
+  //     if (id) {
+  //       this.setState({
+  //         [id]: value,
+  //       });
+  //     }
+  //   };
+  // }
+
+  urlFromObj = (obj) => {
+    // prepare range
+    const range = pathOr(null, ['options', 'priceFilter'], obj);
+    const pushRange = (str) => {
+      if (range) {
+        return `${str}&minValue=${range.minValue}&maxValue=${range.maxValue}`;
+      }
+      return str;
+    };
+
+    // prepare attrs
+    const attrFilters = pathOr(null, ['options', 'attrFilters'], obj);
+    const pushFilters = (str) => {
+      // if (attrFilters) {
+      //   return reduce((acc, next) => {
+      //     return acc;
+      //   }, `${str}&attrFilters=`, attrFilters);
+      // //   return `${str}&minValue=${range.minValue}&maxValue=${range.maxValue}`;
+      // }
+      return str;
+    };
+
+    // pipe for result get str
+    const newUrl = pipe(
+      str => `${str}search=${obj.name}`,
+      pushRange,
+      pushFilters,
+    )('?');
+    return newUrl;
+  }
+
+  prepareUrlStr = (id, values) => {
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = prepareGetUrl(queryObj);
+    const oldAttrs = pathOr([], ['options', 'attrFilters'], oldPreparedObj);
+    const newPreparedObj = assocPath(['options', 'attrFilters'], [
+      ...filter(whereEq({ id }), oldAttrs),
+      {
+        id,
+        equal: {
+          values,
+        },
+      },
+    ], oldPreparedObj);
+    const newUrl = this.urlFromObj(newPreparedObj);
+    console.log('^^^^^^ prepareUrlStr newPreparedObj: ', { newPreparedObj });
+    // console.log('****** prepareUrlStr ****** ');
+    // console.log('^^^^^^ prepareUrlStr data: ', { id, value });
+    // console.log('^^^^^^ prepareUrlStr result: ', { queryObj, oldPreparedObj, newPreparedObj });
+    // console.log('****** prepareUrlStr ****** ');
+    return newUrl;
+  }
+
   handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
+    // const name = pathOr('', ['match', 'location', 'query', 'search'], this.props);
     return (value: string) => {
+      // const getStr = pathOr('', ['match', 'location', 'search'], this.props);
+      // this.props.router.push(`/categories?search=${name}&minValue=${value}&maxValue=${value2}`);
+      const newUrl = this.prepareUrlStr(id, value);
+      console.log('****** attribute filter on collback: ', { id, value, newUrl });
       if (id) {
         this.setState({
           [id]: value,
@@ -99,7 +172,7 @@ class Categories extends Component<PropsType, StateType> {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'], this.props);
-    const catTree = this.generateTree();
+    const accordionItems = this.generateTree();
     const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
     // prepare arrays
     const variantsToArr = variantsName => pipe(
@@ -115,16 +188,17 @@ class Categories extends Component<PropsType, StateType> {
       }),
     );
     const productsWithVariants = map(variantsToArr('all'), products);
-    // console.log('***** Categories attrFilters: ', { attrFilters });
+    // console.log('***** Categories accordionItems: ', { accordionItems });
     return (
       <div styleName="container">
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <Sidebar>
-              {catTree &&
+              {accordionItems &&
                 <Accordion
-                  tree={catTree}
+                  items={accordionItems}
                   onClick={this.handleOnChangeCategory}
+                  activeId={15}
                 />
               }
               <div styleName="blockTitle">Цена (STQ)</div>
@@ -143,6 +217,7 @@ class Categories extends Component<PropsType, StateType> {
                   <AttributeControl
                     attrFilter={attrFilter}
                     onChange={this.handleOnChangeAttribute(attrFilter)}
+                    // onChange={() => this.handleOnChangeAttribute(attrFilter)}
                   />
                 </div>
               ))}

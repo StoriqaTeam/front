@@ -87,6 +87,15 @@ export const prepareGetUrl = (queryObj: {}) => pipe(
   omit(['category', 'maxValue', 'minValue', 'attrFilters']),
 )(queryObj);
 
+// export const  = (queryObj: {}) => pipe(
+//   renameKeys({ search: 'name' }),
+//   when(has('category'), assocInt(['options', 'categoryId'], path(['category']))),
+//   when(has('maxValue'), assocInt(['options', 'priceFilter', 'maxValue'], path(['maxValue']))),
+//   when(has('minValue'), assocInt(['options', 'priceFilter', 'minValue'], path(['minValue']))),
+//   when(has('attrFilters'), assocStr(['options', 'attrFilters'], parseAttrFiltersFromUrl)),
+//   omit(['category', 'maxValue', 'minValue', 'attrFilters']),
+// )(queryObj);
+
 type ChildrenType = {
   parentId: number,
   rawId: number,
