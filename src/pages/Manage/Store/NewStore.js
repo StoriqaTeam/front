@@ -31,7 +31,7 @@ type PropsType = {
 };
 
 class NewStore extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
   };

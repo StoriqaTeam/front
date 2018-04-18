@@ -20,7 +20,7 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type PropsType = {
-  me?: { store?: {} },
+  me?: { store?: {} }, // eslint-disable-line
 };
 
 type StateType = {
@@ -31,7 +31,7 @@ type StateType = {
 };
 
 class EditStore extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
   };
