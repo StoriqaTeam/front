@@ -133,14 +133,14 @@ function translateValues(
 
 /**
  * @param {any[]} array
- * @param {string} uiElement
+ * @param {string} image
  * @return {WidgetValueType[]}
  */
-function buildWidgetInterface(array: any[], uiElement: string): WidgetValueType[] {
+function buildWidgetInterface(array: any[], image: string): WidgetValueType[] {
   return array.map((value, index) => ({
     id: `${index}`,
     label: value,
-    uiElement,
+    image,
   }));
 }
 
@@ -195,11 +195,12 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
   });
 }
 
-function filterValues(variants) {
+export default function buildWidgets(variants: VariantType[]) {
   const results = variants.map((variant) => {
     const { attributes } = variant;
     return attributes.map(({
       value,
+      metaField,
       attribute: {
         id,
         name,
@@ -211,51 +212,35 @@ function filterValues(variants) {
       id,
       value,
       title: extractText(name),
+      image: setImage(metaField),
       uiElement,
     }));
   });
-  const grouped = group(flatten(results), 'id', 'array');
+  const grouped = group(flatten(results), 'uiElement', 'array');
   const filtered = {};
   Object.keys(grouped).forEach(key => filtered[key] = uniq(grouped[key]));
   //
   const result = Object.keys(filtered).reduce((acc, key) => {
     const reduced = filtered[key].reduce((accumulator, current) => {
-      // console.log(current)
+      // console.log(current);
       const copy = Object.assign({}, accumulator);
+      const values = [].concat(copy.values, current.value).filter(i => i !== undefined);
       copy.uiElement = current.uiElement;
-      copy.values = [].concat(accumulator.values, current.value).filter(i => i !== undefined);
-      return copy;
+      copy.values = values;
+      const { title, image } = current;
+      return {
+        ...copy,
+        title,
+        image,
+      };
     }, {});
     acc[key] = {
-      values: 'asasas',
       ...reduced,
+      values: buildWidgetInterface(reduced.values, reduced.image),
     };
     return acc;
   }, {});
   /* eslint-disable no-console */
   console.log('result', result);
-}
-/**
- * @param {VariantType[]} variants
- * @return {{}[]}
- */
-export default function buildWidgets(variants: VariantType[]) {
-  // remove empty attributes
-  const filtered = variants.filter(v => !isEmpty(v.attributes));
-  //
-  filterValues(filtered);
-  return filtered.reduce((current, variant) => {
-    // copy current to avoid 'parameter reassignment'
-    const copy = [...current];
-    const { attributes, id: variantId } = variant;
-    /* eslint-disable no-console */
-    // console.log('buildAttribute(attributes)', buildAttribute(attributes));
-    return [
-      ...copy,
-      {
-        variantId,
-        ...group(buildAttribute(attributes), 'uiElement'),
-      },
-    ];
-  }, []);
+  return result;
 }

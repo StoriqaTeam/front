@@ -1,8 +1,8 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 
-import { extractText, buildWidgets, filterVariants } from 'utils';
+import {extractText, buildWidgets, filterVariants} from 'utils';
 
 import {
   ProductPrice,
@@ -20,13 +20,15 @@ type WidgetValueType = {
 }
 
 type PropsType = {
-  baseProduct: any,
+  widgets: {},
+  productTitle: string,
+  productDescription: string
 }
 
 type StateType = {
   sizes: string | number[],
   selected: WidgetValueType,
-  thumbnails?: {id: string | number, img: string, alt: string}[],
+  thumbnails?: { id: string | number, img: string, alt: string }[],
   variantSelected: number,
 }
 
@@ -64,72 +66,46 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
   handleSize = (selected: WidgetValueType, productVariants, variantId: string): void => {
     this.filter(productVariants, selected, variantId);
   };
-  /**
-   * @param variants
-   * @param selected
-   * @param variantId
-   */
-  filter = (variants, selected, variantId): void => {
-    /* eslint-disable no-console */
-    console.log('filterVariants(variants, selected, variantId)', filterVariants(variants, selected, variantId));
-    const variantIndex = filterVariants(variants, selected, variantId);
-    if (variantIndex >= 0) {
-      this.setState({
-        variantSelected: variantIndex,
-      });
-    }
-  };
+
   render() {
     const {
       selected,
       variantSelected,
     } = this.state;
     const {
-      baseProduct: {
-        name,
-        longDescription,
-        variants: {
-          all,
-        },
-      },
+      productTitle,
+      productDescription,
+      widgets,
     } = this.props;
-    const productVariants = buildWidgets(all);
-    /* eslint-disable no-console */
-    // console.log('productVariants', productVariants);
-    const {
-      CHECKBOX,
-      COLOR_PICKER,
-      COMBOBOX,
-      variantId,
-    } = productVariants[variantSelected];
+    const widgetsKey = Object.keys(widgets)[0];
     return (
       <div styleName="container">
-        <h2>{ extractText(name) }</h2>
+        <h2>{productTitle}</h2>
         <ProductPrice
           lastPrice="0.000290"
           currentPrice="0.000123"
           percentage="12"
         />
         <p>
-          { extractText(longDescription, 'EN', 'Нет описания') }
+          {productDescription}
         </p>
         <ProductSize
-          title={CHECKBOX.title}
-          sizes={CHECKBOX.values}
-          onClick={val => this.handleSize(val, productVariants, variantId)}
+          title={widgets.CHECKBOX.title}
+          sizes={widgets.CHECKBOX.values}
+          onClick={val => this.handleSize(val)}
         />
         <ProductMaterial
-          title={COMBOBOX.title}
-          selected={selected || COMBOBOX.values[0]}
-          materials={COMBOBOX.values}
-          onSelect={val => this.handleSelected(val, productVariants, variantId)}
+          title={widgets.COMBOBOX.title}
+          selected={selected || widgets.COMBOBOX.values[0]}
+          materials={widgets[widgetsKey].values}
+          onSelect={val => this.handleSelected(val)}
         />
         <ProductThumbnails
-          title={COLOR_PICKER.title}
+          title={widgets.COLOR_PICKER.title}
           row
-          srcProp="img"
-          thumbnails={COLOR_PICKER.values}
-          onClick={val => this.handleColor(val, productVariants, variantId)}
+          srcProp="image"
+          thumbnails={widgets.COLOR_PICKER.values}
+          onClick={val => this.handleColor(val)}
         />
       </div>
     );

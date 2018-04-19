@@ -5,6 +5,9 @@ import { createFragmentContainer, graphql } from 'react-relay';
 
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
+
+import { extractText, buildWidgets } from 'utils';
+
 import {
   ProductImage,
   ProductShare,
@@ -16,6 +19,7 @@ import {
 
 import './Product.scss';
 import mockData from './mockData.json';
+
 
 type PropsType = {
   baseProduct: {}
@@ -38,7 +42,16 @@ class Product extends PureComponent<PropsType, StateType> {
   componentDidMount() {
   }
   render() {
-    const { baseProduct } = this.props;
+    const {
+      baseProduct: {
+        name,
+        longDescription,
+        variants: {
+          all,
+        },
+      },
+    } = this.props;
+    const widgets = buildWidgets(all);
     const { tabs } = this.state;
     return (
       <div styleName="container">
@@ -54,7 +67,10 @@ class Product extends PureComponent<PropsType, StateType> {
                   </Col>
                   <Col size={6}>
                     <ProductDetails
-                      baseProduct={baseProduct}
+                      srcProp="image"
+                      productTitle={extractText(name)}
+                      productDescription={extractText(longDescription, 'EN', 'No Description')}
+                      widgets={widgets}
                     />
                   </Col>
                 </Row>
