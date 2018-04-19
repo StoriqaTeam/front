@@ -195,7 +195,11 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
   });
 }
 
-export default function buildWidgets(variants: VariantType[]) {
+/**
+ * @param {VariantType[]} variants
+ * @return {any[]}
+ */
+function transformVariants(variants: VariantType[]): any[] {
   const results = variants.map((variant) => {
     const { attributes } = variant;
     return attributes.map(({
@@ -216,10 +220,17 @@ export default function buildWidgets(variants: VariantType[]) {
       uiElement,
     }));
   });
-  const grouped = group(flatten(results), 'uiElement', 'array');
+  return flatten(results);
+}
+
+export default function buildWidgets(variants: VariantType[]) {
+  const transformedVariants = transformVariants(variants);
+  // group by 'uiElement' property
+  const grouped = group(transformedVariants, 'uiElement', 'array');
+  // reduce to a single Widget object
   const result = Object.keys(grouped).reduce((acc, key) => {
     const reduced = grouped[key].reduce((accumulator, current) => {
-      // console.log(current);
+      // copy accumulator to avoid 'parameter-reassign'
       const copy = { ...accumulator };
       const values = [].concat(copy.values, current.value).filter(i => i !== undefined);
       copy.uiElement = current.uiElement;

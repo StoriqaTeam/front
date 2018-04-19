@@ -37,34 +37,13 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
   };
   /**
    * @param {WidgetValueType} selected
-   * @param {[]} productVariants
-   * @param {string} variantId
    * @return {void}
    */
-  handleSelected = (selected: WidgetValueType, productVariants, variantId: string): void => {
-    this.filter(productVariants, selected, variantId);
+  handleWidget = (selected: WidgetValueType): void => {
     this.setState({
       selected,
     });
   };
-  /**
-   * @param {WidgetValueType} selected
-   * @param {[]} productVariants
-   * @param {string} variantId
-   * @return {void}
-   */
-  handleColor = (selected: WidgetValueType, productVariants, variantId: string): void => {
-    this.filter(productVariants, selected, variantId);
-  };
-  /**
-   * @param selected
-   * @param productVariants
-   * @param variantId
-   */
-  handleSize = (selected: WidgetValueType, productVariants, variantId: string): void => {
-    this.filter(productVariants, selected, variantId);
-  };
-
   render() {
     const {
       selected,
@@ -75,7 +54,7 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
       productDescription,
       widgets,
     } = this.props;
-    const widgetsKey = Object.keys(widgets)[0];
+    // const widgetsKey = Object.keys(widgets)[0];
     return (
       <div styleName="container">
         <h2>{productTitle}</h2>
@@ -90,20 +69,20 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
         <ProductSize
           title={widgets.CHECKBOX.title}
           sizes={widgets.CHECKBOX.values}
-          onClick={val => this.handleSize(val)}
+          onClick={val => this.handleWidget(val)}
         />
         <ProductMaterial
           title={widgets.COMBOBOX.title}
           selected={selected || widgets.COMBOBOX.values[0]}
-          materials={widgets[widgetsKey].values}
-          onSelect={val => this.handleSelected(val)}
+          materials={widgets.COMBOBOX.values}
+          onSelect={val => this.handleWidget(val)}
         />
         <ProductThumbnails
           title={widgets.COLOR_PICKER.title}
           row
           srcProp="image"
           thumbnails={widgets.COLOR_PICKER.values}
-          onClick={val => this.handleColor(val)}
+          onClick={val => this.handleWidget(val)}
         />
       </div>
     );
