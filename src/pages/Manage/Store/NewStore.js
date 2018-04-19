@@ -23,6 +23,7 @@ import './EditStore.scss';
 type StateType = {
   activeItem: string,
   serverValidationErrors: any,
+  logoUrl?: string,
 };
 
 type PropsType = {
@@ -30,13 +31,17 @@ type PropsType = {
 };
 
 class NewStore extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
   };
 
   handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
+  };
+
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
   };
 
   handleSave = ({ form, optionLanguage }) => {
@@ -52,6 +57,7 @@ class NewStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
+    const { logoUrl } = this.state;
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
@@ -67,8 +73,16 @@ class NewStore extends Component<PropsType, StateType> {
       ],
       slug,
       slogan,
+      logo: logoUrl,
       environment,
-      onCompleted: (response: ?Object) => {
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ serverValidationErrors: validationErrors });
+          return;
+        }
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
       },
@@ -99,10 +113,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      activeItem,
-    } = this.state;
-
+    const { activeItem, logoUrl } = this.state;
     return (
       <Container>
         <Row>
@@ -110,6 +121,8 @@ class NewStore extends Component<PropsType, StateType> {
             <Menu
               activeItem={activeItem}
               switchMenu={this.switchMenu}
+              onLogoUpload={this.handleLogoUpload}
+              storeLogo={logoUrl}
             />
           </Col>
           <Col size={10}>

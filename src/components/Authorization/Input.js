@@ -43,7 +43,8 @@ type StateType = {
   },
   isCapsLockOn: boolean,
   validity: ?boolean,
-  isFocused: boolean,
+  isFocus: boolean,
+  isFocusShow: boolean,
 }
 
 class Input extends PureComponent<PropsType, StateType> {
@@ -58,7 +59,8 @@ class Input extends PureComponent<PropsType, StateType> {
     className: 'root',
     focus: false,
     detectCapsLock: false,
-    isFocused: false,
+    isFocus: false,
+    isFocusShow: false,
   };
   state: StateType = {
     labelFloat: null,
@@ -73,7 +75,8 @@ class Input extends PureComponent<PropsType, StateType> {
     },
     isCapsLockOn: false,
     validity: null,
-    isFocused: false,
+    isFocus: false,
+    isFocusShow: false,
   };
 
   componentDidMount() {
@@ -84,11 +87,20 @@ class Input extends PureComponent<PropsType, StateType> {
     }
   }
 
-  /**
-   * @desc this is where we're going to put HTMLInput ref
-   * @type {{}}
-   */
-  input = {};
+  onMouseDown = () => {
+    this.setState({ isFocusShow: true });
+  }
+
+  onMouseUp = () => {
+    this.setState({ isFocusShow: false });
+  }
+
+  onMouseOut = () => {
+    this.setState({
+      isFocusShow: false,
+      showHints: this.state.isFocus,
+    });
+  }
 
   /**
    * @desc Handles the onChange event by setting the model's value
@@ -139,7 +151,7 @@ class Input extends PureComponent<PropsType, StateType> {
         showHints: true,
       });
     }
-    this.setState({ isFocused: true });
+    this.setState({ isFocus: true });
   };
 
   /**
@@ -156,11 +168,11 @@ class Input extends PureComponent<PropsType, StateType> {
     }
 
     if (name === 'password') {
-      this.setState({
-        showHints: false,
-      });
+      this.setState(prevState => ({
+        showHints: prevState.isFocusShow,
+      }));
     }
-    this.setState({ isFocused: false });
+    this.setState({ isFocus: false });
   };
 
   /**
@@ -203,10 +215,11 @@ class Input extends PureComponent<PropsType, StateType> {
   };
 
   /**
-   * @desc applies the corresponding error class
-   * @param {String} error
-   * @return {String}
+   * @desc this is where we're going to put HTMLInput ref
+   * @type {{}}
    */
+  input = {};
+
   errorClass = (error: string) => (error.length === 0 ? '' : 'invalidInput');
 
   render() {
@@ -217,7 +230,6 @@ class Input extends PureComponent<PropsType, StateType> {
       name,
       placeholder,
       type,
-      className,
       detectCapsLock,
       errors,
     } = this.props;
@@ -231,37 +243,43 @@ class Input extends PureComponent<PropsType, StateType> {
       passwordQuality,
       isCapsLockOn,
       validity,
-      isFocused,
+      isFocus,
+      isFocusShow,
     } = this.state;
 
     return (
       <span>
-        <input
-          type={showPassword ? 'text' : type}
-          styleName={classNames(className, {
-            invalidInput: errors && errors.length !== 0,
-            validInput: validity,
+        <div
+          styleName={classNames('input', {
+            isFocus: isFocus || isFocusShow,
+            isError: (errors || formError) && !isFocus && !isFocusShow,
+            validity,
           })}
-          name={name}
-          value={model}
-          ref={(node) => { this.input = node; }}
-          autoComplete={autocomplete ? 'on' : 'off'}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          onChange={this.handleChange}
-          onKeyPress={this.handleKeyPress}
-          placeholder={placeholder}
-          data-test={name}
-        />
-        {label && (
-          <label
-            styleName={`label ${labelFloat || ''}`}
-            htmlFor={name}
-          >
-            { label }
-          </label>
-        )}
-        {formError && name === 'email' && !isFocused &&
+        >
+          {label && (
+            <label
+              styleName={`label ${labelFloat || ''}`}
+              htmlFor={name}
+            >
+              { label }
+            </label>
+          )}
+          <input
+            type={showPassword ? 'text' : type}
+            name={name}
+            value={model}
+            ref={(node) => { this.input = node; }}
+            autoComplete={autocomplete ? 'on' : 'off'}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            onChange={this.handleChange}
+            onKeyPress={this.handleKeyPress}
+            placeholder={placeholder}
+            data-test={name}
+          />
+          <hr />
+        </div>
+        {formError && !isFocus && !isFocusShow &&
           <span styleName="message">
             {formError}
           </span>
@@ -273,6 +291,10 @@ class Input extends PureComponent<PropsType, StateType> {
           <ShowPassword
             show={showPassword}
             onClick={this.handleShowPassword}
+            onMouseDown={this.onMouseDown}
+            onMouseUp={this.onMouseUp}
+            onMouseOut={this.onMouseOut}
+            onBlur={() => {}}
           />
         )}
         {showHints && (

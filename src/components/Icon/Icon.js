@@ -39,6 +39,7 @@ import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 import Cats from 'components/Icon/svg/cats.svg';
+import Logout from 'components/Icon/svg/logout.svg';
 
 import './Icon.scss';
 
@@ -84,6 +85,7 @@ const iconsMap = {
   openArrow: <OpenArrow />,
   crossWhite: <CrossWhite />,
   cats: <Cats />,
+  logout: <Logout />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

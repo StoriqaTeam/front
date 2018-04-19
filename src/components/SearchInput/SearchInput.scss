@@ -61,10 +61,7 @@
   }
 
   & svg {transition: all .3s ease;}
-  &:hover svg {
-    transition: all .3s ease;
-    fill: $color_white;
-  }
+  &:hover svg {fill: $color_blue_1;}
 }
 
 .searchButtonIcon {
