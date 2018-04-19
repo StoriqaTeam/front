@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
+import { sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
@@ -167,14 +167,15 @@ class Categories extends Component<PropsType, StateType> {
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}
               />
-              {attrFilters && attrFilters.map(attrFilter => (
-                <div key={attrFilter.attribute.id} styleName="attrBlock">
-                  <AttributeControl
-                    attrFilter={attrFilter}
-                    onChange={this.handleOnChangeAttribute(attrFilter)}
-                  />
-                </div>
-              ))}
+              {attrFilters && sort((a, b) => (a.attribute.rawId - b.attribute.rawId), attrFilters)
+                .map(attrFilter => (
+                  <div key={attrFilter.attribute.id} styleName="attrBlock">
+                    <AttributeControl
+                      attrFilter={attrFilter}
+                      onChange={this.handleOnChangeAttribute(attrFilter)}
+                    />
+                  </div>
+                ))}
             </div>
           </div>
           <div styleName="contentContainer">
