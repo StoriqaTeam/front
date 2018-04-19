@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
-import { createPaginationContainer, graphql } from 'react-relay';
+import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
@@ -11,6 +11,7 @@ import { urlToInput, inputToUrl } from 'utils/search';
 import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
+import { Button } from 'components/common/Button';
 import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
 import { AttributeControl } from 'components/AttributeControl';
@@ -20,6 +21,7 @@ import './Categories.scss';
 
 type PropsType = {
   router: routerShape,
+  relay: Relay,
 }
 
 type StateType = {
@@ -117,6 +119,10 @@ class Categories extends Component<PropsType, StateType> {
     };
   }
 
+  productsRefetch = () => {
+    this.props.relay.loadMore(24);
+  };
+
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
@@ -150,7 +156,7 @@ class Categories extends Component<PropsType, StateType> {
                   activeId={categoryId ? parseInt(categoryId, 10) : null}
                 />
               }
-              <div styleName="blockTitle">Цена (STQ)</div>
+              <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
                 max={priceRange.maxValue}
@@ -178,9 +184,17 @@ class Categories extends Component<PropsType, StateType> {
                   <CardProduct item={item} />
                 </div>
               ))}
-              <div styleName="loadMoreContainer">
-                <div styleName="loadMoreButton">Load more</div>
-              </div>
+              {this.props.relay.hasMore() && (
+                <div styleName="button">
+                  <Button
+                    big
+                    load
+                    onClick={this.productsRefetch}
+                  >
+                    Load more
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
