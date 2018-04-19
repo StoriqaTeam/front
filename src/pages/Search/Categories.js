@@ -16,9 +16,7 @@ import { CardProduct } from 'components/CardProduct';
 import { AttributeControl } from 'components/AttributeControl';
 import { flattenFunc } from 'utils';
 
-import Sidebar from './Sidebar';
-
-import './Products.scss';
+import './Categories.scss';
 
 type PropsType = {
   router: routerShape,
@@ -44,7 +42,7 @@ type AttrFilterType = {
   },
 }
 
-const storesPerRequest = 5;
+const storesPerRequest = 24;
 
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -144,7 +142,7 @@ class Categories extends Component<PropsType, StateType> {
       <div styleName="container">
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
-            <Sidebar>
+            <div>
               {accordionItems &&
                 <Accordion
                   items={accordionItems}
@@ -171,7 +169,7 @@ class Categories extends Component<PropsType, StateType> {
                   />
                 </div>
               ))}
-            </Sidebar>
+            </div>
           </div>
           <div styleName="contentContainer">
             <div styleName="productsContainer">
@@ -202,7 +200,7 @@ export default createPaginationContainer(
     fragment Categories_search on Search
     @argumentDefinitions(
       text: { type: "SearchProductInput!" }
-      first: { type: "Int", defaultValue: 5 }
+      first: { type: "Int", defaultValue: 24 }
       after: { type: "ID", defaultValue: null }
     ) {
       findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {

@@ -81,7 +81,6 @@ class Start extends PureComponent<PropsType> {
     );
     const discountProducts = map(variantsToArr('mostDiscount'), mostDiscountProducts);
     const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
-    console.log('***** Start products: ', { viewedProducts });
     return (
       <div styleName="container">
         <div styleName="item">
