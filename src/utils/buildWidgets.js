@@ -215,12 +215,25 @@ function filterValues(variants) {
     }));
   });
   const grouped = group(flatten(results), 'id', 'array');
-  /* eslint-disable no-console */
-  console.log('grouped', grouped);
   const filtered = {};
   Object.keys(grouped).forEach(key => filtered[key] = uniq(grouped[key]));
-  console.log('filtered', filtered);
-  console.log('JSON.stringify(filtered, null, 2)', JSON.stringify(filtered, null, 2));
+  //
+  const result = Object.keys(filtered).reduce((acc, key) => {
+    const reduced = filtered[key].reduce((accumulator, current) => {
+      // console.log(current)
+      const copy = Object.assign({}, accumulator);
+      copy.uiElement = current.uiElement;
+      copy.values = [].concat(accumulator.values, current.value).filter(i => i !== undefined);
+      return copy;
+    }, {});
+    acc[key] = {
+      values: 'asasas',
+      ...reduced,
+    };
+    return acc;
+  }, {});
+  /* eslint-disable no-console */
+  console.log('result', result);
 }
 /**
  * @param {VariantType[]} variants
