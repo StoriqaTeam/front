@@ -138,7 +138,7 @@ function translateValues(
  */
 function buildWidgetInterface(array: any[], image: string): WidgetValueType[] {
   return array.map((value, index) => ({
-    id: `${index}`,
+    id: `${index}-${value}`,
     label: value,
     image,
   }));
