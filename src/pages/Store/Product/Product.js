@@ -41,8 +41,9 @@ class Product extends PureComponent<PropsType, StateType> {
   };
   componentDidMount() {
   }
-  onWidgetClick = (): void => {
-
+  handleWidgetClick = (selected): void => {
+    /* eslint-disable no-console */
+    console.log('selected', selected);
   };
   render() {
     const {
@@ -74,6 +75,7 @@ class Product extends PureComponent<PropsType, StateType> {
                       productTitle={extractText(name)}
                       productDescription={extractText(longDescription, 'EN', 'No Description')}
                       widgets={widgets}
+                      onWidgetClick={this.handleWidgetClick}
                     />
                   </Col>
                 </Row>

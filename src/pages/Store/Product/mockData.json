@@ -4,33 +4,33 @@
       "column": [
         {
           "id": 0,
-          "label": "Производитель",
+          "label": "Manufacturer",
           "text": "Nike"
         },
         {
           "id": 1,
-          "label": "Материал",
-          "text": "Экокожа"
+          "label": "Material",
+          "text": "Eco-leather"
         },
         {
           "id": 2,
-          "label": "Тип кроссовок ",
-          "text": " Беговые"
+          "label": "The type of sneakers ",
+          "text": " Running"
         },
         {
           "id": 3,
-          "label": "Стельки ",
-          "text": " Памятью профиля стопы"
+          "label": "Insoles ",
+          "text": " Foot profile memory"
         },
         {
           "id": 4,
-          "label": "Подкладка ",
-          "text": "Хлопок"
+          "label": "Lining ",
+          "text": "Cotton"
         },
         {
           "id": 5,
-          "label": "Подошва ",
-          "text": "  Полиуретан"
+          "label": "Sole ",
+          "text": "  Polyurethane"
         }
       ]
     },
@@ -38,33 +38,33 @@
       "column": [
         {
           "id": 0,
-          "label": "Производитель",
+          "label": "Manufacturer",
           "text": "Nike"
         },
         {
           "id": 1,
-          "label": "Материал",
-          "text": "Экокожа"
+          "label": "Material",
+          "text": "Plastic"
         },
         {
           "id": 2,
-          "label": "Тип кроссовок ",
-          "text": " Беговые"
+          "label": "The type of sneakers ",
+          "text": " Running"
         },
         {
           "id": 3,
-          "label": "Стельки ",
-          "text": " Памятью профиля стопы"
+          "label": "Insoles ",
+          "text": " Foot profile memory"
         },
         {
           "id": 4,
-          "label": "Подкладка ",
-          "text": "Хлопок"
+          "label": "Lining ",
+          "text": "Cotton"
         },
         {
           "id": 5,
-          "label": "Подошва ",
-          "text": "  Полиуретан"
+          "label": "Sole ",
+          "text": "  Polyurethane"
         }
       ]
     }
