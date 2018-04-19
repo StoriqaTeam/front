@@ -6643,10 +6643,6 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
-multi-clamp@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/multi-clamp/-/multi-clamp-1.0.0.tgz#a8ec395c1c3f1fd0c7445555732345d56cb00673"
-
 multicast-dns-service-types@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/multicast-dns-service-types/-/multicast-dns-service-types-1.1.0.tgz#899f11d9686e5e05cb91b35d5f0e63b773cfc901"
@@ -8313,13 +8309,6 @@ react-modal@^3.1.4:
     exenv "^1.2.0"
     prop-types "^15.5.10"
     warning "^3.0.0"
-
-react-multi-clamp@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-multi-clamp/-/react-multi-clamp-1.0.0.tgz#4dc707c64bf6a3c84338a0bded5a63b9444bb27c"
-  dependencies:
-    multi-clamp "^1.0.0"
-    prop-types "^15.6.0"
 
 react-onclickoutside@^6.5.0, react-onclickoutside@^6.7.1:
   version "6.7.1"
