@@ -17,7 +17,7 @@ type TreeType = {
 type PropsType = {
   tree: TreeType,
   isExpanded?: boolean,
-  active?: number,
+  active: ?number,
   onClick: (item: TreeType) => void,
 }
 

@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { find, propEq } from 'ramda';
-import { Link } from 'found';
+import { Link, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
 
@@ -17,13 +17,14 @@ type PropsType = {
       text: string,
     }>,
     children?: Array<any>,
-  }>
+  }>,
 }
 
 class CategoriesMenu extends Component<PropsType> {
   renderMenu(categories: any, isRoot: ?boolean) {
     const lang = 'EN';
     return categories.map((category) => {
+      const { rawId } = category;
       const categoryChildren = category.children;
       const name = find(propEq('lang', lang))(category.name);
       const renderInnerLink = () => (
@@ -44,12 +45,18 @@ class CategoriesMenu extends Component<PropsType> {
             midItem: !isRoot && categoryChildren,
           })}
         >
-          <a
-            href="/"
+          <Link
             styleName="link"
+            to={{
+              pathname: '/categories',
+              query: {
+                search: '',
+                category: rawId,
+              },
+            }}
           >
             {renderInnerLink()}
-          </a>
+          </Link>
           {categoryChildren &&
             <div styleName="items">
               <div styleName="itemsWrap">
@@ -89,4 +96,4 @@ class CategoriesMenu extends Component<PropsType> {
   }
 }
 
-export default CategoriesMenu;
+export default withRouter(CategoriesMenu);

@@ -8,7 +8,7 @@ import { Checkbox } from 'components/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
 import { MiniSelect } from 'components/MiniSelect';
 
-import './AttributeControll.scss';
+import './AttributeControl.scss';
 
 type TranslateType = {
   text: string,
@@ -18,9 +18,9 @@ type TranslateType = {
 type AttributeType = {
   id: string,
   name: Array<TranslateType>,
-  metaField: ?{
+  metaField: {
     values: ?Array<string>,
-    translatedValues: ?Array<TranslateType>,
+    translatedValues: ?Array<{ translations: TranslateType }>,
     uiElement: string,
   },
 }
@@ -45,7 +45,7 @@ type StateType = {
 
 class AttributeControll extends React.Component<PropsType, StateType> {
   state = {
-    value: null,
+    value: '',
   }
 
   handleOnChange = (val: string) => {
@@ -77,7 +77,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         ...this.state,
         value: val,
       });
-      onChange(val);
+      onChange([val]);
     }
   }
 
@@ -94,7 +94,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               id={v}
               label={v}
               isChecked={value && value.includes(v)}
-              handleCheckboxChange={this.handleOnChange}
+              onChange={this.handleOnChange}
             />
           </div>
         )));
