@@ -15,7 +15,6 @@ import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
-// import mostPopularGoods from './mostPopularGoods.json';
 
 type ProductType = {
   rawId: number,

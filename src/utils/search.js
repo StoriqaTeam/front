@@ -1,6 +1,7 @@
 // @flow
 
 import {
+  pathOr,
   when,
   has,
   curry,
@@ -78,7 +79,8 @@ const assocInt = (arr, getterValue) => obj =>
 const assocStr = (arr, getterValue) => obj =>
   assocPath(arr, getterValue(obj))(obj);
 
-export const prepareGetUrl = (queryObj: {}) => pipe(
+export const urlToInput = (queryObj: {}) => pipe(
+  // pipeLog,
   renameKeys({ search: 'name' }),
   when(has('category'), assocInt(['options', 'categoryId'], path(['category']))),
   when(has('maxValue'), assocInt(['options', 'priceFilter', 'maxValue'], path(['maxValue']))),
@@ -87,14 +89,37 @@ export const prepareGetUrl = (queryObj: {}) => pipe(
   omit(['category', 'maxValue', 'minValue', 'attrFilters']),
 )(queryObj);
 
-// export const  = (queryObj: {}) => pipe(
-//   renameKeys({ search: 'name' }),
-//   when(has('category'), assocInt(['options', 'categoryId'], path(['category']))),
-//   when(has('maxValue'), assocInt(['options', 'priceFilter', 'maxValue'], path(['maxValue']))),
-//   when(has('minValue'), assocInt(['options', 'priceFilter', 'minValue'], path(['minValue']))),
-//   when(has('attrFilters'), assocStr(['options', 'attrFilters'], parseAttrFiltersFromUrl)),
-//   omit(['category', 'maxValue', 'minValue', 'attrFilters']),
-// )(queryObj);
+export const inputToUrl = (obj: {
+  name: string,
+  options: ?{
+    categoryId: number,
+    priceFilter: ?{
+      minValue: number,
+      maxValue: number,
+    },
+    attrFilters: ?Array<{
+      id: number,
+      equal: {
+        values: Array<string>,
+      },
+    }>,
+  }
+}) => {
+  const range = pathOr(null, ['options', 'priceFilter'], obj);
+  const attrFilters = pathOr(null, ['options', 'attrFilters'], obj);
+  const categoryId = pathOr(null, ['options', 'categoryId'], obj);
+  const pushCategory = str => `${str}&category=${categoryId}`;
+  const pushRange = str => `${str}&minValue=${range.minValue}&maxValue=${range.maxValue}`;
+  const pushFilters = str => reduce((acc, next) =>
+    `${acc}equal.${next.id}=${next.equal.values.join(',')};`, `${str}&attrFilters=`, attrFilters);
+  // pipe for result get str
+  return pipe(
+    str => `${str}search=${obj.name}`,
+    when(() => complement(isNil)(categoryId), pushCategory),
+    when(() => complement(isNil)(range), pushRange),
+    when(() => complement(isNil)(attrFilters), pushFilters),
+  )('?');
+};
 
 type ChildrenType = {
   parentId: number,
