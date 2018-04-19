@@ -1,8 +1,6 @@
 // @flow
 
-import React, {PureComponent} from 'react';
-
-import {extractText, buildWidgets, filterVariants} from 'utils';
+import React, { PureComponent } from 'react';
 
 import {
   ProductPrice,

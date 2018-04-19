@@ -41,6 +41,9 @@ class Product extends PureComponent<PropsType, StateType> {
   };
   componentDidMount() {
   }
+  onWidgetClick = (): void => {
+
+  };
   render() {
     const {
       baseProduct: {

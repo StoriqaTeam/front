@@ -1,6 +1,6 @@
 // @flow
 
-import { isNil, isEmpty, flatten, uniq } from 'ramda';
+import { isNil, flatten, uniq } from 'ramda';
 import { extractText } from './index';
 
 
@@ -217,13 +217,10 @@ export default function buildWidgets(variants: VariantType[]) {
     }));
   });
   const grouped = group(flatten(results), 'uiElement', 'array');
-  const filtered = {};
-  Object.keys(grouped).forEach(key => filtered[key] = uniq(grouped[key]));
-  //
-  const result = Object.keys(filtered).reduce((acc, key) => {
-    const reduced = filtered[key].reduce((accumulator, current) => {
+  const result = Object.keys(grouped).reduce((acc, key) => {
+    const reduced = grouped[key].reduce((accumulator, current) => {
       // console.log(current);
-      const copy = Object.assign({}, accumulator);
+      const copy = { ...accumulator };
       const values = [].concat(copy.values, current.value).filter(i => i !== undefined);
       copy.uiElement = current.uiElement;
       copy.values = values;
@@ -236,7 +233,7 @@ export default function buildWidgets(variants: VariantType[]) {
     }, {});
     acc[key] = {
       ...reduced,
-      values: buildWidgetInterface(reduced.values, reduced.image),
+      values: buildWidgetInterface(uniq(reduced.values), reduced.image),
     };
     return acc;
   }, {});
