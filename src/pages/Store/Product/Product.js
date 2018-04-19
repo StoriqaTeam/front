@@ -35,6 +35,8 @@ class Product extends PureComponent<PropsType, StateType> {
       },
     ],
   };
+  componentDidMount() {
+  }
   render() {
     const { baseProduct } = this.props;
     const { tabs } = this.state;

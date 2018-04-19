@@ -18,6 +18,7 @@ type WidgetValueType = {
   label: string,
   img?: string,
 }
+
 type PropsType = {
   baseProduct: any,
 }
@@ -94,7 +95,7 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
     } = this.props;
     const productVariants = buildWidgets(all);
     /* eslint-disable no-console */
-    console.log('productVariants', productVariants);
+    // console.log('productVariants', productVariants);
     const {
       CHECKBOX,
       COLOR_PICKER,

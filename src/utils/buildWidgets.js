@@ -1,8 +1,15 @@
 // @flow
 
-import { isNil, isEmpty } from 'ramda';
+import { isNil, isEmpty, flatten, uniq } from 'ramda';
 import { extractText } from './index';
 
+
+/**
+ * 1) filter all variants by value
+ * 2) take all attribute values from the filtered variant
+ *
+ * select disable option, it should disable al filtering
+ */
 type IdType = {
   id?: string,
   rawId?: number,
@@ -188,6 +195,33 @@ function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
   });
 }
 
+function filterValues(variants) {
+  const results = variants.map((variant) => {
+    const { attributes } = variant;
+    return attributes.map(({
+      value,
+      attribute: {
+        id,
+        name,
+        metaField: {
+          uiElement,
+        },
+      },
+    }: AttributeValueType) => ({
+      id,
+      value,
+      title: extractText(name),
+      uiElement,
+    }));
+  });
+  const grouped = group(flatten(results), 'id', 'array');
+  /* eslint-disable no-console */
+  console.log('grouped', grouped);
+  const filtered = {};
+  Object.keys(grouped).forEach(key => filtered[key] = uniq(grouped[key]));
+  console.log('filtered', filtered);
+  console.log('JSON.stringify(filtered, null, 2)', JSON.stringify(filtered, null, 2));
+}
 /**
  * @param {VariantType[]} variants
  * @return {{}[]}
@@ -196,10 +230,13 @@ export default function buildWidgets(variants: VariantType[]) {
   // remove empty attributes
   const filtered = variants.filter(v => !isEmpty(v.attributes));
   //
+  filterValues(filtered);
   return filtered.reduce((current, variant) => {
     // copy current to avoid 'parameter reassignment'
     const copy = [...current];
     const { attributes, id: variantId } = variant;
+    /* eslint-disable no-console */
+    // console.log('buildAttribute(attributes)', buildAttribute(attributes));
     return [
       ...copy,
       {
