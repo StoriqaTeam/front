@@ -2,7 +2,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { find, whereEq, slice } from 'ramda';
+import { map, addIndex, find, whereEq, slice } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -26,6 +26,8 @@ type StateType = {
   showAll: boolean,
 }
 
+const mapIndexed = addIndex(map);
+
 class AccordionBlock extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
@@ -47,13 +49,11 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
   }
 
   handleOnToggle = () => {
-    this.setState({
-      isExpanded: !this.state.isExpanded,
-    });
+    this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
   }
 
   handleOnShowAll = () => {
-    this.setState({ showAll: !this.state.showAll });
+    this.setState(prevState => ({ showAll: !prevState.showAll }));
   }
 
   render() {
@@ -77,7 +77,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
         </div>
         {isExpanded &&
           <div styleName="childrenContainer">
-            {tree.children && slicer(tree.children).map((child => (
+            {tree.children && mapIndexed((child => (
               <div
                 key={child.id}
                 styleName={classNames('item', { active: active === child.id })}
@@ -88,7 +88,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
               >
                 {child.name}
               </div>
-            )))}
+            )), slicer(tree.children))}
             <div
               styleName={classNames('item', { active: true })}
               onClick={this.handleOnShowAll}

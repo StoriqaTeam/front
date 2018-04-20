@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { map, addIndex } from 'ramda';
 
 import AccordionBlock from './AccordionBlock';
 
@@ -22,13 +23,15 @@ type StateType = {
   showAll: boolean,
 }
 
+const mapIndexed = addIndex(map);
+
 class Accordion extends React.Component<PropsType, StateType> {
   state = {
     showAll: false,
   }
 
   handleOnToggle = () => {
-    this.setState({ showAll: !this.state.showAll });
+    this.setState(prevState => ({ showAll: !prevState.showAll }));
   }
 
   render() {
@@ -37,7 +40,7 @@ class Accordion extends React.Component<PropsType, StateType> {
     const filteredItems = showAll ? items : items.slice(0, 3);
     return (
       <div styleName="wrapper">
-        {filteredItems.map((item, index) => (
+        {mapIndexed((item, index) => (
           <div key={item.id} styleName="blockWrapper">
             <AccordionBlock
               tree={item}
@@ -47,7 +50,7 @@ class Accordion extends React.Component<PropsType, StateType> {
             />
             <div styleName="separator" />
           </div>
-        ))}
+        ), filteredItems)}
         <div
           styleName="showAll"
           onClick={this.handleOnToggle}
