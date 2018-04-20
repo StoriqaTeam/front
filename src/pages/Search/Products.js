@@ -90,7 +90,7 @@ class Products extends PureComponent<PropsType, StateType> {
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <Sidebar>
-              <div styleName="blockTitle">Цена (STQ)</div>
+              <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
                 max={priceRange.maxValue}

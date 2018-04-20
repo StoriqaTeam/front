@@ -110,7 +110,7 @@ class Categories extends Component<PropsType, StateType> {
                   onClick={this.handleOnChangeCategory}
                 />
               }
-              <div styleName="blockTitle">Цена (STQ)</div>
+              <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
                 max={priceRange.maxValue}

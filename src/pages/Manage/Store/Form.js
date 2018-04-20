@@ -223,7 +223,7 @@ class Form extends Component<PropsType, StateType> {
           <div styleName="formItem">
             <Select
               forForm
-              label="Язык магазина"
+              label="Language"
               activeItem={defaultLanguageValue}
               items={langItems}
               onSelect={this.handleDefaultLanguage}
