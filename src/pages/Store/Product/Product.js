@@ -6,7 +6,13 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
 
-import { extractText, buildWidgets, filterVariants, isEmpty } from 'utils';
+import {
+  extractText,
+  buildWidgets,
+  filterVariants,
+  isEmpty,
+  compareWidgets,
+} from 'utils';
 
 import {
   ProductImage,
@@ -63,10 +69,9 @@ class Product extends PureComponent<PropsType, StateType> {
         },
       },
     } = this.props;
-    /* eslint-disable no-console */
-    console.log('selected', selected);
-    console.log('filterVariants(all, selected)', filterVariants(all, selected));
-    filterVariants(all, selected);
+    const { widgets } = this.state;
+    const filteredWidgets = filterVariants(all, selected.label);
+    compareWidgets(filteredWidgets, widgets);
   };
   render() {
     const {
