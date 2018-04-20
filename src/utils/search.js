@@ -134,7 +134,7 @@ const searchPathByParent = (
 ) => {
   const result = find(whereEq({ rawId }))(arr);
   stack.unshift(result);
-  if (result.parentId) {
+  if (result && result.parentId) {
     searchPathByParent(arr, result.parentId, stack);
   }
   return stack;

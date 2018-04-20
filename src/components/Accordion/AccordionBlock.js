@@ -23,6 +23,7 @@ type PropsType = {
 
 type StateType = {
   isExpanded: boolean,
+  showAll: boolean,
 }
 
 class AccordionBlock extends React.Component<PropsType, StateType> {
@@ -35,10 +36,12 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
       const isContains = findContainsActive(props.tree.children);
       this.state = {
         isExpanded: props.isExpanded === undefined ? Boolean(isContains) : props.isExpanded,
+        showAll: false,
       };
     } else {
       this.state = {
         isExpanded: Boolean(props.isExpanded),
+        showAll: false,
       };
     }
   }
@@ -47,6 +50,10 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
     this.setState({
       isExpanded: !this.state.isExpanded,
     });
+  }
+
+  handleOnShowAll = () => {
+    this.setState({ showAll: !this.state.showAll });
   }
 
   render() {
@@ -81,6 +88,15 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
                 {child.name}
               </div>
             )))}
+            <div
+              styleName={classNames('item', { active: true })}
+              onClick={this.handleOnShowAll}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
+              show all
+            </div>
           </div>
         }
       </div>
