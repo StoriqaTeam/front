@@ -2,20 +2,19 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
+import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
 import { currentUserShape } from 'utils/shapes';
-import { urlToInput, inputToUrl } from 'utils/search';
-import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { Button } from 'components/common/Button';
 import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
 import { AttributeControl } from 'components/AttributeControl';
-import { flattenFunc } from 'utils';
 
 import './Categories.scss';
 
@@ -123,6 +122,35 @@ class Categories extends Component<PropsType, StateType> {
     this.props.relay.loadMore(24);
   };
 
+  renderBreadcrumbs = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
+    if (!categories || !categoryId) {
+      return null;
+    }
+    const arr = flattenFunc(categories);
+    const pathArr = searchPathByParent(arr, parseInt(categoryId, 10));
+    return (
+      <div styleName="breadcrumbs">
+        <p styleName="item">Все категрии</p>
+        {pathArr.length !== 0 &&
+          pathArr.map(item => (
+            <div
+              key={item.rawId}
+              styleName={classNames('item', { active: item.rawId === parseInt(categoryId, 10) })}
+              onClick={() => this.props.router.push(`/categories?search=&category=${item.rawId}`)}
+              onKeyDown={() => { }}
+              role="button"
+              tabIndex="0"
+            >
+              <span styleName="separator">/</span>{getNameText(item.name, 'EN')}
+            </div>
+          ))
+        }
+      </div>
+    );
+  }
+
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
@@ -179,6 +207,9 @@ class Categories extends Component<PropsType, StateType> {
             </div>
           </div>
           <div styleName="contentContainer">
+            <div styleName="topContentContainer">
+              {this.renderBreadcrumbs()}
+            </div>
             <div styleName="productsContainer">
               {productsWithVariants && productsWithVariants.map(item => (
                 <div key={item.id} styleName="cardWrapper">
@@ -224,6 +255,7 @@ export default createPaginationContainer(
             categories {
               rawId
               level
+              parentId
               name {
                 text
                 lang
@@ -231,6 +263,7 @@ export default createPaginationContainer(
               children {
                 rawId
                 level
+                parentId
                 name {
                   text
                   lang
@@ -238,6 +271,7 @@ export default createPaginationContainer(
                 children {
                   rawId
                   level
+                  parentId
                   name {
                     text
                     lang
@@ -245,6 +279,7 @@ export default createPaginationContainer(
                   children {
                     rawId
                     level
+                    parentId
                     name {
                       text
                       lang
