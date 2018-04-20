@@ -2,7 +2,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { find, whereEq } from 'ramda';
+import { find, whereEq, slice } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -58,7 +58,8 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
 
   render() {
     const { tree, active, onClick } = this.props;
-    const { isExpanded } = this.state;
+    const { isExpanded, showAll } = this.state;
+    const slicer = showAll ? slice(0, Infinity) : slice(0, 5);
     return (
       <div>
         <div
@@ -76,7 +77,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
         </div>
         {isExpanded &&
           <div styleName="childrenContainer">
-            {tree.children && tree.children.map((child => (
+            {tree.children && slicer(tree.children).map((child => (
               <div
                 key={child.id}
                 styleName={classNames('item', { active: active === child.id })}

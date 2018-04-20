@@ -123,9 +123,6 @@ class Categories extends Component<PropsType, StateType> {
   };
 
   renderBreadcrumbs = () => {
-    // const { categoryRowId } = this.props;
-    // const categories = pathOr(null, ['categories', 'children'], this.context.directories);
-    // const categories = pathOr(null, ['data', 'categories', 'children'], categoriesMock);
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
     if (!categories || !categoryId) {
@@ -133,7 +130,6 @@ class Categories extends Component<PropsType, StateType> {
     }
     const arr = flattenFunc(categories);
     const pathArr = searchPathByParent(arr, parseInt(categoryId, 10));
-    console.log('**** render breadcrumbs pathArr: ', pathArr);
     return (
       <div styleName="breadcrumbs">
         <p styleName="item">Все категрии</p>

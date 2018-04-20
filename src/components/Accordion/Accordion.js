@@ -22,7 +22,7 @@ type StateType = {
   showAll: boolean,
 }
 
-class Accordion extends React.Component<PropsType, StateType> { 
+class Accordion extends React.Component<PropsType, StateType> {
   state = {
     showAll: false,
   }
@@ -34,7 +34,7 @@ class Accordion extends React.Component<PropsType, StateType> {
   render() {
     const { items, activeId, onClick } = this.props;
     const { showAll } = this.state;
-    const filteredItems = showAll ? items : items.slice(0, 2);
+    const filteredItems = showAll ? items : items.slice(0, 3);
     return (
       <div styleName="wrapper">
         {filteredItems.map((item, index) => (
@@ -49,6 +49,7 @@ class Accordion extends React.Component<PropsType, StateType> {
           </div>
         ))}
         <div
+          styleName="showAll"
           onClick={this.handleOnToggle}
           onKeyDown={() => {}}
           role="button"
