@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { map, addIndex } from 'ramda';
 
 import './ProductSize.scss';
 
@@ -37,13 +38,14 @@ class ProductSize extends Component<PropsType, StateType> {
   render() {
     const { title, sizes, sizeProp } = this.props;
     const { clicked } = this.state;
+    const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
         <h4>
           { title }
         </h4>
         <div styleName="sizes">
-          {sizes.map((size, index) => (
+          {mapIndexed((size, index) => (
             <button
               key={size.id}
               onClick={() => this.handleClick(index, size)}
@@ -51,7 +53,7 @@ class ProductSize extends Component<PropsType, StateType> {
             >
               { size[sizeProp] }
             </button>
-          ))}
+          ), sizes)}
         </div>
       </div>
     );
