@@ -46,6 +46,6 @@ export default function compareWidgets(filteredWidgets, widgets) {
   };
   forEachObjIndexed(keyValue, widgets);
   /* eslint-disable no-console */
-  console.log('widgetClone', widgetClone);
+  // console.log('widgetClone', widgetClone);
   return widgetClone;
 }

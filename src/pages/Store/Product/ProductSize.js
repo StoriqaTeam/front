@@ -49,7 +49,7 @@ class ProductSize extends Component<PropsType, StateType> {
             <button
               key={size.id}
               onClick={() => this.handleClick(index, size)}
-              styleName={`size ${clicked === index ? 'clicked' : ''}`}
+              styleName={`size ${clicked === index ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
             >
               { size[sizeProp] }
             </button>

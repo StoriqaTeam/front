@@ -47,3 +47,11 @@ h4 {
 .size:not(:last-child) {
   border-right: 1px solid transparent;
 }
+
+.opaque {
+  opacity: 0.3;
+}
+
+.noOpaque {
+  opacity: 0.3;
+}
