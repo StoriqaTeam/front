@@ -6,7 +6,7 @@ import './ProductSize.scss';
 
 type PropsType = {
   title: string,
-  sizes: {id: string, label: string}[],
+  sizes: Array<{id: string, label: string}>,
   sizeProp: string,
   onClick: Function,
 }

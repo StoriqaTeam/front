@@ -3,7 +3,6 @@
 import { isNil, flatten, uniq } from 'ramda';
 import { extractText } from './index';
 
-
 /**
  * 1) filter all variants by value
  * 2) take all attribute values from the filtered variant
@@ -96,7 +95,7 @@ function group(array: [], prop: string, type: string = 'object'): {} {
     item[current[prop]] = item[current[prop]] || [];
     item[current[prop]].push(current);
     return item;
-  }, Object.create(null));
+  }, {});
 }
 
 /**
@@ -109,90 +108,16 @@ function setImage(image: string): string {
 }
 
 /**
- * @desc Iterates over a translatedValues array and just returns their corresponding translation
- * @param {TranslatedValueType[]} translatedValues
- * @param {string} [lang] = 'EN'
- * @param {string} image
- * @param {string} uiElement
- * @return {WidgetValueType[]}
- */
-function translateValues(
-  translatedValues: TranslatedValueType[],
-  lang: string = 'EN',
-  image: string,
-  uiElement: string,
-): WidgetValueType[] {
-  const img = setImage(image);
-  return translatedValues.map(({ translations }, index) => ({
-    id: `${index}`,
-    label: extractText(translations, lang),
-    img,
-    uiElement,
-  }));
-}
-
-/**
  * @param {any[]} array
- * @param {string} image
+ * @param {string} img
  * @return {WidgetValueType[]}
  */
-function buildWidgetInterface(array: any[], image: string): WidgetValueType[] {
+function buildWidgetInterface(array: any[], img: string): WidgetValueType[] {
   return array.map((value, index) => ({
     id: `${index}-${value}`,
     label: value,
-    image,
+    img,
   }));
-}
-
-/**
- * @param {AttributeMetaFieldType} metaField
- * @param {string} image
- * @param {string} attributeId
- * @return {{values: WidgetValueType[], uiElement: AttributeMetaFieldType.uiElement}}
- */
-function buildWidgetValues(
-  metaField: AttributeMetaFieldType,
-  image: string,
-  attributeId: string,
-): {value: WidgetValueType[], uiElement: string} {
-  const {
-    values,
-    translatedValues,
-    uiElement,
-  } = metaField;
-  if (isNil(values)) {
-    return {
-      values: translateValues(translatedValues, 'EN', image, uiElement),
-      uiElement,
-      id: attributeId,
-    };
-  }
-  return {
-    values: buildWidgetInterface(values, uiElement),
-    uiElement,
-    id: attributeId,
-  };
-}
-
-/**
- * @param {AttributeValueType[]} attributes
- * @return {WidgetType[]}
- */
-function buildAttribute(attributes: AttributeValueType[]): WidgetType[] {
-  return attributes.map((attr: AttributeValueType) => {
-    const {
-      value,
-      metaField,
-      attribute,
-    } = attr;
-    return {
-      id: attribute.id,
-      value,
-      image: setImage(metaField),
-      title: extractText(attribute.name),
-      ...buildWidgetValues(attribute.metaField, setImage(metaField), attribute.id),
-    };
-  });
 }
 
 /**
@@ -223,32 +148,34 @@ function transformVariants(variants: VariantType[]): any[] {
   return flatten(results);
 }
 
+
+function reduceGroup(widgetGroup) {
+  return widgetGroup.reduce((accumulator, current) => {
+    // copy accumulator to avoid 'parameter-reassign'
+    const copy = { ...accumulator };
+    const values = [].concat(copy.values, current.value).filter(i => i !== undefined);
+    copy.uiElement = current.uiElement;
+    copy.values = values;
+    const { title, image } = current;
+    return {
+      ...copy,
+      title,
+      image,
+    };
+  }, {});
+}
+
 export default function buildWidgets(variants: VariantType[]) {
   const transformedVariants = transformVariants(variants);
   // group by 'uiElement' property
   const grouped = group(transformedVariants, 'uiElement', 'array');
-  // reduce to a single Widget object
   const result = Object.keys(grouped).reduce((acc, key) => {
-    const reduced = grouped[key].reduce((accumulator, current) => {
-      // copy accumulator to avoid 'parameter-reassign'
-      const copy = { ...accumulator };
-      const values = [].concat(copy.values, current.value).filter(i => i !== undefined);
-      copy.uiElement = current.uiElement;
-      copy.values = values;
-      const { title, image } = current;
-      return {
-        ...copy,
-        title,
-        image,
-      };
-    }, {});
+    const reduced = reduceGroup(grouped[key]);
     acc[key] = {
       ...reduced,
       values: buildWidgetInterface(uniq(reduced.values), reduced.image),
     };
     return acc;
   }, {});
-  /* eslint-disable no-console */
-  console.log('result', result);
   return result;
 }

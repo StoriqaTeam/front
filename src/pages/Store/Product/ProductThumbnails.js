@@ -2,16 +2,12 @@
 
 import React, { Component } from 'react';
 
-import { has } from 'utils';
-
 import './ProductThumbnails.scss';
 
 type PropsType = {
   title: string,
-  thumbnails: {img: string, alt: string}[],
+  thumbnails: Array<{img: string, alt: string, label?: string}>,
   row?: boolean,
-  onClick?: Function,
-  srcProp?: string,
 }
 
 type StateType = {
@@ -22,8 +18,6 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   static defaultProps = {
     title: '',
     row: false,
-    onClick: () => {},
-    srcProp: 'src', // THIS is to point object's property that contains image url
   };
   state = {
     clicked: null,
@@ -45,7 +39,6 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       thumbnails,
       row,
       title,
-      srcProp,
     } = this.props;
     const { clicked } = this.state;
     return (
@@ -54,13 +47,13 @@ class ProductThumbnails extends Component<PropsType, StateType> {
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {thumbnails.map((thumbnail, index) => (
             <button
-              key={has(thumbnail, 'id') ? thumbnail.id : index}
+              key={thumbnail.id}
               onClick={() => this.handleClick(index, thumbnail)}
             >
               <figure>
                 <img
                   styleName={clicked === index ? 'clicked' : ''}
-                  src={thumbnail[srcProp]}
+                  src={thumbnail.img}
                   alt={thumbnail.label || 'something'}
                 />
               </figure>

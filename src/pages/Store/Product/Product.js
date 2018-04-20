@@ -6,7 +6,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
 
-import { extractText, buildWidgets } from 'utils';
+import { extractText, buildWidgets, filterVariants, isEmpty } from 'utils';
 
 import {
   ProductImage,
@@ -20,13 +20,14 @@ import {
 import './Product.scss';
 import mockData from './mockData.json';
 
-
 type PropsType = {
   baseProduct: {}
 };
 
 type StateType = {
-  tabs: {id: string | number, label: string, content: any}[]
+  tabs: {id: string | number, label: string, content: any}[],
+  selectedValue: undefined | string,
+  widgets: {},
 }
 
 class Product extends PureComponent<PropsType, StateType> {
@@ -38,12 +39,38 @@ class Product extends PureComponent<PropsType, StateType> {
         content: (<TabRow row={mockData.row} />),
       },
     ],
+    selectedValue: undefined,
+    widgets: {},
   };
-  componentDidMount() {
+  componentWillReceiveProps(nextProps: PropsType) {
+    const {
+      baseProduct: {
+        variants: {
+          all,
+        },
+      },
+    } = this.props;
+    const { widgets } = this.state;
+    if (isEmpty(widgets)) {
+      this.setState({
+        widgets: buildWidgets(all),
+      });
+    }
   }
   handleWidgetClick = (selected): void => {
+    const {
+      baseProduct: {
+        variants: {
+          all,
+        },
+      },
+    } = this.props;
     /* eslint-disable no-console */
     console.log('selected', selected);
+    // filterVariants(all, selected);
+    this.setState({
+      selectedValue: selected.label,
+    });
   };
   render() {
     const {
@@ -55,8 +82,8 @@ class Product extends PureComponent<PropsType, StateType> {
         },
       },
     } = this.props;
-    const widgets = buildWidgets(all);
-    const { tabs } = this.state;
+    const { tabs, selectedValue, widgets } = this.state;
+    const widgets2 = buildWidgets(all);
     return (
       <div styleName="container">
         <Header />
@@ -71,10 +98,9 @@ class Product extends PureComponent<PropsType, StateType> {
                   </Col>
                   <Col size={6}>
                     <ProductDetails
-                      srcProp="image"
                       productTitle={extractText(name)}
                       productDescription={extractText(longDescription, 'EN', 'No Description')}
-                      widgets={widgets}
+                      widgets={widgets2}
                       onWidgetClick={this.handleWidgetClick}
                     />
                   </Col>

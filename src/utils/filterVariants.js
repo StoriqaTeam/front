@@ -1,15 +1,25 @@
-import { findIndex, propEq } from 'ramda';
+// @flow
 
+import { filter, any, propEq, prop, compose } from 'ramda';
+
+import { buildWidgets } from './index';
 /* eslint-disable */
-export default function filterVariants(variants, selected, variantId) {
-  const widgets = variants.map((v) => {
-    return {
-      [selected.uiElement]: v[selected.uiElement].value,
-      variantId: v.variantId,
-    };
-  });
-  /* eslint-disable no-console */
-  console.log('widgets', widgets);
-  console.log('variantId', variantId);
-  return findIndex(propEq(selected.uiElement, selected.label))(widgets);
+/**
+ * @desc Filters variants based on a value
+ * @param {any} variants
+ * @param {string} value
+ * @return {[]}
+ */
+export default function filterVariants(variants, value): [] {
+  let filtered = [];
+  if (value !== undefined) {
+    const hasValue = any(propEq('value', value));
+    filtered = filter(compose(hasValue, prop('attributes')))(variants);
+    /* eslint-disable no-console */
+    console.log('filtered', filtered);
+  } else {
+    filtered = variants;
+  }
+  console.log('buildWidgets(filtered)', buildWidgets(filtered));
+  return buildWidgets(filtered);
 }
