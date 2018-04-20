@@ -2,25 +2,26 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, filter, where, equals } from 'ramda';
-import { createPaginationContainer, graphql } from 'react-relay';
+import { sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
+import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
+import { urlToInput, inputToUrl } from 'utils/search';
 import log from 'utils/log';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
+import { Button } from 'components/common/Button';
 import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
-import { AttributeControll } from 'components/AttributeControll';
+import { AttributeControl } from 'components/AttributeControl';
 import { flattenFunc } from 'utils';
 
-import Sidebar from './Sidebar';
-
-import './Products.scss';
+import './Categories.scss';
 
 type PropsType = {
   router: routerShape,
+  relay: Relay,
 }
 
 type StateType = {
@@ -43,13 +44,12 @@ type AttrFilterType = {
   },
 }
 
-const storesPerRequest = 20;
+const storesPerRequest = 24;
 
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
-    log.info('******* ^^^^^^^ props: ', props);
     this.state = {
       volume: 0,
       volume2: priceRange.maxValue,
@@ -61,13 +61,14 @@ class Categories extends Component<PropsType, StateType> {
     if (!categories) return null;
     const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
     const res = level2Filter(flattenFunc(categories));
-    return prepareForAccordion(res);
+    const result = prepareForAccordion(res);
+    return result;
   }
 
   handleOnChangeCategory = (item) => {
     const { volume, volume2 } = this.state;
     const name = pathOr('', ['match', 'location', 'query', 'search'], this.props);
-    this.props.router.push(`/products?search=${name}&category=${item.id}&minValue=${volume}&maxValue=${volume2}`);
+    this.props.router.push(`/categories?search=${name}&category=${item.id}&minValue=${volume}&maxValue=${volume2}`);
   };
 
   handleOnRangeChange = (value: number, fieldName: string) => {
@@ -78,13 +79,38 @@ class Categories extends Component<PropsType, StateType> {
 
   handleOnCompleteRange = (value: number, value2: number, e: Event) => {
     log.info({ value, value2 }, e);
-    const name = pathOr('', ['match', 'location', 'query', 'search'], this.props);
-    this.props.router.push(`/categories?search=${name}&minValue=${value}&maxValue=${value2}`);
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const newPreparedObj = assocPath(['options', 'priceFilter'], {
+      minValue: value,
+      maxValue: value2,
+    }, oldPreparedObj);
+    const newUrl = inputToUrl(newPreparedObj);
+    this.props.router.push(`/categories${newUrl}`);
+  }
+
+  prepareUrlStr = (id, values) => {
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const oldAttrs = pathOr([], ['options', 'attrFilters'], oldPreparedObj);
+    const newPreparedObj = assocPath(['options', 'attrFilters'], [
+      ...filter(complement(whereEq({ id })), oldAttrs),
+      {
+        id,
+        equal: {
+          values,
+        },
+      },
+    ], oldPreparedObj);
+    return inputToUrl(newPreparedObj);
   }
 
   handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
+    const rawId = pathOr(null, ['attribute', 'rawId'], attrFilter);
     return (value: string) => {
+      const newUrl = this.prepareUrlStr(rawId, value);
+      this.props.router.push(`/categories${newUrl}`);
       if (id) {
         this.setState({
           [id]: value,
@@ -93,24 +119,44 @@ class Categories extends Component<PropsType, StateType> {
     };
   }
 
+  productsRefetch = () => {
+    this.props.relay.loadMore(24);
+  };
+
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
-    const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
-    const catTree = this.generateTree();
+    const attrFilters = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'], this.props);
+    const accordionItems = this.generateTree();
     const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    // prepare arrays
+    const variantsToArr = variantsName => pipe(
+      path(['node']),
+      i => assoc('storeId', i.rawId, i),
+      evolve({
+        variants: (i) => {
+          if (variantsName === 'all') {
+            return path([variantsName], i);
+          }
+          return [path([variantsName], i)];
+        },
+      }),
+    );
+    const productsWithVariants = map(variantsToArr('all'), products);
     return (
       <div styleName="container">
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
-            <Sidebar>
-              {catTree &&
+            <div>
+              {accordionItems &&
                 <Accordion
-                  tree={catTree}
+                  items={accordionItems}
                   onClick={this.handleOnChangeCategory}
+                  activeId={categoryId ? parseInt(categoryId, 10) : null}
                 />
               }
-              <div styleName="blockTitle">Цена (STQ)</div>
+              <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
                 max={priceRange.maxValue}
@@ -121,26 +167,35 @@ class Categories extends Component<PropsType, StateType> {
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}
               />
-              {attrFilters && attrFilters.map(attrFilter => (
-                <div key={attrFilter.attribute.id} styleName="attrBlock">
-                  <AttributeControll
-                    attrFilter={attrFilter}
-                    onChange={this.handleOnChangeAttribute(attrFilter)}
-                  />
-                </div>
-              ))}
-            </Sidebar>
+              {attrFilters && sort((a, b) => (a.attribute.rawId - b.attribute.rawId), attrFilters)
+                .map(attrFilter => (
+                  <div key={attrFilter.attribute.id} styleName="attrBlock">
+                    <AttributeControl
+                      attrFilter={attrFilter}
+                      onChange={this.handleOnChangeAttribute(attrFilter)}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
           <div styleName="contentContainer">
             <div styleName="productsContainer">
-              {products && products.map(item => (
-                <div key={item.node.id} styleName="cardWrapper">
-                  <CardProduct item={item.node} />
+              {productsWithVariants && productsWithVariants.map(item => (
+                <div key={item.id} styleName="cardWrapper">
+                  <CardProduct item={item} />
                 </div>
               ))}
-              <div styleName="loadMoreContainer">
-                <div styleName="loadMoreButton">Load more</div>
-              </div>
+              {this.props.relay.hasMore() && (
+                <div styleName="button">
+                  <Button
+                    big
+                    load
+                    onClick={this.productsRefetch}
+                  >
+                    Load more
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -160,18 +215,40 @@ export default createPaginationContainer(
     fragment Categories_search on Search
     @argumentDefinitions(
       text: { type: "SearchProductInput!" }
-      first: { type: "Int", defaultValue: 20 }
+      first: { type: "Int", defaultValue: 24 }
       after: { type: "ID", defaultValue: null }
     ) {
       findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {
         pageInfo {
           searchFilters {
             categories {
+              rawId
+              level
+              name {
+                text
+                lang
+              }
               children {
+                rawId
+                level
+                name {
+                  text
+                  lang
+                }
                 children {
                   rawId
+                  level
+                  name {
+                    text
+                    lang
+                  }
                   children {
                     rawId
+                    level
+                    name {
+                      text
+                      lang
+                    }
                   }
                 }
               }
@@ -183,6 +260,14 @@ export default createPaginationContainer(
             attrFilters {
               attribute {
                 id
+                rawId
+                name {
+                  text
+                  lang
+                }
+                metaField {
+                  uiElement
+                }
               }
               equal {
                 values
@@ -206,6 +291,9 @@ export default createPaginationContainer(
             category {
               rawId
             }
+            store {
+              rawId
+            }
             variants {
               all {
                 id
@@ -219,7 +307,6 @@ export default createPaginationContainer(
                     id
                   }
                   value
-                  
                 }
               }
             }

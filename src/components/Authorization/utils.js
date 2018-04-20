@@ -89,7 +89,7 @@ function validateField(name, value, validate, errorMessage) {
       passwordQualityResult = passwordQuality(value);
       // check that every value is true.
       validModel = Object.values(passwordQualityResult).every(p => p === true);
-      formError = setErrorMessage(value, validModel, '');
+      formError = setErrorMessage(value, validModel, 'Invalid Password', errorMessage);
       break;
     default:
       break;

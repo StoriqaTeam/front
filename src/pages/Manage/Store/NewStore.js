@@ -75,7 +75,14 @@ class NewStore extends Component<PropsType, StateType> {
       slogan,
       logo: logoUrl,
       environment,
-      onCompleted: (response: ?Object) => {
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ serverValidationErrors: validationErrors });
+          return;
+        }
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
       },
