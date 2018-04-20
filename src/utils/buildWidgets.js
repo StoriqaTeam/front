@@ -1,6 +1,6 @@
 // @flow
 
-import { isNil, flatten, uniq } from 'ramda';
+import { isNil, flatten, uniq, reduce, filter, identity } from 'ramda';
 import { extractText } from './index';
 
 /**
@@ -150,19 +150,25 @@ function transformVariants(variants: VariantType[]): any[] {
 
 
 function reduceGroup(widgetGroup) {
-  return widgetGroup.reduce((accumulator, current) => {
+  return reduce((accumulator, item) => {
     // copy accumulator to avoid 'parameter-reassign'
     const copy = { ...accumulator };
-    const values = [].concat(copy.values, current.value).filter(i => i !== undefined);
-    copy.uiElement = current.uiElement;
+    const values = filter(identity, [].concat(copy.values, item.value));
+    const valuesWithImages =
+      filter(identity, [].concat(copy.valuesWithImages, { val: item.value, img: item.image }));
+    copy.uiElement = item.uiElement;
     copy.values = values;
-    const { title, image } = current;
-    return {
+    const { title } = item;
+    const outputItem = {
       ...copy,
       title,
-      image,
+      values,
+      valuesWithImages,
     };
-  }, {});
+    // eslint-disable-next-line
+    console.log('outputItem', outputItem);
+    return outputItem;
+  }, {}, widgetGroup);
 }
 
 export default function buildWidgets(variants: VariantType[]) {

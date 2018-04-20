@@ -8,6 +8,7 @@ type PropsType = {
   title: string,
   thumbnails: Array<{img: string, alt: string, label?: string}>,
   row?: boolean,
+  onClick: Function,
 }
 
 type StateType = {
@@ -54,7 +55,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 <img
                   styleName={clicked === index ? 'clicked' : ''}
                   src={thumbnail.img}
-                  alt={thumbnail.label || 'something'}
+                  alt={thumbnail.val || 'something'}
                 />
               </figure>
             </button>

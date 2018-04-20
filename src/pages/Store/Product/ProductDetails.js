@@ -87,7 +87,7 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
           title={widgets.COLOR_PICKER.title}
           row
           srcProp="image"
-          thumbnails={widgets.COLOR_PICKER.values}
+          thumbnails={widgets.COLOR_PICKER.valuesWithImages}
           onClick={val => this.handleWidget(val, widgets.COLOR_PICKER.title)}
         />
       </div>
