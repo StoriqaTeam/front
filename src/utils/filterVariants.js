@@ -18,8 +18,5 @@ export default function filterVariants(variants, value): [] {
   } else {
     filtered = variants;
   }
-  /* eslint-disable no-console */
-  console.log('filtered', filtered);
-  // console.log('buildWidgets(filtered)', buildWidgets(filtered));
   return buildWidgets(filtered);
 }

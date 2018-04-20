@@ -1,4 +1,4 @@
-import { forEachObjIndexed, prop, differenceWith } from 'ramda';
+import { forEachObjIndexed, prop, differenceWith, findIndex, propEq } from 'ramda';
 
 /**
  * @desc Compares to set of widgets and marks the differences
@@ -6,13 +6,46 @@ import { forEachObjIndexed, prop, differenceWith } from 'ramda';
  * @param widgets
  */
 export default function compareWidgets(filteredWidgets, widgets) {
-  const cmp = (x, y) => x.label === y.label;
-  const keyValue = (widget, key) => {
-    /* eslint-disable no-console */
-    // console.log('prop(\'values\', value)', prop('values', filteredWidgets[key]));
-    const differences = differenceWith(cmp, prop('values', widget), prop('values', filteredWidgets[key]), );
+  const widgetClone = {};
+  /**
+   * @param x
+   * @param y
+   * @return {boolean}
+   */
+  const compareValue = (x, y) => x.label === y.label;
+  /**
+   * @param {{}} widget
+   * @param {string} key
+   * @return {*}
+   */
+  const keyValue = (widget: {}, key: string) => {
+    // get current widgets's attributes
+    const widgetAttributes = prop('values', widget);
+    // get the widget's filtered attributes
+    const filterWidgetAttributes = prop('values', filteredWidgets[key]);
+    // extract just the attributes that doesn't exist in 'filterWidgetAttributes'
+    const differences = differenceWith(compareValue, widgetAttributes, filterWidgetAttributes);
+    // apply each different attribute an 'opacity' property
     const differencesWithOpacity = differences.map(dif => ({ ...dif, opacity: true }));
-    console.log('differencesWithOpacity', differencesWithOpacity);
+    // iterate each attribute to add the attribute that doesn't has the 'opacity' attribute
+    const result = widgetAttributes.map((widgetAttr) => {
+      // get the index of the label property in 'differencesWithOpacity'
+      const index = findIndex(propEq('label', widgetAttr.label))(differencesWithOpacity);
+      // if doesn't exists, return the attribute with opacity
+      if (index !== -1) {
+        return differencesWithOpacity[index];
+      }
+      // otherwise return the current widget attribute
+      return widgetAttr;
+    });
+    // build the new widget
+    widgetClone[key] = {
+      ...widget,
+      values: result,
+    };
   };
   forEachObjIndexed(keyValue, widgets);
+  /* eslint-disable no-console */
+  console.log('widgetClone', widgetClone);
+  return widgetClone;
 }

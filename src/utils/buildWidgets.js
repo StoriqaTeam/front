@@ -105,7 +105,7 @@ function setImage(image: string): string {
  */
 function buildWidgetInterface(array: any[], img: string): WidgetValueType[] {
   return array.map((value, index) => ({
-    id: `${index}-${value}`,
+    id: `${index}`,
     label: value,
     img,
   }));
@@ -138,8 +138,6 @@ function transformVariants(variants: VariantType[]): any[] {
   });
   return flatten(results);
 }
-
-
 
 function reduceGroup(widgetGroup) {
   return reduce((accumulator, item) => {
