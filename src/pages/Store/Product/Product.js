@@ -71,7 +71,7 @@ class Product extends PureComponent<PropsType, StateType> {
     } = this.props;
     const { widgets } = this.state;
     const filteredWidgets = filterVariants(all, selected.label);
-    compareWidgets(filteredWidgets, widgets);
+    compareWidgets(filteredWidgets, widgets, selected);
   };
   render() {
     const {

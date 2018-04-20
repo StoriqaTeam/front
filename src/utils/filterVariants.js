@@ -15,11 +15,11 @@ export default function filterVariants(variants, value): [] {
   if (value !== undefined) {
     const hasValue = any(propEq('value', value));
     filtered = filter(compose(hasValue, prop('attributes')))(variants);
-    /* eslint-disable no-console */
-    console.log('filtered', filtered);
   } else {
     filtered = variants;
   }
-  console.log('buildWidgets(filtered)', buildWidgets(filtered));
+  /* eslint-disable no-console */
+  console.log('filtered', filtered);
+  // console.log('buildWidgets(filtered)', buildWidgets(filtered));
   return buildWidgets(filtered);
 }
