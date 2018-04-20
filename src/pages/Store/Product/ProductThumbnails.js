@@ -5,9 +5,10 @@ import React, { Component } from 'react';
 import './ProductThumbnails.scss';
 
 type PropsType = {
-  title: string,
+  title?: string,
   thumbnails: Array<{img: string, alt: string, label?: string}>,
   row?: boolean,
+  onClick: Function,
 }
 
 type StateType = {

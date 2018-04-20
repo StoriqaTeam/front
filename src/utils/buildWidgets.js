@@ -67,15 +67,6 @@ type WidgetValueType = {
   img?: string,
 }
 
-type WidgetType = {
-  id: string,
-  image: string,
-  title: string,
-  values: WidgetValueType[],
-  uiElement: string,
-  value: string | number,
-}
-
 /**
  * @desc Groups an array of objects by certain property
  * @param {{}[]} array - Array of objects

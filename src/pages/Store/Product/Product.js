@@ -26,7 +26,6 @@ type PropsType = {
 
 type StateType = {
   tabs: {id: string | number, label: string, content: any}[],
-  selectedValue: undefined | string,
   widgets: {},
 }
 
@@ -39,7 +38,6 @@ class Product extends PureComponent<PropsType, StateType> {
         content: (<TabRow row={mockData.row} />),
       },
     ],
-    selectedValue: undefined,
     widgets: {},
   };
   componentWillReceiveProps(nextProps: PropsType) {
@@ -49,7 +47,7 @@ class Product extends PureComponent<PropsType, StateType> {
           all,
         },
       },
-    } = this.props;
+    } = nextProps;
     const { widgets } = this.state;
     if (isEmpty(widgets)) {
       this.setState({
@@ -67,23 +65,17 @@ class Product extends PureComponent<PropsType, StateType> {
     } = this.props;
     /* eslint-disable no-console */
     console.log('selected', selected);
-    // filterVariants(all, selected);
-    this.setState({
-      selectedValue: selected.label,
-    });
+    console.log('filterVariants(all, selected)', filterVariants(all, selected));
+    filterVariants(all, selected);
   };
   render() {
     const {
       baseProduct: {
         name,
         longDescription,
-        variants: {
-          all,
-        },
       },
     } = this.props;
-    const { tabs, selectedValue, widgets } = this.state;
-    const widgets2 = buildWidgets(all);
+    const { tabs, widgets } = this.state;
     return (
       <div styleName="container">
         <Header />
@@ -97,12 +89,14 @@ class Product extends PureComponent<PropsType, StateType> {
                     <ProductShare />
                   </Col>
                   <Col size={6}>
-                    <ProductDetails
-                      productTitle={extractText(name)}
-                      productDescription={extractText(longDescription, 'EN', 'No Description')}
-                      widgets={widgets2}
-                      onWidgetClick={this.handleWidgetClick}
-                    />
+                    {!isEmpty(widgets) ? (
+                      <ProductDetails
+                        productTitle={extractText(name)}
+                        productDescription={extractText(longDescription, 'EN', 'No Description')}
+                        widgets={widgets}
+                        onWidgetClick={this.handleWidgetClick}
+                      />
+                    ) : null}
                   </Col>
                 </Row>
               </div>

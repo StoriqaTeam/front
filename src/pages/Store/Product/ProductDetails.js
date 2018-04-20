@@ -25,16 +25,12 @@ type PropsType = {
 }
 
 type StateType = {
-  sizes: string | number[],
   selected: WidgetValueType,
-  thumbnails?: { id: string | number, img: string, alt: string }[],
-  variantSelected: number,
 }
 
 class ProductDetails extends PureComponent<PropsType, StateType> {
   state = {
     selected: null,
-    variantSelected: 0,
   };
   /**
    * @param {WidgetValueType} selected
@@ -53,14 +49,12 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
   render() {
     const {
       selected,
-      variantSelected,
     } = this.state;
     const {
       productTitle,
       productDescription,
       widgets,
     } = this.props;
-    // const widgetsKey = Object.keys(widgets)[0];
     return (
       <div styleName="container">
         <h2>{productTitle}</h2>
