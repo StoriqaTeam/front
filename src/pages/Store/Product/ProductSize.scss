@@ -31,6 +31,7 @@ h4 {
   font-size: 16px;
   height: 40px;
   line-height: 36px;
+  opacity: 1;
   text-align: center;
   width: 58px;
 
@@ -53,5 +54,5 @@ h4 {
 }
 
 .noOpaque {
-  opacity: 0.3;
+  opacity: 1;
 }

@@ -108,6 +108,7 @@ function buildWidgetInterface(array: any[], img: string): WidgetValueType[] {
     id: `${index}`,
     label: value,
     img,
+    opacity: false,
   }));
 }
 

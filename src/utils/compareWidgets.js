@@ -19,8 +19,8 @@ export default function compareWidgets(filteredWidgets, widgets) {
    * @return {*}
    */
   const keyValue = (widget: {}, key: string) => {
-    // get current widgets's attributes
-    const widgetAttributes = prop('values', widget);
+    // get current widgets's attributes and reset back to false
+    const widgetAttributes = prop('values', widget).map(val => ({ ...val, opacity: false })); // (HORRIBLE hack :(, please Дьжэро, you can make it better)
     // get the widget's filtered attributes
     const filterWidgetAttributes = prop('values', filteredWidgets[key]);
     // extract just the attributes that doesn't exist in 'filterWidgetAttributes'
@@ -43,6 +43,8 @@ export default function compareWidgets(filteredWidgets, widgets) {
       ...widget,
       values: result,
     };
+    /* eslint-disable no-console */
+    // console.log('result', result);
   };
   forEachObjIndexed(keyValue, widgets);
   /* eslint-disable no-console */
