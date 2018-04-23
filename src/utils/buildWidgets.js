@@ -146,7 +146,7 @@ function reduceGroup(widgetGroup) {
     const copy = { ...accumulator };
     const values = filter(identity, [].concat(copy.values, item.value));
     const valuesWithImages =
-      filter(identity, [].concat(copy.valuesWithImages, { val: item.value, img: item.image }));
+      filter(identity, [].concat(copy.valuesWithImages, { label: item.value, img: item.image }));
     copy.uiElement = item.uiElement;
     copy.values = values;
     const { title } = item;

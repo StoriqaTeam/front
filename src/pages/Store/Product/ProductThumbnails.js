@@ -53,7 +53,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <figure>
                 <img
-                  styleName={clicked === index ? 'clicked' : ''}
+                  styleName={`${clicked === index ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
                   src={thumbnail.img}
                   alt={thumbnail.val || 'something'}
                 />
