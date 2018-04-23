@@ -138,7 +138,10 @@ class MiniSelect extends Component<PropsType, StateType> {
                   <div
                     key={id}
                     id={id}
-                    styleName={classNames('item', { active: activeItem && activeItem.id === id })}
+                    styleName={classNames('item', {
+                      active: activeItem && activeItem.id === id,
+                      opaque: item.opacity,
+                    })}
                     data-test={id}
                   >
                     {item.label}
