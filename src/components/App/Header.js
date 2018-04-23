@@ -68,9 +68,9 @@ class Header extends PureComponent<PropsType> {
                     isDropdown
                     title="Terms & Conditions"
                     items={[
-                      { id: '1', label: 'Punkt #1' },
-                      { id: '2', label: 'Punkt #2' },
-                      { id: '3', label: 'Punkt #3' },
+                      { id: '1', label: 'Term #1' },
+                      { id: '2', label: 'Term #2' },
+                      { id: '3', label: 'Term #3' },
                     ]}
                     onSelect={() => {}}
                   />
@@ -80,9 +80,9 @@ class Header extends PureComponent<PropsType> {
                     isDropdown
                     title="Delivery"
                     items={[
-                      { id: '1', label: 'Punkt #1' },
-                      { id: '2', label: 'Punkt #2' },
-                      { id: '3', label: 'Punkt #3' },
+                      { id: '1', label: 'Delivery #1' },
+                      { id: '2', label: 'Delivery #2' },
+                      { id: '3', label: 'Delivery #3' },
                     ]}
                   />
                 </div>

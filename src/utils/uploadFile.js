@@ -1,18 +1,22 @@
 // @flow
 
+import Cookies from 'universal-cookie';
+import { pathOr } from 'ramda';
+
 import { log } from 'utils';
 
 export default async function uploadFile(file: File) {
+  const cookies = new Cookies();
+  const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
   const body = new FormData();
   body.append('file', file);
-  if (!process.env.REACT_APP_STATIC_IMAGES_ENDPOINT) return null;
-  const headers = {
-    Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.g5ZM3g7XKc8ioRY01eWMpEOSHSN5TgGQP2acUP7MYh8', // TODO: pass jwt from cookies
-  };
+  if (!process.env.REACT_APP_STATIC_IMAGES_ENDPOINT || !jwt) return null;
   const response = await fetch(process.env.REACT_APP_STATIC_IMAGES_ENDPOINT, {
     method: 'POST',
     body,
-    headers,
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
   });
   if (!response.ok) {
     response.json().then(error => log.error(error));

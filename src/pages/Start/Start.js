@@ -15,7 +15,6 @@ import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
-// import mostPopularGoods from './mostPopularGoods.json';
 
 type ProductType = {
   rawId: number,
@@ -68,11 +67,16 @@ class Start extends PureComponent<PropsType> {
       'edges',
     ], this.props);
     // prepare arrays
-    const variantsToArr = variantsFieldName => pipe(
+    const variantsToArr = variantsName => pipe(
       path(['node']),
       i => assoc('storeId', i.rawId, i),
       evolve({
-        variants: i => ([path([variantsFieldName], i)]),
+        variants: (i) => {
+          if (variantsName === 'all') {
+            return path([variantsName], i);
+          }
+          return [path([variantsName], i)];
+        },
       }),
     );
     const discountProducts = map(variantsToArr('mostDiscount'), mostDiscountProducts);

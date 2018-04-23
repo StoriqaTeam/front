@@ -6,6 +6,15 @@
 ---
 
 ### Запуск версии для разработки:
+
+First you're gonna need to install ssl certificate for localhost. 
+
+For MacOS:
+
+1) Go to `server/cert` and double click `rootCA.pem`. It will add this certificate to Keychain app. Next in the keychain app select this certificate (it's called Storiqa), right click -> Get Info -> Trust -> Always trust. This will enable `https` for Chrome and Safari.
+
+2) For Firefox go to `about:preferences#privacy`. Scroll down to `View certificates`. Then on authorities click `import` and add `rootCA.pem`.
+
 #### Docker:
 `yarn docker`
 
@@ -17,7 +26,7 @@
 
 `yarn dev:kube` -- если бэк запускается с kubernetes.
 
-*http://localhost:3003/*
+*https://localhost:3443/*
 
 ---
 ### Продакшн-версия:
@@ -55,4 +64,4 @@ info_url = "https://graph.facebook.com/me"
 ---
 
 #### Переменная для хранения хоста, где будет развернута аппа (в .env файле)
-`REACT_APP_HOST=http://localhost:3003`
+`REACT_APP_HOST=https://localhost:3443`
