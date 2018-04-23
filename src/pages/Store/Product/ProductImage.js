@@ -4,18 +4,23 @@ import React, { PureComponent } from 'react';
 
 import { isEmpty } from 'utils';
 
-import { ProductThumbnails, ImageDetail, ProductContext } from './index';
+import { ProductThumbnails, ImageDetail } from './index';
 
 import Expand from './svg/expand.svg';
 
 import './ProductImage.scss';
+
+type PropsType = {
+  mainImage: string,
+  thumbnails: Array<string>,
+}
 
 type StateType = {
   thumbnails: {id: string | number, img: string, alt: string}[],
   selectedImage: {src: string, alt: string },
 }
 
-class ProductImage extends PureComponent<{}, StateType> {
+class ProductImage extends PureComponent<PropsType, StateType> {
   state = {
     thumbnails: [
       {
@@ -52,39 +57,26 @@ class ProductImage extends PureComponent<{}, StateType> {
   render() {
     const { thumbnails, selectedImage } = this.state;
     return (
-      <ProductContext.Consumer>
-        {(context) => {
-          /* eslint-disable no-empty-pattern */
-          const {
-            // variants,
-          } = context;
-          // const { photoMain, additionalPhotos } = extractPhotos(variants);
-          const additionalPhotos = [];
-          return (
-            <div styleName="container">
-              <div styleName="thumbnailsWrapper">
-                {additionalPhotos !== null && additionalPhotos.length ? (
-                  <ProductThumbnails
-                    onClick={this.handleClick}
-                    thumbnails={thumbnails}
-                  />
-                ) : null}
-              </div>
-              <figure styleName="bigImage">
-                <span styleName="expand">
-                  <Expand />
-                </span>
-                {/* 'https://image.ibb.co/bWz177/3.jpg' */}
-                <img
-                  src={!isEmpty(selectedImage) ? selectedImage.src : 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png'}
-                  alt=""
-                />
-                <ImageDetail />
-              </figure>
-            </div>
-          );
-        }}
-      </ProductContext.Consumer>
+      <div styleName="container">
+        <div styleName="thumbnailsWrapper">
+          {1 ? (
+            <ProductThumbnails
+              onClick={this.handleClick}
+              thumbnails={thumbnails}
+            />
+          ) : null}
+        </div>
+        <figure styleName="bigImage">
+          <span styleName="expand">
+            <Expand />
+          </span>
+          <img
+            src={!isEmpty(selectedImage) ? selectedImage.src : 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png'}
+            alt=""
+          />
+          <ImageDetail />
+        </figure>
+      </div>
     );
   }
 }

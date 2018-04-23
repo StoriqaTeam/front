@@ -34,6 +34,8 @@ type PropsType = {
 type StateType = {
   tabs: {id: string | number, label: string, content: any}[],
   widgets: {},
+  photoMain: string,
+  additionalPhotos: Array<string>,
 }
 
 class Product extends PureComponent<PropsType, StateType> {
@@ -56,15 +58,18 @@ class Product extends PureComponent<PropsType, StateType> {
       },
     } = nextProps;
     const { widgets } = this.state;
+    /* eslint-disable no-console */
+    console.log('extractPhotos(all)', extractPhotos(all));
     if (isEmpty(widgets)) {
       this.setState({
         widgets: buildWidgets(all),
+        ...extractPhotos(all),
       });
     }
   }
   handleWidgetClick = (selected): void => {
     /* eslint-disable no-console */
-    // console.log('selected', selected);
+    console.log('selected', selected);
     const {
       baseProduct: {
         variants: {
@@ -85,7 +90,13 @@ class Product extends PureComponent<PropsType, StateType> {
         longDescription,
       },
     } = this.props;
-    const { tabs, widgets } = this.state;
+    const {
+      tabs,
+      widgets,
+      photoMain,
+    } = this.state;
+    /* eslint-disable no-console */
+    console.log('widgets', widgets);
     return (
       <div styleName="container">
         <Header />
@@ -95,7 +106,10 @@ class Product extends PureComponent<PropsType, StateType> {
               <div styleName="whiteBackground">
                 <Row>
                   <Col size={6}>
-                    <ProductImage />
+                    <pre>{JSON.stringify(photoMain, null, 2)}</pre>
+                    <ProductImage
+                      mainImage={photoMain}
+                    />
                     <ProductShare />
                   </Col>
                   <Col size={6}>
