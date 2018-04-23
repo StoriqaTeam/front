@@ -26,7 +26,7 @@ class Photos extends PureComponent<PropsType> {
     const { photos: items } = this.props;
     return (
       <Fragment>
-        <span styleName="labelSmall">Фото товара</span>
+        <span styleName="labelSmall">Photo</span>
         <div styleName="container">
           <div styleName="upload">
             <UploadWrapper

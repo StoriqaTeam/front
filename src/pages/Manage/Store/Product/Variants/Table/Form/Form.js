@@ -116,7 +116,7 @@ class Form extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+        alert('Check that fields are filled correctly.'); // eslint-disable-line
       },
     });
   };

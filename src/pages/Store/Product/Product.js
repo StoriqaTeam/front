@@ -43,7 +43,7 @@ class Product extends PureComponent<PropsType, StateType> {
     tabs: [
       {
         id: 0,
-        label: 'Описание',
+        label: 'Description',
         content: (<TabRow row={mockData.row} />),
       },
     ],
