@@ -100,14 +100,14 @@ function setImage(image: string): string {
 
 /**
  * @param {any[]} array
- * @param {string} img
+ * @param {[]} images
  * @return {WidgetValueType[]}
  */
-function buildWidgetInterface(array: any[], img: string): WidgetValueType[] {
+function buildWidgetInterface(array: any[], images: []): WidgetValueType[] {
   return array.map((value, index) => ({
     id: `${index}`,
     label: value,
-    img,
+    img: images[index].img,
     opacity: false,
   }));
 }
@@ -168,7 +168,7 @@ export default function buildWidgets(variants: VariantType[]) {
     const reduced = reduceGroup(grouped[key]);
     acc[key] = {
       ...reduced,
-      values: buildWidgetInterface(uniq(reduced.values), reduced.image),
+      values: buildWidgetInterface(uniq(reduced.values), reduced.valuesWithImages),
     };
     return acc;
   }, {});
