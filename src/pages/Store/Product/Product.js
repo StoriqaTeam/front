@@ -12,6 +12,7 @@ import {
   filterVariants,
   isEmpty,
   compareWidgets,
+  extractPhotos,
 } from 'utils';
 
 import {
@@ -150,6 +151,8 @@ export default createFragmentContainer(
       variants {
         all {
           id
+          photoMain
+          additionalPhotos
           attributes {
             value
             metaField
