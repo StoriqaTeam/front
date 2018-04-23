@@ -47,8 +47,8 @@ class NewProduct extends Component<PropsType, StateType> {
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
       categoryId,
-      seoTitle: [{ lang: 'EN', text: seoTitle }],
-      seoDescription: [{ lang: 'EN', text: seoDescription }],
+      seoTitle: (!seoTitle || seoTitle.length === 0) ? null : [{ lang: 'EN', text: seoTitle }],
+      seoDescription: (!seoDescription || seoDescription.length === 0) ? null : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
