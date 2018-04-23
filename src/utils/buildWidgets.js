@@ -118,7 +118,10 @@ function buildWidgetInterface(array: any[], images: []): WidgetValueType[] {
  */
 function transformVariants(variants: VariantType[]): any[] {
   const results = variants.map((variant) => {
-    const { attributes } = variant;
+    const {
+      id: variantId,
+      attributes,
+    } = variant;
     return attributes.map(({
       value,
       metaField,
@@ -131,6 +134,7 @@ function transformVariants(variants: VariantType[]): any[] {
       },
     }: AttributeValueType) => ({
       id,
+      variantId,
       value,
       title: extractText(name),
       image: setImage(metaField),
@@ -149,8 +153,9 @@ function reduceGroup(widgetGroup) {
       filter(identity, [].concat(copy.valuesWithImages, { label: item.value, img: item.image }));
     copy.uiElement = item.uiElement;
     copy.values = values;
-    const { title } = item;
+    const { title, variantId } = item;
     const outputItem = {
+      variantId,
       ...copy,
       title,
       values,

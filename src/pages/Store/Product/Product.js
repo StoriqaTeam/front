@@ -35,7 +35,7 @@ type StateType = {
   tabs: {id: string | number, label: string, content: any}[],
   widgets: {},
   photoMain: string,
-  additionalPhotos: Array<string>,
+  additionalPhotos: Array<{id: string, img: string}>,
 }
 
 class Product extends PureComponent<PropsType, StateType> {
@@ -48,6 +48,8 @@ class Product extends PureComponent<PropsType, StateType> {
       },
     ],
     widgets: {},
+    photoMain: '',
+    additionalPhotos: [],
   };
   componentWillReceiveProps(nextProps: PropsType) {
     const {
@@ -58,18 +60,25 @@ class Product extends PureComponent<PropsType, StateType> {
       },
     } = nextProps;
     const { widgets } = this.state;
-    /* eslint-disable no-console */
-    console.log('extractPhotos(all)', extractPhotos(all));
     if (isEmpty(widgets)) {
+      const {
+        photoMain,
+        additionalPhotos,
+      } = extractPhotos(all)[0];
       this.setState({
         widgets: buildWidgets(all),
-        ...extractPhotos(all),
+        photoMain,
+        additionalPhotos,
       });
     }
   }
-  handleWidgetClick = (selected): void => {
-    /* eslint-disable no-console */
-    console.log('selected', selected);
+
+  /**
+   * @param selected
+   * @param {Object} selected
+   * @param {string} variantId
+   */
+  handleWidgetClick = (selected: {}, variantId: string): void => {
     const {
       baseProduct: {
         variants: {
@@ -94,9 +103,8 @@ class Product extends PureComponent<PropsType, StateType> {
       tabs,
       widgets,
       photoMain,
+      additionalPhotos,
     } = this.state;
-    /* eslint-disable no-console */
-    console.log('widgets', widgets);
     return (
       <div styleName="container">
         <Header />
@@ -106,9 +114,9 @@ class Product extends PureComponent<PropsType, StateType> {
               <div styleName="whiteBackground">
                 <Row>
                   <Col size={6}>
-                    <pre>{JSON.stringify(photoMain, null, 2)}</pre>
                     <ProductImage
                       mainImage={photoMain}
+                      thumbnails={additionalPhotos}
                     />
                     <ProductShare />
                   </Col>

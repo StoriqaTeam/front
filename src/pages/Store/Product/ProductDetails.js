@@ -34,17 +34,19 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
   };
   /**
    * @param {WidgetValueType} selected
-   * @param {string} title
+   * @param {Object} widget
+   * @param {string} widget.variantId
+   * @param {string} widget.uiElement
    * @return {void}
    */
-  handleWidget = (selected: WidgetValueType, title): void => {
+  handleWidget = (selected: WidgetValueType, { variantId, uiElement }): void => {
     const { onWidgetClick } = this.props;
-    if (title === 'Material') {
+    if (uiElement === 'COMBOBOX') {
       this.setState({
         selected,
       });
     }
-    onWidgetClick(selected);
+    onWidgetClick(selected, variantId);
   };
   render() {
     const {
@@ -73,20 +75,20 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
         <ProductSize
           title={CHECKBOX.title}
           sizes={CHECKBOX.values}
-          onClick={widget => this.handleWidget(widget, CHECKBOX.title)}
+          onClick={widget => this.handleWidget(widget, CHECKBOX)}
         />
         <ProductMaterial
           title={COMBOBOX.title}
           selected={selected || COMBOBOX.values[0]}
           materials={COMBOBOX.values}
-          onSelect={widget => this.handleWidget(widget, COMBOBOX.title)}
+          onSelect={widget => this.handleWidget(widget, COMBOBOX)}
         />
         <ProductThumbnails
           title={COLOR_PICKER.title}
           row
           srcProp="image"
           thumbnails={COLOR_PICKER.values}
-          onClick={widget => this.handleWidget(widget, COLOR_PICKER.title)}
+          onClick={widget => this.handleWidget(widget, COLOR_PICKER)}
         />
       </div>
     );

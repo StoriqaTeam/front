@@ -55,11 +55,12 @@ class ProductImage extends PureComponent<PropsType, StateType> {
     this.setState({ selectedImage });
   };
   render() {
-    const { thumbnails, selectedImage } = this.state;
+    const { mainImage, thumbnails } = this.props;
+    const { selectedImage } = this.state;
     return (
       <div styleName="container">
         <div styleName="thumbnailsWrapper">
-          {1 ? (
+          {!isEmpty(thumbnails) ? (
             <ProductThumbnails
               onClick={this.handleClick}
               thumbnails={thumbnails}
@@ -71,7 +72,7 @@ class ProductImage extends PureComponent<PropsType, StateType> {
             <Expand />
           </span>
           <img
-            src={!isEmpty(selectedImage) ? selectedImage.src : 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png'}
+            src={!isEmpty(selectedImage) ? selectedImage.src : mainImage}
             alt=""
           />
           <ImageDetail />
