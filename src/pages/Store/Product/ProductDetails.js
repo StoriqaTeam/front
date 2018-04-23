@@ -53,7 +53,11 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
     const {
       productTitle,
       productDescription,
-      widgets,
+      widgets: {
+        CHECKBOX,
+        COMBOBOX,
+        COLOR_PICKER,
+      },
     } = this.props;
     return (
       <div styleName="container">
@@ -67,22 +71,22 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
           {productDescription}
         </p>
         <ProductSize
-          title={widgets.CHECKBOX.title}
-          sizes={widgets.CHECKBOX.values}
-          onClick={val => this.handleWidget(val, widgets.CHECKBOX.title)}
+          title={CHECKBOX.title}
+          sizes={CHECKBOX.values}
+          onClick={widget => this.handleWidget(widget, CHECKBOX.title)}
         />
         <ProductMaterial
-          title={widgets.COMBOBOX.title}
-          selected={selected || widgets.COMBOBOX.values[0]}
-          materials={widgets.COMBOBOX.values}
-          onSelect={val => this.handleWidget(val, widgets.COMBOBOX.title)}
+          title={COMBOBOX.title}
+          selected={selected || COMBOBOX.values[0]}
+          materials={COMBOBOX.values}
+          onSelect={widget => this.handleWidget(widget, COMBOBOX.title)}
         />
         <ProductThumbnails
-          title={widgets.COLOR_PICKER.title}
+          title={COLOR_PICKER.title}
           row
           srcProp="image"
-          thumbnails={widgets.COLOR_PICKER.values}
-          onClick={val => this.handleWidget(val, widgets.COLOR_PICKER.title)}
+          thumbnails={COLOR_PICKER.values}
+          onClick={widget => this.handleWidget(widget, COLOR_PICKER.title)}
         />
       </div>
     );
