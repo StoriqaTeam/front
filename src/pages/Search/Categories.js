@@ -51,7 +51,7 @@ class Categories extends Component<PropsType, StateType> {
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
     this.state = {
       volume: 0,
-      volume2: priceRange.maxValue,
+      volume2: (priceRange && priceRange.maxValue) || 0,
     };
   }
 
@@ -156,7 +156,7 @@ class Categories extends Component<PropsType, StateType> {
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'], this.props);
     const accordionItems = this.generateTree();
-    const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
+    const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     // prepare arrays
     const variantsToArr = variantsName => pipe(
@@ -187,7 +187,7 @@ class Categories extends Component<PropsType, StateType> {
               <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
-                max={priceRange.maxValue}
+                max={(priceRange && priceRange.maxValue) || 0}
                 step={0.01}
                 value={volume > priceRange.maxValue ? 0 : volume}
                 value2={volume2 > priceRange.maxValue ? priceRange.maxValue : volume2}
