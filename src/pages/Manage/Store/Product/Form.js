@@ -6,7 +6,8 @@ import { validate } from '@storiqa/shared';
 
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/Button';
-import { Input, Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
+import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 
 import Header from '../Header';

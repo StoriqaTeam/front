@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
 import OnChangeDecorator from '../../../.storybook/OnChangeDecorator';
 
 storiesOf('Forms/Textarea', module)

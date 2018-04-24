@@ -107,6 +107,7 @@ class Select extends Component<PropsType, StateType> {
           forSearch,
           forAutocomlete,
           fullWidth,
+          isExpanded,
         })}
         style={containerStyle}
       >
