@@ -13,6 +13,7 @@ import {
   propEq,
   isEmpty,
   complement,
+  omit,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 
@@ -118,6 +119,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleInputChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
@@ -125,6 +127,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
   };
