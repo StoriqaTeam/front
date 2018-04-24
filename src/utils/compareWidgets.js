@@ -19,6 +19,8 @@ export default function compareWidgets(filteredWidgets, widgets) {
    * @return {*}
    */
   const keyValue = (widget: {}, key: string) => {
+    //
+    const { variantId } = filteredWidgets[key];
     // get current widgets's attributes and reset back to false
     const widgetAttributes = prop('values', widget).map(val => ({ ...val, opacity: false })); // (HORRIBLE hack :(, please Дьжэро, you can make it better)
     // get the widget's filtered attributes
@@ -42,9 +44,8 @@ export default function compareWidgets(filteredWidgets, widgets) {
     widgetClone[key] = {
       ...widget,
       values: result,
+      variantId, // override with current filteredWidgets
     };
-    /* eslint-disable no-console */
-    // console.log('result', result);
   };
   forEachObjIndexed(keyValue, widgets);
   /* eslint-disable no-console */
