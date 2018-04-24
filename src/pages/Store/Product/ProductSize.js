@@ -1,27 +1,23 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { map, addIndex } from 'ramda';
 
 import './ProductSize.scss';
 
 type PropsType = {
   title: string,
-  sizes: Array<{id: string, label: string}>,
-  sizeProp: string,
+  sizes: Array<{id: string, label: string, opacity: boolean, img?: string}>,
   onClick: Function,
 }
 
 type StateType = {
-  clicked: number
+  selected: null | number
 }
 
-class ProductSize extends Component<PropsType, StateType> {
-  static defaultProps = {
-    sizeProp: 'label',
-  };
+class ProductSize extends PureComponent<PropsType, StateType> {
   state = {
-    clicked: null,
+    selected: null,
   };
   /**
    * Highlights size's border when clicked
@@ -32,12 +28,12 @@ class ProductSize extends Component<PropsType, StateType> {
   handleClick = (index: number, item): void => {
     const { onClick } = this.props;
     this.setState({
-      clicked: index,
+      selected: index,
     }, () => onClick(item));
   };
   render() {
-    const { title, sizes, sizeProp } = this.props;
-    const { clicked } = this.state;
+    const { title, sizes } = this.props;
+    const { selected } = this.state;
     const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
@@ -49,9 +45,9 @@ class ProductSize extends Component<PropsType, StateType> {
             <button
               key={size.id}
               onClick={() => this.handleClick(index, size)}
-              styleName={`size ${clicked === index ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
+              styleName={`size ${selected === index ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
             >
-              { size[sizeProp] }
+              { size.label }
             </button>
           ), sizes)}
         </div>
