@@ -89,15 +89,17 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
                 {child.name}
               </div>
             )), slicer(tree.children))}
-            <div
-              styleName={classNames('item', { active: true })}
-              onClick={this.handleOnShowAll}
-              onKeyDown={() => {}}
-              role="button"
-              tabIndex="0"
-            >
-              show all
-            </div>
+            {tree.children && tree.children.length > 5 &&
+              <div
+                styleName={classNames('item', { active: true })}
+                onClick={this.handleOnShowAll}
+                onKeyDown={() => { }}
+                role="button"
+                tabIndex="0"
+              >
+                show all
+              </div>
+            }
           </div>
         }
       </div>
