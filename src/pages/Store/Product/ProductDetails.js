@@ -35,18 +35,17 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
   /**
    * @param {WidgetValueType} selected
    * @param {Object} widget
-   * @param {string} widget.variantId
    * @param {string} widget.uiElement
    * @return {void}
    */
-  handleWidget = (selected: WidgetValueType, { variantId, uiElement }): void => {
+  handleWidget = (selected: WidgetValueType, { uiElement }): void => {
     const { onWidgetClick } = this.props;
     if (uiElement === 'COMBOBOX') {
       this.setState({
         selected,
       });
     }
-    onWidgetClick(selected, variantId);
+    onWidgetClick(selected);
   };
   render() {
     const {

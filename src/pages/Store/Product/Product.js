@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { propEq, filter } from 'ramda';
+import { propEq, filter, head, keys } from 'ramda';
 
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
@@ -40,6 +40,34 @@ type StateType = {
 }
 
 class Product extends PureComponent<PropsType, StateType> {
+  /**
+   * @static
+   * @param {PropsType} nextProps
+   * @param {StateType} prevState
+   * @return {StateType | null}
+   */
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+    const {
+      baseProduct: {
+        variants: {
+          all,
+        },
+      },
+    } = nextProps;
+    const { widgets } = prevState;
+    if (isEmpty(widgets)) {
+      const {
+        photoMain,
+        additionalPhotos,
+      } = extractPhotos(all)[0];
+      return {
+        widgets: buildWidgets(all),
+        photoMain,
+        additionalPhotos,
+      };
+    }
+    return null;
+  }
   state = {
     tabs: [
       {
@@ -52,34 +80,11 @@ class Product extends PureComponent<PropsType, StateType> {
     photoMain: '',
     additionalPhotos: [],
   };
-  componentWillReceiveProps(nextProps: PropsType) {
-    const {
-      baseProduct: {
-        variants: {
-          all,
-        },
-      },
-    } = nextProps;
-    const { widgets } = this.state;
-    if (isEmpty(widgets)) {
-      const {
-        photoMain,
-        additionalPhotos,
-      } = extractPhotos(all)[0];
-      this.setState({
-        widgets: buildWidgets(all),
-        photoMain,
-        additionalPhotos,
-      });
-    }
-  }
-
   /**
    * @param selected
    * @param {Object} selected
-   * @param {string} variantId
    */
-  handleWidgetClick = (selected: {}, variantId: string): void => {
+  handleWidgetClick = (selected: {}): void => {
     const {
       baseProduct: {
         variants: {
@@ -87,6 +92,8 @@ class Product extends PureComponent<PropsType, StateType> {
         },
       },
     } = this.props;
+    const filteredWidgets = filterVariants(all, selected.label);
+    const { variantId } = head(keys(filteredWidgets).map(key => filteredWidgets[key]));
     /**
      * @desc returns true if the object satisfies the 'id' property
      * @return {boolean}
@@ -99,7 +106,6 @@ class Product extends PureComponent<PropsType, StateType> {
       additionalPhotos,
     } = variantObj;
     const { widgets } = this.state;
-    const filteredWidgets = filterVariants(all, selected.label);
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
