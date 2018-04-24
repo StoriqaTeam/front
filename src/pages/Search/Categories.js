@@ -172,6 +172,7 @@ class Categories extends Component<PropsType, StateType> {
       }),
     );
     const productsWithVariants = map(variantsToArr('all'), products);
+    const maxValue = (priceRange && priceRange.maxValue) || 0;
     return (
       <div styleName="container">
         <div styleName="wrapper">
@@ -187,10 +188,10 @@ class Categories extends Component<PropsType, StateType> {
               <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
-                max={(priceRange && priceRange.maxValue) || 0}
+                max={maxValue}
                 step={0.01}
-                value={volume > priceRange.maxValue ? 0 : volume}
-                value2={volume2 > priceRange.maxValue ? priceRange.maxValue : volume2}
+                value={volume > maxValue ? 0 : volume}
+                value2={volume2 > maxValue ? maxValue : volume2}
                 onChange={value => this.handleOnRangeChange(value, 'volume')}
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}

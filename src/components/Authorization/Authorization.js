@@ -254,7 +254,7 @@ class Authorization extends Component<PropsType, StateType> {
               href={socialStrings.facebookLoginString()}
             >
               <Icon type="facebook" />
-              <span>Sign Up with Facebook</span>
+              <span>Sign in with Facebook</span>
             </Button>
           </div>
           <div>
@@ -263,7 +263,7 @@ class Authorization extends Component<PropsType, StateType> {
               href={socialStrings.googleLoginString()}
             >
               <Icon type="google" />
-              <span>Sign Up with Google</span>
+              <span>Sign In with Google</span>
             </Button>
           </div>
         </div>
