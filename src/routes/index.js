@@ -18,9 +18,14 @@ import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import Categories from 'pages/Search/Categories';
+import { Error } from 'pages/Errors';
 
 const routes = (
   <Route>
+    <Route
+      path="/error"
+      Component={Error}
+    />
     <Route
       path="/"
       Component={App}
