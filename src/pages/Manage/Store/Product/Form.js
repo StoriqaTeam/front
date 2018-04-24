@@ -1,12 +1,20 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, propOr, isEmpty, complement, pathOr } from 'ramda';
+import {
+  assocPath,
+  propOr,
+  isEmpty,
+  complement,
+  pathOr,
+  omit,
+} from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/Button';
-import { Input, Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
+import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 
 import Header from '../Header';
@@ -100,6 +108,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleInputChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
@@ -107,6 +116,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
   };

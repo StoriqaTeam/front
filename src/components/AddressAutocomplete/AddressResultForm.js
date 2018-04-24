@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { Input } from 'components/Forms';
+import { Input } from 'components/common/Input';
 
 import './AddressResultForm.scss';
 

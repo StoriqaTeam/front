@@ -4,9 +4,9 @@ import { pick, pathOr, forEach, isEmpty, map } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 import debounce from 'lodash.debounce';
-import { AutocompleteInput } from 'components/Forms';
+import { AutocompleteInput } from 'components/common/AutocompleteInput';
 import { renameCamelCase } from 'utils';
 
 import googleApiWrapper from './GoogleAPIWrapper';
@@ -202,7 +202,7 @@ class Form extends Component<PropsType, StateType> {
     return (
       <div>
         <div styleName="wrapper">
-          <MiniSelect
+          <Select
             forForm
             label="Country"
             items={countriesArr}
