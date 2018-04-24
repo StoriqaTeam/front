@@ -3,9 +3,9 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { Input } from 'components/common/Input';
-import OnChangeDecorator from '../../../.storybook/OnChangeDecorator';
+import OnChangeDecorator from '../../../../.storybook/OnChangeDecorator';
 
-storiesOf('Forms/Input', module)
+storiesOf('Common/Input', module)
   .add('Default', () => (
     <OnChangeDecorator>
       <Input
