@@ -6,7 +6,6 @@ import { pathOr, map, filter } from 'ramda';
 import { getNameText } from 'utils';
 import { Checkbox } from 'components/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
-// import { MiniSelect } from 'components/MiniSelect';
 import { Select } from 'components/common/Select';
 
 import './AttributeControl.scss';
@@ -100,25 +99,11 @@ class AttributeControll extends React.Component<PropsType, StateType> {
           </div>
         )));
       case 'COMBOBOX':
-        // return (values ?
-        //   <MiniSelect
-        //     forForm
-        //     items={map(v => ({ id: v, label: v }), values)}
-        //     onSelect={item => this.handleOnChange(item.id)}
-        //     activeItem={{ id: value, label: value }}
-        //     containerStyle={{
-        //       width: '100%',
-        //     }}
-        //   /> : null);
         return (values ?
           <Select
             forForm
-            // label="Language"
-            // activeItem={defaultLanguageValue}
             activeItem={{ id: value, label: value }}
-            // items={langItems}
             items={map(v => ({ id: v, label: v }), values)}
-            // onSelect={this.handleDefaultLanguage}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
               width: '100%',
