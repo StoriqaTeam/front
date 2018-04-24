@@ -7,26 +7,30 @@
 
 .expand {
   position: absolute;
-  right: 24px;
-  top: 24px;
+  right: 3rem;
+  top: 3rem;
   svg {
-    height: 27px;
-    width: 27px;
+    height: 3.375rem;
+    width: 3.375rem;
   }
 }
 
-.bigImage {
+.image {
   align-items: center;
   display: flex;
+  overflow: hidden;
   flex-flow: column;
-  justify-content: center;
+}
+
+.bigImage {
+  height: 63.25rem;
+
   position: relative;
-  width: 100%;
+  width: 69.875rem;
   & > img {
-    // https://github.com/twbs/bootstrap/blob/v4-dev/scss/mixins/_image.scss
-    height: auto;
-    max-width: 100%;
+    height: 100%;
     object-fit: contain;
+    width: 100%;
   }
 }
 

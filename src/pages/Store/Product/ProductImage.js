@@ -6,8 +6,6 @@ import { isEmpty } from 'utils';
 
 import { ProductThumbnails, ImageDetail } from './index';
 
-import Expand from './svg/expand.svg';
-
 import './ProductImage.scss';
 
 type PropsType = {
@@ -48,11 +46,14 @@ class ProductImage extends PureComponent<PropsType, StateType> {
   };
   /**
    * Sets the clicked image as the big one.
-   * @param {string} selectedImage
+   * @param {Object} selected
+   * @param {string} selected.img
    * @return {void}
    */
-  handleClick = (selectedImage: string): void => {
-    this.setState({ selectedImage });
+  handleClick = ({ img }): void => {
+    /* eslint-disable no-console */
+    console.log('img', img);
+    this.setState({ selectedImage: img });
   };
   render() {
     const { mainImage, thumbnails } = this.props;
@@ -67,16 +68,15 @@ class ProductImage extends PureComponent<PropsType, StateType> {
             />
           ) : null}
         </div>
-        <figure styleName="bigImage">
-          <span styleName="expand">
-            <Expand />
-          </span>
-          <img
-            src={!isEmpty(selectedImage) ? selectedImage.src : mainImage}
-            alt=""
-          />
+        <div styleName="image">
+          <figure styleName="bigImage">
+            <img
+              src={!isEmpty(selectedImage) ? selectedImage : mainImage}
+              alt=""
+            />
+          </figure>
           <ImageDetail />
-        </figure>
+        </div>
       </div>
     );
   }

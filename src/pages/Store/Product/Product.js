@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { propEq } from 'ramda';
 
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
@@ -87,6 +88,7 @@ class Product extends PureComponent<PropsType, StateType> {
       },
     } = this.props;
     const { widgets } = this.state;
+    const byId = propEq('id', variantId);
     const filteredWidgets = filterVariants(all, selected.label);
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
