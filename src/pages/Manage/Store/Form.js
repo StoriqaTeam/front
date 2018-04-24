@@ -19,7 +19,8 @@ import { validate } from '@storiqa/shared';
 import { currentUserShape } from 'utils/shapes';
 import { Button } from 'components/common/Button';
 import { Select } from 'components/common/Select';
-import { Input, Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
+import { Input } from 'components/common/Input';
 
 import Header from './Header';
 
@@ -182,7 +183,11 @@ class Form extends Component<PropsType, StateType> {
 
   // TODO: extract to helper
   /* eslint-disable */
-  renderInput = ({ id, label, limit }: { id: string, label: string, limit?: number }) => (
+  renderInput = ({ id, label, limit }: {
+    id: string,
+    label: string,
+    limit?: number,
+  }) => (
     /* eslint-enable */
     <div styleName="formItem">
       <Input
@@ -219,7 +224,11 @@ class Form extends Component<PropsType, StateType> {
       <Fragment>
         <Header title="Settings" />
         <div styleName="form">
-          {this.renderInput({ id: 'name', label: 'Store name', limit: 50 })}
+          {this.renderInput({
+            id: 'name',
+            label: 'Store name',
+            limit: 50,
+          })}
           <div styleName="formItem">
             <Select
               forForm
@@ -227,10 +236,19 @@ class Form extends Component<PropsType, StateType> {
               activeItem={defaultLanguageValue}
               items={langItems}
               onSelect={this.handleDefaultLanguage}
+              tabIndexValue={0}
             />
           </div>
-          {this.renderInput({ id: 'slogan', label: 'Slogan', limit: 50 })}
-          {this.renderInput({ id: 'slug', label: 'Slug', limit: 50 })}
+          {this.renderInput({
+            id: 'slogan',
+            label: 'Slogan',
+            limit: 50,
+          })}
+          {this.renderInput({
+            id: 'slug',
+            label: 'Slug',
+            limit: 50,
+          })}
           {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
           {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">

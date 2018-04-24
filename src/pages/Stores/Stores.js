@@ -60,7 +60,7 @@ class Stores extends Component<PropsType, StateType> {
       sortItem,
     } = this.state;
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
-    const totalCount = pathOr(0, ['search', 'findStore', 'pageInfo', 'totalCount'], this.props);
+    const totalCount = pathOr(0, ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'], this.props);
     const searchValue = pathOr(null, ['location', 'query', 'search'], this.props);
     return (
       <Container>
@@ -98,25 +98,9 @@ class Stores extends Component<PropsType, StateType> {
           <Col size={10}>
             <div styleName="header">
               <Row>
-                <Col size={6}>
+                <Col size={12}>
                   <div styleName="breadcrumbs">
                     All stores / {category.label}
-                  </div>
-                </Col>
-                <Col size={6}>
-                  <div styleName="sort">
-                    <div styleName="sortLabel">Sort by:</div>
-                    <div styleName="sortSelect">
-                      <Select
-                        forSearch
-                        activeItem={sortItem}
-                        items={[
-                          { id: '1', label: 'Price (decrease)' },
-                          { id: '2', label: 'Price (ascending)' },
-                        ]}
-                        onSelect={this.handleSort}
-                      />
-                    </div>
                   </div>
                 </Col>
               </Row>
@@ -163,7 +147,9 @@ export default createPaginationContainer(
     ) {
       findStore(searchTerm: $text, first: $first, after: $after) @connection(key: "Stores_findStore") {
         pageInfo {
-          totalCount
+          searchFilters {
+            totalCount
+          }
         }
         edges {
           cursor
