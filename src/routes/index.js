@@ -132,7 +132,7 @@ const routes = (
       <Route
         path="/manage"
         query={graphql`query routes_Manage_Query { me { id } }`}
-        render={({ match, props }) => {
+        render={({ props }) => {
           if (props && !props.me) {
             const cookies = new Cookies();
             cookies.remove('__jwt');
