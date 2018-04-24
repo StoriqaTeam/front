@@ -133,6 +133,7 @@ const searchPathByParent = (
   stack: Array<ChildrenType> = [],
 ) => {
   const result = find(whereEq({ rawId }))(arr);
+  if (!result) return stack;
   stack.unshift(result);
   if (result && result.parentId) {
     searchPathByParent(arr, result.parentId, stack);
