@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { any, sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
+import { find, any, sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
@@ -58,13 +58,13 @@ class Categories extends Component<PropsType, StateType> {
   generateTree = () => {
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
-    if (!categories) return null;
+    if (!categories || !categoryId) return null;
     const flattenCategories = flattenFunc(categories);
     const levelFilter = level => filter(where({
       level: equals(level),
       children: i => i.length !== 0,
     }));
-    const isFirstCatPred = obj => (obj.level === 1 && obj.rawId === parseInt(categoryId, 10));
+    const isFirstCatPred = whereEq({ level: 1, rawId: parseInt(categoryId, 10) });
     const isFirstCategory = any(isFirstCatPred)(flattenCategories);
     if (isFirstCategory) {
       const filtered = levelFilter(1)(flattenCategories);
@@ -142,17 +142,22 @@ class Categories extends Component<PropsType, StateType> {
     const pathArr = searchPathByParent(arr, parseInt(categoryId, 10));
     return (
       <div styleName="breadcrumbs">
-        <p styleName="item">Все категрии</p>
+        <div
+          styleName="item"
+          onClick={() => this.props.router.push('/categories?search=')}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex="0"
+        >
+          All categories
+        </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (
             <div
               key={item.rawId}
               styleName={classNames('item', { active: item.rawId === parseInt(categoryId, 10) })}
-              onClick={() => {
-                this.props.router.push(`/categories?search=&category=${item.rawId}`);
-                this.forceUpdate();
-              }}
-              onKeyDown={() => { }}
+              onClick={() => this.props.router.push(`/categories?search=&category=${item.rawId}`)}
+              onKeyDown={() => {}}
               role="button"
               tabIndex="0"
             >
@@ -162,6 +167,35 @@ class Categories extends Component<PropsType, StateType> {
         }
       </div>
     );
+  }
+
+  renderParentLink = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
+    const linkComponent = obj => (
+      <div
+        styleName="parentCategory"
+        onClick={() => {
+          if (!obj) {
+            this.props.router.push('/categories?search=');
+          } else {
+            this.props.router.push(`/categories?search=&category=${obj.rawId}`);
+          }
+        }}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+      >
+        {obj && getNameText(obj.name, 'EN')}
+        {!obj && 'All categories'}
+      </div>
+    );
+    if (!categoryId) return linkComponent();
+    const arr = flattenFunc(categories);
+    const catObj = find(whereEq({ rawId: parseInt(categoryId, 10) }), arr);
+    const parentObj = catObj ? find(whereEq({ rawId: catObj.parentId }), arr) : null;
+    if (!parentObj) return linkComponent();
+    return linkComponent(parentObj);
   }
 
   render() {
@@ -191,6 +225,7 @@ class Categories extends Component<PropsType, StateType> {
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <div>
+              {this.renderParentLink()}
               {accordionItems &&
                 <Accordion
                   items={accordionItems}
