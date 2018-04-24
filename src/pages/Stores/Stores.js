@@ -22,7 +22,6 @@ type PropsType = {
 type StateType = {
   category: { id: string, label: string },
   location: { id: string, label: string },
-  sortItem: { id: string, label: string },
 };
 
 class Stores extends Component<PropsType, StateType> {
@@ -32,7 +31,6 @@ class Stores extends Component<PropsType, StateType> {
       this.state = {
         category: { id: '1', label: 'Childens goods' },
         location: { id: '1', label: 'Russia' },
-        sortItem: { id: '1', label: 'Price (ascending)' },
       };
     }
   }
@@ -49,15 +47,10 @@ class Stores extends Component<PropsType, StateType> {
     this.setState({ location });
   };
 
-  handleSort = (sortItem: { id: string, label: string }) => {
-    this.setState({ sortItem });
-  };
-
   render() {
     const {
       category,
       location,
-      sortItem,
     } = this.state;
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
     const totalCount = pathOr(0, ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'], this.props);
