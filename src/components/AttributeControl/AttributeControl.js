@@ -4,7 +4,7 @@ import React from 'react';
 import { pathOr, map, filter } from 'ramda';
 
 import { getNameText } from 'utils';
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
 import { Select } from 'components/common/Select';
 
