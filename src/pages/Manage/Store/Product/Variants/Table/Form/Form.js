@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { find, append, head, pathOr, map, complement, isEmpty } from 'ramda';
 
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { log } from 'utils';
 import { CreateProductWithAttributesMutation, UpdateProductMutation } from 'relay/mutations';

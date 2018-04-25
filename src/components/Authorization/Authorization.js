@@ -7,7 +7,7 @@ import { withRouter } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import { Spiner } from 'components/Spiner';
 

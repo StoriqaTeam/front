@@ -109,13 +109,14 @@
   height: 5rem;
   margin: 0 -1rem;
   padding: 0 2rem;
-  color: #505050 !important;
+  color: #505050;
   line-height: 5rem;
   font-size: 16px;
   cursor: pointer;
+  transition: all .3s ease;
 
   &:hover {
-    background-color: #F7F7F7;
+    color: $color_blue_1;
   }
 }
 
