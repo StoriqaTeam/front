@@ -1,12 +1,16 @@
 @import "../../styles/variables";
 
-.loader {
+.spinner {
   border: 1px solid transparent;
   border-top: 1px solid $color_blue_1;
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
   animation: spin 2s linear infinite;
+}
+
+.white {
+  border-top: 1px solid $color_white;
 }
 
 @keyframes spin {

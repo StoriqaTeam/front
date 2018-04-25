@@ -1,17 +1,17 @@
 // @flow
 
 import React from 'react';
+import classNames from 'classnames';
 
 import './Spinner.scss';
 
 type PropsType = {
-  size: ?number,
+  white: ?boolean,
 }
 
-const Spinner = ({ size }: PropsType) => (
+const Spinner = ({ white }: PropsType) => (
   <div
-    styleName="loader"
-    style={{ width: size && `${size}rem`, height: size && `${size}rem` }}
+    styleName={classNames('spinner', { white })}
   />
 );
 
