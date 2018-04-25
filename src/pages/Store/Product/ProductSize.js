@@ -24,8 +24,8 @@ class ProductSize extends PureComponent<PropsType, StateType> {
    * @return {StateType | null}
    */
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { isReset, sizes } = nextProps;
-    if (isReset || sizes.every(s => s.opacity === false)) {
+    const { isReset } = nextProps;
+    if (isReset) {
       return {
         selected: null,
       };

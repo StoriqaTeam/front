@@ -25,7 +25,6 @@ type PropsType = {
 }
 
 type StateType = {
-  selected: WidgetValueType,
   resetCHECKBOX: boolean,
   resetCOMBOBOX: boolean,
   resetCOLOR_PICKER: boolean,
@@ -33,7 +32,6 @@ type StateType = {
 
 class ProductDetails extends PureComponent<PropsType, StateType> {
   state = {
-    selected: null,
     resetCHECKBOX: false,
     resetCOMBOBOX: false,
     resetCOLOR_PICKER: false,
@@ -55,19 +53,12 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
    */
   handleWidget = (selected: WidgetValueType, { uiElement }): void => {
     const { onWidgetClick } = this.props;
-    if (uiElement === 'COMBOBOX') {
-      this.setState({
-        selected,
-      });
-    }
     this.setState({
       ...this.resetOthers(uiElement),
-    });
-    onWidgetClick(selected);
+    }, () => onWidgetClick(selected));
   };
   render() {
     const {
-      selected,
       resetCHECKBOX,
       resetCOMBOBOX,
       resetCOLOR_PICKER,
@@ -99,8 +90,8 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
           onClick={widget => this.handleWidget(widget, CHECKBOX)}
         />
         <ProductMaterial
+          isReset={resetCOMBOBOX}
           title={COMBOBOX.title}
-          selected={selected || COMBOBOX.values[0]}
           materials={COMBOBOX.values}
           onSelect={widget => this.handleWidget(widget, COMBOBOX)}
         />
