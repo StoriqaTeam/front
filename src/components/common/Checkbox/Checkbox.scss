@@ -1,0 +1,71 @@
+@import '../../../styles/variables';
+
+.container {
+  position: relative;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+}
+
+.label {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid $color_grey_border2;
+  border-radius: 0.5rem;
+  line-height: 2rem;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    border: 1px solid $color_grey_text;
+  }
+}
+
+.active {
+  border-color: $color_primary;
+}
+
+.label:after {
+  content: '';
+  position: absolute;
+  top: 0.375rem;
+  left: 0.375rem;
+  width: 0.75rem;
+  height: 0.5rem;
+  border: 0.25rem solid;
+  border-color: $color_primary;
+  border-top: none;
+  border-right: none;
+  background-color: transparent;
+  opacity: 0;
+  transform: rotate(-45deg);
+}
+
+.labelText {
+  position: relative;
+  top: -0.125rem;
+  margin-left: 3rem;
+  padding-bottom: 0.25rem;
+  white-space: nowrap;
+  color: $color_grey_text;
+  font-size: 1.75rem;
+}
+
+.input {
+  visibility: hidden;
+}
+
+.input:checked {
+  & + label {
+    border: 1px solid $color_blue_1;
+    background-color: $color_blue_1;
+
+    &:after {
+      opacity: 1;
+      border-color: $color_white;
+    }
+  }
+}

@@ -4,9 +4,9 @@ import React from 'react';
 import { pathOr, map, filter } from 'ramda';
 
 import { getNameText } from 'utils';
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 
 import './AttributeControl.scss';
 
@@ -100,7 +100,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         )));
       case 'COMBOBOX':
         return (values ?
-          <MiniSelect
+          <Select
             forForm
             items={map(v => ({ id: v, label: v }), values)}
             onSelect={item => this.handleOnChange(item.id)}

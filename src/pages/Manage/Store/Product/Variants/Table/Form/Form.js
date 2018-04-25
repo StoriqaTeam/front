@@ -22,7 +22,7 @@ type StateType = {
   isOpenVariantData?: boolean,
   mainPhoto?: ?string,
   photos?: Array<string>,
-  attributeValues?: Array<{ attrId: string, value: string, metaField?: string }>,
+  attributeValues?: Array<{ attrId: number, value: string, metaField?: string }>,
   price?: ?number,
 };
 
@@ -62,6 +62,10 @@ class Form extends Component<PropsType, StateType> {
     //
   };
 
+  onChangeValues = (values: Array<{ attrId: number, value: string, metaField?: string }>) => {
+    this.setState({ attributeValues: values });
+  };
+
   handleUpdate = () => {
     const variant = this.state;
     log.debug({ variant });
@@ -72,7 +76,7 @@ class Form extends Component<PropsType, StateType> {
         vendorCode: variant.vendorCode,
         photoMain: variant.mainPhoto,
         additionalPhotos: variant.photos,
-        cashback: variant.cashback / 100,
+        cashback: variant.cashback ? variant.cashback / 100 : '',
       },
       attributes: variant.attributeValues,
       environment: this.context.environment,
@@ -101,7 +105,7 @@ class Form extends Component<PropsType, StateType> {
         vendorCode: variant.vendorCode,
         photoMain: variant.mainPhoto,
         additionalPhotos: variant.photos,
-        cashback: variant.cashback / 100,
+        cashback: variant.cashback ? variant.cashback / 100 : '',
       },
       attributes: variant.attributeValues,
       environment: this.context.environment,
@@ -265,9 +269,7 @@ class Form extends Component<PropsType, StateType> {
         <Characteristics
           category={this.props.category}
           values={this.state.attributeValues || []}
-          onChange={(values: Array<{ attrId: string, value: string, metaField?: string }>) => {
-            this.setState({ attributeValues: values });
-          }}
+          onChange={this.onChangeValues}
         />
         <Button
           type="button"

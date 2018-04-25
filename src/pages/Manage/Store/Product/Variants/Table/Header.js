@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
 import './Header.scss';

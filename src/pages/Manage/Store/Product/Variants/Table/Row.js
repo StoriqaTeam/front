@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { pathOr, map } from 'ramda';
 
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
 import './Row.scss';

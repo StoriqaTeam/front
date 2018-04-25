@@ -10,7 +10,7 @@ import './Photos.scss';
 
 type PropsType = {
   onAddPhoto: Function,
-  photos: Array<string>,
+  photos: ?Array<string>,
 };
 
 class Photos extends PureComponent<PropsType> {

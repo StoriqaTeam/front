@@ -9,8 +9,8 @@ import CharacteristicItem from './CharacteristicItem';
 import './Characteristics.scss';
 
 type PropsType = {
-  onChange: Function => void,
-  values: Array<{ attrId: string, value: string, metaField?: string }>,
+  onChange: Function,
+  values: Array<{ attrId: number, value: string, metaField?: string }>,
   category: { getAttributes: Array<{}> },
 };
 
