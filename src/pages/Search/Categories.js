@@ -65,7 +65,7 @@ class Categories extends Component<PropsType, StateType> {
       children: i => i.length !== 0,
     }));
     const isFirstCatPred = whereEq({ level: 1, rawId: parseInt(categoryId, 10) });
-    const isFirstCategory = any(isFirstCatPred)(flattenCategories);
+    const isFirstCategory = any(isFirstCatPred, flattenCategories);
     if (isFirstCategory) {
       const filtered = levelFilter(1)(flattenCategories);
       return prepareForAccordion(filtered);
