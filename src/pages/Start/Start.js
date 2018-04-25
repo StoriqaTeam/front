@@ -11,8 +11,6 @@ import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
 
-import SliderPlaceholder from './SliderPlaceholder';
-
 import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
