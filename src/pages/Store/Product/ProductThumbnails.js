@@ -4,11 +4,15 @@ import React, { Component } from 'react';
 
 import './ProductThumbnails.scss';
 
+import {
+  SelectedType,
+} from './types';
+
 type PropsType = {
   // eslint-disable-next-line
   isReset: boolean,
   title?: string,
-  thumbnails: Array<{img: string, alt: string, opacity: boolean, label?: string}>,
+  thumbnails: Array<{id: string, img: string, alt: string, opacity: boolean, label?: string}>,
   row?: boolean,
   onClick: Function,
 }
@@ -43,14 +47,14 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   /**
    * Highlights img's border when clicked
    * @param {number} index
-   * @param {{}} thumbnail
+   * @param {SelectedType} selected
    * @return {void}
    */
-  handleClick = (index: number, thumbnail): void => {
+  handleClick = (index: number, selected: SelectedType): void => {
     const { onClick } = this.props;
     this.setState({
       selected: index,
-    }, onClick(thumbnail));
+    }, onClick(selected));
   };
   render() {
     const {

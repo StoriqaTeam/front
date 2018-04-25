@@ -5,6 +5,10 @@ import { map, addIndex, isNil, propEq } from 'ramda';
 
 import './ProductSize.scss';
 
+import {
+  SelectedType,
+} from './types';
+
 type PropsType = {
   // eslint-disable-next-line
   isReset: boolean,
@@ -39,14 +43,14 @@ class ProductSize extends PureComponent<PropsType, StateType> {
   /**
    * Highlights size's border when clicked
    * @param {number} index
-   * @param {{}} item
+   * @param {SelectedType} selected
    * @return {void}
    */
-  handleClick = (index: number, item): void => {
+  handleClick = (index: number, selected: SelectedType): void => {
     const { onClick } = this.props;
     this.setState({
       selected: index,
-    }, () => onClick(item));
+    }, () => onClick(selected));
   };
   render() {
     const { title, sizes } = this.props;

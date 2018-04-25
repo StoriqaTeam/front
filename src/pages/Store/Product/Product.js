@@ -27,6 +27,7 @@ import {
 
 import {
   ProductType,
+  SelectedType,
 } from './types';
 
 import './Product.scss';
@@ -37,7 +38,7 @@ type PropsType = {
 };
 
 type StateType = {
-  tabs: {id: string | number, label: string, content: any}[],
+  tabs: Array<{id: string | number, label: string, content: any}>,
   widgets: {},
   photoMain: string,
   additionalPhotos: Array<{id: string, img: string}>,
@@ -50,7 +51,7 @@ class Product extends PureComponent<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): ?StateType {
     const {
       baseProduct: {
         variants: {
@@ -65,6 +66,7 @@ class Product extends PureComponent<PropsType, StateType> {
         additionalPhotos,
       } = extractPhotos(all)[0];
       return {
+        tabs: prevState.tabs,
         widgets: buildWidgets(all),
         photoMain,
         additionalPhotos,
@@ -88,7 +90,7 @@ class Product extends PureComponent<PropsType, StateType> {
    * @param selected
    * @param {Object} selected
    */
-  handleWidgetClick = (selected: {}): void => {
+  handleWidgetClick = (selected: SelectedType): void => {
     const {
       baseProduct: {
         variants: {

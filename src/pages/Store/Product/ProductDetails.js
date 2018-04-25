@@ -3,6 +3,10 @@
 import React, { PureComponent } from 'react';
 
 import {
+  WidgetsType,
+} from './types';
+
+import {
   ProductPrice,
   ProductSize,
   ProductMaterial,
@@ -18,7 +22,7 @@ type WidgetValueType = {
 }
 
 type PropsType = {
-  widgets: {},
+  widgets: WidgetsType,
   productTitle: string,
   productDescription: string,
   onWidgetClick: Function,
@@ -51,7 +55,7 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
    * @param {string} widget.uiElement
    * @return {void}
    */
-  handleWidget = (selected: WidgetValueType, { uiElement }): void => {
+  handleWidget = (selected: WidgetValueType, { uiElement }: WidgetsType): void => {
     const { onWidgetClick } = this.props;
     this.setState({
       ...this.resetOthers(uiElement),

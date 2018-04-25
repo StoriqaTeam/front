@@ -3,8 +3,9 @@
 import { map, addIndex, isNil } from 'ramda';
 
 type VariantPhotosType = {
+  id: string,
   photoMain: string,
-  additionalPhotos: Array | Array<string>,
+  additionalPhotos: Array<{id: string, img: string}>,
 }
 
 /**
@@ -13,7 +14,7 @@ type VariantPhotosType = {
  * @return {[]}
  */
 export default function extractPhotos(array: []): Array<VariantPhotosType> {
-  const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
+  const defaultImage: string = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
   /**
    * @return {Function}
    */
@@ -24,7 +25,7 @@ export default function extractPhotos(array: []): Array<VariantPhotosType> {
    * @return {Array<{id: string, img: string}>}
    */
   const makePhotos = (images: Array<string>) =>
-    mapIndexed((img: string, index: string): Array<{id: string, img: string}> => ({
+    mapIndexed((img: string, index: string) => ({
       id: `${index}`,
       img,
     }), images);

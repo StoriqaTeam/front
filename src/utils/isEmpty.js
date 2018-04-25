@@ -6,4 +6,4 @@ import { isEmpty } from 'ramda';
  * @param {string} obj
  * @return {boolean}
  */
-export default (obj: {}): boolean => isEmpty(obj);
+export default (obj: any): boolean => isEmpty(obj);

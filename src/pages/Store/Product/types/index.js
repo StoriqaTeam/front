@@ -6,3 +6,5 @@ export type { default as ProductType } from './ProductType';
 export type { default as TranslationType } from './TranslationType';
 export type { default as UIType } from './UIType';
 export type { default as VariantType } from './VariantType';
+export type { default as SelectedType } from './SelectedType';
+export type { default as WidgetsType } from './WidgetsType';

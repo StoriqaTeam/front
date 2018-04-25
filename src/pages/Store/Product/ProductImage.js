@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
 import { isEmpty } from 'utils';
 
@@ -8,16 +8,20 @@ import { ProductThumbnails, ImageDetail } from './index';
 
 import './ProductImage.scss';
 
+import {
+  SelectedType,
+} from './types';
+
 type PropsType = {
   mainImage: string,
   thumbnails: Array<{img: string, alt: string, label?: string}>,
 }
 
 type StateType = {
-  selectedImage: {src: string, alt?: string },
+  selectedImage: SelectedType,
 }
 
-class ProductImage extends PureComponent<PropsType, StateType> {
+class ProductImage extends Component<PropsType, StateType> {
   /**
    * @static
    * @param {PropsType} nextProps
@@ -38,11 +42,11 @@ class ProductImage extends PureComponent<PropsType, StateType> {
   };
   /**
    * Sets the clicked image as the big one.
-   * @param {Object} selected
+   * @param {SelectedType} selected
    * @param {string} selected.img
    * @return {void}
    */
-  handleClick = ({ img }): void => {
+  handleClick = ({ img }: SelectedType): void => {
     this.setState({ selectedImage: img });
   };
   render() {

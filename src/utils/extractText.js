@@ -14,10 +14,10 @@ type TranslationType = {
  * @param {string} [message] = 'No text'
  * @return {string}
  */
-export default function extractText(array: TranslationType[], lang: string = 'EN', message: string = 'No Text'): string {
+export default function extractText(array: Array<TranslationType>, lang: string = 'EN', message: string = 'No Text'): string {
   if (validArray(array)) {
-    const [translationObject]: TranslationType = array.filter(item => item.lang === lang);
-    return translationObject.text;
+    const [translation] = array.filter((item: TranslationType) => item.lang === lang);
+    return translation.text;
   }
   return message;
 }

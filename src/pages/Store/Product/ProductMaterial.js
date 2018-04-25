@@ -6,6 +6,10 @@ import { MiniSelect } from 'components/MiniSelect';
 
 import './ProductMaterial.scss';
 
+import {
+  SelectedType,
+} from './types';
+
 type material = {id: string | number, label: string};
 
 type PropsType = {
@@ -17,7 +21,7 @@ type PropsType = {
 }
 
 type StateType = {
-  selected: null | Object,
+  selected: SelectedType,
 }
 
 class ProductMaterial extends Component<PropsType, StateType> {
@@ -41,10 +45,10 @@ class ProductMaterial extends Component<PropsType, StateType> {
   };
   /**
    * Highlights size's border when clicked
-   * @param {{}} selected
+   * @param {SelectedType} selected
    * @return {void}
    */
-  handleSelect = (selected): void => {
+  handleSelect = (selected: SelectedType): void => {
     const { onSelect } = this.props;
     this.setState({
       selected,
