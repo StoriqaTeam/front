@@ -100,10 +100,8 @@ const routes = (
 
       <Route
         path="/cart"
-        Component={(props) => {
-          console.log(props);
-          return <Cart />;
-        }}
+        render={({ props, Component }) => <Component {...props} />}
+        Component={Cart}
       />
       <Route
         path="/categories"
