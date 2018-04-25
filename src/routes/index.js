@@ -18,6 +18,7 @@ import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import Categories from 'pages/Search/Categories';
+import Cart from 'pages/Cart';
 
 const routes = (
   <Route>
@@ -97,6 +98,13 @@ const routes = (
     >
       <Route Component={Start} />
 
+      <Route
+        path="/cart"
+        Component={(props) => {
+          console.log(props);
+          return <Cart />;
+        }}
+      />
       <Route
         path="/categories"
         Component={({ search }) => (<Categories search={search} />)}

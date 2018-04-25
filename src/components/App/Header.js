@@ -49,7 +49,7 @@ class Header extends PureComponent<PropsType> {
                       { id: '15', label: 'LSK' },
                       { id: '16', label: 'NXT' },
                     ]}
-                    onSelect={() => {}}
+                    onSelect={() => { }}
                   />
                 </div>
                 <div styleName="item">
@@ -60,7 +60,7 @@ class Header extends PureComponent<PropsType> {
                       { id: '2', label: 'CHN' },
                       { id: '3', label: 'RUS' },
                     ]}
-                    onSelect={() => {}}
+                    onSelect={() => { }}
                   />
                 </div>
                 <div styleName="item">
@@ -72,7 +72,7 @@ class Header extends PureComponent<PropsType> {
                       { id: '2', label: 'Term #2' },
                       { id: '3', label: 'Term #3' },
                     ]}
-                    onSelect={() => {}}
+                    onSelect={() => { }}
                   />
                 </div>
                 <div styleName="item">
@@ -112,7 +112,7 @@ class Header extends PureComponent<PropsType> {
                   <UserDropdown user={user} />
                 </div>
                 <div styleName="cartIcon">
-                  <CartButton />
+                  <CartButton href="/cart" />
                 </div>
                 <div styleName="buttonWrapper">
                   <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>

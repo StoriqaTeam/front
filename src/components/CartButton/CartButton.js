@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
 import { Count } from 'components/Count';
@@ -15,7 +16,7 @@ class CartButton extends PureComponent<PropsTypes> {
     const { amount, href } = this.props;
 
     return (
-      <a href={href} styleName="container">
+      <Link to={href} styleName="container">
         {amount &&
           <div styleName="amount">
             <Count
@@ -27,7 +28,7 @@ class CartButton extends PureComponent<PropsTypes> {
         <div styleName="icon">
           <Icon type="cart" size="16" />
         </div>
-      </a>
+      </Link>
     );
   }
 }
