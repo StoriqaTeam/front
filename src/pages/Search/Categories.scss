@@ -92,3 +92,11 @@
 .active {
   color: $color_primary!important;
 }
+
+.parentCategory {
+  font-family: $font_medium;
+  font-size: 1.75rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
