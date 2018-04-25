@@ -31,9 +31,10 @@ h4 {
   border: solid 1px $gray_border;
   color: #a1a1a1;
   font-size: 16px;
-  height: 40px;
+  height: 5rem;
   line-height: 36px;
   opacity: 1;
+  position: relative;
   text-align: center;
   width: 58px;
 
@@ -62,4 +63,13 @@ h4 {
 
 .opaque {
   opacity: 0.3;
+}
+
+.separator {
+  border-right: 1px solid $gray_border !important;
+  height: 5rem;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 1px;
 }

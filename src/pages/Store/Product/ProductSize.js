@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { map, addIndex } from 'ramda';
+import { map, addIndex, isNil, propEq, allPass } from 'ramda';
 
 import './ProductSize.scss';
 
@@ -57,15 +57,21 @@ class ProductSize extends PureComponent<PropsType, StateType> {
           { title }
         </h4>
         <div styleName="sizes">
-          {mapIndexed((size, index) => (
-            <button
-              key={size.id}
-              onClick={() => this.handleClick(index, size)}
-              styleName={`size ${selected === index && !size.opacity ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
-            >
-              { size.label }
-            </button>
-          ), sizes)}
+          {mapIndexed((size, index, arr) => {
+            const isntOpacity = propEq('opacity', false);
+            const opacities = arr.every(isntOpacity);
+            const separator = () => !isNil(arr[index]) && !arr[index].opacity;
+            return (
+              <button
+                key={size.id}
+                onClick={() => this.handleClick(index, size)}
+                styleName={`size ${selected === index && !size.opacity ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
+              >
+                { size.label }
+                { !opacities && isNil(selected) && separator() ? <span styleName="separator" /> : null }
+              </button>
+            );
+          }, sizes)}
         </div>
       </div>
     );
