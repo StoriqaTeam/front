@@ -24,8 +24,8 @@ class ProductSize extends PureComponent<PropsType, StateType> {
    * @return {StateType | null}
    */
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { isReset } = nextProps;
-    if (isReset) {
+    const { isReset, sizes } = nextProps;
+    if (isReset || sizes.every(s => s.opacity === false)) {
       return {
         selected: null,
       };
@@ -61,7 +61,7 @@ class ProductSize extends PureComponent<PropsType, StateType> {
             <button
               key={size.id}
               onClick={() => this.handleClick(index, size)}
-              styleName={`size ${selected === index ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
+              styleName={`size ${selected === index && !size.opacity ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
             >
               { size.label }
             </button>

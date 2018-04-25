@@ -6,7 +6,7 @@ import './ProductThumbnails.scss';
 
 type PropsType = {
   title?: string,
-  thumbnails: Array<{img: string, alt: string, label?: string}>,
+  thumbnails: Array<{img: string, alt: string, opacity: boolean, label?: string}>,
   row?: boolean,
   onClick: Function,
   isReset: boolean,
@@ -28,8 +28,8 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    * @return {StateType | null}
    */
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { isReset } = nextProps;
-    if (isReset) {
+    const { isReset, thumbnails } = nextProps;
+    if (isReset || thumbnails.every(s => s.opacity === false)) {
       return {
         selected: null,
       };
@@ -69,7 +69,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <figure>
                 <img
-                  styleName={`${selected === index ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
+                  styleName={`${selected === index && !thumbnail.opacity ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
                   src={thumbnail.img}
                   alt={thumbnail.val || 'something'}
                 />
