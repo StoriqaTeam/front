@@ -5,7 +5,9 @@ import { Link } from 'found';
 import { head } from 'ramda';
 
 import { Icon } from 'components/Icon';
+import BannerLoading from 'components/Banner/BannerLoading';
 import { getNameText } from 'utils';
+import ImageLoader from 'libs/react-image-loader';
 
 import { formatPrice } from './utils';
 
@@ -62,7 +64,10 @@ class CardProduct extends PureComponent<PropsTypes> {
           <div styleName="top">
             {!photoMain ?
               <Icon type="camera" size="40" /> :
-              <img styleName="img" src={photoMain} alt="img" />
+              <ImageLoader
+                src={photoMain}
+                loader={<BannerLoading />}
+              />
             }
           </div>
           <div styleName="bottom">

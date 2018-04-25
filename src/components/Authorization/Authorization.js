@@ -7,7 +7,7 @@ import { withRouter } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import { Spiner } from 'components/Spiner';
 
@@ -81,7 +81,7 @@ class Authorization extends Component<PropsType, StateType> {
           this.setState({ errors: validationErrors });
           return;
         }
-        alert('Registration successful, login with your data.'); // eslint-disable-line
+        alert('Registration successful, please confirm your email and login.'); // eslint-disable-line
         if (alone) {
           window.location = '/';
         } else {
@@ -254,7 +254,7 @@ class Authorization extends Component<PropsType, StateType> {
               href={socialStrings.facebookLoginString()}
             >
               <Icon type="facebook" />
-              <span>Sign Up with Facebook</span>
+              <span>Sign in with Facebook</span>
             </Button>
           </div>
           <div>
@@ -263,7 +263,7 @@ class Authorization extends Component<PropsType, StateType> {
               href={socialStrings.googleLoginString()}
             >
               <Icon type="google" />
-              <span>Sign Up with Google</span>
+              <span>Sign In with Google</span>
             </Button>
           </div>
         </div>

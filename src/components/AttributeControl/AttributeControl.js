@@ -4,9 +4,9 @@ import React from 'react';
 import { pathOr, map, filter } from 'ramda';
 
 import { getNameText } from 'utils';
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 
 import './AttributeControl.scss';
 
@@ -100,13 +100,15 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         )));
       case 'COMBOBOX':
         return (values ?
-          <MiniSelect
+          <Select
             forForm
+            activeItem={{ id: value, label: value }}
             items={map(v => ({ id: v, label: v }), values)}
             onSelect={item => this.handleOnChange(item.id)}
-            activeItem={{ id: value, label: value }}
             containerStyle={{
               width: '100%',
+              height: '3rem',
+              marginBottom: '1rem',
             }}
           /> : null);
       case 'COLOR_PICKER':

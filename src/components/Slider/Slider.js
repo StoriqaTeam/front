@@ -15,6 +15,7 @@ type PropsTypes = {
   }>,
   type: string,
   slidesToShow: ?number,
+  seeAllUrl: ?string,
 };
 
 class Slider extends PureComponent<PropsTypes> {

@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { assoc, pathOr, map, propEq, addIndex, findIndex, filter, complement, isNil } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 import { uploadFile, log } from 'utils';
 
 import './Characteristics.scss';
@@ -70,13 +70,13 @@ class CharacteristicItem extends PureComponent<PropsType> {
           <UploadWrapper
             id={attribute.id}
             onUpload={this.handleOnUpload}
-            buttonHeight={80}
-            buttonWidth={80}
+            buttonHeight={10}
+            buttonWidth={10}
             buttonIconType="upload"
             overPicture={characteristicImg}
           />
         </div>
-        <MiniSelect
+        <Select
           forForm
           fullWidth
           label={name}

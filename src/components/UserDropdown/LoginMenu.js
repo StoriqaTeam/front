@@ -36,7 +36,7 @@ const LoginMenu = (props: { onClick: Function }) => (
         href={socialStrings.facebookLoginString()}
       >
         <Icon type="facebook" />
-        <span>Sign Up with Facebook</span>
+        <span>Sign In with Facebook</span>
       </Button>
     </div>
     <div styleName="button">
@@ -45,7 +45,7 @@ const LoginMenu = (props: { onClick: Function }) => (
         href={socialStrings.googleLoginString()}
       >
         <Icon type="google" />
-        <span>Sign Up with Google</span>
+        <span>Sign In with Google</span>
       </Button>
     </div>
   </div>

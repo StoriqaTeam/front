@@ -8,7 +8,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { Input } from 'components/Forms';
+import { Input } from 'components/common/Input';
 import { Button } from 'components/Button';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';

@@ -16,7 +16,26 @@
   position: absolute;
   bottom: -0.375rem;
   width: 100%;
-  border-bottom: 1px solid $color_grey_bg;
+  border-top: 1px solid $color_grey_border2;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border: 1px solid $color_blue_1;
+    transform: scaleX(0);
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  }
+}
+
+.isExpanded {
+  &.forForm .hr, .forSearch .hr {
+    &:after {
+      transform: scaleX(1);
+    }
+  }
 }
 
 .fullWidth {
@@ -29,10 +48,16 @@
 }
 
 .label {
-  font-family: $font_medium;
   color: $color_grey_bg;
   font-size: 14px;
   white-space: nowrap;
+  transform: scale(0.9) translate(0, 1rem);
+  transform-origin: left top 0;
+  transition: all .3s ease;
+}
+
+.isExpanded .label {
+  color: $color_blue_1;
 }
 
 .wrap {
@@ -87,9 +112,14 @@
 }
 
 .selected {
+  font-family: $font_regular;
   position: relative;
   line-height: 2.5rem;
   z-index: 2;
+}
+
+.forForm .selected {
+  top: 0.25rem;
 }
 
 .forAutocomlete .selected,
@@ -139,6 +169,7 @@
   overflow: hidden;
   cursor: default;
   z-index: 11;
+  transition: all .3s ease;
 }
 
 .itemsWrap::-webkit-scrollbar {
@@ -203,6 +234,11 @@
   line-height: 2.25rem;
   white-space: nowrap;
   cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    color: #03a9ff;
+  }
 }
 
 .forForm .item,
@@ -225,10 +261,6 @@
   height: 3.75rem;
   line-height: 3.75rem;
   padding: 0 1rem;
-}
-
-.item:hover {
-  color: #03a9ff;
 }
 
 .active {

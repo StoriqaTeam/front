@@ -8312,6 +8312,10 @@ react-dom@16.3.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+react-error-boundary@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-1.2.2.tgz#be66ee4d45bb4888f28f9c6af2b00f6ccd032511"
+
 react-error-overlay@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-3.0.0.tgz#c2bc8f4d91f1375b3dad6d75265d51cd5eeaf655"

@@ -19,9 +19,14 @@ import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
+import { Error } from 'pages/Errors';
 
 const routes = (
   <Route>
+    <Route
+      path="/error"
+      Component={Error}
+    />
     <Route
       path="/"
       Component={App}
@@ -129,13 +134,16 @@ const routes = (
           return ({ input: { name: searchValue, getStoresTotalCount: true } });
         }}
       />
+      { /* TODO: вынести в HOC ли придумать что-то */ }
       <Route
         path="/manage"
-        render={({ match }) => {
-          if (match.context.jwt) {
-            return null;
+        query={graphql`query routes_Manage_Query { me { id } }`}
+        render={({ props }) => {
+          if (props && !props.me) {
+            const cookies = new Cookies();
+            cookies.remove('__jwt');
+            throw new RedirectException('/login');
           }
-          throw new RedirectException('/login');
         }}
         Component={() => <div />}
       >

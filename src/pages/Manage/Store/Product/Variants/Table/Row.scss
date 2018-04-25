@@ -1,31 +1,40 @@
 @import '../../../../../../styles/variables';
 
 .container {
-  height: 8rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   position: relative;
+  margin: 0 -4rem;
+  padding: 0 4rem;
+  border-bottom: 1px solid $color_grey_light;
 }
 
 .variantItem {
+  display: flex;
+  align-items: center;
   font-size: 12px;
+}
+
+.arrowExpand {
+  position: absolute;
+  top: 2.5rem;
+  right: 2rem;
+  width: 6rem;
+  height: 6rem;
 }
 
 .variant {
   display: flex;
-  align-items: center;
+  // height: 9.75rem;
+  padding: 1.75rem 0;
 }
 
 .variant + .variant {
-  border-bottom: 1px solid #EFEFEF;
+  border-bottom: 1px solid $color_grey_light;
 }
 
 .text {
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
   color: $color_grey_text;
-  height: 3rem;
 }
 
 .textPostfix {
@@ -50,25 +59,48 @@
   width: 12rem;
 }
 
-.line {
-  position: absolute;
-  background-color: $color_grey_light;
-  height: 1px;
-  width: 100%;
-  padding-right: 8rem;
-  padding-left: 8rem;
-  bottom: 0;
+.characteristicItem {
+  display: flex;
+  font-size: 14px;
+  line-height: 20px;
 }
 
-.characteristicItem {
-  height: 2rem;
+.characteristicLabels {
+  color: $color_grey_bg;
+}
+
+.characteristicValues {
+  margin-left: 1.5rem;
+}
+
+.storagesItem {
+  display: flex;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.storagesLabels {
+  color: $color_grey_bg;
+}
+
+.storagesValues {
+  margin-left: 1.5rem;
+}
+
+.deleteButton {
+  & svg {
+    fill: #e4e4e4;
+    transition: all .3s ease;
+  }
+
+  &:hover svg {fill: $color_grey_text;}
 }
 
 .tdCheckbox {width: 5%;}
 .tdCashback {width: 15%;}
 .tdCharacteristics {width: 15%;}
-.tdDropdawn {width: 5%;}
 .tdArticle {width: 20%;}
 .tdPrice {width: 20%;}
-.tdCount {width: 15%;}
+.tdCount {width: 15%; align-items: flex-start;}
 .tdBasket {width: 5%;}
+.tdDropdawn {width: 5%;}

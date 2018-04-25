@@ -1,10 +1,3 @@
-**Пререквизиты:**
-
-0. запустите бэкенд-сервисы (gateway & users) или с kubernetes (https://github.com/StoriqaTeam/backend/blob/master/setup_k8s.md).
-1. склонируйте репозиторий
-2. перейдите в созданную папку
----
-
 ### Запуск версии для разработки:
 
 First you're gonna need to install ssl certificate for localhost. 
@@ -22,9 +15,9 @@ For MacOS:
 #### "Вручную"
 установите зависимости: `yarn`
 
-`yarn dev` -- если запускается бэк руками.
+`yarn dev` -- бэкенд на stable (используется в большинстве случаев).
 
-`yarn dev:kube` -- если бэк запускается с kubernetes.
+`yarn dev:nightly` -- если разработчику нужна свежая бэковая фича с nightly контура.
 
 *https://localhost:3443/*
 

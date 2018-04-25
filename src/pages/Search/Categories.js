@@ -3,10 +3,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
+import { find, any, sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -51,17 +52,27 @@ class Categories extends Component<PropsType, StateType> {
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
     this.state = {
       volume: 0,
-      volume2: priceRange.maxValue,
+      volume2: (priceRange && priceRange.maxValue) || 0,
     };
   }
 
   generateTree = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
-    if (!categories) return null;
-    const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
-    const res = level2Filter(flattenFunc(categories));
-    const result = prepareForAccordion(res);
-    return result;
+    if (!categories || !categoryId) return null;
+    const flattenCategories = flattenFunc(categories);
+    const levelFilter = level => filter(where({
+      level: equals(level),
+      children: i => i.length !== 0,
+    }));
+    const isFirstCatPred = whereEq({ level: 1, rawId: parseInt(categoryId, 10) });
+    const isFirstCategory = any(isFirstCatPred, flattenCategories);
+    if (isFirstCategory) {
+      const filtered = levelFilter(1)(flattenCategories);
+      return prepareForAccordion(filtered);
+    }
+    const filtered = levelFilter(2)(flattenCategories);
+    return prepareForAccordion(filtered);
   }
 
   handleOnChangeCategory = (item) => {
@@ -132,14 +143,22 @@ class Categories extends Component<PropsType, StateType> {
     const pathArr = searchPathByParent(arr, parseInt(categoryId, 10));
     return (
       <div styleName="breadcrumbs">
-        <p styleName="item">Все категрии</p>
+        <div
+          styleName="item"
+          onClick={() => this.props.router.push('/categories?search=')}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex="0"
+        >
+          All categories
+        </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (
             <div
               key={item.rawId}
               styleName={classNames('item', { active: item.rawId === parseInt(categoryId, 10) })}
               onClick={() => this.props.router.push(`/categories?search=&category=${item.rawId}`)}
-              onKeyDown={() => { }}
+              onKeyDown={() => {}}
               role="button"
               tabIndex="0"
             >
@@ -151,12 +170,41 @@ class Categories extends Component<PropsType, StateType> {
     );
   }
 
+  renderParentLink = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
+    const linkComponent = obj => (
+      <div
+        styleName="parentCategory"
+        onClick={() => {
+          if (!obj) {
+            this.props.router.push('/categories?search=');
+          } else {
+            this.props.router.push(`/categories?search=&category=${obj.rawId}`);
+          }
+        }}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+      >
+        {obj && getNameText(obj.name, 'EN')}
+        {!obj && 'All categories'}
+      </div>
+    );
+    if (!categoryId) return linkComponent();
+    const arr = flattenFunc(categories);
+    const catObj = find(whereEq({ rawId: parseInt(categoryId, 10) }), arr);
+    const parentObj = catObj ? find(whereEq({ rawId: catObj.parentId }), arr) : null;
+    if (!parentObj) return linkComponent();
+    return linkComponent(parentObj);
+  }
+
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
     const attrFilters = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'], this.props);
     const accordionItems = this.generateTree();
-    const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
+    const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     // prepare arrays
     const variantsToArr = variantsName => pipe(
@@ -172,11 +220,13 @@ class Categories extends Component<PropsType, StateType> {
       }),
     );
     const productsWithVariants = map(variantsToArr('all'), products);
+    const maxValue = (priceRange && priceRange.maxValue) || 0;
     return (
       <div styleName="container">
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
             <div>
+              {this.renderParentLink()}
               {accordionItems &&
                 <Accordion
                   items={accordionItems}
@@ -187,10 +237,10 @@ class Categories extends Component<PropsType, StateType> {
               <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
-                max={priceRange.maxValue}
+                max={maxValue}
                 step={0.01}
-                value={volume}
-                value2={volume2}
+                value={volume > maxValue ? 0 : volume}
+                value2={volume2 > maxValue ? maxValue : volume2}
                 onChange={value => this.handleOnRangeChange(value, 'volume')}
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}
@@ -241,7 +291,7 @@ Categories.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withRouter(Page(Categories)),
+  withErrorBoundary(withRouter(Page(Categories))),
   graphql`
     fragment Categories_search on Search
     @argumentDefinitions(
