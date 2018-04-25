@@ -9,6 +9,7 @@ import './ProductMaterial.scss';
 type material = {id: string | number, label: string};
 
 type PropsType = {
+  // eslint-disable-next-line
   isReset: boolean,
   title: string,
   materials: material[],

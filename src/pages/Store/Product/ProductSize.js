@@ -1,15 +1,16 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { map, addIndex, isNil, propEq, allPass } from 'ramda';
+import { map, addIndex, isNil, propEq } from 'ramda';
 
 import './ProductSize.scss';
 
 type PropsType = {
+  // eslint-disable-next-line
+  isReset: boolean,
   title: string,
   sizes: Array<{id: string, label: string, opacity: boolean, img?: string}>,
   onClick: Function,
-  isReset: boolean,
 }
 
 type StateType = {

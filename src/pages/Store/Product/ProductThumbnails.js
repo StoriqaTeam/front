@@ -5,11 +5,12 @@ import React, { Component } from 'react';
 import './ProductThumbnails.scss';
 
 type PropsType = {
+  // eslint-disable-next-line
+  isReset: boolean,
   title?: string,
   thumbnails: Array<{img: string, alt: string, opacity: boolean, label?: string}>,
   row?: boolean,
   onClick: Function,
-  isReset: boolean,
 }
 
 type StateType = {

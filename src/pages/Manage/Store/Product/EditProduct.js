@@ -79,8 +79,6 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log({ props: this.props });
-    console.log({ variants: variantsFromProps(this.props) });
     const baseProduct = baseProductFromProps(this.props);
     if (!baseProduct) {
       return (<span>Product not found</span>);
