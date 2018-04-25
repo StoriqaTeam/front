@@ -17,6 +17,7 @@ import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
+import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
 import { Error } from 'pages/Errors';
 
@@ -144,6 +145,7 @@ const routes = (
             throw new RedirectException('/login');
           }
         }}
+        Component={() => <div />}
       >
         <Route path="/store">
           <Route
@@ -189,18 +191,19 @@ const routes = (
             path="/:storeId/products/:productId"
             Component={EditProduct}
             query={graphql`
-            query routes_Product_Query($productID: Int!) {
-              me {
-                id
-                ...EditProduct_me @arguments(productId: $productID)
+              query routes_Product_Query($productID: Int!) {
+                me {
+                  id
+                  ...EditProduct_me @arguments(productId: $productID)
+                }
               }
-            }
-          `}
-            prepareVariables={(_, { params }) => ({ productID: parseInt(params.productId, 10) })}
+            `}
+            prepareVariables={(_, { params }) => (
+              { productID: parseInt(params.productId, 10) || 0 }
+            )}
           />
         </Route>
       </Route>
-
       <Route
         path="/registration"
         Component={Authorization}
@@ -246,6 +249,26 @@ const routes = (
         Component={Profile}
       />
     </Route>
+    <Route
+      path="/store/:storeId/products/:productId"
+      query={graphql`
+        query routes_ProductCard_Query($productID: Int!) {
+          baseProduct(id: $productID) {
+            ...Product_baseProduct
+          }
+        }
+      `}
+      prepareVariables={(_, { params }) => (
+        { productID: parseInt(params.productId, 10) || 0 }
+      )}
+      Component={ProductCard}
+      render={({
+        props,
+        Component,
+      }) => (
+        (Component && props) ? <Component {...props} /> : <div />
+      )}
+    />
   </Route>
 );
 

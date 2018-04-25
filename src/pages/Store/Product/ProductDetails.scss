@@ -1,0 +1,33 @@
+@import "../../../styles/variables";
+
+.container {
+  padding-left: 1.625rem;
+}
+
+h2 {
+  color: $color_black;
+  font-family: $font_regular;
+  font-size: 3.75rem;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 4.375rem;
+  letter-spacing: 0.3px;
+  line-height: normal;
+  margin-bottom: 65px;
+  margin-top: 16px;
+  text-align: left;
+  width: 31.625rem;
+}
+
+p {
+  color: #a1a1a1;
+  font-size: 2rem;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+  max-width: 61.75rem;
+  text-align: left;
+}
