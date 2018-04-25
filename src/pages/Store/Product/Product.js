@@ -85,6 +85,8 @@ class Product extends PureComponent<PropsType, StateType> {
    * @param {Object} selected
    */
   handleWidgetClick = (selected: {}): void => {
+    /* eslint-disable no-console */
+    console.log('selected', selected);
     const {
       baseProduct: {
         variants: {
@@ -106,7 +108,7 @@ class Product extends PureComponent<PropsType, StateType> {
       additionalPhotos,
     } = variantObj;
     this.setState({
-      widgets: compareWidgets(filteredWidgets, widgets),
+      widgets: selected.opacity ? buildWidgets(all) : compareWidgets(filteredWidgets, widgets),
       photoMain,
       additionalPhotos,
     });
