@@ -92,6 +92,7 @@ class Product extends PureComponent<PropsType, StateType> {
         },
       },
     } = this.props;
+    const { widgets } = this.state;
     const filteredWidgets = filterVariants(all, selected.label);
     const { variantId } = head(keys(filteredWidgets).map(key => filteredWidgets[key]));
     /**
@@ -99,13 +100,11 @@ class Product extends PureComponent<PropsType, StateType> {
      * @return {boolean}
      */
     const byId = propEq('id', variantId);
-    // destructure filtered variant
-    const [variantObj] = filter(byId, extractPhotos(all));
+    const variantObj = head(filter(byId, extractPhotos(all)));
     const {
       photoMain,
       additionalPhotos,
     } = variantObj;
-    const { widgets } = this.state;
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
