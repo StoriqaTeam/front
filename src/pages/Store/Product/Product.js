@@ -25,11 +25,15 @@ import {
   TabRow,
 } from './index';
 
+import {
+  ProductType,
+} from './types';
+
 import './Product.scss';
 import mockData from './mockData.json';
 
 type PropsType = {
-  baseProduct: {}
+  baseProduct: ProductType,
 };
 
 type StateType = {
@@ -206,17 +210,11 @@ export default createFragmentContainer(
               metaField {
                 values
                 uiElement
-                translatedValues {
-                  translations {
-                    lang
-                    text
-                  }
-                }
               }
             }
           }
         }
-      }
+      } 
     }   
   `,
 );
