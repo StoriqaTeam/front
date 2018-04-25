@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head } from 'ramda';
+import { head, path } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { getNameText } from 'utils';
@@ -32,6 +32,14 @@ type PropsTypes = {
 }
 
 class CardProduct extends PureComponent<PropsTypes> {
+
+  handleClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = path(['props', 'item', 'rawId'], this);
+    console.log(id);
+  }
+
   render() {
     const {
       item: {
@@ -87,6 +95,7 @@ class CardProduct extends PureComponent<PropsTypes> {
                 </div>
               }
             </div>
+            <button onClick={this.handleClick.bind(this)}>Add to cart</button>
           </div>
         </Link>
       </div>
