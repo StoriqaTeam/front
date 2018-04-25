@@ -8,6 +8,7 @@ type PropsTypes = {
   title: string,
   isRevealButton: boolean,
   handleSlide: Function,
+  seeAllUrl: ?string,
 };
 
 class SliderHeader extends PureComponent<PropsTypes> {
@@ -16,6 +17,7 @@ class SliderHeader extends PureComponent<PropsTypes> {
       title,
       isRevealButton,
       handleSlide,
+      seeAllUrl,
     } = this.props;
 
     return (
@@ -39,7 +41,14 @@ class SliderHeader extends PureComponent<PropsTypes> {
             </button>
           </div>
         }
-        <a styleName="reveal">See all</a>
+        {seeAllUrl &&
+          <a
+            styleName="reveal"
+            href={seeAllUrl}
+          >
+            See all
+          </a>
+        }
         {false && <a styleName="settings">Recommendations settings</a>}
       </div>
     );
