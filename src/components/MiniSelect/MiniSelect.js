@@ -21,7 +21,7 @@ type SelectType = {
 type PropsType = {
   isDropdown: ?boolean,
   transparent: ?boolean,
-  items: Array<{ id: string, label: string }>,
+  items: Array<{ id: string, label: string, opacity: boolean }>,
   onSelect?: (item: ?SelectType) => void,
   title: ?string,
   label: ?string,
