@@ -5,7 +5,7 @@ import { propOr } from 'ramda';
 
 import { Button } from 'components/Button';
 import { Input } from 'components/Authorization';
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 
 import './Authorization.scss';
 

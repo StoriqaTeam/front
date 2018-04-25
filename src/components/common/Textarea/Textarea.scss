@@ -15,12 +15,14 @@
   font-size: 14px;
   line-height: 2rem;
   white-space: nowrap;
+  transform: scale(1) translate(0, 0);
+  transform-origin: left top 0;
   transition: all .3s ease;
 }
 
 .labelFloat {
-  top: -2rem;
-  font-size: 12px;
+  transform: scale(0.9) translate(0, -2.6rem);
+  transform-origin: left top 0;
 }
 
 .isFocus .labelFloat {
