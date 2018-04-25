@@ -204,7 +204,7 @@ class Contacts extends Component<PropsType, StateType> {
           </Col>
           <Col size={10}>
             <div styleName="container">
-              <Header title="Контакты" />
+              <Header title="Contacts" />
               <div styleName="form">
                 {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
                 {this.renderInput({ id: 'phone', label: 'Phone' })}

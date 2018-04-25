@@ -1,0 +1,56 @@
+@import "../../../styles/variables";
+
+.container {
+
+}
+
+.thumbnails {
+  display: flex;
+
+  img[src] {
+    border-radius: 4px;
+    height: 80px;
+    // https://css-tricks.com/almanac/properties/o/object-fit/
+    object-fit: cover;
+    width: 80px;
+  }
+
+  .clicked {
+    border: 2px solid $color_primary;
+  }
+
+}
+
+h4 {
+  color: $color_grey_text;
+  width: 7.75rem;
+  height: 2.375rem;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 1.2px;
+  margin-bottom: 2.25rem;
+  margin-top: 3.5rem;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.column {
+  flex-flow: column;
+  button {
+    margin-bottom: 2rem;
+  }
+}
+
+.row {
+  flex-flow: row;
+  button {
+    margin-right: 2rem;
+  }
+}
+
+.opaque {
+  opacity: 0.3;
+}

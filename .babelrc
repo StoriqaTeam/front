@@ -42,6 +42,13 @@
           "webpackHotModuleReloading": true
         }]
       ]
+    },
+    "test": {
+      "plugins": [
+        ["module-resolver", {
+          "root": ["./src"]
+        }]
+      ]
     }
   }
 }
