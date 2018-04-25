@@ -7,6 +7,7 @@ import { find, any, sort, pathOr, filter, where, equals, map, evolve, pipe, path
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -290,7 +291,7 @@ Categories.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withRouter(Page(Categories)),
+  withErrorBoundary(withRouter(Page(Categories))),
   graphql`
     fragment Categories_search on Search
     @argumentDefinitions(

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { map, pathOr } from 'ramda';
 
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
 import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
@@ -130,7 +131,7 @@ class Stores extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(Stores),
+  withErrorBoundary(Page(Stores)),
   graphql`
     fragment Stores_search on Search
     @argumentDefinitions(
