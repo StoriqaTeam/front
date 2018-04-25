@@ -106,7 +106,7 @@ class Product extends PureComponent<PropsType, StateType> {
       additionalPhotos,
     } = variantObj;
     this.setState({
-      widgets: selected.opacity ? buildWidgets(all) : compareWidgets(filteredWidgets, widgets),
+      widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
       additionalPhotos,
     });
