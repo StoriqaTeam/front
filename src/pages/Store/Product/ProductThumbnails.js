@@ -28,8 +28,8 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    * @return {StateType | null}
    */
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { isReset, thumbnails } = nextProps;
-    if (isReset || thumbnails.every(s => s.opacity === false)) {
+    const { isReset } = nextProps;
+    if (isReset) {
       return {
         selected: null,
       };
