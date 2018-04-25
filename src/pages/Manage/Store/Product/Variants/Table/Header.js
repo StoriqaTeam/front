@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
 import './Header.scss';
@@ -19,42 +19,42 @@ const Header = (props: PropsType) => (
         onChange={props.onSelectAllClick}
       />
     </div>
-    <div styleName="headerItem tdDropdawn" />
     <div styleName="headerItem tdArticle">
       <div styleName="headerItemWrap">
         <span>Article</span>
-        <Icon inline type="arrowExpand" />
+        <Icon inline type="sortArrows" />
       </div>
     </div>
     <div styleName="headerItem tdPrice">
       <div styleName="headerItemWrap">
         <span>Price</span>
-        <Icon inline type="arrowExpand" />
+        <Icon inline type="sortArrows" />
       </div>
     </div>
     <div styleName="headerItem tdCashback">
       <div styleName="headerItemWrap">
         <span>Cashback</span>
-        <Icon inline type="arrowExpand" />
+        <Icon inline type="sortArrows" />
       </div>
     </div>
     <div styleName="headerItem tdCharacteristics">
       <div styleName="headerItemWrap">
         <span>Characteristics</span>
-        <Icon inline type="arrowExpand" />
+        <Icon inline type="sortArrows" />
       </div>
     </div>
     <div styleName="headerItem tdCount">
       <div styleName="headerItemWrap">
         <span>Count</span>
-        <Icon inline type="arrowExpand" />
+        <Icon inline type="sortArrows" />
       </div>
     </div>
     <div styleName="headerItem tdBasket">
-      <button>
-        <Icon type="basket" />
+      <button styleName="deleteButton">
+        <Icon type="basket" size="32" />
       </button>
     </div>
+    <div styleName="headerItem tdDropdawn" />
   </div>
 );
 

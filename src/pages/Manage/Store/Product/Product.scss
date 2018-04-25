@@ -9,8 +9,16 @@
 .form {
   height: 100%;
   margin-top: 2rem;
-  padding: 2rem;
+  padding: 4rem;
   background-color: $color_white;
+}
+
+.title {
+  margin-bottom: 4rem;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
 }
 
 .formItem + .formItem {

@@ -42,6 +42,10 @@
   color: $color_grey_text;
   font-size: 14px;
   background-color: #F7F7F7;
+
+  &:hover {
+    background-color: #F7F7F7;
+  }
 }
 
 .iconic > *:first-child {

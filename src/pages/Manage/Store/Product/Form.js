@@ -13,7 +13,7 @@ import { validate } from '@storiqa/shared';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { CategorySelector } from 'components/CategorySelector';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
@@ -155,6 +155,9 @@ class Form extends Component<PropsType, StateType> {
       <div styleName="container">
         <Header title="Goods" />
         <div styleName="form">
+          <div styleName="title">
+            <strong>General characteristics</strong>
+          </div>
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
           {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
