@@ -154,6 +154,9 @@ class Form extends Component<PropsType, StateType> {
       <div styleName="container">
         <Header title="Goods" />
         <div styleName="form">
+          <div styleName="title">
+            <strong>General characteristics</strong>
+          </div>
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
           {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}

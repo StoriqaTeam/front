@@ -26,7 +26,9 @@ class Characteristics extends PureComponent<PropsType> {
     const attributes = pathOr([], ['getAttributes'], this.props.category);
     return (
       <div styleName="container">
-        <div styleName="title">Characteristics</div>
+        <div styleName="title">
+          <strong>Characteristics</strong>
+        </div>
         <div styleName="items">
           {attributes.map(item => (
             <CharacteristicItem

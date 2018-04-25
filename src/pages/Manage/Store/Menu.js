@@ -42,8 +42,8 @@ class Menu extends PureComponent<PropsType, StateType> {
           <UploadWrapper
             id="new-store-id"
             onUpload={this.handleOnUpload}
-            buttonHeight={208}
-            buttonWidth={208}
+            buttonHeight={26}
+            buttonWidth={26}
             buttonIconType="upload"
             overPicture={storeLogo}
           />
