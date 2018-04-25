@@ -9,6 +9,7 @@ type PropsType = {
   title: string,
   sizes: Array<{id: string, label: string, opacity: boolean, img?: string}>,
   onClick: Function,
+  isReset: boolean,
 }
 
 type StateType = {
@@ -16,6 +17,21 @@ type StateType = {
 }
 
 class ProductSize extends PureComponent<PropsType, StateType> {
+  /**
+   * @static
+   * @param {PropsType} nextProps
+   * @param {StateType} prevState
+   * @return {StateType | null}
+   */
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+    const { isReset } = nextProps;
+    if (isReset) {
+      return {
+        selected: null,
+      };
+    }
+    return prevState;
+  }
   state = {
     selected: null,
   };

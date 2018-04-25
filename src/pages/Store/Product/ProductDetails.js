@@ -26,12 +26,27 @@ type PropsType = {
 
 type StateType = {
   selected: WidgetValueType,
+  resetCHECKBOX: boolean,
+  resetCOMBOBOX: boolean,
+  resetCOLOR_PICKER: boolean,
 }
 
 class ProductDetails extends PureComponent<PropsType, StateType> {
   state = {
     selected: null,
+    resetCHECKBOX: false,
+    resetCOMBOBOX: false,
+    resetCOLOR_PICKER: false,
   };
+  /**
+   * @param {string} uiElement
+   * @return {Object}
+   */
+  resetOthers = (uiElement: string): Object => ({
+    resetCHECKBOX: uiElement !== 'CHECKBOX',
+    resetCOMBOBOX: uiElement !== 'COMBOBOX',
+    resetCOLOR_PICKER: uiElement !== 'COLOR_PICKER',
+  });
   /**
    * @param {WidgetValueType} selected
    * @param {Object} widget
@@ -45,11 +60,17 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
         selected,
       });
     }
+    this.setState({
+      ...this.resetOthers(uiElement),
+    });
     onWidgetClick(selected);
   };
   render() {
     const {
       selected,
+      resetCHECKBOX,
+      resetCOMBOBOX,
+      resetCOLOR_PICKER,
     } = this.state;
     const {
       productTitle,
@@ -72,6 +93,7 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
           {productDescription}
         </p>
         <ProductSize
+          isReset={resetCHECKBOX}
           title={CHECKBOX.title}
           sizes={CHECKBOX.values}
           onClick={widget => this.handleWidget(widget, CHECKBOX)}
@@ -82,7 +104,9 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
           materials={COMBOBOX.values}
           onSelect={widget => this.handleWidget(widget, COMBOBOX)}
         />
+        {/* eslint-disable camelcase */}
         <ProductThumbnails
+          isReset={resetCOLOR_PICKER}
           title={COLOR_PICKER.title}
           row
           srcProp="image"

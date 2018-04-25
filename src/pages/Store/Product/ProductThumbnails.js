@@ -9,10 +9,11 @@ type PropsType = {
   thumbnails: Array<{img: string, alt: string, label?: string}>,
   row?: boolean,
   onClick: Function,
+  isReset: boolean,
 }
 
 type StateType = {
-  isClicked: number
+  selected: null | number,
 }
 
 class ProductThumbnails extends Component<PropsType, StateType> {
@@ -20,8 +21,23 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     title: '',
     row: false,
   };
+  /**
+   * @static
+   * @param {PropsType} nextProps
+   * @param {StateType} prevState
+   * @return {StateType | null}
+   */
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+    const { isReset } = nextProps;
+    if (isReset) {
+      return {
+        selected: null,
+      };
+    }
+    return prevState;
+  }
   state = {
-    clicked: null,
+    selected: null,
   };
   /**
    * Highlights img's border when clicked
@@ -32,7 +48,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   handleClick = (index: number, thumbnail): void => {
     const { onClick } = this.props;
     this.setState({
-      clicked: index,
+      selected: index,
     }, onClick(thumbnail));
   };
   render() {
@@ -41,7 +57,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       row,
       title,
     } = this.props;
-    const { clicked } = this.state;
+    const { selected } = this.state;
     return (
       <div styleName="container">
         { title !== '' ? (<h4>{ title }</h4>) : null }
@@ -53,7 +69,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <figure>
                 <img
-                  styleName={`${clicked === index ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
+                  styleName={`${selected === index ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
                   src={thumbnail.img}
                   alt={thumbnail.val || 'something'}
                 />
