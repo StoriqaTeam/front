@@ -13,7 +13,6 @@ type PropsType = {
 };
 
 type StateType = {
-  sliderWrapperWidth: number,
   visibleSlidesAmount: number,
   totalSlidesAmount: number,
   slidesOffset: number,
@@ -27,7 +26,6 @@ type StateType = {
 export default (OriginalComponent: any) =>
   class HandlerSlideDecorator extends Component<PropsType, StateType> {
   state = {
-    sliderWrapperWidth: 0,
     visibleSlidesAmount: 0,
     totalSlidesAmount: 0,
     slidesOffset: 0,
@@ -125,7 +123,6 @@ export default (OriginalComponent: any) =>
     }
 
     this.setState({
-      sliderWrapperWidth,
       visibleSlidesAmount,
       totalSlidesAmount,
       children,
