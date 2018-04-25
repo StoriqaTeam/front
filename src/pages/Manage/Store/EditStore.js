@@ -28,12 +28,14 @@ type StateType = {
   serverValidationErrors: any,
   activeItem: string,
   logoUrl?: string,
+  isLoading: boolean,
 };
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
+    isLoading: false,
   };
 
   handleLogoUpload = (url: string) => {
@@ -51,6 +53,7 @@ class EditStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
+    this.setState(() => ({ isLoading: true }));
     const id = pathOr(null, ['me', 'store', 'id'], this.props);
     UpdateStoreMainMutation.commit({
       id,
@@ -77,12 +80,14 @@ class EditStore extends Component<PropsType, StateType> {
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
         }
+        this.setState(() => ({ isLoading: false }));
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
+        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
@@ -105,8 +110,7 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { activeItem, logoUrl } = this.state;
-
+    const { activeItem, logoUrl, isLoading } = this.state;
     const store = pathOr(null, ['me', 'store'], this.props);
 
     if (!store) {
@@ -132,6 +136,7 @@ class EditStore extends Component<PropsType, StateType> {
               <Form
                 store={store}
                 onSave={this.handleSave}
+                isLoading={isLoading}
                 serverValidationErrors={this.state.serverValidationErrors}
               />
             </div>

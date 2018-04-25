@@ -12,6 +12,7 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/Button';
 import { Textarea } from 'components/common/Textarea';
@@ -27,6 +28,7 @@ type PropsType = {
   onSave: Function,
   validationErrors: ?{},
   categories: Array<{}>,
+  isLoading: boolean,
 };
 
 type StateType = {
@@ -151,6 +153,7 @@ class Form extends Component<PropsType, StateType> {
   );
 
   render() {
+    const { isLoading } = this.props;
     return (
       <div styleName="container">
         <Header title="Goods" />
@@ -174,12 +177,17 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <Button
-              type="button"
-              onClick={this.handleSave}
-            >
-              Save
-            </Button>
+            {!isLoading ?
+              <Button
+                type="button"
+                onClick={this.handleSave}
+              >
+                Save
+              </Button> :
+              <SpinnerButton small>
+                Save
+              </SpinnerButton>
+            }
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ import Menu from '../Menu';
 
 type StateType = {
   formErrors: ?{},
+  isLoading: boolean,
 };
 
 type PropsType = {
@@ -26,6 +27,7 @@ type PropsType = {
 class NewProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
+    isLoading: false,
   };
 
   handleSave = (form: ?{ [string]: any }) => {
@@ -40,6 +42,7 @@ class NewProduct extends Component<PropsType, StateType> {
       shortDescription,
       fullDesc,
     } = form;
+    this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
       name: [{ lang: 'EN', text: name }],
       storeId: parseInt(this.props.storeId, 10),
@@ -55,6 +58,8 @@ class NewProduct extends Component<PropsType, StateType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
+
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -68,6 +73,7 @@ class NewProduct extends Component<PropsType, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -79,6 +85,7 @@ class NewProduct extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { isLoading } = this.state;
     return (
       <Container>
         <Row>
@@ -94,6 +101,7 @@ class NewProduct extends Component<PropsType, StateType> {
               validationErrors={this.state.formErrors}
               categories={this.context.directories.categories}
               baseProduct={null}
+              isLoading={isLoading}
             />
           </Col>
         </Row>

@@ -1,0 +1,64 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: $font_medium;
+  font-size: 16px;
+  color: $color_white;
+  height: 5rem;
+  line-height: 5rem;
+  min-width: 13rem;
+  padding: 0 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background: $color_blue_1;
+  white-space: nowrap;
+  transition: all .3s ease;
+  &:hover {
+    cursor: default;
+    .childrenWrapper {
+      display: none;
+    }
+  }
+  &.small {
+    font-size: 14px;
+    height: 4rem;
+    min-width: 11rem;
+    line-height: 4rem;
+    padding: 0 1.25rem;
+  }
+  &.white {
+    font-family: $font_regular;
+    color: $color_blue_1;
+    background: $color_white; 
+    border: 1px solid $color_blue_1;
+  }
+}
+
+.spinner {
+  border: 1px solid transparent;
+  border-top: 1px solid $color_blue_1;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 2s linear infinite;
+  &.small {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  &.white {
+    border-top: 1px solid $color_white;
+  }
+}
+
+.childrenWrapper {
+  margin-left: 2rem;
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
