@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { propOr } from 'ramda';
 
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 import { Checkbox } from 'components/common/Checkbox';
 
