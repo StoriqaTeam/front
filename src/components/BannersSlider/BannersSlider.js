@@ -15,7 +15,6 @@ const BannersSlider = (props: PropsTypes) => (
     <Slider
       dots
       infinity
-      // autoplaySpeed={15000}
       animationSpeed={500}
       type="banners"
       items={props.items}

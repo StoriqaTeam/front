@@ -83,27 +83,27 @@ class Start extends PureComponent<PropsType> {
     const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
     return (
       <div styleName="container">
-        <div styleName="item">
+        <div styleName="item bannerSliderItem">
           <BannersSlider items={bannersSlider} />
         </div>
-        {viewedProducts && viewedProducts.length > 0 &&
-          <div styleName="item">
+        <div styleName="item goodSliderItem">
+          {viewedProducts && viewedProducts.length > 0 &&
             <GoodsSlider
               items={viewedProducts}
               title="Most Popular"
               seeAllUrl="/categories?search=&sortBy=VIEWS"
             />
-          </div>
-        }
-        {discountProducts && discountProducts.length > 0 &&
-          <div styleName="item">
+          }
+        </div>
+        <div styleName="item goodSliderItem">
+          {discountProducts && discountProducts.length > 0 &&
             <GoodsSlider
               items={discountProducts}
               title="Sale"
               seeAllUrl="/categories?search=&sortBy=PRICE_ASC"
             />
-          </div>
-        }
+          }
+        </div>
         <div styleName="item">
           <BannersRow
             items={bannersRow}
