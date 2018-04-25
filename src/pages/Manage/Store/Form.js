@@ -276,4 +276,5 @@ Form.contextTypes = {
   currentUser: currentUserShape,
 };
 
+// $FlowIgnoreMe
 export default withErrorBoundary(Form);

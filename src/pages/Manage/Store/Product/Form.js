@@ -187,4 +187,5 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
+// $FlowIgnoreMe
 export default withErrorBoundary(Form);
