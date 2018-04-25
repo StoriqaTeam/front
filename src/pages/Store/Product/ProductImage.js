@@ -25,6 +25,12 @@ class ProductImage extends PureComponent<PropsType, StateType> {
    * @return {StateType | null}
    */
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+    const { selectedImage } = prevState;
+    if (!isEmpty(selectedImage)) {
+      return {
+        selectedImage: {},
+      };
+    }
     return prevState;
   }
   state = {

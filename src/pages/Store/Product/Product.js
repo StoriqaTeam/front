@@ -85,8 +85,6 @@ class Product extends PureComponent<PropsType, StateType> {
    * @param {Object} selected
    */
   handleWidgetClick = (selected: {}): void => {
-    /* eslint-disable no-console */
-    console.log('selected', selected);
     const {
       baseProduct: {
         variants: {
