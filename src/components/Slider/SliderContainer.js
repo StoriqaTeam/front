@@ -24,6 +24,7 @@ type PropsTypes = {
   isTransition: boolean,
   handleDot: Function,
   num: number,
+  seeAllUrl: ?string,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -41,6 +42,7 @@ class SliderContainer extends Component<PropsTypes> {
       num,
       animationSpeed,
       dots,
+      seeAllUrl,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
@@ -52,6 +54,7 @@ class SliderContainer extends Component<PropsTypes> {
           title={title}
           isRevealButton={isRevealButton}
           handleSlide={handleSlide}
+          seeAllUrl={seeAllUrl}
         />}
         <div
           ref={this.props.originalComponentRef}

@@ -85,14 +85,16 @@ export const urlToInput = (queryObj: {}) => pipe(
   when(has('category'), assocInt(['options', 'categoryId'], path(['category']))),
   when(has('maxValue'), assocInt(['options', 'priceFilter', 'maxValue'], path(['maxValue']))),
   when(has('minValue'), assocInt(['options', 'priceFilter', 'minValue'], path(['minValue']))),
+  when(has('sortBy'), assocStr(['options', 'sortBy'], path(['sortBy']))),
   when(has('attrFilters'), assocStr(['options', 'attrFilters'], parseAttrFiltersFromUrl)),
-  omit(['category', 'maxValue', 'minValue', 'attrFilters']),
+  omit(['category', 'maxValue', 'minValue', 'attrFilters', 'sortBy']),
 )(queryObj);
 
 export const inputToUrl = (obj: {
   name: string,
   options: ?{
     categoryId: number,
+    sortBy: ?string,
     priceFilter: ?{
       minValue: number,
       maxValue: number,
@@ -108,7 +110,9 @@ export const inputToUrl = (obj: {
   const range = pathOr(null, ['options', 'priceFilter'], obj);
   const attrFilters = pathOr(null, ['options', 'attrFilters'], obj);
   const categoryId = pathOr(null, ['options', 'categoryId'], obj);
+  const sortBy = pathOr(null, ['options', 'sortBy'], obj);
   const pushCategory = str => `${str}&category=${categoryId}`;
+  const pushSort = str => `${str}&sortBy=${sortBy}`;
   const pushRange = str => `${str}&minValue=${range.minValue}&maxValue=${range.maxValue}`;
   const pushFilters = str => reduce((acc, next) =>
     `${acc}equal.${next.id}=${next.equal.values.join(',')};`, `${str}&attrFilters=`, attrFilters);
@@ -116,6 +120,7 @@ export const inputToUrl = (obj: {
   return pipe(
     str => `${str}search=${obj.name}`,
     when(() => complement(isNil)(categoryId), pushCategory),
+    when(() => complement(isNil)(sortBy), pushSort),
     when(() => complement(isNil)(range), pushRange),
     when(() => complement(isNil)(attrFilters), pushFilters),
   )('?');
