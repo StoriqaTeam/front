@@ -22,6 +22,7 @@ import { Button } from 'components/common/Button';
 import { Select } from 'components/common/Select';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import Header from './Header';
 
@@ -275,4 +276,4 @@ Form.contextTypes = {
   currentUser: currentUserShape,
 };
 
-export default Form;
+export default withErrorBoundary(Form);

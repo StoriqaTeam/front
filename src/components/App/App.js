@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 import { pick } from 'ramda';
-import { withErrorBoundary } from 'react-error-boundary';
 
-import { log } from 'utils';
 import { Alert } from 'components/common/Alert';
 import { currentUserShape } from 'utils/shapes';
 
@@ -98,16 +96,8 @@ App.childContextTypes = {
   currentUser: currentUserShape,
 };
 
-const AppWithErrorBoundary = withErrorBoundary(
-  App,
-  () => (<div>Oooops :-/</div>),
-  (error: Error, componentStack: string) => {
-    log.debug({ error, componentStack });
-  },
-);
-
 export default createRefetchContainer(
-  AppWithErrorBoundary,
+  App,
   graphql`
     fragment App_me on User {
       ...Profile_me

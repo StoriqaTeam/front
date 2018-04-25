@@ -11,6 +11,7 @@ import {
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/Button';
 import { Textarea } from 'components/common/Textarea';
@@ -186,4 +187,4 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
-export default Form;
+export default withErrorBoundary(Form);
