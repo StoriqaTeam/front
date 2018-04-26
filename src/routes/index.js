@@ -20,6 +20,7 @@ import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
 import { Error } from 'pages/Errors';
+import VerifyEmail from 'pages/VerifyEmail';
 
 const routes = (
   <Route>
@@ -243,6 +244,10 @@ const routes = (
         path="/oauth_callback/google"
         Component={OAuthCallback}
         render={({ props, Component }) => <Component provider="GOOGLE" {...props} />}
+      />
+      <Route
+        path="/verify_email/:token"
+        Component={VerifyEmail}
       />
       <Route
         path="/profile"
