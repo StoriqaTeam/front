@@ -3,11 +3,16 @@
 import React, { Component, PureComponent } from 'react';
 import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
+import { pipe, path, map } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 
+import CartStrore from './CartStore';
+
 import type Cart_me from './__generated__/Cart_me.graphql';
+
+import './Cart.scss';
 
 type PropsType = {
   me: Cart_me
@@ -15,17 +20,21 @@ type PropsType = {
 
 class Cart extends PureComponent<PropsType> {
   render() {
-    console.log("-----++-----", this.props.me.cart);
+    const stores = pipe(
+      path(['me', 'cart', 'stores', 'edges']),
+      map(path(['node'])),
+    )(this.props);
     return (
-      <div>"Yo Cart"</div>
-    )
+      <div styleName="container">
+        <div styleName="header">Cart</div>
+        {stores.map(store => <CartStore store={store} />)}
+      </div>
+    );
   }
 }
 
 Cart.contextTypes = {
   environment: PropTypes.object.isRequired,
-  directories: PropTypes.object,
-  currentUser: currentUserShape,
 };
 
 export default createPaginationContainer(
@@ -36,24 +45,21 @@ export default createPaginationContainer(
       first: { type: "Int", defaultValue: null }
       after: { type: "ID", defaultValue: null }
     ) {
-      cart(first: $first, after: $after) @connection(key: "Cart_cart") {
-        edges {
-          node {
-            ... on CartProduct {
-              quantity
+      cart {
+        stores(first: $first, after: $after) @connection(key: "Cart_cart") {
+          edges {
+            node {
+              ...CartStore_store
             }
           }
         }
-        pageInfo {
-          hasNextPage
-        }  
       }
     }
   `,
   {
     direction: 'forward',
-    getConnectionFromProps: props => props.me && props.me.cart,
-    getVariables: (props, { count }, prevFragmentVars) => ({
+    getConnectionFromProps: props => path(['me', 'cart'], props),
+    getVariables: () => ({
       first: null,
       after: null,
     }),
