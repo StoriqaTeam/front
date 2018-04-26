@@ -15,11 +15,12 @@
 
 .sidebarContainer {
   width: 25.95rem;
+
   .blockTitle {
-    color: $color_grey_text;
-    font-size: 1.75rem;
-    font-family: $font_medium;
+    color: $color_grey_bg;
+    font-size: 14px;
   }
+
   .attrBlock {
     margin: 2rem 0;
   }

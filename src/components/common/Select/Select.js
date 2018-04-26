@@ -116,6 +116,9 @@ class Select extends Component<PropsType, StateType> {
           <div styleName="selected">
             { isDropdown ? title : activeItem && activeItem.label }
           </div>
+          {!(activeItem && activeItem.label) && !isDropdown &&
+            <div styleName="placeholder">Select...</div>
+          }
           <div styleName={classNames('icon', { rotateIcon: isExpanded })}>
             <Icon type="arrowExpand" />
           </div>
