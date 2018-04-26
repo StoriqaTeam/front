@@ -14,7 +14,6 @@ import { validate } from '@storiqa/shared';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { CategorySelector } from 'components/CategorySelector';
-import { Button } from 'components/common/Button';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
@@ -180,17 +179,12 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            {!isLoading ?
-              <Button
-                type="button"
-                onClick={this.handleSave}
-              >
-                Save
-              </Button> :
-              <SpinnerButton small>
-                Save
-              </SpinnerButton>
-            }
+            <SpinnerButton
+              onClick={this.handleSave}
+              isLoading={isLoading}
+            >
+              Save
+            </SpinnerButton>
           </div>
         </div>
       </div>

@@ -18,7 +18,6 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { Button } from 'components/common/Button';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Select } from 'components/common/Select';
 import { Textarea } from 'components/common/Textarea';
@@ -259,18 +258,12 @@ class Form extends Component<PropsType, StateType> {
           {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
           {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">
-            {!isLoading ?
-              <Button
-                big
-                type="button"
-                onClick={this.handleSave}
-              >
-                Save
-              </Button> :
-              <SpinnerButton>
-                Save
-              </SpinnerButton>
-            }
+            <SpinnerButton
+              onClick={this.handleSave}
+              isLoading={isLoading}
+            >
+              Save
+            </SpinnerButton>
           </div>
         </div>
       </Fragment>

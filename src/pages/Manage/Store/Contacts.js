@@ -10,7 +10,6 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
-import { Button } from 'components/Button';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
@@ -218,17 +217,12 @@ class Contacts extends Component<PropsType, StateType> {
                   />
                 </div>
                 <div styleName="formItem">
-                  {!isLoading ?
-                    <Button
-                      type="button"
-                      onClick={this.handleUpdate}
-                    >
-                      Save
-                    </Button> :
-                    <SpinnerButton small>
-                      Save
-                    </SpinnerButton>
-                  }
+                  <SpinnerButton
+                    onClick={this.handleUpdate}
+                    isLoading={isLoading}
+                  >
+                    Save
+                  </SpinnerButton>
                 </div>
               </div>
             </div>
