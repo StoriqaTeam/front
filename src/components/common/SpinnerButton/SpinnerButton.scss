@@ -19,7 +19,13 @@
   &:hover {
     cursor: default;
     .childrenWrapper {
-      display: none;
+      opacity: 0;
+    }
+    .spinner {
+      opacity: 0;
+    }
+    .spinnerHover {
+      opacity: 1;
     }
   }
   &.small {
@@ -35,6 +41,11 @@
     background: $color_white; 
     border: 1px solid $color_blue_1;
   }
+}
+
+.spinnerHover {
+  position: absolute;
+  opacity: 0;
 }
 
 .spinner {

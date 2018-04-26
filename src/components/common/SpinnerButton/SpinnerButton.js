@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
 
@@ -13,29 +13,25 @@ type PropsTypes = {
   white: ?boolean,
 };
 
-class Button extends PureComponent<PropsTypes> {
-  render() {
-    const {
-      children,
+const Button = ({
+  children,
+  white,
+  medium,
+  small,
+}: PropsTypes) => (
+  <button
+    disabled
+    styleName={classNames('container', {
       white,
       medium,
       small,
-    } = this.props;
-    return (
-      <button
-        disabled
-        styleName={classNames('container', {
-          white,
-          medium,
-          small,
-        })}
-        type="button"
-      >
-        <div styleName={classNames('spinner', { white: !white, small, medium })} />
-        <span styleName="childrenWrapper">{children}</span>
-      </button>
-    );
-  }
-}
+    })}
+    type="button"
+  >
+    <div styleName={classNames('spinner', { white: !white, small, medium })} />
+    <span styleName="childrenWrapper">{children}</span>
+    <div styleName={classNames('spinner', 'spinnerHover', { white: !white, small, medium })} />
+  </button>
+);
 
 export default Button;
