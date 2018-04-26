@@ -56,9 +56,6 @@ class VerifyEmail extends Component<PropsType, StateType> {
         }
       },
       onError: (error: Error) => {
-        if (this.state.isTokenResponseAlreadyHandled) {
-          return;
-        }
         log.debug({ error });
         this.setState({ isTokenResponseAlreadyHandled: true });
         if (error) {
