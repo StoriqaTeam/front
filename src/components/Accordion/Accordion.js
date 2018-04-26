@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { map, addIndex } from 'ramda';
 
 import AccordionBlock from './AccordionBlock';
 
@@ -13,26 +14,58 @@ type TreeType = {
 }
 
 type PropsType = {
-  tree: Array<TreeType>,
-  activeRowId: number,
+  items: Array<TreeType>,
+  activeId: ?number,
   onClick: (item: TreeType) => void,
 }
 
-const Accordion = ({ activeRowId, onClick, tree }: PropsType) => (
-  <div styleName="wrapper">
-    {tree.map((item, index) => (
-      <div key={item.id} styleName="blockWrapper">
-        <AccordionBlock
-          tree={item}
-          isExpanded={index < 3}
-          active={activeRowId}
-          onClick={onClick}
-        />
-        <div styleName="separator" />
+type StateType = {
+  showAll: boolean,
+}
+
+const mapIndexed = addIndex(map);
+
+class Accordion extends React.Component<PropsType, StateType> {
+  state = {
+    showAll: false,
+  }
+
+  handleOnToggle = () => {
+    this.setState(prevState => ({ showAll: !prevState.showAll }));
+  }
+
+  render() {
+    const { items, activeId, onClick } = this.props;
+    const { showAll } = this.state;
+    const filteredItems = showAll ? items : items.slice(0, 5);
+    return (
+      <div styleName="wrapper">
+        {mapIndexed((item, index) => (
+          <div key={item.id} styleName="blockWrapper">
+            <AccordionBlock
+              tree={item}
+              isExpanded={index < 5}
+              active={activeId}
+              onClick={onClick}
+            />
+            <div styleName="separator" />
+          </div>
+        ), filteredItems)}
+        {items.length > 5 &&
+          <div
+            styleName="showAll"
+            onClick={this.handleOnToggle}
+            onKeyDown={() => { }}
+            role="button"
+            tabIndex="0"
+          >
+            show all
+          </div>
+        }
       </div>
-    ))}
-  </div>
-);
+    );
+  }
+}
 
 
 export default Accordion;

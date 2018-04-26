@@ -10,7 +10,7 @@ import './Photos.scss';
 
 type PropsType = {
   onAddPhoto: Function,
-  photos: Array<string>,
+  photos: ?Array<string>,
 };
 
 class Photos extends PureComponent<PropsType> {
@@ -25,38 +25,38 @@ class Photos extends PureComponent<PropsType> {
   render() {
     const { photos: items } = this.props;
     return (
-      <Fragment>
-        <span styleName="labelSmall">Фото товара</span>
-        <div styleName="container">
-          <div styleName="upload">
-            <UploadWrapper
-              id="foods_foto"
-              onUpload={this.handleOnUpload}
-              buttonHeight={120}
-              buttonWidth={120}
-              buttonIconType="camera"
-              buttonLabel="Добавить фото"
-            />
-          </div>
-          {items && items.length > 0 &&
-          <Fragment>
-            {items.map(item => (
-              <div
-                key={item}
-                styleName="item"
-              >
-                <div styleName="itemWrap">
-                  <img
-                    src={item}
-                    alt="img"
-                  />
-                </div>
-              </div>
-            ))}
-          </Fragment>
-          }
+      <div styleName="container">
+        <div styleName="title">
+          <strong>Product photos</strong>
         </div>
-      </Fragment>
+        <div styleName="upload">
+          <UploadWrapper
+            id="foods_foto"
+            onUpload={this.handleOnUpload}
+            buttonHeight={10}
+            buttonWidth={10}
+            buttonIconType="camera"
+            buttonLabel="Add photo"
+          />
+        </div>
+        {items && items.length > 0 &&
+        <Fragment>
+          {items.map(item => (
+            <div
+              key={item}
+              styleName="item"
+            >
+              <div styleName="itemWrap">
+                <img
+                  src={item}
+                  alt="img"
+                />
+              </div>
+            </div>
+          ))}
+        </Fragment>
+        }
+      </div>
     );
   }
 }

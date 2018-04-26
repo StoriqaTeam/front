@@ -52,7 +52,9 @@ class Variants extends Component<PropsType, StateType> {
   render() {
     return (
       <div styleName="container">
-        <div styleName="title">Варианты товара</div>
+        <div styleName="title">
+          <strong>Variants</strong>
+        </div>
         <Table
           onSave={this.handleSave}
           category={this.props.category}

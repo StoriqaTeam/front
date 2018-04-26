@@ -6,38 +6,27 @@ import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr, last } from 'ramda';
 
-import { log, prepareGetUrl } from 'utils';
-// import { log } from 'utils';
+import { log } from 'utils';
+import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'components/Profile';
 import Start from 'pages/Start/Start';
-// import Products from 'pages/Search/Products';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
+import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
+import { Error } from 'pages/Errors';
+import VerifyEmail from 'pages/VerifyEmail';
 
 const routes = (
   <Route>
     <Route
-      path="/categories"
-      Component={({ search }) => (<Categories search={search} />)}
-      query={graphql`
-        query routes_Categories_Query($searchTerm: SearchProductInput!) {
-          search {
-            ...Categories_search @arguments(text: $searchTerm)
-          }
-        }
-      `}
-      prepareVariables={(...args) => {
-        const queryObj = pathOr('', ['query'], last(args).location);
-        const searchTerm = prepareGetUrl(queryObj);
-        // const searchTerm = { name: '' };
-        return ({ searchTerm });
-      }}
+      path="/error"
+      Component={Error}
     />
     <Route
       path="/"
@@ -115,32 +104,25 @@ const routes = (
     >
       <Route Component={Start} />
 
-      {/* <Route
-        path="/products"
-        Component={({ search }) => (<Products search={search} />)}
+      <Route
+        path="/categories"
+        Component={({ search, me }) => (<Categories search={search} me={me} />)}
         query={graphql`
-          query routes_Products_Query($searchTerm: SearchProductInsideCategoryInput!) {
-            search {
-              ...Products_search @arguments(text: $searchTerm)
-            }
+        query routes_Categories_Query($searchTerm: SearchProductInput!) {
+          me {
+            id
           }
-        `}
+          search {
+            ...Categories_search @arguments(text: $searchTerm)
+          }
+        }
+      `}
         prepareVariables={(...args) => {
-          // http://localhost:3003/products?search=test&category=13&minValue=0&maxValue=1287.4&attrFilters=equal.3=blue;equal.1=1,50
           const queryObj = pathOr('', ['query'], last(args).location);
-          // console.log('^^^^ products search queryObj: ', queryObj);
-          const searchTerm = prepareGetUrl(queryObj);
-          // console.log('^^^^ products search searchTerms: ', searchTerm);
-          if (!searchTerm.categoryId) {
-            searchTerm.categoryId = 1;
-          }
-          if (!searchTerm.attrFilters) {
-            searchTerm.attrFilters = [];
-          }
-          console.log('^^^^ products search searchTerms: ', { ...searchTerm });
+          const searchTerm = urlToInput(queryObj);
           return ({ searchTerm });
         }}
-      /> */}
+      />
       <Route
         path="/stores"
         Component={Stores}
@@ -156,14 +138,18 @@ const routes = (
           return ({ input: { name: searchValue, getStoresTotalCount: true } });
         }}
       />
+      { /* TODO: вынести в HOC ли придумать что-то */ }
       <Route
         path="/manage"
-        render={({ match }) => {
-          if (match.context.jwt) {
-            return null;
+        query={graphql`query routes_Manage_Query { me { id } }`}
+        render={({ props }) => {
+          if (props && !props.me) {
+            const cookies = new Cookies();
+            cookies.remove('__jwt');
+            throw new RedirectException('/login');
           }
-          throw new RedirectException('/login');
         }}
+        Component={() => <div />}
       >
         <Route path="/store">
           <Route
@@ -209,18 +195,19 @@ const routes = (
             path="/:storeId/products/:productId"
             Component={EditProduct}
             query={graphql`
-            query routes_Product_Query($productID: Int!) {
-              me {
-                id
-                ...EditProduct_me @arguments(productId: $productID)
+              query routes_Product_Query($productID: Int!) {
+                me {
+                  id
+                  ...EditProduct_me @arguments(productId: $productID)
+                }
               }
-            }
-          `}
-            prepareVariables={(_, { params }) => ({ productID: parseInt(params.productId, 10) })}
+            `}
+            prepareVariables={(_, { params }) => (
+              { productID: parseInt(params.productId, 10) || 0 }
+            )}
           />
         </Route>
       </Route>
-
       <Route
         path="/registration"
         Component={Authorization}
@@ -262,10 +249,34 @@ const routes = (
         render={({ props, Component }) => <Component provider="GOOGLE" {...props} />}
       />
       <Route
+        path="/verify_email/:token"
+        Component={VerifyEmail}
+      />
+      <Route
         path="/profile"
         Component={Profile}
       />
     </Route>
+    <Route
+      path="/store/:storeId/products/:productId"
+      query={graphql`
+        query routes_ProductCard_Query($productID: Int!) {
+          baseProduct(id: $productID) {
+            ...Product_baseProduct
+          }
+        }
+      `}
+      prepareVariables={(_, { params }) => (
+        { productID: parseInt(params.productId, 10) || 0 }
+      )}
+      Component={ProductCard}
+      render={({
+        props,
+        Component,
+      }) => (
+        (Component && props) ? <Component {...props} /> : <div />
+      )}
+    />
   </Route>
 );
 

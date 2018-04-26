@@ -1,0 +1,15 @@
+@import "../../../styles/variables";
+
+.container {
+  background: $color_white;
+  border: 1px solid #efefef;
+  display: flex;
+  justify-content: flex-start;
+  padding: 36px;
+
+  svg {
+    height: 20px;
+    margin-right: 3rem;
+    width: 20px;
+  }
+}

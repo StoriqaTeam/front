@@ -7,7 +7,7 @@ import { withRouter } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import { Spiner } from 'components/Spiner';
 
@@ -81,6 +81,7 @@ class Authorization extends Component<PropsType, StateType> {
           this.setState({ errors: validationErrors });
           return;
         }
+        alert('Registration successful, please confirm your email and login.'); // eslint-disable-line
         if (alone) {
           window.location = '/';
         } else {
@@ -104,9 +105,9 @@ class Authorization extends Component<PropsType, StateType> {
   handleLoginClick = () => {
     this.setState({ isLoad: true, errors: null });
     const { alone } = this.props;
-    const { username, password } = this.state;
+    const { email, password } = this.state;
     GetJWTByEmailMutation.commit({
-      email: username,
+      email,
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
@@ -175,7 +176,7 @@ class Authorization extends Component<PropsType, StateType> {
     if (isSignUp) {
       this.setState({ formValid: usernameValid && emailValid && passwordValid });
     } else {
-      this.setState({ formValid: usernameValid && passwordValid });
+      this.setState({ formValid: emailValid && passwordValid });
     }
   };
 
@@ -253,7 +254,7 @@ class Authorization extends Component<PropsType, StateType> {
               href={socialStrings.facebookLoginString()}
             >
               <Icon type="facebook" />
-              <span>Sign Up with Facebook</span>
+              <span>Sign in with Facebook</span>
             </Button>
           </div>
           <div>
@@ -262,7 +263,7 @@ class Authorization extends Component<PropsType, StateType> {
               href={socialStrings.googleLoginString()}
             >
               <Icon type="google" />
-              <span>Sign Up with Google</span>
+              <span>Sign In with Google</span>
             </Button>
           </div>
         </div>

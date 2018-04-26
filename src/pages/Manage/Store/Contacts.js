@@ -8,8 +8,8 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { Input } from 'components/Forms';
-import { Button } from 'components/Button';
+import { Input } from 'components/common/Input';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
@@ -45,6 +45,7 @@ type StateType = {
     [string]: ?any,
   },
   activeItem: string,
+  isLoading: boolean,
 };
 
 class Contacts extends Component<PropsType, StateType> {
@@ -59,6 +60,7 @@ class Contacts extends Component<PropsType, StateType> {
     },
     formErrors: {},
     activeItem: 'contacts',
+    isLoading: false,
   };
 
   componentWillMount() {
@@ -108,8 +110,7 @@ class Contacts extends Component<PropsType, StateType> {
         instagramUrl,
       },
     } = this.state;
-
-    this.setState({ formErrors: {} });
+    this.setState({ formErrors: {}, isLoading: true });
 
     UpdateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
@@ -127,6 +128,8 @@ class Contacts extends Component<PropsType, StateType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
+
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -142,6 +145,7 @@ class Contacts extends Component<PropsType, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
 
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
@@ -187,7 +191,7 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem } = this.state;
+    const { activeItem, isLoading } = this.state;
     return (
       <Container>
         <Row>
@@ -199,7 +203,7 @@ class Contacts extends Component<PropsType, StateType> {
           </Col>
           <Col size={10}>
             <div styleName="container">
-              <Header title="Контакты" />
+              <Header title="Contacts" />
               <div styleName="form">
                 {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
                 {this.renderInput({ id: 'phone', label: 'Phone' })}
@@ -213,12 +217,12 @@ class Contacts extends Component<PropsType, StateType> {
                   />
                 </div>
                 <div styleName="formItem">
-                  <Button
-                    type="button"
+                  <SpinnerButton
                     onClick={this.handleUpdate}
+                    isLoading={isLoading}
                   >
                     Save
-                  </Button>
+                  </SpinnerButton>
                 </div>
               </div>
             </div>

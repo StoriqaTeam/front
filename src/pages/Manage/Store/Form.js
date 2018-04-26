@@ -13,13 +13,16 @@ import {
   propEq,
   isEmpty,
   complement,
+  omit,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { Button } from 'components/common/Button';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Select } from 'components/common/Select';
-import { Input, Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
+import { Input } from 'components/common/Input';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import Header from './Header';
 
@@ -43,6 +46,7 @@ type StateType = {
 
 type PropsType = {
   onSave: Function,
+  isLoading: boolean,
   store?: {},
   serverValidationErrors: {
     [string]: ?any,
@@ -118,10 +122,17 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleInputChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
     }
+  };
+
+  handleTextareaChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
+    const { value } = e.target;
+    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
   };
 
   handleSave = () => {
@@ -177,7 +188,11 @@ class Form extends Component<PropsType, StateType> {
 
   // TODO: extract to helper
   /* eslint-disable */
-  renderInput = ({ id, label, limit }: { id: string, label: string, limit?: number }) => (
+  renderInput = ({ id, label, limit }: {
+    id: string,
+    label: string,
+    limit?: number,
+  }) => (
     /* eslint-enable */
     <div styleName="formItem">
       <Input
@@ -191,13 +206,13 @@ class Form extends Component<PropsType, StateType> {
     </div>
   );
 
-  renderTextarea = (id: string, label: string) => (
+  renderTextarea = ({ id, label }: { [string]: any }) => (
     <div styleName="formItem">
       <Textarea
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
-        onChange={this.handleInputChange(id)}
+        onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
       />
     </div>
@@ -208,34 +223,47 @@ class Form extends Component<PropsType, StateType> {
       langItems,
       form,
     } = this.state;
+    const { isLoading } = this.props;
     const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
 
     return (
       <Fragment>
         <Header title="Settings" />
         <div styleName="form">
-          {this.renderInput({ id: 'name', label: 'Store name', limit: 50 })}
+          {this.renderInput({
+            id: 'name',
+            label: 'Store name',
+            limit: 50,
+          })}
           <div styleName="formItem">
             <Select
               forForm
-              label="Язык магазина"
+              label="Language"
               activeItem={defaultLanguageValue}
               items={langItems}
               onSelect={this.handleDefaultLanguage}
+              tabIndexValue={0}
             />
           </div>
-          {this.renderInput({ id: 'slogan', label: 'Slogan', limit: 50 })}
-          {this.renderInput({ id: 'slug', label: 'Slug', limit: 50 })}
-          {this.renderInput({ id: 'shortDescription', label: 'Short description', limit: 50 })}
-          {this.renderInput({ id: 'longDescription', label: 'Long description', limit: 50 })}
+          {this.renderInput({
+            id: 'slogan',
+            label: 'Slogan',
+            limit: 50,
+          })}
+          {this.renderInput({
+            id: 'slug',
+            label: 'Slug',
+            limit: 50,
+          })}
+          {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
+          {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">
-            <Button
-              big
-              type="button"
+            <SpinnerButton
               onClick={this.handleSave}
+              isLoading={isLoading}
             >
               Save
-            </Button>
+            </SpinnerButton>
           </div>
         </div>
       </Fragment>
@@ -249,4 +277,5 @@ Form.contextTypes = {
   currentUser: currentUserShape,
 };
 
-export default Form;
+// $FlowIgnoreMe
+export default withErrorBoundary(Form);

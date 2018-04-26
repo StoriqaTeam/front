@@ -1,0 +1,39 @@
+.container {
+  align-items: flex-start;
+  border-right: 1px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+}
+
+.expand {
+  position: absolute;
+  right: 3rem;
+  top: 3rem;
+  svg {
+    height: 3.375rem;
+    width: 3.375rem;
+  }
+}
+
+.image {
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+  flex-flow: column;
+}
+
+.bigImage {
+  height: 63.25rem;
+
+  position: relative;
+  width: 69.875rem;
+  & > img {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+}
+
+.thumbnailsWrapper {
+  padding: 2.375rem 2.125rem 0 2.125rem ;
+}

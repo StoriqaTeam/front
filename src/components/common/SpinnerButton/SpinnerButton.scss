@@ -1,0 +1,75 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: $font_medium;
+  font-size: 16px;
+  color: $color_white;
+  height: 5rem;
+  line-height: 5rem;
+  min-width: 13rem;
+  padding: 0 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background: $color_blue_1;
+  white-space: nowrap;
+  transition: all .3s ease;
+  &:hover {
+    background: $color_blue_1_hover;
+  }
+  &.small {
+    font-size: 14px;
+    height: 4rem;
+    min-width: 11rem;
+    line-height: 4rem;
+    padding: 0 1.25rem;
+  }
+  &.white {
+    font-family: $font_regular;
+    color: $color_blue_1;
+    background: $color_white; 
+    border: 1px solid $color_blue_1;
+  }
+  &.isLoading {
+    &:hover {
+      cursor: default;
+    }
+    .childrenWrapper {
+      opacity: 0;
+    }
+    .spinner {
+      opacity: 1;
+    }
+  }
+}
+
+.childrenWrapper {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.spinner {
+  position: absolute;
+  opacity: 0;
+  border: 1px solid transparent;
+  border-top: 1px solid $color_blue_1;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 2s linear infinite;
+  transition: opacity 0.5s;
+  &.small {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  &.white {
+    border-top: 1px solid $color_white;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}

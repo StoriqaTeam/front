@@ -1,12 +1,21 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, propOr, isEmpty, complement, pathOr } from 'ramda';
+import {
+  assocPath,
+  propOr,
+  isEmpty,
+  complement,
+  pathOr,
+  omit,
+} from 'ramda';
 import { validate } from '@storiqa/shared';
 
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { CategorySelector } from 'components/CategorySelector';
-import { Button } from 'components/Button';
-import { Input, Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
+import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 
 import Header from '../Header';
@@ -18,6 +27,7 @@ type PropsType = {
   onSave: Function,
   validationErrors: ?{},
   categories: Array<{}>,
+  isLoading: boolean,
 };
 
 type StateType = {
@@ -100,10 +110,17 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleInputChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
     }
+  };
+
+  handleTextareaChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
+    const { value } = e.target;
+    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
   };
 
   // eslint-disable-next-line
@@ -128,17 +145,21 @@ class Form extends Component<PropsType, StateType> {
         id={id}
         value={propOr('', id, this.state.form)}
         label={label}
-        onChange={this.handleInputChange(id)}
+        onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
       />
     </div>
   );
 
   render() {
+    const { isLoading } = this.props;
     return (
       <div styleName="container">
         <Header title="Goods" />
         <div styleName="form">
+          <div styleName="title">
+            <strong>General characteristics</strong>
+          </div>
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
           {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
@@ -158,12 +179,12 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <Button
-              type="button"
+            <SpinnerButton
               onClick={this.handleSave}
+              isLoading={isLoading}
             >
               Save
-            </Button>
+            </SpinnerButton>
           </div>
         </div>
       </div>
@@ -171,4 +192,5 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
-export default Form;
+// $FlowIgnoreMe
+export default withErrorBoundary(Form);

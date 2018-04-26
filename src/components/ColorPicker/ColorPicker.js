@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { map, sort, comparator, lt } from 'ramda';
 
 import './ColorPicker.scss';
 
@@ -16,7 +17,7 @@ const Checkbox = ({
   onSelect,
 }: PropsType) => (
   <div styleName="container">
-    {items.map(color => (
+    {map(color => (
       <div
         key={color}
         styleName="itemWrapper"
@@ -35,7 +36,7 @@ const Checkbox = ({
           }}
         />
       </div>
-    ))}
+    ), sort(comparator((a, b) => lt(a, b)), items))}
   </div>
 );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { Checkbox } from 'components/Checkbox';
+import { Checkbox } from 'components/common/Checkbox';
 
 storiesOf('Checkbox', module)
   .add('Default', () => (

@@ -1,18 +1,48 @@
 @import "../../styles/variables";
 
-.root {
+.input {
+  position: relative;
+}
+
+.input input {
   position: relative;
   width: 100%;
-  border-bottom: 1px solid $color_grey_bg;
+  border-bottom: 1px solid $color_grey_border2;
   font-size: 14px;
-  line-height: 24px;
+  line-height: 3rem;
   text-align: left;
   background-color: transparent;
-  z-index: 2;
+}
 
-  &:focus {
-    border-bottom: 1px solid $color_grey_text;
-  }
+.validity input {
+  border-bottom: 1px solid $color_green;
+}
+
+.isError input {
+  border-bottom: 1px solid $color_red_error;
+}
+
+.input hr {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border: 1px solid $color_blue_1;
+  transform: scaleX(0);
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+.isFocus hr {
+  transform: scaleX(1);
+}
+
+.isFocus.isError hr {
+  border: 1px solid $color_red_error;
+  transform: scaleX(1);
+}
+
+.isError.isFocus .labelFloat {
+  color: $color_red_error;
 }
 
 .validInput {
@@ -25,18 +55,24 @@
 
 .label {
   position: absolute;
-  top: 0;
+  top: 0.5rem;
   left: 0;
   color: $color_grey_bg;
   font-size: 14px;
-  line-height: 16px;
+  line-height: 2rem;
+  white-space: nowrap;
+  transform: scale(1) translate(0, 0);
+  transform-origin: left top 0;
   transition: all .3s ease;
-  z-index: 1;
 }
 
 .labelFloat {
-  top: -16px;
-  font-size: 10px;
+  transform: scale(0.9) translate(0, -2.6rem);
+  transform-origin: left top 0;
+}
+
+.isFocus .labelFloat {
+  color: $color_blue_1;
 }
 
 .message {

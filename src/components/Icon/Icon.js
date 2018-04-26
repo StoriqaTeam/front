@@ -33,11 +33,15 @@ import Camera from 'components/Icon/svg/camera.svg';
 import Minus from 'components/Icon/svg/minus.svg';
 import Plus from 'components/Icon/svg/plus.svg';
 import Upload from 'components/Icon/svg/upload.svg';
+//
 import Basket from 'components/Icon/svg/basket.svg';
 import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
+import Cats from 'components/Icon/svg/cats.svg';
+import Logout from 'components/Icon/svg/logout.svg';
+import SortArrows from 'components/Icon/svg/sortArrows.svg';
 
 import './Icon.scss';
 
@@ -82,6 +86,9 @@ const iconsMap = {
   closeArrow: <CloseArrow />,
   openArrow: <OpenArrow />,
   crossWhite: <CrossWhite />,
+  cats: <Cats />,
+  logout: <Logout />,
+  sortArrows: <SortArrows />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

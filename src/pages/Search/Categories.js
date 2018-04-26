@@ -2,25 +2,25 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, filter, where, equals } from 'ramda';
-import { createPaginationContainer, graphql } from 'react-relay';
+import classNames from 'classnames';
+import { find, any, sort, pathOr, filter, where, equals, map, evolve, pipe, path, assoc, assocPath, whereEq, complement } from 'ramda';
+import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
-import { currentUserShape } from 'utils/shapes';
-import log from 'utils/log';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
+import { Button } from 'components/common/Button';
 import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
-import { AttributeControll } from 'components/AttributeControll';
-import { flattenFunc } from 'utils';
+import { AttributeControl } from 'components/AttributeControl';
 
-import Sidebar from './Sidebar';
-
-import './Products.scss';
+import './Categories.scss';
 
 type PropsType = {
   router: routerShape,
+  relay: Relay,
 }
 
 type StateType = {
@@ -43,7 +43,7 @@ type AttrFilterType = {
   },
 }
 
-const storesPerRequest = 20;
+const storesPerRequest = 24;
 
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -51,22 +51,33 @@ class Categories extends Component<PropsType, StateType> {
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
     this.state = {
       volume: 0,
-      volume2: priceRange.maxValue,
+      volume2: (priceRange && priceRange.maxValue) || 0,
     };
   }
 
   generateTree = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
-    if (!categories) return null;
-    const level2Filter = filter(where({ level: equals(2), children: i => i.length !== 0 }));
-    const res = level2Filter(flattenFunc(categories));
-    return prepareForAccordion(res);
+    if (!categories || !categoryId) return null;
+    const flattenCategories = flattenFunc(categories);
+    const levelFilter = level => filter(where({
+      level: equals(level),
+      children: i => i.length !== 0,
+    }));
+    const isFirstCatPred = whereEq({ level: 1, rawId: parseInt(categoryId, 10) });
+    const isFirstCategory = any(isFirstCatPred, flattenCategories);
+    if (isFirstCategory) {
+      const filtered = levelFilter(1)(flattenCategories);
+      return prepareForAccordion(filtered);
+    }
+    const filtered = levelFilter(2)(flattenCategories);
+    return prepareForAccordion(filtered);
   }
 
   handleOnChangeCategory = (item) => {
     const { volume, volume2 } = this.state;
     const name = pathOr('', ['match', 'location', 'query', 'search'], this.props);
-    this.props.router.push(`/products?search=${name}&category=${item.id}&minValue=${volume}&maxValue=${volume2}`);
+    this.props.router.push(`/categories?search=${name}&category=${item.id}&minValue=${volume}&maxValue=${volume2}`);
   };
 
   handleOnRangeChange = (value: number, fieldName: string) => {
@@ -77,13 +88,38 @@ class Categories extends Component<PropsType, StateType> {
 
   handleOnCompleteRange = (value: number, value2: number, e: Event) => {
     log.info({ value, value2 }, e);
-    const name = pathOr('', ['match', 'location', 'query', 'search'], this.props);
-    this.props.router.push(`/categories?search=${name}&minValue=${value}&maxValue=${value2}`);
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const newPreparedObj = assocPath(['options', 'priceFilter'], {
+      minValue: value,
+      maxValue: value2,
+    }, oldPreparedObj);
+    const newUrl = inputToUrl(newPreparedObj);
+    this.props.router.push(`/categories${newUrl}`);
+  }
+
+  prepareUrlStr = (id, values) => {
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const oldAttrs = pathOr([], ['options', 'attrFilters'], oldPreparedObj);
+    const newPreparedObj = assocPath(['options', 'attrFilters'], [
+      ...filter(complement(whereEq({ id })), oldAttrs),
+      {
+        id,
+        equal: {
+          values,
+        },
+      },
+    ], oldPreparedObj);
+    return inputToUrl(newPreparedObj);
   }
 
   handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
+    const rawId = pathOr(null, ['attribute', 'rawId'], attrFilter);
     return (value: string) => {
+      const newUrl = this.prepareUrlStr(rawId, value);
+      this.props.router.push(`/categories${newUrl}`);
       if (id) {
         this.setState({
           [id]: value,
@@ -92,54 +128,154 @@ class Categories extends Component<PropsType, StateType> {
     };
   }
 
+  productsRefetch = () => {
+    this.props.relay.loadMore(24);
+  };
+
+  renderBreadcrumbs = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
+    if (!categories || !categoryId) {
+      return null;
+    }
+    const arr = flattenFunc(categories);
+    const pathArr = searchPathByParent(arr, parseInt(categoryId, 10));
+    return (
+      <div styleName="breadcrumbs">
+        <div
+          styleName="item"
+          onClick={() => this.props.router.push('/categories?search=')}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex="0"
+        >
+          All categories
+        </div>
+        {pathArr.length !== 0 &&
+          pathArr.map(item => (
+            <div
+              key={item.rawId}
+              styleName={classNames('item', { active: item.rawId === parseInt(categoryId, 10) })}
+              onClick={() => this.props.router.push(`/categories?search=&category=${item.rawId}`)}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
+              <span styleName="separator">/</span>{getNameText(item.name, 'EN')}
+            </div>
+          ))
+        }
+      </div>
+    );
+  }
+
+  renderParentLink = () => {
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
+    const linkComponent = obj => (
+      <div
+        styleName="parentCategory"
+        onClick={() => {
+          if (!obj) {
+            this.props.router.push('/categories?search=');
+          } else {
+            this.props.router.push(`/categories?search=&category=${obj.rawId}`);
+          }
+        }}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+      >
+        {obj && getNameText(obj.name, 'EN')}
+        {!obj && 'All categories'}
+      </div>
+    );
+    if (!categoryId) return linkComponent();
+    const arr = flattenFunc(categories);
+    const catObj = find(whereEq({ rawId: parseInt(categoryId, 10) }), arr);
+    const parentObj = catObj ? find(whereEq({ rawId: catObj.parentId }), arr) : null;
+    if (!parentObj) return linkComponent();
+    return linkComponent(parentObj);
+  }
+
   render() {
     const { volume, volume2 } = this.state;
     const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], this.props);
-    const attrFilters = pathOr(null, ['data', 'search', 'findProduct', 'searchFilters', 'attrFilters'], this.props);
-    const catTree = this.generateTree();
-    const products = pathOr(null, ['search', 'findProduct', 'edges'], this.props);
+    const attrFilters = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'], this.props);
+    const accordionItems = this.generateTree();
+    const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
+    const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+    // prepare arrays
+    const variantsToArr = variantsName => pipe(
+      path(['node']),
+      i => assoc('storeId', i.rawId, i),
+      evolve({
+        variants: (i) => {
+          if (variantsName === 'all') {
+            return path([variantsName], i);
+          }
+          return [path([variantsName], i)];
+        },
+      }),
+    );
+    const productsWithVariants = map(variantsToArr('all'), products);
+    const maxValue = (priceRange && priceRange.maxValue) || 0;
     return (
       <div styleName="container">
         <div styleName="wrapper">
           <div styleName="sidebarContainer">
-            <Sidebar>
-              {catTree &&
+            <div>
+              {this.renderParentLink()}
+              {accordionItems &&
                 <Accordion
-                  tree={catTree}
+                  items={accordionItems}
                   onClick={this.handleOnChangeCategory}
+                  activeId={categoryId ? parseInt(categoryId, 10) : null}
                 />
               }
-              <div styleName="blockTitle">Цена (STQ)</div>
+              <div styleName="blockTitle">Price (STQ)</div>
               <RangerSlider
                 min={0}
-                max={priceRange.maxValue}
+                max={maxValue}
                 step={0.01}
-                value={volume}
-                value2={volume2}
+                value={volume > maxValue ? 0 : volume}
+                value2={volume2 > maxValue ? maxValue : volume2}
                 onChange={value => this.handleOnRangeChange(value, 'volume')}
                 onChange2={value => this.handleOnRangeChange(value, 'volume2')}
                 onChangeComplete={this.handleOnCompleteRange}
               />
-              {attrFilters && attrFilters.map(attrFilter => (
-                <div key={attrFilter.attribute.id} styleName="attrBlock">
-                  <AttributeControll
-                    attrFilter={attrFilter}
-                    onChange={this.handleOnChangeAttribute(attrFilter)}
-                  />
-                </div>
-              ))}
-            </Sidebar>
+              {attrFilters && sort((a, b) => (a.attribute.rawId - b.attribute.rawId), attrFilters)
+                .map(attrFilter => (
+                  <div key={attrFilter.attribute.id} styleName="attrBlock">
+                    <AttributeControl
+                      attrFilter={attrFilter}
+                      onChange={this.handleOnChangeAttribute(attrFilter)}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
           <div styleName="contentContainer">
+            <div styleName="topContentContainer">
+              {this.renderBreadcrumbs()}
+            </div>
             <div styleName="productsContainer">
-              {products && products.map(item => (
-                <div key={item.node.id} styleName="cardWrapper">
-                  <CardProduct item={item.node} />
+              {productsWithVariants && productsWithVariants.map(item => (
+                <div key={item.id} styleName="cardWrapper">
+                  <CardProduct item={item} />
                 </div>
               ))}
-              <div styleName="loadMoreContainer">
-                <div styleName="loadMoreButton">Load more</div>
-              </div>
+              {this.props.relay.hasMore() && (
+                <div styleName="button">
+                  <Button
+                    big
+                    load
+                    onClick={this.productsRefetch}
+                  >
+                    Load more
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -150,25 +286,112 @@ class Categories extends Component<PropsType, StateType> {
 
 Categories.contextTypes = {
   directories: PropTypes.object,
-  currentUser: currentUserShape,
 };
 
 export default createPaginationContainer(
-  withRouter(Page(Categories)),
+  withErrorBoundary(withRouter(Page(Categories))),
   graphql`
     fragment Categories_search on Search
     @argumentDefinitions(
       text: { type: "SearchProductInput!" }
-      first: { type: "Int", defaultValue: 20 }
+      first: { type: "Int", defaultValue: 24 }
       after: { type: "ID", defaultValue: null }
     ) {
       findProduct(searchTerm: $text, first: $first, after: $after) @connection(key: "Categories_findProduct") {
+        pageInfo {
+          searchFilters {
+            categories {
+              rawId
+              level
+              parentId
+              name {
+                text
+                lang
+              }
+              children {
+                rawId
+                level
+                parentId
+                name {
+                  text
+                  lang
+                }
+                children {
+                  rawId
+                  level
+                  parentId
+                  name {
+                    text
+                    lang
+                  }
+                  children {
+                    rawId
+                    level
+                    parentId
+                    name {
+                      text
+                      lang
+                    }
+                  }
+                }
+              }
+            }
+            priceRange {
+              minValue
+              maxValue
+            }
+            attrFilters {
+              attribute {
+                id
+                rawId
+                name {
+                  text
+                  lang
+                }
+                metaField {
+                  uiElement
+                }
+              }
+              equal {
+                values
+              }
+              range {
+                minValue
+                maxValue
+              }
+            }
+          }
+        }
         edges {
           node {
             id
             rawId
+            currencyId
             name {
               text
+              lang
+            }
+            category {
+              rawId
+            }
+            store {
+              rawId
+            }
+            variants {
+              all {
+                id
+                rawId
+                discount
+                photoMain
+                cashback
+                price
+                attributes {
+                  attribute {
+                    id
+                  }
+                  value
+                }
+              }
             }
           }
         }

@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr } from 'ramda';
+import { pathOr, path, map, pipe, evolve, assoc } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -15,9 +15,46 @@ import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
-// import mostPopularGoods from './mostPopularGoods.json';
 
-class Start extends PureComponent<{}> {// eslint-disable-line
+type ProductType = {
+  rawId: number,
+  store: {
+    rawId: number,
+  },
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  currencyId: number,
+  variants: {
+    first: {
+      rawId: number,
+      discount: number,
+      photoMain: string,
+      cashback: number,
+      price: number,
+    },
+  },
+}
+
+/* eslint-disable */
+type PropsType = {
+  mainPage: {
+    findMostViewedProducts: ?{
+      edges: Array<{
+        node: ProductType,
+      }>,
+    },
+    findMostDiscountProducts: ?{
+      edges: Array<{
+        node: ProductType,
+      }>,
+    },
+  },
+}
+/* eslint-enable */
+
+class Start extends PureComponent<PropsType> {
   render() {
     const mostViewedProducts = pathOr([], [
       'mainPage',
@@ -29,27 +66,44 @@ class Start extends PureComponent<{}> {// eslint-disable-line
       'findMostDiscountProducts',
       'edges',
     ], this.props);
+    // prepare arrays
+    const variantsToArr = variantsName => pipe(
+      path(['node']),
+      i => assoc('storeId', i.rawId, i),
+      evolve({
+        variants: (i) => {
+          if (variantsName === 'all') {
+            return path([variantsName], i);
+          }
+          return [path([variantsName], i)];
+        },
+      }),
+    );
+    const discountProducts = map(variantsToArr('mostDiscount'), mostDiscountProducts);
+    const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
     return (
       <div styleName="container">
-        <div styleName="item">
+        <div styleName="item bannerSliderItem">
           <BannersSlider items={bannersSlider} />
         </div>
-        {mostViewedProducts && mostViewedProducts.length > 0 &&
-          <div styleName="item">
+        <div styleName="item goodSliderItem">
+          {viewedProducts && viewedProducts.length > 0 &&
             <GoodsSlider
-              items={mostViewedProducts}
+              items={viewedProducts}
               title="Most Popular"
+              seeAllUrl="/categories?search=&sortBy=VIEWS"
             />
-          </div>
-        }
-        {mostDiscountProducts && mostDiscountProducts.length > 0 &&
-          <div styleName="item">
+          }
+        </div>
+        <div styleName="item goodSliderItem">
+          {discountProducts && discountProducts.length > 0 &&
             <GoodsSlider
-              items={mostDiscountProducts}
+              items={discountProducts}
               title="Sale"
+              seeAllUrl="/categories?search=&sortBy=PRICE_ASC"
             />
-          </div>
-        }
+          }
+        </div>
         <div styleName="item">
           <BannersRow
             items={bannersRow}
@@ -75,10 +129,8 @@ export default createFragmentContainer(
       findMostViewedProducts(searchTerm: {options: {attrFilters: []}}) {
         edges {
           node {
-            id
             rawId
             store {
-              id
               rawId
             }
             name {
@@ -102,10 +154,8 @@ export default createFragmentContainer(
       findMostDiscountProducts(searchTerm: {options: {attrFilters: []}}) {
         edges {
           node {
-            id
             rawId
             store {
-              id
               rawId
             }
             name {
@@ -115,7 +165,6 @@ export default createFragmentContainer(
             currencyId
             variants {
               mostDiscount {
-                id
                 rawId
                 discount
                 photoMain

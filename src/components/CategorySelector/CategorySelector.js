@@ -132,7 +132,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         tabIndex="0"
       >
         {snapshot && [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map((item, index) => (item ? <span key={item.rawId}>{index !== 0 && ' / '}{getNameText(item.name, lang)}</span> : null))}
-        {!snapshot && 'Выбрать категорию'}
+        {!snapshot && 'Choose category'}
       </div>
     );
   }
@@ -148,9 +148,10 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     } = this.state;
     const level2ItemName = level1Item ? find(propEq('lang', lang))(level1Item.name).text : '';
     const level3ItemName = level2Item ? find(propEq('lang', lang))(level2Item.name).text : '';
+
     return (
       <div styleName="wrapper">
-        <p styleName="label">Category</p>
+        <div styleName="label">Category</div>
         <div
           styleName="breadcrumbsWrapper"
           ref={(node) => { this.button = node; }}
@@ -169,7 +170,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
             <div styleName="levelWrapper">
               <div styleName="level">
                 <Fragment>
-                  <div styleName="label">Категории</div>
+                  <div styleName="levelLabel">Categories</div>
                   <LevelList
                     items={categories.children}
                     lang={lang}
@@ -181,7 +182,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
               <div styleName="level">
                 {level1Item &&
                   <Fragment>
-                    <div styleName="label">{level2ItemName}</div>
+                    <div styleName="levelLabel">{level2ItemName}</div>
                     <LevelList
                       items={level1Item.children}
                       lang={lang}
@@ -194,7 +195,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
               <div styleName="level">
                 {level2Item &&
                   <Fragment>
-                    <div styleName="label">{level3ItemName}</div>
+                    <div styleName="levelLabel">{level3ItemName}</div>
                     <LevelList
                       items={level2Item.children}
                       lang={lang}

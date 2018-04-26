@@ -10,11 +10,12 @@ import './Slider.scss';
 
 type PropsTypes = {
   items: Array<{
-    id: string,
-    rawId: string,
+    id: ?string,
+    rawId: ?string,
   }>,
   type: string,
   slidesToShow: ?number,
+  seeAllUrl: ?string,
 };
 
 class Slider extends PureComponent<PropsTypes> {

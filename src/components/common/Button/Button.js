@@ -47,7 +47,6 @@ class Button extends PureComponent<PropsTypes> {
       load,
       contour,
       big,
-      contour,
     });
 
     if (href) {

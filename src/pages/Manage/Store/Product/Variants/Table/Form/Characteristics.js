@@ -9,8 +9,8 @@ import CharacteristicItem from './CharacteristicItem';
 import './Characteristics.scss';
 
 type PropsType = {
-  onChange: Function => void,
-  values: Array<{ attrId: string, value: string, metaField?: string }>,
+  onChange: Function,
+  values: Array<{ attrId: number, value: string, metaField?: string }>,
   category: { getAttributes: Array<{}> },
 };
 
@@ -26,7 +26,9 @@ class Characteristics extends PureComponent<PropsType> {
     const attributes = pathOr([], ['getAttributes'], this.props.category);
     return (
       <div styleName="container">
-        <div styleName="title">Характеристики</div>
+        <div styleName="title">
+          <strong>Characteristics</strong>
+        </div>
         <div styleName="items">
           {attributes.map(item => (
             <CharacteristicItem

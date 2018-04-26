@@ -23,6 +23,8 @@ import './EditStore.scss';
 type StateType = {
   activeItem: string,
   serverValidationErrors: any,
+  logoUrl?: string,
+  isLoading: boolean,
 };
 
 type PropsType = {
@@ -30,13 +32,18 @@ type PropsType = {
 };
 
 class NewStore extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
+    isLoading: false,
   };
 
   handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
+  };
+
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
   };
 
   handleSave = ({ form, optionLanguage }) => {
@@ -52,6 +59,8 @@ class NewStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
+    const { logoUrl } = this.state;
+    this.setState(() => ({ isLoading: true }));
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
@@ -67,8 +76,17 @@ class NewStore extends Component<PropsType, StateType> {
       ],
       slug,
       slogan,
+      logo: logoUrl,
       environment,
-      onCompleted: (response: ?Object) => {
+      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ serverValidationErrors: validationErrors });
+          return;
+        }
+        this.setState(() => ({ isLoading: false }));
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
       },
@@ -77,6 +95,7 @@ class NewStore extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
+        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
@@ -99,10 +118,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      activeItem,
-    } = this.state;
-
+    const { activeItem, logoUrl, isLoading } = this.state;
     return (
       <Container>
         <Row>
@@ -110,12 +126,15 @@ class NewStore extends Component<PropsType, StateType> {
             <Menu
               activeItem={activeItem}
               switchMenu={this.switchMenu}
+              onLogoUpload={this.handleLogoUpload}
+              storeLogo={logoUrl}
             />
           </Col>
           <Col size={10}>
             <div styleName="container">
               <Form
                 onSave={this.handleSave}
+                isLoading={isLoading}
                 serverValidationErrors={this.state.serverValidationErrors}
               />
             </div>

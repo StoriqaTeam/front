@@ -21,14 +21,16 @@ type PropsType = {
 
 type StateType = {
   formErrors: {},
+  isLoading: boolean,
 };
 
 const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
-const variantsFromProps = pathOr(null, ['me', 'baseProduct', 'variants']);
+const variantsFromProps = pathOr(null, ['me', 'baseProduct', 'variants', 'all']);
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
+    isLoading: false,
   };
 
   handleSave = (form: ?{ [string]: any }) => {
@@ -43,6 +45,7 @@ class EditProduct extends Component<PropsType, StateType> {
       shortDescription,
       fullDesc,
     } = form;
+    this.setState(() => ({ isLoading: true }));
     const id = pathOr(null, ['id'], baseProductFromProps(this.props));
     UpdateBaseProductMutation.commit({
       id,
@@ -58,6 +61,7 @@ class EditProduct extends Component<PropsType, StateType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -67,6 +71,7 @@ class EditProduct extends Component<PropsType, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -79,6 +84,7 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { isLoading } = this.state;
     const baseProduct = baseProductFromProps(this.props);
     if (!baseProduct) {
       return (<span>Product not found</span>);
@@ -98,6 +104,7 @@ class EditProduct extends Component<PropsType, StateType> {
               onSave={this.handleSave}
               validationErrors={this.state.formErrors}
               categories={this.context.directories.categories}
+              isLoading={isLoading}
             />
             <Variants
               productId={baseProduct.rawId}
@@ -126,38 +133,38 @@ export default createFragmentContainer(
         rawId
         variants {
           all {
-          id
-          rawId
-          isActive
-          discount
-          photoMain
-          additionalPhotos
-          vendorCode
-          price
-          cashback
-          attributes {
-            value
-            metaField
-            attribute {
-              id
-              rawId
-              name {
-                lang
-                text
-              }
-              valueType
-              metaField {
-                values
-                translatedValues {
-                  translations {
-                    lang
-                    text
-                  }
+            id
+            rawId
+            isActive
+            discount
+            photoMain
+            additionalPhotos
+            vendorCode
+            price
+            cashback
+            attributes {
+              value
+              metaField
+              attribute {
+                id
+                rawId
+                name {
+                  lang
+                  text
                 }
-                uiElement
+                valueType
+                metaField {
+                  values
+                  translatedValues {
+                    translations {
+                      lang
+                      text
+                    }
+                  }
+                  uiElement
+                }
               }
             }
-          }
           }
         }
         category {

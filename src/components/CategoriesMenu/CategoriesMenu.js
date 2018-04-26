@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { find, propEq } from 'ramda';
+import { Link, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
 
@@ -16,22 +17,23 @@ type PropsType = {
       text: string,
     }>,
     children?: Array<any>,
-  }>
+  }>,
 }
 
 class CategoriesMenu extends Component<PropsType> {
   renderMenu(categories: any, isRoot: ?boolean) {
     const lang = 'EN';
     return categories.map((category) => {
+      const { rawId } = category;
       const categoryChildren = category.children;
       const name = find(propEq('lang', lang))(category.name);
       const renderInnerLink = () => (
         <Fragment>
-          <div styleName="text">{name.text}</div>
+          <span styleName="text">{name.text}</span>
           {categoryChildren && !isRoot &&
-          <div styleName="icon">
-            <Icon type="arrowRight" />
-          </div>
+            <span styleName="icon">
+              <Icon type="arrowRight" />
+            </span>
           }
         </Fragment>
       );
@@ -43,21 +45,26 @@ class CategoriesMenu extends Component<PropsType> {
             midItem: !isRoot && categoryChildren,
           })}
         >
-          {categoryChildren ?
-            <div styleName="link">
-              {renderInnerLink()}
-            </div> :
-            <a
-              href="/"
-              styleName="link"
-            >
-              {renderInnerLink()}
-            </a>}
+          <Link
+            styleName="link"
+            to={{
+              pathname: '/categories',
+              query: {
+                search: '',
+                category: rawId,
+              },
+            }}
+          >
+            {renderInnerLink()}
+          </Link>
           {categoryChildren &&
-            <div styleName="itemsWrap">
-              <ul>
-                {this.renderMenu(categoryChildren)}
-              </ul>
+            <div styleName="items">
+              <div styleName="itemsWrap">
+                <div styleName="title">{name.text}</div>
+                <ul>
+                  {this.renderMenu(categoryChildren)}
+                </ul>
+              </div>
             </div>
           }
         </li>
@@ -69,6 +76,19 @@ class CategoriesMenu extends Component<PropsType> {
     return (
       <div styleName="container">
         <ul styleName="root">
+          <li styleName="rootItem rootButtonItem">
+            <Link
+              styleName="button"
+              to="/"
+            >
+              <Icon
+                inline
+                type="cats"
+                size="24"
+              />
+              <span styleName="buttonText">All</span>
+            </Link>
+          </li>
           { this.renderMenu(this.props.categories, true) }
         </ul>
       </div>
@@ -76,4 +96,4 @@ class CategoriesMenu extends Component<PropsType> {
   }
 }
 
-export default CategoriesMenu;
+export default withRouter(CategoriesMenu);

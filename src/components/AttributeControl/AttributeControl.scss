@@ -1,0 +1,17 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.blockTitle {
+  color: $color_grey_bg;
+  font-size: 14px;
+  line-height: 3.5rem;
+}
+
+.valueItem {
+  display: block;
+  margin-bottom: 0.5rem;
+}

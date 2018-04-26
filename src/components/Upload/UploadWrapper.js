@@ -19,6 +19,9 @@ type PropsType = {
   id: string,
 };
 
+
+// TODO: refactor for avoid use style props
+
 const UploadWrapper = ({
   buttonLabel,
   children,
@@ -34,7 +37,7 @@ const UploadWrapper = ({
       <label
         htmlFor={id}
         styleName="uploadButton"
-        style={{ height: buttonHeight, width: buttonWidth }}
+        style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
       >
         {(buttonIconType && !overPicture && <Icon type={buttonIconType} size={32} />)}
         {!overPicture && <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>}

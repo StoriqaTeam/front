@@ -4,7 +4,14 @@
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+}
 
+.isCategories {
+  margin-top: 5rem;
+
+  & .wrap {
+    margin-top: -5rem;
+  }
 }
 
 .wrap {
@@ -13,8 +20,4 @@
   flex-direction: column;
   width: 170rem;
   margin: 0 auto;
-}
-
-.isCategories {
-  margin-top: -2rem;
 }

@@ -20,22 +20,30 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type PropsType = {
-  me?: { store?: {} },
+  me?: { store?: {} }, // eslint-disable-line
 };
 
 type StateType = {
   activeItem: string,
   serverValidationErrors: any,
   activeItem: string,
+  logoUrl?: string,
+  isLoading: boolean,
 };
 
 class EditStore extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
+    isLoading: false,
+  };
+
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
   };
 
   handleSave = ({ form, optionLanguage }) => {
+    const { logoUrl } = this.state;
     const { environment } = this.context;
     const {
       name,
@@ -45,6 +53,7 @@ class EditStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
+    this.setState(() => ({ isLoading: true }));
     const id = pathOr(null, ['me', 'store', 'id'], this.props);
     UpdateStoreMainMutation.commit({
       id,
@@ -60,6 +69,7 @@ class EditStore extends Component<PropsType, StateType> {
       ],
       slug,
       slogan,
+      logo: logoUrl,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
@@ -70,12 +80,14 @@ class EditStore extends Component<PropsType, StateType> {
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
         }
+        this.setState(() => ({ isLoading: false }));
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
+        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
@@ -98,15 +110,15 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      activeItem,
-    } = this.state;
+    const { activeItem, logoUrl, isLoading } = this.state;
+    const store = pathOr(null, ['me', 'store'], this.props);
 
-    let store;
-    const { me } = this.props;
-    if (me) {
-      store = me.store; // eslint-disable-line
+    if (!store) {
+      return (<div>Store not found :(</div>);
     }
+
+    const name = pathOr('', ['name', 0, 'text'], store);
+    const { logo } = store;
     return (
       <Container>
         <Row>
@@ -114,6 +126,9 @@ class EditStore extends Component<PropsType, StateType> {
             <Menu
               activeItem={activeItem}
               switchMenu={this.switchMenu}
+              storeName={name}
+              storeLogo={logoUrl || logo}
+              onLogoUpload={this.handleLogoUpload}
             />
           </Col>
           <Col size={10}>
@@ -121,6 +136,7 @@ class EditStore extends Component<PropsType, StateType> {
               <Form
                 store={store}
                 onSave={this.handleSave}
+                isLoading={isLoading}
                 serverValidationErrors={this.state.serverValidationErrors}
               />
             </div>
@@ -143,6 +159,7 @@ export default createFragmentContainer(
           lang
           text
         }
+        logo
         slogan
         defaultLanguage
         slug

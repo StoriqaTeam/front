@@ -22,6 +22,8 @@ import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 
+import { Error404, Error } from '../src/pages/Errors';
+
 if (process.env.NODE_ENV === 'development') {
   var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
   var config;
@@ -69,7 +71,10 @@ if (process.env.NODE_ENV === 'development') {
 const wrapAsync = (fn) => (req, res, next) => {
   // Make sure to `.catch()` any errors and pass them along to the `next()`
   // middleware in the chain, in this case the error handler.
-  fn(req, res, next).catch(next);
+  fn(req, res, next).catch(e => {
+    console.log(e);
+    res.redirect('/error');
+  });
 };
 
 app.use(wrapAsync(async (req, res) => {
@@ -101,7 +106,12 @@ app.use(wrapAsync(async (req, res) => {
   try {
     const rendered = createRender({
       renderPending: () => (<div>loading</div>),
-      renderError: ({ error }) => (<div>{error.status === 404 ? 'Not found' : 'Error'}</div>),
+      renderError: ({ error }) => {
+        if (error.status === 404) {
+          return (<Error404 />);
+        }
+        return (<Error />);
+      },
     })(renderArgs);
     element = (
       <Provider store={store}>

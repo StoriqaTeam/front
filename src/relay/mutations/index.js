@@ -9,3 +9,4 @@ export { default as CreateBaseProductMutation } from './CreateBaseProductMutatio
 export { default as UpdateBaseProductMutation } from './UpdateBaseProductMutation';
 export { default as CreateProductWithAttributesMutation } from './CreateProductWithAttributesMutation';
 export { default as UpdateProductMutation } from './UpdateProductMutation';
+export { default as VerifyEmailMutation } from './VerifyEmailMutation';

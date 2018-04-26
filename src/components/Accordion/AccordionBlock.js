@@ -2,7 +2,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { find, whereEq } from 'ramda';
+import { map, addIndex, find, whereEq, slice } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -17,13 +17,16 @@ type TreeType = {
 type PropsType = {
   tree: TreeType,
   isExpanded?: boolean,
-  active?: number,
+  active: ?number,
   onClick: (item: TreeType) => void,
 }
 
 type StateType = {
   isExpanded: boolean,
+  showAll: boolean,
 }
+
+const mapIndexed = addIndex(map);
 
 class AccordionBlock extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -35,23 +38,28 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
       const isContains = findContainsActive(props.tree.children);
       this.state = {
         isExpanded: props.isExpanded === undefined ? Boolean(isContains) : props.isExpanded,
+        showAll: false,
       };
     } else {
       this.state = {
         isExpanded: Boolean(props.isExpanded),
+        showAll: false,
       };
     }
   }
 
   handleOnToggle = () => {
-    this.setState({
-      isExpanded: !this.state.isExpanded,
-    });
+    this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
+  }
+
+  handleOnShowAll = () => {
+    this.setState(prevState => ({ showAll: !prevState.showAll }));
   }
 
   render() {
     const { tree, active, onClick } = this.props;
-    const { isExpanded } = this.state;
+    const { isExpanded, showAll } = this.state;
+    const slicer = showAll ? slice(0, Infinity) : slice(0, 5);
     return (
       <div>
         <div
@@ -69,7 +77,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
         </div>
         {isExpanded &&
           <div styleName="childrenContainer">
-            {tree.children && tree.children.map((child => (
+            {tree.children && mapIndexed((child => (
               <div
                 key={child.id}
                 styleName={classNames('item', { active: active === child.id })}
@@ -80,7 +88,18 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
               >
                 {child.name}
               </div>
-            )))}
+            )), slicer(tree.children))}
+            {tree.children && tree.children.length > 5 &&
+              <div
+                styleName={classNames('item', { active: true })}
+                onClick={this.handleOnShowAll}
+                onKeyDown={() => { }}
+                role="button"
+                tabIndex="0"
+              >
+                show all
+              </div>
+            }
           </div>
         }
       </div>

@@ -1,0 +1,60 @@
+@import "../../styles/variables";
+
+.container {
+  position: absolute;
+  background-color: #fbfbfb;
+  height: 100%;
+  width: 100%;
+}
+
+.logoWrapper {
+  padding-left: 2rem;
+  padding-top: 7rem;
+};
+
+.logo svg {
+  width: 24rem;
+  height: 3.125rem;
+}
+
+.messageWrapper {
+  margin-top: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image svg {
+  height: 28rem;
+  width: 28rem;
+}
+
+.text {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.button {
+  margin-top: 4rem;
+}
+
+.code404Wrapper {
+  margin-top: 19rem;
+}
+
+.code404 {
+  height: 225px;
+  font-size: 200px;
+  font-weight: bold;
+  color: $color_blue_2;
+}
+
+.linkBack {
+  color: $color_blue_1;
+  height: 22px;
+  font-family: Roboto;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 3rem;
+}
