@@ -1,0 +1,91 @@
+pipeline:
+  test:
+    image: node:9.9-slim
+    environment:
+      - RUN_MODE=k8s
+    commands:
+      - yarn test
+      - yarn ci
+    when:
+      event: pull_request
+  build:
+    image: node:9.9-slim
+    environment:
+      - TIER=nightly
+    commands:
+      - apt-get update
+      - apt-get install -y git
+      - rm -f /app/yarn.lock || true
+      - yarn -s --no-progress --non-interactive
+    when:
+      event: push
+  package4nightly:
+    image: plugins/docker
+    repo: storiqateam/stq-saga
+    tags:
+      - ${DRONE_BRANCH/\//_}
+      - ${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    username: stqcommon
+    password: "Tz-q6qDL#d3Mz8hm"
+    dockerfile: docker/Dockerfile.run
+    environment:
+      - TIER=nightly
+    when:
+      event:
+        - push
+        - tag
+  cleanup:
+    image: rust:1.25-stretch
+    commands:
+      - cargo clean
+      - rm diesel || true
+  #deploy2nightly:
+    #image: quay.io/honestbee/drone-kubernetes
+    #kubernetes_server: https://api.nightly.stq.cloud
+    #kubernetes_token: 32txou6YhrlD3sHcpxsiCmP1m7taE1fY
+    #namespace: default
+    #deployment: saga
+    #repo: storiqateam/stq-saga
+    #container: saga
+    #tag: ${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    #when:
+      #branch: master
+      #event: push
+  #test_release:
+    #image: alpine
+    #commands:
+      #- sleep 10
+      #- apk update
+      #- apk add curl
+    #when:
+      #branch: master
+      #event: push
+  #deploy2stage:
+    #image: quay.io/honestbee/drone-kubernetes
+    #kubernetes_server: https://api.stage.stq.cloud
+    #kubernetes_token: PW2clI0vKqLi3eywlN776rMyE7hk1pgX
+    #namespace: default
+    #deployment: saga
+    #repo: storiqateam/stq-saga
+    #container: saga
+    #tag: ${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    #when:
+      #branch: release*
+      #event: push
+  #notify_slack:
+    #image: plugins/slack
+    #webhook: https://hooks.slack.com/services/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
+    #channel: back
+    #icon_url: https://drone.io/favicon.ico
+    #username: cd.stq.cloud
+    #template: >
+      #{{#success build.status}}
+        #Build {{build.number}} for {{repo.name}} branch {{build.branch}} succeeded.
+      #{{else}}
+        #Build {{build.number}} for {{repo.name}} branch {{build.branch}} failed.
+      #{{/success}}
+    #when:
+      #event: push
+      #branch: [ master, release ]
+      #status:  [ failure, success ]
+
