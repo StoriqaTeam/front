@@ -18,7 +18,6 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { Button } from 'components/common/Button';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Select } from 'components/common/Select';
 import { Textarea } from 'components/common/Textarea';

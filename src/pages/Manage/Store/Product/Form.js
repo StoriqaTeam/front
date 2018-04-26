@@ -14,7 +14,6 @@ import { validate } from '@storiqa/shared';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { CategorySelector } from 'components/CategorySelector';
-import { Button } from 'components/common/Button';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
