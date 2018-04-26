@@ -112,8 +112,14 @@
 }
 
 .selected {
-  font-family: $font_regular;
   position: relative;
+  line-height: 2.5rem;
+  z-index: 2;
+}
+
+.placeholder {
+  font-size: 14px;
+  color: $color_grey_bg;
   line-height: 2.5rem;
   z-index: 2;
 }
