@@ -131,6 +131,8 @@ class Product extends PureComponent<PropsType, StateType> {
       photoMain,
       additionalPhotos,
     } = this.state;
+    /* eslint-disable no-console */
+    console.log('widgets', widgets);
     return (
       <div styleName="container">
         <Header />
@@ -147,14 +149,12 @@ class Product extends PureComponent<PropsType, StateType> {
                     <ProductShare />
                   </Col>
                   <Col size={6}>
-                    {!isEmpty(widgets) ? (
-                      <ProductDetails
-                        productTitle={extractText(name)}
-                        productDescription={extractText(longDescription, 'EN', 'No Description')}
-                        widgets={widgets}
-                        onWidgetClick={this.handleWidgetClick}
-                      />
-                    ) : null}
+                    <ProductDetails
+                      productTitle={extractText(name)}
+                      productDescription={extractText(longDescription, 'EN', 'No Description')}
+                      widgets={widgets}
+                      onWidgetClick={this.handleWidgetClick}
+                    />
                   </Col>
                 </Row>
               </div>
