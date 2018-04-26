@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 
 import './ProductMaterial.scss';
 
@@ -63,7 +63,7 @@ class ProductMaterial extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <h4>{ title }</h4>
-        <MiniSelect
+        <Select
           forForm
           activeItem={selected || materials[0]}
           items={materials}
