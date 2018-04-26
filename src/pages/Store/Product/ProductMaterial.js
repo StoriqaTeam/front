@@ -16,7 +16,7 @@ type PropsType = {
   // eslint-disable-next-line
   isReset: boolean,
   title: string,
-  materials: material[],
+  materials: Array<material>,
   onSelect: Function,
 }
 
