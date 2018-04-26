@@ -259,18 +259,12 @@ class Form extends Component<PropsType, StateType> {
           {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
           {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">
-            {!isLoading ?
-              <Button
-                big
-                type="button"
-                onClick={this.handleSave}
-              >
-                Save
-              </Button> :
-              <SpinnerButton>
-                Save
-              </SpinnerButton>
-            }
+            <SpinnerButton
+              onClick={this.handleSave}
+              isLoading={isLoading}
+            >
+              Save
+            </SpinnerButton>
           </div>
         </div>
       </Fragment>

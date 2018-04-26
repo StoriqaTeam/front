@@ -17,16 +17,7 @@
   white-space: nowrap;
   transition: all .3s ease;
   &:hover {
-    cursor: default;
-    .childrenWrapper {
-      opacity: 0;
-    }
-    .spinner {
-      opacity: 0;
-    }
-    .spinnerHover {
-      opacity: 1;
-    }
+    background: $color_blue_1_hover;
   }
   &.small {
     font-size: 14px;
@@ -41,20 +32,34 @@
     background: $color_white; 
     border: 1px solid $color_blue_1;
   }
+  &.isLoading {
+    &:hover {
+      cursor: default;
+    }
+    .childrenWrapper {
+      opacity: 0;
+    }
+    .spinner {
+      opacity: 1;
+    }
+  }
 }
 
-.spinnerHover {
-  position: absolute;
-  opacity: 0;
+.childrenWrapper {
+  opacity: 1;
+  transition: opacity 0.5s;
 }
 
 .spinner {
+  position: absolute;
+  opacity: 0;
   border: 1px solid transparent;
   border-top: 1px solid $color_blue_1;
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
   animation: spin 2s linear infinite;
+  transition: opacity 0.5s;
   &.small {
     width: 1.75rem;
     height: 1.75rem;
@@ -63,11 +68,6 @@
     border-top: 1px solid $color_white;
   }
 }
-
-.childrenWrapper {
-  margin-left: 2rem;
-}
-
 
 @keyframes spin {
   0% { transform: rotate(0deg); }

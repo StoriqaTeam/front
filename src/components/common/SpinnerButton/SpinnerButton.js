@@ -7,21 +7,27 @@ import classNames from 'classnames';
 import './SpinnerButton.scss';
 
 type PropsTypes = {
+  onClick: () => void,
   children: Node,
+  isLoading: ?boolean,
   medium: ?boolean,
   small: ?boolean,
   white: ?boolean,
 };
 
 const Button = ({
+  onClick,
   children,
+  isLoading,
   white,
   medium,
   small,
 }: PropsTypes) => (
   <button
-    disabled
+    onClick={onClick}
+    disabled={isLoading}
     styleName={classNames('container', {
+      isLoading,
       white,
       medium,
       small,
@@ -30,7 +36,6 @@ const Button = ({
   >
     <div styleName={classNames('spinner', { white: !white, small, medium })} />
     <span styleName="childrenWrapper">{children}</span>
-    <div styleName={classNames('spinner', 'spinnerHover', { white: !white, small, medium })} />
   </button>
 );
 

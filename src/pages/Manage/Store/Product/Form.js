@@ -180,17 +180,12 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            {!isLoading ?
-              <Button
-                type="button"
-                onClick={this.handleSave}
-              >
-                Save
-              </Button> :
-              <SpinnerButton small>
-                Save
-              </SpinnerButton>
-            }
+            <SpinnerButton
+              onClick={this.handleSave}
+              isLoading={isLoading}
+            >
+              Save
+            </SpinnerButton>
           </div>
         </div>
       </div>
