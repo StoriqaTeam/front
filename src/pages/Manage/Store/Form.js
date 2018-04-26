@@ -19,6 +19,7 @@ import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
 import { Button } from 'components/common/Button';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Select } from 'components/common/Select';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
@@ -46,6 +47,7 @@ type StateType = {
 
 type PropsType = {
   onSave: Function,
+  isLoading: boolean,
   store?: {},
   serverValidationErrors: {
     [string]: ?any,
@@ -222,6 +224,7 @@ class Form extends Component<PropsType, StateType> {
       langItems,
       form,
     } = this.state;
+    const { isLoading } = this.props;
     const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
 
     return (
@@ -256,13 +259,18 @@ class Form extends Component<PropsType, StateType> {
           {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
           {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
           <div styleName="formItem">
-            <Button
-              big
-              type="button"
-              onClick={this.handleSave}
-            >
-              Save
-            </Button>
+            {!isLoading ?
+              <Button
+                big
+                type="button"
+                onClick={this.handleSave}
+              >
+                Save
+              </Button> :
+              <SpinnerButton>
+                Save
+              </SpinnerButton>
+            }
           </div>
         </div>
       </Fragment>
