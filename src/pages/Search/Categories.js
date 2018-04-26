@@ -63,7 +63,7 @@ class Categories extends Component<PropsType, StateType> {
   generateTree = () => {
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
-    if (!categories || !categoryId) return null;
+    if (!categories) return null;
     const flattenCategories = flattenFunc(categories);
     const levelFilter = level => filter(where({
       level: equals(level),
