@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { propEq, filter, head, keys } from 'ramda';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
@@ -179,7 +180,7 @@ class Product extends PureComponent<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Product,
+  withErrorBoundary(Product),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
