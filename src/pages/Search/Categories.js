@@ -48,10 +48,15 @@ const storesPerRequest = 24;
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    const maxValue = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'maxValue'], props);
+    const maxValueFromUrl = pathOr(0, ['match', 'location', 'query', 'maxValue'], this.props);
+    const maxValueFromUrlInt = parseInt(maxValueFromUrl, 10);
+    const volume2 = maxValueFromUrlInt && maxValueFromUrlInt < maxValue ?
+      maxValueFromUrlInt
+      : maxValue;
     this.state = {
       volume: 0,
-      volume2: (priceRange && priceRange.maxValue) || 0,
+      volume2,
     };
   }
 
