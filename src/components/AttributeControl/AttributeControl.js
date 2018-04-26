@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { sort, pathOr, map, filter, comparator, lt } from 'ramda';
+import { uniq, sort, pathOr, map, addIndex, filter, comparator, lt } from 'ramda';
 
 import { getNameText } from 'utils';
 import { Checkbox } from 'components/common/Checkbox';
@@ -86,10 +86,11 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     const { value } = this.state;
     const uiElement = pathOr(null, ['attribute', 'metaField', 'uiElement'], attrFilter);
     const values = pathOr(null, ['equal', 'values'], attrFilter);
+    const mapIndexed = addIndex(map);
     switch (uiElement) {
       case 'CHECKBOX':
-        return (values && map(v => (
-          <div key={v} styleName="valueItem">
+        return (values && mapIndexed((v, index) => (
+          <div key={`${v}-${index}`} styleName="valueItem">
             <Checkbox
               id={v}
               label={v}
@@ -97,13 +98,13 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               onChange={this.handleOnChange}
             />
           </div>
-        ), sort((a, b) => (a - b), values)));
+        ), sort((a, b) => (a - b), uniq(values))));
       case 'COMBOBOX':
         return (values ?
           <Select
             forForm
             activeItem={{ id: value, label: value }}
-            items={map(v => ({ id: v, label: v }), sort(comparator((a, b) => lt(a, b)), values))}
+            items={map(v => ({ id: v, label: v }), sort(comparator((a, b) => lt(a, b)), uniq(values)))}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
               width: '100%',
@@ -115,7 +116,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         return (values ?
           <ColorPicker
             onSelect={this.handleOnChange}
-            items={values}
+            items={uniq(values)}
             value={value}
           /> : null);
       default:
