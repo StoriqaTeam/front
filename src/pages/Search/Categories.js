@@ -9,7 +9,6 @@ import { withRouter, routerShape } from 'found';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
-import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { Button } from 'components/common/Button';
@@ -287,7 +286,6 @@ class Categories extends Component<PropsType, StateType> {
 
 Categories.contextTypes = {
   directories: PropTypes.object,
-  currentUser: currentUserShape,
 };
 
 export default createPaginationContainer(
