@@ -17,6 +17,8 @@ RUN yarn updateSchema
 RUN yarn relay
 
 # Building app
+ENV BABEL_ENV=production
+ENV NODE_ENV=production
 RUN yarn build
 RUN yarn server:dist:build
 
