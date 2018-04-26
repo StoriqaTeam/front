@@ -180,6 +180,7 @@ class Product extends PureComponent<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
+  // $FlowIgnoreMe
   withErrorBoundary(Product),
   graphql`
     fragment Product_baseProduct on BaseProduct {
