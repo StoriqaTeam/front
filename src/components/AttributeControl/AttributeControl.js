@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { pathOr, map, filter } from 'ramda';
+import { sort, pathOr, map, filter, comparator, lt } from 'ramda';
 
 import { getNameText } from 'utils';
 import { Checkbox } from 'components/common/Checkbox';
@@ -88,7 +88,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     const values = pathOr(null, ['equal', 'values'], attrFilter);
     switch (uiElement) {
       case 'CHECKBOX':
-        return (values && values.map(v => (
+        return (values && map(v => (
           <div key={v} styleName="valueItem">
             <Checkbox
               id={v}
@@ -97,13 +97,13 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               onChange={this.handleOnChange}
             />
           </div>
-        )));
+        ), sort((a, b) => (a - b), values)));
       case 'COMBOBOX':
         return (values ?
           <Select
             forForm
             activeItem={{ id: value, label: value }}
-            items={map(v => ({ id: v, label: v }), values)}
+            items={map(v => ({ id: v, label: v }), sort(comparator((a, b) => lt(a, b)), values))}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
               width: '100%',
