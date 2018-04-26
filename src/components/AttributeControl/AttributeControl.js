@@ -104,7 +104,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
           <Select
             forForm
             activeItem={{ id: value, label: value }}
-            items={map(v => ({ id: v, label: v }), sort(comparator((a, b) => lt(a, b)), uniq(values)))}
+            items={map(
+              v => ({ id: v, label: v }),
+              sort(comparator((a, b) => lt(a, b)), uniq(values)),
+            )}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
               width: '100%',
