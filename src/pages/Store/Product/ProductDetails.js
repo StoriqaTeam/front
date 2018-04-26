@@ -1,6 +1,8 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+
+import { isNil } from 'ramda';
 
 import {
   WidgetsType,
@@ -34,7 +36,7 @@ type StateType = {
   resetCOLOR_PICKER: boolean,
 }
 
-class ProductDetails extends PureComponent<PropsType, StateType> {
+class ProductDetails extends Component<PropsType, StateType> {
   state = {
     resetCHECKBOX: false,
     resetCOMBOBOX: false,
@@ -87,27 +89,33 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
         <p>
           {productDescription}
         </p>
-        <ProductSize
-          isReset={resetCHECKBOX}
-          title={CHECKBOX.title}
-          sizes={CHECKBOX.values}
-          onClick={widget => this.handleWidget(widget, CHECKBOX)}
-        />
-        <ProductMaterial
-          isReset={resetCOMBOBOX}
-          title={COMBOBOX.title}
-          materials={COMBOBOX.values}
-          onSelect={widget => this.handleWidget(widget, COMBOBOX)}
-        />
         {/* eslint-disable camelcase */}
-        <ProductThumbnails
-          isReset={resetCOLOR_PICKER}
-          title={COLOR_PICKER.title}
-          row
-          srcProp="image"
-          thumbnails={COLOR_PICKER.values}
-          onClick={widget => this.handleWidget(widget, COLOR_PICKER)}
-        />
+        {!isNil(CHECKBOX) ? (
+          <ProductSize
+            isReset={resetCHECKBOX}
+            title={CHECKBOX.title}
+            sizes={CHECKBOX.values}
+            onClick={widget => this.handleWidget(widget, CHECKBOX)}
+          />
+        ) : null}
+        {!isNil(COMBOBOX) ? (
+          <ProductMaterial
+            isReset={resetCOMBOBOX}
+            title={COMBOBOX.title || ''}
+            materials={COMBOBOX.values}
+            onSelect={widget => this.handleWidget(widget, COMBOBOX)}
+          />
+        ) : null}
+        {!isNil(COLOR_PICKER) ? (
+          <ProductThumbnails
+            isReset={resetCOLOR_PICKER}
+            title={COLOR_PICKER.title}
+            row
+            srcProp="image"
+            thumbnails={COLOR_PICKER.values}
+            onClick={widget => this.handleWidget(widget, COLOR_PICKER)}
+          />
+        ) : null}
       </div>
     );
   }
