@@ -105,9 +105,12 @@ const routes = (
 
       <Route
         path="/categories"
-        Component={({ search }) => (<Categories search={search} />)}
+        Component={({ search, me }) => (<Categories search={search} me={me} />)}
         query={graphql`
         query routes_Categories_Query($searchTerm: SearchProductInput!) {
+          me {
+            id
+          }
           search {
             ...Categories_search @arguments(text: $searchTerm)
           }
