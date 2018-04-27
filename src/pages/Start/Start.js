@@ -35,7 +35,7 @@ type ProductType = {
       price: number,
     },
   },
-}
+};
 
 /* eslint-disable */
 type PropsType = {
@@ -51,35 +51,39 @@ type PropsType = {
       }>,
     },
   },
-}
+};
 /* eslint-enable */
 
 class Start extends PureComponent<PropsType> {
   render() {
-    const mostViewedProducts = pathOr([], [
-      'mainPage',
-      'findMostViewedProducts',
-      'edges',
-    ], this.props);
-    const mostDiscountProducts = pathOr([], [
-      'mainPage',
-      'findMostDiscountProducts',
-      'edges',
-    ], this.props);
-    // prepare arrays
-    const variantsToArr = variantsName => pipe(
-      path(['node']),
-      i => assoc('storeId', i.rawId, i),
-      evolve({
-        variants: (i) => {
-          if (variantsName === 'all') {
-            return path([variantsName], i);
-          }
-          return [path([variantsName], i)];
-        },
-      }),
+    const mostViewedProducts = pathOr(
+      [],
+      ['mainPage', 'findMostViewedProducts', 'edges'],
+      this.props,
     );
-    const discountProducts = map(variantsToArr('mostDiscount'), mostDiscountProducts);
+    const mostDiscountProducts = pathOr(
+      [],
+      ['mainPage', 'findMostDiscountProducts', 'edges'],
+      this.props,
+    );
+    // prepare arrays
+    const variantsToArr = variantsName =>
+      pipe(
+        path(['node']),
+        i => assoc('storeId', i.rawId, i),
+        evolve({
+          variants: i => {
+            if (variantsName === 'all') {
+              return path([variantsName], i);
+            }
+            return [path([variantsName], i)];
+          },
+        }),
+      );
+    const discountProducts = map(
+      variantsToArr('mostDiscount'),
+      mostDiscountProducts,
+    );
     const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
     return (
       <div styleName="container">
@@ -87,28 +91,27 @@ class Start extends PureComponent<PropsType> {
           <BannersSlider items={bannersSlider} />
         </div>
         <div styleName="item goodSliderItem">
-          {viewedProducts && viewedProducts.length > 0 &&
-            <GoodsSlider
-              items={viewedProducts}
-              title="Most Popular"
-              seeAllUrl="/categories?search=&sortBy=VIEWS"
-            />
-          }
+          {viewedProducts &&
+            viewedProducts.length > 0 && (
+              <GoodsSlider
+                items={viewedProducts}
+                title="Most Popular"
+                seeAllUrl="/categories?search=&sortBy=VIEWS"
+              />
+            )}
         </div>
         <div styleName="item goodSliderItem">
-          {discountProducts && discountProducts.length > 0 &&
-            <GoodsSlider
-              items={discountProducts}
-              title="Sale"
-              seeAllUrl="/categories?search=&sortBy=PRICE_ASC"
-            />
-          }
+          {discountProducts &&
+            discountProducts.length > 0 && (
+              <GoodsSlider
+                items={discountProducts}
+                title="Sale"
+                seeAllUrl="/categories?search=&sortBy=PRICE_ASC"
+              />
+            )}
         </div>
         <div styleName="item">
-          <BannersRow
-            items={bannersRow}
-            count={2}
-          />
+          <BannersRow items={bannersRow} count={2} />
         </div>
       </div>
     );
@@ -126,7 +129,7 @@ export default createFragmentContainer(
   Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
-      findMostViewedProducts(searchTerm: {options: {attrFilters: []}}) {
+      findMostViewedProducts(searchTerm: { options: { attrFilters: [] } }) {
         edges {
           node {
             rawId
@@ -151,7 +154,7 @@ export default createFragmentContainer(
           }
         }
       }
-      findMostDiscountProducts(searchTerm: {options: {attrFilters: []}}) {
+      findMostDiscountProducts(searchTerm: { options: { attrFilters: [] } }) {
         edges {
           node {
             rawId

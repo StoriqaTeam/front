@@ -25,7 +25,7 @@ type ProductType = {
       price: number,
     },
   },
-}
+};
 
 type PropsTypes = {
   items: Array<{

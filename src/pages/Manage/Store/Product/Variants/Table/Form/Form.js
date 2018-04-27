@@ -7,7 +7,10 @@ import { find, append, head, pathOr, map, complement, isEmpty } from 'ramda';
 import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { log } from 'utils';
-import { CreateProductWithAttributesMutation, UpdateProductMutation } from 'relay/mutations';
+import {
+  CreateProductWithAttributesMutation,
+  UpdateProductMutation,
+} from 'relay/mutations';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
@@ -22,7 +25,11 @@ type StateType = {
   isOpenVariantData?: boolean,
   mainPhoto?: ?string,
   photos?: Array<string>,
-  attributeValues?: Array<{ attrId: number, value: string, metaField?: string }>,
+  attributeValues?: Array<{
+    attrId: number,
+    value: string,
+    metaField?: string,
+  }>,
   price?: ?number,
 };
 
@@ -37,10 +44,13 @@ class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const product = pathOr(null, ['variant'], props);
-    const attributeValues = map(item => ({
-      attrId: item.rawId,
-      ...this.valueForAttribute({ attr: item, variant: props.variant }),
-    }), props.category.getAttributes);
+    const attributeValues = map(
+      item => ({
+        attrId: item.rawId,
+        ...this.valueForAttribute({ attr: item, variant: props.variant }),
+      }),
+      props.category.getAttributes,
+    );
     if (!product) {
       this.state = {
         attributeValues,
@@ -62,7 +72,9 @@ class Form extends Component<PropsType, StateType> {
     //
   };
 
-  onChangeValues = (values: Array<{ attrId: number, value: string, metaField?: string }>) => {
+  onChangeValues = (
+    values: Array<{ attrId: number, value: string, metaField?: string }>,
+  ) => {
     this.setState({ attributeValues: values });
   };
 
@@ -133,7 +145,9 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handlePriceChange = (e: any) => {
-    const { target: { value } } = e;
+    const {
+      target: { value },
+    } = e;
     if (value === '') {
       this.setState({ price: null });
       return;
@@ -144,7 +158,9 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleCashbackChange = (e: any) => {
-    const { target: { value } } = e;
+    const {
+      target: { value },
+    } = e;
     if (value === '') {
       this.setState({ cashback: null });
       return;
@@ -169,10 +185,15 @@ class Form extends Component<PropsType, StateType> {
     }
   };
 
-  valueForAttribute = ({ attr, variant }: { [string]: any }):
-    { value: string, metaField?: string } => {
+  valueForAttribute = ({
+    attr,
+    variant,
+  }: {
+    [string]: any,
+  }): { value: string, metaField?: string } => {
     const attrFromVariant =
-      variant && find(item => item.attribute.rawId === attr.rawId, variant.attributes);
+      variant &&
+      find(item => item.attribute.rawId === attr.rawId, variant.attributes);
     if (attrFromVariant && attrFromVariant.value) {
       return {
         value: attrFromVariant.value,
@@ -244,10 +265,7 @@ class Form extends Component<PropsType, StateType> {
         </div>
         <div styleName="variantItem tdBasket" />
         <div styleName="variantItem tdDropdawn">
-          <button
-            styleName="arrowExpand"
-            onClick={this.toggleDropdownVariant}
-          >
+          <button styleName="arrowExpand" onClick={this.toggleDropdownVariant}>
             <Icon inline type="arrowExpand" />
           </button>
         </div>
@@ -259,9 +277,7 @@ class Form extends Component<PropsType, StateType> {
     const { photos, mainPhoto } = this.state;
     return (
       <div styleName="container">
-        <div styleName="variants">
-          {this.renderVariant()}
-        </div>
+        <div styleName="variants">{this.renderVariant()}</div>
         <Photos
           photos={mainPhoto ? append(mainPhoto, photos) : photos}
           onAddPhoto={this.handleAddPhoto}

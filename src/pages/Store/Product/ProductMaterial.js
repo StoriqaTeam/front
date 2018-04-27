@@ -6,11 +6,9 @@ import { Select } from 'components/common/Select';
 
 import './ProductMaterial.scss';
 
-import {
-  SelectedType,
-} from './types';
+import { SelectedType } from './types';
 
-type MaterialType = {id: string | number, label: string};
+type MaterialType = { id: string | number, label: string };
 
 type PropsType = {
   // eslint-disable-next-line
@@ -18,11 +16,11 @@ type PropsType = {
   title: string,
   materials: Array<MaterialType>,
   onSelect: Function,
-}
+};
 
 type StateType = {
   selected: SelectedType,
-}
+};
 
 class ProductMaterial extends Component<PropsType, StateType> {
   /**
@@ -31,7 +29,10 @@ class ProductMaterial extends Component<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
     const { isReset } = nextProps;
     if (isReset) {
       return {
@@ -50,19 +51,19 @@ class ProductMaterial extends Component<PropsType, StateType> {
    */
   handleSelect = (selected: SelectedType): void => {
     const { onSelect } = this.props;
-    this.setState({
-      selected,
-    }, () => onSelect(selected));
+    this.setState(
+      {
+        selected,
+      },
+      () => onSelect(selected),
+    );
   };
   render() {
-    const {
-      title,
-      materials,
-    } = this.props;
+    const { title, materials } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        <h4>{ title }</h4>
+        <h4>{title}</h4>
         <Select
           forForm
           activeItem={selected || materials[0]}

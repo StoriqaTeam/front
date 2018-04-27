@@ -8,18 +8,16 @@ import { ProductThumbnails, ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-import {
-  SelectedType,
-} from './types';
+import { SelectedType } from './types';
 
 type PropsType = {
   mainImage: string,
-  thumbnails: Array<{img: string, alt: string, label?: string}>,
-}
+  thumbnails: Array<{ img: string, alt: string, label?: string }>,
+};
 
 type StateType = {
   selectedImage: SelectedType,
-}
+};
 
 class ProductImage extends Component<PropsType, StateType> {
   /**
@@ -28,7 +26,10 @@ class ProductImage extends Component<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
     const { selectedImage } = prevState;
     if (!isEmpty(selectedImage)) {
       return {

@@ -1,14 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import {
-  assocPath,
-  propOr,
-  isEmpty,
-  complement,
-  pathOr,
-  omit,
-} from 'ramda';
+import { assocPath, propOr, isEmpty, complement, pathOr, omit } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -54,7 +47,11 @@ class Form extends Component<PropsType, StateType> {
         name: pathOr('', ['name', 0, 'text'], baseProduct),
         seoTitle: pathOr('', ['seoTitle', 0, 'text'], baseProduct),
         seoDescription: pathOr('', ['seoDescription', 0, 'text'], baseProduct),
-        shortDescription: pathOr('', ['shortDescription', 0, 'text'], baseProduct),
+        shortDescription: pathOr(
+          '',
+          ['shortDescription', 0, 'text'],
+          baseProduct,
+        ),
         fullDesc: pathOr('', ['longDescription', 0, 'text'], baseProduct),
         categoryId: baseProduct.category.rawId,
       },
@@ -79,23 +76,29 @@ class Form extends Component<PropsType, StateType> {
     const nextFormErrors = nextProps.validationErrors;
     if (isEmpty(currentFormErrors) && complement(isEmpty(nextFormErrors))) {
       // конвертнем имена с snakeCase в camel_case :)
-      const formErrors = renameKeys({
-        long_description: 'fullDesc',
-        short_description: 'shortDescription',
-        seo_title: 'seoTitle',
-        seo_description: 'seoDescription',
-      }, nextFormErrors);
+      const formErrors = renameKeys(
+        {
+          long_description: 'fullDesc',
+          short_description: 'shortDescription',
+          seo_title: 'seoTitle',
+          seo_description: 'seoDescription',
+        },
+        nextFormErrors,
+      );
       this.setState({ formErrors });
     }
   }
 
   validate = () => {
     // TODO: вынести спеки
-    const { errors } = validate({
-      name: [[val => !isEmpty(val), 'Should not be empty']],
-      shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
-      fullDesc: [[val => !isEmpty(val), 'Should not be empty']],
-    }, this.state.form);
+    const { errors } = validate(
+      {
+        name: [[val => !isEmpty(val), 'Should not be empty']],
+        shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
+        fullDesc: [[val => !isEmpty(val), 'Should not be empty']],
+      },
+      this.state.form,
+    );
     return errors;
   };
 
@@ -162,13 +165,19 @@ class Form extends Component<PropsType, StateType> {
           </div>
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
-          {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
-          {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
+          {this.renderTextarea({
+            id: 'seoDescription',
+            label: 'SEO description',
+          })}
+          {this.renderTextarea({
+            id: 'shortDescription',
+            label: 'Short description',
+          })}
           {this.renderTextarea({ id: 'fullDesc', label: 'Full description' })}
           <div styleName="formItem">
             <CategorySelector
               categories={this.props.categories}
-              onSelect={(itemId) => {
+              onSelect={itemId => {
                 this.setState({
                   form: {
                     ...this.state.form,
@@ -179,10 +188,7 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <SpinnerButton
-              onClick={this.handleSave}
-              isLoading={isLoading}
-            >
+            <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
               Save
             </SpinnerButton>
           </div>

@@ -9,10 +9,7 @@ type PropTypes = {
 };
 
 const Separator = (props: PropTypes) => (
-  <hr
-    styleName="container"
-    text={props.text}
-  />
+  <hr styleName="container" text={props.text} />
 );
 
 export default Separator;

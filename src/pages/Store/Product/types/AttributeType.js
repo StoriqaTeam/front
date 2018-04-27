@@ -4,6 +4,6 @@ type AttributeType = {
   ...IdType,
   name: Array<TranslationType>,
   metaField: AttributeMetaFieldType,
-}
+};
 
 export default AttributeType;

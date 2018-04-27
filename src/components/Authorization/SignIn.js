@@ -16,7 +16,7 @@ type PropsType = {
   handleLoginClick: Function,
   handleChange: Function,
   handleBlur: Function,
-}
+};
 
 type StateType = {
   autocomplete: boolean,

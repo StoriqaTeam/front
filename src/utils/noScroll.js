@@ -7,14 +7,18 @@ const getScrollbarSize = () => {
 
   const doc = document.documentElement;
   const dummyScroller = document.createElement('div');
-  dummyScroller.setAttribute('style', 'width:99px;height:99px;position:absolute;top:-9999px;overflow:scroll;');
+  dummyScroller.setAttribute(
+    'style',
+    'width:99px;height:99px;position:absolute;top:-9999px;overflow:scroll;',
+  );
   doc.appendChild(dummyScroller);
   scrollbarSize = dummyScroller.offsetWidth - dummyScroller.clientWidth;
   doc.removeChild(dummyScroller);
   return scrollbarSize;
 };
 
-const hasScrollbar = () => document.documentElement.scrollHeight > window.innerHeight;
+const hasScrollbar = () =>
+  document.documentElement.scrollHeight > window.innerHeight;
 
 const on = () => {
   if (typeof document === 'undefined') return;

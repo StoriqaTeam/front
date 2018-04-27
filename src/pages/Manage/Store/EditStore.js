@@ -2,10 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  pathOr,
-  toUpper,
-} from 'ramda';
+import { pathOr, toUpper } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
@@ -57,16 +54,10 @@ class EditStore extends Component<PropsType, StateType> {
     const id = pathOr(null, ['me', 'store', 'id'], this.props);
     UpdateStoreMainMutation.commit({
       id,
-      name: [
-        { lang: optionLanguage, text: name },
-      ],
+      name: [{ lang: optionLanguage, text: name }],
       defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [
-        { lang: optionLanguage, text: longDescription },
-      ],
-      shortDescription: [
-        { lang: optionLanguage, text: shortDescription },
-      ],
+      longDescription: [{ lang: optionLanguage, text: longDescription }],
+      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
       slug,
       slogan,
       logo: logoUrl,
@@ -105,7 +96,7 @@ class EditStore extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 
@@ -114,7 +105,7 @@ class EditStore extends Component<PropsType, StateType> {
     const store = pathOr(null, ['me', 'store'], this.props);
 
     if (!store) {
-      return (<div>Store not found :(</div>);
+      return <div>Store not found :(</div>;
     }
 
     const name = pathOr('', ['name', 0, 'text'], store);
@@ -151,7 +142,7 @@ export default createFragmentContainer(
   Page(EditStore),
   graphql`
     fragment EditStore_me on User
-    @argumentDefinitions(storeId: { type: "Int!" }) {
+      @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         id
         rawId

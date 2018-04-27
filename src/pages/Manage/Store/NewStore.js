@@ -2,11 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  assocPath,
-  pathOr,
-  toUpper,
-} from 'ramda';
+import { assocPath, pathOr, toUpper } from 'ramda';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
@@ -47,11 +43,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   handleSave = ({ form, optionLanguage }) => {
-    const {
-      environment,
-      currentUser,
-      showAlert,
-    } = this.context;
+    const { environment, currentUser, showAlert } = this.context;
     const {
       name,
       longDescription,
@@ -65,16 +57,10 @@ class NewStore extends Component<PropsType, StateType> {
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
-      name: [
-        { lang: optionLanguage, text: name },
-      ],
+      name: [{ lang: optionLanguage, text: name }],
       defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [
-        { lang: optionLanguage, text: longDescription },
-      ],
-      shortDescription: [
-        { lang: optionLanguage, text: shortDescription },
-      ],
+      longDescription: [{ lang: optionLanguage, text: longDescription }],
+      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
       slug,
       slogan,
       logo: logoUrl,
@@ -115,7 +101,7 @@ class NewStore extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 

@@ -10,7 +10,13 @@ import { Link } from 'found';
 import './Stores.scss';
 
 type PropsType = {
-  store: { name: {}, rawId: any, id: any, productsCount: number, logo: ?string, },
+  store: {
+    name: {},
+    rawId: any,
+    id: any,
+    productsCount: number,
+    logo: ?string,
+  },
 };
 
 class StoreRow extends PureComponent<PropsType> {
@@ -31,16 +37,19 @@ class StoreRow extends PureComponent<PropsType> {
                 styleName="storeLogo"
                 data-test="storeLink"
               >
-                {store.logo ?
-                  <img src={store.logo} alt="img" /> :
+                {store.logo ? (
+                  <img src={store.logo} alt="img" />
+                ) : (
                   <Icon type="camera" size="32" />
-                }
+                )}
               </Link>
               <div styleName="storeInfo">
                 <div styleName="storeName">{name}</div>
                 <div styleName="storeAdd">
                   <span>97,5% reviews</span>
-                  {productsCount && <span styleName="productsCount">{productsCount} goods</span>}
+                  {productsCount && (
+                    <span styleName="productsCount">{productsCount} goods</span>
+                  )}
                 </div>
               </div>
               <div styleName="storeElect">
@@ -49,14 +58,22 @@ class StoreRow extends PureComponent<PropsType> {
             </div>
           </Col>
           <Col size={6}>
-            {baseProduct &&
+            {baseProduct && (
               <div styleName="productsData">
                 <div styleName="productsWrap">
-                  {map((baseProductNode) => {
+                  {map(baseProductNode => {
                     const baseProductId = baseProductNode.rawId;
-                    const products = pathOr([], ['products', 'edges'], baseProductNode);
+                    const products = pathOr(
+                      [],
+                      ['products', 'edges'],
+                      baseProductNode,
+                    );
                     const product = head(products);
-                    const photoMain = pathOr(null, ['node', 'photoMain'], product);
+                    const photoMain = pathOr(
+                      null,
+                      ['node', 'photoMain'],
+                      product,
+                    );
                     return (
                       <Link
                         key={baseProductId}
@@ -65,17 +82,18 @@ class StoreRow extends PureComponent<PropsType> {
                         data-test="productLink"
                       >
                         <div styleName="productFotoWrap">
-                          {photoMain ?
-                            <img src={photoMain} alt="img" /> :
+                          {photoMain ? (
+                            <img src={photoMain} alt="img" />
+                          ) : (
                             <Icon type="camera" size="32" />
-                          }
+                          )}
                         </div>
                       </Link>
                     );
                   }, map(baseProductItem => baseProductItem.node, baseProduct))}
                 </div>
               </div>
-            }
+            )}
           </Col>
         </Row>
       </div>
