@@ -43,7 +43,7 @@ type AttrFilterType = {
   },
 }
 
-const storesPerRequest = 24;
+const productsPerRequest = 24;
 
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -145,7 +145,7 @@ class Categories extends Component<PropsType, StateType> {
   }
 
   productsRefetch = () => {
-    this.props.relay.loadMore(24);
+    this.props.relay.loadMore(productsPerRequest);
   };
 
   renderBreadcrumbs = () => {
@@ -432,9 +432,9 @@ export default createPaginationContainer(
   {
     direction: 'forward',
     getConnectionFromProps: props => props.search && props.search.findProduct,
-    getVariables: (props, { count }, prevFragmentVars) => ({
+    getVariables: (props, _, prevFragmentVars) => ({
       text: prevFragmentVars.text,
-      first: count + storesPerRequest,
+      first: productsPerRequest,
       after: props.search.findProduct.pageInfo.endCursor,
     }),
     query: graphql`
