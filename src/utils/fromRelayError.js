@@ -35,9 +35,9 @@ export default pipe(
 
     const messages = {};
     try {
-      const prependKeyAndDouble = (item, key, obj) => {
+      const prependKeyAndDouble = (val, key) => {
         // eslint-disable-line
-        messages[key] = map(i => i.message, item);
+        messages[key] = map(i => i.message, val);
       };
       mapObjIndexed(prependKeyAndDouble, messagesData);
     } catch (e) {

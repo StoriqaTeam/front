@@ -19,10 +19,9 @@ const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
 let returnFunc = () => {}; // eslint-disable-line
 
 if (process.env.BROWSER) {
-  // eslint-disable-next-line
   const store = createReduxStore(
     new BrowserProtocol(),
-    window.__PRELOADED_STATE__ || {},
+    window.__PRELOADED_STATE__ || {}, // eslint-disable-line
   );
   const matchContext = { store, jwt };
 
