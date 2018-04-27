@@ -10,13 +10,13 @@ import {
   SelectedType,
 } from './types';
 
-type material = {id: string | number, label: string};
+type MaterialType = {id: string | number, label: string};
 
 type PropsType = {
   // eslint-disable-next-line
   isReset: boolean,
   title: string,
-  materials: Array<material>,
+  materials: Array<MaterialType>,
   onSelect: Function,
 }
 
