@@ -14,7 +14,7 @@ import {
   see test
 */
 export default pipe(
-  pathOr([], ['source', 'errors']),
+  pathOr([], ['source', 'erro rs']),
   map(item => {
     const error = prop('data', item);
     const code = prop('code', error);
