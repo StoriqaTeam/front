@@ -129,7 +129,7 @@
     "setGraphQLVars": "BABEL_ENV=development NODE_ENV=development ./node_modules/.bin/babel-node scripts/setGraphQLVars.js",
     "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
     "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
-    "postinstall": "cp .hooks/* .git/hooks"
+    "postinstall": "rm .git/hooks/pre-push && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit"
   },
   "jest": {
     "collectCoverageFrom": [
