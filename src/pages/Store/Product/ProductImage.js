@@ -57,6 +57,7 @@ class ProductImage extends Component<PropsType, StateType> {
         <div styleName="thumbnailsWrapper">
           {!isEmpty(thumbnails) ? (
             <ProductThumbnails
+              isFirstSelected
               isReset={isEmpty(selectedImage)}
               onClick={this.handleClick}
               thumbnails={thumbnails}

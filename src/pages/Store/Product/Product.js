@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { propEq, filter, head, keys } from 'ramda';
+import { propEq, filter, head, keys, insert, isNil } from 'ramda';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import { Header, Footer, Main } from 'components/App';
@@ -29,6 +29,7 @@ import {
 import {
   ProductType,
   SelectedType,
+  ThumbnailType,
 } from './types';
 
 import './Product.scss';
@@ -42,7 +43,7 @@ type StateType = {
   tabs: Array<{id: string | number, label: string, content: any}>,
   widgets: {},
   photoMain: string,
-  additionalPhotos: Array<{id: string, img: string}>,
+  additionalPhotos: Array<ThumbnailType>,
 }
 
 class Product extends PureComponent<PropsType, StateType> {
@@ -52,7 +53,7 @@ class Product extends PureComponent<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): ?StateType {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
     const {
       baseProduct: {
         variants: {
@@ -65,7 +66,7 @@ class Product extends PureComponent<PropsType, StateType> {
       const {
         photoMain,
         additionalPhotos,
-      } = extractPhotos(all)[0];
+      } = head(extractPhotos(all));
       return {
         tabs: prevState.tabs,
         widgets: buildWidgets(all),
@@ -88,8 +89,19 @@ class Product extends PureComponent<PropsType, StateType> {
     additionalPhotos: [],
   };
   /**
-   * @param selected
-   * @param {Object} selected
+   * @param {string} img
+   * @param {Array<{id: string, img: string}>} photos
+   * @return {ThumbnailType}
+   */
+  insertPhotoMain = (img: string, photos: ThumbnailType): Array<ThumbnailType> => {
+    if (!isNil(img)) {
+      return insert(0, { id: photos.length + 1, img, opacity: false }, photos);
+    }
+    return photos;
+  };
+  /**
+   * @param {SelectedType} selected
+   * @param {void} selected
    */
   handleWidgetClick = (selected: SelectedType): void => {
     const {
@@ -115,7 +127,7 @@ class Product extends PureComponent<PropsType, StateType> {
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
-      additionalPhotos,
+      additionalPhotos: this.insertPhotoMain(photoMain, additionalPhotos),
     });
   };
   render() {
@@ -131,8 +143,6 @@ class Product extends PureComponent<PropsType, StateType> {
       photoMain,
       additionalPhotos,
     } = this.state;
-    /* eslint-disable no-console */
-    console.log('widgets', widgets);
     return (
       <div styleName="container">
         <Header />
