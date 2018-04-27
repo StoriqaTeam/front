@@ -44,7 +44,7 @@ const UploadWrapper = ({
         {overPicture &&
           <div
             styleName="overPictureWrap"
-            style={{ height: buttonHeight, width: buttonWidth }}
+            style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
           >
             <img
               styleName="overPicture"
