@@ -34,6 +34,7 @@ class SignUp extends PureComponent<PropsType> {
       <div styleName="signUp">
         <div styleName="inputBlock">
           <Input
+            thisFocus
             label="Username"
             name="username"
             type="text"
