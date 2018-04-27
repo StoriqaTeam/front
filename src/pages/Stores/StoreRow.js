@@ -18,7 +18,7 @@ class StoreRow extends PureComponent<PropsType> {
     const { store } = this.props;
     const lang = 'EN';
     const name = find(propEq('lang', lang), store.name).text;
-    const products = pathOr(null, ['baseProductsWithVariants', 'edges'], store);
+    const baseProduct = pathOr(null, ['baseProducts', 'edges'], store);
     const storeId = store.rawId;
     const { productsCount } = store;
     return (
@@ -49,16 +49,18 @@ class StoreRow extends PureComponent<PropsType> {
             </div>
           </Col>
           <Col size={6}>
-            {products &&
+            {baseProduct &&
               <div styleName="productsData">
                 <div styleName="productsWrap">
-                  {map(productsItem => productsItem.node, products).map((product) => {
-                    const photoMain = pathOr(null, ['product', 'photoMain'], head(product.variants));
-                    const productId = product.rawId;
+                  {map((baseProductNode) => {
+                    const baseProductId = baseProductNode.rawId;
+                    const products = pathOr([], ['products', 'edges'], baseProductNode);
+                    const product = head(products);
+                    const photoMain = pathOr(null, ['node', 'photoMain'], product);
                     return (
                       <Link
-                        key={productId}
-                        to={`/store/${storeId}/products/${productId}`}
+                        key={baseProductId}
+                        to={`/store/${storeId}/products/${baseProductId}`}
                         styleName="productFoto"
                         data-test="productLink"
                       >
@@ -70,7 +72,7 @@ class StoreRow extends PureComponent<PropsType> {
                         </div>
                       </Link>
                     );
-                  })}
+                  }, map(baseProductItem => baseProductItem.node, baseProduct))}
                 </div>
               </div>
             }
