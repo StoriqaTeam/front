@@ -38,7 +38,7 @@ type StateType = {
   country: ?SelectType,
   address: ?any,
   autocompleteValue: ?string,
-  predictions: Array<{ mainText: string, secondaryText: string }>,
+  predictdions: Array<{ mainText: string, secondaryText: string }>,
 };
 
 type GeocoderType = {
