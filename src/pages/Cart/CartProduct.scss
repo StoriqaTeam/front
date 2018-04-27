@@ -1,11 +1,51 @@
 @import "../../styles/variables.scss";
 
 .container {
-  padding: 0 2rem 2rem 2rem;
-  font-family: $font_medium;
   color: $color_grey_text;
+  display: flex;
+}
+
+.picture {
+  width: 16rem;
+  height: 16rem;
+  margin-right: 4rem;
+}
+
+.checkbox {
+  margin-right: 4rem;
 }
 
 .header {
   padding: 0 0 1rem 2rem;
+}
+
+.left-container {
+  display: flex;
+}
+
+.main-container {
+  flex-grow: 1;
+}
+
+.product-summary {
+  width: 66%;
+}
+
+.product-params {
+  width: 34%;
+}
+
+.product-summary-header {
+  margin-bottom: 3rem;
+  font-family: $font_regular;
+}
+
+.product-summary-attributes {
+
+}
+
+.product-summary-attributes-title {
+  font-family: $font_medium;
+  text-transform: uppercase;
+  padding-bottom: 2rem;
 }

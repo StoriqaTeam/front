@@ -1,0 +1,17 @@
+@import "../../styles/variables.scss";
+
+.container {
+  width: 50%;
+  display: inline-block;
+  padding-bottom: 2rem;
+}
+
+.title {
+  color: $color_grey_bg;
+  font-family: $font_regular;
+  font-size: 1.75rem;
+}
+
+.value {
+  font-family: $font_regular;
+}
