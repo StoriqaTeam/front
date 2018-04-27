@@ -29,10 +29,15 @@
 }
 
 .root {
-  position: relative;
   width: 100%;
   z-index: 10;
   white-space: nowrap;
+
+  &:not(:hover) .rootItem {
+    & > .items {
+      transition: all 0s ease !important;
+    }
+  }
 }
 
 .rootItem {
@@ -41,16 +46,20 @@
   vertical-align: bottom;
 
   & > .items {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
     position: absolute;
-    left: 0;
-    width: 100%;
+    left: 2rem;
+    right: 2rem;
     padding: 0 4rem;
     border-top: 2px solid $color_blue_2;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     background-color: $color_white;
     box-shadow: $shadow_1;
+    z-index: 10;
+    transition-delay: 0s;
+    transition-delay: .2s;
 
     & > .itemsWrap {
       position: relative;
@@ -120,12 +129,20 @@
     & > .items {
       margin: 0;
       z-index: 11;
-      display: block;
+      opacity: 1;
+      visibility: visible;
     }
     & > .link {
       & > .text {
         color: $color_blue_2;
       }
+    }
+  }
+
+  &:not(:hover) {
+    & > .items {
+      transition-delay: 0s;
+      transition-delay: .35s;
     }
   }
 }

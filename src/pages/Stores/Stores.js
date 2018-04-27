@@ -74,6 +74,7 @@ class Stores extends Component<PropsType, StateType> {
                   { id: '2', label: 'Non-childrens goods' },
                 ]}
                 onSelect={this.handleCategory}
+                dataTest="storesCategoriesSelect"
               />
             </div>
             <div styleName="filterItem">
@@ -86,6 +87,7 @@ class Stores extends Component<PropsType, StateType> {
                   { id: '2', label: 'Norwey' },
                 ]}
                 onSelect={this.handleLocation}
+                dataTest="storesLocationSelect"
               />
             </div>
           </Col>
@@ -118,6 +120,7 @@ class Stores extends Component<PropsType, StateType> {
                   big
                   load
                   onClick={this.storesRefetch}
+                  dataTest="searchStoresLoadMoreButton"
                 >
                   Load more
                 </Button>

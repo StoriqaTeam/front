@@ -43,6 +43,7 @@ class Error404 extends PureComponent<PropsType> {
               big
               type="button"
               onClick={this.handleToMainPage}
+              dataTest="404Button"
             >
               Start from main page
             </Button>

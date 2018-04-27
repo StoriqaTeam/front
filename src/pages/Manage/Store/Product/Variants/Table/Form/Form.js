@@ -274,6 +274,7 @@ class Form extends Component<PropsType, StateType> {
         <Button
           type="button"
           onClick={this.props.variant ? this.handleUpdate : this.handleCreate}
+          dataTest="variantsProductSaveButton"
         >
           Save
         </Button>

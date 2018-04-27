@@ -271,6 +271,7 @@ class Categories extends Component<PropsType, StateType> {
                     big
                     load
                     onClick={this.productsRefetch}
+                    dataTest="searchProductLoadMoreButton"
                   >
                     Load more
                   </Button>

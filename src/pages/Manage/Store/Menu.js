@@ -46,6 +46,7 @@ class Menu extends PureComponent<PropsType, StateType> {
             buttonWidth={26}
             buttonIconType="upload"
             overPicture={storeLogo}
+            dataTest="storeImgUploader"
           />
         </div>
         {storeName && (

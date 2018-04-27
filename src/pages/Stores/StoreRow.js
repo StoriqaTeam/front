@@ -29,6 +29,7 @@ class StoreRow extends PureComponent<PropsType> {
               <Link
                 to={`/store/${store.rawId}`}
                 styleName="storeLogo"
+                data-test="storeLink"
               >
                 {store.logo ?
                   <img src={store.logo} alt="img" /> :
@@ -59,6 +60,7 @@ class StoreRow extends PureComponent<PropsType> {
                         key={productId}
                         to={`/store/${storeId}/products/${productId}`}
                         styleName="productFoto"
+                        data-test="productLink"
                       >
                         <div styleName="productFotoWrap">
                           {photoMain ?

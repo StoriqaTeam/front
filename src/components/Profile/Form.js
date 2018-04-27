@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { assocPath, omit, pick } from 'ramda';
 import DatePicker from 'react-datepicker';
 
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { Text, Checkbox, RadioGroup } from 'components/Forms';
 
 import './Form.scss';
@@ -108,7 +108,12 @@ class Form extends Component<PropsType, StateType> {
           onChange={this.handleInputChange('isActive')}
           errors={errors.isActive}
         />
-        <Button onClick={this.handleClick}>Save</Button>
+        <Button
+          onClick={this.handleClick}
+          dataTest="profileSaveButton"
+        >
+          Save
+        </Button>
       </div>
     );
   }

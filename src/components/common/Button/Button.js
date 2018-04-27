@@ -17,6 +17,7 @@ type PropsTypes = {
   load?: boolean,
   contour: ?boolean,
   big: ?boolean,
+  dataTest: string,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -31,6 +32,7 @@ class Button extends PureComponent<PropsTypes> {
       load,
       contour,
       big,
+      dataTest,
     } = this.props;
 
     const props = {
@@ -50,12 +52,21 @@ class Button extends PureComponent<PropsTypes> {
     });
 
     if (href) {
-      return (<a styleName={styleName} {...props}>{children}</a>);
+      return (
+        <a
+          styleName={styleName}
+          data-test={dataTest}
+          {...props}
+        >
+          {children}
+        </a>
+      );
     }
     return (<button
       styleName={styleName}
       disabled={disabled}
       type="button"
+      data-test={dataTest}
       {...props}
     />);
   }

@@ -121,6 +121,7 @@ class SearchInput extends Component<PropsType, StateType> {
             activeItem={this.state.activeItem}
             items={this.props.searchCategories || []}
             onSelect={this.handleSearchDropdownSelect}
+            dataTest="searchInputSelect"
           />
         </div>
         <div styleName="searchInput">
@@ -134,6 +135,7 @@ class SearchInput extends Component<PropsType, StateType> {
                   onFocus={this.onFocus}
                   onBlur={this.onBlur}
                   placeholder="I find..."
+                  data-test="searchInput"
                 />
               </div>
             )}
@@ -152,7 +154,11 @@ class SearchInput extends Component<PropsType, StateType> {
             open={false}
           />
         </div>
-        <button styleName="searchButton" onClick={this.handleSearch}>
+        <button
+          styleName="searchButton"
+          onClick={this.handleSearch}
+          data-test="searchButton"
+        >
           <Icon
             inline
             type="magnifier"

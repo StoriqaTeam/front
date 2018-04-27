@@ -252,6 +252,7 @@ class Authorization extends Component<PropsType, StateType> {
             <Button
               iconic
               href={socialStrings.facebookLoginString()}
+              dataTest="authFacebookButton"
             >
               <Icon type="facebook" />
               <span>Sign in with Facebook</span>
@@ -261,6 +262,7 @@ class Authorization extends Component<PropsType, StateType> {
             <Button
               iconic
               href={socialStrings.googleLoginString()}
+              dataTest="authGoogleButton"
             >
               <Icon type="google" />
               <span>Sign In with Google</span>

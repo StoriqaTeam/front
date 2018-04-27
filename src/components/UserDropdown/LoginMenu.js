@@ -3,7 +3,7 @@
 import React from 'react';
 // import { Link } from 'found';
 
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 
 import { socialStrings } from 'utils';
@@ -34,6 +34,7 @@ const LoginMenu = (props: { onClick: Function }) => (
       <Button
         iconic
         href={socialStrings.facebookLoginString()}
+        dataTest="menuAuthFacebookButton"
       >
         <Icon type="facebook" />
         <span>Sign In with Facebook</span>
@@ -43,6 +44,7 @@ const LoginMenu = (props: { onClick: Function }) => (
       <Button
         iconic
         href={socialStrings.googleLoginString()}
+        dataTest="menuAuthGoogleButton"
       >
         <Icon type="google" />
         <span>Sign In with Google</span>
