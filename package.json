@@ -132,7 +132,7 @@
     "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
     "prettier:watch": "onchange './src/**/*.js' -- prettier --write {{changed}}",
     "precommit": "yarn prettier",
-    "prepush": "yarn ci"
+    "prepush": "npm run ci"
   },
   "jest": {
     "collectCoverageFrom": [
