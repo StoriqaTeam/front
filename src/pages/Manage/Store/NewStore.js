@@ -50,6 +50,7 @@ class NewStore extends Component<PropsType, StateType> {
     const {
       environment,
       currentUser,
+      showAlert,
     } = this.context;
     const {
       name,
@@ -89,6 +90,7 @@ class NewStore extends Component<PropsType, StateType> {
         this.setState(() => ({ isLoading: false }));
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
+        showAlert('Store created!', false);
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -151,4 +153,5 @@ NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
+  showAlert: PropTypes.func,
 };

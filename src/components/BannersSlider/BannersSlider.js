@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Slider } from 'components/Slider';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 
 import './BannersSlider.scss';
 
@@ -24,6 +24,7 @@ const BannersSlider = (props: PropsTypes) => (
       <Button
         white
         href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}
+        dataTest="sliderStartSellingButton"
       >
         Start selling
       </Button>

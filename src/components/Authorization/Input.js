@@ -28,6 +28,7 @@ type PropsType = {
   detectCapsLock: boolean,
   autocomplete: ?boolean,
   errors: ?Array<string>,
+  thisFocus: ?boolean,
 };
 
 type StateType = {
@@ -82,7 +83,7 @@ class Input extends PureComponent<PropsType, StateType> {
   componentDidMount() {
     const { input } = this;
 
-    if (input && input.name === 'username') {
+    if (input && this.props.thisFocus) {
       input.focus();
     }
   }

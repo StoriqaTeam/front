@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 
 import './ProductMaterial.scss';
 
@@ -10,13 +10,13 @@ import {
   SelectedType,
 } from './types';
 
-type material = {id: string | number, label: string};
+type MaterialType = {id: string | number, label: string};
 
 type PropsType = {
   // eslint-disable-next-line
   isReset: boolean,
   title: string,
-  materials: material[],
+  materials: Array<MaterialType>,
   onSelect: Function,
 }
 
@@ -63,7 +63,7 @@ class ProductMaterial extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <h4>{ title }</h4>
-        <MiniSelect
+        <Select
           forForm
           activeItem={selected || materials[0]}
           items={materials}

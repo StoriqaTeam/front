@@ -54,6 +54,7 @@ class CategoriesMenu extends Component<PropsType> {
                 category: rawId,
               },
             }}
+            data-test="categorieLink"
           >
             {renderInnerLink()}
           </Link>
@@ -75,20 +76,21 @@ class CategoriesMenu extends Component<PropsType> {
   render() {
     return (
       <div styleName="container">
+        <div styleName="rootItem rootButtonItem">
+          <Link
+            styleName="button"
+            to="/"
+            data-test="allCategoriesLink"
+          >
+            <Icon
+              inline
+              type="cats"
+              size="24"
+            />
+            <span styleName="buttonText">All</span>
+          </Link>
+        </div>
         <ul styleName="root">
-          <li styleName="rootItem rootButtonItem">
-            <Link
-              styleName="button"
-              to="/"
-            >
-              <Icon
-                inline
-                type="cats"
-                size="24"
-              />
-              <span styleName="buttonText">All</span>
-            </Link>
-          </li>
           { this.renderMenu(this.props.categories, true) }
         </ul>
       </div>

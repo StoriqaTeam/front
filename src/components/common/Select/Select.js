@@ -33,6 +33,7 @@ type PropsType = {
   containerStyle: ?{
     [name: string]: any,
   },
+  dataTest: string,
 };
 
 class Select extends Component<PropsType, StateType> {
@@ -95,6 +96,7 @@ class Select extends Component<PropsType, StateType> {
       forSearch,
       forAutocomlete,
       containerStyle,
+      dataTest,
     } = this.props;
     const { isExpanded } = this.state;
 
@@ -110,6 +112,7 @@ class Select extends Component<PropsType, StateType> {
           isExpanded,
         })}
         style={containerStyle}
+        data-test={dataTest}
       >
         {label && <div styleName={classNames('label')}>{label}</div>}
         <div styleName={classNames('wrap', { transparent })}>

@@ -74,6 +74,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
             buttonWidth={10}
             buttonIconType="upload"
             overPicture={characteristicImg}
+            dataTest="productCharacteristicImgUploader"
           />
         </div>
         <Select
@@ -83,6 +84,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
           activeItem={selectedItem}
           items={items}
           onSelect={this.handleSelect}
+          dataTest="characteristicSelect"
         />
       </div>
     );

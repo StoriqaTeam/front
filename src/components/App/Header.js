@@ -50,6 +50,7 @@ class Header extends PureComponent<PropsType> {
                       { id: '16', label: 'NXT' },
                     ]}
                     onSelect={() => {}}
+                    dataTest="headerСurrenciesSelect"
                   />
                 </div>
                 <div styleName="item">
@@ -61,6 +62,7 @@ class Header extends PureComponent<PropsType> {
                       { id: '3', label: 'RUS' },
                     ]}
                     onSelect={() => {}}
+                    dataTest="headerLanguagesSelect"
                   />
                 </div>
                 <div styleName="item">
@@ -96,7 +98,10 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <Link to="/">
+                <Link
+                  to="/"
+                  data-test="logoLink"
+                >
                   <Icon type="logo" />
                 </Link>
                 <div styleName="searchInput">
@@ -115,7 +120,10 @@ class Header extends PureComponent<PropsType> {
                   <CartButton />
                 </div>
                 <div styleName="buttonWrapper">
-                  <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
+                  <Button
+                    href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}
+                    dataTest="headerStartSellingButton"
+                  >
                     Start selling
                   </Button>
                 </div>

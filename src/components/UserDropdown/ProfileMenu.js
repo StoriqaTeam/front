@@ -66,6 +66,7 @@ const ProfileMenu = ({
     <Link
       styleName="logout"
       to="/logout"
+      data-test="logoutLink"
     >
       <Icon
         inline

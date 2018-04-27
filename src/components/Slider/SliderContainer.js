@@ -62,6 +62,7 @@ class SliderContainer extends Component<PropsTypes> {
           style={{
             left: slidesOffset || '',
             transition: isTransition ? `left ${animationSpeedSec}s ease-out` : '',
+            animationDelay: '.2s',
           }}
         >
           {Children.map(this.props.children, child => (

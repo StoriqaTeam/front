@@ -6,13 +6,15 @@ import './ProductThumbnails.scss';
 
 import {
   SelectedType,
+  ThumbnailType,
 } from './types';
 
 type PropsType = {
-  // eslint-disable-next-line
+  /* eslint-disable react/no-unused-prop-types */
+  isFirstSelected: boolean,
   isReset: boolean,
   title?: string,
-  thumbnails: Array<{id: string, img: string, alt: string, opacity: boolean, label?: string}>,
+  thumbnails: Array<ThumbnailType>,
   row?: boolean,
   onClick: Function,
 }
@@ -25,6 +27,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   static defaultProps = {
     title: '',
     row: false,
+    isFirstSelected: false,
   };
   /**
    * @static
@@ -33,10 +36,10 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    * @return {StateType | null}
    */
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { isReset } = nextProps;
+    const { isReset, isFirstSelected } = nextProps;
     if (isReset) {
       return {
-        selected: null,
+        selected: isFirstSelected ? 0 : null,
       };
     }
     return prevState;
@@ -76,7 +79,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 <img
                   styleName={`${selected === index && !thumbnail.opacity ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
                   src={thumbnail.img}
-                  alt={thumbnail.val || 'something'}
+                  alt={thumbnail.alt || 'image alt'}
                 />
               </figure>
             </button>
