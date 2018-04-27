@@ -3,6 +3,7 @@
 import React, { Component, PureComponent } from 'react';
 import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
+import { pipe, path, map } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -12,9 +13,10 @@ import './CartStore.scss';
 
 type PropsType = {};
 
-class Product extends PureComponent<PropsType> {
+class CartProduct extends PureComponent<PropsType> {
   render() {
     const { product } = this.props;
+    console.log("Product:", product);
     return (
       <div>
         <Checkbox
@@ -28,4 +30,12 @@ class Product extends PureComponent<PropsType> {
   }
 }
 
-export default Product;
+export default createFragmentContainer(
+  CartProduct,
+  graphql`
+    fragment CartProduct_product on BaseProduct {
+      id
+      isActive
+    }
+  `,
+);

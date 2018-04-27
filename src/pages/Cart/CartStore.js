@@ -3,9 +3,11 @@
 import React, { Component, PureComponent } from 'react';
 import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
+import { pipe, path, pathOr, map } from 'ramda';
 
-import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
+
+import CartProduct from './CartProduct';
 
 import './CartStore.scss';
 
@@ -13,13 +15,31 @@ type PropsType = {};
 
 class CartStore extends PureComponent<PropsType> {
   render() {
-    console.log("-----++-----", this.props.store);
+    const { store } = this.props;
+    console.log("Store:", store);
+    const products = pipe(
+      pathOr([], ['baseProducts', 'edges']),
+      map(path(['node'])),
+    )(store);
     return (
       <div styleName="container">
-        <div styleName="header">Cart</div>
+        {products.map(product => <CartProduct product={product} />)}
       </div>
-    )
+    );
   }
 }
 
-export default CartStore;
+export default createFragmentContainer(
+  CartStore,
+  graphql`
+    fragment CartStore_store on Store {
+      baseProducts {
+        edges {
+          node {
+            ...CartProduct_product
+          }
+        }
+      }
+    }
+  `,
+);

@@ -3,12 +3,12 @@
 import React, { Component, PureComponent } from 'react';
 import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, path, map } from 'ramda';
+import { pipe, pathOr, path, map } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 
-import CartStrore from './CartStore';
+import CartStore from './CartStore';
 
 import type Cart_me from './__generated__/Cart_me.graphql';
 
@@ -21,7 +21,7 @@ type PropsType = {
 class Cart extends PureComponent<PropsType> {
   render() {
     const stores = pipe(
-      path(['me', 'cart', 'stores', 'edges']),
+      pathOr([], ['me', 'cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
     return (
@@ -46,7 +46,7 @@ export default createPaginationContainer(
       after: { type: "ID", defaultValue: null }
     ) {
       cart {
-        stores(first: $first, after: $after) @connection(key: "Cart_cart") {
+        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
           edges {
             node {
               ...CartStore_store
