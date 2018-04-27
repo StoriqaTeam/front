@@ -15,7 +15,11 @@ class CartButton extends PureComponent<PropsTypes> {
     const { amount, href } = this.props;
 
     return (
-      <a href={href} styleName="container">
+      <a
+        href={href}
+        styleName="container"
+        data-test="cartLink"
+      >
         {amount &&
           <div styleName="amount">
             <Count

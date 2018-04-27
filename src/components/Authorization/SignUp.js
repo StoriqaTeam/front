@@ -67,7 +67,11 @@ class SignUp extends PureComponent<PropsType> {
         {formValid &&
           <div styleName="signUpGroup">
             <div styleName="signUpButton">
-              <Button onClick={handleRegistrationClick}>
+              <Button
+                onClick={handleRegistrationClick}
+                type="button"
+                dataTest="signUpButton"
+              >
                 <span>Sign Up</span>
               </Button>
             </div>

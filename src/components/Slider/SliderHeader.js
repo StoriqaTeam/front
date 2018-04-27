@@ -45,6 +45,7 @@ class SliderHeader extends PureComponent<PropsTypes> {
           <a
             styleName="reveal"
             href={seeAllUrl}
+            data-test="seeAllLink"
           >
             See all
           </a>

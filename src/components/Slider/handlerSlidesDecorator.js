@@ -208,11 +208,11 @@ export default (OriginalComponent: any) =>
   }
 
   startAnimation = () => {
-    this.setState({ isTransition: true });
+    this.setState(() => ({ isTransition: true }));
   };
 
   endAnimation = () => {
-    this.setState({ isTransition: false, isClick: false });
+    this.setState(() => ({ isTransition: false, isClick: false }));
   };
 
   swapArray = (direction: string, newNum: number) => {
@@ -226,35 +226,36 @@ export default (OriginalComponent: any) =>
     const { animationSpeed } = this.props;
 
     let newChildren = children;
-    let newSlidesOffset = slidesOffset;
 
     if (direction === 'prev') {
       const lastItem = last(children);
       const slicedItems = slice(0, totalSlidesAmount - 1, children);
       newChildren = prepend(lastItem, slicedItems);
-      newSlidesOffset = slidesOffset - slideWidth;
     }
 
     this.setState(() => ({
-      slidesOffset: newSlidesOffset,
+      slidesOffset: direction === 'next' ? slidesOffset : slidesOffset - slideWidth,
       num: newNum,
       children: newChildren,
     }), () => {
-      this.animationAndMoveTimer = setTimeout(() => {
-        if (direction === 'prev') {
+      if (direction === 'prev') {
+        if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
+        this.refreshTimer = setTimeout(() => {
+          this.startAnimation();
+          this.setState(() => ({ slidesOffset: 0 }));
           if (this.animationTimer) { clearTimeout(this.animationTimer); }
           this.animationTimer = setTimeout(this.endAnimation, animationSpeed);
-        }
+        }, 50);
+      }
+
+      if (direction === 'next') {
         this.startAnimation();
-        this.setState(() => ({
-          slidesOffset: direction === 'next' ? -slideWidth : 0,
-        }));
+        if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
         this.refreshTimer = setTimeout(() => {
-          if (direction === 'next') {
-            this.activateRefreshArray(direction, newNum);
-          }
+          this.setState(() => ({ slidesOffset: -slideWidth }));
+          this.activateRefreshArray(direction, newNum);
         }, 0);
-      }, 0);
+      }
     });
   };
 

@@ -74,7 +74,11 @@ class SignIn extends Component<PropsType, StateType> {
         {formValid && (
           <div styleName="signInGroup">
             <div styleName="signInButton">
-              <Button onClick={handleLoginClick} type="button">
+              <Button
+                onClick={handleLoginClick}
+                type="button"
+                dataTest="signInButton"
+              >
                 <span>Sign In</span>
               </Button>
             </div>

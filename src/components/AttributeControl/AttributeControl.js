@@ -118,6 +118,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               height: '3rem',
               marginBottom: '1rem',
             }}
+            dataTest="attributeControlSelect"
           /> : null);
       case 'COLOR_PICKER':
         return (values ?

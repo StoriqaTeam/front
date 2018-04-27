@@ -60,6 +60,7 @@ class CardProduct extends PureComponent<PropsTypes> {
         <Link
           to={productLink}
           styleName="body"
+          data-test={rawId}
         >
           <div styleName="top">
             {!photoMain ?

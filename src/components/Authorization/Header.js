@@ -24,6 +24,7 @@ const Header = (props: PropTypes) => {
           styleName="linkTitle"
           onClick={handleToggle}
           to={isSignUp ? '/login' : '/registration'}
+          data-test={isSignUp ? 'loginLink' : 'registrationLink'}
         >
           {linkText}
         </Link> :
@@ -33,6 +34,7 @@ const Header = (props: PropTypes) => {
           onKeyDown={() => {}}
           role="button"
           tabIndex="0"
+          data-test={isSignUp ? 'loginToggleButton' : 'registrationToggleButton'}
         >
           {linkText}
         </div>

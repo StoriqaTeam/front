@@ -215,6 +215,7 @@ class Form extends Component<PropsType, StateType> {
               });
             }}
             activeItem={this.state.country}
+            dataTest="AddressFormSelect"
           />
           <div styleName="wrapper">
             {addressBlock}
