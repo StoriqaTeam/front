@@ -164,16 +164,16 @@ export default createPaginationContainer(
               lang
               text
             }
-            baseProducts {
+            baseProducts(first: 4) {
               edges {
                 node {
                   id
                   rawId
-                  variants {
-                    all {
-                      id
-                      rawId
-                      photoMain
+                  products {
+                    edges {
+                      node {
+                        photoMain
+                      }
                     }
                   }
                 }
