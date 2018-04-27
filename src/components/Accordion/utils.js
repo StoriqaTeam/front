@@ -1,4 +1,6 @@
 // @flow
+// prepareForAccordion getting array of categories with children and
+// prepare data for accordion
 
 import { reduce } from 'ramda';
 

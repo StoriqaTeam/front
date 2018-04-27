@@ -148,16 +148,16 @@ class RangerSlider extends React.Component<PropsType, StateType> {
     if (onChange2) onChange2(value, e);
   };
 
-  handleEnd = (e: Event) => {
+  handleEnd = () => {
     const { onChangeComplete, value, value2 } = this.props;
-    if (onChangeComplete) onChangeComplete(value, value2, e);
+    if (onChangeComplete) onChangeComplete(value, value2);
     document.removeEventListener('mousemove', this.handleDrag);
     document.removeEventListener('mouseup', this.handleEnd);
   };
 
-  handleEnd2 = (e: Event) => {
+  handleEnd2 = () => {
     const { onChangeComplete, value, value2 } = this.props;
-    if (onChangeComplete) onChangeComplete(value, value2, e);
+    if (onChangeComplete) onChangeComplete(value, value2);
     document.removeEventListener('mousemove', this.handleDrag2);
     document.removeEventListener('mouseup', this.handleEnd2);
   };

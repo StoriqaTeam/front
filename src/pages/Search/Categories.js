@@ -8,7 +8,7 @@ import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
+import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent } from 'utils';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { Button } from 'components/common/Button';
@@ -48,22 +48,37 @@ const storesPerRequest = 24;
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const priceRange = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'], props);
+    // maxValue of ranger from back (permanent for each category)
+    const maxValue = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'maxValue'], props);
+    // maxValue of ranger from url
+    const maxValueFromUrl = pathOr(0, ['match', 'location', 'query', 'maxValue'], this.props);
+    const maxValueFromUrlInt = parseInt(maxValueFromUrl, 10);
+    // get initial maxValue ranger from url if we can
+    const volume2 = maxValueFromUrlInt && maxValueFromUrlInt < maxValue ?
+      maxValueFromUrlInt
+      : maxValue;
     this.state = {
       volume: 0,
-      volume2: (priceRange && priceRange.maxValue) || 0,
+      volume2,
     };
   }
 
   generateTree = () => {
+    // generate categories tree for render categories filter
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
-    if (!categories || !categoryId) return null;
+    if (!categories) {
+      return null;
+    }
+    // prepare array of all categories
     const flattenCategories = flattenFunc(categories);
+    // function get level and return function for filtering
+    // categories by level with no empty children
     const levelFilter = level => filter(where({
       level: equals(level),
       children: i => i.length !== 0,
     }));
+    // check that we need to render category 1 level with children in sidebar
     const isFirstCatPred = whereEq({ level: 1, rawId: parseInt(categoryId, 10) });
     const isFirstCategory = any(isFirstCatPred, flattenCategories);
     if (isFirstCategory) {
@@ -86,8 +101,8 @@ class Categories extends Component<PropsType, StateType> {
     });
   }
 
-  handleOnCompleteRange = (value: number, value2: number, e: Event) => {
-    log.info({ value, value2 }, e);
+  handleOnCompleteRange = (value: number, value2: number) => {
+    // getting current searchInput data change range and push to new url
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const newPreparedObj = assocPath(['options', 'priceFilter'], {
@@ -98,7 +113,8 @@ class Categories extends Component<PropsType, StateType> {
     this.props.router.push(`/categories${newUrl}`);
   }
 
-  prepareUrlStr = (id, values) => {
+  prepareAttrsToUrlStr = (id, values) => {
+    // getting current searchInput data change attrs and push to new url
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const oldAttrs = pathOr([], ['options', 'attrFilters'], oldPreparedObj);
@@ -118,7 +134,7 @@ class Categories extends Component<PropsType, StateType> {
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
     const rawId = pathOr(null, ['attribute', 'rawId'], attrFilter);
     return (value: string) => {
-      const newUrl = this.prepareUrlStr(rawId, value);
+      const newUrl = this.prepareAttrsToUrlStr(rawId, value);
       this.props.router.push(`/categories${newUrl}`);
       if (id) {
         this.setState({
@@ -205,6 +221,12 @@ class Categories extends Component<PropsType, StateType> {
     const accordionItems = this.generateTree();
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+
+    // for attrs initial
+    const queryObj = pathOr(0, ['match', 'location', 'query'], this.props);
+    const initialSearchInput = urlToInput(queryObj);
+    const initialAttributes = pathOr([], ['options', 'attrFilters'], initialSearchInput);
+
     // prepare arrays
     const variantsToArr = variantsName => pipe(
       path(['node']),
@@ -245,14 +267,22 @@ class Categories extends Component<PropsType, StateType> {
                 onChangeComplete={this.handleOnCompleteRange}
               />
               {attrFilters && sort((a, b) => (a.attribute.rawId - b.attribute.rawId), attrFilters)
-                .map(attrFilter => (
-                  <div key={attrFilter.attribute.id} styleName="attrBlock">
-                    <AttributeControl
-                      attrFilter={attrFilter}
-                      onChange={this.handleOnChangeAttribute(attrFilter)}
-                    />
-                  </div>
-                ))}
+                .map((attrFilter) => {
+                  const initialAttr = find(
+                    whereEq({ id: attrFilter.attribute.rawId }),
+                    initialAttributes,
+                  );
+                  const initialValues = pathOr([], ['equal', 'values'], initialAttr);
+                  return (
+                    <div key={attrFilter.attribute.id} styleName="attrBlock">
+                      <AttributeControl
+                        attrFilter={attrFilter}
+                        initialValues={initialValues}
+                        onChange={this.handleOnChangeAttribute(attrFilter)}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </div>
           <div styleName="contentContainer">
