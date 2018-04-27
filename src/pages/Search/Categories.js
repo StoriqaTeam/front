@@ -91,8 +91,8 @@ class Categories extends Component<PropsType, StateType> {
     });
   }
 
-  handleOnCompleteRange = (value: number, value2: number, e: Event) => {
-    log.info({ value, value2 }, e);
+  handleOnCompleteRange = (value: number, value2: number) => {
+    // log.info({ value, value2 }, e);
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const newPreparedObj = assocPath(['options', 'priceFilter'], {
