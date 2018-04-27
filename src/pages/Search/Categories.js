@@ -210,6 +210,11 @@ class Categories extends Component<PropsType, StateType> {
     const accordionItems = this.generateTree();
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
+
+    // for attrs initial
+    const queryObj = pathOr(0, ['match', 'location', 'query'], this.props);
+    const initialSearchInput = urlToInput(queryObj);
+    const initialAttributes = pathOr([], ['options', 'attrFilters'], initialSearchInput);
     // prepare arrays
     const variantsToArr = variantsName => pipe(
       path(['node']),
@@ -250,14 +255,22 @@ class Categories extends Component<PropsType, StateType> {
                 onChangeComplete={this.handleOnCompleteRange}
               />
               {attrFilters && sort((a, b) => (a.attribute.rawId - b.attribute.rawId), attrFilters)
-                .map(attrFilter => (
-                  <div key={attrFilter.attribute.id} styleName="attrBlock">
-                    <AttributeControl
-                      attrFilter={attrFilter}
-                      onChange={this.handleOnChangeAttribute(attrFilter)}
-                    />
-                  </div>
-                ))}
+                .map((attrFilter) => {
+                  const initialAttr = find(
+                    whereEq({ id: attrFilter.attribute.rawId }),
+                    initialAttributes,
+                  );
+                  const initialValues = pathOr([], ['equal', 'values'], initialAttr);
+                  return (
+                    <div key={attrFilter.attribute.id} styleName="attrBlock">
+                      <AttributeControl
+                        attrFilter={attrFilter}
+                        initialValues={initialValues}
+                        onChange={this.handleOnChangeAttribute(attrFilter)}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </div>
           <div styleName="contentContainer">

@@ -37,6 +37,7 @@ type PropsType = {
       max: number
     }
   },
+  initialValues: Array<string>,
 }
 
 type StateType = {
@@ -44,9 +45,16 @@ type StateType = {
 }
 
 class AttributeControll extends React.Component<PropsType, StateType> {
-  state = {
-    value: '',
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      value: props ? props.initialValues : '',
+    };
   }
+
+  // state = {
+  //   value: '',
+  // }
 
   handleOnChange = (val: string) => {
     const { onChange } = this.props;
