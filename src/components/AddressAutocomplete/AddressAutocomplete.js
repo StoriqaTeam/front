@@ -3,7 +3,7 @@ import React from 'react';
 
 import { GoogleAPIWrapper, AddressForm } from 'components/AddressAutocomplete';
 
-const AddressAfutocompledte = () => (
+const AddressAutocomplete = () => (
   <GoogleAPIWrapper>
     <AddressForm />
   </GoogleAPIWrapper>
