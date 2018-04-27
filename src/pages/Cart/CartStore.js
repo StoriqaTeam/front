@@ -17,10 +17,7 @@ class CartStore extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
     console.log("Store:", store);
-    const products = pipe(
-      pathOr([], ['baseProducts', 'edges']),
-      map(path(['node'])),
-    )(store);
+    const { products } = store;
     return (
       <div styleName="container">
         {products.map(product => <CartProduct product={product} />)}
@@ -32,13 +29,9 @@ class CartStore extends PureComponent<PropsType> {
 export default createFragmentContainer(
   CartStore,
   graphql`
-    fragment CartStore_store on Store {
-      baseProducts {
-        edges {
-          node {
-            ...CartProduct_product
-          }
-        }
+    fragment CartStore_store on CartStore {
+      products {
+        ...CartProduct_product
       }
     }
   `,

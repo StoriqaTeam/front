@@ -18,7 +18,7 @@ type PropsType = {};
 
 class CartProduct extends PureComponent<PropsType> {
   render() {
-    let { product } = this.props;
+    const { product } = this.props;
     if (!product) return null;
     console.log("Product:", product);
     const name = pipe(
@@ -26,12 +26,8 @@ class CartProduct extends PureComponent<PropsType> {
       head,
       path(['text']),
     )(product);
-    product = pipe(
-      pathOr([], ['products', 'edges']),
-      map(path(['node'])),
-      head,
-    )(product);
-    const { price, photoMain, attributes } = product;
+    console.log(product);
+    const { price, photoMain, attributes, quantity } = product;
     console.log('lksfjldfkjg', attributes);
     const attrs = map(attr => ({ title: head(attr.attribute.name).text, value: attr.value.toString() }))(attributes);
     console.log('attrs', attrs);
@@ -75,44 +71,34 @@ class CartProduct extends PureComponent<PropsType> {
 export default createFragmentContainer(
   CartProduct,
   graphql`
-    fragment CartProduct_product on BaseProduct {
-          id
-      isActive
-        name {
-          lang
-        text
-        }
-      products {
-          edges {
-        node {
-          ...on Product {
-          photoMain
-              price
-        attributes {
-          attribute {
-        valueType
-                  metaField {
-          values
-                    uiElement
-        translatedValues {
-          translations {
+    fragment CartProduct_product on CartProduct {
+      id
+      name {
         lang
         text
       }
-    }
-  }
-                  name {
-          lang
-                    text
+      quantity
+      attributes {
+        value
+        metaField
+        attribute {
+          name {
+            lang
+            text
+          }  
+          valueType
+          metaField {
+            values
+            uiElement
+            translatedValues {
+              translations {
+                lang
+                text
+              }
+            }
+          }
         }
       }
-      value
-      metaField
     }
-  }
-}
-}
-}
-}
 `,
 );
