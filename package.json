@@ -169,7 +169,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn prettier",
-      "pre-push": "./node_modules/.bin/eslint ./src"
+      "pre-push": "yarn ci"
     }
   }
 }
