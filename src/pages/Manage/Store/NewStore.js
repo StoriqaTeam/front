@@ -80,6 +80,7 @@ class NewStore extends Component<PropsType, StateType> {
       logo: logoUrl,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        this.setState(() => ({ isLoading: false }));
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
@@ -87,17 +88,16 @@ class NewStore extends Component<PropsType, StateType> {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
-        this.setState(() => ({ isLoading: false }));
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
         showAlert('Store created!', false);
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
-        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });

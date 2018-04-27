@@ -259,7 +259,7 @@ class Input extends PureComponent<PropsType, StateType> {
         >
           {label && (
             <label
-              styleName={`label ${labelFloat || ''}`}
+              styleName={`label ${labelFloat || (model && model.length > 0 && 'labelFloat') || ''}`}
               htmlFor={name}
             >
               { label }
