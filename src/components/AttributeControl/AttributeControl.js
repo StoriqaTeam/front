@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { uniq, sort, pathOr, map, addIndex, filter, comparator, lt } from 'ramda';
+import { prepend, uniq, sort, pathOr, map, addIndex, filter, comparator, lt } from 'ramda';
 
 import { getNameText } from 'utils';
 import { Checkbox } from 'components/common/Checkbox';
@@ -103,15 +103,18 @@ class AttributeControll extends React.Component<PropsType, StateType> {
             />
           </div>
         ), sort((a, b) => (a - b), uniq(values))));
-      case 'COMBOBOX':
+      case 'COMBOBOX': {
+        const objValues = map(
+          v => ({ id: v, label: v }),
+          sort(comparator((a, b) => lt(a, b)), uniq(values)),
+        );
+        // adding not selected item with empty id for reset combobox
+        const preparedValues = prepend({ id: '', label: 'not selected' }, objValues);
         return (values ?
           <Select
             forForm
             activeItem={{ id: value, label: value }}
-            items={map(
-              v => ({ id: v, label: v }),
-              sort(comparator((a, b) => lt(a, b)), uniq(values)),
-            )}
+            items={preparedValues}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
               width: '100%',
@@ -120,6 +123,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
             }}
             dataTest="attributeControlSelect"
           /> : null);
+      }
       case 'COLOR_PICKER':
         return (values ?
           <ColorPicker
