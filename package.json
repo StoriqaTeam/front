@@ -131,6 +131,7 @@
     "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
     "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
     "prettier:watch": "onchange './src/**/*.js' -- prettier --write {{changed}}",
+    "precommit": "yarn prettier",
     "prepush": "yarn ci"
   },
   "jest": {
