@@ -48,6 +48,7 @@ class SignIn extends Component<PropsType, StateType> {
       <div styleName="signIn">
         <div styleName="inputBlock">
           <Input
+            thisFocus
             label="Email"
             name="email"
             type="text"
