@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { propEq, filter, head, keys, insert, isNil } from 'ramda';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -10,12 +10,15 @@ import { Container, Col, Row } from 'layout';
 
 import {
   extractText,
+  isEmpty,
+} from 'utils';
+
+import {
   buildWidgets,
   filterVariants,
-  isEmpty,
   compareWidgets,
   extractPhotos,
-} from 'utils';
+} from './utils';
 
 import {
   ProductImage,
@@ -46,7 +49,7 @@ type StateType = {
   additionalPhotos: Array<ThumbnailType>,
 }
 
-class Product extends PureComponent<PropsType, StateType> {
+class Product extends Component<PropsType, StateType> {
   /**
    * @static
    * @param {PropsType} nextProps

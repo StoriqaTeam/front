@@ -1,4 +1,10 @@
-import { forEachObjIndexed, prop, differenceWith, findIndex, propEq } from 'ramda';
+import {
+  forEachObjIndexed,
+  prop,
+  differenceWith,
+  findIndex,
+  propEq,
+} from 'ramda';
 
 /**
  * @desc Compares to set of widgets and marks the differences
@@ -48,7 +54,5 @@ export default function compareWidgets(filteredWidgets, widgets) {
     };
   };
   forEachObjIndexed(keyValue, widgets);
-  /* eslint-disable no-console */
-  // console.log('widgetClone', widgetClone);
   return widgetClone;
 }

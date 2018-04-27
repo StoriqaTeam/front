@@ -1,11 +1,11 @@
 // @flow
 
 import { isNil, flatten, uniq, reduce, filter, identity } from 'ramda';
-import { extractText } from './index';
+import { extractText } from 'utils';
 
 import {
   VariantType,
-} from '../pages/Store/Product/types';
+} from '../types/index';
 
 type WidgetValueType = {
   id: string,

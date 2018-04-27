@@ -5,7 +5,7 @@ import { filter, any, propEq, prop, compose } from 'ramda';
 import {
   VariantType,
   WidgetsType,
-} from '../pages/Store/Product/types';
+} from '../types';
 
 import { buildWidgets } from './index';
 /**
