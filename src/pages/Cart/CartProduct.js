@@ -1,36 +1,36 @@
 // @flow
 
-import React, { Component, PureComponent } from 'react';
-import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { pipe, path, pathOr, map, head } from 'ramda';
 
-import { currentUserShape } from 'utils/shapes';
-import { Page } from 'components/App';
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 
 import CartProductAttribute from './CartProductAttribute';
 
+// eslint-disable-next-line
+import type CartProduct_product from './__generated__/CartProduct_product.graphql';
 import './CartProduct.scss';
 
-type PropsType = {};
+type PropsType = {
+  // eslint-disable-next-line
+  ...CartProduct_product,
+};
 
 class CartProduct extends PureComponent<PropsType> {
   render() {
     const { product } = this.props;
     if (!product) return null;
-    console.log("Product:", product);
     const name = pipe(
       pathOr([], ['name']),
       head,
       path(['text']),
     )(product);
-    console.log(product);
-    const { price, photoMain, attributes, quantity } = product;
-    console.log('lksfjldfkjg', attributes);
-    const attrs = map(attr => ({ title: head(attr.attribute.name).text, value: attr.value.toString() }))(attributes);
-    console.log('attrs', attrs);
+    const { photoMain, attributes } = product;
+    const attrs = map(attr => (
+      { title: head(attr.attribute.name).text, value: attr.value.toString() }
+    ))(attributes);
     return (
       <div styleName="container">
         <div styleName="left-container">
@@ -60,7 +60,7 @@ class CartProduct extends PureComponent<PropsType> {
             </ShowMore>
           </div>
           <div styleName="product-params">
-
+            Params
           </div>
         </div>
       </div>

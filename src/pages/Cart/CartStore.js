@@ -1,23 +1,22 @@
 // @flow
 
-import React, { Component, PureComponent } from 'react';
-import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
-import PropTypes from 'prop-types';
-import { pipe, path, pathOr, map } from 'ramda';
-
-import { Page } from 'components/App';
+import React, { PureComponent } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import CartProduct from './CartProduct';
+// eslint-disable-next-line
+import type CartStore_store from './__generated__/CartStore_store.graphql';
 
 import './CartStore.scss';
 
-type PropsType = {};
+type PropsType = {
+  // eslint-disable-next-line
+  store: CartStore_store,
+};
 
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store } = this.props;
-    console.log("Store:", store);
-    const { products } = store;
+    const { products } = this.props.store;
     return (
       <div styleName="container">
         {products.map(product => <CartProduct product={product} />)}

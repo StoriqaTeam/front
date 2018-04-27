@@ -1,20 +1,21 @@
 // @flow
 
-import React, { Component, PureComponent } from 'react';
-import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
+import React, { PureComponent } from 'react';
+import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { pipe, pathOr, path, map } from 'ramda';
 
-import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
 
+// eslint-disable-next-line
 import type Cart_me from './__generated__/Cart_me.graphql';
 
 import './Cart.scss';
 
 type PropsType = {
+  // eslint-disable-next-line
   me: Cart_me
 };
 

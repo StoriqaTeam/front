@@ -3,7 +3,7 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
-import type { IncrementInCartMutationVariables, IncrementInCartMutationResponse } from './__generated__/IncrementInCartMutation.graphql'
+import type { IncrementInCartMutationVariables, IncrementInCartMutationResponse } from './__generated__/IncrementInCartMutation.graphql';
 
 const mutation = graphql`
   mutation IncrementInCartMutation($input: IncrementInCartInput!) {

@@ -6,11 +6,10 @@ import { head, path } from 'ramda';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'components/Icon';
+import { IncrementInCartMutation } from 'relay/mutations';
 import { getNameText, log } from 'utils';
 
 import { formatPrice } from './utils';
-
-import { IncrementInCartMutation } from 'relay/mutations';
 
 import './CardProduct.scss';
 
@@ -35,8 +34,7 @@ type PropsTypes = {
 }
 
 class CardProduct extends PureComponent<PropsTypes> {
-
-  handleClick(e) {
+  handleClick(e: any) {
     e.preventDefault();
     e.stopPropagation();
     const id = path(['props', 'item', 'rawId'], this);
@@ -45,21 +43,21 @@ class CardProduct extends PureComponent<PropsTypes> {
         input: { productId: id },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
-          log.debug("Success for IncrementInCart mutation");
-          response && log.debug("Response: ", response);
-          errors && log.debug("Errors: ", errors);
+          log.debug('Success for IncrementInCart mutation');
+          if (response) { log.debug('Response: ', response); }
+          if (errors) { log.debug('Errors: ', errors); }
         },
         onError: (error) => {
-          log.error("Error in IncrementInCart mutation");
+          log.error('Error in IncrementInCart mutation');
           log.error(error);
+          // eslint-disable-next-line
           alert('Unable to add product to cart');
-        }
-      })
+        },
+      });
     } else {
       alert('Something went wrong :('); // eslint-disable-line
-      log.error("Unable to add an item without productId");
+      log.error('Unable to add an item without productId');
     }
-    console.log(id);
   }
 
   render() {
@@ -117,7 +115,7 @@ class CardProduct extends PureComponent<PropsTypes> {
                 </div>
               }
             </div>
-            <button onClick={this.handleClick.bind(this)}>Add to cart</button>
+            <button onClick={e => this.handleClick(e)}>Add to cart</button>
           </div>
         </Link>
       </div>
