@@ -12,7 +12,7 @@ type PropsType = {
   email: string,
   password: string,
   errors: ?Array<string>,
-  formVaflid: boolean,
+  formValid: boolean,
   handleLoginClick: Function,
   handleChange: Function,
   handleBlur: Function,
