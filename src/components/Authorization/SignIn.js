@@ -5,7 +5,6 @@ import { propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
-import { Checkbox } from 'components/common/Checkbox';
 
 import './Authorization.scss';
 
@@ -82,14 +81,6 @@ class SignIn extends Component<PropsType, StateType> {
               >
                 <span>Sign In</span>
               </Button>
-            </div>
-            <div styleName="signInCheckbox">
-              <Checkbox
-                id="login"
-                label="Remember Me"
-                isChecked={autocomplete}
-                handleCheckboxChange={this.handleCheckboxChange}
-              />
             </div>
           </div>
         )}
