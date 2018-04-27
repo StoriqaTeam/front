@@ -52,10 +52,6 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     };
   }
 
-  // state = {
-  //   value: '',
-  // }
-
   handleOnChange = (val: string) => {
     const { onChange } = this.props;
     const { attrFilter } = this.props;
