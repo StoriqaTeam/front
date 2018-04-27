@@ -8,7 +8,7 @@ import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { withRouter, routerShape } from 'found';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent, log } from 'utils';
+import { flattenFunc, urlToInput, inputToUrl, getNameText, searchPathByParent } from 'utils';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { Button } from 'components/common/Button';
