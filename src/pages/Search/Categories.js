@@ -48,9 +48,12 @@ const storesPerRequest = 24;
 class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    // maxValue of ranger from back (permanent for each category)
     const maxValue = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'maxValue'], props);
+    // maxValue of ranger from url
     const maxValueFromUrl = pathOr(0, ['match', 'location', 'query', 'maxValue'], this.props);
     const maxValueFromUrlInt = parseInt(maxValueFromUrl, 10);
+    // get initial maxValue ranger from url if we can
     const volume2 = maxValueFromUrlInt && maxValueFromUrlInt < maxValue ?
       maxValueFromUrlInt
       : maxValue;
@@ -61,14 +64,21 @@ class Categories extends Component<PropsType, StateType> {
   }
 
   generateTree = () => {
+    // generate categories tree for render categories filter
     const categoryId = pathOr(null, ['match', 'location', 'query', 'category'], this.props);
     const categories = pathOr(null, ['search', 'findProduct', 'pageInfo', 'searchFilters', 'categories', 'children'], this.props);
-    if (!categories) return null;
+    if (!categories) {
+      return null;
+    }
+    // prepare array of all categories
     const flattenCategories = flattenFunc(categories);
+    // function get level and return function for filtering
+    // categories by level with no empty children
     const levelFilter = level => filter(where({
       level: equals(level),
       children: i => i.length !== 0,
     }));
+    // check that we need to render category 1 level with children in sidebar
     const isFirstCatPred = whereEq({ level: 1, rawId: parseInt(categoryId, 10) });
     const isFirstCategory = any(isFirstCatPred, flattenCategories);
     if (isFirstCategory) {
@@ -92,7 +102,7 @@ class Categories extends Component<PropsType, StateType> {
   }
 
   handleOnCompleteRange = (value: number, value2: number) => {
-    // log.info({ value, value2 }, e);
+    // getting current searchInput data change range and push to new url
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const newPreparedObj = assocPath(['options', 'priceFilter'], {
@@ -103,7 +113,8 @@ class Categories extends Component<PropsType, StateType> {
     this.props.router.push(`/categories${newUrl}`);
   }
 
-  prepareUrlStr = (id, values) => {
+  prepareAttrsToUrlStr = (id, values) => {
+    // getting current searchInput data change attrs and push to new url
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const oldAttrs = pathOr([], ['options', 'attrFilters'], oldPreparedObj);
@@ -123,7 +134,7 @@ class Categories extends Component<PropsType, StateType> {
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
     const rawId = pathOr(null, ['attribute', 'rawId'], attrFilter);
     return (value: string) => {
-      const newUrl = this.prepareUrlStr(rawId, value);
+      const newUrl = this.prepareAttrsToUrlStr(rawId, value);
       this.props.router.push(`/categories${newUrl}`);
       if (id) {
         this.setState({
@@ -215,6 +226,7 @@ class Categories extends Component<PropsType, StateType> {
     const queryObj = pathOr(0, ['match', 'location', 'query'], this.props);
     const initialSearchInput = urlToInput(queryObj);
     const initialAttributes = pathOr([], ['options', 'attrFilters'], initialSearchInput);
+
     // prepare arrays
     const variantsToArr = variantsName => pipe(
       path(['node']),
