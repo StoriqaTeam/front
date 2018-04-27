@@ -1,0 +1,18 @@
+@import "../../styles/variables.scss";
+
+.icon {
+  background: $color_grey_4;
+  margin-right: 2rem;
+}
+
+.text {
+  color: $color_grey_bg;
+  font-size: 1.75rem;
+  position: relative;
+  top: 0.2rem
+}
+
+.header {
+  display: flex;
+  cursor: pointer;
+}

@@ -2,6 +2,10 @@
 
 import React, { Component } from 'react';
 
+import { Icon } from 'components/Icon';
+
+import './ShowMore.scss';
+
 type PropsType = {
   children?: any,
 }
@@ -15,11 +19,22 @@ class ShowMore extends Component<PropsType, StateType> {
     on: false,
   }
 
+  handleClick() {
+    console.log("TOTOTO");
+  }
+
   render() {
     return (
       <div>
-        <div>Show more</div>
-        {this.state.on && this.props.children}
+        <div styleName="header" onClick={(e) => this.handleClick(e)}>
+          <div styleName="icon">
+            <Icon type="arrowExpand" size={16} inline />
+          </div>
+          <div styleName="text">
+            Show more
+          </div>
+        </div>
+        {this.state.on ? this.props.children : null}
       </div>
     );
   }
