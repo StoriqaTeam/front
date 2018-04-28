@@ -20,7 +20,7 @@ type GraphQLUserType = {
   isActive: boolean,
   phone: ?string,
   birthdate: ?string,
-  gender: "MALE" | "FEMALE" | "UNDEFINED"
+  gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
 };
 
 type PropsTypes = {
@@ -66,8 +66,12 @@ class Profile extends Component<PropsTypes, StateType> {
     const { formErrors } = this.state;
     return (
       <div styleName="container">
-        Profile settings {admin && '(admin)'}<br /><br />
-        {admin && <UsersTable users={users} />}<br /><br />
+        Profile settings {admin && '(admin)'}
+        <br />
+        <br />
+        {admin && <UsersTable users={users} />}
+        <br />
+        <br />
         {!admin && (
           <Form
             onSaveClick={this.handleSave}

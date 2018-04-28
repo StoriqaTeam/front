@@ -12,10 +12,7 @@ const Spiner = (props: { size: 16 | 24 | 32 }) => (
       marginLeft: -props.size / 2,
     }}
   >
-    <Icon
-      type="spiner"
-      size={props.size}
-    />
+    <Icon type="spiner" size={props.size} />
   </div>
 );
 

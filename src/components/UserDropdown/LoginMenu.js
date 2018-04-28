@@ -14,7 +14,9 @@ const LoginMenu = (props: { onClick: Function }) => (
   <div styleName="menu">
     <div
       styleName="link"
-      onClick={() => { props.onClick(false); }}
+      onClick={() => {
+        props.onClick(false);
+      }}
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"
@@ -23,7 +25,9 @@ const LoginMenu = (props: { onClick: Function }) => (
     </div>
     <div
       styleName="link"
-      onClick={() => { props.onClick(true); }}
+      onClick={() => {
+        props.onClick(true);
+      }}
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"

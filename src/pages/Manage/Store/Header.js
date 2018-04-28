@@ -6,7 +6,7 @@ import './Header.scss';
 
 type PropsType = {
   title: string,
-  children?: any;
+  children?: any,
 };
 
 class Header extends PureComponent<PropsType> {

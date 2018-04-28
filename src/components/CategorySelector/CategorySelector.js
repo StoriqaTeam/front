@@ -12,18 +12,18 @@ import './CategorySelector.scss';
 type NameType = {
   lang: string,
   text: string,
-}
+};
 
 type CategoryType = {
   children?: Array<CategoryType>,
   name: Array<NameType>,
   rawId?: string,
-}
+};
 
 type PropsType = {
   categories: CategoryType,
   onSelect: (categoryId: number) => void,
-}
+};
 
 type StateType = {
   lang: string,
@@ -35,8 +35,8 @@ type StateType = {
     level1Item: ?CategoryType,
     level2Item: ?CategoryType,
     level3Item: ?CategoryType,
-  }
-}
+  },
+};
 
 class CategorySelector extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -69,7 +69,8 @@ class CategorySelector extends React.Component<PropsType, StateType> {
 
   handleToggleExpand = (e: any) => {
     const { snapshot } = this.state;
-    const isCategoryWrap = this.categoryWrapp && this.categoryWrapp.contains(e.target);
+    const isCategoryWrap =
+      this.categoryWrapp && this.categoryWrapp.contains(e.target);
     const isButton = this.button && this.button.contains(e.target);
     if (isButton && !isCategoryWrap) {
       this.setState({
@@ -116,45 +117,51 @@ class CategorySelector extends React.Component<PropsType, StateType> {
       default:
         break;
     }
-  }
+  };
 
   renderPath = () => {
-    const {
-      lang,
-      snapshot,
-    } = this.state;
+    const { lang, snapshot } = this.state;
     return (
       <div
         styleName="breadcrumbs"
         onClick={() => this.setState({ isShow: true })}
-        onKeyDown={() => { }}
+        onKeyDown={() => {}}
         role="button"
         tabIndex="0"
       >
-        {snapshot && [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map((item, index) => (item ? <span key={item.rawId}>{index !== 0 && ' / '}{getNameText(item.name, lang)}</span> : null))}
+        {snapshot &&
+          [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map(
+            (item, index) =>
+              item ? (
+                <span key={item.rawId}>
+                  {index !== 0 && ' / '}
+                  {getNameText(item.name, lang)}
+                </span>
+              ) : null,
+          )}
         {!snapshot && 'Choose category'}
       </div>
     );
-  }
+  };
 
   render() {
     const { categories } = this.props;
-    const {
-      lang,
-      level1Item,
-      level2Item,
-      level3Item,
-      isShow,
-    } = this.state;
-    const level2ItemName = level1Item ? find(propEq('lang', lang))(level1Item.name).text : '';
-    const level3ItemName = level2Item ? find(propEq('lang', lang))(level2Item.name).text : '';
+    const { lang, level1Item, level2Item, level3Item, isShow } = this.state;
+    const level2ItemName = level1Item
+      ? find(propEq('lang', lang))(level1Item.name).text
+      : '';
+    const level3ItemName = level2Item
+      ? find(propEq('lang', lang))(level2Item.name).text
+      : '';
 
     return (
       <div styleName="wrapper">
         <div styleName="label">Category</div>
         <div
           styleName="breadcrumbsWrapper"
-          ref={(node) => { this.button = node; }}
+          ref={node => {
+            this.button = node;
+          }}
         >
           {this.renderPath()}
         </div>
@@ -165,7 +172,9 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         >
           <div
             styleName="menuContainer"
-            ref={(node) => { this.categoryWrapp = node; }}
+            ref={node => {
+              this.categoryWrapp = node;
+            }}
           >
             <div styleName="levelWrapper">
               <div styleName="level">
@@ -180,7 +189,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                 </Fragment>
               </div>
               <div styleName="level">
-                {level1Item &&
+                {level1Item && (
                   <Fragment>
                     <div styleName="levelLabel">{level2ItemName}</div>
                     <LevelList
@@ -190,10 +199,10 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                       selectedItem={level2Item}
                     />
                   </Fragment>
-                }
+                )}
               </div>
               <div styleName="level">
-                {level2Item &&
+                {level2Item && (
                   <Fragment>
                     <div styleName="levelLabel">{level3ItemName}</div>
                     <LevelList
@@ -203,7 +212,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                       selectedItem={level3Item}
                     />
                   </Fragment>
-                }
+                )}
               </div>
             </div>
           </div>

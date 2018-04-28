@@ -33,7 +33,6 @@ import Camera from 'components/Icon/svg/camera.svg';
 import Minus from 'components/Icon/svg/minus.svg';
 import Plus from 'components/Icon/svg/plus.svg';
 import Upload from 'components/Icon/svg/upload.svg';
-//
 import Basket from 'components/Icon/svg/basket.svg';
 import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';

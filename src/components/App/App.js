@@ -38,13 +38,7 @@ class App extends Component<PropsType, StateType> {
   };
 
   getChildContext() {
-    const {
-      languages,
-      currencies,
-      categories,
-      relay,
-      me = {},
-    } = this.props;
+    const { languages, currencies, categories, relay, me = {} } = this.props;
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
@@ -75,11 +69,7 @@ class App extends Component<PropsType, StateType> {
     const { isAlertShown, alertText, isError } = this.state;
     return (
       <Fragment>
-        <Alert
-          showAlert={isAlertShown}
-          text={alertText}
-          isError={isError}
-        />
+        <Alert showAlert={isAlertShown} text={alertText} isError={isError} />
         {children && React.cloneElement(children, { me, mainPage })}
       </Fragment>
     );

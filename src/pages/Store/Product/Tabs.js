@@ -5,11 +5,11 @@ import './Tabs.scss';
 type PropsType = {
   selected?: number,
   children: React.Node,
-}
+};
 
 type StateType = {
   selected: number,
-}
+};
 
 class Tabs extends React.Component<PropsType, StateType> {
   /**
@@ -64,17 +64,11 @@ class Tabs extends React.Component<PropsType, StateType> {
           styleName={`label ${activeClass}`}
           onClick={e => this.handleClick(e, index)}
         >
-          <span>
-            {child.props.label}
-          </span>
+          <span>{child.props.label}</span>
         </div>
       );
     };
-    return (
-      <div styleName="labels">
-        { children.map(buildLabels) }
-      </div>
-    );
+    return <div styleName="labels">{children.map(buildLabels)}</div>;
   };
 
   /**
@@ -84,11 +78,7 @@ class Tabs extends React.Component<PropsType, StateType> {
    */
   renderContent = (): React.Node => {
     const { selected } = this.state;
-    return (
-      <div styleName="sisa">
-        {this.props.children[selected]}
-      </div>
-    );
+    return <div styleName="sisa">{this.props.children[selected]}</div>;
   };
 
   render() {

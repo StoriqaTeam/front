@@ -18,23 +18,24 @@ type PropsType = {
     }>,
     children?: Array<any>,
   }>,
-}
+};
 
 class CategoriesMenu extends Component<PropsType> {
   renderMenu(categories: any, isRoot: ?boolean) {
     const lang = 'EN';
-    return categories.map((category) => {
+    return categories.map(category => {
       const { rawId } = category;
       const categoryChildren = category.children;
       const name = find(propEq('lang', lang))(category.name);
       const renderInnerLink = () => (
         <Fragment>
           <span styleName="text">{name.text}</span>
-          {categoryChildren && !isRoot &&
-            <span styleName="icon">
-              <Icon type="arrowRight" />
-            </span>
-          }
+          {categoryChildren &&
+            !isRoot && (
+              <span styleName="icon">
+                <Icon type="arrowRight" />
+              </span>
+            )}
         </Fragment>
       );
       return (
@@ -58,16 +59,14 @@ class CategoriesMenu extends Component<PropsType> {
           >
             {renderInnerLink()}
           </Link>
-          {categoryChildren &&
+          {categoryChildren && (
             <div styleName="items">
               <div styleName="itemsWrap">
                 <div styleName="title">{name.text}</div>
-                <ul>
-                  {this.renderMenu(categoryChildren)}
-                </ul>
+                <ul>{this.renderMenu(categoryChildren)}</ul>
               </div>
             </div>
-          }
+          )}
         </li>
       );
     });
@@ -77,22 +76,12 @@ class CategoriesMenu extends Component<PropsType> {
     return (
       <div styleName="container">
         <div styleName="rootItem rootButtonItem">
-          <Link
-            styleName="button"
-            to="/"
-            data-test="allCategoriesLink"
-          >
-            <Icon
-              inline
-              type="cats"
-              size="24"
-            />
+          <Link styleName="button" to="/" data-test="allCategoriesLink">
+            <Icon inline type="cats" size="24" />
             <span styleName="buttonText">All</span>
           </Link>
         </div>
-        <ul styleName="root">
-          { this.renderMenu(this.props.categories, true) }
-        </ul>
+        <ul styleName="root">{this.renderMenu(this.props.categories, true)}</ul>
       </div>
     );
   }

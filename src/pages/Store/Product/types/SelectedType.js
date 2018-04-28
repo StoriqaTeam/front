@@ -3,6 +3,6 @@ type SelectedType = {
   label: string,
   img: string,
   opacity: boolean,
-}
+};
 
 export default SelectedType;

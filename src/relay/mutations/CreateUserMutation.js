@@ -6,10 +6,10 @@ import { Environment } from 'relay-runtime';
 const mutation = graphql`
   mutation CreateUserMutation($input: CreateUserInput!) {
     createUser(input: $input) {
-      id,
-      rawId,
-      email,
-      isActive,
+      id
+      rawId
+      email
+      isActive
     }
   }
 `;
@@ -22,18 +22,19 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => commitMutation(params.environment, {
-  mutation,
-  variables: {
-    input: {
-      clientMutationId: '',
-      email: params.email,
-      password: params.password,
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
+    mutation,
+    variables: {
+      input: {
+        clientMutationId: '',
+        email: params.email,
+        password: params.password,
+      },
     },
-  },
-  onCompleted: params.onCompleted,
-  onError: params.onError,
-});
+    onCompleted: params.onCompleted,
+    onError: params.onError,
+  });
 
 export default { commit };
 

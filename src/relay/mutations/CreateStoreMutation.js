@@ -39,23 +39,24 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => commitMutation(params.environment, {
-  mutation,
-  variables: {
-    input: {
-      clientMutationId: '',
-      name: params.name,
-      userId: params.userId,
-      defaultLanguage: params.defaultLanguage,
-      shortDescription: params.shortDescription,
-      longDescription: params.longDescription,
-      slug: params.slug,
-      slogan: params.slogan,
-      logo: params.logo,
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
+    mutation,
+    variables: {
+      input: {
+        clientMutationId: '',
+        name: params.name,
+        userId: params.userId,
+        defaultLanguage: params.defaultLanguage,
+        shortDescription: params.shortDescription,
+        longDescription: params.longDescription,
+        slug: params.slug,
+        slogan: params.slogan,
+        logo: params.logo,
+      },
     },
-  },
-  onCompleted: params.onCompleted,
-  onError: params.onError,
-});
+    onCompleted: params.onCompleted,
+    onError: params.onError,
+  });
 
 export default { commit };

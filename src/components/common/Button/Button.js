@@ -53,22 +53,20 @@ class Button extends PureComponent<PropsTypes> {
 
     if (href) {
       return (
-        <a
-          styleName={styleName}
-          data-test={dataTest}
-          {...props}
-        >
+        <a styleName={styleName} data-test={dataTest} {...props}>
           {children}
         </a>
       );
     }
-    return (<button
-      styleName={styleName}
-      disabled={disabled}
-      type="button"
-      data-test={dataTest}
-      {...props}
-    />);
+    return (
+      <button
+        styleName={styleName}
+        disabled={disabled}
+        type="button"
+        data-test={dataTest}
+        {...props}
+      />
+    );
   }
 }
 

@@ -46,7 +46,7 @@ type StateType = {
   validity: ?boolean,
   isFocus: boolean,
   isFocusShow: boolean,
-}
+};
 
 class Input extends PureComponent<PropsType, StateType> {
   static defaultProps = {
@@ -90,18 +90,18 @@ class Input extends PureComponent<PropsType, StateType> {
 
   onMouseDown = () => {
     this.setState({ isFocusShow: true });
-  }
+  };
 
   onMouseUp = () => {
     this.setState({ isFocusShow: false });
-  }
+  };
 
   onMouseOut = () => {
     this.setState({
       isFocusShow: false,
       showHints: this.state.isFocus,
     });
-  }
+  };
 
   /**
    * @desc Handles the onChange event by setting the model's value
@@ -191,16 +191,19 @@ class Input extends PureComponent<PropsType, StateType> {
       passwordQuality,
     } = utils.validateField(inputName, inputValue, validate, errorMessage);
 
-    this.setState({
-      formError,
-      passwordQuality,
-      validity,
-      showHints: inputName === 'password' && !validity,
-    }, this.props.onChange({
-      name,
-      value,
-      validity,
-    }));
+    this.setState(
+      {
+        formError,
+        passwordQuality,
+        validity,
+        showHints: inputName === 'password' && !validity,
+      },
+      this.props.onChange({
+        name,
+        value,
+        validity,
+      }),
+    );
   };
 
   /**
@@ -259,17 +262,21 @@ class Input extends PureComponent<PropsType, StateType> {
         >
           {label && (
             <label
-              styleName={`label ${labelFloat || (model && model.length > 0 && 'labelFloat') || ''}`}
+              styleName={`label ${labelFloat ||
+                (model && model.length > 0 && 'labelFloat') ||
+                ''}`}
               htmlFor={name}
             >
-              { label }
+              {label}
             </label>
           )}
           <input
             type={showPassword ? 'text' : type}
             name={name}
             value={model}
-            ref={(node) => { this.input = node; }}
+            ref={node => {
+              this.input = node;
+            }}
             autoComplete={autocomplete ? 'on' : 'off'}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
@@ -280,14 +287,10 @@ class Input extends PureComponent<PropsType, StateType> {
           />
           <hr />
         </div>
-        {formError && !isFocus && !isFocusShow &&
-          <span styleName="message">
-            {formError}
-          </span>
-        }
-        {detectCapsLock && isCapsLockOn && (
-          <CapsLockMessage />
-        )}
+        {formError &&
+          !isFocus &&
+          !isFocusShow && <span styleName="message">{formError}</span>}
+        {detectCapsLock && isCapsLockOn && <CapsLockMessage />}
         {showPasswordButton && (
           <ShowPassword
             show={showPassword}
@@ -298,16 +301,17 @@ class Input extends PureComponent<PropsType, StateType> {
             onBlur={() => {}}
           />
         )}
-        {showHints && (
-          <PasswordHints {...passwordQuality} />
-        )}
-        {errors && errors.length > 0 &&
-          <div styleName="errors">
-            {errors.map((item, idx) => (
-              <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
-            ))}
-          </div>
-        }
+        {showHints && <PasswordHints {...passwordQuality} />}
+        {errors &&
+          errors.length > 0 && (
+            <div styleName="errors">
+              {errors.map((item, idx) => (
+                <div key={/* eslint-disable */ idx /* eslint-enable */}>
+                  {item}
+                </div>
+              ))}
+            </div>
+          )}
       </span>
     );
   }

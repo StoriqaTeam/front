@@ -47,7 +47,7 @@ class Table extends Component<PropsType, StateType> {
 
   renderRows = () => {
     const { expandedItemId } = this.state;
-    return map((item) => {
+    return map(item => {
       if (propEq('rawId', expandedItemId, item)) {
         return (
           /* $FlowIgnoreMe */
@@ -62,11 +62,8 @@ class Table extends Component<PropsType, StateType> {
         );
       }
       return (
-        <Row
-          key={item.id}
-          variant={item}
-          onExpandClick={this.expandRow}
-        />);
+        <Row key={item.id} variant={item} onExpandClick={this.expandRow} />
+      );
     }, this.props.variants);
   };
 

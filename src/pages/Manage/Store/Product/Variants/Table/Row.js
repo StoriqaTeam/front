@@ -17,7 +17,7 @@ type PropsType = {
       cashback: number,
     },
   },
-  onExpandClick: Function;
+  onExpandClick: Function,
 };
 
 type StateType = {
@@ -47,10 +47,7 @@ class Row extends Component<PropsType, StateType> {
       <div styleName="container">
         <div styleName="variant">
           <div styleName="variantItem tdCheckbox">
-            <Checkbox
-              id="id-variant"
-              onChange={this.handleCheckboxClick}
-            />
+            <Checkbox id="id-variant" onChange={this.handleCheckboxClick} />
           </div>
           <div styleName="variantItem tdArticle">
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
@@ -59,25 +56,31 @@ class Row extends Component<PropsType, StateType> {
             <span styleName="text priceText">{`${price} STQ`}</span>
           </div>
           <div styleName="variantItem tdCashback">
-            <span styleName="text cashbackText"><strong>{cashback}</strong>%</span>
+            <span styleName="text cashbackText">
+              <strong>{cashback}</strong>%
+            </span>
           </div>
           <div styleName="variantItem tdCharacteristics">
             <div styleName="characteristicItem">
               <div styleName="characteristicLabels">
-                {map((item) => {
-                  const name = pathOr('', ['attribute', 'name', 0, 'text'], item);
-                  return (
-                    <div key={`attr-${name}`}>{`${name}: `}</div>
+                {map(item => {
+                  const name = pathOr(
+                    '',
+                    ['attribute', 'name', 0, 'text'],
+                    item,
                   );
+                  return <div key={`attr-${name}`}>{`${name}: `}</div>;
                 }, attrs)}
               </div>
               <div styleName="characteristicValues">
-                {map((item) => {
-                  const name = pathOr('', ['attribute', 'name', 0, 'text'], item);
-                  const val = pathOr('', ['value'], item);
-                  return (
-                    <div key={`attr-${name}`}>{`${val}`}</div>
+                {map(item => {
+                  const name = pathOr(
+                    '',
+                    ['attribute', 'name', 0, 'text'],
+                    item,
                   );
+                  const val = pathOr('', ['value'], item);
+                  return <div key={`attr-${name}`}>{`${val}`}</div>;
                 }, attrs)}
               </div>
             </div>
@@ -104,10 +107,7 @@ class Row extends Component<PropsType, StateType> {
             </button>
           </div>
           <div styleName="variantItem tdDropdawn">
-            <button
-              styleName="arrowExpand"
-              onClick={this.handleExpandClick}
-            >
+            <button styleName="arrowExpand" onClick={this.handleExpandClick}>
               <Icon inline type="arrowExpand" />
             </button>
           </div>

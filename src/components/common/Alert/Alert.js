@@ -33,8 +33,11 @@ class Alert extends Component<PropsTypes, StateTypes> {
   componentWillReceiveProps(nextProps: Object) {
     const { showAlert: nextShowAlert, isError: nextIsError } = nextProps;
 
-    if (this.props.showAlert !== nextShowAlert || nextIsError !== this.props.isError) {
-      this.setState((prevState) => {
+    if (
+      this.props.showAlert !== nextShowAlert ||
+      nextIsError !== this.props.isError
+    ) {
+      this.setState(prevState => {
         if (prevState.showAlert !== nextShowAlert) {
           return { showAlert: nextShowAlert };
         }
