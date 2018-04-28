@@ -107,11 +107,7 @@ class EditProduct extends Component<PropsType, StateType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu
-              activeItem=""
-              switchMenu={() => {}}
-              storeLogo={logo || ''}
-            />
+            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
           </Col>
           <Col size={10}>
             <Form

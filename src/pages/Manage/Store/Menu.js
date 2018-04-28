@@ -39,7 +39,7 @@ class Menu extends PureComponent<PropsType, StateType> {
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
-          {onLogoUpload ?
+          {onLogoUpload ? (
             <UploadWrapper
               id="new-store-id"
               onUpload={this.handleOnUpload}
@@ -48,8 +48,10 @@ class Menu extends PureComponent<PropsType, StateType> {
               buttonIconType="upload"
               overPicture={storeLogo}
               dataTest="storeImgUploader"
-            /> : <img src={storeLogo} alt="store logo" styleName="storeLogo" />
-          }
+            />
+          ) : (
+            <img src={storeLogo} alt="store logo" styleName="storeLogo" />
+          )}
         </div>
         {storeName && <div styleName="title">{storeName}</div>}
         <div styleName="items">

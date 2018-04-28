@@ -107,11 +107,7 @@ class NewProduct extends Component<PropsType, StateType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu
-              activeItem=""
-              switchMenu={() => {}}
-              storeLogo={logo || ''}
-            />
+            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
           </Col>
           <Col size={10}>
             <Form
@@ -136,11 +132,11 @@ NewProduct.contextTypes = {
 export default createFragmentContainer(
   withRouter(Page(NewProduct)),
   graphql`
-    fragment NewProduct_me on User @argumentDefinitions(storeId: { type: "Int!" }) {
+    fragment NewProduct_me on User
+      @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         logo
       }
     }
   `,
 );
-
