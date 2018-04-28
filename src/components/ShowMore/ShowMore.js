@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import cn from 'classnames';
 
 import { Icon } from 'components/Icon';
 
@@ -20,20 +21,26 @@ class ShowMore extends Component<PropsType, StateType> {
   }
 
   handleClick() {
-    console.log("TOTOTO");
+    this.setState({ on: !this.state.on });
   }
 
   render() {
+    const title = this.state.on ? 'Show less' : 'Show more';
     return (
       <div>
-        <div styleName="header" onClick={(e) => this.handleClick(e)}>
+        <button
+          styleName="header"
+          onClick={() => this.handleClick()}
+        >
           <div styleName="icon">
-            <Icon type="arrowExpand" size={16} inline />
+            <div styleName={cn({ on: this.state.on, off: !this.state.on })}>
+              <Icon type="arrowExpand" size={16} inline />
+            </div>
           </div>
           <div styleName="text">
-            Show more
+            {title}
           </div>
-        </div>
+        </button>
         {this.state.on ? this.props.children : null}
       </div>
     );
