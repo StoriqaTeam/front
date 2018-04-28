@@ -201,7 +201,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
     };
     const handleStyle = {
       [direction]: `${coords.handle}px`,
-      zIndex: coords.handle > 100 ? 999 : 1,
+      zIndex: coords.handle >= 100 ? 999 : 1,
     };
     const handleStyle2 = {
       [direction]: `${coords2.handle}px`,
