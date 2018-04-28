@@ -29,6 +29,9 @@ class Cart extends PureComponent<PropsType> {
       <div styleName="container">
         <div styleName="header">Cart</div>
         {stores.map(store => <CartStore store={store} />)}
+        <div styleName="total-container">
+          <div styleName="cart-title">Total</div>
+        </div>
       </div>
     );
   }

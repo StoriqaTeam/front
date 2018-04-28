@@ -52,8 +52,13 @@
   font-family: $font_regular;
 }
 
-.product-attributes-title {
+.cart-product-title {
   font-family: $font_medium;
   text-transform: uppercase;
   padding-bottom: 2rem;
+}
+
+.total-container {
+  width: 40em;
+  border: 1px solid $color_grey_light;
 }

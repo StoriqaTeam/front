@@ -54,7 +54,7 @@ class CartProduct extends PureComponent<PropsType> {
           <div styleName="product-summary">
             <div styleName="product-summary-header">{name}</div>
             <div styleName="product-summary-attributes">
-              <div styleName="product-attributes-title">
+              <div styleName="cart-product-title">
                 Attributes
               </div>
               {attrs.map(attr => (
@@ -68,7 +68,7 @@ class CartProduct extends PureComponent<PropsType> {
             </ShowMore>
           </div>
           <div styleName="product-params">
-            <div styleName="product-attributes-title">Total</div>
+            <div styleName="cart-product-title">Price and cost</div>
             <CartProductAttribute title="Quantity" value={quantity} />
             <CartProductAttribute title="Total cost" value={(quantity * price).toString()} />
             <CartProductAttribute title="Delivery cost" value={(deliveryPrice || 0).toString()} />
