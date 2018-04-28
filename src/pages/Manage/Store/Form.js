@@ -268,6 +268,7 @@ class Form extends Component<PropsType, StateType> {
               items={langItems}
               onSelect={this.handleDefaultLanguage}
               tabIndexValue={0}
+              dataTest="storeLangSelect"
             />
           </div>
           {this.renderInput({
