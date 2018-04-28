@@ -199,8 +199,14 @@ class RangerSlider extends React.Component<PropsType, StateType> {
       marginLeft: `${coords.fill}px`,
       width: `${coords2.fill - coords.fill}px`,
     };
-    const handleStyle = { [direction]: `${coords.handle}px`, zIndex: coords.handle > 100 ? 999 : 1 };
-    const handleStyle2 = { [direction]: `${coords2.handle}px`, zIndex: coords2.handle < 100 ? 999 : 1  };
+    const handleStyle = {
+      [direction]: `${coords.handle}px`,
+      zIndex: coords.handle > 100 ? 999 : 1,
+    };
+    const handleStyle2 = {
+      [direction]: `${coords2.handle}px`,
+      zIndex: coords2.handle < 100 ? 999 : 1,
+    };
 
     return (
       <div styleName="rangerContainer">
