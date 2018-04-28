@@ -39,7 +39,7 @@ class CartTotal extends Component<PropsType, StateType> {
     const offset = window.pageYOffset;
     // const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
     // const threshold = this.props.threshold * rem;
-    console.log(offset, this.props.threshold);
+    // console.log(offset, this.props.threshold);
     this.setState({ sticky: offset > this.props.threshold });
   }
 

@@ -40,7 +40,7 @@ class CardProduct extends PureComponent<PropsTypes> {
     const id = path(['props', 'item', 'rawId'], this);
     if (id) {
       IncrementInCartMutation.commit({
-        input: { productId: id },
+        input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
           log.debug('Success for IncrementInCart mutation');
