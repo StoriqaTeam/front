@@ -27,7 +27,13 @@ class CartProduct extends PureComponent<PropsType> {
       head,
       path(['text']),
     )(product);
-    const { photoMain, attributes } = product;
+    const {
+      photoMain,
+      attributes,
+      price,
+      quantity,
+      deliveryPrice,
+    } = product;
     const attrs = map(attr => (
       { title: head(attr.attribute.name).text, value: attr.value.toString() }
     ))(attributes);
@@ -48,19 +54,24 @@ class CartProduct extends PureComponent<PropsType> {
           <div styleName="product-summary">
             <div styleName="product-summary-header">{name}</div>
             <div styleName="product-summary-attributes">
-              <div styleName="product-summary-attributes-title">
+              <div styleName="product-attributes-title">
                 Attributes
               </div>
               {attrs.map(attr => (
-                <CartProductAttribute {...attr} />
+                <div styleName="half-width">
+                  <CartProductAttribute {...attr} />
+                </div>
               ))}
             </div>
             <ShowMore>
-              Yo1h
+              Some details
             </ShowMore>
           </div>
           <div styleName="product-params">
-            Params
+            <div styleName="product-attributes-title">Total</div>
+            <CartProductAttribute title="Quantity" value={quantity} />
+            <CartProductAttribute title="Total cost" value={(quantity * price).toString()} />
+            <CartProductAttribute title="Delivery cost" value={(deliveryPrice || 0).toString()} />
           </div>
         </div>
       </div>
@@ -77,7 +88,10 @@ export default createFragmentContainer(
         lang
         text
       }
+      photoMain
+      price
       quantity
+      deliveryPrice
       attributes {
         value
         metaField

@@ -1,9 +1,10 @@
 @import "../../styles/variables.scss";
 
 .container {
-  padding: 0 2rem 2rem 2rem;
-  font-family: $font_medium;
+  padding: 4rem;
   color: $color_grey_text;
+  background: $color-white;
+  border: 1px solid $color_grey_light;
 }
 
 .header {

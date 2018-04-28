@@ -7,7 +7,6 @@
 
 .picture {
   width: 16rem;
-  height: 16rem;
   margin-right: 4rem;
 }
 
@@ -21,18 +20,27 @@
 
 .left-container {
   display: flex;
+  align-items: flex-start;
 }
 
 .main-container {
   flex-grow: 1;
+  display: flex;
+}
+
+.half-width {
+  width: 50%;
+  display: inline-block;
 }
 
 .product-summary {
   width: 66%;
+  border-right: 1px solid $color_grey_2;
 }
 
 .product-params {
   width: 34%;
+  padding-left: 4rem;
 }
 
 .product-summary-header {
@@ -44,7 +52,7 @@
   font-family: $font_regular;
 }
 
-.product-summary-attributes-title {
+.product-attributes-title {
   font-family: $font_medium;
   text-transform: uppercase;
   padding-bottom: 2rem;
