@@ -18,7 +18,7 @@ type PropsTypes = {
   contour: ?boolean,
   big: ?boolean,
   dataTest: string,
-  white?: boolean,
+  white: ?boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
