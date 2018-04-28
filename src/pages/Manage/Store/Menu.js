@@ -34,20 +34,22 @@ class Menu extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    const { activeItem, storeName, storeLogo } = this.props;
+    const { activeItem, storeName, storeLogo, onLogoUpload } = this.props;
 
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
-          <UploadWrapper
-            id="new-store-id"
-            onUpload={this.handleOnUpload}
-            buttonHeight={26}
-            buttonWidth={26}
-            buttonIconType="upload"
-            overPicture={storeLogo}
-            dataTest="storeImgUploader"
-          />
+          {onLogoUpload ?
+            <UploadWrapper
+              id="new-store-id"
+              onUpload={this.handleOnUpload}
+              buttonHeight={26}
+              buttonWidth={26}
+              buttonIconType="upload"
+              overPicture={storeLogo}
+              dataTest="storeImgUploader"
+            /> : <img src={storeLogo} alt="store logo" styleName="storeLogo" />
+          }
         </div>
         {storeName && <div styleName="title">{storeName}</div>}
         <div styleName="items">
