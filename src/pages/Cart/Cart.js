@@ -8,6 +8,7 @@ import { pipe, pathOr, path, map } from 'ramda';
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
+import CartTotal from './CartTotal';
 
 // eslint-disable-next-line
 import type Cart_me from './__generated__/Cart_me.graphql';
@@ -19,6 +20,7 @@ type PropsType = {
   me: Cart_me
 };
 
+/* eslint-disable react/no-array-index-key */
 class Cart extends PureComponent<PropsType> {
   render() {
     const stores = pipe(
@@ -28,10 +30,10 @@ class Cart extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
-        {stores.map(store => <CartStore store={store} />)}
-        <div styleName="total-container">
-          <div styleName="cart-title">Total</div>
+        <div styleName="stores-container">
+          {stores.map((store, idx) => <CartStore key={idx} store={store} />)}
         </div>
+        <CartTotal threshold={100} />
       </div>
     );
   }

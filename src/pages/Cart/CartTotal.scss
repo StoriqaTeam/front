@@ -1,5 +1,19 @@
 @import "../../styles/variables.scss";
 
+.container {
+  padding: 4rem;
+  color: $color_grey_text;
+  background: $color-white;
+  border: 1px solid $color_grey_light;
+}
+
+.sticky {
+  position: fixed;
+  right: 2rem;
+  top: 2rem;
+  width: 40rem;  
+}
+
 .cart-total-title {
   font-family: $font_medium;
   text-transform: uppercase;

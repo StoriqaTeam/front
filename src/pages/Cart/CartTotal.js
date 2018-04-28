@@ -1,24 +1,58 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import cn from 'classnames';
 
-import CartProduct from './CartProduct';
-// eslint-disable-next-line
-import type CartStore_store from './__generated__/CartStore_store.graphql';
-
-import './CartStore.scss';
+import './CartTotal.scss';
 
 type PropsType = {
+  threshold: number,
 };
 
-class CartTotal extends PureComponent<PropsType> {
+type StateType = {
+  sticky: boolean,
+};
+
+class CartTotal extends Component<PropsType, StateType> {
+  state = {
+    sticky: false,
+  };
+
+  componentDidMount() {
+    if (!window) return;
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  componentWillUnmount() {
+    if (!window) return;
+    window.removeEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  setRef(ref: Object) {
+    this.ref = ref;
+  }
+
+  ref: ?Object;
+
+  handleScroll() {
+    if (!window) return;
+    const offset = window.pageYOffset;
+    // const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+    // const threshold = this.props.threshold * rem;
+    console.log(offset, this.props.threshold);
+    this.setState({ sticky: offset > this.props.threshold });
+  }
+
   render() {
-    const { products } = this.props.store;
+    // const { products } = this.props.store;
     return (
-      <div styleName="container">
-        {products.map(product => <CartProduct product={product} />)}
+      <div styleName={cn('container', { sticky: this.state.sticky })}>
+        <div styleName="cart-total-title">
+          Total
+        </div>
       </div>
     );
   }
 }
 
+export default CartTotal;

@@ -18,6 +18,7 @@ type PropsType = {
   ...CartProduct_product,
 };
 
+/* eslint-disable react/no-array-index-key */
 class CartProduct extends PureComponent<PropsType> {
   render() {
     const { product } = this.props;
@@ -57,8 +58,8 @@ class CartProduct extends PureComponent<PropsType> {
               <div styleName="cart-product-title">
                 Attributes
               </div>
-              {attrs.map(attr => (
-                <div styleName="half-width">
+              {attrs.map((attr, idx) => (
+                <div key={idx} styleName="half-width">
                   <CartProductAttribute {...attr} />
                 </div>
               ))}

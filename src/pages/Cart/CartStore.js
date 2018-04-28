@@ -14,12 +14,13 @@ type PropsType = {
   store: CartStore_store,
 };
 
+/* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
     const { products } = this.props.store;
     return (
       <div styleName="container">
-        {products.map(product => <CartProduct product={product} />)}
+        {products.map((product, idx) => <CartProduct key={idx} product={product} />)}
       </div>
     );
   }
