@@ -136,34 +136,28 @@ class Product extends Component<PropsType, StateType> {
       <div styleName="container">
         <Header />
         <Main>
-          <div styleName="ProductBackground">
-            <Container>
-              <div styleName="whiteBackground">
-                <Row>
-                  <Col size={6}>
-                    <ProductImage
-                      mainImage={photoMain}
-                      thumbnails={additionalPhotos}
-                    />
-                    <ProductShare />
-                  </Col>
-                  <Col size={6}>
-                    <ProductDetails
-                      productTitle={extractText(name)}
-                      productDescription={extractText(
-                        longDescription,
-                        'EN',
-                        'No Description',
-                      )}
-                      widgets={widgets}
-                      onWidgetClick={this.handleWidgetClick}
-                    />
-                  </Col>
-                </Row>
-              </div>
-            </Container>
-          </div>
-          <Container>
+          <div styleName="ProductDetails">
+            <Row>
+              <Col size={6}>
+                <ProductImage
+                  mainImage={photoMain}
+                  thumbnails={additionalPhotos}
+                />
+                <ProductShare />
+              </Col>
+              <Col size={6}>
+                <ProductDetails
+                  productTitle={extractText(name)}
+                  productDescription={extractText(
+                    longDescription,
+                    'EN',
+                    'No Description',
+                  )}
+                  widgets={widgets}
+                  onWidgetClick={this.handleWidgetClick}
+                />
+              </Col>
+            </Row>
             <Tabs>
               {tabs.map(({ id, label, content }) => (
                 <Tab key={id} label={label}>
@@ -171,7 +165,7 @@ class Product extends Component<PropsType, StateType> {
                 </Tab>
               ))}
             </Tabs>
-          </Container>
+          </div>
         </Main>
         <Footer />
       </div>
