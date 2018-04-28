@@ -32,18 +32,20 @@
   width: 100%;
   z-index: 10;
   white-space: nowrap;
-
-  &:not(:hover) .rootItem {
-    & > .items {
-      transition: all 0s ease !important;
-    }
-  }
 }
 
 .rootItem {
   display: inline-block;
   line-height: 5rem;
   vertical-align: bottom;
+
+  &.activeItem {
+    & > .items {
+      opacity: 1;
+      visibility: visible;
+      transition: all .15s ease-out;
+    }
+  }
 
   & > .items {
     opacity: 0;
@@ -58,8 +60,7 @@
     background-color: $color_white;
     box-shadow: $shadow_1;
     z-index: 10;
-    transition-delay: 0s;
-    transition-delay: .2s;
+    transition: all .15s ease-in;
 
     & > .itemsWrap {
       position: relative;
@@ -71,40 +72,6 @@
         height: 30.5rem;
         margin-top: 1rem;
         padding-bottom: 4rem;
-
-        & > li {
-          font-family: $font_medium;
-          margin-right: -4rem;
-          font-size: 16px;
-          line-height: 4rem;
-
-          & .link {
-            display: block;
-            color: $color_grey_text;
-            transition: all .3s ease;
-
-            & .text {
-              position: relative;
-              font-size: 14px;
-            }
-          }
-
-          & svg {
-            opacity: 0;
-            fill: $color_primary;
-            transition: all .3s ease;
-          }
-
-          &:hover {
-            & > .link {
-              color: $color_blue_2;
-            }
-
-            & svg {
-              opacity: 1;
-            }
-          }
-        }
       }
     }
   }
@@ -126,12 +93,6 @@
   }
 
   &:hover {
-    & > .items {
-      margin: 0;
-      z-index: 11;
-      opacity: 1;
-      visibility: visible;
-    }
     & > .link {
       & > .text {
         color: $color_blue_2;
@@ -141,8 +102,7 @@
 
   &:not(:hover) {
     & > .items {
-      transition-delay: 0s;
-      transition-delay: .35s;
+      transition-delay: .07s;
     }
   }
 }
@@ -172,8 +132,31 @@
 }
 
 .midItem {
+  font-family: $font_medium;
+  margin-right: -4rem;
+  font-size: 16px;
+  line-height: 4rem;
+
+  & .link {
+    display: block;
+    color: $color_grey_text;
+    transition: all .3s ease;
+
+    & .text {
+      position: relative;
+      font-size: 14px;
+    }
+  }
+
+  & svg {
+    opacity: 0;
+    fill: $color_primary;
+    transition: all .3s ease;
+  }
+
   & > .items {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
     position: absolute;
     top: 0;
     left: 100%;
@@ -182,42 +165,49 @@
     & > .itemsWrap {
       width: 100%;
       padding-left: 4rem;
-    }
-  }
 
-  &:hover {
-    & > .items {
-      display: block;
+      & > ul {
+        width: 80rem;
+        height: 29.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin-top: 1rem;
 
-      & > .itemsWrap {
-        & > ul {
-          width: 80rem;
-          height: 29.5rem;
-          display: flex;
-          flex-direction: column;
-          flex-wrap: wrap;
-          margin-top: 1rem;
+        & > li {
+          font-size: 14px;
+          line-height: 4rem;
+          cursor: pointer;
 
-          & > li {
-            font-size: 14px;
-            line-height: 4rem;
-            cursor: pointer;
+          & .link {
+            display: block;
+            width: 100%;
+            color: $color_grey_text;
+            transition: all .3s ease;
+          }
 
-            & .link {
-              display: block;
-              width: 100%;
-              color: $color_grey_text;
-              transition: all .3s ease;
-            }
-
-            &:hover {
-              & > .link {
-                color: $color_blue_2;
-              }
+          &:hover {
+            & > .link {
+              color: $color_blue_2;
             }
           }
         }
       }
+    }
+  }
+
+  &.activeItemMod {
+    & > .items {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    & > .link {
+      color: $color_blue_2 !important;
+    }
+
+    & svg {
+      opacity: 1 !important;
     }
   }
 }
