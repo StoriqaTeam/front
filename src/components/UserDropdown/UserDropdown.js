@@ -30,18 +30,18 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
   state = {
     showModal: false,
     isSignUp: false,
-  }
+  };
 
   onOpenModal = (isSignUp: ?boolean) => {
     this.setState({
       showModal: true,
       isSignUp,
     });
-  }
+  };
 
   onCloseModal = () => {
     this.setState({ showModal: false });
-  }
+  };
 
   render() {
     const { user } = this.props;
@@ -58,18 +58,15 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
         <Dropdown withIcon>
           <trigger>
             <div styleName="avatar">
-              {avatar ?
-                <img
-                  styleName="avatarImg"
-                  src={user.avatar}
-                  alt="img"
-                /> :
+              {avatar ? (
+                <img styleName="avatarImg" src={user.avatar} alt="img" />
+              ) : (
                 <Icon type="person" size="16" />
-              }
+              )}
             </div>
           </trigger>
           <content>
-            {user ?
+            {user ? (
               <ProfileMenu
                 lastName={lastName}
                 firstName={firstName}
@@ -77,15 +74,13 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
                 shopsCount={shopsCount}
                 email={email}
                 avatar={avatar}
-              /> :
+              />
+            ) : (
               <LoginMenu onClick={this.onOpenModal} />
-            }
+            )}
           </content>
         </Dropdown>
-        <Modal
-          showModal={showModal}
-          onClose={this.onCloseModal}
-        >
+        <Modal showModal={showModal} onClose={this.onCloseModal}>
           <Authorization isSignUp={isSignUp} />
         </Modal>
       </div>

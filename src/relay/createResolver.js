@@ -4,7 +4,7 @@ import { Resolver } from 'found-relay';
 
 // installRelayDevTools();
 
-const createResolver = (fetcher) => {
+const createResolver = fetcher => {
   if (process.env.NODE_ENV !== 'production') {
     // installRelayDevTools();
   }

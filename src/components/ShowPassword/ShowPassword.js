@@ -11,16 +11,10 @@ type PropTypes = {
   onMouseDown: Function,
   onMouseUp: Function,
   onMouseOut: Function,
-}
+};
 
 const ShowPassword = (props: PropTypes) => {
-  const {
-    show,
-    onClick,
-    onMouseDown,
-    onMouseUp,
-    onMouseOut,
-  } = props;
+  const { show, onClick, onMouseDown, onMouseUp, onMouseOut } = props;
   const iconType = show ? 'eyeBlue' : 'eye';
   return (
     <button
@@ -32,7 +26,8 @@ const ShowPassword = (props: PropTypes) => {
       onMouseOut={onMouseOut}
       onBlur={() => {}}
     >
-      <Icon type={iconType} /> <small styleName={classNames({ show })}>Show</small>
+      <Icon type={iconType} />{' '}
+      <small styleName={classNames({ show })}>Show</small>
     </button>
   );
 };

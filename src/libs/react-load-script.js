@@ -61,7 +61,9 @@ export default class LoadScript extends React.Component<any, any> {
       return;
     }
 
-    this.constructor.scriptObservers[url] = { [this.scriptLoaderId]: this.props };
+    this.constructor.scriptObservers[url] = {
+      [this.scriptLoaderId]: this.props,
+    };
 
     this.createScript();
   }
@@ -87,7 +89,9 @@ export default class LoadScript extends React.Component<any, any> {
 
     // add 'data-' or non standard attributes to the script tag
     if (attributes) {
-      Object.keys(attributes).forEach(prop => script.setAttribute(prop, attributes[prop]));
+      Object.keys(attributes).forEach(prop =>
+        script.setAttribute(prop, attributes[prop]),
+      );
     }
 
     script.src = url;
@@ -97,9 +101,9 @@ export default class LoadScript extends React.Component<any, any> {
       script.async = true;
     }
 
-    const callObserverFuncAndRemoveObserver = (shouldRemoveObserver) => {
+    const callObserverFuncAndRemoveObserver = shouldRemoveObserver => {
       const observers = this.constructor.scriptObservers[url];
-      Object.keys(observers).forEach((key) => {
+      Object.keys(observers).forEach(key => {
         if (shouldRemoveObserver(observers[key])) {
           delete this.constructor.scriptObservers[url][this.scriptLoaderId];
         }
@@ -107,7 +111,7 @@ export default class LoadScript extends React.Component<any, any> {
     };
     script.onload = () => {
       this.constructor.loadedScripts[url] = true;
-      callObserverFuncAndRemoveObserver((observer) => {
+      callObserverFuncAndRemoveObserver(observer => {
         observer.onLoad();
         return true;
       });
@@ -115,7 +119,7 @@ export default class LoadScript extends React.Component<any, any> {
 
     script.onerror = () => {
       this.constructor.erroredScripts[url] = true;
-      callObserverFuncAndRemoveObserver((observer) => {
+      callObserverFuncAndRemoveObserver(observer => {
         observer.onError();
         return true;
       });

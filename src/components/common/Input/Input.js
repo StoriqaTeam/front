@@ -11,7 +11,7 @@ type PropsType = {
   value: string,
   label: string,
   errors: ?Array<string>,
-  onChange: (e: {target: { value: string }}) => void,
+  onChange: (e: { target: { value: string } }) => void,
   onBlur: () => void,
   onFocus: () => void,
   onKeyDown: () => void,
@@ -32,7 +32,7 @@ class Input extends Component<PropsType, StateType> {
   state = {
     labelFloat: false,
     isFocus: false,
-  }
+  };
 
   componentWillMount() {
     this.setState({ labelFloat: Boolean(this.props.value) });
@@ -64,14 +64,8 @@ class Input extends Component<PropsType, StateType> {
   };
 
   renderInput() {
-    const {
-      onChange,
-      inputRef,
-      isAutocomplete,
-      id,
-      value,
-    } = this.props;
-    return (isAutocomplete ?
+    const { onChange, inputRef, isAutocomplete, id, value } = this.props;
+    return isAutocomplete ? (
       <input
         id={id}
         name={id}
@@ -84,7 +78,8 @@ class Input extends Component<PropsType, StateType> {
         onKeyDown={this.props.onKeyDown}
         onClick={this.props.onClick}
         data-test={id}
-      /> :
+      />
+    ) : (
       <input
         id={id}
         name={id}
@@ -99,61 +94,50 @@ class Input extends Component<PropsType, StateType> {
   }
 
   render() {
-    const {
-      id,
-      value,
-      label,
-      errors,
-      icon,
-      isUrl,
-      limit,
-    } = this.props;
-    const {
-      labelFloat,
-      isFocus,
-    } = this.state;
+    const { id, value, label, errors, icon, isUrl, limit } = this.props;
+    const { labelFloat, isFocus } = this.state;
     return (
       <label
         htmlFor={id}
-        styleName={classNames(
-          'container',
-          {
-            isError: errors,
-            isFocus,
-            isIcon: icon,
-          },
-        )}
+        styleName={classNames('container', {
+          isError: errors,
+          isFocus,
+          isIcon: icon,
+        })}
       >
-        {label &&
-          <span styleName={classNames('label', { labelFloat })}>
-            {label}
-          </span>
-        }
-        {icon &&
+        {label && (
+          <span styleName={classNames('label', { labelFloat })}>{label}</span>
+        )}
+        {icon && (
           <div styleName="icon">
             <Icon type={icon} />
           </div>
-        }
+        )}
         <div styleName="input">
           {this.renderInput()}
           <hr />
         </div>
-        {errors && errors.length > 0 &&
-          <div styleName="errors">
-            {errors.map((item, idx) => (
-              <div key={/* eslint-disable */idx/* eslint-enable */}>{item}</div>
-            ))}
-          </div>
-        }
-        {(isFocus && !isUrl && limit) &&
-          <div styleName={classNames(
-              'valueLength',
-              { maxValueLength: value && value.length === limit },
-            )}
-          >
-            {value ? value.length : 0} / {limit}
-          </div>
-        }
+        {errors &&
+          errors.length > 0 && (
+            <div styleName="errors">
+              {errors.map((item, idx) => (
+                <div key={/* eslint-disable */ idx /* eslint-enable */}>
+                  {item}
+                </div>
+              ))}
+            </div>
+          )}
+        {isFocus &&
+          !isUrl &&
+          limit && (
+            <div
+              styleName={classNames('valueLength', {
+                maxValueLength: value && value.length === limit,
+              })}
+            >
+              {value ? value.length : 0} / {limit}
+            </div>
+          )}
       </label>
     );
   }

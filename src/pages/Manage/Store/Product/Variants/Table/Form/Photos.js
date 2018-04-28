@@ -40,23 +40,18 @@ class Photos extends PureComponent<PropsType> {
             dataTest="productPhotosUploader"
           />
         </div>
-        {items && items.length > 0 &&
-        <Fragment>
-          {items.map(item => (
-            <div
-              key={item}
-              styleName="item"
-            >
-              <div styleName="itemWrap">
-                <img
-                  src={item}
-                  alt="img"
-                />
-              </div>
-            </div>
-          ))}
-        </Fragment>
-        }
+        {items &&
+          items.length > 0 && (
+            <Fragment>
+              {items.map(item => (
+                <div key={item} styleName="item">
+                  <div styleName="itemWrap">
+                    <img src={item} alt="img" />
+                  </div>
+                </div>
+              ))}
+            </Fragment>
+          )}
       </div>
     );
   }

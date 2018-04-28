@@ -14,7 +14,11 @@ class ProgressBar extends PureComponent {
     const { message, percentage, max, qualityClass } = this.props;
     return (
       <div className="progressBarWrapper">
-        <progress className={`progressBar ${qualityClass}`} max={max} value={percentage} />
+        <progress
+          className={`progressBar ${qualityClass}`}
+          max={max}
+          value={percentage}
+        />
         <span className={`progressBarMessage ${qualityClass}`}>{message}</span>
       </div>
     );

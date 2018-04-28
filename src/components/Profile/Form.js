@@ -12,12 +12,12 @@ import './Form.scss';
 type PropsType = {
   onSaveClick: Function,
   profileData: {},
-  errors: ?{}
+  errors: ?{},
 };
 
 type StateType = {
   form: {
-    [key: string]: ?any
+    [key: string]: ?any,
   },
 };
 
@@ -86,14 +86,17 @@ class Form extends Component<PropsType, StateType> {
         <RadioGroup
           id="gender"
           label="Gender"
-          items={['MALE', 'FEMALE', 'UNDEFINED'].map(val => ({ id: val, value: val }))}
+          items={['MALE', 'FEMALE', 'UNDEFINED'].map(val => ({
+            id: val,
+            value: val,
+          }))}
           checked={this.state.form.gender}
           onChange={this.handleInputChange('gender')}
           errors={errors.gender}
         />
         <br />
         <DatePicker
-          onChange={(e:any) => {
+          onChange={(e: any) => {
             this.handleInputChange('birthdate')(e.toDate().toISOString());
             this.handleInputChange('birthdateRaw')(e);
           }}
@@ -108,10 +111,7 @@ class Form extends Component<PropsType, StateType> {
           onChange={this.handleInputChange('isActive')}
           errors={errors.isActive}
         />
-        <Button
-          onClick={this.handleClick}
-          dataTest="profileSaveButton"
-        >
+        <Button onClick={this.handleClick} dataTest="profileSaveButton">
           Save
         </Button>
       </div>

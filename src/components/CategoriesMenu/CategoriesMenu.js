@@ -18,7 +18,7 @@ type PropsType = {
     }>,
     children?: Array<any>,
   }>,
-}
+};
 
 type StateType = {
   active: ?string,
@@ -53,7 +53,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
   onMouseOutTimer: TimeoutID;
   onMouseMoveTimer: TimeoutID;
 
-  onMouseOver = (e) => {
+  onMouseOver = e => {
     const { id } = e.currentTarget;
     const { active } = this.state;
     if (this.onMouseOutTimer) { clearTimeout(this.onMouseOutTimer); }
@@ -76,7 +76,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     }
   }
 
-  onMouseOverMid = (e) => {
+  onMouseOverMid = e => {
     const { id } = e.currentTarget;
     const { rightMouseDirection } = this.state;
     if (rightMouseDirection) {
@@ -90,7 +90,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     this.setState(() => ({ activeMidGhost: null }));
   }
 
-  onMouseMove = (e) => {
+  onMouseMove = e => {
     const { pageX } = e;
     const { activeMidGhost } = this.state;
 
@@ -115,18 +115,19 @@ class CategoriesMenu extends Component<PropsType, StateType> {
   renderMenu(categories: any, isRoot: ?boolean) {
     const { active, activeMid } = this.state;
     const lang = 'EN';
-    return categories.map((category) => {
+    return categories.map(category => {
       const { rawId } = category;
       const categoryChildren = category.children;
       const name = find(propEq('lang', lang))(category.name);
       const renderInnerLink = () => (
         <Fragment>
           <span styleName="text">{name.text}</span>
-          {categoryChildren && !isRoot &&
-            <span styleName="icon">
-              <Icon type="arrowRight" />
-            </span>
-          }
+          {categoryChildren &&
+            !isRoot && (
+              <span styleName="icon">
+                <Icon type="arrowRight" />
+              </span>
+            )}
         </Fragment>
       );
       return (
@@ -158,12 +159,13 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             {renderInnerLink()}
           </Link>
           {categoryChildren &&
-            <div styleName="items" onMouseMove={this.onMouseMove}>
+            <div
+              styleName="items"
+              onMouseMove={this.onMouseMove}
+            >
               <div styleName="itemsWrap">
                 <div styleName="title">{name.text}</div>
-                <ul>
-                  {this.renderMenu(categoryChildren)}
-                </ul>
+                <ul>{this.renderMenu(categoryChildren)}</ul>
               </div>
             </div>
           }
@@ -176,22 +178,12 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="rootItem rootButtonItem">
-          <Link
-            styleName="button"
-            to="/"
-            data-test="allCategoriesLink"
-          >
-            <Icon
-              inline
-              type="cats"
-              size="24"
-            />
+          <Link styleName="button" to="/" data-test="allCategoriesLink">
+            <Icon inline type="cats" size="24" />
             <span styleName="buttonText">All</span>
           </Link>
         </div>
-        <ul styleName="root">
-          { this.renderMenu(this.props.categories, true) }
-        </ul>
+        <ul styleName="root">{this.renderMenu(this.props.categories, true)}</ul>
       </div>
     );
   }

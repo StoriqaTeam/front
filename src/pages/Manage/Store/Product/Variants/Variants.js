@@ -26,11 +26,7 @@ class Variants extends Component<PropsType, StateType> {
   };
 
   handleSave = (variant: { [string]: any }) => {
-    const {
-      price,
-      vendorCode,
-      cashback,
-    } = variant;
+    const { price, vendorCode, cashback } = variant;
 
     const { environment } = this.context;
 

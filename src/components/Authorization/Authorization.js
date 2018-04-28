@@ -33,7 +33,7 @@ type StateType = {
   errors: ?Array<string>,
   isLoad: boolean,
   isSignUp: ?boolean,
-}
+};
 
 class Authorization extends Component<PropsType, StateType> {
   state: StateType = {
@@ -158,7 +158,9 @@ class Authorization extends Component<PropsType, StateType> {
    */
   handleChange = (data: { name: string, value: any, validity: boolean }) => {
     const { name, value, validity } = data;
-    this.setState({ [name]: value, [`${name}Valid`]: validity }, () => this.validateForm());
+    this.setState({ [name]: value, [`${name}Valid`]: validity }, () =>
+      this.validateForm(),
+    );
   };
 
   /**
@@ -166,15 +168,12 @@ class Authorization extends Component<PropsType, StateType> {
    * @return {void}
    */
   validateForm = () => {
-    const {
-      usernameValid,
-      emailValid,
-      passwordValid,
-      isSignUp,
-    } = this.state;
+    const { usernameValid, emailValid, passwordValid, isSignUp } = this.state;
 
     if (isSignUp) {
-      this.setState({ formValid: usernameValid && emailValid && passwordValid });
+      this.setState({
+        formValid: usernameValid && emailValid && passwordValid,
+      });
     } else {
       this.setState({ formValid: emailValid && passwordValid });
     }
@@ -199,7 +198,7 @@ class Authorization extends Component<PropsType, StateType> {
         this.handleLoginClick();
       }
     }
-  }
+  };
 
   render() {
     const { alone } = this.props;
@@ -226,7 +225,7 @@ class Authorization extends Component<PropsType, StateType> {
             alone={alone}
             handleToggle={this.handleToggle}
           />
-          {isSignUp ?
+          {isSignUp ? (
             <SignUp
               username={username}
               email={email}
@@ -235,7 +234,8 @@ class Authorization extends Component<PropsType, StateType> {
               formValid={formValid}
               handleRegistrationClick={this.handleRegistrationClick}
               handleChange={this.handleChange}
-            /> :
+            />
+          ) : (
             <SignIn
               email={email}
               password={password}
@@ -244,7 +244,7 @@ class Authorization extends Component<PropsType, StateType> {
               handleLoginClick={this.handleLoginClick}
               handleChange={this.handleChange}
             />
-          }
+          )}
           <div className="separatorBlock">
             <Separator text="or" />
           </div>

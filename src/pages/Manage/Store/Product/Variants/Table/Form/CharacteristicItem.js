@@ -1,7 +1,17 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { assoc, pathOr, map, propEq, addIndex, findIndex, filter, complement, isNil } from 'ramda';
+import {
+  assoc,
+  pathOr,
+  map,
+  propEq,
+  addIndex,
+  findIndex,
+  filter,
+  complement,
+  isNil,
+} from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { Select } from 'components/common/Select';
@@ -18,7 +28,11 @@ type PropsType = {
 class CharacteristicItem extends PureComponent<PropsType> {
   getSelectItems = (attribute: {}) => {
     const values = pathOr(null, ['metaField', 'values'], attribute);
-    const translatedValues = pathOr(null, ['metaField', 'translatedValues'], attribute);
+    const translatedValues = pathOr(
+      null,
+      ['metaField', 'translatedValues'],
+      attribute,
+    );
     const mapIndexed = addIndex(map);
 
     if (values) {
@@ -61,7 +75,10 @@ class CharacteristicItem extends PureComponent<PropsType> {
       return null;
     }
     const items = this.getSelectItems(attribute);
-    const selectedItem = { id: `${findIndex(propEq('label', value.value), items)}`, label: value.value };
+    const selectedItem = {
+      id: `${findIndex(propEq('label', value.value), items)}`,
+      label: value.value,
+    };
     const { metaField: characteristicImg } = this.props.value;
     const name = pathOr('', ['name', 0, 'text'], attribute);
     return (

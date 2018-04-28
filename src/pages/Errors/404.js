@@ -35,7 +35,8 @@ class Error404 extends PureComponent<PropsType> {
             <span styleName="code404">404</span>
           </div>
           <div styleName="text">
-            {'Oops! Seems that the page you searching doesn\'t exist.'}<br />
+            {"Oops! Seems that the page you searching doesn't exist."}
+            <br />
             Try to start again from main page or use search tool.
           </div>
           <div styleName="button">

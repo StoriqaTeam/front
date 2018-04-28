@@ -20,7 +20,6 @@ type PropsType = {
   dataTest: string,
 };
 
-
 // TODO: refactor for avoid use style props
 
 const UploadWrapper = ({
@@ -42,20 +41,19 @@ const UploadWrapper = ({
         style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
         data-test={dataTest}
       >
-        {(buttonIconType && !overPicture && <Icon type={buttonIconType} size={32} />)}
-        {!overPicture && <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>}
-        {overPicture &&
+        {buttonIconType &&
+          !overPicture && <Icon type={buttonIconType} size={32} />}
+        {!overPicture && (
+          <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
+        )}
+        {overPicture && (
           <div
             styleName="overPictureWrap"
             style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
           >
-            <img
-              styleName="overPicture"
-              src={overPicture}
-              alt="img"
-            />
+            <img styleName="overPicture" src={overPicture} alt="img" />
           </div>
-        }
+        )}
       </label>
       <input
         style={{ display: 'none' }}
@@ -65,9 +63,7 @@ const UploadWrapper = ({
       />
     </div>
     <div styleName="childrenConainer">
-      <div styleName="upoloadChildren">
-        {children}
-      </div>
+      <div styleName="upoloadChildren">{children}</div>
     </div>
   </div>
 );

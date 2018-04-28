@@ -49,25 +49,23 @@ class Menu extends PureComponent<PropsType, StateType> {
             dataTest="storeImgUploader"
           />
         </div>
-        {storeName && (
-          <div styleName="title">
-            {storeName}
-          </div>
-        )}
+        {storeName && <div styleName="title">{storeName}</div>}
         <div styleName="items">
-          {menuItems.map((item) => {
+          {menuItems.map(item => {
             const isActive = item.id === activeItem;
 
             return (
               <div
                 key={item.id}
                 styleName={classNames('item', { isActive })}
-                onClick={() => { this.props.switchMenu(item.id); }}
+                onClick={() => {
+                  this.props.switchMenu(item.id);
+                }}
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
               >
-                { item.title }
+                {item.title}
               </div>
             );
           })}

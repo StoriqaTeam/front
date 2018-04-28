@@ -19,15 +19,19 @@ const mutation = graphql`
 export type VerifyEmailMutationParamsType = {
   variables: VerifyEmailMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?VerifyEmailMutationResponse, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?VerifyEmailMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: VerifyEmailMutationParamsType) => commitMutation(params.environment, {
-  mutation,
-  variables: params.variables,
-  onCompleted: params.onCompleted,
-  onError: params.onError,
-});
+const commit = (params: VerifyEmailMutationParamsType) =>
+  commitMutation(params.environment, {
+    mutation,
+    variables: params.variables,
+    onCompleted: params.onCompleted,
+    onError: params.onError,
+  });
 
 export default { commit };

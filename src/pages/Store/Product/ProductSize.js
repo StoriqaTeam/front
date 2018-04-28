@@ -5,21 +5,19 @@ import { map, addIndex, isNil, propEq } from 'ramda';
 
 import './ProductSize.scss';
 
-import {
-  SelectedType,
-} from './types';
+import { SelectedType } from './types';
 
 type PropsType = {
   // eslint-disable-next-line
   isReset: boolean,
   title: string,
-  sizes: Array<{id: string, label: string, opacity: boolean, img?: string}>,
+  sizes: Array<{ id: string, label: string, opacity: boolean, img?: string }>,
   onClick: Function,
-}
+};
 
 type StateType = {
-  selected: null | number
-}
+  selected: null | number,
+};
 
 class ProductSize extends PureComponent<PropsType, StateType> {
   /**
@@ -28,7 +26,10 @@ class ProductSize extends PureComponent<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
     const { isReset } = nextProps;
     if (isReset) {
       return {
@@ -48,9 +49,12 @@ class ProductSize extends PureComponent<PropsType, StateType> {
    */
   handleClick = (index: number, selected: SelectedType): void => {
     const { onClick } = this.props;
-    this.setState({
-      selected: index,
-    }, () => onClick(selected));
+    this.setState(
+      {
+        selected: index,
+      },
+      () => onClick(selected),
+    );
   };
   render() {
     const { title, sizes } = this.props;
@@ -58,9 +62,7 @@ class ProductSize extends PureComponent<PropsType, StateType> {
     const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
-        <h4>
-          { title }
-        </h4>
+        <h4>{title}</h4>
         <div styleName="sizes">
           {mapIndexed((size, index, arr) => {
             const isntOpacity = propEq('opacity', false);
@@ -70,10 +72,14 @@ class ProductSize extends PureComponent<PropsType, StateType> {
               <button
                 key={size.id}
                 onClick={() => this.handleClick(index, size)}
-                styleName={`size ${selected === index && !size.opacity ? 'clicked' : ''} ${size.opacity ? 'opaque' : ''}`}
+                styleName={`size ${
+                  selected === index && !size.opacity ? 'clicked' : ''
+                } ${size.opacity ? 'opaque' : ''}`}
               >
-                { size.label }
-                { !opacities && isNil(selected) && separator() ? <span styleName="separator" /> : null }
+                {size.label}
+                {!opacities && isNil(selected) && separator() ? (
+                  <span styleName="separator" />
+                ) : null}
               </button>
             );
           }, sizes)}

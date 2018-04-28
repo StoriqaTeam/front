@@ -4,9 +4,7 @@ import React, { Component } from 'react';
 
 import { isNil } from 'ramda';
 
-import {
-  WidgetsType,
-} from './types';
+import { WidgetsType } from './types';
 
 import {
   ProductPrice,
@@ -21,20 +19,20 @@ type WidgetValueType = {
   id: string,
   label: string,
   img?: string,
-}
+};
 
 type PropsType = {
   widgets: WidgetsType,
   productTitle: string,
   productDescription: string,
   onWidgetClick: Function,
-}
+};
 
 type StateType = {
   resetCHECKBOX: boolean,
   resetCOMBOBOX: boolean,
   resetCOLOR_PICKER: boolean,
-}
+};
 
 class ProductDetails extends Component<PropsType, StateType> {
   state = {
@@ -57,26 +55,24 @@ class ProductDetails extends Component<PropsType, StateType> {
    * @param {string} widget.uiElement
    * @return {void}
    */
-  handleWidget = (selected: WidgetValueType, { uiElement }: WidgetsType): void => {
+  handleWidget = (
+    selected: WidgetValueType,
+    { uiElement }: WidgetsType,
+  ): void => {
     const { onWidgetClick } = this.props;
-    this.setState({
-      ...this.resetOthers(uiElement),
-    }, () => onWidgetClick(selected));
+    this.setState(
+      {
+        ...this.resetOthers(uiElement),
+      },
+      () => onWidgetClick(selected),
+    );
   };
   render() {
-    const {
-      resetCHECKBOX,
-      resetCOMBOBOX,
-      resetCOLOR_PICKER,
-    } = this.state;
+    const { resetCHECKBOX, resetCOMBOBOX, resetCOLOR_PICKER } = this.state;
     const {
       productTitle,
       productDescription,
-      widgets: {
-        CHECKBOX,
-        COMBOBOX,
-        COLOR_PICKER,
-      },
+      widgets: { CHECKBOX, COMBOBOX, COLOR_PICKER },
     } = this.props;
     return (
       <div styleName="container">
@@ -86,9 +82,7 @@ class ProductDetails extends Component<PropsType, StateType> {
           currentPrice="0.000123"
           percentage="12"
         />
-        <p>
-          {productDescription}
-        </p>
+        <p>{productDescription}</p>
         {/* eslint-disable camelcase */}
         {!isNil(CHECKBOX) ? (
           <ProductSize

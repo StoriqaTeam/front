@@ -16,9 +16,14 @@ function isCapsLockOn(evt: SyntheticEvent) {
  * @param {String} errorMessage = ''
  * @return {string}
  */
-function setErrorMessage(value, validModel, message = 'Invalid', errorMessage = '') {
+function setErrorMessage(
+  value,
+  validModel,
+  message = 'Invalid',
+  errorMessage = '',
+) {
   // check for enabling custom error message.
-  const error = (errorMessage !== '') ? errorMessage : message;
+  const error = errorMessage !== '' ? errorMessage : message;
   let formError = '';
   formError = validModel ? '' : ` ${error}`;
   // fallback
@@ -79,17 +84,32 @@ function validateField(name, value, validate, errorMessage) {
       break;
     case 'number':
       validModel = validateNumber(value);
-      formError = setErrorMessage(value, validModel, 'Only numbers', errorMessage);
+      formError = setErrorMessage(
+        value,
+        validModel,
+        'Only numbers',
+        errorMessage,
+      );
       break;
     case 'email':
       validModel = validateEmail(value);
-      formError = setErrorMessage(value, validModel, 'Invalid Email', errorMessage);
+      formError = setErrorMessage(
+        value,
+        validModel,
+        'Invalid Email',
+        errorMessage,
+      );
       break;
     case 'password':
       passwordQualityResult = passwordQuality(value);
       // check that every value is true.
       validModel = Object.values(passwordQualityResult).every(p => p === true);
-      formError = setErrorMessage(value, validModel, 'Invalid Password', errorMessage);
+      formError = setErrorMessage(
+        value,
+        validModel,
+        'Invalid Password',
+        errorMessage,
+      );
       break;
     default:
       break;

@@ -42,14 +42,21 @@ class VerifyEmail extends Component<PropsType, StateType> {
         },
       },
       environment: this.context.environment,
-      onCompleted: (response: ?VerifyEmailMutationResponse, errors: ?Array<Error>) => {
+      onCompleted: (
+        response: ?VerifyEmailMutationResponse,
+        errors: ?Array<Error>,
+      ) => {
         log.debug({ response, errors });
         this.setState({ isTokenResponseAlreadyHandled: true });
         if (response && response.verifyEmail && response.verifyEmail.success) {
           alert('Verified successfully. Please login with your login data.'); // eslint-disable-line
           this.props.router.replace('/');
         } else if (errors && errors.length > 0) {
-          const errorMessage = pathOr(null, [0, 'data', 'details', 'message'], errors);
+          const errorMessage = pathOr(
+            null,
+            [0, 'data', 'details', 'message'],
+            errors,
+          );
           log.debug({ errorMessage });
           alert(errorMessage || 'Something going wrong'); // eslint-disable-line
           this.props.router.replace('/');
@@ -74,7 +81,9 @@ class VerifyEmail extends Component<PropsType, StateType> {
           <div styleName="logo">
             <Logo />
           </div>
-          <span styleName="text">Loading...<br />Please wait.</span>
+          <span styleName="text">
+            Loading...<br />Please wait.
+          </span>
           <span styleName="description">- Storiqa team</span>
           <div styleName="spinner">
             <div styleName="double-bounce1" />

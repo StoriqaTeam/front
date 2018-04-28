@@ -13,7 +13,7 @@ type PropsTypes = {
   contentRef: Function,
   children: Node,
   isContentOpen: boolean,
-  withIcon: boolean | void
+  withIcon: boolean | void,
 };
 
 class Dropdown extends Component<PropsTypes> {
@@ -21,10 +21,8 @@ class Dropdown extends Component<PropsTypes> {
     const { withIcon } = this.props;
 
     return (
-      <div
-        styleName="container"
-      >
-        {Children.map(this.props.children, (child) => {
+      <div styleName="container">
+        {Children.map(this.props.children, child => {
           if (child.type === 'trigger') {
             return (
               <div

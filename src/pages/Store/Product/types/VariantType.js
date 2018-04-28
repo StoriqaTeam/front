@@ -5,6 +5,6 @@ type VariantType = {
   photoMain: string | null,
   additionalPhotos: Array<string> | null,
   attributes: Array<AttributeValueType>,
-}
+};
 
 export default VariantType;

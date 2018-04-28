@@ -98,10 +98,7 @@ class Header extends PureComponent<PropsType> {
                 </div>
               </div>
               <div styleName="bottom">
-                <Link
-                  to="/"
-                  data-test="logoLink"
-                >
+                <Link to="/" data-test="logoLink">
                   <Icon type="logo" />
                 </Link>
                 <div styleName="searchInput">
@@ -121,7 +118,11 @@ class Header extends PureComponent<PropsType> {
                 </div>
                 <div styleName="buttonWrapper">
                   <Button
-                    href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}
+                    href={
+                      process.env.REACT_APP_HOST
+                        ? `${process.env.REACT_APP_HOST}/manage/store/new`
+                        : '/'
+                    }
                     dataTest="headerStartSellingButton"
                   >
                     Start selling

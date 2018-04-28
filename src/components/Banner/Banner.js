@@ -14,21 +14,15 @@ type PropsTypes = {
     img: string,
     link: string,
   },
-}
+};
 
 class Banner extends PureComponent<PropsTypes> {
   render() {
     const { item } = this.props;
     return (
-      <div
-        styleName="container"
-        target="_blank"
-      >
+      <div styleName="container" target="_blank">
         <div styleName="wrap">
-          <ImageLoader
-            src={item.img}
-            loader={<BannerLoading />}
-          />
+          <ImageLoader src={item.img} loader={<BannerLoading />} />
         </div>
       </div>
     );

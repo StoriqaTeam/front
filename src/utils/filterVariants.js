@@ -2,10 +2,7 @@
 
 import { filter, any, propEq, prop, compose } from 'ramda';
 
-import {
-  VariantType,
-  WidgetsType,
-} from '../pages/Store/Product/types';
+import { VariantType, WidgetsType } from '../pages/Store/Product/types';
 
 import { buildWidgets } from './index';
 /**
@@ -14,7 +11,10 @@ import { buildWidgets } from './index';
  * @param {string} value
  * @return {[]}
  */
-export default function filterVariants(variants: VariantType, value: string): WidgetsType {
+export default function filterVariants(
+  variants: VariantType,
+  value: string,
+): WidgetsType {
   let filtered = [];
   if (value !== undefined) {
     const hasValue = any(propEq('value', value));

@@ -10,27 +10,21 @@ type PropsType = {
   currentPrice: string,
   percentage: string,
   buttonText?: string,
-}
+};
 
 const ProductPrice = (props: PropsType) => {
-  const {
-    currency,
-    lastPrice,
-    currentPrice,
-    percentage,
-    buttonText,
-  } = props;
+  const { currency, lastPrice, currentPrice, percentage, buttonText } = props;
   return (
     <div styleName="container">
       <span styleName="lasPrice">
-        { lastPrice } { currency }
+        {lastPrice} {currency}
       </span>
       <div styleName="stq">
         <span styleName="currentPrice">
-          { currentPrice } { currency }
+          {currentPrice} {currency}
         </span>
         <button>
-          { buttonText } {`${percentage}%`}
+          {buttonText} {`${percentage}%`}
         </button>
       </div>
     </div>

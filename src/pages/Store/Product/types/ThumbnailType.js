@@ -3,7 +3,7 @@ type ThumbnailType = {
   img: string,
   alt?: string,
   opacity: boolean,
-  label?: string
+  label?: string,
 };
 
 export default ThumbnailType;
