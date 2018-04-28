@@ -69,12 +69,17 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const wrapAsync = (fn) => (req, res, next) => {
-  // Make sure to `.catch()` any errors and pass them along to the `next()`
-  // middleware in the chain, in this case the error handler.
-  fn(req, res, next).catch(e => {
+  try {
+    // Make sure to `.catch()` any errors and pass them along to the `next()`
+    // middleware in the chain, in this case the error handler.
+    fn(req, res, next).catch(e => {
+      console.log(e);
+      res.redirect('/error');
+    });
+  } catch (e) {
     console.log(e);
     res.redirect('/error');
-  });
+  }
 };
 
 app.use(wrapAsync(async (req, res) => {
