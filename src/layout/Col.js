@@ -8,7 +8,7 @@ import './Col.scss';
 type PropsTypes = {
   children: any,
   size: number,
-}
+};
 
 class Col extends PureComponent<PropsTypes> {
   render() {
@@ -16,7 +16,7 @@ class Col extends PureComponent<PropsTypes> {
 
     return (
       <div styleName={classNames('col', { [`col-${size}`]: size })}>
-        { this.props.children }
+        {this.props.children}
       </div>
     );
   }

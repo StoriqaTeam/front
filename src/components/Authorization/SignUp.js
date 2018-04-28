@@ -16,7 +16,7 @@ type PropsType = {
   formValid: boolean,
   handleRegistrationClick: Function,
   handleChange: Function,
-}
+};
 
 class SignUp extends PureComponent<PropsType> {
   render() {
@@ -34,6 +34,7 @@ class SignUp extends PureComponent<PropsType> {
       <div styleName="signUp">
         <div styleName="inputBlock">
           <Input
+            thisFocus
             label="Username"
             name="username"
             type="text"
@@ -64,18 +65,29 @@ class SignUp extends PureComponent<PropsType> {
             errors={propOr(null, 'password', errors)}
           />
         </div>
-        {formValid &&
+        {formValid && (
           <div styleName="signUpGroup">
             <div styleName="signUpButton">
-              <Button onClick={handleRegistrationClick}>
+              <Button
+                onClick={handleRegistrationClick}
+                type="button"
+                dataTest="signUpButton"
+              >
                 <span>Sign Up</span>
               </Button>
             </div>
             <div styleName="policy">
-              By clicking this button, you agree to Storiqa’s <a href="/" styleName="link">Anti-spam Policy</a> & <a href="/" styleName="link">Terms of Use</a>.
+              By clicking this button, you agree to Storiqa’s{' '}
+              <a href="/" styleName="link">
+                Anti-spam Policy
+              </a>{' '}
+              &{' '}
+              <a href="/" styleName="link">
+                Terms of Use
+              </a>.
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }

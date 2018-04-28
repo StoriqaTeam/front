@@ -1,13 +1,21 @@
 // @flow
 
-import { map, pathOr, pipe, prop, fromPairs, toString, mapObjIndexed } from 'ramda';
+import {
+  map,
+  pathOr,
+  pipe,
+  prop,
+  fromPairs,
+  toString,
+  mapObjIndexed,
+} from 'ramda';
 
 /*
   see test
 */
 export default pipe(
-  pathOr([], ['source', 'errors']),
-  map((item) => {
+  pathOr([], ['source', 'erro rs']),
+  map(item => {
     const error = prop('data', item);
     const code = prop('code', error);
 
@@ -27,8 +35,9 @@ export default pipe(
 
     const messages = {};
     try {
-      const prependKeyAndDouble = (item, key, obj) => {// eslint-disable-line
-        messages[key] = map(i => i.message, item);
+      const prependKeyAndDouble = (val, key) => {
+        // eslint-disable-line
+        messages[key] = map(i => i.message, val);
       };
       mapObjIndexed(prependKeyAndDouble, messagesData);
     } catch (e) {

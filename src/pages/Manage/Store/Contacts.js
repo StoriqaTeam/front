@@ -25,7 +25,7 @@ type InputType = {
   label: string,
   icon?: string,
   limit?: number,
-}
+};
 /* eslint-enable */
 
 type PropsType = {
@@ -66,14 +66,17 @@ class Contacts extends Component<PropsType, StateType> {
   componentWillMount() {
     const store = pathOr({}, ['me', 'store'], this.props);
     this.setState({
-      form: pick([
-        'email',
-        'phone',
-        'address',
-        'facebookUrl',
-        'instagramUrl',
-        'twitterUrl',
-      ], store),
+      form: pick(
+        [
+          'email',
+          'phone',
+          'address',
+          'facebookUrl',
+          'instagramUrl',
+          'twitterUrl',
+        ],
+        store,
+      ),
     });
   }
 
@@ -91,24 +94,19 @@ class Contacts extends Component<PropsType, StateType> {
         ...form,
       },
     });
-  }
+  };
 
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
-    const { me: { store } } = this.props;
+    const {
+      me: { store },
+    } = this.props;
     if (!currentUser || !currentUser.rawId) {
       return;
     }
 
     const {
-      form: {
-        email,
-        phone,
-        address,
-        facebookUrl,
-        twitterUrl,
-        instagramUrl,
-      },
+      form: { email, phone, address, facebookUrl, twitterUrl, instagramUrl },
     } = this.state;
     this.setState({ formErrors: {}, isLoading: true });
 
@@ -165,17 +163,12 @@ class Contacts extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 
   // TODO: extract to helper
-  renderInput = ({
-    id,
-    label,
-    icon,
-    limit,
-  }: InputType) => (
+  renderInput = ({ id, label, icon, limit }: InputType) => (
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -196,10 +189,7 @@ class Contacts extends Component<PropsType, StateType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu
-              activeItem={activeItem}
-              switchMenu={this.switchMenu}
-            />
+            <Menu activeItem={activeItem} switchMenu={this.switchMenu} />
           </Col>
           <Col size={10}>
             <div styleName="container">
@@ -207,9 +197,21 @@ class Contacts extends Component<PropsType, StateType> {
               <div styleName="form">
                 {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
                 {this.renderInput({ id: 'phone', label: 'Phone' })}
-                {this.renderInput({ id: 'facebookUrl', label: 'Facebook', icon: 'facebook' })}
-                {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
-                {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
+                {this.renderInput({
+                  id: 'facebookUrl',
+                  label: 'Facebook',
+                  icon: 'facebook',
+                })}
+                {this.renderInput({
+                  id: 'instagramUrl',
+                  label: 'Instagram',
+                  icon: 'instagram',
+                })}
+                {this.renderInput({
+                  id: 'twitterUrl',
+                  label: 'Twitter',
+                  icon: 'twitter',
+                })}
                 <div styleName="formItem">
                   <AddressForm
                     onChangeFormInput={this.handleInputChange}
@@ -242,7 +244,7 @@ export default createFragmentContainer(
   Page(Contacts),
   graphql`
     fragment Contacts_me on User
-    @argumentDefinitions(storeId: { type: "Int!" }) {
+      @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         id
         rawId

@@ -18,7 +18,7 @@ type VariantType = {
   photoMain: string,
   cashback: number,
   price: number,
-}
+};
 
 type PropsTypes = {
   item: {
@@ -30,45 +30,30 @@ type PropsTypes = {
       text: string,
     }>,
     variants: Array<VariantType>,
-  }
-}
+  },
+};
 
 class CardProduct extends PureComponent<PropsTypes> {
   render() {
     const {
-      item: {
-        rawId,
-        storeId,
-        name,
-        variants,
-        currencyId,
-      },
+      item: { rawId, storeId, name, variants, currencyId },
     } = this.props;
-    if (!storeId || !rawId || !currencyId || !variants || variants.length === 0) return null;
-    const {
-      discount,
-      photoMain,
-      cashback,
-      price,
-    } = head(variants);
+    if (!storeId || !rawId || !currencyId || !variants || variants.length === 0)
+      return null;
+    const { discount, photoMain, cashback, price } = head(variants);
     const lang = 'EN';
     const productLink = `/store/${storeId}/products/${rawId}`;
     const discountedPrice = price * (1 - discount);
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
     return (
       <div styleName="container">
-        <Link
-          to={productLink}
-          styleName="body"
-        >
+        <Link to={productLink} styleName="body" data-test={rawId}>
           <div styleName="top">
-            {!photoMain ?
-              <Icon type="camera" size="40" /> :
-              <ImageLoader
-                src={photoMain}
-                loader={<BannerLoading />}
-              />
-            }
+            {!photoMain ? (
+              <Icon type="camera" size="40" />
+            ) : (
+              <ImageLoader src={photoMain} loader={<BannerLoading />} />
+            )}
           </div>
           <div styleName="bottom">
             <div styleName="icon">
@@ -76,21 +61,21 @@ class CardProduct extends PureComponent<PropsTypes> {
             </div>
             {name && <div styleName="title">{getNameText(name, lang)}</div>}
             <div styleName="price">
-              {Boolean(discount) &&
+              {Boolean(discount) && (
                 <div styleName="undiscountedPrice">
                   {formatPrice(price)} STQ
                 </div>
-              }
-              {discountedPrice &&
+              )}
+              {discountedPrice && (
                 <div styleName="actualPrice">
                   <strong>{formatPrice(discountedPrice)} STQ</strong>
                 </div>
-              }
-              {cashbackValue &&
+              )}
+              {cashbackValue && (
                 <div styleName="cashbackWrap">
                   <div styleName="cashback">Cashback {`${cashbackValue}%`}</div>
                 </div>
-              }
+              )}
             </div>
           </div>
         </Link>

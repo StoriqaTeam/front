@@ -14,10 +14,7 @@ type PropsType = {
 const Header = (props: PropsType) => (
   <div styleName="header">
     <div styleName="headerItem tdCheckbox">
-      <Checkbox
-        id="id-header"
-        onChange={props.onSelectAllClick}
-      />
+      <Checkbox id="id-header" onChange={props.onSelectAllClick} />
     </div>
     <div styleName="headerItem tdArticle">
       <div styleName="headerItemWrap">

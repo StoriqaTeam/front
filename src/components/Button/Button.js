@@ -52,14 +52,20 @@ class Button extends PureComponent<PropsTypes> {
     });
 
     if (href) {
-      return (<a styleName={styleName} {...props}>{children}</a>);
+      return (
+        <a styleName={styleName} {...props}>
+          {children}
+        </a>
+      );
     }
-    return (<button
-      styleName={styleName}
-      disabled={disabled}
-      type="button"
-      {...props}
-    />);
+    return (
+      <button
+        styleName={styleName}
+        disabled={disabled}
+        type="button"
+        {...props}
+      />
+    );
   }
 }
 

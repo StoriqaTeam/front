@@ -13,7 +13,7 @@ import { extractText } from 'utils';
 
 import {
   VariantType,
-} from '../types/index';
+} from '../types';
 
 type WidgetValueType = {
   id: string,
@@ -48,7 +48,8 @@ function group(array: [], prop: string, type: string = 'object'): {} {
  * @return {string}
  */
 function setImage(image: string): string {
-  const defaultImage = 'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
+  const defaultImage =
+    'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
   return !isNil(image) && image.includes('http') ? image : defaultImage;
 }
 
@@ -70,52 +71,58 @@ function buildWidgetInterface(array: any[], images: []): Array<WidgetValueType> 
  * @param {Array<VariantType>} variants
  */
 function transformVariants(variants: Array<VariantType>) {
-  const results = variants.map((variant) => {
-    const {
-      id: variantId,
-      attributes,
-    } = variant;
-    return attributes.map(({
-      value,
-      metaField,
-      attribute: {
-        id,
-        name,
-        metaField: {
-          uiElement,
+  const results = variants.map(variant => {
+    const { id: variantId, attributes } = variant;
+    return attributes.map(
+      ({
+        value,
+        metaField,
+        attribute: {
+          id,
+          name,
+          metaField: { uiElement },
         },
-      },
-    }) => ({
-      id,
-      variantId,
-      value,
-      title: extractText(name),
-      image: setImage(metaField),
-      uiElement,
-    }));
+      }) => ({
+        id,
+        variantId,
+        value,
+        title: extractText(name),
+        image: setImage(metaField),
+        uiElement,
+      }),
+    );
   });
   return flatten(results);
 }
 
 function reduceGroup(widgetGroup) {
-  return reduce((accumulator, item) => {
-    // copy accumulator to avoid 'parameter-reassign'
-    const copy = { ...accumulator };
-    const values = filter(identity, [].concat(copy.values, item.value));
-    const valuesWithImages =
-      filter(identity, [].concat(copy.valuesWithImages, { label: item.value, img: item.image }));
-    copy.uiElement = item.uiElement;
-    copy.values = values;
-    const { title, variantId } = item;
-    const outputItem = {
-      variantId,
-      ...copy,
-      title,
-      values,
-      valuesWithImages,
-    };
-    return outputItem;
-  }, {}, widgetGroup);
+  return reduce(
+    (accumulator, item) => {
+      // copy accumulator to avoid 'parameter-reassign'
+      const copy = { ...accumulator };
+      const values = filter(identity, [].concat(copy.values, item.value));
+      const valuesWithImages = filter(
+        identity,
+        [].concat(copy.valuesWithImages, {
+          label: item.value,
+          img: item.image,
+        }),
+      );
+      copy.uiElement = item.uiElement;
+      copy.values = values;
+      const { title, variantId } = item;
+      const outputItem = {
+        variantId,
+        ...copy,
+        title,
+        values,
+        valuesWithImages,
+      };
+      return outputItem;
+    },
+    {},
+    widgetGroup,
+  );
 }
 
 export default function buildWidgets(variants: VariantType[]) {
@@ -126,7 +133,10 @@ export default function buildWidgets(variants: VariantType[]) {
     const reduced = reduceGroup(grouped[key]);
     acc[key] = {
       ...reduced,
-      values: buildWidgetInterface(uniq(reduced.values), reduced.valuesWithImages),
+      values: buildWidgetInterface(
+        uniq(reduced.values),
+        reduced.valuesWithImages,
+      ),
     };
     return acc;
   }, {});

@@ -48,10 +48,16 @@ class SearchInput extends Component<PropsType, StateType> {
     }
 
     const { searchCategories } = this.props;
-    const pathname = pathOr(null, ['match', 'location', 'pathname'], this.props);
+    const pathname = pathOr(
+      null,
+      ['match', 'location', 'pathname'],
+      this.props,
+    );
     const value = pathname.replace('/', '');
     if (value === 'stores') {
-      this.setState({ activeItem: find(propEq('id', 'stores'))(searchCategories) });
+      this.setState({
+        activeItem: find(propEq('id', 'stores'))(searchCategories),
+      });
     } else {
       this.setState({ activeItem: head(searchCategories) });
     }
@@ -65,11 +71,11 @@ class SearchInput extends Component<PropsType, StateType> {
 
   onFocus = () => {
     this.setState({ isFocus: true });
-  }
+  };
 
   onBlur = () => {
     this.setState({ isFocus: false });
-  }
+  };
 
   handleInputChange = (e: any) => {
     e.persist();
@@ -96,21 +102,27 @@ class SearchInput extends Component<PropsType, StateType> {
     const { inputValue, activeItem } = this.state;
     switch (activeItem.id) {
       case 'stores':
-        this.props.router.push(inputValue ? `/stores?search=${inputValue}` : '/stores');
+        this.props.router.push(
+          inputValue ? `/stores?search=${inputValue}` : '/stores',
+        );
         break;
       case 'products':
-        this.props.router.push(inputValue ? `/categories?search=${inputValue}` : '/categories?search=');
+        this.props.router.push(
+          inputValue
+            ? `/categories?search=${inputValue}`
+            : '/categories?search=',
+        );
         break;
       default:
         break;
     }
-  }
+  };
 
   handleKeydown = (e: any) => {
     if (e.keyCode === 13 && this.state.isFocus) {
       this.handleSearch();
     }
-  }
+  };
 
   render() {
     return (
@@ -121,6 +133,7 @@ class SearchInput extends Component<PropsType, StateType> {
             activeItem={this.state.activeItem}
             items={this.props.searchCategories || []}
             onSelect={this.handleSearchDropdownSelect}
+            dataTest="searchInputSelect"
           />
         </div>
         <div styleName="searchInput">
@@ -134,6 +147,7 @@ class SearchInput extends Component<PropsType, StateType> {
                   onFocus={this.onFocus}
                   onBlur={this.onBlur}
                   placeholder="I find..."
+                  data-test="searchInput"
                 />
               </div>
             )}
@@ -142,7 +156,9 @@ class SearchInput extends Component<PropsType, StateType> {
             renderItem={(item, isHighlighted) => (
               <div
                 key={item.id}
-                styleName={classNames('searchMenuItem', { highlighted: isHighlighted })}
+                styleName={classNames('searchMenuItem', {
+                  highlighted: isHighlighted,
+                })}
               >
                 {item.label}
               </div>
@@ -152,12 +168,12 @@ class SearchInput extends Component<PropsType, StateType> {
             open={false}
           />
         </div>
-        <button styleName="searchButton" onClick={this.handleSearch}>
-          <Icon
-            inline
-            type="magnifier"
-            size="16"
-          />
+        <button
+          styleName="searchButton"
+          onClick={this.handleSearch}
+          data-test="searchButton"
+        >
+          <Icon inline type="magnifier" size="16" />
         </button>
       </div>
     );

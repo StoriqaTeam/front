@@ -4,10 +4,7 @@ import React, { Component } from 'react';
 
 import './ProductThumbnails.scss';
 
-import {
-  SelectedType,
-  ThumbnailType,
-} from './types';
+import { SelectedType, ThumbnailType } from './types';
 
 type PropsType = {
   /* eslint-disable react/no-unused-prop-types */
@@ -17,11 +14,11 @@ type PropsType = {
   thumbnails: Array<ThumbnailType>,
   row?: boolean,
   onClick: Function,
-}
+};
 
 type StateType = {
   selected: null | number,
-}
+};
 
 class ProductThumbnails extends Component<PropsType, StateType> {
   static defaultProps = {
@@ -35,7 +32,10 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
     const { isReset, isFirstSelected } = nextProps;
     if (isReset) {
       return {
@@ -55,20 +55,19 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    */
   handleClick = (index: number, selected: SelectedType): void => {
     const { onClick } = this.props;
-    this.setState({
-      selected: index,
-    }, onClick(selected));
+    this.setState(
+      {
+        selected: index,
+      },
+      onClick(selected),
+    );
   };
   render() {
-    const {
-      thumbnails,
-      row,
-      title,
-    } = this.props;
+    const { thumbnails, row, title } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        { title !== '' ? (<h4>{ title }</h4>) : null }
+        {title !== '' ? <h4>{title}</h4> : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {thumbnails.map((thumbnail, index) => (
             <button
@@ -77,7 +76,9 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <figure>
                 <img
-                  styleName={`${selected === index && !thumbnail.opacity ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
+                  styleName={`${
+                    selected === index && !thumbnail.opacity ? 'clicked' : ''
+                  } ${thumbnail.opacity ? 'opaque' : ''}`}
                   src={thumbnail.img}
                   alt={thumbnail.alt || 'image alt'}
                 />

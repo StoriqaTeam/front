@@ -29,11 +29,7 @@ import {
   TabRow,
 } from './index';
 
-import {
-  ProductType,
-  SelectedType,
-  ThumbnailType,
-} from './types';
+import { ProductType, SelectedType, ThumbnailType } from './types';
 
 import './Product.scss';
 import mockData from './mockData.json';
@@ -43,11 +39,11 @@ type PropsType = {
 };
 
 type StateType = {
-  tabs: Array<{id: string | number, label: string, content: any}>,
+  tabs: Array<{ id: string | number, label: string, content: any }>,
   widgets: {},
   photoMain: string,
   additionalPhotos: Array<ThumbnailType>,
-}
+};
 
 class Product extends Component<PropsType, StateType> {
   /**
@@ -56,20 +52,18 @@ class Product extends Component<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
     const {
       baseProduct: {
-        variants: {
-          all,
-        },
+        variants: { all },
       },
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const {
-        photoMain,
-        additionalPhotos,
-      } = head(extractPhotos(all));
+      const { photoMain, additionalPhotos } = head(extractPhotos(all));
       return {
         tabs: prevState.tabs,
         widgets: buildWidgets(all),
@@ -84,7 +78,7 @@ class Product extends Component<PropsType, StateType> {
       {
         id: 0,
         label: 'Description',
-        content: (<TabRow row={mockData.row} />),
+        content: <TabRow row={mockData.row} />,
       },
     ],
     widgets: {},
@@ -96,7 +90,10 @@ class Product extends Component<PropsType, StateType> {
    * @param {Array<{id: string, img: string}>} photos
    * @return {ThumbnailType}
    */
-  insertPhotoMain = (img: string, photos: ThumbnailType): Array<ThumbnailType> => {
+  insertPhotoMain = (
+    img: string,
+    photos: ThumbnailType,
+  ): Array<ThumbnailType> => {
     if (!isNil(img)) {
       return insert(0, { id: photos.length + 1, img, opacity: false }, photos);
     }
@@ -109,24 +106,21 @@ class Product extends Component<PropsType, StateType> {
   handleWidgetClick = (selected: SelectedType): void => {
     const {
       baseProduct: {
-        variants: {
-          all,
-        },
+        variants: { all },
       },
     } = this.props;
     const { widgets } = this.state;
     const filteredWidgets = filterVariants(all, selected.label);
-    const { variantId } = head(keys(filteredWidgets).map(key => filteredWidgets[key]));
+    const { variantId } = head(
+      keys(filteredWidgets).map(key => filteredWidgets[key]),
+    );
     /**
      * @desc returns true if the object satisfies the 'id' property
      * @return {boolean}
      */
     const byId = propEq('id', variantId);
     const variantObj = head(filter(byId, extractPhotos(all)));
-    const {
-      photoMain,
-      additionalPhotos,
-    } = variantObj;
+    const { photoMain, additionalPhotos } = variantObj;
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
@@ -135,17 +129,9 @@ class Product extends Component<PropsType, StateType> {
   };
   render() {
     const {
-      baseProduct: {
-        name,
-        longDescription,
-      },
+      baseProduct: { name, longDescription },
     } = this.props;
-    const {
-      tabs,
-      widgets,
-      photoMain,
-      additionalPhotos,
-    } = this.state;
+    const { tabs, widgets, photoMain, additionalPhotos } = this.state;
     return (
       <div styleName="container">
         <Header />
@@ -164,7 +150,11 @@ class Product extends Component<PropsType, StateType> {
                   <Col size={6}>
                     <ProductDetails
                       productTitle={extractText(name)}
-                      productDescription={extractText(longDescription, 'EN', 'No Description')}
+                      productDescription={extractText(
+                        longDescription,
+                        'EN',
+                        'No Description',
+                      )}
                       widgets={widgets}
                       onWidgetClick={this.handleWidgetClick}
                     />
@@ -176,11 +166,8 @@ class Product extends Component<PropsType, StateType> {
           <Container>
             <Tabs>
               {tabs.map(({ id, label, content }) => (
-                <Tab
-                  key={id}
-                  label={label}
-                >
-                  { content }
+                <Tab key={id} label={label}>
+                  {content}
                 </Tab>
               ))}
             </Tabs>
@@ -231,7 +218,7 @@ export default createFragmentContainer(
             }
           }
         }
-      } 
-    }   
+      }
+    }
   `,
 );

@@ -15,9 +15,16 @@ type PropsType = {
 };
 
 class Characteristics extends PureComponent<PropsType> {
-  handleItemChange = (attribute: { attrId: number, value: string, metaField?: string }) => {
+  handleItemChange = (attribute: {
+    attrId: number,
+    value: string,
+    metaField?: string,
+  }) => {
     const { attrId, value, metaField } = attribute;
-    const filteredItems = filter(item => item.attrId !== attrId, this.props.values);
+    const filteredItems = filter(
+      item => item.attrId !== attrId,
+      this.props.values,
+    );
     filteredItems.push({ attrId, value, metaField });
     this.props.onChange(filteredItems);
   };
@@ -35,7 +42,9 @@ class Characteristics extends PureComponent<PropsType> {
               key={item.id}
               attribute={item}
               onSelect={this.handleItemChange}
-              value={head(filter(propEq('attrId', item.rawId), this.props.values))}
+              value={head(
+                filter(propEq('attrId', item.rawId), this.props.values),
+              )}
             />
           ))}
         </div>

@@ -7,7 +7,7 @@ export const byLang = (lang: string) => find(whereEq({ lang }));
 type NameType = {
   lang: string,
   text: string,
-}
+};
 
 export const getNameText = (arr: Array<NameType>, lang: string) => {
   let name = byLang(lang)(arr);

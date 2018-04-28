@@ -17,7 +17,7 @@ import './Stores.scss';
 import storesData from './stores.json';
 
 type PropsType = {
-  relay: Relay
+  relay: Relay,
 };
 
 type StateType = {
@@ -49,13 +49,18 @@ class Stores extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      category,
-      location,
-    } = this.state;
+    const { category, location } = this.state;
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
-    const totalCount = pathOr(0, ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'], this.props);
-    const searchValue = pathOr(null, ['location', 'query', 'search'], this.props);
+    const totalCount = pathOr(
+      0,
+      ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'],
+      this.props,
+    );
+    const searchValue = pathOr(
+      null,
+      ['location', 'query', 'search'],
+      this.props,
+    );
     return (
       <Container>
         <Row>
@@ -74,6 +79,7 @@ class Stores extends Component<PropsType, StateType> {
                   { id: '2', label: 'Non-childrens goods' },
                 ]}
                 onSelect={this.handleCategory}
+                dataTest="storesCategoriesSelect"
               />
             </div>
             <div styleName="filterItem">
@@ -86,6 +92,7 @@ class Stores extends Component<PropsType, StateType> {
                   { id: '2', label: 'Norwey' },
                 ]}
                 onSelect={this.handleLocation}
+                dataTest="storesLocationSelect"
               />
             </div>
           </Col>
@@ -100,17 +107,21 @@ class Stores extends Component<PropsType, StateType> {
               </Row>
             </div>
             <div styleName="stores">
-              {(stores && stores.length > 0) ?
-                map(storesItem => (
-                  <div key={storesItem.node.id}>
-                    <StoreRow
-                      store={storesItem.node}
-                      key={storesItem.node.id}
-                    />
-                  </div>
-                ), stores) :
+              {stores && stores.length > 0 ? (
+                map(
+                  storesItem => (
+                    <div key={storesItem.node.id}>
+                      <StoreRow
+                        store={storesItem.node}
+                        key={storesItem.node.id}
+                      />
+                    </div>
+                  ),
+                  stores,
+                )
+              ) : (
                 <div>No stores found</div>
-              }
+              )}
             </div>
             {this.props.relay.hasMore() && (
               <div styleName="button">
@@ -118,6 +129,7 @@ class Stores extends Component<PropsType, StateType> {
                   big
                   load
                   onClick={this.storesRefetch}
+                  dataTest="searchStoresLoadMoreButton"
                 >
                   Load more
                 </Button>
@@ -134,12 +146,13 @@ export default createPaginationContainer(
   withErrorBoundary(Page(Stores)),
   graphql`
     fragment Stores_search on Search
-    @argumentDefinitions(
-      text: { type: "SearchStoreInput!" }
-      first: { type: "Int", defaultValue: 8 }
-      after: { type: "ID", defaultValue: null }
-    ) {
-      findStore(searchTerm: $text, first: $first, after: $after) @connection(key: "Stores_findStore") {
+      @argumentDefinitions(
+        text: { type: "SearchStoreInput!" }
+        first: { type: "Int", defaultValue: 8 }
+        after: { type: "ID", defaultValue: null }
+      ) {
+      findStore(searchTerm: $text, first: $first, after: $after)
+        @connection(key: "Stores_findStore") {
         pageInfo {
           searchFilters {
             totalCount
@@ -161,16 +174,16 @@ export default createPaginationContainer(
               lang
               text
             }
-            baseProducts {
+            baseProducts(first: 4) {
               edges {
                 node {
                   id
                   rawId
-                  variants {
-                    all {
-                      id
-                      rawId
-                      photoMain
+                  products {
+                    edges {
+                      node {
+                        photoMain
+                      }
                     }
                   }
                 }
@@ -190,7 +203,11 @@ export default createPaginationContainer(
       first: count + 1,
     }),
     query: graphql`
-      query Stores_edges_Query($first: Int, $after: ID, $text: SearchStoreInput!) {
+      query Stores_edges_Query(
+        $first: Int
+        $after: ID
+        $text: SearchStoreInput!
+      ) {
         search {
           ...Stores_search @arguments(first: $first, after: $after, text: $text)
         }

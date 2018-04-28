@@ -17,13 +17,18 @@ type PropsType = {
 
 class Main extends PureComponent<PropsType> {
   render() {
-    const categories = pathOr(null, ['categories', 'children'], this.context.directories);
+    const categories = pathOr(
+      null,
+      ['categories', 'children'],
+      this.context.directories,
+    );
     const { withoutCategories } = this.props;
     return (
       <main styleName={classNames('container', { isCategories: categories })}>
         <div styleName="wrap">
-          {categories && !withoutCategories && <CategoriesMenu categories={categories} />}
-          { this.props.children }
+          {categories &&
+            !withoutCategories && <CategoriesMenu categories={categories} />}
+          {this.props.children}
         </div>
       </main>
     );

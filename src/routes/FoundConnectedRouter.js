@@ -7,11 +7,9 @@ import { Error404, Error } from 'pages/Errors';
 
 const FoundConnectedRouter = createConnectedRouter({
   render: createRender({
-    renderError: ({ error }) => ( // eslint-disable-line
-      <div>
-        {error.status === 404 ? <Error404 /> : <Error />}
-      </div>
-    ),
+    renderError: (
+      { error }, // eslint-disable-line
+    ) => <div>{error.status === 404 ? <Error404 /> : <Error />}</div>,
   }),
 });
 

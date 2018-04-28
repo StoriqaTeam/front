@@ -13,15 +13,17 @@ type PropsTypes = {
   medium: ?boolean,
   small: ?boolean,
   white: ?boolean,
+  dataTest: boolean,
 };
 
-const Button = ({
+const SpinerButton = ({
   onClick,
   children,
   isLoading,
   white,
   medium,
   small,
+  dataTest,
 }: PropsTypes) => (
   <button
     onClick={onClick}
@@ -33,10 +35,11 @@ const Button = ({
       small,
     })}
     type="button"
+    data-test={dataTest}
   >
     <div styleName={classNames('spinner', { white: !white, small, medium })} />
     <span styleName="childrenWrapper">{children}</span>
   </button>
 );
 
-export default Button;
+export default SpinerButton;

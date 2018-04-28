@@ -8,7 +8,7 @@ import './AddressResultForm.scss';
 type PropsType = {
   address: any,
   onChangeForm: (type: string) => (e: any) => void,
-}
+};
 
 const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
   <div>
