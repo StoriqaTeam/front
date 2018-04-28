@@ -22,6 +22,7 @@ const BannersSlider = (props: PropsTypes) => (
     />
     <div styleName="button">
       <Button
+        big
         white
         href={
           process.env.REACT_APP_HOST
