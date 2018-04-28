@@ -9,6 +9,7 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
 import { CreateBaseProductMutation } from 'relay/mutations';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import Form from './Form';
 
@@ -23,6 +24,8 @@ type PropsType = {
   storeId: number,
   router: routerShape,
 };
+
+const storeLogoFromProps = pathOr(null, ['me', 'store', 'logo']);
 
 class NewProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -98,11 +101,13 @@ class NewProduct extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading } = this.state;
+    const logo = storeLogoFromProps(this.props);
+
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem="" switchMenu={() => {}} />
+            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
           </Col>
           <Col size={10}>
             <Form
@@ -124,4 +129,14 @@ NewProduct.contextTypes = {
   directories: PropTypes.object.isRequired,
 };
 
-export default withRouter(Page(NewProduct));
+export default createFragmentContainer(
+  withRouter(Page(NewProduct)),
+  graphql`
+    fragment NewProduct_me on User
+      @argumentDefinitions(storeId: { type: "Int!" }) {
+      store(id: $storeId) {
+        logo
+      }
+    }
+  `,
+);

@@ -25,6 +25,7 @@ type StateType = {
 };
 
 const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
+const storeLogoFromProps = pathOr(null, ['me', 'baseProduct', 'store', 'logo']);
 const variantsFromProps = pathOr(null, [
   'me',
   'baseProduct',
@@ -97,6 +98,8 @@ class EditProduct extends Component<PropsType, StateType> {
   render() {
     const { isLoading } = this.state;
     const baseProduct = baseProductFromProps(this.props);
+    const logo = storeLogoFromProps(this.props);
+
     if (!baseProduct) {
       return <span>Product not found</span>;
     }
@@ -104,7 +107,7 @@ class EditProduct extends Component<PropsType, StateType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem="" switchMenu={() => {}} />
+            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
           </Col>
           <Col size={10}>
             <Form
@@ -201,6 +204,7 @@ export default createFragmentContainer(
         store {
           id
           rawId
+          logo
         }
         name {
           lang
