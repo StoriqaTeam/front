@@ -37,6 +37,7 @@ class CardProduct extends PureComponent<PropsTypes> {
   handleClick(e: any) {
     e.preventDefault();
     e.stopPropagation();
+    console.log("Env: ", this.context.environment);
     const id = path(['props', 'item', 'rawId'], this);
     if (id) {
       IncrementInCartMutation.commit({
