@@ -26,7 +26,7 @@ type StateType = {
   activeMidGhost: ?string,
   pageX: number,
   rightMouseDirection: boolean,
-}
+};
 
 class CategoriesMenu extends Component<PropsType, StateType> {
   state = {
@@ -35,7 +35,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     activeMidGhost: null,
     pageX: 0,
     rightMouseDirection: false,
-  }
+  };
 
   componentWillUnmount() {
     if (this.onMouseOverTimer) {
@@ -56,25 +56,33 @@ class CategoriesMenu extends Component<PropsType, StateType> {
   onMouseOver = e => {
     const { id } = e.currentTarget;
     const { active } = this.state;
-    if (this.onMouseOutTimer) { clearTimeout(this.onMouseOutTimer); }
-    if (this.onMouseOverTimer) { clearTimeout(this.onMouseOverTimer); }
+    if (this.onMouseOutTimer) {
+      clearTimeout(this.onMouseOutTimer);
+    }
+    if (this.onMouseOverTimer) {
+      clearTimeout(this.onMouseOverTimer);
+    }
     if (active !== id) {
       this.onMouseOverTimer = setTimeout(() => {
         this.setState(() => ({ active: id }));
       }, 300);
     }
-  }
+  };
 
   onMouseOut = () => {
     const { active } = this.state;
-    if (this.onMouseOutTimer) { clearTimeout(this.onMouseOutTimer); }
-    if (this.onMouseOverTimer) { clearTimeout(this.onMouseOverTimer); }
+    if (this.onMouseOutTimer) {
+      clearTimeout(this.onMouseOutTimer);
+    }
+    if (this.onMouseOverTimer) {
+      clearTimeout(this.onMouseOverTimer);
+    }
     if (active) {
       this.onMouseOutTimer = setTimeout(() => {
         this.setState(() => ({ active: null }));
       }, 150);
     }
-  }
+  };
 
   onMouseOverMid = e => {
     const { id } = e.currentTarget;
@@ -84,11 +92,11 @@ class CategoriesMenu extends Component<PropsType, StateType> {
       return;
     }
     this.setState(() => ({ activeMid: id }));
-  }
+  };
 
   onMouseOutMid = () => {
     this.setState(() => ({ activeMidGhost: null }));
-  }
+  };
 
   onMouseMove = e => {
     const { pageX } = e;
@@ -101,7 +109,9 @@ class CategoriesMenu extends Component<PropsType, StateType> {
       this.setState(() => ({ rightMouseDirection: true }));
     }
 
-    if (this.onMouseMoveTimer) { clearTimeout(this.onMouseMoveTimer); }
+    if (this.onMouseMoveTimer) {
+      clearTimeout(this.onMouseMoveTimer);
+    }
     this.onMouseMoveTimer = setTimeout(() => {
       this.setState(() => ({
         rightMouseDirection: false,
@@ -110,7 +120,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     }, 50);
 
     this.setState(() => ({ pageX }));
-  }
+  };
 
   renderMenu(categories: any, isRoot: ?boolean) {
     const { active, activeMid } = this.state;
@@ -158,17 +168,14 @@ class CategoriesMenu extends Component<PropsType, StateType> {
           >
             {renderInnerLink()}
           </Link>
-          {categoryChildren &&
-            <div
-              styleName="items"
-              onMouseMove={this.onMouseMove}
-            >
+          {categoryChildren && (
+            <div styleName="items" onMouseMove={this.onMouseMove}>
               <div styleName="itemsWrap">
                 <div styleName="title">{name.text}</div>
                 <ul>{this.renderMenu(categoryChildren)}</ul>
               </div>
             </div>
-          }
+          )}
         </li>
       );
     });
