@@ -121,7 +121,10 @@ class Input extends Component<PropsType, StateType> {
           errors.length > 0 && (
             <div styleName="errors">
               {errors.map((item, idx) => (
-                <div key={/* eslint-disable */ idx /* eslint-enable */}>
+                <div
+                  key={/* eslint-disable */ idx /* eslint-enable */}
+                  id={`error-label-${id}`}
+                >
                   {item}
                 </div>
               ))}
