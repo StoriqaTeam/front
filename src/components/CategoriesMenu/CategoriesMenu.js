@@ -128,7 +128,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     return categories.map(category => {
       const { rawId } = category;
       const categoryChildren = category.children;
-      const name = find(propEq('lang', lang))(category.name);
+      const name = find(propEq('lang', lang), category.name) || {};
       const renderInnerLink = () => (
         <Fragment>
           <span styleName="text">{name.text}</span>

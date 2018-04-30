@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
-import { withRouter } from 'found';
+import { withRouter, matchShape, routerShape } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
@@ -20,6 +20,8 @@ import './Authorization.scss';
 type PropsType = {
   isSignUp: ?boolean,
   alone: ?boolean,
+  match: matchShape,
+  router: routerShape,
 };
 
 type StateType = {
@@ -104,7 +106,14 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleLoginClick = () => {
     this.setState({ isLoad: true, errors: null });
-    const { alone } = this.props;
+    const {
+      alone,
+      match: {
+        location: {
+          query: { from },
+        },
+      },
+    } = this.props;
     const { email, password } = this.state;
     GetJWTByEmailMutation.commit({
       email,
@@ -120,7 +129,11 @@ class Authorization extends Component<PropsType, StateType> {
           if (this.context.handleLogin) {
             this.context.handleLogin();
             if (alone) {
-              window.location = '/';
+              if (from && from !== '') {
+                this.props.router.replace(from);
+              } else {
+                window.location = '/';
+              }
             } else {
               window.location.reload();
             }

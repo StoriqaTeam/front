@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { map, find, propEq, pathOr, head } from 'ramda';
+import { map, find, propEq, pathOr, head, prop } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
@@ -23,7 +23,7 @@ class StoreRow extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
     const lang = 'EN';
-    const name = find(propEq('lang', lang), store.name).text;
+    const name = prop('text', find(propEq('lang', lang), store.name));
     const baseProduct = pathOr(null, ['baseProducts', 'edges'], store);
     const storeId = store.rawId;
     const { productsCount } = store;

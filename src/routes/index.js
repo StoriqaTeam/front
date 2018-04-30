@@ -151,9 +151,12 @@ const routes = (
         `}
         render={({ props }) => {
           if (props && !props.me) {
+            const {
+              location: { pathname },
+            } = props;
             const cookies = new Cookies();
             cookies.remove('__jwt');
-            throw new RedirectException('/login');
+            throw new RedirectException(`/login?from=${pathname}`);
           }
         }}
         Component={() => <div />}
