@@ -145,7 +145,8 @@
     "prettier":
       "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
     "postinstall":
-      "touch .git/hooks/pre-push && rm .git/hooks/pre-push && touch .git/hooks/pre-commit && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
+      "touch .git/hooks/pre-push && rm .git/hooks/pre-push && touch .git/hooks/pre-commit && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit",
+    "cypress:open": "cypress open"
   },
   "jest": {
     "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
