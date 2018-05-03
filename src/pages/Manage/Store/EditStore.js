@@ -17,7 +17,7 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type PropsType = {
-  me?: { store?: {} }, // eslint-disable-line
+  me?: { store?: { logo: string } }, // eslint-disable-line
 };
 
 type StateType = {
@@ -51,6 +51,7 @@ class EditStore extends Component<PropsType, StateType> {
       slogan,
     } = form;
     this.setState(() => ({ isLoading: true }));
+    // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'store', 'id'], this.props);
     UpdateStoreMainMutation.commit({
       id,
@@ -102,12 +103,14 @@ class EditStore extends Component<PropsType, StateType> {
 
   render() {
     const { activeItem, logoUrl, isLoading } = this.state;
-    const store = pathOr(null, ['me', 'store'], this.props);
+    // $FlowIgnoreMe
+    const store = pathOr(null, ['store'], this.props.me);
 
     if (!store) {
       return <div>Store not found :(</div>;
     }
 
+    // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], store);
     const { logo } = store;
     return (
