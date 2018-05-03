@@ -53,7 +53,6 @@ type PropsType = {
 };
 
 type StateType = {
-  // value: ?string | ?Array<string>,
   value: ?Array<string>,
 };
 
@@ -68,7 +67,6 @@ class AttributeControll extends React.Component<PropsType, StateType> {
   handleOnChange = (val: string) => {
     const { onChange, attrFilter } = this.props;
     const { value } = this.state;
-    // console.log('*** attrFilter: ', attrFilter)
     // $FlowIgnoreMe
     const uiElement = pathOr(
       null,
