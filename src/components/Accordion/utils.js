@@ -11,13 +11,13 @@ type NameType = {
   text: string,
 };
 
-type ArrayType = {
-  rowId: number,
+type ChildrenType = {
+  rawId: number,
   name: Array<NameType>,
-  children: Array<ArrayType>,
+  children: Array<ChildrenType>,
 };
 
-const prepareForAccordion = (arr: ArrayType, lang: string) =>
+const prepareForAccordion = (arr: Array<ChildrenType>, lang?: string) =>
   reduce(
     (acc, next) => [
       ...acc,
