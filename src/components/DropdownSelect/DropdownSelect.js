@@ -71,12 +71,13 @@ class DropdownSelect extends Component<PropsType, StateType> {
     if (!checkedDropdownItemId) return items;
 
     const propNotEq = (...args) => pipe(propEq(...args), not);
-    const notCheckedItems = filter(
-      propNotEq('id', checkedDropdownItemId),
-      items,
-    );
+    const notCheckedItems =
+      filter(propNotEq('id', checkedDropdownItemId), items) || [];
     const checkedItem = find(propEq('id', checkedDropdownItemId), items);
-    return insert(0, checkedItem, notCheckedItems);
+    if (checkedItem) {
+      return insert(0, checkedItem, notCheckedItems);
+    }
+    return notCheckedItems;
   };
 
   renderItem = (item: { id: number, label: string }, idx: number) => {
