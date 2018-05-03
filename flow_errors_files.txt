@@ -1,13 +1,3 @@
-src/components/Authorization/Authorization.js
-src/components/CategorySelector/CategorySelector.js
-src/components/Profile/Profile.js
-src/pages/Manage/Store/Contacts.js
-src/pages/Manage/Store/EditStore.js
-src/pages/Manage/Store/NewStore.js
-src/pages/Manage/Store/Product/EditProduct.js
-src/pages/Manage/Store/Product/Form.js
-src/pages/Manage/Store/Product/NewProduct.js
-src/pages/Manage/Store/Product/Variants/Variants.js
 src/pages/Store/Product/Product.js
 src/pages/Store/Product/utils/buildWidgets.js
 src/utils/search.js
