@@ -72,7 +72,7 @@ class Categories extends Component<PropsType, StateType> {
     super(props);
     // maxValue of ranger from back (permanent for each category)
     const maxValue = pathOr(
-      null,
+      0,
       [
         'search',
         'findProduct',
@@ -206,7 +206,9 @@ class Categories extends Component<PropsType, StateType> {
   };
 
   handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
+    // $FlowIgnoreMe
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
+    // $FlowIgnoreMe
     const rawId = pathOr(null, ['attribute', 'rawId'], attrFilter);
     return (value: string) => {
       const newUrl = this.prepareAttrsToUrlStr(rawId, value);
@@ -403,6 +405,7 @@ class Categories extends Component<PropsType, StateType> {
                 ).map(attrFilter => {
                   const initialAttr = find(
                     whereEq({ id: attrFilter.attribute.rawId }),
+                    // $FlowIgnoreMe
                     initialAttributes,
                   );
                   const initialValues = pathOr(
