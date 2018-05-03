@@ -30,7 +30,7 @@ pipeline:
       - yarn server:dist:build
     when:
       event: push
-      branch: feature/cd
+      branch: master
   node_package4nightly:
     image: plugins/docker
     repo: storiqateam/stq-node
@@ -44,7 +44,7 @@ pipeline:
     dockerfile: docker/Dockerfile.node
     when:
       event: [ push, tag ]
-      branch: feature/cd
+      branch: master
   static_package4nightly:
     image: plugins/docker
     repo: storiqateam/stq-static
@@ -56,7 +56,7 @@ pipeline:
     dockerfile: docker/Dockerfile.static
     when:
       event: [ push, tag ]
-      branch: feature/cd
+      branch: master
   deploy2nightly:
     image: jackthestripper/drone_k8s_rollout
     user: admin
@@ -75,7 +75,7 @@ pipeline:
       - nightly_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
     ca: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMwekNDQWJ1Z0F3SUJBZ0lNRlNTbzZ4bytxYmxYWFVweU1BMEdDU3FHU0liM0RRRUJDd1VBTUJVeEV6QVIKQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13SGhjTk1UZ3dOREV3TVRBeE9ESXhXaGNOTWpnd05EQTVNVEF4T0RJeApXakFWTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBCk1JSUJDZ0tDQVFFQXdDZlhvZmIwMHQ2ZG9xMm1MZzlreUxjTE5lTEYzVlM0R29lRUNOMCtuaityall1THRaYlkKOStiV0JBMW1Ua3NWS3JGcUFob2l5K1g0dkRzYWcyWmExMm80cVlRci9FWGs2cVRtRnluT0s1NkpLdWJoVXNoRAp3QjQxTDgvaXJ1NmdNUWs2a2lYbnVuN2UzS25iemJlZml5QytVc2I5TFR4UWRPMldvTm5tQVpZV2g3QjR4YUJmCm5vSGRHZE4wQTBwZlNBZU1SYWZjb0M3QmNyQldiQlUzMG4xMlM3bFdUTkl0OU82SWMwVUt2NzFXTFlDeFNOQm8KSGhkaEZzZzlaWjQ4dVBPQkRzRlBxUXFsTUdtWEtUVW1ydS8zTG1qSnRFV1h5WVJ0QjJvOVlreGdTUUV4Yi9FZwpIdjNGQ1dYblY2NVNDUTRnQTZHL2tINUV4N1hoMnlybGh3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DCkFRWXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFjWkVIMEc4enFmU2QKR1Q5RDMraVVDdnl5akxrY2xLUjhRWENEVGdxVXB3TGNaN0FuUU1uN2xkalk0UjJHR3lnMnZteWkyZ1AzbktxRQpPWldGTk5WYjUxOHkyN3c2bXdTUnVuUHZ1VzdzT0NFS2I3MmhzN1dFZUNVUGZ3Ni9kVUFueDNzVW1CV243RzVTCjhBRjBvc0lQZVNzeXhVZnNpc25ucG43MGVuRHdtV3k3SzdhYXJvb3hFNk0zMDhNWFROeGh0bW9SOVFPQzR3QUgKWk80SzM0eFpLK2xoTHZNcFpZSHVyeEZUZFJiR3JhTHNKVjZ6YlRHdURlSTAwckY3MVdhMHJlUkF0NVZ6TEgyNwppclJMUlRZVFphQmpuTHlrcGVYbGw3eEFnamxpWVM1L3B1RHZsMFk0elBxMFI4U3NjYXRtUTB0SnVIa2tQaElkCktXalVlMjM2TFE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
     when:
-      branch: feature/cd
+      branch: master
       event: push
   build4stable:
     image: node:9.9-slim
@@ -91,7 +91,7 @@ pipeline:
       - yarn server:dist:build
     when:
       event: push
-      branch: feature/cd
+      branch: master
   node_package4stable:
     image: plugins/docker
     repo: storiqateam/stq-node
@@ -105,7 +105,7 @@ pipeline:
     dockerfile: docker/Dockerfile.node
     when:
       event: [ push, tag ]
-      branch: feature/cd
+      branch: master
   static_package4stable:
     image: plugins/docker
     repo: storiqateam/stq-static
@@ -117,7 +117,7 @@ pipeline:
     dockerfile: docker/Dockerfile.static
     when:
       event: [ push, tag ]
-      branch: feature/cd
+      branch: master
   deploy2stable:
     image: jackthestripper/drone_k8s_rollout
     user: admin
@@ -136,7 +136,7 @@ pipeline:
       - stable_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
     ca: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMwekNDQWJ1Z0F3SUJBZ0lNRlNaRkNyd2ttZEZsRmNURk1BMEdDU3FHU0liM0RRRUJDd1VBTUJVeEV6QVIKQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13SGhjTk1UZ3dOREUxTVRZeE1ETTJXaGNOTWpnd05ERTBNVFl4TURNMgpXakFWTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBCk1JSUJDZ0tDQVFFQTNvSk03QkI3dUF6WUFqQ1FUM3VyeWg1NW40ck5GcjdWUWFzRUhLdkMvVjgzbkVkeTJYLzcKbHlqamlYTEJVKzkvdDV5eUpCUG1VMDVmSHNNblBTTnl1bUh6M2Nmd1U4NnliVTVuUlFjOXRLTkE0UFJ1dW80cgpwMUJlUzNyZ1FoTDN6d3JBTVNYc2toZHRKZms4SjZJR3cvU3Z4Q051RStRNi8zb0JVS1RkU3QyUEZKOVpuUit0Cjl5ZitLa0VLZE1SY1RGRGplbUJCSTlhM1k0amxZQXNjd3hnbStzckpxQjYyaG8zQ1VMT0pBMEZmMEsxSnprNHQKKzRuWnBNSU1zamRKQS9mc1B6Qi9IMXpUeTdZK1pJbzJJTWVGdjg1djk1VEg3TU41YnZ2aWk1bGxyanFOQit4cgpBSXlxSHc0bWxGenlKUzBaUUNEcWhhNmYzdTRzMGIwdFN3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DCkFRWXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFVUWxKSWUrVWxDZ1kKbG0vd1ppYk9xdXJkUUFBT2dpSUpLdjIzbm1CUWc4MDJjM1pUdFFTZnBDTWRxTVRwRVR5SjIyTlN5elRiZUlGcgpjTEJuVCs0b2dDcUdnMm9nTHRZaDM2aVA0aFIyeXlkU094aFdRZlVCaEo5KzlxZW1iZFVOWU90SGZmakl1bE9TCko3aHY4eTFlWXN1U2Exdjl5TDNIckw2ODVVenVKR2ZyRmllMFovRUZWNlMwS1VkMFJEa3J1WnhPWVp2V01vYmoKVUZPMERyaTFFc2xMSnJXVHQzVFIwQXpZWWhjLzZJQk9NRnBDQ3hmaVFLSERFWjBSWCtCVHlGVVZtV29MYkJuRgozRGFtOFNId21PbkExbVZrR0ZVS3hwWWJ4aUgweDdQK3Ntb1lKbm82Q1NYVmpXOVI1V1NTWWFkQi9PbnBTYkoxClppU2JqVEVmMVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
     when:
-      branch: feature/cd
+      branch: master
       event: push
   build4stage:
     image: node:9.9-slim
