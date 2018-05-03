@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr } from 'ramda';
 
 import { Dropdown } from 'components/Dropdown';
 import { Icon } from 'components/Icon';

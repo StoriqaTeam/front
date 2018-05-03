@@ -111,7 +111,7 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="profileIcon">
-                  <UserDropdown user={user} />
+                  {user && <UserDropdown user={user} />}
                 </div>
                 <div styleName="cartIcon">
                   <CartButton />
