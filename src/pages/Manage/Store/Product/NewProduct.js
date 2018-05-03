@@ -66,13 +66,14 @@ class NewProduct extends Component<PropsType, StateType> {
           ? null
           : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -96,6 +97,7 @@ class NewProduct extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
