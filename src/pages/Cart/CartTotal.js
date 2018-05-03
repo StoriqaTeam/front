@@ -14,6 +14,8 @@ type StateType = {
   currentClass: 'sticky' | 'top' | 'bottom',
 };
 
+const STICKY_PADDING_TOP_REM = 2;
+
 class CartTotal extends Component<PropsType, StateType> {
   state = {
     currentClass: 'top',
@@ -42,8 +44,9 @@ class CartTotal extends Component<PropsType, StateType> {
     const rect = this.ref.getBoundingClientRect();
     const height = rect.bottom - rect.top;
     const { top: viewTop, bottom: viewBottom } = this.props.storesRef.getBoundingClientRect();
-    const top = viewTop + offset;
-    const bottom = viewBottom + offset;
+    const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+    const top = viewTop + (offset - (STICKY_PADDING_TOP_REM * rem));
+    const bottom = viewBottom + (offset - (STICKY_PADDING_TOP_REM * rem));
     let currentClass = 'top';
     if (offset >= top) { currentClass = 'sticky'; }
     if (offset + height >= bottom) { currentClass = 'bottom'; }
