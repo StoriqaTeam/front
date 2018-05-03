@@ -12,7 +12,7 @@ import Header from './Header';
 type PropsType = {
   onSave: Function,
   category: {},
-  variants: Array<{}>,
+  variants: Array<{ rawId: number }>,
   productId: number,
 };
 
