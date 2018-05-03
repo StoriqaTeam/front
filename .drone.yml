@@ -54,7 +54,7 @@ pipeline:
     user: admin
     token: 32txou6YhrlD3sHcpxsiCmP1m7taE1fY
     addr: https://api.nightly.stq.cloud
-    object: stores
+    object: front
     kind: deployment
     img_names:
       - storiqateam/stq-node
