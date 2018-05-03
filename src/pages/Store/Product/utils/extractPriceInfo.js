@@ -27,7 +27,7 @@ const calcCrossedPrice = (discount: string | null, price: string) => (
 export default function extractPriceInfo(array: Array<VariantPriceInfoType>) {
   return array.map(({ id, price, cashback, discount }) => ({
     id,
-    price,
+    price: price.toString(),
     cashback: isNil(cashback) ? '0' : cashback,
     crossedPrice: calcCrossedPrice(discount, price),
   }));
