@@ -10,13 +10,11 @@ pipeline:
       event: pull_request
   build4nightly:
     image: node:9.9-slim
-    environment:
-      - TIER=nightly
     commands:
+      - . .env.nightly
       - apt-get update
       - apt-get install -y git
       - rm -f /app/yarn.lock || true
-      - . .env.${TIER}
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
       - yarn relay
