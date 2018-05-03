@@ -18,6 +18,7 @@ pipeline:
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
       - yarn relay
+      - yarn build
     when:
       event: push
       branch: feature/cd
