@@ -30,6 +30,7 @@ class Characteristics extends PureComponent<PropsType> {
   };
 
   render() {
+    // $FlowIgnoreMe
     const attributes = pathOr([], ['getAttributes'], this.props.category);
     return (
       <div styleName="container">
