@@ -11,9 +11,12 @@ import './Stores.scss';
 
 type PropsType = {
   store: {
-    name: {},
-    rawId: any,
-    id: any,
+    name: Array<{
+      lang: string,
+      text: string,
+    }>,
+    rawId: number,
+    id: string,
     productsCount: number,
     logo: ?string,
   },
@@ -23,7 +26,9 @@ class StoreRow extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
     const lang = 'EN';
-    const name = find(propEq('lang', lang), store.name).text;
+    // $FlowIgnoreMe
+    const name = pathOr(null, ['text'], find(propEq('lang', lang), store.name));
+    // $FlowIgnoreMe
     const baseProduct = pathOr(null, ['baseProducts', 'edges'], store);
     const storeId = store.rawId;
     const { productsCount } = store;
