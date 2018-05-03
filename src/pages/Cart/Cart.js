@@ -30,10 +30,14 @@ class Cart extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
-        <div styleName="stores-container">
-          {stores.map((store, idx) => <CartStore key={idx} store={store} />)}
+        <div styleName="body-container">
+          <div styleName="stores-container">
+            {stores.map((store, idx) => <CartStore key={idx} store={store} />)}
+          </div>
+          <div styleName="total-container">
+            <CartTotal threshold={168} />
+          </div>
         </div>
-        <CartTotal threshold={100} />
       </div>
     );
   }

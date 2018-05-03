@@ -7,7 +7,16 @@
 }
 
 .stores-container {
-  margin-right: 44rem;
+  flex-grow: 1;
+}
+
+.total-container {
+  position: relative;
+  width: 40rem;
+}
+
+.body-container {
+  display: flex;
 }
 
 .header {
