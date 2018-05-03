@@ -10,9 +10,9 @@ storiesOf('Search input', module)
     <div style={{ marginTop: 50, marginLeft: 50 }}>
       <SearchInput
         searchCategories={[
-          { id: 1, label: 'Shops' },
-          { id: 2, label: 'Products' },
-          { id: 3, label: 'All' },
+          { id: '1', label: 'Shops' },
+          { id: '2', label: 'Products' },
+          { id: '3', label: 'All' },
         ]}
       />
     </div>

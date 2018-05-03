@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { filter, startsWith, toUpper, head, pathOr, find, propEq } from 'ramda';
 import classNames from 'classnames';
-import { withRouter } from 'found';
+import { withRouter, matchShape } from 'found';
 
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
@@ -15,9 +15,10 @@ import './SearchInput.scss';
 
 type PropsType = {
   items: ?Array<any>,
-  searchCategories: ?Array<{ id: number, label: string }>,
+  searchCategories: ?Array<{ id: string, label: string }>,
   router: Object,
   searchValue: string,
+  match: matchShape,
 };
 
 type StateType = {
@@ -25,7 +26,7 @@ type StateType = {
   items: Array<any>,
   searchCategoryId: ?number,
   isFocus: boolean,
-  activeItem: { id: string, label: string },
+  activeItem: ?{ id: string, label: string },
 };
 
 class SearchInput extends Component<PropsType, StateType> {
@@ -38,7 +39,7 @@ class SearchInput extends Component<PropsType, StateType> {
       // eslint-disable-next-line
       searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
       isFocus: false,
-      activeItem: head(searchCategories),
+      activeItem: head(searchCategories || []),
     };
   }
 
@@ -48,18 +49,14 @@ class SearchInput extends Component<PropsType, StateType> {
     }
 
     const { searchCategories } = this.props;
-    const pathname = pathOr(
-      null,
-      ['match', 'location', 'pathname'],
-      this.props,
-    );
+    const pathname = pathOr('', ['location', 'pathname'], this.props.match);
     const value = pathname.replace('/', '');
     if (value === 'stores') {
       this.setState({
-        activeItem: find(propEq('id', 'stores'))(searchCategories),
+        activeItem: find(propEq('id', 'stores'), searchCategories || []),
       });
     } else {
-      this.setState({ activeItem: head(searchCategories) });
+      this.setState({ activeItem: head(searchCategories || []) });
     }
   }
 
@@ -87,9 +84,9 @@ class SearchInput extends Component<PropsType, StateType> {
       setTimeout(() => {
         const result = filter(
           item => startsWith(toUpper(value), toUpper(item.label)),
-          this.props.items,
+          this.props.items || [],
         );
-        this.setState({ items: result });
+        this.setState({ items: result || [] });
       }, 300);
     }
   };
@@ -100,7 +97,7 @@ class SearchInput extends Component<PropsType, StateType> {
 
   handleSearch = () => {
     const { inputValue, activeItem } = this.state;
-    switch (activeItem.id) {
+    switch (activeItem && activeItem.id) {
       case 'stores':
         this.props.router.push(
           inputValue ? `/stores?search=${inputValue}` : '/stores',
