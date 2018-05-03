@@ -6,7 +6,7 @@ import { propEq, filter, head, keys, insert, isNil } from 'ramda';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import { Header, Footer, Main } from 'components/App';
-import { Container, Col, Row } from 'layout';
+import { Col, Row } from 'layout';
 
 import { extractText, isEmpty } from 'utils';
 
