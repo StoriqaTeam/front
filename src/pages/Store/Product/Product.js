@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { propEq, filter, head, keys, insert, isNil } from 'ramda';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -10,12 +10,15 @@ import { Container, Col, Row } from 'layout';
 
 import {
   extractText,
+  isEmpty,
+} from 'utils';
+
+import {
   buildWidgets,
   filterVariants,
-  isEmpty,
   compareWidgets,
   extractPhotos,
-} from 'utils';
+} from './utils';
 
 import {
   ProductImage,
@@ -42,7 +45,7 @@ type StateType = {
   additionalPhotos: Array<ThumbnailType>,
 };
 
-class Product extends PureComponent<PropsType, StateType> {
+class Product extends Component<PropsType, StateType> {
   /**
    * @static
    * @param {PropsType} nextProps
@@ -133,34 +136,28 @@ class Product extends PureComponent<PropsType, StateType> {
       <div styleName="container">
         <Header />
         <Main>
-          <div styleName="ProductBackground">
-            <Container>
-              <div styleName="whiteBackground">
-                <Row>
-                  <Col size={6}>
-                    <ProductImage
-                      mainImage={photoMain}
-                      thumbnails={additionalPhotos}
-                    />
-                    <ProductShare />
-                  </Col>
-                  <Col size={6}>
-                    <ProductDetails
-                      productTitle={extractText(name)}
-                      productDescription={extractText(
-                        longDescription,
-                        'EN',
-                        'No Description',
-                      )}
-                      widgets={widgets}
-                      onWidgetClick={this.handleWidgetClick}
-                    />
-                  </Col>
-                </Row>
-              </div>
-            </Container>
-          </div>
-          <Container>
+          <div styleName="ProductDetails">
+            <Row>
+              <Col size={6}>
+                <ProductImage
+                  mainImage={photoMain}
+                  thumbnails={additionalPhotos}
+                />
+                <ProductShare />
+              </Col>
+              <Col size={6}>
+                <ProductDetails
+                  productTitle={extractText(name)}
+                  productDescription={extractText(
+                    longDescription,
+                    'EN',
+                    'No Description',
+                  )}
+                  widgets={widgets}
+                  onWidgetClick={this.handleWidgetClick}
+                />
+              </Col>
+            </Row>
             <Tabs>
               {tabs.map(({ id, label, content }) => (
                 <Tab key={id} label={label}>
@@ -168,7 +165,7 @@ class Product extends PureComponent<PropsType, StateType> {
                 </Tab>
               ))}
             </Tabs>
-          </Container>
+          </div>
         </Main>
         <Footer />
       </div>
