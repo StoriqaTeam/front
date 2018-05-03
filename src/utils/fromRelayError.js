@@ -16,6 +16,7 @@ import {
 export default pipe(
   pathOr([], ['source', 'errors']),
   map(item => {
+    // $FlowIgnoreMe
     const error = prop('data', item);
     const code = prop('code', error);
 
