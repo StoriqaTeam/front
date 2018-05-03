@@ -1,0 +1,21 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+}
+
+.input {
+  font-size: 2rem;
+  width: 6rem;
+  color: $color_grey_text;
+  text-align: center;
+}
+
+
+.button {
+  width: 3rem;
+  color: $color_grey_text;
+  border: 1px solid $color_grey_ranger;
+  display: flex;
+  justify-content: center
+}
