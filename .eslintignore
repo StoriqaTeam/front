@@ -2,4 +2,7 @@ config/*.js
 scripts/*.js
 libs/*.js
 flow-typed/
+**/*.test.js
+**/*.graphql.js
+**/*.stories.js
 
