@@ -10,6 +10,15 @@ import {
   mapObjIndexed,
 } from 'ramda';
 
+export type ProcessedErrorType = {
+  [100 | 200 | 300 | 400]: {
+    status: string,
+    messages?: {
+      [string]: Array<string>,
+    },
+  },
+};
+
 // type DetailedErrorType = {
 //   code: number,
 //   details: {
@@ -35,7 +44,7 @@ export default pipe(
     const code = prop('code', error);
 
     if (code !== 100) {
-      return [toString(code), { message: (error && error.details) || item }];
+      return [toString(code), { status: (error && error.details) || item }];
     }
 
     const status = pathOr('', ['details', 'status'], error);
