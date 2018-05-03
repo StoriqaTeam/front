@@ -1,32 +1,31 @@
 import { fromRelayError } from 'utils';
 
-const commonError = {
+const commonErrorWrapper = errObj => ({
   source: {
-    errors: [
-      {
-        data: {
-          code: 100,
-          details: {
-            status: '400 Bad Request',
-            // eslint-disable-next-line
-            message: "{\"email\":[{\"code\":\"email\",\"message\":\"Invalid email format\",\"params\":{\"value\":\"\"}}],\"phone\":[{\"code\":\"phone\",\"message\":\"Incorrect phone format\",\"params\":{\"value\":\"\"}}]}",
-          },
-        },
-      },
-    ],
+    errors: [{
+      data: errObj,
+    }],
   },
-};
+});
+
+const code100error = commonErrorWrapper({
+  code: 100,
+  details: {
+    status: '400 Bad Request',
+    message: "{\"email\":[{\"code\":\"email\",\"message\":\"Invalid email format\",\"params\":{\"value\":\"\"}}],\"phone\":[{\"code\":\"phone\",\"message\":\"Incorrect phone format\",\"params\":{\"value\":\"\"}}]}",
+  },
+});
 
 describe('fromRelayError helper', () => {
-  describe('for common errors', () => {
+  describe('for API errors (with code 100)', () => {
     it('should convert to `{ code: { status, message }}`', () => {
-      const converted = fromRelayError(commonError);
+      const converted = fromRelayError(code100error);
       expect(converted).toMatchObject({
         100: {
           status: '400 Bad Request',
-          message: {
-            email: 'Invalid email format',
-            phone: 'Incorrect phone format',
+          messages: {
+            email: ['Invalid email format'],
+            phone: ['Incorrect phone format'],
           },
         },
       });

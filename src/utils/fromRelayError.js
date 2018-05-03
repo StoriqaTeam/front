@@ -10,6 +10,20 @@ import {
   mapObjIndexed,
 } from 'ramda';
 
+// type DetailedErrorType = {
+//   code: number,
+//   details: {
+
+//   },
+// };
+
+// type RelayErrorType = {
+//   source: {
+//     errors: Array<{
+//       data: DetailedErrorType | string,
+//     }>,
+//   },
+// };
 /*
   see test
 */
