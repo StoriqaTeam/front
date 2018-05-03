@@ -7,9 +7,7 @@ import { pathOr } from 'ramda';
 import './CartTotal.scss';
 
 type PropsType = {
-  threshold: number,
-  top: ?number,
-  bottom: ?number,
+  storesRef: ?Object;
 };
 
 type StateType = {
@@ -39,16 +37,16 @@ class CartTotal extends Component<PropsType, StateType> {
 
   handleScroll() {
     if (!window) return;
-    let height = 0;
-    if (this.ref) {
-      const rect = this.ref.getBoundingClientRect();
-      height = rect.bottom - rect.top;
-    }
-
+    if (!this.ref || !this.props.storesRef) return;
     const offset = window.pageYOffset;
+    const rect = this.ref.getBoundingClientRect();
+    const height = rect.bottom - rect.top;
+    const { top: viewTop, bottom: viewBottom } = this.props.storesRef.getBoundingClientRect();
+    const top = viewTop + offset;
+    const bottom = viewBottom + offset;
     let currentClass = 'top';
-    if (this.props.top && (offset >= this.props.top)) { currentClass = 'sticky'; }
-    if (this.props.bottom && (offset + height >= this.props.bottom)) { currentClass = 'bottom'; }
+    if (offset >= top) { currentClass = 'sticky'; }
+    if (offset + height >= bottom) { currentClass = 'bottom'; }
     if (currentClass !== this.state.currentClass) { this.setState({ currentClass }); }
     // const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
     // const threshold = this.props.threshold * rem;

@@ -21,23 +21,18 @@ type PropsType = {
 };
 
 type StateType = {
-  storesTop: ?number,
-  storesBottom: ?number,
+  storesRef: ?Object,
 }
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
   state = {
-    storesTop: null,
-    storesBottom: null,
+    storesRef: null,
   }
 
   setStoresRef(ref) {
-    this.storesRef = ref;
-    if (!ref) return;
-    const rect = ref.getBoundingClientRect();
-    if ((this.state.storesTop !== rect.top) || (this.state.storesBottom !== rect.bottom)) {
-      this.setState({ storesTop: rect.top, storesBottom: rect.bottom });
+    if (ref && !this.state.storesRef) {
+      this.setState({ storesRef: ref });
     }
   }
 
@@ -57,9 +52,7 @@ class Cart extends Component<PropsType, StateType> {
           </div>
           <div styleName="total-container">
             <CartTotal
-              threshold={168}
-              top={this.state.storesTop}
-              bottom={this.state.storesBottom}
+              storesRef={this.state.storesRef}
             />
           </div>
         </div>
