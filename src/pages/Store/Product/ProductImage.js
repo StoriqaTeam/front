@@ -55,7 +55,11 @@ class ProductImage extends Component<PropsType, StateType> {
     const { selected } = this.state;
     return (
       <div styleName="container">
-        <div styleName={!isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'}>
+        <div
+          styleName={
+            !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
+          }
+        >
           {!isEmpty(thumbnails) ? (
             <ProductThumbnails
               isFirstSelected
@@ -67,10 +71,7 @@ class ProductImage extends Component<PropsType, StateType> {
         </div>
         <div styleName="image">
           <figure styleName="bigImage">
-            <img
-              src={!isEmpty(selected) ? selected : mainImage}
-              alt=""
-            />
+            <img src={!isEmpty(selected) ? selected : mainImage} alt="" />
           </figure>
           <ImageDetail />
         </div>
