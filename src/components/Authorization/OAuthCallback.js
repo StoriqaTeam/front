@@ -63,7 +63,11 @@ class OAuthCallback extends PureComponent<PropsType> {
     // $FlowIgnore
     const fbCallbackUri: string =
       process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI;
-    const queryString = replace(`${fbCallbackUri}${isSafari ? '' : '?'}#`, '', url);
+    const queryString = replace(
+      `${fbCallbackUri}${isSafari ? '' : '?'}#`,
+      '',
+      url,
+    );
     return this.extractToken(queryString);
   };
 
