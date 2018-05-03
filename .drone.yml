@@ -1,4 +1,11 @@
 pipeline:
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - ./node_modules
+    volumes:
+      - /mnt/front:/cache
   test:
     image: node:9.9-slim
     environment:
@@ -8,6 +15,7 @@ pipeline:
       - yarn ci
     when:
       event: pull_request
+      branch: [ master, release* ]
   build4nightly:
     image: node:9.9-slim
     commands:
@@ -50,7 +58,7 @@ pipeline:
       event: [ push, tag ]
       branch: feature/cd
   deploy2nightly:
-    image: jackthestripper/drone_k8s_rollout:latest
+    image: jackthestripper/drone_k8s_rollout
     user: admin
     token: 32txou6YhrlD3sHcpxsiCmP1m7taE1fY
     addr: https://api.nightly.stq.cloud
@@ -69,33 +77,135 @@ pipeline:
     when:
       branch: feature/cd
       event: push
-  #build4stable:
-    #image: node:9.9-slim
-    #environment:
-      #- TIER=stable
-    #commands:
-      #- apt-get update
-      #- apt-get install -y git
-      #- rm -f /app/yarn.lock || true
-      #- . .env.${TIER}
-      #- yarn -s --no-progress --non-interactive --production=false
-      #- yarn updateSchema
-      #- yarn relay
-    #when:
-      #event: push
-      #branch: master
-  #deploy2stage:
-    #image: quay.io/honestbee/drone-kubernetes
-    #kubernetes_server: https://api.stage.stq.cloud
-    #kubernetes_token: PW2clI0vKqLi3eywlN776rMyE7hk1pgX
-    #namespace: default
-    #deployment: saga
-    #repo: storiqateam/stq-saga
-    #container: saga
-    #tag: ${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
-    #when:
-      #branch: release*
-      #event: push
+  build4stable:
+    image: node:9.9-slim
+    commands:
+      - . ./.env.stable
+      - apt-get update
+      - apt-get install -y git
+      - rm -f yarn.lock || true
+      - yarn -s --no-progress --non-interactive --production=false
+      - yarn updateSchema
+      - yarn relay
+      - yarn build
+      - yarn server:dist:build
+    when:
+      event: push
+      branch: feature/cd
+  node_package4stable:
+    image: plugins/docker
+    repo: storiqateam/stq-node
+    environment:
+      - TIER=stable
+    tags:
+      - stable_${DRONE_BRANCH/\//_}
+      - stable_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    username: stqcommon
+    password: "Tz-q6qDL#d3Mz8hm"
+    dockerfile: docker/Dockerfile.node
+    when:
+      event: [ push, tag ]
+      branch: feature/cd
+  static_package4stable:
+    image: plugins/docker
+    repo: storiqateam/stq-static
+    tags:
+      - stable_${DRONE_BRANCH/\//_}
+      - stable_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    username: stqcommon
+    password: "Tz-q6qDL#d3Mz8hm"
+    dockerfile: docker/Dockerfile.static
+    when:
+      event: [ push, tag ]
+      branch: feature/cd
+  deploy2stable:
+    image: jackthestripper/drone_k8s_rollout
+    user: admin
+    token: vhkzUYmnPSI7MtJO3Et9KczuGoS0goqV
+    addr: https://api.stable.stq.cloud
+    object: front
+    kind: deployment
+    img_names:
+      - storiqateam/stq-node
+      - storiqateam/stq-static
+    img_cnts:
+      - node
+      - static
+    img_tags:
+      - stable_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+      - stable_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    ca: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMwekNDQWJ1Z0F3SUJBZ0lNRlNaRkNyd2ttZEZsRmNURk1BMEdDU3FHU0liM0RRRUJDd1VBTUJVeEV6QVIKQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13SGhjTk1UZ3dOREUxTVRZeE1ETTJXaGNOTWpnd05ERTBNVFl4TURNMgpXakFWTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBCk1JSUJDZ0tDQVFFQTNvSk03QkI3dUF6WUFqQ1FUM3VyeWg1NW40ck5GcjdWUWFzRUhLdkMvVjgzbkVkeTJYLzcKbHlqamlYTEJVKzkvdDV5eUpCUG1VMDVmSHNNblBTTnl1bUh6M2Nmd1U4NnliVTVuUlFjOXRLTkE0UFJ1dW80cgpwMUJlUzNyZ1FoTDN6d3JBTVNYc2toZHRKZms4SjZJR3cvU3Z4Q051RStRNi8zb0JVS1RkU3QyUEZKOVpuUit0Cjl5ZitLa0VLZE1SY1RGRGplbUJCSTlhM1k0amxZQXNjd3hnbStzckpxQjYyaG8zQ1VMT0pBMEZmMEsxSnprNHQKKzRuWnBNSU1zamRKQS9mc1B6Qi9IMXpUeTdZK1pJbzJJTWVGdjg1djk1VEg3TU41YnZ2aWk1bGxyanFOQit4cgpBSXlxSHc0bWxGenlKUzBaUUNEcWhhNmYzdTRzMGIwdFN3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DCkFRWXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFVUWxKSWUrVWxDZ1kKbG0vd1ppYk9xdXJkUUFBT2dpSUpLdjIzbm1CUWc4MDJjM1pUdFFTZnBDTWRxTVRwRVR5SjIyTlN5elRiZUlGcgpjTEJuVCs0b2dDcUdnMm9nTHRZaDM2aVA0aFIyeXlkU094aFdRZlVCaEo5KzlxZW1iZFVOWU90SGZmakl1bE9TCko3aHY4eTFlWXN1U2Exdjl5TDNIckw2ODVVenVKR2ZyRmllMFovRUZWNlMwS1VkMFJEa3J1WnhPWVp2V01vYmoKVUZPMERyaTFFc2xMSnJXVHQzVFIwQXpZWWhjLzZJQk9NRnBDQ3hmaVFLSERFWjBSWCtCVHlGVVZtV29MYkJuRgozRGFtOFNId21PbkExbVZrR0ZVS3hwWWJ4aUgweDdQK3Ntb1lKbm82Q1NYVmpXOVI1V1NTWWFkQi9PbnBTYkoxClppU2JqVEVmMVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+    when:
+      branch: feature/cd
+      event: push
+  build4stage:
+    image: node:9.9-slim
+    commands:
+      - . ./.env.stage
+      - apt-get update
+      - apt-get install -y git
+      - rm -f yarn.lock || true
+      - yarn -s --no-progress --non-interactive --production=false
+      - yarn updateSchema
+      - yarn relay
+      - yarn build
+      - yarn server:dist:build
+    when:
+      event: push
+      branch: release*
+  node_package4stage:
+    image: plugins/docker
+    repo: storiqateam/stq-node
+    environment:
+      - TIER=stage
+    tags:
+      - stage_${DRONE_BRANCH/\//_}
+      - stage_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    username: stqcommon
+    password: "Tz-q6qDL#d3Mz8hm"
+    dockerfile: docker/Dockerfile.node
+    when:
+      event: [ push, tag ]
+      branch: release*
+  static_package4stage:
+    image: plugins/docker
+    repo: storiqateam/stq-static
+    tags:
+      - stage_${DRONE_BRANCH/\//_}
+      - stage_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    username: stqcommon
+    password: "Tz-q6qDL#d3Mz8hm"
+    dockerfile: docker/Dockerfile.static
+    when:
+      event: [ push, tag ]
+      branch: release*
+  deploy2stage:
+    image: jackthestripper/drone_k8s_rollout
+    user: admin
+    token: PW2clI0vKqLi3eywlN776rMyE7hk1pgX
+    addr: https://api.stage.stq.cloud
+    object: front
+    kind: deployment
+    img_names:
+      - storiqateam/stq-node
+      - storiqateam/stq-static
+    img_cnts:
+      - node
+      - static
+    img_tags:
+      - stage_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+      - stage_${DRONE_BRANCH/\//_}${DRONE_BUILD_NUMBER}
+    ca: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMwekNDQWJ1Z0F3SUJBZ0lNRlNKQTd5MHlUTHRrNWtXak1BMEdDU3FHU0liM0RRRUJDd1VBTUJVeEV6QVIKQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13SGhjTk1UZ3dOREF5TVRReE1ESXdXaGNOTWpnd05EQXhNVFF4TURJdwpXakFWTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBCk1JSUJDZ0tDQVFFQXg3bHI5ejdaSmF3ZXNnUCt6SW1hY0ZCYVdZNS8rSUlEa2xVcDNCN29VUUdCclM2bkEwbDIKYVU0STc4WlpZQThwcEplOVhFL2daVUVNWEdFdlZuWUozL1pybVBqSWMybnF6T3gxc2N6WmlDamllWG1nakVHKwpvalpoc2tGc3d3R01sRnFsODVtK05UVWdEYUYwSjQ1NkFrM3hoUkdWT1BYaDNMWnN4cXZNcENmNmFrYkNjMTJCCnVjak5uUThmZVc5Sjc4VzkwWGJuSG5kY1c4cWUwQ1dLWnBZSkdlQkd6SHJjczFGc09leURSOHhqVW5pejkzSE8KZ0poTXF4VmYzTk5rL3lYSzZnS1FHVHBGY05uUXlLRy9MZ3JGWW10aGs1UWFORUZLV3hiK0RDVnJsa0F3VmhJRQpxT1FYRWlmQjB5WXpCdmp1Tmxib1JSVlpMeDRwRTNsOFZ3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DCkFRWXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFGZmpyVnUyYmpobGgKZXhiOUo5WFFEaWl1WngwVGZBRDZsRjRBb3RhdFV3UjNMNVdUSlFYMHJvZWNLMHNjWHBiUUx6ME5vTThLbmtPUApyVkk4UWdKY1l1bHJSRmlqWmxrMElQNUJRb3ZVM1RnSlB5RG5xS0xCaTdtR2ZyUXB2YzVrVHVBOTJTb3FGT2pqCjNtZEdqNFprVmh1QkhYWXNOUk53VEFtUVB5WXozZXJFVkM5MDhqalhRYTB1cnQvZWFEd1ZNMFAxanhZZklrUDAKYm9aVmRPWWR6MzJjME5YRXRPZDMvWC9vaWdSSmhSMG5Sc2ZVbDRpd1BBb1JBNlhmM2tpWUNoWWdLci9IZzBudAp2azJ5Yjc0c0ZpZ0tyalZ4cTZNeHRkdGlBUWwrU0g0TkU5RmhYT3FaSFFSVTB4dk9YRC9WaU1qaVl2NXVVc0NrClhza0ZxSyt2eVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+    when:
+      branch: release*
+      event: push
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - ./node_modules
+    volumes:
+      - /mnt/front:/cache
   notify_slack:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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
