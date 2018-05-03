@@ -52,6 +52,7 @@ class VerifyEmail extends Component<PropsType, StateType> {
           alert('Verified successfully. Please login with your login data.'); // eslint-disable-line
           this.props.router.replace('/');
         } else if (errors && errors.length > 0) {
+          // $FlowIgnoreMe
           const errorMessage = pathOr(
             null,
             [0, 'data', 'details', 'message'],
