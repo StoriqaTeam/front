@@ -131,7 +131,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
       const name = find(propEq('lang', lang))(category.name);
       const renderInnerLink = () => (
         <Fragment>
-          <span styleName="text">{name.text}</span>
+          {name && name.text && <span styleName="text">{name.text}</span>}
           {categoryChildren &&
             !isRoot && (
               <span styleName="icon">
@@ -171,7 +171,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
           {categoryChildren && (
             <div styleName="items" onMouseMove={this.onMouseMove}>
               <div styleName="itemsWrap">
-                <div styleName="title">{name.text}</div>
+                {name && name.text && <div styleName="title">{name.text}</div>}
                 <ul>{this.renderMenu(categoryChildren)}</ul>
               </div>
             </div>
