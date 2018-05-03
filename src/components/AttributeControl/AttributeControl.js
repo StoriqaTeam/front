@@ -44,7 +44,7 @@ type AttributeFilterType = {
     min: number,
     max: number,
   },
-}
+};
 
 type PropsType = {
   onChange: (value: string | Array<string>) => void,
@@ -70,8 +70,12 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     const { value } = this.state;
     // console.log('*** attrFilter: ', attrFilter)
     // $FlowIgnoreMe
-    const uiElement = pathOr(null, ['attribute', 'metaField', 'uiElement'], attrFilter);
-    
+    const uiElement = pathOr(
+      null,
+      ['attribute', 'metaField', 'uiElement'],
+      attrFilter,
+    );
+
     const isMultiSelectable =
       uiElement === 'CHECKBOX' || uiElement === 'COLOR_PICKER';
     if (isMultiSelectable && value) {
