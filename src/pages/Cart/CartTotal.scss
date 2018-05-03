@@ -5,12 +5,23 @@
   color: $color_grey_text;
   background: $color-white;
   border: 1px solid $color_grey_light;
+  height: 50rem;
+  width: 40rem;
 }
 
 .sticky {
   position: fixed;
-  top: 2rem;
-  width: 40rem;  
+  top: 0;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+}
+
+.top {
+  position: absolute;
+  top: 0;
 }
 
 .cart-total-title {

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { pipe, pathOr, path, map } from 'ramda';
@@ -20,8 +20,29 @@ type PropsType = {
   me: Cart_me
 };
 
+type StateType = {
+  storesTop: ?number,
+  storesBottom: ?number,
+}
+
 /* eslint-disable react/no-array-index-key */
-class Cart extends PureComponent<PropsType> {
+class Cart extends Component<PropsType, StateType> {
+  state = {
+    storesTop: null,
+    storesBottom: null,
+  }
+
+  setStoresRef(ref) {
+    this.storesRef = ref;
+    if (!ref) return;
+    const rect = ref.getBoundingClientRect();
+    if ((this.state.storesTop !== rect.top) || (this.state.storesBottom !== rect.bottom)) {
+      this.setState({ storesTop: rect.top, storesBottom: rect.bottom });
+    }
+  }
+
+  storesRef: any;
+
   render() {
     const stores = pipe(
       pathOr([], ['me', 'cart', 'stores', 'edges']),
@@ -31,11 +52,15 @@ class Cart extends PureComponent<PropsType> {
       <div styleName="container">
         <div styleName="header">Cart</div>
         <div styleName="body-container">
-          <div styleName="stores-container">
+          <div styleName="stores-container" ref={ref => this.setStoresRef(ref)}>
             {stores.map((store, idx) => <CartStore key={idx} store={store} />)}
           </div>
           <div styleName="total-container">
-            <CartTotal threshold={168} />
+            <CartTotal
+              threshold={168}
+              top={this.state.storesTop}
+              bottom={this.state.storesBottom}
+            />
           </div>
         </div>
       </div>
