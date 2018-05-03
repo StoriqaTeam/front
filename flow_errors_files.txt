@@ -1,38 +1,13 @@
-2 src/components/Accordion/AccordionBlock.js
-2 src/components/Accordion/utils.js
-2 src/components/AddressAutocomplete/utils.js
-2 src/components/AttributeControl/AttributeControl.js
-1 src/components/Authorization/Authorization.js
-1 src/components/Authorization/SignIn.js
-1 src/components/Authorization/SignUp.js
-1 src/components/BannersRow/BannersRow.js
-1 src/components/CardProduct/CardProduct.js
-1 src/components/CategoriesMenu/CategoriesMenu.js
-1 src/components/CategorySelector/CategorySelector.js
-4 src/components/DropdownSelect/DropdownSelect.js
-4 src/components/SearchInput/SearchInput.js
-1 src/components/Slider/handlerSlidesDecorator.js
-1 src/components/UserDropdown/UserDropdown.js
-4 src/pages/Manage/Store/Contacts.js
-4 src/pages/Manage/Store/EditStore.js
-4 src/pages/Manage/Store/Form.js
-4 src/pages/Manage/Store/NewStore.js
-4 src/pages/Manage/Store/Product/EditProduct.js
-4 src/pages/Manage/Store/Product/Form.js
-4 src/pages/Manage/Store/Product/NewProduct.js
-4 src/pages/Manage/Store/Product/Variants/Table/Form/CharacteristicItem.js
-4 src/pages/Manage/Store/Product/Variants/Table/Form/Characteristics.js
-4 src/pages/Manage/Store/Product/Variants/Table/Form/Form.js
-4 src/pages/Manage/Store/Product/Variants/Table/Row.js
-4 src/pages/Manage/Store/Product/Variants/Table/Table.js
-2 src/pages/Search/Categories.js
-3 src/pages/Start/Start.js
-3 src/pages/Store/Product/Product.js
-1 src/pages/Stores/StoreRow.js
-4 src/pages/VerifyEmail/index.js
-3 src/utils/buildWidgets.js
-4 src/utils/fromRelayError.js
-4 src/utils/ramda/renameKeys.js
-2 src/utils/rename.js
-2 src/utils/search.js
-2 src/utils/uploadFile.js
+src/components/Authorization/Authorization.js
+src/components/CategorySelector/CategorySelector.js
+src/components/Profile/Profile.js
+src/pages/Manage/Store/Contacts.js
+src/pages/Manage/Store/EditStore.js
+src/pages/Manage/Store/NewStore.js
+src/pages/Manage/Store/Product/EditProduct.js
+src/pages/Manage/Store/Product/Form.js
+src/pages/Manage/Store/Product/NewProduct.js
+src/pages/Manage/Store/Product/Variants/Variants.js
+src/pages/Store/Product/Product.js
+src/pages/Store/Product/utils/buildWidgets.js
+src/utils/search.js
