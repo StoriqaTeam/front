@@ -21,7 +21,11 @@ type StateType = {
 };
 
 type PropsType = {
-  storeId: number,
+  match: {
+    params: {
+      storeId: string,
+    },
+  },
   router: routerShape,
 };
 
@@ -48,7 +52,7 @@ class NewProduct extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
       name: [{ lang: 'EN', text: name }],
-      storeId: parseInt(this.props.storeId, 10),
+      storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
@@ -74,15 +78,18 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
         }
 
-        const { storeId } = this.props;
-        const productId = pathOr(
+        const { storeId } = this.props.match.params;
+        // $FlowIgnoreMe
+        const productId: ?number = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
           response,
         );
-        this.props.router.push(
-          `/manage/store/${storeId}/products/${productId}`,
-        );
+        if (productId) {
+          this.props.router.push(
+            `/manage/store/${storeId}/products/${productId}`,
+          );
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -101,6 +108,7 @@ class NewProduct extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading } = this.state;
+    // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
     return (
