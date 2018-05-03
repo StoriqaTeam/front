@@ -18,6 +18,9 @@ type PropsTypes = {
     messagesCount: number,
     shopsCount: number,
     avatar: string,
+    lastName: string,
+    firstName: string,
+    email: string,
   },
 };
 
@@ -46,12 +49,15 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
   render() {
     const { user } = this.props;
     const { showModal, isSignUp } = this.state;
-    const lastName = pathOr(null, ['lastName'], user);
-    const firstName = pathOr(null, ['firstName'], user);
-    const email = pathOr(null, ['email'], user);
-    const messagesCount = pathOr(null, ['messagesCount'], user);
-    const shopsCount = pathOr(null, ['shopsCount'], user);
-    const avatar = pathOr(null, ['avatar'], user);
+
+    const {
+      lastName,
+      firstName,
+      email,
+      messagesCount,
+      shopsCount,
+      avatar,
+    } = user;
 
     return (
       <div styleName="container">
