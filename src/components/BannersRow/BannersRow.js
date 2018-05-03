@@ -21,11 +21,13 @@ class BannersRow extends PureComponent<PropsTypes> {
     const width = count ? 100 / count : 100;
     return (
       <div styleName="container">
-        {visibleBanners.map(item => (
-          <div key={item.id} style={{ width: `${width}%` }} styleName="item">
-            <Banner item={item} />
-          </div>
-        ))}
+        {visibleBanners &&
+          visibleBanners.length &&
+          visibleBanners.map(item => (
+            <div key={item.id} style={{ width: `${width}%` }} styleName="item">
+              <Banner item={item} />
+            </div>
+          ))}
       </div>
     );
   }
