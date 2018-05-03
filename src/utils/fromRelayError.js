@@ -1,17 +1,9 @@
 // @flow
 
-import {
-  map,
-  pathOr,
-  pipe,
-  prop,
-  fromPairs,
-  toString,
-  mapObjIndexed,
-} from 'ramda';
+import { map, pathOr, fromPairs, toString, mapObjIndexed } from 'ramda';
 
 export type ProcessedErrorType = {
-  [100 | 200 | 300 | 400]: {
+  ['100' | '200' | '300' | '400']: {
     status: string,
     messages?: {
       [string]: Array<string>,
@@ -19,29 +11,36 @@ export type ProcessedErrorType = {
   },
 };
 
-// type DetailedErrorType = {
-//   code: number,
-//   details: {
+type RelayAPIErrorType = {
+  code: 100,
+  details: {
+    status: string,
+    message?: string,
+  },
+};
 
-//   },
-// };
+type RelayDefaultErrorType = {
+  code: 200 | 300 | 400,
+  details: string,
+};
 
-// type RelayErrorType = {
-//   source: {
-//     errors: Array<{
-//       data: DetailedErrorType | string,
-//     }>,
-//   },
-// };
+type RelayErrorType = {
+  source: {
+    errors: Array<{
+      data: RelayAPIErrorType | RelayDefaultErrorType,
+    }>,
+  },
+};
+
 /*
-  see test
+  see tests
 */
-export default pipe(
-  pathOr([], ['source', 'errors']),
-  map(item => {
-    // $FlowIgnoreMe
-    const error = prop('data', item);
-    const code = prop('code', error);
+const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
+  // $FlowIgnoreMe
+  const errorsArr = pathOr([], ['source', 'errors'], relayError);
+  const convertedErrors = map(item => {
+    const error = item.data;
+    const { code } = error;
 
     if (code !== 100) {
       return [toString(code), { status: (error && error.details) || item }];
@@ -69,6 +68,9 @@ export default pipe(
       alert('Something going wrong :(');
     }
     return [toString(code), { status, messages }];
-  }),
-  fromPairs,
-);
+  }, errorsArr);
+  // $FlowIgnoreMe
+  return fromPairs(convertedErrors);
+};
+
+export default processError;
