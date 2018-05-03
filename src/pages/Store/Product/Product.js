@@ -8,10 +8,7 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Header, Footer, Main } from 'components/App';
 import { Container, Col, Row } from 'layout';
 
-import {
-  extractText,
-  isEmpty,
-} from 'utils';
+import { extractText, isEmpty } from 'utils';
 
 import {
   buildWidgets,
