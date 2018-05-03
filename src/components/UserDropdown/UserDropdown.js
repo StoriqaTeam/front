@@ -12,7 +12,7 @@ import { ProfileMenu, LoginMenu } from 'components/UserDropdown';
 import './UserDropdown.scss';
 
 type PropsTypes = {
-  user: {
+  user: ?{
     name: string,
     messagesCount: number,
     shopsCount: number,
@@ -49,21 +49,12 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
     const { user } = this.props;
     const { showModal, isSignUp } = this.state;
 
-    const {
-      lastName,
-      firstName,
-      email,
-      messagesCount,
-      shopsCount,
-      avatar,
-    } = user;
-
     return (
       <div styleName="container">
         <Dropdown withIcon>
           <trigger>
             <div styleName="avatar">
-              {avatar ? (
+              {user && user.avatar ? (
                 <img styleName="avatarImg" src={user.avatar} alt="img" />
               ) : (
                 <Icon type="person" size="16" />
@@ -73,12 +64,12 @@ class UserDropdown extends Component<PropsTypes, StateTypes> {
           <content>
             {user ? (
               <ProfileMenu
-                lastName={lastName}
-                firstName={firstName}
-                messagesCount={messagesCount}
-                shopsCount={shopsCount}
-                email={email}
-                avatar={avatar}
+                lastName={user.lastName}
+                firstName={user.firstName}
+                messagesCount={user.messagesCount}
+                shopsCount={user.shopsCount}
+                email={user.email}
+                avatar={user.avatar}
               />
             ) : (
               <LoginMenu onClick={this.onOpenModal} />

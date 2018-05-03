@@ -11,7 +11,9 @@ import './Authorization.scss';
 type PropsType = {
   email: string,
   password: string,
-  errors: ?Array<string>,
+  errors: {
+    [string]: ?Array<string>,
+  },
   formValid: boolean,
   handleLoginClick: Function,
   handleChange: Function,
