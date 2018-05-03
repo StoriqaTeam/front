@@ -15,7 +15,7 @@ export default async function uploadFile(file: File) {
     method: 'POST',
     body,
     headers: {
-      Authorization: `Bearer ${jwt}`,
+      Authorization: `Bearer ${String(jwt)}`,
     },
   });
   if (!response.ok) {

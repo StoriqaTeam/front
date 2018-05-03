@@ -78,6 +78,7 @@ class Authorization extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
+          // $FlowIgnoreMe
           this.setState({ errors: validationErrors });
           return;
         }
@@ -95,6 +96,7 @@ class Authorization extends Component<PropsType, StateType> {
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
+          // $FlowIgnoreMe
           errors: validationErrors,
         });
         log.error({ error });
@@ -132,6 +134,7 @@ class Authorization extends Component<PropsType, StateType> {
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
+          // $FlowIgnoreMe
           errors: validationErrors,
         });
       },
@@ -141,6 +144,7 @@ class Authorization extends Component<PropsType, StateType> {
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
+          // $FlowIgnoreMe
           errors: validationErrors,
         });
         log.error({ error });
