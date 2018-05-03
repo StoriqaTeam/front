@@ -25,8 +25,8 @@ type RelayDefaultErrorType = {
 };
 
 type RelayErrorType = {
-  source: {
-    errors: Array<{
+  source?: ?{
+    errors?: ?Array<{
       data: RelayAPIErrorType | RelayDefaultErrorType,
     }>,
   },

@@ -71,11 +71,12 @@ class Authorization extends Component<PropsType, StateType> {
       email,
       password,
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoad: false });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           // $FlowIgnoreMe
@@ -93,6 +94,7 @@ class Authorization extends Component<PropsType, StateType> {
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
@@ -112,7 +114,7 @@ class Authorization extends Component<PropsType, StateType> {
       email,
       password,
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoad: false });
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
@@ -131,6 +133,7 @@ class Authorization extends Component<PropsType, StateType> {
         }
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
@@ -141,6 +144,7 @@ class Authorization extends Component<PropsType, StateType> {
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
           isLoad: false,
