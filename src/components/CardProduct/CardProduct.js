@@ -38,7 +38,7 @@ class CardProduct extends PureComponent<PropsTypes> {
     const {
       item: { rawId, storeId, name, variants, currencyId },
     } = this.props;
-    if (!storeId || !rawId || !currencyId || !variants || variants.length === 0)
+    if (!storeId || !rawId || !currencyId || !variants || variants.length === 0 || !head(variants))
       return null;
     const { discount, photoMain, cashback, price } = head(variants);
     const lang = 'EN';
