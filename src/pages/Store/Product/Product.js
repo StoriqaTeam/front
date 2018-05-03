@@ -168,11 +168,7 @@ class Product extends Component<PropsType, StateType> {
                   widgets={widgets}
                   onWidgetClick={this.handleWidgetClick}
                 >
-                  <ProductPrice
-                    lastPrice={priceInfo.crossedPrice}
-                    currentPrice={priceInfo.price}
-                    percentage={priceInfo.cashback}
-                  />
+                  <ProductPrice {...priceInfo} />
                 </ProductDetails>
               </Col>
             </Row>
