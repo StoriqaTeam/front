@@ -3,7 +3,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { getNameText } from './utils';
+import { getNameText } from 'utils';
 
 import './CategorySelector.scss';
 
