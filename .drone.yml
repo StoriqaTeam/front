@@ -19,6 +19,7 @@ pipeline:
       - yarn updateSchema
       - yarn relay
       - yarn build
+      - yarn server:dist:build
     when:
       event: push
       branch: feature/cd
