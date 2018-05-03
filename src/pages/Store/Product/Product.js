@@ -6,7 +6,7 @@ import { propEq, filter, head, keys, insert, isNil } from 'ramda';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import { Header, Footer, Main } from 'components/App';
-import { Container, Col, Row } from 'layout';
+import { Col, Row } from 'layout';
 
 import {
   extractText,
@@ -18,9 +18,11 @@ import {
   filterVariants,
   compareWidgets,
   extractPhotos,
+  extractPriceInfo,
 } from './utils';
 
 import {
+  ProductPrice,
   ProductImage,
   ProductShare,
   ProductDetails,
@@ -29,7 +31,7 @@ import {
   TabRow,
 } from './index';
 
-import { ProductType, SelectedType, ThumbnailType } from './types';
+import { ProductType, SelectedType, ThumbnailType, PriceInfo } from './types';
 
 import './Product.scss';
 import mockData from './mockData.json';
@@ -43,6 +45,7 @@ type StateType = {
   widgets: {},
   photoMain: string,
   additionalPhotos: Array<ThumbnailType>,
+  priceInfo: PriceInfo
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -64,11 +67,13 @@ class Product extends Component<PropsType, StateType> {
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
       const { photoMain, additionalPhotos } = head(extractPhotos(all));
+      const priceInfo = head(extractPriceInfo(all));
       return {
         tabs: prevState.tabs,
         widgets: buildWidgets(all),
         photoMain,
         additionalPhotos,
+        priceInfo,
       };
     }
     return null;
@@ -84,6 +89,7 @@ class Product extends Component<PropsType, StateType> {
     widgets: {},
     photoMain: '',
     additionalPhotos: [],
+    priceInfo: {},
   };
   /**
    * @param {string} img
@@ -131,7 +137,13 @@ class Product extends Component<PropsType, StateType> {
     const {
       baseProduct: { name, longDescription },
     } = this.props;
-    const { tabs, widgets, photoMain, additionalPhotos } = this.state;
+    const {
+      tabs,
+      widgets,
+      photoMain,
+      additionalPhotos,
+      priceInfo,
+    } = this.state;
     return (
       <div styleName="container">
         <Header />
@@ -155,7 +167,13 @@ class Product extends Component<PropsType, StateType> {
                   )}
                   widgets={widgets}
                   onWidgetClick={this.handleWidgetClick}
-                />
+                >
+                  <ProductPrice
+                    lastPrice={priceInfo.crossedPrice}
+                    currentPrice={priceInfo.price}
+                    percentage={priceInfo.cashback}
+                  />
+                </ProductDetails>
               </Col>
             </Row>
             <Tabs>
@@ -196,6 +214,9 @@ export default createFragmentContainer(
           id
           photoMain
           additionalPhotos
+          price
+          cashback
+          discount
           attributes {
             value
             metaField
