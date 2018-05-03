@@ -34,8 +34,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
     // check for isExpanded accordionBlock
     // isExpanded имеет приоритет по отношению к проверке на активный элемент
     if (props.active && props.tree.children) {
-      const findContainsActive = find(whereEq({ id: props.active }));
-      const isContains = findContainsActive(props.tree.children);
+      const isContains = find(whereEq({ id: props.active }), props.tree.children || []);
       this.state = {
         isExpanded:
           props.isExpanded === undefined
