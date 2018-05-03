@@ -11,8 +11,7 @@ pipeline:
   build4nightly:
     image: node:9.9-slim
     commands:
-      - ls -lah
-      - . .env.nightly
+      - . ./.env.nightly
       - apt-get update
       - apt-get install -y git
       - rm -f yarn.lock || true
