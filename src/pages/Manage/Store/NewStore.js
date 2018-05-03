@@ -74,8 +74,15 @@ class NewStore extends Component<PropsType, StateType> {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
-        const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        this.props.router.push(`/manage/store/${storeId}`);
+        // $FlowIgnoreMe
+        const storeId: ?number = pathOr(
+          null,
+          ['createStore', 'rawId'],
+          response,
+        );
+        if (storeId) {
+          this.props.router.push(`/manage/store/${storeId}`);
+        }
         showAlert('Store created!', false);
       },
       onError: (error: Error) => {
