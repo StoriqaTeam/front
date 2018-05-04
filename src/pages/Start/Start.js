@@ -55,10 +55,18 @@ type PropsType = {
 class Start extends PureComponent<PropsType> {
   render() {
     const { mainPage } = this.props;
-    // $FlowIgnoreMe
-    const mostViewedProducts = pathOr([], ['findMostViewedProducts', 'edges'], mainPage);
-    // $FlowIgnoreMe
-    const mostDiscountProducts = pathOr([], ['findMostDiscountProducts', 'edges'], mainPage);
+    const mostViewedProducts = pathOr(
+      [],
+      ['findMostViewedProducts', 'edges'],
+      // $FlowIgnoreMe
+      mainPage,
+    );
+    const mostDiscountProducts = pathOr(
+      [],
+      ['findMostDiscountProducts', 'edges'],
+      // $FlowIgnoreMe
+      mainPage,
+    );
     // prepare arrays
     const variantsToArr = variantsName =>
       pipe(
