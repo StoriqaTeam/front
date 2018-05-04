@@ -1,25 +1,15 @@
 // @flow
 
-import {
-  isNil,
-  flatten,
-  uniq,
-  reduce,
-  filter,
-  identity,
-  keys,
-} from 'ramda';
+import { isNil, flatten, uniq, reduce, filter, identity, keys } from 'ramda';
 import { extractText } from 'utils';
 
-import {
-  VariantType,
-} from '../types';
+import { VariantType } from '../types';
 
 type WidgetValueType = {
   id: string,
   label: string,
   img?: string,
-}
+};
 
 /**
  * @desc Groups an array of objects by certain property
@@ -58,7 +48,10 @@ function setImage(image: string): string {
  * @param {[]} images
  * @return {Array<WidgetValueType>}
  */
-function buildWidgetInterface(array: any[], images: []): Array<WidgetValueType> {
+function buildWidgetInterface(
+  array: any[],
+  images: [],
+): Array<WidgetValueType> {
   return array.map((value, index) => ({
     id: `${index}`,
     label: value,
