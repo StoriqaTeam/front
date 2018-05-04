@@ -24,7 +24,7 @@ type PropsType = {
 };
 
 type StateType = {
-  labelFfloat: boolean,
+  labelFloat: boolean,
   isFocus: boolean,
 };
 
