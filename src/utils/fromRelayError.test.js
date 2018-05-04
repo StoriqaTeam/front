@@ -18,6 +18,12 @@ const commonError = {
   },
 };
 
+describe('it works', () => {
+  it('should work', () => {
+    expect(true).toEqual(true);
+  })
+})
+
 // xdescribe('fromRelayError helper', () => {
 //   describe('for common errors', () => {
 //     it('should convert to `{ code: { status, message }}`', () => {
