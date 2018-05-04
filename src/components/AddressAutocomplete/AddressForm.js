@@ -26,7 +26,7 @@ type PropsType = {
   autocompleteService: any,
   geocoderService: any,
   onChangeFormInput: (type: string) => (e: any) => void,
-  onUpdateForm: (form: any) => void,
+  onUpdateForm: (form: any) => number,
 };
 
 type SelectType = {
