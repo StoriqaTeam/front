@@ -1,4 +1,8 @@
 pipeline:
+  clone:
+    git:
+      image: plugins/git:next
+      pull: true
   restore-cache:
     image: drillster/drone-volume-cache
     restore: true
