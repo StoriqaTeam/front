@@ -12,7 +12,7 @@ import './SliderContainer.scss';
 type PropsTypes = {
   type: string, // Slider type, for example: banners, product card etc.
   title: string, // Title for product card header
-  slidesToShow: number, // Number of displayed slides
+  slidesTfoShow: number, // Number of displayed slides
   animationSpeed: ?number, // Animation speed (ms), default: 500ms
   dots: ?boolean, // Has dots navigation
   slidesOffset: number,
