@@ -11,6 +11,8 @@ pipeline:
     environment:
       - RUN_MODE=k8s
     commands:
+      - apt-get update
+      - apt-get install -y git ca-certificates
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn test
