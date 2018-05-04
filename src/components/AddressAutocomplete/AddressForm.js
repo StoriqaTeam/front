@@ -35,7 +35,7 @@ type SelectType = {
 };
 
 type StateType = {
-  country: ?SelectType,
+  country: SelectType,
   address: ?any,
   autocompleteValue: ?string,
   predictions: Array<{ mainText: string, secondaryText: string }>,
