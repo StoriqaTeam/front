@@ -79,7 +79,10 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     }
     if (active) {
       this.onMouseOutTimer = setTimeout(() => {
-        this.setState(() => ({ active: null }));
+        this.setState(() => ({
+          active: null,
+          activeMid: null,
+        }));
       }, 150);
     }
   };
@@ -129,6 +132,17 @@ class CategoriesMenu extends Component<PropsType, StateType> {
       const { rawId } = category;
       const categoryChildren = category.children;
       const name = find(propEq('lang', lang))(category.name);
+      let onMouseOver = null;
+      let onMouseOut = null;
+      if (isRoot) {
+        ({ onMouseOver, onMouseOut } = this);
+      } else if (categoryChildren) {
+        onMouseOver = this.onMouseOverMid;
+        onMouseOut = this.onMouseOutMid;
+      } else {
+        onMouseOver = null;
+        onMouseOut = null;
+      }
       const renderInnerLink = () => (
         <Fragment>
           <span styleName="text">{name.text}</span>
@@ -150,8 +164,8 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             activeItem: isRoot && active === `${category.rawId}`,
             activeItemMod: !isRoot && activeMid === `${category.rawId}`,
           })}
-          onMouseOver={isRoot ? this.onMouseOver : this.onMouseOverMid}
-          onMouseOut={isRoot ? this.onMouseOut : this.onMouseOutMid}
+          onMouseOver={onMouseOver}
+          onMouseOut={onMouseOut}
           onBlur={() => {}}
           onFocus={() => {}}
         >
