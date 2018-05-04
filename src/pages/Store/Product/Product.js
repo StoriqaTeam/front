@@ -60,7 +60,12 @@ class Product extends Component<PropsType, StateType> {
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const { photoMain, additionalPhotos } = head(extractPhotos(all));
+      const extractedPhotos = head(extractPhotos(all));
+      let photoMain = '';
+      let additionalPhotos = [];
+      if (extractedPhotos) {
+        ({ photoMain, additionalPhotos } = extractedPhotos);
+      }
       return {
         tabs: prevState.tabs,
         widgets: buildWidgets(all),
@@ -90,7 +95,7 @@ class Product extends Component<PropsType, StateType> {
   insertPhotoMain = (
     img: string,
     photos: ThumbnailType,
-  ): Array<ThumbnailType> => {
+  ): ThumbnailType => {
     if (!isNil(img)) {
       return insert(0, { id: photos.length + 1, img, opacity: false }, photos);
     }
@@ -108,16 +113,24 @@ class Product extends Component<PropsType, StateType> {
     } = this.props;
     const { widgets } = this.state;
     const filteredWidgets = filterVariants(all, selected.label);
-    const { variantId } = head(
+    const filteredWidgetsHeadKeys = head(
       keys(filteredWidgets).map(key => filteredWidgets[key]),
     );
+    let variantId = null;
+    if (filteredWidgetsHeadKeys) {
+      ({ variantId } = filteredWidgetsHeadKeys);
+    }
     /**
      * @desc returns true if the object satisfies the 'id' property
      * @return {boolean}
      */
     const byId = propEq('id', variantId);
     const variantObj = head(filter(byId, extractPhotos(all)));
-    const { photoMain, additionalPhotos } = variantObj;
+    let photoMain = '';
+    let additionalPhotos = [];
+    if (variantObj) {
+      ({ photoMain, additionalPhotos } = variantObj);
+    }
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
