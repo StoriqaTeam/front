@@ -13,17 +13,12 @@ type PropsTypes = {
 
 class SliderHeader extends PureComponent<PropsTypes> {
   render() {
-    const {
-      title,
-      isRevealButton,
-      handleSlide,
-      seeAllUrl,
-    } = this.props;
+    const { title, isRevealButton, handleSlide, seeAllUrl } = this.props;
 
     return (
       <div styleName="container">
         <div styleName="title">{title}</div>
-        {isRevealButton &&
+        {isRevealButton && (
           <div styleName="nav">
             <button
               direction="prev"
@@ -40,15 +35,12 @@ class SliderHeader extends PureComponent<PropsTypes> {
               <Icon type="next" size="32" />
             </button>
           </div>
-        }
-        {seeAllUrl &&
-          <a
-            styleName="reveal"
-            href={seeAllUrl}
-          >
+        )}
+        {seeAllUrl && (
+          <a styleName="reveal" href={seeAllUrl} data-test="seeAllLink">
             See all
           </a>
-        }
+        )}
         {false && <a styleName="settings">Recommendations settings</a>}
       </div>
     );

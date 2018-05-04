@@ -1,13 +1,12 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
+
+import { isNil } from 'ramda';
+
+import { WidgetsType } from './types';
 
 import {
-  WidgetsType,
-} from './types';
-
-import {
-  ProductPrice,
   ProductSize,
   ProductMaterial,
   ProductThumbnails,
@@ -19,22 +18,23 @@ type WidgetValueType = {
   id: string,
   label: string,
   img?: string,
-}
+};
 
 type PropsType = {
   widgets: WidgetsType,
   productTitle: string,
   productDescription: string,
   onWidgetClick: Function,
-}
+  children: React.Node,
+};
 
 type StateType = {
   resetCHECKBOX: boolean,
   resetCOMBOBOX: boolean,
   resetCOLOR_PICKER: boolean,
-}
+};
 
-class ProductDetails extends PureComponent<PropsType, StateType> {
+class ProductDetails extends React.Component<PropsType, StateType> {
   state = {
     resetCHECKBOX: false,
     resetCOMBOBOX: false,
@@ -55,59 +55,58 @@ class ProductDetails extends PureComponent<PropsType, StateType> {
    * @param {string} widget.uiElement
    * @return {void}
    */
-  handleWidget = (selected: WidgetValueType, { uiElement }: WidgetsType): void => {
+  handleWidget = (
+    selected: WidgetValueType,
+    { uiElement }: WidgetsType,
+  ): void => {
     const { onWidgetClick } = this.props;
-    this.setState({
-      ...this.resetOthers(uiElement),
-    }, () => onWidgetClick(selected));
+    this.setState(
+      {
+        ...this.resetOthers(uiElement),
+      },
+      () => onWidgetClick(selected),
+    );
   };
   render() {
-    const {
-      resetCHECKBOX,
-      resetCOMBOBOX,
-      resetCOLOR_PICKER,
-    } = this.state;
+    const { resetCHECKBOX, resetCOMBOBOX, resetCOLOR_PICKER } = this.state;
     const {
       productTitle,
       productDescription,
-      widgets: {
-        CHECKBOX,
-        COMBOBOX,
-        COLOR_PICKER,
-      },
+      widgets: { CHECKBOX, COMBOBOX, COLOR_PICKER },
+      children,
     } = this.props;
     return (
       <div styleName="container">
         <h2>{productTitle}</h2>
-        <ProductPrice
-          lastPrice="0.000290"
-          currentPrice="0.000123"
-          percentage="12"
-        />
-        <p>
-          {productDescription}
-        </p>
-        <ProductSize
-          isReset={resetCHECKBOX}
-          title={CHECKBOX.title}
-          sizes={CHECKBOX.values}
-          onClick={widget => this.handleWidget(widget, CHECKBOX)}
-        />
-        <ProductMaterial
-          isReset={resetCOMBOBOX}
-          title={COMBOBOX.title}
-          materials={COMBOBOX.values}
-          onSelect={widget => this.handleWidget(widget, COMBOBOX)}
-        />
+        {children}
+        <p>{productDescription}</p>
         {/* eslint-disable camelcase */}
-        <ProductThumbnails
-          isReset={resetCOLOR_PICKER}
-          title={COLOR_PICKER.title}
-          row
-          srcProp="image"
-          thumbnails={COLOR_PICKER.values}
-          onClick={widget => this.handleWidget(widget, COLOR_PICKER)}
-        />
+        {!isNil(CHECKBOX) ? (
+          <ProductSize
+            isReset={resetCHECKBOX}
+            title={CHECKBOX.title}
+            sizes={CHECKBOX.values}
+            onClick={widget => this.handleWidget(widget, CHECKBOX)}
+          />
+        ) : null}
+        {!isNil(COMBOBOX) ? (
+          <ProductMaterial
+            isReset={resetCOMBOBOX}
+            title={COMBOBOX.title || ''}
+            materials={COMBOBOX.values}
+            onSelect={widget => this.handleWidget(widget, COMBOBOX)}
+          />
+        ) : null}
+        {!isNil(COLOR_PICKER) ? (
+          <ProductThumbnails
+            isReset={resetCOLOR_PICKER}
+            title={COLOR_PICKER.title}
+            row
+            srcProp="image"
+            thumbnails={COLOR_PICKER.values}
+            onClick={widget => this.handleWidget(widget, COLOR_PICKER)}
+          />
+        ) : null}
       </div>
     );
   }

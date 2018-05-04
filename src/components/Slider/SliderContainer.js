@@ -50,18 +50,23 @@ class SliderContainer extends Component<PropsTypes> {
 
     return (
       <div styleName="container">
-        {type === 'products' && <SliderHeader
-          title={title}
-          isRevealButton={isRevealButton}
-          handleSlide={handleSlide}
-          seeAllUrl={seeAllUrl}
-        />}
+        {type === 'products' && (
+          <SliderHeader
+            title={title}
+            isRevealButton={isRevealButton}
+            handleSlide={handleSlide}
+            seeAllUrl={seeAllUrl}
+          />
+        )}
         <div
           ref={this.props.originalComponentRef}
           styleName="wrapper"
           style={{
             left: slidesOffset || '',
-            transition: isTransition ? `left ${animationSpeedSec}s ease-out` : '',
+            transition: isTransition
+              ? `left ${animationSpeedSec}s ease-out`
+              : '',
+            animationDelay: '.2s',
           }}
         >
           {Children.map(this.props.children, child => (
@@ -75,19 +80,22 @@ class SliderContainer extends Component<PropsTypes> {
             </div>
           ))}
         </div>
-        {dots && slidesToShow === 1 &&
-          <div styleName="dots">
-            {Children.map(this.props.children, (child, idx) => (
-              <div
-                styleName={classNames('dot', { active: idx === num })}
-                onClick={() => { handleDot(idx); }}
-                onKeyDown={() => {}}
-                role="button"
-                tabIndex="0"
-              />
-            ))}
-          </div>
-        }
+        {dots &&
+          slidesToShow === 1 && (
+            <div styleName="dots">
+              {Children.map(this.props.children, (child, idx) => (
+                <div
+                  styleName={classNames('dot', { active: idx === num })}
+                  onClick={() => {
+                    handleDot(idx);
+                  }}
+                  onKeyDown={() => {}}
+                  role="button"
+                  tabIndex="0"
+                />
+              ))}
+            </div>
+          )}
       </div>
     );
   }

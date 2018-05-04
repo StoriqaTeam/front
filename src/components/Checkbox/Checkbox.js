@@ -15,7 +15,7 @@ class Checkbox extends PureComponent<PropsType> {
   onChange = () => {
     const { id, onChange } = this.props;
     onChange(id);
-  }
+  };
 
   render() {
     const { id, label, isChecked } = this.props;

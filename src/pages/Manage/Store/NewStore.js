@@ -2,11 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  assocPath,
-  pathOr,
-  toUpper,
-} from 'ramda';
+import { assocPath, pathOr, toUpper } from 'ramda';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
@@ -47,10 +43,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   handleSave = ({ form, optionLanguage }) => {
-    const {
-      environment,
-      currentUser,
-    } = this.context;
+    const { environment, currentUser, showAlert } = this.context;
     const {
       name,
       longDescription,
@@ -64,21 +57,16 @@ class NewStore extends Component<PropsType, StateType> {
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
-      name: [
-        { lang: optionLanguage, text: name },
-      ],
+      name: [{ lang: optionLanguage, text: name }],
       defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [
-        { lang: optionLanguage, text: longDescription },
-      ],
-      shortDescription: [
-        { lang: optionLanguage, text: shortDescription },
-      ],
+      longDescription: [{ lang: optionLanguage, text: longDescription }],
+      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
       slug,
       slogan,
       logo: logoUrl,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        this.setState(() => ({ isLoading: false }));
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
@@ -86,16 +74,16 @@ class NewStore extends Component<PropsType, StateType> {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
-        this.setState(() => ({ isLoading: false }));
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.props.router.push(`/manage/store/${storeId}`);
+        showAlert('Store created!', false);
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
-        this.setState(() => ({ isLoading: false }));
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
@@ -113,7 +101,7 @@ class NewStore extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 
@@ -151,4 +139,5 @@ NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
+  showAlert: PropTypes.func,
 };

@@ -4,27 +4,27 @@ import React, { Component } from 'react';
 
 import './ProductThumbnails.scss';
 
-import {
-  SelectedType,
-} from './types';
+import { SelectedType, ThumbnailType } from './types';
 
 type PropsType = {
-  // eslint-disable-next-line
+  /* eslint-disable react/no-unused-prop-types */
+  isFirstSelected: boolean,
   isReset: boolean,
   title?: string,
-  thumbnails: Array<{id: string, img: string, alt: string, opacity: boolean, label?: string}>,
+  thumbnails: Array<ThumbnailType>,
   row?: boolean,
   onClick: Function,
-}
+};
 
 type StateType = {
   selected: null | number,
-}
+};
 
 class ProductThumbnails extends Component<PropsType, StateType> {
   static defaultProps = {
     title: '',
     row: false,
+    isFirstSelected: false,
   };
   /**
    * @static
@@ -32,11 +32,14 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { isReset } = nextProps;
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
+    const { isReset, isFirstSelected } = nextProps;
     if (isReset) {
       return {
-        selected: null,
+        selected: isFirstSelected ? 0 : null,
       };
     }
     return prevState;
@@ -52,20 +55,19 @@ class ProductThumbnails extends Component<PropsType, StateType> {
    */
   handleClick = (index: number, selected: SelectedType): void => {
     const { onClick } = this.props;
-    this.setState({
-      selected: index,
-    }, onClick(selected));
+    this.setState(
+      {
+        selected: index,
+      },
+      onClick(selected),
+    );
   };
   render() {
-    const {
-      thumbnails,
-      row,
-      title,
-    } = this.props;
+    const { thumbnails, row, title } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        { title !== '' ? (<h4>{ title }</h4>) : null }
+        {title !== '' ? <h4>{title}</h4> : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {thumbnails.map((thumbnail, index) => (
             <button
@@ -74,9 +76,11 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <figure>
                 <img
-                  styleName={`${selected === index && !thumbnail.opacity ? 'clicked' : ''} ${thumbnail.opacity ? 'opaque' : ''}`}
+                  styleName={`${
+                    selected === index && !thumbnail.opacity ? 'clicked' : ''
+                  } ${thumbnail.opacity ? 'opaque' : ''}`}
                   src={thumbnail.img}
-                  alt={thumbnail.val || 'something'}
+                  alt={thumbnail.alt || 'image alt'}
                 />
               </figure>
             </button>

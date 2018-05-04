@@ -16,12 +16,7 @@ class Checkbox extends PureComponent<PropsType> {
   };
 
   render() {
-    const {
-      id,
-      label,
-      checked,
-      errors,
-    } = this.props;
+    const { id, label, checked, errors } = this.props;
     return (
       <Fragment>
         <label htmlFor={id}>
@@ -34,9 +29,7 @@ class Checkbox extends PureComponent<PropsType> {
             onChange={this.handleChange}
           />
         </label>
-        {errors && errors.length > 0 && (
-          <span>{errors}</span>
-        )}
+        {errors && errors.length > 0 && <span>{errors}</span>}
       </Fragment>
     );
   }

@@ -75,7 +75,11 @@ class Form extends Component<PropsType, StateType> {
         form: {
           name: pathOr(null, ['name', 0, 'text'], store),
           longDescription: pathOr(null, ['longDescription', 0, 'text'], store),
-          shortDescription: pathOr(null, ['shortDescription', 0, 'text'], store),
+          shortDescription: pathOr(
+            null,
+            ['shortDescription', 0, 'text'],
+            store,
+          ),
           defaultLanguage: pathOr(null, ['defaultLanguage'], store),
           slug: pathOr(null, ['slug'], store),
           slogan: pathOr(null, ['slogan'], store),
@@ -101,11 +105,16 @@ class Form extends Component<PropsType, StateType> {
     formErrors: {},
   };
   componentWillMount() {
-    const { directories: { languages } } = this.context;
-    const langItems = map(item => ({
-      id: item.isoCode,
-      label: languagesDic[item.isoCode],
-    }), languages);
+    const {
+      directories: { languages },
+    } = this.context;
+    const langItems = map(
+      item => ({
+        id: item.isoCode,
+        label: languagesDic[item.isoCode],
+      }),
+      languages,
+    );
     this.setState({ langItems });
   }
 
@@ -118,7 +127,9 @@ class Form extends Component<PropsType, StateType> {
   }
 
   handleDefaultLanguage = (defaultLanguage: { id: string, label: string }) => {
-    this.setState(assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)));
+    this.setState(
+      assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)),
+    );
   };
 
   handleInputChange = (id: string) => (e: any) => {
@@ -155,17 +166,28 @@ class Form extends Component<PropsType, StateType> {
     } = this.state;
 
     // TODO: вынести в либу спеки
-    const { errors: formErrors } = validate({
-      name: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      shortDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      longDescription: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-      slug: [[(value: string) => value && value.length > 0, 'Should not be empty']],
-    }, {
-      name,
-      longDescription,
-      shortDescription,
-      slug,
-    });
+    const { errors: formErrors } = validate(
+      {
+        name: [
+          [(value: string) => value && value.length > 0, 'Should not be empty'],
+        ],
+        shortDescription: [
+          [(value: string) => value && value.length > 0, 'Should not be empty'],
+        ],
+        longDescription: [
+          [(value: string) => value && value.length > 0, 'Should not be empty'],
+        ],
+        slug: [
+          [(value: string) => value && value.length > 0, 'Should not be empty'],
+        ],
+      },
+      {
+        name,
+        longDescription,
+        shortDescription,
+        slug,
+      },
+    );
 
     if (formErrors) {
       this.setState({ formErrors });
@@ -188,7 +210,11 @@ class Form extends Component<PropsType, StateType> {
 
   // TODO: extract to helper
   /* eslint-disable */
-  renderInput = ({ id, label, limit }: {
+  renderInput = ({
+    id,
+    label,
+    limit,
+  }: {
     id: string,
     label: string,
     limit?: number,
@@ -219,12 +245,11 @@ class Form extends Component<PropsType, StateType> {
   );
 
   render() {
-    const {
-      langItems,
-      form,
-    } = this.state;
+    const { langItems, form } = this.state;
     const { isLoading } = this.props;
-    const defaultLanguageValue = find(propEq('id', toLower(form.defaultLanguage)))(langItems);
+    const defaultLanguageValue = find(
+      propEq('id', toLower(form.defaultLanguage)),
+    )(langItems);
 
     return (
       <Fragment>
@@ -243,6 +268,7 @@ class Form extends Component<PropsType, StateType> {
               items={langItems}
               onSelect={this.handleDefaultLanguage}
               tabIndexValue={0}
+              dataTest="storeLangSelect"
             />
           </div>
           {this.renderInput({
@@ -255,13 +281,16 @@ class Form extends Component<PropsType, StateType> {
             label: 'Slug',
             limit: 50,
           })}
-          {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
-          {this.renderTextarea({ id: 'longDescription', label: 'Long description' })}
+          {this.renderTextarea({
+            id: 'shortDescription',
+            label: 'Short description',
+          })}
+          {this.renderTextarea({
+            id: 'longDescription',
+            label: 'Long description',
+          })}
           <div styleName="formItem">
-            <SpinnerButton
-              onClick={this.handleSave}
-              isLoading={isLoading}
-            >
+            <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
               Save
             </SpinnerButton>
           </div>

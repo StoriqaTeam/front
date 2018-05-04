@@ -1,3 +1,5 @@
+$bigImageSize: 69.875rem;
+
 .container {
   align-items: flex-start;
   border-right: 1px solid #efefef;
@@ -18,15 +20,14 @@
 .image {
   align-items: center;
   display: flex;
-  overflow: hidden;
   flex-flow: column;
+  width: $bigImageSize;
 }
 
 .bigImage {
-  height: 63.25rem;
-
+  height: $bigImageSize;
   position: relative;
-  width: 69.875rem;
+  width: inherit;
   & > img {
     height: 100%;
     object-fit: contain;
@@ -35,5 +36,10 @@
 }
 
 .thumbnailsWrapper {
+  max-width: 12rem;
   padding: 2.375rem 2.125rem 0 2.125rem ;
+}
+
+.noThumbnailsWrapper {
+  max-width: 12rem;
 }

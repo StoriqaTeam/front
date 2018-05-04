@@ -6,36 +6,36 @@ import './ProductPrice.scss';
 
 type PropsType = {
   currency?: string,
-  lastPrice: string,
-  currentPrice: string,
-  percentage: string,
+  crossedPrice: string,
+  price: string,
+  cashback: string,
   buttonText?: string,
-}
-
-const ProductPrice = (props: PropsType) => {
-  const {
-    currency,
-    lastPrice,
-    currentPrice,
-    percentage,
-    buttonText,
-  } = props;
-  return (
-    <div styleName="container">
-      <span styleName="lasPrice">
-        { lastPrice } { currency }
-      </span>
-      <div styleName="stq">
-        <span styleName="currentPrice">
-          { currentPrice } { currency }
-        </span>
-        <button>
-          { buttonText } {`${percentage}%`}
-        </button>
-      </div>
-    </div>
-  );
 };
+
+const ProductPrice = ({
+  currency,
+  crossedPrice,
+  price,
+  cashback,
+  buttonText,
+  } : PropsType
+) => (
+  <div styleName="container">
+    {price.toString() === crossedPrice ? null : (
+      <span styleName="crossedPrice">
+        {crossedPrice} {currency}
+      </span>
+    )}
+    <div styleName="stq">
+      <span styleName="price">
+        {price} {currency}
+      </span>
+      <button>
+        {buttonText} {`${cashback}%`}
+      </button>
+    </div>
+  </div>
+);
 
 ProductPrice.defaultProps = {
   currency: 'STQ',

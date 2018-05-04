@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
+    "@storiqa/shared":
+      "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
@@ -60,6 +61,7 @@
     "dotenv": "4.0.0",
     "eslint": "4.12.1",
     "eslint-config-airbnb": "16.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-config-react-app": "2.0.1",
     "eslint-import-resolver-babel-module": "4.0.0-beta.3",
     "eslint-loader": "1.9.0",
@@ -72,7 +74,6 @@
     "file-loader": "1.1.5",
     "flow-bin": "0.63.1",
     "fs-extra": "3.0.1",
-    "git-pre-push": "0.0.5",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "node-sass": "4.7.2",
@@ -81,6 +82,7 @@
     "postcss-loader": "2.0.8",
     "postcss-scss": "1.0.3",
     "precss": "2.0.0",
+    "prettier": "1.12.1",
     "promise": "8.0.1",
     "raf": "3.4.0",
     "react-dev-utils": "4.2.1",
@@ -108,9 +110,12 @@
     "build": "node scripts/build.js",
     "build:clean": "rm -rf ./build && mkdir ./build",
     "server:dist:clean": "rm -rf ./dist && mkdir ./dist",
-    "server:dist:build": "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
-    "server:dev": "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node --inspect ./server/index.js",
-    "server:prod": ". .env.stage && yarn build:clean && yarn build && yarn server:dist:build && node ./dist/server.js",
+    "server:dist:build":
+      "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
+    "server:dev":
+      "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node --inspect ./server/index.js",
+    "server:prod":
+      ". .env.stage && yarn build:clean && yarn build && yarn server:dist:build && node ./dist/server.js",
     "dev": "yarn dev:stable",
     "dev:nightly": ". .env.nightly && yarn relay && yarn server:dev",
     "dev:stable": ". .env.stable && yarn relay && yarn server:dev",
@@ -118,18 +123,19 @@
     "lint": "./node_modules/.bin/eslint ./src",
     "test": "jest",
     "storybook": "yarn updateSchema && start-storybook -p 9001 -c .storybook",
-    "relay": "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
+    "relay":
+      "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
     "updateSchema": "./node_modules/.bin/babel-node scripts/updateSchema.js",
-    "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile"
+    "checkImage":
+      "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
+    "prettier":
+      "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
+    "postinstall":
+      "touch .git/hooks/pre-push && rm .git/hooks/pre-push && touch .git/hooks/pre-commit && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
   },
-  "prepush": "ci",
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,mjs}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
@@ -139,11 +145,10 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
+        "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },

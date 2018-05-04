@@ -26,14 +26,11 @@ const ProfileMenu = ({
   <div styleName="menu">
     <div styleName="top">
       <div styleName="icon">
-        {avatar ?
-          <img
-            styleName="topImg"
-            src={avatar}
-            alt="img"
-          /> :
+        {avatar ? (
+          <img styleName="topImg" src={avatar} alt="img" />
+        ) : (
           <Icon type="person" size="32" />
-        }
+        )}
       </div>
       <div styleName="personalData">
         <div styleName="name">
@@ -47,31 +44,24 @@ const ProfileMenu = ({
     <div styleName="items">
       <a href="/" styleName="item">
         <span>Messages</span>
-        {Boolean(messagesCount) &&
+        {Boolean(messagesCount) && (
           <div styleName="count">
-            <Count
-              tip
-              amount={messagesCount}
-              styles="blue"
-            />
+            <Count tip amount={messagesCount} styles="blue" />
           </div>
-        }
+        )}
       </a>
-      <a href="/" styleName="item">Profile settings</a>
-      <a href="/" styleName="item">History</a>
+      <a href="/" styleName="item">
+        Profile settings
+      </a>
+      <a href="/" styleName="item">
+        History
+      </a>
       <a href="/" styleName="item">
         <span>My shops</span>
       </a>
     </div>
-    <Link
-      styleName="logout"
-      to="/logout"
-    >
-      <Icon
-        inline
-        type="logout"
-        size="24"
-      />
+    <Link styleName="logout" to="/logout" data-test="logoutLink">
+      <Icon inline type="logout" size="24" />
       <span styleName="logoutText">Logout</span>
     </Link>
   </div>

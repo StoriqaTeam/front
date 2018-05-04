@@ -4,8 +4,10 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation CreateProductWithAttributesMutation($input:CreateProductWithAttributesInput!) {
-    createProduct(input:$input) {
+  mutation CreateProductWithAttributesMutation(
+    $input: CreateProductWithAttributesInput!
+  ) {
+    createProduct(input: $input) {
       id
       rawId
       discount
@@ -33,18 +35,19 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => commitMutation(params.environment, {
-  mutation,
-  variables: {
-    input: {
-      clientMutationId: '',
-      product: params.product,
-      attributes: params.attributes,
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
+    mutation,
+    variables: {
+      input: {
+        clientMutationId: '',
+        product: params.product,
+        attributes: params.attributes,
+      },
     },
-  },
-  onCompleted: params.onCompleted,
-  onError: params.onError,
-});
+    onCompleted: params.onCompleted,
+    onError: params.onError,
+  });
 
 export default { commit };
 

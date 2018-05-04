@@ -5,7 +5,6 @@ import { propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
-import { Checkbox } from 'components/common/Checkbox';
 
 import './Authorization.scss';
 
@@ -17,7 +16,7 @@ type PropsType = {
   handleLoginClick: Function,
   handleChange: Function,
   handleBlur: Function,
-}
+};
 
 type StateType = {
   autocomplete: boolean,
@@ -48,6 +47,7 @@ class SignIn extends Component<PropsType, StateType> {
       <div styleName="signIn">
         <div styleName="inputBlock">
           <Input
+            thisFocus
             label="Email"
             name="email"
             type="text"
@@ -74,17 +74,13 @@ class SignIn extends Component<PropsType, StateType> {
         {formValid && (
           <div styleName="signInGroup">
             <div styleName="signInButton">
-              <Button onClick={handleLoginClick} type="button">
+              <Button
+                onClick={handleLoginClick}
+                type="button"
+                dataTest="signInButton"
+              >
                 <span>Sign In</span>
               </Button>
-            </div>
-            <div styleName="signInCheckbox">
-              <Checkbox
-                id="login"
-                label="Remember Me"
-                isChecked={autocomplete}
-                handleCheckboxChange={this.handleCheckboxChange}
-              />
             </div>
           </div>
         )}

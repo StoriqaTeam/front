@@ -4,6 +4,6 @@ type AttributeValueType = {
   attribute: AttributeType,
   value: string,
   metaField: string,
-}
+};
 
 export default AttributeValueType;

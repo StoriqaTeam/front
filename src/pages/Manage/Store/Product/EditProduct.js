@@ -25,7 +25,13 @@ type StateType = {
 };
 
 const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
-const variantsFromProps = pathOr(null, ['me', 'baseProduct', 'variants', 'all']);
+const storeLogoFromProps = pathOr(null, ['me', 'baseProduct', 'store', 'logo']);
+const variantsFromProps = pathOr(null, [
+  'me',
+  'baseProduct',
+  'variants',
+  'all',
+]);
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -50,11 +56,17 @@ class EditProduct extends Component<PropsType, StateType> {
     UpdateBaseProductMutation.commit({
       id,
       name: [{ lang: 'EN', text: name }],
-      shortDescription: isEmpty(shortDescription) ? [] : [{ lang: 'EN', text: shortDescription }],
-      longDescription: isEmpty(fullDesc) ? [] : [{ lang: 'EN', text: fullDesc }],
+      shortDescription: isEmpty(shortDescription)
+        ? []
+        : [{ lang: 'EN', text: shortDescription }],
+      longDescription: isEmpty(fullDesc)
+        ? []
+        : [{ lang: 'EN', text: fullDesc }],
       categoryId,
       seoTitle: isEmpty(seoTitle) ? [] : [{ lang: 'EN', text: seoTitle }],
-      seoDescription: isEmpty(seoDescription) ? [] : [{ lang: 'EN', text: seoDescription }],
+      seoDescription: isEmpty(seoDescription)
+        ? []
+        : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         log.debug({ response, errors });
@@ -86,17 +98,16 @@ class EditProduct extends Component<PropsType, StateType> {
   render() {
     const { isLoading } = this.state;
     const baseProduct = baseProductFromProps(this.props);
+    const logo = storeLogoFromProps(this.props);
+
     if (!baseProduct) {
-      return (<span>Product not found</span>);
+      return <span>Product not found</span>;
     }
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <Menu
-              activeItem=""
-              switchMenu={() => {}}
-            />
+            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
           </Col>
           <Col size={10}>
             <Form
@@ -127,7 +138,7 @@ export default createFragmentContainer(
   Page(EditProduct),
   graphql`
     fragment EditProduct_me on User
-    @argumentDefinitions(productId: { type: "Int!" }) {
+      @argumentDefinitions(productId: { type: "Int!" }) {
       baseProduct(id: $productID) {
         id
         rawId
@@ -193,6 +204,7 @@ export default createFragmentContainer(
         store {
           id
           rawId
+          logo
         }
         name {
           lang

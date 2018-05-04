@@ -76,3 +76,12 @@
     background-color: $color_blue_1;
   }
 }
+
+.white {
+  background-color: $color_white;
+  color: $color_blue_1;
+  &:hover {
+    background-color: $color_white;
+    color: $color_blue_1;
+  }
+}

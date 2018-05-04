@@ -24,40 +24,29 @@ import VerifyEmail from 'pages/VerifyEmail';
 
 const routes = (
   <Route>
-    <Route
-      path="/error"
-      Component={Error}
-    />
+    <Route path="/error" Component={Error} />
     <Route
       path="/"
       Component={App}
       query={graphql`
-      query routes_App_Query {
-        id
-        me {
+        query routes_App_Query {
           id
-          ...App_me
-        }
-        mainPage {
-          ...Start_mainPage
-        }
-        languages {
-          isoCode
-        }
-        currencies {
-          key
-          name
-        }
-        categories {
-          name {
-            text
+          me {
+            id
+            ...App_me
           }
-          children {
-            rawId
-            parentId
-            level
+          mainPage {
+            ...Start_mainPage
+          }
+          languages {
+            isoCode
+          }
+          currencies {
+            key
+            name
+          }
+          categories {
             name {
-              lang
               text
             }
             children {
@@ -76,21 +65,29 @@ const routes = (
                   lang
                   text
                 }
-                getAttributes {
-                  id
+                children {
                   rawId
+                  parentId
+                  level
                   name {
                     lang
                     text
+                  }
+                  getAttributes {
+                    id
+                    rawId
+                    name {
+                      lang
+                      text
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
-    `}
-      render={(args) => {
+      `}
+      render={args => {
         const { error, Component, props } = args;
         if (error) {
           log.error({ error });
@@ -106,42 +103,52 @@ const routes = (
 
       <Route
         path="/categories"
-        Component={({ search, me }) => (<Categories search={search} me={me} />)}
+        Component={({ search, me }) => <Categories search={search} me={me} />}
         query={graphql`
-        query routes_Categories_Query($searchTerm: SearchProductInput!) {
-          me {
-            id
+          query routes_Categories_Query($searchTerm: SearchProductInput!) {
+            me {
+              id
+            }
+            search {
+              ...Categories_search @arguments(text: $searchTerm)
+            }
           }
-          search {
-            ...Categories_search @arguments(text: $searchTerm)
-          }
-        }
-      `}
+        `}
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
           const searchTerm = urlToInput(queryObj);
-          return ({ searchTerm });
+          return { searchTerm };
         }}
       />
       <Route
         path="/stores"
         Component={Stores}
         query={graphql`
-        query routes_Stores_Query($input: SearchStoreInput!) {
-          search {
-            ...Stores_search @arguments(text: $input)
+          query routes_Stores_Query($input: SearchStoreInput!) {
+            search {
+              ...Stores_search @arguments(text: $input)
+            }
           }
-        }
-      `}
+        `}
         prepareVariables={(...args) => {
-          const searchValue = pathOr('', ['query', 'search'], last(args).location);
-          return ({ input: { name: searchValue, getStoresTotalCount: true } });
+          const searchValue = pathOr(
+            '',
+            ['query', 'search'],
+            last(args).location,
+          );
+          return { input: { name: searchValue, getStoresTotalCount: true } };
         }}
       />
-      { /* TODO: вынести в HOC ли придумать что-то */ }
+      {/* TODO: вынести в HOC ли придумать что-то */}
       <Route
         path="/manage"
-        query={graphql`query routes_Manage_Query { me { id } }`}
+        query={graphql`
+          query routes_Manage_Query {
+            me {
+              id
+            }
+          }
+        `}
         render={({ props }) => {
           if (props && !props.me) {
             const cookies = new Cookies();
@@ -152,44 +159,50 @@ const routes = (
         Component={() => <div />}
       >
         <Route path="/store">
-          <Route
-            path="/new"
-            exact
-            Component={NewStore}
-          />
+          <Route path="/new" exact Component={NewStore} />
           <Route
             path="/:storeId"
             Component={EditStore}
             query={graphql`
-            query routes_Store_Query($storeID: Int!) {
-              me {
-                ...EditStore_me @arguments(storeId: $storeID)
+              query routes_Store_Query($storeID: Int!) {
+                me {
+                  ...EditStore_me @arguments(storeId: $storeID)
+                }
               }
-            }
-          `}
-            prepareVariables={(_, { params }) => (
-              { storeID: parseInt(params.storeId, 10) }
-            )}
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeID: parseInt(params.storeId, 10),
+            })}
           />
           <Route
             path="/:storeId/contacts"
             Component={Contacts}
             query={graphql`
-            query routes_Contacts_Query($storeID: Int!) {
-              me {
-              id
-              rawId
-                ...Contacts_me @arguments(storeId: $storeID)
+              query routes_Contacts_Query($storeID: Int!) {
+                me {
+                  id
+                  rawId
+                  ...Contacts_me @arguments(storeId: $storeID)
+                }
               }
-            }
-          `}
-            prepareVariables={(_, { params }) => (
-              { storeID: parseInt(params.storeId, 10) }
-            )}
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeID: parseInt(params.storeId, 10),
+            })}
           />
           <Route
             path="/:storeId/product/new"
-            Component={({ params }) => (<NewProduct storeId={params.storeId} />)}
+            Component={({ me }) => <NewProduct me={me} />}
+            query={graphql`
+              query routes_NewProduct_Query($storeID: Int!) {
+                me {
+                  ...NewProduct_me @arguments(storeId: $storeID)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeID: parseInt(params.storeId, 10) || 0,
+            })}
           />
           <Route
             path="/:storeId/products/:productId"
@@ -202,9 +215,9 @@ const routes = (
                 }
               }
             `}
-            prepareVariables={(_, { params }) => (
-              { productID: parseInt(params.productId, 10) || 0 }
-            )}
+            prepareVariables={(_, { params }) => ({
+              productID: parseInt(params.productId, 10) || 0,
+            })}
           />
         </Route>
       </Route>
@@ -224,9 +237,7 @@ const routes = (
       <Route
         path="/login"
         Component={Authorization}
-        render={({ Component, props }) => (
-          <Component alone {...props} />
-        )}
+        render={({ Component, props }) => <Component alone {...props} />}
       />
       <Route
         path="/logout"
@@ -241,21 +252,19 @@ const routes = (
       <Route
         path="/oauth_callback/fb"
         Component={OAuthCallback}
-        render={({ props, Component }) => <Component provider="FACEBOOK" {...props} />}
+        render={({ props, Component }) => (
+          <Component provider="FACEBOOK" {...props} />
+        )}
       />
       <Route
         path="/oauth_callback/google"
         Component={OAuthCallback}
-        render={({ props, Component }) => <Component provider="GOOGLE" {...props} />}
+        render={({ props, Component }) => (
+          <Component provider="GOOGLE" {...props} />
+        )}
       />
-      <Route
-        path="/verify_email/:token"
-        Component={VerifyEmail}
-      />
-      <Route
-        path="/profile"
-        Component={Profile}
-      />
+      <Route path="/verify_email/:token" Component={VerifyEmail} />
+      <Route path="/profile" Component={Profile} />
     </Route>
     <Route
       path="/store/:storeId/products/:productId"
@@ -266,16 +275,13 @@ const routes = (
           }
         }
       `}
-      prepareVariables={(_, { params }) => (
-        { productID: parseInt(params.productId, 10) || 0 }
-      )}
+      prepareVariables={(_, { params }) => ({
+        productID: parseInt(params.productId, 10) || 0,
+      })}
       Component={ProductCard}
-      render={({
-        props,
-        Component,
-      }) => (
-        (Component && props) ? <Component {...props} /> : <div />
-      )}
+      render={({ props, Component }) =>
+        Component && props ? <Component {...props} /> : <div />
+      }
     />
   </Route>
 );

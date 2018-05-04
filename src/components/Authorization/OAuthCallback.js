@@ -58,17 +58,20 @@ class OAuthCallback extends PureComponent<PropsType> {
   }
 
   extractFacebookAccessToken = (url: string) => {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     // <callback_url from .env>?#access_token=<token_here>&expires_in=6232
     // $FlowIgnore
-    const fbCallbackUri: string = process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI;
-    const queryString = replace(`${fbCallbackUri}?#`, '', url);
+    const fbCallbackUri: string =
+      process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI;
+    const queryString = replace(`${fbCallbackUri}${isSafari ? '' : '?'}#`, '', url);
     return this.extractToken(queryString);
   };
 
   extractGoogleAccessToken = (url: string) => {
     // <callback_url from .env>#access_token=<token_here>&token_type=Bearer&expires_in=3600
     // $FlowIgnore
-    const googleCallbackUri: string = process.env.REACT_APP_OAUTH_GOOGLE_REDIRECT_URI;
+    const googleCallbackUri: string =
+      process.env.REACT_APP_OAUTH_GOOGLE_REDIRECT_URI;
     const queryString = replace(`${googleCallbackUri}#`, '', url);
     return this.extractToken(queryString);
   };
@@ -87,7 +90,9 @@ class OAuthCallback extends PureComponent<PropsType> {
         <div styleName="logo">
           <Logo />
         </div>
-        <span styleName="text">Loading...<br />Please wait.</span>
+        <span styleName="text">
+          Loading...<br />Please wait.
+        </span>
         <span styleName="description">- Storiqa team</span>
         <div styleName="spinner">
           <div styleName="double-bounce1" />

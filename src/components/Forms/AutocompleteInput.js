@@ -9,7 +9,7 @@ type PropsType = {
   id: string,
   value: string,
   label: string,
-  onChange: (e: {target: { value: string }}) => void,
+  onChange: (e: { target: { value: string } }) => void,
   onBlur: () => void,
   onFocus: () => void,
   onKeyDown: () => void,
@@ -26,7 +26,7 @@ class AutocompleteInput extends Component<PropsType, StateType> {
   state = {
     labelFloat: false,
     isFocus: false,
-  }
+  };
 
   componentWillMount() {
     this.setState({ labelFloat: Boolean(this.props.value) });
@@ -58,28 +58,14 @@ class AutocompleteInput extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      id,
-      value,
-      label,
-      inputRef,
-      onChange,
-    } = this.props;
-    const {
-      labelFloat,
-      isFocus,
-    } = this.state;
+    const { id, value, label, inputRef, onChange } = this.props;
+    const { labelFloat, isFocus } = this.state;
 
     return (
-      <label
-        htmlFor={id}
-        styleName={classNames('container', { isFocus })}
-      >
-        {label &&
-          <span styleName={classNames('label', { labelFloat })}>
-            {label}
-          </span>
-        }
+      <label htmlFor={id} styleName={classNames('container', { isFocus })}>
+        {label && (
+          <span styleName={classNames('label', { labelFloat })}>{label}</span>
+        )}
         <div styleName="input">
           <input
             type="text"

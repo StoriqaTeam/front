@@ -36,10 +36,9 @@ class Modal extends Component<PropsTypes, StateTypes> {
     const { showModal } = nextProps;
 
     if (this.props.showModal !== showModal) {
-      this.setState(
-        { showModal },
-        () => { this.toggleScroll(showModal); },
-      );
+      this.setState({ showModal }, () => {
+        this.toggleScroll(showModal);
+      });
     }
   }
 

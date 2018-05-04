@@ -29,7 +29,7 @@ const dummyReducer = (state = initialState, action) => {
 };
 
 // "async"
-export const changeWithValue = value => (dispatch) => {
+export const changeWithValue = value => dispatch => {
   dispatch({ type: DUMMY_STORE_CHANGE_STARTED });
 
   return setTimeout(() => {

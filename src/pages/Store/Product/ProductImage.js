@@ -8,18 +8,16 @@ import { ProductThumbnails, ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-import {
-  SelectedType,
-} from './types';
+import { SelectedType, ThumbnailType } from './types';
 
 type PropsType = {
   mainImage: string,
-  thumbnails: Array<{img: string, alt: string, label?: string}>,
-}
+  thumbnails: Array<ThumbnailType>,
+};
 
 type StateType = {
-  selectedImage: SelectedType,
-}
+  selected: SelectedType,
+};
 
 class ProductImage extends Component<PropsType, StateType> {
   /**
@@ -28,17 +26,20 @@ class ProductImage extends Component<PropsType, StateType> {
    * @param {StateType} prevState
    * @return {StateType | null}
    */
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType): StateType | null {
-    const { selectedImage } = prevState;
-    if (!isEmpty(selectedImage)) {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
+    const { selected } = prevState;
+    if (!isEmpty(selected)) {
       return {
-        selectedImage: {},
+        selected: {},
       };
     }
     return prevState;
   }
   state = {
-    selectedImage: {},
+    selected: {},
   };
   /**
    * Sets the clicked image as the big one.
@@ -47,17 +48,18 @@ class ProductImage extends Component<PropsType, StateType> {
    * @return {void}
    */
   handleClick = ({ img }: SelectedType): void => {
-    this.setState({ selectedImage: img });
+    this.setState({ selected: img });
   };
   render() {
     const { mainImage, thumbnails } = this.props;
-    const { selectedImage } = this.state;
+    const { selected } = this.state;
     return (
       <div styleName="container">
-        <div styleName="thumbnailsWrapper">
+        <div styleName={!isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'}>
           {!isEmpty(thumbnails) ? (
             <ProductThumbnails
-              isReset={isEmpty(selectedImage)}
+              isFirstSelected
+              isReset={isEmpty(selected)}
               onClick={this.handleClick}
               thumbnails={thumbnails}
             />
@@ -66,7 +68,7 @@ class ProductImage extends Component<PropsType, StateType> {
         <div styleName="image">
           <figure styleName="bigImage">
             <img
-              src={!isEmpty(selectedImage) ? selectedImage : mainImage}
+              src={!isEmpty(selected) ? selected : mainImage}
               alt=""
             />
           </figure>

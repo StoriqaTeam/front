@@ -2,9 +2,11 @@
   "parser": "babel-eslint",
   "extends": [
     "react-app",
-    "airbnb"
+    "airbnb",
+    "prettier"
   ],
   "rules": {
+    "arrow-parens": ["error", "as-needed"],
     "no-console": "error",
     "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
     "jsx-a11y/href-no-hash": "off",
