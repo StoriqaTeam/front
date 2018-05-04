@@ -16,6 +16,7 @@ pipeline:
       - rm -f yarn.lock || true
       - . ./.env.test
       - yarn -s --no-progress --non-interactive --production=false
+      - yarn updateSchema
       - yarn relay
       - yarn test
       - yarn ci
