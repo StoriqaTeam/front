@@ -26,7 +26,7 @@ type PropsType = {
   autocompleteService: any,
   geocoderService: any,
   onChangeFormInput: (type: string) => (e: any) => void,
-  onUpdateForm: (form: any) => number,
+  onUpdateForm: (form: any) => void,
 };
 
 type SelectType = {
@@ -35,7 +35,7 @@ type SelectType = {
 };
 
 type StateType = {
-  country: SelectType,
+  country: ?SelectType,
   address: ?any,
   autocompleteValue: ?string,
   predictions: Array<{ mainText: string, secondaryText: string }>,
