@@ -6,7 +6,7 @@ import './CartProductAttribute.scss';
 
 type PropsType = {
   title: string,
-  value: string,
+  value: string | any,
 };
 
 class CartProductAttribute extends PureComponent<PropsType> {

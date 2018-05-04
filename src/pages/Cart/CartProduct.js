@@ -6,6 +6,7 @@ import { pipe, path, pathOr, map, head } from 'ramda';
 
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
+import Stepper from 'components/Stepper';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -70,7 +71,7 @@ class CartProduct extends PureComponent<PropsType> {
           </div>
           <div styleName="product-params">
             <div styleName="cart-product-title">Price and cost</div>
-            <CartProductAttribute title="Quantity" value={quantity} />
+            <CartProductAttribute title="Quantity" value={<Stepper value={quantity} min={0} max={9999} onChange={console.log} />} />
             <CartProductAttribute title="Total cost" value={(quantity * price).toString()} />
             <CartProductAttribute title="Delivery cost" value={(deliveryPrice || 0).toString()} />
           </div>
