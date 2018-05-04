@@ -15,9 +15,10 @@ type VariantPriceInfoType = {
  * @param {string} price
  * @return {string}
  */
-const calcCrossedPrice = (discount: string | null, price: string) => (
-  isNil(discount) ? '0' : ((1 - parseInt(discount, 10)) * parseInt(price, 10)).toString()
-);
+const calcCrossedPrice = (discount: string | null, price: string) =>
+  isNil(discount)
+    ? '0'
+    : ((1 - parseInt(discount, 10)) * parseInt(price, 10)).toString();
 
 /**
  * @desc Extracts 'photoMain' and 'additionalPhotos'

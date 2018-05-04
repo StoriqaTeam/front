@@ -8,10 +8,7 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Header, Footer, Main } from 'components/App';
 import { Col, Row } from 'layout';
 
-import {
-  extractText,
-  isEmpty,
-} from 'utils';
+import { extractText, isEmpty } from 'utils';
 
 import {
   buildWidgets,
@@ -45,7 +42,7 @@ type StateType = {
   widgets: {},
   photoMain: string,
   additionalPhotos: Array<ThumbnailType>,
-  priceInfo: PriceInfo
+  priceInfo: PriceInfo,
 };
 
 class Product extends Component<PropsType, StateType> {

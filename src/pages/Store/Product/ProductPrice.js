@@ -18,8 +18,7 @@ const ProductPrice = ({
   price,
   cashback,
   buttonText,
-  } : PropsType
-) => (
+}: PropsType) => (
   <div styleName="container">
     {price.toString() === crossedPrice ? null : (
       <span styleName="crossedPrice">
