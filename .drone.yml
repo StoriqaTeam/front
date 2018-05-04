@@ -1,12 +1,4 @@
 pipeline:
-  pr_workaround:
-    image: alpine/git
-    commands:
-      - sleep 10
-      - git checkout -qf FETCH_HEAD || true
-    when:
-      event: pull_request
-      branch: [ master, release* ]
   restore-cache:
     image: drillster/drone-volume-cache
     restore: true
