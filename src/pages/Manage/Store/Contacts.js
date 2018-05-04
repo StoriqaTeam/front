@@ -255,7 +255,7 @@ export default createFragmentContainer(
   Page(Contacts),
   graphql`
     fragment Contacts_me on User
-      @argumentDefinitions(storId: { type: "Int!" }) {
+      @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         id
         rawId
