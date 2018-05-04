@@ -95,6 +95,7 @@ function reduceGroup(widgetGroup) {
       const copy = { ...accumulator };
       const values = filter(identity, [].concat(copy.values, item.value));
       const valuesWithImages = filter(
+        // $FlowIgnoreMe
         identity,
         [].concat(copy.valuesWithImages, {
           label: item.value,
@@ -121,6 +122,7 @@ function reduceGroup(widgetGroup) {
 export default function buildWidgets(variants: VariantType[]) {
   const transformedVariants = transformVariants(variants);
   // group by 'uiElement' property
+  // $FlowIgnoreMe
   const grouped = group(transformedVariants, 'uiElement', 'array');
   const result = keys(grouped).reduce((acc, key) => {
     const reduced = reduceGroup(grouped[key]);

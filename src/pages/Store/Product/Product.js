@@ -92,10 +92,7 @@ class Product extends Component<PropsType, StateType> {
    * @param {Array<{id: string, img: string}>} photos
    * @return {ThumbnailType}
    */
-  insertPhotoMain = (
-    img: string,
-    photos: ThumbnailType,
-  ): ThumbnailType => {
+  insertPhotoMain = (img: string, photos: ThumbnailType): ThumbnailType => {
     if (!isNil(img)) {
       return insert(0, { id: photos.length + 1, img, opacity: false }, photos);
     }
