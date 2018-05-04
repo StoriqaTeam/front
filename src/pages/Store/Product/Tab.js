@@ -5,7 +5,7 @@ import * as React from 'react';
 import './Tab.scss';
 
 type PropsType = {
-  children: string,
+  children: React.Node,
 };
 
 const Tab = (props: PropsType) => <div styleName="tab">{props.children}</div>;
