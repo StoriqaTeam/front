@@ -6,11 +6,7 @@ import { isNil } from 'ramda';
 
 import { WidgetsType } from './types';
 
-import {
-  ProductSize,
-  ProductMaterial,
-  ProductThumbnails,
-} from './index';
+import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
 
 import './ProductDetails.scss';
 
