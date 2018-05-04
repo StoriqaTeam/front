@@ -14,7 +14,9 @@ pipeline:
       - apt-get update
       - apt-get install -y git ca-certificates
       - rm -f yarn.lock || true
+      - . ./.env.test
       - yarn -s --no-progress --non-interactive --production=false
+      - yarn relay
       - yarn test
       - yarn ci
     when:
