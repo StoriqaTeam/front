@@ -17,7 +17,7 @@ const commonError = {
   },
 };
 
-describe('fromRelayError helper', () => {
+xdescribe('fromRelayError helper', () => {
   describe('for common errors', () => {
     it('should convert to `{ code: { status, message }}`', () => {
       const converted = fromRelayError(commonError);
