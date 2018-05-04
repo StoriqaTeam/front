@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@storiqa/shared":
-      "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
+    "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "compression": "^1.7.1",
@@ -110,12 +109,9 @@
     "build": "node scripts/build.js",
     "build:clean": "rm -rf ./build && mkdir ./build",
     "server:dist:clean": "rm -rf ./dist && mkdir ./dist",
-    "server:dist:build":
-      "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
-    "server:dev":
-      "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node --inspect ./server/index.js",
-    "server:prod":
-      ". .env.stage && yarn build:clean && yarn build && yarn server:dist:build && node ./dist/server.js",
+    "server:dist:build": "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
+    "server:dev": "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node --inspect ./server/index.js",
+    "server:prod": ". .env.stage && yarn build:clean && yarn build && yarn server:dist:build && node ./dist/server.js",
     "dev": "yarn dev:stable",
     "dev:nightly": ". .env.nightly && yarn relay && yarn server:dev",
     "dev:stable": ". .env.stable && yarn relay && yarn server:dev",
@@ -123,15 +119,11 @@
     "lint": "./node_modules/.bin/eslint ./src",
     "test": "jest",
     "storybook": "yarn updateSchema && start-storybook -p 9001 -c .storybook",
-    "relay":
-      "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
+    "relay": "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
     "updateSchema": "./node_modules/.bin/babel-node scripts/updateSchema.js",
-    "checkImage":
-      "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
-    "prettier":
-      "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
-    "postinstall":
-      "touch .git/hooks/pre-push && rm .git/hooks/pre-push && touch .git/hooks/pre-commit && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
+    "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
+    "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
+    "postinstall": "touch .git/hooks/pre-push && rm .git/hooks/pre-push && touch .git/hooks/pre-commit && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
   },
   "jest": {
     "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
@@ -145,8 +137,7 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
-        "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
     "moduleNameMapper": {
