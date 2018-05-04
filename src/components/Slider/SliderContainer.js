@@ -10,7 +10,7 @@ import handlerSlide from './handlerSlidesDecorator';
 import './SliderContainer.scss';
 
 type PropsTypes = {
-  tyasdfpe: string, // Slider type, for example: banners, product card etc.
+  type: string, // Slider type, for example: banners, product card etc.
   title: string, // Title for product card header
   slidesToShow: number, // Number of displayed slides
   animationSpeed: ?number, // Animation speed (ms), default: 500ms
