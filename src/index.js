@@ -9,6 +9,7 @@ import './index.scss';
 if (process.env.BROWSER && buildApp) {
   // $FlowIgnore
   buildApp().then(App => {
+    // $FlowIgnore
     if (process.env.NODE_ENV === 'development' && module.hot) {
       // $FlowIgnore
       ReactDOM.render(App, document.getElementById('root'));
@@ -16,6 +17,7 @@ if (process.env.BROWSER && buildApp) {
       // $FlowIgnore
       ReactDOM.hydrate(App, document.getElementById('root'));
     }
+    // $FlowIgnore
     if (process.env.NODE_ENV === 'development' && module.hot) {
       // $FlowIgnore
       module.hot.accept('./components/entry.js', () => {

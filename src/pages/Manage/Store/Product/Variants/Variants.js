@@ -13,7 +13,7 @@ import './Variants.scss';
 type PropsType = {
   productId: number,
   category: {},
-  variants: Array<{}>,
+  variants: Array<{ rawId: number }>,
 };
 
 type StateType = {

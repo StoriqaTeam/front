@@ -2,6 +2,7 @@
 // @flow
 
 import React from 'react';
+// $FlowIgnoreMe
 import { PropTypes as RPT } from 'prop-types';
 
 export default class LoadScript extends React.Component<any, any> {

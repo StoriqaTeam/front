@@ -2,10 +2,10 @@
 
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
-import { find, propEq } from 'ramda';
+
+import { getNameText } from 'utils';
 
 import LevelList from './LevelList';
-import { getNameText } from './utils';
 
 import './CategorySelector.scss';
 
@@ -147,12 +147,9 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   render() {
     const { categories } = this.props;
     const { lang, level1Item, level2Item, level3Item, isShow } = this.state;
-    const level2ItemName = level1Item
-      ? find(propEq('lang', lang))(level1Item.name).text
-      : '';
-    const level3ItemName = level2Item
-      ? find(propEq('lang', lang))(level2Item.name).text
-      : '';
+
+    const level1ItemName = level1Item ? getNameText(level1Item.name, lang) : '';
+    const level2ItemName = level2Item ? getNameText(level2Item.name, lang) : '';
 
     return (
       <div styleName="wrapper">
@@ -191,7 +188,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
               <div styleName="level">
                 {level1Item && (
                   <Fragment>
-                    <div styleName="levelLabel">{level2ItemName}</div>
+                    <div styleName="levelLabel">{level1ItemName}</div>
                     <LevelList
                       items={level1Item.children}
                       lang={lang}
@@ -204,7 +201,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
               <div styleName="level">
                 {level2Item && (
                   <Fragment>
-                    <div styleName="levelLabel">{level3ItemName}</div>
+                    <div styleName="levelLabel">{level2ItemName}</div>
                     <LevelList
                       items={level2Item.children}
                       lang={lang}

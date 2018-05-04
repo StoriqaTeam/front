@@ -67,10 +67,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
   handleOnChange = (val: string) => {
     const { onChange, attrFilter } = this.props;
     const { value } = this.state;
-    // $FlowIgnoreMe
     const uiElement = pathOr(
       null,
       ['attribute', 'metaField', 'uiElement'],
+      // $FlowIgnoreMe
       attrFilter,
     );
 
@@ -103,10 +103,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
   renderControll = () => {
     const { attrFilter } = this.props;
     const { value } = this.state;
-    // $FlowIgnoreMe
     const uiElement = pathOr(
       null,
       ['attribute', 'metaField', 'uiElement'],
+      // $FlowIgnoreMe
       attrFilter,
     );
     // $FlowIgnoreMe
