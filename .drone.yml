@@ -3,7 +3,7 @@ pipeline:
     image: alpine/git
     commands:
       - sleep 10
-      - git pull || true
+      - git checkout -qf FETCH_HEAD || true
     when:
       event: pull_request
       branch: [ master, release* ]
