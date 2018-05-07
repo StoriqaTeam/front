@@ -6,7 +6,7 @@ import { head, last, slice, append, prepend } from 'ramda';
 type PropsType = {
   slidesToShow: number,
   responsive: Object, // Match the breakpoint to the number of slides
-  children: Array<{}>,
+  children: Array<any>,
   infinity: ?boolean,
   autoplaySpeed: ?number,
   animationSpeed: number,
@@ -17,7 +17,7 @@ type StateType = {
   totalSlidesAmount: number,
   slidesOffset: number,
   num: number,
-  children: Array<{}>,
+  children: Array<any>,
   isTransition: boolean,
   slideWidth: number,
   isClick: boolean,

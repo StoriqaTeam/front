@@ -12,7 +12,7 @@ import './Menu.scss';
 
 type PropsType = {
   activeItem: string,
-  switchMenu: Function,
+  switchMenu: (id: any) => void,
   storeName?: string,
   storeLogo?: string,
   onLogoUpload?: Function,

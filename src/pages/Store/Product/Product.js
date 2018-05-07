@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { propEq, filter, head, keys, insert, isNil } from 'ramda';
@@ -93,10 +91,7 @@ class Product extends Component<PropsType, StateType> {
    * @param {Array<{id: string, img: string}>} photos
    * @return {ThumbnailType}
    */
-  insertPhotoMain = (
-    img: string,
-    photos: ThumbnailType,
-  ): Array<ThumbnailType> => {
+  insertPhotoMain = (img: string, photos: ThumbnailType): ThumbnailType => {
     if (!isNil(img)) {
       return insert(0, { id: photos.length + 1, img, opacity: false }, photos);
     }
@@ -114,16 +109,24 @@ class Product extends Component<PropsType, StateType> {
     } = this.props;
     const { widgets } = this.state;
     const filteredWidgets = filterVariants(all, selected.label);
-    const { variantId } = head(
+    const filteredWidgetsHeadKeys = head(
       keys(filteredWidgets).map(key => filteredWidgets[key]),
     );
+    let variantId = null;
+    if (filteredWidgetsHeadKeys) {
+      ({ variantId } = filteredWidgetsHeadKeys);
+    }
     /**
      * @desc returns true if the object satisfies the 'id' property
      * @return {boolean}
      */
     const byId = propEq('id', variantId);
     const variantObj = head(filter(byId, extractPhotos(all)));
-    const { photoMain, additionalPhotos } = variantObj;
+    let photoMain = '';
+    let additionalPhotos = [];
+    if (variantObj) {
+      ({ photoMain, additionalPhotos } = variantObj);
+    }
     this.setState({
       widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,

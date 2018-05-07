@@ -27,7 +27,7 @@ type ProductType = {
   }>,
   currencyId: number,
   variants: {
-    first: {
+    ['first' | 'mostDiscount']: {
       rawId: number,
       discount: number,
       photoMain: string,
@@ -37,7 +37,6 @@ type ProductType = {
   },
 };
 
-/* eslint-disable */
 type PropsType = {
   mainPage: {
     findMostViewedProducts: ?{
@@ -52,19 +51,21 @@ type PropsType = {
     },
   },
 };
-/* eslint-enable */
 
 class Start extends PureComponent<PropsType> {
   render() {
+    const { mainPage } = this.props;
     const mostViewedProducts = pathOr(
       [],
-      ['mainPage', 'findMostViewedProducts', 'edges'],
-      this.props,
+      ['findMostViewedProducts', 'edges'],
+      // $FlowIgnoreMe
+      mainPage,
     );
     const mostDiscountProducts = pathOr(
       [],
-      ['mainPage', 'findMostDiscountProducts', 'edges'],
-      this.props,
+      ['findMostDiscountProducts', 'edges'],
+      // $FlowIgnoreMe
+      mainPage,
     );
     // prepare arrays
     const variantsToArr = variantsName =>
@@ -143,7 +144,6 @@ export default createFragmentContainer(
             currencyId
             variants {
               first {
-                id
                 rawId
                 discount
                 photoMain

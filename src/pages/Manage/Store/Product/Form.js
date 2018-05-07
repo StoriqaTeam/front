@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, propOr, isEmpty, complement, pathOr, omit } from 'ramda';
+import { assocPath, prop, propOr, isEmpty, pathOr, omit } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -16,7 +16,7 @@ import Header from '../Header';
 import './Product.scss';
 
 type PropsType = {
-  baseProduct: ?{ [string]: any },
+  baseProduct: ?{ [string]: any, shortDescription?: Array<any> },
   onSave: Function,
   validationErrors: ?{},
   categories: Array<{}>,
@@ -25,6 +25,7 @@ type PropsType = {
 
 type StateType = {
   form: {
+    id?: any,
     name: string,
     seoTitle: string,
     seoDescription: string,
@@ -44,14 +45,19 @@ class Form extends Component<PropsType, StateType> {
     }
     this.state = {
       form: {
+        // $FlowIgnoreMe
         name: pathOr('', ['name', 0, 'text'], baseProduct),
+        // $FlowIgnoreMe
         seoTitle: pathOr('', ['seoTitle', 0, 'text'], baseProduct),
+        // $FlowIgnoreMe
         seoDescription: pathOr('', ['seoDescription', 0, 'text'], baseProduct),
+        // $FlowIgnoreMe
         shortDescription: pathOr(
           '',
           ['shortDescription', 0, 'text'],
           baseProduct,
         ),
+        // $FlowIgnoreMe
         fullDesc: pathOr('', ['longDescription', 0, 'text'], baseProduct),
         categoryId: baseProduct.category.rawId,
       },
@@ -74,7 +80,7 @@ class Form extends Component<PropsType, StateType> {
   componentWillReceiveProps(nextProps: PropsType) {
     const currentFormErrors = this.state.formErrors;
     const nextFormErrors = nextProps.validationErrors;
-    if (isEmpty(currentFormErrors) && complement(isEmpty(nextFormErrors))) {
+    if (isEmpty(currentFormErrors) && !isEmpty(nextFormErrors)) {
       // конвертнем имена с snakeCase в camel_case :)
       const formErrors = renameKeys(
         {
@@ -116,14 +122,18 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+      );
     }
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+    );
   };
 
   // eslint-disable-next-line
@@ -133,7 +143,7 @@ class Form extends Component<PropsType, StateType> {
         isUrl={Boolean(icon)}
         icon={icon}
         id={id}
-        value={propOr('', id, this.state.form)}
+        value={prop(id, this.state.form) || ''}
         label={label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
@@ -146,7 +156,7 @@ class Form extends Component<PropsType, StateType> {
     <div styleName="formItem">
       <Textarea
         id={id}
-        value={propOr('', id, this.state.form)}
+        value={prop(id, this.state.form) || ''}
         label={label}
         onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}

@@ -35,42 +35,45 @@ type AttributeType = {
   },
 };
 
+type AttributeFilterType = {
+  attribute: AttributeType,
+  equal: ?{
+    values: Array<string>,
+  },
+  range: ?{
+    min: number,
+    max: number,
+  },
+};
+
 type PropsType = {
   onChange: (value: string | Array<string>) => void,
-  attrFilter: {
-    attribute: AttributeType,
-    equal: ?{
-      values: Array<string>,
-    },
-    range: ?{
-      min: number,
-      max: number,
-    },
-  },
+  attrFilter: AttributeFilterType,
   initialValues: Array<string>,
 };
 
 type StateType = {
-  value: ?string | ?Array<string>,
+  value: ?Array<string>,
 };
 
 class AttributeControll extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      value: props ? props.initialValues : '',
+      value: props ? props.initialValues : [],
     };
   }
 
   handleOnChange = (val: string) => {
-    const { onChange } = this.props;
-    const { attrFilter } = this.props;
+    const { onChange, attrFilter } = this.props;
     const { value } = this.state;
     const uiElement = pathOr(
       null,
       ['attribute', 'metaField', 'uiElement'],
+      // $FlowIgnoreMe
       attrFilter,
     );
+
     const isMultiSelectable =
       uiElement === 'CHECKBOX' || uiElement === 'COLOR_PICKER';
     if (isMultiSelectable && value) {
@@ -91,7 +94,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     } else {
       this.setState({
         ...this.state,
-        value: val,
+        value: [val],
       });
       onChange([val]);
     }
@@ -103,8 +106,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     const uiElement = pathOr(
       null,
       ['attribute', 'metaField', 'uiElement'],
+      // $FlowIgnoreMe
       attrFilter,
     );
+    // $FlowIgnoreMe
     const values = pathOr(null, ['equal', 'values'], attrFilter);
     const mapIndexed = addIndex(map);
     switch (uiElement) {
@@ -138,7 +143,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         return values ? (
           <Select
             forForm
-            activeItem={{ id: value, label: value }}
+            activeItem={value ? { id: value[0], label: value[0] } : null}
             items={preparedValues}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{

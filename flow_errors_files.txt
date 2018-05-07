@@ -1,0 +1,3 @@
+src/pages/Store/Product/Product.js
+src/pages/Store/Product/utils/buildWidgets.js
+src/utils/search.js

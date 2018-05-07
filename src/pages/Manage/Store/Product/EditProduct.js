@@ -26,12 +26,7 @@ type StateType = {
 
 const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
 const storeLogoFromProps = pathOr(null, ['me', 'baseProduct', 'store', 'logo']);
-const variantsFromProps = pathOr(null, [
-  'me',
-  'baseProduct',
-  'variants',
-  'all',
-]);
+const variantsFromProps = pathOr([], ['me', 'baseProduct', 'variants', 'all']);
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -68,12 +63,13 @@ class EditProduct extends Component<PropsType, StateType> {
         ? []
         : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -84,6 +80,7 @@ class EditProduct extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });

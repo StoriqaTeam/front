@@ -19,6 +19,8 @@ import Menu from './Menu';
 
 import './Contacts.scss';
 
+type NestedObject<T> = { [k: string]: T | NestedObject<T> };
+
 /* eslint-disable */
 type InputType = {
   id: string,
@@ -29,7 +31,9 @@ type InputType = {
 /* eslint-enable */
 
 type PropsType = {
-  me: { store: { rawId: string, id: string } },
+  me: {
+    store: { [string]: ?string },
+  },
 };
 
 type StateType = {
@@ -66,7 +70,8 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   componentWillMount() {
-    const store = pathOr({}, ['me', 'store'], this.props);
+    // $FlowIgnoreMe
+    const store = pathOr({}, ['store'], this.props.me);
     this.setState({
       form: pick(
         [
@@ -86,7 +91,9 @@ class Contacts extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+      this.setState(
+        assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
+      );
     }
   };
 
@@ -134,19 +141,21 @@ class Contacts extends Component<PropsType, StateType> {
       twitterUrl,
       instagramUrl,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -158,12 +167,14 @@ class Contacts extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });

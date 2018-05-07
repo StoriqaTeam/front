@@ -1,5 +1,3 @@
-// @flow
-
 import { isNil } from 'ramda';
 
 type VariantPriceInfoType = {

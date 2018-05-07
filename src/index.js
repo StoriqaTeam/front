@@ -6,11 +6,13 @@ import './index.scss';
 
 if (process.env.BROWSER && buildApp) {
   buildApp().then(App => {
+    // $FlowIgnore
     if (process.env.NODE_ENV === 'development' && module.hot) {
       ReactDOM.render(App, document.getElementById('root'));
     } else {
       ReactDOM.hydrate(App, document.getElementById('root'));
     }
+    // $FlowIgnore
     if (process.env.NODE_ENV === 'development' && module.hot) {
       module.hot.accept('./components/entry.js', () => {
         import('./components/entry.js').then(newInstance => {

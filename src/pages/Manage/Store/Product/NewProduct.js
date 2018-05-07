@@ -21,7 +21,11 @@ type StateType = {
 };
 
 type PropsType = {
-  storeId: number,
+  match: {
+    params: {
+      storeId: string,
+    },
+  },
   router: routerShape,
 };
 
@@ -48,7 +52,7 @@ class NewProduct extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
       name: [{ lang: 'EN', text: name }],
-      storeId: parseInt(this.props.storeId, 10),
+      storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
@@ -62,33 +66,38 @@ class NewProduct extends Component<PropsType, StateType> {
           ? null
           : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
         }
 
-        const { storeId } = this.props;
-        const productId = pathOr(
+        const { storeId } = this.props.match.params;
+        // $FlowIgnoreMe
+        const productId: ?number = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
           response,
         );
-        this.props.router.push(
-          `/manage/store/${storeId}/products/${productId}`,
-        );
+        if (productId) {
+          this.props.router.push(
+            `/manage/store/${storeId}/products/${productId}`,
+          );
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
@@ -101,6 +110,7 @@ class NewProduct extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading } = this.state;
+    // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
     return (
