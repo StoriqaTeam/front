@@ -7,10 +7,15 @@ pipeline:
     volumes:
       - /mnt/front:/cache
   test:
-    image: node:9.9-slim
+    image: node:9.9
     environment:
       - RUN_MODE=k8s
     commands:
+      - rm -f yarn.lock || true
+      - . ./.env.test
+      - yarn -s --no-progress --non-interactive --production=false
+      - yarn updateSchema
+      - yarn relay
       - yarn test
       - yarn ci
     when:
