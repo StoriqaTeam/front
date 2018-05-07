@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr } from 'ramda';
 import { routerShape, withRouter, matchShape } from 'found';
 import { pathOr, isEmpty } from 'ramda';
 
@@ -88,14 +87,10 @@ class NewProduct extends Component<PropsType, StateType> {
         }
 
         const { storeId } = this.props.match.params;
-        const productId = pathOr(
-          null,
-          ['createBaseProduct', 'rawId'],
-          response,
-        );
+        const productId = pathOr(-1, ['createBaseProduct', 'rawId'], response);
         if (productId) {
           this.props.router.push(
-            `/manage/store/${storeId}/products/${productId}`,
+            `/manage/store/${storeId}/products/${parseInt(productId, 10)}`,
           );
         }
       },
@@ -117,7 +112,6 @@ class NewProduct extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading } = this.state;
-    // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
     return (
