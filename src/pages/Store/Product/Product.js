@@ -3,7 +3,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { propEq, filter, head, keys, insert, isNil } from 'ramda';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
-import { Header, Footer, Main } from 'components/App';
+import { Page } from 'components/App';
 import { Col, Row } from 'layout';
 
 import { extractText, isEmpty } from 'utils';
@@ -145,43 +145,34 @@ class Product extends Component<PropsType, StateType> {
       priceInfo,
     } = this.state;
     return (
-      <div styleName="container">
-        <Header />
-        <Main>
-          <div styleName="ProductDetails">
-            <Row>
-              <Col size={6}>
-                <ProductImage
-                  mainImage={photoMain}
-                  thumbnails={additionalPhotos}
-                />
-                <ProductShare />
-              </Col>
-              <Col size={6}>
-                <ProductDetails
-                  productTitle={extractText(name)}
-                  productDescription={extractText(
-                    longDescription,
-                    'EN',
-                    'No Description',
-                  )}
-                  widgets={widgets}
-                  onWidgetClick={this.handleWidgetClick}
-                >
-                  <ProductPrice {...priceInfo} />
-                </ProductDetails>
-              </Col>
-            </Row>
-            <Tabs>
-              {tabs.map(({ id, label, content }) => (
-                <Tab key={id} label={label}>
-                  {content}
-                </Tab>
-              ))}
-            </Tabs>
-          </div>
-        </Main>
-        <Footer />
+      <div styleName="ProductDetails">
+        <Row>
+          <Col size={6}>
+            <ProductImage mainImage={photoMain} thumbnails={additionalPhotos} />
+            <ProductShare />
+          </Col>
+          <Col size={6}>
+            <ProductDetails
+              productTitle={extractText(name)}
+              productDescription={extractText(
+                longDescription,
+                'EN',
+                'No Description',
+              )}
+              widgets={widgets}
+              onWidgetClick={this.handleWidgetClick}
+            >
+              <ProductPrice {...priceInfo} />
+            </ProductDetails>
+          </Col>
+        </Row>
+        <Tabs>
+          {tabs.map(({ id, label, content }) => (
+            <Tab key={id} label={label}>
+              {content}
+            </Tab>
+          ))}
+        </Tabs>
       </div>
     );
   }
@@ -189,7 +180,7 @@ class Product extends Component<PropsType, StateType> {
 
 export default createFragmentContainer(
   // $FlowIgnoreMe
-  withErrorBoundary(Product),
+  withErrorBoundary(Page(Product)),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
