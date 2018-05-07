@@ -2,8 +2,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { pathOr } from 'ramda';
+import { routerShape, withRouter, matchShape } from 'found';
 import { pathOr, isEmpty } from 'ramda';
-import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -27,6 +28,7 @@ type PropsType = {
     },
   },
   router: routerShape,
+  match: matchShape,
 };
 
 const storeLogoFromProps = pathOr(null, ['me', 'store', 'logo']);
@@ -36,7 +38,6 @@ class NewProduct extends Component<PropsType, StateType> {
     formErrors: {},
     isLoading: false,
   };
-
   handleSave = (form: ?{ [string]: any }) => {
     if (!form) {
       return;
@@ -87,8 +88,7 @@ class NewProduct extends Component<PropsType, StateType> {
         }
 
         const { storeId } = this.props.match.params;
-        // $FlowIgnoreMe
-        const productId: ?number = pathOr(
+        const productId = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
           response,
