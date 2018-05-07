@@ -112,7 +112,6 @@ class NewProduct extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading } = this.state;
-    // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
     return (
