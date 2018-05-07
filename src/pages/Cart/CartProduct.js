@@ -70,7 +70,7 @@ class CartProduct extends PureComponent<PropsType> {
             </ShowMore>
           </div>
           <div styleName="product-params">
-            <div styleName="cart-product-title">Price and cost</div>
+            <div styleName="cart-product-title">Summary</div>
             <CartProductAttribute title="Quantity" value={<Stepper value={quantity} min={0} max={9999} onChange={console.log} />} />
             <CartProductAttribute title="Total cost" value={(quantity * price).toString()} />
             <CartProductAttribute title="Delivery cost" value={(deliveryPrice || 0).toString()} />

@@ -1,8 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment, ConnectionHandler } from 'relay-runtime';
-import { head, pipe, map, contains, find, reject } from 'ramda';
+import { Environment } from 'relay-runtime';
 
 import type { IncrementInCartMutationVariables, IncrementInCartMutationResponse } from './__generated__/IncrementInCartMutation.graphql';
 
@@ -14,68 +13,6 @@ const mutation = graphql`
   }
 `;
 
-
-// const mutation = graphql`
-//   mutation IncrementInCartMutation($input: IncrementInCartInput!) {
-//     incrementInCart(input: $input) {
-//       stores {
-//         edges {
-//           node {
-//             ... on CartStore {
-//               id
-//               name {
-//                 lang
-//                 text
-//               }
-//               rating
-//               productsPrice
-//               deliveryPrice
-//               totalCount
-//               products {
-//                 edges {
-//                   node {
-//                     ... on CartProduct {
-//                       id
-//                       name {
-//                         lang
-//                         text
-//                       }
-//                       photoMain
-//                       price
-//                       quantity
-//                       deliveryPrice
-//                       attributes {
-//                         value
-//                         metaField
-//                         attribute {
-//                           name {
-//                             lang
-//                             text
-//                           }  
-//                           valueType
-//                           metaField {
-//                             values
-//                             uiElement
-//                             translatedValues {
-//                               translations {
-//                                 lang
-//                                 text
-//                               }
-//                             }
-//                           }
-//                         }
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
 
 export type IncrementInCartParams = {
   ...IncrementInCartMutationVariables,

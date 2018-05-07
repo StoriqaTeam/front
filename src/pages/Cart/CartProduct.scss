@@ -3,6 +3,8 @@
 .container {
   color: $color_grey_text;
   display: flex;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid $color_grey_light;
 }
 
 .picture {

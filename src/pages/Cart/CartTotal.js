@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import cn from 'classnames';
-import { pathOr } from 'ramda';
 
 import './CartTotal.scss';
 
@@ -43,6 +42,7 @@ class CartTotal extends Component<PropsType, StateType> {
     const offset = window.pageYOffset;
     const rect = this.ref.getBoundingClientRect();
     const height = rect.bottom - rect.top;
+    // $FlowIgnoreMe
     const { top: viewTop, bottom: viewBottom } = this.props.storesRef.getBoundingClientRect();
     const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
     const top = viewTop + (offset - (STICKY_PADDING_TOP_REM * rem));
@@ -51,15 +51,9 @@ class CartTotal extends Component<PropsType, StateType> {
     if (offset >= top) { currentClass = 'sticky'; }
     if (offset + height >= bottom) { currentClass = 'bottom'; }
     if (currentClass !== this.state.currentClass) { this.setState({ currentClass }); }
-    // const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
-    // const threshold = this.props.threshold * rem;
-    // console.log(offset, this.props.threshold);
-    // this.setState({ sticky: offset > this.props.threshold });
   }
 
   render() {
-    console.log("Props: ", this.props);
-    console.log("State: ", this.state);
     // const { products } = this.props.store;
     return (
       <div styleName={cn('container', this.state.currentClass)} ref={ref => this.setRef(ref)}>

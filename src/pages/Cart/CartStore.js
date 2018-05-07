@@ -17,10 +17,18 @@ type PropsType = {
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { products } = this.props.store;
+    const { store } = this.props;
+    const { products } = store;
     return (
       <div styleName="container">
-        {products.map((product, idx) => <CartProduct key={idx} product={product} />)}
+        <div styleName="products">
+          {products.map((product, idx) => <CartProduct key={idx} product={product} />)}
+        </div>
+        <div styleName="footer">
+          <div>
+            <img src={store} alt="store_picture" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -33,6 +41,14 @@ export default createFragmentContainer(
       products {
         ...CartProduct_product
       }
+      name {
+        lang
+        text
+      }
+      rating
+      productsPrice
+      deliveryPrice
+      totalCount
     }
   `,
 );
