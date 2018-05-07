@@ -109,7 +109,6 @@ const routes = (
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
           const searchTerm = urlToInput(queryObj);
-          console.log('**** query : ', queryObj);
           return { searchTerm };
         }}
       />

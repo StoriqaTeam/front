@@ -1,4 +1,4 @@
-// @flow
+// TODO: flow type
 
 import { isNil } from 'ramda';
 
