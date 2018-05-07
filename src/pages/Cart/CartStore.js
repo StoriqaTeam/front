@@ -4,9 +4,12 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import Rating from 'components/Rating';
+import { Button } from 'components/Button';
+import { Input } from 'components/Forms';
 
 import CartProduct from './CartProduct';
 import CartProductAttribute from './CartProductAttribute';
+import Chat from './svg/chat.svg';
 // eslint-disable-next-line
 import type CartStore_store from './__generated__/CartStore_store.graphql';
 
@@ -28,22 +31,38 @@ class CartStore extends PureComponent<PropsType> {
           {products.map((product, idx) => <CartProduct key={idx} product={product} />)}
         </div>
         <div styleName="footer">
-          <div styleName="store-info">
-            <img src={store.logo} alt="store_picture" styleName="image" />
-            <div styleName="store-description">
-              <div>
-                {store.name[0].text}
+          <div styleName="store">
+            <div styleName="store-info">
+              <img src={store.logo} alt="store_picture" styleName="image" />
+              <div styleName="store-description">
+                <div>
+                  {store.name[0].text}
+                </div>
+                <Rating rating={store.rating} />
               </div>
-              <Rating rating={store.rating} />
+            </div>
+            <div styleName="chat-container">
+              <div styleName="chat">
+                <Chat />
+              </div>
+              <div styleName="chat-text">
+                Chat with Seller
+              </div>
+            </div>
+            <div>
+              <Input focus={false} onChange={() => { }} detectCapsLock model="TBA" name="TBA" label="Promocode" />
             </div>
           </div>
           <div styleName="store-total">
-            <div className="store-total-header">
-              Summary
+            <div styleName="store-total-header">
+              Seller summary
             </div>
             <CartProductAttribute title="Products cost" value={`${store.productsCost} STQ`} />
             <CartProductAttribute title="Delivery cost" value={`${store.deliveryCost} STQ`} />
             <CartProductAttribute title="Total cost" value={`${store.deliveryCost + store.productsCost} STQ`} />
+            <div styleName="buy">
+              <Button type="wireframe" disabled>Buy from this seller</Button>
+            </div>
           </div>
         </div>
       </div>
