@@ -13,6 +13,7 @@ import { SetInCartMutation } from 'relay/mutations';
 import { log } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
+import Recycle from './svg/recycle.svg';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -65,6 +66,9 @@ class CartProduct extends PureComponent<PropsType> {
 
     return (
       <div styleName="container">
+        <button styleName="recycle">
+          <Recycle />
+        </button>
         <div styleName="left-container">
           <div styleName="checkbox">
             <Checkbox
