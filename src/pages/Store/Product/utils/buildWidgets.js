@@ -1,4 +1,3 @@
-
 import { isNil, flatten, uniq, reduce, filter, identity, keys } from 'ramda';
 import { extractText } from 'utils';
 

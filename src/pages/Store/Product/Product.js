@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { propEq, filter, head, keys, insert, isNil } from 'ramda';
