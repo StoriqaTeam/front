@@ -10,7 +10,6 @@
   display: flex;
   flex-direction: row;
   margin-left: 2rem;
-  margin-top: 2rem;
 }
 
 .sidebarContainer {
@@ -28,13 +27,13 @@
 
 .contentContainer {
   flex: 1;
-  margin: 0 2rem;
+  margin: -0.5rem 2rem 0 2rem;
 
   .topContentContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 1rem;
+    margin: 0 1rem 0.5rem 1rem;
 
     .breadcrumbs {
 
@@ -43,7 +42,6 @@
         color: $color_grey_breadcrumbs;
         font-size: 1.75rem;
         cursor: pointer;
-        // border-bottom: 1px dashed $color_primary;
 
         .separator {
           margin: 0 1rem;
@@ -57,7 +55,6 @@
     }
   }
   .productsContainer {
-    // display: flex;
 
     .loadMoreContainer {
       display: flex;
@@ -96,8 +93,8 @@
 
 .parentCategory {
   font-family: $font_medium;
-  font-size: 1.75rem;
-  text-transform: uppercase;
+  font-size: 2rem;
+  line-height: 1.3;
   margin-bottom: 2rem;
   cursor: pointer;
 }
