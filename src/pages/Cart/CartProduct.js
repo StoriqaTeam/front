@@ -34,7 +34,7 @@ class CartProduct extends PureComponent<PropsType> {
       attributes,
       price,
       quantity,
-      deliveryPrice,
+      deliveryCost,
     } = product;
     const attrs = map(attr => (
       { title: head(attr.attribute.name).text, value: attr.value.toString() }
@@ -72,8 +72,8 @@ class CartProduct extends PureComponent<PropsType> {
           <div styleName="product-params">
             <div styleName="cart-product-title">Summary</div>
             <CartProductAttribute title="Quantity" value={<Stepper value={quantity} min={0} max={9999} onChange={console.log} />} />
-            <CartProductAttribute title="Total cost" value={(quantity * price).toString()} />
-            <CartProductAttribute title="Delivery cost" value={(deliveryPrice || 0).toString()} />
+            <CartProductAttribute title="Total cost" value={`${quantity * price} STQ`} />
+            <CartProductAttribute title="Delivery cost" value={`${(deliveryCost || 0)} STQ`} />
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@ export default createFragmentContainer(
       photoMain
       price
       quantity
-      deliveryPrice
+      deliveryCost
       attributes {
         value
         metaField

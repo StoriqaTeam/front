@@ -12,10 +12,39 @@
   padding: 0 0 1rem 2rem;
 }
 
+.image {
+  width: 5rem;
+  height: 5rem;
+}
+
+.name {
+
+}
+
 .products {
-  
+
+}
+
+.store-info {
+  display: flex;
+  width: 66%;
+  border-right: 1px solid $color_grey_light;
+}
+
+.store-total {
+  width: 34%;
+  padding-left: 4rem;
+}
+
+.store-description {
+  margin-left: 1rem;
+  font-family: $font_regular;
+  top: -0.5rem;
+  position: relative;
 }
 
 .footer {
-
+  padding-top: 4rem;
+  padding-left: 26rem;
+  display: flex;
 }
