@@ -3,11 +3,14 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pipe, path, pathOr, map, head } from 'ramda';
+import PropTypes from 'prop-types';
 
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Select } from 'components/common/Select';
+import { SetInCartMutation } from 'relay/mutations';
+import { log } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -22,6 +25,25 @@ type PropsType = {
 
 /* eslint-disable react/no-array-index-key */
 class CartProduct extends PureComponent<PropsType> {
+  handleQuantityChange(newVal) {
+    const id = this.props.product.rawId;
+    SetInCartMutation.commit({
+      input: { clientMutationId: '', productId: id, quantity: newVal },
+      environment: this.context.environment,
+      onCompleted: (response, errors) => {
+        log.debug('Success for SetInCart mutation');
+        if (response) { log.debug('Response: ', response); }
+        if (errors) { log.debug('Errors: ', errors); }
+      },
+      onError: (error) => {
+        log.error('Error in SetInCart mutation');
+        log.error(error);
+        // eslint-disable-next-line
+        alert('Unable to set product quantity in cart');
+      },
+    });
+  }
+
   render() {
     const { product } = this.props;
     if (!product) return null;
@@ -40,6 +62,7 @@ class CartProduct extends PureComponent<PropsType> {
     const attrs = map(attr => (
       { title: head(attr.attribute.name).text, value: attr.value.toString() }
     ))(attributes);
+
     return (
       <div styleName="container">
         <div styleName="left-container">
@@ -85,20 +108,30 @@ class CartProduct extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="half-width">
-                  <CartProductAttribute title="Delivary term" value="14 days" />
+                  <CartProductAttribute title="Delivery term" value="14 days" />
                 </div>
                 <div styleName="half-width">
                   <CartProductAttribute title="Return policy" value="Replacement or cash" />
                 </div>
                 <div styleName="half-width">
-                  <CartProductAttribute title="Delivary return terms" value="Paid by seller" />
+                  <CartProductAttribute title="Delivery return terms" value="Paid by seller" />
                 </div>
               </div>
             </ShowMore>
           </div>
           <div styleName="product-params">
             <div styleName="cart-product-title">Summary</div>
-            <CartProductAttribute title="Quantity" value={<Stepper value={quantity} min={0} max={9999} onChange={console.log} />} />
+            <CartProductAttribute
+              title="Quantity"
+              value={
+                <Stepper
+                  value={quantity}
+                  min={0}
+                  max={9999}
+                  onChange={newVal => this.handleQuantityChange(newVal)}
+                />
+              }
+            />
             <CartProductAttribute title="Total cost" value={`${quantity * price} STQ`} />
             <CartProductAttribute title="Delivery cost" value={`${(deliveryCost || 0)} STQ`} />
           </div>
@@ -145,3 +178,7 @@ export default createFragmentContainer(
     }
 `,
 );
+
+CartProduct.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};

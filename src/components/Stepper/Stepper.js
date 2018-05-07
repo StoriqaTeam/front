@@ -22,6 +22,10 @@ type StateType = {
 type Action = 'increase' | 'decrease';
 
 class Stepper extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType) {
+    return { inputValue: nextProps.value };
+  }
+
   state = {
     inputValue: 0,
   }
@@ -53,7 +57,6 @@ class Stepper extends Component<PropsType, StateType> {
   handleClick(action: Action) {
     const newVal = action === 'increase' ? this.props.value + 1 : this.props.value - 1;
     if (this.valid(newVal)) {
-      this.setState({ inputValue: newVal });
       this.props.onChange(newVal);
     }
   }
@@ -71,7 +74,6 @@ class Stepper extends Component<PropsType, StateType> {
 
   handleBlur() {
     const value = this.coerce(this.state.inputValue);
-    this.setState({ inputValue: value });
     this.props.onChange(value);
   }
 
