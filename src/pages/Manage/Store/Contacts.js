@@ -36,6 +36,7 @@ type StateType = {
   form: {
     email: ?string,
     phone: ?string,
+    country: ?string,
     address: ?string,
     facebookUrl: ?string,
     instagramUrl: ?string,
@@ -53,6 +54,7 @@ class Contacts extends Component<PropsType, StateType> {
     form: {
       email: '',
       phone: '',
+      country: '',
       address: '',
       facebookUrl: '',
       instagramUrl: '',
@@ -70,6 +72,7 @@ class Contacts extends Component<PropsType, StateType> {
         [
           'email',
           'phone',
+          'country',
           'address',
           'facebookUrl',
           'instagramUrl',
@@ -106,7 +109,16 @@ class Contacts extends Component<PropsType, StateType> {
     }
 
     const {
-      form: { email, phone, address, facebookUrl, twitterUrl, instagramUrl },
+      // param 'country' enter for 'this.handleUpdateForm'
+      form: {
+        email,
+        phone,
+        address,
+        facebookUrl,
+        twitterUrl,
+        instagramUrl,
+        country,
+      },
     } = this.state;
     this.setState({ formErrors: {}, isLoading: true });
 
@@ -116,6 +128,7 @@ class Contacts extends Component<PropsType, StateType> {
       id: store.id,
       email,
       phone,
+      country,
       address,
       facebookUrl,
       twitterUrl,
@@ -184,7 +197,7 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem, isLoading } = this.state;
+    const { activeItem, isLoading, form } = this.state;
     return (
       <Container>
         <Row>
@@ -214,6 +227,8 @@ class Contacts extends Component<PropsType, StateType> {
                 })}
                 <div styleName="formItem">
                   <AddressForm
+                    country={form.country}
+                    address={form.address}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
                   />
@@ -258,6 +273,7 @@ export default createFragmentContainer(
         twitterUrl
         instagramUrl
         address
+        country
       }
     }
   `,

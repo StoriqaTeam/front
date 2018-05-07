@@ -7,7 +7,7 @@ type CountriesType = Array<{ code: string, name: string }>;
 export const getIndexedCountries = (countries: CountriesType) => {
   const mapIndexed = addIndex(map);
   return mapIndexed(
-    (country, index) => ({ id: index.toString(), label: country.name }),
+    country => ({ id: country.code, label: country.name }),
     countries,
   );
 };
