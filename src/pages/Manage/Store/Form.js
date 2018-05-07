@@ -12,7 +12,6 @@ import {
   find,
   propEq,
   isEmpty,
-  complement,
   omit,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
@@ -47,7 +46,13 @@ type StateType = {
 type PropsType = {
   onSave: Function,
   isLoading: boolean,
-  store?: {},
+  store?: {
+    name?: Array<{ lang: string, text: string }>,
+    longDescription?: Array<{ lang: string, text: string }>,
+    defaultLanguage: ?string,
+    slug: ?string,
+    slogan: ?string,
+  },
   serverValidationErrors: {
     [string]: ?any,
   },
@@ -73,16 +78,15 @@ class Form extends Component<PropsType, StateType> {
     if (store) {
       this.state = {
         form: {
-          name: pathOr(null, ['name', 0, 'text'], store),
-          longDescription: pathOr(null, ['longDescription', 0, 'text'], store),
-          shortDescription: pathOr(
-            null,
-            ['shortDescription', 0, 'text'],
-            store,
-          ),
-          defaultLanguage: pathOr(null, ['defaultLanguage'], store),
-          slug: pathOr(null, ['slug'], store),
-          slogan: pathOr(null, ['slogan'], store),
+          // $FlowIgnoreMe
+          name: pathOr('', ['name', 0, 'text'], store),
+          // $FlowIgnoreMe
+          longDescription: pathOr('', ['longDescription', 0, 'text'], store),
+          // $FlowIgnoreMe
+          shortDescription: pathOr('', ['shortDescription', 0, 'text'], store),
+          defaultLanguage: store.defaultLanguage || 'EN',
+          slug: store.slug || '',
+          slogan: store.slogan || '',
         },
         langItems: null,
         optionLanguage: 'EN',
@@ -91,7 +95,7 @@ class Form extends Component<PropsType, StateType> {
     }
   }
 
-  state = {
+  state: StateType = {
     form: {
       name: '',
       longDescription: '',
@@ -104,6 +108,7 @@ class Form extends Component<PropsType, StateType> {
     optionLanguage: 'EN',
     formErrors: {},
   };
+
   componentWillMount() {
     const {
       directories: { languages },
@@ -121,7 +126,7 @@ class Form extends Component<PropsType, StateType> {
   componentWillReceiveProps(nextProps: PropsType) {
     const currentFormErrors = this.state.formErrors;
     const nextFormErrors = nextProps.serverValidationErrors;
-    if (isEmpty(currentFormErrors) && complement(isEmpty(nextFormErrors))) {
+    if (isEmpty(currentFormErrors) && !isEmpty(nextFormErrors)) {
       this.setState({ formErrors: nextFormErrors });
     }
   }
@@ -136,14 +141,18 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+      );
     }
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+    );
   };
 
   handleSave = () => {
@@ -245,11 +254,15 @@ class Form extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { langItems, form } = this.state;
+    const {
+      langItems,
+      form: { defaultLanguage },
+    } = this.state;
     const { isLoading } = this.props;
     const defaultLanguageValue = find(
-      propEq('id', toLower(form.defaultLanguage)),
-    )(langItems);
+      propEq('id', toLower(defaultLanguage || '')),
+      langItems || [],
+    );
 
     return (
       <Fragment>

@@ -12,6 +12,7 @@ const mutation = graphql`
       rawId
       email
       phone
+      country
       address
       facebookUrl
       twitterUrl
@@ -24,6 +25,7 @@ type MutationParamsType = {
   id: string,
   email: string,
   phone: string,
+  country: string,
   address: string,
   facebookUrl: string,
   twitterUrl: string,
@@ -42,6 +44,7 @@ const commit = (params: MutationParamsType) =>
         id: params.id,
         email: params.email,
         phone: params.phone,
+        country: params.country,
         address: params.address,
         facebookUrl: params.facebookUrl,
         twitterUrl: params.twitterUrl,

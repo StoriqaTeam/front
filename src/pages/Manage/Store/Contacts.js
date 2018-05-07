@@ -19,6 +19,8 @@ import Menu from './Menu';
 
 import './Contacts.scss';
 
+type NestedObject<T> = { [k: string]: T | NestedObject<T> };
+
 /* eslint-disable */
 type InputType = {
   id: string,
@@ -29,13 +31,16 @@ type InputType = {
 /* eslint-enable */
 
 type PropsType = {
-  me: { store: { rawId: string, id: string } },
+  me: {
+    store: { [string]: ?string },
+  },
 };
 
 type StateType = {
   form: {
     email: ?string,
     phone: ?string,
+    country: ?string,
     address: ?string,
     facebookUrl: ?string,
     instagramUrl: ?string,
@@ -53,6 +58,7 @@ class Contacts extends Component<PropsType, StateType> {
     form: {
       email: '',
       phone: '',
+      country: '',
       address: '',
       facebookUrl: '',
       instagramUrl: '',
@@ -64,12 +70,14 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   componentWillMount() {
-    const store = pathOr({}, ['me', 'store'], this.props);
+    // $FlowIgnoreMe
+    const store = pathOr({}, ['store'], this.props.me);
     this.setState({
       form: pick(
         [
           'email',
           'phone',
+          'country',
           'address',
           'facebookUrl',
           'instagramUrl',
@@ -83,7 +91,9 @@ class Contacts extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+      this.setState(
+        assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
+      );
     }
   };
 
@@ -106,7 +116,16 @@ class Contacts extends Component<PropsType, StateType> {
     }
 
     const {
-      form: { email, phone, address, facebookUrl, twitterUrl, instagramUrl },
+      // param 'country' enter for 'this.handleUpdateForm'
+      form: {
+        email,
+        phone,
+        address,
+        facebookUrl,
+        twitterUrl,
+        instagramUrl,
+        country,
+      },
     } = this.state;
     this.setState({ formErrors: {}, isLoading: true });
 
@@ -116,24 +135,27 @@ class Contacts extends Component<PropsType, StateType> {
       id: store.id,
       email,
       phone,
+      country,
       address,
       facebookUrl,
       twitterUrl,
       instagramUrl,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -145,12 +167,14 @@ class Contacts extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -184,7 +208,7 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem, isLoading } = this.state;
+    const { activeItem, isLoading, form } = this.state;
     return (
       <Container>
         <Row>
@@ -214,6 +238,8 @@ class Contacts extends Component<PropsType, StateType> {
                 })}
                 <div styleName="formItem">
                   <AddressForm
+                    country={form.country}
+                    address={form.address}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
                   />
@@ -258,6 +284,7 @@ export default createFragmentContainer(
         twitterUrl
         instagramUrl
         address
+        country
       }
     }
   `,

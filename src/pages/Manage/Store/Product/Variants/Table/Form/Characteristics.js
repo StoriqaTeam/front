@@ -8,18 +8,26 @@ import CharacteristicItem from './CharacteristicItem';
 
 import './Characteristics.scss';
 
+type AttributeValueType = {
+  attrId: number,
+  value: string,
+  metaField?: {
+    translations: Array<{ lang: string, text: string }>,
+  },
+};
+
 type PropsType = {
   onChange: Function,
-  values: Array<{ attrId: number, value: string, metaField?: string }>,
-  category: { getAttributes: Array<{}> },
+  values: Array<AttributeValueType>,
+  category: {
+    getAttributes: Array<{
+      rawId: number,
+    }>,
+  },
 };
 
 class Characteristics extends PureComponent<PropsType> {
-  handleItemChange = (attribute: {
-    attrId: number,
-    value: string,
-    metaField?: string,
-  }) => {
+  handleItemChange = (attribute: AttributeValueType) => {
     const { attrId, value, metaField } = attribute;
     const filteredItems = filter(
       item => item.attrId !== attrId,
@@ -30,6 +38,7 @@ class Characteristics extends PureComponent<PropsType> {
   };
 
   render() {
+    // $FlowIgnoreMe
     const attributes = pathOr([], ['getAttributes'], this.props.category);
     return (
       <div styleName="container">
