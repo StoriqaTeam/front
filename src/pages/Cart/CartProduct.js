@@ -9,7 +9,7 @@ import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Select } from 'components/common/Select';
-import { SetInCartMutation, DeleteFromCartMutation } from 'relay/mutations';
+import { SetQuantityInCartMutation, DeleteFromCartMutation } from 'relay/mutations';
 import { log } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
@@ -47,16 +47,16 @@ class CartProduct extends PureComponent<PropsType> {
 
   handleQuantityChange(newVal) {
     const id = this.props.product.rawId;
-    SetInCartMutation.commit({
-      input: { clientMutationId: '', productId: id, quantity: newVal },
+    SetQuantityInCartMutation.commit({
+      input: { clientMutationId: '', productId: id, value: newVal },
       environment: this.context.environment,
       onCompleted: (response, errors) => {
-        log.debug('Success for SetInCart mutation');
+        log.debug('Success for SetQuantityInCart mutation');
         if (response) { log.debug('Response: ', response); }
         if (errors) { log.debug('Errors: ', errors); }
       },
       onError: (error) => {
-        log.error('Error in SetInCart mutation');
+        log.error('Error in SetQuantityInCart mutation');
         log.error(error);
         // eslint-disable-next-line
         alert('Unable to set product quantity in cart');

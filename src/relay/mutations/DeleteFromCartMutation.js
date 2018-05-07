@@ -1,7 +1,8 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment } from 'relay-runtime';
+import { Environment, ConnectionHandler } from 'relay-runtime';
+import { filter } from 'ramda';
 
 import type { DeleteFromCartMutationVariables, DeleteFromCartMutationResponse } from './__generated__/IncrementInCartMutation.graphql';
 
@@ -28,10 +29,20 @@ const commit = (params: DeleteFromCartParams) => commitMutation(params.environme
     input: { ...params.input },
   },
   updater: (relayStore) => {
-    const me = relayStore.getRoot().getLinkedRecord('me');
-    const stores = me.getLinkedRecord('stores').getLinkedRecords('edges').map(edge => egde.getLinkedRecord('node'));
+    const productId = relayStore.getRootField('deleteFromCart').getValue('productId');
+    const storeId = relayStore.getRootField('deleteFromCart').getValue('storeId');
+    const store = relayStore.get(storeId);
     debugger;
-    // const store = relayStore.get()
+    const products = store.getLinkedRecords('products');
+    if (products.length > 0) {
+      const filtered = filter(product => product.getDataID() === productId, products);
+      store.setLinkedRecords(filtered);
+    } else {
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      const cart = me.getLinkedRecord('cart');
+      const connection = ConnectionHandler.getConnection(cart, 'Cart_stores');
+      ConnectionHandler.deleteNode(connection, storeId);
+    }
   },
   onCompleted: params.onCompleted,
   onError: params.onError,
