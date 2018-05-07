@@ -273,22 +273,23 @@ class Categories extends Component<PropsType, StateType> {
         </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (
-            <div
-              key={item.rawId}
-              styleName={classNames('item', {
-                active: item.rawId === parseInt(categoryId, 10),
-              })}
-              onClick={() =>
-                this.props.router.push(
-                  `/categories?search=&category=${item.rawId}`,
-                )
-              }
-              onKeyDown={() => {}}
-              role="button"
-              tabIndex="0"
-            >
+            <div key={item.rawId} styleName="item">
               <span styleName="separator">/</span>
-              {getNameText(item.name, 'EN')}
+              <div
+                styleName={classNames('item', {
+                  active: item.rawId === parseInt(categoryId, 10),
+                })}
+                onClick={() =>
+                  this.props.router.push(
+                    `/categories?search=&category=${item.rawId}`,
+                  )
+                }
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {getNameText(item.name, 'EN')}
+              </div>
             </div>
           ))}
       </div>
