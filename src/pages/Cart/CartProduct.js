@@ -9,7 +9,7 @@ import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Select } from 'components/common/Select';
-import { SetInCartMutation } from 'relay/mutations';
+import { SetInCartMutation, DeleteFromCartMutation } from 'relay/mutations';
 import { log } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
@@ -26,6 +26,25 @@ type PropsType = {
 
 /* eslint-disable react/no-array-index-key */
 class CartProduct extends PureComponent<PropsType> {
+  handleDelete() {
+    const id = this.props.product.rawId;
+    DeleteFromCartMutation.commit({
+      input: { clientMutationId: '', productId: id },
+      environment: this.context.environment,
+      onCompleted: (response, errors) => {
+        log.debug('Success for DeleteFromCart mutation');
+        if (response) { log.debug('Response: ', response); }
+        if (errors) { log.debug('Errors: ', errors); }
+      },
+      onError: (error) => {
+        log.error('Error in DeleteFromCart mutation');
+        log.error(error);
+        // eslint-disable-next-line
+        alert('Unable to delete product quantity in cart');
+      },
+    });
+  }
+
   handleQuantityChange(newVal) {
     const id = this.props.product.rawId;
     SetInCartMutation.commit({
@@ -66,7 +85,7 @@ class CartProduct extends PureComponent<PropsType> {
 
     return (
       <div styleName="container">
-        <button styleName="recycle">
+        <button styleName="recycle" onClick={() => this.handleDelete()}>
           <Recycle />
         </button>
         <div styleName="left-container">
