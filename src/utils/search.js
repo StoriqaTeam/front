@@ -4,22 +4,21 @@ import {
   pathOr,
   when,
   has,
-  curry,
   isNil,
   map,
   reduce,
   find,
   filter,
   whereEq,
-  keys,
   pipe,
   split,
   complement,
-  assoc,
   assocPath,
   path,
   omit,
 } from 'ramda';
+
+import { renameKeys } from 'utils/ramda';
 
 const byLang = (lang: string) => find(whereEq({ lang }));
 
@@ -64,14 +63,6 @@ const parseAttrFiltersFromUrl = pipe(
   filter(complement(isNil)),
 );
 
-const renameKeys = curry((keysMap, obj) =>
-  reduce(
-    (acc, key) => assoc(keysMap[key] || key, obj[key], acc),
-    {},
-    keys(obj),
-  ),
-);
-
 const assocInt = (arr, getterValue) => obj =>
   assocPath(arr, parseInt(getterValue(obj), 10))(obj);
 
@@ -80,7 +71,6 @@ const assocStr = (arr, getterValue) => obj =>
 
 export const urlToInput = (queryObj: {}) =>
   pipe(
-    // pipeLog,
     renameKeys({ search: 'name' }),
     when(
       has('category'),
