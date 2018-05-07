@@ -1,5 +1,6 @@
-import { getNameText, flattenFunc, urlToInput, inputToUrl } from 'utils';
+import { forEach } from 'ramda';
 
+import { getNameText, flattenFunc, urlToInput, inputToUrl, searchPathByParent } from 'utils';
 import { renameKeys } from 'utils/ramda';
 
 describe('search utils tests', () => {
@@ -45,8 +46,25 @@ describe('search utils tests', () => {
 
   describe('inputToUrl util parse search input query to url string', () => {
     it('should return url string: ', () => {
-      const searchVal = 'search=test';
-      expect(inputToUrl(inputByQueryObj)).toEqual(expect.stringContaining(searchVal));
+      const resultStr = inputToUrl(inputByQueryObj);
+      forEach(str => {
+        expect(urlFromInput).toEqual(expect.stringContaining(str));
+      }, resultStr.split('&'));     
+    });
+  });
+
+  describe('searchPathByParent util return array with categories path (for breadcrumbs)', () => {
+    it('should return array of categories: ', () => {
+      const result = searchPathByParent(flattenFunc(rootCategoryChildren), 9)
+      forEach(id => {
+        expect(result).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              rawId: id,
+            }),
+          ]),
+        );
+      }, [1, 3, 9]);
     });
   });
 
@@ -80,15 +98,19 @@ const rootCategoryChildren = [
     "children": [
       {
         "rawId": 3,
+        "parentId": 1,
         "children": [
           {
             "rawId": 9,
+            "parentId": 3,
           },
           {
             "rawId": 10,
+            "parentId": 3,
           },
           {
             "rawId": 11,
+            "parentId": 3,
           }
         ]
       },
@@ -97,6 +119,7 @@ const rootCategoryChildren = [
         "children": [
           {
             "rawId": 27,
+            "parentId": 25,
           }
         ]
       }
@@ -107,9 +130,11 @@ const rootCategoryChildren = [
     "children": [
       {
         "rawId": 7,
+        "parentId": 2,
         "children": [
           {
             "rawId": 18,
+            "parentId": 7,
           },
         ]
       },
@@ -158,4 +183,4 @@ const inputByQueryObj = {
   },
 };
 
-const urlFromInput = '?search=test&category=12&minValue=0&maxValue=345345&attrFilters=equal.1=44;equal.2=Tree;equal.3=Black;';
+const urlFromInput = '?search=test&category=12&sortBy=PRICE_ASC&minValue=0&maxValue=345345&attrFilters=equal.1=44;equal.2=Tree;equal.3=Black;';
