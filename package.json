@@ -119,7 +119,7 @@
     "ci": "yarn lint && yarn flow",
     "lint": "./node_modules/.bin/eslint ./src",
     "test": "jest",
-    "storybook": "yarn updateSchema && start-storybook -p 9001 -c .storybook",
+    "storybook": "NODE_ENV=development BABEL_ENV=development yarn updateSchema && start-storybook -p 9000 -c .storybook",
     "relay": "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
     "updateSchema": "./node_modules/.bin/babel-node scripts/updateSchema.js",
     "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
