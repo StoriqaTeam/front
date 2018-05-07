@@ -7,6 +7,7 @@ import { pipe, path, pathOr, map, head } from 'ramda';
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
+import { Select } from 'components/common/Select';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -66,7 +67,33 @@ class CartProduct extends PureComponent<PropsType> {
               ))}
             </div>
             <ShowMore>
-              Some details
+              <div styleName="delivery-container">
+                <div styleName="cart-product-title">
+                  Delivery and return
+                </div>
+                <div styleName="half-width">
+                  <CartProductAttribute
+                    title="Delivery"
+                    value={
+                      <Select
+                        items={[{ id: 1, label: 'DHL' }, { id: 2, label: 'Boxberry' }]}
+                        activeItem={{ id: 1, label: 'DHL' }}
+                        forForm
+                        containerStyle={{ width: '24rem' }}
+                      />
+                    }
+                  />
+                </div>
+                <div styleName="half-width">
+                  <CartProductAttribute title="Delivary term" value="14 days" />
+                </div>
+                <div styleName="half-width">
+                  <CartProductAttribute title="Return policy" value="Replacement or cash" />
+                </div>
+                <div styleName="half-width">
+                  <CartProductAttribute title="Delivary return terms" value="Paid by seller" />
+                </div>
+              </div>
             </ShowMore>
           </div>
           <div styleName="product-params">
