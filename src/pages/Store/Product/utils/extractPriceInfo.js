@@ -26,7 +26,6 @@ const calcCrossedPrice = (discount: string | null, price: string) =>
  * @return {[]}
  */
 export default function extractPriceInfo(array: Array<VariantPriceInfoType>) {
-  // $FlowIgnoreMe
   return array.map(({ id, price, cashback, discount }) => ({
     id,
     price: price.toString(),
