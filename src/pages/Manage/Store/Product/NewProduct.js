@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
-import { routerShape, withRouter } from 'found';
+import { routerShape, withRouter, matchShape } from 'found';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -23,6 +23,7 @@ type StateType = {
 type PropsType = {
   storeId: number,
   router: routerShape,
+  match: matchShape,
 };
 
 const storeLogoFromProps = pathOr(null, ['me', 'store', 'logo']);
@@ -32,7 +33,6 @@ class NewProduct extends Component<PropsType, StateType> {
     formErrors: {},
     isLoading: false,
   };
-
   handleSave = (form: ?{ [string]: any }) => {
     if (!form) {
       return;
@@ -48,7 +48,7 @@ class NewProduct extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
       name: [{ lang: 'EN', text: name }],
-      storeId: parseInt(this.props.storeId, 10),
+      storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: fullDesc }],
       currencyId: 1,
@@ -74,7 +74,7 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
         }
 
-        const { storeId } = this.props;
+        const { storeId } = this.props.match.params;
         const productId = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
