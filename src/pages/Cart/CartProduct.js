@@ -146,6 +146,7 @@ export default createFragmentContainer(
   graphql`
     fragment CartProduct_product on CartProduct {
       id
+      rawId
       name {
         lang
         text

@@ -10,3 +10,4 @@ export { default as UpdateBaseProductMutation } from './UpdateBaseProductMutatio
 export { default as CreateProductWithAttributesMutation } from './CreateProductWithAttributesMutation';
 export { default as UpdateProductMutation } from './UpdateProductMutation';
 export { default as IncrementInCartMutation } from './IncrementInCartMutation';
+export { default as SetInCartMutation } from './SetInCartMutation';
