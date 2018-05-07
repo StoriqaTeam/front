@@ -148,10 +148,7 @@ class Product extends Component<PropsType, StateType> {
       <div styleName="ProductDetails">
         <Row>
           <Col size={6}>
-            <ProductImage
-              mainImage={photoMain}
-              thumbnails={additionalPhotos}
-            />
+            <ProductImage mainImage={photoMain} thumbnails={additionalPhotos} />
             <ProductShare />
           </Col>
           <Col size={6}>
