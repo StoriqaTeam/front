@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Slider } from 'components/Slider';
-import { Button } from 'components/common/Button';
 
 import './BannersSlider.scss';
 
