@@ -9,14 +9,7 @@ import type { IncrementInCartMutationVariables, IncrementInCartMutationResponse 
 const mutation = graphql`
   mutation IncrementInCartMutation($input: IncrementInCartInput!) {
     incrementInCart(input: $input) {
-      stores {
-        edges {
-          node {
-            ...CartStore_store
-          }
-          cursor
-        }
-      }
+      ...CartStore_store
     }
   }
 `;
@@ -98,32 +91,6 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
   },
   onCompleted: params.onCompleted,
   onError: params.onError,
-  updater: (relayStore) => {
-    const cartBase = relayStore.getRoot()
-      .getLinkedRecord('me')
-      .getLinkedRecord('cart');
-    const storesBase = cartBase
-      .getLinkedRecord('stores');
-    const storesSink = relayStore
-      .getRootField('incrementInCart')
-      .getLinkedRecord('stores');
-    const storeEdgeSink = head(storesSink.getLinkedRecords('edges'));
-    const storeSink = storeEdgeSink.getLinkedRecord('node');
-    const storesBaseNodes = storesBase.getLinkedRecords('edges').map(edge => edge.getLinkedRecord('node'));
-    const storeBase = find(store => store.getDataID() === storeSink.getDataID(), storesBaseNodes);
-    // if store already exists add product to the list of products
-    if (storeBase) {
-      const productsBase = storeBase.getLinkedRecords('products');
-      const productSink = head(storeSink.getLinkedRecords('products'));
-      if (!productSink) return;
-      const filteredProductsBase = reject(x => x.getDataID() === productSink.getDataID(), productsBase);
-      filteredProductsBase.push(productSink);
-      storeSink.setLinkedRecords(filteredProductsBase);
-    } else {
-      const conn = ConnectionHandler.getConnection(cartBase, 'Cart_stores');
-      ConnectionHandler.insertEdgeAfter(conn, storeEdgeSink);
-    }
-  }
 });
 
 export default { commit };
