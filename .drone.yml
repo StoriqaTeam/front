@@ -1,11 +1,4 @@
 pipeline:
-  restore-cache:
-    image: drillster/drone-volume-cache
-    restore: true
-    mount:
-      - ./node_modules
-    volumes:
-      - /mnt/front:/cache
   test:
     image: node:9.9
     environment:
@@ -63,7 +56,7 @@ pipeline:
       event: [ push, tag ]
       branch: master
   deploy2nightly:
-    image: jackthestripper/drone_k8s_rollout
+    image: jackthestripper/drone_k8s_rollout:20180507
     user: admin
     token: 32txou6YhrlD3sHcpxsiCmP1m7taE1fY
     addr: https://api.nightly.stq.cloud
@@ -124,7 +117,7 @@ pipeline:
       event: [ push, tag ]
       branch: master
   deploy2stable:
-    image: jackthestripper/drone_k8s_rollout
+    image: jackthestripper/drone_k8s_rollout:20180507
     user: admin
     token: vhkzUYmnPSI7MtJO3Et9KczuGoS0goqV
     addr: https://api.stable.stq.cloud
@@ -185,7 +178,7 @@ pipeline:
       event: [ push, tag ]
       branch: release*
   deploy2stage:
-    image: jackthestripper/drone_k8s_rollout
+    image: jackthestripper/drone_k8s_rollout:20180507
     user: admin
     token: PW2clI0vKqLi3eywlN776rMyE7hk1pgX
     addr: https://api.stage.stq.cloud
@@ -204,13 +197,6 @@ pipeline:
     when:
       branch: release*
       event: push
-  rebuild-cache:
-    image: drillster/drone-volume-cache
-    rebuild: true
-    mount:
-      - ./node_modules
-    volumes:
-      - /mnt/front:/cache
   notify_slack:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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
