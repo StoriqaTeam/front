@@ -1,17 +1,12 @@
 // @flow
 
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import { isNil } from 'ramda';
 
 import { WidgetsType } from './types';
 
-import {
-  ProductPrice,
-  ProductSize,
-  ProductMaterial,
-  ProductThumbnails,
-} from './index';
+import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
 
 import './ProductDetails.scss';
 
@@ -26,6 +21,7 @@ type PropsType = {
   productTitle: string,
   productDescription: string,
   onWidgetClick: Function,
+  children: React.Node,
 };
 
 type StateType = {
@@ -34,7 +30,7 @@ type StateType = {
   resetCOLOR_PICKER: boolean,
 };
 
-class ProductDetails extends Component<PropsType, StateType> {
+class ProductDetails extends React.Component<PropsType, StateType> {
   state = {
     resetCHECKBOX: false,
     resetCOMBOBOX: false,
@@ -73,15 +69,12 @@ class ProductDetails extends Component<PropsType, StateType> {
       productTitle,
       productDescription,
       widgets: { CHECKBOX, COMBOBOX, COLOR_PICKER },
+      children,
     } = this.props;
     return (
       <div styleName="container">
         <h2>{productTitle}</h2>
-        <ProductPrice
-          lastPrice="0.000290"
-          currentPrice="0.000123"
-          percentage="12"
-        />
+        {children}
         <p>{productDescription}</p>
         {/* eslint-disable camelcase */}
         {!isNil(CHECKBOX) ? (

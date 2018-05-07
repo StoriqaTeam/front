@@ -16,6 +16,7 @@ class Img extends Component {
   };
 
   static defaultProps = {
+    fit: false,
     loader: false,
     unloader: false,
     decode: true,
@@ -165,12 +166,39 @@ class Img extends Component {
     // if we have loaded, show img
     if (this.state.isLoaded) {
       // clear non img props
-      let { src, loader, unloader, decode, container, ...rest } = this.props; //eslint-disable-line
-      let imgProps = {
-        ...{ src: this.sourceList[this.state.currentIndex] },
-        ...rest,
-      };
-      return this.props.container(<img {...imgProps} />);
+      let {
+        fit,
+        src,
+        loader,
+        unloader,
+        decode,
+        container,
+        ...rest
+      } = this.props; //eslint-disable-line
+      let imgProps = { ...rest };
+      return fit
+        ? this.props.container(
+            <div
+              style={{
+                backgroundImage: `url(${src})`,
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                right: '0',
+                bottom: '0',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+              }}
+              {...imgProps}
+            />,
+          )
+        : this.props.container(
+            <img
+              src={this.sourceList[this.state.currentIndex]}
+              {...imgProps}
+            />,
+          );
     }
 
     // if we are still trying to load, show img and a loader if requested

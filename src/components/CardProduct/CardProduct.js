@@ -59,13 +59,11 @@ class CardProduct extends PureComponent<PropsTypes> {
             {!photoMain ? (
               <Icon type="camera" size="40" />
             ) : (
-              <ImageLoader src={photoMain} loader={<BannerLoading />} />
+              <ImageLoader fit src={photoMain} loader={<BannerLoading />} />
             )}
           </div>
           <div styleName="bottom">
-            <div styleName="icon">
-              <Icon type="qa" size="20" />
-            </div>
+            <div styleName="icon">{false && <Icon type="qa" size="20" />}</div>
             {name && <div styleName="title">{getNameText(name, lang)}</div>}
             <div styleName="price">
               {Boolean(discount) && (

@@ -15,9 +15,11 @@ import {
   filterVariants,
   compareWidgets,
   extractPhotos,
+  extractPriceInfo,
 } from './utils';
 
 import {
+  ProductPrice,
   ProductImage,
   ProductShare,
   ProductDetails,
@@ -26,7 +28,7 @@ import {
   TabRow,
 } from './index';
 
-import { ProductType, SelectedType, ThumbnailType } from './types';
+import { ProductType, SelectedType, ThumbnailType, PriceInfo } from './types';
 
 import './Product.scss';
 import mockData from './mockData.json';
@@ -40,6 +42,7 @@ type StateType = {
   widgets: {},
   photoMain: string,
   additionalPhotos: Array<ThumbnailType>,
+  priceInfo: PriceInfo,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -60,17 +63,14 @@ class Product extends Component<PropsType, StateType> {
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const extractedPhotos = head(extractPhotos(all));
-      let photoMain = '';
-      let additionalPhotos = [];
-      if (extractedPhotos) {
-        ({ photoMain, additionalPhotos } = extractedPhotos);
-      }
+      const { photoMain, additionalPhotos } = head(extractPhotos(all));
+      const priceInfo = head(extractPriceInfo(all));
       return {
         tabs: prevState.tabs,
         widgets: buildWidgets(all),
         photoMain,
         additionalPhotos,
+        priceInfo,
       };
     }
     return null;
@@ -86,6 +86,7 @@ class Product extends Component<PropsType, StateType> {
     widgets: {},
     photoMain: '',
     additionalPhotos: [],
+    priceInfo: {},
   };
   /**
    * @param {string} img
@@ -138,7 +139,13 @@ class Product extends Component<PropsType, StateType> {
     const {
       baseProduct: { name, longDescription },
     } = this.props;
-    const { tabs, widgets, photoMain, additionalPhotos } = this.state;
+    const {
+      tabs,
+      widgets,
+      photoMain,
+      additionalPhotos,
+      priceInfo,
+    } = this.state;
     return (
       <div styleName="container">
         <Header />
@@ -162,7 +169,9 @@ class Product extends Component<PropsType, StateType> {
                   )}
                   widgets={widgets}
                   onWidgetClick={this.handleWidgetClick}
-                />
+                >
+                  <ProductPrice {...priceInfo} />
+                </ProductDetails>
               </Col>
             </Row>
             <Tabs>
@@ -203,6 +212,9 @@ export default createFragmentContainer(
           id
           photoMain
           additionalPhotos
+          price
+          cashback
+          discount
           attributes {
             value
             metaField

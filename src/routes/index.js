@@ -73,14 +73,6 @@ const routes = (
                     lang
                     text
                   }
-                  getAttributes {
-                    id
-                    rawId
-                    name {
-                      lang
-                      text
-                    }
-                  }
                 }
               }
             }
