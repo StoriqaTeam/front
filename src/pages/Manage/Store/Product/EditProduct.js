@@ -70,9 +70,14 @@ class EditProduct extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        // $FlowIgnoreMe
+        const status = pathOr('', ['100', 'status'], relayErrors);
+        if (validationErrors && !isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
+        } else if (status) {
+          // $FlowIgnoreMe
+          alert(`Error: "${status}"`); // eslint-disable-line
         }
       },
       onError: (error: Error) => {

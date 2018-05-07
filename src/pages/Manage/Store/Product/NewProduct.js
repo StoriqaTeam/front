@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr } from 'ramda';
+import { pathOr, isEmpty } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
@@ -74,9 +74,16 @@ class NewProduct extends Component<PropsType, StateType> {
         this.setState(() => ({ isLoading: false }));
 
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        // $FlowIgnoreMe
+        const status = pathOr('', ['100', 'status'], relayErrors);
+        if (validationErrors && !isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
+          return;
+        } else if (status) {
+          // $FlowIgnoreMe
+          alert(`Error: "${status}"`); // eslint-disable-line
+          return;
         }
 
         const { storeId } = this.props.match.params;
