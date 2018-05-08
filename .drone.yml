@@ -19,7 +19,6 @@ pipeline:
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
       - yarn relay
-      - yarn test
       - yarn ci
     when:
       event: pull_request
