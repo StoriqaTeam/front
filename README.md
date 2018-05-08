@@ -44,7 +44,11 @@ _https://localhost:3443/_
 
 ### E2E-тесты
 
-#### `yarn test:e2e`
+#### `yarn server:test`
+
+#### `yarn server:graphql:test`
+
+#### when backend and frontend are completed running `yarn cypress:open`
 
 ---
 
