@@ -31,7 +31,7 @@
 }
 
 .isExpanded {
-  &.forForm .hr, .forSearch .hr {
+  &.forForm .hr, &.forSearch .hr {
     &:after {
       transform: scaleX(1);
     }
@@ -48,15 +48,24 @@
 }
 
 .label {
+  position: absolute;
+  top: 0.5rem;
+  left: 0;
   color: $color_grey_bg;
   font-size: 14px;
+  line-height: 2rem;
   white-space: nowrap;
-  transform: scale(0.9) translate(0, 1rem);
+  transform: scale(1) translate(0, 0);
   transform-origin: left top 0;
   transition: all .3s ease;
 }
 
-.isExpanded .label {
+.labelFloat {
+  transform: scale(0.9) translate(0, -2.6rem);
+  transform-origin: left top 0;
+}
+
+.isExpanded .labelFloat {
   color: $color_blue_1;
 }
 
@@ -91,18 +100,9 @@
   vertical-align: bottom;
 }
 
-.isDropdown .wrap {
-  background-color: transparent;
-}
-
 .isItem {
   padding-right: 3.5rem;
   font-size: 16px;
-  background-color: transparent;
-}
-
-.isDropdown {
-  color: $color_grey_link;
   background-color: transparent;
 }
 
@@ -117,14 +117,8 @@
   z-index: 2;
 }
 
-.placeholder {
-  font-size: 14px;
-  color: $color_grey_bg;
-  line-height: 2.5rem;
-  z-index: 2;
-}
-
-.forForm .selected {
+.forForm .selected,
+.forSearch .selected {
   top: 0.25rem;
 }
 
@@ -171,7 +165,7 @@
   padding: 0.5rem 0.5rem 0.5rem 0;
   border-radius: 0.25rem;
   background-color: $color_white;
-  box-shadow: 0 0.25rem 0.75rem 0 rgba(0, 0, 0, .16);
+  box-shadow: $shadow_1;
   overflow: hidden;
   cursor: default;
   z-index: 11;
@@ -215,13 +209,6 @@
   top: -1rem;
 }
 
-.isDropdown .items {
-  top: 3rem;
-  left: auto;
-  right: 0;
-  z-index: 1;
-}
-
 .itemsWrap {
   position: relative;
   max-height: 10rem;
@@ -258,10 +245,6 @@
   line-height: 3rem;
 }
 
-.isDropdown .item {
-  white-space: nowrap;
-}
-
 .forAutocomlete .item {
   font-size: 14px;
   height: 3.75rem;
@@ -273,14 +256,6 @@
   color: #03a9ff;
 }
 
-.isDropdown .active {
-  display: block;
-}
-
 .hidden {
   display: none;
-}
-
-.area {
-  //
 }

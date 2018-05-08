@@ -49,7 +49,7 @@ describe('search utils tests', () => {
       const resultStr = inputToUrl(inputByQueryObj);
       forEach(str => {
         expect(urlFromInput).toEqual(expect.stringContaining(str));
-      }, resultStr.split('&'));     
+      }, resultStr.split('&'));
     });
   });
 
