@@ -1,0 +1,25 @@
+@import "../../../styles/variables";
+
+.wizardContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $color_white;
+  min-height: 101rem;
+  margin: 0 2rem -2rem 2rem;
+  border: 1px solid $color_grey_border3;
+
+  .stepperWrapper {
+    display: flex;
+  }
+
+  .contentWrapper {
+    display: flex;
+    flex: 1;
+    padding-top: 14.25rem;
+  }
+
+  .footerWrapper {
+    display: flex;
+  }
+}
