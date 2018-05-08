@@ -2,8 +2,12 @@
 .*/node_modules/webpack-cli/.*
 .*/node_modules/graphql/.*
 .*/node_modules/cypress/.*
+.*/node_modules/konfig/.*
+.*/node_modules/config-chain/.*
 ./build/.*
 ./config/.*
+./cypress/.*
+./dist/.*
 
 [include]
 

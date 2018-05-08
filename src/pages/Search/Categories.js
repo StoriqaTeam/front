@@ -244,7 +244,19 @@ class Categories extends Component<PropsType, StateType> {
       this.props,
     );
     if (!categories || !categoryId) {
-      return null;
+      return (
+        <div styleName="breadcrumbs">
+          <div
+            styleName="item"
+            onClick={() => this.props.router.push('/categories?search=')}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="0"
+          >
+            All categories
+          </div>
+        </div>
+      );
     }
     const arr = flattenFunc(categories);
     const pathArr = searchPathByParent(arr, parseInt(categoryId, 10));
@@ -261,22 +273,23 @@ class Categories extends Component<PropsType, StateType> {
         </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (
-            <div
-              key={item.rawId}
-              styleName={classNames('item', {
-                active: item.rawId === parseInt(categoryId, 10),
-              })}
-              onClick={() =>
-                this.props.router.push(
-                  `/categories?search=&category=${item.rawId}`,
-                )
-              }
-              onKeyDown={() => {}}
-              role="button"
-              tabIndex="0"
-            >
+            <div key={item.rawId} styleName="item">
               <span styleName="separator">/</span>
-              {getNameText(item.name, 'EN')}
+              <div
+                styleName={classNames('item', {
+                  active: item.rawId === parseInt(categoryId, 10),
+                })}
+                onClick={() =>
+                  this.props.router.push(
+                    `/categories?search=&category=${item.rawId}`,
+                  )
+                }
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {getNameText(item.name, 'EN')}
+              </div>
             </div>
           ))}
       </div>
@@ -321,10 +334,24 @@ class Categories extends Component<PropsType, StateType> {
     );
     if (!categoryId) return linkComponent();
     const arr = flattenFunc(categories);
-    const catObj = find(whereEq({ rawId: parseInt(categoryId, 10) }), arr);
-    const parentObj = catObj
-      ? find(whereEq({ rawId: catObj.parentId }), arr)
-      : null;
+    const findCatPred = rawId => find(whereEq({ rawId }));
+    const catObj = findCatPred(parseInt(categoryId, 10))(arr);
+    let parentObj = null;
+    // подготовка объекта категории
+    if (catObj) {
+      switch (catObj.level) {
+        case 3:
+          // если категория 3 уровня надо отрисовать backlink на бабушку
+          parentObj = findCatPred(catObj.parentId)(arr);
+          parentObj = parentObj ? findCatPred(parentObj.parentId)(arr) : null;
+          break;
+        case 2:
+          parentObj = find(whereEq({ rawId: catObj.parentId }), arr);
+          break;
+        default:
+          break;
+      }
+    }
     if (!parentObj) return linkComponent();
     return linkComponent(parentObj);
   };

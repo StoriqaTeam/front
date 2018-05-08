@@ -8,7 +8,6 @@ import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
 import { Button } from 'components/common/Button';
 import { Select } from 'components/common/Select';
-import { Dropdown } from 'components/common/Dropdown';
 import { Icon } from 'components/Icon';
 
 import { Container, Row, Col } from 'layout';
@@ -66,33 +65,11 @@ class Header extends PureComponent<PropsType> {
                     dataTest="headerLanguagesSelect"
                   />
                 </div>
-                <div styleName="item">
-                  <Dropdown
-                    title="Terms & Conditions"
-                    items={[
-                      { id: '1', label: 'Term #1' },
-                      { id: '2', label: 'Term #2' },
-                      { id: '3', label: 'Term #3' },
-                    ]}
-                  />
+                <div>
+                  <a href="_">Help</a> {/* eslint-disable-line */}
                 </div>
-                <div styleName="item">
-                  <Dropdown
-                    title="Delivery"
-                    items={[
-                      { id: '1', label: 'Delivery #1' },
-                      { id: '2', label: 'Delivery #2' },
-                      { id: '3', label: 'Delivery #3' },
-                    ]}
-                  />
-                </div>
-                <div styleName="item">
-                  <a href="/">
-                    <span styleName="qaIcon">
-                      <Icon type="qualityAssurance" />
-                    </span>
-                    Quality Assurance
-                  </a>
+                <div>
+                  <a href="/manage/store/new">Sell on Storiqa</a>
                 </div>
               </div>
               <div styleName="bottom">

@@ -95,12 +95,9 @@ const routes = (
 
       <Route
         path="/categories"
-        Component={({ search, me }) => <Categories search={search} me={me} />}
+        Component={Categories}
         query={graphql`
           query routes_Categories_Query($searchTerm: SearchProductInput!) {
-            me {
-              id
-            }
             search {
               ...Categories_search @arguments(text: $searchTerm)
             }
@@ -128,6 +125,22 @@ const routes = (
           return { input: { ...searchTerm, getStoresTotalCount: true } };
         }}
       />
+      <Route path="/store">
+        <Route
+          path="/:storeId/products/:productId"
+          Component={ProductCard}
+          query={graphql`
+            query routes_ProductCard_Query($productID: Int!) {
+              baseProduct(id: $productID) {
+                ...Product_baseProduct
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => ({
+            productID: parseInt(params.productId, 10),
+          })}
+        />
+      </Route>
       {/* TODO: вынести в HOC ли придумать что-то */}
       <Route
         path="/manage"
@@ -140,9 +153,12 @@ const routes = (
         `}
         render={({ props }) => {
           if (props && !props.me) {
+            const {
+              location: { pathname },
+            } = props;
             const cookies = new Cookies();
             cookies.remove('__jwt');
-            throw new RedirectException('/login');
+            throw new RedirectException(`/login?from=${pathname}`);
           }
         }}
         Component={() => <div />}
@@ -255,23 +271,6 @@ const routes = (
       <Route path="/verify_email/:token" Component={VerifyEmail} />
       <Route path="/profile" Component={Profile} />
     </Route>
-    <Route
-      path="/store/:storeId/products/:productId"
-      query={graphql`
-        query routes_ProductCard_Query($productID: Int!) {
-          baseProduct(id: $productID) {
-            ...Product_baseProduct
-          }
-        }
-      `}
-      prepareVariables={(_, { params }) => ({
-        productID: parseInt(params.productId, 10) || 0,
-      })}
-      Component={ProductCard}
-      render={({ props, Component }) =>
-        Component && props ? <Component {...props} /> : <div />
-      }
-    />
   </Route>
 );
 
