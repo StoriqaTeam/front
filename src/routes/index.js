@@ -123,12 +123,9 @@ const routes = (
           }
         `}
         prepareVariables={(...args) => {
-          const searchValue = pathOr(
-            '',
-            ['query', 'search'],
-            last(args).location,
-          );
-          return { input: { name: searchValue, getStoresTotalCount: true } };
+          const queryObj = pathOr('', ['query'], last(args).location);
+          const searchTerm = urlToInput(queryObj);
+          return { input: { ...searchTerm, getStoresTotalCount: true } };
         }}
       />
       {/* TODO: вынести в HOC ли придумать что-то */}

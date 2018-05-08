@@ -61,8 +61,10 @@ const parseAttrFiltersFromUrl = pipe(
   filter(complement(isNil)),
 );
 
-const assocInt = (arr, getterValue) => obj =>
-  assocPath(arr, parseInt(getterValue(obj), 10))(obj);
+const assocInt = (arr, getterValue) => obj => {
+  const value = getterValue(obj);
+  return assocPath(arr, value ? parseInt(getterValue(obj), 10) : null)(obj);
+};
 
 const assocStr = (arr, getterValue) => obj =>
   assocPath(arr, getterValue(obj))(obj);
@@ -84,10 +86,21 @@ export const urlToInput = (queryObj: {}) =>
     ),
     when(has('sortBy'), assocStr(['options', 'sortBy'], path(['sortBy']))),
     when(
+      has('location'),
+      assocStr(['options', 'location'], path(['location'])),
+    ),
+    when(
       has('attrFilters'),
       assocStr(['options', 'attrFilters'], parseAttrFiltersFromUrl),
     ),
-    omit(['category', 'maxValue', 'minValue', 'attrFilters', 'sortBy']),
+    omit([
+      'category',
+      'maxValue',
+      'minValue',
+      'attrFilters',
+      'sortBy',
+      'location',
+    ]),
   )(queryObj);
 
 export const inputToUrl = (obj: {

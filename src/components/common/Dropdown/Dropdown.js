@@ -2,53 +2,26 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { find, propEq, prepend } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
-import './Select.scss';
+import './Dropdown.scss';
 
 type StateType = {
   isExpanded: boolean,
-  items: Array<{ id: string, label: string }>,
-};
-
-type SelectType = {
-  id: string,
-  label: string,
 };
 
 type PropsType = {
-  transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
-  onSelect?: (item: ?SelectType) => void,
-  label: ?string,
-  activeItem: ?{ id: string, label: string },
-  forForm: ?boolean,
-  forSearch: ?boolean,
-  forAutocomlete: ?boolean,
-  fullWidth: ?boolean,
-  containerStyle: ?{
-    [name: string]: any,
-  },
-  dataTest: string,
-  withEmpty?: boolean,
+  title: ?string,
 };
 
 class Select extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      isExpanded: false,
-      items: props.items,
-    };
-  }
+  state = {
+    isExpanded: false,
+  };
 
   componentWillMount() {
-    const { items, withEmpty } = this.props;
-    this.setState({
-      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
-    });
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
       window.addEventListener('keydown', this.handleToggleExpand);
@@ -81,53 +54,19 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  handleItemClick = (e: any) => {
-    const { onSelect, items } = this.props;
-    if (this.props && onSelect) {
-      onSelect(find(propEq('id', e.target.id))(items));
-    }
-  };
-
   render() {
-    const {
-      transparent,
-      label,
-      activeItem,
-      forForm,
-      fullWidth,
-      forSearch,
-      forAutocomlete,
-      containerStyle,
-      dataTest,
-    } = this.props;
-    const { isExpanded, items } = this.state;
+    const { items, title } = this.props;
+    const { isExpanded } = this.state;
 
     return (
       <div
         ref={node => {
           this.button = node;
         }}
-        styleName={classNames('container', {
-          forForm,
-          forSearch,
-          forAutocomlete,
-          fullWidth,
-          isExpanded,
-        })}
-        style={containerStyle}
-        data-test={dataTest}
+        styleName="container"
       >
-        {label && (
-          <div
-            styleName={classNames('label', {
-              labelFloat: activeItem || isExpanded,
-            })}
-          >
-            {label}
-          </div>
-        )}
-        <div styleName={classNames('wrap', { transparent })}>
-          <div styleName="selected">{activeItem && activeItem.label}</div>
+        <div styleName="wrap">
+          <div styleName="selected">{title}</div>
           <div styleName={classNames('icon', { rotateIcon: isExpanded })}>
             <Icon type="arrowExpand" />
           </div>
@@ -144,7 +83,6 @@ class Select extends Component<PropsType, StateType> {
                 this.itemsWrap = node;
               }}
               styleName="itemsWrap"
-              onClick={this.handleItemClick}
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
@@ -152,14 +90,7 @@ class Select extends Component<PropsType, StateType> {
               {items.map(item => {
                 const { id } = item;
                 return (
-                  <div
-                    key={id}
-                    id={id}
-                    styleName={classNames('item', {
-                      active: activeItem && activeItem.id === id,
-                    })}
-                    data-test={id}
-                  >
+                  <div key={id} id={id} styleName="item">
                     {item.label}
                   </div>
                 );
@@ -167,7 +98,6 @@ class Select extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        {(forForm || forSearch) && <div styleName="hr" />}
       </div>
     );
   }

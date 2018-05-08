@@ -8,6 +8,7 @@ import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
 import { Button } from 'components/common/Button';
 import { Select } from 'components/common/Select';
+import { Dropdown } from 'components/common/Dropdown';
 import { Icon } from 'components/Icon';
 
 import { Container, Row, Col } from 'layout';
@@ -66,20 +67,17 @@ class Header extends PureComponent<PropsType> {
                   />
                 </div>
                 <div styleName="item">
-                  <Select
-                    isDropdown
+                  <Dropdown
                     title="Terms & Conditions"
                     items={[
                       { id: '1', label: 'Term #1' },
                       { id: '2', label: 'Term #2' },
                       { id: '3', label: 'Term #3' },
                     ]}
-                    onSelect={() => {}}
                   />
                 </div>
                 <div styleName="item">
-                  <Select
-                    isDropdown
+                  <Dropdown
                     title="Delivery"
                     items={[
                       { id: '1', label: 'Delivery #1' },

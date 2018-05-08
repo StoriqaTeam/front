@@ -1,14 +1,16 @@
 // @flow
 
 import React, { Component } from 'react';
+import { routerShape } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { map, pathOr } from 'ramda';
+import { map, pathOr, find, propEq, assocPath } from 'ramda';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
 import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
+import { urlToInput, inputToUrl } from 'utils';
 
 import StoreRow from './StoreRow';
 
@@ -17,12 +19,14 @@ import './Stores.scss';
 import storesData from './stores.json';
 
 type PropsType = {
+  router: routerShape,
   relay: Relay,
 };
 
 type StateType = {
-  category: { id: string, label: string },
-  location: { id: string, label: string },
+  category: ?{ id: string, label: string },
+  location: ?{ id: string, label: string },
+  categories: Array<{ id: string, label: string }>,
 };
 
 class Stores extends Component<PropsType, StateType> {
@@ -30,9 +34,42 @@ class Stores extends Component<PropsType, StateType> {
     super(props);
     if (storesData) {
       this.state = {
-        category: { id: '1', label: 'Childens goods' },
-        location: { id: '1', label: 'Russia' },
+        category: null,
+        location: null,
+        categories: [],
       };
+    }
+  }
+
+  componentWillMount() {
+    const lang = 'EN';
+    const rawCategories = pathOr(
+      [],
+      [
+        'search',
+        'findStore',
+        'pageInfo',
+        'searchFilters',
+        'category',
+        'children',
+      ],
+      this.props,
+    );
+    const categories = map(item => {
+      const name = find(propEq('lang', lang))(item.name);
+      return {
+        id: String(item.rawId),
+        label: name && name.text ? name.text : '',
+      };
+    }, rawCategories);
+    this.setState({ categories });
+    const category = pathOr(
+      null,
+      ['match', 'location', 'query', 'category'],
+      this.props,
+    );
+    if (category) {
+      this.setState({ category: find(propEq('id', category))(categories) });
     }
   }
 
@@ -42,6 +79,15 @@ class Stores extends Component<PropsType, StateType> {
 
   handleCategory = (category: { id: string, label: string }) => {
     this.setState({ category });
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const newPreparedObj = assocPath(
+      ['options', 'categoryId'],
+      category ? category.id : null,
+      oldPreparedObj,
+    );
+    const newUrl = inputToUrl(newPreparedObj);
+    this.props.router.push(`/stores${newUrl}`);
   };
 
   handleLocation = (location: { id: string, label: string }) => {
@@ -51,6 +97,7 @@ class Stores extends Component<PropsType, StateType> {
   render() {
     const { category, location } = this.state;
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
+    const { categories } = this.state;
     const totalCount = pathOr(
       0,
       ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'],
@@ -72,12 +119,10 @@ class Stores extends Component<PropsType, StateType> {
             <div styleName="filterItem">
               <Select
                 forSearch
+                withEmpty
                 label="Categories"
                 activeItem={category}
-                items={[
-                  { id: '1', label: 'Childens goods' },
-                  { id: '2', label: 'Non-childrens goods' },
-                ]}
+                items={categories}
                 onSelect={this.handleCategory}
                 dataTest="storesCategoriesSelect"
               />
@@ -85,6 +130,7 @@ class Stores extends Component<PropsType, StateType> {
             <div styleName="filterItem">
               <Select
                 forSearch
+                withEmpty
                 label="Location"
                 activeItem={location}
                 items={[
@@ -101,7 +147,7 @@ class Stores extends Component<PropsType, StateType> {
               <Row>
                 <Col size={12}>
                   <div styleName="breadcrumbs">
-                    All stores / {category.label}
+                    All stores{category && ` / ${category.label}`}
                   </div>
                 </Col>
               </Row>
@@ -156,6 +202,19 @@ export default createPaginationContainer(
         pageInfo {
           searchFilters {
             totalCount
+            category {
+              id
+              rawId
+              children {
+                id
+                rawId
+                name {
+                  lang
+                  text
+                }
+              }
+            }
+            country
           }
         }
         edges {

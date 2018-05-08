@@ -4,12 +4,22 @@
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
-import { filter, startsWith, toUpper, head, pathOr, find, propEq } from 'ramda';
+import {
+  filter,
+  startsWith,
+  toUpper,
+  head,
+  pathOr,
+  find,
+  propEq,
+  assocPath,
+} from 'ramda';
 import classNames from 'classnames';
 import { withRouter, matchShape } from 'found';
 
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
+import { urlToInput, inputToUrl } from 'utils';
 
 import './SearchInput.scss';
 
@@ -97,18 +107,39 @@ class SearchInput extends Component<PropsType, StateType> {
 
   handleSearch = () => {
     const { inputValue, activeItem } = this.state;
+    // $FlowIgnoreMe
+    const pathname = pathOr(
+      '',
+      ['match', 'location', 'pathname'],
+      this.props,
+    ).replace('/', '');
+    // $FlowIgnoreMe
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+
+    const newPreparedObj = assocPath(['name'], inputValue, oldPreparedObj);
+    const newUrl = inputToUrl(newPreparedObj);
+
     switch (activeItem && activeItem.id) {
       case 'stores':
-        this.props.router.push(
-          inputValue ? `/stores?search=${inputValue}` : '/stores',
-        );
+        if (pathname === 'stores') {
+          this.props.router.push(`/stores${newUrl}`);
+        } else {
+          this.props.router.push(
+            inputValue ? `/stores?search=${inputValue}` : '/stores?search=',
+          );
+        }
         break;
       case 'products':
-        this.props.router.push(
-          inputValue
-            ? `/categories?search=${inputValue}`
-            : '/categories?search=',
-        );
+        if (pathname === 'categories') {
+          this.props.router.push(`/categories${newUrl}`);
+        } else {
+          this.props.router.push(
+            inputValue
+              ? `/categories?search=${inputValue}`
+              : '/categories?search=',
+          );
+        }
         break;
       default:
         break;
