@@ -4,6 +4,7 @@ export type {
 export type { default as AttributeType } from './AttributeType';
 export type { default as AttributeValueType } from './AttributeValueType';
 export type { default as IdType } from './IdType';
+export type { default as PriceInfo } from './PriceInfo';
 export type { default as ProductType } from './ProductType';
 export type { default as SelectedType } from './SelectedType';
 export type { default as ThumbnailType } from './ThumbnailType';

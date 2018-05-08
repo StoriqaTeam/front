@@ -79,7 +79,10 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     }
     if (active) {
       this.onMouseOutTimer = setTimeout(() => {
-        this.setState(() => ({ active: null }));
+        this.setState(() => ({
+          active: null,
+          activeMid: null,
+        }));
       }, 150);
     }
   };
@@ -128,10 +131,21 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     return categories.map(category => {
       const { rawId } = category;
       const categoryChildren = category.children;
-      const name = find(propEq('lang', lang), category.name) || {};
+      const name = find(propEq('lang', lang))(category.name);
+      let onMouseOver = null;
+      let onMouseOut = null;
+      if (isRoot) {
+        ({ onMouseOver, onMouseOut } = this);
+      } else if (categoryChildren) {
+        onMouseOver = this.onMouseOverMid;
+        onMouseOut = this.onMouseOutMid;
+      } else {
+        onMouseOver = null;
+        onMouseOut = null;
+      }
       const renderInnerLink = () => (
         <Fragment>
-          <span styleName="text">{name.text}</span>
+          {name && name.text && <span styleName="text">{name.text}</span>}
           {categoryChildren &&
             !isRoot && (
               <span styleName="icon">
@@ -150,8 +164,8 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             activeItem: isRoot && active === `${category.rawId}`,
             activeItemMod: !isRoot && activeMid === `${category.rawId}`,
           })}
-          onMouseOver={isRoot ? this.onMouseOver : this.onMouseOverMid}
-          onMouseOut={isRoot ? this.onMouseOut : this.onMouseOutMid}
+          onMouseOver={onMouseOver}
+          onMouseOut={onMouseOut}
           onBlur={() => {}}
           onFocus={() => {}}
         >
@@ -171,7 +185,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
           {categoryChildren && (
             <div styleName="items" onMouseMove={this.onMouseMove}>
               <div styleName="itemsWrap">
-                <div styleName="title">{name.text}</div>
+                {name && name.text && <div styleName="title">{name.text}</div>}
                 <ul>{this.renderMenu(categoryChildren)}</ul>
               </div>
             </div>

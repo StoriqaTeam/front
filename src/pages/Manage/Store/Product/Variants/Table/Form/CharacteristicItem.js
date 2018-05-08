@@ -19,18 +19,31 @@ import { uploadFile, log } from 'utils';
 
 import './Characteristics.scss';
 
+type AttributeType = {
+  rawId: number,
+  id: string,
+  metaField: {
+    translatedValues: ?Array<{}>,
+    values: ?Array<{}>,
+  },
+};
+
 type PropsType = {
-  attribute: { rawId: number, id: string },
+  attribute: AttributeType,
   onSelect: Function,
   value: { attrId: number, value: string, metaField?: string },
 };
 
 class CharacteristicItem extends PureComponent<PropsType> {
-  getSelectItems = (attribute: {}) => {
+  getSelectItems = (
+    attribute: AttributeType,
+  ): Array<{ id: string, label: string }> => {
+    // $FlowIgnoreMe
     const values = pathOr(null, ['metaField', 'values'], attribute);
     const translatedValues = pathOr(
-      null,
+      [],
       ['metaField', 'translatedValues'],
+      // $FlowIgnoreMe
       attribute,
     );
     const mapIndexed = addIndex(map);
@@ -39,16 +52,21 @@ class CharacteristicItem extends PureComponent<PropsType> {
       return mapIndexed((item, idx) => ({ id: `${idx}`, label: item }), values);
     }
 
-    const items = mapIndexed((item, idx) => {
-      const text = pathOr(null, ['translations', 0, 'text'], item);
-      if (text) {
-        return {
-          id: `${idx}`,
-          label: text,
-        };
-      }
-      return null;
-    }, translatedValues);
+    const items = mapIndexed(
+      // $FlowIgnoreMe
+      (item: { translations: Array<{ text: string }> }, idx: number) => {
+        // $FlowIgnoreMe
+        const text = pathOr(null, ['translations', 0, 'text'], item);
+        if (text) {
+          return {
+            id: `${idx}`,
+            label: text,
+          };
+        }
+        return null;
+      },
+      translatedValues || [],
+    );
     return filter(complement(isNil), items);
   };
 
@@ -80,6 +98,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
       label: value.value,
     };
     const { metaField: characteristicImg } = this.props.value;
+    // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], attribute);
     return (
       <div styleName="item">

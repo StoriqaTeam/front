@@ -38,7 +38,14 @@ class CardProduct extends PureComponent<PropsTypes> {
     const {
       item: { rawId, storeId, name, variants, currencyId },
     } = this.props;
-    if (!storeId || !rawId || !currencyId || !variants || variants.length === 0)
+    if (
+      !storeId ||
+      !rawId ||
+      !currencyId ||
+      !variants ||
+      variants.length === 0 ||
+      !head(variants)
+    )
       return null;
     const { discount, photoMain, cashback, price } = head(variants);
     const lang = 'EN';
@@ -52,13 +59,11 @@ class CardProduct extends PureComponent<PropsTypes> {
             {!photoMain ? (
               <Icon type="camera" size="40" />
             ) : (
-              <ImageLoader src={photoMain} loader={<BannerLoading />} />
+              <ImageLoader fit src={photoMain} loader={<BannerLoading />} />
             )}
           </div>
           <div styleName="bottom">
-            <div styleName="icon">
-              <Icon type="qa" size="20" />
-            </div>
+            <div styleName="icon">{false && <Icon type="qa" size="20" />}</div>
             {name && <div styleName="title">{getNameText(name, lang)}</div>}
             <div styleName="price">
               {Boolean(discount) && (

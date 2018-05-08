@@ -65,36 +65,11 @@ class Header extends PureComponent<PropsType> {
                     dataTest="headerLanguagesSelect"
                   />
                 </div>
-                <div styleName="item">
-                  <Select
-                    isDropdown
-                    title="Terms & Conditions"
-                    items={[
-                      { id: '1', label: 'Term #1' },
-                      { id: '2', label: 'Term #2' },
-                      { id: '3', label: 'Term #3' },
-                    ]}
-                    onSelect={() => {}}
-                  />
+                <div>
+                  <a href="_">Help</a> {/* eslint-disable-line */}
                 </div>
-                <div styleName="item">
-                  <Select
-                    isDropdown
-                    title="Delivery"
-                    items={[
-                      { id: '1', label: 'Delivery #1' },
-                      { id: '2', label: 'Delivery #2' },
-                      { id: '3', label: 'Delivery #3' },
-                    ]}
-                  />
-                </div>
-                <div styleName="item">
-                  <a href="/">
-                    <span styleName="qaIcon">
-                      <Icon type="qualityAssurance" />
-                    </span>
-                    Quality Assurance
-                  </a>
+                <div>
+                  <a href="/manage/store/new">Sell on Storiqa</a>
                 </div>
               </div>
               <div styleName="bottom">

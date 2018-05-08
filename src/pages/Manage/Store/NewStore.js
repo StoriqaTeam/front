@@ -65,17 +65,25 @@ class NewStore extends Component<PropsType, StateType> {
       slogan,
       logo: logoUrl,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState(() => ({ isLoading: false }));
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
-        const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        this.props.router.push(`/manage/store/${storeId}`);
+        // $FlowIgnoreMe
+        const storeId: ?number = pathOr(
+          null,
+          ['createStore', 'rawId'],
+          response,
+        );
+        if (storeId) {
+          this.props.router.push(`/manage/store/${storeId}`);
+        }
         showAlert('Store created!', false);
       },
       onError: (error: Error) => {
@@ -84,12 +92,14 @@ class NewStore extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });

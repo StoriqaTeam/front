@@ -1,5 +1,5 @@
 type ThumbnailType = {
-  id: string,
+  id: number,
   img: string,
   alt?: string,
   opacity: boolean,

@@ -58,11 +58,16 @@ class OAuthCallback extends PureComponent<PropsType> {
   }
 
   extractFacebookAccessToken = (url: string) => {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     // <callback_url from .env>?#access_token=<token_here>&expires_in=6232
     // $FlowIgnore
     const fbCallbackUri: string =
       process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI;
-    const queryString = replace(`${fbCallbackUri}#`, '', url);
+    const queryString = replace(
+      `${fbCallbackUri}${isSafari ? '' : '?'}#`,
+      '',
+      url,
+    );
     return this.extractToken(queryString);
   };
 

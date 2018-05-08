@@ -1,9 +1,7 @@
-// @flow
+import { isNil, flatten, uniq, reduce, filter, identity, keys } from 'ramda';
+import { extractText } from 'utils';
 
-import { isNil, flatten, uniq, reduce, filter, identity } from 'ramda';
-import { extractText } from './index';
-
-import { VariantType } from '../pages/Store/Product/types';
+import { VariantType } from '../types';
 
 type WidgetValueType = {
   id: string,
@@ -46,9 +44,12 @@ function setImage(image: string): string {
 /**
  * @param {any[]} array
  * @param {[]} images
- * @return {WidgetValueType[]}
+ * @return {Array<WidgetValueType>}
  */
-function buildWidgetInterface(array: any[], images: []): WidgetValueType[] {
+function buildWidgetInterface(
+  array: any[],
+  images: [],
+): Array<WidgetValueType> {
   return array.map((value, index) => ({
     id: `${index}`,
     label: value,
@@ -58,9 +59,9 @@ function buildWidgetInterface(array: any[], images: []): WidgetValueType[] {
 }
 
 /**
- * @param {VariantType[]} variants
+ * @param {Array<VariantType>} variants
  */
-function transformVariants(variants: VariantType[]) {
+function transformVariants(variants: Array<VariantType>) {
   const results = variants.map(variant => {
     const { id: variantId, attributes } = variant;
     return attributes.map(
@@ -92,6 +93,7 @@ function reduceGroup(widgetGroup) {
       const copy = { ...accumulator };
       const values = filter(identity, [].concat(copy.values, item.value));
       const valuesWithImages = filter(
+        // $FlowIgnoreMe
         identity,
         [].concat(copy.valuesWithImages, {
           label: item.value,
@@ -118,8 +120,9 @@ function reduceGroup(widgetGroup) {
 export default function buildWidgets(variants: VariantType[]) {
   const transformedVariants = transformVariants(variants);
   // group by 'uiElement' property
+  // $FlowIgnoreMe
   const grouped = group(transformedVariants, 'uiElement', 'array');
-  const result = Object.keys(grouped).reduce((acc, key) => {
+  const result = keys(grouped).reduce((acc, key) => {
     const reduced = reduceGroup(grouped[key]);
     acc[key] = {
       ...reduced,

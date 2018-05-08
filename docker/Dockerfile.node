@@ -1,0 +1,21 @@
+FROM node:9.9-slim
+
+RUN mkdir -p /app/build \
+  && mkdir -p /app/dist \
+  && mkdir -p /app/node_modules
+
+COPY build /app/build
+COPY dist /app/dist
+COPY node_modules /app/node_modules
+
+# Running as user "app"
+RUN adduser --disabled-password --gecos "" --home /app --no-create-home -u 5000 app \
+  && chown -R app: /app
+
+# Setting up env
+USER app
+WORKDIR /app
+
+EXPOSE 3003
+
+ENTRYPOINT node ./dist/server.js

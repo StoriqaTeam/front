@@ -11,11 +11,15 @@ import './Row.scss';
 type PropsType = {
   variant: {
     rawId: number,
-    product: {
-      vendorCode: string,
-      price: number,
-      cashback: number,
-    },
+    vendorCode: string,
+    price: number,
+    cashback: number,
+    attributes: Array<{
+      attribute: {
+        name: Array<{ text: string }>,
+      },
+      value: string,
+    }>,
   },
   onExpandClick: Function,
 };
@@ -38,11 +42,13 @@ class Row extends Component<PropsType, StateType> {
   };
 
   render() {
-    const vendorCode = pathOr(null, ['vendorCode'], this.props.variant);
-    const price = pathOr(null, ['price'], this.props.variant);
-    const cashbackValue = pathOr(null, ['cashback'], this.props.variant);
+    const {
+      vendorCode,
+      price,
+      cashback: cashbackValue,
+      attributes: attrs,
+    } = this.props.variant;
     const cashback = Math.round(cashbackValue * 100) || null;
-    const attrs = pathOr([], ['attributes'], this.props.variant);
     return (
       <div styleName="container">
         <div styleName="variant">
@@ -67,6 +73,7 @@ class Row extends Component<PropsType, StateType> {
                   const name = pathOr(
                     '',
                     ['attribute', 'name', 0, 'text'],
+                    // $FlowIgnoreMe
                     item,
                   );
                   return <div key={`attr-${name}`}>{`${name}: `}</div>;
@@ -77,9 +84,10 @@ class Row extends Component<PropsType, StateType> {
                   const name = pathOr(
                     '',
                     ['attribute', 'name', 0, 'text'],
+                    // $FlowIgnoreMe
                     item,
                   );
-                  const val = pathOr('', ['value'], item);
+                  const val = item.value;
                   return <div key={`attr-${name}`}>{`${val}`}</div>;
                 }, attrs)}
               </div>

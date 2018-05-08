@@ -39,6 +39,7 @@ if (process.env.BROWSER) {
       matchContext,
       resolver,
     }).then(initialRenderArgs => (
+      // $FlowIgnoreMe
       <ReduxProvider store={store}>
         <FoundConnectedRouter
           matchContext={matchContext}

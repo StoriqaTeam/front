@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { pick, pathOr, forEach, isEmpty, map } from 'ramda';
+import { pick, pathOr, forEach, isEmpty, map, find, propEq } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
@@ -27,6 +27,8 @@ type PropsType = {
   geocoderService: any,
   onChangeFormInput: (type: string) => (e: any) => void,
   onUpdateForm: (form: any) => void,
+  country: string,
+  address: string,
 };
 
 type SelectType = {
@@ -56,17 +58,17 @@ type GeocoderType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    const country = find(propEq('name', props.country))(countries);
     this.state = {
-      country: null,
+      country: country ? { id: country.code, label: country.name } : null,
       address: null,
-      autocompleteValue: null,
+      autocompleteValue: props.address,
       predictions: [],
     };
     this.handleAutocomplete = debounce(this.handleAutocomplete, 250);
   }
 
   handleOnReceiveAddress = (result: GeocoderType) => {
-    const { onUpdateForm } = this.props;
     if (result && result.addressComponents) {
       const address = {};
       const populateAddressField = addressComponent => {
@@ -80,7 +82,6 @@ class Form extends Component<PropsType, StateType> {
       };
       forEach(populateAddressField, result.addressComponents);
       this.setState({ address });
-      onUpdateForm(address);
     }
   };
 
@@ -136,10 +137,11 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleAutocomplete = (value: string) => {
-    const { autocompleteService } = this.props;
+    const { autocompleteService, onUpdateForm } = this.props;
     const { country } = this.state;
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
+    onUpdateForm({ address: value });
     if (isEmpty(value)) {
       this.setState({ predictions: [] });
       return;
@@ -159,13 +161,22 @@ class Form extends Component<PropsType, StateType> {
     this.handleAutocomplete(value);
   };
 
+  handleOnChangeCountry = (value: ?SelectType) => {
+    this.setState(
+      () => ({ country: value }),
+      () => {
+        this.props.onUpdateForm({ country: value ? value.label : '' });
+      },
+    );
+  };
+
   render() {
     const { country, address, autocompleteValue, predictions } = this.state;
     const countriesArr = getIndexedCountries(countries);
-    const label = country ? country.label : '';
-    const countryFromResource = getCountryByName(label, countries);
+    const countryLabel = country ? country.label : '';
+    const countryFromResource = getCountryByName(countryLabel, countries);
     const addressBlock =
-      !label || !countryFromResource ? null : (
+      !countryLabel || !countryFromResource ? null : (
         <div styleName="wrapper">
           <Autocomplete
             autoHighlight
@@ -226,14 +237,7 @@ class Form extends Component<PropsType, StateType> {
             forForm
             label="Country"
             items={countriesArr}
-            onSelect={(value: ?SelectType) => {
-              this.setState({
-                country: value,
-                address: null,
-                autocompleteValue: '',
-                predictions: [],
-              });
-            }}
+            onSelect={this.handleOnChangeCountry}
             activeItem={this.state.country}
             dataTest="AddressFormSelect"
           />
