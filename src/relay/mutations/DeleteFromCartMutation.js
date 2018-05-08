@@ -35,7 +35,7 @@ const commit = (params: DeleteFromCartParams) => commitMutation(params.environme
     const products = store.getLinkedRecords('products');
     if (products.length > 1) {
       const filtered = filter(product => product.getDataID() === productId, products);
-      store.setLinkedRecords(filtered);
+      store.setLinkedRecords(filtered, 'products');
     } else {
       const me = relayStore.getRoot().getLinkedRecord('me');
       const cart = me.getLinkedRecord('cart');
