@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { routerShape } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { map, pathOr, find, propEq, assocPath } from 'ramda';
+import { map, pathOr, find, propEq, assocPath, addIndex } from 'ramda';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
@@ -25,8 +25,9 @@ type PropsType = {
 
 type StateType = {
   category: ?{ id: string, label: string },
-  location: ?{ id: string, label: string },
+  country: ?{ id: string, label: string },
   categories: Array<{ id: string, label: string }>,
+  countries: Array<{ id: string, label: string }>,
 };
 
 class Stores extends Component<PropsType, StateType> {
@@ -35,8 +36,9 @@ class Stores extends Component<PropsType, StateType> {
     if (storesData) {
       this.state = {
         category: null,
-        location: null,
+        country: null,
         categories: [],
+        countries: [],
       };
     }
   }
@@ -71,6 +73,29 @@ class Stores extends Component<PropsType, StateType> {
     if (category) {
       this.setState({ category: find(propEq('id', category))(categories) });
     }
+
+    const rawCountries = pathOr(
+      [],
+      ['search', 'findStore', 'pageInfo', 'searchFilters', 'country'],
+      this.props,
+    );
+    const mapIndexed = addIndex(map);
+    const countries = mapIndexed(
+      (item, idx) => ({
+        id: String(idx),
+        label: item,
+      }),
+      rawCountries,
+    );
+    this.setState({ countries });
+    const country = pathOr(
+      null,
+      ['match', 'location', 'query', 'country'],
+      this.props,
+    );
+    if (country) {
+      this.setState({ country: find(propEq('label', country))(countries) });
+    }
   }
 
   storesRefetch = () => {
@@ -90,14 +115,22 @@ class Stores extends Component<PropsType, StateType> {
     this.props.router.push(`/stores${newUrl}`);
   };
 
-  handleLocation = (location: { id: string, label: string }) => {
-    this.setState({ location });
+  handleLocation = (country: { id: string, label: string }) => {
+    this.setState({ country });
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const newPreparedObj = assocPath(
+      ['options', 'country'],
+      country ? country.label : null,
+      oldPreparedObj,
+    );
+    const newUrl = inputToUrl(newPreparedObj);
+    this.props.router.push(`/stores${newUrl}`);
   };
 
   render() {
-    const { category, location } = this.state;
+    const { categories, countries, category, country } = this.state;
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
-    const { categories } = this.state;
     const totalCount = pathOr(
       0,
       ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'],
@@ -132,11 +165,8 @@ class Stores extends Component<PropsType, StateType> {
                 forSearch
                 withEmpty
                 label="Location"
-                activeItem={location}
-                items={[
-                  { id: '1', label: 'Russia' },
-                  { id: '2', label: 'Norwey' },
-                ]}
+                activeItem={country}
+                items={countries}
                 onSelect={this.handleLocation}
                 dataTest="storesLocationSelect"
               />
