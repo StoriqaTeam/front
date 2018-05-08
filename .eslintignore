@@ -2,7 +2,8 @@ config/*.js
 scripts/*.js
 libs/*.js
 flow-typed/
+**/*_spec.js
+cypress/
 **/*.test.js
 **/*.graphql.js
 **/*.stories.js
-

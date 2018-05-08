@@ -8,7 +8,7 @@ import getClientEnvironment from '../config/env';
 
 const run = () => {
   console.log('Start GraphQL schema update.');
-  const graphqlEndpoint = process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT;
+const graphqlEndpoint = process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT;
   console.log('GraphQL endpoint: ', graphqlEndpoint);
   if (!graphqlEndpoint) {
     console.error(`Please check 'graphqlEndpoint' var in ${__filename}`);
@@ -29,17 +29,17 @@ const run = () => {
       if (result.errors) {
         console.error(
           'ERROR introspecting schema: ',
-          JSON.stringify(result.errors, null, 2)
+          JSON.stringify(result.errors, null, 2),
         );
       } else {
         fs.writeFileSync(
           path.join(__dirname, '../src/relay/schema.json'),
-          JSON.stringify(result, null, 2)
+          JSON.stringify(result, null, 2),
         );
         console.log('GraphQL schema updated.');
       }
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(`Error in ${__filename}`);
       console.error(err);
       process.exit(1);
