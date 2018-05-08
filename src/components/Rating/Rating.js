@@ -16,8 +16,8 @@ const Rating = (props: PropsType) => {
   return (
     <div styleName="container">
       {range(1, 6).map(idx => (
-        <div styleName="star-container">
-          <Star key={idx} styleName={idx <= numStars ? 'on' : 'off'} />
+        <div key={idx} styleName="star-container">
+          <Star styleName={idx <= numStars ? 'on' : 'off'} />
         </div>
       ))}
     </div>

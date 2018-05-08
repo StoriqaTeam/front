@@ -32,9 +32,8 @@ const commit = (params: DeleteFromCartParams) => commitMutation(params.environme
     const productId = relayStore.getRootField('deleteFromCart').getValue('productId');
     const storeId = relayStore.getRootField('deleteFromCart').getValue('storeId');
     const store = relayStore.get(storeId);
-    debugger;
     const products = store.getLinkedRecords('products');
-    if (products.length > 0) {
+    if (products.length > 1) {
       const filtered = filter(product => product.getDataID() === productId, products);
       store.setLinkedRecords(filtered);
     } else {
