@@ -122,7 +122,7 @@
     "dev": "yarn dev:stable",
     "dev:nightly": ". ./.env.nightly && yarn server:dev",
     "dev:stable": ". ./.env.stable && yarn server:dev",
-    "ci": "yarn lint && yarn flow",
+    "ci": "yarn lint && yarn flow && yarn test",
     "lint": "./node_modules/.bin/eslint ./src",
     "test": "NODE_ENV=test BABEL_ENV=test jest",
     "storybook": "NODE_ENV=development BABEL_ENV=development yarn updateSchema && start-storybook -p 9000 -c .storybook",
@@ -130,7 +130,6 @@
     "updateSchema": "./node_modules/.bin/babel-node scripts/updateSchema.js",
     "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
     "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
-    "postinstall": "touch .git/hooks/pre-push && rm .git/hooks/pre-push && touch .git/hooks/pre-commit && rm .git/hooks/pre-commit && cp .hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && cp .hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit",
     "cypress:open": "cypress open",
     "server:graphql:test": "PORT=3333 NODE_ENV=test yarn babel-node --inspect=9339 ./server/test_server"
   },
