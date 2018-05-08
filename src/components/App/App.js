@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
-import { pick } from 'ramda';
+import { pick, path } from 'ramda';
 
 import { Alert } from 'components/common/Alert';
 import { currentUserShape } from 'utils/shapes';
