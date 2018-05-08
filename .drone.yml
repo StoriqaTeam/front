@@ -25,11 +25,9 @@ pipeline:
       event: pull_request
       branch: [ master, release* ]
   build4nightly:
-    image: node:9.9-slim
+    image: node:9.9
     commands:
       - . ./.env.nightly
-      - apt-get update
-      - apt-get install -y git
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
@@ -86,11 +84,9 @@ pipeline:
       branch: master
       event: push
   build4stable:
-    image: node:9.9-slim
+    image: node:9.9
     commands:
       - . ./.env.stable
-      - apt-get update
-      - apt-get install -y git
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
@@ -147,11 +143,9 @@ pipeline:
       branch: master
       event: push
   build4stage:
-    image: node:9.9-slim
+    image: node:9.9
     commands:
       - . ./.env.stage
-      - apt-get update
-      - apt-get install -y git
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
