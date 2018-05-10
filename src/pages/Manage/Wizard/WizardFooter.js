@@ -11,7 +11,7 @@ import './WizardFooter.scss';
 const WizardFooter = ({ step }: { step: number }) => (
   <div styleName="footerContainer">
     <div styleName="backContainer">
-      {step !== 1 &&
+      {step !== 1 && (
         <div
           styleName="leftButton"
           onClick={console.log}
@@ -22,13 +22,13 @@ const WizardFooter = ({ step }: { step: number }) => (
           <Icon type="arrowLeft" />
           <span>Go back</span>
         </div>
-      }
-      <span styleName="footerText">This listing isn’t active yet. It will be available to shoppers once you open your shop.</span>
+      )}
+      <span styleName="footerText">
+        This listing isn’t active yet. It will be available to shoppers once you
+        open your shop.
+      </span>
     </div>
-    <Button
-      dataTest="wizardBackButton"
-      big
-    >
+    <Button dataTest="wizardBackButton" big>
       <span>Next step</span>
     </Button>
   </div>
