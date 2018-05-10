@@ -35,8 +35,6 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
     const cart = me.getLinkedRecord('cart');
     const storesConnection = ConnectionHandler.getConnection(cart, 'Cart_stores');
     const storeIds = storesConnection.getLinkedRecords('edges').map(e => e.getLinkedRecord('node').getDataID());
-    console.log("ids", storeIds, store.getDataID());
-    // debugger;
     if (findIndex(id => id === store.getDataID(), storeIds) === -1) {
       const edge = ConnectionHandler.createEdge(
         relayStore,
@@ -44,10 +42,9 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
         store,
         'StoresEdge',
       );
-      console.log("New edge: ", edge, params.environment);
       ConnectionHandler.insertEdgeAfter(storesConnection, edge);
     }
-  }
+  },
 });
 
 export default { commit };

@@ -9,7 +9,7 @@ import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Select } from 'components/common/Select';
-import { SetQuantityInCartMutation, DeleteFromCartMutation } from 'relay/mutations';
+import { SetQuantityInCartMutation, SetSelectionInCartMutation, DeleteFromCartMutation } from 'relay/mutations';
 import { log } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
@@ -41,6 +41,25 @@ class CartProduct extends PureComponent<PropsType> {
         log.error(error);
         // eslint-disable-next-line
         alert('Unable to delete product quantity in cart');
+      },
+    });
+  }
+
+  handleSelectChange() {
+    const id = this.props.product.rawId;
+    SetSelectionInCartMutation.commit({
+      input: { clientMutationId: '', productId: id, value: !this.props.product.selected },
+      environment: this.context.environment,
+      onCompleted: (response, errors) => {
+        log.debug('Success for SetSelectionInCart mutation');
+        if (response) { log.debug('Response: ', response); }
+        if (errors) { log.debug('Errors: ', errors); }
+      },
+      onError: (error) => {
+        log.error('Error in SetSelectionInCart mutation');
+        log.error(error);
+        // eslint-disable-next-line
+        alert('Unable to set product selection in cart');
       },
     });
   }
@@ -78,6 +97,7 @@ class CartProduct extends PureComponent<PropsType> {
       price,
       quantity,
       deliveryCost,
+      selected,
     } = product;
     const attrs = map(attr => (
       { title: head(attr.attribute.name).text, value: attr.value.toString() }
@@ -93,8 +113,8 @@ class CartProduct extends PureComponent<PropsType> {
             <Checkbox
               id={`Cartproduct_${product.rawId}`}
               label={false}
-              isChecked
-              onChange={() => { }}
+              isChecked={selected}
+              onChange={() => this.handleSelectChange()}
             />
           </div>
           <img src={photoMain} styleName="picture" alt="product_picture" />
@@ -177,6 +197,7 @@ export default createFragmentContainer(
       photoMain
       price
       quantity
+      selected
       deliveryCost
       attributes {
         value

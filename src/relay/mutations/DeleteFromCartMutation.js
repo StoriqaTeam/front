@@ -41,6 +41,7 @@ const commit = (params: DeleteFromCartParams) => commitMutation(params.environme
       const cart = me.getLinkedRecord('cart');
       const connection = ConnectionHandler.getConnection(cart, 'Cart_stores');
       ConnectionHandler.deleteNode(connection, storeId);
+      relayStore.delete(storeId);
     }
   },
   onCompleted: params.onCompleted,
