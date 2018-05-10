@@ -25,6 +25,7 @@ type ProductType = {
       price: number,
     },
   },
+  rating: number,
 };
 
 type PropsTypes = {

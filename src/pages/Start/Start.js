@@ -151,6 +151,7 @@ export default createFragmentContainer(
                 price
               }
             }
+            rating
           }
         }
       }
@@ -175,6 +176,7 @@ export default createFragmentContainer(
                 price
               }
             }
+            rating
           }
         }
       }

@@ -95,9 +95,14 @@ export default (OriginalComponent: any) =>
           clearInterval(this.autoplayInterval);
         }
         this.autoplayInterval = setInterval(() => {
-          this.handleSlide('next');
+          this.autoplayHandleDot();
         }, autoplaySpeed);
       }
+    };
+
+    autoplayHandleDot = () => {
+      const { num, totalSlidesAmount } = this.state;
+      this.handleDot(num === totalSlidesAmount - 1 ? 0 : num + 1);
     };
 
     sliderPropsCalc = (children: Array<{}>) => {
