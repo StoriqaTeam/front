@@ -3,7 +3,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import Stars from 'components/Rating/svg/stars.svg';
+import Stars from 'components/common/Rating/svg/stars.svg';
 
 import './Rating.scss';
 

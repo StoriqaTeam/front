@@ -6,7 +6,7 @@ import { head } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
-import { Rating } from 'components/Rating';
+import { Rating } from 'components/common/Rating';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { getNameText } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
