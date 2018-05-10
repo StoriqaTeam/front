@@ -10,29 +10,28 @@ import WizardFooter from './WizardFooter';
 
 import './WizardWrapper.scss';
 
-type PropsType = {
-}
+type PropsType = {};
 
-type StateType = {
-}
+type StateType = {};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    this.state = {}
+    this.state = {};
   }
 
   render() {
+    const step = 2;
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
-          <WizardStepper step={2} />
+          <WizardStepper step={step} />
         </div>
         <div styleName="contentWrapper">
           <h1>content</h1>
         </div>
         <div styleName="footerWrapper">
-          <WizardFooter step={2} />
+          <WizardFooter step={step} />
         </div>
       </div>
     );

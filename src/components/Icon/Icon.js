@@ -25,6 +25,7 @@ import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
 import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import ArrowRight from 'components/Icon/svg/arrowRight.svg';
+import ArrowLeft from 'components/Icon/svg/arrowLeft.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
@@ -40,6 +41,7 @@ import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 import Cats from 'components/Icon/svg/cats.svg';
 import Logout from 'components/Icon/svg/logout.svg';
+
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
 
 import './Icon.scss';
@@ -72,6 +74,7 @@ const iconsMap = {
   arrowExpand: <ArrowExpand />,
   arrowSelect: <ArrowSelect />,
   arrowRight: <ArrowRight />,
+  arrowLeft: <ArrowLeft />,
   cross: <Cross />,
   pencil: <Pencil />,
   magnifier: <Magnifier />,

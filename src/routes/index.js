@@ -164,10 +164,7 @@ const routes = (
         }}
         Component={() => <div />}
       >
-        <Route
-          path="/wizard"
-          Component={WizardWrapper}
-        />
+        <Route path="/wizard" Component={WizardWrapper} />
         <Route path="/store">
           <Route path="/new" exact Component={NewStore} />
           <Route

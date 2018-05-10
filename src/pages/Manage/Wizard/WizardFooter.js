@@ -11,21 +11,26 @@ import './WizardFooter.scss';
 const WizardFooter = ({ step }: { step: number }) => (
   <div styleName="footerContainer">
     <div styleName="backContainer">
-      <Button
-        href="/manage/wizard"
-        dataTest="wizardBackButton"
-      >
-        Back
-      </Button>
+      {step !== 1 &&
+        <div
+          styleName="leftButton"
+          onClick={console.log}
+          onKeyDown={() => {}}
+          role="button"
+          tabIndex="0"
+        >
+          <Icon type="arrowLeft" />
+          <span>Go back</span>
+        </div>
+      }
+      <span styleName="footerText">This listing isn’t active yet. It will be available to shoppers once you open your shop.</span>
     </div>
-    <div styleName="nextContainer">
-      <Button
-        href="/manage/wizard"
-        dataTest="wizardBackButton"
-      >
-        next step
-      </Button>
-    </div>
+    <Button
+      dataTest="wizardBackButton"
+      big
+    >
+      <span>Next step</span>
+    </Button>
   </div>
 );
 
