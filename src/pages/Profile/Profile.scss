@@ -1,0 +1,37 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.title {
+  font-family: $font_medium;
+  color: $color_grey_text;
+  font-size: 24px;
+}
+
+.subtitle {
+  margin-bottom: 5rem;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.form {
+  margin-top: 2rem;
+  padding: 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.formItem + .formItem {
+  margin-top: 6rem;
+}

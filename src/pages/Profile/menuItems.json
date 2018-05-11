@@ -1,0 +1,18 @@
+[
+  {
+    "id": "personal-data",
+    "title": "Personal data"
+  },
+  {
+    "id": "shipping-addresses",
+    "title": "Shipping addresses"
+  },
+  {
+    "id": "security",
+    "title": "Security"
+  },
+  {
+    "id": "kyc",
+    "title": "KYC"
+  }
+]

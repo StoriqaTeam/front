@@ -50,9 +50,9 @@ const ProfileMenu = ({
           </div>
         )}
       </a>
-      <a href="/" styleName="item">
+      <Link to="/profile" styleName="item">
         Profile settings
-      </a>
+      </Link>
       <a href="/" styleName="item">
         History
       </a>

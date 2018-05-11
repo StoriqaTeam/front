@@ -1,0 +1,14 @@
+@import "../../../styles/variables";
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.title {
+  font-family: $font_medium;
+  color: $color_grey_text;
+  font-size: 24px;
+}

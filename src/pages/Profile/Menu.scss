@@ -1,0 +1,63 @@
+@import "../../styles/variables.scss";
+
+.menu {
+  position: relative;
+}
+
+.imgWrap {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.title {
+  font-family: $font_medium;
+  max-height: 6rem;
+  margin-top: 3.25rem;
+  margin-bottom: 2rem;
+}
+
+.items {
+  position: relative;
+}
+
+.item {
+  display: block;
+  margin-left: -2rem;
+  padding: 1.5rem 0 1.5rem 2rem;
+  color: $color_grey_text;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    background-color: #FFFFFF;
+  }
+}
+
+.isActive {
+  font-family: $font_medium;
+  position: relative;
+  background-color: $color_white;
+}
+
+.isActive:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.25rem;
+  display: block;
+  border-left: 2px solid $color_primary;
+}
+
+.storeLogo {
+  width: 26rem;
+  height: 26rem;
+}
