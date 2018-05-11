@@ -8,13 +8,21 @@ import { Button } from 'components/common/Button';
 
 import './WizardFooter.scss';
 
-const WizardFooter = ({ step }: { step: number }) => (
+const WizardFooter = ({
+  step,
+  onChange,
+  onSave,
+}: {
+  step: number,
+  onChange: (step: number) => void,
+  onSave: () => void,
+}) => (
   <div styleName="footerContainer">
     <div styleName="backContainer">
       {step !== 1 && (
         <div
           styleName="leftButton"
-          onClick={console.log}
+          onClick={() => onChange(step - 1)}
           onKeyDown={() => {}}
           role="button"
           tabIndex="0"
@@ -28,7 +36,17 @@ const WizardFooter = ({ step }: { step: number }) => (
         open your shop.
       </span>
     </div>
-    <Button dataTest="wizardBackButton" big>
+    <Button
+      onClick={() => {
+        if (step === 3) {
+          onSave();
+        } else {
+          onChange(step + 1);
+        }
+      }}
+      dataTest="wizardBackButton"
+      big
+    >
       <span>Next step</span>
     </Button>
   </div>

@@ -1,41 +1,70 @@
 // @flow
 
 import React from 'react';
+import { pathOr } from 'ramda';
+import { withRouter, routerShape } from 'found';
 // import { graphql, Relay } from 'react-relay';
 
 import { Page } from 'components/App';
 
-import WizardStepper from './WizardStepper';
+import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
 
 import './WizardWrapper.scss';
 
-type PropsType = {};
+type PropsType = {
+  router: routerShape,
+};
 
 type StateType = {};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {};
+  static getDerivedStateFromProps(nextProps) {
+    const step = parseInt(
+      pathOr('1', ['location', 'query', 'step'], nextProps),
+      10,
+    );
+    return { step };
   }
 
+  constructor(props: PropsType) {
+    super(props);
+    const step = parseInt(
+      pathOr('1', ['location', 'query', 'step'], props),
+      10,
+    );
+    this.state = {
+      step,
+    };
+  }
+
+  handleChangeStep = (step: number) => {
+    this.props.router.push(`/manage/wizard?step=${step}`);
+  };
+
+  handleOnSave = () => {};
+
   render() {
-    const step = 2;
+    const { step } = this.state;
+
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
-          <WizardStepper step={step} />
+          <WizardHeader currentStep={step} onChange={this.handleChangeStep} />
         </div>
         <div styleName="contentWrapper">
           <h1>content</h1>
         </div>
         <div styleName="footerWrapper">
-          <WizardFooter step={step} />
+          <WizardFooter
+            step={step}
+            onChange={this.handleChangeStep}
+            onSave={this.handleOnSave}
+          />
         </div>
       </div>
     );
   }
 }
 
-export default Page(WizardWrapper);
+export default withRouter(Page(WizardWrapper));
