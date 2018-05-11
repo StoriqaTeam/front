@@ -32,7 +32,7 @@ type PropsTypes = {
       text: string,
     }>,
     variants: Array<VariantType>,
-    rating: ?number,
+    rating: number,
   },
 };
 
