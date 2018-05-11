@@ -45,6 +45,7 @@ class CardProduct extends PureComponent<PropsTypes> {
       !storeId ||
       !rawId ||
       !currencyId ||
+      !rating ||
       !variants ||
       variants.length === 0 ||
       !head(variants)
