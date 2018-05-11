@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { propEq, filter, head, keys, insert, isNil } from 'ramda';
+import PropTypes from 'prop-types';
+import { propEq, filter, head, keys, insert, isNil, pathOr, defaultTo, prop, pipe } from 'ramda';
+import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-
 import { Page } from 'components/App';
 import { Col, Row } from 'layout';
+import { IncrementInCartMutation } from 'relay/mutations';
 
-import { extractText, isEmpty } from 'utils';
+import { extractText, isEmpty, log } from 'utils';
 
 import {
   buildWidgets,
@@ -97,6 +99,38 @@ class Product extends Component<PropsType, StateType> {
     }
     return photos;
   };
+
+  handleAddToCart() {
+    // Todo for Jero - update this after refactoring (needed selected product id)
+    const id = pipe(
+      pathOr([], ['props', 'baseProduct', 'variants', 'all']),
+      head,
+      defaultTo({}),
+      prop('rawId'),
+    )(this);
+    
+    if (id) {
+      IncrementInCartMutation.commit({
+        input: { clientMutationId: '', productId: id },
+        environment: this.context.environment,
+        onCompleted: (response, errors) => {
+          log.debug('Success for IncrementInCart mutation');
+          if (response) { log.debug('Response: ', response); }
+          if (errors) { log.debug('Errors: ', errors); }
+        },
+        onError: error => {
+          log.error('Error in IncrementInCart mutation');
+          log.error(error);
+          // eslint-disable-next-line
+          alert('Unable to add product to cart');
+        },
+      });
+    } else {
+      alert('Something went wrong :('); // eslint-disable-line
+      log.error('Unable to add an item without productId');
+    }
+  }
+
   /**
    * @param {SelectedType} selected
    * @param {void} selected
@@ -164,6 +198,10 @@ class Product extends Component<PropsType, StateType> {
             >
               <ProductPrice {...priceInfo} />
             </ProductDetails>
+            <div styleName="buttons-container">
+              <Button disabled big>Buy now</Button>
+              <Button wireframe big onClick={() => this.handleAddToCart()}>Add to cart</Button>
+            </div>
           </Col>
         </Row>
         <Tabs>
@@ -199,6 +237,7 @@ export default createFragmentContainer(
       variants {
         all {
           id
+          rawId
           photoMain
           additionalPhotos
           price
@@ -224,3 +263,8 @@ export default createFragmentContainer(
     }
   `,
 );
+
+
+Product.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};

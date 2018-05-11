@@ -105,7 +105,6 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['me', 'cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
-    console.log(stores);
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>

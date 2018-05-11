@@ -37,32 +37,6 @@ type PropsTypes = {
 };
 
 class CardProduct extends PureComponent<PropsTypes> {
-  handleClick(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    // const id = path(['props', 'item', 'rawId'], this);
-    // if (id) {
-    //   IncrementInCartMutation.commit({
-    //     input: { clientMutationId: '', productId: id },
-    //     environment: this.context.environment,
-    //     onCompleted: (response, errors) => {
-    //       log.debug('Success for IncrementInCart mutation');
-    //       if (response) { log.debug('Response: ', response); }
-    //       if (errors) { log.debug('Errors: ', errors); }
-    //     },
-    //     onError: (error) => {
-    //       log.error('Error in IncrementInCart mutation');
-    //       log.error(error);
-    //       // eslint-disable-next-line
-    //       alert('Unable to add product to cart');
-    //     },
-    //   });
-    // } else {
-    //   alert('Something went wrong :('); // eslint-disable-line
-    //   log.error('Unable to add an item without productId');
-    // }
-  }
-
   render() {
     const {
       item: { rawId, storeId, name, variants, currencyId, rating },
@@ -129,7 +103,6 @@ class CardProduct extends PureComponent<PropsTypes> {
                 </div>
               </div>
             </div>
-            <button onClick={e => this.handleClick(e)}>Add to cart</button>
           </div>
         </Link>
       </div>
