@@ -593,6 +593,7 @@ export default createPaginationContainer(
                 }
               }
             }
+            rating
           }
         }
       }
