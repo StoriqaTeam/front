@@ -40,7 +40,7 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
         relayStore,
         storesConnection,
         store,
-        'StoresEdge',
+        'CartStoresEdge',
       );
       ConnectionHandler.insertEdgeAfter(storesConnection, edge);
     }

@@ -28,7 +28,7 @@ const commit = (params: DeleteFromCartParams) => commitMutation(params.environme
   variables: {
     input: { ...params.input },
   },
-  updater: (relayStore) => {
+  updater: relayStore => {
     const productId = relayStore.getRootField('deleteFromCart').getValue('productId');
     const storeId = relayStore.getRootField('deleteFromCart').getValue('storeId');
     const store = relayStore.get(storeId);

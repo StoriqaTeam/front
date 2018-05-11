@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createPaginationContainer, graphql } from 'react-relay';
+import { createPaginationContainer, graphql, ConnectionHandler } from 'react-relay';
 import PropTypes from 'prop-types';
 import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head } from 'ramda';
 
@@ -20,7 +20,7 @@ const STORES_QUERY = graphql`
 query CartStoresLocalQuery {
   me {
     cart {
-      stores(first: null, after: null) @connection(key: "Cart_stores") {
+      stores {
         edges {
           node {
             productsCost
@@ -87,10 +87,8 @@ class Cart extends Component<PropsType, StateType> {
       node: STORES_QUERY().operation,
     });
     store.subscribe(snapshot, s => {
-      console.log(s, getTotals(s.data));
       this.setState({ totals: getTotals(s.data) });
     });
-    console.log(snapshot, getTotals(snapshot.data));
     this.setState({ totals: getTotals(snapshot.data) });
   }
 
