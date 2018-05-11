@@ -20,7 +20,7 @@ const STORES_QUERY = graphql`
 query CartStoresLocalQuery {
   me {
     cart {
-      stores {
+      stores(first: null, after: null) @connection(key: "Cart_stores") {
         edges {
           node {
             productsCost
@@ -87,8 +87,10 @@ class Cart extends Component<PropsType, StateType> {
       node: STORES_QUERY().operation,
     });
     store.subscribe(snapshot, s => {
+      console.log(s, getTotals(s.data));
       this.setState({ totals: getTotals(s.data) });
-    })
+    });
+    console.log(snapshot, getTotals(snapshot.data));
     this.setState({ totals: getTotals(snapshot.data) });
   }
 
@@ -100,6 +102,10 @@ class Cart extends Component<PropsType, StateType> {
 
   storesRef: any;
 
+  totalsForStore(id: string) {
+    return this.state.totals[id] || { productsCost: 0, deliveryCost: 0, totalCount: 0 };
+  }
+
   render() {
     const stores = pipe(
       pathOr([], ['me', 'cart', 'stores', 'edges']),
@@ -110,7 +116,7 @@ class Cart extends Component<PropsType, StateType> {
         <div styleName="header">Cart</div>
         <div styleName="body-container">
           <div styleName="stores-container" ref={ref => this.setStoresRef(ref)}>
-            {stores.map(store => <CartStore key={store.__id} store={store} totals={this.state.totals[store.__id]} />)}
+            {stores.map(store => <CartStore key={store.__id} store={store} totals={this.totalsForStore(store.__id)} />)}
           </div>
           <div styleName="total-container">
             <CartTotal

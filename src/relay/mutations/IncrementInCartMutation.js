@@ -29,7 +29,7 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
   },
   onCompleted: params.onCompleted,
   onError: params.onError,
-  updater: (relayStore) => {
+  updater: relayStore => {
     const store = relayStore.getRootField('incrementInCart');
     const me = relayStore.getRoot().getLinkedRecord('me');
     const cart = me.getLinkedRecord('cart');
