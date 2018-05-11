@@ -19,7 +19,6 @@ type PropsTypes = {
   big: ?boolean,
   dataTest: string,
   white: ?boolean,
-  medium?: ?boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -36,7 +35,6 @@ class Button extends PureComponent<PropsTypes> {
       big,
       dataTest,
       white,
-      medium,
     } = this.props;
 
     const props = {
@@ -54,7 +52,6 @@ class Button extends PureComponent<PropsTypes> {
       contour,
       big,
       white,
-      medium
     });
 
     if (href) {

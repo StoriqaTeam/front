@@ -3,16 +3,17 @@
 import React, { Component } from 'react';
 import cn from 'classnames';
 import { Button } from 'components/common/Button';
+import { pipe, values, reduce } from 'ramda';
 
 import CartProductAttribute from './CartProductAttribute';
 
 import './CartTotal.scss';
 
+type Totals = { [storeId: string]: { productsCost: number, deliveryCost: number, totalCount: number }}
+
 type PropsType = {
   storesRef: ?Object;
-  productsCost: number,
-  deliveryCost: number,
-  totalCount: number,
+  totals: Totals;
 };
 
 type StateType = {
@@ -62,7 +63,15 @@ class CartTotal extends Component<PropsType, StateType> {
   }
 
   render() {
-    const { productsCost, deliveryCost, totalCount } = this.props;
+    const totals = pipe(
+      values,
+      reduce((acc, elem) => ({
+        productsCost: acc.productsCost + elem.productsCost,
+        deliveryCost: acc.deliveryCost + elem.deliveryCost,
+        totalCount: acc.totalCount + elem.totalCount,
+      }), { productsCost: 0, deliveryCost: 0, totalCount: 0 }),
+    )(this.props.totals);
+    const { productsCost, deliveryCost, totalCount } = totals;
     return (
       <div styleName={cn('container', this.state.currentClass)} ref={ref => this.setRef(ref)}>
         <div styleName="cart-total-title">
@@ -72,7 +81,7 @@ class CartTotal extends Component<PropsType, StateType> {
         <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
         <CartProductAttribute title={`Total (${totalCount} items)`} value={`${productsCost + deliveryCost} STQ`} />
         <div styleName="checkout">
-          <Button disabled medium>Checkout</Button>
+          <Button disabled big>Checkout</Button>
         </div>
       </div>
     );

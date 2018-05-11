@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import Rating from 'components/Rating';
-import { Button } from 'components/Button';
+import { Button } from 'components/common/Button';
 import { Input } from 'components/Forms';
 
 import CartProduct from './CartProduct';
@@ -18,6 +18,7 @@ import './CartStore.scss';
 type PropsType = {
   // eslint-disable-next-line
   store: CartStore_store,
+  totals: { productsCost: number, deliveryCost: number, totalCount: number },
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -57,11 +58,11 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="store-total-header">
               Seller summary
             </div>
-            <CartProductAttribute title="Products cost" value={`${store.productsCost} STQ`} />
-            <CartProductAttribute title="Delivery cost" value={`${store.deliveryCost} STQ`} />
-            <CartProductAttribute title="Total cost" value={`${store.deliveryCost + store.productsCost} STQ`} />
+            <CartProductAttribute title="Products cost" value={`${this.props.totals.productsCost} STQ`} />
+            <CartProductAttribute title="Delivery cost" value={`${this.props.totals.deliveryCost} STQ`} />
+            <CartProductAttribute title="Total cost" value={`${this.props.totals.deliveryCost + this.props.totals.productsCost} STQ`} />
             <div styleName="buy">
-              <Button type="wireframe" disabled medium>Buy from this seller</Button>
+              <Button type="wireframe" disabled big>Buy from this seller</Button>
             </div>
           </div>
         </div>
@@ -83,9 +84,6 @@ export default createFragmentContainer(
       }
       rating
       logo
-      productsCost
-      deliveryCost
-      totalCount
     }
   `,
 );

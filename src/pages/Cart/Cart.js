@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, __, prop, pick, reduce } from 'ramda';
+import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head } from 'ramda';
 
 import { Page } from 'components/App';
 
@@ -12,48 +12,84 @@ import CartTotal from './CartTotal';
 
 // eslint-disable-next-line
 import type Cart_me from './__generated__/Cart_me.graphql';
+import type CartStoresLocalQueryResponse from './__generated__/CartStoresLocalQuery.graphql';
 
 import './Cart.scss';
+
+const STORES_QUERY = graphql`
+query CartStoresLocalQuery {
+  me {
+    cart {
+      stores {
+        edges {
+          node {
+            productsCost
+            deliveryCost
+            totalCount
+            products {
+              id
+              selected
+              quantity
+              price
+              deliveryCost
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
 
 type PropsType = {
   // eslint-disable-next-line
   me: Cart_me
 };
 
+type Totals = { [storeId: string]: { productsCost: number, deliveryCost: number, totalCount: number }}
+
 type StateType = {
   storesRef: ?Object,
+  totals: Totals,
 }
+
+const getTotals: (data: CartStoresLocalQueryResponse) => Totals =
+  data => {
+    const fold = pipe(
+      filter(propEq('selected', true)),
+      reduce((acc, elem) => ({
+        productsCost: acc.productsCost + elem.quantity * elem.price,
+        deliveryCost: acc.deliveryCost + elem.deliveryCost,
+        totalCount: acc.totalCount + elem.quantity,
+      }), { productsCost: 0, deliveryCost: 0, totalCount: 0 }),
+    );
+    return pipe(
+      pathOr([], ['me', 'cart', 'stores', 'edges']),
+      map(prop('node')),
+      reject(isNil),
+      map(store => ({ id: store.id, ...fold(store.products) })),
+      groupBy(prop('id')),
+      map(head),
+    )(data);
+  }
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
   state = {
     storesRef: null,
+    totals: {},
   }
 
-  getTotal(): { productsCost: number, deliveryCost: number } {
-    const store = pipe(
-      path(['context', 'environment']),
-      env => env.getStore().getSource().toJSON(),
-    )(this);
-    return pipe(
-      path(['context', 'environment']),
-      env => env.getStore().getSource().toJSON(),
-      path(['client:root', 'me', '__ref']),
-      prop(__, store),
-      path(['cart', '__ref']),
-      prop(__, store),
-      path(['stores', '__ref']),
-      prop(__, store),
-      path(['edges', '__refs']),
-      map(prop(__, store)),
-      map(path(['node', '__ref'])),
-      map(prop(__, store)),
-      reduce((acc, elem) => ({
-        productsCost: acc.productsCost + elem.productsCost,
-        deliveryCost: acc.deliveryCost + elem.deliveryCost,
-        totalCount: acc.totalCount + elem.totalCount,
-      }), { productsCost: 0, deliveryCost: 0, totalCount: 0 }),
-    )(this);
+  componentWillMount() {
+    const store = this.context.environment.getStore();
+    const snapshot = store.lookup({
+      dataID: 'client:root',
+      node: STORES_QUERY().operation,
+    });
+    store.subscribe(snapshot, s => {
+      this.setState({ totals: getTotals(s.data) });
+    })
+    this.setState({ totals: getTotals(snapshot.data) });
   }
 
   setStoresRef(ref) {
@@ -69,20 +105,18 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['me', 'cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
-    const { productsCost, deliveryCost, totalCount } = this.getTotal();
+    console.log(stores);
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
         <div styleName="body-container">
           <div styleName="stores-container" ref={ref => this.setStoresRef(ref)}>
-            {stores.map((store, idx) => <CartStore key={idx} store={store} />)}
+            {stores.map(store => <CartStore key={store.__id} store={store} totals={this.state.totals[store.__id]} />)}
           </div>
           <div styleName="total-container">
             <CartTotal
               storesRef={this.state.storesRef}
-              productsCost={productsCost}
-              deliveryCost={deliveryCost}
-              totalCount={totalCount}
+              totals={this.state.totals}
             />
           </div>
         </div>
