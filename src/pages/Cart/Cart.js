@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map } from 'ramda';
+import { pipe, pathOr, path, map, __, prop, pick, reduce } from 'ramda';
 
 import { Page } from 'components/App';
 
@@ -30,6 +30,32 @@ class Cart extends Component<PropsType, StateType> {
     storesRef: null,
   }
 
+  getTotal(): { productsCost: number, deliveryCost: number } {
+    const store = pipe(
+      path(['context', 'environment']),
+      env => env.getStore().getSource().toJSON(),
+    )(this);
+    return pipe(
+      path(['context', 'environment']),
+      env => env.getStore().getSource().toJSON(),
+      path(['client:root', 'me', '__ref']),
+      prop(__, store),
+      path(['cart', '__ref']),
+      prop(__, store),
+      path(['stores', '__ref']),
+      prop(__, store),
+      path(['edges', '__refs']),
+      map(prop(__, store)),
+      map(path(['node', '__ref'])),
+      map(prop(__, store)),
+      map(pick(['productsCost', 'deliveryCost'])),
+      reduce((acc, elem) => ({
+        productsCost: acc.productsCost + elem.productsCost,
+        deliveryCost: acc.deliveryCost + elem.deliveryCost,
+      }), { productsCost: 0, deliveryCost: 0 }),
+    )(this);
+  }
+
   setStoresRef(ref) {
     if (ref && !this.state.storesRef) {
       this.setState({ storesRef: ref });
@@ -43,6 +69,7 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['me', 'cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
+    const { productsCost, deliveryCost } = this.getTotal();
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
@@ -53,6 +80,8 @@ class Cart extends Component<PropsType, StateType> {
           <div styleName="total-container">
             <CartTotal
               storesRef={this.state.storesRef}
+              productsCost={productsCost}
+              deliveryCost={deliveryCost}
             />
           </div>
         </div>

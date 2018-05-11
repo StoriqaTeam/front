@@ -3,10 +3,14 @@
 import React, { Component } from 'react';
 import cn from 'classnames';
 
+import CartProductAttribute from './CartProductAttribute';
+
 import './CartTotal.scss';
 
 type PropsType = {
   storesRef: ?Object;
+  productsCost: number,
+  deliveryCost: number,
 };
 
 type StateType = {
@@ -56,12 +60,15 @@ class CartTotal extends Component<PropsType, StateType> {
   }
 
   render() {
-    // const { products } = this.props.store;
+    const { productsCost, deliveryCost } = this.props;
     return (
       <div styleName={cn('container', this.state.currentClass)} ref={ref => this.setRef(ref)}>
         <div styleName="cart-total-title">
           Total
         </div>
+        <CartProductAttribute title="Products cost" value={productsCost} />
+        <CartProductAttribute title="Delivery cost" value={deliveryCost} />
+        <CartProductAttribute title="Total" value={productsCost + deliveryCost} />
       </div>
     );
   }
