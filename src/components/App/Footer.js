@@ -81,7 +81,7 @@ const Footer = () => (
           </div>
           <div styleName="infoBlock">
             <div styleName="address">
-              Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287
+              Unit 617, 6/F, 131-132 Connaught Road West, Hong Kong
             </div>
             <a href="mailto:support@storiqa.com" styleName="email">
               support@storiqa.com
