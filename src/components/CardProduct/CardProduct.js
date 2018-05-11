@@ -32,7 +32,7 @@ type PropsTypes = {
       text: string,
     }>,
     variants: Array<VariantType>,
-    rating: number,
+    rating: ?number,
   },
 };
 
@@ -45,7 +45,6 @@ class CardProduct extends PureComponent<PropsTypes> {
       !storeId ||
       !rawId ||
       !currencyId ||
-      !rating ||
       !variants ||
       variants.length === 0 ||
       !head(variants)
