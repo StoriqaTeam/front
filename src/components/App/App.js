@@ -6,6 +6,7 @@ import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 import { pick } from 'ramda';
 
+import { AlertContextProvider } from 'components/App/AlertContext';
 import { Alert } from 'components/common/Alert';
 import { currentUserShape } from 'utils/shapes';
 
@@ -70,7 +71,13 @@ class App extends Component<PropsType, StateType> {
     return (
       <Fragment>
         <Alert showAlert={isAlertShown} text={alertText} isError={isError} />
-        {children && React.cloneElement(children, { me, mainPage })}
+        <AlertContextProvider
+          value={{
+            showAlert: ({ alertType }) => console.log('show alert', alertType),
+          }}
+        >
+          {children && React.cloneElement(children, { me, mainPage })}
+        </AlertContextProvider>
       </Fragment>
     );
   }
