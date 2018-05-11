@@ -11,6 +11,7 @@ type PropsType = {
   storesRef: ?Object;
   productsCost: number,
   deliveryCost: number,
+  totalCount: number,
 };
 
 type StateType = {
@@ -60,11 +61,12 @@ class CartTotal extends Component<PropsType, StateType> {
   }
 
   render() {
-    const { productsCost, deliveryCost } = this.props;
+    const { productsCost, deliveryCost, totalCount } = this.props;
     return (
       <div styleName={cn('container', this.state.currentClass)} ref={ref => this.setRef(ref)}>
         <div styleName="cart-total-title">
-          Total
+          <span>Total</span>
+          <span>{` (${totalCount} items)`}</span>
         </div>
         <CartProductAttribute title="Products cost" value={productsCost} />
         <CartProductAttribute title="Delivery cost" value={deliveryCost} />

@@ -52,7 +52,8 @@ class Cart extends Component<PropsType, StateType> {
       reduce((acc, elem) => ({
         productsCost: acc.productsCost + elem.productsCost,
         deliveryCost: acc.deliveryCost + elem.deliveryCost,
-      }), { productsCost: 0, deliveryCost: 0 }),
+        totalCount: acc.totalCount + elem.totalCount,
+      }), { productsCost: 0, deliveryCost: 0, totalCount: 0 }),
     )(this);
   }
 
@@ -69,7 +70,7 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['me', 'cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
-    const { productsCost, deliveryCost } = this.getTotal();
+    const { productsCost, deliveryCost, totalCount } = this.getTotal();
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
@@ -82,6 +83,7 @@ class Cart extends Component<PropsType, StateType> {
               storesRef={this.state.storesRef}
               productsCost={productsCost}
               deliveryCost={deliveryCost}
+              totalCount={totalCount}
             />
           </div>
         </div>
