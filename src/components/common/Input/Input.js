@@ -95,7 +95,16 @@ class Input extends Component<PropsType, StateType> {
   }
 
   render() {
-    const { id, value, label, errors, icon, isUrl, limit, fullWidth } = this.props;
+    const {
+      id,
+      value,
+      label,
+      errors,
+      icon,
+      isUrl,
+      limit,
+      fullWidth,
+    } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
       <label

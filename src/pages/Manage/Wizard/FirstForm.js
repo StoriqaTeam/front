@@ -7,7 +7,6 @@ import { Textarea } from 'components/common/Textarea';
 
 import './FirstForm.scss';
 
-
 type FirstFormPropsType = {
   data: {
     userId: ?number,
@@ -21,18 +20,19 @@ type FirstFormPropsType = {
   },
   onChange: (value: string, fieldName: string) => void,
   onSave: (value: string, fieldName: string) => void,
-}
+};
 
 const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
-
   const handleOnChange = e => {
-    const { target: { value, name } } = e;
+    const {
+      target: { value, name },
+    } = e;
     onChange(value, name);
-  }
+  };
 
   const handleOnBlur = fieldName => () => {
     onSave(fieldName);
-  }
+  };
 
   return (
     <div styleName="form">
@@ -68,6 +68,6 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
       </div>
     </div>
   );
-}
+};
 
 export default FirstForm;
