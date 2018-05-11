@@ -61,7 +61,7 @@ class CartStore extends PureComponent<PropsType> {
             <CartProductAttribute title="Delivery cost" value={`${store.deliveryCost} STQ`} />
             <CartProductAttribute title="Total cost" value={`${store.deliveryCost + store.productsCost} STQ`} />
             <div styleName="buy">
-              <Button type="wireframe" disabled>Buy from this seller</Button>
+              <Button type="wireframe" disabled medium>Buy from this seller</Button>
             </div>
           </div>
         </div>

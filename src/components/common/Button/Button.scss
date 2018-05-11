@@ -11,10 +11,16 @@
   text-align: center;
   cursor: pointer;
   color: $color_white;
-  font-size: 14px;
+  font-size: 1.875rem;
   background: $color_blue_1;
   white-space: nowrap;
   transition: all .3s ease;
+
+  &.medium {
+    font-size: 2rem;
+    line-height: 5rem;
+    height: 5rem;
+  }
 
   &:hover {
     background: $color_blue_1_hover;

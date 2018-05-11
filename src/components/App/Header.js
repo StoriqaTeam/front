@@ -89,7 +89,7 @@ class Header extends PureComponent<PropsType> {
                   <UserDropdown user={user} />
                 </div>
                 <div styleName="cartIcon">
-                  <CartButton />
+                  <CartButton href="/cart" amount={0} />
                 </div>
                 <div styleName="buttonWrapper">
                   <Button

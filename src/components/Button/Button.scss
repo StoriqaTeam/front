@@ -9,9 +9,15 @@
   line-height: 4rem;
   cursor: pointer;
   color: $color_white;
-  font-size: 14px;
+  font-size: 1.875rem;
   background: $color_primary;
   white-space: nowrap;
+
+  &.medium {
+    font-size: 2rem;
+    line-height: 5rem;
+    height: 5rem;
+  }
 }
 
 .wireframe {

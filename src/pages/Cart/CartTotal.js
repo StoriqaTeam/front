@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import cn from 'classnames';
+import { Button } from 'components/common/Button';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -65,12 +66,14 @@ class CartTotal extends Component<PropsType, StateType> {
     return (
       <div styleName={cn('container', this.state.currentClass)} ref={ref => this.setRef(ref)}>
         <div styleName="cart-total-title">
-          <span>Total</span>
-          <span>{` (${totalCount} items)`}</span>
+          Total
         </div>
-        <CartProductAttribute title="Products cost" value={productsCost} />
-        <CartProductAttribute title="Delivery cost" value={deliveryCost} />
-        <CartProductAttribute title="Total" value={productsCost + deliveryCost} />
+        <CartProductAttribute title="Products cost" value={`${productsCost} STQ`} />
+        <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
+        <CartProductAttribute title={`Total (${totalCount} items)`} value={`${productsCost + deliveryCost} STQ`} />
+        <div styleName="checkout">
+          <Button disabled medium>Checkout</Button>
+        </div>
       </div>
     );
   }

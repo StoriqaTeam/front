@@ -5,7 +5,6 @@
   color: $color_grey_text;
   background: $color-white;
   border: 1px solid $color_grey_light;
-  height: 50rem;
   width: 40rem;
 }
 
@@ -28,4 +27,12 @@
   font-family: $font_medium;
   text-transform: uppercase;
   padding-bottom: 2rem;
+}
+
+.checkout {
+  margin-top: 2rem;
+
+  button {
+    width: 100%;
+  }
 }

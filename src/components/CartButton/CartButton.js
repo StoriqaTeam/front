@@ -1,3 +1,5 @@
+// @flow
+
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
 
@@ -8,7 +10,7 @@ import './CartButton.scss';
 
 type PropsTypes = {
   amount: number,
-  href: number,
+  href: string,
 };
 
 class CartButton extends PureComponent<PropsTypes> {
@@ -16,10 +18,10 @@ class CartButton extends PureComponent<PropsTypes> {
     const { amount, href } = this.props;
 
     return (
-      <Link to={href} styleName="container">
+      <Link to={href || '/'} styleName="container">
         {amount &&
           <div styleName="amount">
-            <Count amount={32} type="blue" />
+            <Count amount={amount} type="blue" />
           </div>
         }
         <div styleName="icon">

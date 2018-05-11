@@ -48,7 +48,6 @@ class Cart extends Component<PropsType, StateType> {
       map(prop(__, store)),
       map(path(['node', '__ref'])),
       map(prop(__, store)),
-      map(pick(['productsCost', 'deliveryCost'])),
       reduce((acc, elem) => ({
         productsCost: acc.productsCost + elem.productsCost,
         deliveryCost: acc.deliveryCost + elem.deliveryCost,
