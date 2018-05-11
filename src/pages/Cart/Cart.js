@@ -1,9 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createPaginationContainer, graphql, ConnectionHandler } from 'react-relay';
+import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head } from 'ramda';
+import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head, find } from 'ramda';
 
 import { Page } from 'components/App';
 
@@ -23,9 +23,6 @@ query CartStoresLocalQuery {
       stores {
         edges {
           node {
-            productsCost
-            deliveryCost
-            totalCount
             products {
               id
               selected
@@ -64,7 +61,7 @@ const getTotals: (data: CartStoresLocalQueryResponse) => Totals =
       }), { productsCost: 0, deliveryCost: 0, totalCount: 0 }),
     );
     return pipe(
-      pathOr([], ['me', 'cart', 'stores', 'edges']),
+      pathOr([], ['edges']),
       map(prop('node')),
       reject(isNil),
       map(store => ({ id: store.id, ...fold(store.products) })),
@@ -82,9 +79,21 @@ class Cart extends Component<PropsType, StateType> {
 
   componentWillMount() {
     const store = this.context.environment.getStore();
+    const source = store.getSource().toJSON();
+    const meId = path(['client:root', 'me', '__ref'])(source);
+    const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
+    const queryNode = pipe(
+      prop('operation'),
+      prop('selections'),
+      find(propEq('name', 'me')),
+      prop('selections'),
+      find(propEq('name', 'cart')),
+      prop('selections'),
+      find(propEq('name', 'stores')),
+    )(STORES_QUERY());
     const snapshot = store.lookup({
-      dataID: 'client:root',
-      node: STORES_QUERY().operation,
+      dataID: connectionId,
+      node: queryNode,
     });
     store.subscribe(snapshot, s => {
       this.setState({ totals: getTotals(s.data) });
