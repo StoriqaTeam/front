@@ -4,7 +4,7 @@ import { installRelayDevTools } from 'relay-devtools'; // eslint-disable-line
 
 installRelayDevTools();
 
-const createResolver = (fetcher) => {
+const createResolver = fetcher => {
   if (process.env.NODE_ENV !== 'production') {
     // installRelayDevTools();
   }

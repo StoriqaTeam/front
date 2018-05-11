@@ -21,7 +21,9 @@ class FetcherBase {
     try {
       const response = await fetch(this.url, {
         method: 'POST',
-        headers: jwt ? assoc('Authorization', `Bearer ${jwt}`, headers) : headers,
+        headers: jwt
+          ? assoc('Authorization', `Bearer ${jwt}`, headers)
+          : headers,
         body: JSON.stringify({ query: operation.text, variables }),
       });
       log.debug('GraphQL response', { response });

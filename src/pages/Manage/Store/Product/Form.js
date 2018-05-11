@@ -1,12 +1,14 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, propOr, isEmpty, complement, pathOr } from 'ramda';
+import { assocPath, prop, propOr, isEmpty, pathOr, omit } from 'ramda';
 import { validate } from '@storiqa/shared';
 
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { CategorySelector } from 'components/CategorySelector';
-import { Button } from 'components/Button';
-import { Input, Textarea } from 'components/Forms';
+import { Textarea } from 'components/common/Textarea';
+import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 
 import Header from '../Header';
@@ -14,14 +16,16 @@ import Header from '../Header';
 import './Product.scss';
 
 type PropsType = {
-  baseProduct: ?{ [string]: any },
+  baseProduct: ?{ [string]: any, shortDescription?: Array<any> },
   onSave: Function,
   validationErrors: ?{},
   categories: Array<{}>,
+  isLoading: boolean,
 };
 
 type StateType = {
   form: {
+    id?: any,
     name: string,
     seoTitle: string,
     seoDescription: string,
@@ -41,10 +45,19 @@ class Form extends Component<PropsType, StateType> {
     }
     this.state = {
       form: {
+        // $FlowIgnoreMe
         name: pathOr('', ['name', 0, 'text'], baseProduct),
+        // $FlowIgnoreMe
         seoTitle: pathOr('', ['seoTitle', 0, 'text'], baseProduct),
+        // $FlowIgnoreMe
         seoDescription: pathOr('', ['seoDescription', 0, 'text'], baseProduct),
-        shortDescription: pathOr('', ['shortDescription', 0, 'text'], baseProduct),
+        // $FlowIgnoreMe
+        shortDescription: pathOr(
+          '',
+          ['shortDescription', 0, 'text'],
+          baseProduct,
+        ),
+        // $FlowIgnoreMe
         fullDesc: pathOr('', ['longDescription', 0, 'text'], baseProduct),
         categoryId: baseProduct.category.rawId,
       },
@@ -67,25 +80,31 @@ class Form extends Component<PropsType, StateType> {
   componentWillReceiveProps(nextProps: PropsType) {
     const currentFormErrors = this.state.formErrors;
     const nextFormErrors = nextProps.validationErrors;
-    if (isEmpty(currentFormErrors) && complement(isEmpty(nextFormErrors))) {
+    if (isEmpty(currentFormErrors) && !isEmpty(nextFormErrors)) {
       // конвертнем имена с snakeCase в camel_case :)
-      const formErrors = renameKeys({
-        long_description: 'fullDesc',
-        short_description: 'shortDescription',
-        seo_title: 'seoTitle',
-        seo_description: 'seoDescription',
-      }, nextFormErrors);
+      const formErrors = renameKeys(
+        {
+          long_description: 'fullDesc',
+          short_description: 'shortDescription',
+          seo_title: 'seoTitle',
+          seo_description: 'seoDescription',
+        },
+        nextFormErrors,
+      );
       this.setState({ formErrors });
     }
   }
 
   validate = () => {
     // TODO: вынести спеки
-    const { errors } = validate({
-      name: [[val => !isEmpty(val), 'Should not be empty']],
-      shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
-      fullDesc: [[val => !isEmpty(val), 'Should not be empty']],
-    }, this.state.form);
+    const { errors } = validate(
+      {
+        name: [[val => !isEmpty(val), 'Should not be empty']],
+        shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
+        fullDesc: [[val => !isEmpty(val), 'Should not be empty']],
+      },
+      this.state.form,
+    );
     return errors;
   };
 
@@ -100,15 +119,21 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleInputChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+      );
     }
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+    );
   };
 
   // eslint-disable-next-line
@@ -118,7 +143,7 @@ class Form extends Component<PropsType, StateType> {
         isUrl={Boolean(icon)}
         icon={icon}
         id={id}
-        value={propOr('', id, this.state.form)}
+        value={prop(id, this.state.form) || ''}
         label={label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
@@ -131,7 +156,7 @@ class Form extends Component<PropsType, StateType> {
     <div styleName="formItem">
       <Textarea
         id={id}
-        value={propOr('', id, this.state.form)}
+        value={prop(id, this.state.form) || ''}
         label={label}
         onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
@@ -140,19 +165,29 @@ class Form extends Component<PropsType, StateType> {
   );
 
   render() {
+    const { isLoading } = this.props;
     return (
       <div styleName="container">
         <Header title="Goods" />
         <div styleName="form">
+          <div styleName="title">
+            <strong>General characteristics</strong>
+          </div>
           {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
           {this.renderInput({ id: 'seoTitle', label: 'SEO title', limit: 50 })}
-          {this.renderTextarea({ id: 'seoDescription', label: 'SEO description' })}
-          {this.renderTextarea({ id: 'shortDescription', label: 'Short description' })}
+          {this.renderTextarea({
+            id: 'seoDescription',
+            label: 'SEO description',
+          })}
+          {this.renderTextarea({
+            id: 'shortDescription',
+            label: 'Short description',
+          })}
           {this.renderTextarea({ id: 'fullDesc', label: 'Full description' })}
           <div styleName="formItem">
             <CategorySelector
               categories={this.props.categories}
-              onSelect={(itemId) => {
+              onSelect={itemId => {
                 this.setState({
                   form: {
                     ...this.state.form,
@@ -163,12 +198,9 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <Button
-              type="button"
-              onClick={this.handleSave}
-            >
+            <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
               Save
-            </Button>
+            </SpinnerButton>
           </div>
         </div>
       </div>
@@ -176,4 +208,5 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
-export default Form;
+// $FlowIgnoreMe
+export default withErrorBoundary(Form);

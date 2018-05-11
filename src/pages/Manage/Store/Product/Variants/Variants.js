@@ -13,7 +13,7 @@ import './Variants.scss';
 type PropsType = {
   productId: number,
   category: {},
-  variants: Array<{}>,
+  variants: Array<{ rawId: number }>,
 };
 
 type StateType = {
@@ -26,11 +26,7 @@ class Variants extends Component<PropsType, StateType> {
   };
 
   handleSave = (variant: { [string]: any }) => {
-    const {
-      price,
-      vendorCode,
-      cashback,
-    } = variant;
+    const { price, vendorCode, cashback } = variant;
 
     const { environment } = this.context;
 
@@ -52,7 +48,9 @@ class Variants extends Component<PropsType, StateType> {
   render() {
     return (
       <div styleName="container">
-        <div styleName="title">Variants</div>
+        <div styleName="title">
+          <strong>Variants</strong>
+        </div>
         <Table
           onSave={this.handleSave}
           category={this.props.category}

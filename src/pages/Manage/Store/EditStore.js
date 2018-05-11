@@ -2,10 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  pathOr,
-  toUpper,
-} from 'ramda';
+import { pathOr, toUpper } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { currentUserShape } from 'utils/shapes';
@@ -20,7 +17,7 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type PropsType = {
-  me?: { store?: {} }, // eslint-disable-line
+  me?: { store?: { logo: string } }, // eslint-disable-line
 };
 
 type StateType = {
@@ -28,12 +25,14 @@ type StateType = {
   serverValidationErrors: any,
   activeItem: string,
   logoUrl?: string,
+  isLoading: boolean,
 };
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
+    isLoading: false,
   };
 
   handleLogoUpload = (url: string) => {
@@ -51,44 +50,45 @@ class EditStore extends Component<PropsType, StateType> {
       slug,
       slogan,
     } = form;
+    this.setState(() => ({ isLoading: true }));
+    // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'store', 'id'], this.props);
     UpdateStoreMainMutation.commit({
       id,
-      name: [
-        { lang: optionLanguage, text: name },
-      ],
+      name: [{ lang: optionLanguage, text: name }],
       defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [
-        { lang: optionLanguage, text: longDescription },
-      ],
-      shortDescription: [
-        { lang: optionLanguage, text: shortDescription },
-      ],
+      longDescription: [{ lang: optionLanguage, text: longDescription }],
+      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
       slug,
       slogan,
       logo: logoUrl,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
         }
+        this.setState(() => ({ isLoading: false }));
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
+        this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -100,19 +100,20 @@ class EditStore extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 
   render() {
-    const { activeItem, logoUrl } = this.state;
-
-    const store = pathOr(null, ['me', 'store'], this.props);
+    const { activeItem, logoUrl, isLoading } = this.state;
+    // $FlowIgnoreMe
+    const store = pathOr(null, ['store'], this.props.me);
 
     if (!store) {
-      return (<div>Store not found :(</div>);
+      return <div>Store not found :(</div>;
     }
 
+    // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], store);
     const { logo } = store;
     return (
@@ -132,6 +133,7 @@ class EditStore extends Component<PropsType, StateType> {
               <Form
                 store={store}
                 onSave={this.handleSave}
+                isLoading={isLoading}
                 serverValidationErrors={this.state.serverValidationErrors}
               />
             </div>
@@ -146,7 +148,7 @@ export default createFragmentContainer(
   Page(EditStore),
   graphql`
     fragment EditStore_me on User
-    @argumentDefinitions(storeId: { type: "Int!" }) {
+      @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         id
         rawId

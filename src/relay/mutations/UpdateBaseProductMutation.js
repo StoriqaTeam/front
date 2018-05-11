@@ -26,8 +26,8 @@ const mutation = graphql`
       longDescription {
         lang
         text
-      } 
-      seoTitle { 
+      }
+      seoTitle {
         lang
         text
       }
@@ -53,23 +53,24 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => commitMutation(params.environment, {
-  mutation,
-  variables: {
-    input: {
-      clientMutationId: '',
-      id: params.id,
-      name: params.name,
-      shortDescription: params.shortDescription,
-      longDescription: params.longDescription,
-      seoTitle: params.seoTitle,
-      seoDescription: params.seoDescription,
-      currencyId: params.currencyId,
-      categoryId: params.categoryId,
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
+    mutation,
+    variables: {
+      input: {
+        clientMutationId: '',
+        id: params.id,
+        name: params.name,
+        shortDescription: params.shortDescription,
+        longDescription: params.longDescription,
+        seoTitle: params.seoTitle,
+        seoDescription: params.seoDescription,
+        currencyId: params.currencyId,
+        categoryId: params.categoryId,
+      },
     },
-  },
-  onCompleted: params.onCompleted,
-  onError: params.onError,
-});
+    onCompleted: params.onCompleted,
+    onError: params.onError,
+  });
 
 export default { commit };

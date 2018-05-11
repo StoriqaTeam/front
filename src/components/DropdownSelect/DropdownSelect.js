@@ -47,12 +47,15 @@ class DropdownSelect extends Component<PropsType, StateType> {
   };
 
   handleSelectItem = (id: number) => {
-    this.setState(() => ({ checkedDropdownItemId: id, isExpanded: false }), () => {
-      const { onDropdownSelect } = this.props;
-      if (onDropdownSelect) {
-        onDropdownSelect(id);
-      }
-    });
+    this.setState(
+      () => ({ checkedDropdownItemId: id, isExpanded: false }),
+      () => {
+        const { onDropdownSelect } = this.props;
+        if (onDropdownSelect) {
+          onDropdownSelect(id);
+        }
+      },
+    );
   };
 
   handleToggleExpand = () => {
@@ -68,20 +71,26 @@ class DropdownSelect extends Component<PropsType, StateType> {
     if (!checkedDropdownItemId) return items;
 
     const propNotEq = (...args) => pipe(propEq(...args), not);
-    const notCheckedItems = filter(propNotEq('id', checkedDropdownItemId), items);
+    const notCheckedItems =
+      filter(propNotEq('id', checkedDropdownItemId), items) || [];
     const checkedItem = find(propEq('id', checkedDropdownItemId), items);
-    return insert(0, checkedItem, notCheckedItems);
+    if (checkedItem) {
+      return insert(0, checkedItem, notCheckedItems);
+    }
+    return notCheckedItems;
   };
 
   renderItem = (item: { id: number, label: string }, idx: number) => {
     const { checkedDropdownItemId } = this.state;
-    const checked = checkedDropdownItemId ? checkedDropdownItemId === item.id : idx === 0;
+    const checked = checkedDropdownItemId
+      ? checkedDropdownItemId === item.id
+      : idx === 0;
     const inputId = this.withPrefix(`input_${item.id}`);
     return (
       <div
         key={item.id}
         styleName="item"
-        ref={(node) => {
+        ref={node => {
           this.node = node;
         }}
       >
@@ -108,10 +117,7 @@ class DropdownSelect extends Component<PropsType, StateType> {
     const { isExpanded } = this.state;
     return (
       <div styleName={`container ${isExpanded ? 'expanded' : 'collapsed'}`}>
-        <button
-          styleName="toggleExpand"
-          onClick={this.handleToggleExpand}
-        />
+        <button styleName="toggleExpand" onClick={this.handleToggleExpand} />
         {this.prepareItems(items).map(this.renderItem)}
       </div>
     );

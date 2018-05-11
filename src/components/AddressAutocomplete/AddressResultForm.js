@@ -1,14 +1,14 @@
 // @flow
 
 import React from 'react';
-import { Input } from 'components/Forms';
+import { Input } from 'components/common/Input';
 
 import './AddressResultForm.scss';
 
 type PropsType = {
   address: any,
   onChangeForm: (type: string) => (e: any) => void,
-}
+};
 
 const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
   <div>

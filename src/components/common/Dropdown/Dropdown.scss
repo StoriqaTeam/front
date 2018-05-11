@@ -1,0 +1,110 @@
+@import "../../../styles/variables";
+
+.container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.isExpanded {
+  &.forForm .hr, .forSearch .hr {
+    &:after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+.label {
+  color: $color_grey_bg;
+  font-size: 14px;
+  white-space: nowrap;
+  transform: scale(0.9) translate(0, 1rem);
+  transform-origin: left top 0;
+  transition: all .3s ease;
+}
+
+.isExpanded .label {
+  color: $color_blue_1;
+}
+
+.wrap {
+  position: relative;
+  display: inline-block;
+  height: 2.25rem;
+  padding: 0 3rem 0 1rem;
+  border-radius: 0.25rem;
+  color: $color_grey_text;
+  font-size: 11px;
+}
+
+.selected {
+  position: relative;
+  line-height: 2.5rem;
+  z-index: 2;
+}
+
+.icon {
+  position: absolute;
+  top: 1px;
+  right: 0.5rem;
+  border-radius: 0.25rem;
+  z-index: 2;
+  transition: all .3s ease;
+}
+
+.rotateIcon {
+  transform: rotate(-180deg);
+  transition: all .3s ease;
+}
+
+.items {
+  position: absolute;
+  top: 3rem;
+  left: auto;
+  right: 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  border-radius: 0.25rem;
+  background-color: #FFFFFF;
+  box-shadow: $shadow_1;
+  overflow: hidden;
+  cursor: default;
+  z-index: 11;
+  transition: all .3s ease;
+}
+
+.itemsWrap::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.itemsWrap::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #d8d8d8;
+}
+
+.itemsWrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.itemsWrap {
+  position: relative;
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
+.item {
+  height: 2rem;
+  padding: 0 1rem;
+  text-align: left;
+  line-height: 2.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    color: #03a9ff;
+  }
+}
+
+.hidden {
+  display: none;
+}

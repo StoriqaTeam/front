@@ -1,40 +1,72 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { assoc, pathOr, map, propEq, addIndex, findIndex, filter, complement, isNil } from 'ramda';
+import {
+  assoc,
+  pathOr,
+  map,
+  propEq,
+  addIndex,
+  findIndex,
+  filter,
+  complement,
+  isNil,
+} from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
-import { MiniSelect } from 'components/MiniSelect';
+import { Select } from 'components/common/Select';
 import { uploadFile, log } from 'utils';
 
 import './Characteristics.scss';
 
+type AttributeType = {
+  rawId: number,
+  id: string,
+  metaField: {
+    translatedValues: ?Array<{}>,
+    values: ?Array<{}>,
+  },
+};
+
 type PropsType = {
-  attribute: { rawId: number, id: string },
+  attribute: AttributeType,
   onSelect: Function,
   value: { attrId: number, value: string, metaField?: string },
 };
 
 class CharacteristicItem extends PureComponent<PropsType> {
-  getSelectItems = (attribute: {}) => {
+  getSelectItems = (
+    attribute: AttributeType,
+  ): Array<{ id: string, label: string }> => {
+    // $FlowIgnoreMe
     const values = pathOr(null, ['metaField', 'values'], attribute);
-    const translatedValues = pathOr(null, ['metaField', 'translatedValues'], attribute);
+    const translatedValues = pathOr(
+      [],
+      ['metaField', 'translatedValues'],
+      // $FlowIgnoreMe
+      attribute,
+    );
     const mapIndexed = addIndex(map);
 
     if (values) {
       return mapIndexed((item, idx) => ({ id: `${idx}`, label: item }), values);
     }
 
-    const items = mapIndexed((item, idx) => {
-      const text = pathOr(null, ['translations', 0, 'text'], item);
-      if (text) {
-        return {
-          id: `${idx}`,
-          label: text,
-        };
-      }
-      return null;
-    }, translatedValues);
+    const items = mapIndexed(
+      // $FlowIgnoreMe
+      (item: { translations: Array<{ text: string }> }, idx: number) => {
+        // $FlowIgnoreMe
+        const text = pathOr(null, ['translations', 0, 'text'], item);
+        if (text) {
+          return {
+            id: `${idx}`,
+            label: text,
+          };
+        }
+        return null;
+      },
+      translatedValues || [],
+    );
     return filter(complement(isNil), items);
   };
 
@@ -61,8 +93,12 @@ class CharacteristicItem extends PureComponent<PropsType> {
       return null;
     }
     const items = this.getSelectItems(attribute);
-    const selectedItem = { id: `${findIndex(propEq('label', value.value), items)}`, label: value.value };
+    const selectedItem = {
+      id: `${findIndex(propEq('label', value.value), items)}`,
+      label: value.value,
+    };
     const { metaField: characteristicImg } = this.props.value;
+    // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], attribute);
     return (
       <div styleName="item">
@@ -70,19 +106,21 @@ class CharacteristicItem extends PureComponent<PropsType> {
           <UploadWrapper
             id={attribute.id}
             onUpload={this.handleOnUpload}
-            buttonHeight={80}
-            buttonWidth={80}
+            buttonHeight={10}
+            buttonWidth={10}
             buttonIconType="upload"
             overPicture={characteristicImg}
+            dataTest="productCharacteristicImgUploader"
           />
         </div>
-        <MiniSelect
+        <Select
           forForm
           fullWidth
           label={name}
           activeItem={selectedItem}
           items={items}
           onSelect={this.handleSelect}
+          dataTest="characteristicSelect"
         />
       </div>
     );

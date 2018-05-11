@@ -6,7 +6,7 @@
   }, {
     "code": "#FF508E",
     "name": "Marked for sale/incorrect/error alert",
-    "var": "$color_pink"
+    "var": "$color_pink_1"
   }, {
     "code": "#9FC63C",
     "name": "Granted/online/correct",

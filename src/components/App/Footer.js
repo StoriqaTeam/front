@@ -17,44 +17,75 @@ const Footer = () => (
             <div styleName="navBlockLogo">
               <Icon type="logo" />
               <div styleName="description">
-                Storiqa is a global marketplace for any kind
-                of legal goods supporting cryptocurrency payments
+                Storiqa is a global marketplace for any kind of legal goods
+                supporting cryptocurrency payments
               </div>
             </div>
             <div styleName="navBlockItem market">
               <div styleName="navHeader">
                 <b>Storiqa market</b>
               </div>
-              <a href="/" styleName="navItem">Sale</a>
-              <a href="/" styleName="navItem">Recommended</a>
-              <a href="/" styleName="navItem">Popular</a>
-              <a href="/" styleName="navItem">Reviews</a>
+              <a href="/" styleName="navItem">
+                Sale
+              </a>
+              <a href="/" styleName="navItem">
+                Recommended
+              </a>
+              <a href="/" styleName="navItem">
+                Popular
+              </a>
+              <a href="/" styleName="navItem">
+                Reviews
+              </a>
             </div>
             <div styleName="navBlockItem sections">
               <div styleName="navHeader">
                 <b>Sections</b>
               </div>
-              <a href="/" styleName="navItem">Showcase</a>
-              <a href="/" styleName="navItem">Goods</a>
-              <a href="/" styleName="navItem">Shops</a>
-              <a href="/" styleName="navItem">Storiqa Community</a>
+              <a href="/" styleName="navItem">
+                Showcase
+              </a>
+              <a href="/" styleName="navItem">
+                Goods
+              </a>
+              <a href="/" styleName="navItem">
+                Shops
+              </a>
+              <a href="/" styleName="navItem">
+                Storiqa Community
+              </a>
             </div>
             <div styleName="navBlockItem services">
               <div styleName="navHeader">
                 <b>Services</b>
               </div>
-              <a href="/" styleName="navItem">Quality Assurance</a>
-              <a href="/" styleName="navItem">Storiqa wallet</a>
+              <a href="/" styleName="navItem">
+                Quality Assurance
+              </a>
+              <a href="/" styleName="navItem">
+                Storiqa wallet
+              </a>
             </div>
             <div styleName="navBlockButton">
-              <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
+              <Button
+                href={
+                  process.env.REACT_APP_HOST
+                    ? `${process.env.REACT_APP_HOST}/manage/store/new`
+                    : '/'
+                }
+                dataTest="footerStartSellingButton"
+              >
                 Start selling
               </Button>
             </div>
           </div>
           <div styleName="infoBlock">
-            <div styleName="address">Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287</div>
-            <a href="mailto:support@storiqa.com" styleName="email">support@storiqa.com</a>
+            <div styleName="address">
+              Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287
+            </div>
+            <a href="mailto:support@storiqa.com" styleName="email">
+              support@storiqa.com
+            </a>
             <div styleName="aboutNavBlock">
               <div styleName="aboutNavItem">
                 <a href="/">About Storiqa</a>
@@ -70,14 +101,32 @@ const Footer = () => (
               </div>
             </div>
             <div styleName="icons">
-              <Icon type="facebookGray" size="32" />
-              <Icon type="pinterestGray" size="32" />
-              <Icon type="twitterGray" size="32" />
-              <Icon type="instagramGray" size="32" />
-              <Icon type="vkGray" size="32" />
+              <a
+                href="https://www.facebook.com/storiqa"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon type="facebookGray" size="32" />
+              </a>
+              <a
+                href="https://twitter.com/storiqa"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon type="twitterGray" size="32" />
+              </a>
+              <a
+                href="https://www.instagram.com/storiqa"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon type="instagramGray" size="32" />
+              </a>
             </div>
           </div>
-          <div styleName="rightsBlock">© Storiqa Marketplace. All rights reserved. 2018</div>
+          <div styleName="rightsBlock">
+            © Storiqa Marketplace. All rights reserved. 2018
+          </div>
         </Col>
       </Row>
     </Container>

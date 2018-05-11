@@ -1,0 +1,17 @@
+.container {
+  color: #a29f9a;
+  font-size: 13px;
+  letter-spacing: 0.1px;
+  padding: 7.5px;
+  text-align: center;
+}
+
+.zoom {
+  svg {
+    height: 17px;
+    position: relative;
+    right: 3px;
+    top: 3px;
+    width: 17px;
+  }
+}

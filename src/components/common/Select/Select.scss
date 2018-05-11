@@ -16,7 +16,26 @@
   position: absolute;
   bottom: -0.375rem;
   width: 100%;
-  border-bottom: 1px solid $color_grey_bg;
+  border-top: 1px solid $color_grey_border2;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border: 1px solid $color_blue_1;
+    transform: scaleX(0);
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  }
+}
+
+.isExpanded {
+  &.forForm .hr, &.forSearch .hr {
+    &:after {
+      transform: scaleX(1);
+    }
+  }
 }
 
 .fullWidth {
@@ -29,10 +48,25 @@
 }
 
 .label {
-  font-family: $font_medium;
+  position: absolute;
+  top: 0.5rem;
+  left: 0;
   color: $color_grey_bg;
   font-size: 14px;
+  line-height: 2rem;
   white-space: nowrap;
+  transform: scale(1) translate(0, 0);
+  transform-origin: left top 0;
+  transition: all .3s ease;
+}
+
+.labelFloat {
+  transform: scale(0.9) translate(0, -2.6rem);
+  transform-origin: left top 0;
+}
+
+.isExpanded .labelFloat {
+  color: $color_blue_1;
 }
 
 .wrap {
@@ -66,18 +100,9 @@
   vertical-align: bottom;
 }
 
-.isDropdown .wrap {
-  background-color: transparent;
-}
-
 .isItem {
   padding-right: 3.5rem;
   font-size: 16px;
-  background-color: transparent;
-}
-
-.isDropdown {
-  color: $color_grey_link;
   background-color: transparent;
 }
 
@@ -90,6 +115,11 @@
   position: relative;
   line-height: 2.5rem;
   z-index: 2;
+}
+
+.forForm .selected,
+.forSearch .selected {
+  top: 0.25rem;
 }
 
 .forAutocomlete .selected,
@@ -135,10 +165,11 @@
   padding: 0.5rem 0.5rem 0.5rem 0;
   border-radius: 0.25rem;
   background-color: $color_white;
-  box-shadow: 0 0.25rem 0.75rem 0 rgba(0, 0, 0, .16);
+  box-shadow: $shadow_1;
   overflow: hidden;
   cursor: default;
   z-index: 11;
+  transition: all .3s ease;
 }
 
 .itemsWrap::-webkit-scrollbar {
@@ -178,13 +209,6 @@
   top: -1rem;
 }
 
-.isDropdown .items {
-  top: 3rem;
-  left: auto;
-  right: 0;
-  z-index: 1;
-}
-
 .itemsWrap {
   position: relative;
   max-height: 10rem;
@@ -203,6 +227,11 @@
   line-height: 2.25rem;
   white-space: nowrap;
   cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    color: #03a9ff;
+  }
 }
 
 .forForm .item,
@@ -216,10 +245,6 @@
   line-height: 3rem;
 }
 
-.isDropdown .item {
-  white-space: nowrap;
-}
-
 .forAutocomlete .item {
   font-size: 14px;
   height: 3.75rem;
@@ -227,22 +252,10 @@
   padding: 0 1rem;
 }
 
-.item:hover {
-  color: #03a9ff;
-}
-
 .active {
   color: #03a9ff;
 }
 
-.isDropdown .active {
-  display: block;
-}
-
 .hidden {
   display: none;
-}
-
-.area {
-  //
 }

@@ -2,28 +2,26 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { find, propEq } from 'ramda';
+import { find, propEq, prepend } from 'ramda';
 
-import { log } from 'utils';
 import { Icon } from 'components/Icon';
 
 import './Select.scss';
 
 type StateType = {
   isExpanded: boolean,
+  items: Array<{ id: string, label: string }>,
 };
 
 type SelectType = {
   id: string,
   label: string,
-}
+};
 
 type PropsType = {
-  isDropdown: ?boolean,
   transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
   onSelect?: (item: ?SelectType) => void,
-  title: ?string,
   label: ?string,
   activeItem: ?{ id: string, label: string },
   forForm: ?boolean,
@@ -33,14 +31,24 @@ type PropsType = {
   containerStyle: ?{
     [name: string]: any,
   },
+  dataTest: string,
+  withEmpty?: boolean,
 };
 
 class Select extends Component<PropsType, StateType> {
-  state = {
-    isExpanded: false,
-  };
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      isExpanded: false,
+      items: props.items,
+    };
+  }
 
   componentWillMount() {
+    const { items, withEmpty } = this.props;
+    this.setState({
+      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
+    });
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
       window.addEventListener('keydown', this.handleToggleExpand);
@@ -68,25 +76,20 @@ class Select extends Component<PropsType, StateType> {
       return;
     }
 
-    if ((e.keyCode === 27) || (!isButtonClick && !isItems) || isItemsWrap) {
+    if (e.keyCode === 27 || (!isButtonClick && !isItems) || isItemsWrap) {
       this.setState({ isExpanded: false });
     }
   };
 
   handleItemClick = (e: any) => {
-    if (this.props.isDropdown) {
-      log.info('id', e.target.id);
-    } else if (this.props && this.props.onSelect) {
-      // $FlowIgnoreMe
-      this.props.onSelect(find(propEq('id', e.target.id))(this.props.items));
+    const { onSelect, items } = this.props;
+    if (this.props && onSelect) {
+      onSelect(find(propEq('id', e.target.id))(items));
     }
   };
 
   render() {
     const {
-      items,
-      isDropdown,
-      title,
       transparent,
       label,
       activeItem,
@@ -95,50 +98,66 @@ class Select extends Component<PropsType, StateType> {
       forSearch,
       forAutocomlete,
       containerStyle,
+      dataTest,
     } = this.props;
-    const { isExpanded } = this.state;
+    const { isExpanded, items } = this.state;
 
     return (
       <div
-        ref={(node) => { this.button = node; }}
+        ref={node => {
+          this.button = node;
+        }}
         styleName={classNames('container', {
-          isDropdown,
           forForm,
           forSearch,
           forAutocomlete,
           fullWidth,
+          isExpanded,
         })}
         style={containerStyle}
+        data-test={dataTest}
       >
-        {label && <div styleName={classNames('label')}>{label}</div>}
-        <div styleName={classNames('wrap', { transparent })}>
-          <div styleName="selected">
-            { isDropdown ? title : activeItem && activeItem.label }
+        {label && (
+          <div
+            styleName={classNames('label', {
+              labelFloat: activeItem || isExpanded,
+            })}
+          >
+            {label}
           </div>
+        )}
+        <div styleName={classNames('wrap', { transparent })}>
+          <div styleName="selected">{activeItem && activeItem.label}</div>
           <div styleName={classNames('icon', { rotateIcon: isExpanded })}>
             <Icon type="arrowExpand" />
           </div>
           <div
-            ref={(node) => { this.items = node; }}
+            ref={node => {
+              this.items = node;
+            }}
             styleName={classNames('items', {
               hidden: !isExpanded,
             })}
           >
             <div
-              ref={(node) => { this.itemsWrap = node; }}
+              ref={node => {
+                this.itemsWrap = node;
+              }}
               styleName="itemsWrap"
               onClick={this.handleItemClick}
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
             >
-              {items.map((item) => {
+              {items.map(item => {
                 const { id } = item;
                 return (
                   <div
                     key={id}
                     id={id}
-                    styleName={classNames('item', { active: activeItem && activeItem.id === id })}
+                    styleName={classNames('item', {
+                      active: activeItem && activeItem.id === id,
+                    })}
                     data-test={id}
                   >
                     {item.label}

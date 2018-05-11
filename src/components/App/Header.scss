@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
   position: relative;
@@ -12,6 +12,9 @@
   align-items: center;
   justify-content: flex-end;
   padding-top: 1rem;
+  a {
+    margin-left: 3rem;
+  }
 }
 
 .item {

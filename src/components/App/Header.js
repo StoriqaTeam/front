@@ -49,7 +49,8 @@ class Header extends PureComponent<PropsType> {
                       { id: '15', label: 'LSK' },
                       { id: '16', label: 'NXT' },
                     ]}
-                    onSelect={() => { }}
+                    onSelect={() => {}}
+                    dataTest="headerСurrenciesSelect"
                   />
                 </div>
                 <div styleName="item">
@@ -60,43 +61,19 @@ class Header extends PureComponent<PropsType> {
                       { id: '2', label: 'CHN' },
                       { id: '3', label: 'RUS' },
                     ]}
-                    onSelect={() => { }}
+                    onSelect={() => {}}
+                    dataTest="headerLanguagesSelect"
                   />
                 </div>
-                <div styleName="item">
-                  <Select
-                    isDropdown
-                    title="Terms & Conditions"
-                    items={[
-                      { id: '1', label: 'Term #1' },
-                      { id: '2', label: 'Term #2' },
-                      { id: '3', label: 'Term #3' },
-                    ]}
-                    onSelect={() => { }}
-                  />
+                <div>
+                  <a href="_">Help</a> {/* eslint-disable-line */}
                 </div>
-                <div styleName="item">
-                  <Select
-                    isDropdown
-                    title="Delivery"
-                    items={[
-                      { id: '1', label: 'Delivery #1' },
-                      { id: '2', label: 'Delivery #2' },
-                      { id: '3', label: 'Delivery #3' },
-                    ]}
-                  />
-                </div>
-                <div styleName="item">
-                  <a href="/">
-                    <span styleName="qaIcon">
-                      <Icon type="qualityAssurance" />
-                    </span>
-                    Quality Assurance
-                  </a>
+                <div>
+                  <a href="/manage/store/new">Sell on Storiqa</a>
                 </div>
               </div>
               <div styleName="bottom">
-                <Link to="/">
+                <Link to="/" data-test="logoLink">
                   <Icon type="logo" />
                 </Link>
                 <div styleName="searchInput">
@@ -112,10 +89,17 @@ class Header extends PureComponent<PropsType> {
                   <UserDropdown user={user} />
                 </div>
                 <div styleName="cartIcon">
-                  <CartButton href="/cart" />
+                  <CartButton />
                 </div>
                 <div styleName="buttonWrapper">
-                  <Button href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}>
+                  <Button
+                    href={
+                      process.env.REACT_APP_HOST
+                        ? `${process.env.REACT_APP_HOST}/manage/store/new`
+                        : '/'
+                    }
+                    dataTest="headerStartSellingButton"
+                  >
                     Start selling
                   </Button>
                 </div>

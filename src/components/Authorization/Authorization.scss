@@ -43,13 +43,14 @@
 
 .signInCheckbox {
   margin-left: 16px;
+  padding-top: 8px;
   font-size: 14px;
   text-align: left;
   width: 50%;
 }
 
 .signInButton {
-  width: 128px;
+  width: 100%;
 
   & > * {
     width: 100%;

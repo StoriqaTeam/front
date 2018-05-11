@@ -1,0 +1,45 @@
+$bigImageSize: 69.875rem;
+
+.container {
+  align-items: flex-start;
+  border-right: 1px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+}
+
+.expand {
+  position: absolute;
+  right: 3rem;
+  top: 3rem;
+  svg {
+    height: 3.375rem;
+    width: 3.375rem;
+  }
+}
+
+.image {
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  width: $bigImageSize;
+}
+
+.bigImage {
+  height: $bigImageSize;
+  position: relative;
+  width: inherit;
+  & > img {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+}
+
+.thumbnailsWrapper {
+  max-width: 12rem;
+  padding: 2.375rem 2.125rem 0 2.125rem ;
+}
+
+.noThumbnailsWrapper {
+  max-width: 12rem;
+}

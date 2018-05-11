@@ -2,18 +2,35 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { find, append, head, pathOr, map, complement, isEmpty } from 'ramda';
+import { find, append, head, pathOr, map, isEmpty } from 'ramda';
 
-import { Button } from 'components/Button';
-import { Checkbox } from 'components/Checkbox';
+import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { log } from 'utils';
-import { CreateProductWithAttributesMutation, UpdateProductMutation } from 'relay/mutations';
+import {
+  CreateProductWithAttributesMutation,
+  UpdateProductMutation,
+} from 'relay/mutations';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
 
 import './Form.scss';
+
+type AttributeValueType = {
+  attrId: number,
+  value: string,
+  metaField?: {
+    translations: Array<{ lang: string, text: string }>,
+  },
+};
+
+type ValueForAttributeType = {
+  value: string,
+  metaField?: {
+    translations: Array<{ lang: string, text: string }>,
+  },
+};
 
 type StateType = {
   productId?: string,
@@ -23,44 +40,67 @@ type StateType = {
   isOpenVariantData?: boolean,
   mainPhoto?: ?string,
   photos?: Array<string>,
-  attributeValues?: Array<{ attrId: string, value: string, metaField?: string }>,
   price?: ?number,
+  attributeValues?: Array<AttributeValueType>,
 };
 
 type PropsType = {
   productId: number,
-  category: { getAttributes: Array<{}> },
-  variant: ?{},
+  category: {
+    getAttributes: Array<{
+      rawId: number,
+    }>,
+  },
+  variant: ?{
+    id: string,
+    vendorCode: string,
+    price?: number,
+    cashback?: ?number,
+    photoMain?: ?string,
+    additionalPhotos?: Array<string>,
+  },
   onExpandClick: (id: string) => void,
+};
+
+type ValueForAttributeInputType = {
+  attr: any,
+  variant: any,
 };
 
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const product = pathOr(null, ['variant'], props);
-    const attributeValues = map(item => ({
-      attrId: item.rawId,
-      ...this.valueForAttribute({ attr: item, variant: props.variant }),
-    }), props.category.getAttributes);
+    const product = props.variant;
+    const attrValues: Array<AttributeValueType> = map(
+      item => ({
+        attrId: item.rawId,
+        ...this.valueForAttribute({ attr: item, variant: props.variant }),
+      }),
+      props.category.getAttributes,
+    );
     if (!product) {
       this.state = {
-        attributeValues,
+        attributeValues: attrValues,
       };
     } else {
       this.state = {
         productId: product.id,
         vendorCode: product.vendorCode,
         price: product.price,
-        cashback: product.cashback,
+        cashback: Math.round((product.cashback || 0) * 100),
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
-        attributeValues,
+        attributeValues: attrValues,
       };
     }
   }
 
   state: StateType = {
     //
+  };
+
+  onChangeValues = (values: Array<AttributeValueType>) => {
+    this.setState({ attributeValues: values });
   };
 
   handleUpdate = () => {
@@ -73,7 +113,7 @@ class Form extends Component<PropsType, StateType> {
         vendorCode: variant.vendorCode,
         photoMain: variant.mainPhoto,
         additionalPhotos: variant.photos,
-        cashback: variant.cashback,
+        cashback: variant.cashback ? variant.cashback / 100 : '',
       },
       attributes: variant.attributeValues,
       environment: this.context.environment,
@@ -102,7 +142,7 @@ class Form extends Component<PropsType, StateType> {
         vendorCode: variant.vendorCode,
         photoMain: variant.mainPhoto,
         additionalPhotos: variant.photos,
-        cashback: variant.cashback,
+        cashback: variant.cashback ? variant.cashback / 100 : '',
       },
       attributes: variant.attributeValues,
       environment: this.context.environment,
@@ -116,7 +156,7 @@ class Form extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Проверьте правильность введенных данных'); // eslint-disable-line
+        alert('Check that fields are filled correctly.'); // eslint-disable-line
       },
     });
   };
@@ -130,7 +170,9 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handlePriceChange = (e: any) => {
-    const { target: { value } } = e;
+    const {
+      target: { value },
+    } = e;
     if (value === '') {
       this.setState({ price: null });
       return;
@@ -141,7 +183,9 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleCashbackChange = (e: any) => {
-    const { target: { value } } = e;
+    const {
+      target: { value },
+    } = e;
     if (value === '') {
       this.setState({ cashback: null });
       return;
@@ -155,21 +199,27 @@ class Form extends Component<PropsType, StateType> {
     if (!this.state.mainPhoto) {
       this.setState({ mainPhoto: url });
     } else {
-      this.setState(prevState => ({ photos: append(url, prevState.photos) }));
+      this.setState((prevState: StateType) => ({
+        photos: append(url, prevState.photos || []),
+      }));
     }
   };
 
   toggleDropdownVariant = () => {
-    const id = pathOr(null, ['variant', 'rawId'], this.props);
+    // $FlowIgnoreMe
+    const id: string = pathOr('', ['rawId'], this.props.variant);
     if (this.props.onExpandClick) {
       this.props.onExpandClick(id);
     }
   };
 
-  valueForAttribute = ({ attr, variant }: { [string]: any }):
-    { value: string, metaField?: string } => {
+  valueForAttribute = (
+    input: ValueForAttributeInputType,
+  ): ValueForAttributeType => {
+    const { attr, variant } = input;
     const attrFromVariant =
-      variant && find(item => item.attribute.rawId === attr.rawId, variant.attributes);
+      variant &&
+      find(item => item.attribute.rawId === attr.rawId, variant.attributes);
     if (attrFromVariant && attrFromVariant.value) {
       return {
         value: attrFromVariant.value,
@@ -179,11 +229,17 @@ class Form extends Component<PropsType, StateType> {
     const { values, translatedValues } = attr.metaField;
     if (values) {
       return {
-        value: head(values),
+        value: head(values) || '',
       };
-    } else if (translatedValues && complement(isEmpty(translatedValues))) {
+    } else if (translatedValues && !isEmpty(translatedValues)) {
       return {
-        value: pathOr('', [0, 'translations', 0, 'text'], translatedValues),
+        // $FlowIgnoreMe
+        value: pathOr(
+          '',
+          // $FlowIgnoreMe
+          [0, 'translations', 0, 'text'],
+          translatedValues || [],
+        ),
       };
     }
     return {
@@ -195,17 +251,7 @@ class Form extends Component<PropsType, StateType> {
     const { vendorCode, price, cashback } = this.state;
     return (
       <div styleName="variant">
-        <div styleName="variantItem tdCheckbox">
-          <Checkbox
-            id="id-variant"
-            onChange={this.handleCheckboxClick}
-          />
-        </div>
-        <div styleName="variantItem tdDropdawn">
-          <button onClick={this.toggleDropdownVariant}>
-            <Icon inline type="openArrow" />
-          </button>
-        </div>
+        <div styleName="variantItem tdCheckbox" />
         <div styleName="variantItem tdArticle">
           <input
             styleName="input vendorCodeInput"
@@ -233,10 +279,26 @@ class Form extends Component<PropsType, StateType> {
           <span styleName="inputPostfix">%</span>
         </div>
         <div styleName="variantItem tdCharacteristics" />
-        <div styleName="variantItem tdCount">8</div>
-        <div styleName="variantItem tdBasket">
-          <button>
-            <Icon type="basket" />
+        <div styleName="variantItem tdCount">
+          <div styleName="storagesItem">
+            <div styleName="storagesLabels">
+              <div>1 storage</div>
+              <div>2 storage</div>
+            </div>
+            <div styleName="storagesValues">
+              <div>
+                <strong>56</strong>
+              </div>
+              <div>
+                <strong>67</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div styleName="variantItem tdBasket" />
+        <div styleName="variantItem tdDropdawn">
+          <button styleName="arrowExpand" onClick={this.toggleDropdownVariant}>
+            <Icon inline type="arrowExpand" />
           </button>
         </div>
       </div>
@@ -244,28 +306,23 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { photos, mainPhoto } = this.state;
+    const { photos = [], mainPhoto } = this.state;
     return (
-      <div>
-        <div styleName="variants">
-          {this.renderVariant()}
-        </div>
-        {/* $FlowIgnoreMe */}
-        <Characteristics
-          category={this.props.category}
-          values={this.state.attributeValues || []}
-          onChange={(values: Array<{ attrId: string, value: string, metaField?: string }>) => {
-            this.setState({ attributeValues: values });
-          }}
-        />
-        {/* $FlowIgnoreMe */}
+      <div styleName="container">
+        <div styleName="variants">{this.renderVariant()}</div>
         <Photos
           photos={mainPhoto ? append(mainPhoto, photos) : photos}
           onAddPhoto={this.handleAddPhoto}
         />
+        <Characteristics
+          category={this.props.category}
+          values={this.state.attributeValues || []}
+          onChange={this.onChangeValues}
+        />
         <Button
           type="button"
           onClick={this.props.variant ? this.handleUpdate : this.handleCreate}
+          dataTest="variantsProductSaveButton"
         >
           Save
         </Button>

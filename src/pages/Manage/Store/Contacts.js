@@ -8,8 +8,8 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { Input } from 'components/Forms';
-import { Button } from 'components/Button';
+import { Input } from 'components/common/Input';
+import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
@@ -19,23 +19,28 @@ import Menu from './Menu';
 
 import './Contacts.scss';
 
+type NestedObject<T> = { [k: string]: T | NestedObject<T> };
+
 /* eslint-disable */
 type InputType = {
   id: string,
   label: string,
   icon?: string,
   limit?: number,
-}
+};
 /* eslint-enable */
 
 type PropsType = {
-  me: { store: { rawId: string, id: string } },
+  me: {
+    store: { [string]: ?string },
+  },
 };
 
 type StateType = {
   form: {
     email: ?string,
     phone: ?string,
+    country: ?string,
     address: ?string,
     facebookUrl: ?string,
     instagramUrl: ?string,
@@ -45,6 +50,7 @@ type StateType = {
     [string]: ?any,
   },
   activeItem: string,
+  isLoading: boolean,
 };
 
 class Contacts extends Component<PropsType, StateType> {
@@ -52,6 +58,7 @@ class Contacts extends Component<PropsType, StateType> {
     form: {
       email: '',
       phone: '',
+      country: '',
       address: '',
       facebookUrl: '',
       instagramUrl: '',
@@ -59,26 +66,34 @@ class Contacts extends Component<PropsType, StateType> {
     },
     formErrors: {},
     activeItem: 'contacts',
+    isLoading: false,
   };
 
   componentWillMount() {
-    const store = pathOr({}, ['me', 'store'], this.props);
+    // $FlowIgnoreMe
+    const store = pathOr({}, ['store'], this.props.me);
     this.setState({
-      form: pick([
-        'email',
-        'phone',
-        'address',
-        'facebookUrl',
-        'instagramUrl',
-        'twitterUrl',
-      ], store),
+      form: pick(
+        [
+          'email',
+          'phone',
+          'country',
+          'address',
+          'facebookUrl',
+          'instagramUrl',
+          'twitterUrl',
+        ],
+        store,
+      ),
     });
   }
 
   handleInputChange = (id: string) => (e: any) => {
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value.replace(/\s\s/, ' ')));
+      this.setState(
+        assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
+      );
     }
   };
 
@@ -89,16 +104,19 @@ class Contacts extends Component<PropsType, StateType> {
         ...form,
       },
     });
-  }
+  };
 
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
-    const { me: { store } } = this.props;
+    const {
+      me: { store },
+    } = this.props;
     if (!currentUser || !currentUser.rawId) {
       return;
     }
 
     const {
+      // param 'country' enter for 'this.handleUpdateForm'
       form: {
         email,
         phone,
@@ -106,10 +124,10 @@ class Contacts extends Component<PropsType, StateType> {
         facebookUrl,
         twitterUrl,
         instagramUrl,
+        country,
       },
     } = this.state;
-
-    this.setState({ formErrors: {} });
+    this.setState({ formErrors: {}, isLoading: true });
 
     UpdateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
@@ -117,22 +135,27 @@ class Contacts extends Component<PropsType, StateType> {
       id: store.id,
       email,
       phone,
+      country,
       address,
       facebookUrl,
       twitterUrl,
       instagramUrl,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
+
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -142,13 +165,16 @@ class Contacts extends Component<PropsType, StateType> {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -161,17 +187,12 @@ class Contacts extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 
   // TODO: extract to helper
-  renderInput = ({
-    id,
-    label,
-    icon,
-    limit,
-  }: InputType) => (
+  renderInput = ({ id, label, icon, limit }: InputType) => (
     <div styleName="formItem">
       <Input
         isUrl={Boolean(icon)}
@@ -187,38 +208,49 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem } = this.state;
+    const { activeItem, isLoading, form } = this.state;
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <Menu
-              activeItem={activeItem}
-              switchMenu={this.switchMenu}
-            />
+            <Menu activeItem={activeItem} switchMenu={this.switchMenu} />
           </Col>
           <Col size={10}>
             <div styleName="container">
-              <Header title="Контакты" />
+              <Header title="Contacts" />
               <div styleName="form">
                 {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
                 {this.renderInput({ id: 'phone', label: 'Phone' })}
-                {this.renderInput({ id: 'facebookUrl', label: 'Facebook', icon: 'facebook' })}
-                {this.renderInput({ id: 'instagramUrl', label: 'Instagram', icon: 'instagram' })}
-                {this.renderInput({ id: 'twitterUrl', label: 'Twitter', icon: 'twitter' })}
+                {this.renderInput({
+                  id: 'facebookUrl',
+                  label: 'Facebook',
+                  icon: 'facebook',
+                })}
+                {this.renderInput({
+                  id: 'instagramUrl',
+                  label: 'Instagram',
+                  icon: 'instagram',
+                })}
+                {this.renderInput({
+                  id: 'twitterUrl',
+                  label: 'Twitter',
+                  icon: 'twitter',
+                })}
                 <div styleName="formItem">
                   <AddressForm
+                    country={form.country}
+                    address={form.address}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
                   />
                 </div>
                 <div styleName="formItem">
-                  <Button
-                    type="button"
+                  <SpinnerButton
                     onClick={this.handleUpdate}
+                    isLoading={isLoading}
                   >
                     Save
-                  </Button>
+                  </SpinnerButton>
                 </div>
               </div>
             </div>
@@ -238,7 +270,7 @@ export default createFragmentContainer(
   Page(Contacts),
   graphql`
     fragment Contacts_me on User
-    @argumentDefinitions(storeId: { type: "Int!" }) {
+      @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
         id
         rawId
@@ -252,6 +284,7 @@ export default createFragmentContainer(
         twitterUrl
         instagramUrl
         address
+        country
       }
     }
   `,

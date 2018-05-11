@@ -1,0 +1,62 @@
+{
+  "c3RvcmVzfGF0dHJpYnV0ZXwz": [
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+      "value": "Red",
+      "title": "Colour",
+      "uiElement": "COLOR_PICKER"
+    },
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+      "value": "Black",
+      "title": "Colour",
+      "uiElement": "COLOR_PICKER"
+    },
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+      "value": "Blue",
+      "title": "Colour",
+      "uiElement": "COLOR_PICKER"
+    },
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+      "value": "Brown",
+      "title": "Colour",
+      "uiElement": "COLOR_PICKER"
+    }
+  ],
+  "c3RvcmVzfGF0dHJpYnV0ZXwy": [
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+      "value": "Glass",
+      "title": "Material",
+      "uiElement": "COMBOBOX"
+    },
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+      "value": "Tree",
+      "title": "Material",
+      "uiElement": "COMBOBOX"
+    }
+  ],
+  "c3RvcmVzfGF0dHJpYnV0ZXwx": [
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+      "value": "46",
+      "title": "Size",
+      "uiElement": "CHECKBOX"
+    },
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+      "value": "44",
+      "title": "Size",
+      "uiElement": "CHECKBOX"
+    },
+    {
+      "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+      "value": "50",
+      "title": "Size",
+      "uiElement": "CHECKBOX"
+    }
+  ]
+}

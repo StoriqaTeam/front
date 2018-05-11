@@ -1,0 +1,75 @@
+@import "../../../styles/variables";
+
+$gray_border: #e1e1e1;
+
+.container {
+  display: inline-block;
+}
+
+h4 {
+  color: $color_grey_text;
+  font-size: 1.75rem;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 2.625rem;
+  letter-spacing: 1.2px;
+  line-height: normal;
+  margin: 15px 0;
+  text-align: left;
+  text-transform: uppercase;
+  width: 9.75rem;
+}
+
+.sizes {
+  align-items: center;
+  display: flex;
+}
+
+.size {
+  align-self: center;
+  border: solid 1px $gray_border;
+  color: #a1a1a1;
+  font-size: 16px;
+  height: 5rem;
+  line-height: 36px;
+  opacity: 1;
+  position: relative;
+  text-align: center;
+  width: 58px;
+
+  &.clicked {
+    border: 1px solid $color_primary !important;
+  }
+
+  &.clicked + button {
+    border-left: 1px solid transparent;
+  }
+
+  &.opaque:not(:first-child) {
+    border-left: 1px solid $gray_border !important;
+
+    & + button {
+      // border-right: 1px solid transparent !important;
+    }
+
+  }
+  // apply transparent border-right except the last one
+  &:not(:last-child) {
+    border-right: 1px solid transparent;
+  }
+
+}
+
+.opaque {
+  opacity: 0.3;
+}
+
+.separator {
+  border-right: 1px solid $gray_border !important;
+  height: 5rem;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 1px;
+}

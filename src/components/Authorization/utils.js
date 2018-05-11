@@ -16,9 +16,14 @@ function isCapsLockOn(evt: SyntheticEvent) {
  * @param {String} errorMessage = ''
  * @return {string}
  */
-function setErrorMessage(value, validModel, message = 'Invalid', errorMessage = '') {
+function setErrorMessage(
+  value,
+  validModel,
+  message = 'Invalid',
+  errorMessage = '',
+) {
   // check for enabling custom error message.
-  const error = (errorMessage !== '') ? errorMessage : message;
+  const error = errorMessage !== '' ? errorMessage : message;
   let formError = '';
   formError = validModel ? '' : ` ${error}`;
   // fallback
@@ -32,7 +37,7 @@ function setErrorMessage(value, validModel, message = 'Invalid', errorMessage = 
  * @return {Array|null}
  */
 function validateEmail(value) {
-  const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const isValid = !!value.match(emailRegex);
   return isValid;
 }
@@ -79,17 +84,32 @@ function validateField(name, value, validate, errorMessage) {
       break;
     case 'number':
       validModel = validateNumber(value);
-      formError = setErrorMessage(value, validModel, 'Only numbers', errorMessage);
+      formError = setErrorMessage(
+        value,
+        validModel,
+        'Only numbers',
+        errorMessage,
+      );
       break;
     case 'email':
       validModel = validateEmail(value);
-      formError = setErrorMessage(value, validModel, 'Invalid Email', errorMessage);
+      formError = setErrorMessage(
+        value,
+        validModel,
+        'Invalid Email',
+        errorMessage,
+      );
       break;
     case 'password':
       passwordQualityResult = passwordQuality(value);
       // check that every value is true.
       validModel = Object.values(passwordQualityResult).every(p => p === true);
-      formError = setErrorMessage(value, validModel, 'Invalid Password', errorMessage);
+      formError = setErrorMessage(
+        value,
+        validModel,
+        'Invalid Password',
+        errorMessage,
+      );
       break;
     default:
       break;

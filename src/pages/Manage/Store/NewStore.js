@@ -2,11 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  assocPath,
-  pathOr,
-  toUpper,
-} from 'ramda';
+import { assocPath, pathOr, toUpper } from 'ramda';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
@@ -24,6 +20,7 @@ type StateType = {
   activeItem: string,
   serverValidationErrors: any,
   logoUrl?: string,
+  isLoading: boolean,
 };
 
 type PropsType = {
@@ -34,6 +31,7 @@ class NewStore extends Component<PropsType, StateType> {
   state: StateType = {
     activeItem: 'settings',
     serverValidationErrors: {},
+    isLoading: false,
   };
 
   handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
@@ -45,10 +43,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   handleSave = ({ form, optionLanguage }) => {
-    const {
-      environment,
-      currentUser,
-    } = this.context;
+    const { environment, currentUser, showAlert } = this.context;
     const {
       name,
       longDescription,
@@ -58,45 +53,53 @@ class NewStore extends Component<PropsType, StateType> {
       slogan,
     } = form;
     const { logoUrl } = this.state;
+    this.setState(() => ({ isLoading: true }));
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
-      name: [
-        { lang: optionLanguage, text: name },
-      ],
+      name: [{ lang: optionLanguage, text: name }],
       defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [
-        { lang: optionLanguage, text: longDescription },
-      ],
-      shortDescription: [
-        { lang: optionLanguage, text: shortDescription },
-      ],
+      longDescription: [{ lang: optionLanguage, text: longDescription }],
+      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
       slug,
       slogan,
       logo: logoUrl,
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState(() => ({ isLoading: false }));
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
-        const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        this.props.router.push(`/manage/store/${storeId}`);
+        // $FlowIgnoreMe
+        const storeId: ?number = pathOr(
+          null,
+          ['createStore', 'rawId'],
+          response,
+        );
+        if (storeId) {
+          this.props.router.push(`/manage/store/${storeId}`);
+        }
+        showAlert('Store created!', false);
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
 
+        // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         if (validationErrors) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
 
+        // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
@@ -108,12 +111,12 @@ class NewStore extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = (activeItem) => {
+  switchMenu = activeItem => {
     this.setState({ activeItem });
   };
 
   render() {
-    const { activeItem, logoUrl } = this.state;
+    const { activeItem, logoUrl, isLoading } = this.state;
     return (
       <Container>
         <Row>
@@ -129,6 +132,7 @@ class NewStore extends Component<PropsType, StateType> {
             <div styleName="container">
               <Form
                 onSave={this.handleSave}
+                isLoading={isLoading}
                 serverValidationErrors={this.state.serverValidationErrors}
               />
             </div>
@@ -145,4 +149,5 @@ NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,
   directories: PropTypes.object,
   currentUser: currentUserShape,
+  showAlert: PropTypes.func,
 };

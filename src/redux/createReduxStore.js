@@ -2,15 +2,18 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createHistoryEnhancer, queryMiddleware } from 'farce/lib';
-import { createMatchEnhancer, Matcher, makeRouteConfig, hotRouteConfig } from 'found/lib';
+import {
+  createMatchEnhancer,
+  Matcher,
+  makeRouteConfig,
+  hotRouteConfig,
+} from 'found/lib';
 
 import routes from 'routes';
 import createReducers from 'redux/reducers/createReducers';
 
 const generateStore = (historyProtocol, initialState) => {
-  const middlewares = [
-    thunk,
-  ];
+  const middlewares = [thunk];
   const routesConfig = hotRouteConfig(makeRouteConfig(routes));
   if (process.env.NODE_ENV !== 'production') {
     const logger = createLogger({ collapsed: true });

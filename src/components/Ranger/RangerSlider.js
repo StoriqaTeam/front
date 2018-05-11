@@ -40,7 +40,7 @@ type PropsType = {
 type StateType = {
   limit: number,
   grab: number,
-}
+};
 
 class RangerSlider extends React.Component<PropsType, StateType> {
   static defaultProps = {
@@ -78,24 +78,19 @@ class RangerSlider extends React.Component<PropsType, StateType> {
 
   getValueFromPosition = (pos: number, buttonNumber: number) => {
     const { limit } = this.state;
-    const {
-      orientation,
-      min,
-      max,
-      step,
-      value,
-      value2,
-    } = this.props;
+    const { orientation, min, max, step, value, value2 } = this.props;
 
     if (buttonNumber === 1) {
       const percentage = clamp(pos, 0, limit) / (limit || 1);
-      const baseVal = step * Math.round((percentage * (max - min)) / step);
-      const newValue = orientation === 'horizontal' ? baseVal + min : max - baseVal;
+      const baseVal = step * Math.round(percentage * (max - min) / step);
+      const newValue =
+        orientation === 'horizontal' ? baseVal + min : max - baseVal;
       return clamp(newValue < value2 ? newValue : value2, min, max);
     }
     const percentage = clamp(pos, min, limit) / (limit || 1);
-    const baseVal = step * Math.round((percentage * (max - min)) / step);
-    const newValue = orientation === 'horizontal' ? baseVal + min : max - baseVal;
+    const baseVal = step * Math.round(percentage * (max - min) / step);
+    const newValue =
+      orientation === 'horizontal' ? baseVal + min : max - baseVal;
     return clamp(newValue > value ? newValue : value, min, max);
   };
 
@@ -148,16 +143,16 @@ class RangerSlider extends React.Component<PropsType, StateType> {
     if (onChange2) onChange2(value, e);
   };
 
-  handleEnd = (e: Event) => {
+  handleEnd = () => {
     const { onChangeComplete, value, value2 } = this.props;
-    if (onChangeComplete) onChangeComplete(value, value2, e);
+    if (onChangeComplete) onChangeComplete(value, value2);
     document.removeEventListener('mousemove', this.handleDrag);
     document.removeEventListener('mouseup', this.handleEnd);
   };
 
-  handleEnd2 = (e: Event) => {
+  handleEnd2 = () => {
     const { onChangeComplete, value, value2 } = this.props;
-    if (onChangeComplete) onChangeComplete(value, value2, e);
+    if (onChangeComplete) onChangeComplete(value, value2);
     document.removeEventListener('mousemove', this.handleDrag2);
     document.removeEventListener('mouseup', this.handleEnd2);
   };
@@ -184,9 +179,8 @@ class RangerSlider extends React.Component<PropsType, StateType> {
     const value = this.getValueFromPosition(pos, buttonNumber);
     const position = this.getPositionFromValue(value);
     const handlePos = orientation === 'horizontal' ? position + grab : position;
-    const fillPos = orientation === 'horizontal'
-      ? handlePos
-      : limit - handlePos;
+    const fillPos =
+      orientation === 'horizontal' ? handlePos : limit - handlePos;
     return {
       fill: fillPos,
       handle: handlePos,
@@ -195,29 +189,31 @@ class RangerSlider extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      value,
-      value2,
-      orientation,
-      className,
-      min,
-      max,
-    } = this.props;
+    const { value, value2, orientation, className, min, max } = this.props;
     const { direction } = constants.orientation[orientation];
     const position = this.getPositionFromValue(value);
     const position2 = this.getPositionFromValue(value2);
     const coords = this.coordinates(position, 1);
     const coords2 = this.coordinates(position2, 2);
-    const fillStyle = { marginLeft: `${coords.fill}px`, width: `${coords2.fill - coords.fill}px` };
-    const handleStyle = { [direction]: `${coords.handle}px` };
-    const handleStyle2 = { [direction]: `${coords2.handle}px` };
+    const fillStyle = {
+      marginLeft: `${coords.fill}px`,
+      width: `${coords2.fill - coords.fill}px`,
+    };
+    const handleStyle = {
+      [direction]: `${coords.handle}px`,
+      zIndex: coords.handle >= 100 ? 999 : 1,
+    };
+    const handleStyle2 = {
+      [direction]: `${coords2.handle}px`,
+      zIndex: coords2.handle < 100 ? 999 : 1,
+    };
 
     return (
       <div styleName="rangerContainer">
         <div
           role="slider"
           tabIndex="-1"
-          ref={(s) => {
+          ref={s => {
             this.slider = s;
           }}
           styleName={cx(
@@ -234,7 +230,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
           <div styleName="rangesliderFill" style={fillStyle} />
           <div
             role="button"
-            ref={(sh) => {
+            ref={sh => {
               this.handle = sh;
             }}
             styleName="rangesliderHandle"
@@ -246,7 +242,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
           />
           <div
             role="button"
-            ref={(sh) => {
+            ref={sh => {
               this.handle2 = sh;
             }}
             styleName="rangesliderHandle2"

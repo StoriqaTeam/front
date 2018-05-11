@@ -27,7 +27,7 @@ type ProductType = {
   }>,
   currencyId: number,
   variants: {
-    first: {
+    ['first' | 'mostDiscount']: {
       rawId: number,
       discount: number,
       photoMain: string,
@@ -35,9 +35,8 @@ type ProductType = {
       price: number,
     },
   },
-}
+};
 
-/* eslint-disable */
 type PropsType = {
   mainPage: {
     findMostViewedProducts: ?{
@@ -51,62 +50,69 @@ type PropsType = {
       }>,
     },
   },
-}
-/* eslint-enable */
+};
 
 class Start extends PureComponent<PropsType> {
   render() {
-    const mostViewedProducts = pathOr([], [
-      'mainPage',
-      'findMostViewedProducts',
-      'edges',
-    ], this.props);
-    const mostDiscountProducts = pathOr([], [
-      'mainPage',
-      'findMostDiscountProducts',
-      'edges',
-    ], this.props);
-    // prepare arrays
-    const variantsToArr = variantsName => pipe(
-      path(['node']),
-      i => assoc('storeId', i.rawId, i),
-      evolve({
-        variants: (i) => {
-          if (variantsName === 'all') {
-            return path([variantsName], i);
-          }
-          return [path([variantsName], i)];
-        },
-      }),
+    const { mainPage } = this.props;
+    const mostViewedProducts = pathOr(
+      [],
+      ['findMostViewedProducts', 'edges'],
+      // $FlowIgnoreMe
+      mainPage,
     );
-    const discountProducts = map(variantsToArr('mostDiscount'), mostDiscountProducts);
+    const mostDiscountProducts = pathOr(
+      [],
+      ['findMostDiscountProducts', 'edges'],
+      // $FlowIgnoreMe
+      mainPage,
+    );
+    // prepare arrays
+    const variantsToArr = variantsName =>
+      pipe(
+        path(['node']),
+        i => assoc('storeId', i.rawId, i),
+        evolve({
+          variants: i => {
+            if (variantsName === 'all') {
+              return path([variantsName], i);
+            }
+            return [path([variantsName], i)];
+          },
+        }),
+      );
+    const discountProducts = map(
+      variantsToArr('mostDiscount'),
+      mostDiscountProducts,
+    );
     const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
     return (
       <div styleName="container">
-        <div styleName="item">
+        <div styleName="item bannerSliderItem">
           <BannersSlider items={bannersSlider} />
         </div>
-        {viewedProducts && viewedProducts.length > 0 &&
-          <div styleName="item">
-            <GoodsSlider
-              items={viewedProducts}
-              title="Most Popular"
-            />
-          </div>
-        }
-        {discountProducts && discountProducts.length > 0 &&
-          <div styleName="item">
-            <GoodsSlider
-              items={discountProducts}
-              title="Sale"
-            />
-          </div>
-        }
+        <div styleName="item goodSliderItem">
+          {viewedProducts &&
+            viewedProducts.length > 0 && (
+              <GoodsSlider
+                items={viewedProducts}
+                title="Most Popular"
+                seeAllUrl="/categories?search=&sortBy=VIEWS"
+              />
+            )}
+        </div>
+        <div styleName="item goodSliderItem">
+          {discountProducts &&
+            discountProducts.length > 0 && (
+              <GoodsSlider
+                items={discountProducts}
+                title="Sale"
+                seeAllUrl="/categories?search=&sortBy=PRICE_ASC"
+              />
+            )}
+        </div>
         <div styleName="item">
-          <BannersRow
-            items={bannersRow}
-            count={2}
-          />
+          <BannersRow items={bannersRow} count={2} />
         </div>
       </div>
     );
@@ -124,7 +130,7 @@ export default createFragmentContainer(
   Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
-      findMostViewedProducts(searchTerm: {options: {attrFilters: []}}) {
+      findMostViewedProducts(searchTerm: { options: { attrFilters: [] } }) {
         edges {
           node {
             rawId
@@ -138,7 +144,6 @@ export default createFragmentContainer(
             currencyId
             variants {
               first {
-                id
                 rawId
                 discount
                 photoMain
@@ -146,10 +151,11 @@ export default createFragmentContainer(
                 price
               }
             }
+            rating
           }
         }
       }
-      findMostDiscountProducts(searchTerm: {options: {attrFilters: []}}) {
+      findMostDiscountProducts(searchTerm: { options: { attrFilters: [] } }) {
         edges {
           node {
             rawId
@@ -170,6 +176,7 @@ export default createFragmentContainer(
                 price
               }
             }
+            rating
           }
         }
       }

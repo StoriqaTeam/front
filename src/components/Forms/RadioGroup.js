@@ -34,7 +34,8 @@ class RadioGroup extends PureComponent<PropsType> {
     const { items, label } = this.props;
     return (
       <div>
-        {label}<br />
+        {label}
+        <br />
         {items.map(this.renderItem)}
       </div>
     );

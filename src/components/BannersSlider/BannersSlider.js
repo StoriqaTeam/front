@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Slider } from 'components/Slider';
-import { Button } from 'components/Button';
 
 import './BannersSlider.scss';
 
@@ -15,22 +14,13 @@ const BannersSlider = (props: PropsTypes) => (
     <Slider
       dots
       infinity
-      // autoplaySpeed={15000}
       animationSpeed={500}
+      autoplaySpeed={4000}
       type="banners"
       items={props.items}
       slidesToShow={1}
     />
-    <div styleName="button">
-      <Button
-        white
-        href={process.env.REACT_APP_HOST ? `${process.env.REACT_APP_HOST}/manage/store/new` : '/'}
-      >
-        Start selling
-      </Button>
-    </div>
   </div>
 );
 
 export default BannersSlider;
-

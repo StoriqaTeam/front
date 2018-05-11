@@ -17,7 +17,13 @@ import { curry, reduce, assoc, keys } from 'ramda';
 renameKeys({ firstName: 'name', type: 'kind', foo: 'bar' })(input)
 //=> { name: 'Elisia', age: 22, kind: 'human' } */
 
+// $FlowIgnoreMe
 const renameKeys = curry((keysMap, obj) =>
-  reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj)));
+  reduce(
+    (acc, key) => assoc(keysMap[key] || key, obj[key], acc),
+    {},
+    keys(obj),
+  ),
+);
 
 export default renameKeys;

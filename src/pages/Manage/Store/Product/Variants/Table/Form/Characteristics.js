@@ -8,32 +8,52 @@ import CharacteristicItem from './CharacteristicItem';
 
 import './Characteristics.scss';
 
+type AttributeValueType = {
+  attrId: number,
+  value: string,
+  metaField?: {
+    translations: Array<{ lang: string, text: string }>,
+  },
+};
+
 type PropsType = {
-  onChange: Function => void,
-  values: Array<{ attrId: string, value: string, metaField?: string }>,
-  category: { getAttributes: Array<{}> },
+  onChange: Function,
+  values: Array<AttributeValueType>,
+  category: {
+    getAttributes: Array<{
+      rawId: number,
+    }>,
+  },
 };
 
 class Characteristics extends PureComponent<PropsType> {
-  handleItemChange = (attribute: { attrId: number, value: string, metaField?: string }) => {
+  handleItemChange = (attribute: AttributeValueType) => {
     const { attrId, value, metaField } = attribute;
-    const filteredItems = filter(item => item.attrId !== attrId, this.props.values);
+    const filteredItems = filter(
+      item => item.attrId !== attrId,
+      this.props.values,
+    );
     filteredItems.push({ attrId, value, metaField });
     this.props.onChange(filteredItems);
   };
 
   render() {
+    // $FlowIgnoreMe
     const attributes = pathOr([], ['getAttributes'], this.props.category);
     return (
       <div styleName="container">
-        <div styleName="title">Characteristics</div>
+        <div styleName="title">
+          <strong>Characteristics</strong>
+        </div>
         <div styleName="items">
           {attributes.map(item => (
             <CharacteristicItem
               key={item.id}
               attribute={item}
               onSelect={this.handleItemChange}
-              value={head(filter(propEq('attrId', item.rawId), this.props.values))}
+              value={head(
+                filter(propEq('attrId', item.rawId), this.props.values),
+              )}
             />
           ))}
         </div>

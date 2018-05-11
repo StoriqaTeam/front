@@ -4,7 +4,7 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation GetJWTByProviderMutation($input:CreateJWTProviderInput!) {
+  mutation GetJWTByProviderMutation($input: CreateJWTProviderInput!) {
     getJWTByProvider(input: $input) {
       token
     }
@@ -19,18 +19,19 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => commitMutation(params.environment, {
-  mutation,
-  variables: {
-    input: {
-      clientMutationId: '',
-      provider: params.provider,
-      token: params.token,
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
+    mutation,
+    variables: {
+      input: {
+        clientMutationId: '',
+        provider: params.provider,
+        token: params.token,
+      },
     },
-  },
-  onCompleted: params.onCompleted,
-  onError: params.onError,
-});
+    onCompleted: params.onCompleted,
+    onError: params.onError,
+  });
 
 export default { commit };
 

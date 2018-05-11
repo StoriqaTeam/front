@@ -2,6 +2,10 @@
 
 import React, { PureComponent } from 'react';
 
+import ImageLoader from 'libs/react-image-loader';
+
+import BannerLoading from './BannerLoading';
+
 import './Banner.scss';
 
 type PropsTypes = {
@@ -10,21 +14,15 @@ type PropsTypes = {
     img: string,
     link: string,
   },
-}
+};
 
 class Banner extends PureComponent<PropsTypes> {
   render() {
     const { item } = this.props;
     return (
-      <div
-        styleName="container"
-        target="_blank"
-      >
+      <div styleName="container" target="_blank">
         <div styleName="wrap">
-          <img
-            src={item.img}
-            alt="img"
-          />
+          <ImageLoader src={item.img} loader={<BannerLoading />} />
         </div>
       </div>
     );

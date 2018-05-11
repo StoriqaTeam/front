@@ -7,7 +7,7 @@
 .input input {
   position: relative;
   width: 100%;
-  border-bottom: 1px solid $color_grey_bg;
+  border-bottom: 1px solid $color_grey_border2;
   font-size: 14px;
   line-height: 3rem;
   text-align: left;
@@ -27,7 +27,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  border: 1px solid $color_grey_bg;
+  border: 1px solid $color_blue_1;
   transform: scaleX(0);
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
@@ -67,8 +67,12 @@
 }
 
 .labelFloat {
-  transform: scale(0.75) translate(0, -3.5rem);
+  transform: scale(0.9) translate(0, -2.6rem);
   transform-origin: left top 0;
+}
+
+.isFocus .labelFloat {
+  color: $color_blue_1;
 }
 
 .message {

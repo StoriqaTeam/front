@@ -25,18 +25,20 @@ type ProductType = {
       price: number,
     },
   },
-}
+  rating: number,
+};
 
 type PropsTypes = {
   items: Array<{
     node: ProductType,
   }>,
   title: string,
+  seeAllUrl: ?string,
 };
 
 class GoodsSlider extends PureComponent<PropsTypes> {
   render() {
-    const { items, title } = this.props;
+    const { items, title, seeAllUrl } = this.props;
     return (
       <div styleName="container">
         <Slider
@@ -46,6 +48,7 @@ class GoodsSlider extends PureComponent<PropsTypes> {
           type="products"
           items={items}
           slidesToShow={4}
+          seeAllUrl={seeAllUrl}
         />
       </div>
     );
