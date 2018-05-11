@@ -1,1 +1,1 @@
-export { default as WizardWrapper } from './WizardWrapper';
+export { default as Wizard } from './Wizard';

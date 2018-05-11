@@ -15,7 +15,7 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
-import { WizardWrapper } from 'pages/Manage/Wizard';
+import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
@@ -164,7 +164,28 @@ const routes = (
         }}
         Component={() => <div />}
       >
-        <Route path="/wizard" Component={WizardWrapper} />
+        <Route
+          path="/wizard"
+          Component={Wizard}
+          query={graphql`
+            query routes_Wizard_Query {
+              me {
+                id
+                wizardStore {
+                  id
+                  rawId
+                  storeId
+                  name
+                  slug
+                  shortDescription
+                  address
+                  country
+                  defaultLanguage
+                }
+              }
+            }
+          `}
+        />
         <Route path="/store">
           <Route path="/new" exact Component={NewStore} />
           <Route

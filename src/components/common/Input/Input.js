@@ -21,6 +21,7 @@ type PropsType = {
   inputRef: ?(e: any) => void,
   isAutocomplete: ?boolean,
   limit: ?number,
+  fullWidth: ?boolean,
 };
 
 type StateType = {
@@ -94,15 +95,16 @@ class Input extends Component<PropsType, StateType> {
   }
 
   render() {
-    const { id, value, label, errors, icon, isUrl, limit } = this.props;
+    const { id, value, label, errors, icon, isUrl, limit, fullWidth } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
       <label
         htmlFor={id}
         styleName={classNames('container', {
-          isError: errors,
           isFocus,
+          isError: errors,
           isIcon: icon,
+          fullWidth,
         })}
       >
         {label && (
