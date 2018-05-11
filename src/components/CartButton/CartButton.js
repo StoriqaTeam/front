@@ -21,7 +21,7 @@ class CartButton extends PureComponent<PropsTypes> {
           <div styleName="amount">
             <Count amount={32} type="blue" />
           </div>
-        )}
+        }
         <div styleName="icon">
           <Icon type="cart" size="16" />
         </div>

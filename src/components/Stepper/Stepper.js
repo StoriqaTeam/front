@@ -32,9 +32,7 @@ class Stepper extends Component<PropsType, StateType> {
 
   valid(val: number): boolean {
     return (
-      // $FlowIgnore
       (isNil(this.props.min) || val >= this.props.min) &&
-      // $FlowIgnore
       (isNil(this.props.max) || val <= this.props.max)
     );
   }
@@ -43,14 +41,11 @@ class Stepper extends Component<PropsType, StateType> {
   coerce(val: ?number): number {
     let value = isNil(val) ? (this.props.min || this.props.max || 0) : val;
     if (!isNil(this.props.min)) {
-      // $FlowIgnore
       value = Math.max(this.props.min, value);
     }
     if (!isNil(this.props.max)) {
-      // $FlowIgnore
       value = Math.min(this.props.max, value);
     }
-    // $FlowIgnore
     return value;
   }
 

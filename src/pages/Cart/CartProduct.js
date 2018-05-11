@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pipe, path, pathOr, map, head } from 'ramda';
+import { pipe, path, pathOr, map, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 
 import { Checkbox } from 'components/Checkbox';
@@ -36,7 +36,7 @@ class CartProduct extends PureComponent<PropsType> {
         if (response) { log.debug('Response: ', response); }
         if (errors) { log.debug('Errors: ', errors); }
       },
-      onError: (error) => {
+      onError: error => {
         log.error('Error in DeleteFromCart mutation');
         log.error(error);
         // eslint-disable-next-line
@@ -55,7 +55,7 @@ class CartProduct extends PureComponent<PropsType> {
         if (response) { log.debug('Response: ', response); }
         if (errors) { log.debug('Errors: ', errors); }
       },
-      onError: (error) => {
+      onError: error => {
         log.error('Error in SetSelectionInCart mutation');
         log.error(error);
         // eslint-disable-next-line
@@ -74,7 +74,7 @@ class CartProduct extends PureComponent<PropsType> {
         if (response) { log.debug('Response: ', response); }
         if (errors) { log.debug('Errors: ', errors); }
       },
-      onError: (error) => {
+      onError: error => {
         log.error('Error in SetQuantityInCart mutation');
         log.error(error);
         // eslint-disable-next-line
@@ -86,9 +86,10 @@ class CartProduct extends PureComponent<PropsType> {
   render() {
     const { product } = this.props;
     if (!product) return null;
-    const name = pipe(
+    const name: ?string = pipe(
       pathOr([], ['name']),
       head,
+      defaultTo({}),
       path(['text']),
     )(product);
     const {
