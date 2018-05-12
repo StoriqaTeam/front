@@ -11,6 +11,8 @@ import CartProductAttribute from './CartProductAttribute';
 
 import './CartTotal.scss';
 
+const STICKY_THRESHOLD_REM = 90;
+
 type Totals = { [storeId: string]: { productsCost: number, deliveryCost: number, totalCount: number }}
 
 type PropsType = {
@@ -49,12 +51,19 @@ class CartTotal extends Component<PropsType, StateType> {
   handleScroll() {
     if (!window) return;
     if (!this.ref || !this.props.storesRef) return;
+    const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
     const offset = window.pageYOffset;
+    // $FlowIgnoreMe
     const rect = this.ref.getBoundingClientRect();
     const height = rect.bottom - rect.top;
     // $FlowIgnoreMe
     const { top: viewTop, bottom: viewBottom } = this.props.storesRef.getBoundingClientRect();
-    const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+    if ((viewBottom - viewTop) < STICKY_THRESHOLD_REM * rem) {
+      if (this.state.currentClass !== 'top') {
+        this.setState({ currentClass: 'top' });
+      }
+      return;
+    }
     const top = viewTop + (offset - (STICKY_PADDING_TOP_REM * rem));
     const bottom = viewBottom +
       (offset - ((STICKY_PADDING_TOP_REM + STICKY_PADDING_BOTTOM_REM) * rem));
@@ -146,7 +155,10 @@ class CartTotal extends Component<PropsType, StateType> {
         <div styleName="totals-container">
           <CartProductAttribute title="Products cost" value={`${productsCost} STQ`} />
           <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
-          <CartProductAttribute title={`Total (${totalCount} items)`} value={`${productsCost + deliveryCost} STQ`} />
+          <CartProductAttribute 
+            title={<div><span>Total</span><span style={{color: '#8fb62c'}}>{` (${totalCount} items)`}</span></div>} 
+            value={`${productsCost + deliveryCost} STQ`}
+          />
         </div>
         <div styleName="checkout">
           <Button disabled big>Checkout</Button>

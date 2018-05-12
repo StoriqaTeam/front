@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 import './CartProductAttribute.scss';
 
 type PropsType = {
-  title: string,
+  title: string | any,
   value: string | any,
 };
 
