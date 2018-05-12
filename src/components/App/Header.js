@@ -1,7 +1,10 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import { graphql } from 'react-relay';
+import PropTypes from 'prop-types';
 import { Link } from 'found';
+import { pipe, pathOr, path, map, prop, propEq, sum, chain, reject, isNil, find } from 'ramda';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -12,14 +15,88 @@ import { Icon } from 'components/Icon';
 
 import { Container, Row, Col } from 'layout';
 
+import type HeaderStoresLocalQueryResponse from './__generated__/HeaderStoresLocalQuery.graphql';
 import './Header.scss';
+
+const STORES_QUERY = graphql`
+query HeaderStoresLocalQuery {
+  me {
+    cart {
+      stores {
+        edges {
+          node {
+            products {
+              id
+              quantity
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
+const getCartCount: (data: HeaderStoresLocalQueryResponse) => number =
+  data =>
+    pipe(
+      pathOr([], ['edges']),
+      chain(pathOr([], ['node', 'products'])),
+      reject(isNil),
+      map(prop('quantity')),
+      reject(isNil),
+      sum
+    )(data);
 
 type PropsType = {
   user: ?{},
   searchValue: string,
 };
 
-class Header extends PureComponent<PropsType> {
+type StateType = {
+  cartCount: number,
+}
+
+class Header extends Component<PropsType, StateType> {
+  state = {
+    cartCount: 0,
+  }
+
+  componentWillMount() {
+    const store = this.context.environment.getStore();
+    const source = store.getSource().toJSON();
+    const meId = path(['client:root', 'me', '__ref'])(source);
+    if (!meId) return;
+    const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
+    const queryNode = pipe(
+      prop('operation'),
+      prop('selections'),
+      find(propEq('name', 'me')),
+      prop('selections'),
+      find(propEq('name', 'cart')),
+      prop('selections'),
+      find(propEq('name', 'stores')),
+    )(STORES_QUERY());
+    const snapshot = store.lookup({
+      dataID: connectionId,
+      node: queryNode,
+    });
+    const { dispose } = store.subscribe(snapshot, s => {
+      this.setState({ cartCount: getCartCount(s.data) });
+    });
+    this.dispose = dispose;
+    // console.log("--------------", source, snapshot);
+    this.setState({ cartCount: getCartCount(snapshot.data) });
+  }
+
+  componentWillUnmount() {
+    if (this.dispose) {
+      this.dispose();
+    }
+  }
+
+  dispose: () => void;
+
   render() {
     const { user, searchValue } = this.props;
     return (
@@ -89,7 +166,7 @@ class Header extends PureComponent<PropsType> {
                   <UserDropdown user={user} />
                 </div>
                 <div styleName="cartIcon">
-                  <CartButton href="/cart" amount={0} />
+                  <CartButton href="/cart" amount={this.state.cartCount} />
                 </div>
                 <div styleName="buttonWrapper">
                   <Button
@@ -113,3 +190,7 @@ class Header extends PureComponent<PropsType> {
 }
 
 export default Header;
+
+Header.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};

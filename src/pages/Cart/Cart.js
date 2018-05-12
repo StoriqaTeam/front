@@ -95,10 +95,17 @@ class Cart extends Component<PropsType, StateType> {
       dataID: connectionId,
       node: queryNode,
     });
-    store.subscribe(snapshot, s => {
+    const { dispose } = store.subscribe(snapshot, s => {
       this.setState({ totals: getTotals(s.data) });
     });
+    this.dispose = dispose;
     this.setState({ totals: getTotals(snapshot.data) });
+  }
+
+  componentWillUnmount() {
+    if (this.dispose) {
+      this.dispose();
+    }
   }
 
   setStoresRef(ref) {
@@ -108,6 +115,7 @@ class Cart extends Component<PropsType, StateType> {
   }
 
   storesRef: any;
+  dispose: () => void;
 
   totalsForStore(id: string) {
     return this.state.totals[id] || { productsCost: 0, deliveryCost: 0, totalCount: 0 };
