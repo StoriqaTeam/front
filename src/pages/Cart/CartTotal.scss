@@ -64,7 +64,13 @@
 .payment-option-icon {
   position: absolute;
   right: 0;
+  display: flex;
+  height: 100%;
+  align-items: center;
   svg {
+    height: 2rem;
+  }
+  img {
     height: 2rem;
   }
 }

@@ -6,6 +6,11 @@ import { Button } from 'components/common/Button';
 import { pipe, values, reduce } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
 
+import master from './png/master.png';
+import visa from './png/visa.png';
+import btc from './png/btc.png';
+import eth from './png/eth.png';
+import stq from './png/stq.png';
 import Recycle from './svg/recycle.svg';
 import CartProductAttribute from './CartProductAttribute';
 
@@ -102,7 +107,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 5504 84** **** 3452
               </div>
               <div styleName="payment-option-icon">
-                <Recycle />
+                <img src={master} alt="master card" />
               </div>
             </div>
             
@@ -112,7 +117,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 5504 84** **** 5824
               </div>
               <div styleName="payment-option-icon">
-                <Recycle />
+                <img src={visa} alt="visa" />
               </div>
             </div>
           </div>
@@ -127,7 +132,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 STQ
               </div>
               <div styleName="payment-option-icon">
-                <Recycle />
+                <img src={stq} alt="stq" />
               </div>
             </div>
             
@@ -137,7 +142,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 BTC
               </div>
               <div styleName="payment-option-icon">
-                <Recycle />
+                <img src={btc} alt="btc" />
               </div>
             </div>
 
@@ -147,7 +152,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 ETH
               </div>
               <div styleName="payment-option-icon">
-                <Recycle />
+                <img src={eth} alt="eth" />
               </div>
             </div>
           </div>
