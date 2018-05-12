@@ -11,7 +11,6 @@ import visa from './png/visa.png';
 import btc from './png/btc.png';
 import eth from './png/eth.png';
 import stq from './png/stq.png';
-import Recycle from './svg/recycle.svg';
 import CartProductAttribute from './CartProductAttribute';
 
 import './CartTotal.scss';
