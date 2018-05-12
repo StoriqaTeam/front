@@ -4,7 +4,9 @@ import React, { Component } from 'react';
 import cn from 'classnames';
 import { Button } from 'components/common/Button';
 import { pipe, values, reduce } from 'ramda';
+import { Checkbox } from 'components/common/Checkbox';
 
+import Recycle from './svg/recycle.svg';
 import CartProductAttribute from './CartProductAttribute';
 
 import './CartTotal.scss';
@@ -77,9 +79,75 @@ class CartTotal extends Component<PropsType, StateType> {
         <div styleName="cart-total-title">
           Total
         </div>
-        <CartProductAttribute title="Products cost" value={`${productsCost} STQ`} />
-        <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
-        <CartProductAttribute title={`Total (${totalCount} items)`} value={`${productsCost + deliveryCost} STQ`} />
+        <div styleName="payments-container">
+          <div styleName="value">
+            Payment methods
+          </div>
+          <div styleName="payments-group">
+            <div styleName="title">
+              My cards
+            </div>
+            <div styleName="payment-option">
+              <Checkbox isChecked={false} />
+              <div styleName="payment-option-value">
+                5504 84** **** 3452
+              </div>
+              <div styleName="payment-option-icon">
+                <Recycle />
+              </div>
+            </div>
+            
+            <div styleName="payment-option">
+              <Checkbox isChecked={false} />
+              <div styleName="payment-option-value">
+                5504 84** **** 5824
+              </div>
+              <div styleName="payment-option-icon">
+                <Recycle />
+              </div>
+            </div>
+          </div>
+
+          <div styleName="payments-group">
+            <div styleName="title">
+              Crypto payments
+            </div>
+            <div styleName="payment-option">
+              <Checkbox isChecked />
+              <div styleName="payment-option-value">
+                STQ
+              </div>
+              <div styleName="payment-option-icon">
+                <Recycle />
+              </div>
+            </div>
+            
+            <div styleName="payment-option">
+              <Checkbox isChecked={false} />
+              <div styleName="payment-option-value">
+                BTC
+              </div>
+              <div styleName="payment-option-icon">
+                <Recycle />
+              </div>
+            </div>
+
+            <div styleName="payment-option">
+              <Checkbox isChecked={false} />
+              <div styleName="payment-option-value">
+                ETH
+              </div>
+              <div styleName="payment-option-icon">
+                <Recycle />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div styleName="totals-container">
+          <CartProductAttribute title="Products cost" value={`${productsCost} STQ`} />
+          <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
+          <CartProductAttribute title={`Total (${totalCount} items)`} value={`${productsCost + deliveryCost} STQ`} />
+        </div>
         <div styleName="checkout">
           <Button disabled big>Checkout</Button>
         </div>
