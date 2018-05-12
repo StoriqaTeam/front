@@ -32,18 +32,23 @@ const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
 
 class CartTotal extends Component<PropsType, StateType> {
+  constructor(props) {
+    super(props);
+    this.handleScroll = this.handleScrollEvent.bind(this);
+  }
+
   state = {
     currentClass: 'top',
   };
 
   componentDidMount() {
     if (!window) return;
-    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   componentWillUnmount() {
     if (!window) return;
-    window.removeEventListener('scroll', this.handleScroll.bind(this));
+    window.removeEventListener('scroll', this.handleScroll);
   }
 
   setRef(ref: ?Object) {
@@ -51,8 +56,11 @@ class CartTotal extends Component<PropsType, StateType> {
   }
 
   ref: ?Object;
-
-  handleScroll() {
+  scrolling: boolean;
+  handleScroll: () => void;
+  scrolling = false;
+  
+  updateStickiness() {
     if (!window) return;
     if (!this.ref || !this.props.storesRef) return;
     const rem = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
@@ -75,6 +83,16 @@ class CartTotal extends Component<PropsType, StateType> {
     if (offset >= top) { currentClass = 'sticky'; }
     if (offset + height >= bottom) { currentClass = 'bottom'; }
     if (this.ref.className !== currentClass) { this.ref.className = currentClass };
+  }
+
+  handleScrollEvent() {
+    if (!this.scrolling) {
+      window.requestAnimationFrame(() => {
+        this.updateStickiness();
+        this.scrolling = false;
+      })
+      this.scrolling = true;
+    }
   }
 
   render() {
