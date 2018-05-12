@@ -66,9 +66,10 @@ class CartProduct extends PureComponent<PropsType> {
   }
 
   handleQuantityChange(newVal) {
-    const id = this.props.product.rawId;
+    const {rawId: productId, id: nodeId} = this.props.product;
     SetQuantityInCartMutation.commit({
-      input: { clientMutationId: '', productId: id, value: newVal },
+      input: { clientMutationId: '', productId, value: newVal },
+      nodeId,
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug('Success for SetQuantityInCart mutation');

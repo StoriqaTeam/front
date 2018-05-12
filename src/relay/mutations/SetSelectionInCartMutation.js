@@ -31,7 +31,6 @@ const commit = (params: SetSelectionInCartParams) => commitMutation(params.envir
     const { input: { value }, nodeId } = params;
     const product = relayStore.get(nodeId);
     product.setValue(value, 'selected');
-    // debugger;
   },
   onCompleted: params.onCompleted,
   onError: params.onError,

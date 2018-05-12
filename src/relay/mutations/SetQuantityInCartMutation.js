@@ -16,6 +16,7 @@ const mutation = graphql`
 
 export type SetQuantityInCartParams = {
   ...SetQuantityInCartMutationVariables,
+  nodeId: string,
   environment: Environment,
   onCompleted: ?(response: ?SetQuantityInCartMutationResponse, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
@@ -25,6 +26,11 @@ const commit = (params: SetQuantityInCartParams) => commitMutation(params.enviro
   mutation,
   variables: {
     input: { ...params.input },
+  },
+  optimisticUpdater: relayStore => {
+    const { input: { value }, nodeId } = params;
+    const product = relayStore.get(nodeId);
+    product.setValue(value, 'quantity');
   },
   onCompleted: params.onCompleted,
   onError: params.onError,
