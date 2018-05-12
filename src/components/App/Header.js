@@ -5,7 +5,7 @@ import { graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
 // $FlowIgnoreMe
-import { pipe, pathOr, path, map, prop, propEq, sum, chain, reject, isNil, find } from 'ramda';
+import { pipe, pathOr, path, map, prop, sum, chain, reject, isNil } from 'ramda';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -16,7 +16,7 @@ import { Icon } from 'components/Icon';
 
 import { Container, Row, Col } from 'layout';
 
-import type HeaderStoresLocalQueryResponse from './__generated__/HeaderStoresLocalQuery.graphql';
+import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 import './Header.scss';
 
 const STORES_FRAGMENT = graphql`
@@ -34,7 +34,7 @@ fragment HeaderStoresLocalFragment on CartStoresConnection {
 `;
 
 
-const getCartCount: (data: HeaderStoresLocalQueryResponse) => number =
+const getCartCount: (data: HeaderStoresLocalFragment) => number =
   data =>
     pipe(
       pathOr([], ['edges']),

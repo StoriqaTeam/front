@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import cn from 'classnames';
 import { Button } from 'components/common/Button';
 import { pipe, values, reduce } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
@@ -32,7 +31,7 @@ const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
 
 class CartTotal extends Component<PropsType, StateType> {
-  constructor(props) {
+  constructor(props: PropsType) {
     super(props);
     this.handleScroll = this.handleScrollEvent.bind(this);
   }
@@ -55,7 +54,7 @@ class CartTotal extends Component<PropsType, StateType> {
     this.ref = ref;
   }
 
-  ref: ?Object;
+  ref: ?{ className: string };
   scrolling: boolean;
   handleScroll: () => void;
   scrolling = false;
@@ -82,6 +81,7 @@ class CartTotal extends Component<PropsType, StateType> {
     let currentClass = 'top';
     if (offset >= top) { currentClass = 'sticky'; }
     if (offset + height >= bottom) { currentClass = 'bottom'; }
+    // $FlowIgnoreMe
     if (this.ref.className !== currentClass) { this.ref.className = currentClass };
   }
 

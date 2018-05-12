@@ -1,9 +1,10 @@
 // @flow
+/* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head, find } from 'ramda';
+import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head, defaultTo } from 'ramda';
 
 import { Page } from 'components/App';
 
@@ -12,7 +13,7 @@ import CartTotal from './CartTotal';
 
 // eslint-disable-next-line
 import type Cart_me from './__generated__/Cart_me.graphql';
-import type CartStoresLocalQueryResponse from './__generated__/CartStoresLocalQuery.graphql';
+import type CartStoresLocalFragment from './__generated__/CartStoresLocalFragment.graphql';
 
 import './Cart.scss';
 
@@ -45,15 +46,16 @@ type StateType = {
   totals: Totals,
 }
 
-const getTotals: (data: CartStoresLocalQueryResponse) => Totals =
+const getTotals: (data: CartStoresLocalFragment) => Totals =
   data => {
+    const defaultTotals = { productsCost: 0, deliveryCost: 0, totalCount: 0 };
     const fold = pipe(
       filter(propEq('selected', true)),
       reduce((acc, elem) => ({
         productsCost: acc.productsCost + elem.quantity * elem.price,
         deliveryCost: acc.deliveryCost + elem.deliveryCost,
         totalCount: acc.totalCount + elem.quantity,
-      }), { productsCost: 0, deliveryCost: 0, totalCount: 0 }),
+      }), defaultTotals),
     );
     return pipe(
       pathOr([], ['edges']),
@@ -61,7 +63,7 @@ const getTotals: (data: CartStoresLocalQueryResponse) => Totals =
       reject(isNil),
       map(store => ({ id: store.id, ...fold(store.products) })),
       groupBy(prop('id')),
-      map(head),
+      map(pipe(head, defaultTo(defaultTotals))),
     )(data);
   }
 
