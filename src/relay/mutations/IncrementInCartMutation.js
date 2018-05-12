@@ -29,6 +29,22 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
   },
   onCompleted: params.onCompleted,
   onError: params.onError,
+  optimisticUpdater: relayStore => {
+    const me = relayStore.getRoot().getLinkedRecord('me');
+    const cart = me.getLinkedRecord('cart');
+    const storesConnection = ConnectionHandler.getConnection(cart, 'Cart_stores');
+    const store = relayStore.create(Math.random().toString(36).substring(7), 'CartStore');
+    const product = relayStore.create(Math.random().toString(36).substring(7), 'CartProduct');
+    product.setValue(1, 'quantity');
+    store.setLinkedRecords([product], 'products');
+    const edge = ConnectionHandler.createEdge(
+      relayStore,
+      storesConnection,
+      store,
+      'CartStoresEdge',
+    );
+    ConnectionHandler.insertEdgeAfter(storesConnection, edge);
+  },
   updater: relayStore => {
     const store = relayStore.getRootField('incrementInCart');
     const me = relayStore.getRoot().getLinkedRecord('me');
