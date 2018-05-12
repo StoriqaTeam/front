@@ -33,6 +33,9 @@ const commit = (params: IncrementInCartParams) => commitMutation(params.environm
     const me = relayStore.getRoot().getLinkedRecord('me');
     const cart = me.getLinkedRecord('cart');
     const storesConnection = ConnectionHandler.getConnection(cart, 'Cart_stores');
+    // The idea is to just create random store with random product that will 
+    // definitely increase the cart counter, and will be gone as
+    // soon as we get the response from server
     const store = relayStore.create(Math.random().toString(36).substring(7), 'CartStore');
     const product = relayStore.create(Math.random().toString(36).substring(7), 'CartProduct');
     product.setValue(1, 'quantity');

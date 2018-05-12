@@ -78,12 +78,21 @@ class Cart extends Component<PropsType, StateType> {
     const store = this.context.environment.getStore();
     const source = store.getSource().toJSON();
     const meId = path(['client:root', 'me', '__ref'])(source);
+    // Technically we could make a full query here, but it will query
+    // client:${meId}:cart:stores. And all updated work on
+    // client:${meId}:cart:__Cart_stores_connection.
+    // @connection directive work on makin a query, but unfortunately
+    // store.lookup doesn't work with this directive. Hence this hacky
+    // version.
     const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
     const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
-      dataID: connectionId,
-      node: queryNode,
+      dataID: connectionId, // root
+      node: queryNode, // query starting from root
     });
+    // This will be triggered each time any field in our query changes
+    // Therefore it's important to include not only the data you need into the query,
+    // but also the data you need to watch for.
     const { dispose } = store.subscribe(snapshot, s => {
       this.setState({ totals: getTotals(s.data) });
     });
