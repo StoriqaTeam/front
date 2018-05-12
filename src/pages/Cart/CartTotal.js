@@ -74,7 +74,7 @@ class CartTotal extends Component<PropsType, StateType> {
     let currentClass = 'top';
     if (offset >= top) { currentClass = 'sticky'; }
     if (offset + height >= bottom) { currentClass = 'bottom'; }
-    if (currentClass !== this.state.currentClass) { this.setState({ currentClass }); }
+    if (this.ref.className !== currentClass) { this.ref.className = currentClass };
   }
 
   render() {
@@ -88,84 +88,86 @@ class CartTotal extends Component<PropsType, StateType> {
     )(this.props.totals);
     const { productsCost, deliveryCost, totalCount } = totals;
     return (
-      <div styleName={cn('container', this.state.currentClass)} ref={ref => this.setRef(ref)}>
-        <div styleName="cart-total-title">
-          Total
-        </div>
-        <div styleName="payments-container">
-          <div styleName="value">
-            Payment methods
+      <div className="top" ref={ref => this.setRef(ref)}>
+        <div styleName="container">
+          <div styleName="cart-total-title">
+            Total
           </div>
-          <div styleName="payments-group">
-            <div styleName="title">
-              My cards
+          <div styleName="payments-container">
+            <div styleName="value">
+              Payment methods
             </div>
-            <div styleName="payment-option">
-              <Checkbox isChecked={false} />
-              <div styleName="payment-option-value">
-                5504 84** **** 3452
+            <div styleName="payments-group">
+              <div styleName="title">
+                My cards
               </div>
-              <div styleName="payment-option-icon">
-                <img src={master} alt="master card" />
+              <div styleName="payment-option">
+                <Checkbox isChecked={false} />
+                <div styleName="payment-option-value">
+                  5504 84** **** 3452
+                </div>
+                <div styleName="payment-option-icon">
+                  <img src={master} alt="master card" />
+                </div>
               </div>
-            </div>
-            
-            <div styleName="payment-option">
-              <Checkbox isChecked={false} />
-              <div styleName="payment-option-value">
-                5504 84** **** 5824
-              </div>
-              <div styleName="payment-option-icon">
-                <img src={visa} alt="visa" />
-              </div>
-            </div>
-          </div>
-
-          <div styleName="payments-group">
-            <div styleName="title">
-              Crypto payments
-            </div>
-            <div styleName="payment-option">
-              <Checkbox isChecked />
-              <div styleName="payment-option-value">
-                STQ
-              </div>
-              <div styleName="payment-option-icon">
-                <img src={stq} alt="stq" />
-              </div>
-            </div>
-            
-            <div styleName="payment-option">
-              <Checkbox isChecked={false} />
-              <div styleName="payment-option-value">
-                BTC
-              </div>
-              <div styleName="payment-option-icon">
-                <img src={btc} alt="btc" />
+              
+              <div styleName="payment-option">
+                <Checkbox isChecked={false} />
+                <div styleName="payment-option-value">
+                  5504 84** **** 5824
+                </div>
+                <div styleName="payment-option-icon">
+                  <img src={visa} alt="visa" />
+                </div>
               </div>
             </div>
 
-            <div styleName="payment-option">
-              <Checkbox isChecked={false} />
-              <div styleName="payment-option-value">
-                ETH
+            <div styleName="payments-group">
+              <div styleName="title">
+                Crypto payments
               </div>
-              <div styleName="payment-option-icon">
-                <img src={eth} alt="eth" />
+              <div styleName="payment-option">
+                <Checkbox isChecked />
+                <div styleName="payment-option-value">
+                  STQ
+                </div>
+                <div styleName="payment-option-icon">
+                  <img src={stq} alt="stq" />
+                </div>
+              </div>
+              
+              <div styleName="payment-option">
+                <Checkbox isChecked={false} />
+                <div styleName="payment-option-value">
+                  BTC
+                </div>
+                <div styleName="payment-option-icon">
+                  <img src={btc} alt="btc" />
+                </div>
+              </div>
+
+              <div styleName="payment-option">
+                <Checkbox isChecked={false} />
+                <div styleName="payment-option-value">
+                  ETH
+                </div>
+                <div styleName="payment-option-icon">
+                  <img src={eth} alt="eth" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div styleName="totals-container">
-          <CartProductAttribute title="Products cost" value={`${productsCost} STQ`} />
-          <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
-          <CartProductAttribute 
-            title={<div><span>Total</span><span style={{color: '#8fb62c'}}>{` (${totalCount} items)`}</span></div>} 
-            value={`${productsCost + deliveryCost} STQ`}
-          />
-        </div>
-        <div styleName="checkout">
-          <Button disabled big>Checkout</Button>
+          <div styleName="totals-container">
+            <CartProductAttribute title="Products cost" value={`${productsCost} STQ`} />
+            <CartProductAttribute title="Delivery cost" value={`${deliveryCost} STQ`} />
+            <CartProductAttribute 
+              title={<div><span>Total</span><span style={{color: '#8fb62c'}}>{` (${totalCount} items)`}</span></div>} 
+              value={`${productsCost + deliveryCost} STQ`}
+            />
+          </div>
+          <div styleName="checkout">
+            <Button disabled big>Checkout</Button>
+          </div>
         </div>
       </div>
     );

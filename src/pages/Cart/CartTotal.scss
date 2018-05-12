@@ -8,19 +8,21 @@
   width: 40rem;
 }
 
-.sticky {
-  position: fixed;
-  top: 2rem;
-}
-
-.bottom {
-  position: absolute;
-  bottom: 2rem;
-}
-
-.top {
-  position: absolute;
-  top: 0;
+:global {
+  .sticky {
+    position: fixed;
+    top: 2rem;
+  }
+  
+  .bottom {
+    position: absolute;
+    bottom: 2rem;
+  }
+  
+  .top {
+    position: absolute;
+    top: 0;
+  }  
 }
 
 .cart-total-title {
