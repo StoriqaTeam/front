@@ -6,11 +6,11 @@ import { Button } from 'components/common/Button';
 import { pipe, values, reduce } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
 
-import master from './png/master.png';
-import visa from './png/visa.png';
-import btc from './png/btc.png';
-import eth from './png/eth.png';
-import stq from './png/stq.png';
+// import master from './png/master.png';
+// import visa from './png/visa.png';
+// import btc from './png/btc.png';
+// import eth from './png/eth.png';
+// import stq from './png/stq.png';
 import CartProductAttribute from './CartProductAttribute';
 
 import './CartTotal.scss';
@@ -125,7 +125,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   5504 84** **** 3452
                 </div>
                 <div styleName="payment-option-icon">
-                  <img src={master} alt="master card" />
+                  <img src="" alt="master card" />
                 </div>
               </div>
               
@@ -135,7 +135,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   5504 84** **** 5824
                 </div>
                 <div styleName="payment-option-icon">
-                  <img src={visa} alt="visa" />
+                  <img src="" alt="visa" />
                 </div>
               </div>
             </div>
@@ -150,7 +150,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   STQ
                 </div>
                 <div styleName="payment-option-icon">
-                  <img src={stq} alt="stq" />
+                  <img src="" alt="stq" />
                 </div>
               </div>
               
@@ -160,7 +160,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   BTC
                 </div>
                 <div styleName="payment-option-icon">
-                  <img src={btc} alt="btc" />
+                  <img src="" alt="btc" />
                 </div>
               </div>
 
@@ -170,7 +170,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   ETH
                 </div>
                 <div styleName="payment-option-icon">
-                  <img src={eth} alt="eth" />
+                  <img src="" alt="eth" />
                 </div>
               </div>
             </div>

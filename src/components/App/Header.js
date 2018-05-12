@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
+// $FlowIgnoreMe
 import { pipe, pathOr, path, map, prop, propEq, sum, chain, reject, isNil, find } from 'ramda';
 
 import { SearchInput } from 'components/SearchInput';
@@ -18,24 +19,20 @@ import { Container, Row, Col } from 'layout';
 import type HeaderStoresLocalQueryResponse from './__generated__/HeaderStoresLocalQuery.graphql';
 import './Header.scss';
 
-const STORES_QUERY = graphql`
-query HeaderStoresLocalQuery {
-  me {
-    cart {
-      stores {
-        edges {
-          node {
-            products {
-              id
-              quantity
-            }
-          }
-        }
+const STORES_FRAGMENT = graphql`
+fragment HeaderStoresLocalFragment on CartStoresConnection {
+  edges {
+    node {
+      id
+      products {
+        id
+        quantity
       }
     }
   }
 }
 `;
+
 
 const getCartCount: (data: HeaderStoresLocalQueryResponse) => number =
   data =>
@@ -68,15 +65,7 @@ class Header extends Component<PropsType, StateType> {
     const meId = path(['client:root', 'me', '__ref'])(source);
     if (!meId) return;
     const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
-    const queryNode = pipe(
-      prop('operation'),
-      prop('selections'),
-      find(propEq('name', 'me')),
-      prop('selections'),
-      find(propEq('name', 'cart')),
-      prop('selections'),
-      find(propEq('name', 'stores')),
-    )(STORES_QUERY());
+    const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
       dataID: connectionId,
       node: queryNode,
@@ -85,7 +74,6 @@ class Header extends Component<PropsType, StateType> {
       this.setState({ cartCount: getCartCount(s.data) });
     });
     this.dispose = dispose;
-    // console.log("--------------", source, snapshot);
     this.setState({ cartCount: getCartCount(snapshot.data) });
   }
 

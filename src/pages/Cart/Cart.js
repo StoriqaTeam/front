@@ -16,27 +16,22 @@ import type CartStoresLocalQueryResponse from './__generated__/CartStoresLocalQu
 
 import './Cart.scss';
 
-const STORES_QUERY = graphql`
-query CartStoresLocalQuery {
-  me {
-    cart {
-      stores {
-        edges {
-          node {
-            products {
-              id
-              selected
-              quantity
-              price
-              deliveryCost
-            }
-          }
-        }
+const STORES_FRAGMENT = graphql`
+fragment CartStoresLocalFragment on CartStoresConnection {
+  edges {
+    node {
+      id
+      products {
+        id
+        selected
+        quantity
+        price
+        deliveryCost
       }
     }
   }
 }
-`;
+`
 
 type PropsType = {
   // eslint-disable-next-line
@@ -82,15 +77,7 @@ class Cart extends Component<PropsType, StateType> {
     const source = store.getSource().toJSON();
     const meId = path(['client:root', 'me', '__ref'])(source);
     const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
-    const queryNode = pipe(
-      prop('operation'),
-      prop('selections'),
-      find(propEq('name', 'me')),
-      prop('selections'),
-      find(propEq('name', 'cart')),
-      prop('selections'),
-      find(propEq('name', 'stores')),
-    )(STORES_QUERY());
+    const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
       dataID: connectionId,
       node: queryNode,
