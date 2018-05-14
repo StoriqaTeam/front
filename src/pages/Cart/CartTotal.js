@@ -75,10 +75,10 @@ class CartTotal extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const rect = this.ref.getBoundingClientRect();
     const height = rect.bottom - rect.top;
-    // $FlowIgnoreMe
     const {
       top: viewTop,
       bottom: viewBottom,
+      // $FlowIgnoreMe
     } = this.props.storesRef.getBoundingClientRect();
     if (viewBottom - viewTop < STICKY_THRESHOLD_REM * rem) {
       if (this.state.currentClass !== 'top') {
@@ -99,6 +99,7 @@ class CartTotal extends Component<PropsType, StateType> {
     }
     // $FlowIgnoreMe
     if (this.ref.className !== currentClass) {
+      // $FlowIgnoreMe
       this.ref.className = currentClass;
     }
   }
@@ -191,9 +192,9 @@ class CartTotal extends Component<PropsType, StateType> {
               title={
                 <div>
                   <span>Total</span>
-                  <span
-                    style={{ color: '#8fb62c' }}
-                  >{` (${totalCount} items)`}</span>
+                  <span style={{ color: '#8fb62c' }}>
+                    {` (${totalCount} items)`}
+                  </span>
                 </div>
               }
               value={`${productsCost + deliveryCost} STQ`}
