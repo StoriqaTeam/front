@@ -4,7 +4,21 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, propEq, groupBy, filter, reject, isNil, reduce, head, defaultTo } from 'ramda';
+import {
+  pipe,
+  pathOr,
+  path,
+  map,
+  prop,
+  propEq,
+  groupBy,
+  filter,
+  reject,
+  isNil,
+  reduce,
+  head,
+  defaultTo,
+} from 'ramda';
 
 import { Page } from 'components/App';
 
@@ -18,61 +32,69 @@ import type CartStoresLocalFragment from './__generated__/CartStoresLocalFragmen
 import './Cart.scss';
 
 const STORES_FRAGMENT = graphql`
-fragment CartStoresLocalFragment on CartStoresConnection {
-  edges {
-    node {
-      id
-      products {
+  fragment CartStoresLocalFragment on CartStoresConnection {
+    edges {
+      node {
         id
-        selected
-        quantity
-        price
-        deliveryCost
+        products {
+          id
+          selected
+          quantity
+          price
+          deliveryCost
+        }
       }
     }
   }
-}
-`
+`;
 
 type PropsType = {
   // eslint-disable-next-line
-  me: Cart_me
+  me: Cart_me,
 };
 
-type Totals = { [storeId: string]: { productsCost: number, deliveryCost: number, totalCount: number }}
+type Totals = {
+  [storeId: string]: {
+    productsCost: number,
+    deliveryCost: number,
+    totalCount: number,
+  },
+};
 
 type StateType = {
   storesRef: ?Object,
   totals: Totals,
-}
+};
 
-const getTotals: (data: CartStoresLocalFragment) => Totals =
-  data => {
-    const defaultTotals = { productsCost: 0, deliveryCost: 0, totalCount: 0 };
-    const fold = pipe(
-      filter(propEq('selected', true)),
-      reduce((acc, elem) => ({
+const getTotals: (data: CartStoresLocalFragment) => Totals = data => {
+  const defaultTotals = { productsCost: 0, deliveryCost: 0, totalCount: 0 };
+  const fold = pipe(
+    filter(propEq('selected', true)),
+    reduce(
+      (acc, elem) => ({
         productsCost: acc.productsCost + elem.quantity * elem.price,
         deliveryCost: acc.deliveryCost + elem.deliveryCost,
         totalCount: acc.totalCount + elem.quantity,
-      }), defaultTotals),
-    );
-    return pipe(
-      pathOr([], ['edges']),
-      map(prop('node')),
-      reject(isNil),
-      map(store => ({ id: store.id, ...fold(store.products) })),
-      groupBy(prop('id')),
-      map(pipe(head, defaultTo(defaultTotals))),
-    )(data);
-  }
+      }),
+      defaultTotals,
+    ),
+  );
+  return pipe(
+    pathOr([], ['edges']),
+    map(prop('node')),
+    reject(isNil),
+    map(store => ({ id: store.id, ...fold(store.products) })),
+    groupBy(prop('id')),
+    map(pipe(head, defaultTo(defaultTotals))),
+  )(data);
+};
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
   state = {
     storesRef: null,
     totals: {},
-  }
+  };
 
   componentWillMount() {
     const store = this.context.environment.getStore();
@@ -116,7 +138,13 @@ class Cart extends Component<PropsType, StateType> {
   dispose: () => void;
 
   totalsForStore(id: string) {
-    return this.state.totals[id] || { productsCost: 0, deliveryCost: 0, totalCount: 0 };
+    return (
+      this.state.totals[id] || {
+        productsCost: 0,
+        deliveryCost: 0,
+        totalCount: 0,
+      }
+    );
   }
 
   render() {
@@ -129,7 +157,13 @@ class Cart extends Component<PropsType, StateType> {
         <div styleName="header">Cart</div>
         <div styleName="body-container">
           <div styleName="stores-container" ref={ref => this.setStoresRef(ref)}>
-            {stores.map(store => <CartStore key={store.__id} store={store} totals={this.totalsForStore(store.__id)} />)}
+            {stores.map(store => (
+              <CartStore
+                key={store.__id}
+                store={store}
+                totals={this.totalsForStore(store.__id)}
+              />
+            ))}
           </div>
           <div styleName="total-container">
             <CartTotal
@@ -150,11 +184,11 @@ Cart.contextTypes = {
 export default createPaginationContainer(
   Page(Cart),
   graphql`
-    fragment Cart_me on User 
-    @argumentDefinitions(
-      first: { type: "Int", defaultValue: null }
-      after: { type: "ID", defaultValue: null }
-    ) {
+    fragment Cart_me on User
+      @argumentDefinitions(
+        first: { type: "Int", defaultValue: null }
+        after: { type: "ID", defaultValue: null }
+      ) {
       cart {
         stores(first: $first, after: $after) @connection(key: "Cart_stores") {
           edges {
