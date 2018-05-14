@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, propEq, filter, head, keys, insert, isNil, pathOr, defaultTo, prop, pipe } from 'ramda';
+import {
+  path,
+  propEq,
+  filter,
+  head,
+  keys,
+  insert,
+  isNil,
+  pathOr,
+  defaultTo,
+  prop,
+  pipe,
+} from 'ramda';
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
@@ -101,7 +113,9 @@ class Product extends Component<PropsType, StateType> {
   };
 
   handleAddToCart() {
-    if (!this.loggedIn()) { return }
+    if (!this.loggedIn()) {
+      return;
+    }
 
     // Todo for Jero - update this after refactoring (needed selected product id)
     const id = pipe(
@@ -110,15 +124,19 @@ class Product extends Component<PropsType, StateType> {
       defaultTo({}),
       prop('rawId'),
     )(this);
-    
+
     if (id) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
           log.debug('Success for IncrementInCart mutation');
-          if (response) { log.debug('Response: ', response); }
-          if (errors) { log.debug('Errors: ', errors); }
+          if (response) {
+            log.debug('Response: ', response);
+          }
+          if (errors) {
+            log.debug('Errors: ', errors);
+          }
         },
         onError: error => {
           log.error('Error in IncrementInCart mutation');
@@ -209,10 +227,19 @@ class Product extends Component<PropsType, StateType> {
               <ProductPrice {...priceInfo} />
             </ProductDetails>
             <div styleName="buttons-container">
-              <Button disabled big>Buy now</Button>
-              <Button wireframe={loggedIn} big disabled={!loggedIn} onClick={() => this.handleAddToCart()}>Add to cart</Button>
+              <Button disabled big>
+                Buy now
+              </Button>
+              <Button
+                wireframe={loggedIn}
+                big
+                disabled={!loggedIn}
+                onClick={() => this.handleAddToCart()}
+              >
+                Add to cart
+              </Button>
             </div>
-            { !loggedIn && <div>Please login to use cart</div> }
+            {!loggedIn && <div>Please login to use cart</div>}
           </Col>
         </Row>
         <Tabs>
@@ -274,7 +301,6 @@ export default createFragmentContainer(
     }
   `,
 );
-
 
 Product.contextTypes = {
   environment: PropTypes.object.isRequired,

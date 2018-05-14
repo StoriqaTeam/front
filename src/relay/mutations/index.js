@@ -18,7 +18,11 @@ export {
 } from './CreateProductWithAttributesMutation';
 export { default as UpdateProductMutation } from './UpdateProductMutation';
 export { default as IncrementInCartMutation } from './IncrementInCartMutation';
-export { default as SetQuantityInCartMutation } from './SetQuantityInCartMutation';
-export { default as SetSelectionInCartMutation } from './SetSelectionInCartMutation';
+export {
+  default as SetQuantityInCartMutation,
+} from './SetQuantityInCartMutation';
+export {
+  default as SetSelectionInCartMutation,
+} from './SetSelectionInCartMutation';
 export { default as DeleteFromCartMutation } from './DeleteFromCartMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';

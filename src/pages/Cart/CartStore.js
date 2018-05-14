@@ -29,16 +29,16 @@ class CartStore extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="products">
-          {products.map((product, idx) => <CartProduct key={idx} product={product} />)}
+          {products.map((product, idx) => (
+            <CartProduct key={idx} product={product} />
+          ))}
         </div>
         <div styleName="footer">
           <div styleName="store">
             <div styleName="store-info">
               <img src={store.logo} alt="store_picture" styleName="image" />
               <div styleName="store-description">
-                <div>
-                  {store.name[0].text}
-                </div>
+                <div>{store.name[0].text}</div>
                 <Rating rating={store.rating} />
               </div>
             </div>
@@ -46,23 +46,38 @@ class CartStore extends PureComponent<PropsType> {
               <div styleName="chat">
                 <Chat />
               </div>
-              <div styleName="chat-text">
-                Chat with Seller
-              </div>
+              <div styleName="chat-text">Chat with Seller</div>
             </div>
             <div>
-              <Input focus={false} onChange={() => { }} detectCapsLock model="TBA" name="TBA" label="Promocode" />
+              <Input
+                focus={false}
+                onChange={() => {}}
+                detectCapsLock
+                model="TBA"
+                name="TBA"
+                label="Promocode"
+              />
             </div>
           </div>
           <div styleName="store-total">
-            <div styleName="store-total-header">
-              Seller summary
-            </div>
-            <CartProductAttribute title="Products cost" value={`${this.props.totals.productsCost} STQ`} />
-            <CartProductAttribute title="Delivery cost" value={`${this.props.totals.deliveryCost} STQ`} />
-            <CartProductAttribute title="Total cost" value={`${this.props.totals.deliveryCost + this.props.totals.productsCost} STQ`} />
+            <div styleName="store-total-header">Seller summary</div>
+            <CartProductAttribute
+              title="Products cost"
+              value={`${this.props.totals.productsCost} STQ`}
+            />
+            <CartProductAttribute
+              title="Delivery cost"
+              value={`${this.props.totals.deliveryCost} STQ`}
+            />
+            <CartProductAttribute
+              title="Total cost"
+              value={`${this.props.totals.deliveryCost +
+                this.props.totals.productsCost} STQ`}
+            />
             <div styleName="buy">
-              <Button type="wireframe" disabled big>Buy from this seller</Button>
+              <Button type="wireframe" disabled big>
+                Buy from this seller
+              </Button>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import './Rating.scss';
 
 type PropsType = {
   rating: number,
-}
+};
 
 const Rating = (props: PropsType) => {
   const numStars = Math.round(props.rating);

@@ -4,8 +4,18 @@ import React, { Component } from 'react';
 import { graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
-// $FlowIgnoreMe
-import { pipe, pathOr, path, map, prop, sum, chain, reject, isNil } from 'ramda';
+import {
+  pipe,
+  pathOr,
+  path,
+  map,
+  prop,
+  sum,
+  // $FlowIgnoreMe
+  chain,
+  reject,
+  isNil,
+} from 'ramda';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -20,30 +30,28 @@ import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFra
 import './Header.scss';
 
 const STORES_FRAGMENT = graphql`
-fragment HeaderStoresLocalFragment on CartStoresConnection {
-  edges {
-    node {
-      id
-      products {
+  fragment HeaderStoresLocalFragment on CartStoresConnection {
+    edges {
+      node {
         id
-        quantity
+        products {
+          id
+          quantity
+        }
       }
     }
   }
-}
 `;
 
-
-const getCartCount: (data: HeaderStoresLocalFragment) => number =
-  data =>
-    pipe(
-      pathOr([], ['edges']),
-      chain(pathOr([], ['node', 'products'])),
-      reject(isNil),
-      map(prop('quantity')),
-      reject(isNil),
-      sum
-    )(data);
+const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
+  pipe(
+    pathOr([], ['edges']),
+    chain(pathOr([], ['node', 'products'])),
+    reject(isNil),
+    map(prop('quantity')),
+    reject(isNil),
+    sum,
+  )(data);
 
 type PropsType = {
   user: ?{},
@@ -52,12 +60,12 @@ type PropsType = {
 
 type StateType = {
   cartCount: number,
-}
+};
 
 class Header extends Component<PropsType, StateType> {
   state = {
     cartCount: 0,
-  }
+  };
 
   componentWillMount() {
     const store = this.context.environment.getStore();
