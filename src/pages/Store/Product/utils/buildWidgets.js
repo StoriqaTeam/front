@@ -1,4 +1,7 @@
-import { isNil, flatten, uniq, reduce, filter, identity, keys } from 'ramda';
+// @flow
+
+import { chain, filter, identity, isNil, keys, reduce, uniq } from 'ramda';
+
 import { extractText } from 'utils';
 
 import { VariantType } from '../types';
@@ -9,24 +12,27 @@ type WidgetValueType = {
   img?: string,
 };
 
+type TransformedVariantType = {
+  id: string,
+  image: string,
+  title: string,
+  uiElement: string,
+  value: string,
+  variantId: string,
+};
+
 /**
  * @desc Groups an array of objects by certain property
  * @param {{}[]} array - Array of objects
- * @param {string} prop - The property which by want to group
- * @param {string} [type] = 'object' - type of object to return could be and object or array
+ * @param {string} property - The property which by want to group
  * @return {{prop: []}}
  */
-function group(array: [], prop: string, type: string = 'object'): {} {
+function group(array: Array<TransformedVariantType>, property: string): {} {
   return array.reduce((accumulator, current) => {
     // copy accumulator to avoid 'parameter reassignment'
     const item = Object.assign({}, accumulator);
-    if (type === 'object') {
-      item[current[prop]] = item[current[prop]] || {};
-      item[current[prop]] = current;
-      return item;
-    }
-    item[current[prop]] = item[current[prop]] || [];
-    item[current[prop]].push(current);
+    item[current[property]] = item[current[property]] || [];
+    item[current[property]].push(current);
     return item;
   }, {});
 }
@@ -35,11 +41,11 @@ function group(array: [], prop: string, type: string = 'object'): {} {
  * @param {string} image
  * @return {string}
  */
-function setImage(image: string): string {
+const setImage = (image: string): string => {
   const defaultImage =
     'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
   return !isNil(image) && image.includes('http') ? image : defaultImage;
-}
+};
 
 /**
  * @param {any[]} array
@@ -58,33 +64,41 @@ function buildWidgetInterface(
   }));
 }
 
+function extractVariantAttributes(
+  variant: VariantType,
+): Array<TransformedVariantType> {
+  const { id: variantId, attributes } = variant;
+  return attributes.map(
+    ({
+      value,
+      metaField,
+      attribute: {
+        id,
+        name,
+        metaField: { uiElement },
+      },
+    }) => ({
+      id,
+      variantId,
+      value,
+      title: extractText(name),
+      image: setImage(metaField),
+      uiElement,
+    }),
+  );
+}
+
 /**
  * @param {Array<VariantType>} variants
+ * @return {Array<TransformedVariantType>}
  */
-function transformVariants(variants: Array<VariantType>) {
-  const results = variants.map(variant => {
-    const { id: variantId, attributes } = variant;
-    return attributes.map(
-      ({
-        value,
-        metaField,
-        attribute: {
-          id,
-          name,
-          metaField: { uiElement },
-        },
-      }) => ({
-        id,
-        variantId,
-        value,
-        title: extractText(name),
-        image: setImage(metaField),
-        uiElement,
-      }),
-    );
-  });
-  return flatten(results);
-}
+
+/*
+ * @return {Function(Array<VariantType>)}
+ */
+export const transformVariants: (
+  Array<VariantType>,
+) => Array<TransformedVariantType> = chain(extractVariantAttributes);
 
 function reduceGroup(widgetGroup) {
   return reduce(
@@ -93,7 +107,6 @@ function reduceGroup(widgetGroup) {
       const copy = { ...accumulator };
       const values = filter(identity, [].concat(copy.values, item.value));
       const valuesWithImages = filter(
-        // $FlowIgnoreMe
         identity,
         [].concat(copy.valuesWithImages, {
           label: item.value,
@@ -117,11 +130,10 @@ function reduceGroup(widgetGroup) {
   );
 }
 
-export default function buildWidgets(variants: VariantType[]) {
+export default function buildWidgets(variants: Array<VariantType>) {
   const transformedVariants = transformVariants(variants);
   // group by 'uiElement' property
-  // $FlowIgnoreMe
-  const grouped = group(transformedVariants, 'uiElement', 'array');
+  const grouped = group(transformedVariants, 'uiElement');
   const result = keys(grouped).reduce((acc, key) => {
     const reduced = reduceGroup(grouped[key]);
     acc[key] = {
