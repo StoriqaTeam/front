@@ -2,7 +2,7 @@
 
 import {
   all,
-  // $FlowIgnore
+  // $FlowIgnoreMe
   chain,
   filter,
   groupBy,
