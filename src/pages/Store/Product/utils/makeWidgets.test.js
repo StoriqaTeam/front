@@ -4,6 +4,7 @@ import {
   makeWidgetsFromVariants,
   groupWidgets,
   makeWidgets,
+  removeWidgetOptionsDuplicates,
 } from './makeWidgets';
 
 import mockVariants from './mocks/mockVariants.json';
@@ -12,6 +13,7 @@ import mockTransformedVariants from './mocks/mockTransformedVariants.json';
 import mockGroupedWidgets from './mocks/mockGroupedWidgets.json';
 import mockWidgets from './mocks/mockWidgets.json';
 import expectedWidgets from './mocks/expectedWidgets.json';
+import expectedDeduplicateWidgets from './mocks/expectedDeduplicateWidgets.json';
 
 
 describe('test makeWidgets helper functions', () => {
@@ -47,15 +49,21 @@ describe('test makeWidgets helper functions', () => {
     });
   });
 
+  describe('test removeWidgetOptionsDuplicates', () => {
+    test('it should return an array of WidgetType with not duplicates in its \'options\' property', () => {
+      expect(removeWidgetOptionsDuplicates(mockWidgets)).toEqual(expect.arrayContaining(expectedDeduplicateWidgets));
+    });
+  });
+
   describe('test makeWidgetsFromVariants', () => {
     test('it should return an array of WidgetType ', () => {
-      expect(makeWidgetsFromVariants(mockVariants)).toEqual(expect.arrayContaining(mockWidgets));
+      expect(makeWidgetsFromVariants(mockVariants)).toEqual(expect.arrayContaining(expectedDeduplicateWidgets));
     });
   });
 
   describe('test makeWidgets', () => {
     test('it should return an array of WidgetType when selections are empty', () => {
-      expect(makeWidgets(emptySelections)(mockVariants)).toEqual(expect.arrayContaining(mockWidgets));
+      expect(makeWidgets(emptySelections)(mockVariants)).toEqual(expect.arrayContaining(expectedDeduplicateWidgets));
     });
     test('it should return a filtered array of WidgetType based on selections', () => {
       expect(makeWidgets(selections)(mockVariants)).toEqual(expect.arrayContaining(expectedWidgets));

@@ -11,6 +11,7 @@ import {
   isNil,
   keys,
   map,
+  uniqBy,
   not,
   pathEq,
   pipe,
@@ -124,10 +125,26 @@ const makeWidget = (groupedWidgets: GroupedWidgetsType): Array<WidgetType> => {
   return map(mergeWidgetOptions, keys(groupedWidgets));
 };
 
+export const removeWidgetOptionsDuplicates = (
+  widgets: Array<WidgetType>,
+): Array<WidgetType> =>
+  map(
+    (widget: WidgetType): Array<WidgetType> => ({
+      ...widget,
+      options: uniqBy(prop('label'), widget.options),
+    }),
+    widgets,
+  );
+
 export const makeWidgetsFromVariants: (
   Array<VariantType>,
 ) => Array<WidgetType> = variants =>
-  pipe(transformProductVariants, groupWidgets, makeWidget)(variants);
+  pipe(
+    transformProductVariants,
+    groupWidgets,
+    makeWidget,
+    removeWidgetOptionsDuplicates,
+  )(variants);
 
 export const makeWidgets: (
   Array<SelectionType>,
