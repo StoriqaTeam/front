@@ -9,7 +9,11 @@ import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Select } from 'components/common/Select';
-import { SetQuantityInCartMutation, SetSelectionInCartMutation, DeleteFromCartMutation } from 'relay/mutations';
+import {
+  SetQuantityInCartMutation,
+  SetSelectionInCartMutation,
+  DeleteFromCartMutation,
+} from 'relay/mutations';
 import { log } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
@@ -33,8 +37,12 @@ class CartProduct extends PureComponent<PropsType> {
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug('Success for DeleteFromCart mutation');
-        if (response) { log.debug('Response: ', response); }
-        if (errors) { log.debug('Errors: ', errors); }
+        if (response) {
+          log.debug('Response: ', response);
+        }
+        if (errors) {
+          log.debug('Errors: ', errors);
+        }
       },
       onError: error => {
         log.error('Error in DeleteFromCart mutation');
@@ -46,15 +54,23 @@ class CartProduct extends PureComponent<PropsType> {
   }
 
   handleSelectChange() {
-    const {rawId: productId, id: nodeId} = this.props.product;
+    const { rawId: productId, id: nodeId } = this.props.product;
     SetSelectionInCartMutation.commit({
-      input: { clientMutationId: '', productId, value: !this.props.product.selected },
+      input: {
+        clientMutationId: '',
+        productId,
+        value: !this.props.product.selected,
+      },
       nodeId,
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug('Success for SetSelectionInCart mutation');
-        if (response) { log.debug('Response: ', response); }
-        if (errors) { log.debug('Errors: ', errors); }
+        if (response) {
+          log.debug('Response: ', response);
+        }
+        if (errors) {
+          log.debug('Errors: ', errors);
+        }
       },
       onError: error => {
         log.error('Error in SetSelectionInCart mutation');
@@ -66,15 +82,19 @@ class CartProduct extends PureComponent<PropsType> {
   }
 
   handleQuantityChange(newVal) {
-    const {rawId: productId, id: nodeId} = this.props.product;
+    const { rawId: productId, id: nodeId } = this.props.product;
     SetQuantityInCartMutation.commit({
       input: { clientMutationId: '', productId, value: newVal },
       nodeId,
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug('Success for SetQuantityInCart mutation');
-        if (response) { log.debug('Response: ', response); }
-        if (errors) { log.debug('Errors: ', errors); }
+        if (response) {
+          log.debug('Response: ', response);
+        }
+        if (errors) {
+          log.debug('Errors: ', errors);
+        }
       },
       onError: error => {
         log.error('Error in SetQuantityInCart mutation');
@@ -102,9 +122,10 @@ class CartProduct extends PureComponent<PropsType> {
       deliveryCost,
       selected,
     } = product;
-    const attrs = map(attr => (
-      { title: head(attr.attribute.name).text, value: attr.value.toString() }
-    ))(attributes);
+    const attrs = map(attr => ({
+      title: head(attr.attribute.name).text,
+      value: attr.value.toString(),
+    }))(attributes);
 
     return (
       <div styleName="container">
@@ -126,9 +147,7 @@ class CartProduct extends PureComponent<PropsType> {
           <div styleName="product-summary">
             <div styleName="product-summary-header">{name}</div>
             <div styleName="product-summary-attributes">
-              <div styleName="cart-product-title">
-                Attributes
-              </div>
+              <div styleName="cart-product-title">Attributes</div>
               {attrs.map((attr, idx) => (
                 <div key={idx} styleName="half-width">
                   <CartProductAttribute {...attr} />
@@ -137,15 +156,16 @@ class CartProduct extends PureComponent<PropsType> {
             </div>
             <ShowMore>
               <div styleName="delivery-container">
-                <div styleName="cart-product-title">
-                  Delivery and return
-                </div>
+                <div styleName="cart-product-title">Delivery and return</div>
                 <div styleName="half-width">
                   <CartProductAttribute
                     title="Delivery"
                     value={
                       <Select
-                        items={[{ id: 1, label: 'DHL' }, { id: 2, label: 'Boxberry' }]}
+                        items={[
+                          { id: 1, label: 'DHL' },
+                          { id: 2, label: 'Boxberry' },
+                        ]}
                         activeItem={{ id: 1, label: 'DHL' }}
                         forForm
                         containerStyle={{ width: '24rem' }}
@@ -157,10 +177,16 @@ class CartProduct extends PureComponent<PropsType> {
                   <CartProductAttribute title="Delivery term" value="14 days" />
                 </div>
                 <div styleName="half-width">
-                  <CartProductAttribute title="Return policy" value="Replacement or cash" />
+                  <CartProductAttribute
+                    title="Return policy"
+                    value="Replacement or cash"
+                  />
                 </div>
                 <div styleName="half-width">
-                  <CartProductAttribute title="Delivery return terms" value="Paid by seller" />
+                  <CartProductAttribute
+                    title="Delivery return terms"
+                    value="Paid by seller"
+                  />
                 </div>
               </div>
             </ShowMore>
@@ -178,8 +204,14 @@ class CartProduct extends PureComponent<PropsType> {
                 />
               }
             />
-            <CartProductAttribute title="Total cost" value={`${quantity * price} STQ`} />
-            <CartProductAttribute title="Delivery cost" value={`${(deliveryCost || 0)} STQ`} />
+            <CartProductAttribute
+              title="Total cost"
+              value={`${quantity * price} STQ`}
+            />
+            <CartProductAttribute
+              title="Delivery cost"
+              value={`${deliveryCost || 0} STQ`}
+            />
           </div>
         </div>
       </div>
@@ -209,7 +241,7 @@ export default createFragmentContainer(
           name {
             lang
             text
-          }  
+          }
           valueType
           metaField {
             values
@@ -224,7 +256,7 @@ export default createFragmentContainer(
         }
       }
     }
-`,
+  `,
 );
 
 CartProduct.contextTypes = {

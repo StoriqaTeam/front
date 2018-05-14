@@ -17,7 +17,7 @@ type PropsType = {
 
 type StateType = {
   inputValue: ?number,
-}
+};
 
 type Action = 'increase' | 'decrease';
 
@@ -28,7 +28,7 @@ class Stepper extends Component<PropsType, StateType> {
 
   state = {
     inputValue: 0,
-  }
+  };
 
   valid(val: number): boolean {
     return (
@@ -39,7 +39,7 @@ class Stepper extends Component<PropsType, StateType> {
 
   // coerce intput value to valid range
   coerce(val: ?number): number {
-    let value = isNil(val) ? (this.props.min || this.props.max || 0) : val;
+    let value = isNil(val) ? this.props.min || this.props.max || 0 : val;
     if (!isNil(this.props.min)) {
       value = Math.max(this.props.min, value);
     }
@@ -50,7 +50,8 @@ class Stepper extends Component<PropsType, StateType> {
   }
 
   handleClick(action: Action) {
-    const newVal = action === 'increase' ? this.props.value + 1 : this.props.value - 1;
+    const newVal =
+      action === 'increase' ? this.props.value + 1 : this.props.value - 1;
     if (this.valid(newVal)) {
       this.props.onChange(newVal);
     }
