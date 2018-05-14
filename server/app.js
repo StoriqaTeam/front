@@ -58,6 +58,9 @@ if (process.env.NODE_ENV === 'production') {
   app.use(logger);
 }
 
+// healthcheck
+app.use('/healthcheck', (req, res) => res.status(200).send());
+
 app.use('/favicon.ico', express.static(path.resolve('./build/favicon.ico')));
 app.use(
   '/manifest.json',
