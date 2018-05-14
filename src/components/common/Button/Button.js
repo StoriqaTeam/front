@@ -38,7 +38,6 @@ class Button extends PureComponent<PropsTypes> {
       wireframe,
     } = this.props;
 
-    
     const props = {
       type,
       disabled,
