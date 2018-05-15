@@ -10,8 +10,9 @@ import './BirthdateSelect.scss';
 type ItemType = { id: string, label: string };
 
 type PropsType = {
-  handleBirthdate: Function,
+  handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
+  errors: ?Array<string>,
 };
 
 type StateType = {
@@ -27,9 +28,9 @@ class BirthdateSelect extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      years: this.handleYearGenerate(100, 1919),
-      months: this.handleMonthGenerate(12, 1),
-      days: this.handleDayGenerate(31, 1),
+      years: this.generateYears(100, 1919),
+      months: this.generateMonths(12, 1),
+      days: this.generateDays(31, 1),
       yearValue: null,
       monthValue: null,
       dayValue: null,
@@ -57,14 +58,14 @@ class BirthdateSelect extends Component<PropsType, StateType> {
     }
   }
 
-  handleYearGenerate = (count: number, start: number) => {
+  generateYears = (count: number, start: number) => {
     const items = [
       ...Array.from(Array(count).keys(), x => count - 1 + start - x),
     ];
     return map(item => ({ id: `${item}`, label: `${item}` }), items);
   };
 
-  handleMonthGenerate = (count: number, start: number) => {
+  generateMonths = (count: number, start: number) => {
     const monthNames = [
       'January',
       'February',
@@ -89,7 +90,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
     );
   };
 
-  handleDayGenerate = (count: number, start: number) => {
+  generateDays = (count: number, start: number) => {
     const items = [...Array.from(Array(count).keys(), x => start + x)];
     return map(
       item => ({
@@ -101,13 +102,45 @@ class BirthdateSelect extends Component<PropsType, StateType> {
   };
 
   handleSelect = (value: ItemType, id: string) => {
-    this.setState(() => ({ [`${id}Value`]: value }), this.handleCheckDate);
+    const { yearValue, monthValue, dayValue } = this.state;
+    const year = yearValue ? yearValue.label : null;
+    const month = monthValue ? monthValue.id : null;
+    const day = dayValue ? dayValue.label : null;
+
+    const checkDayMonth = (monthV: ?string, dayV: ?string) => {
+      const bool1 =
+        (monthV === '04' ||
+          monthV === '06' ||
+          monthV === '09' ||
+          monthV === '11') &&
+        dayV === '31';
+      const bool2 =
+        monthV === '02' &&
+        ((Number(year) % 4 !== 0 &&
+          (dayV === '29' || dayV === '30' || dayV === '31')) ||
+          (Number(year) % 4 === 0 && (dayV === '30' || dayV === '31')));
+      return bool1 || bool2;
+    };
+
+    if (
+      id === 'year' &&
+      Number(value.label) % 4 !== 0 &&
+      month === '02' &&
+      day === '29'
+    ) {
+      this.setState(() => ({ dayValue: null }), this.checkDate);
+    } else if (id === 'month' && checkDayMonth(value.id, day)) {
+      this.setState(() => ({ dayValue: null }), this.checkDate);
+    } else if (id === 'day' && checkDayMonth(month, value.label)) {
+      this.setState(() => ({ monthValue: null }), this.checkDate);
+    }
+    this.setState(() => ({ [`${id}Value`]: value }), this.checkDate);
   };
 
-  handleCheckDate = () => {
+  checkDate = () => {
     const { yearValue, monthValue, dayValue } = this.state;
     if (yearValue && monthValue && dayValue) {
-      this.props.handleBirthdate(
+      this.props.handleBirthdateSelect(
         `${yearValue.label}-${monthValue.id}-${dayValue.label}`,
       );
     }
@@ -127,6 +160,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
   );
 
   render() {
+    const { errors } = this.props;
     return (
       <div styleName="container">
         <div styleName="label">Birthdate</div>
@@ -135,6 +169,12 @@ class BirthdateSelect extends Component<PropsType, StateType> {
           {this.renderSelect('month', 'Month')}
           {this.renderSelect('day', 'Day')}
         </div>
+        {errors &&
+          errors.length && (
+            <div styleName="errors">
+              {map((item, idx) => <div key={idx}>{item}</div>, errors)}
+            </div>
+          )}
       </div>
     );
   }

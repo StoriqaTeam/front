@@ -20,18 +20,13 @@ import { renameKeys } from 'utils/ramda';
 
 import { UpdateUserMutation } from 'relay/mutations';
 
+import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
+import type { Profile_me as ProfileMe } from './__generated__/Profile_me.graphql';
+
 import './Profile.scss';
 
-type UserType = {
-  firstName: string,
-  lastName: string,
-  phone: ?string,
-  birthdate: ?string,
-  gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
-};
-
 type PropsType = {
-  me: UserType,
+  me: ProfileMe,
   activeItem: string,
 };
 
@@ -126,7 +121,8 @@ class Profile extends Component<PropsType, StateType> {
     }
 
     this.setState(() => ({ isLoading: true }));
-    UpdateUserMutation.commit({
+
+    const params: MutationParamsType = {
       input: {
         clientMutationId: '',
         id: newData.id,
@@ -173,7 +169,8 @@ class Profile extends Component<PropsType, StateType> {
         // eslint-disable-next-line
         alert('Something going wrong :(');
       },
-    });
+    };
+    UpdateUserMutation.commit(params);
   };
 
   updateFormErrors = id => {
@@ -208,8 +205,8 @@ class Profile extends Component<PropsType, StateType> {
               menuItems={menuItems}
               activeItem={activeItem}
               onLogoUpload={this.onLogoUpload}
-              firstName={me.firstName}
-              lastName={me.lastName}
+              firstName={me.firstName || ''}
+              lastName={me.lastName || ''}
             />
           </Col>
           <Col size={10}>

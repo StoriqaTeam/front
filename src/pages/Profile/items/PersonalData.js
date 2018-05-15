@@ -5,7 +5,7 @@ import { assocPath, propOr, toUpper, toLower, find, propEq } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
-import { BirthdateSelect } from 'pages/Profile/BirthdateSelect';
+import { BirthdateSelect } from 'pages/Profile/items/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 
 import '../Profile.scss';
@@ -66,7 +66,7 @@ class PersonalData extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     this.props.updateFormErrors(id);
     const { value } = e.target;
-    if (id === 'phone' && (!/^\+?\d*$/.test(value) || value.length > 14)) {
+    if (id === 'phone' && !/^\+?\d*$/.test(value)) {
       return;
     }
     if (value.length <= 50) {
@@ -76,13 +76,13 @@ class PersonalData extends Component<PropsType, StateType> {
     }
   };
 
-  handleGender = (genderValue: { id: string, label: string }) => {
+  handleGenderSelect = (genderValue: { id: string, label: string }) => {
     this.setState((prevState: StateType) =>
       assocPath(['data', 'gender'], toUpper(genderValue.id), prevState),
     );
   };
 
-  handleBirthdate = (value: string) => {
+  handleBirthdateSelect = (value: string) => {
     this.setState((prevState: StateType) =>
       assocPath(['data', 'birthdate'], value, prevState),
     );
@@ -113,7 +113,7 @@ class PersonalData extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, formErrors } = this.props;
     const { data } = this.state;
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
@@ -134,20 +134,20 @@ class PersonalData extends Component<PropsType, StateType> {
             label="Gender"
             activeItem={genderValue}
             items={genderItems}
-            onSelect={this.handleGender}
+            onSelect={this.handleGenderSelect}
             dataTest="profileGenderSelect"
           />
         </div>
         <div styleName="formItem">
           <BirthdateSelect
             birthdate={data.birthdate}
-            handleBirthdate={this.handleBirthdate}
+            handleBirthdateSelect={this.handleBirthdateSelect}
+            errors={propOr(null, 'birthdate', formErrors)}
           />
         </div>
         {this.renderInput({
           id: 'phone',
           label: 'Phone',
-          limit: 14,
         })}
         <div styleName="formItem">
           <SpinnerButton
