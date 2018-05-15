@@ -85,3 +85,14 @@
     color: $color_blue_1;
   }
 }
+
+.wireframe {
+  background: transparent;
+  font-family: $font_regular;
+  font-size:  14px;
+  border: $color_primary 1px solid;
+  color: $color_primary;
+  &:hover {
+    color: $color_white;
+  }
+}

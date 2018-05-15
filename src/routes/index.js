@@ -19,6 +19,7 @@ import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
+import Cart from 'pages/Cart';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 
@@ -93,6 +94,11 @@ const routes = (
     >
       <Route Component={Start} />
 
+      <Route
+        path="/cart"
+        render={({ props, Component }) => <Component {...props} />}
+        Component={Cart}
+      />
       <Route
         path="/categories"
         Component={Categories}
