@@ -31,7 +31,8 @@
     "relay-runtime": "1.5.0-rc.1",
     "resize-observer-polyfill": "1.5.0",
     "universal-cookie": "2.1.2",
-    "universal-cookie-express": "2.1.2"
+    "universal-cookie-express": "2.1.2",
+    "webpack-isomorphic-tools": "^3.0.5"
   },
   "devDependencies": {
     "@storybook/addon-actions": "3.3.9",
@@ -45,6 +46,7 @@
     "babel-eslint": "8.2.1",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-dynamic-import-node": "1.2.0",
     "babel-plugin-inline-react-svg": "0.5.2",
     "babel-plugin-module-resolver": "3.0.0",
@@ -114,7 +116,7 @@
     "build": "node scripts/build.js",
     "build:clean": "rm -rf ./build && mkdir ./build",
     "server:dist:clean": "rm -rf ./dist && mkdir ./dist",
-    "server:dist:build": "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
+    "server:dist:build": ". ./.env.stage && yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
     "server": "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node --inspect ./server/index.js",
     "server:dev": "export NODE_ENV=\"development\" && export BABEL_ENV=\"development\" && export REACT_APP_HOST=\"https://localhost:3443\" && yarn server",
     "server:test": ". ./.env.test && yarn server",
