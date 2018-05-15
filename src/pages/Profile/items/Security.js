@@ -1,8 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
-import './Security.scss';
+import '../Profile.scss';
 
 type PropsType = {
   //
@@ -12,9 +12,10 @@ type StateType = {
   //
 };
 
+// eslint-disable-next-line
 class Security extends Component<PropsType, StateType> {
   render() {
-    return <div styleName="container">Security</div>;
+    return <Fragment>&nbsp;</Fragment>;
   }
 }
 

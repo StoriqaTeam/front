@@ -1,31 +1,45 @@
 // @flow
 
-import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-import { pathOr, find, propEq } from 'ramda';
-// import { createFragmentContainer, graphql } from 'react-relay';
+import React, { Component, cloneElement } from 'react';
+import PropTypes from 'prop-types';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { pathOr, find, propEq, omit } from 'ramda';
+import { validate } from '@storiqa/shared';
 
-// import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
-import { PersonalData } from 'pages/Profile/PersonalData';
-import { ShippingAddresses } from 'pages/Profile/ShippingAddresses';
-import { Security } from 'pages/Profile/Security';
-import { KYC } from 'pages/Profile/KYC';
-// import { UpdateStoreMainMutation } from 'relay/mutations';
+import {
+  PersonalData,
+  ShippingAddresses,
+  Security,
+  KYC,
+} from 'pages/Profile/items';
+import Menu from 'pages/Profile/Menu';
 import { Container, Row, Col } from 'layout';
-// import { log, fromRelayError } from 'utils';
+import { log, fromRelayError } from 'utils';
+import { renameKeys } from 'utils/ramda';
 
-// import Form from './Form';
-import Menu from './Menu';
+import { UpdateUserMutation } from 'relay/mutations';
 
 import './Profile.scss';
 
+type UserType = {
+  firstName: string,
+  lastName: string,
+  phone: ?string,
+  birthdate: ?string,
+  gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
+};
+
 type PropsType = {
+  me: UserType,
   activeItem: string,
 };
 
 type StateType = {
-  //
+  isLoading: boolean,
+  formErrors: ?{
+    [string]: ?any,
+  },
 };
 
 const menuItems = [
@@ -42,31 +56,149 @@ const profileMenuMap = {
   kyc: <KYC />,
 };
 
-class Profile extends Component<PropsType> {
-  // constructor(props: PropsType) {
-  //   super(props);
-  //   this.state = {
-  //     profileMenuMap: {
-  //       'personal-data': <PersonalData />,
-  //       'shipping-addresses': <ShippingAddresses />,
-  //       'security': <Security />,
-  //       'kyc': <KYC />,
-  //     }
-  //   }
-  // }
+class Profile extends Component<PropsType, StateType> {
+  state = {
+    isLoading: false,
+    formErrors: null,
+  };
 
   onLogoUpload = url => {
-    // console.log('---url', url);
+    log.info(url);
+  };
+
+  handleSave = data => {
+    const { environment } = this.context;
+    const { me } = this.props;
+    const newData = {
+      ...me,
+      ...data,
+      firstName: data.first_name,
+      lastName: data.last_name,
+    };
+    const {
+      phone,
+      firstName,
+      lastName,
+      middleName,
+      birthdate,
+      gender,
+      isActive,
+    } = newData;
+
+    let { errors: formErrors } = validate(
+      {
+        firstName: [
+          [
+            (value: string) => value && value.length > 0,
+            'First name must not be empty',
+          ],
+        ],
+        lastName: [
+          [
+            (value: string) => value && value.length > 0,
+            'Last name must not be empty',
+          ],
+        ],
+        phone: [
+          [
+            (value: string) => /^\+?\d{7}\d*$/.test(value),
+            'Incorrect phone format',
+          ],
+        ],
+      },
+      {
+        firstName,
+        lastName,
+        phone,
+      },
+    );
+
+    if (formErrors) {
+      formErrors = renameKeys(
+        {
+          firstName: 'first_name',
+          lastName: 'last_name',
+        },
+        formErrors,
+      );
+      this.setState({ formErrors });
+      return;
+    }
+
+    this.setState(() => ({ isLoading: true }));
+    UpdateUserMutation.commit({
+      input: {
+        clientMutationId: '',
+        id: newData.id,
+        phone,
+        firstName,
+        lastName,
+        middleName,
+        birthdate,
+        gender,
+        isActive,
+      },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        // $FlowIgnoreMe
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+        }
+        this.setState(() => ({ isLoading: false }));
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+
+        this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          return;
+        }
+        // eslint-disable-next-line
+        alert('Something going wrong :(');
+      },
+    });
+  };
+
+  updateFormErrors = id => {
+    // $FlowIgnoreMe
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
   };
 
   renderProfileItem = () => {
+    const { handleSave, updateFormErrors } = this;
     const { activeItem, me } = this.props;
-    return pathOr(null, [activeItem], profileMenuMap);
+    const { formErrors, isLoading } = this.state;
+    // $FlowIgnoreMe
+    const element = pathOr(null, [activeItem], profileMenuMap);
+    return cloneElement(element, {
+      data: me,
+      formErrors,
+      handleSave,
+      isLoading,
+      updateFormErrors,
+    });
   };
 
   render() {
     const { activeItem, me } = this.props;
-    console.log('---me', me);
+    // $FlowIgnoreMe
     const { title } = find(propEq('id', activeItem), menuItems);
     return (
       <Container>
@@ -76,6 +208,8 @@ class Profile extends Component<PropsType> {
               menuItems={menuItems}
               activeItem={activeItem}
               onLogoUpload={this.onLogoUpload}
+              firstName={me.firstName}
+              lastName={me.lastName}
             />
           </Col>
           <Col size={10}>
@@ -87,7 +221,7 @@ class Profile extends Component<PropsType> {
                 <div styleName="subtitle">
                   <strong>{title}</strong>
                 </div>
-                {pathOr(null, [activeItem], profileMenuMap)}
+                {this.renderProfileItem()}
               </div>
             </div>
           </Col>
@@ -97,4 +231,21 @@ class Profile extends Component<PropsType> {
   }
 }
 
-export default Page(Profile);
+Profile.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
+
+export default createFragmentContainer(
+  Page(Profile),
+  graphql`
+    fragment Profile_me on User {
+      id
+      email
+      phone
+      firstName
+      lastName
+      birthdate
+      gender
+    }
+  `,
+);

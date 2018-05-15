@@ -1,8 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
-
-import './KYC.scss';
+import React, { Component, Fragment } from 'react';
 
 type PropsType = {
   //
@@ -12,9 +10,10 @@ type StateType = {
   //
 };
 
+// eslint-disable-next-line
 class KYC extends Component<PropsType, StateType> {
   render() {
-    return <div styleName="container">KYC</div>;
+    return <Fragment>&nbsp;</Fragment>;
   }
 }
 

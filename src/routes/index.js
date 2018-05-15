@@ -10,7 +10,7 @@ import { log } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
-import Profile from 'pages/Profile/Profile';
+import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';

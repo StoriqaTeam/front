@@ -1,0 +1,27 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  top: 0.5rem;
+  left: 0;
+  color: $color_grey_bg;
+  font-size: 14px;
+  line-height: 2rem;
+  white-space: nowrap;
+  transform: scale(0.9) translate(0, -2.6rem);
+  transform-origin: left bottom 0;
+}
+
+.items {
+  display: flex;
+}
+
+.item {
+  & + .item {
+    margin-left: 2rem;
+  }
+}

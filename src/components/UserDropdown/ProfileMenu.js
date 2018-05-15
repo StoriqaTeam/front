@@ -34,9 +34,9 @@ const ProfileMenu = ({
       </div>
       <div styleName="personalData">
         <div styleName="name">
-          <span>{lastName || '\u00A0'}</span>
-          <br />
           <span>{firstName || '\u00A0'}</span>
+          <br />
+          <span>{lastName || '\u00A0'}</span>
         </div>
         <div styleName="email">{email}</div>
       </div>
