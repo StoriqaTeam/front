@@ -11,16 +11,15 @@ const env = getClientEnvironment(publicUrl);
 /* eslint-disable */
 module.exports = {
   devtool: 'source-map',
-  target: "node",
-  entry: "./server/index.js",
+  target: 'node',
+  entry: './server/server.js',
   output: {
-    path: path.resolve(__dirname, "../dist"),
-    filename: "./server.js",
-    publicPath: "/dist/",
+    path: path.resolve(__dirname, '../dist'),
+    filename: './server.js',
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.json',],
+    extensions: ['.js', '.json'],
   },
   module: {
     rules: [
@@ -30,41 +29,52 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           cacheDirectory: false,
-          presets: ['react', 'es2015', "react-app"]
-        }
+          presets: ['react', 'es2015', 'react-app'],
+        },
       },
       {
         oneOf: [
           {
+            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            loader: require.resolve('url-loader'),
+            options: {
+              limit: 10000,
+              name: 'static/media/[name].[hash:8].[ext]',
+            },
+          },
+          {
             test: /\.scss$/,
-            use: [{
-              loader: "css-loader", // translates CSS into CommonJS
-              options: {
-                importLoaders: 1,
-                modules: true,
-                sourceMap: true,
-                localIdentName: '[name]__[local]___[hash:base64:5]'
-              }
-            }, {
-              loader: "sass-loader"
-            }],
+            use: [
+              {
+                loader: 'css-loader', // translates CSS into CommonJS
+                options: {
+                  importLoaders: 1,
+                  modules: true,
+                  sourceMap: true,
+                  localIdentName: '[name]__[local]___[hash:base64:5]',
+                },
+              },
+              {
+                loader: 'sass-loader',
+              },
+            ],
           },
           {
             loader: require.resolve('file-loader'),
             exclude: [/\.js$/, /\.html$/, /\.json$/],
-          }
-        ]
+          },
+        ],
       },
-    ]
+    ],
   },
   externals: [nodeExternals()],
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.BROWSER': JSON.stringify(false),
-      ...env.stringified
+      ...env.stringified,
     }),
-    new webpack.optimize.UglifyJsPlugin()
-  ]
+    new webpack.optimize.UglifyJsPlugin(),
+  ],
 };
 /* eslint-enable */

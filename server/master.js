@@ -1,7 +1,7 @@
 /* eslint-disable */
 const cluster = require('cluster');
 
-const NUM_OF_WORKERS = 4;
+const NUM_OF_WORKERS = process.env.NODE_ENV === 'production' ? 4 : 1;
 
 cluster.on('disconnect', worker => {
   console.log(`Worker ${worker.id} died`);
