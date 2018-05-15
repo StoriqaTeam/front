@@ -71,7 +71,7 @@ info_url = "https://graph.facebook.com/me"
 
 #### Пример работы с автогенерированными Flow-типами для Relay
 
-## `https://github.com/StoriqaTeam/front/pull/137/commits/711d30c0efa56f1c5ecbc7148a55d610ed5ac11a`
+##### https://github.com/StoriqaTeam/front/pull/137/commits/711d30c0efa56f1c5ecbc7148a55d610ed5ac11a
 
 #### Отключение pre-push хука
 
