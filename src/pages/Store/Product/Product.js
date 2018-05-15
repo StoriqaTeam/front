@@ -28,6 +28,7 @@ import {
   compareWidgets,
   extractPhotos,
   extractPriceInfo,
+  makeWidgets,
 } from './utils';
 
 import {
@@ -79,7 +80,7 @@ class Product extends Component<PropsType, StateType> {
       const priceInfo = head(extractPriceInfo(all));
       return {
         tabs: prevState.tabs,
-        widgets: buildWidgets(all),
+        widgets: makeWidgets([])(all),
         photoMain,
         additionalPhotos,
         priceInfo,

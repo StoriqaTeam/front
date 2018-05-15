@@ -152,3 +152,5 @@ export const makeWidgets: (
   const filteredVariants = filterVariantsBySelection(selections)(variants);
   return makeWidgetsFromVariants(filteredVariants);
 };
+
+export default makeWidgets;

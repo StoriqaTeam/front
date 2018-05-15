@@ -70,7 +70,7 @@ class ProductSize extends PureComponent<PropsType, StateType> {
             const separator = () => !isNil(arr[index]) && !arr[index].opacity;
             return (
               <button
-                key={size.id}
+                key={`${size.id}-${size.label}`}
                 onClick={() => this.handleClick(index, size)}
                 styleName={`size ${
                   selected === index && !size.opacity ? 'clicked' : ''

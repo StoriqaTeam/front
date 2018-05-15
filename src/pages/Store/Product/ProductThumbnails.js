@@ -71,7 +71,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {thumbnails.map((thumbnail, index) => (
             <button
-              key={thumbnail.id}
+              key={`${thumbnail.id}-${thumbnail.label}`}
               onClick={() => this.handleClick(index, thumbnail)}
             >
               <figure>
@@ -79,7 +79,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                   styleName={`${
                     selected === index && !thumbnail.opacity ? 'clicked' : ''
                   } ${thumbnail.opacity ? 'opaque' : ''}`}
-                  src={thumbnail.img}
+                  src={thumbnail.image}
                   alt={thumbnail.alt || 'image alt'}
                 />
               </figure>
