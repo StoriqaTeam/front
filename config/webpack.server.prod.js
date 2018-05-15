@@ -12,7 +12,7 @@ const env = getClientEnvironment(publicUrl);
 module.exports = {
   devtool: 'source-map',
   target: 'node',
-  entry: './server/server.js',
+  entry: './server/index.js',
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: './server.js',
