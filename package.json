@@ -116,7 +116,7 @@
     "build": "node scripts/build.js",
     "build:clean": "rm -rf ./build && mkdir ./build",
     "server:dist:clean": "rm -rf ./dist && mkdir ./dist",
-    "server:dist:build": ". ./.env.stage && yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
+    "server:dist:build": "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./config/webpack.server.prod.js",
     "server": "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node --inspect ./server/index.js",
     "server:dev": "export NODE_ENV=\"development\" && export BABEL_ENV=\"development\" && export REACT_APP_HOST=\"https://localhost:3443\" && yarn server",
     "server:test": ". ./.env.test && yarn server",
