@@ -11,8 +11,8 @@ import { SpinnerButton } from 'components/common/SpinnerButton';
 import '../Profile.scss';
 
 type DataType = {
-  firstName: string,
-  lastName: string,
+  first_name: string,
+  last_name: string,
   phone: ?string,
   birthdate: ?string,
   gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
@@ -21,7 +21,13 @@ type DataType = {
 type PropsType = {
   handleSave: (data: DataType) => void,
   updateFormErrors: (id: string) => void,
-  data: DataType,
+  data: {
+    firstName: string,
+    lastName: string,
+    phone: ?string,
+    birthdate: ?string,
+    gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
+  },
   isLoading: boolean,
   formErrors: {
     [string]: ?any,
@@ -44,8 +50,8 @@ class PersonalData extends Component<PropsType, StateType> {
     this.state = {
       data: {
         phone: data.phone || '',
-        firstName: data.firstName || '',
-        lastName: data.lastName || '',
+        first_name: data.firstName || '',
+        last_name: data.lastName || '',
         birthdate: data.birthdate || '',
         gender: data.gender || 'UNDEFINED',
       },
@@ -54,11 +60,7 @@ class PersonalData extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { data } = this.state;
-    this.props.handleSave({
-      ...data,
-      first_name: data.firstName,
-      last_name: data.lastName,
-    });
+    this.props.handleSave(data);
   };
 
   handleInputChange = (id: string) => (e: any) => {
@@ -117,12 +119,12 @@ class PersonalData extends Component<PropsType, StateType> {
     return (
       <Fragment>
         {this.renderInput({
-          id: 'firstName',
+          id: 'first_name',
           label: 'First name',
           limit: 50,
         })}
         {this.renderInput({
-          id: 'lastName',
+          id: 'last_name',
           label: 'Last name',
           limit: 50,
         })}
