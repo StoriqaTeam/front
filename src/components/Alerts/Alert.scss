@@ -1,0 +1,77 @@
+@import '../../styles/variables';
+
+.container {
+  width: 40rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  box-shadow: 0 7px 21px 5px rgba(0, 0, 0, 0.08);
+}
+
+.leftEdge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 0.25rem;
+}
+
+.default {
+  background-color: #d5d5d5;
+}
+
+.success {
+  background-color: #8fb62c;
+}
+
+.warning {
+  background-color: #ffd467;
+}
+
+.danger {
+  background-color: #ff408d;
+}
+
+.closeIcon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 2rem;
+  margin-top: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.title {
+  color: $color_grey_text;
+  font-family: $font_regular;
+  font-size: 14px;
+}
+
+.alertMessage {
+  margin-left: 2rem;
+  margin-top: 2.5rem;
+  margin-right: 1.5rem;
+  line-height: 1.43;
+  letter-spacing: normal;
+  color: $color_grey_bg;
+  font-family: $font_regular;
+  font-size: 14px;
+}
+
+.link {
+  color: $color_blue_1;
+  text-decoration: underline;
+  font-family: $font_regular;
+  font-size: 14px;
+  line-height: 1.43;
+  margin-left: 2rem;
+  margin-top: 1.5rem;
+  margin-right: 1.5rem;
+  margin-bottom: 2rem;
+}
