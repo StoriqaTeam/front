@@ -190,6 +190,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { step } = this.state;
+    console.log(this.props)
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">

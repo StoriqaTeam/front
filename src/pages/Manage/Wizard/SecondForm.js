@@ -59,6 +59,7 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
 
   const handleChangeAddressData = data => {
     console.log('^^^^ SecondForm handleChangeAddressData: ', data);
+    // onSave('defaultLanguage', item.id);
   };
 
   const languagesItems = map(
@@ -72,7 +73,7 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
   const findActiveItem = find(item => item.id === data.defaultLanguage);
 
   return (
-    <div styleName="form">
+    <div styleName="form secondForm">
       <div styleName="formItem">
         <Select
           forForm
@@ -84,10 +85,10 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
           dataTest="wizardLanguagesSelect"
         />
       </div>
-      <div styleName="formItem">
+      <div styleName="formItem addressForm">
         <AddressForm isOpen onChangeData={handleChangeAddressData} />
       </div>
-      <div>
+      <div styleName="">
         <Textarea
           id="shortDescription"
           value={data.shortDescription}

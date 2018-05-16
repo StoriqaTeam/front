@@ -249,13 +249,14 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="wrapper">
           <Select
             forForm
+            fullWidth
             label="Country"
             items={countriesArr}
             onSelect={this.handleOnChangeCountry}
             activeItem={this.state.country}
             dataTest="AddressFormSelect"
           />
-          <div styleName="wrapper">{addressBlock}</div>
+          <div styleName="result">{addressBlock}</div>
         </div>
         {autocompleteResult}
       </div>
