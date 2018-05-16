@@ -71,7 +71,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {thumbnails.map((thumbnail, index) => (
             <button
-              key={`${thumbnail.id}-${thumbnail.label}`}
+              key={`${thumbnail.label}`}
               onClick={() => this.handleClick(index, thumbnail)}
             >
               <figure>
