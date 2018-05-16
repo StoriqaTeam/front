@@ -5,5 +5,7 @@ if (cluster.isMaster) {
   require('./master');
 } else {
   // eslint-disable-next-line
-  require('./worker');
+  process.env.NODE_ENV === 'production'
+    ? require('./server') // eslint-disable-line
+    : require('./worker'); // eslint-disable-line
 }
