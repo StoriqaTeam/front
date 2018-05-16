@@ -1,35 +1,36 @@
 // @flow
 
 import React from 'react';
-import { map } from 'ramda';
+import { map, find, assocPath } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { Select } from 'components/common/Select';
+import { AddressForm } from 'components/AddressAutocomplete';
 
 import './Form.scss';
 
 const languagesDic = {
-  en: 'English',
-  ch: 'Chinese',
-  de: 'German',
-  ru: 'Russian',
-  es: 'Spanish',
-  fr: 'French',
-  ko: 'Korean',
-  po: 'Portuguese',
-  ja: 'Japanese',
+  EN: 'English',
+  CH: 'Chinese',
+  DE: 'German',
+  RU: 'Russian',
+  ES: 'Spanish',
+  FR: 'French',
+  KO: 'Korean',
+  PO: 'Portuguese',
+  JA: 'Japanese',
 };
 
 type PropsType = {
-  languages: Array<{ icoCode: string }>,
+  languages: Array<{ isoCode: string }>,
   data: {
     userId: ?number,
     storeId: ?number,
     name: ?string,
+    slug: ?string,
     shortDescription: ?string,
     defaultLanguage: ?string,
-    slug: ?string,
     country: ?string,
     address: ?string,
   },
@@ -44,13 +45,49 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
     const {
       target: { value, name },
     } = e;
-    onChange(value, name);
+    onChange(name, value);
   };
 
   const handleOnBlur = fieldName => () => {
     onSave(fieldName);
   };
 
+  const handleOnSelectLanguage = item => {
+    onChange('defaultLanguage', item.id);
+    onSave('defaultLanguage', item.id);
+  }
+
+  const handleAddressFormChange = (id: string) => (e: any) => {
+    const { value } = e.target;
+    console.log('^^^^ second form handleAddressFormChange: ', { id, value })
+    // if (value.length <= 50) {
+    //   this.setState(
+    //     assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
+    //   );
+    // }
+  };
+
+  const handleUpdateFormChange = (form: any) => {
+    console.log('^^^^ second form handleUpdateFormChange: ', { form })
+    // this.setState({
+    //   form: {
+    //     ...this.state.form,
+    //     ...form,
+    //   },
+    // });
+  };
+
+  const languagesItems = map(
+    item => ({
+      id: item.isoCode.toUpperCase(),
+      label: languagesDic[item.isoCode.toUpperCase()],
+    }),
+    languages,
+  );
+
+  const findActiveItem = find(item => item.id === data.defaultLanguage);
+
+  console.log('^^^^^ second form languagesItems: ', languagesItems);
   return (
     <div styleName="form">
       <div styleName="formItem">
@@ -58,32 +95,18 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
           forForm
           fullWidth
           label="Main language"
-          // activeItem={data && data.defaultLanguage ? { id: data.defaultLanguage, label: 'ENG' } : null}
-          items={map(item => ({
-            id: item.isoCode,
-            label: languagesDic[item.isoCode],
-          }), languages)}
-          onSelect={() => {}}
+          activeItem={findActiveItem(languagesItems)}
+          items={languagesItems}
+          onSelect={handleOnSelectLanguage}
           dataTest="wizardLanguagesSelect"
         />
-        {/* <Select
-          forForm
-          label="Main language"
-          activeItem={defaultLanguageValue}
-          items={langItems}
-          onSelect={this.handleDefaultLanguage}
-          tabIndexValue={0}
-          dataTest="storeLangSelect"
-        /> */}
       </div>
       <div styleName="formItem">
-        <Input
-          id="slug"
-          value={data.slug}
-          label="Slug"
-          onChange={handleOnChange}
-          onBlur={handleOnBlur('slug')}
-          fullWidth
+        <AddressForm
+          country=''
+          address=''
+          onChangeFormInput={handleAddressFormChange}
+          onUpdateForm={handleUpdateFormChange}
         />
       </div>
       <div>

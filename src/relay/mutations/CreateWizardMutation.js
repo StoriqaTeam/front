@@ -10,8 +10,12 @@ const mutation = graphql`
       rawId
       stepOne {
         name
+        slug
+        shortDescription
       }
       stepTwo {
+        country
+        address
         defaultLanguage
       }
       stepThree {
@@ -37,7 +41,11 @@ const commit = (params: MutationParamsType) =>
     mutation,
     onCompleted: params.onCompleted,
     onError: params.onError,
-    updater: params.updater,
+    updater: relayStore => {
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      const wizardRecord = relayStore.getRootField('createWizardStore');
+      me.setLinkedRecord(wizardRecord, 'wizardStore');
+    },
   });
 
 export default { commit };

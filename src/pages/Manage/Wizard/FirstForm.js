@@ -18,8 +18,8 @@ type FirstFormPropsType = {
     country: ?string,
     address: ?string,
   },
-  onChange: (value: string, fieldName: string) => void,
-  onSave: (value: string, fieldName: string) => void,
+  onChange: (fieldName: string, value: string) => void,
+  onSave: (fieldName: string, value: string) => void,
 };
 
 const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
@@ -27,7 +27,7 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
     const {
       target: { value, name },
     } = e;
-    onChange(value, name);
+    onChange(name, value);
   };
 
   const handleOnBlur = fieldName => () => {

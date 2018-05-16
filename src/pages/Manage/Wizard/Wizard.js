@@ -26,11 +26,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], props);
     const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], props);
     const stepThree = pathOr(null, ['me', 'wizardStore', 'stepThree'], props);
+    console.log('^^^^ constructor props: ', { props, stepOne, stepTwo, stepThree });
+    // defaultLanguage будет 'EN' по умолчанию для нового store
     this.state = {
       step: 1,
       wizardStore: {
         ...stepOne,
         ...stepTwo,
+        defaultLanguage: stepTwo && stepTwo.defaultLanguage ? stepTwo.defaultLanguage : 'EN',
         ...stepThree,
       },
       formErrors: {},
@@ -78,13 +81,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         // eslint-disable-next-line
         alert('Something going wrong :(');
       },
-      updater: relayStore => {
-        const me = relayStore.getRoot().getLinkedRecord('me');
-        const wizardRecord = relayStore.getRootField('createWizardStore');
-        me.setLinkedRecord(wizardRecord, 'wizardStore');
-      }
     });
-  }
+  };
 
   updateWizard = (fieldName, value) => {
     this.setState(() => ({ isLoading: true }));
@@ -106,34 +104,36 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         alert('Something going wrong :(');
       },
     });
-  }
+  };
 
   handleChangeStep = (step: number) => {
     this.setState({ step });
   };
 
-  handleChangeForm = (value, fieldName) => {
+  handleChangeForm = (fieldName, value) => {
+    const { wizardStore } = this.state;
     this.setState({
       wizardStore: {
-        ...this.state.wizardStore,
+        ...wizardStore,
         [fieldName]: value,
       },
     });
   };
 
-  handleOnSaveWizard = fieldName => {
+  handleOnSaveWizard = (fieldName, value) => {
     const { wizardStore } = this.state;
     // console.log('**** handleOnSaveWizard: ', {
     //   value: wizardStore[fieldName],
     //   fieldName,
     // });
-    if (wizardStore[fieldName] || wizardStore[fieldName] === '') {
-      this.updateWizard(fieldName, wizardStore[fieldName]);
+    if (value || wizardStore[fieldName] || wizardStore[fieldName] === '') {
+      this.updateWizard(fieldName, value || wizardStore[fieldName]);
     }
   };
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
+    // console.log('^^^^ render props: ', this.props);
     switch (step) {
       case 1:
         return (
@@ -183,10 +183,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const { step, wizardStore } = this.state;
-
-    console.log('**** Wizard props: ', this.props);
-
+    const { step } = this.state;
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
@@ -206,7 +203,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     );
   }
 }
-
 
 WizardWrapper.contextTypes = {
   environment: PropTypes.object.isRequired,
