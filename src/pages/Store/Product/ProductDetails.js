@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import { ascend, prop, sortWith } from 'ramda';
 
 import { WidgetsType, WidgetType, WidgetOptionType } from './types';
 
@@ -107,6 +108,9 @@ class ProductDetails extends React.Component<PropsType, StateType> {
     }
     return WidgetComponent;
   };
+  sort: (Array<WidgetType>) => Array<WidgetType> = sortWith([
+    ascend(prop('id')),
+  ]);
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
@@ -114,7 +118,7 @@ class ProductDetails extends React.Component<PropsType, StateType> {
         <h2>{productTitle}</h2>
         {children}
         <p>{productDescription}</p>
-        {widgets.map(this.generateWidget)}
+        {this.sort(widgets).map(this.generateWidget)}
       </div>
     );
   }
