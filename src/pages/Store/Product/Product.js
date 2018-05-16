@@ -41,7 +41,13 @@ import {
   TabRow,
 } from './index';
 
-import { ProductType, SelectedType, ThumbnailType, PriceInfo, WidgetOptionType } from './types';
+import {
+  ProductType,
+  SelectedType,
+  ThumbnailType,
+  PriceInfo,
+  WidgetOptionType,
+} from './types';
 
 import './Product.scss';
 import mockData from './mockData.json';
@@ -195,7 +201,7 @@ class Product extends Component<PropsType, StateType> {
     const widgets = differentiateWidgets([{ id, value: label }])(variants);
     this.setState({
       widgets,
-    })
+    });
   };
 
   loggedIn() {
