@@ -55,11 +55,11 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
   const handleOnSelectLanguage = item => {
     onChange('defaultLanguage', item.id);
     onSave('defaultLanguage', item.id);
-  }
+  };
 
   const handleAddressFormChange = (id: string) => (e: any) => {
     const { value } = e.target;
-    console.log('^^^^ second form handleAddressFormChange: ', { id, value })
+    console.log('^^^^ second form handleAddressFormChange: ', { id, value });
     // if (value.length <= 50) {
     //   this.setState(
     //     assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
@@ -68,7 +68,7 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
   };
 
   const handleUpdateFormChange = (form: any) => {
-    console.log('^^^^ second form handleUpdateFormChange: ', { form })
+    console.log('^^^^ second form handleUpdateFormChange: ', { form });
     // this.setState({
     //   form: {
     //     ...this.state.form,
@@ -103,8 +103,8 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
       </div>
       <div styleName="formItem">
         <AddressForm
-          country=''
-          address=''
+          country=""
+          address=""
           onChangeFormInput={handleAddressFormChange}
           onUpdateForm={handleUpdateFormChange}
         />

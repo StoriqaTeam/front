@@ -26,14 +26,20 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], props);
     const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], props);
     const stepThree = pathOr(null, ['me', 'wizardStore', 'stepThree'], props);
-    console.log('^^^^ constructor props: ', { props, stepOne, stepTwo, stepThree });
+    console.log('^^^^ constructor props: ', {
+      props,
+      stepOne,
+      stepTwo,
+      stepThree,
+    });
     // defaultLanguage будет 'EN' по умолчанию для нового store
     this.state = {
       step: 1,
       wizardStore: {
         ...stepOne,
         ...stepTwo,
-        defaultLanguage: stepTwo && stepTwo.defaultLanguage ? stepTwo.defaultLanguage : 'EN',
+        defaultLanguage:
+          stepTwo && stepTwo.defaultLanguage ? stepTwo.defaultLanguage : 'EN',
         ...stepThree,
       },
       formErrors: {},
