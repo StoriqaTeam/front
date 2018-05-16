@@ -10,7 +10,7 @@ import {
   sortWith,
 } from 'ramda';
 
-import { makeWidgets } from './index';
+import { makeWidgets, removeWidgetOptionsDuplicates } from './index';
 import { VariantType, WidgetType, WidgetOptionType } from '../types';
 
 const differentiateWidgets: (
@@ -67,6 +67,7 @@ const differentiateWidgets: (
   return pipe(
     mapIndexed(differentiateOption),
     mergeWidgetsOptions(filteredWidgets),
+    removeWidgetOptionsDuplicates,
   )(widgetsEmpty);
 };
 

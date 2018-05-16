@@ -4,8 +4,9 @@ import {
   makeWidgetsFromVariants,
   groupWidgets,
   makeWidgets,
-  removeWidgetOptionsDuplicates,
 } from './makeWidgets';
+
+import { removeWidgetOptionsDuplicates } from './index';
 
 import mockVariants from './mocks/mockVariants.json';
 import expectedVariants from './mocks/expectedVariants.json';

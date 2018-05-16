@@ -23,6 +23,8 @@ import { extractText } from 'utils';
 
 import { VariantType, WidgetType, GroupedWidgetsType } from '../types';
 
+import { removeWidgetOptionsDuplicates } from './index';
+
 type TransformedVariantType = {
   id: string,
   image: string,
@@ -124,17 +126,6 @@ const makeWidget = (groupedWidgets: GroupedWidgetsType): Array<WidgetType> => {
     reduce(reduceWidgetsOptions, {}, groupedWidgets[key]);
   return map(mergeWidgetOptions, keys(groupedWidgets));
 };
-
-export const removeWidgetOptionsDuplicates = (
-  widgets: Array<WidgetType>,
-): Array<WidgetType> =>
-  map(
-    (widget: WidgetType): Array<WidgetType> => ({
-      ...widget,
-      options: uniqBy(prop('label'), widget.options),
-    }),
-    widgets,
-  );
 
 export const makeWidgetsFromVariants: (
   Array<VariantType>,
