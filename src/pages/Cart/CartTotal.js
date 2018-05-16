@@ -5,11 +5,6 @@ import { Button } from 'components/common/Button';
 import { pipe, values, reduce } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
 
-// import master from './png/master.png';
-// import visa from './png/visa.png';
-// import btc from './png/btc.png';
-// import eth from './png/eth.png';
-// import stq from './png/stq.png';
 import CartProductAttribute from './CartProductAttribute';
 
 import './CartTotal.scss';
@@ -75,10 +70,10 @@ class CartTotal extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const rect = this.ref.getBoundingClientRect();
     const height = rect.bottom - rect.top;
-    // $FlowIgnoreMe
     const {
       top: viewTop,
       bottom: viewBottom,
+      // $FlowIgnoreMe
     } = this.props.storesRef.getBoundingClientRect();
     if (viewBottom - viewTop < STICKY_THRESHOLD_REM * rem) {
       if (this.state.currentClass !== 'top') {
@@ -99,6 +94,7 @@ class CartTotal extends Component<PropsType, StateType> {
     }
     // $FlowIgnoreMe
     if (this.ref.className !== currentClass) {
+      // $FlowIgnoreMe
       this.ref.className = currentClass;
     }
   }
@@ -138,7 +134,11 @@ class CartTotal extends Component<PropsType, StateType> {
                 <Checkbox isChecked={false} />
                 <div styleName="payment-option-value">5504 84** **** 3452</div>
                 <div styleName="payment-option-icon">
-                  <img src="" alt="master card" />
+                  <img
+                    // eslint-disable-next-line
+                    src={require('./png/master.png')}
+                    alt="master card"
+                  />
                 </div>
               </div>
 
@@ -146,7 +146,11 @@ class CartTotal extends Component<PropsType, StateType> {
                 <Checkbox isChecked={false} />
                 <div styleName="payment-option-value">5504 84** **** 5824</div>
                 <div styleName="payment-option-icon">
-                  <img src="" alt="visa" />
+                  <img
+                    // eslint-disable-next-line
+                    src={require('./png/visa.png')}
+                    alt="visa"
+                  />
                 </div>
               </div>
             </div>
@@ -157,7 +161,11 @@ class CartTotal extends Component<PropsType, StateType> {
                 <Checkbox isChecked />
                 <div styleName="payment-option-value">STQ</div>
                 <div styleName="payment-option-icon">
-                  <img src="" alt="stq" />
+                  <img
+                    // eslint-disable-next-line
+                    src={require('./png/stq.png')}
+                    alt="stq"
+                  />
                 </div>
               </div>
 
@@ -165,7 +173,11 @@ class CartTotal extends Component<PropsType, StateType> {
                 <Checkbox isChecked={false} />
                 <div styleName="payment-option-value">BTC</div>
                 <div styleName="payment-option-icon">
-                  <img src="" alt="btc" />
+                  <img
+                    // eslint-disable-next-line
+                    src={require('./png/btc.png')}
+                    alt="btc"
+                  />
                 </div>
               </div>
 
@@ -173,7 +185,11 @@ class CartTotal extends Component<PropsType, StateType> {
                 <Checkbox isChecked={false} />
                 <div styleName="payment-option-value">ETH</div>
                 <div styleName="payment-option-icon">
-                  <img src="" alt="eth" />
+                  <img
+                    // eslint-disable-next-line
+                    src={require('./png/eth.png')}
+                    alt="eth"
+                  />
                 </div>
               </div>
             </div>
@@ -191,9 +207,9 @@ class CartTotal extends Component<PropsType, StateType> {
               title={
                 <div>
                   <span>Total</span>
-                  <span
-                    style={{ color: '#8fb62c' }}
-                  >{` (${totalCount} items)`}</span>
+                  <span style={{ color: '#8fb62c' }}>
+                    {` (${totalCount} items)`}
+                  </span>
                 </div>
               }
               value={`${productsCost + deliveryCost} STQ`}

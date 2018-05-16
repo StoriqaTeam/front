@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
-// $FlowIgnoreMe
 import {
   pipe,
   pathOr,
@@ -12,6 +11,7 @@ import {
   map,
   prop,
   sum,
+  // $FlowIgnoreMe
   chain,
   reject,
   isNil,
