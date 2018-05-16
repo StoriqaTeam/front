@@ -278,8 +278,8 @@
     react-treebeard "^2.1.0"
 
 "@types/node@^8.0.24":
-  version "8.10.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.12.tgz#dcb66f6de39074a296534bd1a256a3c6a1c8f5b5"
+  version "8.10.15"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.15.tgz#3ce3cdf6ee1846a9db0c0f52275c14bf0cd67f67"
 
 abab@^1.0.3:
   version "1.0.4"
@@ -4829,8 +4829,8 @@ home-or-tmp@^2.0.0:
     os-tmpdir "^1.0.1"
 
 home-path@^1.0.1:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/home-path/-/home-path-1.0.5.tgz#788b29815b12d53bacf575648476e6f9041d133f"
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/home-path/-/home-path-1.0.6.tgz#d549dc2465388a7f8667242c5b31588d29af29fc"
 
 homedir-polyfill@^1.0.1:
   version "1.0.1"
@@ -8763,7 +8763,7 @@ relay-compiler@1.5.0-rc.1:
     signedsource "^1.0.0"
     yargs "^9.0.0"
 
-relay-devtools@1.4.0:
+relay-devtools@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/relay-devtools/-/relay-devtools-1.4.0.tgz#7456c4ed3ad1e06f559fd80a77fee17f9e8edf80"
   dependencies:

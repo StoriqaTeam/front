@@ -18,3 +18,5 @@ export {
 } from './CreateProductWithAttributesMutation';
 export { default as UpdateProductMutation } from './UpdateProductMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';
+export { default as CreateWizardMutation } from './CreateWizardMutation';
+export { default as UpdateWizardMutation } from './UpdateWizardMutation';

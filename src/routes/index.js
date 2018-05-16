@@ -169,19 +169,11 @@ const routes = (
           Component={Wizard}
           query={graphql`
             query routes_Wizard_Query {
+              languages {
+                isoCode
+              }
               me {
-                id
-                wizardStore {
-                  id
-                  rawId
-                  storeId
-                  name
-                  slug
-                  shortDescription
-                  address
-                  country
-                  defaultLanguage
-                }
+                ...Wizard_me
               }
             }
           `}

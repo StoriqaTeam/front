@@ -1,13 +1,28 @@
 // @flow
 
 import React from 'react';
+import { map } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
+import { Select } from 'components/common/Select';
 
 import './Form.scss';
 
-type FirstFormPropsType = {
+const languagesDic = {
+  en: 'English',
+  ch: 'Chinese',
+  de: 'German',
+  ru: 'Russian',
+  es: 'Spanish',
+  fr: 'French',
+  ko: 'Korean',
+  po: 'Portuguese',
+  ja: 'Japanese',
+};
+
+type PropsType = {
+  languages: Array<{ icoCode: string }>,
   data: {
     userId: ?number,
     storeId: ?number,
@@ -22,7 +37,9 @@ type FirstFormPropsType = {
   onSave: (value: string, fieldName: string) => void,
 };
 
-const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
+const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
+  console.log('^^^^ second form data: ', data);
+
   const handleOnChange = e => {
     const {
       target: { value, name },
@@ -37,14 +54,27 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
   return (
     <div styleName="form">
       <div styleName="formItem">
-        <Input
-          id="name"
-          value={data.name}
-          label="Name"
-          onChange={handleOnChange}
-          onBlur={handleOnBlur('name')}
+        <Select
+          forForm
           fullWidth
+          label="Main language"
+          // activeItem={data && data.defaultLanguage ? { id: data.defaultLanguage, label: 'ENG' } : null}
+          items={map(item => ({
+            id: item.isoCode,
+            label: languagesDic[item.isoCode],
+          }), languages)}
+          onSelect={() => {}}
+          dataTest="wizardLanguagesSelect"
         />
+        {/* <Select
+          forForm
+          label="Main language"
+          activeItem={defaultLanguageValue}
+          items={langItems}
+          onSelect={this.handleDefaultLanguage}
+          tabIndexValue={0}
+          dataTest="storeLangSelect"
+        /> */}
       </div>
       <div styleName="formItem">
         <Input
@@ -59,7 +89,7 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
       <div>
         <Textarea
           id="shortDescription"
-          value={data.shortDescription ? data.shortDescription : ''}
+          value={data.shortDescription}
           label="Short description"
           onChange={handleOnChange}
           onBlur={handleOnBlur('shortDescription')}
@@ -70,4 +100,4 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
   );
 };
 
-export default FirstForm;
+export default SecondForm;
