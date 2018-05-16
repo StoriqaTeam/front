@@ -27,8 +27,10 @@ type PropsType = {
   geocoderService: any,
   onChangeFormInput: (type: string) => (e: any) => void,
   onUpdateForm: (form: any) => void,
+  onChangeData: (data: any) => void,
   country: string,
   address: string,
+  isOpen?: boolean,
 };
 
 type SelectType = {
@@ -81,7 +83,7 @@ class Form extends Component<PropsType, StateType> {
         }
       };
       forEach(populateAddressField, result.addressComponents);
-      this.setState({ address });
+      this.setState({ address: renameCamelCase(address) });
     }
   };
 
@@ -105,7 +107,9 @@ class Form extends Component<PropsType, StateType> {
 
   handleOnChangeForm = (type: string) => (e: any) => {
     const { onChangeFormInput } = this.props;
-    onChangeFormInput(type)(e);
+    if (onChangeFormInput) {
+      onChangeFormInput(type)(e);
+    }
     this.setState({
       address: {
         ...this.state.address,
@@ -141,7 +145,9 @@ class Form extends Component<PropsType, StateType> {
     const { country } = this.state;
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
-    onUpdateForm({ address: value });
+    if (onUpdateForm) {
+      onUpdateForm({ address: value });
+    }
     if (isEmpty(value)) {
       this.setState({ predictions: [] });
       return;
@@ -162,69 +168,77 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleOnChangeCountry = (value: ?SelectType) => {
+    const { onUpdateForm } = this.props;
     this.setState(
       () => ({ country: value }),
       () => {
-        this.props.onUpdateForm({ country: value ? value.label : '' });
+        if (onUpdateForm) {
+          onUpdateForm({ country: value ? value.label : '' });
+        }
       },
     );
   };
 
   render() {
+    const { onChangeData, isOpen } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
+    onChangeData({
+      country: country ? country.id : null,
+      address,
+      autocompleteValue,
+    });
     const countriesArr = getIndexedCountries(countries);
     const countryLabel = country ? country.label : '';
     const countryFromResource = getCountryByName(countryLabel, countries);
-    const addressBlock =
-      !countryLabel || !countryFromResource ? null : (
-        <div styleName="wrapper">
-          <Autocomplete
-            autoHighlight
-            id="autocompleteId"
-            wrapperStyle={{ position: 'relative' }}
-            items={predictions}
-            getItemValue={item => item.mainText}
-            renderItem={(item, isHighlighted) => (
-              <div
-                key={`${item.mainText}-${item.secondaryText}`}
-                styleName={classNames('item', { isHighlighted })}
-              >
-                {`${item.mainText}, ${item.secondaryText}`}
-              </div>
-            )}
-            renderInput={props => (
-              <AutocompleteInput
-                inputRef={props.ref}
-                label="Address"
-                {...pick(
-                  [
-                    'onChange',
-                    'onBlur',
-                    'onFocus',
-                    'onKeyDown',
-                    'onClick',
-                    'value',
-                  ],
-                  props,
-                )}
-              />
-            )}
-            renderMenu={items => (
-              <div styleName="items">
-                <div styleName="itemsWrap" />
-                {items}
-              </div>
-            )}
-            value={autocompleteValue}
-            onChange={e => this.handleOnChangeAddress(e.target.value)}
-            onSelect={(selectedValue, item) => {
-              this.handleOnChangeAddress(selectedValue);
-              this.handleOnSetAddress(selectedValue, item);
-            }}
-          />
-        </div>
-      );
-    const autocompleteResult = address && (
+    const addressBlock = (countryFromResource || countryLabel || isOpen) && (
+      <div styleName="wrapper">
+        <Autocomplete
+          autoHighlight
+          id="autocompleteId"
+          wrapperStyle={{ position: 'relative' }}
+          items={predictions}
+          getItemValue={item => item.mainText}
+          renderItem={(item, isHighlighted) => (
+            <div
+              key={`${item.mainText}-${item.secondaryText}`}
+              styleName={classNames('item', { isHighlighted })}
+            >
+              {`${item.mainText}, ${item.secondaryText}`}
+            </div>
+          )}
+          renderInput={props => (
+            <AutocompleteInput
+              inputRef={props.ref}
+              label="Address"
+              {...pick(
+                [
+                  'onChange',
+                  'onBlur',
+                  'onFocus',
+                  'onKeyDown',
+                  'onClick',
+                  'value',
+                ],
+                props,
+              )}
+            />
+          )}
+          renderMenu={items => (
+            <div styleName="items">
+              <div styleName="itemsWrap" />
+              {items}
+            </div>
+          )}
+          value={autocompleteValue}
+          onChange={e => this.handleOnChangeAddress(e.target.value)}
+          onSelect={(selectedValue, item) => {
+            this.handleOnChangeAddress(selectedValue);
+            this.handleOnSetAddress(selectedValue, item);
+          }}
+        />
+      </div>
+    );
+    const autocompleteResult = (address || isOpen) && (
       <AddressResultForm
         onChangeForm={this.handleOnChangeForm}
         address={address}

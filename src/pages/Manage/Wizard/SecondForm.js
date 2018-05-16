@@ -3,7 +3,7 @@
 import React from 'react';
 import { map, find, assocPath } from 'ramda';
 
-import { Input } from 'components/common/Input';
+// import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -39,7 +39,7 @@ type PropsType = {
 };
 
 const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
-  console.log('^^^^ second form data: ', data);
+  // console.log('^^^^ second form data: ', data);
 
   const handleOnChange = e => {
     const {
@@ -57,24 +57,8 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
     onSave('defaultLanguage', item.id);
   };
 
-  const handleAddressFormChange = (id: string) => (e: any) => {
-    const { value } = e.target;
-    console.log('^^^^ second form handleAddressFormChange: ', { id, value });
-    // if (value.length <= 50) {
-    //   this.setState(
-    //     assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
-    //   );
-    // }
-  };
-
-  const handleUpdateFormChange = (form: any) => {
-    console.log('^^^^ second form handleUpdateFormChange: ', { form });
-    // this.setState({
-    //   form: {
-    //     ...this.state.form,
-    //     ...form,
-    //   },
-    // });
+  const handleChangeAddressData = data => {
+    console.log('^^^^ SecondForm handleChangeAddressData: ', data);
   };
 
   const languagesItems = map(
@@ -87,7 +71,6 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
 
   const findActiveItem = find(item => item.id === data.defaultLanguage);
 
-  console.log('^^^^^ second form languagesItems: ', languagesItems);
   return (
     <div styleName="form">
       <div styleName="formItem">
@@ -102,12 +85,7 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
         />
       </div>
       <div styleName="formItem">
-        <AddressForm
-          country=""
-          address=""
-          onChangeFormInput={handleAddressFormChange}
-          onUpdateForm={handleUpdateFormChange}
-        />
+        <AddressForm isOpen onChangeData={handleChangeAddressData} />
       </div>
       <div>
         <Textarea

@@ -283,8 +283,10 @@ export default createFragmentContainer(
         facebookUrl
         twitterUrl
         instagramUrl
-        address
-        country
+        address {
+          value
+          country
+        }
       }
     }
   `,

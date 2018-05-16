@@ -12,8 +12,10 @@ const mutation = graphql`
       rawId
       email
       phone
-      country
-      address
+      address {
+        value
+        country
+      }
       facebookUrl
       twitterUrl
       instagramUrl
