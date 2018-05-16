@@ -5,7 +5,7 @@ import { assocPath, propOr, toUpper, toLower, find, propEq } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
-import { BirthdateSelect } from 'pages/Profile/BirthdateSelect';
+import { BirthdateSelect } from 'pages/Profile/items/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 
 import '../Profile.scss';
