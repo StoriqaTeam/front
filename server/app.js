@@ -37,6 +37,12 @@ if (process.env.NODE_ENV === 'development') {
   require('babel-register')(config);
 }
 
+// clear require() cache if in development mode
+// (makes asset hot reloading work)
+if (process.env.NODE_ENV !== 'production') {
+  webpackIsomorphicTools.refresh();
+}
+
 const app = express();
 
 // Support Gzip
