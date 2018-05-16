@@ -28,7 +28,9 @@ type PropsType = {
   onChangeFormInput: (type: string) => (e: any) => void,
   onUpdateForm: (form: any) => void,
   country: string,
-  address: string,
+  autocompleteValue: string,
+  isOpen?: boolean,
+  address: any,
 };
 
 type SelectType = {
@@ -61,14 +63,16 @@ class Form extends Component<PropsType, StateType> {
     const country = find(propEq('name', props.country))(countries);
     this.state = {
       country: country ? { id: country.code, label: country.name } : null,
-      address: null,
-      autocompleteValue: props.address,
+      address: props.address,
+      autocompleteValue: props.autocompleteValue,
       predictions: [],
     };
     this.handleAutocomplete = debounce(this.handleAutocomplete, 250);
   }
 
   handleOnReceiveAddress = (result: GeocoderType) => {
+    const { onUpdateForm } = this.props;
+    const { country } = this.state;
     if (result && result.addressComponents) {
       const address = {};
       const populateAddressField = addressComponent => {
@@ -82,6 +86,7 @@ class Form extends Component<PropsType, StateType> {
       };
       forEach(populateAddressField, result.addressComponents);
       this.setState({ address });
+      onUpdateForm({ ...address, country: country.label });
     }
   };
 
@@ -157,6 +162,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleOnChangeAddress = (value: string) => {
+    console.log('---value', value);
     this.setState({ autocompleteValue: value });
     this.handleAutocomplete(value);
   };
@@ -171,12 +177,14 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { isOpen } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
+    // console.log('---address', address);
     const countriesArr = getIndexedCountries(countries);
     const countryLabel = country ? country.label : '';
     const countryFromResource = getCountryByName(countryLabel, countries);
     const addressBlock =
-      !countryLabel || !countryFromResource ? null : (
+      (countryFromResource || countryLabel || isOpen) && (
         <div styleName="wrapper">
           <Autocomplete
             autoHighlight
@@ -224,7 +232,7 @@ class Form extends Component<PropsType, StateType> {
           />
         </div>
       );
-    const autocompleteResult = address && (
+    const autocompleteResult = (address || isOpen) && (
       <AddressResultForm
         onChangeForm={this.handleOnChangeForm}
         address={address}
