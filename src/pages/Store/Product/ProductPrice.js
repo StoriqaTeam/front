@@ -30,7 +30,7 @@ const ProductPrice = ({
         {price} {currency}
       </span>
       <button>
-        {buttonText} {`${cashback}%`}
+        {buttonText} {`${parseInt(cashback * 100, 10)}%`}
       </button>
     </div>
   </div>
