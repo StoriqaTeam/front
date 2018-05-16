@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { WidgetsType, WidgetType } from './types';
+import { WidgetsType, WidgetType, WidgetOptionType } from './types';
 
 import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
 
@@ -62,13 +62,14 @@ class ProductDetails extends React.Component<PropsType, StateType> {
     );
   };
 
-  handleWidgetClick = (selected: WidgetType) => {
-
+  handleWidgetClick = (selected: WidgetOptionType): void => {
+    const { onWidgetClick } = this.props;
+    onWidgetClick(selected);
   };
 
-  generateWidget = (widget: WidgetType, index: number) => {
+  generateWidget = (widget: WidgetType, index: number): React.Node => {
     let WidgetComponent;
-    switch(widget.uiElement) {
+    switch (widget.uiElement) {
       case 'CHECKBOX':
         WidgetComponent = (
           <ProductSize
@@ -102,18 +103,12 @@ class ProductDetails extends React.Component<PropsType, StateType> {
         );
         break;
       default:
-        return null
+        return null;
     }
-    return (WidgetComponent);
+    return WidgetComponent;
   };
   render() {
-    const { resetCHECKBOX, resetCOMBOBOX, resetCOLOR_PICKER } = this.state;
-    const {
-      productTitle,
-      productDescription,
-      widgets,
-      children,
-    } = this.props;
+    const { productTitle, productDescription, widgets, children } = this.props;
     return (
       <div styleName="container">
         <h2>{productTitle}</h2>

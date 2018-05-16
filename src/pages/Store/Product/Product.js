@@ -23,12 +23,12 @@ import { IncrementInCartMutation } from 'relay/mutations';
 import { extractText, isEmpty, log } from 'utils';
 
 import {
-  buildWidgets,
   filterVariants,
   compareWidgets,
   extractPhotos,
   extractPriceInfo,
   makeWidgets,
+  differentiateWidgets,
 } from './utils';
 
 import {
@@ -41,7 +41,7 @@ import {
   TabRow,
 } from './index';
 
-import { ProductType, SelectedType, ThumbnailType, PriceInfo } from './types';
+import { ProductType, SelectedType, ThumbnailType, PriceInfo, WidgetOptionType } from './types';
 
 import './Product.scss';
 import mockData from './mockData.json';
@@ -189,6 +189,15 @@ class Product extends Component<PropsType, StateType> {
     });
   };
 
+  handleWidget = ({ id, label }: WidgetOptionType): void => {
+    const pathToAll = ['baseProduct', 'variants', 'all'];
+    const variants = path(pathToAll, this.props);
+    const widgets = differentiateWidgets([{ id, value: label }])(variants);
+    this.setState({
+      widgets,
+    })
+  };
+
   loggedIn() {
     const store = this.context.environment.getStore();
     const root = store.getSource().get('client:root');
@@ -223,7 +232,7 @@ class Product extends Component<PropsType, StateType> {
                 'No Description',
               )}
               widgets={widgets}
-              onWidgetClick={this.handleWidgetClick}
+              onWidgetClick={this.handleWidget}
             >
               <ProductPrice {...priceInfo} />
             </ProductDetails>
