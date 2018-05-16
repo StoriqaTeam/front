@@ -35,6 +35,7 @@ class Button extends PureComponent<PropsTypes> {
       big,
       dataTest,
       white,
+      wireframe,
     } = this.props;
 
     const props = {
@@ -52,6 +53,7 @@ class Button extends PureComponent<PropsTypes> {
       contour,
       big,
       white,
+      wireframe,
     });
 
     if (href) {

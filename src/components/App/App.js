@@ -98,6 +98,7 @@ export default createRefetchContainer(
   graphql`
     fragment App_me on User {
       ...Profile_me
+      ...Cart_me
       id
       rawId
       email
