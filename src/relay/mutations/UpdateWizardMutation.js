@@ -1,6 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
+import { omit } from 'ramda';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
@@ -31,11 +32,18 @@ const mutation = graphql`
 
 type MutationParamsType = {
   name?: number,
+  slug?: string,
   shortDescription?: number,
   defaultLanguage?: string,
-  slug?: string,
   country?: string,
   address?: string,
+  administrativeAreaLevel1?: string,
+  administrativeAreaLevel2?: string,
+  locality?: string,
+  political?: string,
+  postalCode?: string,
+  route?: string,
+  streetNumber?: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
@@ -47,12 +55,7 @@ const commit = (params: MutationParamsType) =>
     variables: {
       input: {
         clientMutationId: '',
-        name: params.name,
-        shortDescription: params.shortDescription,
-        defaultLanguage: params.defaultLanguage,
-        slug: params.slug,
-        country: params.country,
-        address: params.address,
+        ...omit(['environment', 'onCompleted', 'onError'], params),
       },
     },
     onCompleted: params.onCompleted,

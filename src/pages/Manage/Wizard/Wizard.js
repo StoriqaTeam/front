@@ -90,10 +90,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  updateWizard = (fieldName, value) => {
+  updateWizard = data => {
+    // console.log('**** updateWizard: ', { fieldName, value });
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
-      [fieldName]: value,
+      // [fieldName]: value,
+      ...data,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -126,14 +128,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnSaveWizard = (fieldName, value) => {
-    const { wizardStore } = this.state;
+  handleOnSaveWizard = data => {
+    // const { wizardStore } = this.state;
     // console.log('**** handleOnSaveWizard: ', {
     //   value: wizardStore[fieldName],
     //   fieldName,
     // });
-    if (value || wizardStore[fieldName] || wizardStore[fieldName] === '') {
-      this.updateWizard(fieldName, value || wizardStore[fieldName]);
+    console.log('**** on save: ', data);
+    if (data) {
+      this.updateWizard(data);
     }
   };
 
@@ -190,7 +193,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { step } = this.state;
-    console.log(this.props)
+    // console.log('$$$$ WIZARD RENDER props ', this.props.me)
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
@@ -231,9 +234,18 @@ export default createFragmentContainer(
           shortDescription
         }
         stepTwo {
-          country
-          address
           defaultLanguage
+          addressFull {
+            country
+            value
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            locality
+            political
+            postalCode
+            route
+            streetNumber
+          }
         }
         stepThree {
           edges {

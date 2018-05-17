@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import { map, find, assocPath } from 'ramda';
+import { map, find } from 'ramda';
+import debounce from 'lodash.debounce';
 
 // import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
@@ -41,25 +42,26 @@ type PropsType = {
 const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
   // console.log('^^^^ second form data: ', data);
 
-  const handleOnChange = e => {
-    const {
-      target: { value, name },
-    } = e;
-    onChange(name, value);
-  };
-
-  const handleOnBlur = fieldName => () => {
-    onSave(fieldName);
-  };
+  // const handleOnChange = e => {
+  //   const {
+  //     target: { value, name },
+  //   } = e;
+  //   onChange(name, value);
+  // };
 
   const handleOnSelectLanguage = item => {
     onChange('defaultLanguage', item.id);
-    onSave('defaultLanguage', item.id);
+    onSave({ defaultLanguage: item.id });
   };
 
-  const handleChangeAddressData = data => {
-    console.log('^^^^ SecondForm handleChangeAddressData: ', data);
-    // onSave('defaultLanguage', item.id);
+  const handleChangeAddressData = addressData => {
+    console.log('^^^^ SecondForm handleChangeAddressData: ', addressData);
+
+    // debounce(() => onSave('addressFull', addressData.address));
+
+    if (addressData && addressData) {
+      onSave(addressData);
+    }
   };
 
   const languagesItems = map(
@@ -71,6 +73,8 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
   );
 
   const findActiveItem = find(item => item.id === data.defaultLanguage);
+
+  const { addressFull } = data;
 
   return (
     <div styleName="form secondForm">
@@ -86,16 +90,12 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
         />
       </div>
       <div styleName="formItem addressForm">
-        <AddressForm isOpen onChangeData={handleChangeAddressData} />
-      </div>
-      <div styleName="">
-        <Textarea
-          id="shortDescription"
-          value={data.shortDescription}
-          label="Short description"
-          onChange={handleOnChange}
-          onBlur={handleOnBlur('shortDescription')}
-          fullWidth
+        <AddressForm
+          isOpen
+          onChangeData={handleChangeAddressData}
+          country={addressFull ? addressFull.country : null}
+          address={addressFull ? addressFull.value : null}
+          addressFull={addressFull}
         />
       </div>
     </div>

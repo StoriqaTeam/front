@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { pick, pathOr, forEach, isEmpty, map, find, propEq } from 'ramda';
+import { pick, pathOr, forEach, isEmpty, map, find, omit } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
@@ -30,6 +30,7 @@ type PropsType = {
   onChangeData: (data: any) => void,
   country: string,
   address: string,
+  addressFull: any,
   isOpen?: boolean,
 };
 
@@ -60,10 +61,14 @@ type GeocoderType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const country = find(propEq('name', props.country))(countries);
+    const country = find(
+      item => item.name === props.country || item.code === props.country,
+    )(countries);
     this.state = {
       country: country ? { id: country.code, label: country.name } : null,
-      address: null,
+      address: props.addressFull
+        ? omit(['country', 'value'], props.addressFull)
+        : null,
       autocompleteValue: props.address,
       predictions: [],
     };
@@ -83,7 +88,9 @@ class Form extends Component<PropsType, StateType> {
         }
       };
       forEach(populateAddressField, result.addressComponents);
-      this.setState({ address: renameCamelCase(address) });
+      this.setState({ address: renameCamelCase(address) }, () =>
+        this.handleOnChangeData(),
+      );
     }
   };
 
@@ -110,12 +117,15 @@ class Form extends Component<PropsType, StateType> {
     if (onChangeFormInput) {
       onChangeFormInput(type)(e);
     }
-    this.setState({
-      address: {
-        ...this.state.address,
-        [type]: e.target.value,
+    this.setState(
+      {
+        address: {
+          ...this.state.address,
+          [type]: e.target.value,
+        },
       },
-    });
+      () => this.handleOnChangeData(),
+    );
   };
 
   handleSearch = (predictions: any, status: string) => {
@@ -163,7 +173,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleOnChangeAddress = (value: string) => {
-    this.setState({ autocompleteValue: value });
+    this.setState(
+      () => ({ autocompleteValue: value }),
+      () => this.handleOnChangeData(),
+    );
     this.handleAutocomplete(value);
   };
 
@@ -175,18 +188,26 @@ class Form extends Component<PropsType, StateType> {
         if (onUpdateForm) {
           onUpdateForm({ country: value ? value.label : '' });
         }
+        this.handleOnChangeData();
       },
     );
   };
 
+  handleOnChangeData = () => {
+    const { onChangeData } = this.props;
+    const { address, country, autocompleteValue } = this.state;
+    if (onChangeData) {
+      onChangeData({
+        ...address,
+        country: country ? country.id : null,
+        address: autocompleteValue,
+      });
+    }
+  };
+
   render() {
-    const { onChangeData, isOpen } = this.props;
+    const { isOpen } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
-    onChangeData({
-      country: country ? country.id : null,
-      address,
-      autocompleteValue,
-    });
     const countriesArr = getIndexedCountries(countries);
     const countryLabel = country ? country.label : '';
     const countryFromResource = getCountryByName(countryLabel, countries);
