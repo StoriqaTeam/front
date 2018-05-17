@@ -19,19 +19,14 @@ type FirstFormPropsType = {
     address: ?string,
   },
   onChange: (fieldName: string, value: string) => void,
-  onSave: (fieldName: string, value: string) => void,
 };
 
-const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
+const FirstForm = ({ data, onChange }: FirstFormPropsType) => {
   const handleOnChange = e => {
     const {
       target: { value, name },
     } = e;
-    onChange(name, value);
-  };
-
-  const handleOnBlur = formData => () => {
-    onSave(formData);
+    onChange({ [name]: value });
   };
 
   return (
@@ -42,7 +37,6 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
           value={data.name}
           label="Name"
           onChange={handleOnChange}
-          onBlur={handleOnBlur({ name: data.name })}
           fullWidth
         />
       </div>
@@ -52,7 +46,6 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
           value={data.slug}
           label="Slug"
           onChange={handleOnChange}
-          onBlur={handleOnBlur({ slug: data.slug })}
           fullWidth
         />
       </div>
@@ -62,7 +55,6 @@ const FirstForm = ({ data, onChange, onSave }: FirstFormPropsType) => {
           value={data.shortDescription ? data.shortDescription : ''}
           label="Short description"
           onChange={handleOnChange}
-          onBlur={handleOnBlur({ shortDescription: data.shortDescription })}
           fullWidth
         />
       </div>

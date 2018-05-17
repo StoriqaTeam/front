@@ -2,10 +2,7 @@
 
 import React from 'react';
 import { map, find } from 'ramda';
-import debounce from 'lodash.debounce';
 
-// import { Input } from 'components/common/Input';
-import { Textarea } from 'components/common/Textarea';
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
 
@@ -35,21 +32,19 @@ type PropsType = {
     country: ?string,
     address: ?string,
   },
-  onChange: (value: string, fieldName: string) => void,
-  onSave: (value: string, fieldName: string) => void,
+  onChange: (data: { [name: string]: string }) => void,
 };
 
-const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
+const SecondForm = ({ data, onChange, languages }: PropsType) => {
   const handleOnSelectLanguage = item => {
-    onChange('defaultLanguage', item.id);
-    onSave({ defaultLanguage: item.id });
+    onChange({ defaultLanguage: item.id});
   };
 
-  const handleChangeAddressData = debounce(addressData => {
+  const handleChangeAddressData = addressData => {
     if (addressData && addressData) {
-      onSave(addressData);
+      onChange(addressData);
     }
-  }, 1000);
+  };
 
   const languagesItems = map(
     item => ({

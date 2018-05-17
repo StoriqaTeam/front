@@ -9,20 +9,22 @@ import { Button } from 'components/common/Button';
 import './WizardFooter.scss';
 
 const WizardFooter = ({
-  step,
-  onChange,
-  onSave,
+  currentStep,
+  onChangeStep,
+  onSaveStep,
+  isReadyToNext,
 }: {
-  step: number,
-  onChange: (step: number) => void,
-  onSave: () => void,
+  currentStep: number,
+  onChangeStep: (newStep: number) => void,
+  onSaveStep: (newStep: number) => void,
+  isReadyToNext?: boolean,
 }) => (
   <div styleName="footerContainer">
     <div styleName="backContainer">
-      {step !== 1 && (
+      {currentStep !== 1 && (
         <div
           styleName="leftButton"
-          onClick={() => onChange(step - 1)}
+          onClick={() => onChangeStep(currentStep - 1)}
           onKeyDown={() => {}}
           role="button"
           tabIndex="0"
@@ -38,18 +40,19 @@ const WizardFooter = ({
     </div>
     <Button
       onClick={() => {
-        if (step === 3) {
-          onSave();
-        } else {
-          onChange(step + 1);
-        }
+        onSaveStep(currentStep + 1);
       }}
       dataTest="wizardBackButton"
       big
+      disabled={!isReadyToNext}
     >
       <span>Next step</span>
     </Button>
   </div>
 );
+
+WizardFooter.defaultProps = {
+  isReadyToNext: true,
+}
 
 export default WizardFooter;

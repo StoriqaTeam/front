@@ -3,11 +3,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, isEmpty } from 'ramda';
+import { pathOr, isEmpty, where, isNil, complement } from 'ramda';
+import debounce from 'lodash.debounce';
 
 import { log, fromRelayError } from 'utils';
 import { Page } from 'components/App';
-import { CreateWizardMutation, UpdateWizardMutation } from 'relay/mutations';
+import { CreateWizardMutation, UpdateWizardMutation, CreateStoreMutation } from 'relay/mutations';
 
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
@@ -26,12 +27,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], props);
     const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], props);
     const stepThree = pathOr(null, ['me', 'wizardStore', 'stepThree'], props);
-    console.log('^^^^ constructor props: ', {
-      props,
-      stepOne,
-      stepTwo,
-      stepThree,
-    });
+    // console.log('^^^^ constructor props: ', {
+    //   props,
+    //   stepOne,
+    //   stepTwo,
+    //   stepThree,
+    // });
     // defaultLanguage будет 'EN' по умолчанию для нового store
     this.state = {
       step: 1,
@@ -45,8 +46,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       formErrors: {},
       isLoading: false,
     };
-
-    // create Wizard on initial start selling
   }
 
   componentDidMount() {
@@ -96,6 +95,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     UpdateWizardMutation.commit({
       // [fieldName]: value,
       ...data,
+      defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -114,31 +114,83 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleChangeStep = (step: number) => {
+  createStore = () => {
+    const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], this.props);
+    const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], this.props);
+    console.log('**** create store props: ', { stepOne, stepTwo });
+    // CreateStoreMutation.commit({
+    //   // [fieldName]: value,
+    //   ...data,
+    //   environment: this.context.environment,
+    //   onCompleted: (response: ?Object, errors: ?Array<any>) => {
+    //     log.debug({ response, errors });
+    //     const relayErrors = fromRelayError({ source: { errors } });
+    //     log.debug({ relayErrors });
+    //     this.setState(() => ({ isLoading: false }));
+    //   },
+    //   onError: (error: Error) => {
+    //     log.debug({ error });
+    //     const relayErrors = fromRelayError(error);
+    //     log.debug({ relayErrors });
+    //     this.setState(() => ({ isLoading: false }));
+    //     // eslint-disable-next-line
+    //     alert('Something going wrong :(');
+    //   },
+    // });
+  }
+
+  updateStore = () => {
+    console.log('**** update store');
+  }
+
+  handleOnChangeStep = (step: number) => {
     this.setState({ step });
   };
 
-  handleChangeForm = (fieldName, value) => {
+  handleOnSaveStep = (changedStep: number) => {
+    const { step } = this.state;
+    switch (step) {
+      case 1:
+        this.handleOnChangeStep(changedStep);
+        this.createStore();
+        break;
+      case 2:
+        this.handleOnChangeStep(changedStep);
+        this.updateStore();
+        break;
+      case 3:
+        this.updateStore();
+        break;
+     default:
+        break;
+    }
+  }
+
+  // handleChangeForm = (fieldName, value) => {
+  //   const { wizardStore } = this.state;
+  //   this.setState({
+  //     wizardStore: {
+  //       ...wizardStore,
+  //       [fieldName]: value,
+  //     },
+  //   });
+  // };
+
+  handleChangeForm = data => {
     const { wizardStore } = this.state;
     this.setState({
       wizardStore: {
         ...wizardStore,
-        [fieldName]: value,
+        ...data,
       },
-    });
+    }, this.handleOnSaveWizard(data));
   };
 
-  handleOnSaveWizard = data => {
-    // const { wizardStore } = this.state;
-    // console.log('**** handleOnSaveWizard: ', {
-    //   value: wizardStore[fieldName],
-    //   fieldName,
-    // });
-    console.log('**** on save: ', data);
+  handleOnSaveWizard = debounce(data => {
     if (data) {
       this.updateWizard(data);
     }
-  };
+  }, 1000);
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
@@ -193,20 +245,41 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { step } = this.state;
+    const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], this.props);
+    const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], this.props);
+    const isNotNil = complement(isNil);
+    const stepOnePopulated = where({
+      name: isNotNil,
+      slug: isNotNil,
+      shortDescription: isNotNil,
+    });
+    const steptTwoPopulated = where({
+      defaultLanguage: isNotNil,
+    });
+    const isReadyToNext = () => {
+      if (!stepOne || !stepTwo) {
+        return false;
+      }
+      if (stepOnePopulated(stepOne) && steptTwoPopulated(stepTwo)) {
+        return true;
+      }
+      return false;
+    }
     // console.log('$$$$ WIZARD RENDER props ', this.props.me)
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
-          <WizardHeader currentStep={step} onChange={this.handleChangeStep} />
+          <WizardHeader currentStep={step} onChangeStep={this.handleOnChangeStep} />
         </div>
         <div styleName="contentWrapper">
           <div styleName="formWrapper">{this.renderForm()}</div>
         </div>
         <div styleName="footerWrapper">
           <WizardFooter
-            step={step}
-            onChange={this.handleChangeStep}
-            onSave={this.handleOnSave}
+            currentStep={step}
+            onChangeStep={this.handleOnChangeStep}
+            onSaveStep={this.handleOnSaveStep}
+            isReadyToNext={isReadyToNext()}
           />
         </div>
       </div>

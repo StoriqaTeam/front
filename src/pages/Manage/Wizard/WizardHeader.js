@@ -9,15 +9,15 @@ import './WizardHeader.scss';
 
 const WizardStepper = ({
   currentStep,
-  onChange,
+  onChangeStep,
 }: {
   currentStep: number,
-  onChange: (val: number) => void,
+  onChangeStep: (val: number) => void,
 }) => {
   const StepLabel = ({ step, text }: { step: number, text: string }) => (
     <div
       styleName={classNames('item', { active: currentStep === step })}
-      onClick={() => onChange(step)}
+      onClick={() => onChangeStep(step)}
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"
