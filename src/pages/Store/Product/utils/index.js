@@ -6,3 +6,4 @@ export { default as makeWidgets } from './makeWidgets';
 export {
   default as removeWidgetOptionsDuplicates,
 } from './removeWidgetOptionsDuplicates';
+export { default as sortByProp } from './sortByProp';

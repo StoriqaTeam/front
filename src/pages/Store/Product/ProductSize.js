@@ -1,39 +1,21 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import { map, addIndex, isNil, propEq } from 'ramda';
+import React, { Component } from 'react';
+import { map, addIndex, propEq } from 'ramda';
 
 import './ProductSize.scss';
 
-import { SelectedType } from './types';
+import { SelectedType, WidgetOptionType } from './types';
+
+import { sortByProp } from './utils';
 
 type PropsType = {
-  // isReset: boolean,
   title: string,
-  sizes: Array<{ id: string, label: string, opacity: boolean, img?: string }>,
-  onClick: Function,
+  options: Array<WidgetOptionType>,
+  onClick: WidgetOptionType => WidgetOptionType,
 };
 
-type StateType = {
-  selected: null | number,
-};
-
-class ProductSize extends PureComponent<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): StateType | null {
-    return prevState;
-  }
-  state = {
-    selected: null,
-  };
+class ProductSize extends Component<PropsType, {}> {
   /**
    * Highlights size's border when clicked
    * @param {number} index
@@ -42,41 +24,34 @@ class ProductSize extends PureComponent<PropsType, StateType> {
    */
   handleClick = (index: number, selected: SelectedType): void => {
     const { onClick } = this.props;
-    this.setState(
-      {
-        selected: index,
-      },
-      () => onClick({ ...selected, state: 'selected ' }),
-    );
+    onClick({ ...selected, state: 'selected ' });
   };
   render() {
-    const { title, sizes } = this.props;
-    const { selected } = this.state;
+    const { title, options } = this.props;
     const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
         <h4>{title}</h4>
-        <pre>{JSON.stringify(sizes, null, 2)}</pre>
         <div styleName="sizes">
-          {mapIndexed((size, index, arr) => {
-            const isntOpacity = propEq('opacity', false);
-            const opacities = arr.every(isntOpacity);
-            const separator = () => !isNil(arr[index]) && !arr[index].opacity;
+          {mapIndexed((option, index, arr) => {
+            const selected = arr.every(propEq('opacity', 'selected'));
+            const separator = () =>
+              !option.state === 'disable' && option.state === 'available';
             return (
               <button
-                key={`${size.label}`}
-                onClick={() => this.handleClick(index, size)}
+                key={`${option.label}`}
+                onClick={() => this.handleClick(index, option)}
                 styleName={`size ${
-                  selected === index && !size.opacity ? 'clicked' : ''
-                } ${size.opacity ? 'opaque' : ''}`}
+                  option.state === 'selected' ? 'clicked' : ''
+                } ${option.state === 'disable' ? 'opaque' : ''}`}
               >
-                {size.label}
-                {!opacities && isNil(selected) && separator() ? (
+                {option.label}
+                {!selected && separator() ? (
                   <span styleName="separator" />
                 ) : null}
               </button>
             );
-          }, sizes)}
+          }, sortByProp('label')(options))}
         </div>
       </div>
     );

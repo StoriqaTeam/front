@@ -1,19 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import { ascend, prop, sortWith } from 'ramda';
 
 import { WidgetsType, WidgetType, WidgetOptionType } from './types';
 
 import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
 
-import './ProductDetails.scss';
+import { sortByProp } from './utils';
 
-type WidgetValueType = {
-  id: string,
-  label: string,
-  img?: string,
-};
+import './ProductDetails.scss';
 
 type PropsType = {
   widgets: WidgetsType,
@@ -23,46 +18,7 @@ type PropsType = {
   children: React.Node,
 };
 
-type StateType = {
-  resetCHECKBOX: boolean,
-  resetCOMBOBOX: boolean,
-  resetCOLOR_PICKER: boolean,
-};
-
-class ProductDetails extends React.Component<PropsType, StateType> {
-  state = {
-    resetCHECKBOX: false,
-    resetCOMBOBOX: false,
-    resetCOLOR_PICKER: false,
-  };
-  /**
-   * @param {string} uiElement
-   * @return {Object}
-   */
-  resetOthers = (uiElement: string): Object => ({
-    resetCHECKBOX: uiElement !== 'CHECKBOX',
-    resetCOMBOBOX: uiElement !== 'COMBOBOX',
-    resetCOLOR_PICKER: uiElement !== 'COLOR_PICKER',
-  });
-  /**
-   * @param {WidgetValueType} selected
-   * @param {Object} widget
-   * @param {string} widget.uiElement
-   * @return {void}
-   */
-  handleWidget = (
-    selected: WidgetValueType,
-    { uiElement }: WidgetsType,
-  ): void => {
-    const { onWidgetClick } = this.props;
-    this.setState(
-      {
-        ...this.resetOthers(uiElement),
-      },
-      () => onWidgetClick(selected),
-    );
-  };
-
+class ProductDetails extends React.Component<PropsType, {}> {
   handleWidgetClick = (selected: WidgetOptionType): void => {
     const { onWidgetClick } = this.props;
     onWidgetClick(selected);
@@ -76,7 +32,7 @@ class ProductDetails extends React.Component<PropsType, StateType> {
           <ProductSize
             key={index}
             title={widget.title}
-            sizes={widget.options}
+            options={widget.options}
             onClick={selected => this.handleWidgetClick(selected)}
           />
         );
@@ -108,9 +64,6 @@ class ProductDetails extends React.Component<PropsType, StateType> {
     }
     return WidgetComponent;
   };
-  sort: (Array<WidgetType>) => Array<WidgetType> = sortWith([
-    ascend(prop('id')),
-  ]);
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
@@ -118,7 +71,7 @@ class ProductDetails extends React.Component<PropsType, StateType> {
         <h2>{productTitle}</h2>
         {children}
         <p>{productDescription}</p>
-        {this.sort(widgets).map(this.generateWidget)}
+        {sortByProp('id')(widgets).map(this.generateWidget)}
       </div>
     );
   }

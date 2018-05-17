@@ -24,7 +24,6 @@ import { extractText, isEmpty, log } from 'utils';
 
 import {
   filterVariants,
-  compareWidgets,
   extractPhotos,
   extractPriceInfo,
   makeWidgets,
@@ -98,7 +97,7 @@ class Product extends Component<PropsType, StateType> {
     tabs: [
       {
         id: 0,
-        label: 'Description',
+        label: 'Characteristics',
         content: <TabRow row={mockData.row} />,
       },
     ],
@@ -168,7 +167,6 @@ class Product extends Component<PropsType, StateType> {
         variants: { all },
       },
     } = this.props;
-    const { widgets } = this.state;
     const filteredWidgets = filterVariants(all, selected.label);
     const filteredWidgetsHeadKeys = head(
       keys(filteredWidgets).map(key => filteredWidgets[key]),
@@ -189,7 +187,6 @@ class Product extends Component<PropsType, StateType> {
       ({ photoMain, additionalPhotos } = variantObj);
     }
     this.setState({
-      widgets: compareWidgets(filteredWidgets, widgets),
       photoMain,
       additionalPhotos: this.insertPhotoMain(photoMain, additionalPhotos),
     });
@@ -257,7 +254,7 @@ class Product extends Component<PropsType, StateType> {
                 Add to cart
               </Button>
             </div>
-            {!loggedIn && <div>Please login to use cart</div>}
+            {/* {!loggedIn && <div>Please login to use cart</div>} */}
           </Col>
         </Row>
         <Tabs>
