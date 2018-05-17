@@ -17,7 +17,9 @@ type PropsType = {
 };
 
 class AlertsContainer extends React.PureComponent<PropsType> {
-  renderAlerts = map(alertProps => <Alert {...alertProps} />);
+  renderAlerts = map(alertProps => (
+    <Alert key={alertProps.createdAtTimestamp} {...alertProps} />
+  ));
 
   render() {
     return alertsRootDiv

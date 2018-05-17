@@ -11,10 +11,11 @@ import './Alert.scss';
 export type AlertType = 'default' | 'success' | 'warning' | 'danger';
 
 export type AlertPropsType = {
+  createdAtTimestamp: number,
   type: AlertType,
   text: string,
   link: { text: string, path?: string },
-  onClose: () => void,
+  onClose: (timestamp: number) => void,
 };
 
 const titlesHashMap = {
@@ -25,20 +26,23 @@ const titlesHashMap = {
 };
 
 const Alert = (props: AlertPropsType) => {
-  const { type = 'default', text, link } = props;
+  const { type = 'default', text, link, createdAtTimestamp } = props;
   const title = propOr('Information.', type, titlesHashMap);
   return (
     <div styleName="container">
       <div styleName={classnames('leftEdge', type)} />
       <div styleName="titleContainer">
         <div styleName="title">{title}</div>
-        <button onClick={props.onClose} styleName="closeButton">
+        <button
+          onClick={() => props.onClose(createdAtTimestamp)}
+          styleName="closeButton"
+        >
           <CloseIcon />
         </button>
       </div>
       <div styleName="alertMessage">{text}</div>
       <div styleName="link">
-        <button onClick={props.onClose}>
+        <button onClick={() => props.onClose(createdAtTimestamp)}>
           <span styleName="link">{link.text}</span>
         </button>
       </div>

@@ -2,10 +2,14 @@
 
 import { createContext } from 'react';
 
-import type { AlertPropsType } from 'components/Alerts';
+import type { AlertType } from 'components/Alerts';
 
 export type AlertContextType = {
-  showAlert: (props: AlertPropsType) => void,
+  addAlert: (props: {
+    type: AlertType,
+    text: string,
+    link: { text: string, path?: string },
+  }) => void,
 };
 
 const {

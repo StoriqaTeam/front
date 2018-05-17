@@ -4,13 +4,13 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
-import { pick } from 'ramda';
+import { pick, filter, propEq, concat, complement } from 'ramda';
 
 import { AlertsContainer } from 'components/Alerts';
-import { AlertContextProvider } from 'components/App/AlertContext';
+// import { AlertContextProvider } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 
-import type { AlertPropsType } from 'components/Alerts';
+import type { AlertType, AlertPropsType } from 'components/Alerts';
 
 import './App.scss';
 
@@ -50,31 +50,43 @@ class App extends Component<PropsType, StateType> {
     };
   }
 
-  alertsDiv: any;
-
   handleLogin = () => {
     this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
-  generateAlerts = () => {
-    const result = [];
-    for (let i = 0; i < 4; i++) {
-      result.push({
-        type: 'default',
-        text:
-          'Module build failed: SyntaxError: Unexpected token, expected , (65:28)',
-        link: { text: 'ok' },
-        onClose: () => {},
-      });
-    }
-    return result;
+  handleAlertClose = (timestamp: number) => {
+    this.setState(prevState => ({
+      alerts: filter(
+        complement(propEq('createdAtTimestamp', timestamp)),
+        prevState.alerts,
+      ),
+    }));
+  };
+
+  addAlert = (alert: {
+    type: AlertType,
+    text: string,
+    link: { text: string, path?: string },
+  }) => {
+    this.setState(prevState => ({
+      alerts: concat(
+        [
+          {
+            ...alert,
+            onClose: this.handleAlertClose,
+            createdAtTimestamp: Date.now() + Math.random() * 1000,
+          },
+        ],
+        prevState.alerts,
+      ),
+    }));
   };
 
   render() {
     const { me, mainPage, children } = this.props;
     return (
       <Fragment>
-        <AlertsContainer alerts={this.generateAlerts()} />
+        <AlertsContainer alerts={this.state.alerts} />
         {children && React.cloneElement(children, { me, mainPage })}
       </Fragment>
     );
