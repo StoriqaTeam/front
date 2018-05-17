@@ -10,9 +10,9 @@ import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import { Spiner } from 'components/Spiner';
-import { withShowAlert } from 'components/App/AlertContext';
 import { log, socialStrings, fromRelayError } from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
