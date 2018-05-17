@@ -40,29 +40,16 @@ type PropsType = {
 };
 
 const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
-  // console.log('^^^^ second form data: ', data);
-
-  // const handleOnChange = e => {
-  //   const {
-  //     target: { value, name },
-  //   } = e;
-  //   onChange(name, value);
-  // };
-
   const handleOnSelectLanguage = item => {
     onChange('defaultLanguage', item.id);
     onSave({ defaultLanguage: item.id });
   };
 
-  const handleChangeAddressData = addressData => {
-    console.log('^^^^ SecondForm handleChangeAddressData: ', addressData);
-
-    // debounce(() => onSave('addressFull', addressData.address));
-
+  const handleChangeAddressData = debounce(addressData => {
     if (addressData && addressData) {
       onSave(addressData);
     }
-  };
+  }, 1000);
 
   const languagesItems = map(
     item => ({
@@ -73,9 +60,7 @@ const SecondForm = ({ data, onChange, onSave, languages }: PropsType) => {
   );
 
   const findActiveItem = find(item => item.id === data.defaultLanguage);
-
   const { addressFull } = data;
-
   return (
     <div styleName="form secondForm">
       <div styleName="formItem">
