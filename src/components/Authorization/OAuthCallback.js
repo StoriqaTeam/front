@@ -6,15 +6,19 @@ import { fromPairs, map, pathOr, prop, pipe, replace, split } from 'ramda';
 import Cookies from 'universal-cookie';
 import { routerShape } from 'found';
 
+import { withShowAlert } from 'components/App/AlertContext';
 import { log } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 import Logo from 'components/Icon/svg/logo.svg';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './OAuthCallback.scss';
 
 type PropsType = {
   provider: string,
   router: routerShape,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 // Component that handles code from oauth-providers and fetches jwt token.
@@ -39,6 +43,14 @@ class OAuthCallback extends PureComponent<PropsType> {
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<Error>) => {
           log.debug({ response, errors });
+          if (errors) {
+            this.props.showAlert({
+              type: 'danger',
+              text: 'Something going wrong.',
+              link: { text: 'Close.' },
+            });
+            return;
+          }
           const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
           if (jwt) {
             const cookies = new Cookies();
@@ -48,7 +60,11 @@ class OAuthCallback extends PureComponent<PropsType> {
         },
         onError: (error: Error) => {
           log.error(error);
-          alert('Something going wrong.'); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
           this.props.router.replace('/login');
         },
       });
@@ -111,4 +127,4 @@ OAuthCallback.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default OAuthCallback;
+export default withShowAlert(OAuthCallback);
