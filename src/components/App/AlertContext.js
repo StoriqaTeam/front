@@ -2,10 +2,10 @@
 
 import { createContext } from 'react';
 
-export type AlertType = 'default' | 'success' | 'warning' | 'danger';
+import type { AlertPropsType } from 'components/Alerts';
 
 export type AlertContextType = {
-  showAlert?: ({ alertType: AlertType }) => void,
+  showAlert: (props: AlertPropsType) => void,
 };
 
 const {

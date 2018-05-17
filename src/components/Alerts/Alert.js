@@ -8,8 +8,10 @@ import CloseIcon from './svg/close_icon.svg';
 
 import './Alert.scss';
 
-type PropsType = {
-  type: 'default' | 'success' | 'warning' | 'danger',
+export type AlertType = 'default' | 'success' | 'warning' | 'danger';
+
+export type AlertPropsType = {
+  type: AlertType,
   text: string,
   link: { text: string, path?: string },
   onClose: () => void,
@@ -22,7 +24,7 @@ const titlesHashMap = {
   danger: 'Danger!',
 };
 
-const Alert = (props: PropsType) => {
+const Alert = (props: AlertPropsType) => {
   const { type = 'default', text, link } = props;
   const title = propOr('Information.', type, titlesHashMap);
   return (

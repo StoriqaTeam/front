@@ -6,16 +6,16 @@ import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 import { pick } from 'ramda';
 
+import { AlertsContainer } from 'components/Alerts';
 import { AlertContextProvider } from 'components/App/AlertContext';
-import { Alert } from 'components/common/Alert';
 import { currentUserShape } from 'utils/shapes';
+
+import type { AlertPropsType } from 'components/Alerts';
 
 import './App.scss';
 
 type StateType = {
-  isAlertShown: boolean,
-  isError: boolean,
-  alertText: string,
+  alerts: Array<AlertPropsType>,
 };
 
 type PropsType = {
@@ -33,9 +33,7 @@ type PropsType = {
 
 class App extends Component<PropsType, StateType> {
   state: StateType = {
-    isAlertShown: false,
-    isError: false,
-    alertText: '',
+    alerts: [],
   };
 
   getChildContext() {
@@ -43,7 +41,6 @@ class App extends Component<PropsType, StateType> {
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
-      showAlert: this.showAlert,
       currentUser: pick(['id', 'rawId'], me || {}),
       directories: {
         languages,
@@ -53,31 +50,32 @@ class App extends Component<PropsType, StateType> {
     };
   }
 
+  alertsDiv: any;
+
   handleLogin = () => {
     this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
-  showAlert = (text: string, isError: boolean = false) => {
-    this.setState({
-      isAlertShown: true,
-      isError,
-      alertText: text,
-    });
+  generateAlerts = () => {
+    const result = [];
+    for (let i = 0; i < 4; i++) {
+      result.push({
+        type: 'default',
+        text:
+          'Module build failed: SyntaxError: Unexpected token, expected , (65:28)',
+        link: { text: 'ok' },
+        onClose: () => {},
+      });
+    }
+    return result;
   };
 
   render() {
     const { me, mainPage, children } = this.props;
-    const { isAlertShown, alertText, isError } = this.state;
     return (
       <Fragment>
-        <Alert showAlert={isAlertShown} text={alertText} isError={isError} />
-        <AlertContextProvider
-          value={{
-            showAlert: ({ alertType }) => console.log('show alert', alertType),
-          }}
-        >
-          {children && React.cloneElement(children, { me, mainPage })}
-        </AlertContextProvider>
+        <AlertsContainer alerts={this.generateAlerts()} />
+        {children && React.cloneElement(children, { me, mainPage })}
       </Fragment>
     );
   }
