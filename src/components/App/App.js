@@ -7,10 +7,11 @@ import type { Environment } from 'relay-runtime';
 import { pick, filter, propEq, concat, complement } from 'ramda';
 
 import { AlertsContainer } from 'components/Alerts';
-// import { AlertContextProvider } from 'components/App/AlertContext';
+import { AlertContextProvider } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 
-import type { AlertType, AlertPropsType } from 'components/Alerts';
+import type { AlertPropsType } from 'components/Alerts';
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './App.scss';
 
@@ -63,11 +64,7 @@ class App extends Component<PropsType, StateType> {
     }));
   };
 
-  addAlert = (alert: {
-    type: AlertType,
-    text: string,
-    link: { text: string, path?: string },
-  }) => {
+  addAlert = (alert: AddAlertInputType) => {
     this.setState(prevState => ({
       alerts: concat(
         [
@@ -87,7 +84,13 @@ class App extends Component<PropsType, StateType> {
     return (
       <Fragment>
         <AlertsContainer alerts={this.state.alerts} />
-        {children && React.cloneElement(children, { me, mainPage })}
+        <AlertContextProvider
+          value={{
+            addAlert: this.addAlert,
+          }}
+        >
+          {children && React.cloneElement(children, { me, mainPage })}
+        </AlertContextProvider>
       </Fragment>
     );
   }
