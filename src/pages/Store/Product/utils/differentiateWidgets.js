@@ -1,12 +1,14 @@
 import {
   addIndex,
   ascend,
+  chain,
   concat,
   difference,
   map,
   mergeDeepWithKey,
   pipe,
   prop,
+  propEq,
   sortWith,
 } from 'ramda';
 
@@ -25,6 +27,27 @@ const differentiateWidgets: (
   const filteredWidgets = sortByTitle(makeWidgets(selections)(variants));
 
   const mapIndexed = addIndex(map);
+
+  const updateWidgetsOptionsState = (
+    widgets: Array<WidgetType>,
+  ): Array<WidgetType> => {
+    const updateWidgetSelection: SelectionType => WidgetType => Array<
+      WidgetType,
+    > = selection => widget => {
+      if (widget.id === selection.id) {
+        const setSelectedState = (option: SelectionType) =>
+          propEq('label', selection.value)(option)
+            ? { ...option, state: 'selected' }
+            : option;
+        const options = map(setSelectedState, widget.options);
+        return { ...widget, options };
+      }
+      return widget;
+    };
+    const mapSelections = (selection: SelectionType) =>
+      map(updateWidgetSelection(selection), widgets);
+    return chain(mapSelections, selections);
+  };
 
   const differentiateOption = (
     widget: WidgetType,
@@ -68,6 +91,7 @@ const differentiateWidgets: (
     mapIndexed(differentiateOption),
     mergeWidgetsOptions(filteredWidgets),
     removeWidgetOptionsDuplicates,
+    updateWidgetsOptionsState,
   )(widgetsEmpty);
 };
 

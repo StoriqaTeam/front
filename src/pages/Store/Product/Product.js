@@ -195,10 +195,12 @@ class Product extends Component<PropsType, StateType> {
     });
   };
 
-  handleWidget = ({ id, label }: WidgetOptionType): void => {
+  handleWidget = ({ id, label, state }: WidgetOptionType): void => {
     const pathToAll = ['baseProduct', 'variants', 'all'];
     const variants = path(pathToAll, this.props);
-    const widgets = differentiateWidgets([{ id, value: label }])(variants);
+    const widgets = differentiateWidgets([{ id, value: label, state }])(
+      variants,
+    );
     this.setState({
       widgets,
     });

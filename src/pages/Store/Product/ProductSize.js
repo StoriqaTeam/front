@@ -8,8 +8,7 @@ import './ProductSize.scss';
 import { SelectedType } from './types';
 
 type PropsType = {
-  // eslint-disable-next-line
-  isReset: boolean,
+  // isReset: boolean,
   title: string,
   sizes: Array<{ id: string, label: string, opacity: boolean, img?: string }>,
   onClick: Function,
@@ -30,12 +29,6 @@ class ProductSize extends PureComponent<PropsType, StateType> {
     nextProps: PropsType,
     prevState: StateType,
   ): StateType | null {
-    const { isReset } = nextProps;
-    if (isReset) {
-      return {
-        selected: null,
-      };
-    }
     return prevState;
   }
   state = {
@@ -53,7 +46,7 @@ class ProductSize extends PureComponent<PropsType, StateType> {
       {
         selected: index,
       },
-      () => onClick(selected),
+      () => onClick({ ...selected, state: 'selected ' }),
     );
   };
   render() {
@@ -63,6 +56,7 @@ class ProductSize extends PureComponent<PropsType, StateType> {
     return (
       <div styleName="container">
         <h4>{title}</h4>
+        <pre>{JSON.stringify(sizes, null, 2)}</pre>
         <div styleName="sizes">
           {mapIndexed((size, index, arr) => {
             const isntOpacity = propEq('opacity', false);
@@ -70,7 +64,7 @@ class ProductSize extends PureComponent<PropsType, StateType> {
             const separator = () => !isNil(arr[index]) && !arr[index].opacity;
             return (
               <button
-                key={`${size.id}-${size.label}`}
+                key={`${size.label}`}
                 onClick={() => this.handleClick(index, size)}
                 styleName={`size ${
                   selected === index && !size.opacity ? 'clicked' : ''
