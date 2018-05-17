@@ -19,8 +19,8 @@ const {
   Consumer: AlertContextConsumer,
 } = React.createContext({ addAlert: () => {} });
 
-const withShowAlert = (Component: React.ComponentType<any>) => {
-  return class extends React.PureComponent<{}> {
+const withShowAlert = (Component: React.ComponentType<any>) =>
+  class extends React.PureComponent<{}> {
     render() {
       return (
         <AlertContextConsumer>
@@ -31,6 +31,5 @@ const withShowAlert = (Component: React.ComponentType<any>) => {
       );
     }
   };
-};
 
 export { AlertContextProvider, AlertContextConsumer, withShowAlert };
