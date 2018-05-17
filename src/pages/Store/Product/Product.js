@@ -19,8 +19,11 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import { extractText, isEmpty, log } from 'utils';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import {
   buildWidgets,
@@ -46,6 +49,7 @@ import './Product.scss';
 import mockData from './mockData.json';
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   baseProduct: ProductType,
 };
 
@@ -141,12 +145,19 @@ class Product extends Component<PropsType, StateType> {
         onError: error => {
           log.error('Error in IncrementInCart mutation');
           log.error(error);
-          // eslint-disable-next-line
-          alert('Unable to add product to cart');
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Unable to add product to cart',
+            link: { text: 'Close.' },
+          });
         },
       });
     } else {
-      alert('Something went wrong :('); // eslint-disable-line
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something went wrong :(',
+        link: { text: 'Close.' },
+      });
       log.error('Unable to add an item without productId');
     }
   }
@@ -256,7 +267,7 @@ class Product extends Component<PropsType, StateType> {
 
 export default createFragmentContainer(
   // $FlowIgnoreMe
-  withErrorBoundary(Page(Product)),
+  withShowAlert(withErrorBoundary(Page(Product))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
