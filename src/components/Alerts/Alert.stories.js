@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, text, select } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 
 import { Alert } from 'components/Alerts';
 
@@ -18,5 +19,6 @@ storiesOf('Alert', module)
       link={{
         text: text('Link text', 'Got it!'),
       }}
+      onClose={action('close clicked')}
     />
   ));

@@ -12,6 +12,7 @@ type PropsType = {
   type: 'default' | 'success' | 'warning' | 'danger',
   text: string,
   link: { text: string, path?: string },
+  onClose: () => void,
 };
 
 const titlesHashMap = {
@@ -29,13 +30,15 @@ const Alert = (props: PropsType) => {
       <div styleName={classnames('leftEdge', type)} />
       <div styleName="titleContainer">
         <div styleName="title">{title}</div>
-        <div styleName="closeIcon">
+        <button onClick={props.onClose} styleName="closeButton">
           <CloseIcon />
-        </div>
+        </button>
       </div>
       <div styleName="alertMessage">{text}</div>
       <div styleName="link">
-        <span onClick={() => {}}>{link.text}</span>
+        <button onClick={props.onClose}>
+          <span styleName="link">{link.text}</span>
+        </button>
       </div>
     </div>
   );
