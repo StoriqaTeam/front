@@ -26,3 +26,12 @@ export {
 } from './SetSelectionInCartMutation';
 export { default as DeleteFromCartMutation } from './DeleteFromCartMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';
+export {
+  default as createUserDeliveryAddress,
+} from './createUserDeliveryAddress';
+export {
+  default as deleteUserDeliveryAddress,
+} from './deleteUserDeliveryAddress';
+export {
+  default as updateUserDeliveryAddress,
+} from './updateUserDeliveryAddress';

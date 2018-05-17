@@ -178,7 +178,7 @@ class Profile extends Component<PropsType, StateType> {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
   };
 
-  renderProfileItem = () => {
+  renderProfileItem = subtitle => {
     const { handleSave, updateFormErrors } = this;
     const { activeItem, me } = this.props;
     const { formErrors, isLoading } = this.state;
@@ -190,13 +190,14 @@ class Profile extends Component<PropsType, StateType> {
       handleSave,
       isLoading,
       updateFormErrors,
+      subtitle,
     });
   };
 
   render() {
     const { activeItem, me } = this.props;
     // $FlowIgnoreMe
-    const { title } = find(propEq('id', activeItem), menuItems);
+    const { title: subtitle } = find(propEq('id', activeItem), menuItems);
     return (
       <Container>
         <Row>
@@ -214,12 +215,7 @@ class Profile extends Component<PropsType, StateType> {
               <div styleName="header">
                 <span styleName="title">Profile</span>
               </div>
-              <div styleName="form">
-                <div styleName="subtitle">
-                  <strong>{title}</strong>
-                </div>
-                {this.renderProfileItem()}
-              </div>
+              <div styleName="form">{this.renderProfileItem(subtitle)}</div>
             </div>
           </Col>
         </Row>
@@ -237,12 +233,30 @@ export default createFragmentContainer(
   graphql`
     fragment Profile_me on User {
       id
+      rawId
       email
       phone
       firstName
       lastName
       birthdate
       gender
+      deliveryAddresses {
+        rawId
+        id
+        userId
+        isPriority
+        address {
+          country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          political
+          postalCode
+          streetNumber
+          value
+          route
+          locality
+        }
+      }
     }
   `,
 );
