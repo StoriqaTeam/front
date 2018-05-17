@@ -8,7 +8,11 @@ import debounce from 'lodash.debounce';
 
 import { log, fromRelayError } from 'utils';
 import { Page } from 'components/App';
-import { CreateWizardMutation, UpdateWizardMutation, CreateStoreMutation } from 'relay/mutations';
+import {
+  CreateWizardMutation,
+  UpdateWizardMutation,
+  CreateStoreMutation,
+} from 'relay/mutations';
 
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
@@ -137,11 +141,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     //     alert('Something going wrong :(');
     //   },
     // });
-  }
+  };
 
   updateStore = () => {
     console.log('**** update store');
-  }
+  };
 
   handleOnChangeStep = (step: number) => {
     this.setState({ step });
@@ -161,10 +165,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       case 3:
         this.updateStore();
         break;
-     default:
+      default:
         break;
     }
-  }
+  };
 
   // handleChangeForm = (fieldName, value) => {
   //   const { wizardStore } = this.state;
@@ -178,12 +182,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   handleChangeForm = data => {
     const { wizardStore } = this.state;
-    this.setState({
-      wizardStore: {
-        ...wizardStore,
-        ...data,
+    this.setState(
+      {
+        wizardStore: {
+          ...wizardStore,
+          ...data,
+        },
       },
-    }, this.handleOnSaveWizard(data));
+      this.handleOnSaveWizard(data),
+    );
   };
 
   handleOnSaveWizard = debounce(data => {
@@ -264,12 +271,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         return true;
       }
       return false;
-    }
+    };
     // console.log('$$$$ WIZARD RENDER props ', this.props.me)
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
-          <WizardHeader currentStep={step} onChangeStep={this.handleOnChangeStep} />
+          <WizardHeader
+            currentStep={step}
+            onChangeStep={this.handleOnChangeStep}
+          />
         </div>
         <div styleName="contentWrapper">
           <div styleName="formWrapper">{this.renderForm()}</div>

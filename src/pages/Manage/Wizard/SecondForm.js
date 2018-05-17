@@ -37,7 +37,7 @@ type PropsType = {
 
 const SecondForm = ({ data, onChange, languages }: PropsType) => {
   const handleOnSelectLanguage = item => {
-    onChange({ defaultLanguage: item.id});
+    onChange({ defaultLanguage: item.id });
   };
 
   const handleChangeAddressData = addressData => {

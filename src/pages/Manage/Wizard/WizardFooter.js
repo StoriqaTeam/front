@@ -53,6 +53,6 @@ const WizardFooter = ({
 
 WizardFooter.defaultProps = {
   isReadyToNext: true,
-}
+};
 
 export default WizardFooter;
