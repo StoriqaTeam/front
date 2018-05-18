@@ -4,30 +4,17 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation UpdateUserMutation($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      id
-      email
-      phone
-      firstName
-      lastName
-      middleName
-      birthdate
-      gender
-      isActive
+  mutation ChangePasswordMutation($input: ChangePasswordInput!) {
+    changePasword(input: $input) {
+      success
     }
   }
 `;
 
 export type MutationParamsType = {
   input: {
-    id: string,
-    phone: ?string,
-    firstName: ?string,
-    lastName: ?string,
-    middleName: ?string,
-    birthdate: ?string,
-    gender: string,
+    oldPassword: string,
+    newPassword: string,
   },
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,

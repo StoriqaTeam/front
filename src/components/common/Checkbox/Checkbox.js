@@ -6,7 +6,7 @@ import './Checkbox.scss';
 
 type PropsType = {
   id: string,
-  label: boolean,
+  label?: string,
   isChecked: boolean,
   onChange: Function,
 };

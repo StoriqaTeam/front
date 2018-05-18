@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { Route, RedirectException } from 'found';
+import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr, last } from 'ramda';
@@ -10,7 +10,7 @@ import { log } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
-import { Profile } from 'components/Profile';
+import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
@@ -275,7 +275,16 @@ const routes = (
         )}
       />
       <Route path="/verify_email/:token" Component={VerifyEmail} />
-      <Route path="/profile" Component={Profile} />
+      <Redirect from="/profile" to={() => '/profile/personal-data'} />
+      <Route
+        path="/profile/:item"
+        Component={props => (
+          <Profile
+            activeItem={pathOr('personal-data', ['params', 'item'], props)}
+            me={props.me}
+          />
+        )}
+      />
     </Route>
   </Route>
 );
