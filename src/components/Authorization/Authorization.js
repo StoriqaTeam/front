@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr } from 'ramda';
+import { pathOr, isEmpty } from 'ramda';
 import { withRouter, matchShape, routerShape } from 'found';
 import Cookies from 'universal-cookie';
 
@@ -10,10 +10,11 @@ import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import { Spiner } from 'components/Spiner';
-
 import { log, socialStrings, fromRelayError } from 'utils';
-
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './Authorization.scss';
 
@@ -22,6 +23,7 @@ type PropsType = {
   alone: ?boolean,
   match: matchShape,
   router: routerShape,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -79,13 +81,31 @@ class Authorization extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           // $FlowIgnoreMe
           this.setState({ errors: validationErrors });
           return;
         }
-        alert('Registration successful, please confirm your email and login.'); // eslint-disable-line
+        // $FlowIgnoreMe
+        const errorStatus: ?string = pathOr(
+          null,
+          ['100', 'status'],
+          relayErrors,
+        );
+        if (errorStatus) {
+          this.props.showAlert({
+            type: 'danger',
+            text: errorStatus,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Registration successful, please confirm your email and login.',
+          link: { text: 'Got it!' },
+        });
         if (alone) {
           window.location = '/';
         } else {
@@ -95,15 +115,23 @@ class Authorization extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
+        log.error({ error });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        this.setState({
-          isLoad: false,
-          // $FlowIgnoreMe
-          errors: validationErrors,
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.setState({
+            isLoad: false,
+            // $FlowIgnoreMe
+            errors: validationErrors,
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
         });
-        log.error({ error });
       },
     });
   };
@@ -300,4 +328,4 @@ Authorization.contextTypes = {
   handleLogin: PropTypes.func,
 };
 
-export default withRouter(Authorization);
+export default withShowAlert(withRouter(Authorization));

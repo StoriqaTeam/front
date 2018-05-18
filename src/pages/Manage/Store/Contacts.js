@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr, pick } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
+import { withShowAlert } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -13,6 +14,8 @@ import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Header from './Header';
 import Menu from './Menu';
@@ -31,6 +34,7 @@ type InputType = {
 /* eslint-enable */
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   me: {
     store: { [string]: ?string },
   },
@@ -181,8 +185,11 @@ class Contacts extends Component<PropsType, StateType> {
           return;
         }
 
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
@@ -267,7 +274,7 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(Contacts),
+  withShowAlert(Page(Contacts)),
   graphql`
     fragment Contacts_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {

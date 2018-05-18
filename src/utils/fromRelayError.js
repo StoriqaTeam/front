@@ -64,8 +64,7 @@ const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
       };
       mapObjIndexed(prependKeyAndDouble, messagesData);
     } catch (e) {
-      // eslint-disable-next-line
-      alert('Something going wrong :(');
+      //
     }
     return [toString(code), { status, messages }];
   }, errorsArr);
