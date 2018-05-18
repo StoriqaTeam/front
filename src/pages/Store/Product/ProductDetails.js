@@ -42,7 +42,7 @@ class ProductDetails extends React.Component<PropsType, {}> {
           <ProductMaterial
             key={index}
             title={widget.title || ''}
-            materials={widget.options}
+            options={widget.options}
             onSelect={selected => this.handleWidgetClick(selected)}
           />
         );

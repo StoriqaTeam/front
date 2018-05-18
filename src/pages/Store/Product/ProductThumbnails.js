@@ -25,37 +25,40 @@ class ProductThumbnails extends Component<PropsType, {}> {
     row: false,
     isFirstSelected: false,
   };
-  handleClick = (index: number, option: WidgetOptionType): void => {
+  handleClick = (option: WidgetOptionType): void => {
     const { onClick } = this.props;
     onClick(option);
   };
   render() {
     const { options, row, title } = this.props;
+    const mapOptions = option => (
+      <button
+        key={`${option.label}`}
+        onClick={() => this.handleClick(option)}
+      >
+        <figure>
+          <img
+            styleName={classNames(
+              {
+                clicked: option.state === 'selected',
+              },
+              {
+                disable: option.state === 'disable',
+              },
+            )}
+            src={option.image}
+            alt={option.alt || 'image alt'}
+          />
+        </figure>
+      </button>
+    );
     return (
       <div styleName="container">
         {!isEmpty(title) ? <h4>{title}</h4> : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
-          {isNil(options) ? null : sortByProp('label')(options).map((option, index) => (
-            <button
-              key={`${option.label}`}
-              onClick={() => this.handleClick(index, option)}
-            >
-              <figure>
-                <img
-                  styleName={classNames(
-                    {
-                      clicked: option.state === 'selected',
-                    },
-                    {
-                      disable: option.state === 'disable',
-                    }
-                  )}
-                  src={option.image}
-                  alt={option.alt || 'image alt'}
-                />
-              </figure>
-            </button>
-          ))}
+          {isNil(options)
+            ? null
+            : sortByProp('label')(options).map(mapOptions)}
         </div>
       </div>
     );
