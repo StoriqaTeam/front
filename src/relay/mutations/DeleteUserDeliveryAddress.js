@@ -5,7 +5,7 @@ import { Environment } from 'relay-runtime';
 import { filter } from 'ramda';
 
 const mutation = graphql`
-  mutation deleteUserDeliveryAddressMutation($id: Int!) {
+  mutation DeleteUserDeliveryAddressMutation($id: Int!) {
     deleteUserDeliveryAddress(id: $id) {
       id
       rawId

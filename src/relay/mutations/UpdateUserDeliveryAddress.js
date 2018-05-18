@@ -2,12 +2,13 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { map } from 'ramda';
 
 const mutation = graphql`
-  mutation createUserDeliveryAddressMutation(
-    $input: NewUserDeliveryAddressInput!
+  mutation UpdateUserDeliveryAddressMutation(
+    $input: UpdateUserDeliveryAddressInput!
   ) {
-    createUserDeliveryAddress(input: $input) {
+    updateUserDeliveryAddress(input: $input) {
       rawId
       id
       userId
@@ -29,7 +30,7 @@ const mutation = graphql`
 
 export type MutationParamsType = {
   input: {
-    userId: number,
+    id: number,
     country: string,
     administrativeAreaLevel1: ?string,
     administrativeAreaLevel2: ?string,
@@ -55,10 +56,20 @@ const commit = (params: MutationParamsType) =>
     onCompleted: params.onCompleted,
     onError: params.onError,
     updater: relayStore => {
-      const address = relayStore.getRootField('createUserDeliveryAddress');
+      const updatedAddress = relayStore.getRootField(
+        'updateUserDeliveryAddress',
+      );
+      const updatedAddressId = updatedAddress.getValue('id');
       const me = relayStore.getRoot().getLinkedRecord('me');
       const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
-      const newDeliveryAddresses = [...deliveryAddresses, address];
+      const newDeliveryAddresses = map(item => {
+        /* eslint-disable */
+        if (item._dataID === updatedAddressId) {
+          /* eslint-enable */
+          return updatedAddress;
+        }
+        return item;
+      }, deliveryAddresses);
       me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddresses');
     },
   });
