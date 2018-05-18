@@ -157,7 +157,17 @@ class Authorization extends Component<PropsType, StateType> {
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
           const cookies = new Cookies();
-          cookies.set('__jwt', { value: jwt });
+          const today = new Date();
+          const expirationDate = new Date();
+          expirationDate.setDate(today.getDate() + 1);
+          cookies.set(
+            '__jwt',
+            { value: jwt },
+            {
+              path: '/',
+              expires: expirationDate,
+            },
+          );
           if (this.context.handleLogin) {
             this.context.handleLogin();
             if (alone) {

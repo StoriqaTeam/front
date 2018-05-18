@@ -54,7 +54,17 @@ class OAuthCallback extends PureComponent<PropsType> {
           const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
           if (jwt) {
             const cookies = new Cookies();
-            cookies.set('__jwt', { value: jwt }, { path: '/' });
+            const today = new Date();
+            const expirationDate = new Date();
+            expirationDate.setDate(today.getDate() + 1);
+            cookies.set(
+              '__jwt',
+              { value: jwt },
+              {
+                path: '/',
+                expires: expirationDate,
+              },
+            );
             window.location.href = '/'; // TODO: use refetch or store update
           }
         },
