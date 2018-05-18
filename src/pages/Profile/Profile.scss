@@ -139,11 +139,17 @@
   right: 0;
   cursor: pointer;
 
-  & svg {transition: all .3s ease;}
+  & svg {
+    transition: all .3s ease;
+  }
 
   &.openIcon {
-    & svg {fill: $color_blue_1;}
-    &:after {opacity: 0;}
+    & svg {
+      fill: $color_blue_1;
+    }
+    &:after {
+      opacity: 0;
+    }
   }
 
   &:after {

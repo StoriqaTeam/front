@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, propOr, pathOr, omit, values, all, equals } from 'ramda';
+import { assocPath, pathOr, propOr, omit, values, all, equals } from 'ramda';
 import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
 
@@ -187,9 +187,9 @@ class Security extends Component<{}, StateType> {
   /* eslint-disable */
   renderInput = ({ id, label }: { id: string, label: string }) => {
     /* eslint-enable */
-    const { formErrors } = this.state;
+    const { formErrors, form } = this.state;
     // $FlowIgnoreMe
-    const value = propOr('', ['form', 'id'], this.state);
+    const value = propOr('', id, form);
     const seeValue = this.state[`${id}See`];
     return (
       <Input

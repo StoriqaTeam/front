@@ -5,6 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { pipe, path, pathOr, map, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 
+import { withShowAlert } from 'components/App/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
@@ -16,14 +17,18 @@ import {
 } from 'relay/mutations';
 import { log } from 'utils';
 
+import type { AddAlertInputType } from 'components/App/AlertContext';
+
 import CartProductAttribute from './CartProductAttribute';
 import Recycle from './svg/recycle.svg';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
+
 import './CartProduct.scss';
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   // eslint-disable-next-line
   ...CartProduct_product,
 };
@@ -47,8 +52,11 @@ class CartProduct extends PureComponent<PropsType> {
       onError: error => {
         log.error('Error in DeleteFromCart mutation');
         log.error(error);
-        // eslint-disable-next-line
-        alert('Unable to delete product quantity in cart');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Unable to delete product quantity in cart',
+          link: { text: 'Close.' },
+        });
       },
     });
   }
@@ -75,8 +83,11 @@ class CartProduct extends PureComponent<PropsType> {
       onError: error => {
         log.error('Error in SetSelectionInCart mutation');
         log.error(error);
-        // eslint-disable-next-line
-        alert('Unable to set product selection in cart');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Unable to set product selection in cart',
+          link: { text: 'Close.' },
+        });
       },
     });
   }
@@ -99,8 +110,11 @@ class CartProduct extends PureComponent<PropsType> {
       onError: error => {
         log.error('Error in SetQuantityInCart mutation');
         log.error(error);
-        // eslint-disable-next-line
-        alert('Unable to set product quantity in cart');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Unable to set product quantity in cart',
+          link: { text: 'Close.' },
+        });
       },
     });
   }
@@ -220,7 +234,7 @@ class CartProduct extends PureComponent<PropsType> {
 }
 
 export default createFragmentContainer(
-  CartProduct,
+  withShowAlert(CartProduct),
   graphql`
     fragment CartProduct_product on CartProduct {
       id

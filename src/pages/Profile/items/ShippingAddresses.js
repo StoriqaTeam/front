@@ -11,14 +11,14 @@ import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
 import { log, fromRelayError } from 'utils';
 import {
-  createUserDeliveryAddress,
-  deleteUserDeliveryAddress,
-  updateUserDeliveryAddress,
+  CreateUserDeliveryAddress,
+  DeleteUserDeliveryAddress,
+  UpdateUserDeliveryAddress,
 } from 'relay/mutations';
 
-import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/updateUserDeliveryAddress';
-import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/createUserDeliveryAddress';
-import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/deleteUserDeliveryAddress';
+import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddress';
+import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddress';
+import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddress';
 
 import '../Profile.scss';
 
@@ -159,9 +159,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       },
     };
     if (id) {
-      updateUserDeliveryAddress.commit(params);
+      UpdateUserDeliveryAddress.commit(params);
     } else {
-      createUserDeliveryAddress.commit(params);
+      CreateUserDeliveryAddress.commit(params);
     }
   };
 
@@ -191,7 +191,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         alert('Something going wrong :(');
       },
     };
-    deleteUserDeliveryAddress.commit(params);
+    DeleteUserDeliveryAddress.commit(params);
   };
 
   handleUpdateForm = (form: any) => {

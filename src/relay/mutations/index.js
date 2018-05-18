@@ -27,12 +27,11 @@ export {
 export { default as DeleteFromCartMutation } from './DeleteFromCartMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';
 export {
-  default as createUserDeliveryAddress,
-} from './createUserDeliveryAddress';
+  default as CreateUserDeliveryAddress,
+} from './CreateUserDeliveryAddress';
 export {
-  default as deleteUserDeliveryAddress,
-} from './deleteUserDeliveryAddress';
+  default as DeleteUserDeliveryAddress,
+} from './DeleteUserDeliveryAddress';
 export {
-  default as updateUserDeliveryAddress,
-} from './updateUserDeliveryAddress';
-export { default as ChangePassword } from './ChangePassword';
+  default as UpdateUserDeliveryAddress,
+} from './UpdateUserDeliveryAddress';
