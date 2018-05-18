@@ -48,11 +48,6 @@ h4 {
 
   &.opaque:not(:first-child) {
     border-left: 1px solid $gray_border !important;
-
-    & + button {
-      // border-right: 1px solid transparent !important;
-    }
-
   }
   // apply transparent border-right except the last one
   &:not(:last-child) {
@@ -72,4 +67,9 @@ h4 {
   right: -1px;
   top: -1px;
   width: 1px;
+
+  &.highlighted {
+    border-right: 1px solid $color_primary !important;
+  }
+
 }

@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { map, addIndex, propEq } from 'ramda';
+import classNames from 'classnames';
 
 import './ProductSize.scss';
 
@@ -34,7 +35,7 @@ class ProductSize extends Component<PropsType, {}> {
         <h4>{title}</h4>
         <div styleName="sizes">
           {mapIndexed((option, index, arr) => {
-            const selected = arr.every(propEq('opacity', 'selected'));
+            const available = arr.every(propEq('state', 'available'));
             const separator = () =>
               !option.state === 'disable' && option.state === 'available';
             return (
@@ -46,8 +47,12 @@ class ProductSize extends Component<PropsType, {}> {
                 } ${option.state === 'disable' ? 'opaque' : ''}`}
               >
                 {option.label}
-                {!selected && separator() ? (
-                  <span styleName="separator" />
+                {!available || separator() ? (
+                  <span
+                    styleName={classNames('separator', {
+                      highlighted: option.state === 'selected',
+                    })}
+                  />
                 ) : null}
               </button>
             );
