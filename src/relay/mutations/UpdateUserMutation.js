@@ -15,6 +15,7 @@ const mutation = graphql`
       birthdate
       gender
       isActive
+      avatar
     }
   }
 `;
@@ -25,9 +26,9 @@ export type MutationParamsType = {
     phone: ?string,
     firstName: ?string,
     lastName: ?string,
-    middleName: ?string,
     birthdate: ?string,
-    gender: string,
+    gender: ?string,
+    avatar: ?string,
   },
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
@@ -42,6 +43,12 @@ const commit = (params: MutationParamsType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    updater: relayStore => {
+      const updateUser = relayStore.getRootField('updateUser');
+      const avatar = updateUser.getValue('avatar');
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      me.setValue(avatar, 'avatar');
+    },
   });
 
 export default { commit };

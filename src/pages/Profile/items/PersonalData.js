@@ -1,42 +1,67 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { assocPath, propOr, toUpper, toLower, find, propEq } from 'ramda';
+import PropTypes from 'prop-types';
+import {
+  assocPath,
+  propOr,
+  toUpper,
+  toLower,
+  find,
+  propEq,
+  isEmpty,
+  pathOr,
+  omit,
+} from 'ramda';
+import { validate } from '@storiqa/shared';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
 import { BirthdateSelect } from 'pages/Profile/items/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import { log, fromRelayError } from 'utils';
+import { renameKeys } from 'utils/ramda';
+
+import { UpdateUserMutation } from 'relay/mutations';
+import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 
 import '../Profile.scss';
 
 type DataType = {
-  first_name: string,
-  last_name: string,
+  firstName: string,
+  lastName: string,
   phone: ?string,
   birthdate: ?string,
   gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
 };
 
 type PropsType = {
-  handleSave: (data: DataType) => void,
-  updateFormErrors: (id: string) => void,
   data: {
+    id: string,
     firstName: string,
     lastName: string,
     phone: ?string,
     birthdate: ?string,
     gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
   },
-  isLoading: boolean,
-  formErrors: {
-    [string]: ?any,
-  },
   subtitle: string,
+  showAlert: ({
+    type: 'success' | 'error',
+    text: string,
+    link: {
+      text: string,
+    },
+  }) => void,
 };
 
 type StateType = {
   data: DataType,
+  formErrors: {
+    [string]: ?any,
+  },
+  isLoading: boolean,
 };
 
 const genderItems = [
@@ -51,21 +76,122 @@ class PersonalData extends Component<PropsType, StateType> {
     this.state = {
       data: {
         phone: data.phone || '',
-        first_name: data.firstName || '',
-        last_name: data.lastName || '',
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
         birthdate: data.birthdate || '',
         gender: data.gender || 'UNDEFINED',
       },
+      formErrors: {},
+      isLoading: false,
     };
   }
 
   handleSave = () => {
+    const { environment } = this.context;
+    const { data: propsData } = this.props;
     const { data } = this.state;
-    this.props.handleSave(data);
+    const { phone, firstName, lastName, birthdate, gender } = data;
+
+    const { errors: formErrors } = validate(
+      {
+        firstName: [
+          [
+            (value: string) => value && value.length > 0,
+            'First name must not be empty',
+          ],
+        ],
+        lastName: [
+          [
+            (value: string) => value && value.length > 0,
+            'Last name must not be empty',
+          ],
+        ],
+        phone: [
+          [
+            (value: string) => /^\+?\d{7}\d*$/.test(value),
+            'Incorrect phone format',
+          ],
+        ],
+      },
+      {
+        firstName,
+        lastName,
+        phone,
+      },
+    );
+
+    if (formErrors) {
+      this.setState({ formErrors });
+      return;
+    }
+
+    this.setState(() => ({ isLoading: true }));
+
+    const params: MutationParamsType = {
+      input: {
+        clientMutationId: '',
+        id: propsData.id,
+        phone: phone || null,
+        firstName: firstName || null,
+        lastName: lastName || null,
+        birthdate: birthdate || null,
+        gender: gender || null,
+        avatar: null,
+      },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.setState({
+            formErrors: renameKeys(
+              {
+                first_name: 'firstName',
+                last_name: 'lastName',
+              },
+              validationErrors,
+            ),
+          });
+        }
+        this.setState(() => ({ isLoading: false }));
+        this.props.showAlert({
+          type: 'success',
+          text: 'User success update',
+          link: { text: 'Got it!' },
+        });
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+
+        this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (validationErrors) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          return;
+        }
+        // eslint-disable-next-line
+        alert('Something going wrong :(');
+      },
+    };
+    UpdateUserMutation.commit(params);
   };
 
   handleInputChange = (id: string) => (e: any) => {
-    this.props.updateFormErrors(id);
+    this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     if (id === 'phone' && !/^\+?\d*$/.test(value)) {
       return;
@@ -99,7 +225,6 @@ class PersonalData extends Component<PropsType, StateType> {
     label: string,
     limit?: number,
   }) => (
-    /* eslint-enable */
     <div styleName="formItem">
       <Input
         id={id}
@@ -107,15 +232,15 @@ class PersonalData extends Component<PropsType, StateType> {
         value={propOr('', id, this.state.data)}
         label={label}
         onChange={this.handleInputChange(id)}
-        errors={propOr(null, id, this.props.formErrors)}
+        errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
       />
     </div>
   );
 
   render() {
-    const { isLoading, formErrors, subtitle } = this.props;
-    const { data } = this.state;
+    const { subtitle } = this.props;
+    const { data, isLoading, formErrors } = this.state;
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
       <Fragment>
@@ -123,12 +248,12 @@ class PersonalData extends Component<PropsType, StateType> {
           <strong>{subtitle}</strong>
         </div>
         {this.renderInput({
-          id: 'first_name',
+          id: 'firstName',
           label: 'First name',
           limit: 50,
         })}
         {this.renderInput({
-          id: 'last_name',
+          id: 'lastName',
           label: 'Last name',
           limit: 50,
         })}
@@ -167,4 +292,8 @@ class PersonalData extends Component<PropsType, StateType> {
   }
 }
 
-export default PersonalData;
+PersonalData.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
+
+export default withShowAlert(PersonalData);
