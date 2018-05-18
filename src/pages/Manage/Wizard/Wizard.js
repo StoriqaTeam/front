@@ -16,8 +16,9 @@ import {
 
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
-import FirstForm from './FirstForm';
-import SecondForm from './SecondForm';
+import Step1 from './Step1/Form';
+import Step2 from './Step2/Form';
+import Step3 from './Step3/View';
 
 import './Wizard.scss';
 
@@ -39,7 +40,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // });
     // defaultLanguage будет 'EN' по умолчанию для нового store
     this.state = {
-      step: 1,
+      step: 3,
       wizardStore: {
         ...stepOne,
         ...stepTwo,
@@ -144,7 +145,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateStore = () => {
-    console.log('**** update store');
+    const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], this.props);
+    const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], this.props);
+    console.log('**** update store props: ', { stepOne, stepTwo });
   };
 
   handleOnChangeStep = (step: number) => {
@@ -197,7 +200,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     if (data) {
       this.updateWizard(data);
     }
-  }, 1000);
+  }, 250);
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
@@ -205,43 +208,49 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     switch (step) {
       case 1:
         return (
-          <div>
+          <div styleName="formWrapper firstForm">
             <div styleName="headerTitle">Give your store a name</div>
             <div styleName="headerDescription">
               Make a bright name for your store to attend your customers and
               encrease your sales
             </div>
-            <FirstForm
+            <Step1
               data={wizardStore}
               onChange={this.handleChangeForm}
-              onSave={this.handleOnSaveWizard}
             />
           </div>
         );
       case 2:
         return (
-          <div>
+          <div styleName="formWrapper secondForm">
             <div styleName="headerTitle">Set up store</div>
             <div styleName="headerDescription">
               Define a few settings that will make your sells effective and
               comfortable.
             </div>
-            <SecondForm
+            <Step2
               data={wizardStore}
               languages={this.props.languages}
               onChange={this.handleChangeForm}
-              onSave={this.handleOnSaveWizard}
             />
           </div>
         );
       case 3:
         return (
-          <div>
+          <div styleName="formWrapper thirdForm">
             <div styleName="headerTitle">Fill your store with goods</div>
             <div styleName="headerDescription">
               Choose what you gonna sale in your marketplace and add it with
               ease
             </div>
+            <Step3
+              data={wizardStore}
+              // languages={this.props.languages}
+              products={products}
+              onChange={() => {}}
+              onUpload={() => {}}
+              // onSave={this.handleOnSaveWizard}
+            />
           </div>
         );
       default:
@@ -251,6 +260,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
+
     const { step } = this.state;
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], this.props);
     const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], this.props);
@@ -282,7 +292,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           />
         </div>
         <div styleName="contentWrapper">
-          <div styleName="formWrapper">{this.renderForm()}</div>
+          {this.renderForm()}
         </div>
         <div styleName="footerWrapper">
           <WizardFooter
@@ -341,3 +351,42 @@ export default createFragmentContainer(
     }
   `,
 );
+
+const products = [
+  {
+    "node": {
+      "name": [
+        {
+          "text": "A Set Of \"Labyrinth\""
+        }
+      ]
+    }
+  },
+  {
+    "node": {
+      "name": [
+        {
+          "text": "Oak end cutting board"
+        }
+      ]
+    }
+  },
+  {
+    "node": {
+      "name": [
+        {
+          "text": "American walnut end cutting board"
+        }
+      ]
+    }
+  },
+  {
+    "node": {
+      "name": [
+        {
+          "text": "Oak tray"
+        }
+      ]
+    }
+  },
+]

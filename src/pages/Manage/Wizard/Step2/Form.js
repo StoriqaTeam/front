@@ -57,7 +57,7 @@ const SecondForm = ({ data, onChange, languages }: PropsType) => {
   const findActiveItem = find(item => item.id === data.defaultLanguage);
   const { addressFull } = data;
   return (
-    <div styleName="form secondForm">
+    <div styleName="form">
       <div styleName="formItem">
         <Select
           forForm

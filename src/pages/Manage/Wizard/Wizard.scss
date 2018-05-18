@@ -1,6 +1,7 @@
 @import "../../../styles/variables";
 
 .wizardContainer {
+  // position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -16,15 +17,23 @@
   .contentWrapper {
     display: flex;
     flex: 1;
-    padding-top: 14.25rem;
-    padding-bottom: 9rem;
+    padding: 14.25rem 3rem 9rem 3rem;
     justify-content: center;
 
     .formWrapper {
-      width: 54rem;
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      &.firstForm {
+        width: 54rem;
+      }
+      &.secondForm {
+        width: 54rem;
+      }
+      &.thirdForm {
+        width: 100%;
+      }
 
       .headerTitle {
         font-family: $font_light;
@@ -47,3 +56,4 @@
     display: flex;
   }
 }
+

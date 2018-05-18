@@ -1,0 +1,64 @@
+@import "../../../../styles/variables";
+
+.view {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  .productItem {
+    padding-bottom: 2rem;
+    margin: 0.95rem;
+    .productContent {
+      position: relative;
+      height: 38rem;
+      width: 38rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: $color_grey_light;
+      border-radius: 0.5rem;
+    }
+    .buttonLabel {
+      text-align: center;
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin-top: 0.4rem;
+      color: $color_grey_bg;
+    }
+  }
+}
+
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  background-color: rgba(255, 255, 255, 0.85);
+  overflow: scroll;
+  padding: 13rem 0;
+
+  .modal {
+    display: flex;
+    justify-content: center;
+
+    .modalContent {
+      position: relative;
+
+      .closeButton {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10rem;
+        height: 10rem;
+        cursor: pointer;
+      }
+    }
+  }
+}

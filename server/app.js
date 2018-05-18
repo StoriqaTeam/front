@@ -138,7 +138,7 @@ app.use(wrapAsync(async (req, res) => {
         <link rel="stylesheet" type="text/css" href="/styles.css">
       </head>
       <body>
-      <div id="root" style="height: 100%;">${ReactDOMServer.renderToString(element)}</div>
+      <div id="root" style="height: 100%; overflow: auto;">${ReactDOMServer.renderToString(element)}</div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}
@@ -158,8 +158,8 @@ app.use(wrapAsync(async (req, res) => {
       const renderedEl = ReactDOMServer.renderToString(element);
       const RenderedApp = htmlData
         .replace(
-          '<div id="root" style="height:100%"></div>',
-          `<div id="root" style="height:100%;">${renderedEl}</div>`,
+          '<div id="root" style="height:100%; overflow: auto;"></div>',
+          `<div id="root" style="height:100%; overflow: auto;">${renderedEl}</div>`,
         )
         .replace(
           '<script>window.__RELAY_PAYLOADS__=null</script>',
