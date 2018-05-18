@@ -92,7 +92,17 @@
   font-size:  14px;
   border: $color_primary 1px solid;
   color: $color_primary;
+
   &:hover {
     color: $color_white;
+  }
+
+  &.disabled {
+    opacity: .3;
+
+    &:hover {
+      color: $color_primary;
+      background: transparent;
+    }
   }
 }

@@ -32,6 +32,7 @@ type PropsType = {
   formErrors: {
     [string]: ?any,
   },
+  subtitle: string,
 };
 
 type StateType = {
@@ -113,11 +114,14 @@ class PersonalData extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { isLoading, formErrors } = this.props;
+    const { isLoading, formErrors, subtitle } = this.props;
     const { data } = this.state;
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
       <Fragment>
+        <div styleName="subtitle">
+          <strong>{subtitle}</strong>
+        </div>
         {this.renderInput({
           id: 'first_name',
           label: 'First name',
