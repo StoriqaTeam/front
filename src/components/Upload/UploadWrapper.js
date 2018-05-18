@@ -36,7 +36,7 @@ const UploadWrapper = ({
   dataTest,
 }: PropsType) => (
   <div styleName="wrapper">
-    <div styleName={classNames("upoloadContainer", { noIndents })}>
+    <div styleName={classNames('upoloadContainer', { noIndents })}>
       <label
         htmlFor={id}
         styleName="uploadButton"

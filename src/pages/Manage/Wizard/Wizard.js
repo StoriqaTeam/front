@@ -214,10 +214,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               Make a bright name for your store to attend your customers and
               encrease your sales
             </div>
-            <Step1
-              data={wizardStore}
-              onChange={this.handleChangeForm}
-            />
+            <Step1 data={wizardStore} onChange={this.handleChangeForm} />
           </div>
         );
       case 2:
@@ -260,7 +257,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-
     const { step } = this.state;
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], this.props);
     const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], this.props);
@@ -291,9 +287,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             onChangeStep={this.handleOnChangeStep}
           />
         </div>
-        <div styleName="contentWrapper">
-          {this.renderForm()}
-        </div>
+        <div styleName="contentWrapper">{this.renderForm()}</div>
         <div styleName="footerWrapper">
           <WizardFooter
             currentStep={step}
@@ -354,39 +348,39 @@ export default createFragmentContainer(
 
 const products = [
   {
-    "node": {
-      "name": [
+    node: {
+      name: [
         {
-          "text": "A Set Of \"Labyrinth\""
-        }
-      ]
-    }
+          text: 'A Set Of "Labyrinth"',
+        },
+      ],
+    },
   },
   {
-    "node": {
-      "name": [
+    node: {
+      name: [
         {
-          "text": "Oak end cutting board"
-        }
-      ]
-    }
+          text: 'Oak end cutting board',
+        },
+      ],
+    },
   },
   {
-    "node": {
-      "name": [
+    node: {
+      name: [
         {
-          "text": "American walnut end cutting board"
-        }
-      ]
-    }
+          text: 'American walnut end cutting board',
+        },
+      ],
+    },
   },
   {
-    "node": {
-      "name": [
+    node: {
+      name: [
         {
-          "text": "Oak tray"
-        }
-      ]
-    }
+          text: 'Oak tray',
+        },
+      ],
+    },
   },
-]
+];

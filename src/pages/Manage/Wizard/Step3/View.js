@@ -22,13 +22,12 @@ const Modal = ({ children, showModal, onClose }) => {
   return (
     <div styleName="modalWrapper">
       <div styleName="modal">
-
         <div styleName="modalContent">
           <div
             styleName="closeButton"
             role="button"
             onClick={onClose}
-            onKeyDown={() => { }}
+            onKeyDown={() => {}}
             tabIndex={0}
           >
             close
@@ -37,8 +36,8 @@ const Modal = ({ children, showModal, onClose }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 type PropsType = {
   data: {
@@ -56,16 +55,16 @@ type PropsType = {
 
 type StateType = {
   showForm: boolean,
-}
+};
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
   state = {
     showForm: false,
     productState: {
-      name: "",
-      shortDescription: "",
-    }
-  }
+      name: '',
+      shortDescription: '',
+    },
+  };
 
   handleOnAddProduct = () => {
     console.log('handleOnAddProduct');
@@ -74,7 +73,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   handleOnCloseModal = () => {
     this.setState({ showForm: false });
-  }
+  };
 
   handleOnChangeForm = form => {
     console.log('^^^^ form : ', form);
@@ -82,9 +81,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       productState: {
         ...this.state.productState,
         ...form,
-      }
+      },
     });
-  }
+  };
 
   handleOnUploadPhoto = async (e: any) => {
     e.preventDefault();
@@ -114,7 +113,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           role="button"
           // style={handleStyle}
           onClick={this.handleOnAddProduct}
-          onKeyDown={() => { }}
+          onKeyDown={() => {}}
           tabIndex={0}
         >
           <div styleName="productContent">
@@ -122,33 +121,31 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             <span styleName="buttonLabel">add product</span>
           </div>
         </div>
-        {products && map(item => {
-          return (
-            <div styleName="productItem">
-              <div styleName="productContent">
-                {getNameText(item.node.name)}
+        {products &&
+          map(item => {
+            return (
+              <div styleName="productItem">
+                <div styleName="productContent">
+                  {getNameText(item.node.name)}
+                </div>
               </div>
-            </div>
-          )
-        }, products)}
-        <Modal
-          showModal={showForm}
-          onClose={this.handleOnCloseModal}
-        >
+            );
+          }, products)}
+        <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
             data={productState}
             onChange={this.handleOnChangeForm}
             onUpload={this.handleOnUploadPhoto}
-          // categories={this.context.directories.categories}
+            // categories={this.context.directories.categories}
           />
         </Modal>
       </div>
     );
   }
-};
+}
 
 ThirdStepView.contextType = {
   directories: PropTypes.object.isRequired,
-}
+};
 
 export default ThirdStepView;

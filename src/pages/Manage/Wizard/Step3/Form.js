@@ -115,8 +115,13 @@ const Uploaders = ({ onUpload }) => (
   </div>
 );
 
-const ThirdForm = ({ data, onChange, products, categories, onUpload }: PropsType) => {
-
+const ThirdForm = ({
+  data,
+  onChange,
+  products,
+  categories,
+  onUpload,
+}: PropsType) => {
   console.log(products);
 
   const handleChangeData = e => {
@@ -134,7 +139,8 @@ const ThirdForm = ({ data, onChange, products, categories, onUpload }: PropsType
       <div styleName="formWrapper">
         <div styleName="headerTitle">Add new product</div>
         <div styleName="headerDescription">
-          Fill up the forms below to show up as many attributes of your good to make it clear for buyer
+          Fill up the forms below to show up as many attributes of your good to
+          make it clear for buyer
         </div>
         <div styleName="form">
           <div styleName="section">
@@ -179,7 +185,5 @@ const ThirdForm = ({ data, onChange, products, categories, onUpload }: PropsType
     </div>
   );
 };
-
-
 
 export default ThirdForm;
