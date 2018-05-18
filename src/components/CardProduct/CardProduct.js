@@ -60,7 +60,7 @@ class CardProduct extends PureComponent<PropsTypes> {
 
     const lang = 'EN';
     const productLink = `/store/${storeId}/products/${rawId}`;
-    const discountedPrice = price && discount ? price * (1 - discount) : null;
+    const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
     return (
