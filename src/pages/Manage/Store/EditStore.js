@@ -5,11 +5,14 @@ import PropTypes from 'prop-types';
 import { pathOr, toUpper } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
+import { withShowAlert } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Form from './Form';
 import Menu from './Menu';
@@ -17,7 +20,8 @@ import Menu from './Menu';
 import './EditStore.scss';
 
 type PropsType = {
-  me?: { store?: { logo: string } }, // eslint-disable-line
+  me?: { store?: { logo: string } },
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -94,8 +98,11 @@ class EditStore extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
@@ -145,7 +152,7 @@ class EditStore extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(EditStore),
+  Page(withShowAlert(EditStore)),
   graphql`
     fragment EditStore_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {

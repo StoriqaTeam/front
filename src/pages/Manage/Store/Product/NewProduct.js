@@ -10,6 +10,9 @@ import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
 import { CreateBaseProductMutation } from 'relay/mutations';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Form from './Form';
 
@@ -21,6 +24,7 @@ type StateType = {
 };
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   match: {
     params: {
       storeId: string,
@@ -76,13 +80,16 @@ class NewProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         // $FlowIgnoreMe
-        const status = pathOr('', ['100', 'status'], relayErrors);
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
         if (validationErrors && !isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
         } else if (status) {
-          // $FlowIgnoreMe
-          alert(`Error: "${status}"`); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
           return;
         }
 
@@ -105,13 +112,18 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
-        alert('Something going wrong :('); // eslint-disable-line
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
 
   render() {
     const { isLoading } = this.state;
+    // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
     return (
@@ -141,7 +153,7 @@ NewProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(Page(NewProduct)),
+  withRouter(withShowAlert(Page(NewProduct))),
   graphql`
     fragment NewProduct_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {

@@ -10,6 +10,9 @@ import { Page } from 'components/App';
 import { CreateStoreMutation } from 'relay/mutations';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Form from './Form';
 import Menu from './Menu';
@@ -25,6 +28,7 @@ type StateType = {
 
 type PropsType = {
   router: routerShape,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 class NewStore extends Component<PropsType, StateType> {
@@ -105,8 +109,11 @@ class NewStore extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Got it!' },
+        });
       },
     });
   };
@@ -143,7 +150,7 @@ class NewStore extends Component<PropsType, StateType> {
   }
 }
 
-export default withRouter(Page(NewStore));
+export default withShowAlert(withRouter(Page(NewStore)));
 
 NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,
