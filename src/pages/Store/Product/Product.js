@@ -221,20 +221,13 @@ class Product extends Component<PropsType, StateType> {
       priceInfo,
     } = this.state;
     const loggedIn = this.loggedIn();
-    const description = extractText(
-      longDescription,
-      'EN',
-      'No Description',
-    );
+    const description = extractText(longDescription, 'EN', 'No Description');
     return (
       <div styleName="ProductDetails">
         <Row>
           <Col size={6}>
             <ProductImage mainImage={photoMain} thumbnails={additionalPhotos} />
-            <ProductShare
-              photoMain={photoMain}
-              description={description}
-            />
+            <ProductShare photoMain={photoMain} description={description} />
           </Col>
           <Col size={6}>
             <ProductDetails

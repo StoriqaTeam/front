@@ -13,7 +13,7 @@ import './ProductShare.scss';
 type PropsType = {
   photoMain: string,
   description: string,
-}
+};
 
 class ProductShare extends Component<PropsType> {
   handleShare = () => {};

@@ -16,7 +16,7 @@
   white-space: nowrap;
   transition: all .3s ease;
 
-  &:hover {
+  &:hover:not([disabled]) {
     background: $color_blue_1_hover;
   }
 }
