@@ -4,6 +4,7 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
+  height: 3rem;
 }
 
 .forForm {
@@ -11,7 +12,9 @@
   width: 41rem;
 }
 
-.forForm .hr, .forSearch .hr {
+.forForm .hr,
+.forSearch .hr,
+.isBirthdate .hr {
   display: block;
   position: absolute;
   bottom: -0.375rem;
@@ -31,11 +34,18 @@
 }
 
 .isExpanded {
-  &.forForm .hr, &.forSearch .hr {
+  &.forForm .hr,
+  &.forSearch .hr,
+  &.isBirthdate .hr {
     &:after {
       transform: scaleX(1);
     }
   }
+}
+
+.isBirthdate {
+  display: block;
+  width: 12.33rem;
 }
 
 .fullWidth {
@@ -49,7 +59,7 @@
 
 .label {
   position: absolute;
-  top: 0.5rem;
+  top: 0.75rem;
   left: 0;
   color: $color_grey_bg;
   font-size: 14px;
@@ -69,6 +79,12 @@
   color: $color_blue_1;
 }
 
+.isBirthdate .labelFloat,
+.isBirthdate .label {
+  color: $color_grey_text;
+  transform: none;
+}
+
 .wrap {
   position: relative;
   display: inline-block;
@@ -80,13 +96,16 @@
   font-size: 11px;
 }
 
-.forForm .wrap, .forSearch .wrap {
+.forForm .wrap,
+.forSearch .wrap,
+.isBirthdate .wrap {
   position: static;
 }
 
 .transparent,
 .forForm .wrap,
-.forSearch .wrap {
+.forSearch .wrap,
+.isBirthdate .wrap {
   padding-left: 0;
   background-color: transparent;
 }
@@ -118,13 +137,13 @@
 }
 
 .forForm .selected,
-.forSearch .selected {
+.forSearch .selected,
+.isBirthdate .selected {
   top: 0.25rem;
+  font-size: 14px;
 }
 
-.forAutocomlete .selected,
-.forForm .selected,
-.forSearch .selected {
+.forAutocomlete .selected {
   font-size: 14px;
 }
 
@@ -143,7 +162,8 @@
 }
 
 .forForm .icon,
-.forSearch .icon {
+.forSearch .icon,
+.isBirthdate .icon {
   top: auto;
   bottom: 0.25rem;
   right: -0.5rem;
@@ -162,7 +182,7 @@
   position: absolute;
   top: 3rem;
   left: 0;
-  padding: 0.5rem 0.5rem 0.5rem 0;
+  //padding: 0.5rem 0.5rem 0.5rem 0;
   border-radius: 0.25rem;
   background-color: $color_white;
   box-shadow: $shadow_1;
@@ -198,7 +218,8 @@
 }
 
 .forForm .items,
-.forSearch .items {
+.forSearch .items,
+.isBirthdate .items {
   top: 100%;
   left: 0;
   margin-left: 0;
@@ -212,11 +233,13 @@
 .itemsWrap {
   position: relative;
   max-height: 10rem;
+  padding: 0.5rem 0.5rem 0.5rem 0;
   overflow-y: auto;
 }
 
 .forForm .itemsWrap,
-.forSearch .itemsWrap{
+.forSearch .itemsWrap,
+.isBirthdate .itemsWrap {
   max-height: 15rem;
 }
 
@@ -235,7 +258,8 @@
 }
 
 .forForm .item,
-.forSearch .item {
+.forSearch .item,
+.isBirthdate .item {
   height: 3rem;
   line-height: 3.25rem;
   font-size: 14px;
