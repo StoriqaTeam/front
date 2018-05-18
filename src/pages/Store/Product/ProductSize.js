@@ -44,7 +44,7 @@ class ProductSize extends Component<PropsType, {}> {
                 onClick={() => this.handleClick(index, option)}
                 styleName={`size ${
                   option.state === 'selected' ? 'clicked' : ''
-                } ${option.state === 'disable' ? 'opaque' : ''}`}
+                } ${option.state === 'disable' ? 'disable' : ''}`}
               >
                 {option.label}
                 {!available || separator() ? (

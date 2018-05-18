@@ -54,7 +54,7 @@ class ProductDetails extends React.Component<PropsType, {}> {
             title={widget.title}
             row
             srcProp="image"
-            thumbnails={widget.options}
+            options={widget.options}
             onClick={selected => this.handleWidgetClick(selected)}
           />
         );

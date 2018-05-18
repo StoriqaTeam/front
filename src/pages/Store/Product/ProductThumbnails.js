@@ -1,86 +1,57 @@
 // @flow
 
 import React, { Component } from 'react';
+import { isEmpty, isNil } from 'ramda';
+import classNames from 'classnames';
 
 import './ProductThumbnails.scss';
 
-import { SelectedType, ThumbnailType } from './types';
+import { sortByProp } from './utils';
+
+import { WidgetOptionType } from './types';
 
 type PropsType = {
   /* eslint-disable react/no-unused-prop-types */
   isFirstSelected: boolean,
-  isReset: boolean,
   title?: string,
-  thumbnails: Array<ThumbnailType>,
+  options: Array<WidgetOptionType>,
   row?: boolean,
   onClick: Function,
 };
 
-type StateType = {
-  selected: null | number,
-};
-
-class ProductThumbnails extends Component<PropsType, StateType> {
+class ProductThumbnails extends Component<PropsType, {}> {
   static defaultProps = {
     title: '',
     row: false,
     isFirstSelected: false,
   };
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): StateType | null {
-    const { isReset, isFirstSelected } = nextProps;
-    if (isReset) {
-      return {
-        selected: isFirstSelected ? 0 : null,
-      };
-    }
-    return prevState;
-  }
-  state = {
-    selected: null,
-  };
-  /**
-   * Highlights img's border when clicked
-   * @param {number} index
-   * @param {SelectedType} selected
-   * @return {void}
-   */
-  handleClick = (index: number, selected: SelectedType): void => {
+  handleClick = (index: number, option: WidgetOptionType): void => {
     const { onClick } = this.props;
-    this.setState(
-      {
-        selected: index,
-      },
-      onClick(selected),
-    );
+    onClick(option);
   };
   render() {
-    const { thumbnails, row, title } = this.props;
-    const { selected } = this.state;
+    const { options, row, title } = this.props;
     return (
       <div styleName="container">
-        {title !== '' ? <h4>{title}</h4> : null}
+        {!isEmpty(title) ? <h4>{title}</h4> : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
-          {thumbnails.map((thumbnail, index) => (
+          {isNil(options) ? null : sortByProp('label')(options).map((option, index) => (
             <button
-              key={`${thumbnail.label}`}
-              onClick={() => this.handleClick(index, thumbnail)}
+              key={`${option.label}`}
+              onClick={() => this.handleClick(index, option)}
             >
               <figure>
                 <img
-                  styleName={`${
-                    selected === index && !thumbnail.opacity ? 'clicked' : ''
-                  } ${thumbnail.opacity ? 'opaque' : ''}`}
-                  src={thumbnail.image}
-                  alt={thumbnail.alt || 'image alt'}
+                  styleName={classNames(
+                    {
+                      clicked: option.state === 'selected',
+                    },
+                    {
+                      disable: option.state === 'disable',
+                    }
+                  )}
+                  src={option.image}
+                  alt={option.alt || 'image alt'}
                 />
               </figure>
             </button>
