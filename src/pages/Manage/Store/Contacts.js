@@ -246,7 +246,7 @@ class Contacts extends Component<PropsType, StateType> {
                 <div styleName="formItem">
                   <AddressForm
                     country={form.country}
-                    address={form.address}
+                    autocompleteValue={form.address}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
                   />
@@ -292,6 +292,10 @@ export default createFragmentContainer(
         instagramUrl
         address
         country
+        addressFull {
+          value
+          country
+        }
       }
     }
   `,

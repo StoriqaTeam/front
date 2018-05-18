@@ -1,0 +1,121 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.title {
+  font-family: $font_medium;
+  color: $color_grey_text;
+  font-size: 24px;
+}
+
+.subtitle {
+  margin-bottom: 5rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form {
+  margin-top: 2rem;
+  padding: 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.formItem + .formItem {
+  margin-top: 6rem;
+}
+
+.addressForm {
+  width: 41rem;
+}
+
+.editAddressForm {
+  margin: 4rem 0;
+  padding: 4rem;
+  background-color: $color_grey_8;
+}
+
+.saveButtons {
+  display: flex;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.editButtons {
+  display: flex;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.cancelButton {
+  margin-left: 3rem;
+  font-size: 16px;
+  color: $color_grey_bg;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    color: $color_grey_text;
+  }
+}
+
+.addButton {
+  //display: flex;
+  //justify-content: flex-end;
+  float: right;
+}
+
+.priorityCheckbox {
+  margin-top: 5rem;
+}
+
+.addressesWrap {
+  &.isOpenNewForm {
+    margin-top: 7.5rem;
+  }
+}
+
+.addresses {
+  //
+}
+
+.item {
+  padding: 4rem;
+  border-radius: 4px;
+  background-color: $color_grey_8;
+
+  & + .item {
+    margin-top: 4rem;
+  }
+}
+
+.address {
+  color: $color_grey_bg;
+  line-height: 2.5rem;
+}
+
+.name {
+  margin-top: 1rem;
+}
+
+.email {
+  color: $color_grey_bg;
+}
+
+.preorityText {
+  margin-bottom: 1.5rem;
+  color: $color_blue_1;
+  line-height: 2.5rem;
+}

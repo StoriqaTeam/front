@@ -13,61 +13,67 @@ type PropsType = {
 const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
   <div>
     <div styleName="row">
-      <div styleName="itemWrapper">
+      <div styleName="itemWrapper odd">
         <Input
-          id="street-number"
+          fullWidth
+          id="streetNumber"
           label="Apt / Suite / Other"
-          onChange={onChangeForm('street_number')}
-          value={address.street_number}
+          onChange={onChangeForm('streetNumber')}
+          value={address ? address.streetNumber : ''}
           limit={50}
         />
       </div>
       <div styleName="itemWrapper">
         <Input
+          fullWidth
           id="route"
           label="Street address"
           onChange={onChangeForm('route')}
-          value={address.route}
+          value={address ? address.route : ''}
           limit={50}
         />
       </div>
     </div>
     <div styleName="row">
-      <div styleName="itemWrapper">
+      <div styleName="itemWrapper odd">
         <Input
+          fullWidth
           id="locality"
           label="City"
           onChange={onChangeForm('locality')}
-          value={address.locality}
+          value={address ? address.locality : ''}
           limit={50}
         />
       </div>
       <div styleName="itemWrapper">
         <Input
-          id="administrative_area_level_2"
+          fullWidth
+          id="administrativeAreaLevel2"
           label="Region / State"
-          onChange={onChangeForm('administrative_area_level_2')}
-          value={address.administrative_area_level_2}
+          onChange={onChangeForm('administrativeAreaLevel2')}
+          value={address ? address.administrativeAreaLevel2 : ''}
           limit={50}
         />
       </div>
     </div>
     <div styleName="row">
-      <div styleName="itemWrapper">
+      <div styleName="itemWrapper odd">
         <Input
-          id="administrative_area_level_1"
+          fullWidth
+          id="administrativeAreaLevel1"
           label="Area / District"
-          onChange={onChangeForm('administrative_area_level_1')}
-          value={address.administrative_area_level_1}
+          onChange={onChangeForm('administrativeAreaLevel1')}
+          value={address ? address.administrativeAreaLevel1 : ''}
           limit={50}
         />
       </div>
       <div styleName="itemWrapper">
         <Input
-          id="postal_code"
+          fullWidth
+          id="postalCode"
           label="Postal Code"
-          onChange={onChangeForm('postal_code')}
-          value={address.postal_code}
+          onChange={onChangeForm('postalCode')}
+          value={address ? address.postalCode : ''}
           limit={50}
         />
       </div>

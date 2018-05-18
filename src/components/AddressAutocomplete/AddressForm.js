@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { pick, pathOr, forEach, isEmpty, map, find, propEq } from 'ramda';
+import { pick, pathOr, forEach, isEmpty, map, find, omit } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
@@ -27,8 +27,11 @@ type PropsType = {
   geocoderService: any,
   onChangeFormInput: (type: string) => (e: any) => void,
   onUpdateForm: (form: any) => void,
+  onChangeData: (data: any) => void,
   country: string,
   address: string,
+  addressFull: any,
+  isOpen?: boolean,
 };
 
 type SelectType = {
@@ -58,10 +61,14 @@ type GeocoderType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const country = find(propEq('name', props.country))(countries);
+    const country = find(
+      item => item.name === props.country || item.code === props.country,
+    )(countries);
     this.state = {
       country: country ? { id: country.code, label: country.name } : null,
-      address: null,
+      address: props.addressFull
+        ? omit(['country', 'value'], props.addressFull)
+        : null,
       autocompleteValue: props.address,
       predictions: [],
     };
@@ -81,7 +88,9 @@ class Form extends Component<PropsType, StateType> {
         }
       };
       forEach(populateAddressField, result.addressComponents);
-      this.setState({ address });
+      this.setState({ address: renameCamelCase(address) }, () =>
+        this.handleOnChangeData(),
+      );
     }
   };
 
@@ -105,13 +114,18 @@ class Form extends Component<PropsType, StateType> {
 
   handleOnChangeForm = (type: string) => (e: any) => {
     const { onChangeFormInput } = this.props;
-    onChangeFormInput(type)(e);
-    this.setState({
-      address: {
-        ...this.state.address,
-        [type]: e.target.value,
+    if (onChangeFormInput) {
+      onChangeFormInput(type)(e);
+    }
+    this.setState(
+      {
+        address: {
+          ...this.state.address,
+          [type]: e.target.value,
+        },
       },
-    });
+      () => this.handleOnChangeData(),
+    );
   };
 
   handleSearch = (predictions: any, status: string) => {
@@ -141,7 +155,9 @@ class Form extends Component<PropsType, StateType> {
     const { country } = this.state;
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
-    onUpdateForm({ address: value });
+    if (onUpdateForm) {
+      onUpdateForm({ address: value });
+    }
     if (isEmpty(value)) {
       this.setState({ predictions: [] });
       return;
@@ -157,74 +173,93 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleOnChangeAddress = (value: string) => {
-    this.setState({ autocompleteValue: value });
+    this.setState(
+      () => ({ autocompleteValue: value }),
+      () => this.handleOnChangeData(),
+    );
     this.handleAutocomplete(value);
   };
 
   handleOnChangeCountry = (value: ?SelectType) => {
+    const { onUpdateForm } = this.props;
     this.setState(
       () => ({ country: value }),
       () => {
-        this.props.onUpdateForm({ country: value ? value.label : '' });
+        if (onUpdateForm) {
+          onUpdateForm({ country: value ? value.label : '' });
+        }
+        this.handleOnChangeData();
       },
     );
   };
 
+  handleOnChangeData = () => {
+    const { onChangeData } = this.props;
+    const { address, country, autocompleteValue } = this.state;
+    if (onChangeData) {
+      onChangeData({
+        ...address,
+        country: country ? country.id : null,
+        address: autocompleteValue,
+      });
+    }
+  };
+
   render() {
+    const { isOpen } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
     const countriesArr = getIndexedCountries(countries);
     const countryLabel = country ? country.label : '';
     const countryFromResource = getCountryByName(countryLabel, countries);
-    const addressBlock =
-      !countryLabel || !countryFromResource ? null : (
-        <div styleName="wrapper">
-          <Autocomplete
-            autoHighlight
-            id="autocompleteId"
-            wrapperStyle={{ position: 'relative' }}
-            items={predictions}
-            getItemValue={item => item.mainText}
-            renderItem={(item, isHighlighted) => (
-              <div
-                key={`${item.mainText}-${item.secondaryText}`}
-                styleName={classNames('item', { isHighlighted })}
-              >
-                {`${item.mainText}, ${item.secondaryText}`}
-              </div>
-            )}
-            renderInput={props => (
-              <AutocompleteInput
-                inputRef={props.ref}
-                label="Address"
-                {...pick(
-                  [
-                    'onChange',
-                    'onBlur',
-                    'onFocus',
-                    'onKeyDown',
-                    'onClick',
-                    'value',
-                  ],
-                  props,
-                )}
-              />
-            )}
-            renderMenu={items => (
-              <div styleName="items">
-                <div styleName="itemsWrap" />
-                {items}
-              </div>
-            )}
-            value={autocompleteValue}
-            onChange={e => this.handleOnChangeAddress(e.target.value)}
-            onSelect={(selectedValue, item) => {
-              this.handleOnChangeAddress(selectedValue);
-              this.handleOnSetAddress(selectedValue, item);
-            }}
-          />
-        </div>
-      );
-    const autocompleteResult = address && (
+    const addressBlock = (countryFromResource || countryLabel || isOpen) && (
+      <div styleName="wrapper">
+        <Autocomplete
+          autoHighlight
+          id="autocompleteId"
+          wrapperStyle={{ position: 'relative' }}
+          items={predictions}
+          getItemValue={item => item.mainText}
+          renderItem={(item, isHighlighted) => (
+            <div
+              key={`${item.mainText}-${item.secondaryText}`}
+              styleName={classNames('item', { isHighlighted })}
+            >
+              {`${item.mainText}, ${item.secondaryText}`}
+            </div>
+          )}
+          renderInput={props => (
+            <AutocompleteInput
+              inputRef={props.ref}
+              label="Address"
+              {...pick(
+                [
+                  'onChange',
+                  'onBlur',
+                  'onFocus',
+                  'onKeyDown',
+                  'onClick',
+                  'value',
+                ],
+                props,
+              )}
+            />
+          )}
+          renderMenu={items => (
+            <div styleName="items">
+              <div styleName="itemsWrap" />
+              {items}
+            </div>
+          )}
+          value={autocompleteValue}
+          onChange={e => this.handleOnChangeAddress(e.target.value)}
+          onSelect={(selectedValue, item) => {
+            this.handleOnChangeAddress(selectedValue);
+            this.handleOnSetAddress(selectedValue, item);
+          }}
+        />
+      </div>
+    );
+    const autocompleteResult = (address || isOpen) && (
       <AddressResultForm
         onChangeForm={this.handleOnChangeForm}
         address={address}
@@ -235,13 +270,14 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="wrapper">
           <Select
             forForm
+            fullWidth
             label="Country"
             items={countriesArr}
             onSelect={this.handleOnChangeCountry}
             activeItem={this.state.country}
             dataTest="AddressFormSelect"
           />
-          <div styleName="wrapper">{addressBlock}</div>
+          <div styleName="result">{addressBlock}</div>
         </div>
         {autocompleteResult}
       </div>
