@@ -32,10 +32,7 @@ class ProductThumbnails extends Component<PropsType, {}> {
   render() {
     const { options, row, title } = this.props;
     const mapOptions = option => (
-      <button
-        key={`${option.label}`}
-        onClick={() => this.handleClick(option)}
-      >
+      <button key={`${option.label}`} onClick={() => this.handleClick(option)}>
         <figure>
           <img
             styleName={classNames(
@@ -56,9 +53,7 @@ class ProductThumbnails extends Component<PropsType, {}> {
       <div styleName="container">
         {!isEmpty(title) ? <h4>{title}</h4> : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
-          {isNil(options)
-            ? null
-            : sortByProp('label')(options).map(mapOptions)}
+          {isNil(options) ? null : sortByProp('label')(options).map(mapOptions)}
         </div>
       </div>
     );
