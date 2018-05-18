@@ -99,9 +99,13 @@ class Form extends Component<PropsType, StateType> {
     // TODO: вынести спеки
     const { errors } = validate(
       {
-        name: [[val => !isEmpty(val), 'Should not be empty']],
-        shortDescription: [[val => !isEmpty(val), 'Should not be empty']],
-        fullDesc: [[val => !isEmpty(val), 'Should not be empty']],
+        name: [[val => !isEmpty(val), 'Name must not be empty']],
+        shortDescription: [
+          [val => !isEmpty(val), 'Short description must not be empty'],
+        ],
+        fullDesc: [
+          [val => !isEmpty(val), 'Long description must not be empty'],
+        ],
       },
       this.state.form,
     );
