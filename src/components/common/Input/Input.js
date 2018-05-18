@@ -106,7 +106,11 @@ class Input extends Component<PropsType, StateType> {
         })}
       >
         {label && (
-          <span styleName={classNames('label', { labelFloat })}>{label}</span>
+          <span
+            styleName={classNames('label', { labelFloat: labelFloat || value })}
+          >
+            {label}
+          </span>
         )}
         {icon && (
           <div styleName="icon">

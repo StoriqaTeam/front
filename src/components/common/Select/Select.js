@@ -33,6 +33,7 @@ type PropsType = {
   },
   dataTest: string,
   withEmpty?: boolean,
+  isBirthdate?: boolean,
 };
 
 class Select extends Component<PropsType, StateType> {
@@ -99,6 +100,7 @@ class Select extends Component<PropsType, StateType> {
       forAutocomlete,
       containerStyle,
       dataTest,
+      isBirthdate,
     } = this.props;
     const { isExpanded, items } = this.state;
 
@@ -112,12 +114,13 @@ class Select extends Component<PropsType, StateType> {
           forSearch,
           forAutocomlete,
           fullWidth,
+          isBirthdate,
           isExpanded,
         })}
         style={containerStyle}
         data-test={dataTest}
       >
-        {label && (
+        {((label && !isBirthdate) || !(isBirthdate && activeItem)) && (
           <div
             styleName={classNames('label', {
               labelFloat: activeItem || isExpanded,
@@ -127,7 +130,10 @@ class Select extends Component<PropsType, StateType> {
           </div>
         )}
         <div styleName={classNames('wrap', { transparent })}>
-          <div styleName="selected">{activeItem && activeItem.label}</div>
+          {activeItem &&
+            activeItem.label && (
+              <div styleName="selected">{activeItem.label}</div>
+            )}
           <div styleName={classNames('icon', { rotateIcon: isExpanded })}>
             <Icon type="arrowExpand" />
           </div>
@@ -167,7 +173,7 @@ class Select extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        {(forForm || forSearch) && <div styleName="hr" />}
+        {(forForm || forSearch || isBirthdate) && <div styleName="hr" />}
       </div>
     );
   }
