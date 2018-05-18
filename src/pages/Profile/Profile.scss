@@ -119,3 +119,48 @@
   color: $color_blue_1;
   line-height: 2.5rem;
 }
+
+.passwordInputs {
+  margin-bottom: 6rem;
+}
+
+.passwordInput {
+  position: relative;
+  width: 30rem;
+
+  &.passwordInput {
+    margin-top: 6rem;
+  }
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+
+  & svg {
+    transition: all .3s ease;
+  }
+
+  &.openIcon {
+    & svg {
+      fill: $color_blue_1;
+    }
+    &:after {
+      opacity: 0;
+    }
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 1.5rem;
+    display: block;
+    height: 3rem;
+    border-right: 2px solid $color_grey_link;
+    transform: rotate(45deg);
+    transition: all .3s ease;
+  }
+}
