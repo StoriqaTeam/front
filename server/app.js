@@ -37,6 +37,12 @@ if (process.env.NODE_ENV === 'development') {
   require('babel-register')(config);
 }
 
+// clear require() cache if in development mode
+// (makes asset hot reloading work)
+if (process.env.NODE_ENV !== 'production') {
+  webpackIsomorphicTools.refresh();
+}
+
 const app = express();
 
 // Support Gzip
@@ -149,6 +155,7 @@ app.use(
       <div id="root" style="height: 100%;">${ReactDOMServer.renderToString(
         element,
       )}</div>
+      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {
