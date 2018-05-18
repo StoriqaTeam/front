@@ -35,3 +35,4 @@ export {
 export {
   default as updateUserDeliveryAddress,
 } from './updateUserDeliveryAddress';
+export { default as ChangePassword } from './ChangePassword';

@@ -63,8 +63,9 @@ const commit = (params: MutationParamsType) =>
       const me = relayStore.getRoot().getLinkedRecord('me');
       const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
       const newDeliveryAddresses = map(item => {
+        /* eslint-disable */
         if (item._dataID === updatedAddressId) {
-          // eslint-disable-line
+          /* eslint-enable */
           return updatedAddress;
         }
         return item;

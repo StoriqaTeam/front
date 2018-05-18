@@ -12,8 +12,8 @@ type PropsType = {
   label: string,
   errors: ?Array<string>,
   onChange: (e: { target: { value: string } }) => void,
-  onBlur: () => void,
-  onFocus: () => void,
+  onBlur: (e: any) => void,
+  onFocus: (e: any) => void,
   onKeyDown: () => void,
   onClick: () => void,
   icon: ?string,
@@ -21,6 +21,8 @@ type PropsType = {
   inputRef: ?(e: any) => void,
   isAutocomplete: ?boolean,
   limit: ?number,
+  type?: string,
+  fullWidth?: boolean,
 };
 
 type StateType = {
@@ -45,26 +47,26 @@ class Input extends Component<PropsType, StateType> {
     onChange(e);
   };
 
-  handleFocus = () => {
+  handleFocus = (e: any) => {
     const { onFocus } = this.props;
     this.setState({
       labelFloat: !this.state.labelFloat || true,
       isFocus: true,
     });
-    if (onFocus) onFocus();
+    if (onFocus) onFocus(e);
   };
 
-  handleBlur = () => {
+  handleBlur = (e: any) => {
     const { value, onBlur } = this.props;
     this.setState({
       labelFloat: Boolean(value) && value.length > 0,
       isFocus: false,
     });
-    if (onBlur) onBlur();
+    if (onBlur) onBlur(e);
   };
 
   renderInput() {
-    const { onChange, inputRef, isAutocomplete, id, value } = this.props;
+    const { onChange, inputRef, isAutocomplete, id, value, type } = this.props;
     return isAutocomplete ? (
       <input
         id={id}
@@ -83,7 +85,7 @@ class Input extends Component<PropsType, StateType> {
       <input
         id={id}
         name={id}
-        type="text"
+        type={type || 'text'}
         value={value || ''}
         onChange={onChange}
         onFocus={this.handleFocus}
@@ -94,7 +96,16 @@ class Input extends Component<PropsType, StateType> {
   }
 
   render() {
-    const { id, value, label, errors, icon, isUrl, limit } = this.props;
+    const {
+      id,
+      value,
+      label,
+      errors,
+      icon,
+      isUrl,
+      limit,
+      fullWidth,
+    } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
       <label
@@ -103,6 +114,7 @@ class Input extends Component<PropsType, StateType> {
           isError: errors,
           isFocus,
           isIcon: icon,
+          fullWidth,
         })}
       >
         {label && (
