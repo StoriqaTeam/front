@@ -2,7 +2,16 @@
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr, omit, values, all, equals } from 'ramda';
+import {
+  assocPath,
+  pathOr,
+  propOr,
+  omit,
+  values,
+  all,
+  equals,
+  isEmpty,
+} from 'ramda';
 import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
 
@@ -121,8 +130,8 @@ class Security extends Component<{}, StateType> {
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({
             formErrors: renameKeys(
               {
@@ -188,7 +197,6 @@ class Security extends Component<{}, StateType> {
   renderInput = ({ id, label }: { id: string, label: string }) => {
     /* eslint-enable */
     const { formErrors, form } = this.state;
-    // $FlowIgnoreMe
     const value = propOr('', id, form);
     const seeValue = this.state[`${id}See`];
     return (
