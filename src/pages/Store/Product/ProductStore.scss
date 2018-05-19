@@ -1,0 +1,71 @@
+@import "../../../styles/variables";
+
+.container {
+  padding-left: 1.625rem;
+  padding-top: 22px;
+}
+
+.storeInfo {
+  display: flex;
+}
+
+.storeInfoWrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 73%;
+}
+
+.iconsWrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 60%;
+}
+
+.storeName {
+  color: $color_grey_text;
+}
+
+.storeDetails {
+  p {
+    text-align: right;
+  }
+}
+
+.icon {
+  svg {
+    height: 26px;
+    width: 26px;
+  }
+}
+
+.iconInfo {
+  margin-top: 15.7px;
+  display: flex;
+  align-items: center;
+}
+
+.iconInfoText {
+  font-size: 16px;
+  margin: 0 13px;
+  position: relative;
+  top: -5px;
+}
+
+.chatText {
+  color: $color_grey_bg
+}
+
+.separator {
+  width: 1px;
+  border-left: 1px solid $color_grey_bg;
+  height: 25px;
+  position: relative;
+  top: 20px;
+}
+
+.image {
+  height: 42px;
+  width: 42px;
+  background: #eeeeee;
+  margin-right: 11px;
+}

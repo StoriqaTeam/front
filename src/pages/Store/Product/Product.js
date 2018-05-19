@@ -30,6 +30,8 @@ import {
   ProductImage,
   ProductShare,
   ProductDetails,
+  ProductContext,
+  ProductStore,
   Tab,
   Tabs,
   TabRow,
@@ -153,9 +155,7 @@ class Product extends Component<PropsType, StateType> {
     const pathToAll = ['baseProduct', 'variants', 'all'];
     const variants = path(pathToAll, this.props);
     const productVariant = getVariantFromSelection(selection)(variants);
-    const widgets = differentiateWidgets(selection)(
-      variants,
-    );
+    const widgets = differentiateWidgets(selection)(variants);
     this.setState({
       widgets,
       productVariant,
@@ -170,59 +170,64 @@ class Product extends Component<PropsType, StateType> {
     const {
       baseProduct: { name, longDescription },
     } = this.props;
-    const {
-      tabs,
-      widgets,
-      productVariant,
-    } = this.state;
+    const { tabs, widgets, productVariant } = this.state;
     const loggedIn = this.loggedIn();
     const description = extractText(longDescription, 'EN', 'No Description');
     return (
-      <div styleName="ProductDetails">
-        <Row>
-          <Col size={6}>
-            <ProductImage mainImage={productVariant.photoMain} thumbnails={productVariant.additionalPhotos} />
-            {process.env.BROWSER ? (
-              <ProductShare photoMain={productVariant.photoMain} description={productVariant.description} />
-            ) : null}
-          </Col>
-          <Col size={6}>
-            <ProductDetails
-              productTitle={extractText(name)}
-              productDescription={description}
-              widgets={widgets}
-              onWidgetClick={this.handleWidget}
-            >
-              <ProductPrice
-                price={productVariant.price}
-                crossPrice={productVariant.crossPrice}
-                cashback={productVariant.cashback}
+      <ProductContext.Provider value={this.props.baseProduct}>
+        <div styleName="ProductDetails">
+          <Row>
+            <Col size={6}>
+              <ProductImage
+                mainImage={productVariant.photoMain}
+                thumbnails={productVariant.additionalPhotos}
               />
-            </ProductDetails>
-            <div styleName="buttons-container">
-              <Button disabled big>
-                Buy now
-              </Button>
-              <Button
-                wireframe={loggedIn}
-                big
-                disabled={!loggedIn}
-                onClick={() => this.handleAddToCart()}
+              {process.env.BROWSER ? (
+                <ProductShare
+                  photoMain={productVariant.photoMain}
+                  description={productVariant.description}
+                />
+              ) : null}
+            </Col>
+            <Col size={6}>
+              <ProductDetails
+                productTitle={extractText(name)}
+                productDescription={description}
+                widgets={widgets}
+                onWidgetClick={this.handleWidget}
               >
-                Add to cart
-              </Button>
-            </div>
-            {/* {!loggedIn && <div>Please login to use cart</div>} */}
-          </Col>
-        </Row>
-        <Tabs>
-          {tabs.map(({ id, label, content }) => (
-            <Tab key={id} label={label}>
-              {content}
-            </Tab>
-          ))}
-        </Tabs>
-      </div>
+                <ProductPrice
+                  price={productVariant.price}
+                  crossPrice={productVariant.crossPrice}
+                  cashback={productVariant.cashback}
+                />
+              </ProductDetails>
+              <div styleName="buttons-container">
+                <Button disabled big>
+                  Buy now
+                </Button>
+                <Button
+                  wireframe={loggedIn}
+                  big
+                  disabled={!loggedIn}
+                  onClick={() => this.handleAddToCart()}
+                >
+                  Add to cart
+                </Button>
+              </div>
+              <ProductStore />
+              {/* {!loggedIn && <div>Please login to use cart</div>} */}
+            </Col>
+          </Row>
+          <Tabs>
+            {tabs.map(({ id, label, content }) => (
+              <Tab key={id} label={label}>
+                {content}
+              </Tab>
+            ))}
+          </Tabs>
+        </div>
+      </ProductContext.Provider>
     );
   }
 }
@@ -244,6 +249,14 @@ export default createFragmentContainer(
       longDescription {
         text
         lang
+      }
+      store {
+        name {
+          lang
+          text
+        }
+        rating
+        productsCount
       }
       variants {
         all {

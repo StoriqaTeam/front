@@ -34,22 +34,30 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   };
   handleClick = (option: WidgetOptionType, index: number): void => {
     const { onClick } = this.props;
-    this.setState({
-      selected: index,
-    }, () => {
-      onClick(option);
-    });
+    this.setState(
+      {
+        selected: index,
+      },
+      () => {
+        onClick(option);
+      },
+    );
   };
   render() {
     const { options, row, title, isFirstSelected } = this.props;
     const { selected } = this.state;
     const mapOptions = (option, index) => (
-      <button key={`${option.label || option.id}`} onClick={() => this.handleClick(option, index)}>
+      <button
+        key={`${option.label || option.id}`}
+        onClick={() => this.handleClick(option, index)}
+      >
         <figure>
           <img
             styleName={classNames(
               {
-                clicked: option.state === 'selected' || (isFirstSelected && selected === index),
+                clicked:
+                  option.state === 'selected' ||
+                  (isFirstSelected && selected === index),
               },
               {
                 disable: option.state === 'disable',

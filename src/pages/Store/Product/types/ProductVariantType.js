@@ -8,7 +8,7 @@ type ProductVariantType = {
   cashback: null | number,
   discount: null | number,
   crossPrice: string,
-  variants: Array<WidgetType>
-}
+  variants: Array<WidgetType>,
+};
 
 export default ProductVariantType;
