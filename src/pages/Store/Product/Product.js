@@ -172,7 +172,6 @@ class Product extends Component<PropsType, StateType> {
     } = this.props;
     const { tabs, widgets, productVariant } = this.state;
     const loggedIn = this.loggedIn();
-    console.log('productVariant', productVariant);
     const description = extractText(longDescription, 'EN', 'No Description');
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
