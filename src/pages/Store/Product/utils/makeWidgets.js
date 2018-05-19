@@ -139,9 +139,8 @@ export const makeWidgetsFromVariants: (
 export const makeWidgets: (
   Array<SelectionType>,
 ) => (Array<VariantType>) => Array<WidgetType> = selections => variants =>
-  pipe(
-    filterVariantsBySelection(selections),
-    makeWidgetsFromVariants,
-  )(variants);
+  pipe(filterVariantsBySelection(selections), makeWidgetsFromVariants)(
+    variants,
+  );
 
 export default makeWidgets;

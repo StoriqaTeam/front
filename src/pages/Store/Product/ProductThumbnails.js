@@ -19,25 +19,37 @@ type PropsType = {
   onClick: Function,
 };
 
-class ProductThumbnails extends Component<PropsType, {}> {
+type StateType = {
+  selected: null | number,
+};
+
+class ProductThumbnails extends Component<PropsType, StateType> {
   static defaultProps = {
     title: '',
     row: false,
     isFirstSelected: false,
   };
-  handleClick = (option: WidgetOptionType): void => {
+  state = {
+    selected: 0,
+  };
+  handleClick = (option: WidgetOptionType, index: number): void => {
     const { onClick } = this.props;
-    onClick(option);
+    this.setState({
+      selected: index,
+    }, () => {
+      onClick(option);
+    });
   };
   render() {
-    const { options, row, title } = this.props;
-    const mapOptions = option => (
-      <button key={`${option.label}`} onClick={() => this.handleClick(option)}>
+    const { options, row, title, isFirstSelected } = this.props;
+    const { selected } = this.state;
+    const mapOptions = (option, index) => (
+      <button key={`${option.label || option.id}`} onClick={() => this.handleClick(option, index)}>
         <figure>
           <img
             styleName={classNames(
               {
-                clicked: option.state === 'selected',
+                clicked: option.state === 'selected' || (isFirstSelected && selected === index),
               },
               {
                 disable: option.state === 'disable',

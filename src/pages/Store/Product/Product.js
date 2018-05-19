@@ -3,10 +3,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   path,
-  propEq,
-  filter,
   head,
-  keys,
   insert,
   isNil,
   pathOr,
@@ -23,11 +20,9 @@ import { IncrementInCartMutation } from 'relay/mutations';
 import { extractText, isEmpty, log } from 'utils';
 
 import {
-  filterVariants,
-  extractPhotos,
-  extractPriceInfo,
   makeWidgets,
   differentiateWidgets,
+  getVariantFromSelection,
 } from './utils';
 
 import {
@@ -42,10 +37,10 @@ import {
 
 import {
   ProductType,
-  SelectedType,
   ThumbnailType,
   PriceInfo,
   WidgetOptionType,
+  ProductVariantType,
 } from './types';
 
 import './Product.scss';
@@ -61,6 +56,7 @@ type StateType = {
   photoMain: string,
   additionalPhotos: Array<ThumbnailType>,
   priceInfo: PriceInfo,
+  productVariant: ProductVariantType,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -81,14 +77,12 @@ class Product extends Component<PropsType, StateType> {
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const { photoMain, additionalPhotos } = head(extractPhotos(all));
-      const priceInfo = head(extractPriceInfo(all));
+      const madeWidgets = makeWidgets([])(all);
+      const productVariant = getVariantFromSelection([])(all);
       return {
         tabs: prevState.tabs,
-        widgets: makeWidgets([])(all),
-        photoMain,
-        additionalPhotos,
-        priceInfo,
+        widgets: madeWidgets,
+        productVariant,
       };
     }
     return null;
@@ -101,10 +95,8 @@ class Product extends Component<PropsType, StateType> {
         content: <TabRow row={mockData.row} />,
       },
     ],
-    widgets: {},
-    photoMain: '',
-    additionalPhotos: [],
-    priceInfo: {},
+    widgets: [],
+    productVariant: {},
   };
   /**
    * @param {string} img
@@ -156,59 +148,24 @@ class Product extends Component<PropsType, StateType> {
       log.error('Unable to add an item without productId');
     }
   }
-
-  /**
-   * @param {SelectedType} selected
-   * @param {void} selected
-   */
-  handleWidgetClick = (selected: SelectedType): void => {
-    const {
-      baseProduct: {
-        variants: { all },
-      },
-    } = this.props;
-    const filteredWidgets = filterVariants(all, selected.label);
-    const filteredWidgetsHeadKeys = head(
-      keys(filteredWidgets).map(key => filteredWidgets[key]),
-    );
-    let variantId = null;
-    if (filteredWidgetsHeadKeys) {
-      ({ variantId } = filteredWidgetsHeadKeys);
-    }
-    /**
-     * @desc returns true if the object satisfies the 'id' property
-     * @return {boolean}
-     */
-    const byId = propEq('id', variantId);
-    const variantObj = head(filter(byId, extractPhotos(all)));
-    let photoMain = '';
-    let additionalPhotos = [];
-    if (variantObj) {
-      ({ photoMain, additionalPhotos } = variantObj);
-    }
-    this.setState({
-      photoMain,
-      additionalPhotos: this.insertPhotoMain(photoMain, additionalPhotos),
-    });
-  };
-
-  handleWidget = ({ id, label, state }: WidgetOptionType): void => {
+  handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
+    const selection = [{ id, value: label, state, variantIds }];
     const pathToAll = ['baseProduct', 'variants', 'all'];
     const variants = path(pathToAll, this.props);
-    const widgets = differentiateWidgets([{ id, value: label, state }])(
+    const productVariant = getVariantFromSelection(selection)(variants);
+    const widgets = differentiateWidgets(selection)(
       variants,
     );
     this.setState({
       widgets,
+      productVariant,
     });
   };
-
   loggedIn() {
     const store = this.context.environment.getStore();
     const root = store.getSource().get('client:root');
     return !!path(['me', '__ref'], root);
   }
-
   render() {
     const {
       baseProduct: { name, longDescription },
@@ -216,9 +173,7 @@ class Product extends Component<PropsType, StateType> {
     const {
       tabs,
       widgets,
-      photoMain,
-      additionalPhotos,
-      priceInfo,
+      productVariant,
     } = this.state;
     const loggedIn = this.loggedIn();
     const description = extractText(longDescription, 'EN', 'No Description');
@@ -226,9 +181,9 @@ class Product extends Component<PropsType, StateType> {
       <div styleName="ProductDetails">
         <Row>
           <Col size={6}>
-            <ProductImage mainImage={photoMain} thumbnails={additionalPhotos} />
+            <ProductImage mainImage={productVariant.photoMain} thumbnails={productVariant.additionalPhotos} />
             {process.env.BROWSER ? (
-              <ProductShare photoMain={photoMain} description={description} />
+              <ProductShare photoMain={productVariant.photoMain} description={productVariant.description} />
             ) : null}
           </Col>
           <Col size={6}>
@@ -238,7 +193,11 @@ class Product extends Component<PropsType, StateType> {
               widgets={widgets}
               onWidgetClick={this.handleWidget}
             >
-              <ProductPrice {...priceInfo} />
+              <ProductPrice
+                price={productVariant.price}
+                crossPrice={productVariant.crossPrice}
+                cashback={productVariant.cashback}
+              />
             </ProductDetails>
             <div styleName="buttons-container">
               <Button disabled big>
