@@ -27,12 +27,7 @@ type PropsType = {
   // onChange: (data: { [name: string]: string }) => void,
 };
 
-const ThirdForm = ({
-  data,
-  onChange,
-  categories,
-  onUpload,
-}: PropsType) => {
+const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
   console.log('^^^^ ThirdForm props: ', data);
 
   const handleChangeData = e => {
@@ -71,8 +66,8 @@ const ThirdForm = ({
         {/* <div styleName="formItem">
         </div> */}
       </div>
-    )
-  }
+    );
+  };
 
   const { addressFull } = data;
 
@@ -118,7 +113,9 @@ const ThirdForm = ({
             <div styleName="formItem">
               <CategorySelector
                 categories={categories}
-                onSelect={itemId => console.log('^^^^ selected category: ', itemId)}
+                onSelect={itemId =>
+                  console.log('^^^^ selected category: ', itemId)
+                }
               />
             </div>
             <div styleName="formItem">

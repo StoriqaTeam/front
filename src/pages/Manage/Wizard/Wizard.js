@@ -194,7 +194,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   handleOnSaveProduct = data => {
     console.log('^^^^ Wizrd handle on save PRODUCT: ', data);
-  }
+  };
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
