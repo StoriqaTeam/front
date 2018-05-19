@@ -8,7 +8,7 @@ type PropsType = {
   currency?: string,
   crossedPrice: string,
   price: string,
-  cashback: string,
+  cashback: number,
   buttonText?: string,
 };
 
@@ -29,7 +29,7 @@ const ProductPrice = ({
       <span styleName="price">
         {price} {currency}
       </span>
-      <button>
+      <button styleName={cashback > 0 ? '' : 'noCashback'}>
         {buttonText} {`${cashback}%`}
       </button>
     </div>

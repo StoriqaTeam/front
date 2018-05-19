@@ -4,14 +4,12 @@ import React, { Component } from 'react';
 
 import Rating from 'components/Rating';
 
-import { extractText} from 'utils';
+import { extractText } from 'utils';
 
 import { ProductStoreType } from './types';
 import ChatIcon from './svg/chat.svg';
 import HeartIcon from './svg/heart.svg';
-import {
-  ProductContext,
-} from './index';
+import { ProductContext } from './index';
 
 import './ProductStore.scss';
 
@@ -44,18 +42,14 @@ class ProductStore extends Component<PropsType, {}> {
                 <span styleName="icon">
                   <ChatIcon />
                 </span>
-                <small styleName="iconInfoText">
-                  Написать продавцу
-                </small>
+                <small styleName="iconInfoText">Написать продавцу</small>
               </div>
               <span styleName="separator" />
               <div styleName="iconInfo">
                 <span styleName="icon">
                   <HeartIcon />
                 </span>
-                <small styleName="iconInfoText">
-                  В избранное
-                </small>
+                <small styleName="iconInfoText">В избранное</small>
               </div>
             </div>
           </div>

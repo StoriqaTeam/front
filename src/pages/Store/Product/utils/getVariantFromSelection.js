@@ -30,7 +30,7 @@ const setProductVariantValues = (variant: VariantType) => {
    */
   const calcCrossedPrice = (discount: string | null, price: string) =>
     isNil(discount)
-      ? '0'
+      ? 0
       : ((1 - parseInt(discount, 10)) * parseInt(price, 10)).toString();
 
   const insertPhotoMain = (
@@ -53,8 +53,8 @@ const setProductVariantValues = (variant: VariantType) => {
   return {
     id,
     price,
-    cashback: isNil(cashback) ? '0' : Math.round(cashback * 100),
-    discount: isNil(discount) ? '0' : discount,
+    cashback: isNil(cashback) ? 0 : Math.round(cashback * 100),
+    discount: isNil(discount) ? 0 : discount,
     crossPrice: calcCrossedPrice(discount, price),
     photoMain: isNil(photoMain) ? defaultImage : photoMain,
     additionalPhotos: isNil(additionalPhotos)
