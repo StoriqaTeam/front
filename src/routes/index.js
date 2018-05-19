@@ -99,9 +99,7 @@ const routes = (
 
       <Route
         path="/cart"
-        render={({ props, Component }) => {
-          return <Component {...props} />;
-        }}
+        render={({ props, Component }) => <Component {...props} />}
         Component={Cart}
       />
       <Route

@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
 
@@ -14,20 +15,32 @@ class FetcherBase {
     throw new Error('should be implemented in subclasses');
   }
 
+  // eslint-disable-next-line
+  getSessionIdFromCookies() {
+    throw new Error('should be implemented in subclasses');
+  }
+
   async fetch(operation, variables) {
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
-    const headers = { 'Content-Type': 'application/json' };
+    let headers = { 'Content-Type': 'application/json' };
+    if (jwt) {
+      headers = assoc('Authorization', `Bearer ${jwt}`, headers);
+    }
+    const sessionId = this.getSessionIdFromCookies();
+    headers = {
+      ...headers,
+      'Session-Id': `SESSION_ID=${sessionId}`,
+    };
     try {
-      const response = await fetch(this.url, {
-        method: 'POST',
-        headers: jwt
-          ? assoc('Authorization', `Bearer ${jwt}`, headers)
-          : headers,
-        body: JSON.stringify({ query: operation.text, variables }),
+      const response = await axios({
+        method: 'post',
+        url: this.url,
+        headers,
+        data: JSON.stringify({ query: operation.text, variables }),
       });
-      log.debug('GraphQL response', { response });
-      return response.json();
+      log.debug('GraphQL response', { response: response.data });
+      return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
       return {};
@@ -36,15 +49,20 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url, jwt) {
+  constructor(url, jwt, sessionId) {
     super(url);
 
     this.jwt = jwt;
+    this.sessionId = sessionId;
     this.payloads = [];
   }
 
   getJWTFromCookies() {
     return this.jwt;
+  }
+
+  getSessionIdFromCookies() {
+    return this.sessionId;
   }
 
   async fetch(...args) {
@@ -71,6 +89,12 @@ export class ClientFetcher extends FetcherBase {
   getJWTFromCookies() {
     const cookies = new Cookies();
     return pathOr(null, ['value'], cookies.get('__jwt'));
+  }
+
+  // eslint-disable-next-line
+  getSessionIdFromCookies() {
+    const cookies = new Cookies();
+    return cookies.get('SESSION_ID');
   }
 
   async fetch(...args) {
