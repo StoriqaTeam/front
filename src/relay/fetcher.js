@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-fetch';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
