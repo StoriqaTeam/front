@@ -21,6 +21,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
+import { generateSessionId } from 'utils';
 
 import { Error404, Error } from '../src/pages/Errors';
 
@@ -96,6 +97,14 @@ const wrapAsync = fn => (req, res, next) => {
 
 app.use(
   wrapAsync(async (req, res) => {
+    // set session_id cookie if not setted :)
+    const sessionIdCookie = req.universalCookies.get('SESSION_ID');
+    if (!sessionIdCookie) {
+      req.universalCookies.set('SESSION_ID', generateSessionId(), {
+        path: '/',
+      });
+    }
+
     const store = createReduxStore(new ServerProtocol(req.url));
     const jwtCookie = req.universalCookies.get('__jwt');
     const jwt = typeof jwtCookie === 'object' && jwtCookie.value;
@@ -155,6 +164,7 @@ app.use(
       <div id="root" style="height: 100%;">${ReactDOMServer.renderToString(
         element,
       )}</div>
+      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {

@@ -9,7 +9,9 @@ import Logo from 'components/Icon/svg/logo.svg';
 import { VerifyEmailMutation } from 'relay/mutations';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { log } from 'utils';
+import { withShowAlert } from 'components/App/AlertContext';
 
+import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { VerifyEmailMutationParamsType } from 'relay/mutations/VerifyEmailMutation';
 import type { VerifyEmailMutationResponse } from 'relay/mutations/__generated__/VerifyEmailMutation.graphql';
 
@@ -20,6 +22,7 @@ type StateType = {
 };
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   params: { token: string },
   router: routerShape,
 };
@@ -49,7 +52,11 @@ class VerifyEmail extends Component<PropsType, StateType> {
         log.debug({ response, errors });
         this.setState({ isTokenResponseAlreadyHandled: true });
         if (response && response.verifyEmail && response.verifyEmail.success) {
-          alert('Verified successfully. Please login with your login data.'); // eslint-disable-line
+          this.props.showAlert({
+            type: 'success',
+            text: 'Verified successfully. Please login with your login data.',
+            link: { text: 'Ok :)' },
+          });
           this.props.router.replace('/');
         } else if (errors && errors.length > 0) {
           // $FlowIgnoreMe
@@ -59,7 +66,11 @@ class VerifyEmail extends Component<PropsType, StateType> {
             errors,
           );
           log.debug({ errorMessage });
-          alert(errorMessage || 'Something going wrong'); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: errorMessage || 'Something going wrong',
+            link: { text: 'Close.' },
+          });
           this.props.router.replace('/');
         }
       },
@@ -67,7 +78,11 @@ class VerifyEmail extends Component<PropsType, StateType> {
         log.debug({ error });
         this.setState({ isTokenResponseAlreadyHandled: true });
         if (error) {
-          alert('Something going wrong'); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong',
+            link: { text: 'Close.' },
+          });
           this.props.router.replace('/');
         }
       },
@@ -100,4 +115,4 @@ VerifyEmail.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withErrorBoundary(withRouter(VerifyEmail));
+export default withShowAlert(withErrorBoundary(withRouter(VerifyEmail)));

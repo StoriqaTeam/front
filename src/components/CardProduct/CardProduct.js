@@ -16,10 +16,12 @@ import { formatPrice } from './utils';
 import './CardProduct.scss';
 
 type VariantType = {
-  discount: number,
-  photoMain: string,
-  cashback: number,
-  price: number,
+  cashback: ?number,
+  discount: ?number,
+  id: string,
+  photoMain: ?string,
+  price: ?number,
+  rawId: ?number,
 };
 
 type PropsTypes = {
@@ -31,7 +33,11 @@ type PropsTypes = {
       lang: string,
       text: string,
     }>,
-    variants: Array<VariantType>,
+    products: {
+      edges: Array<{
+        node: VariantType,
+      }>,
+    },
     rating: number,
   },
 };
@@ -39,22 +45,22 @@ type PropsTypes = {
 class CardProduct extends PureComponent<PropsTypes> {
   render() {
     const {
-      item: { rawId, storeId, name, variants, currencyId, rating },
+      item: { rawId, storeId, name, products, currencyId, rating },
     } = this.props;
-    if (
-      !storeId ||
-      !rawId ||
-      !currencyId ||
-      !rating ||
-      !variants ||
-      variants.length === 0 ||
-      !head(variants)
-    )
-      return null;
-    const { discount, photoMain, cashback, price } = head(variants);
+    let discount = null;
+    let photoMain = null;
+    let cashback = null;
+    let price = null;
+    const product = head(products.edges);
+    if (product) {
+      ({ discount, photoMain, cashback, price } = product.node);
+    }
+
+    if (!storeId || !rawId || !currencyId || !price) return null;
+
     const lang = 'EN';
     const productLink = `/store/${storeId}/products/${rawId}`;
-    const discountedPrice = price * (1 - discount);
+    const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
     return (
