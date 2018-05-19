@@ -36,6 +36,9 @@ const routes = (
             id
             ...App_me
           }
+          cart {
+            ...Cart_cart
+          }
           mainPage {
             ...Start_mainPage
           }
@@ -96,7 +99,9 @@ const routes = (
 
       <Route
         path="/cart"
-        render={({ props, Component }) => <Component {...props} />}
+        render={({ props, Component }) => {
+          return <Component {...props} />;
+        }}
         Component={Cart}
       />
       <Route

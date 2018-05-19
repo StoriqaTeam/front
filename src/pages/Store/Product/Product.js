@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
-  path,
   propEq,
   filter,
   head,
@@ -117,10 +116,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   handleAddToCart() {
-    if (!this.loggedIn()) {
-      return;
-    }
-
     // Todo for Jero - update this after refactoring (needed selected product id)
     const id = pipe(
       pathOr([], ['props', 'baseProduct', 'variants', 'all']),
@@ -199,12 +194,6 @@ class Product extends Component<PropsType, StateType> {
     });
   };
 
-  loggedIn() {
-    const store = this.context.environment.getStore();
-    const root = store.getSource().get('client:root');
-    return !!path(['me', '__ref'], root);
-  }
-
   render() {
     const {
       baseProduct: { name, longDescription },
@@ -216,7 +205,6 @@ class Product extends Component<PropsType, StateType> {
       additionalPhotos,
       priceInfo,
     } = this.state;
-    const loggedIn = this.loggedIn();
     return (
       <div styleName="ProductDetails">
         <Row>
@@ -241,16 +229,10 @@ class Product extends Component<PropsType, StateType> {
               <Button disabled big>
                 Buy now
               </Button>
-              <Button
-                wireframe={loggedIn}
-                big
-                disabled={!loggedIn}
-                onClick={() => this.handleAddToCart()}
-              >
+              <Button wireframe big onClick={() => this.handleAddToCart()}>
                 Add to cart
               </Button>
             </div>
-            {!loggedIn && <div>Please login to use cart</div>}
           </Col>
         </Row>
         <Tabs>
