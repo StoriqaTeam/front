@@ -5,14 +5,13 @@
   "private": true,
   "dependencies": {
     "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
-    "axios": "^0.18.0",
+    "axios": "0.18.0",
     "body-parser": "1.18.2",
     "classnames": "2.2.5",
     "compression": "1.7.1",
     "express": "4.16.2",
     "found": "0.3.8",
     "found-relay": "0.3.0-alpha.12",
-    "isomorphic-fetch": "2.2.1",
     "lodash.debounce": "4.0.8",
     "morgan": "1.9.0",
     "prop-types": "15.6.0",
@@ -33,7 +32,7 @@
     "resize-observer-polyfill": "1.5.0",
     "universal-cookie": "2.1.2",
     "universal-cookie-express": "2.1.2",
-    "webpack-isomorphic-tools": "^3.0.5"
+    "webpack-isomorphic-tools": "3.0.5"
   },
   "devDependencies": {
     "@storybook/addon-actions": "3.3.9",
