@@ -228,10 +228,7 @@ class Product extends Component<PropsType, StateType> {
           <Col size={6}>
             <ProductImage mainImage={photoMain} thumbnails={additionalPhotos} />
             {process.env.BROWSER ? (
-              <ProductShare
-                photoMain={photoMain}
-                description={description}
-              />
+              <ProductShare photoMain={photoMain} description={description} />
             ) : null}
           </Col>
           <Col size={6}>
