@@ -5,7 +5,7 @@ import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
   mutation ChangePasswordMutation($input: ChangePasswordInput!) {
-    changePasword(input: $input) {
+    changePassword(input: $input) {
       success
     }
   }
