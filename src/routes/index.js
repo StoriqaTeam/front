@@ -74,6 +74,19 @@ const routes = (
                     lang
                     text
                   }
+                  getAttributes {
+                    name {
+                      text
+                    }
+                    metaField {
+                      values
+                      translatedValues {
+                        translations {
+                          text
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

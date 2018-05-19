@@ -173,16 +173,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
-  // handleChangeForm = (fieldName, value) => {
-  //   const { wizardStore } = this.state;
-  //   this.setState({
-  //     wizardStore: {
-  //       ...wizardStore,
-  //       [fieldName]: value,
-  //     },
-  //   });
-  // };
-
   handleChangeForm = data => {
     const { wizardStore } = this.state;
     this.setState(
@@ -201,6 +191,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       this.updateWizard(data);
     }
   }, 250);
+
+  handleOnSaveProduct = data => {
+    console.log('^^^^ Wizrd handle on save PRODUCT: ', data);
+  }
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
@@ -244,8 +238,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               data={wizardStore}
               // languages={this.props.languages}
               products={products}
-              onChange={() => {}}
-              onUpload={() => {}}
+              onSave={this.handleOnSaveProduct}
+              // onUpload={() => {}}
               // onSave={this.handleOnSaveWizard}
             />
           </div>

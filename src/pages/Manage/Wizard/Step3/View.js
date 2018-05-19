@@ -30,7 +30,7 @@ const Modal = ({ children, showModal, onClose }) => {
             onKeyDown={() => {}}
             tabIndex={0}
           >
-            close
+            <Icon type="cross" />
           </div>
           {children}
         </div>
@@ -60,9 +60,21 @@ type StateType = {
 class ThirdStepView extends React.Component<PropsType, StateType> {
   state = {
     showForm: false,
-    productState: {
+    baseProduct: {
+      storeId: null,
+      currencyId: 1,
+      categoryId: null,
       name: '',
       shortDescription: '',
+      product: {
+        baseProductId: null,
+        vendorCode: '',
+        photoMain: '',
+        additionalPhotos: [],
+        price: null,
+        cashback: null,
+      },
+      attributes: [],
     },
   };
 
@@ -76,10 +88,10 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeForm = form => {
-    console.log('^^^^ form : ', form);
+    // console.log('^^^^ form : ', form);
     this.setState({
-      productState: {
-        ...this.state.productState,
+      baseProduct: {
+        ...this.state.baseProduct,
         ...form,
       },
     });
@@ -95,23 +107,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   render() {
     const { data, onChange, products, onUpload } = this.props;
-    const { productState, showForm } = this.state;
+    const { baseProduct, showForm } = this.state;
     return (
       <div styleName="view">
-        {/* <UploadWrapper
-        id="foods_foto"
-        onUpload={onUpload}
-        buttonHeight={10}
-        buttonWidth={10}
-        buttonIconType="camera"
-        buttonLabel="Add photo"
-        dataTest="productPhotosUploader"
-      /> */}
-
         <div
           styleName="productItem"
           role="button"
-          // style={handleStyle}
           onClick={this.handleOnAddProduct}
           onKeyDown={() => {}}
           tabIndex={0}
@@ -133,10 +134,10 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           }, products)}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
-            data={productState}
+            data={baseProduct}
             onChange={this.handleOnChangeForm}
             onUpload={this.handleOnUploadPhoto}
-            // categories={this.context.directories.categories}
+            categories={this.context.directories.categories}
           />
         </Modal>
       </div>
@@ -144,7 +145,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   }
 }
 
-ThirdStepView.contextType = {
+ThirdStepView.contextTypes = {
   directories: PropTypes.object.isRequired,
 };
 
