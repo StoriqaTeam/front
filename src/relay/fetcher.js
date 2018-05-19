@@ -30,7 +30,7 @@ class FetcherBase {
     const sessionId = this.getSessionIdFromCookies();
     headers = {
       ...headers,
-      'Session-Id': `SESSION_ID=${sessionId}`,
+      'Session-Id': sessionId,
     };
     try {
       const response = await axios({
