@@ -42,8 +42,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       defaultLanguage:
         stepTwo && stepTwo.defaultLanguage ? stepTwo.defaultLanguage : 'EN',
       // ...stepThree,
-    }
-    console.log('^^^^ constructor wizard state: ', { storeId, wizardStore });
+    };
+    // console.log('^^^^ constructor wizard state: ', { storeId, wizardStore });
     // defaultLanguage будет 'EN' по умолчанию для нового store
     this.state = {
       step: 1,
@@ -139,7 +139,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         userId,
       },
     );
-    console.log('**** create store prepared obj: ', { preparedData });
+    // console.log('**** create store prepared obj: ', { preparedData });
     CreateStoreMutation.commit({
       ...preparedData,
       environment: this.context.environment,
@@ -169,8 +169,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       return null;
     }
     const query = graphql`
-      query Wizard_me_Query($id:Int!) {
-        store(id:$id) {
+      query Wizard_me_Query($id: Int!) {
+        store(id: $id) {
           id
         }
       }
@@ -180,52 +180,53 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     };
     // return promise
     return fetchQuery(environment, query, variables);
-  }
+  };
 
   updateStore = () => {
     const { step, storeId, wizardStore } = this.state;
+    console.log('*** updateStore: ', { step, storeId, wizardStore });
     if (!storeId) {
       return;
     }
-    this.fetchStoreByRawId(storeId)
-      .then(response => {
-        const stID = pathOr(null, ['store', 'id'], response);
-        if (!stID) {
-          return;
-        }
-        const preparedData = evolve(
-          {
-            name: n => [{ lang: 'EN', text: n }],
-            shortDescription: d => [{ lang: 'EN', text: d }],
-          },
-          {
-            id: stID,
-            address: wizardStore.addressFull.value,
-            ...omit(['addressFull'], wizardStore),
-            ...omit(['value'], wizardStore.addressFull),
-          },
-        );
-        console.log('**** update store with wizard state: ', { preparedData });
-        const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
-        updater.commit({
-          ...preparedData,
-          environment: this.context.environment,
-          onCompleted: (response: ?Object, errors: ?Array<any>) => {
-            log.debug({ response, errors });
-            const relayErrors = fromRelayError({ source: { errors } });
-            log.debug({ relayErrors });
-            this.setState(() => ({ isLoading: false }));
-          },
-          onError: (error: Error) => {
-            log.debug({ error });
-            const relayErrors = fromRelayError(error);
-            log.debug({ relayErrors });
-            this.setState(() => ({ isLoading: false }));
-            // eslint-disable-next-line
-            alert('Something going wrong :(');
-          },
-        });
+    this.fetchStoreByRawId(storeId).then(response => {
+      const stID = pathOr(null, ['store', 'id'], response);
+      if (!stID) {
+        return;
+      }
+      const preparedData = evolve(
+        {
+          name: n => [{ lang: 'EN', text: n }],
+          shortDescription: d => [{ lang: 'EN', text: d }],
+        },
+        {
+          id: stID,
+          address: wizardStore.addressFull.value,
+          ...omit(['addressFull'], wizardStore),
+          ...omit(['value'], wizardStore.addressFull),
+        },
+      );
+      console.log('**** update store with wizard state: ', { preparedData });
+      const updater =
+        step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
+      updater.commit({
+        ...preparedData,
+        environment: this.context.environment,
+        onCompleted: (response: ?Object, errors: ?Array<any>) => {
+          log.debug({ response, errors });
+          const relayErrors = fromRelayError({ source: { errors } });
+          log.debug({ relayErrors });
+          this.setState(() => ({ isLoading: false }));
+        },
+        onError: (error: Error) => {
+          log.debug({ error });
+          const relayErrors = fromRelayError(error);
+          log.debug({ relayErrors });
+          this.setState(() => ({ isLoading: false }));
+          // eslint-disable-next-line
+          alert('Something going wrong :(');
+        },
       });
+    });
   };
 
   handleOnChangeStep = (step: number) => {
@@ -255,24 +256,55 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
-  handleChangeForm = data => {
-    const { wizardStore } = this.state;
-    this.setState(
-      {
-        wizardStore: {
-          ...wizardStore,
-          ...data,
-        },
-      },
-      this.handleOnSaveWizard(data),
-    );
-  };
-
+  // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
     if (data) {
       this.updateWizard(data);
     }
   }, 250);
+
+  // Update State
+  handleChangeWizardState = (data, callback) => {
+    this.setState(oldState => ({
+        wizardStore: {
+          ...oldState.wizardStore,
+          ...data,
+        },
+      }),
+      () => {
+        if (callback) {
+          callback();
+        }
+      },
+    );
+  }
+
+  handleChangeForm = data => {
+    this.handleChangeWizardState(data);
+    this.handleOnSaveWizard(data);
+  }
+
+  // handleChangeForm = data => {
+  //   // const callback = () => {
+  //   //   this.handleOnSaveWizard(data);
+  //   // }
+  //   // this.handleChangeState(data, callback);
+
+
+  //   // this.setState(
+  //   //   {
+  //   //     wizardStore: {
+  //   //       ...wizardStore,
+  //   //       ...data,
+  //   //     },
+  //   //   },
+  //   //   // () => {
+  //   //   //   // console.log('**** on change form data, wizardStore: ', { data, wizardStore })
+  //   //   //   this.handleOnSaveWizard(data);
+  //   //   // },
+  //   // );
+
+  // };
 
   handleOnSaveProduct = data => {
     console.log('^^^^ Wizrd handle on save PRODUCT: ', data);
@@ -280,7 +312,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
-    console.log('^^^^ render props: ', this.props);
+    // console.log('^^^^ render props: ', this.props);
     switch (step) {
       case 1:
         return (
