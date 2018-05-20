@@ -3,7 +3,7 @@
 import React from 'react';
 import { map, find, pathOr, whereEq } from 'ramda';
 
-import { getNameText, flattenFunc } from 'utils';
+import { getNameText, flattenFunc, findCategory } from 'utils';
 import { Icon } from 'components/Icon';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
@@ -37,6 +37,8 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
     onChange({ [name]: value });
   };
 
+  // const handleOnChangeCategory = (value: number) => ;
+
   // const handlePriceChange = (e: any) => {
   //   const {
   //     target: { value },
@@ -53,12 +55,13 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
   const renderAttributes = () => {
     console.log('*** renderAttributes');
     const categoryId = pathOr(null, ['product', 'categoryId'], data);
-    if (!categoryId || !categories || !categories.children) {
-      return null;
-    }
-    const catsArr = flattenFunc(categories.children);
-    const findCatPred = rawId => find(whereEq({ rawId }));
-    const catObj = findCatPred(parseInt(categoryId, 10))(catsArr);
+    // if (!categoryId || !categories || !categories.children) {
+    //   return null;
+    // }
+    // const catsArr = flattenFunc(categories.children);
+    // const findCatPred = rawId => find(whereEq({ rawId }));
+    // const catObj = findCatPred(parseInt(categoryId, 10))(catsArr);
+    const catObj = findCategory(whereEq({ rawId: parseInt(categoryId, 10) }), categories);
     console.log('*** catObj: ', catObj);
     return (
       <div styleName="section">
@@ -70,6 +73,7 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
   };
 
   const { addressFull } = data;
+  const categoryId = pathOr(null, ['product', 'categoryId'], data);
 
   return (
     <div styleName="wrapper">
@@ -113,9 +117,7 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
             <div styleName="formItem">
               <CategorySelector
                 categories={categories}
-                onSelect={itemId =>
-                  console.log('^^^^ selected category: ', itemId)
-                }
+                onSelect={id => onChange({ categoryId: id })}
               />
             </div>
             <div styleName="formItem">
@@ -151,7 +153,7 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
               {/* <span styleName="">STQ</span> */}
             </div>
           </div>
-          {renderAttributes()}
+          {categoryId && renderAttributes()}
         </div>
       </div>
     </div>
