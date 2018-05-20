@@ -17,6 +17,7 @@ import {
   UpdateStoreMainMutation,
 } from 'relay/mutations';
 
+import { resposeLogger, errorsLogger } from './utils';
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
@@ -98,34 +99,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     CreateWizardMutation.commit({
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        // $FlowIgnoreMe
-        const status = pathOr('', ['100', 'status'], relayErrors);
-        if (validationErrors && !isEmpty(validationErrors)) {
-          this.setState({ formErrors: validationErrors });
-        } else if (status) {
-          // $FlowIgnoreMe
-          alert(`Error: "${status}"`); // eslint-disable-line
-        }
+        resposeLogger(response, errors);
       },
       onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
-        // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
-          this.setState({ formErrors: validationErrors });
-          return;
-        }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        errorsLogger(error);
       },
     });
   };
@@ -137,18 +116,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        resposeLogger(response, errors);
       },
       onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        errorsLogger(error);
       },
     });
   };
@@ -159,20 +132,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-        // console.log('**** create store responce: ', response);
         this.updateWizard({ storeId: response.createStore.rawId });
         this.setState(() => ({ isLoading: false }));
+        resposeLogger(response, errors);
       },
       onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        errorsLogger(error);
       },
     });
   };
@@ -200,12 +166,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   updateStore = () => {
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
-    console.log('*** updateStore: ', { step, wizardStore });
+    // console.log('*** updateStore: ', { step, wizardStore });
     if (!wizardStore.storeId) {
       return;
     }
-    this.fetchStoreByRawId(wizardStore.storeId).then(response => {
-      const stID = pathOr(null, ['store', 'id'], response);
+    this.fetchStoreByRawId(wizardStore.storeId).then(res => {
+      const stID = pathOr(null, ['store', 'id'], res);
       if (!stID) {
         return;
       }
@@ -217,18 +183,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...preparedData,
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
-          log.debug({ response, errors });
-          const relayErrors = fromRelayError({ source: { errors } });
-          log.debug({ relayErrors });
+          const responseData = response.createStore ? response.createStore : response.updateStore;
+          this.updateWizard({ storeId: responseData.rawId });
           this.setState(() => ({ isLoading: false }));
+          resposeLogger(response, errors);
         },
         onError: (error: Error) => {
-          log.debug({ error });
-          const relayErrors = fromRelayError(error);
-          log.debug({ relayErrors });
           this.setState(() => ({ isLoading: false }));
-          // eslint-disable-next-line
-          alert('Something going wrong :(');
+          errorsLogger(error);
         },
       });
     });
