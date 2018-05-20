@@ -9,26 +9,16 @@ import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
 
+import AttributesForm from './AttributesForm';
 import Uploaders from './Uploaders';
 
 import './Form.scss';
 
 type PropsType = {
-  // data: {
-  //   userId: ?number,
-  //   storeId: ?number,
-  //   name: ?string,
-  //   slug: ?string,
-  //   shortDescription: ?string,
-  //   defaultLanguage: ?string,
-  //   country: ?string,
-  //   address: ?string,
-  // },
-  // onChange: (data: { [name: string]: string }) => void,
 };
 
 const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
-  console.log('^^^^ ThirdForm props: ', data);
+  // console.log('^^^^ ThirdForm props: ', data);
 
   const handleChangeData = e => {
     const {
@@ -37,43 +27,25 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
     onChange({ [name]: value });
   };
 
-  // const handleOnChangeCategory = (value: number) => ;
-
-  // const handlePriceChange = (e: any) => {
-  //   const {
-  //     target: { value },
-  //   } = e;
-  //   if (value === '') {
-  //     onChange({ price: value });
-  //     return;
-  //   } else if (Number.isNaN(parseFloat(value))) {
-  //     return;
-  //   }
-  //   this.setState({ price: parseFloat(value) });
-  // };
-
   const renderAttributes = () => {
-    console.log('*** renderAttributes');
-    const categoryId = pathOr(null, ['product', 'categoryId'], data);
-    // if (!categoryId || !categories || !categories.children) {
-    //   return null;
-    // }
-    // const catsArr = flattenFunc(categories.children);
-    // const findCatPred = rawId => find(whereEq({ rawId }));
-    // const catObj = findCatPred(parseInt(categoryId, 10))(catsArr);
-    const catObj = findCategory(whereEq({ rawId: parseInt(categoryId, 10) }), categories);
+    // console.log('*** renderAttributes');
+    const { categoryId } = data;
+    const catObj = findCategory(
+      whereEq({ rawId: parseInt(categoryId, 10) }),
+      // whereEq({ rawId: 34 }),
+      categories,
+    );
     console.log('*** catObj: ', catObj);
-    return (
+    return ((catObj && catObj.getAttributes) &&
       <div styleName="section">
         <div styleName="sectionName">Properties</div>
-        {/* <div styleName="formItem">
-        </div> */}
+        <AttributesForm attributes={catObj.getAttributes} onChange={onChange} />
       </div>
     );
   };
 
-  const { addressFull } = data;
-  const categoryId = pathOr(null, ['product', 'categoryId'], data);
+  const { addressFull, categoryId } = data;
+  console.log('*** form render categoryId, data: ', { categoryId, data });
 
   return (
     <div styleName="wrapper">

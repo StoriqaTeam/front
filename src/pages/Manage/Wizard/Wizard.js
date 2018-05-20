@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, isEmpty, where, isNil, complement } from 'ramda';
+import { evolve, pathOr, isEmpty, where, isNil, complement } from 'ramda';
 import debounce from 'lodash.debounce';
 
 import { log, fromRelayError } from 'utils';
@@ -40,7 +40,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // });
     // defaultLanguage будет 'EN' по умолчанию для нового store
     this.state = {
-      step: 3,
+      step: 1,
       wizardStore: {
         ...stepOne,
         ...stepTwo,
@@ -121,27 +121,35 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   createStore = () => {
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], this.props);
-    const stepTwo = pathOr(null, ['me', 'wizardStore', 'stepTwo'], this.props);
-    console.log('**** create store props: ', { stepOne, stepTwo });
-    // CreateStoreMutation.commit({
-    //   // [fieldName]: value,
-    //   ...data,
-    //   environment: this.context.environment,
-    //   onCompleted: (response: ?Object, errors: ?Array<any>) => {
-    //     log.debug({ response, errors });
-    //     const relayErrors = fromRelayError({ source: { errors } });
-    //     log.debug({ relayErrors });
-    //     this.setState(() => ({ isLoading: false }));
-    //   },
-    //   onError: (error: Error) => {
-    //     log.debug({ error });
-    //     const relayErrors = fromRelayError(error);
-    //     log.debug({ relayErrors });
-    //     this.setState(() => ({ isLoading: false }));
-    //     // eslint-disable-next-line
-    //     alert('Something going wrong :(');
-    //   },
-    // });
+    const defaultLanguage = pathOr(null, ['me', 'wizardStore', 'stepTwo', 'defaultLanguage'], this.props);
+    const userId = pathOr(null, ['me', 'rawId'], this.props);
+    const preparedData = evolve({
+      name: n => ([{ lang: 'EN', text: n }]),
+      shortDescription: d => ([{ lang: 'EN', text: d }]),
+    }, {
+      ...stepOne,
+      defaultLanguage,
+      userId,
+    });
+    console.log('**** create store prepared obj: ', { preparedData });
+    CreateStoreMutation.commit({
+      ...preparedData,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
+      },
+      onError: (error: Error) => {
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
+        this.setState(() => ({ isLoading: false }));
+        // eslint-disable-next-line
+        alert('Something going wrong :(');
+      },
+    });
   };
 
   updateStore = () => {
@@ -198,7 +206,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   renderForm = () => {
     const { step, wizardStore } = this.state;
-    // console.log('^^^^ render props: ', this.props);
+    console.log('^^^^ render props: ', this.props);
     switch (step) {
       case 1:
         return (

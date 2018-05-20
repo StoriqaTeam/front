@@ -40,8 +40,8 @@ export const flattenFunc = reduce((acc, nextItem) => {
 
 type TreeType = {
   rawId: number,
-  children: Array<TreeType>
-}
+  children: Array<TreeType>,
+};
 
 export const findCategory = (pred: (i: any) => boolean, tree: TreeType) => {
   if (tree.children && tree.children.length > 0) {
@@ -50,7 +50,7 @@ export const findCategory = (pred: (i: any) => boolean, tree: TreeType) => {
     return result || null;
   }
   return null;
-}
+};
 
 const urlToAttr = item => {
   const left = item.split('=').length === 2 ? item.split('=')[0] : null;

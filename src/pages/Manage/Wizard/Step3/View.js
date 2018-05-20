@@ -87,12 +87,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     this.setState({ showForm: false });
   };
 
-  handleOnChangeForm = form => {
-    // console.log('^^^^ form : ', form);
+  handleOnChangeForm = data => {
+    console.log('^^^^ View handleOnChangeForm data : ', { state: this.state, data });
     this.setState({
       baseProduct: {
         ...this.state.baseProduct,
-        ...form,
+        ...data,
       },
     });
   };
