@@ -14,6 +14,13 @@ const mutation = graphql`
       phone
       address
       country
+      administrativeAreaLevel1
+      administrativeAreaLevel2
+      locality
+      political
+      postalCode
+      route
+      streetNumber
       facebookUrl
       twitterUrl
       instagramUrl
@@ -27,6 +34,13 @@ type MutationParamsType = {
   phone: string,
   country: string,
   address: string,
+  administrativeAreaLevel1: string,
+  administrativeAreaLevel2: string,
+  locality: string,
+  political: string,
+  postalCode: string,
+  route: string,
+  streetNumber: string,
   facebookUrl: string,
   twitterUrl: string,
   instagramUrl: string,
@@ -46,6 +60,13 @@ const commit = (params: MutationParamsType) =>
         phone: params.phone,
         country: params.country,
         address: params.address,
+        administrativeAreaLevel1: params.administrativeAreaLevel1,
+        administrativeAreaLevel2: params.administrativeAreaLevel2,
+        locality: params.locality,
+        political: params.political,
+        postalCode: params.postalCode,
+        route: params.route,
+        streetNumber: params.streetNumber,
         facebookUrl: params.facebookUrl,
         twitterUrl: params.twitterUrl,
         instagramUrl: params.instagramUrl,

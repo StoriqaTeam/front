@@ -14,8 +14,7 @@ import Uploaders from './Uploaders';
 
 import './Form.scss';
 
-type PropsType = {
-};
+type PropsType = {};
 
 const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
   // console.log('^^^^ ThirdForm props: ', data);
@@ -36,11 +35,17 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
       categories,
     );
     console.log('*** catObj: ', catObj);
-    return ((catObj && catObj.getAttributes) &&
-      <div styleName="section">
-        <div styleName="sectionName">Properties</div>
-        <AttributesForm attributes={catObj.getAttributes} onChange={onChange} />
-      </div>
+    return (
+      catObj &&
+      catObj.getAttributes && (
+        <div styleName="section">
+          <div styleName="sectionName">Properties</div>
+          <AttributesForm
+            attributes={catObj.getAttributes}
+            onChange={onChange}
+          />
+        </div>
+      )
     );
   };
 
