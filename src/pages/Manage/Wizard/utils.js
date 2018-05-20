@@ -19,7 +19,7 @@ export const resposeLogger = (response: ?Object, errors: ?Array<any>) => {
     alert(`Error: "${status}"`); // eslint-disable-line
   }
   return null;
-}
+};
 
 export const errorsLogger = (error: Error) => {
   log.debug({ error });
@@ -34,4 +34,4 @@ export const errorsLogger = (error: Error) => {
   // eslint-disable-next-line
   alert('Something going wrong :(');
   return null;
-}
+};

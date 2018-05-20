@@ -3,11 +3,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { evolve, pathOr, omit, isEmpty, where, isNil, complement } from 'ramda';
+import { evolve, pathOr, omit, where, isNil, complement } from 'ramda';
 import { fetchQuery } from 'relay-runtime';
 import debounce from 'lodash.debounce';
 
-import { log, fromRelayError } from 'utils';
+import { log } from 'utils';
 import { Page } from 'components/App';
 import {
   CreateWizardMutation,
@@ -31,7 +31,6 @@ type PropsType = {};
 type StateType = {};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
-
   static prepareWizardState(props) {
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], props);
     const stepOne = pathOr(null, ['me', 'wizardStore', 'stepOne'], props);
@@ -74,9 +73,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       wizardStore: {
         ...prevState.wizardStore,
         ...nextWizardStore,
-      }
+      },
     };
-  }
+  };
 
   constructor(props: PropsType) {
     super(props);
@@ -175,7 +174,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       if (!stID) {
         return;
       }
-      const preparedData = WizardWrapper.prepareStoreMutationInput(this.props, stID);
+      const preparedData = WizardWrapper.prepareStoreMutationInput(
+        this.props,
+        stID,
+      );
       // console.log('**** update store with wizard state: ', { preparedData });
       const updater =
         step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
@@ -183,7 +185,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...preparedData,
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
-          const responseData = response.createStore ? response.createStore : response.updateStore;
+          const responseData = response.createStore
+            ? response.createStore
+            : response.updateStore;
           this.updateWizard({ storeId: responseData.rawId });
           this.setState(() => ({ isLoading: false }));
           resposeLogger(response, errors);
