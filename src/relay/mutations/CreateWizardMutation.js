@@ -8,6 +8,7 @@ const mutation = graphql`
     createWizardStore {
       id
       rawId
+      storeId
       stepOne {
         name
         slug
@@ -17,6 +18,17 @@ const mutation = graphql`
         country
         address
         defaultLanguage
+        addressFull {
+          country
+          value
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          political
+          postalCode
+          route
+          streetNumber
+        }
       }
       stepThree {
         edges {
