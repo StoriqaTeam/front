@@ -2,12 +2,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, addIndex, find, pathOr, assocPath, path, append } from 'ramda';
+import { map, addIndex, assocPath, path, append } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
-import { getNameText, uploadFile } from 'utils';
-import { UploadWrapper } from 'components/Upload';
+import { uploadFile } from 'utils';
 import { Icon } from 'components/Icon';
 // import { Modal } from 'components/Modal';
 import { CardProduct } from 'components/CardProduct';
@@ -16,7 +15,13 @@ import Form from './Form';
 
 import './View.scss';
 
-const Modal = ({ children, showModal, onClose }) => {
+type ModalType = {
+  children: Raact.Element,
+  showModal: boolean,
+  onClose: () => void,
+};
+
+const Modal = ({ children, showModal, onClose }: ModalType) => {
   if (!showModal) {
     return null;
   }

@@ -1,10 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { map, find, pathOr, whereEq } from 'ramda';
+import { map, pathOr, whereEq } from 'ramda';
 
-import { getNameText, flattenFunc, findCategory } from 'utils';
-import { Icon } from 'components/Icon';
+import { findCategory } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
@@ -16,7 +15,21 @@ import type { AttributeType, AttrValueType } from './AttributesForm';
 
 import './Form.scss';
 
-type PropsType = {};
+type CategoriesTreeType = {
+  rawId: number,
+  level: number,
+  children: ?Array<CategoriesTreeType>,
+};
+
+type PropsType = {
+  categoryId: ?number,
+  categories: CategoriesTreeType,
+  onChange: (obj: { [name: string]: string }) => void,
+  data: {
+    categoryId: ?number,
+  },
+  onUpload: (type: boolean, e: any) => void,
+};
 
 type StateType = {
   attrValues: Array<AttrValueType>,
@@ -36,19 +49,6 @@ class ThirdForm extends Component<PropsType, StateType> {
     };
   }
 
-  handleChangeData = e => {
-    const {
-      target: { value, name },
-    } = e;
-    this.props.onChange({ [name]: value });
-  };
-
-  handleAttributesChange = (attrs: Array<AttrValueType>) => {
-    this.setState({
-      attrValues: attrs,
-    });
-  };
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.categoryId !== this.props.data.categoryId) {
       const {
@@ -65,6 +65,19 @@ class ThirdForm extends Component<PropsType, StateType> {
       });
     }
   }
+
+  handleChangeData = e => {
+    const {
+      target: { value, name },
+    } = e;
+    this.props.onChange({ [name]: value });
+  };
+
+  handleAttributesChange = (attrs: Array<AttrValueType>) => {
+    this.setState({
+      attrValues: attrs,
+    });
+  };
 
   defaultValueForAttribute = (attribute: AttributeType): AttrValueType => {
     const noValueString = 'No value';
@@ -119,7 +132,7 @@ class ThirdForm extends Component<PropsType, StateType> {
   render() {
     console.log('^^^^ ThirdForm props: ', this.props);
     const { data } = this.props;
-    const { addressFull, categoryId } = data;
+    const { categoryId } = data;
     console.log('*** form render categoryId, data: ', { categoryId, data });
 
     return (

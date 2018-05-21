@@ -29,7 +29,6 @@ yarn-error.log*
 .env.development
 .env.production
 .vscode/
-webpack-assets.json
 
 # saldin
 flow_check.log
@@ -37,3 +36,4 @@ flow_check.log
 .vscode/settings.json
 scripts/parse_flow_errors.js
 webpack-stats.json
+webpack-assets.json

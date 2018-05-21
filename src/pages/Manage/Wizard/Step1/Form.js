@@ -37,9 +37,8 @@ class FirstForm extends React.Component<PropsType, StateType> {
     return newState;
   };
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    return FirstForm.prepareState(nextProps.initialData, prevState);
-  };
+  static getDerivedStateFromProps = (nextProps, prevState) =>
+    FirstForm.prepareState(nextProps.initialData, prevState);
 
   constructor(props: PropsType) {
     super(props);
