@@ -201,10 +201,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...preparedData,
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
-          const responseData = response.createStore
-            ? response.createStore
-            : response.updateStore;
-          this.updateWizard({ storeId: responseData.rawId });
+          console.log('^^^ updateStore updateStore mutation response: ', { response, errors });
+          // const responseData = response.createStore
+          //   ? response.createStore
+          //   : response.updateStore;
+          // this.updateWizard({ storeId: responseData.rawId });
           this.setState(() => ({ isLoading: false }));
           resposeLogger(response, errors);
         },

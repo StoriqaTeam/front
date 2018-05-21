@@ -38,11 +38,9 @@ class FirstForm extends React.Component<PropsType, StateType> {
     const {
       target: { value, name },
     } = e;
-    this.setState({ [name]: value },
-      () => {
-        onChange({ ...this.state });
-      }
-    );
+    this.setState({ [name]: value }, () => {
+      onChange({ ...this.state });
+    });
   };
 
   handleOnSave = () => {
