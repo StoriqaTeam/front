@@ -254,38 +254,44 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
+    // const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     console.log('>>> handleOnSaveWizard: ', { data });
     // const userId = pathOr(null, ['me', 'rawId'], this.props);
-    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
     if (data) {
       this.updateWizard({
-        ...data,
-        storeId,
+        ...omit(['id', 'rawId', 'stepOne', 'stepTwo', 'stepThree', 'store'], data),
+        // storeId,
       });
     }
   }, 250);
 
   // Update State
-  handleChangeWizardState = (data, callback) => {
-    console.log('>>> handleChangeWizardState: ', { data, callback });
-    this.setState(
-      oldState => ({
-        wizardStore: {
-          ...oldState.wizardStore,
-          ...data,
-        },
-      }),
-      () => {
-        if (callback) {
-          callback();
-        }
-      },
-    );
-  };
+  // handleChangeWizardState = (data, callback) => {
+  //   console.log('>>> handleChangeWizardState: ', { data, callback });
+  //   this.setState(
+  //     oldState => ({
+  //       wizardStore: {
+  //         ...oldState.wizardStore,
+  //         ...data,
+  //       },
+  //     }),
+  //     () => {
+  //       if (callback) {
+  //         callback();
+  //       }
+  //     },
+  //   );
+  // };
 
   handleChangeForm = data => {
-    console.log('>>> handleChangeForm: ', { data });
-    this.handleChangeWizardState(data);
+    const storeID = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
+    const storeId = pathOr(null, ['me', 'wizardStore', 'store', 'rawId'], this.props);
+    console.log('>>> handleChangeForm: ', { data, storeId, storeID });
+    // const preparedDataInput = evolve(transformations, {
+      
+    // });
+    // this.handleChangeWizardState(data);
     this.handleOnSaveWizard(data);
   };
 
@@ -295,10 +301,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   renderForm = () => {
     console.log('>>> renderForm');
-    const { step, wizardStore } = this.state;
+    const { step } = this.state;
+    // const { wizardStore } = this.props;
+    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
 
     // const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
-    // console.log('^^^^ render props: ', this.props);
+    console.log('^^^ renderForm wizardStore : ', { wizardStore });
     switch (step) {
       case 1:
         return (
@@ -308,7 +316,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               Make a bright name for your store to attend your customers and
               encrease your sales
             </div>
-            <Step1 data={wizardStore} onChange={this.handleChangeForm} />
+            <Step1 initialData={wizardStore} onChange={this.handleChangeForm} />
           </div>
         );
       case 2:
@@ -411,24 +419,24 @@ export default createFragmentContainer(
         id
         rawId
         storeId
-        stepOne {
-          name
-          slug
-          shortDescription
+        name
+        slug
+        shortDescription
+        defaultLanguage
+        store {
+          id
+          rawId
         }
-        stepTwo {
-          defaultLanguage
-          addressFull {
-            country
-            value
-            administrativeAreaLevel1
-            administrativeAreaLevel2
-            locality
-            political
-            postalCode
-            route
-            streetNumber
-          }
+        addressFull {
+          country
+          value
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          political
+          postalCode
+          route
+          streetNumber
         }
         stepThree {
           edges {
@@ -441,61 +449,6 @@ export default createFragmentContainer(
     }
   `,
 );
-
-const mockNewData = {
-  me: {
-    id: 'dXNlcnN8dXNlcnwx',
-    rawId: 1,
-    isActive: true,
-    wizardStore: {
-      id: 'c3RvcmVzfHdpemFyZF9zdG9yZXwzOA==',
-      rawId: 38,
-      storeId: 200,
-      store: {
-        id: 'c3RvcmVzfHN0b3JlfDIwMA==',
-        name: [
-          {
-            text: 'name90091212',
-          },
-        ],
-        shortDescription: [
-          {
-            text: 'laflk',
-          },
-        ],
-        slug: 'slug9000',
-        defaultLanguage: 'RU',
-        addressFull: {
-          value: 'Kavaja Street 100',
-          country: 'AL',
-          route: 'Rruga e Kavajës',
-          administrativeAreaLevel1: 'Qarku i Tiranës',
-          administrativeAreaLevel2: 'Tiranë',
-          postalCode: null,
-          streetNumber: '100',
-        },
-      },
-      name: 'name90091212',
-      slug: 'slug9000',
-      shortDescription: 'laflk',
-      defaultLanguage: 'RU',
-      addressFull: {
-        country: 'AL',
-        value: 'Kavaja Street 100',
-        administrativeAreaLevel1: 'Qarku i Tiranës',
-        administrativeAreaLevel2: 'Tiranë',
-        locality: 'Tiranë',
-        political: null,
-        postalCode: null,
-        route: 'Rruga e Kavajës',
-        streetNumber: '100',
-      },
-      stepThree: {
-        edges: [],
-      },
-    },
-  },
-};
 
 const products = [
   {
