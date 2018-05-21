@@ -109,7 +109,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateWizard = data => {
-    console.log('**** update Wizard data: ', { data })
+    console.log('**** update Wizard data: ', { data });
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
       ...data,
@@ -189,7 +189,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           const responseData = response.createStore
             ? response.createStore
             : response.updateStore;
-          console.log('**** updateStore responseData: ', {responseData, response});
+          console.log('**** updateStore responseData: ', {
+            responseData,
+            response,
+          });
           this.updateWizard({ storeId: responseData.rawId });
           this.setState(() => ({ isLoading: false }));
           resposeLogger(response, errors);

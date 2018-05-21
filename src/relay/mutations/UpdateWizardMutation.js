@@ -61,8 +61,7 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) =>
-{ 
+const commit = (params: MutationParamsType) => {
   console.log('**** update wizard mutation params: ', params);
   return commitMutation(params.environment, {
     mutation,
@@ -75,6 +74,6 @@ const commit = (params: MutationParamsType) =>
     onCompleted: params.onCompleted,
     onError: params.onError,
   });
- }
+};
 
 export default { commit };
