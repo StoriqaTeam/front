@@ -15,6 +15,10 @@
     text-transform: uppercase;
   }
 
+  .noCashback {
+    background: $color_grey_light !important;
+  }
+
 }
 
 .stq {
@@ -42,3 +46,4 @@
   color: $color_grey_text;
   font-size: 2.5rem;
 }
+

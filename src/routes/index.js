@@ -36,6 +36,9 @@ const routes = (
             id
             ...App_me
           }
+          cart {
+            ...Cart_cart
+          }
           mainPage {
             ...Start_mainPage
           }
