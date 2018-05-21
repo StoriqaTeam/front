@@ -44,13 +44,22 @@ import Logout from 'components/Icon/svg/logout.svg';
 import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
 import Note from 'components/Icon/svg/note.svg';
 
+// For product
+import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
+import AngleView from 'components/Icon/svg/product/angleView.svg';
+import ShowDetails from 'components/Icon/svg/product/showDetails.svg';
+import ShowInScene from 'components/Icon/svg/product/showInScene.svg';
+import ShowInUse from 'components/Icon/svg/product/showInUse.svg';
+import ShowSizes from 'components/Icon/svg/product/showSizes.svg';
+import ShowVariety from 'components/Icon/svg/product/showVariety.svg';
+
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
 
 import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32 | 40,
+  size: 8 | 16 | 20 | 24 | 32 | 40 | 56,
   inline: ?boolean,
 };
 
@@ -95,6 +104,15 @@ const iconsMap = {
   sortArrows: <SortArrows />,
   cameraPlus: <CameraPlus />,
   note: <Note />,
+
+  // For product
+  mainFoto: <MainFoto />,
+  angleView: <AngleView />,
+  showDetails: <ShowDetails />,
+  showInScene: <ShowInScene />,
+  showInUse: <ShowInUse />,
+  showSizes: <ShowSizes />,
+  showVariety: <ShowVariety />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

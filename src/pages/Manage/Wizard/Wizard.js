@@ -457,17 +457,20 @@ const products = {
         rawId: 1,
         storeId: 1,
         products: {
-          edges: [{
-            node: {
-              cashback: null,
-              discount: 5,
-              id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
-              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-              price: 100,
-              rawId: 671,
-            }
-          }],
-        }
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 0.5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 100,
+                rawId: 671,
+              },
+            },
+          ],
+        },
       },
     },
     {
@@ -483,17 +486,20 @@ const products = {
         rawId: 4,
         storeId: 1,
         products: {
-          edges: [{
-            node: {
-              cashback: null,
-              discount: 5,
-              id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
-              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-              price: 200,
-              rawId: 672,
-            }
-          }],
-        }
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 0.5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 200,
+                rawId: 672,
+              },
+            },
+          ],
+        },
       },
     },
     {
@@ -509,17 +515,20 @@ const products = {
         rawId: 3,
         storeId: 1,
         products: {
-          edges: [{
-            node: {
-              cashback: null,
-              discount: 5,
-              id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
-              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-              price: 300,
-              rawId: 673,
-            }
-          }],
-        }
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 0.5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 300,
+                rawId: 673,
+              },
+            },
+          ],
+        },
       },
     },
     {
@@ -535,18 +544,21 @@ const products = {
         rawId: 4,
         storeId: 1,
         products: {
-          edges: [{
-            node: {
-              cashback: null,
-              discount: 5,
-              id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
-              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-              price: 400,
-              rawId: 674,
-            }
-          }],
-        }
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 0.5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 400,
+                rawId: 674,
+              },
+            },
+          ],
+        },
       },
     },
-  ]
+  ],
 };

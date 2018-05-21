@@ -25,7 +25,6 @@ type PropsTypes = {
 class Start extends PureComponent<PropsTypes> {
   render() {
     const { mainPage } = this.props;
-    console.log('---mainPage', mainPage);
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
