@@ -79,6 +79,8 @@ const routes = (
                     text
                   }
                   getAttributes {
+                    id
+                    rawId
                     name {
                       text
                     }
