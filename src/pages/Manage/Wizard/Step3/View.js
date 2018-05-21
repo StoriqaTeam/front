@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, find, pathOr, assocPath, path, append } from 'ramda';
+import { map, addIndex, find, pathOr, assocPath, path, append } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
@@ -152,6 +152,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const { data, onChange, products, onUpload } = this.props;
     const { baseProduct, showForm } = this.state;
     const productsArr = map(item => item.node, products.edges);
+    const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
         <div
@@ -167,9 +168,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           </div>
         </div>
         {productsArr &&
-          map(
-            item => (
-              <div styleName="productItem cardItem">
+          mapIndexed(
+            (item, index) => (
+              <div key={index} styleName="productItem cardItem">
                 <div styleName="productContent">
                   <CardProduct item={item} />
                   <div styleName="layer">

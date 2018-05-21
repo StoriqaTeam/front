@@ -16,6 +16,9 @@
 
     &.uploaderItem {
       padding: 1rem;
+      &:hover {
+        cursor: pointer;
+      }
 
       & .productContent {
         display: flex;
