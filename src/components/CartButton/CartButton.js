@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
-import { path } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { Count } from 'components/Count';
@@ -18,11 +17,6 @@ type PropsTypes = {
 class CartButton extends PureComponent<PropsTypes> {
   render() {
     const { amount, href } = this.props;
-    const store = this.context.environment.getStore();
-    const root = store.getSource().get('client:root');
-    if (!path(['me', '__ref'], root)) {
-      return null;
-    }
     return (
       <Link to={href || '/'} styleName="container">
         {amount && (

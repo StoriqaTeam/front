@@ -7,7 +7,6 @@ import { Link } from 'found';
 import {
   pipe,
   pathOr,
-  path,
   map,
   prop,
   sum,
@@ -69,10 +68,7 @@ class Header extends Component<PropsType, StateType> {
 
   componentWillMount() {
     const store = this.context.environment.getStore();
-    const source = store.getSource().toJSON();
-    const meId = path(['client:root', 'me', '__ref'])(source);
-    if (!meId) return;
-    const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
+    const connectionId = 'client:root:cart:__Cart_stores_connection';
     const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
       dataID: connectionId,
