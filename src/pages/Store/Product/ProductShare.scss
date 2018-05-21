@@ -1,15 +1,34 @@
 @import "../../../styles/variables";
 
+$icon-size: 20px;
+
 .container {
   background: $color_white;
   border: 1px solid #efefef;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+}
+
+.socialIcons {
   padding: 36px;
+  display: flex;
+  justify-content: flex-start;
 
   svg {
-    height: 20px;
+    height: $icon-size;
     margin-right: 3rem;
-    width: 20px;
+    width: $icon-size;
+  }
+}
+
+.favorite {
+  border-left: 1px solid #efefef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 34px;
+  svg {
+    height: $icon-size;
+    width: $icon-size;
   }
 }
