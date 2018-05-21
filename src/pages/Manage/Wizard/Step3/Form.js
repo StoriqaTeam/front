@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import { map, find, pathOr, whereEq } from 'ramda';
 
 import { getNameText, flattenFunc, findCategory } from 'utils';
@@ -12,27 +12,93 @@ import { CategorySelector } from 'components/CategorySelector';
 import AttributesForm from './AttributesForm';
 import Uploaders from './Uploaders';
 
+import type { AttributeType, AttrValueType } from './AttributesForm';
+
 import './Form.scss';
 
 type PropsType = {};
 
-const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
-  // console.log('^^^^ ThirdForm props: ', data);
+type StateType = {
+  attrValues: Array<AttrValueType>,
+};
 
-  const handleChangeData = e => {
+class ThirdForm extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+
+    const { categoryId } = props;
+    const catObj = findCategory(
+      whereEq({ rawId: parseInt(categoryId, 10) }),
+      props.categories,
+    ) || { getAttributes: [] };
+    this.state = {
+      attrValues: this.prepareDefaultValuesForAttributes(catObj.getAttributes),
+    };
+  }
+
+  handleChangeData = e => {
     const {
       target: { value, name },
     } = e;
-    onChange({ [name]: value });
+    this.props.onChange({ [name]: value });
   };
 
-  const renderAttributes = () => {
+  handleAttributesChange = (attrs: Array<AttrValueType>) => {
+    this.setState({
+      attrValues: attrs,
+    });
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.categoryId !== this.props.data.categoryId) {
+      const {
+        data: { categoryId },
+      } = nextProps;
+      const catObj = findCategory(
+        whereEq({ rawId: parseInt(categoryId, 10) }),
+        nextProps.categories,
+      ) || { getAttributes: [] };
+      this.setState({
+        attrValues: this.prepareDefaultValuesForAttributes(
+          catObj.getAttributes,
+        ),
+      });
+    }
+  }
+
+  defaultValueForAttribute = (attribute: AttributeType): AttrValueType => {
+    const noValueString = 'No value';
+    let valueStr = noValueString;
+    const {
+      metaField: { translatedValues, values },
+    } = attribute;
+    if (values && values.length > 0) {
+      valueStr = values[0] || noValueString;
+    } else if (translatedValues.length > 0) {
+      // $FlowIgnoreMe
+      valueStr = pathOr(
+        noValueString,
+        [0, 'translations', 0, 'text'],
+        translatedValues,
+      );
+    }
+    return {
+      attrId: attribute.rawId,
+      value: valueStr,
+    };
+  };
+
+  prepareDefaultValuesForAttributes = (
+    attrs: Array<AttributeType>,
+  ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
+
+  renderAttributes = () => {
     // console.log('*** renderAttributes');
-    const { categoryId } = data;
+    const { categoryId } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       // whereEq({ rawId: 34 }),
-      categories,
+      this.props.categories,
     );
     console.log('*** catObj: ', catObj);
     return (
@@ -42,99 +108,104 @@ const ThirdForm = ({ data, onChange, categories, onUpload }: PropsType) => {
           <div styleName="sectionName">Properties</div>
           <AttributesForm
             attributes={catObj.getAttributes}
-            onChange={onChange}
+            onChange={this.handleAttributesChange}
+            values={this.state.attrValues}
           />
         </div>
       )
     );
   };
 
-  const { addressFull, categoryId } = data;
-  console.log('*** form render categoryId, data: ', { categoryId, data });
+  render() {
+    console.log('^^^^ ThirdForm props: ', this.props);
+    const { data } = this.props;
+    const { addressFull, categoryId } = data;
+    console.log('*** form render categoryId, data: ', { categoryId, data });
 
-  return (
-    <div styleName="wrapper">
-      <div styleName="formWrapper">
-        <div styleName="headerTitle">Add new product</div>
-        <div styleName="headerDescription">
-          Fill up the forms below to show up as many attributes of your good to
-          make it clear for buyer
-        </div>
-        <div styleName="form">
-          <div styleName="section">
-            <div styleName="formItem">
-              <Input
-                id="name"
-                value={data.name}
-                label="Product name"
-                onChange={handleChangeData}
-                fullWidth
-              />
-            </div>
-            <div styleName="formItem">
-              <Textarea
-                id="shortDescription"
-                value={data.shortDescription}
-                label="Short description"
-                onChange={handleChangeData}
-                fullWidth
-              />
-            </div>
+    return (
+      <div styleName="wrapper">
+        <div styleName="formWrapper">
+          <div styleName="headerTitle">Add new product</div>
+          <div styleName="headerDescription">
+            Fill up the forms below to show up as many attributes of your good
+            to make it clear for buyer
           </div>
-          <div styleName="section">
-            <div styleName="sectionName">Product photo</div>
-            <Uploaders onUpload={onUpload} />
+          <div styleName="form">
+            <div styleName="section">
+              <div styleName="formItem">
+                <Input
+                  id="name"
+                  value={data.name}
+                  label="Product name"
+                  onChange={this.handleChangeData}
+                  fullWidth
+                />
+              </div>
+              <div styleName="formItem">
+                <Textarea
+                  id="shortDescription"
+                  value={data.shortDescription}
+                  label="Short description"
+                  onChange={this.handleChangeData}
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div styleName="section">
+              <div styleName="sectionName">Product photo</div>
+              <Uploaders onUpload={this.props.onUpload} />
+            </div>
+            {/* <div styleName="section">
+              <div styleName="sectionName">Product photo</div>
+              <Uploaders onUpload={onUpload} />
+            </div> */}
+            <div styleName="section">
+              <div styleName="sectionName">General settings and pricing</div>
+              <div styleName="formItem">
+                <CategorySelector
+                  categories={this.props.categories}
+                  onSelect={id => this.props.onChange({ categoryId: id })}
+                />
+              </div>
+              <div styleName="formItem">
+                <Input
+                  id="price"
+                  value={data.price || ''}
+                  label="Price"
+                  onChange={this.handleChangeData}
+                  fullWidth
+                  type="number"
+                />
+                {/* <span styleName="">STQ</span> */}
+              </div>
+              <div styleName="formItem">
+                <Input
+                  id="vendorCode"
+                  value={data.vendorCode || ''}
+                  label="Vendor code"
+                  onChange={this.handleChangeData}
+                  fullWidth
+                />
+                {/* <span styleName="">STQ</span> */}
+              </div>
+              <div styleName="formItem">
+                <Input
+                  id="cashback"
+                  value={data.cashback || ''}
+                  label="Cashback"
+                  onChange={this.handleChangeData}
+                  fullWidth
+                  type="number"
+                />
+                {/* <span styleName="">STQ</span> */}
+              </div>
+            </div>
+            {categoryId && this.renderAttributes()}
           </div>
-          {/* <div styleName="section">
-            <div styleName="sectionName">Product photo</div>
-            <Uploaders onUpload={onUpload} />
-          </div> */}
-          <div styleName="section">
-            <div styleName="sectionName">General settings and pricing</div>
-            <div styleName="formItem">
-              <CategorySelector
-                categories={categories}
-                onSelect={id => onChange({ categoryId: id })}
-              />
-            </div>
-            <div styleName="formItem">
-              <Input
-                id="price"
-                value={data.price || ''}
-                label="Price"
-                onChange={handleChangeData}
-                fullWidth
-                type="number"
-              />
-              {/* <span styleName="">STQ</span> */}
-            </div>
-            <div styleName="formItem">
-              <Input
-                id="vendorCode"
-                value={data.vendorCode || ''}
-                label="Vendor code"
-                onChange={handleChangeData}
-                fullWidth
-              />
-              {/* <span styleName="">STQ</span> */}
-            </div>
-            <div styleName="formItem">
-              <Input
-                id="cashback"
-                value={data.cashback || ''}
-                label="Cashback"
-                onChange={handleChangeData}
-                fullWidth
-                type="number"
-              />
-              {/* <span styleName="">STQ</span> */}
-            </div>
-          </div>
-          {categoryId && renderAttributes()}
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default ThirdForm;

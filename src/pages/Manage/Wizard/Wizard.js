@@ -339,6 +339,19 @@ export default createFragmentContainer(
         store {
           id
           rawId
+          baseProducts {
+            edges {
+              node {
+                products {
+                  edges {
+                    node {
+                      ...Wizard_ProductFragment
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
         addressFull {
           country
@@ -355,6 +368,38 @@ export default createFragmentContainer(
           edges {
             node {
               id
+            }
+          }
+        }
+      }
+    }
+
+    fragment Wizard_ProductFragment on Product {
+      id
+      rawId
+      price
+      discount
+      photoMain
+      additionalPhotos
+      attributes {
+        ...Wizard_AttributeFragment
+      }
+    }
+
+    fragment Wizard_AttributeFragment on AttributeValue {
+      value
+      metaField
+      attribute {
+        id
+        rawId
+        name {
+          text
+        }
+        metaField {
+          values
+          translatedValues {
+            translations {
+              text
             }
           }
         }
@@ -382,7 +427,7 @@ const products = {
             {
               node: {
                 cashback: null,
-                discount: 0.5,
+                discount: 5,
                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
                 photoMain:
                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
@@ -411,7 +456,7 @@ const products = {
             {
               node: {
                 cashback: null,
-                discount: 0.5,
+                discount: 5,
                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
                 photoMain:
                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
@@ -440,7 +485,7 @@ const products = {
             {
               node: {
                 cashback: null,
-                discount: 0.5,
+                discount: 5,
                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
                 photoMain:
                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
@@ -469,7 +514,7 @@ const products = {
             {
               node: {
                 cashback: null,
-                discount: 0.5,
+                discount: 5,
                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
                 photoMain:
                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',

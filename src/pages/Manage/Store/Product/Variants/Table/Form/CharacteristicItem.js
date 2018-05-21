@@ -24,7 +24,7 @@ type AttributeType = {
   id: string,
   metaField: {
     translatedValues: ?Array<{}>,
-    values: ?Array<{}>,
+    values: ?Array<string>,
   },
 };
 
