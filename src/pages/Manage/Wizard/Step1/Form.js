@@ -11,7 +11,7 @@ import './Form.scss';
 type TranslatedType = {
   lang?: string,
   text: string,
-}
+};
 
 type DataType = {
   name: ?Array<TranslatedType>,
@@ -28,7 +28,6 @@ type PropsType = {
 type StateType = DataType;
 
 class FirstForm extends React.Component<PropsType, StateType> {
-
   static prepareState = (props: PropsType, state?: StateType) => {
     // const name = pathOr('', ['name'], props);
     // const shortDescription = pathOr('', ['shortDescription'], props);
@@ -40,10 +39,10 @@ class FirstForm extends React.Component<PropsType, StateType> {
       // name,
       // shortDescription,
       // slug,
-    }
+    };
     console.log('<<< Form 1 prepareState: ', { newState });
     return newState;
-  }
+  };
 
   // static getDerivedStateFromProps = (nextProps, prevState) => {
   //   const name = pathOr('', ['initialData', 'name', 'text'], nextProps);
@@ -63,7 +62,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     return FirstForm.prepareState(nextProps.initialData, prevState);
-  }
+  };
 
   constructor(props: PropsType) {
     super(props);
@@ -74,14 +73,14 @@ class FirstForm extends React.Component<PropsType, StateType> {
 
   transformToTranslations = (fieldName: string) => {
     const { initialData } = this.props;
-    return text => ([
+    return text => [
       ...initialData[fieldName],
       {
         lang: 'EN',
         [fieldName]: text,
-      }
-    ]);
-  }
+      },
+    ];
+  };
 
   // prepareInputData = () => {
   //   const transformations = {
@@ -109,7 +108,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
     this.setState({ slug: value }, () => {
       onChange({ ...this.state });
     });
-  }
+  };
 
   // handleOnSave = () => {
   //   const { onChange } = this.props;
@@ -120,7 +119,12 @@ class FirstForm extends React.Component<PropsType, StateType> {
     // const { data } = this.props;
     const { initialData } = this.props;
     const { name, slug, shortDescription } = this.state;
-    console.log('>>> From 1 render: ', { initialData, name, slug, shortDescription })
+    console.log('>>> From 1 render: ', {
+      initialData,
+      name,
+      slug,
+      shortDescription,
+    });
     return (
       <div styleName="form">
         <div styleName="formItem">

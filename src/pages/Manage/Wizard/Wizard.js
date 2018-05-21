@@ -260,7 +260,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
     if (data) {
       this.updateWizard({
-        ...omit(['id', 'rawId', 'stepOne', 'stepTwo', 'stepThree', 'store'], data),
+        ...omit(
+          ['id', 'rawId', 'stepOne', 'stepTwo', 'stepThree', 'store'],
+          data,
+        ),
         // storeId,
       });
     }
@@ -285,11 +288,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   // };
 
   handleChangeForm = data => {
-    const storeID = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
-    const storeId = pathOr(null, ['me', 'wizardStore', 'store', 'rawId'], this.props);
+    const storeID = pathOr(
+      null,
+      ['me', 'wizardStore', 'store', 'id'],
+      this.props,
+    );
+    const storeId = pathOr(
+      null,
+      ['me', 'wizardStore', 'store', 'rawId'],
+      this.props,
+    );
     console.log('>>> handleChangeForm: ', { data, storeId, storeID });
     // const preparedDataInput = evolve(transformations, {
-      
+
     // });
     // this.handleChangeWizardState(data);
     this.handleOnSaveWizard(data);
