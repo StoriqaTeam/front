@@ -9,26 +9,24 @@ const mutation = graphql`
       id
       rawId
       storeId
-      stepOne {
-        name
-        slug
-        shortDescription
+      name
+      slug
+      shortDescription
+      defaultLanguage
+      store {
+        id
+        rawId
       }
-      stepTwo {
+      addressFull {
         country
-        address
-        defaultLanguage
-        addressFull {
-          country
-          value
-          administrativeAreaLevel1
-          administrativeAreaLevel2
-          locality
-          political
-          postalCode
-          route
-          streetNumber
-        }
+        value
+        administrativeAreaLevel1
+        administrativeAreaLevel2
+        locality
+        political
+        postalCode
+        route
+        streetNumber
       }
       stepThree {
         edges {

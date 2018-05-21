@@ -10,26 +10,24 @@ const mutation = graphql`
       id
       rawId
       storeId
-      stepOne {
-        name
-        slug
-        shortDescription
+      name
+      slug
+      shortDescription
+      defaultLanguage
+      store {
+        id
+        rawId
       }
-      stepTwo {
+      addressFull {
         country
-        address
-        defaultLanguage
-        addressFull {
-          country
-          value
-          administrativeAreaLevel1
-          administrativeAreaLevel2
-          locality
-          political
-          postalCode
-          route
-          streetNumber
-        }
+        value
+        administrativeAreaLevel1
+        administrativeAreaLevel2
+        locality
+        political
+        postalCode
+        route
+        streetNumber
       }
       stepThree {
         edges {
@@ -42,13 +40,9 @@ const mutation = graphql`
   }
 `;
 
-type MutationParamsType = {
-  name?: number,
-  slug?: string,
-  shortDescription?: number,
-  defaultLanguage?: string,
+type AddressParamsType = {
   country?: string,
-  address?: string,
+  value?: string,
   administrativeAreaLevel1?: string,
   administrativeAreaLevel2?: string,
   locality?: string,
@@ -56,6 +50,14 @@ type MutationParamsType = {
   postalCode?: string,
   route?: string,
   streetNumber?: string,
+}
+
+type MutationParamsType = {
+  name?: number,
+  slug?: string,
+  shortDescription?: number,
+  defaultLanguage?: string,
+  addressFull?: AddressParamsType,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
