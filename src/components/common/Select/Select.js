@@ -2,15 +2,15 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { find, propEq } from 'ramda';
+import { find, propEq, prepend } from 'ramda';
 
-import { log } from 'utils';
 import { Icon } from 'components/Icon';
 
 import './Select.scss';
 
 type StateType = {
   isExpanded: boolean,
+  items: Array<{ id: string, label: string }>,
 };
 
 type SelectType = {
@@ -19,11 +19,9 @@ type SelectType = {
 };
 
 type PropsType = {
-  isDropdown: ?boolean,
   transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
   onSelect?: (item: ?SelectType) => void,
-  title: ?string,
   label: ?string,
   activeItem: ?{ id: string, label: string },
   forForm: ?boolean,
@@ -34,14 +32,24 @@ type PropsType = {
     [name: string]: any,
   },
   dataTest: string,
+  withEmpty?: boolean,
+  isBirthdate?: boolean,
 };
 
 class Select extends Component<PropsType, StateType> {
-  state = {
-    isExpanded: false,
-  };
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      isExpanded: false,
+      items: props.items,
+    };
+  }
 
   componentWillMount() {
+    const { items, withEmpty } = this.props;
+    this.setState({
+      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
+    });
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
       window.addEventListener('keydown', this.handleToggleExpand);
@@ -75,19 +83,14 @@ class Select extends Component<PropsType, StateType> {
   };
 
   handleItemClick = (e: any) => {
-    if (this.props.isDropdown) {
-      log.info('id', e.target.id);
-    } else if (this.props && this.props.onSelect) {
-      // $FlowIgnoreMe
-      this.props.onSelect(find(propEq('id', e.target.id))(this.props.items));
+    const { onSelect, items } = this.props;
+    if (this.props && onSelect) {
+      onSelect(find(propEq('id', e.target.id))(items));
     }
   };
 
   render() {
     const {
-      items,
-      isDropdown,
-      title,
       transparent,
       label,
       activeItem,
@@ -97,8 +100,9 @@ class Select extends Component<PropsType, StateType> {
       forAutocomlete,
       containerStyle,
       dataTest,
+      isBirthdate,
     } = this.props;
-    const { isExpanded } = this.state;
+    const { isExpanded, items } = this.state;
 
     return (
       <div
@@ -106,23 +110,30 @@ class Select extends Component<PropsType, StateType> {
           this.button = node;
         }}
         styleName={classNames('container', {
-          isDropdown,
           forForm,
           forSearch,
           forAutocomlete,
           fullWidth,
+          isBirthdate,
           isExpanded,
         })}
         style={containerStyle}
         data-test={dataTest}
       >
-        {label && <div styleName={classNames('label')}>{label}</div>}
-        <div styleName={classNames('wrap', { transparent })}>
-          <div styleName="selected">
-            {isDropdown ? title : activeItem && activeItem.label}
+        {((label && !isBirthdate) || !(isBirthdate && activeItem)) && (
+          <div
+            styleName={classNames('label', {
+              labelFloat: activeItem || isExpanded,
+            })}
+          >
+            {label}
           </div>
-          {!(activeItem && activeItem.label) &&
-            !isDropdown && <div styleName="placeholder">Select...</div>}
+        )}
+        <div styleName={classNames('wrap', { transparent })}>
+          {activeItem &&
+            activeItem.label && (
+              <div styleName="selected">{activeItem.label}</div>
+            )}
           <div styleName={classNames('icon', { rotateIcon: isExpanded })}>
             <Icon type="arrowExpand" />
           </div>
@@ -148,7 +159,7 @@ class Select extends Component<PropsType, StateType> {
                 const { id } = item;
                 return (
                   <div
-                    key={id}
+                    key={`${id}-${item.label}`}
                     id={id}
                     styleName={classNames('item', {
                       active: activeItem && activeItem.id === id,
@@ -162,7 +173,7 @@ class Select extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        {(forForm || forSearch) && <div styleName="hr" />}
+        {(forForm || forSearch || isBirthdate) && <div styleName="hr" />}
       </div>
     );
   }

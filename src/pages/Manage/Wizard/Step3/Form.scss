@@ -57,16 +57,13 @@
         }
 
         .uploadersWrapper {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-
           .uploadItem {
-            // margin: 1rem;
-            margin-bottom: 2rem;
+            display: inline-block;
+             margin-bottom: 2rem;
 
-            &.withIndents {
-              margin: 0 2rem;
+            &:nth-child(3n+2) {
+              margin-right: 2rem;
+              margin-left: 2rem;
             }
           }
         }

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="13579.5 2741.1 10.342 14.202">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #9b9b9b;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="Recycle_Bin_Artboard_1" data-name="Recycle_Bin_Artboard 1" transform="translate(13568.8 2726.6)">
+    <path id="Path_628" data-name="Path 628" class="cls-1" d="M19.992,42.5H11.75a.551.551,0,0,1-.55-.55v-2.2a.551.551,0,0,1,.55-.55h8.243a.551.551,0,0,1,.55.55v2.2A.551.551,0,0,1,19.992,42.5Z" transform="translate(0 -22.538)"/>
+    <path id="Path_629" data-name="Path 629" class="cls-1" d="M30.344,95.443H23.75a.551.551,0,0,1-.55-.55V87.2h7.693v7.693A.551.551,0,0,1,30.344,95.443Z" transform="translate(-11.176 -67.241)"/>
+    <line id="Line_353" data-name="Line 353" class="cls-2" y2="4.396" transform="translate(14.586 21.883)"/>
+    <line id="Line_354" data-name="Line 354" class="cls-2" y2="4.396" transform="translate(17.149 21.883)"/>
+    <path id="Path_630" data-name="Path 630" class="cls-2" d="M63.062,16.649V15H60.5v1.649" transform="translate(-45.914)"/>
+  </g>
+</svg>

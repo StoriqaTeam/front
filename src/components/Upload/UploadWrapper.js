@@ -19,6 +19,7 @@ type PropsType = {
   noIndents: ?boolean,
   id: string,
   dataTest: string,
+  buttonIconSize: ?number,
 };
 
 // TODO: refactor for avoid use style props
@@ -34,6 +35,7 @@ const UploadWrapper = ({
   noIndents,
   id,
   dataTest,
+  buttonIconSize,
 }: PropsType) => (
   <div styleName="wrapper">
     <div styleName={classNames('upoloadContainer', { noIndents })}>
@@ -43,8 +45,9 @@ const UploadWrapper = ({
         style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
         data-test={dataTest}
       >
-        {buttonIconType &&
-          !overPicture && <Icon type={buttonIconType} size={32} />}
+        {!overPicture && (
+          <Icon type={buttonIconType} size={buttonIconSize || 32} />
+        )}
         {!overPicture && (
           <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
         )}

@@ -1,0 +1,402 @@
+[
+  {
+    "id": "c3RvcmVzfHByb2R1Y3R8MTI=",
+    "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-lbM3k2OYTJoC.png",
+    "discount": null,
+    "additionalPhotos": [
+      "https://s3.amazonaws.com/storiqa-dev/img-UgBDNyoN1YwC.png"
+    ],
+    "price": 567,
+    "cashback": 0.07,
+    "attributes": [
+      {
+        "value": "Tree",
+        "metaField": null,
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+          "name": [
+            {
+              "text": "Material",
+              "lang": "EN"
+            },
+            {
+              "text": "Материал",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COMBOBOX"
+          }
+        }
+      },
+      {
+        "value": "44",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-AfIeZzNOQAYC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+          "name": [
+            {
+              "text": "Size",
+              "lang": "EN"
+            },
+            {
+              "text": "Размер",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": [
+              "44",
+              "46",
+              "48",
+              "50",
+              "52"
+            ],
+            "uiElement": "CHECKBOX"
+          }
+        }
+      },
+      {
+        "value": "Black",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-LLaH0LAGQ7cC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+          "name": [
+            {
+              "text": "Colour",
+              "lang": "EN"
+            },
+            {
+              "text": "Цвет",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COLOR_PICKER"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfHByb2R1Y3R8MTM=",
+    "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-Ip3DPFjeCTkC.png",
+    "discount": null,
+    "additionalPhotos": null,
+    "price": 452,
+    "cashback": 0.12,
+    "attributes": [
+      {
+        "value": "46",
+        "metaField": null,
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+          "name": [
+            {
+              "text": "Size",
+              "lang": "EN"
+            },
+            {
+              "text": "Размер",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": [
+              "44",
+              "46",
+              "48",
+              "50",
+              "52"
+            ],
+            "uiElement": "CHECKBOX"
+          }
+        }
+      },
+      {
+        "value": "Blue",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-kNrV067StH0C.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+          "name": [
+            {
+              "text": "Colour",
+              "lang": "EN"
+            },
+            {
+              "text": "Цвет",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COLOR_PICKER"
+          }
+        }
+      },
+      {
+        "value": "Glass",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-DKQ4VaWhut0C.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+          "name": [
+            {
+              "text": "Material",
+              "lang": "EN"
+            },
+            {
+              "text": "Материал",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COMBOBOX"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfHByb2R1Y3R8MTQ=",
+    "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-IA6DcKNEmBoC.png",
+    "discount": null,
+    "additionalPhotos": null,
+    "price": 666,
+    "cashback": 0.05,
+    "attributes": [
+      {
+        "value": "44",
+        "metaField": null,
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+          "name": [
+            {
+              "text": "Size",
+              "lang": "EN"
+            },
+            {
+              "text": "Размер",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": [
+              "44",
+              "46",
+              "48",
+              "50",
+              "52"
+            ],
+            "uiElement": "CHECKBOX"
+          }
+        }
+      },
+      {
+        "value": "Red",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-NBSinzGtc00C.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+          "name": [
+            {
+              "text": "Colour",
+              "lang": "EN"
+            },
+            {
+              "text": "Цвет",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COLOR_PICKER"
+          }
+        }
+      },
+      {
+        "value": "Metal",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-xMVA9ep4PwAC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+          "name": [
+            {
+              "text": "Material",
+              "lang": "EN"
+            },
+            {
+              "text": "Материал",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COMBOBOX"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfHByb2R1Y3R8MTU=",
+    "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-ShbEtojSxfgC.png",
+    "discount": null,
+    "additionalPhotos": [
+      "https://s3.amazonaws.com/storiqa-dev/img-Qs2SSB93ONIC.png",
+      "https://s3.amazonaws.com/storiqa-dev/img-HymCGG3PSM0C.png"
+    ],
+    "price": 120,
+    "cashback": 0.09,
+    "attributes": [
+      {
+        "value": "Tree",
+        "metaField": null,
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+          "name": [
+            {
+              "text": "Material",
+              "lang": "EN"
+            },
+            {
+              "text": "Материал",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COMBOBOX"
+          }
+        }
+      },
+      {
+        "value": "Brown",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-tEeHFbRGplwC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+          "name": [
+            {
+              "text": "Colour",
+              "lang": "EN"
+            },
+            {
+              "text": "Цвет",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COLOR_PICKER"
+          }
+        }
+      },
+      {
+        "value": "52",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-XYi95A0RGD0C.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+          "name": [
+            {
+              "text": "Size",
+              "lang": "EN"
+            },
+            {
+              "text": "Размер",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": [
+              "44",
+              "46",
+              "48",
+              "50",
+              "52"
+            ],
+            "uiElement": "CHECKBOX"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfHByb2R1Y3R8MTY=",
+    "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-yg18NOw1Ws0C.png",
+    "discount": null,
+    "additionalPhotos": null,
+    "price": 400,
+    "cashback": 0.03,
+    "attributes": [
+      {
+        "value": "Blue",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-Vcq19zzloDoC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+          "name": [
+            {
+              "text": "Colour",
+              "lang": "EN"
+            },
+            {
+              "text": "Цвет",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COLOR_PICKER"
+          }
+        }
+      },
+      {
+        "value": "50",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-wtfU3HrrkzcC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+          "name": [
+            {
+              "text": "Size",
+              "lang": "EN"
+            },
+            {
+              "text": "Размер",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": [
+              "44",
+              "46",
+              "48",
+              "50",
+              "52"
+            ],
+            "uiElement": "CHECKBOX"
+          }
+        }
+      },
+      {
+        "value": "Tree",
+        "metaField": "https://s3.amazonaws.com/storiqa-dev/img-832qlBGeCQoC.png",
+        "attribute": {
+          "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+          "name": [
+            {
+              "text": "Material",
+              "lang": "EN"
+            },
+            {
+              "text": "Материал",
+              "lang": "RU"
+            }
+          ],
+          "metaField": {
+            "values": null,
+            "uiElement": "COMBOBOX"
+          }
+        }
+      }
+    ]
+  }
+]

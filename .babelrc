@@ -1,53 +1,85 @@
 {
   "presets": [
-    ["es2015", { "loose": true }],
+    [
+      "es2015",
+      {
+        "loose": true
+      }
+    ],
     "react",
     "react-app",
     "flow"
   ],
   "plugins": [
     "dynamic-import-node",
-    ["relay", {"schema": "./src/relay/schema.json"}],
-    "inline-react-svg"
+    [
+      "relay",
+      {
+        "schema": "./src/relay/schema.json"
+      }
+    ],
+    "inline-react-svg",
+    "add-module-exports"
   ],
   "env": {
     "production": {
       "plugins": [
-        ["module-resolver", {
-          "root": ["./src"]
-        }],
-        ["react-css-modules", {
-          "filetypes": {
-            ".scss": {
-              "syntax": "postcss-scss"
-            }
-          },
-          "generateScopedName": "[name]__[local]___[hash:base64:5]"
-        }]
+        [
+          "module-resolver",
+          {
+            "root": [
+              "./src"
+            ]
+          }
+        ],
+        [
+          "react-css-modules",
+          {
+            "filetypes": {
+              ".scss": {
+                "syntax": "postcss-scss"
+              }
+            },
+            "generateScopedName": "[name]__[local]___[hash:base64:5]"
+          }
+        ]
       ]
     },
     "development": {
       "plugins": [
-        ["module-resolver", {
-          "root": ["./src"]
-        }],
-        ["react-css-modules", {
-          "filetypes": {
-            ".scss": {
-              "syntax": "postcss-scss"
-            }
-          },
-          "generateScopedName": "[name]__[local]___[hash:base64:5]",
-          "removeImport": true,
-          "webpackHotModuleReloading": true
-        }]
+        [
+          "module-resolver",
+          {
+            "root": [
+              "./src"
+            ]
+          }
+        ],
+        [
+          "react-css-modules",
+          {
+            "filetypes": {
+              ".scss": {
+                "syntax": "postcss-scss"
+              }
+            },
+            "generateScopedName": "[name]__[local]___[hash:base64:5]",
+            "removeImport": true,
+            "webpackHotModuleReloading": true
+          }
+        ]
       ]
     },
     "test": {
       "plugins": [
-        ["module-resolver", {
-          "root": ["./src"]
-        }]
+        [
+          "module-resolver",
+          {
+            "root": [
+              "./src"
+            ]
+          }
+        ]
       ]
     }
   }

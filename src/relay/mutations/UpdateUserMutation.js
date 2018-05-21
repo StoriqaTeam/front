@@ -19,7 +19,7 @@ const mutation = graphql`
   }
 `;
 
-type MutationParamsType = {
+export type MutationParamsType = {
   input: {
     id: string,
     phone: ?string,
@@ -27,6 +27,7 @@ type MutationParamsType = {
     lastName: ?string,
     middleName: ?string,
     birthdate: ?string,
+    gender: string,
   },
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,

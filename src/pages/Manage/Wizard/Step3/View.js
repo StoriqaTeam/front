@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, find } from 'ramda';
+import { map, find, pathOr, assocPath, path, append } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
@@ -10,6 +10,7 @@ import { getNameText, uploadFile } from 'utils';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 // import { Modal } from 'components/Modal';
+import { CardProduct } from 'components/CardProduct';
 
 import Form from './Form';
 
@@ -39,6 +40,24 @@ const Modal = ({ children, showModal, onClose }) => {
   );
 };
 
+type ProductType = {
+  item: {
+    rawId: number,
+    storeId: number,
+    currencyId: number,
+    name: Array<{
+      lang: string,
+      text: string,
+    }>,
+    variants: Array<{
+      discount: number,
+      photoMain: string,
+      cashback: number,
+      price: number,
+    }>,
+  },
+};
+
 type PropsType = {
   data: {
     userId: ?number,
@@ -51,6 +70,7 @@ type PropsType = {
     address: ?string,
   },
   onChange: (data: { [name: string]: string }) => void,
+  products: Array<ProductType>,
 };
 
 type StateType = {
@@ -100,41 +120,85 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = async (e: any) => {
+  handleOnUploadPhoto = async (type: boolean, e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
     if (!result.url) return;
-    console.log('result url: ', result.url);
+    if (type === 'photoMain') {
+      this.setState(prevState =>
+        assocPath(
+          ['baseProduct', 'product', 'photoMain'],
+          result.url,
+          prevState,
+        ),
+      );
+    } else {
+      const additionalPhotos = path(
+        ['baseProduct', 'product', 'additionalPhotos'],
+        this.state,
+      );
+      this.setState(prevState =>
+        assocPath(
+          ['baseProduct', 'product', 'photoMain'],
+          append(result.url, additionalPhotos),
+          prevState,
+        ),
+      );
+    }
   };
 
   render() {
     const { data, onChange, products, onUpload } = this.props;
     const { baseProduct, showForm } = this.state;
+    const productsArr = map(item => item.node, products.edges);
     return (
       <div styleName="view">
         <div
-          styleName="productItem"
+          styleName="productItem uploaderItem"
           role="button"
           onClick={this.handleOnAddProduct}
           onKeyDown={() => {}}
           tabIndex={0}
         >
           <div styleName="productContent">
-            <Icon type="camera" size={32} />
-            <span styleName="buttonLabel">add product</span>
+            <Icon type="cameraPlus" size={56} />
+            <span styleName="buttonLabel">Add new product</span>
           </div>
         </div>
-        {products &&
-          map(item => {
-            return (
-              <div styleName="productItem">
+        {productsArr &&
+          map(
+            item => (
+              <div styleName="productItem cardItem">
                 <div styleName="productContent">
-                  {getNameText(item.node.name)}
+                  <CardProduct item={item} />
+                  <div styleName="layer">
+                    <div
+                      styleName="editbutton"
+                      onClick={() => {}}
+                      role="button"
+                      onKeyDown={() => {}}
+                      tabIndex={0}
+                    >
+                      <Icon type="note" size={56} />
+                      <span styleName="buttonLabel">Edit product</span>
+                    </div>
+                    <div
+                      styleName="editbutton"
+                      onClick={() => {}}
+                      role="button"
+                      onKeyDown={() => {}}
+                      tabIndex={0}
+                    >
+                      <Icon type="basket" size={56} />
+                      <span styleName="buttonLabel">Delete product</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            );
-          }, products)}
+            ),
+            productsArr,
+          )}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
             data={baseProduct}

@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { Route, RedirectException } from 'found';
+import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr, last } from 'ramda';
@@ -10,7 +10,7 @@ import { log } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
-import { Profile } from 'components/Profile';
+import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
@@ -20,6 +20,7 @@ import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
+import Cart from 'pages/Cart';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 
@@ -35,6 +36,9 @@ const routes = (
           me {
             id
             ...App_me
+          }
+          cart {
+            ...Cart_cart
           }
           mainPage {
             ...Start_mainPage
@@ -108,6 +112,11 @@ const routes = (
       <Route Component={Start} />
 
       <Route
+        path="/cart"
+        render={({ props, Component }) => <Component {...props} />}
+        Component={Cart}
+      />
+      <Route
         path="/categories"
         Component={Categories}
         query={graphql`
@@ -134,12 +143,9 @@ const routes = (
           }
         `}
         prepareVariables={(...args) => {
-          const searchValue = pathOr(
-            '',
-            ['query', 'search'],
-            last(args).location,
-          );
-          return { input: { name: searchValue, getStoresTotalCount: true } };
+          const queryObj = pathOr('', ['query'], last(args).location);
+          const searchTerm = urlToInput(queryObj);
+          return { input: { ...searchTerm, getStoresTotalCount: true } };
         }}
       />
       <Route path="/store">
@@ -170,9 +176,12 @@ const routes = (
         `}
         render={({ props }) => {
           if (props && !props.me) {
+            const {
+              location: { pathname },
+            } = props;
             const cookies = new Cookies();
             cookies.remove('__jwt');
-            throw new RedirectException('/login');
+            throw new RedirectException(`/login?from=${pathname}`);
           }
         }}
         Component={() => <div />}
@@ -297,7 +306,16 @@ const routes = (
         )}
       />
       <Route path="/verify_email/:token" Component={VerifyEmail} />
-      <Route path="/profile" Component={Profile} />
+      <Redirect from="/profile" to={() => '/profile/personal-data'} />
+      <Route
+        path="/profile/:item"
+        Component={props => (
+          <Profile
+            activeItem={pathOr('personal-data', ['params', 'item'], props)}
+            me={props.me}
+          />
+        )}
+      />
     </Route>
   </Route>
 );

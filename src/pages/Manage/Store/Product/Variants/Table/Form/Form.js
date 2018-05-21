@@ -11,6 +11,9 @@ import {
   CreateProductWithAttributesMutation,
   UpdateProductMutation,
 } from 'relay/mutations';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
@@ -45,6 +48,7 @@ type StateType = {
 };
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   productId: number,
   category: {
     getAttributes: Array<{
@@ -119,7 +123,11 @@ class Form extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         if (errors) {
-          alert('Check that fields are filled.'); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Check that fields are filled.',
+            link: { text: 'Close.' },
+          });
           return;
         }
         log.debug({ response, errors });
@@ -127,7 +135,11 @@ class Form extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Check that fields are filled.'); // eslint-disable-line
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Check that fields are filled.',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
@@ -148,7 +160,11 @@ class Form extends Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<Error>) => {
         if (errors) {
-          alert('Check that fields are filled.'); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Check that fields are filled.',
+            link: { text: 'Close.' },
+          });
           return;
         }
         log.debug({ response, errors });
@@ -156,7 +172,11 @@ class Form extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.debug({ error });
-        alert('Check that fields are filled correctly.'); // eslint-disable-line
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Check that fields are filled.',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
@@ -335,4 +355,4 @@ Form.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Form;
+export default withShowAlert(Form);

@@ -1,4 +1,15 @@
 pipeline:
+  update_pr:
+    image: plugins/git
+    commands:
+    - export BRANCH_SRC=origin/${DRONE_COMMIT_REFSPEC%%:*} BRANCH_DST=origin/${DRONE_BRANCH}
+    - cp -rpf .git .git.bak
+    - git config --global user.email "service@storiqa.com" && git config --global user.name "Storiqa Common"
+    - git fetch && git checkout $BRANCH_SRC && git merge --no-commit $BRANCH_DST
+    - rm -rf .git && mv -f .git.bak .git
+    when:
+      event: pull_request
+      branch: [ master, release* ]
   test:
     image: node:9.9
     environment:
@@ -9,17 +20,14 @@ pipeline:
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
       - yarn relay
-      - yarn test
       - yarn ci
     when:
       event: pull_request
       branch: [ master, release* ]
   build4nightly:
-    image: node:9.9-slim
+    image: node:9.9
     commands:
       - . ./.env.nightly
-      - apt-get update
-      - apt-get install -y git
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
@@ -56,12 +64,13 @@ pipeline:
       event: [ push, tag ]
       branch: master
   deploy2nightly:
-    image: jackthestripper/drone_k8s_rollout:20180507
+    image: jackthestripper/drone_k8s_rollout:20180510
     user: admin
     token: 32txou6YhrlD3sHcpxsiCmP1m7taE1fY
     addr: https://api.nightly.stq.cloud
     object: front
     kind: deployment
+    namespace: default
     img_names:
       - storiqateam/stq-node
       - storiqateam/stq-static
@@ -76,11 +85,9 @@ pipeline:
       branch: master
       event: push
   build4stable:
-    image: node:9.9-slim
+    image: node:9.9
     commands:
       - . ./.env.stable
-      - apt-get update
-      - apt-get install -y git
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
@@ -117,12 +124,13 @@ pipeline:
       event: [ push, tag ]
       branch: master
   deploy2stable:
-    image: jackthestripper/drone_k8s_rollout:20180507
+    image: jackthestripper/drone_k8s_rollout:20180510
     user: admin
     token: vhkzUYmnPSI7MtJO3Et9KczuGoS0goqV
     addr: https://api.stable.stq.cloud
     object: front
     kind: deployment
+    namespace: default
     img_names:
       - storiqateam/stq-node
       - storiqateam/stq-static
@@ -137,11 +145,9 @@ pipeline:
       branch: master
       event: push
   build4stage:
-    image: node:9.9-slim
+    image: node:9.9
     commands:
       - . ./.env.stage
-      - apt-get update
-      - apt-get install -y git
       - rm -f yarn.lock || true
       - yarn -s --no-progress --non-interactive --production=false
       - yarn updateSchema
@@ -178,12 +184,13 @@ pipeline:
       event: [ push, tag ]
       branch: release*
   deploy2stage:
-    image: jackthestripper/drone_k8s_rollout:20180507
+    image: jackthestripper/drone_k8s_rollout:20180510
     user: admin
     token: PW2clI0vKqLi3eywlN776rMyE7hk1pgX
     addr: https://api.stage.stq.cloud
     object: front
     kind: deployment
+    namespace: default
     img_names:
       - storiqateam/stq-node
       - storiqateam/stq-static

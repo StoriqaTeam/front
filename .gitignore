@@ -30,3 +30,10 @@ yarn-error.log*
 .env.production
 .vscode/
 webpack-assets.json
+
+# saldin
+flow_check.log
+.prettierrc
+.vscode/settings.json
+scripts/parse_flow_errors.js
+webpack-stats.json

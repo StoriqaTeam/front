@@ -4,17 +4,12 @@ import React from 'react';
 import { createProvider as createReduxProvider } from 'react-redux';
 import { getStoreRenderArgs } from 'found/lib';
 import { BrowserProtocol } from 'farce';
-import Cookies from 'universal-cookie';
-import { pathOr } from 'ramda';
 import createReduxStore from 'redux/createReduxStore';
 import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 import createResolver from 'relay/createResolver';
 import { ClientFetcher } from 'relay/fetcher';
 
 import '../index.scss';
-
-const cookies = new Cookies();
-const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
 
 let returnFunc = () => {}; // eslint-disable-line
 
@@ -23,7 +18,7 @@ if (process.env.BROWSER) {
     new BrowserProtocol(),
     window.__PRELOADED_STATE__ || {}, // eslint-disable-line
   );
-  const matchContext = { store, jwt };
+  const matchContext = { store };
 
   const ReduxProvider = createReduxProvider();
 

@@ -21,6 +21,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
+import { generateSessionId } from 'utils';
 
 import { Error404, Error } from '../src/pages/Errors';
 
@@ -35,6 +36,12 @@ if (process.env.NODE_ENV === 'development') {
     console.error(err);
   }
   require('babel-register')(config);
+}
+
+// clear require() cache if in development mode
+// (makes asset hot reloading work)
+if (process.env.NODE_ENV !== 'production') {
+  webpackIsomorphicTools.refresh();
 }
 
 const app = express();
@@ -58,17 +65,23 @@ if (process.env.NODE_ENV === 'production') {
   app.use(logger);
 }
 
+// healthcheck
+app.use('/healthcheck', (req, res) => res.status(200).send());
+
 app.use('/favicon.ico', express.static(path.resolve('./build/favicon.ico')));
-app.use('/manifest.json', express.static(path.resolve('./build/manifest.json')));
+app.use(
+  '/manifest.json',
+  express.static(path.resolve('./build/manifest.json')),
+);
 
 if (process.env.NODE_ENV === 'development') {
   const webpackConfig = require('../config/webpack.config.dev');
   const compiler = webpack(webpackConfig);
-  app.use(webpackMiddleware(compiler, {stats: {colors: true}}));
+  app.use(webpackMiddleware(compiler, { stats: { colors: true } }));
   app.use(webpackHotMiddleware(compiler));
 }
 
-const wrapAsync = (fn) => (req, res, next) => {
+const wrapAsync = fn => (req, res, next) => {
   try {
     // Make sure to `.catch()` any errors and pass them along to the `next()`
     // middleware in the chain, in this case the error handler.
@@ -82,55 +95,66 @@ const wrapAsync = (fn) => (req, res, next) => {
   }
 };
 
-app.use(wrapAsync(async (req, res) => {
-  const store = createReduxStore(new ServerProtocol(req.url));
-  const jwtCookie = req.universalCookies.get('__jwt');
-  const jwt = (typeof jwtCookie === 'object') && jwtCookie.value;
-  const fetcher = new ServerFetcher(process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT, jwt);
-
-  store.dispatch(FarceActions.init());
-
-  const matchContext = { store, jwt };
-
-  let renderArgs;
-  try {
-    renderArgs = await getStoreRenderArgs({
-      store,
-      matchContext,
-      resolver: createResolver(fetcher),
-    });
-  } catch (e) {
-    if (e instanceof RedirectException) {
-      res.redirect(302, store.farce.createHref(e.location));
-      return;
+app.use(
+  wrapAsync(async (req, res) => {
+    // set session_id cookie if not setted :)
+    const sessionIdCookie = req.universalCookies.get('SESSION_ID');
+    if (!sessionIdCookie) {
+      req.universalCookies.set('SESSION_ID', generateSessionId(), {
+        path: '/',
+      });
     }
-    throw e;
-  }
 
-  let element;
-  try {
-    const rendered = createRender({
-      renderPending: () => (<div>loading</div>),
-      renderError: ({ error }) => {
-        if (error.status === 404) {
-          return (<Error404 />);
-        }
-        return (<Error />);
-      },
-    })(renderArgs);
-    element = (
-      <Provider store={store}>
-        <RouterProvider router={renderArgs.router}>
-          {rendered}
-        </RouterProvider>
-      </Provider>
+    const store = createReduxStore(new ServerProtocol(req.url));
+    const jwtCookie = req.universalCookies.get('__jwt');
+    const jwt = typeof jwtCookie === 'object' && jwtCookie.value;
+    const fetcher = new ServerFetcher(
+      process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      jwt,
+      req.universalCookies.get('SESSION_ID'),
     );
-  } catch (e) {
-    element = (<div>ERROR :-(</div>);
-  }
 
-  if (process.env.NODE_ENV === 'development') {
-    res.status(renderArgs.error ? renderArgs.error.status : 200).send(`
+    store.dispatch(FarceActions.init());
+
+    const matchContext = { store, jwt };
+
+    let renderArgs;
+    try {
+      renderArgs = await getStoreRenderArgs({
+        store,
+        matchContext,
+        resolver: createResolver(fetcher),
+      });
+    } catch (e) {
+      if (e instanceof RedirectException) {
+        res.redirect(302, store.farce.createHref(e.location));
+        return;
+      }
+      throw e;
+    }
+
+    let element;
+    try {
+      const rendered = createRender({
+        renderPending: () => <div>loading</div>,
+        renderError: ({ error }) => {
+          if (error.status === 404) {
+            return <Error404 />;
+          }
+          return <Error />;
+        },
+      })(renderArgs);
+      element = (
+        <Provider store={store}>
+          <RouterProvider router={renderArgs.router}>{rendered}</RouterProvider>
+        </Provider>
+      );
+    } catch (e) {
+      element = <div>ERROR :-(</div>;
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      res.status(renderArgs.error ? renderArgs.error.status : 200).send(`
       <!DOCTYPE html>
       <html>
       <head>
@@ -138,43 +162,55 @@ app.use(wrapAsync(async (req, res) => {
         <link rel="stylesheet" type="text/css" href="/styles.css">
       </head>
       <body>
-      <div id="root" style="height: 100%; overflow: auto;">${ReactDOMServer.renderToString(element)}</div>
+      <div id="root" style="height: 100%; overflow: auto;">${ReactDOMServer.renderToString(
+        element,
+      )}</div>
+      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
-        window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}
+        window.__PRELOADED_STATE__= ${serialize(store.getState(), {
+          isJSON: true,
+        })}
       </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&libraries=places" type="text/javascript"></script>
       <script src="/static/js/bundle.js"></script>
       </body>  
       </html>
     `);
-  } else if (process.env.NODE_ENV === 'production') {
-    fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
-      if (err) {
-        console.error('read err', err);
-        return res.status(404).end();
-      }
+    } else if (process.env.NODE_ENV === 'production') {
+      fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
+        if (err) {
+          console.error('read err', err);
+          return res.status(404).end();
+        }
 
-      const renderedEl = ReactDOMServer.renderToString(element);
-      const RenderedApp = htmlData
-        .replace(
-          '<div id="root" style="height:100%; overflow: auto;"></div>',
-          `<div id="root" style="height:100%; overflow: auto;">${renderedEl}</div>`,
-        )
-        .replace(
-          '<script>window.__RELAY_PAYLOADS__=null</script>',
-          `<script>window.__RELAY_PAYLOADS__=${serialize(fetcher, { isJSON: true })}</script>`
-        )
-        .replace(
-          '<script>window.__PRELOADED_STATE__=null</script>',
-          `<script>window.__PRELOADED_STATE__= ${serialize(store.getState(), { isJSON: true })}</script>`
-        );
-      res.status(renderArgs.error ? renderArgs.error.status : 200).send(RenderedApp);
-    });
-  } else {
-    return res.status(404).end();
-  }
-}));
+        const renderedEl = ReactDOMServer.renderToString(element);
+        const RenderedApp = htmlData
+          .replace(
+            '<div id="root" style="height:100%; overflow: auto;"></div>',
+            `<div id="root" style="height:100%; overflow: auto;">${renderedEl}</div>`,
+          )
+          .replace(
+            '<script>window.__RELAY_PAYLOADS__=null</script>',
+            `<script>window.__RELAY_PAYLOADS__=${serialize(fetcher, {
+              isJSON: true,
+            })}</script>`,
+          )
+          .replace(
+            '<script>window.__PRELOADED_STATE__=null</script>',
+            `<script>window.__PRELOADED_STATE__= ${serialize(store.getState(), {
+              isJSON: true,
+            })}</script>`,
+          );
+        res
+          .status(renderArgs.error ? renderArgs.error.status : 200)
+          .send(RenderedApp);
+      });
+    } else {
+      return res.status(404).end();
+    }
+  }),
+);
 
 module.exports = app;
 

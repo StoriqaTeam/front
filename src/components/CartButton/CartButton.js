@@ -1,4 +1,8 @@
+// @flow
+
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
 import { Count } from 'components/Count';
@@ -7,26 +11,29 @@ import './CartButton.scss';
 
 type PropsTypes = {
   amount: number,
-  href: number,
+  href: string,
 };
 
 class CartButton extends PureComponent<PropsTypes> {
   render() {
     const { amount, href } = this.props;
-
     return (
-      <a href={href} styleName="container" data-test="cartLink">
+      <Link to={href || '/'} styleName="container">
         {amount && (
           <div styleName="amount">
-            <Count amount={32} type="blue" />
+            <Count amount={amount} type="blue" />
           </div>
         )}
         <div styleName="icon">
           <Icon type="cart" size="16" />
         </div>
-      </a>
+      </Link>
     );
   }
 }
+
+CartButton.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default CartButton;

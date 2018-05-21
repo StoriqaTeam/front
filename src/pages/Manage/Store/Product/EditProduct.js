@@ -9,6 +9,9 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
 import { UpdateBaseProductMutation } from 'relay/mutations';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Variants from './Variants/Variants';
 import Form from './Form';
@@ -16,7 +19,7 @@ import Form from './Form';
 import Menu from '../Menu';
 
 type PropsType = {
-  //
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -47,6 +50,7 @@ class EditProduct extends Component<PropsType, StateType> {
       fullDesc,
     } = form;
     this.setState(() => ({ isLoading: true }));
+    // $FlowIgnoreMe
     const id = pathOr(null, ['id'], baseProductFromProps(this.props));
     UpdateBaseProductMutation.commit({
       id,
@@ -72,12 +76,15 @@ class EditProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         // $FlowIgnoreMe
-        const status = pathOr('', ['100', 'status'], relayErrors);
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
         if (validationErrors && !isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
         } else if (status) {
-          // $FlowIgnoreMe
-          alert(`Error: "${status}"`); // eslint-disable-line
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
         }
       },
       onError: (error: Error) => {
@@ -91,8 +98,11 @@ class EditProduct extends Component<PropsType, StateType> {
           this.setState({ formErrors: validationErrors });
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
@@ -100,6 +110,7 @@ class EditProduct extends Component<PropsType, StateType> {
   render() {
     const { isLoading } = this.state;
     const baseProduct = baseProductFromProps(this.props);
+    // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
     if (!baseProduct) {
@@ -122,6 +133,7 @@ class EditProduct extends Component<PropsType, StateType> {
             <Variants
               productId={baseProduct.rawId}
               category={baseProduct.category}
+              // $FlowIgnoreMe
               variants={variantsFromProps(this.props)}
             />
           </Col>
@@ -137,7 +149,7 @@ EditProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(EditProduct),
+  withShowAlert(Page(EditProduct)),
   graphql`
     fragment EditProduct_me on User
       @argumentDefinitions(productId: { type: "Int!" }) {

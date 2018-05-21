@@ -6,89 +6,114 @@ import { UploadWrapper } from 'components/Upload';
 
 import './Form.scss';
 
-const Uploaders = ({ onUpload }) => (
+const Uploaders = ({
+  onUpload,
+}: {
+  onUpload: (type: string, e: any) => void,
+}) => (
   <div styleName="uploadersWrapper">
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={onUpload}
+        onUpload={e => {
+          onUpload('photoMain', e);
+        }}
         buttonHeight={26}
         buttonWidth={26}
         noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
-        dataTest="productPhotosUploader"
-      />
-    </div>
-    <div styleName="uploadItem withIndents">
-      <UploadWrapper
-        id="main_foto"
-        onUpload={onUpload}
-        buttonHeight={26}
-        buttonWidth={26}
-        noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
+        buttonIconType="mainFoto"
+        buttonIconSize={56}
+        buttonLabel="Add main photo"
         dataTest="productPhotosUploader"
       />
     </div>
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={onUpload}
+        onUpload={() => {
+          onUpload();
+        }}
         buttonHeight={26}
         buttonWidth={26}
         noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
+        buttonIconType="angleView"
+        buttonIconSize={56}
+        buttonLabel="Add angle view"
         dataTest="productPhotosUploader"
       />
     </div>
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={onUpload}
+        onUpload={() => {
+          onUpload();
+        }}
         buttonHeight={26}
         buttonWidth={26}
         noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
-        dataTest="productPhotosUploader"
-      />
-    </div>
-    <div styleName="uploadItem withIndents">
-      <UploadWrapper
-        id="main_foto"
-        onUpload={onUpload}
-        buttonHeight={26}
-        buttonWidth={26}
-        noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
+        buttonIconType="showDetails"
+        buttonIconSize={56}
+        buttonLabel="Show details"
         dataTest="productPhotosUploader"
       />
     </div>
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={onUpload}
+        onUpload={() => {
+          onUpload();
+        }}
         buttonHeight={26}
         buttonWidth={26}
         noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
+        buttonIconType="showInScene"
+        buttonIconSize={56}
+        buttonLabel="Show in scene"
         dataTest="productPhotosUploader"
       />
     </div>
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={onUpload}
+        onUpload={() => {
+          onUpload();
+        }}
         buttonHeight={26}
         buttonWidth={26}
         noIndents
-        buttonIconType="camera"
-        buttonLabel="Add photo"
+        buttonIconType="showInUse"
+        buttonIconSize={56}
+        buttonLabel="Show in use"
+        dataTest="productPhotosUploader"
+      />
+    </div>
+    <div styleName="uploadItem">
+      <UploadWrapper
+        id="main_foto"
+        onUpload={() => {
+          onUpload();
+        }}
+        buttonHeight={26}
+        buttonWidth={26}
+        noIndents
+        buttonIconType="showSizes"
+        buttonIconSize={56}
+        buttonLabel="Show sizes"
+        dataTest="productPhotosUploader"
+      />
+    </div>
+    <div styleName="uploadItem">
+      <UploadWrapper
+        id="main_foto"
+        onUpload={() => {
+          onUpload();
+        }}
+        buttonHeight={26}
+        buttonWidth={26}
+        noIndents
+        buttonIconType="showVariety"
+        buttonIconSize={56}
+        buttonLabel="Show variety"
         dataTest="productPhotosUploader"
       />
     </div>

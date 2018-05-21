@@ -16,7 +16,7 @@
   white-space: nowrap;
   transition: all .3s ease;
 
-  &:hover {
+  &:hover:not([disabled]) {
     background: $color_blue_1_hover;
   }
 }
@@ -83,5 +83,26 @@
   &:hover {
     background-color: $color_white;
     color: $color_blue_1;
+  }
+}
+
+.wireframe {
+  background: transparent;
+  font-family: $font_regular;
+  font-size:  14px;
+  border: $color_primary 1px solid;
+  color: $color_primary;
+
+  &:hover {
+    color: $color_white;
+  }
+
+  &.disabled {
+    opacity: .3;
+
+    &:hover {
+      color: $color_primary;
+      background: transparent;
+    }
   }
 }

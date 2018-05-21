@@ -1,0 +1,68 @@
+[
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png",
+        "label": "Tree",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTI="
+        ]
+      },
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-xMVA9ep4PwAC.png",
+        "label": "Metal",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTQ="
+        ]
+      }
+    ],
+    "title": "Material",
+    "uiElement": "COMBOBOX"
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-AfIeZzNOQAYC.png",
+        "label": "44",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTI="
+        ]
+      }
+    ],
+    "title": "Size",
+    "uiElement": "CHECKBOX"
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-LLaH0LAGQ7cC.png",
+        "label": "Black",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTI="
+        ]
+      },
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-NBSinzGtc00C.png",
+        "label": "Red",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTQ="
+        ]
+      }
+    ],
+    "title": "Colour",
+    "uiElement": "COLOR_PICKER"
+  }
+]
