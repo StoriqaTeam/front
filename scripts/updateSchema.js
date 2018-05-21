@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { introspectionQuery } from 'graphql/utilities';
-import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 import getClientEnvironment from '../config/env';
 
 // Save JSON of full schema introspection for Babel Relay Plugin to use
@@ -14,32 +14,33 @@ const run = () => {
     console.error(`Please check 'graphqlEndpoint' var in ${__filename}`);
     process.exit(1);
   }
-  fetch(graphqlEndpoint, {
-    method: 'POST',
+  axios({
+    url: graphqlEndpoint,
+    method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
+    data: JSON.stringify({
       query: introspectionQuery,
     }),
   })
     .then(result => {
       console.log('Result status from graphql: ', result.statusText);
-      return result.json();
+      return result.data;
     })
     .then(result => {
       if (result.errors) {
         console.error(
           'ERROR introspecting schema: ',
-          JSON.stringify(result.errors, null, 2)
+          JSON.stringify(result.errors, null, 2),
         );
       } else {
         fs.writeFileSync(
           path.join(__dirname, '../src/relay/schema.json'),
-          JSON.stringify(result, null, 2)
+          JSON.stringify(result, null, 2),
         );
         console.log('GraphQL schema updated.');
       }
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(`Error in ${__filename}`);
       console.error(err);
       process.exit(1);

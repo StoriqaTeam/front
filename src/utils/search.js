@@ -75,8 +75,10 @@ const parseAttrFiltersFromUrl = pipe(
   filter(complement(isNil)),
 );
 
-const assocInt = (arr, getterValue) => obj =>
-  assocPath(arr, parseInt(getterValue(obj), 10))(obj);
+const assocInt = (arr, getterValue) => obj => {
+  const value = getterValue(obj);
+  return assocPath(arr, value ? parseInt(getterValue(obj), 10) : null)(obj);
+};
 
 const assocStr = (arr, getterValue) => obj =>
   assocPath(arr, getterValue(obj))(obj);
@@ -97,11 +99,19 @@ export const urlToInput = (queryObj: {}) =>
       assocInt(['options', 'priceFilter', 'minValue'], path(['minValue'])),
     ),
     when(has('sortBy'), assocStr(['options', 'sortBy'], path(['sortBy']))),
+    when(has('country'), assocStr(['options', 'country'], path(['country']))),
     when(
       has('attrFilters'),
       assocStr(['options', 'attrFilters'], parseAttrFiltersFromUrl),
     ),
-    omit(['category', 'maxValue', 'minValue', 'attrFilters', 'sortBy']),
+    omit([
+      'category',
+      'maxValue',
+      'minValue',
+      'attrFilters',
+      'sortBy',
+      'country',
+    ]),
   )(queryObj);
 
 export const inputToUrl = (obj: {
@@ -119,13 +129,16 @@ export const inputToUrl = (obj: {
         values: Array<string>,
       },
     }>,
+    country: ?string,
   },
 }) => {
   const range = pathOr(null, ['options', 'priceFilter'], obj);
   const attrFilters = pathOr(null, ['options', 'attrFilters'], obj);
   const categoryId = pathOr(null, ['options', 'categoryId'], obj);
   const sortBy = pathOr(null, ['options', 'sortBy'], obj);
+  const country = pathOr(null, ['options', 'country'], obj);
   const pushCategory = str => `${str}&category=${categoryId}`;
+  const pushCountry = str => `${str}&country=${country}`;
   const pushSort = str => `${str}&sortBy=${sortBy}`;
   const pushRange = str =>
     `${str}&minValue=${range.minValue}&maxValue=${range.maxValue}`;
@@ -140,6 +153,7 @@ export const inputToUrl = (obj: {
     str => `${str}search=${obj.name}`,
     when(() => complement(isNil)(categoryId), pushCategory),
     when(() => complement(isNil)(sortBy), pushSort),
+    when(() => complement(isNil)(country), pushCountry),
     when(() => complement(isNil)(range), pushRange),
     when(() => complement(isNil)(attrFilters), pushFilters),
   )('?');

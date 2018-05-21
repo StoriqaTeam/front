@@ -125,6 +125,13 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     this.setState(() => ({ pageX }));
   };
 
+  handleClick = () => {
+    this.setState(() => ({
+      active: null,
+      activeMid: null,
+    }));
+  };
+
   renderMenu(categories: any, isRoot: ?boolean) {
     const { active, activeMid } = this.state;
     const lang = 'EN';
@@ -178,6 +185,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
                 category: rawId,
               },
             }}
+            onClick={this.handleClick}
             data-test="categorieLink"
           >
             {renderInnerLink()}

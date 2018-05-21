@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, path, map, pipe, evolve, assoc } from 'ramda';
+import { pathOr, map } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -11,81 +11,36 @@ import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
 
+import type { Start_mainPage as StartMainPage } from './__generated__/Start_mainPage.graphql';
+
 import './Start.scss';
 
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 
-type ProductType = {
-  rawId: number,
-  store: {
-    rawId: number,
-  },
-  name: Array<{
-    lang: string,
-    text: string,
-  }>,
-  currencyId: number,
-  variants: {
-    ['first' | 'mostDiscount']: {
-      rawId: number,
-      discount: number,
-      photoMain: string,
-      cashback: number,
-      price: number,
-    },
-  },
+type PropsTypes = {
+  mainPage: StartMainPage,
 };
 
-type PropsType = {
-  mainPage: {
-    findMostViewedProducts: ?{
-      edges: Array<{
-        node: ProductType,
-      }>,
-    },
-    findMostDiscountProducts: ?{
-      edges: Array<{
-        node: ProductType,
-      }>,
-    },
-  },
-};
-
-class Start extends PureComponent<PropsType> {
+class Start extends PureComponent<PropsTypes> {
   render() {
     const { mainPage } = this.props;
+    console.log('---mainPage', mainPage);
+    // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
       ['findMostViewedProducts', 'edges'],
-      // $FlowIgnoreMe
       mainPage,
     );
+    // $FlowIgnoreMe
     const mostDiscountProducts = pathOr(
       [],
       ['findMostDiscountProducts', 'edges'],
-      // $FlowIgnoreMe
       mainPage,
     );
-    // prepare arrays
-    const variantsToArr = variantsName =>
-      pipe(
-        path(['node']),
-        i => assoc('storeId', i.rawId, i),
-        evolve({
-          variants: i => {
-            if (variantsName === 'all') {
-              return path([variantsName], i);
-            }
-            return [path([variantsName], i)];
-          },
-        }),
-      );
-    const discountProducts = map(
-      variantsToArr('mostDiscount'),
-      mostDiscountProducts,
-    );
-    const viewedProducts = map(variantsToArr('first'), mostViewedProducts);
+
+    const discountProducts = map(item => item.node, mostViewedProducts);
+    const viewedProducts = map(item => item.node, mostDiscountProducts);
     return (
       <div styleName="container">
         <div styleName="item bannerSliderItem">
@@ -134,23 +89,25 @@ export default createFragmentContainer(
         edges {
           node {
             rawId
-            store {
-              rawId
-            }
+            storeId
             name {
               lang
               text
             }
             currencyId
-            variants {
-              first {
-                rawId
-                discount
-                photoMain
-                cashback
-                price
+            products(first: 1) {
+              edges {
+                node {
+                  id
+                  rawId
+                  discount
+                  photoMain
+                  cashback
+                  price
+                }
               }
             }
+            rating
           }
         }
       }
@@ -158,23 +115,25 @@ export default createFragmentContainer(
         edges {
           node {
             rawId
-            store {
-              rawId
-            }
+            storeId
             name {
               lang
               text
             }
             currencyId
-            variants {
-              mostDiscount {
-                rawId
-                discount
-                photoMain
-                cashback
-                price
+            products(first: 1) {
+              edges {
+                node {
+                  id
+                  rawId
+                  discount
+                  photoMain
+                  cashback
+                  price
+                }
               }
             }
+            rating
           }
         }
       }

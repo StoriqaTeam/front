@@ -1,0 +1,32 @@
+@import "../../styles/variables.scss";
+
+.icon {
+  background: $color_grey_7;
+  margin-right: 2rem;
+}
+
+.text {
+  color: $color_grey_bg;
+  font-size: 1.75rem;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  cursor: pointer;
+}
+
+.on {
+  transform: rotate(-180deg);
+  transition: all .3s ease;
+}
+
+.off {
+  transform: rotate(0deg);
+  transition: all .3s ease;  
+}
+
+.content {
+  overflow: hidden;
+  transition: all .3s ease;  
+}

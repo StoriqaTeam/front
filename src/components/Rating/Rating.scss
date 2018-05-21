@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+}
+
+.star-container {
+  width: 2rem;
+  height: 2rem;
+}
+
+.on {
+  path {
+    fill: #FFB652;
+  }
+}
+
+.off {
+  path {
+    fill: #D8D8D8;
+  }
+}

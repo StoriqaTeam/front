@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, find } from 'ramda';
+import { map, find, pathOr } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
@@ -10,6 +10,7 @@ import { getNameText, uploadFile } from 'utils';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 // import { Modal } from 'components/Modal';
+import { CardProduct } from 'components/CardProduct';
 
 import Form from './Form';
 
@@ -131,6 +132,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const { data, onChange, products, onUpload } = this.props;
     console.log('---products', products);
     const { baseProduct, showForm } = this.state;
+    const productsArr = map(item => item.node, products.edges);
     return (
       <div styleName="view">
         <div
@@ -145,16 +147,14 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             <span styleName="buttonLabel">add product</span>
           </div>
         </div>
-        {products &&
+        {productsArr &&
           map(item => {
             return (
               <div styleName="productItem">
-                <div styleName="productContent">
-                  {getNameText(item.node.name)}
-                </div>
+                <CardProduct item={item} />
               </div>
             );
-          }, products)}
+          }, productsArr)}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
             data={baseProduct}

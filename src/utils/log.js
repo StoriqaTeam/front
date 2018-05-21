@@ -12,6 +12,10 @@ if (process.env.NODE_ENV === 'development') {
   warn = console.warn;
   error = console.error;
 } else if (process.env.NODE_ENV === 'production') {
+  debug = console.log;
+  info = console.info;
+  warn = console.warn;
+  error = console.error;
 }
 /* eslint-enable */
 

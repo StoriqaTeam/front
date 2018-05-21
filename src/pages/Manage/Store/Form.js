@@ -178,16 +178,28 @@ class Form extends Component<PropsType, StateType> {
     const { errors: formErrors } = validate(
       {
         name: [
-          [(value: string) => value && value.length > 0, 'Should not be empty'],
+          [
+            (value: string) => value && value.length > 0,
+            'Name must not be empty',
+          ],
         ],
         shortDescription: [
-          [(value: string) => value && value.length > 0, 'Should not be empty'],
+          [
+            (value: string) => value && value.length > 0,
+            'Short description must not be empty',
+          ],
         ],
         longDescription: [
-          [(value: string) => value && value.length > 0, 'Should not be empty'],
+          [
+            (value: string) => value && value.length > 0,
+            'Long description must not be empty',
+          ],
         ],
         slug: [
-          [(value: string) => value && value.length > 0, 'Should not be empty'],
+          [
+            (value: string) => value && value.length > 0,
+            'Slug must not be empty',
+          ],
         ],
       },
       {
@@ -303,7 +315,11 @@ class Form extends Component<PropsType, StateType> {
             label: 'Long description',
           })}
           <div styleName="formItem">
-            <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
+            <SpinnerButton
+              onClick={this.handleSave}
+              isLoading={isLoading}
+              dataTest="saveButton"
+            >
               Save
             </SpinnerButton>
           </div>

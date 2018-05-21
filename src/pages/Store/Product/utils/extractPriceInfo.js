@@ -27,7 +27,7 @@ export default function extractPriceInfo(array: Array<VariantPriceInfoType>) {
   return array.map(({ id, price, cashback, discount }) => ({
     id,
     price: price.toString(),
-    cashback: isNil(cashback) ? '0' : cashback,
+    cashback: isNil(cashback) ? '0' : Math.round(cashback * 100),
     crossedPrice: calcCrossedPrice(discount, price),
   }));
 }

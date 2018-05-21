@@ -12,10 +12,6 @@ import {
   where,
   equals,
   map,
-  evolve,
-  pipe,
-  path,
-  assoc,
   assocPath,
   whereEq,
   complement,
@@ -38,11 +34,14 @@ import { RangerSlider } from 'components/Ranger';
 import { CardProduct } from 'components/CardProduct';
 import { AttributeControl } from 'components/AttributeControl';
 
+import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
+
 import './Categories.scss';
 
 type PropsType = {
   router: routerShape,
   relay: Relay,
+  search: CategoriesSearch,
 };
 
 type StateType = {
@@ -71,19 +70,14 @@ class Categories extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     // maxValue of ranger from back (permanent for each category)
+    // $FlowIgnoreMe
     const maxValue = pathOr(
       0,
-      [
-        'search',
-        'findProduct',
-        'pageInfo',
-        'searchFilters',
-        'priceRange',
-        'maxValue',
-      ],
-      props,
+      ['findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'maxValue'],
+      props.search,
     );
     // maxValue of ranger from url
+    // $FlowIgnoreMe
     const maxValueFromUrl = pathOr(
       0,
       ['match', 'location', 'query', 'maxValue'],
@@ -103,11 +97,13 @@ class Categories extends Component<PropsType, StateType> {
 
   generateTree = () => {
     // generate categories tree for render categories filter
+    // $FlowIgnoreMe
     const categoryId = pathOr(
       null,
       ['match', 'location', 'query', 'category'],
       this.props,
     );
+    // $FlowIgnoreMe
     const categories = pathOr(
       null,
       [
@@ -150,6 +146,7 @@ class Categories extends Component<PropsType, StateType> {
 
   handleOnChangeCategory = item => {
     const { volume, volume2 } = this.state;
+    // $FlowIgnoreMe
     const name = pathOr(
       '',
       ['match', 'location', 'query', 'search'],
@@ -170,6 +167,7 @@ class Categories extends Component<PropsType, StateType> {
 
   handleOnCompleteRange = (value: number, value2: number) => {
     // getting current searchInput data change range and push to new url
+    // $FlowIgnoreMe
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const newPreparedObj = assocPath(
@@ -186,6 +184,7 @@ class Categories extends Component<PropsType, StateType> {
 
   prepareAttrsToUrlStr = (id, values) => {
     // getting current searchInput data change attrs and push to new url
+    // $FlowIgnoreMe
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const oldPreparedObj = urlToInput(queryObj);
     const oldAttrs = pathOr([], ['options', 'attrFilters'], oldPreparedObj);
@@ -226,11 +225,13 @@ class Categories extends Component<PropsType, StateType> {
   };
 
   renderBreadcrumbs = () => {
+    // $FlowIgnoreMe
     const categoryId = pathOr(
       null,
       ['match', 'location', 'query', 'category'],
       this.props,
     );
+    // $FlowIgnoreMe
     const categories = pathOr(
       null,
       [
@@ -297,11 +298,13 @@ class Categories extends Component<PropsType, StateType> {
   };
 
   renderParentLink = () => {
+    // $FlowIgnoreMe
     const categoryId = pathOr(
       null,
       ['match', 'location', 'query', 'category'],
       this.props,
     );
+    // $FlowIgnoreMe
     const categories = pathOr(
       null,
       [
@@ -358,18 +361,22 @@ class Categories extends Component<PropsType, StateType> {
 
   render() {
     const { volume, volume2 } = this.state;
+    // $FlowIgnoreMe
     const priceRange = pathOr(
       null,
       ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'],
       this.props,
     );
+    // $FlowIgnoreMe
     const attrFilters = pathOr(
       null,
       ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'],
       this.props,
     );
     const accordionItems = this.generateTree();
+    // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
+    // $FlowIgnoreMe
     const categoryId = pathOr(
       null,
       ['match', 'location', 'query', 'category'],
@@ -377,6 +384,7 @@ class Categories extends Component<PropsType, StateType> {
     );
 
     // for attrs initial
+    // $FlowIgnoreMe
     const queryObj = pathOr(0, ['match', 'location', 'query'], this.props);
     const initialSearchInput = urlToInput(queryObj);
     const initialAttributes = pathOr(
@@ -384,22 +392,7 @@ class Categories extends Component<PropsType, StateType> {
       ['options', 'attrFilters'],
       initialSearchInput,
     );
-
-    // prepare arrays
-    const variantsToArr = variantsName =>
-      pipe(
-        path(['node']),
-        i => assoc('storeId', i.rawId, i),
-        evolve({
-          variants: i => {
-            if (variantsName === 'all') {
-              return path([variantsName], i);
-            }
-            return [path([variantsName], i)];
-          },
-        }),
-      );
-    const productsWithVariants = map(variantsToArr('all'), products);
+    const productsWithVariants = map(item => item.node, products);
     const maxValue = (priceRange && priceRange.maxValue) || 0;
     return (
       <div styleName="container">
@@ -574,25 +567,26 @@ export default createPaginationContainer(
             category {
               rawId
             }
-            store {
-              rawId
-            }
-            variants {
-              all {
-                id
-                rawId
-                discount
-                photoMain
-                cashback
-                price
-                attributes {
-                  attribute {
-                    id
+            storeId
+            products(first: 1) {
+              edges {
+                node {
+                  id
+                  rawId
+                  discount
+                  photoMain
+                  cashback
+                  price
+                  attributes {
+                    attribute {
+                      id
+                    }
+                    value
                   }
-                  value
                 }
               }
             }
+            rating
           }
         }
       }

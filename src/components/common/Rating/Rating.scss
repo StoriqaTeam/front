@@ -1,0 +1,35 @@
+@import "../../../styles/variables";
+
+.container {
+  position: relative;
+  width: 10rem;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+  overflow: hidden;
+
+  & svg {
+    position: relative;
+    display: block;
+    z-index: 2;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 1px;
+    right: 1px;
+    background-color: $color_grey_6;
+  }
+}
+
+.background {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  background-color: $color_orange_1;
+  z-index: 1;
+}

@@ -4,22 +4,25 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
-import { pick } from 'ramda';
+import { pick, filter, propEq, concat, complement } from 'ramda';
 
-import { Alert } from 'components/common/Alert';
+import { AlertsContainer } from 'components/Alerts';
+import { AlertContextProvider } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
+
+import type { AlertPropsType } from 'components/Alerts';
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './App.scss';
 
 type StateType = {
-  isAlertShown: boolean,
-  isError: boolean,
-  alertText: string,
+  alerts: Array<AlertPropsType>,
 };
 
 type PropsType = {
   me: ?{},
   mainPage: ?{},
+  cart: ?{},
   languages: ?Array<{ id: number, name: string }>,
   currencies: ?Array<{ id: number, name: string }>,
   categories: any,
@@ -32,9 +35,7 @@ type PropsType = {
 
 class App extends Component<PropsType, StateType> {
   state: StateType = {
-    isAlertShown: false,
-    isError: false,
-    alertText: '',
+    alerts: [],
   };
 
   getChildContext() {
@@ -42,7 +43,6 @@ class App extends Component<PropsType, StateType> {
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
-      showAlert: this.showAlert,
       currentUser: pick(['id', 'rawId'], me || {}),
       directories: {
         languages,
@@ -56,21 +56,42 @@ class App extends Component<PropsType, StateType> {
     this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
-  showAlert = (text: string, isError: boolean = false) => {
-    this.setState({
-      isAlertShown: true,
-      isError,
-      alertText: text,
-    });
+  handleAlertClose = (timestamp: number) => {
+    this.setState(prevState => ({
+      alerts: filter(
+        complement(propEq('createdAtTimestamp', timestamp)),
+        prevState.alerts,
+      ),
+    }));
+  };
+
+  addAlert = (alert: AddAlertInputType) => {
+    this.setState(prevState => ({
+      alerts: concat(
+        [
+          {
+            ...alert,
+            onClose: this.handleAlertClose,
+            createdAtTimestamp: Date.now() + Math.random() * 1000,
+          },
+        ],
+        prevState.alerts,
+      ),
+    }));
   };
 
   render() {
-    const { me, mainPage, children } = this.props;
-    const { isAlertShown, alertText, isError } = this.state;
+    const { me, mainPage, cart, children } = this.props;
     return (
       <Fragment>
-        <Alert showAlert={isAlertShown} text={alertText} isError={isError} />
-        {children && React.cloneElement(children, { me, mainPage })}
+        <AlertsContainer alerts={this.state.alerts} />
+        <AlertContextProvider
+          value={{
+            addAlert: this.addAlert,
+          }}
+        >
+          {children && React.cloneElement(children, { me, mainPage, cart })}
+        </AlertContextProvider>
       </Fragment>
     );
   }

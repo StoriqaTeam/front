@@ -442,42 +442,111 @@ export default createFragmentContainer(
   `,
 );
 
-const products = [
-  {
-    node: {
-      name: [
-        {
-          text: 'A Set Of "Labyrinth"',
-          price: 'A Set Of "Labyrinth"',
-        },
-      ],
+const products = {
+  edges: [
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 1,
+        rating: 1,
+        rawId: 1,
+        storeId: 1,
+        products: {
+          edges: [{
+            node: {
+              cashback: null,
+              discount: 5,
+              id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
+              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+              price: 100,
+              rawId: 671,
+            }
+          }],
+        }
+      },
     },
-  },
-  {
-    node: {
-      name: [
-        {
-          text: 'Oak end cutting board',
-        },
-      ],
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 2,
+        rating: 3,
+        rawId: 4,
+        storeId: 1,
+        products: {
+          edges: [{
+            node: {
+              cashback: null,
+              discount: 5,
+              id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
+              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+              price: 200,
+              rawId: 672,
+            }
+          }],
+        }
+      },
     },
-  },
-  {
-    node: {
-      name: [
-        {
-          text: 'American walnut end cutting board',
-        },
-      ],
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 3,
+        rating: 3,
+        rawId: 3,
+        storeId: 1,
+        products: {
+          edges: [{
+            node: {
+              cashback: null,
+              discount: 5,
+              id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
+              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+              price: 300,
+              rawId: 673,
+            }
+          }],
+        }
+      },
     },
-  },
-  {
-    node: {
-      name: [
-        {
-          text: 'Oak tray',
-        },
-      ],
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 4,
+        rating: 4,
+        rawId: 4,
+        storeId: 1,
+        products: {
+          edges: [{
+            node: {
+              cashback: null,
+              discount: 5,
+              id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
+              photoMain: 'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+              price: 400,
+              rawId: 674,
+            }
+          }],
+        }
+      },
     },
-  },
-];
+  ]
+};
