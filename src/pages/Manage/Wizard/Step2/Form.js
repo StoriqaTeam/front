@@ -40,9 +40,11 @@ type PropsType = {
 type StateType = DataType;
 
 class SecondForm extends React.Component<PropsType, StateType> {
-
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log('>>> Form 2 getDerivedStateFromProps: ', { initialData: nextProps.initialData , prevState });
+    console.log('>>> Form 2 getDerivedStateFromProps: ', {
+      initialData: nextProps.initialData,
+      prevState,
+    });
     const store = pathOr(null, ['initialData', 'store'], nextProps);
     const storeId = pathOr(null, ['initialData', 'storeId'], nextProps);
     const newState = {
