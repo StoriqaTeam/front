@@ -2,19 +2,13 @@
 
 import * as React from 'react';
 
-import { isNil } from 'ramda';
-
-import { WidgetsType } from './types';
+import { WidgetsType, WidgetType, WidgetOptionType } from './types';
 
 import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
 
-import './ProductDetails.scss';
+import { sortByProp } from './utils';
 
-type WidgetValueType = {
-  id: string,
-  label: string,
-  img?: string,
-};
+import './ProductDetails.scss';
 
 type PropsType = {
   widgets: WidgetsType,
@@ -24,85 +18,60 @@ type PropsType = {
   children: React.Node,
 };
 
-type StateType = {
-  resetCHECKBOX: boolean,
-  resetCOMBOBOX: boolean,
-  resetCOLOR_PICKER: boolean,
-};
-
-class ProductDetails extends React.Component<PropsType, StateType> {
-  state = {
-    resetCHECKBOX: false,
-    resetCOMBOBOX: false,
-    resetCOLOR_PICKER: false,
-  };
-  /**
-   * @param {string} uiElement
-   * @return {Object}
-   */
-  resetOthers = (uiElement: string): Object => ({
-    resetCHECKBOX: uiElement !== 'CHECKBOX',
-    resetCOMBOBOX: uiElement !== 'COMBOBOX',
-    resetCOLOR_PICKER: uiElement !== 'COLOR_PICKER',
-  });
-  /**
-   * @param {WidgetValueType} selected
-   * @param {Object} widget
-   * @param {string} widget.uiElement
-   * @return {void}
-   */
-  handleWidget = (
-    selected: WidgetValueType,
-    { uiElement }: WidgetsType,
-  ): void => {
+class ProductDetails extends React.Component<PropsType, {}> {
+  handleWidgetClick = (selected: WidgetOptionType): void => {
     const { onWidgetClick } = this.props;
-    this.setState(
-      {
-        ...this.resetOthers(uiElement),
-      },
-      () => onWidgetClick(selected),
-    );
+    onWidgetClick(selected);
+  };
+
+  generateWidget = (widget: WidgetType, index: number): React.Node => {
+    let WidgetComponent;
+    switch (widget.uiElement) {
+      case 'CHECKBOX':
+        WidgetComponent = (
+          <ProductSize
+            key={index}
+            title={widget.title}
+            options={widget.options}
+            onClick={selected => this.handleWidgetClick(selected)}
+          />
+        );
+        break;
+      case 'COMBOBOX':
+        WidgetComponent = (
+          <ProductMaterial
+            key={index}
+            title={widget.title || ''}
+            options={widget.options}
+            onSelect={selected => this.handleWidgetClick(selected)}
+          />
+        );
+        break;
+      case 'COLOR_PICKER':
+        WidgetComponent = (
+          <ProductThumbnails
+            key={index}
+            title={widget.title}
+            row
+            srcProp="image"
+            options={widget.options}
+            onClick={selected => this.handleWidgetClick(selected)}
+          />
+        );
+        break;
+      default:
+        return null;
+    }
+    return WidgetComponent;
   };
   render() {
-    const { resetCHECKBOX, resetCOMBOBOX, resetCOLOR_PICKER } = this.state;
-    const {
-      productTitle,
-      productDescription,
-      widgets: { CHECKBOX, COMBOBOX, COLOR_PICKER },
-      children,
-    } = this.props;
+    const { productTitle, productDescription, widgets, children } = this.props;
     return (
       <div styleName="container">
         <h2>{productTitle}</h2>
         {children}
         <p>{productDescription}</p>
-        {/* eslint-disable camelcase */}
-        {!isNil(CHECKBOX) ? (
-          <ProductSize
-            isReset={resetCHECKBOX}
-            title={CHECKBOX.title}
-            sizes={CHECKBOX.values}
-            onClick={widget => this.handleWidget(widget, CHECKBOX)}
-          />
-        ) : null}
-        {!isNil(COMBOBOX) ? (
-          <ProductMaterial
-            isReset={resetCOMBOBOX}
-            title={COMBOBOX.title || ''}
-            materials={COMBOBOX.values}
-            onSelect={widget => this.handleWidget(widget, COMBOBOX)}
-          />
-        ) : null}
-        {!isNil(COLOR_PICKER) ? (
-          <ProductThumbnails
-            isReset={resetCOLOR_PICKER}
-            title={COLOR_PICKER.title}
-            row
-            srcProp="image"
-            thumbnails={COLOR_PICKER.values}
-            onClick={widget => this.handleWidget(widget, COLOR_PICKER)}
-          />
-        ) : null}
+        {sortByProp('id')(widgets).map(this.generateWidget)}
       </div>
     );
   }

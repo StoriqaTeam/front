@@ -8,7 +8,7 @@ import { ProductThumbnails, ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-import { SelectedType, ThumbnailType } from './types';
+import { WidgetOptionType, ThumbnailType } from './types';
 
 type PropsType = {
   mainImage: string,
@@ -16,7 +16,7 @@ type PropsType = {
 };
 
 type StateType = {
-  selected: SelectedType,
+  selected: WidgetOptionType,
 };
 
 class ProductImage extends Component<PropsType, StateType> {
@@ -41,14 +41,8 @@ class ProductImage extends Component<PropsType, StateType> {
   state = {
     selected: {},
   };
-  /**
-   * Sets the clicked image as the big one.
-   * @param {SelectedType} selected
-   * @param {string} selected.img
-   * @return {void}
-   */
-  handleClick = ({ img }: SelectedType): void => {
-    this.setState({ selected: img });
+  handleClick = ({ image }: WidgetOptionType): void => {
+    this.setState({ selected: image });
   };
   render() {
     const { mainImage, thumbnails } = this.props;
@@ -65,7 +59,7 @@ class ProductImage extends Component<PropsType, StateType> {
               isFirstSelected
               isReset={isEmpty(selected)}
               onClick={this.handleClick}
-              thumbnails={thumbnails}
+              options={thumbnails}
             />
           ) : null}
         </div>

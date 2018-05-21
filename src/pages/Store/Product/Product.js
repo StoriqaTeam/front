@@ -3,10 +3,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   path,
-  propEq,
-  filter,
   head,
-  keys,
   insert,
   isNil,
   pathOr,
@@ -26,11 +23,9 @@ import { extractText, isEmpty, log } from 'utils';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import {
-  buildWidgets,
-  filterVariants,
-  compareWidgets,
-  extractPhotos,
-  extractPriceInfo,
+  makeWidgets,
+  differentiateWidgets,
+  getVariantFromSelection,
 } from './utils';
 
 import {
@@ -38,12 +33,20 @@ import {
   ProductImage,
   ProductShare,
   ProductDetails,
+  ProductContext,
+  ProductStore,
   Tab,
   Tabs,
   TabRow,
 } from './index';
 
-import { ProductType, SelectedType, ThumbnailType, PriceInfo } from './types';
+import {
+  ProductType,
+  ThumbnailType,
+  PriceInfo,
+  WidgetOptionType,
+  ProductVariantType,
+} from './types';
 
 import './Product.scss';
 import mockData from './mockData.json';
@@ -59,6 +62,7 @@ type StateType = {
   photoMain: string,
   additionalPhotos: Array<ThumbnailType>,
   priceInfo: PriceInfo,
+  productVariant: ProductVariantType,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -79,14 +83,12 @@ class Product extends Component<PropsType, StateType> {
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const { photoMain, additionalPhotos } = head(extractPhotos(all));
-      const priceInfo = head(extractPriceInfo(all));
+      const madeWidgets = makeWidgets([])(all);
+      const productVariant = getVariantFromSelection([])(all);
       return {
         tabs: prevState.tabs,
-        widgets: buildWidgets(all),
-        photoMain,
-        additionalPhotos,
-        priceInfo,
+        widgets: madeWidgets,
+        productVariant,
       };
     }
     return null;
@@ -95,14 +97,12 @@ class Product extends Component<PropsType, StateType> {
     tabs: [
       {
         id: 0,
-        label: 'Description',
+        label: 'Characteristics',
         content: <TabRow row={mockData.row} />,
       },
     ],
-    widgets: {},
-    photoMain: '',
-    additionalPhotos: [],
-    priceInfo: {},
+    widgets: [],
+    productVariant: {},
   };
   /**
    * @param {string} img
@@ -161,106 +161,84 @@ class Product extends Component<PropsType, StateType> {
       log.error('Unable to add an item without productId');
     }
   }
-
-  /**
-   * @param {SelectedType} selected
-   * @param {void} selected
-   */
-  handleWidgetClick = (selected: SelectedType): void => {
-    const {
-      baseProduct: {
-        variants: { all },
-      },
-    } = this.props;
-    const { widgets } = this.state;
-    const filteredWidgets = filterVariants(all, selected.label);
-    const filteredWidgetsHeadKeys = head(
-      keys(filteredWidgets).map(key => filteredWidgets[key]),
-    );
-    let variantId = null;
-    if (filteredWidgetsHeadKeys) {
-      ({ variantId } = filteredWidgetsHeadKeys);
-    }
-    /**
-     * @desc returns true if the object satisfies the 'id' property
-     * @return {boolean}
-     */
-    const byId = propEq('id', variantId);
-    const variantObj = head(filter(byId, extractPhotos(all)));
-    let photoMain = '';
-    let additionalPhotos = [];
-    if (variantObj) {
-      ({ photoMain, additionalPhotos } = variantObj);
-    }
+  handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
+    const selection = [{ id, value: label, state, variantIds }];
+    const pathToAll = ['baseProduct', 'variants', 'all'];
+    const variants = path(pathToAll, this.props);
+    const productVariant = getVariantFromSelection(selection)(variants);
+    const widgets = differentiateWidgets(selection)(variants);
     this.setState({
-      widgets: compareWidgets(filteredWidgets, widgets),
-      photoMain,
-      additionalPhotos: this.insertPhotoMain(photoMain, additionalPhotos),
+      widgets,
+      productVariant,
     });
   };
-
   loggedIn() {
     const store = this.context.environment.getStore();
     const root = store.getSource().get('client:root');
     return !!path(['me', '__ref'], root);
   }
-
   render() {
     const {
       baseProduct: { name, longDescription },
     } = this.props;
-    const {
-      tabs,
-      widgets,
-      photoMain,
-      additionalPhotos,
-      priceInfo,
-    } = this.state;
+    const { tabs, widgets, productVariant } = this.state;
     const loggedIn = this.loggedIn();
+    const description = extractText(longDescription, 'EN', 'No Description');
     return (
-      <div styleName="ProductDetails">
-        <Row>
-          <Col size={6}>
-            <ProductImage mainImage={photoMain} thumbnails={additionalPhotos} />
-            <ProductShare />
-          </Col>
-          <Col size={6}>
-            <ProductDetails
-              productTitle={extractText(name)}
-              productDescription={extractText(
-                longDescription,
-                'EN',
-                'No Description',
-              )}
-              widgets={widgets}
-              onWidgetClick={this.handleWidgetClick}
-            >
-              <ProductPrice {...priceInfo} />
-            </ProductDetails>
-            <div styleName="buttons-container">
-              <Button disabled big>
-                Buy now
-              </Button>
-              <Button
-                wireframe={loggedIn}
-                big
-                disabled={!loggedIn}
-                onClick={() => this.handleAddToCart()}
+      <ProductContext.Provider value={this.props.baseProduct}>
+        <div styleName="ProductDetails">
+          <Row>
+            <Col size={6}>
+              <ProductImage
+                mainImage={productVariant.photoMain}
+                thumbnails={productVariant.additionalPhotos}
+              />
+              {process.env.BROWSER ? (
+                <ProductShare
+                  photoMain={productVariant.photoMain}
+                  description={productVariant.description}
+                />
+              ) : null}
+            </Col>
+            <Col size={6}>
+              <ProductDetails
+                productTitle={extractText(name)}
+                productDescription={description}
+                widgets={widgets}
+                onWidgetClick={this.handleWidget}
               >
-                Add to cart
-              </Button>
-            </div>
-            {!loggedIn && <div>Please login to use cart</div>}
-          </Col>
-        </Row>
-        <Tabs>
-          {tabs.map(({ id, label, content }) => (
-            <Tab key={id} label={label}>
-              {content}
-            </Tab>
-          ))}
-        </Tabs>
-      </div>
+                <ProductPrice
+                  price={productVariant.price}
+                  crossPrice={productVariant.crossPrice}
+                  cashback={productVariant.cashback}
+                />
+              </ProductDetails>
+              <div styleName="buttons-container">
+                <Button disabled big>
+                  Buy now
+                </Button>
+                <Button
+                  wireframe={loggedIn}
+                  big
+                  disabled={!loggedIn}
+                  onClick={() => this.handleAddToCart()}
+                >
+                  Add to cart
+                </Button>
+              </div>
+              <ProductStore />
+              {/* {!loggedIn && <div>Please login to use cart</div>} */}
+            </Col>
+          </Row>
+          <Tabs>
+            {tabs.map(({ id, label, content }) => (
+              <Tab key={id} label={label}>
+                {content}
+              </Tab>
+            ))}
+          </Tabs>
+        </div>
+      </ProductContext.Provider>
     );
   }
 }
@@ -282,6 +260,14 @@ export default createFragmentContainer(
       longDescription {
         text
         lang
+      }
+      store {
+        name {
+          lang
+          text
+        }
+        rating
+        productsCount
       }
       variants {
         all {

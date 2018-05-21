@@ -159,7 +159,7 @@ class Select extends Component<PropsType, StateType> {
                 const { id } = item;
                 return (
                   <div
-                    key={id}
+                    key={`${id}-${item.label}`}
                     id={id}
                     styleName={classNames('item', {
                       active: activeItem && activeItem.id === id,
