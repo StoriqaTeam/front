@@ -1,10 +1,14 @@
 @import "../../../styles/variables";
 
 $icon-size: 20px;
+$border-color: #efefef;
 
 .container {
   background: $color_white;
-  border: 1px solid #efefef;
+  border-top:1px solid $border-color;
+  border-right:1px solid $border-color;
+  border-bottom:1px solid $border-color;
+  border-left:1px solid transparent;
   display: flex;
   justify-content: space-between;
 }
