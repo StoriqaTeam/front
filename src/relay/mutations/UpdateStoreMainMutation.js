@@ -40,8 +40,9 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) =>
-  commitMutation(params.environment, {
+const commit = (params: MutationParamsType) => { 
+  console.log('!!! UpdateStoreMainMutation params: ', params);
+  return commitMutation(params.environment, {
     mutation,
     variables: {
       input: {
@@ -59,5 +60,6 @@ const commit = (params: MutationParamsType) =>
     onCompleted: params.onCompleted,
     onError: params.onError,
   });
+}
 
 export default { commit };

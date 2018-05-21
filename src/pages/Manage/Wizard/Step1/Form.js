@@ -24,7 +24,7 @@ type StateType = DataType;
 class FirstForm extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log('*** Frist form const props: ', props);
+    // console.log('*** Frist form const props: ', props);
     this.state = {
       name: props.data ? props.data.name : '',
       slug: props.data ? props.data.slug : '',
@@ -38,12 +38,15 @@ class FirstForm extends React.Component<PropsType, StateType> {
     const {
       target: { value, name },
     } = e;
-    this.setState({ [name]: value });
-    onChange({ ...this.state });
+    this.setState({ [name]: value },
+      () => {
+        onChange({ ...this.state });
+      }
+    );
   };
 
   handleOnSave = () => {
-    const { onChange } = this.props;
+    // const { onChange } = this.props;
     // onChange({ ...this.state });
   };
 
