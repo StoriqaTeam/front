@@ -17,7 +17,6 @@ import { Page } from 'components/App';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
-import { Error404 } from 'pages/Errors';
 import { extractText, isEmpty, log } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
