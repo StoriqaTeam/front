@@ -442,6 +442,61 @@ export default createFragmentContainer(
   `,
 );
 
+const mockNewData = {
+  me: {
+    id: "dXNlcnN8dXNlcnwx",
+    rawId: 1,
+    isActive: true,
+    wizardStore: {
+      id: "c3RvcmVzfHdpemFyZF9zdG9yZXwzOA==",
+      rawId: 38,
+      storeId: 200,
+      store: {
+        id: "c3RvcmVzfHN0b3JlfDIwMA==",
+        name: [
+          {
+            text: "name90091212"
+          }
+        ],
+        shortDescription: [
+          {
+            text: "laflk"
+          }
+        ],
+        slug: "slug9000",
+        defaultLanguage: "RU",
+        addressFull: {
+          value: "Kavaja Street 100",
+          country: "AL",
+          route: "Rruga e Kavajës",
+          administrativeAreaLevel1: "Qarku i Tiranës",
+          administrativeAreaLevel2: "Tiranë",
+          postalCode: null,
+          streetNumber: "100"
+        }
+      },
+      name: "name90091212",
+      slug: "slug9000",
+      shortDescription: "laflk",
+      defaultLanguage: "RU",
+      addressFull: {
+        country: "AL",
+        value: "Kavaja Street 100",
+        administrativeAreaLevel1: "Qarku i Tiranës",
+        administrativeAreaLevel2: "Tiranë",
+        locality: "Tiranë",
+        political: null,
+        postalCode: null,
+        route: "Rruga e Kavajës",
+        streetNumber: "100"
+      },
+      stepThree: {
+        edges: []
+      }
+    }
+  }
+};
+
 const products = [
   {
     node: {
