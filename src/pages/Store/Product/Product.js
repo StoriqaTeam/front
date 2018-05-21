@@ -208,11 +208,7 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button
-                  wireframe
-                  big
-                  onClick={this.handleAddToCart}
-                >
+                <Button wireframe big onClick={this.handleAddToCart}>
                   Add to cart
                 </Button>
               </div>
