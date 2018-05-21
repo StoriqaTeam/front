@@ -54,19 +54,20 @@ const differentiateWidgets: (
 
   const differentiateOption = (
     widgets: Array<WidgetType>,
-  ): Array<WidgetOptionType> => widgets.map((widget, index) => {
-    const diffedOptions = difference(widget.options)(
-      filteredWidgets[index].options,
-    );
-    const disableOptions = map(
-      option => ({ ...option, state: 'disable' }),
-      diffedOptions,
-    );
-    return {
-      ...widget,
-      options: disableOptions,
-    };
-  });
+  ): Array<WidgetOptionType> =>
+    widgets.map((widget, index) => {
+      const diffedOptions = difference(widget.options)(
+        filteredWidgets[index].options,
+      );
+      const disableOptions = map(
+        option => ({ ...option, state: 'disable' }),
+        diffedOptions,
+      );
+      return {
+        ...widget,
+        options: disableOptions,
+      };
+    });
 
   const mergeWidgetsOptions = (diffWidgets: Array<WidgetType>) => (
     widgets: Array<WidgetType>,

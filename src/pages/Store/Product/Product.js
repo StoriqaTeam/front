@@ -17,7 +17,7 @@ import { Page } from 'components/App';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
-
+import { Error404 } from 'pages/Errors';
 import { extractText, isEmpty, log } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -76,6 +76,9 @@ class Product extends Component<PropsType, StateType> {
     nextProps: PropsType,
     prevState: StateType,
   ): StateType | null {
+    if (isNil(nextProps.baseProduct)) {
+      return null;
+    }
     const {
       baseProduct: {
         variants: { all },
@@ -91,7 +94,7 @@ class Product extends Component<PropsType, StateType> {
         productVariant,
       };
     }
-    return null;
+    return prevState;
   }
   state = {
     tabs: [
@@ -178,6 +181,13 @@ class Product extends Component<PropsType, StateType> {
     return !!path(['me', '__ref'], root);
   }
   render() {
+    if (isNil(this.props.baseProduct)) {
+      return (
+        <div styleName="productNotFound">
+          <h1>Product Not Found</h1>
+        </div>
+      );
+    }
     const {
       baseProduct: { name, longDescription },
     } = this.props;
