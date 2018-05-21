@@ -1,55 +1,38 @@
 // @flow
 
 import React, { Component } from 'react';
+import { isNil } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
 import './ProductMaterial.scss';
 
-import { SelectedType } from './types';
+import { sortByProp } from './utils';
+
+import { WidgetOptionType } from './types';
 
 type MaterialType = { id: string | number, label: string };
 
 type PropsType = {
-  // eslint-disable-next-line
-  isReset: boolean,
   title: string,
-  materials: Array<MaterialType>,
+  options: Array<MaterialType>,
   onSelect: Function,
 };
 
 type StateType = {
-  selected: SelectedType,
+  selected: WidgetOptionType,
 };
 
 class ProductMaterial extends Component<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): StateType | null {
-    const { isReset } = nextProps;
-    if (isReset) {
-      return {
-        selected: null,
-      };
-    }
-    return prevState;
-  }
   state = {
     selected: null,
   };
   /**
    * Highlights size's border when clicked
-   * @param {SelectedType} selected
+   * @param {WidgetOptionType} selected
    * @return {void}
    */
-  handleSelect = (selected: SelectedType): void => {
+  handleSelect = (selected: WidgetOptionType): void => {
     const { onSelect } = this.props;
     this.setState(
       {
@@ -59,17 +42,19 @@ class ProductMaterial extends Component<PropsType, StateType> {
     );
   };
   render() {
-    const { title, materials } = this.props;
+    const { title, options } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
         <h4>{title}</h4>
-        <Select
-          forForm
-          activeItem={selected || materials[0]}
-          items={materials}
-          onSelect={this.handleSelect}
-        />
+        {isNil(options) ? null : (
+          <Select
+            forForm
+            activeItem={selected || sortByProp('label')(options)[0]}
+            items={sortByProp('label')(options)}
+            onSelect={this.handleSelect}
+          />
+        )}
       </div>
     );
   }

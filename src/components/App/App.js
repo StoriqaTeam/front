@@ -22,6 +22,7 @@ type StateType = {
 type PropsType = {
   me: ?{},
   mainPage: ?{},
+  cart: ?{},
   languages: ?Array<{ id: number, name: string }>,
   currencies: ?Array<{ id: number, name: string }>,
   categories: any,
@@ -80,7 +81,7 @@ class App extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me, mainPage, children } = this.props;
+    const { me, mainPage, cart, children } = this.props;
     return (
       <Fragment>
         <AlertsContainer alerts={this.state.alerts} />
@@ -89,7 +90,7 @@ class App extends Component<PropsType, StateType> {
             addAlert: this.addAlert,
           }}
         >
-          {children && React.cloneElement(children, { me, mainPage })}
+          {children && React.cloneElement(children, { me, mainPage, cart })}
         </AlertContextProvider>
       </Fragment>
     );
@@ -111,7 +112,6 @@ export default createRefetchContainer(
   graphql`
     fragment App_me on User {
       ...Profile_me
-      ...Cart_me
       id
       rawId
       email

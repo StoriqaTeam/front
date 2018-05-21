@@ -111,6 +111,7 @@ app.use(
     const fetcher = new ServerFetcher(
       process.env.REACT_APP_GRAPHQL_ENDPOINT,
       jwt,
+      req.universalCookies.get('SESSION_ID'),
     );
 
     store.dispatch(FarceActions.init());
