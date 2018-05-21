@@ -13,7 +13,12 @@ import {
   insert,
 } from 'ramda';
 
-import { VariantType, ProductVariantType, ThumbnailType, WidgetOptionType } from '../types';
+import {
+  VariantType,
+  ProductVariantType,
+  ThumbnailType,
+  WidgetOptionType,
+} from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
