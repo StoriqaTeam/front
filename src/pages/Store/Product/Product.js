@@ -199,6 +199,7 @@ class Product extends Component<PropsType, StateType> {
           <Row>
             <Col size={6}>
               <ProductImage
+                discount={productVariant.discount}
                 mainImage={productVariant.photoMain}
                 thumbnails={productVariant.additionalPhotos}
               />

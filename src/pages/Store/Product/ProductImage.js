@@ -12,6 +12,7 @@ import { WidgetOptionType, ThumbnailType } from './types';
 
 type PropsType = {
   mainImage: string,
+  discount: number,
   thumbnails: Array<ThumbnailType>,
 };
 
@@ -45,7 +46,7 @@ class ProductImage extends Component<PropsType, StateType> {
     this.setState({ selected: image });
   };
   render() {
-    const { mainImage, thumbnails } = this.props;
+    const { mainImage, thumbnails, discount } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
@@ -65,6 +66,18 @@ class ProductImage extends Component<PropsType, StateType> {
         </div>
         <div styleName="image">
           <figure styleName="bigImage">
+            {(discount > 0) ? (
+              <span styleName="discount">
+                Price <br /> Off <br />
+                <span
+                  style={{
+                    fontSize: 16,
+                  }}
+                >
+                  { `${discount} %` }
+                </span>
+              </span>
+            ) : null}
             <img src={!isEmpty(selected) ? selected : mainImage} alt="" />
           </figure>
           <ImageDetail />

@@ -43,3 +43,19 @@ $bigImageSize: 69.875rem;
 .noThumbnailsWrapper {
   max-width: 12rem;
 }
+
+.discount {
+  background-color: #ff62a4;
+  border-radius: 4px;
+  border: solid 1px #ffffff;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  height: 9.375rem;
+  position: absolute;
+  right: 9.375rem;
+  text-align: center;
+  padding-top: 1px;
+  top: 0;
+  width: 8rem;
+}
