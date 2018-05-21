@@ -101,7 +101,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
       ...data,
-      // defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
+      defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
+      addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState(() => ({ isLoading: false }));
@@ -138,11 +139,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   createStore = () => {
     console.log('>>> createStore');
-    // const preparedData = WizardWrapper.prepareStoreMutationInput(this.props);
+    const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
-      ...this.props,
+      ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        console.log('^^^ createStore response: ', { response, errors });
         this.updateWizard({ storeId: response.createStore.rawId });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
@@ -436,16 +438,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const steptTwoChecker = where({
       defaultLanguage: isNotEmpty,
     });
-    const stepOne = pick(['name', 'shortDescription', 'slug'], wizardStore);
-    const isStepOnePopulated = stepOneChecker(stepOne);
-    const stepTwo = pick(['defaultLanguage'], wizardStore);
-    const isStepTwoPopulated = steptTwoChecker(stepTwo);
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^');
-    console.log('^^^ render wizardStore: ', { wizardStore });
-    console.log('^^^ render step checkers 1: ', { isStepOnePopulated, stepOne });
-    console.log('^^^ render step checkers 2: ', { isStepTwoPopulated, stepTwo });
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^');
+    // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^');
+    // console.log('^^^ render wizardStore: ', { wizardStore });
+    // console.log('^^^ render step checkers 1: ', { isStepOnePopulated, stepOne });
+    // console.log('^^^ render step checkers 2: ', { isStepTwoPopulated, stepTwo });
+    // console.log('^^^^^^^^^^^^^^^^^^^^^^^^^');
     const isReadyToNext = () => {
+      if (!wizardStore) {
+        return false;
+      }
+      const stepOne = pick(['name', 'shortDescription', 'slug'], wizardStore);
+      const isStepOnePopulated = stepOneChecker(stepOne);
+      const stepTwo = pick(['defaultLanguage'], wizardStore);
+      const isStepTwoPopulated = steptTwoChecker(stepTwo);
       if (step === 1 && isStepOnePopulated) {
         return true;
       }

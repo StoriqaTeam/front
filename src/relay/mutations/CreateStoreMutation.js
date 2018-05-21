@@ -21,6 +21,7 @@ const mutation = graphql`
         text
       }
       slug
+      defaultLanguage
     }
   }
 `;
