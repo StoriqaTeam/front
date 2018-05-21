@@ -117,10 +117,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   handleAddToCart() {
-    if (!this.loggedIn()) {
-      return;
-    }
-
     // Todo for Jero - update this after refactoring (needed selected product id)
     const id = pipe(
       pathOr([], ['props', 'baseProduct', 'variants', 'all']),
@@ -172,17 +168,12 @@ class Product extends Component<PropsType, StateType> {
       productVariant,
     });
   };
-  loggedIn() {
-    const store = this.context.environment.getStore();
-    const root = store.getSource().get('client:root');
-    return !!path(['me', '__ref'], root);
-  }
+
   render() {
     const {
       baseProduct: { name, longDescription },
     } = this.props;
     const { tabs, widgets, productVariant } = this.state;
-    const loggedIn = this.loggedIn();
     const description = extractText(longDescription, 'EN', 'No Description');
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
@@ -217,17 +208,11 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button
-                  wireframe={loggedIn}
-                  big
-                  disabled={!loggedIn}
-                  onClick={() => this.handleAddToCart()}
-                >
+                <Button wireframe big onClick={this.handleAddToCart}>
                   Add to cart
                 </Button>
               </div>
               <ProductStore />
-              {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>
           </Row>
           <Tabs>
