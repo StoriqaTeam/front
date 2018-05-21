@@ -7,6 +7,7 @@ export { default as ProductImage } from './ProductImage';
 export { default as ProductMaterial } from './ProductMaterial';
 export { default as ProductShare } from './ProductShare';
 export { default as ProductSize } from './ProductSize';
+export { default as ProductStore } from './ProductStore';
 export { default as ProductThumbnails } from './ProductThumbnails';
 export { default as Tab } from './Tab';
 export { default as TabColumn } from './TabColumn';

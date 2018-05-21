@@ -8,7 +8,7 @@ type PropsType = {
   currency?: string,
   crossedPrice: string,
   price: string,
-  cashback: string,
+  cashback: number,
   buttonText?: string,
 };
 
@@ -16,28 +16,25 @@ const ProductPrice = ({
   currency,
   crossedPrice,
   price,
-  cashback: cashbackString,
+  cashback,
   buttonText,
-}: PropsType) => {
-  const cashback = parseFloat(cashbackString) || 0;
-  return (
-    <div styleName="container">
-      {price.toString() === crossedPrice ? null : (
-        <span styleName="crossedPrice">
-          {crossedPrice} {currency}
-        </span>
-      )}
-      <div styleName="stq">
-        <span styleName="price">
-          {price} {currency}
-        </span>
-        <button>
-          {buttonText} {`${parseInt(cashback * 100, 10)}%`}
-        </button>
-      </div>
+}: PropsType) => (
+  <div styleName="container">
+    {price.toString() === crossedPrice ? null : (
+      <span styleName="crossedPrice">
+        {crossedPrice} {currency}
+      </span>
+    )}
+    <div styleName="stq">
+      <span styleName="price">
+        {price} {currency}
+      </span>
+      <button styleName={cashback > 0 ? '' : 'noCashback'}>
+        {buttonText} {`${cashback}%`}
+      </button>
     </div>
-  );
-};
+  </div>
+);
 
 ProductPrice.defaultProps = {
   currency: 'STQ',

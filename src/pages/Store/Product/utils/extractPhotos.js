@@ -27,9 +27,9 @@ export default function extractPhotos(array: []): Array<VariantPhotosType> {
    */
   const makePhotos = (images: Array<string>) =>
     mapIndexed(
-      (img: string, index: string) => ({
+      (image: string, index: string) => ({
         id: `${index}`,
-        img,
+        image,
       }),
       images,
     );
