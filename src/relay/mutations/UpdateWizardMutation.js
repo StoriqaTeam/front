@@ -53,6 +53,7 @@ type AddressParamsType = {
 };
 
 type MutationParamsType = {
+  storeId?: number,
   name?: number,
   slug?: string,
   shortDescription?: number,

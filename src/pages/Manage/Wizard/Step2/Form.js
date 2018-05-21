@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { omit, map, find } from 'ramda';
+import { pathOr, omit, map, find } from 'ramda';
 
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -40,18 +40,20 @@ type PropsType = {
 type StateType = DataType;
 
 class SecondForm extends React.Component<PropsType, StateType> {
-  static prepareState = (props: PropsType, state?: StateType) => {
-    console.log('>>> Form 2 prepareState: ', { props, state });
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    console.log('>>> Form 2 getDerivedStateFromProps: ', { initialData: nextProps.initialData , prevState });
+    const store = pathOr(null, ['initialData', 'store'], nextProps);
+    const storeId = pathOr(null, ['initialData', 'storeId'], nextProps);
     const newState = {
-      ...props,
-      ...state,
+      ...nextProps.initialData,
+      ...prevState,
+      store,
+      storeId,
     };
-    console.log('<<< Form 2 prepareState: ', { newState });
+    console.log('<<< Form 2 getDerivedStateFromProps: ', { newState });
     return newState;
   };
-
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    SecondForm.prepareState(nextProps.initialData, prevState);
 
   constructor(props: PropsType) {
     super(props);

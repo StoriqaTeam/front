@@ -105,6 +105,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        console.log('^^^ updateWizard response, errors: ', { response, errors });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
       },
