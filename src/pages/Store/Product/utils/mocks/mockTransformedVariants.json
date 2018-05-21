@@ -1,0 +1,242 @@
+[
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+    "title": "Material",
+    "uiElement": "COMBOBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png",
+        "label": "Tree",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTI="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+    "title": "Size",
+    "uiElement": "CHECKBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-AfIeZzNOQAYC.png",
+        "label": "44",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTI="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+    "title": "Colour",
+    "uiElement": "COLOR_PICKER",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-LLaH0LAGQ7cC.png",
+        "label": "Black",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTI="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+    "title": "Size",
+    "uiElement": "CHECKBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+        "image": "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png",
+        "label": "46",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTM="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+    "title": "Colour",
+    "uiElement": "COLOR_PICKER",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-kNrV067StH0C.png",
+        "label": "Blue",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTM="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+    "title": "Material",
+    "uiElement": "COMBOBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-DKQ4VaWhut0C.png",
+        "label": "Glass",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTM="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+    "title": "Size",
+    "uiElement": "CHECKBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+        "image": "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png",
+        "label": "44",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTQ="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+    "title": "Colour",
+    "uiElement": "COLOR_PICKER",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-NBSinzGtc00C.png",
+        "label": "Red",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTQ="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+    "title": "Material",
+    "uiElement": "COMBOBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-xMVA9ep4PwAC.png",
+        "label": "Metal",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTQ="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+    "title": "Material",
+    "uiElement": "COMBOBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png",
+        "label": "Tree",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTU="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+    "title": "Colour",
+    "uiElement": "COLOR_PICKER",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-tEeHFbRGplwC.png",
+        "label": "Brown",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTU="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+    "title": "Size",
+    "uiElement": "CHECKBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-XYi95A0RGD0C.png",
+        "label": "52",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTU="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+    "title": "Colour",
+    "uiElement": "COLOR_PICKER",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwz",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-Vcq19zzloDoC.png",
+        "label": "Blue",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTY="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+    "title": "Size",
+    "uiElement": "CHECKBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwx",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-wtfU3HrrkzcC.png",
+        "label": "50",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTY="
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+    "title": "Material",
+    "uiElement": "COMBOBOX",
+    "options": [
+      {
+        "id": "c3RvcmVzfGF0dHJpYnV0ZXwy",
+        "image": "https://s3.amazonaws.com/storiqa-dev/img-832qlBGeCQoC.png",
+        "label": "Tree",
+        "state": "available",
+        "variantIds": [
+          "c3RvcmVzfHByb2R1Y3R8MTY="
+        ]
+      }
+    ]
+  }
+]
