@@ -40,7 +40,6 @@ type PropsType = {
 type StateType = DataType;
 
 class SecondForm extends React.Component<PropsType, StateType> {
-
   static prepareState = (props: PropsType, state?: StateType) => {
     console.log('>>> Form 2 prepareState: ', { props, state });
     const newState = {
@@ -63,31 +62,34 @@ class SecondForm extends React.Component<PropsType, StateType> {
 
   handleOnSelectLanguage = item => {
     const { onChange } = this.props;
-    console.log('>>> Form2 handleOnSelectLanguage state', this.state)
-    this.setState({
-      defaultLanguage: item.id,
-    }, () => {
-      onChange({
-        ...this.state,
-      });
-    });
+    console.log('>>> Form2 handleOnSelectLanguage state', this.state);
+    this.setState(
+      {
+        defaultLanguage: item.id,
+      },
+      () => {
+        onChange({
+          ...this.state,
+        });
+      },
+    );
   };
 
   handleChangeAddressData = addressData => {
     const { onChange } = this.props;
-    console.log('>>> Form2 handleChangeAddressData addressData', addressData)
+    console.log('>>> Form2 handleChangeAddressData addressData', addressData);
     if (onChange && addressData) {
       onChange({
         ...this.state,
         addressFull: {
           ...omit(['address', 'postalCodeSuffix'], addressData),
           value: addressData.address,
-        }
+        },
       });
     }
   };
 
-  render() { 
+  render() {
     const { languages } = this.props;
     const { addressFull, defaultLanguage } = this.state;
     const languagesItems = map(
@@ -123,6 +125,6 @@ class SecondForm extends React.Component<PropsType, StateType> {
       </div>
     );
   }
-};
+}
 
 export default SecondForm;
