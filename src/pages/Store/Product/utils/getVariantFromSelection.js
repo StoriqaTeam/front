@@ -1,3 +1,5 @@
+// @flow
+
 import {
   map,
   pipe,
@@ -11,7 +13,7 @@ import {
   insert,
 } from 'ramda';
 
-import { VariantType, ProductVariantType, ThumbnailType } from '../types';
+import { VariantType, ProductVariantType, ThumbnailType, WidgetOptionType } from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
@@ -65,13 +67,13 @@ const setProductVariantValues = (variant: VariantType) => {
 
 const findVariant: (
   Array<VariantType>,
-) => string => Array<ProductVariantType> = variants => variantId => {
+) => string => ProductVariantType = variants => variantId => {
   const variant = find(propEq('id')(variantId))(variants);
   return setProductVariantValues(variant);
 };
 
 const getVariantFromSelection: (
-  Array<SelectionType>,
+  Array<WidgetOptionType>,
 ) => (Array<VariantType>) => ProductVariantType = selections => variants => {
   if (isEmpty(selections)) {
     return setProductVariantValues(head(variants));
