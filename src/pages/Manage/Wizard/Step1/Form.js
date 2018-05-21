@@ -29,7 +29,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
       name: props.data ? props.data.name : '',
       slug: props.data ? props.data.slug : '',
       shortDescription: props.data ? props.data.shortDescription : '',
-      defaultLanguage: props.data ? props.data.defaultLanguage : '',
+      defaultLanguage: props.data ? props.data.defaultLanguage : 'EN',
     };
   }
 
