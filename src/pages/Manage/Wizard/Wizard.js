@@ -448,6 +448,7 @@ const products = [
       name: [
         {
           text: 'A Set Of "Labyrinth"',
+          price: 'A Set Of "Labyrinth"',
         },
       ],
     },

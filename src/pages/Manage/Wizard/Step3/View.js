@@ -39,6 +39,24 @@ const Modal = ({ children, showModal, onClose }) => {
   );
 };
 
+type ProductType = {
+  item: {
+    rawId: number,
+    storeId: number,
+    currencyId: number,
+    name: Array<{
+      lang: string,
+      text: string,
+    }>,
+    variants: Array<{
+      discount: number,
+      photoMain: string,
+      cashback: number,
+      price: number,
+    }>,
+  },
+};
+
 type PropsType = {
   data: {
     userId: ?number,
@@ -51,6 +69,7 @@ type PropsType = {
     address: ?string,
   },
   onChange: (data: { [name: string]: string }) => void,
+  products: Array<ProductType>,
 };
 
 type StateType = {
@@ -110,6 +129,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   render() {
     const { data, onChange, products, onUpload } = this.props;
+    console.log('---products', products);
     const { baseProduct, showForm } = this.state;
     return (
       <div styleName="view">

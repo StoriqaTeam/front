@@ -41,6 +41,8 @@ import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 import Cats from 'components/Icon/svg/cats.svg';
 import Logout from 'components/Icon/svg/logout.svg';
+import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
+import Note from 'components/Icon/svg/note.svg';
 
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
 
@@ -91,6 +93,8 @@ const iconsMap = {
   cats: <Cats />,
   logout: <Logout />,
   sortArrows: <SortArrows />,
+  cameraPlus: <CameraPlus />,
+  note: <Note />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
