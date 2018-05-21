@@ -50,7 +50,7 @@ type AddressParamsType = {
   postalCode?: string,
   route?: string,
   streetNumber?: string,
-}
+};
 
 type MutationParamsType = {
   name?: number,

@@ -129,13 +129,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         id,
         userId,
         address: wizardStore.addressFull.value,
-        ...pick(['name', 'shortDescription', 'defaultLanguage', 'slug'], wizardStore),
+        ...pick(
+          ['name', 'shortDescription', 'defaultLanguage', 'slug'],
+          wizardStore,
+        ),
         ...omit(['value'], wizardStore.addressFull),
       },
     );
     console.log('<<< prepareStoreMutationInput: ', { preparedData });
     return preparedData;
-  }
+  };
 
   createStore = () => {
     console.log('>>> createStore');
@@ -169,17 +172,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     //   return;
     // }
 
-  // id: string,
-  // name: string,
-  // longDescription: string,
-  // shortDescription: string,
-  // defaultLanguage: string,
-  // slug: string,
-  // slogan: string,
-  // logo?: string,
+    // id: string,
+    // name: string,
+    // longDescription: string,
+    // shortDescription: string,
+    // defaultLanguage: string,
+    // slug: string,
+    // slogan: string,
+    // logo?: string,
 
-    const updater =
-      step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
+    const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
     updater.commit({
       ...preparedData,
       environment: this.context.environment,
@@ -200,7 +202,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         errorsLogger(error);
       },
     });
-
   };
 
   // fetchStoreByRawId = (storeId: number) => {
@@ -386,7 +387,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               comfortable.
             </div>
             <Step2
-              data={wizardStore}
+              initialData={wizardStore}
               languages={this.props.languages}
               onChange={this.handleChangeForm}
             />
@@ -417,15 +418,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    // const isReadyToNext = () => {
-    //   if (!stepOne || !stepTwo) {
-    //     return false;
-    //   }
-    //   if (stepOnePopulated(stepOne) && steptTwoPopulated(stepTwo)) {
-    //     return true;
-    //   }
-    //   return false;
-    // };
     console.log('>>> render');
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
