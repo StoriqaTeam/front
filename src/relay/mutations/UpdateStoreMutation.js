@@ -10,6 +10,7 @@ const mutation = graphql`
     updateStore(input: $input) {
       id
       rawId
+      defaultLanguage
       email
       phone
       addressFull {
@@ -34,6 +35,7 @@ const mutation = graphql`
 
 type MutationParamsType = {
   id: string,
+  defaultLanguage: string,
   email: string,
   phone: string,
   country: string,
@@ -60,6 +62,7 @@ const commit = (params: MutationParamsType) =>
       input: {
         clientMutationId: '',
         id: params.id,
+        defaultLanguage: params.defaultLanguage,
         email: params.email,
         phone: params.phone,
         country: params.country,

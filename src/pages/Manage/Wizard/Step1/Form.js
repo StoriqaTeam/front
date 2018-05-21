@@ -7,59 +7,84 @@ import { Textarea } from 'components/common/Textarea';
 
 import './Form.scss';
 
-type FirstFormPropsType = {
-  data: {
-    userId: ?number,
-    storeId: ?number,
-    name: ?string,
-    shortDescription: ?string,
-    defaultLanguage: ?string,
-    slug: ?string,
-    country: ?string,
-    address: ?string,
-  },
+type DataType = {
+  name: ?string,
+  shortDescription: ?string,
+  slug: ?string,
+  defaultLanguage: ?string,
+};
+
+type PropsType = {
+  data: DataType,
   onChange: (fieldName: string, value: string) => void,
 };
 
-const FirstForm = ({ data, onChange }: FirstFormPropsType) => {
-  const handleOnChange = e => {
+type StateType = DataType;
+
+class FirstForm extends React.Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    console.log('*** Frist form const props: ', props)
+    this.state = {
+      name: props.data ? props.data.name : '',
+      slug: props.data ? props.data.slug : '',
+      shortDescription: props.data ? props.data.shortDescription : '',
+      defaultLanguage: props.data ? props.data.defaultLanguage : '',
+    }
+  }
+
+  handleOnChange = e => {
+    const { onChange } = this.props;
     const {
       target: { value, name },
     } = e;
-    onChange({ [name]: value });
+    this.setState({ [name]: value });
+    onChange({ ...this.state });
   };
 
-  return (
-    <div styleName="form">
-      <div styleName="formItem">
-        <Input
-          id="name"
-          value={data.name}
-          label="Name"
-          onChange={handleOnChange}
-          fullWidth
-        />
+  handleOnSave = () => {
+    const { onChange } = this.props;
+    // onChange({ ...this.state });
+  };
+
+  render() {
+    // const { data } = this.props;
+    const { name, slug, shortDescription } = this.state;
+    return (
+      <div styleName="form">
+        <div styleName="formItem">
+          <Input
+            id="name"
+            value={name}
+            label="Name"
+            onChange={this.handleOnChange}
+            onBlur={this.handleOnSave}
+            fullWidth
+          />
+        </div>
+        <div styleName="formItem">
+          <Input
+            id="slug"
+            value={slug}
+            label="Slug"
+            onChange={this.handleOnChange}
+            onBlur={this.handleOnSave}
+            fullWidth
+          />
+        </div>
+        <div>
+          <Textarea
+            id="shortDescription"
+            value={shortDescription}
+            label="Short description"
+            onChange={this.handleOnChange}
+            onBlur={this.handleOnSave}
+            fullWidth
+          />
+        </div>
       </div>
-      <div styleName="formItem">
-        <Input
-          id="slug"
-          value={data.slug}
-          label="Slug"
-          onChange={handleOnChange}
-          fullWidth
-        />
-      </div>
-      <div>
-        <Textarea
-          id="shortDescription"
-          value={data.shortDescription ? data.shortDescription : ''}
-          label="Short description"
-          onChange={handleOnChange}
-          fullWidth
-        />
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default FirstForm;

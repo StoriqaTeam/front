@@ -109,10 +109,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateWizard = data => {
+    console.log('**** update Wizard data: ', { data })
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
       ...data,
-      defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
+      // defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState(() => ({ isLoading: false }));
@@ -178,7 +179,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.props,
         stID,
       );
-      // console.log('**** update store with wizard state: ', { preparedData });
+      console.log('**** update store with wizard state: ', { preparedData });
       const updater =
         step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
       updater.commit({
@@ -188,6 +189,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           const responseData = response.createStore
             ? response.createStore
             : response.updateStore;
+          console.log('**** updateStore responseData: ', {responseData, response});
           this.updateWizard({ storeId: responseData.rawId });
           this.setState(() => ({ isLoading: false }));
           resposeLogger(response, errors);
@@ -232,8 +234,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
+    console.log('**** handleOnSaveWizard props: ', this.props, { data });
+    // const userId = pathOr(null, ['me', 'rawId'], this.props);
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     if (data) {
-      this.updateWizard(data);
+      this.updateWizard({
+        ...data,
+        storeId,
+      });
     }
   }, 250);
 
