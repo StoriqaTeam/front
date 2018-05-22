@@ -170,11 +170,6 @@ class Product extends Component<PropsType, StateType> {
       productVariant,
     });
   };
-  loggedIn() {
-    const store = this.context.environment.getStore();
-    const root = store.getSource().get('client:root');
-    return !!path(['me', '__ref'], root);
-  }
   render() {
     if (isNil(this.props.baseProduct)) {
       return (
