@@ -1,3 +1,5 @@
+// @flow
+
 import { map, prop, uniqBy } from 'ramda';
 import { WidgetType } from '../types';
 

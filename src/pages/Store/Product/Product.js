@@ -17,7 +17,6 @@ import { Page } from 'components/App';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
-
 import { extractText, isEmpty, log } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -76,6 +75,9 @@ class Product extends Component<PropsType, StateType> {
     nextProps: PropsType,
     prevState: StateType,
   ): StateType | null {
+    if (isNil(nextProps.baseProduct)) {
+      return null;
+    }
     const {
       baseProduct: {
         variants: { all },
@@ -91,7 +93,7 @@ class Product extends Component<PropsType, StateType> {
         productVariant,
       };
     }
-    return null;
+    return prevState;
   }
   state = {
     tabs: [
@@ -168,12 +170,19 @@ class Product extends Component<PropsType, StateType> {
       productVariant,
     });
   };
-
   render() {
+    if (isNil(this.props.baseProduct)) {
+      return (
+        <div styleName="productNotFound">
+          <h1>Product Not Found</h1>
+        </div>
+      );
+    }
     const {
       baseProduct: { name, longDescription },
     } = this.props;
     const { tabs, widgets, productVariant } = this.state;
+    const loggedIn = false;
     const description = extractText(longDescription, 'EN', 'No Description');
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
@@ -181,6 +190,7 @@ class Product extends Component<PropsType, StateType> {
           <Row>
             <Col size={6}>
               <ProductImage
+                discount={productVariant.discount}
                 mainImage={productVariant.photoMain}
                 thumbnails={productVariant.additionalPhotos}
               />
@@ -208,11 +218,17 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button wireframe big onClick={this.handleAddToCart}>
+                <Button
+                  wireframe={loggedIn}
+                  big
+                  disabled={!loggedIn}
+                  onClick={() => this.handleAddToCart()}
+                >
                   Add to cart
                 </Button>
               </div>
               <ProductStore />
+              {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>
           </Row>
           <Tabs>
