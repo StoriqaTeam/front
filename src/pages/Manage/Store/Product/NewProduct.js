@@ -71,23 +71,31 @@ class NewProduct extends Component<PropsType, StateType> {
           : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
+        this.setState(() => ({ isLoading: false }));
 
+        log.debug({ response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-        this.setState(() => ({ isLoading: false }));
 
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        log.debug({ validationErrors });
         // $FlowIgnoreMe
         const status: string = pathOr('', ['100', 'status'], relayErrors);
-        if (validationErrors && !isEmpty(validationErrors)) {
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
         } else if (status) {
           this.props.showAlert({
             type: 'danger',
             text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        } else if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
@@ -99,6 +107,11 @@ class NewProduct extends Component<PropsType, StateType> {
           this.props.router.push(
             `/manage/store/${storeId}/products/${parseInt(productId, 10)}`,
           );
+          this.props.showAlert({
+            type: 'success',
+            text: 'Product created!',
+            link: { text: 'Ok!' },
+          });
         }
       },
       onError: (error: Error) => {
