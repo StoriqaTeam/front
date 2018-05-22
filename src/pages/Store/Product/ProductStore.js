@@ -13,11 +13,7 @@ import { ProductContext } from './index';
 
 import './ProductStore.scss';
 
-type PropsType = {
-  store: any,
-};
-
-class ProductStore extends Component<PropsType, {}> {
+class ProductStore extends Component<{}> {
   handleClick = (): void => {};
   render() {
     return (
@@ -33,8 +29,8 @@ class ProductStore extends Component<PropsType, {}> {
                 </div>
               </div>
               <div styleName="storeDetails">
-                <p>{store.productsCount} товаров</p>
-                <p>97,5% пол. отзывов</p>
+                <p>{store.productsCount} goods</p>
+                <p>97,5% user reviews</p>
               </div>
             </div>
             <div styleName="iconsWrapper">
@@ -42,14 +38,14 @@ class ProductStore extends Component<PropsType, {}> {
                 <span styleName="icon">
                   <ChatIcon />
                 </span>
-                <small styleName="iconInfoText">Написать продавцу</small>
+                <small styleName="iconInfoText">Contact seller</small>
               </div>
               <span styleName="separator" />
               <div styleName="iconInfo">
                 <span styleName="icon">
                   <HeartIcon />
                 </span>
-                <small styleName="iconInfoText">В избранное</small>
+                <small styleName="iconInfoText">To Favorites</small>
               </div>
             </div>
           </div>

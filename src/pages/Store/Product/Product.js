@@ -3,15 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import {
-  path,
-  head,
-  isNil,
-  pathOr,
-  defaultTo,
-  prop,
-  pipe,
-} from 'ramda';
+import { path, head, isNil, pathOr, defaultTo, prop, pipe } from 'ramda';
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
@@ -44,7 +36,7 @@ import {
   ProductType,
   WidgetOptionType,
   ProductVariantType,
-  WidgetType
+  WidgetType,
 } from './types';
 
 import './Product.scss';
