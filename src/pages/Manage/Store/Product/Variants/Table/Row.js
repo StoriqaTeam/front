@@ -48,7 +48,10 @@ class Row extends Component<PropsType, StateType> {
       cashback: cashbackValue,
       attributes: attrs,
     } = this.props.variant;
-    const cashback = Math.round(cashbackValue * 100) || null;
+    const cashback =
+      Math.round(cashbackValue * 100) != null
+        ? Math.round(cashbackValue * 100)
+        : null;
     return (
       <div styleName="container">
         <div styleName="variant">

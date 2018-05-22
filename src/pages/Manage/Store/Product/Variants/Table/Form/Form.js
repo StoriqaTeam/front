@@ -117,7 +117,7 @@ class Form extends Component<PropsType, StateType> {
         vendorCode: variant.vendorCode,
         photoMain: variant.mainPhoto,
         additionalPhotos: variant.photos,
-        cashback: variant.cashback ? variant.cashback / 100 : '',
+        cashback: variant.cashback != null ? variant.cashback / 100 : '',
       },
       attributes: variant.attributeValues,
       environment: this.context.environment,
@@ -130,6 +130,11 @@ class Form extends Component<PropsType, StateType> {
           });
           return;
         }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Variant created!',
+          link: { text: 'Close.' },
+        });
         log.debug({ response, errors });
         window.location.reload(); // TODO: fix it!
       },
@@ -154,7 +159,7 @@ class Form extends Component<PropsType, StateType> {
         vendorCode: variant.vendorCode,
         photoMain: variant.mainPhoto,
         additionalPhotos: variant.photos,
-        cashback: variant.cashback ? variant.cashback / 100 : '',
+        cashback: variant.cashback != null ? variant.cashback / 100 : '',
       },
       attributes: variant.attributeValues,
       environment: this.context.environment,
@@ -167,6 +172,11 @@ class Form extends Component<PropsType, StateType> {
           });
           return;
         }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Variant created!',
+          link: { text: 'Close.' },
+        });
         log.debug({ response, errors });
         window.location.reload(); // TODO: fix it!
       },
@@ -208,6 +218,9 @@ class Form extends Component<PropsType, StateType> {
     } = e;
     if (value === '') {
       this.setState({ cashback: null });
+      return;
+    } else if (value === 0) {
+      this.setState({ cashback: 0 });
       return;
     } else if (Number.isNaN(parseFloat(value))) {
       return;
@@ -294,7 +307,7 @@ class Form extends Component<PropsType, StateType> {
             styleName="input cashbackInput"
             type="text"
             onChange={this.handleCashbackChange}
-            value={cashback || ''}
+            value={cashback != null ? cashback : ''}
           />
           <span styleName="inputPostfix">%</span>
         </div>

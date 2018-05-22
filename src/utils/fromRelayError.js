@@ -1,6 +1,16 @@
 // @flow
 
-import { map, pathOr, fromPairs, toString, mapObjIndexed } from 'ramda';
+import {
+  map,
+  pathOr,
+  fromPairs,
+  toString,
+  mapObjIndexed,
+  isEmpty,
+  filter,
+  complement,
+  isNil,
+} from 'ramda';
 
 export type ProcessedErrorType = {
   ['100' | '200' | '300' | '400']: {
@@ -38,8 +48,18 @@ type RelayErrorType = {
 const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
   // $FlowIgnoreMe
   const errorsArr = pathOr([], ['source', 'errors'], relayError);
+
+  if (isEmpty(errorsArr)) {
+    return null;
+  }
+
   const convertedErrors = map(item => {
     const error = item.data;
+
+    if (!error) {
+      return null;
+    }
+
     const { code } = error;
 
     if (code !== 100) {
@@ -69,7 +89,7 @@ const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
     return [toString(code), { status, messages }];
   }, errorsArr);
   // $FlowIgnoreMe
-  return fromPairs(convertedErrors);
+  return fromPairs(filter(complement(isNil), convertedErrors));
 };
 
 export default processError;
