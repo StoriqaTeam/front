@@ -7,7 +7,7 @@ import { Rating } from 'components/common/Rating';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/common/Input';
 import { Icon } from 'components/Icon';
-import { formatPrice } from 'utils';
+import { formatPrice, getNameText } from 'utils';
 
 import CartProduct from './CartProduct';
 import CartProductAttribute from './CartProductAttribute';
@@ -40,7 +40,9 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="store-info">
               <img src={store.logo} alt="store_picture" styleName="image" />
               <div styleName="store-description">
-                <div styleName="store-name">{store.name[0].text}</div>
+                <div styleName="store-name">
+                  {getNameText(store.name, 'EN')}
+                </div>
                 <Rating value={store.rating} />
               </div>
             </div>
