@@ -6,7 +6,7 @@ import './ProductPrice.scss';
 
 type PropsType = {
   currency?: string,
-  crossedPrice: string,
+  crossedPrice: number,
   price: string,
   cashback: number,
   buttonText?: string,
@@ -20,11 +20,11 @@ const ProductPrice = ({
   buttonText,
 }: PropsType) => (
   <div styleName="container">
-    {price.toString() === crossedPrice ? null : (
+    {crossedPrice > 0 ? (
       <span styleName="crossedPrice">
         {crossedPrice} {currency}
       </span>
-    )}
+    ) : null}
     <div styleName="stq">
       <span styleName="price">
         {price} {currency}
