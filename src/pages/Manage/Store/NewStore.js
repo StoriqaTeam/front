@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, toUpper } from 'ramda';
+import { assocPath, pathOr, toUpper, isEmpty } from 'ramda';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
@@ -47,7 +47,7 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   handleSave = ({ form, optionLanguage }) => {
-    const { environment, currentUser, showAlert } = this.context;
+    const { environment, currentUser } = this.context;
     const {
       name,
       longDescription,
@@ -57,7 +57,7 @@ class NewStore extends Component<PropsType, StateType> {
       slogan,
     } = form;
     const { logoUrl } = this.state;
-    this.setState(() => ({ isLoading: true }));
+    this.setState(() => ({ isLoading: true, serverValidationErrors: {} }));
 
     CreateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
@@ -74,8 +74,8 @@ class NewStore extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
@@ -88,7 +88,11 @@ class NewStore extends Component<PropsType, StateType> {
         if (storeId) {
           this.props.router.push(`/manage/store/${storeId}`);
         }
-        showAlert('Store created!', false);
+        this.props.showAlert({
+          type: 'success',
+          text: 'Store created!',
+          link: { text: 'Ok!' },
+        });
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -97,18 +101,12 @@ class NewStore extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
 
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
 
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          return;
-        }
         this.props.showAlert({
           type: 'danger',
           text: 'Something going wrong :(',
