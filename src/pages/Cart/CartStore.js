@@ -3,14 +3,15 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import Rating from 'components/Rating';
+import { Rating } from 'components/common/Rating';
 import { Button } from 'components/common/Button';
-import { Input } from 'components/Forms';
+import { Input } from 'components/common/Input';
+import { Icon } from 'components/Icon';
 import { formatPrice } from 'utils';
 
 import CartProduct from './CartProduct';
 import CartProductAttribute from './CartProductAttribute';
-import Chat from './svg/chat.svg';
+
 // eslint-disable-next-line
 import type CartStore_store from './__generated__/CartStore_store.graphql';
 
@@ -39,18 +40,17 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="store-info">
               <img src={store.logo} alt="store_picture" styleName="image" />
               <div styleName="store-description">
-                <div>{store.name[0].text}</div>
-                <Rating rating={store.rating} />
+                <div styleName="store-name">{store.name[0].text}</div>
+                <Rating value={store.rating} />
               </div>
             </div>
             <div styleName="chat-container">
-              <div styleName="chat">
-                <Chat />
-              </div>
+              <Icon type="chat" size={24} />
               <div styleName="chat-text">Chat with Seller</div>
             </div>
-            <div>
+            <div styleName="promocode">
               <Input
+                fullWidth
                 focus={false}
                 onChange={() => {}}
                 detectCapsLock
