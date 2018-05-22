@@ -13,8 +13,8 @@ class CartProductAttribute extends PureComponent<PropsType> {
   render() {
     return (
       <div styleName="container">
-        <p styleName="title">{this.props.title}</p>
-        <p styleName="value">{this.props.value}</p>
+        <div styleName="title">{this.props.title}</div>
+        <div styleName="value">{this.props.value}</div>
       </div>
     );
   }
