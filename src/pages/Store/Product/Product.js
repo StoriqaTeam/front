@@ -219,9 +219,8 @@ class Product extends Component<PropsType, StateType> {
                   Buy now
                 </Button>
                 <Button
-                  wireframe={loggedIn}
+                  wireframe
                   big
-                  disabled={!loggedIn}
                   onClick={() => this.handleAddToCart()}
                 >
                   Add to cart

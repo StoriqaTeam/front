@@ -38,7 +38,7 @@ const setProductVariantValues = (variant: VariantType) => {
   const calcCrossedPrice = (discount: string | null, price: string) =>
     isNil(discount)
       ? 0
-      : ((1 - parseInt(discount, 10)) * parseInt(price, 10)).toString();
+      : ((1 - parseInt(discount, 10)) * parseInt(price, 10));
 
   const insertPhotoMain = (
     image: string,
