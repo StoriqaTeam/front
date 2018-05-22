@@ -42,6 +42,7 @@ import Cats from 'components/Icon/svg/cats.svg';
 import Logout from 'components/Icon/svg/logout.svg';
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
 import User from 'components/Icon/svg/user.svg';
+import Chat from 'components/Icon/svg/chat.svg';
 
 import './Icon.scss';
 
@@ -90,6 +91,7 @@ const iconsMap = {
   logout: <Logout />,
   sortArrows: <SortArrows />,
   user: <User />,
+  chat: <Chat />,
 };
 
 class Icon extends PureComponent<PropsTypes> {
