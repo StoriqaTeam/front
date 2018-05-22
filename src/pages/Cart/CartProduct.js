@@ -15,7 +15,7 @@ import {
   SetSelectionInCartMutation,
   DeleteFromCartMutation,
 } from 'relay/mutations';
-import { log } from 'utils';
+import { log, formatPrice } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -220,11 +220,11 @@ class CartProduct extends PureComponent<PropsType> {
             />
             <CartProductAttribute
               title="Total cost"
-              value={`${quantity * price} STQ`}
+              value={`${formatPrice(quantity * price || 0)} STQ`}
             />
             <CartProductAttribute
               title="Delivery cost"
-              value={`${deliveryCost || 0} STQ`}
+              value={`${formatPrice(deliveryCost || 0)} STQ`}
             />
           </div>
         </div>
