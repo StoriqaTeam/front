@@ -53,6 +53,9 @@ class CardProduct extends PureComponent<PropsTypes> {
     if (product) {
       ({ discount, photoMain, cashback, price } = product.node);
     }
+    if (photoMain) {
+      photoMain = photoMain.replace(/.(png|jpg)/, '-medium.$1');
+    }
 
     if (!storeId || !rawId || !currencyId || !price) return null;
 

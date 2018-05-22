@@ -5,6 +5,7 @@
   display: flex;
   border-bottom: 1px solid $color_grey_light;
   position: relative;
+  padding-bottom: 3rem;
 
   & + .container {
     padding-top: 3rem;
@@ -74,8 +75,10 @@
 }
 
 .recycle {
-  width: 1.5rem;
-  height: 1.5rem;
   position: absolute;
   right: 0;
+
+  & svg {
+    fill: $color_grey_bg;
+  }
 }

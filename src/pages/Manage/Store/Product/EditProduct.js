@@ -77,15 +77,29 @@ class EditProduct extends Component<PropsType, StateType> {
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         // $FlowIgnoreMe
         const status: string = pathOr('', ['100', 'status'], relayErrors);
-        if (validationErrors && !isEmpty(validationErrors)) {
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
+          return;
         } else if (status) {
           this.props.showAlert({
             type: 'danger',
             text: `Error: "${status}"`,
             link: { text: 'Close.' },
           });
+          return;
+        } else if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
         }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Store updated!',
+          link: { text: 'Got it!' },
+        });
       },
       onError: (error: Error) => {
         log.debug({ error });
