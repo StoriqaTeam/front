@@ -8,6 +8,7 @@ import { map, addIndex } from 'ramda';
 // import { AddressForm } from 'components/AddressAutocomplete';
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
+import { getNameText } from 'utils';
 
 import Form from './Form';
 import Modal from './Modal';
@@ -49,8 +50,29 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     showForm: false,
   };
 
-  handleOnShowForm = () => {
-    this.setState({ showForm: true });
+  handleOnShowForm = item => {
+    const { onChange, data } = this.props;
+    const name = item.name ? getNameText(item.name) : '';
+    const shortDescription = item.shortDescription
+      ? getNameText(item.shortDescription)
+      : '';
+    const prepareStateObj = {
+      ...data,
+      categoryId: item.category && item.category.rawId,
+      id: item.id,
+      name,
+      shortDescription,
+    };
+    console.log('>>> Form 3 View handleOnShowForm item: ', {
+      productData: item,
+      stateData: data,
+      prepareStateObj,
+    });
+    return () => {
+      console.log('^^^ handleOnShowForm show form');
+      onChange(prepareStateObj);
+      this.setState({ showForm: true });
+    };
   };
 
   handleOnCloseModal = () => {
@@ -65,17 +87,18 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       onChangeAttrs,
       products,
       onUpload,
+      onSave,
     } = this.props;
     const { showForm } = this.state;
-    const productsArr = map(item => item.node, products.edges);
-    console.log('>>> View Form 3 render: ', { data });
+    const productsArr = map(item => item.node, products);
+    console.log('>>> View Form 3 render: ', { data, products, productsArr });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
         <div
           styleName="productItem uploaderItem"
           role="button"
-          onClick={this.handleOnShowForm}
+          onClick={() => this.setState({ showForm: true })}
           onKeyDown={() => {}}
           tabIndex={0}
         >
@@ -93,7 +116,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <div styleName="layer">
                     <div
                       styleName="editbutton"
-                      onClick={this.handleOnShowForm}
+                      onClick={this.handleOnShowForm(item)}
                       role="button"
                       onKeyDown={() => {}}
                       tabIndex={0}
@@ -120,11 +143,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
             data={data}
+            categories={this.context.directories.categories}
             aditionalPhotosMap={aditionalPhotosMap}
             onChange={onChange}
             onChangeAttrs={onChangeAttrs}
             onUpload={onUpload}
-            categories={this.context.directories.categories}
+            onSave={onSave}
           />
         </Modal>
       </div>

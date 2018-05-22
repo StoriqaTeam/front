@@ -17,6 +17,59 @@ const mutation = graphql`
       store {
         id
         rawId
+        baseProducts {
+          edges {
+            node {
+              id
+              rawId
+              name {
+                text
+                lang
+              }
+              shortDescription {
+                lang
+                text
+              }
+              category {
+                id
+                rawId
+              }
+              storeId
+              currencyId
+              products {
+                edges {
+                  node {
+                    id
+                    rawId
+                    price
+                    discount
+                    photoMain
+                    additionalPhotos
+                    attributes {
+                      value
+                      metaField
+                      attribute {
+                        id
+                        rawId
+                        name {
+                          text
+                        }
+                        metaField {
+                          values
+                          translatedValues {
+                            translations {
+                              text
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
       addressFull {
         country

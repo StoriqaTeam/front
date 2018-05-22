@@ -1,7 +1,7 @@
 // @flow
 
 import { log, fromRelayError } from 'utils';
-import { pathOr, isEmpty } from 'ramda';
+import { evolve, pathOr, isEmpty, reduce } from 'ramda';
 
 export const resposeLogger = (response: ?Object, errors: ?Array<any>) => {
   log.debug({ response, errors });
@@ -34,4 +34,23 @@ export const errorsLogger = (error: Error) => {
   // eslint-disable-next-line
   alert('Something going wrong :(');
   return null;
+};
+
+export const transformTranslated = (
+  lang: string,
+  arr: Array<string>,
+  obj: any,
+) => {
+  const transformation = reduce(
+    (acc, next) => ({
+      ...acc,
+      [next]: text => ({
+        lang,
+        text,
+      }),
+    }),
+    {},
+    arr,
+  );
+  return evolve(transformation, obj);
 };

@@ -23,10 +23,14 @@ import {
   CreateStoreMutation,
   UpdateStoreMutation,
   UpdateStoreMainMutation,
+  CreateBaseProductMutation,
+  UpdateBaseProductMutation,
+  CreateProductWithAttributesMutation,
+  UpdateProductMutation,
 } from 'relay/mutations';
 import { uploadFile } from 'utils';
 
-import { resposeLogger, errorsLogger } from './utils';
+import { resposeLogger, errorsLogger, transformTranslated } from './utils';
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
@@ -40,12 +44,25 @@ type PropsType = {};
 type StateType = {};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log('>>> getDerivedStateFromProps: ', { nextProps, prevState });
+    const wizardStore = pathOr(null, ['me', 'wizardStore'], nextProps);
+    return {
+      ...prevState,
+      baseProduct: {
+        ...prevState.baseProduct,
+        storeId: wizardStore && wizardStore.storeId,
+      },
+    };
+  }
+
   constructor(props: PropsType) {
     super(props);
     console.log('>>> constructor');
     this.state = {
       step: 1,
       baseProduct: {
+        id: null,
         storeId: null,
         currencyId: 1,
         categoryId: null,
@@ -149,7 +166,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         console.log('^^^ createStore response: ', { response, errors });
-        this.updateWizard({ storeId: response.createStore.rawId });
+        const storeId = pathOr(null, ['createStore', 'rawId'], response);
+        this.updateWizard({ storeId });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
       },
@@ -163,7 +181,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   updateStore = () => {
     console.log('>>> updateStore');
     const { step } = this.state;
-    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -231,21 +248,100 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }, 250);
 
   handleChangeForm = data => {
-    // const storeID = pathOr(
-    //   null,
-    //   ['me', 'wizardStore', 'store', 'id'],
-    //   this.props,
-    // );
-    // const storeId = pathOr(
-    //   null,
-    //   ['me', 'wizardStore', 'store', 'rawId'],
-    //   this.props,
-    // );
     console.log('>>> handleChangeForm: ', { data });
     this.handleOnSaveWizard(data);
   };
 
   // Product handlers
+  createBaseProduct = () => {
+    console.log('>>> createBaseProduct');
+    const { baseProduct } = this.state;
+    const preparedData = transformTranslated(
+      'EN',
+      ['name', 'shortDescription'],
+      omit(['product', 'attributes'], baseProduct),
+    );
+    console.log('^^^ createBaseProduct preparedData: ', { preparedData });
+    CreateBaseProductMutation.commit({
+      ...preparedData,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        console.log('^^^ createBaseProduct response: ', { response, errors });
+        resposeLogger(response, errors);
+        const baseProductId = pathOr(
+          null,
+          ['createBaseProduct', 'rawId'],
+          response,
+        );
+        const prepareDataForProduct = {
+          product: {
+            ...baseProduct.product,
+            cashback: baseProduct.product.cashback / 100,
+            baseProductId,
+          },
+          attributes: baseProduct.attributes,
+        };
+        console.log('^^^ createBaseProduct prepareDataForProduct: ', {
+          prepareDataForProduct,
+        });
+        if (!baseProductId) {
+          this.setState(() => ({ isLoading: false }));
+          return;
+        }
+        // create variant after create base product
+        CreateProductWithAttributesMutation.commit({
+          ...prepareDataForProduct,
+          environment: this.context.environment,
+          onCompleted: (
+            productResponse: ?Object,
+            productErrors: ?Array<any>,
+          ) => {
+            console.log('^^^ createProduct response: ', {
+              productResponse,
+              productErrors,
+            });
+            this.setState(() => ({ isLoading: false }));
+            resposeLogger(productResponse, productErrors);
+          },
+          onError: (error: Error) => {
+            this.setState(() => ({ isLoading: false }));
+            errorsLogger(error);
+          },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        errorsLogger(error);
+      },
+    });
+  };
+
+  updateBaseProduct = () => {
+    console.log('>>> updateBaseProduct');
+    const { baseProduct } = this.state;
+    const preparedData = transformTranslated(
+      'EN',
+      ['name', 'shortDescription'],
+      omit(['product', 'attributes'], baseProduct),
+    );
+    console.log('^^^ updateBaseProduct preparedData: ', { preparedData });
+    UpdateBaseProductMutation.commit({
+      ...preparedData,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        console.log('^^^ updateBaseProduct response: ', { response, errors });
+        // const storeId = pathOr(null, ['createStore', 'rawId'], response);
+        // this.updateWizard({ storeId });
+        this.setState(() => ({ isLoading: false }));
+        resposeLogger(response, errors);
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        errorsLogger(error);
+      },
+    });
+  };
+
   handleOnChangeProductForm = data => {
     console.log('>>> handleOnChangeProductForm: ', {
       state: this.state,
@@ -296,10 +392,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   handleOnChangeAttrs = attrsValues => {
     console.log('>>> handleOnChangeAttrs values: ', { attrsValues });
-  }
+  };
 
-  handleOnSaveProduct = data => {
-    console.log('>>> handleOnSaveProduct: ', { data });
+  handleOnSaveProduct = () => {
+    console.log('>>> handleOnSaveProduct: ', { state: this.state.baseProduct });
+    const { baseProduct } = this.state;
+    if (baseProduct.id) {
+      this.updateBaseProduct();
+    } else {
+      this.createBaseProduct();
+    }
   };
 
   renderForm = () => {
@@ -343,7 +445,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             </div>
             <Step3
               data={this.state.baseProduct}
-              products={products}
+              products={
+                wizardStore.store && wizardStore.store.baseProducts.edges
+              }
               onUpload={this.handleOnUploadPhoto}
               aditionalPhotosMap={this.state.aditionalPhotosMap}
               onChange={this.handleOnChangeProductForm}
@@ -359,7 +463,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('>>> render');
+    console.log('>>> render', { props: this.props });
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const isNotEmpty = complement((i: any) => !i);
@@ -434,6 +538,22 @@ export default createFragmentContainer(
           baseProducts {
             edges {
               node {
+                id
+                rawId
+                name {
+                  text
+                  lang
+                }
+                shortDescription {
+                  lang
+                  text
+                }
+                category {
+                  id
+                  rawId
+                }
+                storeId
+                currencyId
                 products {
                   edges {
                     node {
@@ -485,6 +605,7 @@ export default createFragmentContainer(
         id
         rawId
         name {
+          lang
           text
         }
         metaField {
@@ -500,123 +621,123 @@ export default createFragmentContainer(
   `,
 );
 
-const products = {
-  edges: [
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 1,
-        rating: 1,
-        rawId: 1,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 100,
-                rawId: 671,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 2,
-        rating: 3,
-        rawId: 4,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 200,
-                rawId: 672,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 3,
-        rating: 3,
-        rawId: 3,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 300,
-                rawId: 673,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 4,
-        rating: 4,
-        rawId: 4,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 400,
-                rawId: 674,
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
+// const products = {
+//   edges: [
+//     {
+//       node: {
+//         name: [
+//           {
+//             text: 'A Set Of "Labyrinth"',
+//             lang: 'EN',
+//           },
+//         ],
+//         currencyId: 1,
+//         rating: 1,
+//         rawId: 1,
+//         storeId: 1,
+//         products: {
+//           edges: [
+//             {
+//               node: {
+//                 cashback: null,
+//                 discount: 5,
+//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
+//                 photoMain:
+//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+//                 price: 100,
+//                 rawId: 671,
+//               },
+//             },
+//           ],
+//         },
+//       },
+//     },
+//     {
+//       node: {
+//         name: [
+//           {
+//             text: 'A Set Of "Labyrinth"',
+//             lang: 'EN',
+//           },
+//         ],
+//         currencyId: 2,
+//         rating: 3,
+//         rawId: 4,
+//         storeId: 1,
+//         products: {
+//           edges: [
+//             {
+//               node: {
+//                 cashback: null,
+//                 discount: 5,
+//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
+//                 photoMain:
+//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+//                 price: 200,
+//                 rawId: 672,
+//               },
+//             },
+//           ],
+//         },
+//       },
+//     },
+//     {
+//       node: {
+//         name: [
+//           {
+//             text: 'A Set Of "Labyrinth"',
+//             lang: 'EN',
+//           },
+//         ],
+//         currencyId: 3,
+//         rating: 3,
+//         rawId: 3,
+//         storeId: 1,
+//         products: {
+//           edges: [
+//             {
+//               node: {
+//                 cashback: null,
+//                 discount: 5,
+//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
+//                 photoMain:
+//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+//                 price: 300,
+//                 rawId: 673,
+//               },
+//             },
+//           ],
+//         },
+//       },
+//     },
+//     {
+//       node: {
+//         name: [
+//           {
+//             text: 'A Set Of "Labyrinth"',
+//             lang: 'EN',
+//           },
+//         ],
+//         currencyId: 4,
+//         rating: 4,
+//         rawId: 4,
+//         storeId: 1,
+//         products: {
+//           edges: [
+//             {
+//               node: {
+//                 cashback: null,
+//                 discount: 5,
+//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
+//                 photoMain:
+//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+//                 price: 400,
+//                 rawId: 674,
+//               },
+//             },
+//           ],
+//         },
+//       },
+//     },
+//   ],
+// };

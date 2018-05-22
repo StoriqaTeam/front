@@ -56,6 +56,13 @@ class CardProduct extends PureComponent<PropsTypes> {
       ({ discount, photoMain, cashback, price } = product.node);
     }
 
+    console.log('>>> CartProduct data: ', {
+      storeId,
+      rawId,
+      currencyId,
+      price,
+    });
+
     if (!storeId || !rawId || !currencyId || !price) return null;
 
     const lang = 'EN';

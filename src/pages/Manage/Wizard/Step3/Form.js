@@ -7,6 +7,7 @@ import { findCategory } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
+import { Button } from 'components/common/Button';
 
 import AttributesForm from './AttributesForm';
 import Uploaders from './Uploaders';
@@ -67,11 +68,29 @@ class ThirdForm extends Component<PropsType, StateType> {
     }
   }
 
-  handleChangeData = e => {
+  handleChangeBaseProductState = e => {
+    const { data } = this.props;
     const {
       target: { value, name },
     } = e;
-    this.props.onChange({ [name]: value });
+    this.props.onChange({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  handleChangeProductState = e => {
+    const { data } = this.props;
+    const {
+      target: { value, name },
+    } = e;
+    this.props.onChange({
+      ...data,
+      product: {
+        ...data.product,
+        [name]: name === 'vendorCode' ? value : parseInt(value, 10),
+      },
+    });
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
@@ -134,7 +153,7 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { data, aditionalPhotosMap } = this.props;
+    const { data, aditionalPhotosMap, onSave } = this.props;
     const { categoryId } = data;
     console.log('>>> Form 3 render: ', { data, aditionalPhotosMap });
 
@@ -153,7 +172,7 @@ class ThirdForm extends Component<PropsType, StateType> {
                   id="name"
                   value={data.name}
                   label="Product name"
-                  onChange={this.handleChangeData}
+                  onChange={this.handleChangeBaseProductState}
                   fullWidth
                 />
               </div>
@@ -162,7 +181,7 @@ class ThirdForm extends Component<PropsType, StateType> {
                   id="shortDescription"
                   value={data.shortDescription}
                   label="Short description"
-                  onChange={this.handleChangeData}
+                  onChange={this.handleChangeBaseProductState}
                   fullWidth
                 />
               </div>
@@ -190,9 +209,9 @@ class ThirdForm extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   id="price"
-                  value={data.price || ''}
+                  value={data.product.price || ''}
                   label="Price"
-                  onChange={this.handleChangeData}
+                  onChange={this.handleChangeProductState}
                   fullWidth
                   type="number"
                 />
@@ -201,9 +220,9 @@ class ThirdForm extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   id="vendorCode"
-                  value={data.vendorCode || ''}
+                  value={data.product.vendorCode || ''}
                   label="Vendor code"
-                  onChange={this.handleChangeData}
+                  onChange={this.handleChangeProductState}
                   fullWidth
                 />
                 {/* <span styleName="">STQ</span> */}
@@ -211,9 +230,9 @@ class ThirdForm extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   id="cashback"
-                  value={data.cashback || ''}
+                  value={data.product.cashback || ''}
                   label="Cashback"
-                  onChange={this.handleChangeData}
+                  onChange={this.handleChangeProductState}
                   fullWidth
                   type="number"
                 />
@@ -221,6 +240,16 @@ class ThirdForm extends Component<PropsType, StateType> {
               </div>
             </div>
             {categoryId && this.renderAttributes()}
+            <Button
+              onClick={() => {
+                onSave();
+              }}
+              dataTest="wizardSaveProductButton"
+              big
+              disabled={false}
+            >
+              <span>Save</span>
+            </Button>
           </div>
         </div>
       </div>
