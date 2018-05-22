@@ -1,10 +1,11 @@
+// @flow
+
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   path,
   head,
-  insert,
   isNil,
   pathOr,
   defaultTo,
@@ -41,10 +42,9 @@ import {
 
 import {
   ProductType,
-  ThumbnailType,
-  PriceInfo,
   WidgetOptionType,
   ProductVariantType,
+  WidgetType
 } from './types';
 
 import './Product.scss';
@@ -57,20 +57,11 @@ type PropsType = {
 
 type StateType = {
   tabs: Array<{ id: string | number, label: string, content: any }>,
-  widgets: {},
-  photoMain: string,
-  additionalPhotos: Array<ThumbnailType>,
-  priceInfo: PriceInfo,
+  widgets: Array<WidgetType>,
   productVariant: ProductVariantType,
 };
 
 class Product extends Component<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -106,24 +97,12 @@ class Product extends Component<PropsType, StateType> {
     widgets: [],
     productVariant: {},
   };
-  /**
-   * @param {string} img
-   * @param {Array<{id: string, img: string}>} photos
-   * @return {ThumbnailType}
-   */
-  insertPhotoMain = (img: string, photos: ThumbnailType): ThumbnailType => {
-    if (!isNil(img)) {
-      return insert(0, { id: photos.length + 1, img, opacity: false }, photos);
-    }
-    return photos;
-  };
-
   handleAddToCart() {
     // Todo for Jero - update this after refactoring (needed selected product id)
     const id = pipe(
       pathOr([], ['props', 'baseProduct', 'variants', 'all']),
       head,
-      defaultTo({}),
+      defaultTo({ rawId: 0 }),
       prop('rawId'),
     )(this);
 
@@ -217,12 +196,7 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button
-                  wireframe={loggedIn}
-                  big
-                  disabled={!loggedIn}
-                  onClick={() => this.handleAddToCart()}
-                >
+                <Button wireframe big onClick={() => this.handleAddToCart()}>
                   Add to cart
                 </Button>
               </div>
@@ -244,7 +218,6 @@ class Product extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  // $FlowIgnoreMe
   withShowAlert(withErrorBoundary(Page(Product))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
