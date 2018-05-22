@@ -66,7 +66,7 @@ class ProductImage extends Component<PropsType, StateType> {
         </div>
         <div styleName="image">
           <figure styleName="bigImage">
-            {(discount > 0) ? (
+            {discount > 0 ? (
               <span styleName="discount">
                 Price <br /> Off <br />
                 <span
@@ -74,7 +74,7 @@ class ProductImage extends Component<PropsType, StateType> {
                     fontSize: 16,
                   }}
                 >
-                  { `${discount} %` }
+                  {`${discount} %`}
                 </span>
               </span>
             ) : null}
