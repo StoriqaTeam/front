@@ -102,20 +102,17 @@ describe('fromRelayError helper', () => {
   });
 });
 
-// xdescribe('fromRelayError helper', () => {
-//   describe('for common errors', () => {
-//     it('should convert to `{ code: { status, message }}`', () => {
-//       const converted = fromRelayError(commonError);
-//       expect(converted).toMatchObject({
-//         100: {
-//           status: '400 Bad Request',
-//           message: {
-//             email: 'Invalid email format',
-//             phone: 'Incorrect phone format',
-//           },
-//         },
-//       });
-//     });
-//   });
-// });
+const otherError = {
+  errors: {
+    someField: 'someValue',
+  },
+};
+
+describe("other errors", () => {
+  it('should return null if no data in error', () => {
+    const result = fromRelayError(otherError);
+    expect(result).toBeNull();
+  })
+})
+
 /* eslint-disable */
