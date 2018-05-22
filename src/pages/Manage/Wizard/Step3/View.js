@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, addIndex, assocPath, path, append } from 'ramda';
+import { map, addIndex } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
@@ -36,6 +36,7 @@ type PropsType = {
   data: any,
   aditionalPhotosMap: any,
   onChange: (data: { [name: string]: string }) => void,
+  onUpload: (type: string, e: any) => void,
   products: Array<ProductType>,
 };
 
@@ -48,8 +49,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     showForm: false,
   };
 
-  handleOnAddProduct = () => {
-    // console.log('handleOnAddProduct');
+  handleOnShowForm = () => {
     this.setState({ showForm: true });
   };
 
@@ -62,6 +62,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       data,
       aditionalPhotosMap,
       onChange,
+      onChangeAttrs,
       products,
       onUpload,
     } = this.props;
@@ -74,7 +75,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
         <div
           styleName="productItem uploaderItem"
           role="button"
-          onClick={this.handleOnAddProduct}
+          onClick={this.handleOnShowForm}
           onKeyDown={() => {}}
           tabIndex={0}
         >
@@ -92,7 +93,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <div styleName="layer">
                     <div
                       styleName="editbutton"
-                      onClick={() => {}}
+                      onClick={this.handleOnShowForm}
                       role="button"
                       onKeyDown={() => {}}
                       tabIndex={0}
@@ -121,6 +122,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             data={data}
             aditionalPhotosMap={aditionalPhotosMap}
             onChange={onChange}
+            onChangeAttrs={onChangeAttrs}
             onUpload={onUpload}
             categories={this.context.directories.categories}
           />

@@ -75,9 +75,12 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
+    console.log('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
+    const { onChangeAttrs } = this.props;
     this.setState({
       attrValues: attrs,
     });
+    onChangeAttrs(attrs);
   };
 
   defaultValueForAttribute = (attribute: AttributeType): AttrValueType => {

@@ -294,6 +294,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
+  handleOnChangeAttrs = attrsValues => {
+    console.log('>>> handleOnChangeAttrs values: ', { attrsValues });
+  }
+
   handleOnSaveProduct = data => {
     console.log('>>> handleOnSaveProduct: ', { data });
   };
@@ -343,6 +347,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               onUpload={this.handleOnUploadPhoto}
               aditionalPhotosMap={this.state.aditionalPhotosMap}
               onChange={this.handleOnChangeProductForm}
+              onChangeAttrs={this.handleOnChangeAttrs}
               onSave={this.handleOnSaveProduct}
             />
           </div>
