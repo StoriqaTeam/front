@@ -50,8 +50,7 @@ const commit = (params: DeleteFromCartParams) =>
         );
         store.setLinkedRecords(filtered, 'products');
       } else {
-        const me = relayStore.getRoot().getLinkedRecord('me');
-        const cart = me.getLinkedRecord('cart');
+        const cart = relayStore.getRoot().getLinkedRecord('cart');
         const connection = ConnectionHandler.getConnection(cart, 'Cart_stores');
         ConnectionHandler.deleteNode(connection, storeId);
         relayStore.delete(storeId);

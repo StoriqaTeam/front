@@ -18,6 +18,7 @@ type PropsType = {
   overPicture: ?string,
   id: string,
   dataTest: string,
+  buttonIconSize: ?number,
 };
 
 // TODO: refactor for avoid use style props
@@ -32,6 +33,7 @@ const UploadWrapper = ({
   overPicture,
   id,
   dataTest,
+  buttonIconSize,
 }: PropsType) => (
   <div styleName="wrapper">
     <div styleName="upoloadContainer">
@@ -42,7 +44,9 @@ const UploadWrapper = ({
         data-test={dataTest}
       >
         {buttonIconType &&
-          !overPicture && <Icon type={buttonIconType} size={32} />}
+          !overPicture && (
+            <Icon type={buttonIconType} size={buttonIconSize || 32} />
+          )}
         {!overPicture && (
           <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
         )}

@@ -36,8 +36,7 @@ const commit = (params: IncrementInCartParams) =>
     onCompleted: params.onCompleted,
     onError: params.onError,
     optimisticUpdater: relayStore => {
-      const me = relayStore.getRoot().getLinkedRecord('me');
-      const cart = me.getLinkedRecord('cart');
+      const cart = relayStore.getRoot().getLinkedRecord('cart');
       const storesConnection = ConnectionHandler.getConnection(
         cart,
         'Cart_stores',
@@ -69,8 +68,7 @@ const commit = (params: IncrementInCartParams) =>
     },
     updater: relayStore => {
       const store = relayStore.getRootField('incrementInCart');
-      const me = relayStore.getRoot().getLinkedRecord('me');
-      const cart = me.getLinkedRecord('cart');
+      const cart = relayStore.getRoot().getLinkedRecord('cart');
       const storesConnection = ConnectionHandler.getConnection(
         cart,
         'Cart_stores',

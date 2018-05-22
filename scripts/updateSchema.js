@@ -1,29 +1,30 @@
 import fs from 'fs';
 import path from 'path';
 import { introspectionQuery } from 'graphql/utilities';
-import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 import getClientEnvironment from '../config/env';
 
 // Save JSON of full schema introspection for Babel Relay Plugin to use
 
 const run = () => {
   console.log('Start GraphQL schema update.');
-const graphqlEndpoint = process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT;
+  const graphqlEndpoint = process.env.REACT_APP_SERVER_GRAPHQL_ENDPOINT;
   console.log('GraphQL endpoint: ', graphqlEndpoint);
   if (!graphqlEndpoint) {
     console.error(`Please check 'graphqlEndpoint' var in ${__filename}`);
     process.exit(1);
   }
-  fetch(graphqlEndpoint, {
-    method: 'POST',
+  axios({
+    url: graphqlEndpoint,
+    method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
+    data: JSON.stringify({
       query: introspectionQuery,
     }),
   })
     .then(result => {
       console.log('Result status from graphql: ', result.statusText);
-      return result.json();
+      return result.data;
     })
     .then(result => {
       if (result.errors) {

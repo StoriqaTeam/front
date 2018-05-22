@@ -26,7 +26,7 @@ import CartStore from './CartStore';
 import CartTotal from './CartTotal';
 
 // eslint-disable-next-line
-import type Cart_me from './__generated__/Cart_me.graphql';
+import type Cart_cart from './__generated__/Cart_cart.graphql';
 import type CartStoresLocalFragment from './__generated__/CartStoresLocalFragment.graphql';
 
 import './Cart.scss';
@@ -50,7 +50,7 @@ const STORES_FRAGMENT = graphql`
 
 type PropsType = {
   // eslint-disable-next-line
-  me: Cart_me,
+  cart: Cart_cart,
 };
 
 type Totals = {
@@ -98,15 +98,7 @@ class Cart extends Component<PropsType, StateType> {
 
   componentWillMount() {
     const store = this.context.environment.getStore();
-    const source = store.getSource().toJSON();
-    const meId = path(['client:root', 'me', '__ref'])(source);
-    // Technically we could make a full query here, but it will query
-    // client:${meId}:cart:stores. And all updated work on
-    // client:${meId}:cart:__Cart_stores_connection.
-    // @connection directive work on makin a query, but unfortunately
-    // store.lookup doesn't work with this directive. Hence this hacky
-    // version.
-    const connectionId = `client:${meId}:cart:__Cart_stores_connection`;
+    const connectionId = `client:root:cart:__Cart_stores_connection`;
     const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
       dataID: connectionId, // root
@@ -149,7 +141,7 @@ class Cart extends Component<PropsType, StateType> {
 
   render() {
     const stores = pipe(
-      pathOr([], ['me', 'cart', 'stores', 'edges']),
+      pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
     return (
@@ -184,17 +176,15 @@ Cart.contextTypes = {
 export default createPaginationContainer(
   Page(Cart),
   graphql`
-    fragment Cart_me on User
+    fragment Cart_cart on Cart
       @argumentDefinitions(
         first: { type: "Int", defaultValue: null }
         after: { type: "ID", defaultValue: null }
       ) {
-      cart {
-        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
-          edges {
-            node {
-              ...CartStore_store
-            }
+      stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+        edges {
+          node {
+            ...CartStore_store
           }
         }
       }
@@ -202,15 +192,15 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps: props => path(['me', 'cart'], props),
+    getConnectionFromProps: prop('cart'),
     getVariables: () => ({
       first: null,
       after: null,
     }),
     query: graphql`
       query Cart_cart_Query($first: Int, $after: ID) {
-        me {
-          ...Cart_me @arguments(first: $first, after: $after)
+        cart {
+          ...Cart_cart @arguments(first: $first, after: $after)
         }
       }
     `,
