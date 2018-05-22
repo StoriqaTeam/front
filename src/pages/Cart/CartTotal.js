@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Button } from 'components/common/Button';
 import { pipe, values, reduce } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
+import { formatPrice } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -197,11 +198,11 @@ class CartTotal extends Component<PropsType, StateType> {
           <div styleName="totals-container">
             <CartProductAttribute
               title="Products cost"
-              value={`${productsCost} STQ`}
+              value={`${formatPrice(productsCost || 0)} STQ`}
             />
             <CartProductAttribute
               title="Delivery cost"
-              value={`${deliveryCost} STQ`}
+              value={`${formatPrice(deliveryCost || 0)} STQ`}
             />
             <CartProductAttribute
               title={
@@ -212,7 +213,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   </span>
                 </div>
               }
-              value={`${productsCost + deliveryCost} STQ`}
+              value={`${formatPrice(productsCost + deliveryCost || 0)} STQ`}
             />
           </div>
           <div styleName="checkout">

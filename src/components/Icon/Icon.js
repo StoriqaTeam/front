@@ -40,14 +40,14 @@ import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 import Cats from 'components/Icon/svg/cats.svg';
 import Logout from 'components/Icon/svg/logout.svg';
-//
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
+import User from 'components/Icon/svg/user.svg';
 
 import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32 | 40,
+  size: 8 | 16 | 20 | 24 | 32 | 48 | 40,
   inline: ?boolean,
 };
 
@@ -89,6 +89,7 @@ const iconsMap = {
   cats: <Cats />,
   logout: <Logout />,
   sortArrows: <SortArrows />,
+  user: <User />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

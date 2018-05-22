@@ -6,6 +6,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import Rating from 'components/Rating';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Forms';
+import { formatPrice } from 'utils';
 
 import CartProduct from './CartProduct';
 import CartProductAttribute from './CartProductAttribute';
@@ -63,16 +64,18 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="store-total-header">Seller summary</div>
             <CartProductAttribute
               title="Products cost"
-              value={`${this.props.totals.productsCost} STQ`}
+              value={`${formatPrice(this.props.totals.productsCost || 0)} STQ`}
             />
             <CartProductAttribute
               title="Delivery cost"
-              value={`${this.props.totals.deliveryCost} STQ`}
+              value={`${formatPrice(this.props.totals.deliveryCost || 0)} STQ`}
             />
             <CartProductAttribute
               title="Total cost"
-              value={`${this.props.totals.deliveryCost +
-                this.props.totals.productsCost} STQ`}
+              value={`${formatPrice(
+                this.props.totals.deliveryCost +
+                  this.props.totals.productsCost || 0,
+              )} STQ`}
             />
             <div styleName="buy">
               <Button type="wireframe" disabled big>
