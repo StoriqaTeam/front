@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, toUpper } from 'ramda';
+import { pathOr, toUpper, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -72,12 +72,18 @@ class EditStore extends Component<PropsType, StateType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-        // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
-          this.setState({ serverValidationErrors: validationErrors });
-        }
         this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.setState({ serverValidationErrors: validationErrors });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Saved!',
+          link: { text: 'Ok!' },
+        });
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -86,18 +92,12 @@ class EditStore extends Component<PropsType, StateType> {
 
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
 
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          return;
-        }
         this.props.showAlert({
           type: 'danger',
           text: 'Something going wrong :(',
