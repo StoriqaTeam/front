@@ -182,7 +182,6 @@ class Product extends Component<PropsType, StateType> {
       baseProduct: { name, longDescription },
     } = this.props;
     const { tabs, widgets, productVariant } = this.state;
-    const loggedIn = false;
     const description = extractText(longDescription, 'EN', 'No Description');
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
@@ -219,9 +218,8 @@ class Product extends Component<PropsType, StateType> {
                   Buy now
                 </Button>
                 <Button
-                  wireframe={loggedIn}
+                  wireframe
                   big
-                  disabled={!loggedIn}
                   onClick={() => this.handleAddToCart()}
                 >
                   Add to cart
