@@ -6,44 +6,13 @@ import { map, addIndex, assocPath, path, append } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
-import { uploadFile } from 'utils';
 import { Icon } from 'components/Icon';
-// import { Modal } from 'components/Modal';
 import { CardProduct } from 'components/CardProduct';
 
 import Form from './Form';
+import Modal from './Modal';
 
 import './View.scss';
-
-type ModalType = {
-  children: Raact.Element,
-  showModal: boolean,
-  onClose: () => void,
-};
-
-const Modal = ({ children, showModal, onClose }: ModalType) => {
-  if (!showModal) {
-    return null;
-  }
-  return (
-    <div styleName="modalWrapper">
-      <div styleName="modal">
-        <div styleName="modalContent">
-          <div
-            styleName="closeButton"
-            role="button"
-            onClick={onClose}
-            onKeyDown={() => {}}
-            tabIndex={0}
-          >
-            <Icon type="cross" />
-          </div>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 type ProductType = {
   item: {
@@ -64,16 +33,8 @@ type ProductType = {
 };
 
 type PropsType = {
-  data: {
-    userId: ?number,
-    storeId: ?number,
-    name: ?string,
-    slug: ?string,
-    shortDescription: ?string,
-    defaultLanguage: ?string,
-    country: ?string,
-    address: ?string,
-  },
+  data: any,
+  aditionalPhotosMap: any,
   onChange: (data: { [name: string]: string }) => void,
   products: Array<ProductType>,
 };
@@ -85,26 +46,10 @@ type StateType = {
 class ThirdStepView extends React.Component<PropsType, StateType> {
   state = {
     showForm: false,
-    baseProduct: {
-      storeId: null,
-      currencyId: 1,
-      categoryId: null,
-      name: '',
-      shortDescription: '',
-      product: {
-        baseProductId: null,
-        vendorCode: '',
-        photoMain: '',
-        additionalPhotos: [],
-        price: null,
-        cashback: null,
-      },
-      attributes: [],
-    },
   };
 
   handleOnAddProduct = () => {
-    console.log('handleOnAddProduct');
+    // console.log('handleOnAddProduct');
     this.setState({ showForm: true });
   };
 
@@ -112,51 +57,17 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     this.setState({ showForm: false });
   };
 
-  handleOnChangeForm = data => {
-    console.log('^^^^ View handleOnChangeForm data : ', {
-      state: this.state,
-      data,
-    });
-    this.setState({
-      baseProduct: {
-        ...this.state.baseProduct,
-        ...data,
-      },
-    });
-  };
-
-  handleOnUploadPhoto = async (type: boolean, e: any) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    if (type === 'photoMain') {
-      this.setState(prevState =>
-        assocPath(
-          ['baseProduct', 'product', 'photoMain'],
-          result.url,
-          prevState,
-        ),
-      );
-    } else {
-      const additionalPhotos = path(
-        ['baseProduct', 'product', 'additionalPhotos'],
-        this.state,
-      );
-      this.setState(prevState =>
-        assocPath(
-          ['baseProduct', 'product', 'photoMain'],
-          append(result.url, additionalPhotos),
-          prevState,
-        ),
-      );
-    }
-  };
-
   render() {
-    const { data, onChange, products, onUpload } = this.props;
-    const { baseProduct, showForm } = this.state;
+    const {
+      data,
+      aditionalPhotosMap,
+      onChange,
+      products,
+      onUpload,
+    } = this.props;
+    const { showForm } = this.state;
     const productsArr = map(item => item.node, products.edges);
+    console.log('>>> View Form 3 render: ', { data });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
@@ -207,9 +118,10 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           )}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
-            data={baseProduct}
-            onChange={this.handleOnChangeForm}
-            onUpload={this.handleOnUploadPhoto}
+            data={data}
+            aditionalPhotosMap={aditionalPhotosMap}
+            onChange={onChange}
+            onUpload={onUpload}
             categories={this.context.directories.categories}
           />
         </Modal>

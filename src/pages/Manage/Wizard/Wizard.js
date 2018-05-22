@@ -3,7 +3,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pick, evolve, pathOr, omit, where, complement } from 'ramda';
+import {
+  append,
+  assocPath,
+  path,
+  pick,
+  evolve,
+  pathOr,
+  omit,
+  where,
+  complement,
+} from 'ramda';
 import debounce from 'lodash.debounce';
 
 import { Page } from 'components/App';
@@ -14,6 +24,7 @@ import {
   UpdateStoreMutation,
   UpdateStoreMainMutation,
 } from 'relay/mutations';
+import { uploadFile } from 'utils';
 
 import { resposeLogger, errorsLogger } from './utils';
 import WizardHeader from './WizardHeader';
@@ -34,6 +45,30 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     console.log('>>> constructor');
     this.state = {
       step: 1,
+      baseProduct: {
+        storeId: null,
+        currencyId: 1,
+        categoryId: null,
+        name: '',
+        shortDescription: '',
+        product: {
+          baseProductId: null,
+          vendorCode: '',
+          photoMain: '',
+          additionalPhotos: [],
+          price: null,
+          cashback: null,
+        },
+        attributes: [],
+      },
+      aditionalPhotosMap: {
+        photoAngle: '',
+        photoDetails: '',
+        photoScene: '',
+        photoUse: '',
+        photoSizes: '',
+        photoVarienty: '',
+      },
     };
   }
 
@@ -196,18 +231,67 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }, 250);
 
   handleChangeForm = data => {
-    const storeID = pathOr(
-      null,
-      ['me', 'wizardStore', 'store', 'id'],
-      this.props,
-    );
-    const storeId = pathOr(
-      null,
-      ['me', 'wizardStore', 'store', 'rawId'],
-      this.props,
-    );
-    console.log('>>> handleChangeForm: ', { data, storeId, storeID });
+    // const storeID = pathOr(
+    //   null,
+    //   ['me', 'wizardStore', 'store', 'id'],
+    //   this.props,
+    // );
+    // const storeId = pathOr(
+    //   null,
+    //   ['me', 'wizardStore', 'store', 'rawId'],
+    //   this.props,
+    // );
+    console.log('>>> handleChangeForm: ', { data });
     this.handleOnSaveWizard(data);
+  };
+
+  // Product handlers
+  handleOnChangeProductForm = data => {
+    console.log('>>> handleOnChangeProductForm: ', {
+      state: this.state,
+      data,
+    });
+    this.setState({
+      baseProduct: {
+        ...this.state.baseProduct,
+        ...data,
+      },
+    });
+  };
+
+  handleOnUploadPhoto = async (type: string, e: any) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    if (type === 'photoMain') {
+      this.setState(prevState =>
+        assocPath(
+          ['baseProduct', 'product', 'photoMain'],
+          result.url,
+          prevState,
+        ),
+      );
+    } else {
+      const additionalPhotos = path(
+        ['baseProduct', 'product', 'additionalPhotos'],
+        this.state,
+      );
+      this.setState(prevState => ({
+        ...prevState,
+        baseProduct: {
+          ...prevState.baseProduct,
+          product: {
+            ...prevState.baseProduct.product,
+            additionalPhotos: [...additionalPhotos, result.url],
+          },
+        },
+        aditionalPhotosMap: {
+          ...this.state.aditionalPhotosMap,
+          [type]: result.url,
+        },
+      }));
+    }
   };
 
   handleOnSaveProduct = data => {
@@ -254,8 +338,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               ease
             </div>
             <Step3
-              data={wizardStore}
+              data={this.state.baseProduct}
               products={products}
+              onUpload={this.handleOnUploadPhoto}
+              aditionalPhotosMap={this.state.aditionalPhotosMap}
+              onChange={this.handleOnChangeProductForm}
               onSave={this.handleOnSaveProduct}
             />
           </div>

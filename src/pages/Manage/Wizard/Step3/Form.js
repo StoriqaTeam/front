@@ -28,6 +28,7 @@ type PropsType = {
   data: {
     categoryId: ?number,
   },
+  aditionalPhotosMap: any,
   onUpload: (type: boolean, e: any) => void,
 };
 
@@ -130,10 +131,9 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('^^^^ ThirdForm props: ', this.props);
-    const { data } = this.props;
+    const { data, aditionalPhotosMap } = this.props;
     const { categoryId } = data;
-    console.log('*** form render categoryId, data: ', { categoryId, data });
+    console.log('>>> Form 3 render: ', { data, aditionalPhotosMap });
 
     return (
       <div styleName="wrapper">
@@ -166,7 +166,11 @@ class ThirdForm extends Component<PropsType, StateType> {
             </div>
             <div styleName="section">
               <div styleName="sectionName">Product photo</div>
-              <Uploaders onUpload={this.props.onUpload} />
+              <Uploaders
+                onUpload={this.props.onUpload}
+                photoMain={data.product.photoMain}
+                aditionalPhotosMap={aditionalPhotosMap}
+              />
             </div>
             {/* <div styleName="section">
               <div styleName="sectionName">Product photo</div>

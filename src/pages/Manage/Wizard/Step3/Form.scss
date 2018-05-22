@@ -58,12 +58,26 @@
 
         .uploadersWrapper {
           .uploadItem {
+            position: relative;
             display: inline-block;
              margin-bottom: 2rem;
 
             &:nth-child(3n+2) {
               margin-right: 2rem;
               margin-left: 2rem;
+            }
+            .uploadedPhotoWrapper {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              overflow: hidden;
+              background-color: $color_white;
+
+              img {
+                width: 100%;
+              }
             }
           }
         }
