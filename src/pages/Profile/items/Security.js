@@ -109,12 +109,11 @@ class Security extends Component<{}, StateType> {
     );
 
     if (formErrors) {
-      this.setState({
-        formErrors,
-        isLoading: false,
-      });
+      this.setState({ formErrors });
       return;
     }
+
+    this.setState(() => ({ isLoading: true }));
 
     const input = {
       clientMutationId: '',

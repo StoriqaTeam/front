@@ -3,12 +3,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { assocPath, pathOr, map } from 'ramda';
+import { assocPath, pathOr, map, assoc, isEmpty } from 'ramda';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
+import { withShowAlert } from 'components/App/AlertContext';
 import { log, fromRelayError } from 'utils';
 import {
   CreateUserDeliveryAddress,
@@ -48,6 +49,13 @@ type PropsType = {
     email: string,
     deliveryAddresses: Array<DeliveryAddressesType>,
   },
+  showAlert: ({
+    type: 'success' | 'danger' | 'warning',
+    text: string,
+    link: {
+      text: string,
+    },
+  }) => void,
 };
 
 type StateType = {
@@ -92,7 +100,6 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   handleSave = (id: ?number) => {
-    this.setState(() => ({ isLoading: true }));
     const { environment } = this.context;
     const { data } = this.props;
     const { form } = this.state;
@@ -109,13 +116,34 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       isPriority,
     } = form;
 
+    const availabilityErrors = {};
+
+    if (!country || !postalCode) {
+      if (!country)
+        assoc('country', 'Country is required parameter', availabilityErrors);
+      if (!postalCode)
+        assoc(
+          'postalCode',
+          'Postal code is required parameter',
+          availabilityErrors,
+        );
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Country and postal code are required parameters',
+        link: { text: 'Got it!' },
+      });
+      return;
+    }
+
+    this.setState(() => ({ isLoading: true }));
+
     const input = {
       clientMutationId: '',
-      country: country || null,
+      country,
       administrativeAreaLevel1: administrativeAreaLevel1 || null,
       administrativeAreaLevel2: administrativeAreaLevel2 || null,
       political: political || null,
-      postalCode: postalCode || null,
+      postalCode,
       streetNumber: streetNumber || null,
       address: address || null,
       route: route || null,
@@ -135,11 +163,18 @@ class ShippingAddresses extends Component<PropsType, StateType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-        this.setState(() => ({
-          isLoading: false,
-          isOpenNewForm: false,
-          editableAddressId: null,
-        }));
+        if (isEmpty(relayErrors)) {
+          this.setState(() => ({
+            isLoading: false,
+            isOpenNewForm: false,
+            editableAddressId: null,
+          }));
+          this.props.showAlert({
+            type: 'success',
+            text: id ? 'Address update!' : 'New address create!',
+            link: { text: 'Got it!' },
+          });
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -373,7 +408,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                     )}
                   </Fragment>
                 );
-              }, [...deliveryAddresses].reverse())}
+              }, deliveryAddresses)}
             </div>
           </div>
         )}
@@ -386,4 +421,4 @@ ShippingAddresses.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default ShippingAddresses;
+export default withShowAlert(ShippingAddresses);

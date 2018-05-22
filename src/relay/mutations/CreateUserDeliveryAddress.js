@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { map } from 'ramda';
 
 const mutation = graphql`
   mutation CreateUserDeliveryAddressMutation(
@@ -56,9 +57,16 @@ const commit = (params: MutationParamsType) =>
     onError: params.onError,
     updater: relayStore => {
       const address = relayStore.getRootField('createUserDeliveryAddress');
+      const isPriority = address.getValue('isPriority');
       const me = relayStore.getRoot().getLinkedRecord('me');
       const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
-      const newDeliveryAddresses = [...deliveryAddresses, address];
+      map(item => {
+        if (isPriority) {
+          item.setValue(false, 'isPriority');
+        }
+        return item;
+      }, deliveryAddresses);
+      const newDeliveryAddresses = [address, ...deliveryAddresses];
       me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddresses');
     },
   });

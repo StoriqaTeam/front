@@ -59,6 +59,7 @@ const commit = (params: MutationParamsType) =>
       const updatedAddress = relayStore.getRootField(
         'updateUserDeliveryAddress',
       );
+      const isPriority = updatedAddress.getValue('isPriority');
       const updatedAddressId = updatedAddress.getValue('id');
       const me = relayStore.getRoot().getLinkedRecord('me');
       const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
@@ -67,6 +68,9 @@ const commit = (params: MutationParamsType) =>
         if (item._dataID === updatedAddressId) {
           /* eslint-enable */
           return updatedAddress;
+        }
+        if (isPriority) {
+          item.setValue(false, 'isPriority');
         }
         return item;
       }, deliveryAddresses);
