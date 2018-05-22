@@ -119,10 +119,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   handleAddToCart() {
-    if (!this.loggedIn()) {
-      return;
-    }
-
     // Todo for Jero - update this after refactoring (needed selected product id)
     const id = pipe(
       pathOr([], ['props', 'baseProduct', 'variants', 'all']),
