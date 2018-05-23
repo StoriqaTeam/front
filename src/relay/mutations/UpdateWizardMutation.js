@@ -14,6 +14,24 @@ const mutation = graphql`
       slug
       shortDescription
       defaultLanguage
+      addressFull {
+        country
+        value
+        administrativeAreaLevel1
+        administrativeAreaLevel2
+        locality
+        political
+        postalCode
+        route
+        streetNumber
+      }
+      stepThree {
+        edges {
+          node {
+            id
+          }
+        }
+      }
       store {
         id
         rawId
@@ -68,24 +86,6 @@ const mutation = graphql`
                 }
               }
             }
-          }
-        }
-      }
-      addressFull {
-        country
-        value
-        administrativeAreaLevel1
-        administrativeAreaLevel2
-        locality
-        political
-        postalCode
-        route
-        streetNumber
-      }
-      stepThree {
-        edges {
-          node {
-            id
           }
         }
       }

@@ -34,7 +34,7 @@ type ProductType = {
 };
 
 type PropsType = {
-  data: any,
+  formStateData: any,
   aditionalPhotosMap: any,
   onChange: (data: { [name: string]: string }) => void,
   onUpload: (type: string, e: any) => void,
@@ -51,13 +51,13 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   handleOnShowForm = item => {
-    const { onChange, data } = this.props;
+    const { onChange, formStateData } = this.props;
     const name = item.name ? getNameText(item.name) : '';
     const shortDescription = item.shortDescription
       ? getNameText(item.shortDescription)
       : '';
     const prepareStateObj = {
-      ...data,
+      ...formStateData,
       categoryId: item.category && item.category.rawId,
       id: item.id,
       name,
@@ -65,7 +65,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     };
     console.log('>>> Form 3 View handleOnShowForm item: ', {
       productData: item,
-      stateData: data,
+      stateData: formStateData,
       prepareStateObj,
     });
     return () => {
@@ -81,7 +81,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   render() {
     const {
-      data,
+      formStateData,
       aditionalPhotosMap,
       onChange,
       onChangeAttrs,
@@ -90,8 +90,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       onSave,
     } = this.props;
     const { showForm } = this.state;
-    const productsArr = map(item => item.node, products);
-    console.log('>>> View Form 3 render: ', { data, products, productsArr });
+    const productsArr = products && map(item => item.node, products);
+    console.log('>>> View Form 3 render: ', {
+      formStateData,
+      products,
+      productsArr,
+    });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
@@ -142,7 +146,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           )}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
-            data={data}
+            data={formStateData}
             categories={this.context.directories.categories}
             aditionalPhotosMap={aditionalPhotosMap}
             onChange={onChange}

@@ -22,6 +22,13 @@ const mutation = graphql`
       }
       slug
       defaultLanguage
+      baseProducts {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;

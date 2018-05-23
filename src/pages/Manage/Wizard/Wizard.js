@@ -21,11 +21,12 @@ import {
   CreateWizardMutation,
   UpdateWizardMutation,
   CreateStoreMutation,
-  UpdateStoreMutation,
+  // UpdateStoreMutation,
+  UpdateStoreWizardMutation,
   UpdateStoreMainMutation,
   CreateBaseProductWizardMutation,
   UpdateBaseProductMutation,
-  CreateProductWithAttributesMutation,
+  CreateProductWithAttributesWizardMutation,
   UpdateProductMutation,
 } from 'relay/mutations';
 import { uploadFile } from 'utils';
@@ -185,8 +186,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     if (!preparedData.id) {
       return;
     }
-    const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
-    updater.commit({
+    // const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreWizardMutation;
+    UpdateStoreWizardMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -290,7 +291,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         // console.log('^^^ createBaseProduct prepareDataForProduct: ', {
         //   prepareDataForProduct,
         // });
-        CreateProductWithAttributesMutation.commit({
+        CreateProductWithAttributesWizardMutation.commit({
           ...prepareDataForProduct,
           environment: this.context.environment,
           onCompleted: (
@@ -409,6 +410,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     console.log('>>> renderForm');
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    const baseProducts = pathOr(
+      null,
+      ['me', 'wizardStore', 'baseProducts'],
+      this.props,
+    );
     switch (step) {
       case 1:
         return (
@@ -438,24 +444,24 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         );
       case 3:
         return (
-          <div styleName="formWrapper thirdForm">
-            <div styleName="headerTitle">Fill your store with goods</div>
-            <div styleName="headerDescription">
-              Choose what you gonna sale in your marketplace and add it with
-              ease
+          baseProducts && (
+            <div styleName="formWrapper thirdForm">
+              <div styleName="headerTitle">Fill your store with goods</div>
+              <div styleName="headerDescription">
+                Choose what you gonna sale in your marketplace and add it with
+                ease
+              </div>
+              <Step3
+                formStateData={this.state.baseProduct}
+                products={baseProducts.edges}
+                onUpload={this.handleOnUploadPhoto}
+                aditionalPhotosMap={this.state.aditionalPhotosMap}
+                onChange={this.handleOnChangeProductForm}
+                onChangeAttrs={this.handleOnChangeAttrs}
+                onSave={this.handleOnSaveProduct}
+              />
             </div>
-            <Step3
-              data={this.state.baseProduct}
-              products={
-                wizardStore.store && wizardStore.store.baseProducts.edges
-              }
-              onUpload={this.handleOnUploadPhoto}
-              aditionalPhotosMap={this.state.aditionalPhotosMap}
-              onChange={this.handleOnChangeProductForm}
-              onChangeAttrs={this.handleOnChangeAttrs}
-              onSave={this.handleOnSaveProduct}
-            />
-          </div>
+          )
         );
       default:
         break;
@@ -573,7 +579,7 @@ export default createFragmentContainer(
                 }
                 storeId
                 currencyId
-                products {
+                products(first: 1) @connection(key: "Wizard_products") {
                   edges {
                     node {
                       id
