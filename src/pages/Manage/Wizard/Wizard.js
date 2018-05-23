@@ -23,7 +23,7 @@ import {
   CreateStoreMutation,
   UpdateStoreMutation,
   UpdateStoreMainMutation,
-  CreateBaseProductMutation,
+  CreateBaseProductWizardMutation,
   UpdateBaseProductMutation,
   CreateProductWithAttributesMutation,
   UpdateProductMutation,
@@ -263,7 +263,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     );
     // console.log('^^^ createBaseProduct preparedData: ', { preparedData });
     // const storeID = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
-    CreateBaseProductMutation.commit({
+    CreateBaseProductWizardMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -533,6 +533,24 @@ export default createFragmentContainer(
         slug
         shortDescription
         defaultLanguage
+        addressFull {
+          country
+          value
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          political
+          postalCode
+          route
+          streetNumber
+        }
+        stepThree {
+          edges {
+            node {
+              id
+            }
+          }
+        }
         store {
           id
           rawId
@@ -594,146 +612,7 @@ export default createFragmentContainer(
             }
           }
         }
-        addressFull {
-          country
-          value
-          administrativeAreaLevel1
-          administrativeAreaLevel2
-          locality
-          political
-          postalCode
-          route
-          streetNumber
-        }
-        stepThree {
-          edges {
-            node {
-              id
-            }
-          }
-        }
       }
     }
   `,
 );
-
-// const products = {
-//   edges: [
-//     {
-//       node: {
-//         name: [
-//           {
-//             text: 'A Set Of "Labyrinth"',
-//             lang: 'EN',
-//           },
-//         ],
-//         currencyId: 1,
-//         rating: 1,
-//         rawId: 1,
-//         storeId: 1,
-//         products: {
-//           edges: [
-//             {
-//               node: {
-//                 cashback: null,
-//                 discount: 5,
-//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
-//                 photoMain:
-//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-//                 price: 100,
-//                 rawId: 671,
-//               },
-//             },
-//           ],
-//         },
-//       },
-//     },
-//     {
-//       node: {
-//         name: [
-//           {
-//             text: 'A Set Of "Labyrinth"',
-//             lang: 'EN',
-//           },
-//         ],
-//         currencyId: 2,
-//         rating: 3,
-//         rawId: 4,
-//         storeId: 1,
-//         products: {
-//           edges: [
-//             {
-//               node: {
-//                 cashback: null,
-//                 discount: 5,
-//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
-//                 photoMain:
-//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-//                 price: 200,
-//                 rawId: 672,
-//               },
-//             },
-//           ],
-//         },
-//       },
-//     },
-//     {
-//       node: {
-//         name: [
-//           {
-//             text: 'A Set Of "Labyrinth"',
-//             lang: 'EN',
-//           },
-//         ],
-//         currencyId: 3,
-//         rating: 3,
-//         rawId: 3,
-//         storeId: 1,
-//         products: {
-//           edges: [
-//             {
-//               node: {
-//                 cashback: null,
-//                 discount: 5,
-//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
-//                 photoMain:
-//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-//                 price: 300,
-//                 rawId: 673,
-//               },
-//             },
-//           ],
-//         },
-//       },
-//     },
-//     {
-//       node: {
-//         name: [
-//           {
-//             text: 'A Set Of "Labyrinth"',
-//             lang: 'EN',
-//           },
-//         ],
-//         currencyId: 4,
-//         rating: 4,
-//         rawId: 4,
-//         storeId: 1,
-//         products: {
-//           edges: [
-//             {
-//               node: {
-//                 cashback: null,
-//                 discount: 5,
-//                 id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
-//                 photoMain:
-//                   'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-//                 price: 400,
-//                 rawId: 674,
-//               },
-//             },
-//           ],
-//         },
-//       },
-//     },
-//   ],
-// };
