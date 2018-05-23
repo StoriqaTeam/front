@@ -24,6 +24,44 @@ const mutation = graphql`
       currencyId
       category {
         id
+        rawId
+      }
+      storeId
+      currencyId
+      products(first: 1) @connection(key: "Wizard_products") {
+        edges {
+          node {
+            id
+            rawId
+            price
+            discount
+            photoMain
+            additionalPhotos
+            vendorCode
+            cashback
+            price
+            attributes {
+              value
+              metaField
+              attribute {
+                id
+                rawId
+                name {
+                  lang
+                  text
+                }
+                metaField {
+                  values
+                  translatedValues {
+                    translations {
+                      text
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -41,6 +79,7 @@ type MutationParamsType = {
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
+  updater: ?(proxyStore: any) => void,
 };
 
 const commit = (params: MutationParamsType) =>
@@ -61,6 +100,7 @@ const commit = (params: MutationParamsType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    updater: params.updater,
   });
 
 export default { commit };

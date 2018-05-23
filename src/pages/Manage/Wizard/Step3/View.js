@@ -1,28 +1,22 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { map, addIndex, assocPath, path, append } from 'ramda';
+import { map, addIndex } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
-import { uploadFile, log } from 'utils';
 import { Icon } from 'components/Icon';
-// import { Modal } from 'components/Modal';
 import { CardProduct } from 'components/CardProduct';
+import { getNameText, log } from 'utils';
 
 import Form from './Form';
+import Modal from './Modal';
 
 import './View.scss';
 
-type ModalType = {
-  children: React.Element<*>,
-  showModal: boolean,
-  onClose: () => void,
-};
-
-type ProductNodeType = {
-  node: {
+type ProductType = {
+  item: {
     rawId: number,
     storeId: number,
     currencyId: number,
@@ -30,161 +24,85 @@ type ProductNodeType = {
       lang: string,
       text: string,
     }>,
-    discount: number,
-    photoMain: string,
-    cashback: number,
-    price: number,
+    variants: Array<{
+      discount: number,
+      photoMain: string,
+      cashback: number,
+      price: number,
+    }>,
   },
 };
 
 type PropsType = {
-  // data: {
-  //   userId: ?number,
-  //   storeId: ?number,
-  //   name: ?string,
-  //   slug: ?string,
-  //   shortDescription: ?string,
-  //   defaultLanguage: ?string,
-  //   country: ?string,
-  //   address: ?string,
-  // },
-  // onChange: (data: { [name: string]: string }) => void,
-  products: {
-    edges: Array<ProductNodeType>,
-  },
+  formStateData: any,
+  aditionalPhotosMap: any,
+  onChange: (data: { [name: string]: string }) => void,
+  onUpload: (type: string, e: any) => void,
+  products: Array<ProductType>,
 };
 
 type StateType = {
   showForm: boolean,
-  baseProduct: {
-    storeId: ?number,
-    currencyId: number,
-    categoryId: ?number,
-    name: string,
-    shortDescription: string,
-    product: {
-      baseProductId: ?number,
-      vendorCode: ?string,
-      photoMain: string,
-      additionalPhotos: Array<string>,
-      price: ?number,
-      cashback: ?number,
-    },
-    attributes: [],
-  },
-};
-
-const Modal = ({ children, showModal, onClose }: ModalType) => {
-  if (!showModal) {
-    return null;
-  }
-  return (
-    <div styleName="modalWrapper">
-      <div styleName="modal">
-        <div styleName="modalContent">
-          <div
-            styleName="closeButton"
-            role="button"
-            onClick={onClose}
-            onKeyDown={() => {}}
-            tabIndex={0}
-          >
-            <Icon type="cross" />
-          </div>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
 };
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
   state = {
     showForm: false,
-    baseProduct: {
-      storeId: null,
-      currencyId: 1,
-      categoryId: null,
-      name: '',
-      shortDescription: '',
-      product: {
-        baseProductId: null,
-        vendorCode: '',
-        photoMain: '',
-        additionalPhotos: [],
-        price: null,
-        cashback: null,
-      },
-      attributes: [],
-    },
   };
 
-  handleOnAddProduct = () => {
-    log.info('handleOnAddProduct');
-    this.setState({ showForm: true });
+  handleOnShowForm = item => {
+    const { onChange, formStateData } = this.props;
+    const name = item.name ? getNameText(item.name) : '';
+    const shortDescription = item.shortDescription
+      ? getNameText(item.shortDescription)
+      : '';
+    const prepareStateObj = {
+      ...formStateData,
+      categoryId: item.category && item.category.rawId,
+      id: item.id,
+      name,
+      shortDescription,
+    };
+    log.info('>>> Form 3 View handleOnShowForm item: ', {
+      productData: item,
+      stateData: formStateData,
+      prepareStateObj,
+    });
+    return () => {
+      log.info('^^^ handleOnShowForm show form');
+      onChange(prepareStateObj);
+      this.setState({ showForm: true });
+    };
   };
 
   handleOnCloseModal = () => {
     this.setState({ showForm: false });
   };
 
-  handleOnChangeForm = (data: { [string]: any }) => {
-    log.info('^^^^ View handleOnChangeForm data : ', {
-      state: this.state,
-      data,
-    });
-    this.setState({
-      baseProduct: {
-        ...this.state.baseProduct,
-        ...data,
-      },
-    });
-  };
-
-  handleOnUploadPhoto = async (e: any, type: ?string): Promise<*> => {
-    if (!e) {
-      return;
-    }
-    e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    if (type === 'photoMain') {
-      this.setState(prevState =>
-        assocPath(
-          ['baseProduct', 'product', 'photoMain'],
-          result.url,
-          prevState,
-        ),
-      );
-    } else {
-      const additionalPhotos = path(
-        ['baseProduct', 'product', 'additionalPhotos'],
-        this.state,
-      );
-      this.setState(prevState =>
-        assocPath(
-          ['baseProduct', 'product', 'photoMain'],
-          // $FlowIgnoreMe
-          append(result.url, additionalPhotos),
-          prevState,
-        ),
-      );
-    }
-  };
-
   render() {
-    // const { data, onChange, products, onUpload } = this.props;
-    const { products } = this.props;
-    const { baseProduct, showForm } = this.state;
-    const productsArr = map(item => item.node, products.edges);
+    const {
+      formStateData,
+      aditionalPhotosMap,
+      onChange,
+      onChangeAttrs,
+      products,
+      onUpload,
+      onSave,
+    } = this.props;
+    const { showForm } = this.state;
+    const productsArr = map(item => item.node, products);
+    log.info('>>> View Form 3 render: ', {
+      formStateData,
+      products,
+      productsArr,
+    });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
         <div
           styleName="productItem uploaderItem"
           role="button"
-          onClick={this.handleOnAddProduct}
+          onClick={() => this.setState({ showForm: true })}
           onKeyDown={() => {}}
           tabIndex={0}
         >
@@ -202,7 +120,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <div styleName="layer">
                     <div
                       styleName="editbutton"
-                      onClick={() => {}}
+                      onClick={this.handleOnShowForm(item)}
                       role="button"
                       onKeyDown={() => {}}
                       tabIndex={0}
@@ -228,10 +146,13 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           )}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
-            data={baseProduct}
-            onChange={this.handleOnChangeForm}
-            onUpload={this.handleOnUploadPhoto}
+            data={formStateData}
             categories={this.context.directories.categories}
+            aditionalPhotosMap={aditionalPhotosMap}
+            onChange={onChange}
+            onChangeAttrs={onChangeAttrs}
+            onUpload={onUpload}
+            onSave={onSave}
           />
         </Modal>
       </div>

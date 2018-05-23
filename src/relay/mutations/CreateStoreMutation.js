@@ -22,6 +22,13 @@ const mutation = graphql`
       }
       slug
       defaultLanguage
+      baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;

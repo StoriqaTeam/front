@@ -3,22 +3,19 @@
 // TODO: rename to UpdateStoreContactsMutation
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment } from 'relay-runtime';
-import { log } from 'utils';
+import { Environment, ConnectionHandler } from 'relay-runtime';
 
 const mutation = graphql`
-  mutation UpdateStoreMutation($input: UpdateStoreInput!) {
+  mutation UpdateStoreWizardMutation($input: UpdateStoreInput!) {
     updateStore(input: $input) {
       id
       rawId
       defaultLanguage
-      email
-      phone
-      slug
       name {
         lang
         text
       }
+      slug
       shortDescription {
         lang
         text
@@ -56,8 +53,6 @@ type MutationParamsType = {
   slug: string,
   shortDescription: string,
   defaultLanguage: string,
-  email: string,
-  phone: string,
   country: string,
   address: string,
   administrativeAreaLevel1: string,
@@ -67,25 +62,19 @@ type MutationParamsType = {
   postalCode: string,
   route: string,
   streetNumber: string,
-  facebookUrl: string,
-  twitterUrl: string,
-  instagramUrl: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
 };
 
 const commit = (params: MutationParamsType) => {
-  log.info('!!! UpdateStoreMutation params: ', params);
+  console.log('!!! UpdateStoreMutation params: ', params);
   return commitMutation(params.environment, {
     mutation,
     variables: {
       input: {
         clientMutationId: '',
         id: params.id,
-        name: params.name,
-        slug: params.slug,
-        shortDescription: params.shortDescription,
         defaultLanguage: params.defaultLanguage,
         email: params.email,
         phone: params.phone,
@@ -105,6 +94,30 @@ const commit = (params: MutationParamsType) => {
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    // updater: (relayStore, data) => {
+    //   console.log('>>> UpdateStoreWizardMutation updater: ');
+    //   const me = relayStore.getRoot().getLinkedRecord('me');
+    //   const wizardStore = me.getLinkedRecord('wizardStore');
+    //   const storeProxy = wizardStore.getLinkedRecord('store');
+    //   const conn = ConnectionHandler.getConnection(
+    //     storeProxy,
+    //     'Wizard_baseProducts',
+    //   );
+    //   ConnectionHandler.insertEdgeAfter(conn, );
+
+    //   const responseStore = relayStore.getRootField('updateStore');
+    //   // const responseStoreBaseProducts = responseStore.getLinkedRecord(
+    //   //   'baseProducts',
+    //   // );
+
+    //   // storeProxy.setLinkedRecord(responseStoreBaseProducts, 'baseProducts');
+    //   console.log('^^^ UpdateStoreWizardMutation updater: ', {
+    //     storeProxy,
+    //     responseStore,
+    //     data,
+    //     // responseStoreBaseProducts,
+    //   });
+    // },
   });
 };
 

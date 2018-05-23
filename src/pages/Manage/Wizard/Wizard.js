@@ -2,21 +2,37 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ConnectionHandler } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pick, evolve, pathOr, omit, where, complement } from 'ramda';
+import {
+  append,
+  assocPath,
+  path,
+  pick,
+  evolve,
+  pathOr,
+  omit,
+  where,
+  complement,
+} from 'ramda';
 import debounce from 'lodash.debounce';
 
 import { Page } from 'components/App';
-import { log } from 'utils';
 import {
   CreateWizardMutation,
   UpdateWizardMutation,
   CreateStoreMutation,
   UpdateStoreMutation,
-  UpdateStoreMainMutation,
+  // UpdateStoreMainMutation,
+  CreateBaseProductMutation,
+  UpdateBaseProductMutation,
+  CreateProductWithAttributesMutation,
+  UpdateProductMutation,
+  CreateProductMutation,
 } from 'relay/mutations';
+import { uploadFile, log } from 'utils';
 
-import { resposeLogger, errorsLogger } from './utils';
+import { resposeLogger, errorsLogger, transformTranslated } from './utils';
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
@@ -25,174 +41,58 @@ import Step3 from './Step3/View';
 
 import './Wizard.scss';
 
-const products = {
-  edges: [
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 1,
-        rating: 1,
-        rawId: 1,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 100,
-                rawId: 671,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 2,
-        rating: 3,
-        rawId: 4,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 200,
-                rawId: 672,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 3,
-        rating: 3,
-        rawId: 3,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 300,
-                rawId: 673,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 4,
-        rating: 4,
-        rawId: 4,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 400,
-                rawId: 674,
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
+type PropsType = {};
 
-type PropsType = {
-  languages: any,
-  products: {
-    edges: Array<{
-      node: {
-        name: Array<{
-          text: string,
-          lang: string,
-        }>,
-        currencyId: number,
-        rating: number,
-        rawId: number,
-        storeId: number,
-        products: {
-          edges: Array<{
-            node: {
-              cashback: ?number,
-              discount: ?number,
-              id: string,
-              photoMain: ?string,
-              price: number,
-              rawId: number,
-            },
-          }>,
-        },
-      },
-    }>,
-  },
-};
-
-type StateType = {
-  isLoading: boolean,
-  step: number,
-};
+type StateType = {};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    log.info('>>> getDerivedStateFromProps: ', { nextProps, prevState });
+    const wizardStore = pathOr(null, ['me', 'wizardStore'], nextProps);
+    return {
+      ...prevState,
+      baseProduct: {
+        ...prevState.baseProduct,
+        storeId: wizardStore && wizardStore.storeId,
+      },
+    };
+  }
+
   constructor(props: PropsType) {
     super(props);
-    log.info('>>> constructor');
+    // log.info('>>> constructor');
     this.state = {
-      isLoading: false,
       step: 1,
+      baseProduct: {
+        id: null,
+        storeId: null,
+        currencyId: 1,
+        categoryId: null,
+        name: '',
+        shortDescription: '',
+        product: {
+          baseProductId: null,
+          vendorCode: '',
+          photoMain: '',
+          additionalPhotos: [],
+          price: null,
+          cashback: null,
+        },
+        attributes: [],
+      },
+      aditionalPhotosMap: {
+        photoAngle: '',
+        photoDetails: '',
+        photoScene: '',
+        photoUse: '',
+        photoSizes: '',
+        photoVarienty: '',
+      },
     };
   }
 
   componentDidMount() {
-    log.info('>>> componentDidMount');
+    // log.info('>>> componentDidMount');
     this.createWizard();
   }
 
@@ -236,7 +136,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   prepareStoreMutationInput = () => {
-    log.info('>>> prepareStoreMutationInput: ');
+    // log.info('>>> prepareStoreMutationInput: ');
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
     const userId = pathOr(null, ['me', 'rawId'], this.props);
@@ -261,14 +161,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   createStore = () => {
-    log.info('>>> createStore');
+    // log.info('>>> createStore');
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.info('^^^ createStore response: ', { response, errors });
-        this.updateWizard({ storeId: response.createStore.rawId });
+        const storeId = pathOr(null, ['createStore', 'rawId'], response);
+        this.updateWizard({ storeId });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
       },
@@ -280,15 +181,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateStore = () => {
-    log.info('>>> updateStore');
+    // log.info('>>> updateStore');
     const { step } = this.state;
-    // const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
     }
-    const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreMutation;
-    updater.commit({
+    // const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreWizardMutation;
+    UpdateStoreMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -307,12 +207,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeStep = (step: number) => {
-    log.info('>>> handleOnChangeStep: ', { step });
+    // log.info('>>> handleOnChangeStep: ', { step });
     this.setState({ step });
   };
 
   handleOnSaveStep = (changedStep: number) => {
-    log.info('>>> handleOnSaveStep: ', { changedStep });
+    // log.info('>>> handleOnSaveStep: ', { changedStep });
     const { step } = this.state;
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     switch (step) {
@@ -350,28 +250,189 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }, 250);
 
   handleChangeForm = data => {
-    const storeID = pathOr(
-      null,
-      ['me', 'wizardStore', 'store', 'id'],
-      this.props,
-    );
-    const storeId = pathOr(
-      null,
-      ['me', 'wizardStore', 'store', 'rawId'],
-      this.props,
-    );
-    log.info('>>> handleChangeForm: ', { data, storeId, storeID });
+    // log.info('>>> handleChangeForm: ', { data });
     this.handleOnSaveWizard(data);
   };
 
-  handleOnSaveProduct = data => {
-    log.info('>>> handleOnSaveProduct: ', { data });
+  // Product handlers
+  createBaseProduct = () => {
+    // log.info('>>> createBaseProduct');
+    const { baseProduct } = this.state;
+    const preparedData = transformTranslated(
+      'EN',
+      ['name', 'shortDescription'],
+      omit(['product', 'attributes'], baseProduct),
+    );
+    log.info('^^^ createBaseProduct preparedData: ', { preparedData });
+    // const storeID = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
+    CreateBaseProductMutation.commit({
+      ...preparedData,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        // log.info('^^^ createBaseProduct response: ', { response, errors });
+        resposeLogger(response, errors);
+        const baseProductId = pathOr(
+          null,
+          ['createBaseProduct', 'rawId'],
+          response,
+        );
+        if (!baseProductId) {
+          this.setState(() => ({ isLoading: false }));
+          return;
+        }
+        // create variant after create base product
+        const prepareDataForProduct = {
+          product: {
+            ...baseProduct.product,
+            cashback: baseProduct.product.cashback / 100,
+            baseProductId,
+          },
+          attributes: baseProduct.attributes,
+        };
+        // log.info('^^^ createBaseProduct prepareDataForProduct: ', {
+        //   prepareDataForProduct,
+        // });
+        CreateProductWithAttributesMutation.commit({
+          ...prepareDataForProduct,
+          environment: this.context.environment,
+          onCompleted: (
+            productResponse: ?Object,
+            productErrors: ?Array<any>,
+          ) => {
+            log.info('^^^ createProduct response: ', {
+              productResponse,
+              productErrors,
+            });
+            this.setState(() => ({ isLoading: false }));
+            resposeLogger(productResponse, productErrors);
+          },
+          onError: (error: Error) => {
+            this.setState(() => ({ isLoading: false }));
+            errorsLogger(error);
+          },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        errorsLogger(error);
+      },
+      updater: relayStore => {
+        const me = relayStore.getRoot().getLinkedRecord('me');
+        const wizardStore = me.getLinkedRecord('wizardStore');
+        const storeProxy = wizardStore.getLinkedRecord('store');
+        const conn = ConnectionHandler.getConnection(
+          storeProxy,
+          'Wizard_baseProducts',
+        );
+        const newProduct = relayStore.getRootField('createBaseProduct');
+        const edge = ConnectionHandler.createEdge(
+          relayStore,
+          conn,
+          newProduct,
+          'BaseProductsEdge',
+        );
+        ConnectionHandler.insertEdgeAfter(conn, edge);
+      },
+    });
+  };
+
+  updateBaseProduct = () => {
+    log.info('>>> updateBaseProduct');
+    const { baseProduct } = this.state;
+    const preparedData = transformTranslated(
+      'EN',
+      ['name', 'shortDescription'],
+      omit(['product', 'attributes'], baseProduct),
+    );
+    log.info('^^^ updateBaseProduct preparedData: ', { preparedData });
+    UpdateBaseProductMutation.commit({
+      ...preparedData,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.info('^^^ updateBaseProduct response: ', { response, errors });
+        // const storeId = pathOr(null, ['createStore', 'rawId'], response);
+        // this.updateWizard({ storeId });
+        this.setState(() => ({ isLoading: false }));
+        resposeLogger(response, errors);
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        errorsLogger(error);
+      },
+    });
+  };
+
+  handleOnChangeProductForm = data => {
+    log.info('>>> handleOnChangeProductForm: ', {
+      state: this.state,
+      data,
+    });
+    this.setState({
+      baseProduct: {
+        ...this.state.baseProduct,
+        ...data,
+      },
+    });
+  };
+
+  handleOnUploadPhoto = async (type: string, e: any) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    if (type === 'photoMain') {
+      this.setState(prevState =>
+        assocPath(
+          ['baseProduct', 'product', 'photoMain'],
+          result.url,
+          prevState,
+        ),
+      );
+    } else {
+      const additionalPhotos = path(
+        ['baseProduct', 'product', 'additionalPhotos'],
+        this.state,
+      );
+      this.setState(prevState => ({
+        ...prevState,
+        baseProduct: {
+          ...prevState.baseProduct,
+          product: {
+            ...prevState.baseProduct.product,
+            additionalPhotos: [...additionalPhotos, result.url],
+          },
+        },
+        aditionalPhotosMap: {
+          ...this.state.aditionalPhotosMap,
+          [type]: result.url,
+        },
+      }));
+    }
+  };
+
+  handleOnChangeAttrs = attrsValues => {
+    log.info('>>> handleOnChangeAttrs values: ', { attrsValues });
+  };
+
+  handleOnSaveProduct = () => {
+    log.info('>>> handleOnSaveProduct: ', { state: this.state.baseProduct });
+    const { baseProduct } = this.state;
+    if (baseProduct.id) {
+      this.updateBaseProduct();
+    } else {
+      this.createBaseProduct();
+    }
   };
 
   renderForm = () => {
-    log.info('>>> renderForm');
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    const baseProducts = pathOr(
+      null,
+      ['me', 'wizardStore', 'store', 'baseProducts'],
+      this.props,
+    );
+    log.info('>>> renderForm', { baseProducts });
     switch (step) {
       case 1:
         return (
@@ -408,8 +469,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               ease
             </div>
             <Step3
-              data={wizardStore}
-              products={products}
+              formStateData={this.state.baseProduct}
+              products={baseProducts ? baseProducts.edges : []}
+              onUpload={this.handleOnUploadPhoto}
+              aditionalPhotosMap={this.state.aditionalPhotosMap}
+              onChange={this.handleOnChangeProductForm}
+              onChangeAttrs={this.handleOnChangeAttrs}
               onSave={this.handleOnSaveProduct}
             />
           </div>
@@ -421,8 +486,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    log.info('>>> render');
-    log.info(this.state.isLoading);
+    log.info('>>> render', { props: this.props });
+    log.info('>>> render context', this.context);
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const isNotEmpty = complement((i: any) => !i);
@@ -491,23 +556,6 @@ export default createFragmentContainer(
         slug
         shortDescription
         defaultLanguage
-        store {
-          id
-          rawId
-          baseProducts {
-            edges {
-              node {
-                products {
-                  edges {
-                    node {
-                      ...Wizard_ProductFragment
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
         addressFull {
           country
           value
@@ -526,35 +574,64 @@ export default createFragmentContainer(
             }
           }
         }
-      }
-    }
-
-    fragment Wizard_ProductFragment on Product {
-      id
-      rawId
-      price
-      discount
-      photoMain
-      additionalPhotos
-      attributes {
-        ...Wizard_AttributeFragment
-      }
-    }
-
-    fragment Wizard_AttributeFragment on AttributeValue {
-      value
-      metaField
-      attribute {
-        id
-        rawId
-        name {
-          text
-        }
-        metaField {
-          values
-          translatedValues {
-            translations {
-              text
+        store {
+          id
+          rawId
+          baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
+            edges {
+              node {
+                id
+                rawId
+                name {
+                  text
+                  lang
+                }
+                shortDescription {
+                  lang
+                  text
+                }
+                category {
+                  id
+                  rawId
+                }
+                storeId
+                currencyId
+                products(first: 1) @connection(key: "Wizard_products") {
+                  edges {
+                    node {
+                      id
+                      rawId
+                      price
+                      discount
+                      photoMain
+                      additionalPhotos
+                      vendorCode
+                      cashback
+                      price
+                      attributes {
+                        value
+                        metaField
+                        attribute {
+                          id
+                          rawId
+                          name {
+                            lang
+                            text
+                          }
+                          metaField {
+                            values
+                            translatedValues {
+                              translations {
+                                text
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }

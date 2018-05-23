@@ -35,6 +35,43 @@ const mutation = graphql`
         lang
         text
       }
+      storeId
+      currencyId
+      products(first: 1) @connection(key: "Wizard_products") {
+        edges {
+          node {
+            id
+            rawId
+            price
+            discount
+            photoMain
+            additionalPhotos
+            vendorCode
+            cashback
+            price
+            attributes {
+              value
+              metaField
+              attribute {
+                id
+                rawId
+                name {
+                  lang
+                  text
+                }
+                metaField {
+                  values
+                  translatedValues {
+                    translations {
+                      text
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
