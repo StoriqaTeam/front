@@ -171,7 +171,7 @@ class Header extends Component<PropsType, StateType> {
                     searchValue={searchValue}
                   />
                 </div>
-                <div styleName="authBlock">
+                <div>
                   {user ? (
                     <UserDropdown user={user} />
                   ) : (

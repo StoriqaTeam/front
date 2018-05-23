@@ -14,7 +14,6 @@
   left: -100%;
   display: block;
   margin-top: 12px;
-  // margin-left: 20px;
   min-width: 232px;
   min-height: 232px;
   padding: 16px 8px;
@@ -62,7 +61,6 @@
       transform: rotate(180deg);
     }
   }
-  //border-radius: 50%;
 }
 
 .withIconContent {
@@ -75,7 +73,4 @@
   &:after {
     right: 4rem;
   }
-  //position: relative;
-  //left: -30rem;
-  //width: 35rem;
 }
