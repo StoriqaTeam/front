@@ -315,11 +315,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             productResponse: ?Object,
             productErrors: ?Array<any>,
           ) => {
-            console.log('^^^ createProduct response: ', {
-              productResponse,
-              productErrors,
-            });
             this.setState(() => ({ isLoading: false }));
+            this.handleOnClearProductState();
             resposeLogger(productResponse, productErrors);
           },
           onError: (error: Error) => {
@@ -362,10 +359,18 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnClearProductState = () => {
-    this.setState(prevState => ({
-      ...prevState,
-      ...initialProductState,
-    }));
+    this.setState(prevState => {
+      // storeId save for next products
+      const clearedData = omit(['storeId'], initialProductState.baseProduct);
+      return {
+        ...prevState,
+        baseProduct: {
+          ...prevState.baseProduct,
+          ...clearedData,
+        },
+        aditionalPhotosMap: initialProductState.aditionalPhotosMap,
+      };
+    });
   };
 
   handleOnDeleteProduct = (ID: string) => {

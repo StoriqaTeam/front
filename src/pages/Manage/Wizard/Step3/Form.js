@@ -130,14 +130,14 @@ class ThirdForm extends Component<PropsType, StateType> {
   ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
 
   renderAttributes = () => {
-    // console.log('*** renderAttributes');
+    console.log('*** renderAttributes');
     const { categoryId } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       // whereEq({ rawId: 34 }),
       this.props.categories,
     );
-    console.log('*** catObj: ', catObj);
+    console.log('^^^ renderAttributes catObj: ', catObj);
     return (
       catObj &&
       catObj.getAttributes && (
@@ -155,8 +155,12 @@ class ThirdForm extends Component<PropsType, StateType> {
 
   render() {
     const { data, aditionalPhotosMap, onSave, onClose } = this.props;
-    const { categoryId } = data;
-    console.log('>>> Form 3 render: ', { data, aditionalPhotosMap });
+    const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
+    console.log('>>> Form 3 render: ', {
+      data,
+      aditionalPhotosMap,
+      categoryId,
+    });
 
     return (
       <div styleName="wrapper">
