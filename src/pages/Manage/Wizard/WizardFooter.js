@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';

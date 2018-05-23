@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { map, pathOr, whereEq } from 'ramda';
 
-import { findCategory } from 'utils';
+import { findCategory, log } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
@@ -27,8 +27,15 @@ type PropsType = {
   onChange: (obj: { [name: string]: string }) => void,
   data: {
     categoryId: ?number,
+    name: string,
+    shortDescription: string,
+    product: {
+      price: string,
+      vendorCode: string,
+      cashback: ?number,
+    }
   },
-  onUpload: (type: boolean, e: any) => void,
+  onUpload: (type?: string, e?: any) => void,
 };
 
 type StateType = {
@@ -49,7 +56,7 @@ class ThirdForm extends Component<PropsType, StateType> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: PropsType) {
     if (nextProps.data.categoryId !== this.props.data.categoryId) {
       const {
         data: { categoryId },
@@ -66,7 +73,7 @@ class ThirdForm extends Component<PropsType, StateType> {
     }
   }
 
-  handleChangeData = e => {
+  handleChangeData = (e: any) => {
     const {
       target: { value, name },
     } = e;
@@ -106,14 +113,14 @@ class ThirdForm extends Component<PropsType, StateType> {
   ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
 
   renderAttributes = () => {
-    // console.log('*** renderAttributes');
+    // log.info('*** renderAttributes');
     const { categoryId } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       // whereEq({ rawId: 34 }),
       this.props.categories,
     );
-    console.log('*** catObj: ', catObj);
+    log.info('*** catObj: ', catObj);
     return (
       catObj &&
       catObj.getAttributes && (
@@ -130,10 +137,10 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('^^^^ ThirdForm props: ', this.props);
+    log.info('^^^^ ThirdForm props: ', this.props);
     const { data } = this.props;
     const { categoryId } = data;
-    console.log('*** form render categoryId, data: ', { categoryId, data });
+    log.info('*** form render categoryId, data: ', { categoryId, data });
 
     return (
       <div styleName="wrapper">

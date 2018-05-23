@@ -9,7 +9,7 @@ import './Form.scss';
 const Uploaders = ({
   onUpload,
 }: {
-  onUpload: (type: string, e: any) => void,
+  onUpload: (type?: string, e?: any) => void,
 }) => (
   <div styleName="uploadersWrapper">
     <div styleName="uploadItem">

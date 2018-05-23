@@ -1,12 +1,12 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { map, addIndex, assocPath, path, append } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
-import { uploadFile } from 'utils';
+import { uploadFile, log } from 'utils';
 import { Icon } from 'components/Icon';
 // import { Modal } from 'components/Modal';
 import { CardProduct } from 'components/CardProduct';
@@ -16,7 +16,7 @@ import Form from './Form';
 import './View.scss';
 
 type ModalType = {
-  children: Raact.Element,
+  children: React.Element<*>,
   showModal: boolean,
   onClose: () => void,
 };
@@ -45,8 +45,8 @@ const Modal = ({ children, showModal, onClose }: ModalType) => {
   );
 };
 
-type ProductType = {
-  item: {
+type ProductNodeType = {
+  node: {
     rawId: number,
     storeId: number,
     currencyId: number,
@@ -54,32 +54,48 @@ type ProductType = {
       lang: string,
       text: string,
     }>,
-    variants: Array<{
-      discount: number,
-      photoMain: string,
-      cashback: number,
-      price: number,
-    }>,
+    discount: number,
+    photoMain: string,
+    cashback: number,
+    price: number,
   },
 };
 
 type PropsType = {
-  data: {
-    userId: ?number,
-    storeId: ?number,
-    name: ?string,
-    slug: ?string,
-    shortDescription: ?string,
-    defaultLanguage: ?string,
-    country: ?string,
-    address: ?string,
+  // data: {
+  //   userId: ?number,
+  //   storeId: ?number,
+  //   name: ?string,
+  //   slug: ?string,
+  //   shortDescription: ?string,
+  //   defaultLanguage: ?string,
+  //   country: ?string,
+  //   address: ?string,
+  // },
+  // onChange: (data: { [name: string]: string }) => void,
+  products: {
+    edges: Array<ProductNodeType>,
   },
-  onChange: (data: { [name: string]: string }) => void,
-  products: Array<ProductType>,
 };
 
 type StateType = {
   showForm: boolean,
+  baseProduct: {
+    storeId: ?number,
+    currencyId: number,
+    categoryId: ?number,
+    name: string,
+    shortDescription: string,
+    product: {
+      baseProductId: ?number,
+      vendorCode: string,
+      photoMain: string,
+      additionalPhotos: Array<string>,
+      price: ?number,
+      cashback: ?number,
+    },
+    attributes: [],
+  },
 };
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
@@ -104,7 +120,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   handleOnAddProduct = () => {
-    console.log('handleOnAddProduct');
+    log.info('handleOnAddProduct');
     this.setState({ showForm: true });
   };
 
@@ -112,8 +128,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     this.setState({ showForm: false });
   };
 
-  handleOnChangeForm = data => {
-    console.log('^^^^ View handleOnChangeForm data : ', {
+  handleOnChangeForm = (data: { [string]: any }) => {
+    log.info('^^^^ View handleOnChangeForm data : ', {
       state: this.state,
       data,
     });
@@ -125,7 +141,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = async (type: boolean, e: any) => {
+  handleOnUploadPhoto = async (type: string, e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
@@ -146,6 +162,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       this.setState(prevState =>
         assocPath(
           ['baseProduct', 'product', 'photoMain'],
+          // $FlowIgnoreMe
           append(result.url, additionalPhotos),
           prevState,
         ),
@@ -154,7 +171,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const { data, onChange, products, onUpload } = this.props;
+    // const { data, onChange, products, onUpload } = this.props;
+    const { products } = this.props;
     const { baseProduct, showForm } = this.state;
     const productsArr = map(item => item.node, products.edges);
     const mapIndexed = addIndex(map);

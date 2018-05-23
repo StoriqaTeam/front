@@ -3,6 +3,7 @@
 import { graphql, commitMutation } from 'react-relay';
 import { omit } from 'ramda';
 import { Environment } from 'relay-runtime';
+import { log } from 'utils';
 
 const mutation = graphql`
   mutation UpdateWizardMutation($input: UpdateWizardStoreInput!) {
@@ -65,7 +66,7 @@ type MutationParamsType = {
 };
 
 const commit = (params: MutationParamsType) => {
-  console.log('!!! UpdateWizardMutation params: ', params);
+  log.info('!!! UpdateWizardMutation params: ', params);
   return commitMutation(params.environment, {
     mutation,
     variables: {

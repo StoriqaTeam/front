@@ -7,6 +7,7 @@ import { pick, evolve, pathOr, omit, where, complement } from 'ramda';
 import debounce from 'lodash.debounce';
 
 import { Page } from 'components/App';
+import { log } from 'utils';
 import {
   CreateWizardMutation,
   UpdateWizardMutation,
@@ -24,26 +25,149 @@ import Step3 from './Step3/View';
 
 import './Wizard.scss';
 
-type PropsType = {};
+const products = {
+  edges: [
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 1,
+        rating: 1,
+        rawId: 1,
+        storeId: 1,
+        products: {
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 100,
+                rawId: 671,
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 2,
+        rating: 3,
+        rawId: 4,
+        storeId: 1,
+        products: {
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 200,
+                rawId: 672,
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 3,
+        rating: 3,
+        rawId: 3,
+        storeId: 1,
+        products: {
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 300,
+                rawId: 673,
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      node: {
+        name: [
+          {
+            text: 'A Set Of "Labyrinth"',
+            lang: 'EN',
+          },
+        ],
+        currencyId: 4,
+        rating: 4,
+        rawId: 4,
+        storeId: 1,
+        products: {
+          edges: [
+            {
+              node: {
+                cashback: null,
+                discount: 5,
+                id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
+                photoMain:
+                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
+                price: 400,
+                rawId: 674,
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+};
+
+type PropsType = {
+  languages: any,
+};
 
 type StateType = {};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log('>>> constructor');
+    log.info('>>> constructor');
     this.state = {
       step: 1,
     };
   }
 
   componentDidMount() {
-    console.log('>>> componentDidMount');
+    log.info('>>> componentDidMount');
     this.createWizard();
   }
 
   createWizard = () => {
-    console.log('>>> createWizard');
+    log.info('>>> createWizard');
     this.setState(() => ({ isLoading: true }));
     CreateWizardMutation.commit({
       environment: this.context.environment,
@@ -59,7 +183,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateWizard = data => {
-    console.log('>>> updateWizard data: ', { data });
+    log.info('>>> updateWizard data: ', { data });
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
       ...data,
@@ -67,7 +191,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ updateWizard response, errors: ', {
+        log.info('^^^ updateWizard response, errors: ', {
           response,
           errors,
         });
@@ -82,7 +206,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   prepareStoreMutationInput = () => {
-    console.log('>>> prepareStoreMutationInput: ');
+    log.info('>>> prepareStoreMutationInput: ');
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
     const userId = pathOr(null, ['me', 'rawId'], this.props);
@@ -102,18 +226,18 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...omit(['value'], wizardStore.addressFull),
       },
     );
-    console.log('<<< prepareStoreMutationInput: ', { preparedData });
+    log.info('<<< prepareStoreMutationInput: ', { preparedData });
     return preparedData;
   };
 
   createStore = () => {
-    console.log('>>> createStore');
+    log.info('>>> createStore');
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ createStore response: ', { response, errors });
+        log.info('^^^ createStore response: ', { response, errors });
         this.updateWizard({ storeId: response.createStore.rawId });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
@@ -126,9 +250,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateStore = () => {
-    console.log('>>> updateStore');
+    log.info('>>> updateStore');
     const { step } = this.state;
-    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    // const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -138,7 +262,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ updateStore updateStore mutation response: ', {
+        log.info('^^^ updateStore updateStore mutation response: ', {
           response,
           errors,
         });
@@ -153,12 +277,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeStep = (step: number) => {
-    console.log('>>> handleOnChangeStep: ', { step });
+    log.info('>>> handleOnChangeStep: ', { step });
     this.setState({ step });
   };
 
   handleOnSaveStep = (changedStep: number) => {
-    console.log('>>> handleOnSaveStep: ', { changedStep });
+    log.info('>>> handleOnSaveStep: ', { changedStep });
     const { step } = this.state;
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     switch (step) {
@@ -184,7 +308,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
-    console.log('>>> handleOnSaveWizard: ', { data });
+    log.info('>>> handleOnSaveWizard: ', { data });
     if (data) {
       this.updateWizard({
         ...omit(
@@ -206,16 +330,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['me', 'wizardStore', 'store', 'rawId'],
       this.props,
     );
-    console.log('>>> handleChangeForm: ', { data, storeId, storeID });
+    log.info('>>> handleChangeForm: ', { data, storeId, storeID });
     this.handleOnSaveWizard(data);
   };
 
   handleOnSaveProduct = data => {
-    console.log('>>> handleOnSaveProduct: ', { data });
+    log.info('>>> handleOnSaveProduct: ', { data });
   };
 
   renderForm = () => {
-    console.log('>>> renderForm');
+    log.info('>>> renderForm');
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     switch (step) {
@@ -267,7 +391,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('>>> render');
+    log.info('>>> render');
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const isNotEmpty = complement((i: any) => !i);
@@ -407,124 +531,3 @@ export default createFragmentContainer(
     }
   `,
 );
-
-const products = {
-  edges: [
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 1,
-        rating: 1,
-        rawId: 1,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx1',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 100,
-                rawId: 671,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 2,
-        rating: 3,
-        rawId: 4,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx2',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 200,
-                rawId: 672,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 3,
-        rating: 3,
-        rawId: 3,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx3',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 300,
-                rawId: 673,
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      node: {
-        name: [
-          {
-            text: 'A Set Of "Labyrinth"',
-            lang: 'EN',
-          },
-        ],
-        currencyId: 4,
-        rating: 4,
-        rawId: 4,
-        storeId: 1,
-        products: {
-          edges: [
-            {
-              node: {
-                cashback: null,
-                discount: 5,
-                id: 'c3RvcmVzfHByb2R1Y3R8Njcx4',
-                photoMain:
-                  'https://s3.amazonaws.com/storiqa-dev/img-4IALAADXr0QC.png',
-                price: 400,
-                rawId: 674,
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
