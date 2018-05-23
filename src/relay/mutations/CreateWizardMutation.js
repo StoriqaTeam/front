@@ -54,6 +54,7 @@ const commit = (params: MutationParamsType) =>
     updater: relayStore => {
       const me = relayStore.getRoot().getLinkedRecord('me');
       const wizardRecord = relayStore.getRootField('createWizardStore');
+      // console.log('>>> createWizardStore updater: ',  { me, wizardRecord });
       me.setLinkedRecord(wizardRecord, 'wizardStore');
     },
   });

@@ -261,18 +261,24 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['name', 'shortDescription'],
       omit(['product', 'attributes'], baseProduct),
     );
-    console.log('^^^ createBaseProduct preparedData: ', { preparedData });
+    // console.log('^^^ createBaseProduct preparedData: ', { preparedData });
+    // const storeID = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
     CreateBaseProductMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ createBaseProduct response: ', { response, errors });
+        // console.log('^^^ createBaseProduct response: ', { response, errors });
         resposeLogger(response, errors);
         const baseProductId = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
           response,
         );
+        if (!baseProductId) {
+          this.setState(() => ({ isLoading: false }));
+          return;
+        }
+        // create variant after create base product
         const prepareDataForProduct = {
           product: {
             ...baseProduct.product,
@@ -281,14 +287,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           },
           attributes: baseProduct.attributes,
         };
-        console.log('^^^ createBaseProduct prepareDataForProduct: ', {
-          prepareDataForProduct,
-        });
-        if (!baseProductId) {
-          this.setState(() => ({ isLoading: false }));
-          return;
-        }
-        // create variant after create base product
+        // console.log('^^^ createBaseProduct prepareDataForProduct: ', {
+        //   prepareDataForProduct,
+        // });
         CreateProductWithAttributesMutation.commit({
           ...prepareDataForProduct,
           environment: this.context.environment,
@@ -535,7 +536,7 @@ export default createFragmentContainer(
         store {
           id
           rawId
-          baseProducts {
+          baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
             edges {
               node {
                 id
@@ -557,7 +558,35 @@ export default createFragmentContainer(
                 products {
                   edges {
                     node {
-                      ...Wizard_ProductFragment
+                      id
+                      rawId
+                      price
+                      discount
+                      photoMain
+                      additionalPhotos
+                      vendorCode
+                      cashback
+                      price
+                      attributes {
+                        value
+                        metaField
+                        attribute {
+                          id
+                          rawId
+                          name {
+                            lang
+                            text
+                          }
+                          metaField {
+                            values
+                            translatedValues {
+                              translations {
+                                text
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -580,39 +609,6 @@ export default createFragmentContainer(
           edges {
             node {
               id
-            }
-          }
-        }
-      }
-    }
-
-    fragment Wizard_ProductFragment on Product {
-      id
-      rawId
-      price
-      discount
-      photoMain
-      additionalPhotos
-      attributes {
-        ...Wizard_AttributeFragment
-      }
-    }
-
-    fragment Wizard_AttributeFragment on AttributeValue {
-      value
-      metaField
-      attribute {
-        id
-        rawId
-        name {
-          lang
-          text
-        }
-        metaField {
-          values
-          translatedValues {
-            translations {
-              text
             }
           }
         }
