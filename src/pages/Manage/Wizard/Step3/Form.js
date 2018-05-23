@@ -25,7 +25,9 @@ type CategoriesTreeType = {
 type PropsType = {
   categoryId?: ?number,
   categories: CategoriesTreeType,
-  onChange: (obj: { [name: string]: string }) => void,
+  onChange: ({
+    [name: string]: any,
+  }) => void,
   data: {
     storeId: ?number,
     currencyId: number,
@@ -43,7 +45,9 @@ type PropsType = {
     attributes: [],
   },
   aditionalPhotosMap: any,
-  onUpload: (e: any, type: ?string) => Promise<*>,
+  onUpload: (type: ?string, e: any) => Promise<*>,
+  onChangeAttrs: (Array<AttrValueType>) => void,
+  onSave: () => void,
 };
 
 type StateType = {
@@ -254,9 +258,7 @@ class ThirdForm extends Component<PropsType, StateType> {
             </div>
             {categoryId && this.renderAttributes()}
             <Button
-              onClick={() => {
-                onSave();
-              }}
+              onClick={onSave}
               dataTest="wizardSaveProductButton"
               big
               disabled={false}

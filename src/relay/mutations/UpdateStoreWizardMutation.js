@@ -68,7 +68,6 @@ type MutationParamsType = {
 };
 
 const commit = (params: MutationParamsType) => {
-  console.log('!!! UpdateStoreMutation params: ', params);
   return commitMutation(params.environment, {
     mutation,
     variables: {
