@@ -107,7 +107,8 @@ pipeline:
     - yarn build
     - yarn server:dist:build
     when:
-      event: push
+      event: deployment
+      environment: stable
       branch: master
   node_package4stable:
     image: plugins/docker
@@ -223,6 +224,72 @@ pipeline:
     when:
       branch: release*
       event: push
+  build4production:
+    image: node:9.9
+    commands:
+    - . ./.env.production
+    - rm -f yarn.lock || true
+    - yarn -s --no-progress --non-interactive --production=false
+    - yarn updateSchema
+    - yarn relay
+    - yarn build
+    - yarn server:dist:build
+    when:
+      event: deployment
+      environment: production
+      branch: master
+  node_package4production:
+    image: plugins/docker
+    repo: storiqateam/stq-node
+    environment:
+    - TIER=production
+    tags:
+    - prod_${DRONE_BRANCH//\//_}
+    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    dockerfile: docker/Dockerfile.node
+    secrets:
+    - docker_username
+    - docker_password
+    when:
+      event: deployment
+      environment: production
+      branch: master
+  static_package4production:
+    image: plugins/docker
+    repo: storiqateam/stq-static
+    tags:
+    - prod_${DRONE_BRANCH//\//_}
+    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    dockerfile: docker/Dockerfile.static
+    secrets:
+    - docker_username
+    - docker_password
+    when:
+      branch: master
+      event: deployment
+      environment: production
+  deploy2production:
+    image: jackthestripper/drone_k8s_rollout:20180510
+    user: admin
+    token: 2qIxi6uQs9wPFVXKqlyZXze1WFY4d4qY
+    addr: https://api.production.stq.cloud
+    object: front
+    kind: deployment
+    namespace: default
+    img_names:
+    - storiqateam/stq-node
+    - storiqateam/stq-static
+    img_cnts:
+    - node
+    - static
+    img_tags:
+    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    ca: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMwekNDQWJ1Z0F3SUJBZ0lNRlRFOXJ4ZTR2QkVmV3dvUU1BMEdDU3FHU0liM0RRRUJDd1VBTUJVeEV6QVIKQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13SGhjTk1UZ3dOVEl4TURrMU9UTXdXaGNOTWpnd05USXdNRGsxT1RNdwpXakFWTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBCk1JSUJDZ0tDQVFFQXNNVmZFbnVDQm82ZHd1L0NRb0EraEFORDE3L0hnSnN4YktGWmdXMmN2RFBxQUxOTlpQOEsKYTc3T3g4UnM1bUlNeStiWkpYTnhndzIvOEQxOWhlTC9UaWNHWDJJNGVFeXRoZ203NnRtTlg5bEQ4SEwxNHBjNQpYRkcwd3NPL3V2WUJWWm8xclZVTXcyRGVsd2FIUnJjU1h6ck93TzNUQzdSaEx6VzlaY1lCWEFmRGtWMmM4TkFxCnRNLzFGUjladG1qRkV5c1d0d0pXZUtNdXNYdnQvOURNc3Z2ZWVxL1hIVjVJaXRKZVMzRy9vZndCeUlubnZndFMKTHYxdTFJN0pBOGY2TEQ1SlNLUG9VNENSZWtwWkFGVk81OGEzbW1KRE9SRHJhN1FLU09wVk5va1ovVFRCYkNzagplazQ1cjd5ZklTb1pWRkNuM3I3QXFQMDkwU2ZUUXFJcE13SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DCkFRWXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFLbE90UzJQU0ZaWWcKenhRb1lDd2N0TGR1THM4dlB0Yms2cjdYdWdhZ25vaHpMOHR4Tk90UWliZ3hhY04va0t1a1hEMkxsTmlmQVUyagorMGlzYVBLNXBnSStNUzV5eFlmWFVpWjlpT2gydkZhWXJoMXp4eU0zRHozaDBrbUhWOGU2WkErYUlpS2hWU0NxCmY0TlNrMlVSNjNNb0xnVElyR1ZxRmFwajJBS1o0bkVKZ1lMUit3bG9TdWRubVBVZVFTallXdkNUcTczcmRMcVMKL0JCazVlUXNCZHF3clZBK3Z3dGd3Nnl3N0ljek1Nblk2QUFESFJVMytvTExHS3ZnUVFHTHhINkJ1WnUwOWF1WQpTUXRXMG83OWxrZExvNnhIMUZldVF5bVJNbTlVQ01DeWdIRUlBc1lYRFROVWcxYTdBTFBTR0NnNkszUEQ1S05MCjBRYWxCVWxoWmc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    when:
+      branch: master
+      event: deployment
+      environment: production
   notify_slack:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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
