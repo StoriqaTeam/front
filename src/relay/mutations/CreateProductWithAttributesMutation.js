@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment, ConnectionHandler } from 'relay-runtime';
+import { log } from 'utils';
 
 const mutation = graphql`
   mutation CreateProductWithAttributesMutation(
@@ -30,6 +31,7 @@ type MutationParamsType = {
     discount: number,
   },
   attributes: Array<{ attrId: number, value: string, metaField?: string }>,
+  parentID: number,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
@@ -49,7 +51,7 @@ const commit = (params: MutationParamsType) =>
     onCompleted: params.onCompleted,
     onError: params.onError,
     updater: (relayStore, newData) => {
-      console.log('>>> CreateBaseProductMutation updater params: ', {
+      log.info('>>> CreateBaseProductMutation updater params: ', {
         params,
         newData,
       });

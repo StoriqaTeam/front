@@ -76,6 +76,7 @@ type MutationParamsType = {
   seoDescription: Array<{ lang: string, text: string }>,
   currencyId: number,
   categoryId: number,
+  parentID: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,

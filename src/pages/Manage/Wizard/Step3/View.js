@@ -47,7 +47,7 @@ type PropsType = {
   formStateData: any,
   aditionalPhotosMap: any,
   onChange: (data: { [name: string]: string }) => void,
-  onUpload: (type: string, e: any) => void,
+  onUpload: (type: string, e: any) => Promise<*>,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
   onSave: () => void,

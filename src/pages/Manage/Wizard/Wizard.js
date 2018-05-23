@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ConnectionHandler } from 'relay-runtime';
+// import { ConnectionHandler } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
 import {
   //  append,
@@ -28,7 +28,7 @@ import {
   UpdateBaseProductMutation,
   CreateProductWithAttributesMutation,
   // CreateProductMutation,
-  UpdateProductMutation,
+  // UpdateProductMutation,
   DeactivateBaseProductMutation,
 } from 'relay/mutations';
 import { uploadFile, log } from 'utils';
@@ -325,7 +325,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['name', 'shortDescription'],
       omit(['product', 'attributes'], baseProduct),
     );
-    console.log('^^^ createBaseProduct preparedData: ', { preparedData });
+    log.info('^^^ createBaseProduct preparedData: ', { preparedData });
+    // $FlowIgnoreMe
     const parentID = pathOr(
       null,
       ['me', 'wizardStore', 'store', 'id'],

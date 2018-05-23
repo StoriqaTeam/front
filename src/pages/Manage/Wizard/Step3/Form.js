@@ -48,6 +48,7 @@ type PropsType = {
   onUpload: (type: string, e: any) => Promise<*>,
   onChangeAttrs: (Array<AttrValueType>) => void,
   onSave: () => void,
+  onClose: () => void,
 };
 
 type StateType = {
@@ -171,8 +172,9 @@ class ThirdForm extends Component<PropsType, StateType> {
 
   render() {
     const { data, aditionalPhotosMap, onSave, onClose } = this.props;
+    // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
-    console.log('>>> Form 3 render: ', {
+    log.info('>>> Form 3 render: ', {
       data,
       aditionalPhotosMap,
       categoryId,
