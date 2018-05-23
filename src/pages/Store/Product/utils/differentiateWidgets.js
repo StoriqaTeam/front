@@ -1,6 +1,9 @@
+// @flow
+
 import {
   addIndex,
   ascend,
+  // $FlowIgnoreMe
   chain,
   concat,
   difference,
@@ -16,7 +19,7 @@ import { makeWidgets, removeWidgetOptionsDuplicates } from './index';
 import { VariantType, WidgetType, WidgetOptionType } from '../types';
 
 const differentiateWidgets: (
-  Array<SelectionType>,
+  Array<WidgetOptionType>,
 ) => (Array<VariantType>) => Array<WidgetType> = selections => variants => {
   const sortByTitle: (Array<WidgetType>) => Array<WidgetType> = sortWith([
     ascend(prop('title')),
@@ -31,11 +34,11 @@ const differentiateWidgets: (
   const updateWidgetsOptionsState = (
     widgets: Array<WidgetType>,
   ): Array<WidgetType> => {
-    const updateWidgetSelection: SelectionType => WidgetType => Array<
+    const updateWidgetSelection: WidgetOptionType => WidgetType => Array<
       WidgetType,
     > = selection => widget => {
       if (widget.id === selection.id) {
-        const setSelectedState = (option: SelectionType) =>
+        const setSelectedState = (option: WidgetOptionType) =>
           propEq('label', selection.value)(option)
             ? { ...option, state: 'selected' }
             : option;
@@ -44,27 +47,27 @@ const differentiateWidgets: (
       }
       return widget;
     };
-    const mapSelections = (selection: SelectionType) =>
+    const mapSelections = (selection: WidgetOptionType) =>
       map(updateWidgetSelection(selection), widgets);
     return chain(mapSelections, selections);
   };
 
   const differentiateOption = (
-    widget: WidgetType,
-    index: number,
-  ): Array<WidgetOptionType> => {
-    const diffedOptions = difference(widget.options)(
-      filteredWidgets[index].options,
-    );
-    const disableOptions = map(
-      option => ({ ...option, state: 'disable' }),
-      diffedOptions,
-    );
-    return {
-      ...widget,
-      options: disableOptions,
-    };
-  };
+    widgets: Array<WidgetType>,
+  ): Array<WidgetOptionType> =>
+    widgets.map((widget, index) => {
+      const diffedOptions = difference(widget.options)(
+        filteredWidgets[index].options,
+      );
+      const disableOptions = map(
+        option => ({ ...option, state: 'disable' }),
+        diffedOptions,
+      );
+      return {
+        ...widget,
+        options: disableOptions,
+      };
+    });
 
   const mergeWidgetsOptions = (diffWidgets: Array<WidgetType>) => (
     widgets: Array<WidgetType>,
@@ -88,7 +91,7 @@ const differentiateWidgets: (
   };
 
   return pipe(
-    mapIndexed(differentiateOption),
+    differentiateOption,
     mergeWidgetsOptions(filteredWidgets),
     removeWidgetOptionsDuplicates,
     updateWidgetsOptionsState,

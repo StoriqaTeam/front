@@ -70,7 +70,12 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       </button>
     );
     return (
-      <div styleName="container">
+      <div
+        styleName={classNames('container', {
+          'scroll-x': row,
+          'scroll-y': !row,
+        })}
+      >
         {!isEmpty(title) ? <h4>{title}</h4> : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {isNil(options) ? null : sortByProp('label')(options).map(mapOptions)}

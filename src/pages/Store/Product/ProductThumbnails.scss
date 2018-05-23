@@ -1,7 +1,15 @@
 @import "../../../styles/variables";
 
 .container {
+  &.scroll-y {
+    max-height: 570px;
+    overflow-y: scroll;
+  }
 
+  &.scroll-x {
+    overflow-x: scroll;
+    max-width: 495px;
+  }
 }
 
 .thumbnails {
