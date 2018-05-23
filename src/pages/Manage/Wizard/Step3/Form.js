@@ -22,7 +22,7 @@ type CategoriesTreeType = {
 };
 
 type PropsType = {
-  categoryId: ?number,
+  categoryId?: ?number,
   categories: CategoriesTreeType,
   onChange: (obj: { [name: string]: string }) => void,
   data: {
@@ -41,7 +41,7 @@ type PropsType = {
     },
     attributes: [],
   },
-  onUpload: (e: any, type: ?string) => void,
+  onUpload: (e: any, type: ?string) => Promise<*>,
 };
 
 type StateType = {

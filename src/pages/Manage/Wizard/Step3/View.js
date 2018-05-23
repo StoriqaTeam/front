@@ -141,7 +141,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = async (e: any, type: ?string) => {
+  handleOnUploadPhoto = async (e: any, type: ?string): Promise<*> => {
     if (!e) {
       return;
     }

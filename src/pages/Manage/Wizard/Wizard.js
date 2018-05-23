@@ -148,15 +148,45 @@ const products = {
 
 type PropsType = {
   languages: any,
+  products: {
+    edges: Array<{
+      node: {
+        name: Array<{
+          text: string,
+          lang: string,
+        }>,
+        currencyId: number,
+        rating: number,
+        rawId: number,
+        storeId: number,
+        products: {
+          edges: Array<{
+            node: {
+              cashback: ?number,
+              discount: ?number,
+              id: string,
+              photoMain: ?string,
+              price: number,
+              rawId: number,
+            },
+          }>,
+        },
+      },
+    }>,
+  },
 };
 
-type StateType = {};
+type StateType = {
+  isLoading: boolean,
+  step: number,
+};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     log.info('>>> constructor');
     this.state = {
+      isLoading: false,
       step: 1,
     };
   }
@@ -392,6 +422,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     log.info('>>> render');
+    log.info(this.state.isLoading);
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const isNotEmpty = complement((i: any) => !i);
