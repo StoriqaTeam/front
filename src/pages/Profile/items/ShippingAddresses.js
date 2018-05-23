@@ -3,23 +3,26 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { assocPath, pathOr, map, assoc, isEmpty } from 'ramda';
+import { assocPath, map, assoc } from 'ramda';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
 import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
+
 import { log, fromRelayError } from 'utils';
 import {
-  CreateUserDeliveryAddress,
-  DeleteUserDeliveryAddress,
-  UpdateUserDeliveryAddress,
+  CreateUserDeliveryAddressMutation,
+  DeleteUserDeliveryAddressMutation,
+  UpdateUserDeliveryAddressMutation,
 } from 'relay/mutations';
 
-import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddress';
-import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddress';
-import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddress';
+import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddressMutation';
+import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressMutation';
+import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddressMutation';
 
 import '../Profile.scss';
 
@@ -49,13 +52,7 @@ type PropsType = {
     email: string,
     deliveryAddresses: Array<DeliveryAddressesType>,
   },
-  showAlert: ({
-    type: 'success' | 'danger' | 'warning',
-    text: string,
-    link: {
-      text: string,
-    },
-  }) => void,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -159,44 +156,41 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       input: id ? updateInput : createInput,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-        if (isEmpty(relayErrors)) {
-          this.setState(() => ({
-            isLoading: false,
-            isOpenNewForm: false,
-            editableAddressId: null,
-          }));
-          this.props.showAlert({
-            type: 'success',
-            text: id ? 'Address update!' : 'New address create!',
-            link: { text: 'Got it!' },
-          });
-        }
-      },
-      onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
-
         this.setState(() => ({ isLoading: false }));
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
+        log.debug({ response, errors });
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
           return;
         }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.setState(() => ({
+          isLoading: false,
+          isOpenNewForm: false,
+          editableAddressId: null,
+        }));
+        this.props.showAlert({
+          type: 'success',
+          text: id ? 'Address update!' : 'Address create!',
+          link: { text: 'Got it!' },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
       },
     };
     if (id) {
-      UpdateUserDeliveryAddress.commit(params);
+      UpdateUserDeliveryAddressMutation.commit(params);
     } else {
-      CreateUserDeliveryAddress.commit(params);
+      CreateUserDeliveryAddressMutation.commit(params);
     }
   };
 
@@ -226,7 +220,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         alert('Something going wrong :(');
       },
     };
-    DeleteUserDeliveryAddress.commit(params);
+    DeleteUserDeliveryAddressMutation.commit(params);
   };
 
   handleUpdateForm = (form: any) => {

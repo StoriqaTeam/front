@@ -3,6 +3,11 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
+import type {
+  ChangePasswordMutationVariables,
+  ChangePasswordMutationResponse,
+} from './__generated__/ChangePasswordMutation.graphql';
+
 const mutation = graphql`
   mutation ChangePasswordMutation($input: ChangePasswordInput!) {
     changePassword(input: $input) {
@@ -12,12 +17,12 @@ const mutation = graphql`
 `;
 
 export type MutationParamsType = {
-  input: {
-    oldPassword: string,
-    newPassword: string,
-  },
+  ...ChangePasswordMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?ChangePasswordMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 

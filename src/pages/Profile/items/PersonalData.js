@@ -21,6 +21,8 @@ import { BirthdateSelect } from 'pages/Profile/items/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { withShowAlert } from 'components/App/AlertContext';
 
+import type { AddAlertInputType } from 'components/App/AlertContext';
+
 import { log, fromRelayError } from 'utils';
 import { renameKeys } from 'utils/ramda';
 
@@ -47,13 +49,7 @@ type PropsType = {
     gender: 'MALE' | 'FEMALE' | 'UNDEFINED',
   },
   subtitle: string,
-  showAlert: ({
-    type: 'success' | 'error',
-    text: string,
-    link: {
-      text: string,
-    },
-  }) => void,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -141,11 +137,13 @@ class PersonalData extends Component<PropsType, StateType> {
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
-
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        // $FlowIgnoreMe
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
+        this.setState(() => ({ isLoading: false }));
         if (!isEmpty(validationErrors)) {
           this.setState({
             formErrors: renameKeys(
@@ -156,35 +154,53 @@ class PersonalData extends Component<PropsType, StateType> {
               validationErrors,
             ),
           });
+          return;
+        } else if (status) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        } else if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
         }
-        this.setState(() => ({ isLoading: false }));
         this.props.showAlert({
           type: 'success',
-          text: 'User success update',
+          text: 'User update!',
           link: { text: 'Got it!' },
         });
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
-          this.setState({ formErrors: validationErrors });
+        if (!isEmpty(validationErrors)) {
+          this.setState({
+            formErrors: renameKeys(
+              {
+                first_name: 'firstName',
+                last_name: 'lastName',
+              },
+              validationErrors,
+            ),
+          });
           return;
         }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          return;
-        }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
       },
     };
     UpdateUserMutation.commit(params);
