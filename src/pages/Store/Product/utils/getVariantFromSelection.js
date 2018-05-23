@@ -36,9 +36,7 @@ const setProductVariantValues = (variant: VariantType) => {
    * @desc Applies the following formula (1 - discount) * price
    */
   const calcCrossedPrice = (discount: string | null, price: string) =>
-    isNil(discount)
-      ? 0
-      : ((1 - parseInt(discount, 10)) * parseInt(price, 10)).toString();
+    isNil(discount) ? 0 : (1 - parseInt(discount, 10)) * parseInt(price, 10);
 
   const insertPhotoMain = (
     image: string,
