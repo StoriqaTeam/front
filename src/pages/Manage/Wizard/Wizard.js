@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ConnectionHandler } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
 import {
-  append,
+  //  append,
   assocPath,
   path,
   pick,
@@ -27,8 +27,8 @@ import {
   CreateBaseProductMutation,
   UpdateBaseProductMutation,
   CreateProductWithAttributesMutation,
-  UpdateProductMutation,
-  CreateProductMutation,
+  // UpdateProductMutation,
+  // CreateProductMutation,
 } from 'relay/mutations';
 import { uploadFile, log } from 'utils';
 
@@ -43,7 +43,35 @@ import './Wizard.scss';
 
 type PropsType = {};
 
-type StateType = {};
+type StateType = {
+  isLoading: boolean,
+  step: number,
+  baseProduct: {
+    id: ?string,
+    storeId: ?number,
+    currencyId: number,
+    categoryId: ?number,
+    name: string,
+    shortDescription: string,
+    product: {
+      baseProductId: ?number,
+      vendorCode: string,
+      photoMain: string,
+      additionalPhotos: Array<string>,
+      price: ?number,
+      cashback: ?number,
+    },
+    attributes: Array<any>,
+  },
+  aditionalPhotosMap: {
+    photoAngle: string,
+    photoDetails: string,
+    photoScene: string,
+    photoUse: string,
+    photoSizes: string,
+    photoVarienty: string,
+  },
+};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -62,6 +90,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     super(props);
     // log.info('>>> constructor');
     this.state = {
+      isLoading: false,
       step: 1,
       baseProduct: {
         id: null,
@@ -112,7 +141,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  updateWizard = data => {
+  updateWizard = (data: {
+    defaultLanguage?: string,
+    addressFull?: { value: any },
+  }) => {
     log.info('>>> updateWizard data: ', { data });
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
@@ -137,7 +169,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   prepareStoreMutationInput = () => {
     // log.info('>>> prepareStoreMutationInput: ');
-    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    const wizardStore = pathOr(
+      { addressFull: {} },
+      ['me', 'wizardStore'],
+      this.props,
+    );
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     const preparedData = evolve(
@@ -182,7 +218,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   updateStore = () => {
     // log.info('>>> updateStore');
-    const { step } = this.state;
+    // const { step } = this.state;
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -284,7 +320,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         const prepareDataForProduct = {
           product: {
             ...baseProduct.product,
-            cashback: baseProduct.product.cashback / 100,
+            cashback: (baseProduct.product.cashback || 0) / 100,
             baseProductId,
           },
           attributes: baseProduct.attributes,
@@ -389,17 +425,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ),
       );
     } else {
-      const additionalPhotos = path(
-        ['baseProduct', 'product', 'additionalPhotos'],
-        this.state,
-      );
+      const additionalPhotos =
+        path(['baseProduct', 'product', 'additionalPhotos'], this.state) || [];
       this.setState(prevState => ({
         ...prevState,
         baseProduct: {
           ...prevState.baseProduct,
           product: {
             ...prevState.baseProduct.product,
-            additionalPhotos: [...additionalPhotos, result.url],
+            additionalPhotos: [...additionalPhotos, result.url || ''],
           },
         },
         aditionalPhotosMap: {
@@ -488,6 +522,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   render() {
     log.info('>>> render', { props: this.props });
     log.info('>>> render context', this.context);
+    log.info(this.state.isLoading);
     const { step } = this.state;
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     const isNotEmpty = complement((i: any) => !i);
