@@ -8,29 +8,39 @@ import { map, addIndex } from 'ramda';
 // import { AddressForm } from 'components/AddressAutocomplete';
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
-import { getNameText } from 'utils';
+import { getNameText, log } from 'utils';
 
 import Form from './Form';
 import Modal from './Modal';
 
 import './View.scss';
 
-type ProductType = {
-  item: {
-    rawId: number,
-    storeId: number,
-    currencyId: number,
-    name: Array<{
-      lang: string,
-      text: string,
-    }>,
-    variants: Array<{
+type ProductNodeType = {
+  id: string,
+  rawId: number,
+  storeId: number,
+  currencyId: number,
+  category: { id: string, rawId: number },
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  shortDescription: Array<{
+    lang: string,
+    text: string,
+  }>,
+  products: {
+    edges: Array<{
       discount: number,
       photoMain: string,
       cashback: number,
       price: number,
     }>,
   },
+};
+
+type ProductType = {
+  node: ProductNodeType,
 };
 
 type PropsType = {
@@ -40,6 +50,8 @@ type PropsType = {
   onUpload: (type: string, e: any) => void,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
+  onSave: () => void,
+  onChangeAttrs: () => void,
 };
 
 type StateType = {
@@ -51,7 +63,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     showForm: false,
   };
 
-  handleOnShowForm = item => {
+  handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
     const name = item.name ? getNameText(item.name) : '';
     const shortDescription = item.shortDescription
@@ -64,13 +76,13 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       name,
       shortDescription,
     };
-    console.log('>>> Form 3 View handleOnShowForm item: ', {
+    log.info('>>> Form 3 View handleOnShowForm item: ', {
       productData: item,
       stateData: formStateData,
       prepareStateObj,
     });
     return () => {
-      console.log('^^^ handleOnShowForm show form');
+      log.info('^^^ handleOnShowForm show form');
       onChange(prepareStateObj);
       this.setState({ showForm: true });
     };
@@ -97,7 +109,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     } = this.props;
     const { showForm } = this.state;
     const productsArr = map(item => item.node, products);
-    console.log('>>> View Form 3 render: ', {
+    log.info('>>> View Form 3 render: ', {
       formStateData,
       products,
       productsArr,

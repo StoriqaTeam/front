@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ConnectionHandler } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
 import {
-  append,
+  //  append,
   assocPath,
   path,
   pick,
@@ -31,7 +31,7 @@ import {
   UpdateProductMutation,
   DeactivateBaseProductMutation,
 } from 'relay/mutations';
-import { uploadFile } from 'utils';
+import { uploadFile, log } from 'utils';
 
 import { resposeLogger, errorsLogger, transformTranslated } from './utils';
 import WizardHeader from './WizardHeader';
@@ -42,9 +42,54 @@ import Step3 from './Step3/View';
 
 import './Wizard.scss';
 
-type PropsType = {};
+type BaseProductNodeType = {
+  id: ?string,
+  storeId: ?number,
+  currencyId: number,
+  categoryId: ?number,
+  name: string,
+  shortDescription: string,
+  product: {
+    baseProductId: ?number,
+    vendorCode: string,
+    photoMain: string,
+    additionalPhotos: Array<string>,
+    price: ?number,
+    cashback: ?number,
+  },
+  attributes: Array<any>,
+};
 
-type StateType = {};
+type PropsType = {
+  languages: Array<{
+    isoCode: string,
+  }>,
+  me: {
+    wizardStore: {
+      store: {
+        baseProducts: {
+          edges: Array<{
+            node: BaseProductNodeType,
+          }>,
+        },
+      },
+    },
+  },
+};
+
+type StateType = {
+  isLoading: boolean,
+  step: number,
+  baseProduct: BaseProductNodeType,
+  aditionalPhotosMap: {
+    photoAngle: string,
+    photoDetails: string,
+    photoScene: string,
+    photoUse: string,
+    photoSizes: string,
+    photoVarienty: string,
+  },
+};
 
 const initialProductState = {
   baseProduct: {
@@ -76,7 +121,7 @@ const initialProductState = {
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log('>>> getDerivedStateFromProps: ', { nextProps, prevState });
+    log.info('>>> getDerivedStateFromProps: ', { nextProps, prevState });
     const wizardStore = pathOr(null, ['me', 'wizardStore'], nextProps);
     return {
       ...prevState,
@@ -89,20 +134,21 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    // console.log('>>> constructor');
+    // log.info('>>> constructor');
     this.state = {
+      isLoading: false,
       step: 1,
       ...initialProductState,
     };
   }
 
   componentDidMount() {
-    // console.log('>>> componentDidMount');
+    // log.info('>>> componentDidMount');
     this.createWizard();
   }
 
   createWizard = () => {
-    console.log('>>> createWizard');
+    log.info('>>> createWizard');
     this.setState(() => ({ isLoading: true }));
     CreateWizardMutation.commit({
       environment: this.context.environment,
@@ -117,8 +163,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  updateWizard = data => {
-    console.log('>>> updateWizard data: ', { data });
+  updateWizard = (data: {
+    defaultLanguage?: string,
+    addressFull?: { value: any },
+  }) => {
+    log.info('>>> updateWizard data: ', { data });
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
       ...data,
@@ -126,7 +175,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ updateWizard response, errors: ', {
+        log.info('^^^ updateWizard response, errors: ', {
           response,
           errors,
         });
@@ -141,9 +190,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   prepareStoreMutationInput = () => {
-    // console.log('>>> prepareStoreMutationInput: ');
-    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    // log.info('>>> prepareStoreMutationInput: ');
+    // $FlowIgnoreMe
+    const wizardStore = pathOr(
+      { addressFull: {} },
+      ['me', 'wizardStore'],
+      this.props,
+    );
+    // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
+    // $FlowIgnoreMe
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     const preparedData = evolve(
       {
@@ -161,18 +217,18 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...omit(['value'], wizardStore.addressFull),
       },
     );
-    console.log('<<< prepareStoreMutationInput: ', { preparedData });
+    log.info('<<< prepareStoreMutationInput: ', { preparedData });
     return preparedData;
   };
 
   createStore = () => {
-    // console.log('>>> createStore');
+    // log.info('>>> createStore');
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ createStore response: ', { response, errors });
+        log.info('^^^ createStore response: ', { response, errors });
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.updateWizard({ storeId });
         this.setState(() => ({ isLoading: false }));
@@ -186,8 +242,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateStore = () => {
-    // console.log('>>> updateStore');
-    const { step } = this.state;
+    // log.info('>>> updateStore');
+    // const { step } = this.state;
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -197,7 +253,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ updateStore updateStore mutation response: ', {
+        log.info('^^^ updateStore updateStore mutation response: ', {
           response,
           errors,
         });
@@ -212,13 +268,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeStep = (step: number) => {
-    // console.log('>>> handleOnChangeStep: ', { step });
+    // log.info('>>> handleOnChangeStep: ', { step });
     this.setState({ step });
   };
 
   handleOnSaveStep = (changedStep: number) => {
-    // console.log('>>> handleOnSaveStep: ', { changedStep });
+    // log.info('>>> handleOnSaveStep: ', { changedStep });
     const { step } = this.state;
+    // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     switch (step) {
       case 1:
@@ -243,7 +300,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
-    console.log('>>> handleOnSaveWizard: ', { data });
+    log.info('>>> handleOnSaveWizard: ', { data });
     if (data) {
       this.updateWizard({
         ...omit(
@@ -255,13 +312,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }, 250);
 
   handleChangeForm = data => {
-    // console.log('>>> handleChangeForm: ', { data });
+    // log.info('>>> handleChangeForm: ', { data });
     this.handleOnSaveWizard(data);
   };
 
   // Product handlers
   createBaseProduct = () => {
-    // console.log('>>> createBaseProduct');
+    // log.info('>>> createBaseProduct');
     const { baseProduct } = this.state;
     const preparedData = transformTranslated(
       'EN',
@@ -279,7 +336,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       parentID,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        // console.log('^^^ createBaseProduct response: ', { response, errors });
+        // log.info('^^^ createBaseProduct response: ', { response, errors });
         resposeLogger(response, errors);
         const baseProductId = pathOr(
           null,
@@ -299,12 +356,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         const prepareDataForProduct = {
           product: {
             ...baseProduct.product,
-            cashback: baseProduct.product.cashback / 100,
+            cashback: (baseProduct.product.cashback || 0) / 100,
             baseProductId,
           },
           attributes: baseProduct.attributes,
         };
-        // console.log('^^^ createBaseProduct prepareDataForProduct: ', {
+        // log.info('^^^ createBaseProduct prepareDataForProduct: ', {
         //   prepareDataForProduct,
         // });
         CreateProductWithAttributesMutation.commit({
@@ -333,19 +390,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   updateBaseProduct = () => {
-    console.log('>>> updateBaseProduct');
+    log.info('>>> updateBaseProduct');
     const { baseProduct } = this.state;
     const preparedData = transformTranslated(
       'EN',
       ['name', 'shortDescription'],
       omit(['product', 'attributes'], baseProduct),
     );
-    console.log('^^^ updateBaseProduct preparedData: ', { preparedData });
+    log.info('^^^ updateBaseProduct preparedData: ', { preparedData });
     UpdateBaseProductMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        console.log('^^^ updateBaseProduct response: ', { response, errors });
+        log.info('^^^ updateBaseProduct response: ', { response, errors });
         // const storeId = pathOr(null, ['createStore', 'rawId'], response);
         // this.updateWizard({ storeId });
         this.setState(() => ({ isLoading: false }));
@@ -390,7 +447,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeProductForm = data => {
-    console.log('>>> handleOnChangeProductForm: ', {
+    log.info('>>> handleOnChangeProductForm: ', {
       state: this.state,
       data,
     });
@@ -416,17 +473,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ),
       );
     } else {
-      const additionalPhotos = path(
-        ['baseProduct', 'product', 'additionalPhotos'],
-        this.state,
-      );
+      const additionalPhotos =
+        path(['baseProduct', 'product', 'additionalPhotos'], this.state) || [];
       this.setState(prevState => ({
         ...prevState,
         baseProduct: {
           ...prevState.baseProduct,
           product: {
             ...prevState.baseProduct.product,
-            additionalPhotos: [...additionalPhotos, result.url],
+            additionalPhotos: [...additionalPhotos, result.url || ''],
           },
         },
         aditionalPhotosMap: {
@@ -438,11 +493,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeAttrs = attrsValues => {
-    console.log('>>> handleOnChangeAttrs values: ', { attrsValues });
+    log.info('>>> handleOnChangeAttrs values: ', { attrsValues });
   };
 
   handleOnSaveProduct = () => {
-    console.log('>>> handleOnSaveProduct: ', { state: this.state.baseProduct });
+    log.info('>>> handleOnSaveProduct: ', { state: this.state.baseProduct });
     const { baseProduct } = this.state;
     if (baseProduct.id) {
       this.updateBaseProduct();
@@ -453,13 +508,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   renderForm = () => {
     const { step } = this.state;
+    // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    // $FlowIgnoreMe
     const baseProducts = pathOr(
       null,
       ['me', 'wizardStore', 'store', 'baseProducts'],
       this.props,
     );
-    console.log('>>> renderForm', { baseProducts });
+    log.info('>>> renderForm', { baseProducts });
     switch (step) {
       case 1:
         return (
@@ -514,10 +571,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('>>> render', { props: this.props });
-    console.log('>>> render context', this.context);
+    log.info('>>> render', { props: this.props });
+    log.info('>>> render context', this.context);
+    log.info(this.state.isLoading);
+    const { me } = this.props;
     const { step } = this.state;
-    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    const { wizardStore } = me;
     const isNotEmpty = complement((i: any) => !i);
     const stepOneChecker = where({
       name: isNotEmpty,

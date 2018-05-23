@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { log } from 'utils';
 
 const mutation = graphql`
   mutation UpdateStoreMainMutation($input: UpdateStoreInput!) {
@@ -41,7 +42,7 @@ type MutationParamsType = {
 };
 
 const commit = (params: MutationParamsType) => {
-  console.log('!!! UpdateStoreMainMutation params: ', params);
+  log.info('!!! UpdateStoreMainMutation params: ', params);
   return commitMutation(params.environment, {
     mutation,
     variables: {

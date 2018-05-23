@@ -3,7 +3,7 @@
 // TODO: rename to UpdateStoreContactsMutation
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment, ConnectionHandler } from 'relay-runtime';
+import { Environment } from 'relay-runtime';
 
 const mutation = graphql`
   mutation UpdateStoreWizardMutation($input: UpdateStoreInput!) {
@@ -62,14 +62,18 @@ type MutationParamsType = {
   postalCode: string,
   route: string,
   streetNumber: string,
+  email: string,
+  phone: string,
+  facebookUrl: string,
+  twitterUrl: string,
+  instagramUrl: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => {
-  console.log('!!! UpdateStoreMutation params: ', params);
-  return commitMutation(params.environment, {
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
     mutation,
     variables: {
       input: {
@@ -119,6 +123,5 @@ const commit = (params: MutationParamsType) => {
     //   });
     // },
   });
-};
 
 export default { commit };

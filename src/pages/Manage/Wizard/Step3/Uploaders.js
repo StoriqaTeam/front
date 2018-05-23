@@ -46,15 +46,14 @@ const aditionalPhotosConfig = [
   },
 ];
 
-const Uploaders = ({
-  onUpload,
-  photoMain,
-  aditionalPhotosMap,
-}: {
-  onUpload: (type: string, e: any) => void,
-}) => (
+type PropsType = {
+  onUpload: (type: string, e: any) => Promise<*>,
+  photoMain: ?string,
+  aditionalPhotosMap: { [string]: string },
+};
+
+const Uploaders = ({ onUpload, photoMain, aditionalPhotosMap }: PropsType) => (
   <div styleName="uploadersWrapper">
-    {console.log('>>> Uploaders: ', { photoMain })}
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_photo"

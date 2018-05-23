@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
+import { log } from 'utils';
 
 import './Form.scss';
 
@@ -21,24 +22,39 @@ type DataType = {
 
 type PropsType = {
   initialData: DataType,
-  onChange: (fieldName: string, value: string) => void,
+  onChange: ({
+    id: string,
+    rawId: number,
+    stepOne: ?{},
+    stepTwo: ?{},
+    stepThree: ?{},
+    store: {
+      id: string,
+      rawId: number,
+      baseProducts: {
+        edges: Array<?{}>,
+      },
+    },
+  }) => void,
 };
 
 type StateType = DataType;
 
 class FirstForm extends React.Component<PropsType, StateType> {
-  static prepareState = (props: PropsType, state?: StateType) => {
-    console.log('>>> Form 1 prepareState: ', { props, state });
+  static prepareState = (props: DataType, state?: StateType) => {
+    log.info('>>> Form 1 prepareState: ', { props, state });
     const newState = {
       ...props,
       ...state,
     };
-    console.log('<<< Form 1 prepareState: ', { newState });
+    log.info('<<< Form 1 prepareState: ', { newState });
     return newState;
   };
 
-  static getDerivedStateFromProps = (nextProps, prevState) =>
-    FirstForm.prepareState(nextProps.initialData, prevState);
+  static getDerivedStateFromProps = (
+    nextProps: PropsType,
+    prevState: StateType,
+  ) => FirstForm.prepareState(nextProps.initialData, prevState);
 
   constructor(props: PropsType) {
     super(props);
@@ -47,12 +63,13 @@ class FirstForm extends React.Component<PropsType, StateType> {
     };
   }
 
-  handleOnChange = e => {
+  handleOnChange = (e: any) => {
     const { onChange } = this.props;
     const {
       target: { value, name },
     } = e;
     this.setState({ [name]: value }, () => {
+      // $FlowIgnoreMe
       onChange({ ...this.state });
     });
   };
@@ -60,7 +77,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
   render() {
     const { initialData } = this.props;
     const { name, slug, shortDescription } = this.state;
-    console.log('>>> From 1 render: ', {
+    log.info('>>> From 1 render: ', {
       initialData,
       name,
       slug,

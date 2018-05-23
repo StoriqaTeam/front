@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { map, pathOr, whereEq } from 'ramda';
 
-import { findCategory } from 'utils';
+import { findCategory, log } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
@@ -23,15 +23,31 @@ type CategoriesTreeType = {
 };
 
 type PropsType = {
-  categoryId: ?number,
+  categoryId?: ?number,
   categories: CategoriesTreeType,
-  onChange: (obj: { [name: string]: string }) => void,
+  onChange: ({
+    [name: string]: any,
+  }) => void,
   data: {
+    storeId: ?number,
+    currencyId: number,
     categoryId: ?number,
+    name: string,
+    shortDescription: string,
+    product: {
+      baseProductId: ?number,
+      vendorCode: ?string,
+      photoMain: string,
+      additionalPhotos: Array<string>,
+      price: ?number,
+      cashback: ?number,
+    },
+    attributes: [],
   },
   aditionalPhotosMap: any,
-  onUpload: (type: boolean, e: any) => void,
-  onClose: () => void,
+  onUpload: (type: string, e: any) => Promise<*>,
+  onChangeAttrs: (Array<AttrValueType>) => void,
+  onSave: () => void,
 };
 
 type StateType = {
@@ -52,7 +68,7 @@ class ThirdForm extends Component<PropsType, StateType> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: PropsType) {
     if (nextProps.data.categoryId !== this.props.data.categoryId) {
       const {
         data: { categoryId },
@@ -69,7 +85,7 @@ class ThirdForm extends Component<PropsType, StateType> {
     }
   }
 
-  handleChangeBaseProductState = e => {
+  handleChangeBaseProductState = (e: any) => {
     const { data } = this.props;
     const {
       target: { value, name },
@@ -80,7 +96,7 @@ class ThirdForm extends Component<PropsType, StateType> {
     });
   };
 
-  handleChangeProductState = e => {
+  handleChangeProductState = (e: any) => {
     const { data } = this.props;
     const {
       target: { value, name },
@@ -95,7 +111,7 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
-    console.log('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
+    log.info('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
     const { onChangeAttrs } = this.props;
     this.setState({
       attrValues: attrs,
@@ -130,14 +146,14 @@ class ThirdForm extends Component<PropsType, StateType> {
   ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
 
   renderAttributes = () => {
-    console.log('*** renderAttributes');
+    // log.info('*** renderAttributes');
     const { categoryId } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       // whereEq({ rawId: 34 }),
       this.props.categories,
     );
-    console.log('^^^ renderAttributes catObj: ', catObj);
+    log.info('*** catObj: ', catObj);
     return (
       catObj &&
       catObj.getAttributes && (

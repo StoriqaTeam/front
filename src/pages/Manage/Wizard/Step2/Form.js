@@ -5,6 +5,7 @@ import { pathOr, omit, map, find } from 'ramda';
 
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
+import { log } from 'utils';
 
 import './Form.scss';
 
@@ -20,6 +21,19 @@ const languagesDic = {
   JA: 'Japanese',
 };
 
+type AddressType = {
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  country: ?string,
+  locality: ?string,
+  political: ?string,
+  postalCode: ?string,
+  route: ?string,
+  streetNumber: ?string,
+  address: ?string,
+  value: ?string,
+};
+
 type DataType = {
   userId: ?number,
   storeId: ?number,
@@ -29,23 +43,30 @@ type DataType = {
   defaultLanguage: ?string,
   country: ?string,
   address: ?string,
+  value: ?string,
+  addressFull: AddressType,
 };
 
 type PropsType = {
   languages: Array<{ isoCode: string }>,
   initialData: DataType,
-  onChange: (data: { [name: string]: string }) => void,
+  onChange: DataType => void,
 };
 
 type StateType = DataType;
 
 class SecondForm extends React.Component<PropsType, StateType> {
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    console.log('>>> Form 2 getDerivedStateFromProps: ', {
+  static getDerivedStateFromProps = (
+    nextProps: PropsType,
+    prevState: StateType,
+  ) => {
+    log.info('>>> Form 2 getDerivedStateFromProps: ', {
       initialData: nextProps.initialData,
       prevState,
     });
+    // $FlowIgnoreMe
     const store = pathOr(null, ['initialData', 'store'], nextProps);
+    // $FlowIgnoreMe
     const storeId = pathOr(null, ['initialData', 'storeId'], nextProps);
     const newState = {
       ...nextProps.initialData,
@@ -53,7 +74,7 @@ class SecondForm extends React.Component<PropsType, StateType> {
       store,
       storeId,
     };
-    console.log('<<< Form 2 getDerivedStateFromProps: ', { newState });
+    log.info('<<< Form 2 getDerivedStateFromProps: ', { newState });
     return newState;
   };
 
@@ -64,9 +85,9 @@ class SecondForm extends React.Component<PropsType, StateType> {
     };
   }
 
-  handleOnSelectLanguage = item => {
+  handleOnSelectLanguage = (item: { id: string, label: string }) => {
     const { onChange } = this.props;
-    console.log('>>> Form2 handleOnSelectLanguage state', this.state);
+    log.info('>>> Form2 handleOnSelectLanguage state', this.state);
     this.setState(
       {
         defaultLanguage: item.id,
@@ -79,9 +100,9 @@ class SecondForm extends React.Component<PropsType, StateType> {
     );
   };
 
-  handleChangeAddressData = addressData => {
+  handleChangeAddressData = (addressData: AddressType) => {
     const { onChange } = this.props;
-    console.log('>>> Form2 handleChangeAddressData addressData', addressData);
+    log.info('>>> Form2 handleChangeAddressData addressData', addressData);
     if (onChange && addressData) {
       onChange({
         ...this.state,
