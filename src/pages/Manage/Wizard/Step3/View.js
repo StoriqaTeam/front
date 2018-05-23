@@ -38,6 +38,7 @@ type PropsType = {
   aditionalPhotosMap: any,
   onChange: (data: { [name: string]: string }) => void,
   onUpload: (type: string, e: any) => void,
+  onDelete: (ID: string) => void,
   products: Array<ProductType>,
 };
 
@@ -77,6 +78,11 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   handleOnCloseModal = () => {
     this.setState({ showForm: false });
+  };
+
+  handleOnDelete = (ID: string) => () => {
+    const { onDelete } = this.props;
+    onDelete(ID);
   };
 
   render() {
@@ -130,7 +136,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                     </div>
                     <div
                       styleName="editbutton"
-                      onClick={() => {}}
+                      onClick={this.handleOnDelete(item.id)}
                       role="button"
                       onKeyDown={() => {}}
                       tabIndex={0}
@@ -153,6 +159,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             onChangeAttrs={onChangeAttrs}
             onUpload={onUpload}
             onSave={onSave}
+            onClose={this.handleOnCloseModal}
           />
         </Modal>
       </div>

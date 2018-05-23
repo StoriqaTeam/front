@@ -100,16 +100,7 @@ const commit = (params: MutationParamsType) =>
     onCompleted: params.onCompleted,
     onError: params.onError,
     // updater for add new base product to baseProducts connection
-    updater: (relayStore, newData) => {
-      console.log('>>> CreateBaseProductMutation updater params: ', {
-        params,
-        newData,
-      });
-      // const me = relayStore.getRoot().getLinkedRecord('me');
-      // const wizardStore = me.getLinkedRecord('wizardStore');
-      if (!params || !params.parentID) {
-        return;
-      }
+    updater: relayStore => {
       const storeProxy = relayStore.get(params.parentID);
       const conn = ConnectionHandler.getConnection(
         storeProxy,

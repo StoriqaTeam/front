@@ -27,8 +27,9 @@ import {
   CreateBaseProductMutation,
   UpdateBaseProductMutation,
   CreateProductWithAttributesMutation,
+  // CreateProductMutation,
   UpdateProductMutation,
-  CreateProductMutation,
+  DeactivateBaseProductMutation,
 } from 'relay/mutations';
 import { uploadFile } from 'utils';
 
@@ -44,6 +45,34 @@ import './Wizard.scss';
 type PropsType = {};
 
 type StateType = {};
+
+const initialProductState = {
+  baseProduct: {
+    id: null,
+    storeId: null,
+    currencyId: 1,
+    categoryId: null,
+    name: '',
+    shortDescription: '',
+    product: {
+      baseProductId: null,
+      vendorCode: '',
+      photoMain: '',
+      additionalPhotos: [],
+      price: null,
+      cashback: null,
+    },
+    attributes: [],
+  },
+  aditionalPhotosMap: {
+    photoAngle: '',
+    photoDetails: '',
+    photoScene: '',
+    photoUse: '',
+    photoSizes: '',
+    photoVarienty: '',
+  },
+};
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -63,31 +92,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // console.log('>>> constructor');
     this.state = {
       step: 1,
-      baseProduct: {
-        id: null,
-        storeId: null,
-        currencyId: 1,
-        categoryId: null,
-        name: '',
-        shortDescription: '',
-        product: {
-          baseProductId: null,
-          vendorCode: '',
-          photoMain: '',
-          additionalPhotos: [],
-          price: null,
-          cashback: null,
-        },
-        attributes: [],
-      },
-      aditionalPhotosMap: {
-        photoAngle: '',
-        photoDetails: '',
-        photoScene: '',
-        photoUse: '',
-        photoSizes: '',
-        photoVarienty: '',
-      },
+      ...initialProductState,
     };
   }
 
@@ -356,6 +361,29 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
+  handleOnClearProductState = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      ...initialProductState,
+    }));
+  };
+
+  handleOnDeleteProduct = (ID: string) => {
+    const storeID = path(['me', 'wizardStore', 'store', 'id'], this.props);
+    DeactivateBaseProductMutation.commit({
+      id: ID,
+      parentID: storeID,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.handleOnClearProductState();
+        resposeLogger(response, errors);
+      },
+      onError: (error: Error) => {
+        errorsLogger(error);
+      },
+    });
+  };
+
   handleOnChangeProductForm = data => {
     console.log('>>> handleOnChangeProductForm: ', {
       state: this.state,
@@ -470,6 +498,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               onChange={this.handleOnChangeProductForm}
               onChangeAttrs={this.handleOnChangeAttrs}
               onSave={this.handleOnSaveProduct}
+              onDelete={this.handleOnDeleteProduct}
             />
           </div>
         );

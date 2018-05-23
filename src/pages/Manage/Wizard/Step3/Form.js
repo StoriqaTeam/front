@@ -31,6 +31,7 @@ type PropsType = {
   },
   aditionalPhotosMap: any,
   onUpload: (type: boolean, e: any) => void,
+  onClose: () => void,
 };
 
 type StateType = {
@@ -153,7 +154,7 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { data, aditionalPhotosMap, onSave } = this.props;
+    const { data, aditionalPhotosMap, onSave, onClose } = this.props;
     const { categoryId } = data;
     console.log('>>> Form 3 render: ', { data, aditionalPhotosMap });
 
@@ -243,6 +244,7 @@ class ThirdForm extends Component<PropsType, StateType> {
             <Button
               onClick={() => {
                 onSave();
+                onClose();
               }}
               dataTest="wizardSaveProductButton"
               big
