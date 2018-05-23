@@ -90,7 +90,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       onSave,
     } = this.props;
     const { showForm } = this.state;
-    const productsArr = products && map(item => item.node, products);
+    const productsArr = map(item => item.node, products);
     console.log('>>> View Form 3 render: ', {
       formStateData,
       products,

@@ -36,7 +36,7 @@ const mutation = graphql`
       facebookUrl
       twitterUrl
       instagramUrl
-      baseProducts {
+      baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
         edges {
           node {
             id
@@ -94,23 +94,30 @@ const commit = (params: MutationParamsType) => {
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
-    updater: relayStore => {
-      const me = relayStore.getRoot().getLinkedRecord('me');
-      const wizardStore = me.getLinkedRecord('wizardStore');
-      const storeProxy = wizardStore.getLinkedRecord('store');
+    // updater: (relayStore, data) => {
+    //   console.log('>>> UpdateStoreWizardMutation updater: ');
+    //   const me = relayStore.getRoot().getLinkedRecord('me');
+    //   const wizardStore = me.getLinkedRecord('wizardStore');
+    //   const storeProxy = wizardStore.getLinkedRecord('store');
+    //   const conn = ConnectionHandler.getConnection(
+    //     storeProxy,
+    //     'Wizard_baseProducts',
+    //   );
+    //   ConnectionHandler.insertEdgeAfter(conn, );
 
-      const responseStore = relayStore.getRootField('updateStore');
-      const responseStoreBaseProducts = responseStore.getLinkedRecord(
-        'baseProducts',
-      );
+    //   const responseStore = relayStore.getRootField('updateStore');
+    //   // const responseStoreBaseProducts = responseStore.getLinkedRecord(
+    //   //   'baseProducts',
+    //   // );
 
-      storeProxy.setLinkedRecord(responseStoreBaseProducts, 'baseProducts');
-      console.log('>>> UpdateStoreWizardMutation updater: ', {
-        storeProxy,
-        responseStore,
-        responseStoreBaseProducts,
-      });
-    },
+    //   // storeProxy.setLinkedRecord(responseStoreBaseProducts, 'baseProducts');
+    //   console.log('^^^ UpdateStoreWizardMutation updater: ', {
+    //     storeProxy,
+    //     responseStore,
+    //     data,
+    //     // responseStoreBaseProducts,
+    //   });
+    // },
   });
 };
 

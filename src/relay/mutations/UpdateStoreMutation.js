@@ -13,6 +13,15 @@ const mutation = graphql`
       defaultLanguage
       email
       phone
+      slug
+      name {
+        lang
+        text
+      }
+      shortDescription {
+        lang
+        text
+      }
       addressFull {
         country
         value
@@ -29,12 +38,22 @@ const mutation = graphql`
       facebookUrl
       twitterUrl
       instagramUrl
+      baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;
 
 type MutationParamsType = {
   id: string,
+  name: string,
+  slug: string,
+  shortDescription: string,
   defaultLanguage: string,
   email: string,
   phone: string,
@@ -63,6 +82,9 @@ const commit = (params: MutationParamsType) => {
       input: {
         clientMutationId: '',
         id: params.id,
+        name: params.name,
+        slug: params.slug,
+        shortDescription: params.shortDescription,
         defaultLanguage: params.defaultLanguage,
         email: params.email,
         phone: params.phone,

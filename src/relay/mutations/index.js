@@ -37,12 +37,3 @@ export {
 } from './UpdateUserDeliveryAddress';
 export { default as CreateWizardMutation } from './CreateWizardMutation';
 export { default as UpdateWizardMutation } from './UpdateWizardMutation';
-export {
-  default as CreateBaseProductWizardMutation,
-} from './CreateBaseProductWizardMutation';
-export {
-  default as CreateProductWithAttributesWizardMutation,
-} from './CreateProductWithAttributesWizardMutation';
-export {
-  default as UpdateStoreWizardMutation,
-} from './UpdateStoreWizardMutation';
