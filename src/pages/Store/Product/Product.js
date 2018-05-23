@@ -139,12 +139,14 @@ class Product extends Component<PropsType, StateType> {
       {
         id: '0',
         label: 'Description',
-        content: <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>,
+        content: (
+          <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
+        ),
       },
       {
         id: '1',
         label: 'Characteristics',
-        content: (<TabRow row={mockData.row} />),
+        content: <TabRow row={mockData.row} />,
       },
     ];
     return (

@@ -1,22 +1,21 @@
 // @flow
 
 import {
+  addIndex,
+  find,
+  flatten,
+  head,
+  insert,
+  isEmpty,
+  isNil,
   map,
   pipe,
-  flatten,
-  find,
   propEq,
-  isEmpty,
-  head,
-  addIndex,
-  isNil,
-  insert,
 } from 'ramda';
 
 import {
   VariantType,
   ProductVariantType,
-  ThumbnailType,
   WidgetOptionType,
 } from '../types';
 
@@ -41,8 +40,8 @@ const setProductVariantValues = (variant: VariantType) => {
   const insertPhotoMain = (
     image: string,
     photos: Array<{ id: string, image: string }>,
-  ): ThumbnailType => {
-    if (!isNil(image)) {
+  ): Array<{id: string, image: string}> => {
+    if (!isNil(image) && photos.every(p => p !== image)) {
       return insert(0, { id: `${photos.length + 1}`, image }, photos);
     }
     return photos;
@@ -70,10 +69,12 @@ const setProductVariantValues = (variant: VariantType) => {
 
 const findVariant: (
   Array<VariantType>,
-) => string => ProductVariantType = variants => variantId => {
-  const variant = find(propEq('id')(variantId))(variants);
-  return setProductVariantValues(variant);
-};
+) => string => ProductVariantType = variants => variantId => (
+  pipe(
+    find(propEq('id')(variantId)),
+    setProductVariantValues,
+  )(variants)
+);
 
 const getVariantFromSelection: (
   Array<WidgetOptionType>,
