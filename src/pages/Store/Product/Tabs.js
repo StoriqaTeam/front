@@ -1,10 +1,12 @@
+// @flow
+
 import * as React from 'react';
 
 import './Tabs.scss';
 
 type PropsType = {
-  selected?: number,
-  children: React.Node,
+  selected: number,
+  children: Array<React.Node>,
 };
 
 type StateType = {
@@ -22,7 +24,7 @@ class Tabs extends React.Component<PropsType, StateType> {
   state = {
     selected: this.props.selected,
   };
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: PropsType) {
     if (nextProps.selected !== this.props.selected) {
       this.setState({
         selected: nextProps.selected,
@@ -32,11 +34,11 @@ class Tabs extends React.Component<PropsType, StateType> {
   /**
    * Set the selected's tabs index
    *
-   * @param {SyntheticEvent} evt
+   * @param {any} evt
    * @param {number} index
    * @return {void}
    */
-  handleClick = (evt: SyntheticEvent, index: number): void => {
+  handleClick = (evt: any, index: number): void => {
     evt.preventDefault();
     this.setState({
       selected: index,
@@ -44,9 +46,9 @@ class Tabs extends React.Component<PropsType, StateType> {
   };
   /**
    * Renders the tab's
-   * @return {React.Node[]}
+   * @return {React.Element<any>}
    */
-  renderTitles = (): React.Node[] => {
+  renderTitles = (): React.Element<any> => {
     const { children } = this.props;
     const { selected } = this.state;
     /**
@@ -54,7 +56,7 @@ class Tabs extends React.Component<PropsType, StateType> {
      * @param {number} index
      * @return {React.Node}
      */
-    const buildLabels = (child: React.Node, index: number): React.Node => {
+    const buildLabels = (child: any, index: number) => {
       const activeClass = selected === index ? 'active' : '';
       return (
         <div
@@ -68,7 +70,7 @@ class Tabs extends React.Component<PropsType, StateType> {
         </div>
       );
     };
-    return <div styleName="labels">{children.map(buildLabels)}</div>;
+    return (<div styleName="labels">{children.map(buildLabels)}</div>);
   };
 
   /**

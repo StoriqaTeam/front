@@ -1,10 +1,10 @@
-import { IdType, AttributeValueType } from './index';
+// @flow
 
-type VariantType = {
+import type { IdType, AttributeValueType } from './index';
+
+export type VariantType = {
   ...IdType,
   photoMain: string | null,
   additionalPhotos: Array<string> | null,
   attributes: Array<AttributeValueType>,
 };
-
-export default VariantType;

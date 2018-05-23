@@ -1,9 +1,9 @@
-import React from 'react';
+// @flow
 
-type TabType = {
+import * as React from 'react';
+
+export type TabType = {
   id: string,
   label: string,
-  content: React.Node | string,
+  content: React.Node | React.Component<any, any> | string,
 };
-
-export default TabType;

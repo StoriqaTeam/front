@@ -8,16 +8,16 @@ import { ProductThumbnails, ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-import { WidgetOptionType, ThumbnailType } from './types';
+import type { WidgetOptionType } from './types';
 
 type PropsType = {
   mainImage: string,
   discount: number,
-  thumbnails: Array<ThumbnailType>,
+  thumbnails: Array<WidgetOptionType>,
 };
 
 type StateType = {
-  selected: WidgetOptionType,
+  selected: string,
 };
 
 class ProductImage extends Component<PropsType, StateType> {
@@ -34,16 +34,16 @@ class ProductImage extends Component<PropsType, StateType> {
     const { selected } = prevState;
     if (!isEmpty(selected)) {
       return {
-        selected: {},
+        selected: '',
       };
     }
     return prevState;
   }
   state = {
-    selected: {},
+    selected: '',
   };
-  handleClick = ({ image }: WidgetOptionType): void => {
-    this.setState({ selected: image });
+  handleClick = ({ img }: WidgetOptionType): void => {
+    this.setState({ selected: img });
   };
   render() {
     const { mainImage, thumbnails, discount } = this.props;

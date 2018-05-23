@@ -32,7 +32,7 @@ import {
   TabRow,
 } from './index';
 
-import {
+import type {
   ProductType,
   WidgetOptionType,
   ProductVariantType,
@@ -51,7 +51,7 @@ type PropsType = {
 
 type StateType = {
   widgets: Array<WidgetType>,
-  productVariant: ProductVariantType,
+  productVariant: { ...ProductVariantType },
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -78,7 +78,7 @@ class Product extends Component<PropsType, StateType> {
     }
     return prevState;
   }
-  state = {
+  state: StateType = {
     widgets: [],
     productVariant: {},
   };
