@@ -47,7 +47,7 @@ const aditionalPhotosConfig = [
 ];
 
 type PropsType = {
-  onUpload: (type: ?string, e: any) => Promise<*>,
+  onUpload: (type: string, e: any) => Promise<*>,
   photoMain: ?string,
   aditionalPhotosMap: { [string]: string },
 };

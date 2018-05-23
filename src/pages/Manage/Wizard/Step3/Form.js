@@ -45,7 +45,7 @@ type PropsType = {
     attributes: [],
   },
   aditionalPhotosMap: any,
-  onUpload: (type: ?string, e: any) => Promise<*>,
+  onUpload: (type: string, e: any) => Promise<*>,
   onChangeAttrs: (Array<AttrValueType>) => void,
   onSave: () => void,
 };

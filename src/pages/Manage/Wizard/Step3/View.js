@@ -15,16 +15,22 @@ import Modal from './Modal';
 
 import './View.scss';
 
-type ProductType = {
-  item: {
-    rawId: number,
-    storeId: number,
-    currencyId: number,
-    name: Array<{
-      lang: string,
-      text: string,
-    }>,
-    variants: Array<{
+type ProductNodeType = {
+  id: string,
+  rawId: number,
+  storeId: number,
+  currencyId: number,
+  category: { id: string, rawId: number },
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  shortDescription: Array<{
+    lang: string,
+    text: string,
+  }>,
+  products: {
+    edges: Array<{
       discount: number,
       photoMain: string,
       cashback: number,
@@ -33,12 +39,18 @@ type ProductType = {
   },
 };
 
+type ProductType = {
+  node: ProductNodeType,
+};
+
 type PropsType = {
   formStateData: any,
   aditionalPhotosMap: any,
   onChange: (data: { [name: string]: string }) => void,
-  onUpload: (type: string, e: any) => void,
+  onUpload: (type: string, e: any) => Promise<*>,
   products: Array<ProductType>,
+  onSave: () => void,
+  onChangeAttrs: () => void,
 };
 
 type StateType = {
@@ -50,7 +62,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     showForm: false,
   };
 
-  handleOnShowForm = item => {
+  handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
     const name = item.name ? getNameText(item.name) : '';
     const shortDescription = item.shortDescription
