@@ -1,13 +1,13 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 
 import { Icon } from 'components/Icon';
 
 import './Modal.scss';
 
 type ModalType = {
-  children: Raact.Element,
+  children: React.Element<*>,
   showModal: boolean,
   onClose: () => void,
 };
