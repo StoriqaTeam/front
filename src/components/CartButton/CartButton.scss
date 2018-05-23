@@ -2,9 +2,12 @@
 
 .container {
   position: relative;
-  display: block;
-  width: 32px;
-  height: 32px;
+  // top: -0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   cursor: pointer;
 
@@ -14,13 +17,14 @@
 
 .amount {
   position: absolute;
-  top: -11px;
-  left: 14px;
+  top: -0.75rem;
+  left: 2.25rem;
+  z-index: 1;
 }
 
 .icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -8px 0 0 -9px;
+  //position: absolute;
+  //top: 50%;
+  //left: 50%;
+  // margin: -8px 0 0 -9px;
 }

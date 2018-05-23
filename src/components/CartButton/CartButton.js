@@ -19,11 +19,12 @@ class CartButton extends PureComponent<PropsTypes> {
     const { amount, href } = this.props;
     return (
       <Link to={href || '/'} styleName="container">
-        {amount && (
-          <div styleName="amount">
-            <Count amount={amount} type="blue" />
-          </div>
-        )}
+        {Boolean(amount) &&
+          amount > 0 && (
+            <div styleName="amount">
+              <Count amount={amount} type="blue" />
+            </div>
+          )}
         <div styleName="icon">
           <Icon type="cart" size="16" />
         </div>

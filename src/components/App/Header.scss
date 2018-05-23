@@ -40,15 +40,44 @@
   flex: 1;
 }
 
-.buttonWrapper {
-  margin-left: 3rem;
-}
-
-.profileIcon {
-  width: 4rem;
+.authBlock {
+  //width: 4rem;
 }
 
 .cartIcon {
   width: 4rem;
-  margin-left: 2rem;
+  margin-left: 1rem;
+}
+
+.authButtons {
+  display: flex;
+
+  & .signInButton {
+    margin-left: 2rem;
+    padding: 0 2rem;
+    border-radius: 0.5rem;
+    border: solid 1px rgba(151,151,151,.2);
+    font-size: 14px;
+    height: 4rem;
+    line-height: 4rem;
+    cursor: pointer;
+    transition: all .3s ease;
+
+    &:hover {
+      color: $color_white;
+      background-color: $color_blue_1_hover;
+    }
+  }
+
+  & .signUpButton {
+    font-size: 14px;
+    height: 4rem;
+    line-height: 4rem;
+    cursor: pointer;
+    transition: all .3s ease;
+
+    &:hover {
+      color: $color_blue_1;
+    }
+  }
 }

@@ -38,8 +38,8 @@ class Start extends PureComponent<PropsTypes> {
       mainPage,
     );
 
-    const discountProducts = map(item => item.node, mostViewedProducts);
-    const viewedProducts = map(item => item.node, mostDiscountProducts);
+    const discountProducts = map(item => item.node, mostDiscountProducts);
+    const viewedProducts = map(item => item.node, mostViewedProducts);
     return (
       <div styleName="container">
         <div styleName="item bannerSliderItem">

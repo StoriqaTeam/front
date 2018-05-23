@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   position: relative;
 }
@@ -9,9 +11,11 @@
 
 .content {
   position: absolute;
+  left: -100%;
   display: block;
   margin-top: 12px;
-  width: 232px;
+  // margin-left: 20px;
+  min-width: 232px;
   min-height: 232px;
   padding: 16px 8px;
   background-color: #fff;
@@ -36,17 +40,42 @@
     top: 0;
     right: 8px;
     width: 32px;
-    height: 12px;
+    height: 16px;
     background-color: #fff;
   }
 }
 
 .withIconTrigger {
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  transition: all .3s ease;
+
+  & .icon {
+    margin-left: 1rem;
+    transition: all .3s ease;
+  }
+
+  &.isContentOpen {
+    color: $color_blue_1;
+
+    & .icon {
+      transform: rotate(180deg);
+    }
+  }
+  //border-radius: 50%;
 }
 
 .withIconContent {
-  position: relative;
-  left: -30rem;
-  width: 35rem;
+  margin-left: 9.5rem;
+
+  &:before {
+    right: 5rem;
+  }
+
+  &:after {
+    right: 4rem;
+  }
+  //position: relative;
+  //left: -30rem;
+  //width: 35rem;
 }

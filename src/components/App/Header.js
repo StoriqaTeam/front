@@ -19,9 +19,10 @@ import {
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
-import { Button } from 'components/common/Button';
 import { Select } from 'components/common/Select';
 import { Icon } from 'components/Icon';
+import { Modal } from 'components/Modal';
+import { Authorization } from 'components/Authorization';
 
 import { Container, Row, Col } from 'layout';
 
@@ -59,11 +60,15 @@ type PropsType = {
 
 type StateType = {
   cartCount: number,
+  showModal: boolean,
+  isSignUp: ?boolean,
 };
 
 class Header extends Component<PropsType, StateType> {
   state = {
     cartCount: 0,
+    showModal: false,
+    isSignUp: false,
   };
 
   componentWillMount() {
@@ -87,10 +92,22 @@ class Header extends Component<PropsType, StateType> {
     }
   }
 
+  onOpenModal = (isSignUp: ?boolean) => {
+    this.setState({
+      showModal: true,
+      isSignUp,
+    });
+  };
+
+  onCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+
   dispose: () => void;
 
   render() {
     const { user, searchValue } = this.props;
+    const { showModal, isSignUp } = this.state;
     return (
       <header styleName="container">
         <Container>
@@ -154,28 +171,46 @@ class Header extends Component<PropsType, StateType> {
                     searchValue={searchValue}
                   />
                 </div>
-                <div styleName="profileIcon">
-                  <UserDropdown user={user} />
+                <div styleName="authBlock">
+                  {user ? (
+                    <UserDropdown user={user} />
+                  ) : (
+                    <div styleName="authButtons">
+                      <div
+                        styleName="signUpButton"
+                        onClick={() => {
+                          this.onOpenModal(true);
+                        }}
+                        onKeyDown={() => {}}
+                        role="button"
+                        tabIndex="0"
+                      >
+                        Sign Up
+                      </div>
+                      <div
+                        styleName="signInButton"
+                        onClick={() => {
+                          this.onOpenModal(false);
+                        }}
+                        onKeyDown={() => {}}
+                        role="button"
+                        tabIndex="0"
+                      >
+                        <strong>Sign In</strong>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div styleName="cartIcon">
                   <CartButton href="/cart" amount={this.state.cartCount} />
-                </div>
-                <div styleName="buttonWrapper">
-                  <Button
-                    href={
-                      process.env.REACT_APP_HOST
-                        ? `${process.env.REACT_APP_HOST}/manage/store/new`
-                        : '/'
-                    }
-                    dataTest="headerStartSellingButton"
-                  >
-                    Start selling
-                  </Button>
                 </div>
               </div>
             </Col>
           </Row>
         </Container>
+        <Modal showModal={showModal} onClose={this.onCloseModal}>
+          <Authorization isSignUp={isSignUp} />
+        </Modal>
       </header>
     );
   }
