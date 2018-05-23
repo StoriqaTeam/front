@@ -1,4 +1,4 @@
-@import "../../../../../../styles/variables";
+@import '../../../../../../styles/variables';
 
 .header {
   display: flex;
@@ -26,17 +26,35 @@
 .deleteButton {
   & svg {
     fill: #e4e4e4;
-    transition: all .3s ease;
+    transition: all 0.3s ease;
   }
 
-  &:hover svg {fill: $color_grey_text;}
+  &:hover svg {
+    fill: $color_grey_text;
+  }
 }
 
-.tdCheckbox {width: 5%;}
-.tdArticle {width: 20%;}
-.tdPrice {width: 20%;}
-.tdCashback {width: 15%;}
-.tdCharacteristics {width: 15%;}
-.tdCount {width: 15%;}
-.tdBasket {width: 5%;}
-.tdDropdawn {width: 5%;}
+.tdCheckbox {
+  width: 5%;
+}
+.tdArticle {
+  width: 20%;
+}
+.tdPrice {
+  width: 20%;
+}
+.tdCashback {
+  width: 15%;
+}
+.tdDiscount {
+  width: 15%;
+}
+.tdCharacteristics {
+  width: 15%;
+}
+.tdBasket {
+  width: 5%;
+}
+.tdDropdown {
+  width: 5%;
+}

@@ -34,15 +34,15 @@ const Header = (props: PropsType) => (
         <Icon inline type="sortArrows" />
       </div>
     </div>
-    <div styleName="headerItem tdCharacteristics">
+    <div styleName="headerItem tdDiscount">
       <div styleName="headerItemWrap">
-        <span>Characteristics</span>
+        <span>Discount</span>
         <Icon inline type="sortArrows" />
       </div>
     </div>
-    <div styleName="headerItem tdCount">
+    <div styleName="headerItem tdCharacteristics">
       <div styleName="headerItemWrap">
-        <span>Count</span>
+        <span>Characteristics</span>
         <Icon inline type="sortArrows" />
       </div>
     </div>
@@ -51,7 +51,7 @@ const Header = (props: PropsType) => (
         <Icon type="basket" size="32" />
       </button>
     </div>
-    <div styleName="headerItem tdDropdawn" />
+    <div styleName="headerItem tdDropdown" />
   </div>
 );
 

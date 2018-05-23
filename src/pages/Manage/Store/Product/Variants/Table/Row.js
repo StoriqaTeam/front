@@ -14,6 +14,7 @@ type PropsType = {
     vendorCode: string,
     price: number,
     cashback: number,
+    discount?: number,
     attributes: Array<{
       attribute: {
         name: Array<{ text: string }>,
@@ -46,6 +47,7 @@ class Row extends Component<PropsType, StateType> {
       vendorCode,
       price,
       cashback: cashbackValue,
+      discount,
       attributes: attrs,
     } = this.props.variant;
     const cashback =
@@ -67,6 +69,11 @@ class Row extends Component<PropsType, StateType> {
           <div styleName="variantItem tdCashback">
             <span styleName="text cashbackText">
               <strong>{cashback}</strong>%
+            </span>
+          </div>
+          <div styleName="variantItem tdCashback">
+            <span styleName="text cashbackText">
+              <strong>{discount != null ? discount : 0}</strong>%
             </span>
           </div>
           <div styleName="variantItem tdCharacteristics">
@@ -96,28 +103,12 @@ class Row extends Component<PropsType, StateType> {
               </div>
             </div>
           </div>
-          <div styleName="variantItem tdCount">
-            <div styleName="storagesItem">
-              <div styleName="storagesLabels">
-                <div>1 storage</div>
-                <div>2 storage</div>
-              </div>
-              <div styleName="storagesValues">
-                <div>
-                  <strong>56</strong>
-                </div>
-                <div>
-                  <strong>67</strong>
-                </div>
-              </div>
-            </div>
-          </div>
           <div styleName="variantItem tdBasket">
             <button styleName="deleteButton">
               <Icon type="basket" size="32" />
             </button>
           </div>
-          <div styleName="variantItem tdDropdawn">
+          <div styleName="variantItem tdDropdown">
             <button styleName="arrowExpand" onClick={this.handleExpandClick}>
               <Icon inline type="arrowExpand" />
             </button>
