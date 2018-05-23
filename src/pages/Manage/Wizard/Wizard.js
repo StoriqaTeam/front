@@ -264,9 +264,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       omit(['product', 'attributes'], baseProduct),
     );
     console.log('^^^ createBaseProduct preparedData: ', { preparedData });
-    // const storeID = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
+    const parentID = pathOr(
+      null,
+      ['me', 'wizardStore', 'store', 'id'],
+      this.props,
+    );
     CreateBaseProductMutation.commit({
       ...preparedData,
+      parentID,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         // console.log('^^^ createBaseProduct response: ', { response, errors });
@@ -274,6 +279,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         const baseProductId = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
+          response,
+        );
+        const baseProductID = pathOr(
+          null,
+          ['createBaseProduct', 'id'],
           response,
         );
         if (!baseProductId) {
@@ -294,6 +304,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         // });
         CreateProductWithAttributesMutation.commit({
           ...prepareDataForProduct,
+          parentID: baseProductID,
           environment: this.context.environment,
           onCompleted: (
             productResponse: ?Object,
@@ -315,23 +326,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
         errorsLogger(error);
-      },
-      updater: relayStore => {
-        const me = relayStore.getRoot().getLinkedRecord('me');
-        const wizardStore = me.getLinkedRecord('wizardStore');
-        const storeProxy = wizardStore.getLinkedRecord('store');
-        const conn = ConnectionHandler.getConnection(
-          storeProxy,
-          'Wizard_baseProducts',
-        );
-        const newProduct = relayStore.getRootField('createBaseProduct');
-        const edge = ConnectionHandler.createEdge(
-          relayStore,
-          conn,
-          newProduct,
-          'BaseProductsEdge',
-        );
-        ConnectionHandler.insertEdgeAfter(conn, edge);
       },
     });
   };

@@ -1,7 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment } from 'relay-runtime';
+import { Environment, ConnectionHandler } from 'relay-runtime';
 
 const mutation = graphql`
   mutation CreateBaseProductMutation($input: CreateBaseProductInput!) {
@@ -79,7 +79,6 @@ type MutationParamsType = {
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
-  updater: ?(proxyStore: any) => void,
 };
 
 const commit = (params: MutationParamsType) =>
@@ -100,7 +99,31 @@ const commit = (params: MutationParamsType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
-    updater: params.updater,
+    // updater for add new base product to baseProducts connection
+    updater: (relayStore, newData) => {
+      console.log('>>> CreateBaseProductMutation updater params: ', {
+        params,
+        newData,
+      });
+      // const me = relayStore.getRoot().getLinkedRecord('me');
+      // const wizardStore = me.getLinkedRecord('wizardStore');
+      if (!params || !params.parentID) {
+        return;
+      }
+      const storeProxy = relayStore.get(params.parentID);
+      const conn = ConnectionHandler.getConnection(
+        storeProxy,
+        'Wizard_baseProducts',
+      );
+      const newProduct = relayStore.getRootField('createBaseProduct');
+      const edge = ConnectionHandler.createEdge(
+        relayStore,
+        conn,
+        newProduct,
+        'BaseProductsEdge',
+      );
+      ConnectionHandler.insertEdgeAfter(conn, edge);
+    },
   });
 
 export default { commit };
