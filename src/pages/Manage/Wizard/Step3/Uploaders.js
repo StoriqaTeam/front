@@ -9,14 +9,14 @@ import './Form.scss';
 const Uploaders = ({
   onUpload,
 }: {
-  onUpload: (type?: string, e?: any) => void,
+  onUpload: (e: any, type: ?string) => void,
 }) => (
   <div styleName="uploadersWrapper">
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
         onUpload={e => {
-          onUpload('photoMain', e);
+          onUpload(e, 'photoMain');
         }}
         buttonHeight={26}
         buttonWidth={26}
@@ -30,8 +30,8 @@ const Uploaders = ({
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={() => {
-          onUpload();
+        onUpload={e => {
+          onUpload(e);
         }}
         buttonHeight={26}
         buttonWidth={26}
@@ -45,8 +45,8 @@ const Uploaders = ({
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={() => {
-          onUpload();
+        onUpload={e => {
+          onUpload(e);
         }}
         buttonHeight={26}
         buttonWidth={26}
@@ -60,8 +60,8 @@ const Uploaders = ({
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={() => {
-          onUpload();
+        onUpload={e => {
+          onUpload(e);
         }}
         buttonHeight={26}
         buttonWidth={26}
@@ -75,8 +75,8 @@ const Uploaders = ({
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={() => {
-          onUpload();
+        onUpload={e => {
+          onUpload(e);
         }}
         buttonHeight={26}
         buttonWidth={26}
@@ -90,8 +90,8 @@ const Uploaders = ({
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={() => {
-          onUpload();
+        onUpload={e => {
+          onUpload(e);
         }}
         buttonHeight={26}
         buttonWidth={26}
@@ -105,8 +105,8 @@ const Uploaders = ({
     <div styleName="uploadItem">
       <UploadWrapper
         id="main_foto"
-        onUpload={() => {
-          onUpload();
+        onUpload={e => {
+          onUpload(e);
         }}
         buttonHeight={26}
         buttonWidth={26}

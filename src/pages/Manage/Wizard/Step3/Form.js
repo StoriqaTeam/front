@@ -26,16 +26,22 @@ type PropsType = {
   categories: CategoriesTreeType,
   onChange: (obj: { [name: string]: string }) => void,
   data: {
+    storeId: ?number,
+    currencyId: number,
     categoryId: ?number,
     name: string,
     shortDescription: string,
     product: {
-      price: string,
-      vendorCode: string,
+      baseProductId: ?number,
+      vendorCode: ?string,
+      photoMain: string,
+      additionalPhotos: Array<string>,
+      price: ?number,
       cashback: ?number,
-    }
+    },
+    attributes: [],
   },
-  onUpload: (type?: string, e?: any) => void,
+  onUpload: (e: any, type: ?string) => void,
 };
 
 type StateType = {
@@ -190,7 +196,7 @@ class ThirdForm extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   id="price"
-                  value={data.price || ''}
+                  value={data.product.price || ''}
                   label="Price"
                   onChange={this.handleChangeData}
                   fullWidth
@@ -201,7 +207,7 @@ class ThirdForm extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   id="vendorCode"
-                  value={data.vendorCode || ''}
+                  value={data.product.vendorCode || ''}
                   label="Vendor code"
                   onChange={this.handleChangeData}
                   fullWidth
@@ -211,7 +217,7 @@ class ThirdForm extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   id="cashback"
-                  value={data.cashback || ''}
+                  value={data.product.cashback || ''}
                   label="Cashback"
                   onChange={this.handleChangeData}
                   fullWidth

@@ -21,30 +21,6 @@ type ModalType = {
   onClose: () => void,
 };
 
-const Modal = ({ children, showModal, onClose }: ModalType) => {
-  if (!showModal) {
-    return null;
-  }
-  return (
-    <div styleName="modalWrapper">
-      <div styleName="modal">
-        <div styleName="modalContent">
-          <div
-            styleName="closeButton"
-            role="button"
-            onClick={onClose}
-            onKeyDown={() => {}}
-            tabIndex={0}
-          >
-            <Icon type="cross" />
-          </div>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 type ProductNodeType = {
   node: {
     rawId: number,
@@ -88,7 +64,7 @@ type StateType = {
     shortDescription: string,
     product: {
       baseProductId: ?number,
-      vendorCode: string,
+      vendorCode: ?string,
       photoMain: string,
       additionalPhotos: Array<string>,
       price: ?number,
@@ -96,6 +72,30 @@ type StateType = {
     },
     attributes: [],
   },
+};
+
+const Modal = ({ children, showModal, onClose }: ModalType) => {
+  if (!showModal) {
+    return null;
+  }
+  return (
+    <div styleName="modalWrapper">
+      <div styleName="modal">
+        <div styleName="modalContent">
+          <div
+            styleName="closeButton"
+            role="button"
+            onClick={onClose}
+            onKeyDown={() => {}}
+            tabIndex={0}
+          >
+            <Icon type="cross" />
+          </div>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
@@ -141,7 +141,10 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = async (type: string, e: any) => {
+  handleOnUploadPhoto = async (e: any, type: ?string) => {
+    if (!e) {
+      return;
+    }
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
