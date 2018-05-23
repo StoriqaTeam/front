@@ -134,29 +134,29 @@ const commit = (params: MutationParamsType) => {
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
-    updater: (relayStore, data) => {
-      // debugger;
-      // console.log('>>> updateWizardMutations data: ', {data})
-      // if (data.storeId) {
-      //   const me = relayStore.getRoot().getLinkedRecord('me');
-      //   const wizardStore = me.getLinkedRecord('wizardStore');
-      //   // const storeProxy = wizardStore.getLinkedRecord('store');
-      //   // const conn = ConnectionHandler.getConnection(
-      //   //   storeProxy,
-      //   //   'Wizard_baseProducts',
-      //   // );
-      //   const newWizard = relayStore.getRootField('updateWizardStore');
-      //   const newStore = newWizard.getLinkedRecord('store');
-      //   wizardStore.setLinkedRecord(newStore, 'store');
-      //   // const edge = ConnectionHandler.createEdge(
-      //   //   relayStore,
-      //   //   conn,
-      //   //   newProduct,
-      //   //   'BaseProductsEdge',
-      //   // );
-      //   // ConnectionHandler.insertEdgeAfter(conn, edge);
-      // }
-    },
+    // updater: (relayStore, data) => {
+    // debugger;
+    // console.log('>>> updateWizardMutations data: ', {data})
+    // if (data.storeId) {
+    //   const me = relayStore.getRoot().getLinkedRecord('me');
+    //   const wizardStore = me.getLinkedRecord('wizardStore');
+    //   // const storeProxy = wizardStore.getLinkedRecord('store');
+    //   // const conn = ConnectionHandler.getConnection(
+    //   //   storeProxy,
+    //   //   'Wizard_baseProducts',
+    //   // );
+    //   const newWizard = relayStore.getRootField('updateWizardStore');
+    //   const newStore = newWizard.getLinkedRecord('store');
+    //   wizardStore.setLinkedRecord(newStore, 'store');
+    //   // const edge = ConnectionHandler.createEdge(
+    //   //   relayStore,
+    //   //   conn,
+    //   //   newProduct,
+    //   //   'BaseProductsEdge',
+    //   // );
+    //   // ConnectionHandler.insertEdgeAfter(conn, edge);
+    // }
+    // },
   });
 };
 

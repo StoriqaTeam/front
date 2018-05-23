@@ -41,28 +41,45 @@ import Step3 from './Step3/View';
 
 import './Wizard.scss';
 
-type PropsType = {};
+type BaseProductNodeType = {
+  id: ?string,
+  storeId: ?number,
+  currencyId: number,
+  categoryId: ?number,
+  name: string,
+  shortDescription: string,
+  product: {
+    baseProductId: ?number,
+    vendorCode: string,
+    photoMain: string,
+    additionalPhotos: Array<string>,
+    price: ?number,
+    cashback: ?number,
+  },
+  attributes: Array<any>,
+};
+
+type PropsType = {
+  languages: Array<{
+    isoCode: string,
+  }>,
+  me: {
+    wizardStore: {
+      store: {
+        baseProducts: {
+          edges: Array<{
+            node: BaseProductNodeType,
+          }>,
+        },
+      },
+    },
+  },
+};
 
 type StateType = {
   isLoading: boolean,
   step: number,
-  baseProduct: {
-    id: ?string,
-    storeId: ?number,
-    currencyId: number,
-    categoryId: ?number,
-    name: string,
-    shortDescription: string,
-    product: {
-      baseProductId: ?number,
-      vendorCode: string,
-      photoMain: string,
-      additionalPhotos: Array<string>,
-      price: ?number,
-      cashback: ?number,
-    },
-    attributes: Array<any>,
-  },
+  baseProduct: BaseProductNodeType,
   aditionalPhotosMap: {
     photoAngle: string,
     photoDetails: string,
@@ -169,12 +186,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   prepareStoreMutationInput = () => {
     // log.info('>>> prepareStoreMutationInput: ');
+    // $FlowIgnoreMe
     const wizardStore = pathOr(
       { addressFull: {} },
       ['me', 'wizardStore'],
       this.props,
     );
+    // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
+    // $FlowIgnoreMe
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     const preparedData = evolve(
       {
@@ -250,6 +270,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   handleOnSaveStep = (changedStep: number) => {
     // log.info('>>> handleOnSaveStep: ', { changedStep });
     const { step } = this.state;
+    // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     switch (step) {
       case 1:
@@ -460,7 +481,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   renderForm = () => {
     const { step } = this.state;
+    // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    // $FlowIgnoreMe
     const baseProducts = pathOr(
       null,
       ['me', 'wizardStore', 'store', 'baseProducts'],
@@ -523,8 +546,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     log.info('>>> render', { props: this.props });
     log.info('>>> render context', this.context);
     log.info(this.state.isLoading);
+    const { me } = this.props;
     const { step } = this.state;
-    const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
+    const { wizardStore } = me;
     const isNotEmpty = complement((i: any) => !i);
     const stepOneChecker = where({
       name: isNotEmpty,
