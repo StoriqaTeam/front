@@ -4,6 +4,11 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 import { map } from 'ramda';
 
+import type {
+  CreateUserDeliveryAddressMutationVariables,
+  CreateUserDeliveryAddressMutationResponse,
+} from './__generated__/CreateUserDeliveryAddressMutation.graphql';
+
 const mutation = graphql`
   mutation CreateUserDeliveryAddressMutation(
     $input: NewUserDeliveryAddressInput!
@@ -29,21 +34,12 @@ const mutation = graphql`
 `;
 
 export type MutationParamsType = {
-  input: {
-    userId: number,
-    country: string,
-    administrativeAreaLevel1: ?string,
-    administrativeAreaLevel2: ?string,
-    political: ?string,
-    postalCode: string,
-    streetNumber: ?string,
-    address: ?string,
-    route: ?string,
-    locality: ?string,
-    isPriority: boolean,
-  },
+  ...CreateUserDeliveryAddressMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?CreateUserDeliveryAddressMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 

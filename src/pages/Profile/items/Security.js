@@ -19,14 +19,21 @@ import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Icon } from 'components/Icon';
 import { PasswordHints } from 'components/PasswordHints';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import { log, fromRelayError } from 'utils';
 import { renameKeys } from 'utils/ramda';
 
-import { ChangePassword } from 'relay/mutations';
-import type { MutationParamsType } from 'relay/mutations/ChangePassword';
+import { ChangePasswordMutation } from 'relay/mutations';
+import type { MutationParamsType } from 'relay/mutations/ChangePasswordMutation';
 
 import '../Profile.scss';
+
+type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
+};
 
 type StateType = {
   form: {
@@ -51,7 +58,7 @@ type StateType = {
 };
 
 // eslint-disable-next-line
-class Security extends Component<{}, StateType> {
+class Security extends Component<PropsType, StateType> {
   state: StateType = {
     form: {
       oldPassword: '',
@@ -73,11 +80,9 @@ class Security extends Component<{}, StateType> {
   };
 
   handleSave = () => {
-    this.setState(() => ({ isLoading: true }));
     const { environment } = this.context;
     const { form, isValidNewPassword } = this.state;
     const { oldPassword, newPassword, repeatNewPassword } = form;
-
     const { errors: formErrors } = validate(
       {
         oldPassword: [
@@ -92,6 +97,10 @@ class Security extends Component<{}, StateType> {
             'Password must not be empty',
           ],
           [() => isValidNewPassword, 'Not valid password'],
+          [
+            (value: string) => value !== oldPassword,
+            'Password has not changed',
+          ],
         ],
         repeatNewPassword: [
           [
@@ -130,6 +139,9 @@ class Security extends Component<{}, StateType> {
         log.debug({ relayErrors });
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        // $FlowIgnoreMe
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
+        this.setState(() => ({ isLoading: false }));
         if (!isEmpty(validationErrors)) {
           this.setState({
             formErrors: renameKeys(
@@ -140,19 +152,64 @@ class Security extends Component<{}, StateType> {
               validationErrors,
             ),
           });
+          return;
+        } else if (status) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        } else if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
         }
-        this.setState(() => ({ isLoading: false }));
+        this.props.showAlert({
+          type: 'success',
+          text: 'Password successfully update!',
+          link: { text: 'Got it!' },
+        });
+        this.setState(() => ({
+          newPasswordSee: false,
+          repeatNewPasswordSee: false,
+        }));
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
         this.setState(() => ({ isLoading: false }));
+        // $FlowIgnoreMe
+        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.setState({
+            formErrors: renameKeys(
+              {
+                password: 'oldPassword',
+                new_password: 'newPassword',
+              },
+              validationErrors,
+            ),
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
+        this.setState(() => ({
+          newPasswordSee: false,
+          repeatNewPasswordSee: false,
+        }));
       },
     };
-    ChangePassword.commit(params);
+    ChangePasswordMutation.commit(params);
   };
 
   toggleSeePassword = (typePaasword: string) => {
@@ -303,4 +360,4 @@ Security.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Security;
+export default withShowAlert(Security);
