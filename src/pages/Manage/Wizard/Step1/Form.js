@@ -33,7 +33,7 @@ type PropsType = {
       rawId: number,
       baseProducts: {
         edges: Array<?{}>,
-      }
+      },
     },
   }) => void,
 };
@@ -51,8 +51,10 @@ class FirstForm extends React.Component<PropsType, StateType> {
     return newState;
   };
 
-  static getDerivedStateFromProps = (nextProps: PropsType, prevState: StateType) =>
-    FirstForm.prepareState(nextProps.initialData, prevState);
+  static getDerivedStateFromProps = (
+    nextProps: PropsType,
+    prevState: StateType,
+  ) => FirstForm.prepareState(nextProps.initialData, prevState);
 
   constructor(props: PropsType) {
     super(props);

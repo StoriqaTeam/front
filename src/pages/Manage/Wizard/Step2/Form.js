@@ -32,7 +32,7 @@ type AddressType = {
   streetNumber: ?string,
   address: ?string,
   value: ?string,
-}
+};
 
 type DataType = {
   userId: ?number,
@@ -50,13 +50,16 @@ type DataType = {
 type PropsType = {
   languages: Array<{ isoCode: string }>,
   initialData: DataType,
-  onChange: (DataType) => void,
+  onChange: DataType => void,
 };
 
 type StateType = DataType;
 
 class SecondForm extends React.Component<PropsType, StateType> {
-  static getDerivedStateFromProps = (nextProps: PropsType, prevState: StateType) => {
+  static getDerivedStateFromProps = (
+    nextProps: PropsType,
+    prevState: StateType,
+  ) => {
     log.info('>>> Form 2 getDerivedStateFromProps: ', {
       initialData: nextProps.initialData,
       prevState,
@@ -82,7 +85,7 @@ class SecondForm extends React.Component<PropsType, StateType> {
     };
   }
 
-  handleOnSelectLanguage = (item: {id: string, label: string}) => {
+  handleOnSelectLanguage = (item: { id: string, label: string }) => {
     const { onChange } = this.props;
     log.info('>>> Form2 handleOnSelectLanguage state', this.state);
     this.setState(
