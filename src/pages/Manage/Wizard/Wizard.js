@@ -16,6 +16,7 @@ import {
   complement,
 } from 'ramda';
 import debounce from 'lodash.debounce';
+import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
 import {
@@ -61,6 +62,7 @@ type BaseProductNodeType = {
 };
 
 type PropsType = {
+  router: routerShape,
   languages: Array<{
     isoCode: string,
   }>,
@@ -291,7 +293,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.updateStore();
         break;
       case 3:
-        this.updateStore();
+        this.props.router.push('/');
         break;
       default:
         break;
@@ -579,6 +581,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const { me } = this.props;
     const { step } = this.state;
     const { wizardStore } = me;
+    const baseProducts = pathOr(
+      null,
+      ['me', 'wizardStore', 'store', 'baseProducts'],
+      this.props,
+    );
     const isNotEmpty = complement((i: any) => !i);
     const stepOneChecker = where({
       name: isNotEmpty,
@@ -588,6 +595,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const steptTwoChecker = where({
       defaultLanguage: isNotEmpty,
     });
+    // debugger;
     const isReadyToNext = () => {
       if (!wizardStore) {
         return false;
@@ -596,10 +604,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       const isStepOnePopulated = stepOneChecker(stepOne);
       const stepTwo = pick(['defaultLanguage'], wizardStore);
       const isStepTwoPopulated = steptTwoChecker(stepTwo);
+      const isStepThreePopulated =
+        baseProducts && baseProducts.edges.length > 0;
+      log.info({ wizardStore });
       if (step === 1 && isStepOnePopulated) {
         return true;
       }
       if (step === 2 && isStepTwoPopulated) {
+        return true;
+      }
+      if (step === 3 && isStepThreePopulated) {
         return true;
       }
       return false;
@@ -632,7 +646,7 @@ WizardWrapper.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(WizardWrapper),
+  withRouter(Page(WizardWrapper)),
   graphql`
     fragment Wizard_me on User {
       id
