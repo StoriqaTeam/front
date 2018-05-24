@@ -51,6 +51,7 @@ type PropsType = {
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
   onSave: () => void,
+  onClearProductState: () => void,
   onChangeAttrs: () => void,
 };
 
@@ -92,6 +93,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   handleOnCloseModal = () => {
+    const { onClearProductState } = this.props;
+    onClearProductState();
     this.setState({ showForm: false });
   };
 
