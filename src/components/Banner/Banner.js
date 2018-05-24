@@ -20,11 +20,11 @@ class Banner extends PureComponent<PropsTypes> {
   render() {
     const { item } = this.props;
     return (
-      <div styleName="container" target="_blank">
+      <a styleName="container" target="_blank" href={item.link}>
         <div styleName="wrap">
           <ImageLoader src={item.img} loader={<BannerLoading />} />
         </div>
-      </div>
+      </a>
     );
   }
 }

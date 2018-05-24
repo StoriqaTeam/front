@@ -2,21 +2,21 @@
   {
     "id": "1",
     "img": "https://s3.amazonaws.com/storiqa-dev/img-AYQfG1KxAhkC.png",
-    "link": "https://s3.amazonaws.com/storiqa-dev/img-AYQfG1KxAhkC.png"
+    "link": "/categories?search=wallet&category=31"
   },
   {
     "id": "2",
     "img": "https://s3.amazonaws.com/storiqa-dev/img-9yhQ3e0ad0gC.png",
-    "link": "https://s3.amazonaws.com/storiqa-dev/img-9yhQ3e0ad0gC.png"
+    "link": "/categories?search=&category=28"
   },
   {
     "id": "3",
     "img": "https://s3.amazonaws.com/storiqa-dev/img-1dJwPHCELHkC.png",
-    "link": "https://s3.amazonaws.com/storiqa-dev/img-1dJwPHCELHkC.png"
+    "link": "/manage/wizard"
   },
   {
     "id": "4",
     "img": "https://s3.amazonaws.com/storiqa-dev/img-ruBblzwuj4IC.png",
-    "link": "https://s3.amazonaws.com/storiqa-dev/img-ruBblzwuj4IC.png"
+    "link": "/categories?search=&category=36"
   }
 ]
