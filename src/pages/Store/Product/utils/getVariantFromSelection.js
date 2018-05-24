@@ -13,11 +13,7 @@ import {
   propEq,
 } from 'ramda';
 
-import {
-  VariantType,
-  ProductVariantType,
-  WidgetOptionType,
-} from '../types';
+import type { VariantType, ProductVariantType, WidgetOptionType } from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
@@ -40,7 +36,7 @@ const setProductVariantValues = (variant: VariantType) => {
   const insertPhotoMain = (
     image: string,
     photos: Array<{ id: string, image: string }>,
-  ): Array<{id: string, image: string}> => {
+  ): Array<{ id: string, image: string }> => {
     if (!isNil(image) && photos.every(p => p !== image)) {
       return insert(0, { id: `${photos.length + 1}`, image }, photos);
     }
@@ -50,8 +46,11 @@ const setProductVariantValues = (variant: VariantType) => {
     id,
     photoMain,
     additionalPhotos,
+    // $FlowIgnoreMe
     price,
+    // $FlowIgnoreMe
     cashback,
+    // $FlowIgnoreMe
     discount,
   } = variant;
   return {
@@ -63,26 +62,27 @@ const setProductVariantValues = (variant: VariantType) => {
     photoMain: isNil(photoMain) ? defaultImage : photoMain,
     additionalPhotos: isNil(additionalPhotos)
       ? []
-      : insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
+      : // $FlowIgnoreMe
+      insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
   };
 };
 
 const findVariant: (
   Array<VariantType>,
-) => string => ProductVariantType = variants => variantId => (
-  pipe(
-    find(propEq('id')(variantId)),
-    setProductVariantValues,
-  )(variants)
-);
+) => string => ProductVariantType = variants => variantId =>
+  // $FlowIgnoreMe
+  pipe(find(propEq('id')(variantId)), setProductVariantValues)(variants);
 
 const getVariantFromSelection: (
   Array<WidgetOptionType>,
+  // $FlowIgnoreMe
 ) => (Array<VariantType>) => ProductVariantType = selections => variants => {
   if (isEmpty(selections)) {
+    // $FlowIgnoreMe
     return setProductVariantValues(head(variants));
   }
   return pipe(
+    // $FlowIgnoreMe
     map(({ variantIds }) => variantIds),
     flatten,
     map(findVariant(variants)),

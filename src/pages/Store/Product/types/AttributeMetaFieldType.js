@@ -1,6 +1,6 @@
 // @flow
 
-import { UIType } from './index';
+import type { UIType } from './index';
 
 export type AttributeMetaFieldType = {
   values?: Array<string>,

@@ -1,6 +1,6 @@
 // @flow
 
-import { AttributeType } from './index';
+import type { AttributeType } from './index';
 
 export type AttributeValueType = {
   attribute: AttributeType,

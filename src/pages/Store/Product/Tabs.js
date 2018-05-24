@@ -70,7 +70,7 @@ class Tabs extends React.Component<PropsType, StateType> {
         </div>
       );
     };
-    return (<div styleName="labels">{children.map(buildLabels)}</div>);
+    return <div styleName="labels">{children.map(buildLabels)}</div>;
   };
 
   /**

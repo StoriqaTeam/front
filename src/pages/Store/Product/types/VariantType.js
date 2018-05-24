@@ -1,9 +1,10 @@
 // @flow
 
-import type { IdType, AttributeValueType } from './index';
+import type { AttributeValueType } from './index';
 
 export type VariantType = {
-  ...IdType,
+  id: string,
+  rawId?: number,
   photoMain: string | null,
   additionalPhotos: Array<string> | null,
   attributes: Array<AttributeValueType>,

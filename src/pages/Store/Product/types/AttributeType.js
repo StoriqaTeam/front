@@ -1,9 +1,10 @@
 // @flow
 
-import { IdType, TranslationType, AttributeMetaFieldType } from './index';
+import type { TranslationType, AttributeMetaFieldType } from './index';
 
 export type AttributeType = {
-  ...IdType,
+  id: string,
+  rawId?: string,
   name: Array<TranslationType>,
   metaField: AttributeMetaFieldType,
 };
