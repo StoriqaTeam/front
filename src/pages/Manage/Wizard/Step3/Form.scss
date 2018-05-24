@@ -41,7 +41,7 @@
       background-color: $color_white;
       // height: 760px;
 
-      .section { 
+      .section {
         margin-bottom: 7.5rem;
 
         .sectionName {
@@ -87,5 +87,20 @@
         }
       }
     }
+  }
+
+  .attributesForm {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  .cancelButton {
+    margin-left: 2rem;
   }
 }

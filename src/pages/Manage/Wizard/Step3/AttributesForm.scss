@@ -1,4 +1,9 @@
 @import "../../../../styles/variables";
 
-.wrapper {
+.itemWrapper {
+  //display: inline-block;
+  width: 50%;
+  margin-bottom: 6rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
 }

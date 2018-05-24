@@ -113,15 +113,17 @@ class CharacteristicItem extends PureComponent<PropsType> {
             dataTest="productCharacteristicImgUploader"
           />
         </div>
-        <Select
-          forForm
-          fullWidth
-          label={name}
-          activeItem={selectedItem}
-          items={items}
-          onSelect={this.handleSelect}
-          dataTest="characteristicSelect"
-        />
+        <div styleName="characteristicSelect">
+          <Select
+            forForm
+            fullWidth
+            label={name}
+            activeItem={selectedItem}
+            items={items}
+            onSelect={this.handleSelect}
+            dataTest="characteristicSelect"
+          />
+        </div>
       </div>
     );
   }
