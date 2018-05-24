@@ -32,11 +32,13 @@ import {
   TabRow,
 } from './index';
 
-import {
+import type {
   ProductType,
   WidgetOptionType,
   ProductVariantType,
   WidgetType,
+  TabType,
+  TranslationType,
 } from './types';
 
 import './Product.scss';
@@ -48,9 +50,8 @@ type PropsType = {
 };
 
 type StateType = {
-  tabs: Array<{ id: string | number, label: string, content: any }>,
   widgets: Array<WidgetType>,
-  productVariant: ProductVariantType,
+  productVariant: { ...ProductVariantType },
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -71,21 +72,13 @@ class Product extends Component<PropsType, StateType> {
       const madeWidgets = makeWidgets([])(all);
       const productVariant = getVariantFromSelection([])(all);
       return {
-        tabs: prevState.tabs,
         widgets: madeWidgets,
         productVariant,
       };
     }
     return prevState;
   }
-  state = {
-    tabs: [
-      {
-        id: 0,
-        label: 'Characteristics',
-        content: <TabRow row={mockData.row} />,
-      },
-    ],
+  state: StateType = {
     widgets: [],
     productVariant: {},
   };
@@ -141,6 +134,31 @@ class Product extends Component<PropsType, StateType> {
       productVariant,
     });
   };
+  makeTabs = (longDescription: Array<TranslationType>) => {
+    const tabs: Array<TabType> = [
+      {
+        id: '0',
+        label: 'Description',
+        content: (
+          <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
+        ),
+      },
+      {
+        id: '1',
+        label: 'Characteristics',
+        content: <TabRow row={mockData.row} />,
+      },
+    ];
+    return (
+      <Tabs>
+        {tabs.map(({ id, label, content }) => (
+          <Tab key={id} label={label}>
+            {content}
+          </Tab>
+        ))}
+      </Tabs>
+    );
+  };
   render() {
     if (isNil(this.props.baseProduct)) {
       return (
@@ -150,10 +168,10 @@ class Product extends Component<PropsType, StateType> {
       );
     }
     const {
-      baseProduct: { name, longDescription },
+      baseProduct: { name, shortDescription, longDescription },
     } = this.props;
-    const { tabs, widgets, productVariant } = this.state;
-    const description = extractText(longDescription, 'EN', 'No Description');
+    const { widgets, productVariant } = this.state;
+    const description = extractText(shortDescription, 'EN', 'No Description');
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
         <div styleName="ProductDetails">
@@ -196,13 +214,7 @@ class Product extends Component<PropsType, StateType> {
               {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>
           </Row>
-          <Tabs>
-            {tabs.map(({ id, label, content }) => (
-              <Tab key={id} label={label}>
-                {content}
-              </Tab>
-            ))}
-          </Tabs>
+          {this.makeTabs(longDescription)}
         </div>
       </ProductContext.Provider>
     );

@@ -16,11 +16,12 @@ import {
 } from 'ramda';
 
 import { makeWidgets, removeWidgetOptionsDuplicates } from './index';
-import { VariantType, WidgetType, WidgetOptionType } from '../types';
+import type { VariantType, WidgetType, WidgetOptionType } from '../types';
 
 const differentiateWidgets: (
   Array<WidgetOptionType>,
 ) => (Array<VariantType>) => Array<WidgetType> = selections => variants => {
+  // $FlowIgnoreMe
   const sortByTitle: (Array<WidgetType>) => Array<WidgetType> = sortWith([
     ascend(prop('title')),
   ]);
@@ -39,12 +40,15 @@ const differentiateWidgets: (
     > = selection => widget => {
       if (widget.id === selection.id) {
         const setSelectedState = (option: WidgetOptionType) =>
+          // $FlowIgnoreMe
           propEq('label', selection.value)(option)
             ? { ...option, state: 'selected' }
             : option;
         const options = map(setSelectedState, widget.options);
+        // $FlowIgnoreMe
         return { ...widget, options };
       }
+      // $FlowIgnoreMe
       return widget;
     };
     const mapSelections = (selection: WidgetOptionType) =>
@@ -63,6 +67,7 @@ const differentiateWidgets: (
         option => ({ ...option, state: 'disable' }),
         diffedOptions,
       );
+      // $FlowIgnoreMe
       return {
         ...widget,
         options: disableOptions,
@@ -77,19 +82,21 @@ const differentiateWidgets: (
       leftOption: WidgetType,
       rightOption: WidgetType,
     ): WidgetOptionType =>
+      // $FlowIgnoreMe
       key === 'options' ? concat(leftOption, rightOption) : rightOption;
 
     const mergeWidgetOptions = (
       leftOption: WidgetType,
       rightOption: WidgetType,
+      // $FlowIgnoreMe
     ): WidgetType => mergeDeepWithKey(mergeOptions, leftOption, rightOption);
 
     const applyMerge = (widget: WidgetType, index: number): Array<WidgetType> =>
       mergeWidgetOptions(widget, diffWidgets[index]);
-
+    // $FlowIgnoreMe
     return mapIndexed(applyMerge, widgets);
   };
-
+  // $FlowIgnoreMe
   return pipe(
     differentiateOption,
     mergeWidgetsOptions(filteredWidgets),

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import './ProductSize.scss';
 
-import { SelectedType, WidgetOptionType } from './types';
+import type { WidgetOptionType } from './types';
 
 import { sortByProp } from './utils';
 
@@ -20,12 +20,12 @@ class ProductSize extends Component<PropsType, {}> {
   /**
    * Highlights size's border when clicked
    * @param {number} index
-   * @param {SelectedType} selected
+   * @param {WidgetOptionType} selected
    * @return {void}
    */
-  handleClick = (index: number, selected: SelectedType): void => {
+  handleClick = (index: number, selected: WidgetOptionType): void => {
     const { onClick } = this.props;
-    onClick({ ...selected, state: 'selected ' });
+    onClick({ ...selected, state: 'selected' });
   };
   render() {
     const { title, options } = this.props;

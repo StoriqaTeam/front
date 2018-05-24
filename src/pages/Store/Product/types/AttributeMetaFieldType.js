@@ -1,8 +1,8 @@
-import { UIType } from './index';
+// @flow
 
-type AttributeMetaFieldType = {
+import type { UIType } from './index';
+
+export type AttributeMetaFieldType = {
   values?: Array<string>,
   uiElement: UIType,
 };
-
-export default AttributeMetaFieldType;

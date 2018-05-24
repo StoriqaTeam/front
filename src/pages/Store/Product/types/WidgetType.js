@@ -1,10 +1,10 @@
-import { WidgetOptionType } from './index';
+// @flow
 
-type WidgetType = {
+import type { WidgetOptionType } from './index';
+
+export type WidgetType = {
   id: string,
   title: string,
   uiElement: string,
   options: Array<WidgetOptionType>,
 };
-
-export default WidgetType;
