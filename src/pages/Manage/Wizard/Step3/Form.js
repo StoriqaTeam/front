@@ -42,7 +42,7 @@ type PropsType = {
       price: ?number,
       cashback: ?number,
     },
-    attributes: [],
+    attributes: Array<AttrValueType>,
   },
   aditionalPhotosMap: any,
   onUpload: (type: string, e: any) => Promise<*>,
@@ -59,12 +59,13 @@ class ThirdForm extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    const { categoryId } = props;
+    const { categoryId } = props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       props.categories,
     ) || { getAttributes: [] };
     this.state = {
+      // attrValues: attributes.length > 0 ? attributes : this.prepareDefaultValuesForAttributes(catObj.getAttributes),
       attrValues: this.prepareDefaultValuesForAttributes(catObj.getAttributes),
     };
   }
@@ -145,6 +146,21 @@ class ThirdForm extends Component<PropsType, StateType> {
   prepareDefaultValuesForAttributes = (
     attrs: Array<AttributeType>,
   ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
+
+  checkForSave = () => {
+    const { data } = this.props;
+    const isNotReady =
+      !data.name ||
+      !data.shortDescription ||
+      !data.categoryId ||
+      !data.product.price ||
+      !data.product.vendorCode;
+    // console.log({data , isNotReady })
+    if (isNotReady) {
+      return true;
+    }
+    return false;
+  };
 
   renderAttributes = () => {
     // log.info('*** renderAttributes');
@@ -274,7 +290,7 @@ class ThirdForm extends Component<PropsType, StateType> {
                   }}
                   dataTest="wizardSaveProductButton"
                   big
-                  disabled={false}
+                  disabled={this.checkForSave()}
                 >
                   <span>Save</span>
                 </Button>
