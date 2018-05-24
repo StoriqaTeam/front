@@ -160,11 +160,13 @@ class ThirdForm extends Component<PropsType, StateType> {
       catObj.getAttributes && (
         <div styleName="section">
           <div styleName="sectionName">Properties</div>
-          <AttributesForm
-            attributes={catObj.getAttributes}
-            onChange={this.handleAttributesChange}
-            values={this.state.attrValues}
-          />
+          <div styleName="attributesForm">
+            <AttributesForm
+              attributes={catObj.getAttributes}
+              onChange={this.handleAttributesChange}
+              values={this.state.attrValues}
+            />
+          </div>
         </div>
       )
     );
@@ -263,17 +265,31 @@ class ThirdForm extends Component<PropsType, StateType> {
               </div>
             </div>
             {categoryId && this.renderAttributes()}
-            <Button
-              onClick={() => {
-                onSave();
-                onClose();
-              }}
-              dataTest="wizardSaveProductButton"
-              big
-              disabled={false}
-            >
-              <span>Save</span>
-            </Button>
+            <div styleName="buttons">
+              <div>
+                <Button
+                  onClick={() => {
+                    onSave();
+                    onClose();
+                  }}
+                  dataTest="wizardSaveProductButton"
+                  big
+                  disabled={false}
+                >
+                  <span>Save</span>
+                </Button>
+              </div>
+              <div styleName="cancelButton">
+                <Button
+                  onClick={onClose}
+                  dataTest="wizardCancelProductButton"
+                  big
+                  wireframe
+                >
+                  <span>Cancel</span>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

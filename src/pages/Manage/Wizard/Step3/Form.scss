@@ -12,6 +12,7 @@
   width: 170rem;
   background-color: $color_white;
   padding-top: 22.625rem;
+  padding-bottom: 12rem;
   border: 1px solid $color_grey_border3;
 
   .formWrapper {
@@ -41,7 +42,7 @@
       background-color: $color_white;
       // height: 760px;
 
-      .section { 
+      .section {
         margin-bottom: 7.5rem;
 
         .sectionName {
@@ -87,5 +88,20 @@
         }
       }
     }
+  }
+
+  .attributesForm {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  .cancelButton {
+    margin-left: 2rem;
   }
 }
