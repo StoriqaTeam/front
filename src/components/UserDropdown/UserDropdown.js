@@ -48,7 +48,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
               </div>
               {(firstName || lastName) && (
                 <div styleName="greeting">
-                  {`Hi, ${lastName} ${toUpper(firstName.charAt(0))}.`}
+                  {`Hi, ${firstName} ${toUpper(lastName.charAt(0))}.`}
                 </div>
               )}
             </div>
