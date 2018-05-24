@@ -293,7 +293,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.updateStore();
         break;
       case 3:
-        this.props.router.push('/');
+        this.props.router.push(`/manage/store/${storeId}`);
         break;
       default:
         break;
@@ -581,6 +581,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const { me } = this.props;
     const { step } = this.state;
     const { wizardStore } = me;
+    // $FlowIgnoreMe
     const baseProducts = pathOr(
       null,
       ['me', 'wizardStore', 'store', 'baseProducts'],
