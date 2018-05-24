@@ -250,7 +250,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     if (!preparedData.id) {
       return;
     }
-    // const updater = step === 1 ? UpdateStoreMainMutation : UpdateStoreWizardMutation;
     UpdateStoreMutation.commit({
       ...preparedData,
       environment: this.context.environment,
