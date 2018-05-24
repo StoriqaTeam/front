@@ -63,7 +63,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 disable: option.state === 'disable',
               },
             )}
-            src={option.img}
+            src={option.image}
             alt={option.alt || 'image alt'}
           />
         </figure>

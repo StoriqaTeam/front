@@ -38,14 +38,12 @@ const setProductVariantValues = (variant: VariantType) => {
     isNil(discount) ? 0 : (1 - parseInt(discount, 10)) * parseInt(price, 10);
 
   const insertPhotoMain = (
-    img: string,
-    photos: Array<{ id: string, img: string }>,
+    image: string,
+    photos: Array<{ id: string, image: string }>,
   ): Array<{ id: string, image: string }> => {
-    if (!isNil(img) && photos.every(p => p !== img)) {
-      // $FlowIgnore
-      return insert(0, { id: `${photos.length + 1}`, img }, photos);
+    if (!isNil(image) && photos.every(p => p !== image)) {
+      return insert(0, { id: `${photos.length + 1}`, image }, photos);
     }
-    // $FlowIgnore
     return photos;
   };
   const {

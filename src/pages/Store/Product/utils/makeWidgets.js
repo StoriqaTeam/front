@@ -90,7 +90,7 @@ export const pluckVariantAttributes = ({
       options: [
         {
           id,
-          img: setImage(metaField),
+          image: setImage(metaField),
           label: value,
           state: 'available',
           variantIds: [variantId],

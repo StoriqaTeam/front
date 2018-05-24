@@ -42,8 +42,8 @@ class ProductImage extends Component<PropsType, StateType> {
   state = {
     selected: '',
   };
-  handleClick = ({ img }: WidgetOptionType): void => {
-    this.setState({ selected: img });
+  handleClick = ({ image }: WidgetOptionType): void => {
+    this.setState({ selected: image });
   };
   render() {
     const { mainImage, thumbnails, discount } = this.props;
