@@ -117,6 +117,7 @@ export default createRefetchContainer(
       email
       firstName
       lastName
+      avatar
     }
   `,
   graphql`

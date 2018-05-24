@@ -3,6 +3,11 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
+import type {
+  UpdateUserMutationVariables,
+  UpdateUserMutationResponse,
+} from './__generated__/UpdateUserMutation.graphql';
+
 const mutation = graphql`
   mutation UpdateUserMutation($input: UpdateUserInput!) {
     updateUser(input: $input) {
@@ -21,17 +26,12 @@ const mutation = graphql`
 `;
 
 export type MutationParamsType = {
-  input: {
-    id: string,
-    phone: ?string,
-    firstName: ?string,
-    lastName: ?string,
-    birthdate: ?string,
-    gender: ?string,
-    avatar: ?string,
-  },
+  ...UpdateUserMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?UpdateUserMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 

@@ -14,12 +14,12 @@ import {
 import Menu from 'pages/Profile/Menu';
 import { Container, Row, Col } from 'layout';
 
-import type { Profile_me as ProfileMe } from './__generated__/Profile_me.graphql';
+import type { Profile_me as ProfileMeType } from './__generated__/Profile_me.graphql';
 
 import './Profile.scss';
 
 type PropsType = {
-  me: ProfileMe,
+  me: ProfileMeType,
   activeItem: string,
 };
 
