@@ -36,3 +36,8 @@ export {
   default as UpdateUserDeliveryAddressMutation,
 } from './UpdateUserDeliveryAddressMutation';
 export { default as ChangePasswordMutation } from './ChangePasswordMutation';
+export { default as CreateWizardMutation } from './CreateWizardMutation';
+export { default as UpdateWizardMutation } from './UpdateWizardMutation';
+export {
+  default as DeactivateBaseProductMutation,
+} from './DeactivateBaseProductMutation';

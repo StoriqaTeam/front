@@ -1,6 +1,6 @@
-import { forEach } from 'ramda';
+import { forEach, whereEq } from 'ramda';
 
-import { getNameText, flattenFunc, urlToInput, inputToUrl, searchPathByParent } from 'utils';
+import { getNameText, flattenFunc, findCategory, urlToInput, inputToUrl, searchPathByParent } from 'utils';
 import { renameKeys } from 'utils/ramda';
 
 describe('search utils tests', () => {
@@ -65,6 +65,21 @@ describe('search utils tests', () => {
           ]),
         );
       }, [1, 3, 9]);
+    });
+  });
+
+  describe('search in category tree by predicate', () => {
+    it('should return object with rawId === 9: ', () => {
+      const result = findCategory(whereEq({ rawId: 9 }), rootCategory);
+      expect(result).toEqual(
+        expect.objectContaining({
+          rawId: 9,
+        }),
+      );
+    });
+    it('should return null if no category founds: ', () => {
+      const result = findCategory(whereEq({ rawId: 100 }), rootCategory);
+      expect(result).toEqual(null);
     });
   });
 
@@ -141,6 +156,10 @@ const rootCategoryChildren = [
     ]
   }
 ];
+
+const rootCategory = {
+  children: rootCategoryChildren,
+}
 
 const queryObj = {
   attrFilters: 'equal.1=44;equal.2=Tree;equal.3=Black;',

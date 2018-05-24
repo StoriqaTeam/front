@@ -14,6 +14,7 @@ type PropsType = {
   productId: number,
   category: {},
   variants: Array<{ rawId: number }>,
+  storeID: string,
 };
 
 type StateType = {
@@ -31,6 +32,7 @@ class Variants extends Component<PropsType, StateType> {
     const { environment } = this.context;
 
     CreateProductWithAttributesMutation.commit({
+      storeID: this.props.storeID,
       baseProductId: parseInt(this.props.productId, 10),
       price,
       vendorCode,
@@ -56,6 +58,7 @@ class Variants extends Component<PropsType, StateType> {
           category={this.props.category}
           variants={this.props.variants}
           productId={this.props.productId}
+          storeID={this.props.storeID}
         />
       </div>
     );

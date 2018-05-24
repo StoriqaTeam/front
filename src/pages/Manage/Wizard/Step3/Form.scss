@@ -1,0 +1,106 @@
+@import "../../../../styles/variables";
+
+.wrapper {
+  // position: absolute;
+  // z-index: 1;
+  // top: 0;
+  // right: 0;
+  // bottom: 0;
+  // left: 0;
+  display: flex;
+  justify-content: center;
+  width: 170rem;
+  background-color: $color_white;
+  padding: 22.625rem 0 14rem 0;
+  border: 1px solid $color_grey_border3;
+
+  .formWrapper {
+    width: 82rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .headerTitle {
+      font-family: $font_light;
+      font-size: 4.5rem;
+      margin-bottom: 2.7rem;
+      text-align: center;
+    }
+
+    .headerDescription {
+      width: 54rem;
+      font-family: $font_regular;
+      line-height: 2.7rem;
+      color: $color_grey_5;
+      text-align: center;
+      margin-bottom: 6.5rem;
+    }
+
+    .form {
+      width: 100%;
+      background-color: $color_white;
+      // height: 760px;
+
+      .section {
+        margin-bottom: 7.5rem;
+
+        .sectionName {
+          font-family: $font_medium;
+          text-transform: uppercase;
+          letter-spacing: 1.2px;
+          color: $color_grey_text;
+          margin-bottom: 3rem;
+        }
+
+        .formItem {
+          margin-bottom: 7.5rem;
+        }
+
+        .uploadersWrapper {
+          .uploadItem {
+            position: relative;
+            display: inline-block;
+             margin-bottom: 2rem;
+
+            &:nth-child(3n+2) {
+              margin-right: 2rem;
+              margin-left: 2rem;
+            }
+            .uploadedPhotoWrapper {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              overflow: hidden;
+              background-color: $color_white;
+
+              img {
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        &.splited {
+
+        }
+      }
+    }
+  }
+
+  .attributesForm {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  .cancelButton {
+    margin-left: 2rem;
+  }
+}

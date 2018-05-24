@@ -1,7 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment } from 'relay-runtime';
+import { Environment, ConnectionHandler } from 'relay-runtime';
 
 const mutation = graphql`
   mutation CreateBaseProductMutation($input: CreateBaseProductInput!) {
@@ -24,6 +24,44 @@ const mutation = graphql`
       currencyId
       category {
         id
+        rawId
+      }
+      storeId
+      currencyId
+      products(first: 1) @connection(key: "Wizard_products") {
+        edges {
+          node {
+            id
+            rawId
+            price
+            discount
+            photoMain
+            additionalPhotos
+            vendorCode
+            cashback
+            price
+            attributes {
+              value
+              metaField
+              attribute {
+                id
+                rawId
+                name {
+                  lang
+                  text
+                }
+                metaField {
+                  values
+                  translatedValues {
+                    translations {
+                      text
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -38,6 +76,7 @@ type MutationParamsType = {
   seoDescription: Array<{ lang: string, text: string }>,
   currencyId: number,
   categoryId: number,
+  parentID: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
@@ -61,6 +100,22 @@ const commit = (params: MutationParamsType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    // updater for add new base product to baseProducts connection
+    updater: relayStore => {
+      const storeProxy = relayStore.get(params.parentID);
+      const conn = ConnectionHandler.getConnection(
+        storeProxy,
+        'Wizard_baseProducts',
+      );
+      const newProduct = relayStore.getRootField('createBaseProduct');
+      const edge = ConnectionHandler.createEdge(
+        relayStore,
+        conn,
+        newProduct,
+        'BaseProductsEdge',
+      );
+      ConnectionHandler.insertEdgeAfter(conn, edge);
+    },
   });
 
 export default { commit };

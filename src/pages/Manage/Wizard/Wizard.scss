@@ -1,0 +1,61 @@
+@import "../../../styles/variables";
+
+.wizardContainer {
+  // position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $color_white;
+  min-height: 101rem;
+  margin: 0 2rem -2rem 2rem;
+  border-top: 1px solid $color_grey_border3;
+  border-bottom: 1px solid $color_grey_border3;
+
+  .stepperWrapper {
+    display: flex;
+  }
+
+  .contentWrapper {
+    display: flex;
+    flex: 1;
+    padding: 14.25rem 3rem 9rem 3rem;
+    justify-content: center;
+
+    .formWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &.firstForm {
+        width: 54rem;
+      }
+      &.secondForm {
+        width: 54rem;
+      }
+      &.thirdForm {
+        width: 100%;
+      }
+
+      .headerTitle {
+        font-family: $font_light;
+        font-size: 4.5rem;
+        margin-bottom: 2.7rem;
+        text-align: center;
+      }
+
+      .headerDescription {
+        width: 45rem;
+        font-family: $font_regular;
+        line-height: 2.7rem;
+        color: $color_grey_5;
+        text-align: center;
+        margin-bottom: 6.5rem;
+      }
+    }
+  }
+
+  .footerWrapper {
+    display: flex;
+  }
+}
+

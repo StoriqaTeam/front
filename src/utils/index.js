@@ -12,6 +12,7 @@ export {
   getNameText,
   urlToInput,
   inputToUrl,
+  findCategory,
 } from './search';
 export { default as rename, renameCamelCase } from './rename';
 export { default as socialStrings } from './socialStrings';

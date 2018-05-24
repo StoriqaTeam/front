@@ -35,3 +35,4 @@ flow_check.log
 .vscode/settings.json
 scripts/parse_flow_errors.js
 webpack-stats.json
+webpack-assets.json

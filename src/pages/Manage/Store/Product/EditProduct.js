@@ -126,6 +126,8 @@ class EditProduct extends Component<PropsType, StateType> {
     const baseProduct = baseProductFromProps(this.props);
     // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
+    // $FlowIgnoreMe
+    const storeID = pathOr(null, ['store', 'id'], baseProduct);
 
     if (!baseProduct) {
       return <span>Product not found</span>;
@@ -149,6 +151,7 @@ class EditProduct extends Component<PropsType, StateType> {
               category={baseProduct.category}
               // $FlowIgnoreMe
               variants={variantsFromProps(this.props)}
+              storeID={storeID}
             />
           </Col>
         </Row>

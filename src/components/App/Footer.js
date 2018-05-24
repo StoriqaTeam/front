@@ -70,7 +70,7 @@ const Footer = () => (
               <Button
                 href={
                   process.env.REACT_APP_HOST
-                    ? `${process.env.REACT_APP_HOST}/manage/store/new`
+                    ? `${process.env.REACT_APP_HOST}/manage/wizard`
                     : '/'
                 }
                 dataTest="footerStartSellingButton"

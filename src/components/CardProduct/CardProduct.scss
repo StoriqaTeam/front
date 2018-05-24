@@ -3,11 +3,13 @@
 .container {
   position: relative;
   padding: 1rem;
+  height: 100%;
 }
 
 .body {
+  position: relative;
   display: block;
-  height: 320px;
+  height: 100%;
   box-shadow: $shadow_1;
   overflow: hidden;
 }
@@ -17,7 +19,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  height: 53.25%;
+  min-height: 21.25rem;
   background-color: $color_grey_light;
 }
 
@@ -48,11 +50,13 @@
 }
 
 .bottom {
-  position: relative;
+  position: absolute;
+  top: 21.25rem;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 46.75%;
+  width: 100%;
   padding: 2rem;
   z-index: 1;
   background-color: $color_white;

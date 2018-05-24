@@ -64,6 +64,7 @@ type PropsType = {
     additionalPhotos?: Array<string>,
   },
   onExpandClick: (id: string) => void,
+  storeID: string,
 };
 
 type ValueForAttributeInputType = {
@@ -153,6 +154,7 @@ class Form extends Component<PropsType, StateType> {
     const variant = this.state;
     log.debug({ variant });
     CreateProductWithAttributesMutation.commit({
+      storeID: this.props.storeID,
       product: {
         baseProductId: this.props.productId,
         price: variant.price,
