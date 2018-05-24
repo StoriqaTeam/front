@@ -9,7 +9,7 @@ import './ProductMaterial.scss';
 
 import { sortByProp } from './utils';
 
-import { WidgetOptionType } from './types';
+import type { WidgetOptionType } from './types';
 
 type MaterialType = { id: string | number, label: string };
 
@@ -20,7 +20,7 @@ type PropsType = {
 };
 
 type StateType = {
-  selected: WidgetOptionType,
+  selected: WidgetOptionType | null,
 };
 
 class ProductMaterial extends Component<PropsType, StateType> {

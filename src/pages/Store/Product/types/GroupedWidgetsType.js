@@ -1,11 +1,7 @@
-import { UIType, WidgetOptionType } from './index';
+// @flow
 
-type GroupedWidgetsType = {
-  [UIType]: {
-    title: string,
-    uiElement: string,
-    options: Array<WidgetOptionType>,
-  },
+import type { WidgetType } from './index';
+
+export type GroupedWidgetsType = {
+  [string]: Array<WidgetType>,
 };
-
-export default GroupedWidgetsType;

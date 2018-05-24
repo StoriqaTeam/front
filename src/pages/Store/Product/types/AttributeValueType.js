@@ -1,9 +1,9 @@
-import { AttributeType } from './index';
+// @flow
 
-type AttributeValueType = {
+import type { AttributeType } from './index';
+
+export type AttributeValueType = {
   attribute: AttributeType,
   value: string,
   metaField: string,
 };
-
-export default AttributeValueType;

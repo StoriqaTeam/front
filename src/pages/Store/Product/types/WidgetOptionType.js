@@ -1,9 +1,9 @@
-type WidgetOptionType = {
+// @flow
+
+export type WidgetOptionType = {
   id: string,
   label: string,
-  img: string,
+  image: string,
   state: 'selected' | 'available' | 'disabled',
   variantIds: Array<string>,
 };
-
-export default WidgetOptionType;

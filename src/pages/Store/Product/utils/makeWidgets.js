@@ -20,17 +20,20 @@ import {
 
 import { extractText } from 'utils';
 
-import { VariantType, WidgetType, GroupedWidgetsType } from '../types';
+import type {
+  VariantType,
+  WidgetType,
+  GroupedWidgetsType,
+  WidgetOptionType,
+} from '../types';
 
 import { removeWidgetOptionsDuplicates } from './index';
 
 type TransformedVariantType = {
   id: string,
-  image: string,
   title: string,
   uiElement: string,
-  value: string,
-  variantId: string,
+  options: Array<WidgetOptionType>,
 };
 
 type SelectionType = { id: string, value: string };
@@ -121,7 +124,9 @@ const makeWidget = (groupedWidgets: GroupedWidgetsType): Array<WidgetType> => {
     }
     return item;
   };
+
   const mergeWidgetOptions = (key: string): WidgetType =>
+    // $FlowIgnoreMe
     reduce(reduceWidgetsOptions, {}, groupedWidgets[key]);
   return map(mergeWidgetOptions, keys(groupedWidgets));
 };
