@@ -25,9 +25,9 @@ const setProductVariantValues = (variant: VariantType) => {
   const mapIndexed: Function = addIndex(map);
   const makePhotos = (images: Array<string>) =>
     mapIndexed(
-      (img: string, index: string) => ({
+      (image: string, index: string) => ({
         id: `${index}`,
-        img,
+        image,
       }),
       images,
     );
