@@ -48,9 +48,8 @@ class AttributesForm extends PureComponent<PropsType> {
     const value = find(propEq('attrId', item.rawId), this.props.values);
     if (value) {
       return (
-        <div styleName="itemWrapper">
+        <div key={item.id} styleName="itemWrapper">
           <CharacteristicItem
-            key={item.id}
             // $FlowIgnoreMe
             attribute={item}
             onSelect={this.handleCharectiristicItemChange}

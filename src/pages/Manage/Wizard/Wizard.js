@@ -460,6 +460,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
+  handleOnChangeAttrs = attrsValues => {
+    log.info('>>> handleOnChangeAttrs values: ', { attrsValues });
+    this.handleOnChangeProductForm({ attributes: attrsValues });
+  };
+
   handleOnUploadPhoto = async (type: string, e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
@@ -491,10 +496,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         },
       }));
     }
-  };
-
-  handleOnChangeAttrs = attrsValues => {
-    log.info('>>> handleOnChangeAttrs values: ', { attrsValues });
   };
 
   handleOnSaveProduct = () => {
