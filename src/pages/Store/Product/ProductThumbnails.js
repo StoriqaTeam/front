@@ -8,7 +8,7 @@ import './ProductThumbnails.scss';
 
 import { sortByProp } from './utils';
 
-import { WidgetOptionType } from './types';
+import type { WidgetOptionType } from './types';
 
 type PropsType = {
   /* eslint-disable react/no-unused-prop-types */

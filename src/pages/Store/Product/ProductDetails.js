@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { WidgetsType, WidgetType, WidgetOptionType } from './types';
+import type { WidgetType, WidgetOptionType } from './types';
 
 import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
 
@@ -11,7 +11,7 @@ import { sortByProp } from './utils';
 import './ProductDetails.scss';
 
 type PropsType = {
-  widgets: WidgetsType,
+  widgets: Array<WidgetType>,
   productTitle: string,
   productDescription: string,
   onWidgetClick: Function,

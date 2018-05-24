@@ -25,6 +25,7 @@ import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
 import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import ArrowRight from 'components/Icon/svg/arrowRight.svg';
+import ArrowLeft from 'components/Icon/svg/arrowLeft.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
@@ -40,6 +41,18 @@ import Heart from 'components/Icon/svg/heart.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 import Cats from 'components/Icon/svg/cats.svg';
 import Logout from 'components/Icon/svg/logout.svg';
+import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
+import Note from 'components/Icon/svg/note.svg';
+
+// For product
+import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
+import AngleView from 'components/Icon/svg/product/angleView.svg';
+import ShowDetails from 'components/Icon/svg/product/showDetails.svg';
+import ShowInScene from 'components/Icon/svg/product/showInScene.svg';
+import ShowInUse from 'components/Icon/svg/product/showInUse.svg';
+import ShowSizes from 'components/Icon/svg/product/showSizes.svg';
+import ShowVariety from 'components/Icon/svg/product/showVariety.svg';
+
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
 import User from 'components/Icon/svg/user.svg';
 import Chat from 'components/Icon/svg/chat.svg';
@@ -48,7 +61,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32 | 48 | 40,
+  size: 8 | 16 | 20 | 24 | 32 | 40 | 48 | 56,
   inline: ?boolean,
 };
 
@@ -74,6 +87,7 @@ const iconsMap = {
   arrowExpand: <ArrowExpand />,
   arrowSelect: <ArrowSelect />,
   arrowRight: <ArrowRight />,
+  arrowLeft: <ArrowLeft />,
   cross: <Cross />,
   pencil: <Pencil />,
   magnifier: <Magnifier />,
@@ -90,8 +104,19 @@ const iconsMap = {
   cats: <Cats />,
   logout: <Logout />,
   sortArrows: <SortArrows />,
+  cameraPlus: <CameraPlus />,
+  note: <Note />,
   user: <User />,
   chat: <Chat />,
+
+  // For product
+  mainFoto: <MainFoto />,
+  angleView: <AngleView />,
+  showDetails: <ShowDetails />,
+  showInScene: <ShowInScene />,
+  showInUse: <ShowInUse />,
+  showSizes: <ShowSizes />,
+  showVariety: <ShowVariety />,
 };
 
 class Icon extends PureComponent<PropsTypes> {

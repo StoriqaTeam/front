@@ -111,8 +111,8 @@ class Input extends Component<PropsType, StateType> {
       <label
         htmlFor={id}
         styleName={classNames('container', {
-          isError: errors,
           isFocus,
+          isError: errors,
           isIcon: icon,
           fullWidth,
         })}

@@ -6,7 +6,7 @@ import Rating from 'components/Rating';
 
 import { extractText } from 'utils';
 
-import { ProductStoreType } from './types';
+import type { ProductType } from './types';
 import ChatIcon from './svg/chat.svg';
 import HeartIcon from './svg/heart.svg';
 import { ProductContext } from './index';
@@ -15,7 +15,7 @@ import './ProductStore.scss';
 
 const ProductStore = () => (
   <ProductContext.Consumer>
-    {({ store }: ProductStoreType) => (
+    {({ store }: ProductType) => (
       <div styleName="container">
         <div styleName="storeInfoWrapper">
           <div styleName="storeInfo">

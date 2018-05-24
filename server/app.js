@@ -162,7 +162,7 @@ app.use(
         <link rel="stylesheet" type="text/css" href="/styles.css">
       </head>
       <body>
-      <div id="root" style="height: 100%;">${ReactDOMServer.renderToString(
+      <div id="root" style="height: 100%; overflow: auto;">${ReactDOMServer.renderToString(
         element,
       )}</div>
       <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
@@ -187,8 +187,8 @@ app.use(
         const renderedEl = ReactDOMServer.renderToString(element);
         const RenderedApp = htmlData
           .replace(
-            '<div id="root" style="height:100%"></div>',
-            `<div id="root" style="height:100%;">${renderedEl}</div>`,
+            '<div id="root" style="height:100%; overflow: auto;"></div>',
+            `<div id="root" style="height:100%; overflow: auto;">${renderedEl}</div>`,
           )
           .replace(
             '<script>window.__RELAY_PAYLOADS__=null</script>',

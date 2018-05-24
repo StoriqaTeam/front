@@ -16,6 +16,7 @@ type PropsType = {
   buttonWidth: number,
   buttonIconType: ?string,
   overPicture: ?string,
+  noIndents: ?boolean,
   id: string,
   dataTest: string,
   buttonIconSize: ?number,
@@ -31,12 +32,13 @@ const UploadWrapper = ({
   buttonWidth,
   buttonIconType,
   overPicture,
+  noIndents,
   id,
   dataTest,
   buttonIconSize,
 }: PropsType) => (
   <div styleName="wrapper">
-    <div styleName="upoloadContainer">
+    <div styleName={classNames('upoloadContainer', { noIndents })}>
       <label
         htmlFor={id}
         styleName="uploadButton"

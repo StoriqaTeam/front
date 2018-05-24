@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
-import { pathOr, isEmpty } from 'ramda';
+import { pathOr, isEmpty, path } from 'ramda';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -53,8 +53,10 @@ class NewProduct extends Component<PropsType, StateType> {
       shortDescription,
       fullDesc,
     } = form;
+    const storeID = path(['me', 'store', 'id'], this.props);
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
+      parentID: storeID,
       name: [{ lang: 'EN', text: name }],
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
@@ -171,7 +173,65 @@ export default createFragmentContainer(
     fragment NewProduct_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {
       store(id: $storeId) {
+        id
         logo
+        baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
+          edges {
+            node {
+              id
+              rawId
+              name {
+                text
+                lang
+              }
+              shortDescription {
+                lang
+                text
+              }
+              category {
+                id
+                rawId
+              }
+              storeId
+              currencyId
+              products(first: 1) @connection(key: "Wizard_products") {
+                edges {
+                  node {
+                    id
+                    rawId
+                    price
+                    discount
+                    photoMain
+                    additionalPhotos
+                    vendorCode
+                    cashback
+                    price
+                    attributes {
+                      value
+                      metaField
+                      attribute {
+                        id
+                        rawId
+                        name {
+                          lang
+                          text
+                        }
+                        metaField {
+                          values
+                          translatedValues {
+                            translations {
+                              text
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   `,

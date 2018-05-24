@@ -155,7 +155,7 @@ class Header extends Component<PropsType, StateType> {
                   <a href="_">Help</a> {/* eslint-disable-line */}
                 </div>
                 <div>
-                  <a href="/manage/store/new">Sell on Storiqa</a>
+                  <a href="/manage/wizard">Sell on Storiqa</a>
                 </div>
               </div>
               <div styleName="bottom">

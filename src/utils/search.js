@@ -38,6 +38,20 @@ export const flattenFunc = reduce((acc, nextItem) => {
   return [...acc, nextItem];
 }, []);
 
+type TreeType = {
+  rawId: number,
+  children: Array<TreeType>,
+};
+
+export const findCategory = (pred: (i: any) => boolean, tree: TreeType) => {
+  if (tree.children && tree.children.length > 0) {
+    const flatArr = flattenFunc(tree.children);
+    const result = find(pred, flatArr);
+    return result || null;
+  }
+  return null;
+};
+
 const urlToAttr = item => {
   const left = item.split('=').length === 2 ? item.split('=')[0] : null;
   const right = item.split('=').length === 2 ? item.split('=')[1] : null;

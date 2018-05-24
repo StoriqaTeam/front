@@ -5,7 +5,7 @@ import { pathOr } from 'ramda';
 
 import { log } from 'utils';
 
-export default async function uploadFile(file: File) {
+export default async function uploadFile(file: File): { url?: string } {
   const cookies = new Cookies();
   const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
   const body = new FormData();

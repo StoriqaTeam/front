@@ -1,15 +1,14 @@
-import { TranslationType, IdType, VariantType } from './index';
+// @flow
 
-type ProductType = {
-  baseProduct: {
-    ...IdType,
-    name: Array<TranslationType>,
-    shortDescription: Array<TranslationType>,
-    longDescription: Array<TranslationType>,
-    variants: {
-      all: Array<VariantType>,
-    },
+import type { TranslationType, IdType, VariantType, StoreType } from './index';
+
+export type ProductType = {
+  ...IdType,
+  name: Array<TranslationType>,
+  shortDescription: Array<TranslationType>,
+  longDescription: Array<TranslationType>,
+  store: StoreType,
+  variants: {
+    all: Array<VariantType>,
   },
 };
-
-export default ProductType;

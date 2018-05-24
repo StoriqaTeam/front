@@ -9,6 +9,11 @@
 .upoloadContainer {
   padding-bottom: 2rem;
   margin-right: 2rem;
+
+  &.noIndents {
+    padding-bottom: 0;
+    margin-right: 0;
+  }
 }
 
 .uploadButton {

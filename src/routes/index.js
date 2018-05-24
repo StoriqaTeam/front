@@ -15,6 +15,7 @@ import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
+import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
@@ -76,6 +77,21 @@ const routes = (
                   name {
                     lang
                     text
+                  }
+                  getAttributes {
+                    id
+                    rawId
+                    name {
+                      text
+                    }
+                    metaField {
+                      values
+                      translatedValues {
+                        translations {
+                          text
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -172,6 +188,20 @@ const routes = (
         }}
         Component={() => <div />}
       >
+        <Route
+          path="/wizard"
+          Component={Wizard}
+          query={graphql`
+            query routes_Wizard_Query {
+              languages {
+                isoCode
+              }
+              me {
+                ...Wizard_me
+              }
+            }
+          `}
+        />
         <Route path="/store">
           <Route path="/new" exact Component={NewStore} />
           <Route

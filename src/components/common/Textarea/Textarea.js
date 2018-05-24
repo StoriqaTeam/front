@@ -11,7 +11,9 @@ type PropsType = {
   value: string,
   label: string,
   errors: ?Array<string>,
+  onBlur: ?() => void,
   onChange: (e: { target: { value: string } }) => void,
+  fullWidth: ?boolean,
 };
 
 type StateType = {
@@ -42,15 +44,18 @@ class Textarea extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
-    const { value } = this.props;
+    const { value, onBlur } = this.props;
     this.setState({
       labelFloat: Boolean(value) && value.length > 0,
       isFocus: false,
     });
+    if (onBlur) {
+      onBlur();
+    }
   };
 
   render() {
-    const { id, value, label, errors } = this.props;
+    const { id, value, label, errors, fullWidth } = this.props;
 
     const { labelFloat, isFocus } = this.state;
 
@@ -60,6 +65,7 @@ class Textarea extends Component<PropsType, StateType> {
         styleName={classNames('container', {
           isError: errors,
           isFocus,
+          fullWidth,
         })}
       >
         <span styleName={classNames('label', { labelFloat })}>{label}</span>
