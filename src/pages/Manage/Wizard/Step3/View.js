@@ -71,6 +71,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       : '';
     const prepareStateObj = {
       ...formStateData,
+      product: {
+        ...formStateData.product,
+      },
       categoryId: item.category && item.category.rawId,
       id: item.id,
       name,
@@ -78,7 +81,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     };
     log.info('>>> Form 3 View handleOnShowForm item: ', {
       productData: item,
-      stateData: formStateData,
+      formStateData,
       prepareStateObj,
     });
     return () => {
@@ -138,7 +141,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <div styleName="layer">
                     <div
                       styleName="editbutton"
-                      onClick={this.handleOnShowForm(item)}
+                      onClick={() => {}}
                       role="button"
                       onKeyDown={() => {}}
                       tabIndex={0}
