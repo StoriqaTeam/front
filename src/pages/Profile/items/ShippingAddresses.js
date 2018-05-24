@@ -3,22 +3,26 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { assocPath, pathOr, map } from 'ramda';
+import { assocPath, map, assoc } from 'ramda';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
+import { withShowAlert } from 'components/App/AlertContext';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
+
 import { log, fromRelayError } from 'utils';
 import {
-  CreateUserDeliveryAddress,
-  DeleteUserDeliveryAddress,
-  UpdateUserDeliveryAddress,
+  CreateUserDeliveryAddressMutation,
+  DeleteUserDeliveryAddressMutation,
+  UpdateUserDeliveryAddressMutation,
 } from 'relay/mutations';
 
-import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddress';
-import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddress';
-import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddress';
+import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddressMutation';
+import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressMutation';
+import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddressMutation';
 
 import '../Profile.scss';
 
@@ -48,6 +52,7 @@ type PropsType = {
     email: string,
     deliveryAddresses: Array<DeliveryAddressesType>,
   },
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -92,7 +97,6 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   handleSave = (id: ?number) => {
-    this.setState(() => ({ isLoading: true }));
     const { environment } = this.context;
     const { data } = this.props;
     const { form } = this.state;
@@ -109,13 +113,34 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       isPriority,
     } = form;
 
+    const availabilityErrors = {};
+
+    if (!country || !postalCode) {
+      if (!country)
+        assoc('country', 'Country is required parameter', availabilityErrors);
+      if (!postalCode)
+        assoc(
+          'postalCode',
+          'Postal code is required parameter',
+          availabilityErrors,
+        );
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Country and postal code are required parameters',
+        link: { text: 'Got it!' },
+      });
+      return;
+    }
+
+    this.setState(() => ({ isLoading: true }));
+
     const input = {
       clientMutationId: '',
-      country: country || null,
+      country,
       administrativeAreaLevel1: administrativeAreaLevel1 || null,
       administrativeAreaLevel2: administrativeAreaLevel2 || null,
       political: political || null,
-      postalCode: postalCode || null,
+      postalCode,
       streetNumber: streetNumber || null,
       address: address || null,
       route: route || null,
@@ -131,37 +156,41 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       input: id ? updateInput : createInput,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
         this.setState(() => ({
           isLoading: false,
           isOpenNewForm: false,
           editableAddressId: null,
         }));
+        this.props.showAlert({
+          type: 'success',
+          text: id ? 'Address update!' : 'Address create!',
+          link: { text: 'Got it!' },
+        });
       },
       onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
-
         this.setState(() => ({ isLoading: false }));
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          return;
-        }
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
       },
     };
     if (id) {
-      UpdateUserDeliveryAddress.commit(params);
+      UpdateUserDeliveryAddressMutation.commit(params);
     } else {
-      CreateUserDeliveryAddress.commit(params);
+      CreateUserDeliveryAddressMutation.commit(params);
     }
   };
 
@@ -191,7 +220,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         alert('Something going wrong :(');
       },
     };
-    DeleteUserDeliveryAddress.commit(params);
+    DeleteUserDeliveryAddressMutation.commit(params);
   };
 
   handleUpdateForm = (form: any) => {
@@ -373,7 +402,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                     )}
                   </Fragment>
                 );
-              }, [...deliveryAddresses].reverse())}
+              }, deliveryAddresses)}
             </div>
           </div>
         )}
@@ -386,4 +415,4 @@ ShippingAddresses.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default ShippingAddresses;
+export default withShowAlert(ShippingAddresses);

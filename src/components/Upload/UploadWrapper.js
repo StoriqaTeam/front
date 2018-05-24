@@ -45,9 +45,10 @@ const UploadWrapper = ({
         style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
         data-test={dataTest}
       >
-        {!overPicture && (
-          <Icon type={buttonIconType} size={buttonIconSize || 32} />
-        )}
+        {buttonIconType &&
+          !overPicture && (
+            <Icon type={buttonIconType} size={buttonIconSize || 32} />
+          )}
         {!overPicture && (
           <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
         )}

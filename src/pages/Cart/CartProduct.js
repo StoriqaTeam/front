@@ -9,18 +9,18 @@ import { withShowAlert } from 'components/App/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
+import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import {
   SetQuantityInCartMutation,
   SetSelectionInCartMutation,
   DeleteFromCartMutation,
 } from 'relay/mutations';
-import { log } from 'utils';
+import { log, formatPrice } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import CartProductAttribute from './CartProductAttribute';
-import Recycle from './svg/recycle.svg';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -144,7 +144,7 @@ class CartProduct extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <button styleName="recycle" onClick={() => this.handleDelete()}>
-          <Recycle />
+          <Icon type="basket" size={32} />
         </button>
         <div styleName="left-container">
           <div styleName="checkbox">
@@ -220,11 +220,11 @@ class CartProduct extends PureComponent<PropsType> {
             />
             <CartProductAttribute
               title="Total cost"
-              value={`${quantity * price} STQ`}
+              value={`${formatPrice(quantity * price || 0)} STQ`}
             />
             <CartProductAttribute
               title="Delivery cost"
-              value={`${deliveryCost || 0} STQ`}
+              value={`${formatPrice(deliveryCost || 0)} STQ`}
             />
           </div>
         </div>

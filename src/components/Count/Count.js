@@ -12,7 +12,9 @@ type PropsTypes = {
 };
 
 const Count = ({ amount, styles, tip }: PropsTypes) => (
-  <div styleName={classNames('container', styles, { tip })}>{amount}</div>
+  <div styleName={classNames('container', styles, { tip })}>
+    <strong>{amount}</strong>
+  </div>
 );
 
 export default Count;

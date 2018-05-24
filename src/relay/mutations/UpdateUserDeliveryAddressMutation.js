@@ -4,6 +4,11 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 import { map } from 'ramda';
 
+import type {
+  UpdateUserDeliveryAddressMutationVariables,
+  UpdateUserDeliveryAddressMutationResponse,
+} from './__generated__/UpdateUserDeliveryAddressMutation.graphql';
+
 const mutation = graphql`
   mutation UpdateUserDeliveryAddressMutation(
     $input: UpdateUserDeliveryAddressInput!
@@ -29,21 +34,12 @@ const mutation = graphql`
 `;
 
 export type MutationParamsType = {
-  input: {
-    id: number,
-    country: string,
-    administrativeAreaLevel1: ?string,
-    administrativeAreaLevel2: ?string,
-    political: ?string,
-    postalCode: string,
-    streetNumber: ?string,
-    address: ?string,
-    route: ?string,
-    locality: ?string,
-    isPriority: boolean,
-  },
+  ...UpdateUserDeliveryAddressMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?UpdateUserDeliveryAddressMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 
@@ -59,6 +55,7 @@ const commit = (params: MutationParamsType) =>
       const updatedAddress = relayStore.getRootField(
         'updateUserDeliveryAddress',
       );
+      const isPriority = updatedAddress.getValue('isPriority');
       const updatedAddressId = updatedAddress.getValue('id');
       const me = relayStore.getRoot().getLinkedRecord('me');
       const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
@@ -67,6 +64,9 @@ const commit = (params: MutationParamsType) =>
         if (item._dataID === updatedAddressId) {
           /* eslint-enable */
           return updatedAddress;
+        }
+        if (isPriority) {
+          item.setValue(false, 'isPriority');
         }
         return item;
       }, deliveryAddresses);

@@ -54,12 +54,14 @@ import ShowSizes from 'components/Icon/svg/product/showSizes.svg';
 import ShowVariety from 'components/Icon/svg/product/showVariety.svg';
 
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
+import User from 'components/Icon/svg/user.svg';
+import Chat from 'components/Icon/svg/chat.svg';
 
 import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32 | 40 | 56,
+  size: 8 | 16 | 20 | 24 | 32 | 40 | 48 | 56,
   inline: ?boolean,
 };
 
@@ -104,6 +106,8 @@ const iconsMap = {
   sortArrows: <SortArrows />,
   cameraPlus: <CameraPlus />,
   note: <Note />,
+  user: <User />,
+  chat: <Chat />,
 
   // For product
   mainFoto: <MainFoto />,

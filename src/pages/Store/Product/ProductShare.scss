@@ -1,15 +1,38 @@
 @import "../../../styles/variables";
 
+$icon-size: 20px;
+$border-color: #efefef;
+
 .container {
   background: $color_white;
-  border: 1px solid #efefef;
+  border-top:1px solid $border-color;
+  border-right:1px solid $border-color;
+  border-bottom:1px solid $border-color;
+  border-left:1px solid transparent;
+  display: flex;
+  justify-content: space-between;
+}
+
+.socialIcons {
+  padding: 36px;
   display: flex;
   justify-content: flex-start;
-  padding: 36px;
 
   svg {
-    height: 20px;
+    height: $icon-size;
     margin-right: 3rem;
-    width: 20px;
+    width: $icon-size;
+  }
+}
+
+.favorite {
+  border-left: 1px solid #efefef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 34px;
+  svg {
+    height: $icon-size;
+    width: $icon-size;
   }
 }

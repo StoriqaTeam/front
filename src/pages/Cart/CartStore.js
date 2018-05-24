@@ -3,13 +3,15 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import Rating from 'components/Rating';
+import { Rating } from 'components/common/Rating';
 import { Button } from 'components/common/Button';
-import { Input } from 'components/Forms';
+import { Input } from 'components/common/Input';
+import { Icon } from 'components/Icon';
+import { formatPrice, getNameText } from 'utils';
 
 import CartProduct from './CartProduct';
 import CartProductAttribute from './CartProductAttribute';
-import Chat from './svg/chat.svg';
+
 // eslint-disable-next-line
 import type CartStore_store from './__generated__/CartStore_store.graphql';
 
@@ -38,18 +40,19 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="store-info">
               <img src={store.logo} alt="store_picture" styleName="image" />
               <div styleName="store-description">
-                <div>{store.name[0].text}</div>
-                <Rating rating={store.rating} />
+                <div styleName="store-name">
+                  {getNameText(store.name, 'EN')}
+                </div>
+                <Rating value={store.rating} />
               </div>
             </div>
             <div styleName="chat-container">
-              <div styleName="chat">
-                <Chat />
-              </div>
+              <Icon type="chat" size={24} />
               <div styleName="chat-text">Chat with Seller</div>
             </div>
-            <div>
+            <div styleName="promocode">
               <Input
+                fullWidth
                 focus={false}
                 onChange={() => {}}
                 detectCapsLock
@@ -63,16 +66,18 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="store-total-header">Seller summary</div>
             <CartProductAttribute
               title="Products cost"
-              value={`${this.props.totals.productsCost} STQ`}
+              value={`${formatPrice(this.props.totals.productsCost || 0)} STQ`}
             />
             <CartProductAttribute
               title="Delivery cost"
-              value={`${this.props.totals.deliveryCost} STQ`}
+              value={`${formatPrice(this.props.totals.deliveryCost || 0)} STQ`}
             />
             <CartProductAttribute
               title="Total cost"
-              value={`${this.props.totals.deliveryCost +
-                this.props.totals.productsCost} STQ`}
+              value={`${formatPrice(
+                this.props.totals.deliveryCost +
+                  this.props.totals.productsCost || 0,
+              )} STQ`}
             />
             <div styleName="buy">
               <Button type="wireframe" disabled big>

@@ -8,10 +8,8 @@ import classNames from 'classnames';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText } from 'utils';
+import { getNameText, formatPrice } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
-
-import { formatPrice } from './utils';
 
 import './CardProduct.scss';
 
@@ -54,6 +52,9 @@ class CardProduct extends PureComponent<PropsTypes> {
     const product = head(products.edges);
     if (product) {
       ({ discount, photoMain, cashback, price } = product.node);
+    }
+    if (photoMain) {
+      photoMain = photoMain.replace(/.(png|jpg)/, '-medium.$1');
     }
 
     if (!storeId || !rawId || !currencyId || !price) return null;

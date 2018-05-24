@@ -4,13 +4,13 @@
   font-family: $font_medium;
   position: relative;
   display: inline-block;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 5px 1px;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
   text-align: center;
-  color: #fff;
+  color: $color_white;
   font-size: 11px;
-  line-height: 18px;
+  line-height: 2.25rem;
   border-radius: 2px;
   background-color: $color_primary;
 }
