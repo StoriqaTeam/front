@@ -93,7 +93,7 @@ type StateType = {
   },
 };
 
-const initialProductState = {
+export const initialProductState = {
   baseProduct: {
     id: null,
     storeId: null,
@@ -561,6 +561,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               onUpload={this.handleOnUploadPhoto}
               aditionalPhotosMap={this.state.aditionalPhotosMap}
               onChange={this.handleOnChangeProductForm}
+              onClearProductState={this.handleOnClearProductState}
               onChangeAttrs={this.handleOnChangeAttrs}
               onSave={this.handleOnSaveProduct}
               onDelete={this.handleOnDeleteProduct}
