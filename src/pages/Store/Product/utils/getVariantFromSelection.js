@@ -13,7 +13,11 @@ import {
   propEq,
 } from 'ramda';
 
-import type { VariantType, ProductVariantType, WidgetOptionType } from '../types';
+import type {
+  VariantType,
+  ProductVariantType,
+  WidgetOptionType,
+} from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
@@ -21,9 +25,9 @@ const setProductVariantValues = (variant: VariantType) => {
   const mapIndexed: Function = addIndex(map);
   const makePhotos = (images: Array<string>) =>
     mapIndexed(
-      (image: string, index: string) => ({
+      (img: string, index: string) => ({
         id: `${index}`,
-        image,
+        img,
       }),
       images,
     );
@@ -34,12 +38,14 @@ const setProductVariantValues = (variant: VariantType) => {
     isNil(discount) ? 0 : (1 - parseInt(discount, 10)) * parseInt(price, 10);
 
   const insertPhotoMain = (
-    image: string,
-    photos: Array<{ id: string, image: string }>,
+    img: string,
+    photos: Array<{ id: string, img: string }>,
   ): Array<{ id: string, image: string }> => {
-    if (!isNil(image) && photos.every(p => p !== image)) {
-      return insert(0, { id: `${photos.length + 1}`, image }, photos);
+    if (!isNil(img) && photos.every(p => p !== img)) {
+      // $FlowIgnore
+      return insert(0, { id: `${photos.length + 1}`, img }, photos);
     }
+    // $FlowIgnore
     return photos;
   };
   const {
@@ -63,7 +69,7 @@ const setProductVariantValues = (variant: VariantType) => {
     additionalPhotos: isNil(additionalPhotos)
       ? []
       : // $FlowIgnoreMe
-      insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
+        insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
   };
 };
 

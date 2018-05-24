@@ -20,7 +20,12 @@ import {
 
 import { extractText } from 'utils';
 
-import type { VariantType, WidgetType, GroupedWidgetsType, WidgetOptionType } from '../types';
+import type {
+  VariantType,
+  WidgetType,
+  GroupedWidgetsType,
+  WidgetOptionType,
+} from '../types';
 
 import { removeWidgetOptionsDuplicates } from './index';
 

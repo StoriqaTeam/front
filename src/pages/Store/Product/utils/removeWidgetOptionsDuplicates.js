@@ -6,7 +6,7 @@ import type { WidgetType } from '../types';
 const removeWidgetOptionsDuplicates = (
   widgets: Array<WidgetType>,
 ): Array<WidgetType> =>
-// $FlowIgnoreMe
+  // $FlowIgnoreMe
   map(
     // $FlowIgnoreMe
     (widget: WidgetType): Array<WidgetType> => ({
