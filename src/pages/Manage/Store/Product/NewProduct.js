@@ -55,6 +55,7 @@ class NewProduct extends Component<PropsType, StateType> {
     } = form;
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
+      // parentID: // ID store
       name: [{ lang: 'EN', text: name }],
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
