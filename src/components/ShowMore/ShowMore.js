@@ -38,7 +38,7 @@ class ShowMore extends Component<PropsType, StateType> {
           </div>
           <div styleName="text">{title}</div>
         </button>
-        <div styleName="content" style={{ 'max-height': `${height}rem` }}>
+        <div styleName="content" style={{ maxHeight: `${height}rem` }}>
           {this.props.children}
         </div>
       </div>

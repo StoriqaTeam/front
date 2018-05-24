@@ -27,7 +27,6 @@ yarn-error.log*
 /src/relay/schema.json
 
 .env.development
-.env.production
 .vscode/
 
 # saldin

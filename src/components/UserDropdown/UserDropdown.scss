@@ -2,22 +2,28 @@
 
 .container {
   position: relative;
-  width: 4rem;
-  height: 4rem;
+}
+
+.user {
+  white-space: nowrap;
+  transition: all .3s ease;
+
+  &:hover {
+    color: $color_blue_1;
+  }
 }
 
 .avatar {
   position: relative;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 4rem;
   height: 4rem;
+  vertical-align: middle;
   border-radius: 50%;
+  background-color: $color_grey_7;
   overflow: hidden;
-
-  & svg {transition: all .3s ease;}
-  &:hover svg {fill: $color_blue_1;}
 }
 
 .avatarImg {
@@ -25,8 +31,15 @@
   height: 100%;
 }
 
+.greeting {
+  display: inline-block;
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+
 .menu {
   position: relative;
+  width: 33rem;
 }
 
 .personalData {
