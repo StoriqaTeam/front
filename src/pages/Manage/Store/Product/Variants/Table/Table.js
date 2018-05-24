@@ -14,6 +14,7 @@ type PropsType = {
   category: {},
   variants: Array<{ rawId: number }>,
   productId: number,
+  storeID: string,
 };
 
 type StateType = {
@@ -57,6 +58,7 @@ class Table extends Component<PropsType, StateType> {
             key={item.id}
             isExpanded
             onExpandClick={this.expandRow}
+            storeID={this.props.storeID}
           />
         );
       }
@@ -75,6 +77,7 @@ class Table extends Component<PropsType, StateType> {
           <Form
             category={this.props.category}
             productId={this.props.productId}
+            storeID={this.props.storeID}
           />
         )}
       </div>
