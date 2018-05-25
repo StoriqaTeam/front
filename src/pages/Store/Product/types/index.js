@@ -10,6 +10,7 @@ export type { ProductType } from './ProductType';
 export type { ProductVariantType } from './ProductVariantType';
 export type { TabType } from './TabType';
 export type { TranslationType } from './TranslationType';
+export type { SelectionType } from './SelectionType';
 export type { UIType } from './UIType';
 export type { VariantType } from './VariantType';
 export type { WidgetOptionType } from './WidgetOptionType';
