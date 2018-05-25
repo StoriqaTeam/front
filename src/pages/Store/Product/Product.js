@@ -18,6 +18,7 @@ import {
   makeWidgets,
   differentiateWidgets,
   getVariantFromSelection,
+  isSelected,
 } from './utils';
 
 import {
@@ -93,7 +94,8 @@ class Product extends Component<PropsType, StateType> {
     },
   };
   handleAddToCart(id: number): void {
-    if (id) {
+    const { widgets } = this.state;
+    if (id && isSelected(widgets)) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -117,9 +119,12 @@ class Product extends Component<PropsType, StateType> {
         },
       });
     } else {
+      const message = !isSelected(widgets)
+        ? 'You must select an attribute'
+        : 'Something went wrong :(';
       this.props.showAlert({
         type: 'danger',
-        text: 'Something went wrong :(',
+        text: message,
         link: { text: 'Close.' },
       });
       log.error('Unable to add an item without productId');
