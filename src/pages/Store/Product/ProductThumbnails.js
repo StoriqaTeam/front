@@ -60,7 +60,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                   (isFirstSelected && selected === index),
               },
               {
-                disable: option.state === 'disabled',
+                disabled: option.state === 'disabled',
               },
             )}
             src={option.image}
