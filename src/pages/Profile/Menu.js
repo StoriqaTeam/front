@@ -100,16 +100,17 @@ class Menu extends PureComponent<PropsType> {
           {menuItems.map(item => {
             const isActive = item.id === activeItem;
             return (
-              <Fragment>
-                {item.id !== 'kyc' ?
+              <Fragment key={item.id}>
+                {item.id !== 'kyc' ? (
                   <Link
-                    key={item.id}
                     to={`/profile/${item.id}`}
                     styleName={classNames('item', { isActive })}
                   >
                     {item.title}
-                  </Link> : <div styleName="item">{item.title}</div>
-                }
+                  </Link>
+                ) : (
+                  <div styleName="item">{item.title}</div>
+                )}
               </Fragment>
             );
           })}
