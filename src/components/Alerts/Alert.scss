@@ -10,6 +10,11 @@
   margin: 2rem;
 }
 
+.disappering {
+  opacity: 0;
+  transition: all 1.5s ease;
+}
+
 .leftEdge {
   position: absolute;
   left: 0;
