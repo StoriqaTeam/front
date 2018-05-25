@@ -50,7 +50,11 @@ const ProfileMenu = ({
           </div>
         )}
       </a>
-      <Link to="/profile" styleName="item">
+      <Link
+        to="/profile"
+        styleName="item"
+        data-test="header-user-menu-profileLink"
+      >
         Profile settings
       </Link>
       <a href="/" styleName="item">
@@ -60,7 +64,11 @@ const ProfileMenu = ({
         <span>My shops</span>
       </a>
     </div>
-    <Link styleName="logout" to="/logout" data-test="logoutLink">
+    <Link
+      styleName="logout"
+      to="/logout"
+      data-test="header-user-menu-logoutLink"
+    >
       <Icon inline type="logout" size="24" />
       <span styleName="logoutText">Logout</span>
     </Link>

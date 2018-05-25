@@ -217,7 +217,7 @@ class CartTotal extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="checkout">
-            <Button disabled big>
+            <Button disabled={!totalCount} big>
               Checkout
             </Button>
           </div>
