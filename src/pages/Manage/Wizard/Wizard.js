@@ -657,7 +657,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         >
           <div styleName="modalContent">
             <div styleName="modalTitle">
-              Are you shure to end wizard and getting start selling?
+              Do you really want to leave this page?
             </div>
             <div styleName="modalButtonsContainer">
               <div styleName="modalOkButton">
