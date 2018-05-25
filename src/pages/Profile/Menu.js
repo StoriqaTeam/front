@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
 import classNames from 'classnames';
@@ -100,13 +100,17 @@ class Menu extends PureComponent<PropsType> {
           {menuItems.map(item => {
             const isActive = item.id === activeItem;
             return (
-              <Link
-                key={item.id}
-                to={`/profile/${item.id}`}
-                styleName={classNames('item', { isActive })}
-              >
-                {item.title}
-              </Link>
+              <Fragment>
+                {item.id !== 'kyc' ?
+                  <Link
+                    key={item.id}
+                    to={`/profile/${item.id}`}
+                    styleName={classNames('item', { isActive })}
+                  >
+                    {item.title}
+                  </Link> : <div styleName="item">{item.title}</div>
+                }
+              </Fragment>
             );
           })}
         </div>
