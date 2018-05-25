@@ -42,7 +42,7 @@
       // height: 760px;
 
       .section {
-        margin-bottom: 7.5rem;
+        margin-bottom: 6rem;
 
         .sectionName {
           font-family: $font_medium;
@@ -53,7 +53,30 @@
         }
 
         .formItem {
-          margin-bottom: 7.5rem;
+          margin-bottom: 3rem;
+        }
+
+        .input {
+          margin-bottom: 6.5rem;
+        }
+
+        .categorySelector {
+          margin-top: 6rem;
+          margin-bottom: 3rem;
+        }
+
+        .productStates {
+          display: flex;
+          flex-wrap: wrap;
+          margin-left: -1rem;
+          margin-right: -1rem;
+        }
+
+        .productState {
+          width: 50%;
+          margin-bottom: 3rem;
+          padding-right: 1rem;
+          padding-left: 1rem;
         }
 
         .uploadersWrapper {
