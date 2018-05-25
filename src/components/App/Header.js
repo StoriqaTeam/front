@@ -209,7 +209,7 @@ class Header extends Component<PropsType, StateType> {
           </Row>
         </Container>
         <Modal showModal={showModal} onClose={this.onCloseModal}>
-          <Authorization isSignUp={isSignUp} />
+          <Authorization isSignUp={isSignUp} onCloseModal={this.onCloseModal} />
         </Modal>
       </header>
     );

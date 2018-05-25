@@ -16,6 +16,7 @@ export type AlertPropsType = {
   text: string,
   link: { text: string, path?: string },
   onClose: (timestamp: number) => void,
+  onClick?: () => void,
 };
 
 const titlesHashMap = {
@@ -26,7 +27,7 @@ const titlesHashMap = {
 };
 
 const Alert = (props: AlertPropsType) => {
-  const { type = 'default', text, link, createdAtTimestamp } = props;
+  const { type = 'default', text, link, createdAtTimestamp, onClick } = props;
   const title = propOr('Information.', type, titlesHashMap);
   return (
     <div styleName="container">
@@ -34,7 +35,12 @@ const Alert = (props: AlertPropsType) => {
       <div styleName="titleContainer">
         <div styleName="title">{title}</div>
         <button
-          onClick={() => props.onClose(createdAtTimestamp)}
+          onClick={() => {
+            props.onClose(createdAtTimestamp);
+            if (onClick) {
+              onClick();
+            }
+          }}
           styleName="closeButton"
         >
           <CloseIcon />
@@ -42,12 +48,23 @@ const Alert = (props: AlertPropsType) => {
       </div>
       <div styleName="alertMessage">{text}</div>
       <div styleName="link">
-        <button onClick={() => props.onClose(createdAtTimestamp)}>
+        <button
+          onClick={() => {
+            props.onClose(createdAtTimestamp);
+            if (onClick) {
+              onClick();
+            }
+          }}
+        >
           <span styleName="link">{link.text}</span>
         </button>
       </div>
     </div>
   );
+};
+
+Alert.defaultProps = {
+  onClick: () => {},
 };
 
 export default Alert;
