@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, head, isNil, pathOr, defaultTo, prop, pipe } from 'ramda';
+import { path, isNil } from 'ramda';
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
@@ -18,6 +18,7 @@ import {
   makeWidgets,
   differentiateWidgets,
   getVariantFromSelection,
+  isSelected,
 } from './utils';
 
 import {
@@ -29,7 +30,7 @@ import {
   ProductStore,
   Tab,
   Tabs,
-  TabRow,
+  // TabRow,
 } from './index';
 
 import type {
@@ -42,7 +43,7 @@ import type {
 } from './types';
 
 import './Product.scss';
-import mockData from './mockData.json';
+// import mockData from './mockData.json';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -51,7 +52,7 @@ type PropsType = {
 
 type StateType = {
   widgets: Array<WidgetType>,
-  productVariant: { ...ProductVariantType },
+  productVariant: ProductVariantType,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -80,18 +81,21 @@ class Product extends Component<PropsType, StateType> {
   }
   state: StateType = {
     widgets: [],
-    productVariant: {},
+    productVariant: {
+      id: '',
+      rawId: 0,
+      description: '',
+      photoMain: '',
+      additionalPhotos: null,
+      price: 0,
+      cashback: null,
+      discount: null,
+      crossPrice: null,
+    },
   };
-  handleAddToCart() {
-    // Todo for Jero - update this after refactoring (needed selected product id)
-    const id = pipe(
-      pathOr([], ['props', 'baseProduct', 'variants', 'all']),
-      head,
-      defaultTo({ rawId: 0 }),
-      prop('rawId'),
-    )(this);
-
-    if (id) {
+  handleAddToCart(id: number): void {
+    const { widgets } = this.state;
+    if (id && isSelected(widgets)) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -115,12 +119,18 @@ class Product extends Component<PropsType, StateType> {
         },
       });
     } else {
+      const message = !isSelected(widgets)
+        ? 'You must select an attribute'
+        : 'Something went wrong :(';
       this.props.showAlert({
         type: 'danger',
-        text: 'Something went wrong :(',
+        text: message,
         link: { text: 'Close.' },
       });
-      log.error('Unable to add an item without productId');
+      const errorMessage = !isSelected(widgets)
+        ? 'Unable to add an item without selected attribute'
+        : 'Unable to add an item without productId';
+      log.error(errorMessage);
     }
   }
   handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
@@ -143,11 +153,11 @@ class Product extends Component<PropsType, StateType> {
           <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
         ),
       },
-      {
+      /* {
         id: '1',
         label: 'Characteristics',
         content: <TabRow row={mockData.row} />,
-      },
+      }, */
     ];
     return (
       <Tabs>
@@ -206,7 +216,11 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button wireframe big onClick={() => this.handleAddToCart()}>
+                <Button
+                  wireframe
+                  big
+                  onClick={() => this.handleAddToCart(productVariant.rawId)}
+                >
                   Add to cart
                 </Button>
               </div>

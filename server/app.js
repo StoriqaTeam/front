@@ -22,6 +22,7 @@ import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 import { generateSessionId } from 'utils';
+import { isTokenExpired } from 'utils/token';
 
 import { Error404, Error } from '../src/pages/Errors';
 
@@ -107,7 +108,12 @@ app.use(
 
     const store = createReduxStore(new ServerProtocol(req.url));
     const jwtCookie = req.universalCookies.get('__jwt');
-    const jwt = typeof jwtCookie === 'object' && jwtCookie.value;
+    let jwt = typeof jwtCookie === 'object' && jwtCookie.value;
+    if (isTokenExpired(jwt)) {
+      req.universalCookies.remove('__jwt');
+      jwt = null;
+    }
+
     const fetcher = new ServerFetcher(
       process.env.REACT_APP_GRAPHQL_ENDPOINT,
       jwt,
@@ -184,6 +190,39 @@ app.use(
           return res.status(404).end();
         }
 
+        // add GoogleTagManager for production
+        /*
+          Copy the following JavaScript and paste it as close to
+          the opening <head> tag as possible on every page of your website,
+          replacing GTM-XXXX with your container ID:
+        */
+        const GTMSnippet1 = process.env.REACT_APP_GTM
+          ? `<!-- Google Tag Manager -->
+          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','${
+            process.env.REACT_APP_GTM
+          }');</script>
+          <!-- End Google Tag Manager -->`
+          : '';
+        /*
+          Copy the following snippet and paste it immediately after the
+          opening <body> tag on every page of your website, replacing GTM-XXXX
+          with your container ID: 
+        */
+        const GTMSnippet2 = process.env.REACT_APP_GTM
+          ? `
+          <!-- Google Tag Manager (noscript) -->
+          <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${
+            process.env.REACT_APP_GTM
+          }"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+          <!-- End Google Tag Manager (noscript) -->
+        `
+          : '';
+
         const renderedEl = ReactDOMServer.renderToString(element);
         const RenderedApp = htmlData
           .replace(
@@ -201,7 +240,9 @@ app.use(
             `<script>window.__PRELOADED_STATE__= ${serialize(store.getState(), {
               isJSON: true,
             })}</script>`,
-          );
+          )
+          .replace('<noscript>GTM_SNIPPET_1</noscript>', GTMSnippet1)
+          .replace('<noscript>GTM_SNIPPET_2</noscript>', GTMSnippet2);
         res
           .status(renderArgs.error ? renderArgs.error.status : 200)
           .send(RenderedApp);

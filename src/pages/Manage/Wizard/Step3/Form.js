@@ -211,7 +211,7 @@ class ThirdForm extends Component<PropsType, StateType> {
           </div>
           <div styleName="form">
             <div styleName="section">
-              <div styleName="formItem">
+              <div styleName="input">
                 <Input
                   id="name"
                   value={data.name}
@@ -220,7 +220,7 @@ class ThirdForm extends Component<PropsType, StateType> {
                   fullWidth
                 />
               </div>
-              <div styleName="formItem">
+              <div styleName="input">
                 <Textarea
                   id="shortDescription"
                   value={data.shortDescription}
@@ -240,43 +240,45 @@ class ThirdForm extends Component<PropsType, StateType> {
             </div>
             <div styleName="section">
               <div styleName="sectionName">General settings and pricing</div>
-              <div styleName="formItem">
+              <div styleName="categorySelector">
                 <CategorySelector
                   categories={this.props.categories}
                   onSelect={id => this.props.onChange({ categoryId: id })}
                 />
               </div>
-              <div styleName="formItem">
-                <Input
-                  id="price"
-                  value={data.product.price || ''}
-                  label="Price"
-                  onChange={this.handleChangeProductState}
-                  fullWidth
-                  type="number"
-                />
-                {/* <span styleName="">STQ</span> */}
-              </div>
-              <div styleName="formItem">
-                <Input
-                  id="vendorCode"
-                  value={data.product.vendorCode || ''}
-                  label="Vendor code"
-                  onChange={this.handleChangeProductState}
-                  fullWidth
-                />
-                {/* <span styleName="">STQ</span> */}
-              </div>
-              <div styleName="formItem">
-                <Input
-                  id="cashback"
-                  value={data.product.cashback || ''}
-                  label="Cashback"
-                  onChange={this.handleChangeProductState}
-                  fullWidth
-                  type="number"
-                />
-                {/* <span styleName="">STQ</span> */}
+              <div styleName="productStates formItem">
+                <div styleName="productState">
+                  <Input
+                    id="price"
+                    value={data.product.price || ''}
+                    label="Price"
+                    onChange={this.handleChangeProductState}
+                    fullWidth
+                    type="number"
+                  />
+                  {/* <span styleName="">STQ</span> */}
+                </div>
+                <div styleName="productState">
+                  <Input
+                    id="vendorCode"
+                    value={data.product.vendorCode || ''}
+                    label="Vendor code"
+                    onChange={this.handleChangeProductState}
+                    fullWidth
+                  />
+                  {/* <span styleName="">STQ</span> */}
+                </div>
+                <div styleName="productState">
+                  <Input
+                    id="cashback"
+                    value={data.product.cashback || ''}
+                    label="Cashback"
+                    onChange={this.handleChangeProductState}
+                    fullWidth
+                    type="number"
+                  />
+                  {/* <span styleName="">STQ</span> */}
+                </div>
               </div>
             </div>
             {categoryId && this.renderAttributes()}
