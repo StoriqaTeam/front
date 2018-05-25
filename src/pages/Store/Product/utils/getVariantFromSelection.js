@@ -13,11 +13,7 @@ import {
   propEq,
 } from 'ramda';
 
-import type {
-  VariantType,
-  ProductVariantType,
-  SelectionType,
-} from '../types';
+import type { VariantType, ProductVariantType, SelectionType } from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
@@ -63,8 +59,7 @@ const setProductVariantValues = (variant: VariantType) => {
     photoMain: isNil(photoMain) ? defaultImage : photoMain,
     additionalPhotos: isNil(additionalPhotos)
       ? []
-      :
-        insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
+      : insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
   };
 };
 
@@ -74,13 +69,14 @@ const findVariant: (
   // $FlowIgnoreMe
   pipe(find(propEq('id')(variantId)), setProductVariantValues)(variants);
 
-const getVariantFromSelection = (selections: Array<SelectionType>) =>
-  (variants: Array<VariantType>): ProductVariantType => {
+const getVariantFromSelection = (selections: Array<SelectionType>) => (
+  variants: Array<VariantType>,
+): ProductVariantType => {
   if (isEmpty(selections)) {
     // $FlowIgnoreMe
     return setProductVariantValues(head(variants));
   }
-    // $FlowIgnoreMe
+  // $FlowIgnoreMe
   return pipe(
     // $FlowIgnoreMe
     map(({ variantIds }) => variantIds),

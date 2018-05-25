@@ -11,23 +11,33 @@ import {
   propEq,
 } from 'ramda';
 
-import { makeWidgets, removeWidgetOptionsDuplicates, sortByProp } from './index';
-import type { VariantType, WidgetType, WidgetOptionType, SelectionType } from '../types';
+import {
+  makeWidgets,
+  removeWidgetOptionsDuplicates,
+  sortByProp,
+} from './index';
+import type {
+  VariantType,
+  WidgetType,
+  WidgetOptionType,
+  SelectionType,
+} from '../types';
 
 const differentiateWidgets: (
   Array<WidgetOptionType>,
 ) => (Array<VariantType>) => Array<WidgetType> = selections => variants => {
-
   const widgetsEmpty = sortByProp('title')(makeWidgets([])(variants));
 
-  const filteredWidgets = sortByProp('title')(makeWidgets(selections)(variants));
+  const filteredWidgets = sortByProp('title')(
+    makeWidgets(selections)(variants),
+  );
 
   const updateWidgetsOptionsState = (
     widgets: Array<WidgetType>,
   ): Array<WidgetType> => {
-    const updateWidgetSelection = (
-      selection: SelectionType
-    ) => (widget: WidgetType): WidgetType => {
+    const updateWidgetSelection = (selection: SelectionType) => (
+      widget: WidgetType,
+    ): WidgetType => {
       if (widget.id === selection.id) {
         const setSelectedState = (option: WidgetOptionType) =>
           propEq('label', selection.value)(option)
@@ -43,9 +53,7 @@ const differentiateWidgets: (
     return chain(mapSelections, selections);
   };
 
-  const differentiateOption = (
-    widgets: Array<WidgetType>,
-  ): Array<WidgetType> =>
+  const differentiateOption = (widgets: Array<WidgetType>): Array<WidgetType> =>
     widgets.map((widget, index) => {
       const diffedOptions = difference(widget.options)(
         filteredWidgets[index].options,

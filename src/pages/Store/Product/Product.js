@@ -29,7 +29,7 @@ import {
   ProductStore,
   Tab,
   Tabs,
-  TabRow,
+  // TabRow,
 } from './index';
 
 import type {
@@ -42,7 +42,7 @@ import type {
 } from './types';
 
 import './Product.scss';
-import mockData from './mockData.json';
+// import mockData from './mockData.json';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -143,11 +143,11 @@ class Product extends Component<PropsType, StateType> {
           <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
         ),
       },
-      {
+      /* {
         id: '1',
         label: 'Characteristics',
         content: <TabRow row={mockData.row} />,
-      },
+      }, */
     ];
     return (
       <Tabs>
