@@ -23,6 +23,7 @@ import Categories from 'pages/Search/Categories';
 import Cart from 'pages/Cart';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
+import Logout from 'pages/Logout';
 
 const routes = (
   <Route>
@@ -283,16 +284,7 @@ const routes = (
         Component={Authorization}
         render={({ Component, props }) => <Component alone {...props} />}
       />
-      <Route
-        path="/logout"
-        Component={() => null}
-        render={() => {
-          const cookies = new Cookies();
-          cookies.remove('__jwt');
-          window.location = '/';
-          return null;
-        }}
-      />
+      <Route path="/logout" Component={Logout} />
       <Route
         path="/oauth_callback/fb"
         Component={OAuthCallback}
