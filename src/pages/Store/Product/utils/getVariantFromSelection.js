@@ -44,14 +44,17 @@ const setProductVariantValues = (variant: VariantType) => {
   };
   const {
     id,
+    rawId,
     photoMain,
     additionalPhotos,
     price,
     cashback,
     discount,
+    description,
   } = variant;
   return {
     id,
+    rawId,
     price,
     cashback: isNil(cashback) ? 0 : Math.round(cashback * 100),
     discount: isNil(discount) ? 0 : discount,
@@ -60,6 +63,7 @@ const setProductVariantValues = (variant: VariantType) => {
     additionalPhotos: isNil(additionalPhotos)
       ? []
       : insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
+    description,
   };
 };
 

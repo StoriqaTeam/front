@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, head, isNil, pathOr, defaultTo, prop, pipe } from 'ramda';
+import { path, isNil } from 'ramda';
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
@@ -51,7 +51,7 @@ type PropsType = {
 
 type StateType = {
   widgets: Array<WidgetType>,
-  productVariant: { ...ProductVariantType },
+  productVariant: ProductVariantType,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -80,17 +80,19 @@ class Product extends Component<PropsType, StateType> {
   }
   state: StateType = {
     widgets: [],
-    productVariant: {},
+    productVariant: {
+      id: '',
+      rawId: 0,
+      description: '',
+      photoMain: '',
+      additionalPhotos: null,
+      price: 0,
+      cashback: null,
+      discount: null,
+      crossPrice: null,
+    },
   };
-  handleAddToCart() {
-    // Todo for Jero - update this after refactoring (needed selected product id)
-    const id = pipe(
-      pathOr([], ['props', 'baseProduct', 'variants', 'all']),
-      head,
-      defaultTo({ rawId: 0 }),
-      prop('rawId'),
-    )(this);
-
+  handleAddToCart(id: number): void {
     if (id) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
@@ -206,7 +208,11 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button wireframe big onClick={() => this.handleAddToCart()}>
+                <Button
+                  wireframe
+                  big
+                  onClick={() => this.handleAddToCart(productVariant.rawId)}
+                >
                   Add to cart
                 </Button>
               </div>

@@ -10,5 +10,6 @@ export type VariantType = {
   discount: number | null,
   photoMain: string | null,
   additionalPhotos: Array<string> | null,
+  description: string,
   attributes: Array<AttributeValueType>,
 };
