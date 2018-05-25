@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 import { propOr } from 'ramda';
 
@@ -19,6 +19,10 @@ export type AlertPropsType = {
   onClick?: () => void,
 };
 
+type StateType = {
+  isDisappearing: boolean,
+};
+
 const titlesHashMap = {
   default: 'Information.',
   success: 'Success!',
@@ -26,12 +30,20 @@ const titlesHashMap = {
   danger: 'Attention!',
 };
 
-class Alert extends PureComponent<AlertPropsType> {
+class Alert extends Component<AlertPropsType, StateType> {
+  state: StateType = {
+    isDisappearing: false,
+  };
+
   componentDidMount() {
     setTimeout(() => {
       this.props.onClose(this.props.createdAtTimestamp);
     }, 3000);
+    setTimeout(() => {
+      this.setState({ isDisappearing: true });
+    }, 1500);
   }
+
   render() {
     const {
       type = 'default',
@@ -42,7 +54,11 @@ class Alert extends PureComponent<AlertPropsType> {
     } = this.props;
     const title = propOr('Information.', type, titlesHashMap);
     return (
-      <div styleName="container">
+      <div
+        styleName={classnames('container', {
+          disappering: this.state.isDisappearing,
+        })}
+      >
         <div styleName={classnames('leftEdge', type)} />
         <div styleName="titleContainer">
           <div styleName="title">{title}</div>
