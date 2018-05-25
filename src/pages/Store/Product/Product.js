@@ -127,7 +127,10 @@ class Product extends Component<PropsType, StateType> {
         text: message,
         link: { text: 'Close.' },
       });
-      log.error('Unable to add an item without productId');
+      const errorMessage = !isSelected(widgets)
+        ? 'Unable to add an item without selected attribute'
+        : 'Unable to add an item without productId';
+      log.error(errorMessage);
     }
   }
   handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
