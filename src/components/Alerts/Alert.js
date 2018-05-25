@@ -23,7 +23,7 @@ const titlesHashMap = {
   default: 'Information.',
   success: 'Success!',
   warning: 'Warning!',
-  danger: 'Danger!',
+  danger: 'Attention!',
 };
 
 const Alert = (props: AlertPropsType) => {
