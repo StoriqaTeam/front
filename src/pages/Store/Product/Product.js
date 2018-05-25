@@ -103,6 +103,13 @@ class Product extends Component<PropsType, StateType> {
           if (errors) {
             log.debug('Errors: ', errors);
           }
+          if (!errors && response) {
+            this.props.showAlert({
+              type: 'success',
+              text: 'Product added to cart!',
+              link: { text: 'Ok.' },
+            });
+          }
         },
         onError: error => {
           log.error('Error in IncrementInCart mutation');
