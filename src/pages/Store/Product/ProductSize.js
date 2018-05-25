@@ -37,14 +37,14 @@ class ProductSize extends Component<PropsType, {}> {
           {mapIndexed((option, index, arr) => {
             const available = arr.every(propEq('state', 'available'));
             const separator = () =>
-              !option.state === 'disable' && option.state === 'available';
+              !option.state === 'disabled' && option.state === 'available';
             return (
               <button
                 key={`${option.label}`}
                 onClick={() => this.handleClick(index, option)}
                 styleName={`size ${
                   option.state === 'selected' ? 'clicked' : ''
-                } ${option.state === 'disable' ? 'disable' : ''}`}
+                } ${option.state === 'disabled' ? 'disabled' : ''}`}
               >
                 {option.label}
                 {!available || separator() ? (
