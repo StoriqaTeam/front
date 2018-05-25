@@ -1,8 +1,6 @@
 // @flow
 
 import {
-  addIndex,
-  ascend,
   // $FlowIgnoreMe
   chain,
   concat,
@@ -10,64 +8,60 @@ import {
   map,
   mergeDeepWithKey,
   pipe,
-  prop,
   propEq,
-  sortWith,
 } from 'ramda';
 
-import { makeWidgets, removeWidgetOptionsDuplicates } from './index';
-import type { VariantType, WidgetType, WidgetOptionType } from '../types';
+import {
+  makeWidgets,
+  removeWidgetOptionsDuplicates,
+  sortByProp,
+} from './index';
+import type {
+  VariantType,
+  WidgetType,
+  WidgetOptionType,
+  SelectionType,
+} from '../types';
 
 const differentiateWidgets: (
   Array<WidgetOptionType>,
 ) => (Array<VariantType>) => Array<WidgetType> = selections => variants => {
-  // $FlowIgnoreMe
-  const sortByTitle: (Array<WidgetType>) => Array<WidgetType> = sortWith([
-    ascend(prop('title')),
-  ]);
+  const widgetsEmpty = sortByProp('title')(makeWidgets([])(variants));
 
-  const widgetsEmpty = sortByTitle(makeWidgets([])(variants));
-
-  const filteredWidgets = sortByTitle(makeWidgets(selections)(variants));
-
-  const mapIndexed = addIndex(map);
+  const filteredWidgets = sortByProp('title')(
+    makeWidgets(selections)(variants),
+  );
 
   const updateWidgetsOptionsState = (
     widgets: Array<WidgetType>,
   ): Array<WidgetType> => {
-    const updateWidgetSelection: WidgetOptionType => WidgetType => Array<
-      WidgetType,
-    > = selection => widget => {
+    const updateWidgetSelection = (selection: SelectionType) => (
+      widget: WidgetType,
+    ): WidgetType => {
       if (widget.id === selection.id) {
         const setSelectedState = (option: WidgetOptionType) =>
-          // $FlowIgnoreMe
           propEq('label', selection.value)(option)
             ? { ...option, state: 'selected' }
             : option;
         const options = map(setSelectedState, widget.options);
-        // $FlowIgnoreMe
         return { ...widget, options };
       }
-      // $FlowIgnoreMe
       return widget;
     };
-    const mapSelections = (selection: WidgetOptionType) =>
+    const mapSelections = (selection: SelectionType) =>
       map(updateWidgetSelection(selection), widgets);
     return chain(mapSelections, selections);
   };
 
-  const differentiateOption = (
-    widgets: Array<WidgetType>,
-  ): Array<WidgetOptionType> =>
+  const differentiateOption = (widgets: Array<WidgetType>): Array<WidgetType> =>
     widgets.map((widget, index) => {
       const diffedOptions = difference(widget.options)(
         filteredWidgets[index].options,
       );
       const disableOptions = map(
-        option => ({ ...option, state: 'disable' }),
+        option => ({ ...option, state: 'disabled' }),
         diffedOptions,
       );
-      // $FlowIgnoreMe
       return {
         ...widget,
         options: disableOptions,
@@ -79,24 +73,21 @@ const differentiateWidgets: (
   ): Array<WidgetType> => {
     const mergeOptions = (
       key: string,
-      leftOption: WidgetType,
-      rightOption: WidgetType,
+      leftOption: WidgetOptionType,
+      rightOption: WidgetOptionType,
     ): WidgetOptionType =>
-      // $FlowIgnoreMe
+      // $FlowFixMe can't figure out why 'concat' complains with the 2nd argument
       key === 'options' ? concat(leftOption, rightOption) : rightOption;
 
     const mergeWidgetOptions = (
       leftOption: WidgetType,
       rightOption: WidgetType,
-      // $FlowIgnoreMe
     ): WidgetType => mergeDeepWithKey(mergeOptions, leftOption, rightOption);
 
-    const applyMerge = (widget: WidgetType, index: number): Array<WidgetType> =>
+    const applyMerge = (widget: WidgetType, index: number): WidgetType =>
       mergeWidgetOptions(widget, diffWidgets[index]);
-    // $FlowIgnoreMe
-    return mapIndexed(applyMerge, widgets);
+    return widgets.map(applyMerge);
   };
-  // $FlowIgnoreMe
   return pipe(
     differentiateOption,
     mergeWidgetsOptions(filteredWidgets),
