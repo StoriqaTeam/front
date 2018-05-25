@@ -16,16 +16,16 @@ import {
 import type {
   VariantType,
   ProductVariantType,
-  WidgetOptionType,
+  SelectionType,
 } from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
     'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
-  const mapIndexed: Function = addIndex(map);
+  const mapIndexed = addIndex(map);
   const makePhotos = (images: Array<string>) =>
     mapIndexed(
-      (image: string, index: string) => ({
+      (image: string, index: number) => ({
         id: `${index}`,
         image,
       }),
@@ -34,11 +34,11 @@ const setProductVariantValues = (variant: VariantType) => {
   /**
    * @desc Applies the following formula (1 - discount) * price
    */
-  const calcCrossedPrice = (discount: string | null, price: string) =>
+  const calcCrossedPrice = (discount: number | null, price: number) =>
     isNil(discount) ? 0 : (1 - parseInt(discount, 10)) * parseInt(price, 10);
 
   const insertPhotoMain = (
-    image: string,
+    image: string | null,
     photos: Array<{ id: string, image: string }>,
   ): Array<{ id: string, image: string }> => {
     if (!isNil(image) && photos.every(p => p !== image)) {
@@ -50,11 +50,8 @@ const setProductVariantValues = (variant: VariantType) => {
     id,
     photoMain,
     additionalPhotos,
-    // $FlowIgnoreMe
     price,
-    // $FlowIgnoreMe
     cashback,
-    // $FlowIgnoreMe
     discount,
   } = variant;
   return {
@@ -66,7 +63,7 @@ const setProductVariantValues = (variant: VariantType) => {
     photoMain: isNil(photoMain) ? defaultImage : photoMain,
     additionalPhotos: isNil(additionalPhotos)
       ? []
-      : // $FlowIgnoreMe
+      :
         insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
   };
 };
@@ -77,14 +74,13 @@ const findVariant: (
   // $FlowIgnoreMe
   pipe(find(propEq('id')(variantId)), setProductVariantValues)(variants);
 
-const getVariantFromSelection: (
-  Array<WidgetOptionType>,
-  // $FlowIgnoreMe
-) => (Array<VariantType>) => ProductVariantType = selections => variants => {
+const getVariantFromSelection = (selections: Array<SelectionType>) =>
+  (variants: Array<VariantType>): ProductVariantType => {
   if (isEmpty(selections)) {
     // $FlowIgnoreMe
     return setProductVariantValues(head(variants));
   }
+    // $FlowIgnoreMe
   return pipe(
     // $FlowIgnoreMe
     map(({ variantIds }) => variantIds),
