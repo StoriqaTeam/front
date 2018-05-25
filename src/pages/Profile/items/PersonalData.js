@@ -102,17 +102,10 @@ class PersonalData extends Component<PropsType, StateType> {
             'Last name must not be empty',
           ],
         ],
-        phone: [
-          [
-            (value: string) => /^\+?\d{7}\d*$/.test(value),
-            'Incorrect phone format',
-          ],
-        ],
       },
       {
         firstName,
         lastName,
-        phone,
       },
     );
 
