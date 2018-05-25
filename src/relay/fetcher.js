@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
-import { isTokenExpired } from 'utils/token';
+import isTokenExpired from 'utils/token';
 
 import { log } from 'utils';
 
