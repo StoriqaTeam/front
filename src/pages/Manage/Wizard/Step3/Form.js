@@ -46,47 +46,71 @@ type PropsType = {
   },
   aditionalPhotosMap: any,
   onUpload: (type: string, e: any) => Promise<*>,
-  onChangeAttrs: (Array<AttrValueType>) => void,
   onSave: () => void,
   onClose: () => void,
 };
 
-type StateType = {
-  attrValues: Array<AttrValueType>,
-};
-
 class ThirdForm extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
+  // constructor(props: PropsType) {
+  //   super(props);
 
-    const { categoryId } = props.data;
-    const catObj = findCategory(
-      whereEq({ rawId: parseInt(categoryId, 10) }),
-      props.categories,
-    ) || { getAttributes: [] };
-    this.state = {
-      // attrValues: attributes.length > 0 ? attributes : this.prepareDefaultValuesForAttributes(catObj.getAttributes),
-      attrValues: this.prepareDefaultValuesForAttributes(catObj.getAttributes),
-    };
-  }
+  //   // const { categoryId, attributes } = props.data;
 
-  componentWillReceiveProps(nextProps: PropsType) {
-    if (nextProps.data.categoryId !== this.props.data.categoryId) {
-      const {
-        data: { categoryId },
-      } = nextProps;
-      const catObj = findCategory(
-        whereEq({ rawId: parseInt(categoryId, 10) }),
-        nextProps.categories,
-      ) || { getAttributes: [] };
-      this.setState({
-        attrValues: this.prepareDefaultValuesForAttributes(
-          catObj.getAttributes,
-        ),
-      });
-    }
-  }
+  //   // const catObj = findCategory(
+  //   //   whereEq({ rawId: parseInt(categoryId, 10) }),
+  //   //   props.categories,
+  //   // ) || { getAttributes: [] };
 
+  //   // this.state = {
+  //   //   attrValues: attributes.length > 0 ? attributes : this.prepareDefaultValuesForAttributes(catObj.getAttributes),
+  //   //   // attrValues: this.prepareDefaultValuesForAttributes(catObj.getAttributes),
+  //   // };
+  // }
+
+  // componentWillReceiveProps(nextProps: PropsType) {
+  //   if (nextProps.data.categoryId !== this.props.data.categoryId) {
+  //     const {
+  //       data: { categoryId },
+  //     } = nextProps;
+  //     const catObj = findCategory(
+  //       whereEq({ rawId: parseInt(categoryId, 10) }),
+  //       nextProps.categories,
+  //     ) || { getAttributes: [] };
+  //     this.setState({
+  //       attrValues: this.prepareDefaultValuesForAttributes(
+  //         catObj.getAttributes,
+  //       ),
+  //     });
+  //   }
+  // }
+
+  // defaultValueForAttribute = (attribute: AttributeType): AttrValueType => {
+  //   const noValueString = 'No value';
+  //   let valueStr = noValueString;
+  //   const {
+  //     metaField: { translatedValues, values },
+  //   } = attribute;
+  //   if (values && values.length > 0) {
+  //     valueStr = values[0] || noValueString;
+  //   } else if (translatedValues.length > 0) {
+  //     // $FlowIgnoreMe
+  //     valueStr = pathOr(
+  //       noValueString,
+  //       [0, 'translations', 0, 'text'],
+  //       translatedValues,
+  //     );
+  //   }
+  //   return {
+  //     attrId: attribute.rawId,
+  //     value: valueStr,
+  //   };
+  // };
+
+  // prepareDefaultValuesForAttributes = (
+  //   attrs: Array<AttributeType>,
+  // ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
+
+  // TODO: remove useless function
   handleChangeBaseProductState = (e: any) => {
     const { data } = this.props;
     const {
@@ -114,38 +138,17 @@ class ThirdForm extends Component<PropsType, StateType> {
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
     log.info('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
-    const { onChangeAttrs } = this.props;
-    this.setState({
-      attrValues: attrs,
-    });
-    onChangeAttrs(attrs);
+    const { onChange } = this.props;
+    onChange({ attributes: attrs });
   };
 
-  defaultValueForAttribute = (attribute: AttributeType): AttrValueType => {
-    const noValueString = 'No value';
-    let valueStr = noValueString;
-    const {
-      metaField: { translatedValues, values },
-    } = attribute;
-    if (values && values.length > 0) {
-      valueStr = values[0] || noValueString;
-    } else if (translatedValues.length > 0) {
-      // $FlowIgnoreMe
-      valueStr = pathOr(
-        noValueString,
-        [0, 'translations', 0, 'text'],
-        translatedValues,
-      );
-    }
-    return {
-      attrId: attribute.rawId,
-      value: valueStr,
-    };
-  };
-
-  prepareDefaultValuesForAttributes = (
-    attrs: Array<AttributeType>,
-  ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
+  prepareValuesForAttributes = (
+    attributes: Array<{ value: string, attribute: { rowId: number } }>,
+  ) =>
+    map(
+      item => ({ value: item.value, attrId: item.attribute.rawId }),
+      attributes,
+    );
 
   checkForSave = () => {
     const { data } = this.props;
@@ -163,14 +166,13 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   renderAttributes = () => {
-    // log.info('*** renderAttributes');
-    const { categoryId } = this.props.data;
+    log.info('>>> Form 3 renderAttributes');
+    const { categoryId, attributes } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
-      // whereEq({ rawId: 34 }),
       this.props.categories,
     );
-    log.info('*** catObj: ', catObj);
+    log.info('^^^ Form 3 catObj: ', { catObj, attributes });
     return (
       catObj &&
       catObj.getAttributes && (
@@ -179,8 +181,9 @@ class ThirdForm extends Component<PropsType, StateType> {
           <div styleName="attributesForm">
             <AttributesForm
               attributes={catObj.getAttributes}
+              // values={this.prepareValuesForAttributes(attributes)}
+              values={attributes}
               onChange={this.handleAttributesChange}
-              values={this.state.attrValues}
             />
           </div>
         </div>
@@ -235,10 +238,6 @@ class ThirdForm extends Component<PropsType, StateType> {
                 aditionalPhotosMap={aditionalPhotosMap}
               />
             </div>
-            {/* <div styleName="section">
-              <div styleName="sectionName">Product photo</div>
-              <Uploaders onUpload={onUpload} />
-            </div> */}
             <div styleName="section">
               <div styleName="sectionName">General settings and pricing</div>
               <div styleName="formItem">

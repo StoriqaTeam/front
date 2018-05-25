@@ -58,7 +58,7 @@ type BaseProductNodeType = {
     price: ?number,
     cashback: ?number,
   },
-  attributes: Array<any>,
+  // attributes,
 };
 
 type PropsType = {
@@ -203,11 +203,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
     // $FlowIgnoreMe
     const userId = pathOr(null, ['me', 'rawId'], this.props);
-    const preparedData = evolve(
-      {
-        name: text => [{ lang: 'EN', text }],
-        shortDescription: text => [{ lang: 'EN', text }],
-      },
+    const preparedData = transformTranslated(
+      'EN',
+      ['name', 'shortDescription'],
       {
         id,
         userId,
@@ -219,6 +217,22 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...omit(['value'], wizardStore.addressFull),
       },
     );
+    // const preparedData = evolve(
+    //   {
+    //     name: text => [{ lang: 'EN', text }],
+    //     shortDescription: text => [{ lang: 'EN', text }],
+    //   },
+    //   {
+    //     id,
+    //     userId,
+    //     address: wizardStore.addressFull.value,
+    //     ...pick(
+    //       ['name', 'shortDescription', 'defaultLanguage', 'slug'],
+    //       wizardStore,
+    //     ),
+    //     ...omit(['value'], wizardStore.addressFull),
+    //   },
+    // );
     log.info('<<< prepareStoreMutationInput: ', { preparedData });
     return preparedData;
   };
@@ -461,10 +475,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnChangeAttrs = attrsValues => {
-    log.info('>>> handleOnChangeAttrs values: ', { attrsValues });
-    this.handleOnChangeProductForm({ attributes: attrsValues });
-  };
+  // handleOnChangeAttrs = attrsValues => {
+  //   log.info('>>> handleOnChangeAttrs values: ', { attrsValues });
+  //   this.handleOnChangeProductForm({ product: { attributes: attrsValues } });
+  // };
 
   handleOnUploadPhoto = async (type: string, e: any) => {
     e.preventDefault();
@@ -558,11 +572,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             <Step3
               formStateData={this.state.baseProduct}
               products={baseProducts ? baseProducts.edges : []}
-              onUpload={this.handleOnUploadPhoto}
               aditionalPhotosMap={this.state.aditionalPhotosMap}
+              onUpload={this.handleOnUploadPhoto}
               onChange={this.handleOnChangeProductForm}
               onClearProductState={this.handleOnClearProductState}
-              onChangeAttrs={this.handleOnChangeAttrs}
+              // onChangeAttrs={this.handleOnChangeAttrs}
               onSave={this.handleOnSaveProduct}
               onDelete={this.handleOnDeleteProduct}
             />

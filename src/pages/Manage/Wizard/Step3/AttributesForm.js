@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import { map, concat, filter, complement, propEq, find } from 'ramda';
 
+import { log } from 'utils';
+
 import CharacteristicItem from 'pages/Manage/Store/Product/Variants/Table/Form/CharacteristicItem';
 
 import './AttributesForm.scss';
@@ -36,34 +38,47 @@ class AttributesForm extends PureComponent<PropsType> {
     value: string,
     metaField?: string,
   }) => {
+    log.info('>>> AttributeForm handleCharectiristicItemChange: ', { data });
     const notChangedAttrs =
       filter(complement(propEq('attrId', data.attrId)), this.props.values) ||
       [];
     // $FlowIgnoreMe
     const result = concat([data], notChangedAttrs);
-    this.props.onChange(result);
+    this.props.onChange(
+      data.value !== 'NotSelected' ? result : notChangedAttrs,
+    );
   };
 
   renderCharacteristics = map((item: AttributeType) => {
     const value = find(propEq('attrId', item.rawId), this.props.values);
-    if (value) {
-      return (
-        <div key={item.id} styleName="itemWrapper">
-          <CharacteristicItem
-            // $FlowIgnoreMe
-            attribute={item}
-            onSelect={this.handleCharectiristicItemChange}
-            // $FlowIgnoreMe
-            value={value}
-          />
-        </div>
-      );
-    }
-    return null;
+    log.info('>>> AttributesForm renderCharacteristics: ', {
+      item,
+      value,
+      values: this.props.values,
+    });
+    // if (value) {
+    return (
+      <div key={item.id} styleName="itemWrapper">
+        <CharacteristicItem
+          // $FlowIgnoreMe
+          attribute={item}
+          onSelect={this.handleCharectiristicItemChange}
+          // $FlowIgnoreMe
+          value={value}
+        />
+      </div>
+    );
+    // }
+    // return null;
   });
 
   render() {
-    const { attributes } = this.props;
+    const { attributes, values } = this.props;
+    // const attributesWithEmpty = [
+    //   { id: 'notSelected', rawId: 0, name: [{ text: 'Not selected' }] }, // for empty value
+    //   ...attributes,
+    // ];
+    log.info('>>> AttributesForm render: ', { attributes, values });
     return this.renderCharacteristics(attributes);
   }
 }
