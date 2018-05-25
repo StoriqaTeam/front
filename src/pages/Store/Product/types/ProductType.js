@@ -1,9 +1,10 @@
 // @flow
 
-import type { TranslationType, IdType, VariantType, StoreType } from './index';
+import type { TranslationType, VariantType, StoreType } from './index';
 
 export type ProductType = {
-  ...IdType,
+  id: string,
+  rawId: number,
   name: Array<TranslationType>,
   shortDescription: Array<TranslationType>,
   longDescription: Array<TranslationType>,
