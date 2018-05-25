@@ -16,6 +16,7 @@
 
     &.uploaderItem {
       padding: 1rem;
+
       &:hover {
         cursor: pointer;
       }
@@ -79,6 +80,37 @@
       }
     }
   }
+}
+
+.firstUploaderItem {
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+  margin-bottom: 30rem;
+
+  .firstUploaderItemWrapper {
+    width: 47rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .icon {
+    & svg {
+      fill: $color_grey_9;
+    }
+  }
+
+  .text {
+    margin-top: 1rem;
+    color: $color_grey_5;
+    text-align: center;
+  }
+
+  .button {
+    margin-top: 3rem;
+  }
+
 }
 
 .modalWrapper {

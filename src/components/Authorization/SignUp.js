@@ -9,8 +9,9 @@ import { Input } from 'components/Authorization';
 import './Authorization.scss';
 
 type PropsType = {
-  username: string,
   email: string,
+  firstName: string,
+  lastName: string,
   password: string,
   errors: {
     [string]: ?Array<string>,
@@ -23,8 +24,9 @@ type PropsType = {
 class SignUp extends PureComponent<PropsType> {
   render() {
     const {
-      username,
       email,
+      firstName,
+      lastName,
       password,
       errors,
       formValid,
@@ -36,17 +38,27 @@ class SignUp extends PureComponent<PropsType> {
       <div styleName="signUp">
         <div styleName="inputBlock">
           <Input
-            thisFocus
-            label="Username"
-            name="username"
+            label="First name"
+            name="firstName"
             type="text"
-            model={username}
+            model={firstName}
             onChange={handleChange}
-            errors={propOr(null, 'username', errors)}
+            errors={propOr(null, 'firstName', errors)}
           />
         </div>
         <div styleName="inputBlock">
           <Input
+            label="Last name"
+            name="lastName"
+            type="text"
+            model={lastName}
+            onChange={handleChange}
+            errors={propOr(null, 'lastName', errors)}
+          />
+        </div>
+        <div styleName="inputBlock">
+          <Input
+            thisFocus
             label="Email"
             name="email"
             type="email"
