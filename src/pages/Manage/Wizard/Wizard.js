@@ -19,6 +19,8 @@ import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
+import { Modal } from 'components/Modal';
+import { Button } from 'components/common/Button';
 import {
   CreateWizardMutation,
   UpdateWizardMutation,
@@ -80,6 +82,7 @@ type PropsType = {
 };
 
 type StateType = {
+  showConfirm: boolean,
   isLoading: boolean,
   step: number,
   baseProduct: BaseProductNodeType,
@@ -139,6 +142,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // log.info('>>> constructor');
     this.state = {
       isLoading: false,
+      showConfirm: false,
       step: 1,
       ...initialProductState,
     };
@@ -292,11 +296,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.updateStore();
         break;
       case 3:
-        this.props.router.push(`/manage/store/${storeId}`);
+        this.setState({ showConfirm: true });
         break;
       default:
         break;
     }
+  };
+
+  handleEndingWizard = () => {
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+    this.setState({ showConfirm: false }, () =>
+      this.props.router.push(`/manage/store/${storeId}`),
+    );
   };
 
   // delay for block tonns of query
@@ -575,11 +587,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    log.info('>>> render', { props: this.props });
+    log.info('>>> render props', this.props);
+    log.info('>>> render state', this.state);
     log.info('>>> render context', this.context);
     log.info(this.state.isLoading);
     const { me } = this.props;
-    const { step } = this.state;
+    const { step, showConfirm } = this.state;
     const { wizardStore } = me;
     // $FlowIgnoreMe
     const baseProducts = pathOr(
@@ -637,6 +650,37 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             isReadyToNext={isReadyToNext()}
           />
         </div>
+
+        <Modal
+          showModal={showConfirm}
+          onClose={() => this.setState({ showConfirm: false })}
+        >
+          <div styleName="modalContent">
+            <div styleName="modalTitle">
+              Do you really want to leave this page?
+            </div>
+            <div styleName="modalButtonsContainer">
+              <div styleName="modalOkButton">
+                <Button
+                  onClick={this.handleEndingWizard}
+                  dataTest="closeWizard"
+                  white
+                  wireframe
+                  big
+                >
+                  <span>Ok</span>
+                </Button>
+              </div>
+              <Button
+                onClick={() => this.setState({ showConfirm: false })}
+                dataTest="continueWizard"
+                big
+              >
+                <span>Cancel</span>
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }
