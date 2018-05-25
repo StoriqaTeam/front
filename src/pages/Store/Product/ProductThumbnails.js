@@ -69,9 +69,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           <img
             styleName={classNames(
               {
-                clicked:
-                  option.state === 'selected' ||
-                  (selected === index),
+                clicked: option.state === 'selected' || selected === index,
               },
               {
                 disabled: option.state === 'disabled',

@@ -93,6 +93,15 @@ class Product extends Component<PropsType, StateType> {
       crossPrice: null,
     },
   };
+  componentDidMount() {
+    if (process.env.BROWSER) {
+      setTimeout(() => {
+        // HACK because 'window.scrollTo(0, 0)' doesn't work
+        // $FlowFixMe
+        document.getElementById('root').scrollTop = 0
+      }, 2);
+    }
+  }
   handleAddToCart(id: number): void {
     const { widgets } = this.state;
     if (id && isSelected(widgets)) {
