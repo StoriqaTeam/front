@@ -1,7 +1,6 @@
 @import "../../../styles/variables";
 
 .wizardContainer {
-  // position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -18,7 +17,7 @@
   .contentWrapper {
     display: flex;
     flex: 1;
-    padding: 14.25rem 3rem 9rem 3rem;
+    padding: 14.25rem 3rem 2rem 3rem;
     justify-content: center;
 
     .formWrapper {

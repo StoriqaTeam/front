@@ -2,12 +2,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, addIndex } from 'ramda';
+import { map, addIndex, isEmpty } from 'ramda';
 
 // import { Select } from 'components/common/Select';
 // import { AddressForm } from 'components/AddressAutocomplete';
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
+import { Button } from 'components/common/Button';
 import { getNameText, log } from 'utils';
 
 import Form from './Form';
@@ -123,19 +124,44 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
-        <div
-          styleName="productItem uploaderItem"
-          role="button"
-          onClick={() => this.setState({ showForm: true })}
-          onKeyDown={() => {}}
-          tabIndex={0}
-        >
-          <div styleName="productContent">
-            <Icon type="cameraPlus" size={56} />
-            <span styleName="buttonLabel">Add new product</span>
+        {!isEmpty(productsArr) ? (
+          <div
+            styleName="productItem uploaderItem"
+            role="button"
+            onClick={() => this.setState({ showForm: true })}
+            onKeyDown={() => {}}
+            tabIndex={0}
+            dataTest="wizardUploaderProductFoto"
+          >
+            <div styleName="productContent">
+              <Icon type="cameraPlus" size={56} />
+              <span styleName="buttonLabel">Add new product</span>
+            </div>
           </div>
-        </div>
-        {productsArr &&
+        ) : (
+          <div styleName="firstUploaderItem">
+            <div styleName="firstUploaderItemWrapper">
+              <div styleName="icon">
+                <Icon type="cameraPlus" size={80} />
+              </div>
+              <div styleName="text">
+                Currently you have no products in your store. Click ‘Add’ to
+                start filling your store with products.
+              </div>
+              <div styleName="button">
+                <Button
+                  onClick={() => this.setState({ showForm: true })}
+                  dataTest="wizardUploaderProductFotoFirst"
+                  big
+                  wireframe
+                >
+                  <span>Add first product</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+        {!isEmpty(productsArr) &&
           mapIndexed(
             (item, index) => (
               <div key={index} styleName="productItem cardItem">
