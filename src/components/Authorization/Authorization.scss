@@ -82,12 +82,14 @@
   margin-bottom: 16px;
 }
 
-.spiner {
+.spinner {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  align-items: center;
   background-color: rgba(255,255,255,.7);
   z-index: 2;
 }
