@@ -304,6 +304,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleEndingWizard = () => {
+    // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     this.setState({ showConfirm: false }, () =>
       this.props.router.push(`/manage/store/${storeId}`),
