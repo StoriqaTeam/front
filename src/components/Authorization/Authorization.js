@@ -8,13 +8,14 @@ import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
+import { Spinner } from 'components/common/Spinner';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
-import { Spiner } from 'components/Spiner';
 import { log, socialStrings, fromRelayError } from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { MutationParamsType } from 'relay/mutations/CreateUserMutation';
 
 import './Authorization.scss';
 
@@ -24,31 +25,36 @@ type PropsType = {
   match: matchShape,
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
+  onCloseModal?: () => void,
 };
 
 type StateType = {
-  username: string,
-  usernameValid: boolean,
+  firstName: string,
+  lastName: string,
   email: string,
   emailValid: boolean,
+  firstNameValid: boolean,
+  lastNameValid: boolean,
   password: string,
   passwordValid: boolean,
   formValid: boolean,
   errors: ?Array<string>,
-  isLoad: boolean,
+  isLoading: boolean,
   isSignUp: ?boolean,
 };
 
 class Authorization extends Component<PropsType, StateType> {
   state: StateType = {
-    username: '',
-    usernameValid: false,
+    firstName: '',
+    lastName: '',
     email: '',
     emailValid: false,
+    firstNameValid: false,
+    lastNameValid: false,
     password: '',
     passwordValid: false,
     formValid: false,
-    isLoad: false,
+    isLoading: false,
     errors: null,
     isSignUp: false,
   };
@@ -66,25 +72,42 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
+  handleAlertOnClick = () => {
+    if (this.props.alone) {
+      window.location = '/';
+    }
+  };
+
   handleRegistrationClick = () => {
-    this.setState({ isLoad: true, errors: null });
-    const { alone } = this.props;
+    this.setState({ isLoading: true, errors: null });
     const { email, password } = this.state;
 
-    CreateUserMutation.commit({
+    /** Uncomment, when backend will appear */
+    // const { email, password, firstName, lastName } = this.state;
+
+    const input = {
+      clientMutationId: '',
       email,
+      // firstName,
+      // lastName,
       password,
+    };
+
+    // $FlowIgnoreMe
+    const params: MutationParamsType = {
+      input,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState({ isLoad: false });
-
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
           // $FlowIgnoreMe
-          this.setState({ errors: validationErrors });
+          this.setState({
+            errors: validationErrors,
+            isLoading: false,
+          });
           return;
         }
         // $FlowIgnoreMe
@@ -99,18 +122,20 @@ class Authorization extends Component<PropsType, StateType> {
             text: errorStatus,
             link: { text: 'Close.' },
           });
+          this.setState({ isLoading: false });
           return;
         }
         this.props.showAlert({
           type: 'success',
           text: 'Registration successful, please confirm your email and login.',
-          link: { text: 'Got it!' },
+          link: { text: 'Ok!' },
+          onClick: this.handleAlertOnClick,
         });
-        if (alone) {
-          window.location = '/';
-        } else {
-          window.location.reload();
+        const { onCloseModal } = this.props;
+        if (onCloseModal) {
+          onCloseModal();
         }
+        this.setState({ isLoading: false });
         log.debug({ response, errors });
       },
       onError: (error: Error) => {
@@ -121,7 +146,7 @@ class Authorization extends Component<PropsType, StateType> {
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
           this.setState({
-            isLoad: false,
+            isLoading: false,
             // $FlowIgnoreMe
             errors: validationErrors,
           });
@@ -132,12 +157,14 @@ class Authorization extends Component<PropsType, StateType> {
           text: 'Something going wrong :(',
           link: { text: 'Close.' },
         });
+        this.setState({ isLoading: false });
       },
-    });
+    };
+    CreateUserMutation.commit(params);
   };
 
   handleLoginClick = () => {
-    this.setState({ isLoad: true, errors: null });
+    this.setState({ isLoading: true, errors: null });
     const {
       alone,
       match: {
@@ -152,7 +179,7 @@ class Authorization extends Component<PropsType, StateType> {
       password,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState({ isLoad: false });
+        this.setState({ isLoading: false });
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
@@ -187,7 +214,7 @@ class Authorization extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
-          isLoad: false,
+          isLoading: false,
           // $FlowIgnoreMe
           errors: validationErrors,
         });
@@ -198,7 +225,7 @@ class Authorization extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
         this.setState({
-          isLoad: false,
+          isLoading: false,
           // $FlowIgnoreMe
           errors: validationErrors,
         });
@@ -227,11 +254,18 @@ class Authorization extends Component<PropsType, StateType> {
    * @return {void}
    */
   validateForm = () => {
-    const { usernameValid, emailValid, passwordValid, isSignUp } = this.state;
+    const {
+      firstNameValid,
+      lastNameValid,
+      emailValid,
+      passwordValid,
+      isSignUp,
+    } = this.state;
 
     if (isSignUp) {
       this.setState({
-        formValid: usernameValid && emailValid && passwordValid,
+        formValid:
+          firstNameValid && lastNameValid && emailValid && passwordValid,
       });
     } else {
       this.setState({ formValid: emailValid && passwordValid });
@@ -241,8 +275,9 @@ class Authorization extends Component<PropsType, StateType> {
   handleToggle = () => {
     this.setState({
       isSignUp: !this.state.isSignUp,
-      username: '',
       email: '',
+      firstName: '',
+      lastName: '',
       password: '',
       errors: null,
     });
@@ -262,11 +297,12 @@ class Authorization extends Component<PropsType, StateType> {
   render() {
     const { alone } = this.props;
     const {
-      username,
       email,
+      firstName,
+      lastName,
       password,
       formValid,
-      isLoad,
+      isLoading,
       errors,
       isSignUp,
     } = this.state;
@@ -274,9 +310,9 @@ class Authorization extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="wrap">
-          {isLoad && (
-            <div styleName="spiner">
-              <Spiner size={32} />
+          {isLoading && (
+            <div styleName="spinner">
+              <Spinner />
             </div>
           )}
           <Header
@@ -286,8 +322,9 @@ class Authorization extends Component<PropsType, StateType> {
           />
           {isSignUp ? (
             <SignUp
-              username={username}
               email={email}
+              firstName={firstName}
+              lastName={lastName}
               password={password}
               errors={errors}
               formValid={formValid}
