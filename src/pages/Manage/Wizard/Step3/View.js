@@ -88,7 +88,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const productDataFromItem = head(productsEdges)
       ? head(productsEdges).node
       : {};
-    log.info('>>> View handleOnShowForm: ', { productDataFromItem });
+    log.info('>>> View handleOnShowForm productDataFromItem: ', {
+      productDataFromItem,
+    });
     const prepareStateObj = {
       ...formStateData,
       product: omit(['attributes'], productDataFromItem),
@@ -134,11 +136,11 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     } = this.props;
     const { showForm } = this.state;
     const productsArr = map(item => item.node, products);
-    log.info('>>> View Form 3 render: ', {
-      formStateData,
-      products,
-      productsArr,
-    });
+    // log.info('>>> View Form 3 render: ', {
+    //   formStateData,
+    //   products,
+    //   productsArr,
+    // });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">

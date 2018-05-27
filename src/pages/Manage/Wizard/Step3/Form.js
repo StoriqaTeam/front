@@ -172,7 +172,7 @@ class ThirdForm extends Component<PropsType, StateType> {
       whereEq({ rawId: parseInt(categoryId, 10) }),
       this.props.categories,
     );
-    log.info('^^^ Form 3 catObj: ', { catObj, attributes });
+    log.info('^^^ Form 3 renderAttributes: ', { catObj, attributes });
     return (
       catObj &&
       catObj.getAttributes && (

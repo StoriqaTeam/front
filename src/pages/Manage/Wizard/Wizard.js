@@ -31,7 +31,7 @@ import {
   UpdateBaseProductMutation,
   CreateProductWithAttributesMutation,
   // CreateProductMutation,
-  // UpdateProductMutation,
+  UpdateProductMutation,
   DeactivateBaseProductMutation,
 } from 'relay/mutations';
 import { uploadFile, log } from 'utils';
@@ -126,7 +126,7 @@ export const initialProductState = {
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps, prevState) {
-    log.info('>>> getDerivedStateFromProps: ', { nextProps, prevState });
+    // log.info('>>> getDerivedStateFromProps: ', { nextProps, prevState });
     const wizardStore = pathOr(null, ['me', 'wizardStore'], nextProps);
     return {
       ...prevState,
@@ -154,7 +154,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }
 
   createWizard = () => {
-    log.info('>>> createWizard');
+    // log.info('>>> createWizard');
     this.setState(() => ({ isLoading: true }));
     CreateWizardMutation.commit({
       environment: this.context.environment,
@@ -173,7 +173,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     defaultLanguage?: string,
     addressFull?: { value: any },
   }) => {
-    log.info('>>> updateWizard data: ', { data });
+    // log.info('>>> updateWizard data: ', { data });
     this.setState(() => ({ isLoading: true }));
     UpdateWizardMutation.commit({
       ...data,
@@ -181,10 +181,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.info('^^^ updateWizard response, errors: ', {
-          response,
-          errors,
-        });
+        // log.info('^^^ updateWizard response, errors: ', {
+        //   response,
+        //   errors,
+        // });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
       },
@@ -237,7 +237,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     //     ...omit(['value'], wizardStore.addressFull),
     //   },
     // );
-    log.info('<<< prepareStoreMutationInput: ', { preparedData });
+    // log.info('<<< prepareStoreMutationInput: ', { preparedData });
     return preparedData;
   };
 
@@ -248,7 +248,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.info('^^^ createStore response: ', { response, errors });
+        // log.info('^^^ createStore response: ', { response, errors });
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.updateWizard({ storeId });
         this.setState(() => ({ isLoading: false }));
@@ -272,10 +272,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.info('^^^ updateStore updateStore mutation response: ', {
-          response,
-          errors,
-        });
+        // log.info('^^^ updateStore updateStore mutation response: ', {
+        //   response,
+        //   errors,
+        // });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
       },
@@ -327,7 +327,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
-    log.info('>>> handleOnSaveWizard: ', { data });
+    // log.info('>>> handleOnSaveWizard: ', { data });
     if (data) {
       this.updateWizard({
         ...omit(
@@ -352,7 +352,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['name', 'shortDescription'],
       omit(['product', 'attributes'], baseProduct),
     );
-    log.info('^^^ createBaseProduct preparedData: ', { preparedData });
+    // log.info('^^^ createBaseProduct preparedData: ', { preparedData });
     // $FlowIgnoreMe
     const parentID = pathOr(
       null,
@@ -425,14 +425,48 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['name', 'shortDescription'],
       omit(['product', 'attributes'], baseProduct),
     );
-    log.info('^^^ updateBaseProduct preparedData: ', { preparedData });
+    log.info('^^^ updateBaseProduct preparedData: ', {
+      baseProduct,
+      preparedData,
+    });
     UpdateBaseProductMutation.commit({
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.info('^^^ updateBaseProduct response: ', { response, errors });
+        // log.info('^^^ updateBaseProduct response: ', { response, errors });
         // const storeId = pathOr(null, ['createStore', 'rawId'], response);
         // this.updateWizard({ storeId });
+        // create variant after create base product
+        const prepareDataForProduct = {
+          id: baseProduct.product.id,
+          product: {
+            ...pick(
+              ['photoMain', 'additionalPhotos', 'vendorCode', 'price'],
+              baseProduct.product,
+            ),
+            cashback: (baseProduct.product.cashback || 0) / 100,
+          },
+          attributes: baseProduct.attributes,
+        };
+        // log.info('^^^ createBaseProduct prepareDataForProduct: ', {
+        //   prepareDataForProduct,
+        // });
+        UpdateProductMutation.commit({
+          ...prepareDataForProduct,
+          environment: this.context.environment,
+          onCompleted: (
+            productResponse: ?Object,
+            productErrors: ?Array<any>,
+          ) => {
+            this.setState(() => ({ isLoading: false }));
+            this.handleOnClearProductState();
+            resposeLogger(productResponse, productErrors);
+          },
+          onError: (error: Error) => {
+            this.setState(() => ({ isLoading: false }));
+            errorsLogger(error);
+          },
+        });
         this.setState(() => ({ isLoading: false }));
         resposeLogger(response, errors);
       },
@@ -475,10 +509,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeProductForm = data => {
-    log.info('>>> handleOnChangeProductForm: ', {
-      state: this.state,
-      data,
-    });
+    // log.info('>>> handleOnChangeProductForm: ', {
+    //   state: this.state,
+    //   data,
+    // });
     this.setState({
       baseProduct: {
         ...this.state.baseProduct,
@@ -526,7 +560,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   handleOnSaveProduct = () => {
-    log.info('>>> handleOnSaveProduct: ', { state: this.state.baseProduct });
+    // log.info('>>> handleOnSaveProduct: ', { state: this.state.baseProduct });
     const { baseProduct } = this.state;
     if (baseProduct.id) {
       this.updateBaseProduct();
@@ -545,7 +579,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['me', 'wizardStore', 'store', 'baseProducts'],
       this.props,
     );
-    log.info('>>> renderForm', { baseProducts });
+    // log.info('>>> renderForm', { baseProducts });
     switch (step) {
       case 1:
         return (
@@ -602,9 +636,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     log.info('>>> render props', this.props);
-    log.info('>>> render state', this.state);
-    log.info('>>> render context', this.context);
-    log.info(this.state.isLoading);
+    log.info('>>> render state', this.state.baseProduct);
+    // log.info('>>> render context', this.context);
+    // log.info(this.state.isLoading);
     const { me } = this.props;
     const { step, showConfirm } = this.state;
     const { wizardStore } = me;
@@ -634,7 +668,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       const isStepTwoPopulated = steptTwoChecker(stepTwo);
       const isStepThreePopulated =
         baseProducts && baseProducts.edges.length > 0;
-      log.info({ wizardStore });
+      // log.info({ wizardStore });
       if (step === 1 && isStepOnePopulated) {
         return true;
       }
@@ -771,6 +805,7 @@ export default createFragmentContainer(
                       cashback
                       price
                       attributes {
+                        attrId
                         value
                         metaField
                         attribute {
