@@ -22,7 +22,7 @@ import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 import { generateSessionId } from 'utils';
-import { isTokenExpired } from 'utils/token';
+import isTokenExpired from 'utils/token';
 
 import { Error404, Error } from '../src/pages/Errors';
 

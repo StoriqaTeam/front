@@ -87,7 +87,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
       <div styleName="form">
         <div styleName="formItem">
           <Input
-            id="storeName"
+            id="name"
             value={name}
             label="Store name"
             onChange={this.handleOnChange}

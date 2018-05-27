@@ -1,4 +1,4 @@
-import { isTokenExpired } from 'utils/token'
+import isTokenExpired from 'utils/token'
 
 /* { user_id: 6, exp: 1527236289 } */
 const token1 = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjo2LCJleHAiOjE1MjcyMzYyODl9.TQvuMKIdWtKuxyu7J0vnGXFsIGsc_9ljSd7Z2OPezya1HEZkDsg5J6FYquLXRuyqNhSqDWYsiZK2iUwjBEVxWS9inXfuu3mpqfSae_JngLPxxuExA89rzjSdd0cIiIXZZ5730aqqpvJjVlgCaU-3sHAVvkw8C5ztZjnvwwSJMC5B69DzUBSF8SJJcrPZC8dx_NA6Y1obyCtGj4o3PEqxntA8yb3rcPpOe_s8mOXhBN6qAcLjQeFBqJcpJHq55Fc47PJ_fuT1r_VGbblsDUHCv_Hd1b3mbKe_BDXVNshhL5EgFHtoM-zwc0LptSz0MZIxKdWGRDvoOtgqrJh3yjY0HA";
