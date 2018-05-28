@@ -137,7 +137,7 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
-    log.info('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
+    // log.info('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
     const { onChange } = this.props;
     onChange({ attributes: attrs });
   };
@@ -166,13 +166,13 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   renderAttributes = () => {
-    log.info('>>> Form 3 renderAttributes');
+    // log.info('>>> Form 3 renderAttributes');
     const { categoryId, attributes } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       this.props.categories,
     );
-    log.info('^^^ Form 3 renderAttributes: ', { catObj, attributes });
+    // log.info('^^^ Form 3 renderAttributes: ', { catObj, attributes });
     return (
       catObj &&
       catObj.getAttributes && (
@@ -195,11 +195,16 @@ class ThirdForm extends Component<PropsType, StateType> {
     const { data, aditionalPhotosMap, onSave, onClose } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
-    log.info('>>> Form 3 render: ', {
-      data,
-      aditionalPhotosMap,
-      categoryId,
-    });
+    // log.info('>>> Form 3 render: ', {
+    //   data,
+    //   aditionalPhotosMap,
+    //   categoryId,
+    // });
+
+    const cashbackCalc =
+      parseInt(data.product.cashback, 10) < 0
+        ? parseInt(data.product.cashback, 10) * 100
+        : data.product.cashback;
 
     return (
       <div styleName="wrapper">

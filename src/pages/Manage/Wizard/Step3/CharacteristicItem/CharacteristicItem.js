@@ -22,6 +22,7 @@ import './Characteristics.scss';
 type AttributeType = {
   rawId: number,
   id: string,
+  name: string,
   metaField: {
     translatedValues: ?Array<{}>,
     values: ?Array<string>,
@@ -71,9 +72,10 @@ class CharacteristicItem extends PureComponent<PropsType> {
   };
 
   handleSelect = (value: { label: string }) => {
+    // log.info('>>> CharacteristicItem handleSelect: ', value);
     this.props.onSelect({
       ...this.props.value,
-      value: value.label,
+      value: value ? value.label : null,
       attrId: this.props.attribute.rawId,
     });
   };
@@ -88,34 +90,44 @@ class CharacteristicItem extends PureComponent<PropsType> {
 
   render() {
     const { attribute, value } = this.props;
-    if (!value) {
-      log.warn('CharacteristicItem', 'value is nil');
-      return null;
-    }
+    // if (!value) {
+    //   log.warn('CharacteristicItem', 'value is nil');
+    //   return null;
+    // }
+    // const emptyItem = { id: '-1', label: 'NotSelected' };
+    // const items = [emptyItem, ...this.getSelectItems(attribute)];
     const items = this.getSelectItems(attribute);
-    const selectedItem = {
-      id: `${findIndex(propEq('label', value.value), items)}`,
-      label: value.value,
-    };
-    const { metaField: characteristicImg } = this.props.value;
+    const selectedItem = value
+      ? {
+          id: `${findIndex(propEq('label', value.value), items)}`,
+          label: value.value,
+        }
+      : null;
+    // : emptyItem;
+    // : items;
+    // const { metaField: characteristicImg } = this.props.value;
+    const characteristicImg = pathOr('', ['metaField'], this.props.value);
     // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], attribute);
+    log.info('>>> CharacteristicItem render: ', { value, selectedItem });
     return (
       <div styleName="item">
         <div styleName="characteristicImg">
           <UploadWrapper
             id={attribute.id}
-            onUpload={this.handleOnUpload}
+            onUpload={this.props.value && this.handleOnUpload}
             buttonHeight={10}
             buttonWidth={10}
             buttonIconType="upload"
             overPicture={characteristicImg}
             dataTest="productCharacteristicImgUploader"
+            disabled={!this.props.value}
           />
         </div>
         <div styleName="characteristicSelect">
           <Select
             forForm
+            withEmpty
             fullWidth
             label={name}
             activeItem={selectedItem}

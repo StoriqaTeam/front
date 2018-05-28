@@ -5,7 +5,7 @@ import { map, concat, filter, complement, propEq, find } from 'ramda';
 
 import { log } from 'utils';
 
-import CharacteristicItem from 'pages/Manage/Store/Product/Variants/Table/Form/CharacteristicItem';
+import { CharacteristicItem } from './CharacteristicItem';
 
 import './AttributesForm.scss';
 
@@ -33,17 +33,21 @@ type PropsType = {
 };
 
 class AttributesForm extends PureComponent<PropsType> {
-  handleCharectiristicItemChange = (data: {
-    attrId: number,
-    value: string,
-    metaField?: string,
-  }) => {
-    log.info('>>> AttributeForm handleCharectiristicItemChange: ', { data });
+  handleCharectiristicItemChange = (
+    data: ?{
+      attrId: number,
+      value: string,
+      metaField?: string,
+    },
+  ) => {
+    // log.info('>>> AttributeForm handleCharectiristicItemChange: ', { data });
     const notChangedAttrs =
       filter(complement(propEq('attrId', data.attrId)), this.props.values) ||
       [];
     // $FlowIgnoreMe
-    const result = concat([data], notChangedAttrs);
+    const result = data.value
+      ? concat([data], notChangedAttrs)
+      : notChangedAttrs;
     this.props.onChange(
       data.value !== 'NotSelected' ? result : notChangedAttrs,
     );
@@ -51,11 +55,11 @@ class AttributesForm extends PureComponent<PropsType> {
 
   renderCharacteristics = map((item: AttributeType) => {
     const value = find(propEq('attrId', item.rawId), this.props.values);
-    log.info('>>> AttributesForm renderCharacteristics: ', {
-      item,
-      value,
-      values: this.props.values,
-    });
+    // log.info('>>> AttributesForm renderCharacteristics: ', {
+    //   item,
+    //   value,
+    //   values: this.props.values,
+    // });
     // if (value) {
     return (
       <div key={item.id} styleName="itemWrapper">
@@ -78,7 +82,7 @@ class AttributesForm extends PureComponent<PropsType> {
     //   { id: 'notSelected', rawId: 0, name: [{ text: 'Not selected' }] }, // for empty value
     //   ...attributes,
     // ];
-    log.info('>>> AttributesForm render: ', { attributes, values });
+    // log.info('>>> AttributesForm render: ', { attributes, values });
     return this.renderCharacteristics(attributes);
   }
 }

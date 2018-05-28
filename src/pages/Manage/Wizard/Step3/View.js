@@ -66,47 +66,53 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   prepareAttributesValues = (
-    attributes: Array<{ value: string, attribute: { rowId: number } }>,
+    attributes: Array<{
+      value: string,
+      attribute: { rowId: number },
+      metaField: ?string,
+    }>,
   ) => {
     // debugger;
-    log.info('>>> View form 3 prepareAttributesValues: ', { attributes });
+    // log.info('>>> View form 3 prepareAttributesValues: ', { attributes });
     return map(
-      item => ({ value: item.value, attrId: item.attribute.rawId }),
+      item => ({
+        value: item.value,
+        attrId: item.attribute.rawId,
+        metaField: item.metaField,
+      }),
       attributes || [],
     );
   };
 
   handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
-    // debugger;
     const name = item.name ? getNameText(item.name) : '';
     const shortDescription = item.shortDescription
       ? getNameText(item.shortDescription)
       : '';
-
     const productsEdges = pathOr(null, ['products', 'edges'], item);
     const productDataFromItem = head(productsEdges)
       ? head(productsEdges).node
       : {};
-    log.info('>>> View handleOnShowForm productDataFromItem: ', {
-      productDataFromItem,
-    });
     const prepareStateObj = {
       ...formStateData,
-      product: omit(['attributes'], productDataFromItem),
+      product: {
+        ...omit(['attributes'], productDataFromItem),
+        cashback: productDataFromItem.cashback * 100,
+      },
       attributes: this.prepareAttributesValues(productDataFromItem.attributes),
       categoryId: item.category && item.category.rawId,
       id: item.id,
       name,
       shortDescription,
     };
-    log.info('>>> Form 3 View handleOnShowForm item: ', {
-      productData: item,
-      formStateData,
-      prepareStateObj,
-    });
+    // log.info('>>> Form 3 View handleOnShowForm item: ', {
+    //   productData: item,
+    //   formStateData,
+    //   prepareStateObj,
+    // });
     return () => {
-      log.info('^^^ handleOnShowForm show form');
+      // log.info('^^^ handleOnShowForm show form');
       onChange(prepareStateObj);
       this.setState({ showForm: true });
     };

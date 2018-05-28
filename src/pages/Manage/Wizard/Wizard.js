@@ -448,9 +448,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           },
           attributes: baseProduct.attributes,
         };
-        // log.info('^^^ createBaseProduct prepareDataForProduct: ', {
-        //   prepareDataForProduct,
-        // });
+        log.info('^^^ createBaseProduct prepareDataForProduct: ', {
+          prepareDataForProduct,
+        });
         UpdateProductMutation.commit({
           ...prepareDataForProduct,
           environment: this.context.environment,
@@ -622,7 +622,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               onUpload={this.handleOnUploadPhoto}
               onChange={this.handleOnChangeProductForm}
               onClearProductState={this.handleOnClearProductState}
-              // onChangeAttrs={this.handleOnChangeAttrs}
               onSave={this.handleOnSaveProduct}
               onDelete={this.handleOnDeleteProduct}
             />
@@ -635,8 +634,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    log.info('>>> render props', this.props);
-    log.info('>>> render state', this.state.baseProduct);
+    // log.info('>>> render props', this.props);
+    // log.info('>>> render state', this.state.baseProduct);
     // log.info('>>> render context', this.context);
     // log.info(this.state.isLoading);
     const { me } = this.props;
@@ -762,13 +761,6 @@ export default createFragmentContainer(
           postalCode
           route
           streetNumber
-        }
-        stepThree {
-          edges {
-            node {
-              id
-            }
-          }
         }
         store {
           id
