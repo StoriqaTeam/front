@@ -80,7 +80,7 @@ class Tabs extends React.Component<PropsType, StateType> {
    */
   renderContent = (): React.Node => {
     const { selected } = this.state;
-    return <div styleName="sisa">{this.props.children[selected]}</div>;
+    return <div>{this.props.children[selected]}</div>;
   };
 
   render() {
