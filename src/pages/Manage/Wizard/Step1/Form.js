@@ -4,7 +4,6 @@ import React from 'react';
 
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
-import { log } from 'utils';
 
 import './Form.scss';
 
@@ -42,12 +41,10 @@ type StateType = DataType;
 
 class FirstForm extends React.Component<PropsType, StateType> {
   static prepareState = (props: DataType, state?: StateType) => {
-    log.info('>>> Form 1 prepareState: ', { props, state });
     const newState = {
       ...props,
       ...state,
     };
-    log.info('<<< Form 1 prepareState: ', { newState });
     return newState;
   };
 
@@ -75,14 +72,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const { initialData } = this.props;
     const { name, slug, shortDescription } = this.state;
-    log.info('>>> From 1 render: ', {
-      initialData,
-      name,
-      slug,
-      shortDescription,
-    });
     return (
       <div styleName="form">
         <div styleName="formItem">

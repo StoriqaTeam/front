@@ -2,15 +2,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, addIndex, isEmpty } from 'ramda';
+import { omit, pathOr, head, map, addIndex, isEmpty } from 'ramda';
 
-// import { Select } from 'components/common/Select';
-// import { AddressForm } from 'components/AddressAutocomplete';
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
-import { getNameText, log } from 'utils';
+import { getNameText } from 'utils';
 
+import type { BaseProductNodeType } from '../Wizard';
 import Form from './Form';
 import Modal from './Modal';
 
@@ -45,15 +44,14 @@ type ProductType = {
 };
 
 type PropsType = {
-  formStateData: any,
   aditionalPhotosMap: any,
-  onChange: (data: { [name: string]: string }) => void,
+  onChange: (data: { [name: string]: any }) => void,
   onUpload: (type: string, e: any) => Promise<*>,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
   onSave: () => void,
   onClearProductState: () => void,
-  onChangeAttrs: () => void,
+  formStateData: BaseProductNodeType,
 };
 
 type StateType = {
@@ -65,29 +63,46 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     showForm: false,
   };
 
+  prepareAttributesValues = (
+    attributes: Array<{
+      value: string,
+      attribute: { rawId: number },
+      metaField: ?string,
+    }>,
+  ) =>
+    map(
+      item => ({
+        value: item.value,
+        attrId: item.attribute.rawId,
+        metaField: item.metaField,
+      }),
+      attributes || [],
+    );
+
   handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
     const name = item.name ? getNameText(item.name) : '';
     const shortDescription = item.shortDescription
       ? getNameText(item.shortDescription)
       : '';
+    // $FlowIgnoreMe
+    const productsEdges = pathOr(null, ['products', 'edges'], item);
+    const productDataFromItem = head(productsEdges)
+      ? head(productsEdges).node
+      : {};
     const prepareStateObj = {
       ...formStateData,
       product: {
-        ...formStateData.product,
+        ...omit(['attributes'], productDataFromItem),
+        cashback: productDataFromItem.cashback * 100,
       },
+      attributes: this.prepareAttributesValues(productDataFromItem.attributes),
       categoryId: item.category && item.category.rawId,
       id: item.id,
       name,
       shortDescription,
     };
-    log.info('>>> Form 3 View handleOnShowForm item: ', {
-      productData: item,
-      formStateData,
-      prepareStateObj,
-    });
     return () => {
-      log.info('^^^ handleOnShowForm show form');
       onChange(prepareStateObj);
       this.setState({ showForm: true });
     };
@@ -95,8 +110,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   handleOnCloseModal = () => {
     const { onClearProductState } = this.props;
-    onClearProductState();
-    this.setState({ showForm: false });
+    this.setState({ showForm: false }, () => {
+      onClearProductState();
+    });
   };
 
   handleOnDelete = (ID: string) => () => {
@@ -109,18 +125,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       formStateData,
       aditionalPhotosMap,
       onChange,
-      onChangeAttrs,
       products,
       onUpload,
       onSave,
     } = this.props;
     const { showForm } = this.state;
     const productsArr = map(item => item.node, products);
-    log.info('>>> View Form 3 render: ', {
-      formStateData,
-      products,
-      productsArr,
-    });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
@@ -131,7 +141,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             onClick={() => this.setState({ showForm: true })}
             onKeyDown={() => {}}
             tabIndex={0}
-            dataTest="wizardUploaderProductFoto"
+            data-test="wizardUploaderProductFoto"
           >
             <div styleName="productContent">
               <Icon type="cameraPlus" size={56} />
@@ -170,7 +180,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <div styleName="layer">
                     <div
                       styleName="editbutton"
-                      onClick={() => {}}
+                      onClick={this.handleOnShowForm(item)}
                       role="button"
                       onKeyDown={() => {}}
                       tabIndex={0}
@@ -200,7 +210,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             categories={this.context.directories.categories}
             aditionalPhotosMap={aditionalPhotosMap}
             onChange={onChange}
-            onChangeAttrs={onChangeAttrs}
             onUpload={onUpload}
             onSave={onSave}
             onClose={this.handleOnCloseModal}
