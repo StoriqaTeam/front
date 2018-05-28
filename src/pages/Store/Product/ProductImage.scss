@@ -4,7 +4,7 @@ $bigImageSize: 69.875rem;
 
 .container {
   align-items: flex-start;
-  border-right: 1px solid #efefef;
+  border-right: 0.125rem solid #efefef;
   display: flex;
   justify-content: space-between;
 }
@@ -48,16 +48,16 @@ $bigImageSize: 69.875rem;
 
 .discount {
   background-color: #ff62a4;
-  border-bottom: 1px solid $color_white;
-  border-left: 1px solid $color_white;
-  border-radius: 0 0 4px 4px;
-  border-right: 1px solid $color_white;
+  border-bottom: 0.125rem solid $color_white;
+  border-left: 0.125rem solid $color_white;
+  border-radius: 0 0 0.5rem 0.5rem;
+  border-right: 0.125rem solid $color_white;
   border-top: 0 solid transparent;
   color: white;
-  font-size: 14px;
+  font-size: 1.75rem;
   font-weight: bold;
   height: 9.375rem;
-  padding-top: 1px;
+  padding-top: 0.125rem;
   position: absolute;
   right: 9.375rem;
   text-align: center;

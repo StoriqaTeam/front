@@ -4,35 +4,31 @@
   background: $color_white;
   display: block;
   overflow: hidden;
-  padding: 26px 24px;
+  padding: 3.25rem 3rem;
 }
 
 .label {
   color: #9c9c9c;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1.75rem;
   font-stretch: normal;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 1.2px;
   line-height: normal;
-  margin-right: 53px;
-  padding-bottom: 14px;
+  margin-right: 6.625rem;
+  padding-bottom: 1.75rem;
   text-transform: uppercase;
 }
 
 .labels {
-  border-bottom: 2px solid #efefef;
+  border-bottom: 0.25rem solid #efefef;
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 22px;
+  margin-bottom: 2.75rem;
 }
 
 .active {
   color: $color_primary;
-  border-bottom: 2px solid $color_primary;;
-}
-
-.sisa {
-
+  border-bottom: 0.25rem solid $color_primary;;
 }
