@@ -11,6 +11,7 @@ import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
+import Rating from 'components/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -194,7 +195,7 @@ class Product extends Component<PropsType, StateType> {
       );
     }
     const {
-      baseProduct: { name, shortDescription, longDescription },
+      baseProduct: { name, shortDescription, longDescription, store },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
@@ -222,6 +223,9 @@ class Product extends Component<PropsType, StateType> {
                 widgets={widgets}
                 onWidgetClick={this.handleWidget}
               >
+                <div styleName="rating">
+                  <Rating rating={store.rating} />
+                </div>
                 <ProductPrice
                   price={productVariant.price}
                   lastPrice={productVariant.lastPrice}

@@ -34,7 +34,7 @@ const setProductVariantValues = (variant: VariantType) => {
     isNil(discount) ? 0 : price;
 
   const calcPrice = (price: number, discount: ?number) =>
-    isNil(discount) ? price : formatPrice(price - (price * discount));
+    isNil(discount) ? price : formatPrice(price - price * discount);
 
   const insertPhotoMain = (
     image: string | null,
