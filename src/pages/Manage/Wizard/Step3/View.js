@@ -141,7 +141,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             onClick={() => this.setState({ showForm: true })}
             onKeyDown={() => {}}
             tabIndex={0}
-            dataTest="wizardUploaderProductFoto"
+            data-test="wizardUploaderProductFoto"
           >
             <div styleName="productContent">
               <Icon type="cameraPlus" size={56} />
