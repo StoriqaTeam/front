@@ -93,10 +93,18 @@ class Product extends Component<PropsType, StateType> {
       crossPrice: null,
     },
   };
-
-  handleAddToCart = (id: number): void => {
+  componentDidMount() {
+    if (process.env.BROWSER) {
+      setTimeout(() => {
+        // HACK because 'window.scrollTo(0, 0)' doesn't work
+        // $FlowFixMe
+        document.getElementById('root').scrollTop = 0;
+      }, 0);
+    }
+  }
+  handleAddToCart(id: number): void {
     const { widgets } = this.state;
-    if (id && isSelected(widgets)) {
+    if ((id && isSelected(widgets)) || (id && widgets.length === 0)) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -140,7 +148,7 @@ class Product extends Component<PropsType, StateType> {
         : 'Unable to add an item without productId';
       log.error(errorMessage);
     }
-  };
+  }
   handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
     const selection = [{ id, value: label, state, variantIds }];
     const pathToAll = ['baseProduct', 'variants', 'all'];
