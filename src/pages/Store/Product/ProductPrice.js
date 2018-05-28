@@ -29,9 +29,9 @@ const ProductPrice = ({
       <span styleName="price">
         {price} {currency}
       </span>
-      <button styleName={cashback > 0 ? '' : 'noCashback'}>
+      <span styleName={`cashback ${cashback > 0 ? '' : 'noCashback'}`}>
         {buttonText} {`${cashback}%`}
-      </button>
+      </span>
     </div>
   </div>
 );
