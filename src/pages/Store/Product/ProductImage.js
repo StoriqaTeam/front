@@ -74,7 +74,7 @@ class ProductImage extends Component<PropsType, StateType> {
                     fontSize: 16,
                   }}
                 >
-                  {`${Math.round(discount * 100)} %`}
+                  {`- ${Math.round(discount * 100)} %`}
                 </span>
               </span>
             ) : null}
