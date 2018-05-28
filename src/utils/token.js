@@ -1,6 +1,5 @@
 // @flow
 
-import Cookies from 'universal-cookie';
 import { pathOr } from 'ramda';
 import jwtDecode from 'jwt-decode';
 
@@ -37,13 +36,4 @@ const isTokenExpired = (
   return currentTimestamp - expiredAt > liveTime;
 };
 
-const getTokenFromCookies = (): ?string => {
-  const cookies = new Cookies();
-  // $FlowIgnoreMe
-  return pathOr(null, ['value'], cookies.get('__jwt'));
-};
-
-export default {
-  isTokenExpired,
-  getTokenFromCookies,
-};
+export default isTokenExpired;

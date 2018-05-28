@@ -143,7 +143,11 @@ class CartProduct extends PureComponent<PropsType> {
 
     return (
       <div styleName="container">
-        <button styleName="recycle" onClick={() => this.handleDelete()}>
+        <button
+          styleName="recycle"
+          onClick={() => this.handleDelete()}
+          data-test={`cart-product-${product.rawId}-delete`}
+        >
           <Icon type="basket" size={32} />
         </button>
         <div styleName="left-container">
@@ -168,7 +172,7 @@ class CartProduct extends PureComponent<PropsType> {
                 </div>
               ))}
             </div>
-            <ShowMore>
+            <ShowMore dataTest={`cart-product-${product.rawId}-showMore`}>
               <div styleName="delivery-container">
                 <div styleName="cart-product-title">Delivery and return</div>
                 <div styleName="half-width">
@@ -211,6 +215,7 @@ class CartProduct extends PureComponent<PropsType> {
               title="Quantity"
               value={
                 <Stepper
+                  dataTest={`product-${product.rawId}-quantity-stepper`}
                   value={quantity}
                   min={0}
                   max={9999}

@@ -58,3 +58,27 @@
   }
 }
 
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 30rem;
+  padding: 0.4rem;
+  background-color: $color_white;
+  .modalTitle {
+    font-family: $font_regular;
+    font-size: 2.5rem;
+  }
+  .modalButtonsContainer {
+    margin: 4rem 2rem 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: space-around;
+    width: 100%;
+    .modalOkButton {
+      margin-right: 2rem;
+    }
+  }
+}
+

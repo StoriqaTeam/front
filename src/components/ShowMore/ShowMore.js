@@ -10,6 +10,7 @@ import './ShowMore.scss';
 type PropsType = {
   height?: ?number, // max container height in rem (needed for animation)
   children?: any,
+  dataTest?: string,
 };
 
 type StateType = {
@@ -30,7 +31,11 @@ class ShowMore extends Component<PropsType, StateType> {
     const height = this.state.on ? this.props.height || 25 : 0;
     return (
       <div>
-        <button styleName="header" onClick={() => this.handleClick()}>
+        <button
+          styleName="header"
+          onClick={() => this.handleClick()}
+          data-test={this.props.dataTest}
+        >
           <div styleName="icon">
             <div styleName={cn({ on: this.state.on, off: !this.state.on })}>
               <Icon type="arrowExpand" size={16} inline />
