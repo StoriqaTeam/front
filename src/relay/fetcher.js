@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
+import isTokenExpired from 'utils/token';
 
 import { log } from 'utils';
 
@@ -87,6 +88,10 @@ export class ClientFetcher extends FetcherBase {
   // eslint-disable-next-line
   getJWTFromCookies() {
     const cookies = new Cookies();
+    const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
+    if (isTokenExpired(jwt)) {
+      cookies.remove('__jwt');
+    }
     return pathOr(null, ['value'], cookies.get('__jwt'));
   }
 

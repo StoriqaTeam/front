@@ -43,6 +43,15 @@ const STORES_FRAGMENT = graphql`
   }
 `;
 
+const HEADER_FRAGMENT = graphql`
+  fragment Header_me on User {
+    email
+    firstName
+    lastName
+    avatar
+  }
+`;
+
 const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
   pipe(
     pathOr([], ['edges']),
@@ -54,7 +63,6 @@ const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
   )(data);
 
 type PropsType = {
-  user: ?{},
   searchValue: string,
 };
 
@@ -62,6 +70,12 @@ type StateType = {
   cartCount: number,
   showModal: boolean,
   isSignUp: ?boolean,
+  userData: ?{
+    avatar: ?string,
+    email: ?string,
+    firstName: ?string,
+    lastName: ?string,
+  },
 };
 
 class Header extends Component<PropsType, StateType> {
@@ -69,6 +83,7 @@ class Header extends Component<PropsType, StateType> {
     cartCount: 0,
     showModal: false,
     isSignUp: false,
+    userData: null,
   };
 
   componentWillMount() {
@@ -84,11 +99,32 @@ class Header extends Component<PropsType, StateType> {
     });
     this.dispose = dispose;
     this.setState({ cartCount: getCartCount(snapshot.data) });
+
+    const meId = pathOr(
+      null,
+      ['me', '__ref'],
+      store.getSource().get('client:root'),
+    );
+    if (meId) {
+      const queryUser = HEADER_FRAGMENT.me();
+      const snapshotUser = store.lookup({
+        dataID: meId,
+        node: queryUser,
+      });
+      const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
+        this.setState({ userData: s.data });
+      });
+      this.disposeUser = disposeUser;
+      this.setState({ userData: snapshotUser.data });
+    }
   }
 
   componentWillUnmount() {
     if (this.dispose) {
       this.dispose();
+    }
+    if (this.disposeUser) {
+      this.disposeUser();
     }
   }
 
@@ -104,10 +140,11 @@ class Header extends Component<PropsType, StateType> {
   };
 
   dispose: () => void;
+  disposeUser: () => void;
 
   render() {
-    const { user, searchValue } = this.props;
-    const { showModal, isSignUp } = this.state;
+    const { searchValue } = this.props;
+    const { showModal, isSignUp, userData } = this.state;
     return (
       <header styleName="container">
         <Container>
@@ -172,8 +209,8 @@ class Header extends Component<PropsType, StateType> {
                   />
                 </div>
                 <div>
-                  {user ? (
-                    <UserDropdown user={user} />
+                  {userData ? (
+                    <UserDropdown user={userData} />
                   ) : (
                     <div styleName="authButtons">
                       <div
@@ -209,7 +246,7 @@ class Header extends Component<PropsType, StateType> {
           </Row>
         </Container>
         <Modal showModal={showModal} onClose={this.onCloseModal}>
-          <Authorization isSignUp={isSignUp} />
+          <Authorization isSignUp={isSignUp} onCloseModal={this.onCloseModal} />
         </Modal>
       </header>
     );

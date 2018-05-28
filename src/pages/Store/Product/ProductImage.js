@@ -74,11 +74,23 @@ class ProductImage extends Component<PropsType, StateType> {
                     fontSize: 16,
                   }}
                 >
-                  {`${Math.round(discount * 100)} %`}
+                  {`- ${Math.round(discount * 100)} %`}
                 </span>
               </span>
             ) : null}
-            <img src={!isEmpty(selected) ? selected : mainImage} alt="" />
+            <div
+              role="img"
+              style={{
+                backgroundImage: `url(${
+                  !isEmpty(selected) ? selected : mainImage
+                })`,
+                backgroundSize: 'contain',
+                width: '100%',
+                height: '100%',
+                backgroundPosition: 'center top',
+                backgroundRepeat: 'no-repeat',
+              }}
+            />
           </figure>
           <ImageDetail />
         </div>

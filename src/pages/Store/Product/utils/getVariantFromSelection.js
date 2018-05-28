@@ -13,32 +13,31 @@ import {
   propEq,
 } from 'ramda';
 
-import type {
-  VariantType,
-  ProductVariantType,
-  WidgetOptionType,
-} from '../types';
+import { formatPrice } from 'utils';
+
+import type { VariantType, ProductVariantType, SelectionType } from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
   const defaultImage: string =
     'https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png';
-  const mapIndexed: Function = addIndex(map);
+  const mapIndexed = addIndex(map);
   const makePhotos = (images: Array<string>) =>
     mapIndexed(
-      (image: string, index: string) => ({
+      (image: string, index: number) => ({
         id: `${index}`,
         image,
       }),
       images,
     );
-  /**
-   * @desc Applies the following formula (1 - discount) * price
-   */
-  const calcCrossedPrice = (discount: string | null, price: string) =>
-    isNil(discount) ? 0 : (1 - parseInt(discount, 10)) * parseInt(price, 10);
+
+  const calcCrossedPrice = (price: number, discount: ?number) =>
+    isNil(discount) ? 0 : price;
+
+  const calcPrice = (price: number, discount: ?number) =>
+    isNil(discount) ? price : formatPrice(price - price * discount);
 
   const insertPhotoMain = (
-    image: string,
+    image: string | null,
     photos: Array<{ id: string, image: string }>,
   ): Array<{ id: string, image: string }> => {
     if (!isNil(image) && photos.every(p => p !== image)) {
@@ -48,26 +47,27 @@ const setProductVariantValues = (variant: VariantType) => {
   };
   const {
     id,
+    rawId,
     photoMain,
     additionalPhotos,
-    // $FlowIgnoreMe
     price,
-    // $FlowIgnoreMe
     cashback,
-    // $FlowIgnoreMe
     discount,
+    description,
   } = variant;
+
   return {
     id,
-    price,
+    rawId,
+    price: calcPrice(price, discount),
     cashback: isNil(cashback) ? 0 : Math.round(cashback * 100),
     discount: isNil(discount) ? 0 : discount,
-    crossPrice: calcCrossedPrice(discount, price),
+    lastPrice: calcCrossedPrice(price, discount),
     photoMain: isNil(photoMain) ? defaultImage : photoMain,
     additionalPhotos: isNil(additionalPhotos)
       ? []
-      : // $FlowIgnoreMe
-        insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
+      : insertPhotoMain(photoMain, makePhotos(additionalPhotos)),
+    description,
   };
 };
 
@@ -77,14 +77,14 @@ const findVariant: (
   // $FlowIgnoreMe
   pipe(find(propEq('id')(variantId)), setProductVariantValues)(variants);
 
-const getVariantFromSelection: (
-  Array<WidgetOptionType>,
-  // $FlowIgnoreMe
-) => (Array<VariantType>) => ProductVariantType = selections => variants => {
+const getVariantFromSelection = (selections: Array<SelectionType>) => (
+  variants: Array<VariantType>,
+): ProductVariantType => {
   if (isEmpty(selections)) {
     // $FlowIgnoreMe
     return setProductVariantValues(head(variants));
   }
+  // $FlowIgnoreMe
   return pipe(
     // $FlowIgnoreMe
     map(({ variantIds }) => variantIds),

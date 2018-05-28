@@ -5,7 +5,6 @@ import { pathOr, omit, map, find } from 'ramda';
 
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
-import { log } from 'utils';
 
 import './Form.scss';
 
@@ -60,10 +59,6 @@ class SecondForm extends React.Component<PropsType, StateType> {
     nextProps: PropsType,
     prevState: StateType,
   ) => {
-    log.info('>>> Form 2 getDerivedStateFromProps: ', {
-      initialData: nextProps.initialData,
-      prevState,
-    });
     // $FlowIgnoreMe
     const store = pathOr(null, ['initialData', 'store'], nextProps);
     // $FlowIgnoreMe
@@ -74,7 +69,6 @@ class SecondForm extends React.Component<PropsType, StateType> {
       store,
       storeId,
     };
-    log.info('<<< Form 2 getDerivedStateFromProps: ', { newState });
     return newState;
   };
 
@@ -87,7 +81,6 @@ class SecondForm extends React.Component<PropsType, StateType> {
 
   handleOnSelectLanguage = (item: { id: string, label: string }) => {
     const { onChange } = this.props;
-    log.info('>>> Form2 handleOnSelectLanguage state', this.state);
     this.setState(
       {
         defaultLanguage: item.id,
@@ -102,7 +95,6 @@ class SecondForm extends React.Component<PropsType, StateType> {
 
   handleChangeAddressData = (addressData: AddressType) => {
     const { onChange } = this.props;
-    log.info('>>> Form2 handleChangeAddressData addressData', addressData);
     if (onChange && addressData) {
       onChange({
         ...this.state,

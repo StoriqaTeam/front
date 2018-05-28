@@ -21,6 +21,7 @@ type PropsType = {
   lastName: string,
   avatar: ?string,
   id: string,
+  provider: ?string,
 };
 
 class Menu extends PureComponent<PropsType> {
@@ -66,7 +67,14 @@ class Menu extends PureComponent<PropsType> {
   };
 
   render() {
-    const { activeItem, menuItems, firstName, lastName, avatar } = this.props;
+    const {
+      activeItem,
+      menuItems,
+      firstName,
+      lastName,
+      avatar,
+      provider,
+    } = this.props;
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
@@ -99,6 +107,16 @@ class Menu extends PureComponent<PropsType> {
         <div styleName="items">
           {menuItems.map(item => {
             const isActive = item.id === activeItem;
+            if (
+              (item.id === 'security' && provider !== 'EMAIL') ||
+              item.id === 'kyc'
+            ) {
+              return (
+                <div key={item.id} styleName="item">
+                  {item.title}
+                </div>
+              );
+            }
             return (
               <Link
                 key={item.id}

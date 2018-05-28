@@ -22,6 +22,7 @@ import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 import { generateSessionId } from 'utils';
+import isTokenExpired from 'utils/token';
 
 import { Error404, Error } from '../src/pages/Errors';
 
@@ -107,7 +108,12 @@ app.use(
 
     const store = createReduxStore(new ServerProtocol(req.url));
     const jwtCookie = req.universalCookies.get('__jwt');
-    const jwt = typeof jwtCookie === 'object' && jwtCookie.value;
+    let jwt = typeof jwtCookie === 'object' && jwtCookie.value;
+    if (isTokenExpired(jwt)) {
+      req.universalCookies.remove('__jwt');
+      jwt = null;
+    }
+
     const fetcher = new ServerFetcher(
       process.env.REACT_APP_GRAPHQL_ENDPOINT,
       jwt,

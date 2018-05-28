@@ -26,6 +26,19 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 667px);
+  height: calc(100vh - 83.375rem);
   justify-content: center;
+}
+
+.rating {
+  margin-bottom: 2.375rem;
+}
+
+.line {
+  background: #efefef;
+  height: 1px;
+  left: -2.125rem;
+  margin: 3.375rem 0;
+  position: relative;
+  width: calc(100% + 2.125rem);
 }

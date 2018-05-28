@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { map, concat, filter, complement, propEq, find } from 'ramda';
 
-import CharacteristicItem from 'pages/Manage/Store/Product/Variants/Table/Form/CharacteristicItem';
+import { CharacteristicItem } from './CharacteristicItem';
 
 import './AttributesForm.scss';
 
@@ -20,7 +20,7 @@ export type AttributeType = {
 
 export type AttrValueType = {
   attrId: number,
-  value: string,
+  value: ?string,
   metaField?: ?string,
 };
 
@@ -31,35 +31,36 @@ type PropsType = {
 };
 
 class AttributesForm extends PureComponent<PropsType> {
-  handleCharectiristicItemChange = (data: {
-    attrId: number,
-    value: string,
-    metaField?: string,
-  }) => {
+  handleCharectiristicItemChange = (
+    data: ?{
+      attrId: number,
+      value: string,
+      metaField?: string,
+    },
+  ) => {
     const notChangedAttrs =
-      filter(complement(propEq('attrId', data.attrId)), this.props.values) ||
+      (data &&
+        filter(complement(propEq('attrId', data.attrId)), this.props.values)) ||
       [];
-    // $FlowIgnoreMe
-    const result = concat([data], notChangedAttrs);
-    this.props.onChange(result);
+    const result =
+      data && data.value
+        ? // $FlowIgnoreMe
+          concat([data], notChangedAttrs)
+        : notChangedAttrs;
+    this.props.onChange(data && data.value ? result : notChangedAttrs);
   };
 
   renderCharacteristics = map((item: AttributeType) => {
     const value = find(propEq('attrId', item.rawId), this.props.values);
-    if (value) {
-      return (
-        <div key={item.id} styleName="itemWrapper">
-          <CharacteristicItem
-            // $FlowIgnoreMe
-            attribute={item}
-            onSelect={this.handleCharectiristicItemChange}
-            // $FlowIgnoreMe
-            value={value}
-          />
-        </div>
-      );
-    }
-    return null;
+    return (
+      <div key={item.id} styleName="itemWrapper">
+        <CharacteristicItem
+          attribute={item}
+          onSelect={this.handleCharectiristicItemChange}
+          value={value}
+        />
+      </div>
+    );
   });
 
   render() {

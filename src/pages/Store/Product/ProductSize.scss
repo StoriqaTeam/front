@@ -15,7 +15,7 @@ h4 {
   height: 2.625rem;
   letter-spacing: 1.2px;
   line-height: normal;
-  margin: 15px 0;
+  margin: 1.875rem 0;
   text-align: left;
   text-transform: uppercase;
   width: 9.75rem;
@@ -30,13 +30,13 @@ h4 {
   align-self: center;
   border: solid 1px $gray_border;
   color: #a1a1a1;
-  font-size: 16px;
+  font-size: 2rem;
   height: 5rem;
-  line-height: 36px;
+  line-height: 4.5rem;
   opacity: 1;
   position: relative;
   text-align: center;
-  width: 58px;
+  width: 7.25rem;
 
   &.clicked {
     border: 1px solid $color_primary !important;
@@ -56,7 +56,7 @@ h4 {
 
 }
 
-.disable {
+.disabled {
   opacity: 0.3;
 }
 

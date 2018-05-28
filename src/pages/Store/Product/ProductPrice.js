@@ -6,7 +6,7 @@ import './ProductPrice.scss';
 
 type PropsType = {
   currency?: string,
-  crossedPrice: number,
+  lastPrice: number,
   price: string,
   cashback: number,
   buttonText?: string,
@@ -14,24 +14,24 @@ type PropsType = {
 
 const ProductPrice = ({
   currency,
-  crossedPrice,
+  lastPrice,
   price,
   cashback,
   buttonText,
 }: PropsType) => (
   <div styleName="container">
-    {crossedPrice > 0 ? (
-      <span styleName="crossedPrice">
-        {crossedPrice} {currency}
+    {lastPrice > 0 ? (
+      <span styleName="lastPrice">
+        {lastPrice} {currency}
       </span>
     ) : null}
     <div styleName="stq">
       <span styleName="price">
         {price} {currency}
       </span>
-      <button styleName={cashback > 0 ? '' : 'noCashback'}>
+      <span styleName={`cashback ${cashback > 0 ? '' : 'noCashback'}`}>
         {buttonText} {`${cashback}%`}
-      </button>
+      </span>
     </div>
   </div>
 );

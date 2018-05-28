@@ -14,6 +14,27 @@ const mutation = graphql`
       vendorCode
       cashback
       price
+      attributes {
+        attrId
+        value
+        metaField
+        attribute {
+          id
+          rawId
+          name {
+            lang
+            text
+          }
+          metaField {
+            values
+            translatedValues {
+              translations {
+                text
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;

@@ -8,6 +8,7 @@ import { pathOr } from 'ramda';
 import Logo from 'components/Icon/svg/logo.svg';
 import { VerifyEmailMutation } from 'relay/mutations';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { Spinner } from 'components/common/Spinner';
 import { log } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -101,10 +102,7 @@ class VerifyEmail extends Component<PropsType, StateType> {
             Loading...<br />Please wait.
           </span>
           <span styleName="description">- Storiqa team</span>
-          <div styleName="spinner">
-            <div styleName="double-bounce1" />
-            <div styleName="double-bounce2" />
-          </div>
+          <Spinner />
         </div>
       </div>
     );
