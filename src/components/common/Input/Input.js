@@ -23,6 +23,7 @@ type PropsType = {
   limit: ?number,
   type?: string,
   fullWidth?: boolean,
+  postfix: ?string,
 };
 
 type StateType = {
@@ -105,6 +106,7 @@ class Input extends Component<PropsType, StateType> {
       isUrl,
       limit,
       fullWidth,
+      postfix,
     } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
@@ -130,7 +132,10 @@ class Input extends Component<PropsType, StateType> {
           </div>
         )}
         <div styleName="input">
-          {this.renderInput()}
+          <div styleName="inputContent">
+            {this.renderInput()}
+            {postfix && <span styleName="postfix">{postfix}</span>}
+          </div>
           <hr />
         </div>
         {errors &&

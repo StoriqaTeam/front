@@ -13,6 +13,8 @@ import {
   propEq,
 } from 'ramda';
 
+import { formatPrice } from 'utils';
+
 import type { VariantType, ProductVariantType, SelectionType } from '../types';
 
 const setProductVariantValues = (variant: VariantType) => {
@@ -27,11 +29,12 @@ const setProductVariantValues = (variant: VariantType) => {
       }),
       images,
     );
-  /**
-   * @desc Applies the following formula (1 - discount) * price
-   */
-  const calcCrossedPrice = (discount: number | null, price: number) =>
-    isNil(discount) ? 0 : (1 - parseInt(discount, 10)) * parseInt(price, 10);
+
+  const calcCrossedPrice = (price: number, discount: ?number) =>
+    isNil(discount) ? 0 : price;
+
+  const calcPrice = (price: number, discount: ?number) =>
+    isNil(discount) ? price : formatPrice(price - price * discount);
 
   const insertPhotoMain = (
     image: string | null,
@@ -52,13 +55,14 @@ const setProductVariantValues = (variant: VariantType) => {
     discount,
     description,
   } = variant;
+
   return {
     id,
     rawId,
-    price,
+    price: calcPrice(price, discount),
     cashback: isNil(cashback) ? 0 : Math.round(cashback * 100),
     discount: isNil(discount) ? 0 : discount,
-    crossPrice: calcCrossedPrice(discount, price),
+    lastPrice: calcCrossedPrice(price, discount),
     photoMain: isNil(photoMain) ? defaultImage : photoMain,
     additionalPhotos: isNil(additionalPhotos)
       ? []

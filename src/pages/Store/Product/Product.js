@@ -11,6 +11,7 @@ import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
+import Rating from 'components/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -90,7 +91,7 @@ class Product extends Component<PropsType, StateType> {
       price: 0,
       cashback: null,
       discount: null,
-      crossPrice: null,
+      lastPrice: null,
     },
   };
   componentDidMount() {
@@ -194,7 +195,7 @@ class Product extends Component<PropsType, StateType> {
       );
     }
     const {
-      baseProduct: { name, shortDescription, longDescription },
+      baseProduct: { name, shortDescription, longDescription, store },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
@@ -222,9 +223,12 @@ class Product extends Component<PropsType, StateType> {
                 widgets={widgets}
                 onWidgetClick={this.handleWidget}
               >
+                <div styleName="rating">
+                  <Rating rating={store.rating} />
+                </div>
                 <ProductPrice
                   price={productVariant.price}
-                  crossPrice={productVariant.crossPrice}
+                  lastPrice={productVariant.lastPrice}
                   cashback={productVariant.cashback}
                 />
               </ProductDetails>
@@ -241,6 +245,7 @@ class Product extends Component<PropsType, StateType> {
                   Add to cart
                 </Button>
               </div>
+              <div styleName="line" />
               <ProductStore />
               {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>

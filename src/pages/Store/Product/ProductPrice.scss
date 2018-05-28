@@ -7,18 +7,18 @@
 
   span.cashback {
     background-color: $color_primary;
-    border-radius: 2px;
+    border-radius: 0.25rem;
     color: #ffffff;
     font-family: Roboto;
     font-size: 11px;
     font-stretch: normal;
     font-style: normal;
     font-weight: bold;
-    height: 18px;
-    line-height: 18px;
+    height: 2.25rem;
+    line-height: 2.25rem;
     margin-left: 1.875rem;
     text-align: center;
-    width: 103px;
+    width: 12.875rem;
   }
 
   .noCashback {
@@ -31,10 +31,10 @@
   align-items: center;
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 38px;
+  margin-bottom: 4.75rem;
 }
 
-.crossedPrice {
+.lastPrice {
   color: #9a9a9a;
   font-size: 1.75rem;
   font-stretch: normal;
