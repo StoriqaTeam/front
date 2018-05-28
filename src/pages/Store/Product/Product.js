@@ -98,8 +98,8 @@ class Product extends Component<PropsType, StateType> {
       setTimeout(() => {
         // HACK because 'window.scrollTo(0, 0)' doesn't work
         // $FlowFixMe
-        document.getElementById('root').scrollTop = 0
-      }, 2);
+        document.getElementById('root').scrollTop = 0;
+      }, 0);
     }
   }
   handleAddToCart(id: number): void {
