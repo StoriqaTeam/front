@@ -245,6 +245,7 @@ class Product extends Component<PropsType, StateType> {
                   Add to cart
                 </Button>
               </div>
+              <div styleName="line" />
               <ProductStore />
               {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>

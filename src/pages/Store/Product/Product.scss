@@ -33,3 +33,12 @@
 .rating {
   margin-bottom: 2.375rem;
 }
+
+.line {
+  background: #efefef;
+  height: 1px;
+  left: -2.125rem;
+  margin: 3.375rem 0;
+  position: relative;
+  width: calc(100% + 2.125rem);
+}

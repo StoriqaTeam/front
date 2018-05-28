@@ -2,7 +2,6 @@
 
 .container {
   padding-left: 1.625rem;
-  padding-top: 22px;
 }
 
 .storeInfo {
@@ -18,7 +17,7 @@
 .iconsWrapper {
   display: flex;
   justify-content: space-between;
-  max-width: 60%;
+  max-width: 38.125rem;
 }
 
 .storeName {
@@ -46,9 +45,9 @@
 
 .iconInfoText {
   font-size: 16px;
-  margin: 0 13px;
+  margin-left: 13px;
   position: relative;
-  top: -5px;
+  top: -3px;
 }
 
 .chatText {
@@ -57,10 +56,10 @@
 
 .separator {
   width: 1px;
-  border-left: 1px solid $color_grey_bg;
-  height: 25px;
+  background: $color_grey_bg;
+  height: 27px;
   position: relative;
-  top: 20px;
+  top: 17px;
 }
 
 .image {
