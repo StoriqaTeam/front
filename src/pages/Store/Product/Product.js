@@ -116,6 +116,13 @@ class Product extends Component<PropsType, StateType> {
           if (errors) {
             log.debug('Errors: ', errors);
           }
+          if (!errors && response) {
+            this.props.showAlert({
+              type: 'success',
+              text: 'Product added to cart!',
+              link: { text: 'Ok.' },
+            });
+          }
         },
         onError: error => {
           log.error('Error in IncrementInCart mutation');
@@ -141,7 +148,7 @@ class Product extends Component<PropsType, StateType> {
         : 'Unable to add an item without productId';
       log.error(errorMessage);
     }
-  }
+  };
   handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
     const selection = [{ id, value: label, state, variantIds }];
     const pathToAll = ['baseProduct', 'variants', 'all'];
@@ -229,6 +236,7 @@ class Product extends Component<PropsType, StateType> {
                   wireframe
                   big
                   onClick={() => this.handleAddToCart(productVariant.rawId)}
+                  dataTest="product-addToCart"
                 >
                   Add to cart
                 </Button>

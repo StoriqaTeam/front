@@ -89,7 +89,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
           <Input
             id="name"
             value={name}
-            label="Name"
+            label="Store name"
             onChange={this.handleOnChange}
             fullWidth
           />

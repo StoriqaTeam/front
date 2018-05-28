@@ -129,7 +129,7 @@ class CartTotal extends Component<PropsType, StateType> {
           <div styleName="cart-total-title">Total</div>
           <div styleName="payments-container">
             <div styleName="value">Payment methods</div>
-            <div styleName="payments-group">
+            {/* <div styleName="payments-group">
               <div styleName="title">My cards</div>
               <div styleName="payment-option">
                 <Checkbox isChecked={false} />
@@ -154,7 +154,7 @@ class CartTotal extends Component<PropsType, StateType> {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div styleName="payments-group">
               <div styleName="title">Crypto payments</div>
@@ -217,7 +217,7 @@ class CartTotal extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="checkout">
-            <Button disabled big>
+            <Button disabled={!totalCount} big>
               Checkout
             </Button>
           </div>
