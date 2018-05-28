@@ -182,7 +182,7 @@
   position: absolute;
   top: 3rem;
   left: 0;
-  //padding: 0.5rem 0.5rem 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
   border-radius: 0.25rem;
   background-color: $color_white;
   box-shadow: $shadow_1;
@@ -233,7 +233,6 @@
 .itemsWrap {
   position: relative;
   max-height: 10rem;
-  padding: 0.5rem 0.5rem 0.5rem 0;
   overflow-y: auto;
 }
 
@@ -247,7 +246,7 @@
   height: 2rem;
   padding: 0 1rem;
   text-align: left;
-  line-height: 2.25rem;
+  line-height: 2rem;
   white-space: nowrap;
   cursor: pointer;
   transition: all .3s ease;
@@ -261,7 +260,7 @@
 .forSearch .item,
 .isBirthdate .item {
   height: 3rem;
-  line-height: 3.25rem;
+  line-height: 3rem;
   font-size: 14px;
 }
 
