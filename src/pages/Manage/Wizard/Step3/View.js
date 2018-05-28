@@ -4,13 +4,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, pathOr, head, map, addIndex, isEmpty } from 'ramda';
 
-// import { Select } from 'components/common/Select';
-// import { AddressForm } from 'components/AddressAutocomplete';
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
-import { getNameText, log } from 'utils';
+import { getNameText } from 'utils';
 
+import type { BaseProductNodeType } from '../Wizard';
 import Form from './Form';
 import Modal from './Modal';
 
@@ -45,15 +44,14 @@ type ProductType = {
 };
 
 type PropsType = {
-  // formStateData: any,
   aditionalPhotosMap: any,
-  onChange: (data: { [name: string]: string }) => void,
+  onChange: (data: { [name: string]: any }) => void,
   onUpload: (type: string, e: any) => Promise<*>,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
   onSave: () => void,
   onClearProductState: () => void,
-  // onChangeAttrs: () => void,
+  formStateData: BaseProductNodeType,
 };
 
 type StateType = {
@@ -68,13 +66,11 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   prepareAttributesValues = (
     attributes: Array<{
       value: string,
-      attribute: { rowId: number },
+      attribute: { rawId: number },
       metaField: ?string,
     }>,
-  ) => {
-    // debugger;
-    // log.info('>>> View form 3 prepareAttributesValues: ', { attributes });
-    return map(
+  ) =>
+    map(
       item => ({
         value: item.value,
         attrId: item.attribute.rawId,
@@ -82,7 +78,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       }),
       attributes || [],
     );
-  };
 
   handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
@@ -90,6 +85,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const shortDescription = item.shortDescription
       ? getNameText(item.shortDescription)
       : '';
+    // $FlowIgnoreMe
     const productsEdges = pathOr(null, ['products', 'edges'], item);
     const productDataFromItem = head(productsEdges)
       ? head(productsEdges).node
@@ -106,13 +102,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       name,
       shortDescription,
     };
-    // log.info('>>> Form 3 View handleOnShowForm item: ', {
-    //   productData: item,
-    //   formStateData,
-    //   prepareStateObj,
-    // });
     return () => {
-      // log.info('^^^ handleOnShowForm show form');
       onChange(prepareStateObj);
       this.setState({ showForm: true });
     };
@@ -135,18 +125,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       formStateData,
       aditionalPhotosMap,
       onChange,
-      // onChangeAttrs,
       products,
       onUpload,
       onSave,
     } = this.props;
     const { showForm } = this.state;
     const productsArr = map(item => item.node, products);
-    // log.info('>>> View Form 3 render: ', {
-    //   formStateData,
-    //   products,
-    //   productsArr,
-    // });
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
@@ -226,7 +210,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             categories={this.context.directories.categories}
             aditionalPhotosMap={aditionalPhotosMap}
             onChange={onChange}
-            // onChangeAttrs={onChangeAttrs}
             onUpload={onUpload}
             onSave={onSave}
             onClose={this.handleOnCloseModal}

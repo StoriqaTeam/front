@@ -57,6 +57,12 @@
 
 .input {
   position: relative;
+  .inputContent {
+    display: flex;
+    .postfix {
+      margin: 0 2rem;
+    }
+  }
 }
 
 .input input {

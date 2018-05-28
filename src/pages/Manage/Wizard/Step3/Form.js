@@ -1,9 +1,9 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { map, pathOr, whereEq } from 'ramda';
 
-import { findCategory, log } from 'utils';
+import { findCategory } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
@@ -12,7 +12,8 @@ import { Button } from 'components/common/Button';
 import AttributesForm from './AttributesForm';
 import Uploaders from './Uploaders';
 
-import type { AttributeType, AttrValueType } from './AttributesForm';
+import type { AttrValueType } from './AttributesForm';
+import type { BaseProductNodeType } from '../Wizard';
 
 import './Form.scss';
 
@@ -28,88 +29,14 @@ type PropsType = {
   onChange: ({
     [name: string]: any,
   }) => void,
-  data: {
-    storeId: ?number,
-    currencyId: number,
-    categoryId: ?number,
-    name: string,
-    shortDescription: string,
-    product: {
-      baseProductId: ?number,
-      vendorCode: ?string,
-      photoMain: string,
-      additionalPhotos: Array<string>,
-      price: ?number,
-      cashback: ?number,
-    },
-    attributes: Array<AttrValueType>,
-  },
+  data: BaseProductNodeType,
   aditionalPhotosMap: any,
   onUpload: (type: string, e: any) => Promise<*>,
   onSave: () => void,
   onClose: () => void,
 };
 
-class ThirdForm extends Component<PropsType, StateType> {
-  // constructor(props: PropsType) {
-  //   super(props);
-
-  //   // const { categoryId, attributes } = props.data;
-
-  //   // const catObj = findCategory(
-  //   //   whereEq({ rawId: parseInt(categoryId, 10) }),
-  //   //   props.categories,
-  //   // ) || { getAttributes: [] };
-
-  //   // this.state = {
-  //   //   attrValues: attributes.length > 0 ? attributes : this.prepareDefaultValuesForAttributes(catObj.getAttributes),
-  //   //   // attrValues: this.prepareDefaultValuesForAttributes(catObj.getAttributes),
-  //   // };
-  // }
-
-  // componentWillReceiveProps(nextProps: PropsType) {
-  //   if (nextProps.data.categoryId !== this.props.data.categoryId) {
-  //     const {
-  //       data: { categoryId },
-  //     } = nextProps;
-  //     const catObj = findCategory(
-  //       whereEq({ rawId: parseInt(categoryId, 10) }),
-  //       nextProps.categories,
-  //     ) || { getAttributes: [] };
-  //     this.setState({
-  //       attrValues: this.prepareDefaultValuesForAttributes(
-  //         catObj.getAttributes,
-  //       ),
-  //     });
-  //   }
-  // }
-
-  // defaultValueForAttribute = (attribute: AttributeType): AttrValueType => {
-  //   const noValueString = 'No value';
-  //   let valueStr = noValueString;
-  //   const {
-  //     metaField: { translatedValues, values },
-  //   } = attribute;
-  //   if (values && values.length > 0) {
-  //     valueStr = values[0] || noValueString;
-  //   } else if (translatedValues.length > 0) {
-  //     // $FlowIgnoreMe
-  //     valueStr = pathOr(
-  //       noValueString,
-  //       [0, 'translations', 0, 'text'],
-  //       translatedValues,
-  //     );
-  //   }
-  //   return {
-  //     attrId: attribute.rawId,
-  //     value: valueStr,
-  //   };
-  // };
-
-  // prepareDefaultValuesForAttributes = (
-  //   attrs: Array<AttributeType>,
-  // ): Array<AttrValueType> => map(this.defaultValueForAttribute, attrs);
-
+class ThirdForm extends PureComponent<PropsType> {
   // TODO: remove useless function
   handleChangeBaseProductState = (e: any) => {
     const { data } = this.props;
@@ -137,13 +64,12 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
-    // log.info('>>> Form 3 handleAttributesChange new attrs values: ', attrs);
     const { onChange } = this.props;
     onChange({ attributes: attrs });
   };
 
   prepareValuesForAttributes = (
-    attributes: Array<{ value: string, attribute: { rowId: number } }>,
+    attributes: Array<{ value: string, attribute: { rawId: number } }>,
   ) =>
     map(
       item => ({ value: item.value, attrId: item.attribute.rawId }),
@@ -158,7 +84,6 @@ class ThirdForm extends Component<PropsType, StateType> {
       !data.categoryId ||
       !data.product.price ||
       !data.product.vendorCode;
-    // console.log({data , isNotReady })
     if (isNotReady) {
       return true;
     }
@@ -166,13 +91,11 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   renderAttributes = () => {
-    // log.info('>>> Form 3 renderAttributes');
     const { categoryId, attributes } = this.props.data;
     const catObj = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       this.props.categories,
     );
-    // log.info('^^^ Form 3 renderAttributes: ', { catObj, attributes });
     return (
       catObj &&
       catObj.getAttributes && (
@@ -181,7 +104,6 @@ class ThirdForm extends Component<PropsType, StateType> {
           <div styleName="attributesForm">
             <AttributesForm
               attributes={catObj.getAttributes}
-              // values={this.prepareValuesForAttributes(attributes)}
               values={attributes}
               onChange={this.handleAttributesChange}
             />
@@ -195,17 +117,6 @@ class ThirdForm extends Component<PropsType, StateType> {
     const { data, aditionalPhotosMap, onSave, onClose } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
-    // log.info('>>> Form 3 render: ', {
-    //   data,
-    //   aditionalPhotosMap,
-    //   categoryId,
-    // });
-
-    const cashbackCalc =
-      parseInt(data.product.cashback, 10) < 0
-        ? parseInt(data.product.cashback, 10) * 100
-        : data.product.cashback;
-
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">
@@ -260,8 +171,8 @@ class ThirdForm extends Component<PropsType, StateType> {
                     onChange={this.handleChangeProductState}
                     fullWidth
                     type="number"
+                    postfix="STQ"
                   />
-                  {/* <span styleName="">STQ</span> */}
                 </div>
                 <div styleName="productState">
                   <Input
@@ -281,6 +192,7 @@ class ThirdForm extends Component<PropsType, StateType> {
                     onChange={this.handleChangeProductState}
                     fullWidth
                     type="number"
+                    postfix="%"
                   />
                   {/* <span styleName="">STQ</span> */}
                 </div>

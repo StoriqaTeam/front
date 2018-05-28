@@ -106,6 +106,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
     // : emptyItem;
     // : items;
     // const { metaField: characteristicImg } = this.props.value;
+    // $FlowIgnoreMe
     const characteristicImg = pathOr('', ['metaField'], this.props.value);
     // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], attribute);

@@ -3,8 +3,6 @@
 import React, { PureComponent } from 'react';
 import { map, concat, filter, complement, propEq, find } from 'ramda';
 
-import { log } from 'utils';
-
 import { CharacteristicItem } from './CharacteristicItem';
 
 import './AttributesForm.scss';
@@ -22,7 +20,7 @@ export type AttributeType = {
 
 export type AttrValueType = {
   attrId: number,
-  value: string,
+  value: ?string,
   metaField?: ?string,
 };
 
@@ -40,49 +38,33 @@ class AttributesForm extends PureComponent<PropsType> {
       metaField?: string,
     },
   ) => {
-    // log.info('>>> AttributeForm handleCharectiristicItemChange: ', { data });
     const notChangedAttrs =
-      filter(complement(propEq('attrId', data.attrId)), this.props.values) ||
+      (data &&
+        filter(complement(propEq('attrId', data.attrId)), this.props.values)) ||
       [];
-    // $FlowIgnoreMe
-    const result = data.value
-      ? concat([data], notChangedAttrs)
-      : notChangedAttrs;
-    this.props.onChange(
-      data.value !== 'NotSelected' ? result : notChangedAttrs,
-    );
+    const result =
+      data && data.value
+        ? // $FlowIgnoreMe
+          concat([data], notChangedAttrs)
+        : notChangedAttrs;
+    this.props.onChange(data && data.value ? result : notChangedAttrs);
   };
 
   renderCharacteristics = map((item: AttributeType) => {
     const value = find(propEq('attrId', item.rawId), this.props.values);
-    // log.info('>>> AttributesForm renderCharacteristics: ', {
-    //   item,
-    //   value,
-    //   values: this.props.values,
-    // });
-    // if (value) {
     return (
       <div key={item.id} styleName="itemWrapper">
         <CharacteristicItem
-          // $FlowIgnoreMe
           attribute={item}
           onSelect={this.handleCharectiristicItemChange}
-          // $FlowIgnoreMe
           value={value}
         />
       </div>
     );
-    // }
-    // return null;
   });
 
   render() {
-    const { attributes, values } = this.props;
-    // const attributesWithEmpty = [
-    //   { id: 'notSelected', rawId: 0, name: [{ text: 'Not selected' }] }, // for empty value
-    //   ...attributes,
-    // ];
-    // log.info('>>> AttributesForm render: ', { attributes, values });
+    const { attributes } = this.props;
     return this.renderCharacteristics(attributes);
   }
 }
