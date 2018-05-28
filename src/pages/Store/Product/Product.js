@@ -90,7 +90,7 @@ class Product extends Component<PropsType, StateType> {
       price: 0,
       cashback: null,
       discount: null,
-      crossPrice: null,
+      lastPrice: null,
     },
   };
   componentDidMount() {
@@ -224,7 +224,7 @@ class Product extends Component<PropsType, StateType> {
               >
                 <ProductPrice
                   price={productVariant.price}
-                  crossPrice={productVariant.crossPrice}
+                  lastPrice={productVariant.lastPrice}
                   cashback={productVariant.cashback}
                 />
               </ProductDetails>
