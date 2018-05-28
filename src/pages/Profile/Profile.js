@@ -70,6 +70,7 @@ class Profile extends Component<PropsType, StateType> {
               activeItem={activeItem}
               firstName={me.firstName || ''}
               lastName={me.lastName || ''}
+              provider={me.provider || null}
             />
           </Col>
           <Col size={10}>
@@ -99,6 +100,7 @@ export default createFragmentContainer(
       lastName
       birthdate
       gender
+      provider
       deliveryAddresses {
         rawId
         id

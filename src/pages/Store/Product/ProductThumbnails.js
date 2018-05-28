@@ -13,6 +13,7 @@ import type { WidgetOptionType } from './types';
 type PropsType = {
   /* eslint-disable react/no-unused-prop-types */
   isFirstSelected: boolean,
+  isReset: boolean,
   title?: string,
   options: Array<WidgetOptionType>,
   row?: boolean,
@@ -24,13 +25,26 @@ type StateType = {
 };
 
 class ProductThumbnails extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): StateType | null {
+    const { isReset, isFirstSelected } = nextProps;
+    if (isReset) {
+      return {
+        selected: isFirstSelected ? 0 : null,
+      };
+    }
+    return prevState;
+  }
   static defaultProps = {
     title: '',
     row: false,
+    isReset: false,
     isFirstSelected: false,
   };
   state = {
-    selected: 0,
+    selected: null,
   };
   handleClick = (option: WidgetOptionType, index: number): void => {
     const { onClick } = this.props;
@@ -44,7 +58,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     );
   };
   render() {
-    const { options, row, title, isFirstSelected } = this.props;
+    const { options, row, title } = this.props;
     const { selected } = this.state;
     const mapOptions = (option, index) => (
       <button
@@ -55,9 +69,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           <img
             styleName={classNames(
               {
-                clicked:
-                  option.state === 'selected' ||
-                  (isFirstSelected && selected === index),
+                clicked: option.state === 'selected' || selected === index,
               },
               {
                 disabled: option.state === 'disabled',
