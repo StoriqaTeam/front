@@ -11,6 +11,7 @@ import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
+import Rating from 'components/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -90,13 +91,21 @@ class Product extends Component<PropsType, StateType> {
       price: 0,
       cashback: null,
       discount: null,
-      crossPrice: null,
+      lastPrice: null,
     },
   };
-
-  handleAddToCart = (id: number): void => {
+  componentDidMount() {
+    if (process.env.BROWSER) {
+      setTimeout(() => {
+        // HACK because 'window.scrollTo(0, 0)' doesn't work
+        // $FlowFixMe
+        document.getElementById('root').scrollTop = 0;
+      }, 0);
+    }
+  }
+  handleAddToCart(id: number): void {
     const { widgets } = this.state;
-    if (id && isSelected(widgets)) {
+    if ((id && isSelected(widgets)) || (id && widgets.length === 0)) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -140,7 +149,7 @@ class Product extends Component<PropsType, StateType> {
         : 'Unable to add an item without productId';
       log.error(errorMessage);
     }
-  };
+  }
   handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
     const selection = [{ id, value: label, state, variantIds }];
     const pathToAll = ['baseProduct', 'variants', 'all'];
@@ -186,7 +195,7 @@ class Product extends Component<PropsType, StateType> {
       );
     }
     const {
-      baseProduct: { name, shortDescription, longDescription },
+      baseProduct: { name, shortDescription, longDescription, store },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
@@ -214,9 +223,12 @@ class Product extends Component<PropsType, StateType> {
                 widgets={widgets}
                 onWidgetClick={this.handleWidget}
               >
+                <div styleName="rating">
+                  <Rating rating={store.rating} />
+                </div>
                 <ProductPrice
                   price={productVariant.price}
-                  crossPrice={productVariant.crossPrice}
+                  lastPrice={productVariant.lastPrice}
                   cashback={productVariant.cashback}
                 />
               </ProductDetails>
@@ -233,6 +245,7 @@ class Product extends Component<PropsType, StateType> {
                   Add to cart
                 </Button>
               </div>
+              <div styleName="line" />
               <ProductStore />
               {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>

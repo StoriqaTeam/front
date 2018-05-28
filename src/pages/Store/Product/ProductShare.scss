@@ -1,20 +1,20 @@
 @import "../../../styles/variables";
 
-$icon-size: 20px;
+$icon-size: 2.5rem;
 $border-color: #efefef;
 
 .container {
   background: $color_white;
-  border-top:1px solid $border-color;
-  border-right:1px solid $border-color;
-  border-bottom:1px solid $border-color;
-  border-left:1px solid transparent;
+  border-top: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+  border-left: 1px solid transparent;
   display: flex;
   justify-content: space-between;
 }
 
 .socialIcons {
-  padding: 36px;
+  padding: 4.5rem;
   display: flex;
   justify-content: flex-start;
 
@@ -30,7 +30,7 @@ $border-color: #efefef;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 34px;
+  padding: 0 4.25rem;
   svg {
     height: $icon-size;
     width: $icon-size;

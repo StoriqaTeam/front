@@ -8,7 +8,7 @@
 
   &.scroll-x {
     overflow-x: scroll;
-    max-width: 495px;
+    max-width: 61.875rem;
   }
 }
 
@@ -16,15 +16,15 @@
   display: flex;
 
   img[src] {
-    border-radius: 4px;
-    height: 80px;
+    border-radius: 0.5rem;
+    height: 10rem;
     // https://css-tricks.com/almanac/properties/o/object-fit/
     object-fit: cover;
-    width: 80px;
+    width: 10rem;
   }
 
   .clicked {
-    border: 2px solid $color_primary;
+    border: 0.25rem solid $color_primary;
   }
 
 }
