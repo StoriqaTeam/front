@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { head, last, slice, append, prepend } from 'ramda';
+import { head, last, slice, append, prepend, propEq, findIndex } from 'ramda';
 
 type PropsType = {
   slidesToShow: number,
@@ -21,6 +21,7 @@ type StateType = {
   isTransition: boolean,
   slideWidth: number,
   isClick: boolean,
+  previewLength: number,
 };
 
 export default (OriginalComponent: any) =>
@@ -34,6 +35,7 @@ export default (OriginalComponent: any) =>
       isTransition: false,
       slideWidth: 0,
       isClick: false,
+      previewLength: 3,
     };
 
     componentDidMount() {
@@ -87,6 +89,33 @@ export default (OriginalComponent: any) =>
     refreshTimer: TimeoutID;
     originalComponentElement: Element;
 
+    cropChildren = (direction?: string) => {
+      const { children, slidesToShow } = this.props;
+      const { children: stateChildren, totalSlidesAmount, previewLength } = this.state;
+      if (!direction) {
+        const firstSevenItems = slice(0, slidesToShow + previewLength, children);
+        this.setState({ children: firstSevenItems });
+      }
+      if (direction === 'prev') {
+        // $FlowIgnoreMe
+        const headKey = head(stateChildren).key;
+        const headPositionIdx = findIndex(propEq('key', headKey))(children);
+        const newFirstItem = children[headPositionIdx !== 0 ? headPositionIdx - 1 : totalSlidesAmount - 1];
+        const slicedChildren = slice(0, 6, stateChildren);
+        const newChildren = prepend(newFirstItem, slicedChildren);
+        this.setState({ children: newChildren });
+      }
+      if (direction === 'next') {
+        // $FlowIgnoreMe
+        const lastKey = last(stateChildren).key;
+        const lastPositionIdx = findIndex(propEq('key', lastKey))(children);
+        const newLastItem = children[lastPositionIdx === totalSlidesAmount - 1 ? 0 : lastPositionIdx + 1];
+        const slicedChildren = slice(1, slidesToShow + previewLength, stateChildren);
+        const newChildren = append(newLastItem, slicedChildren);
+        this.setState({children: newChildren});
+      }
+    }
+
     activateAutoplayTimer = () => {
       const { autoplaySpeed } = this.props;
 
@@ -133,10 +162,15 @@ export default (OriginalComponent: any) =>
       this.setState({
         visibleSlidesAmount,
         totalSlidesAmount,
-        children,
         slideWidth,
         slidesOffset: 0,
       });
+
+      if (slidesToShow > 1) {
+        this.cropChildren();
+      } else {
+        this.setState({ children });
+      }
     };
 
     handleSlide = (direction: 'prev' | 'next') => {
@@ -261,10 +295,10 @@ export default (OriginalComponent: any) =>
           slidesOffset:
             direction === 'next' ? slidesOffset : slidesOffset - slideWidth,
           num: newNum,
-          children: newChildren,
         }),
         () => {
           if (direction === 'prev') {
+            this.cropChildren('prev');
             if (this.refreshTimer) {
               clearTimeout(this.refreshTimer);
             }
@@ -282,6 +316,7 @@ export default (OriginalComponent: any) =>
           }
 
           if (direction === 'next') {
+            this.setState({ children: newChildren });
             this.startAnimation();
             if (this.refreshTimer) {
               clearTimeout(this.refreshTimer);
@@ -328,18 +363,21 @@ export default (OriginalComponent: any) =>
         newSlidesOffset = -(slideWidth * (totalSlidesAmount - 1));
       }
       if (direction === 'next') {
-        const firstItem = head(children);
-        const slicedItems = slice(1, totalSlidesAmount, children);
-        newChildren = append(firstItem, slicedItems);
+        // const firstItem = head(children);
+        // const slicedItems = slice(1, totalSlidesAmount, children);
+        // newChildren = append(firstItem, slicedItems);
+        this.cropChildren('next');
         newSlidesOffset = 0;
       }
 
       this.setState({
         slidesOffset: newSlidesOffset,
         num: newNum,
-        children: newChildren,
         isClick: false,
       });
+      if (direction === 'prev') {
+        this.setState({ children: newChildren });
+      }
     };
 
     render() {

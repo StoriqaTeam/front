@@ -61,7 +61,7 @@ class Start extends PureComponent<PropsTypes> {
               <GoodsSlider
                 items={discountProducts}
                 title="Sale"
-                seeAllUrl="/categories?search=&sortBy=PRICE_DESC"
+                seeAllUrl="/categories?search=&sortBy=DISCOUNT"
               />
             )}
         </div>
