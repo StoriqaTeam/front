@@ -1,15 +1,13 @@
 // @flow
 
-import type { WidgetType } from './index';
-
 export type ProductVariantType = {
   id: string,
-  photoMain: null | string,
-  additionalPhotos: null | Array<string>,
+  rawId: number,
+  photoMain: ?string,
+  additionalPhotos: ?Array<string>,
   price: number,
-  cashback: null | number,
-  discount: null | number,
-  crossPrice: string,
+  cashback: ?number,
+  discount: ?number,
+  lastPrice: ?number,
   description: string,
-  variants: Array<WidgetType>,
 };

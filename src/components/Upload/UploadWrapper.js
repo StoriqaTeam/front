@@ -20,6 +20,7 @@ type PropsType = {
   id: string,
   dataTest: string,
   buttonIconSize: ?number,
+  disabled: ?boolean,
 };
 
 // TODO: refactor for avoid use style props
@@ -36,6 +37,7 @@ const UploadWrapper = ({
   id,
   dataTest,
   buttonIconSize,
+  disabled,
 }: PropsType) => (
   <div styleName="wrapper">
     <div styleName={classNames('upoloadContainer', { noIndents })}>
@@ -61,12 +63,14 @@ const UploadWrapper = ({
           </div>
         )}
       </label>
-      <input
-        style={{ display: 'none' }}
-        id={id}
-        type="file"
-        onChange={onUpload}
-      />
+      {!disabled && (
+        <input
+          style={{ display: 'none' }}
+          id={id}
+          type="file"
+          onChange={onUpload}
+        />
+      )}
     </div>
     <div styleName="childrenConainer">
       <div styleName="upoloadChildren">{children}</div>

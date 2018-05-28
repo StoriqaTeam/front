@@ -315,7 +315,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   render() {
     const { data } = this.props;
     const { editableAddressId, isOpenNewForm } = this.state;
-    const { deliveryAddresses } = data;
+    const { deliveryAddresses = [] } = data;
     return (
       <Fragment>
         {deliveryAddresses.length === 0 && (

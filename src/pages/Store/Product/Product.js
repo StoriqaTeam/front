@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, head, isNil, pathOr, defaultTo, prop, pipe } from 'ramda';
+import { path, isNil } from 'ramda';
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
@@ -11,6 +11,7 @@ import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
+import Rating from 'components/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -18,6 +19,7 @@ import {
   makeWidgets,
   differentiateWidgets,
   getVariantFromSelection,
+  isSelected,
 } from './utils';
 
 import {
@@ -29,7 +31,7 @@ import {
   ProductStore,
   Tab,
   Tabs,
-  TabRow,
+  // TabRow,
 } from './index';
 
 import type {
@@ -42,7 +44,7 @@ import type {
 } from './types';
 
 import './Product.scss';
-import mockData from './mockData.json';
+// import mockData from './mockData.json';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -51,7 +53,7 @@ type PropsType = {
 
 type StateType = {
   widgets: Array<WidgetType>,
-  productVariant: { ...ProductVariantType },
+  productVariant: ProductVariantType,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -80,18 +82,30 @@ class Product extends Component<PropsType, StateType> {
   }
   state: StateType = {
     widgets: [],
-    productVariant: {},
+    productVariant: {
+      id: '',
+      rawId: 0,
+      description: '',
+      photoMain: '',
+      additionalPhotos: null,
+      price: 0,
+      cashback: null,
+      discount: null,
+      lastPrice: null,
+    },
   };
-  handleAddToCart() {
-    // Todo for Jero - update this after refactoring (needed selected product id)
-    const id = pipe(
-      pathOr([], ['props', 'baseProduct', 'variants', 'all']),
-      head,
-      defaultTo({ rawId: 0 }),
-      prop('rawId'),
-    )(this);
-
-    if (id) {
+  componentDidMount() {
+    if (process.env.BROWSER) {
+      setTimeout(() => {
+        // HACK because 'window.scrollTo(0, 0)' doesn't work
+        // $FlowFixMe
+        document.getElementById('root').scrollTop = 0;
+      }, 0);
+    }
+  }
+  handleAddToCart(id: number): void {
+    const { widgets } = this.state;
+    if ((id && isSelected(widgets)) || (id && widgets.length === 0)) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -102,6 +116,13 @@ class Product extends Component<PropsType, StateType> {
           }
           if (errors) {
             log.debug('Errors: ', errors);
+          }
+          if (!errors && response) {
+            this.props.showAlert({
+              type: 'success',
+              text: 'Product added to cart!',
+              link: { text: 'Ok.' },
+            });
           }
         },
         onError: error => {
@@ -115,12 +136,18 @@ class Product extends Component<PropsType, StateType> {
         },
       });
     } else {
+      const message = !isSelected(widgets)
+        ? 'You must select an attribute'
+        : 'Something went wrong :(';
       this.props.showAlert({
         type: 'danger',
-        text: 'Something went wrong :(',
+        text: message,
         link: { text: 'Close.' },
       });
-      log.error('Unable to add an item without productId');
+      const errorMessage = !isSelected(widgets)
+        ? 'Unable to add an item without selected attribute'
+        : 'Unable to add an item without productId';
+      log.error(errorMessage);
     }
   }
   handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
@@ -143,11 +170,11 @@ class Product extends Component<PropsType, StateType> {
           <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
         ),
       },
-      {
+      /* {
         id: '1',
         label: 'Characteristics',
         content: <TabRow row={mockData.row} />,
-      },
+      }, */
     ];
     return (
       <Tabs>
@@ -168,7 +195,7 @@ class Product extends Component<PropsType, StateType> {
       );
     }
     const {
-      baseProduct: { name, shortDescription, longDescription },
+      baseProduct: { name, shortDescription, longDescription, store },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
@@ -196,9 +223,12 @@ class Product extends Component<PropsType, StateType> {
                 widgets={widgets}
                 onWidgetClick={this.handleWidget}
               >
+                <div styleName="rating">
+                  <Rating rating={store.rating} />
+                </div>
                 <ProductPrice
                   price={productVariant.price}
-                  crossPrice={productVariant.crossPrice}
+                  lastPrice={productVariant.lastPrice}
                   cashback={productVariant.cashback}
                 />
               </ProductDetails>
@@ -206,10 +236,16 @@ class Product extends Component<PropsType, StateType> {
                 <Button disabled big>
                   Buy now
                 </Button>
-                <Button wireframe big onClick={() => this.handleAddToCart()}>
+                <Button
+                  wireframe
+                  big
+                  onClick={() => this.handleAddToCart(productVariant.rawId)}
+                  dataTest="product-addToCart"
+                >
                   Add to cart
                 </Button>
               </div>
+              <div styleName="line" />
               <ProductStore />
               {/* {!loggedIn && <div>Please login to use cart</div>} */}
             </Col>

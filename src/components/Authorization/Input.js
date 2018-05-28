@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { PasswordHints } from 'components/PasswordHints';
 import { CapsLockMessage } from 'components/CapsLockMessage';
-import { ShowPassword } from 'components/ShowPassword';
+import { Icon } from 'components/Icon';
 
 import { log } from 'utils';
 
@@ -97,10 +97,7 @@ class Input extends PureComponent<PropsType, StateType> {
   };
 
   onMouseOut = () => {
-    this.setState({
-      isFocusShow: false,
-      showHints: this.state.isFocus,
-    });
+    this.setState({ isFocusShow: false });
   };
 
   /**
@@ -170,7 +167,7 @@ class Input extends PureComponent<PropsType, StateType> {
 
     if (name === 'password') {
       this.setState(prevState => ({
-        showHints: prevState.isFocusShow,
+        showHints: prevState.showHints ? prevState.isFocusShow : false,
       }));
     }
     this.setState({ isFocus: false });
@@ -292,14 +289,19 @@ class Input extends PureComponent<PropsType, StateType> {
           !isFocusShow && <span styleName="message">{formError}</span>}
         {detectCapsLock && isCapsLockOn && <CapsLockMessage />}
         {showPasswordButton && (
-          <ShowPassword
-            show={showPassword}
+          <div
+            styleName={classNames('icon', { openIcon: showPassword })}
             onClick={this.handleShowPassword}
             onMouseDown={this.onMouseDown}
             onMouseUp={this.onMouseUp}
             onMouseOut={this.onMouseOut}
             onBlur={() => {}}
-          />
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="0"
+          >
+            <Icon type="eye" size="24" />
+          </div>
         )}
         {showHints && <PasswordHints {...passwordQuality} />}
         {errors &&

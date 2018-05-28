@@ -13,6 +13,7 @@ type PropsType = {
   max?: ?number,
   value: number,
   onChange: (value: number) => void,
+  dataTest?: string,
 };
 
 type StateType = {
@@ -76,7 +77,11 @@ class Stepper extends Component<PropsType, StateType> {
   render() {
     return (
       <div styleName="container">
-        <button styleName="button" onClick={() => this.handleClick('decrease')}>
+        <button
+          styleName="button"
+          onClick={() => this.handleClick('decrease')}
+          data-test={`${this.props.dataTest || ''}-decrease`}
+        >
           <Icon type="minus" size="16" />
         </button>
         <input
@@ -86,7 +91,11 @@ class Stepper extends Component<PropsType, StateType> {
           onChange={e => this.handleChange(e)}
           value={isNil(this.state.inputValue) ? '' : this.state.inputValue}
         />
-        <button styleName="button" onClick={() => this.handleClick('increase')}>
+        <button
+          styleName="button"
+          onClick={() => this.handleClick('increase')}
+          data-test={`${this.props.dataTest || ''}-increase`}
+        >
           <Icon type="plus" size="16" />
         </button>
       </div>
