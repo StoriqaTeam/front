@@ -1,26 +1,32 @@
 [
   {
     "id": "orders",
-    "title": "Orders"
+    "title": "Orders",
+    "disable": false
   },
   {
     "id": "goods",
-    "title": "Goods"
+    "title": "Goods",
+    "disable": false
   },
   {
     "id": "settings",
-    "title": "Settings"
+    "title": "Settings",
+    "disable": false
   },
   {
     "id": "contacts",
-    "title": "Contacts"
+    "title": "Contacts",
+    "disable": false
   },
   {
     "id": "employees",
-    "title": "Employees"
+    "title": "Employees",
+    "disable": true
   },
   {
     "id": "warehouses",
-    "title": "Warehouses"
+    "title": "Warehouses",
+    "disable": true
   }
 ]

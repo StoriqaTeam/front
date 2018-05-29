@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { UploadWrapper } from 'components/Upload';
 import { uploadFile } from 'utils';
 
+import type { MenuItemType } from './types';
+
 import menuItems from './menuItems.json';
 
 import './Menu.scss';
@@ -35,7 +37,6 @@ class Menu extends PureComponent<PropsType, StateType> {
 
   render() {
     const { activeItem, storeName, storeLogo, onLogoUpload } = this.props;
-
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
@@ -55,7 +56,7 @@ class Menu extends PureComponent<PropsType, StateType> {
         </div>
         {storeName && <div styleName="title">{storeName}</div>}
         <div styleName="items">
-          {menuItems.map(item => {
+          {menuItems.map((item: MenuItemType) => {
             const isActive = item.id === activeItem;
 
             return (
