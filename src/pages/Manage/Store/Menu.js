@@ -62,7 +62,10 @@ class Menu extends PureComponent<PropsType, StateType> {
             return (
               <div
                 key={item.id}
-                styleName={classNames('item', { isActive })}
+                styleName={classNames('item', {
+                  isActive,
+                  'isDisabled': item.disabled,
+                })}
                 onClick={() => {
                   this.props.switchMenu(item.id);
                 }}

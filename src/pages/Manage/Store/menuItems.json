@@ -2,31 +2,31 @@
   {
     "id": "orders",
     "title": "Orders",
-    "disable": false
+    "disabled": false
   },
   {
     "id": "goods",
     "title": "Goods",
-    "disable": false
+    "disabled": false
   },
   {
     "id": "settings",
     "title": "Settings",
-    "disable": false
+    "disabled": false
   },
   {
     "id": "contacts",
     "title": "Contacts",
-    "disable": false
+    "disabled": false
   },
   {
     "id": "employees",
     "title": "Employees",
-    "disable": true
+    "disabled": true
   },
   {
     "id": "warehouses",
     "title": "Warehouses",
-    "disable": true
+    "disabled": true
   }
 ]
