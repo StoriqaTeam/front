@@ -1,7 +1,16 @@
 // @flow
 
 import React, { Component } from 'react';
-import { head, last, slice, append, prepend, propEq, findIndex } from 'ramda';
+import {
+  head,
+  last,
+  slice,
+  append,
+  prepend,
+  propEq,
+  findIndex,
+  concat,
+} from 'ramda';
 
 type PropsType = {
   slidesToShow: number,
@@ -91,30 +100,58 @@ export default (OriginalComponent: any) =>
 
     cropChildren = (direction?: string) => {
       const { children, slidesToShow } = this.props;
-      const { children: stateChildren, totalSlidesAmount, previewLength } = this.state;
+      const { children: stateChildren, previewLength, slideWidth } = this.state;
+      const totalSlidesAmount = children.length;
       if (!direction) {
-        const firstSevenItems = slice(0, slidesToShow + previewLength, children);
-        this.setState({ children: firstSevenItems });
+        const firstSevenItems = slice(
+          0,
+          slidesToShow + previewLength,
+          children,
+        );
+        const lastThreeItems = slice(
+          totalSlidesAmount - previewLength,
+          totalSlidesAmount,
+          children,
+        );
+        this.setState({
+          children: concat(lastThreeItems, firstSevenItems),
+        });
       }
       if (direction === 'prev') {
         // $FlowIgnoreMe
         const headKey = head(stateChildren).key;
-        const headPositionIdx = findIndex(propEq('key', headKey))(children);
-        const newFirstItem = children[headPositionIdx !== 0 ? headPositionIdx - 1 : totalSlidesAmount - 1];
-        const slicedChildren = slice(0, 6, stateChildren);
+        const headIdx = findIndex(propEq('key', headKey))(children);
+        const newFirstItem =
+          children[headIdx === 0 ? totalSlidesAmount - 1 : headIdx - 1];
+        const slicedChildren = slice(
+          0,
+          2 * previewLength + slidesToShow - 1,
+          stateChildren,
+        );
         const newChildren = prepend(newFirstItem, slicedChildren);
-        this.setState({ children: newChildren });
+        this.setState(prevState => ({
+          children: newChildren,
+          slidesOffset: prevState.slidesOffset - slideWidth,
+        }));
       }
       if (direction === 'next') {
         // $FlowIgnoreMe
         const lastKey = last(stateChildren).key;
-        const lastPositionIdx = findIndex(propEq('key', lastKey))(children);
-        const newLastItem = children[lastPositionIdx === totalSlidesAmount - 1 ? 0 : lastPositionIdx + 1];
-        const slicedChildren = slice(1, slidesToShow + previewLength, stateChildren);
+        const lastIdx = findIndex(propEq('key', lastKey))(children);
+        const newLastItem =
+          children[lastIdx === totalSlidesAmount - 1 ? 0 : lastIdx + 1];
+        const slicedChildren = slice(
+          1,
+          2 * previewLength + slidesToShow,
+          stateChildren,
+        );
         const newChildren = append(newLastItem, slicedChildren);
-        this.setState({children: newChildren});
+        this.setState(prevState => ({
+          children: newChildren,
+          slidesOffset: prevState.slidesOffset + slideWidth,
+        }));
       }
-    }
+    };
 
     activateAutoplayTimer = () => {
       const { autoplaySpeed } = this.props;
@@ -136,6 +173,7 @@ export default (OriginalComponent: any) =>
 
     sliderPropsCalc = (children: Array<{}>) => {
       const { infinity, slidesToShow, responsive, autoplaySpeed } = this.props;
+      const { previewLength } = this.state;
       const totalSlidesAmount = children.length;
       const sliderWrapperWidth = this.originalComponentElement.getBoundingClientRect()
         .width;
@@ -163,7 +201,7 @@ export default (OriginalComponent: any) =>
         visibleSlidesAmount,
         totalSlidesAmount,
         slideWidth,
-        slidesOffset: 0,
+        slidesOffset: slidesToShow === 1 ? 0 : -previewLength * slideWidth,
       });
 
       if (slidesToShow > 1) {
@@ -174,6 +212,33 @@ export default (OriginalComponent: any) =>
     };
 
     handleSlide = (direction: 'prev' | 'next') => {
+      const { animationSpeed } = this.props;
+      const { slidesOffset, slideWidth, isTransition } = this.state;
+      if (isTransition) {
+        return;
+      }
+      const newSlidesOffset =
+        direction === 'next'
+          ? slidesOffset - slideWidth
+          : slidesOffset + slideWidth;
+      this.startAnimation();
+      this.setState(
+        {
+          slidesOffset: newSlidesOffset,
+        },
+        () => {
+          if (this.animationTimer) {
+            clearTimeout(this.animationTimer);
+          }
+          this.animationTimer = setTimeout(() => {
+            this.endAnimation();
+            this.cropChildren(direction);
+          }, animationSpeed);
+        },
+      );
+    };
+
+    handleSlideOld = (direction: 'prev' | 'next') => {
       const { infinity, autoplaySpeed } = this.props;
       const {
         visibleSlidesAmount,
