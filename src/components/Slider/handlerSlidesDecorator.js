@@ -118,7 +118,7 @@ export default (OriginalComponent: any) =>
         });
       }
       if (direction === 'prev') {
-        // $FlowIgnoreMe
+        // $FlowIgnore
         const headKey = head(stateChildren).key;
         const headIdx = findIndex(propEq('key', headKey))(children);
         const newFirstItem =
@@ -135,7 +135,7 @@ export default (OriginalComponent: any) =>
         }));
       }
       if (direction === 'next') {
-        // $FlowIgnoreMe
+        // $FlowIgnore
         const lastKey = last(stateChildren).key;
         const lastIdx = findIndex(propEq('key', lastKey))(children);
         const newLastItem =
