@@ -1,15 +1,23 @@
 @import "../../../styles/variables";
 
 .container {
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   &.scroll-y {
-    max-height: 570px;
+    height: calc(69.875rem - 2.375rem);
+    overflow-x: hidden;
     overflow-y: scroll;
   }
 
   &.scroll-x {
-    overflow-x: scroll;
     max-width: 61.875rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
   }
+
 }
 
 .thumbnails {
