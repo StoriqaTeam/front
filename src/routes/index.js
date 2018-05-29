@@ -251,6 +251,7 @@ const routes = (
             })}
           />
 
+
           <Route
             path="/:storeId/products"
             Component={({ me }) => <Products me={me} />}
@@ -265,6 +266,8 @@ const routes = (
               storeID: parseInt(params.storeId, 10) || 0,
             })}
           />
+
+
 
           <Route
             path="/:storeId/products/:productId"

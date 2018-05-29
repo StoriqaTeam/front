@@ -212,13 +212,21 @@ class ShippingAddresses extends Component<PropsType, StateType> {
           editableAddressId: null,
         }));
         this.resetForm();
+        this.props.showAlert({
+          type: 'success',
+          text: 'Address delete!',
+          link: { text: 'Got it!' },
+        });
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
       },
     };
     DeleteUserDeliveryAddressMutation.commit(params);

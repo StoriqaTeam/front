@@ -2,14 +2,14 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, toUpper, isEmpty, filter, map, head } from 'ramda';
+import {assocPath, pathOr, toUpper, isEmpty, filter, map, head, path} from 'ramda';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 // import { CreateStoreMutation } from 'relay/mutations';
 import { Container, Row, Col } from 'layout';
-import { getNameText, formatPrice } from 'utils';
+import { getNameText, formatPrice, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
@@ -19,15 +19,17 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
+import { DeactivateBaseProductMutation } from 'relay/mutations';
+
 import Menu from './Menu';
 import Header from './Header';
 
 import './Products.scss';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql, createPaginationContainer } from 'react-relay';
 
 type PropsType = {
-  // router: routerShape,
-  // showAlert: (input: AddAlertInputType) => void,
+  router: routerShape,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -40,6 +42,72 @@ class Products extends Component<PropsType, StateType> {
   // state: StateType = {
   //   //
   // };
+
+  addProduct = () => {
+    const storeId = pathOr(
+      null,
+      ['match', 'params', 'storeId'],
+      this.props,
+    );
+
+    if (storeId) {
+      this.props.router.push(
+        `/manage/store/${storeId}/product/new`,
+      );
+    }
+  }
+
+  editProduct = (id: number) => {
+    const storeId = pathOr(
+      null,
+      ['match', 'params', 'storeId'],
+      this.props,
+    );
+
+    if (storeId) {
+      this.props.router.push(
+        `/manage/store/${storeId}/products/${parseInt(id, 10)}`,
+      );
+    }
+  }
+
+  deleteProduct = (id: string) => {
+    const storeId = pathOr(
+      null,
+      ['me', 'store', 'id'],
+      this.props,
+    );
+
+    DeactivateBaseProductMutation.commit({
+      id,
+      parentID: storeId,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Product delete!',
+          link: { text: 'Got it!' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
 
   renderHeaderRow = () => {
     return (
@@ -88,10 +156,8 @@ class Products extends Component<PropsType, StateType> {
   };
 
   renderRows = item => {
-    console.log('---item', item);
     const { product } = item;
     const attributes = pathOr([], ['product', 'attributes'], item);
-    console.log('---attributes', attributes);
     return (
       <div key={item.rawId} styleName="itemRowWrap">
         <div styleName="td tdCheckbox">
@@ -131,41 +197,54 @@ class Products extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="td tdCharacteristics">
-          {!isEmpty(attributes) &&
+          {!isEmpty(attributes) && (
             <div>
               <div styleName="characteristicItem">
                 <div styleName="characteristicLabels">
                   {map(attributeItem => {
-                    const attributeName = getNameText(attributeItem.attribute.name, 'EN');
-                    return <div key={`attr-${attributeName}`}>{`${attributeName}: `}</div>;
+                    const attributeName = getNameText(
+                      attributeItem.attribute.name,
+                      'EN',
+                    );
+                    return (
+                      <div
+                        key={`attr-${attributeName}`}
+                      >{`${attributeName}: `}</div>
+                    );
                   }, attributes)}
                 </div>
                 <div styleName="characteristicValues">
                   {map(attributeItem => {
-                    const attributeName = getNameText(attributeItem.attribute.name, 'EN');
+                    const attributeName = getNameText(
+                      attributeItem.attribute.name,
+                      'EN',
+                    );
                     const val = attributeItem.value;
                     return <div key={`attr-${attributeName}`}>{`${val}`}</div>;
                   }, attributes)}
                 </div>
               </div>
             </div>
-          }
+          )}
         </div>
         <div styleName="td tdEdit">
-          <button styleName="editButton">
+          <button
+            styleName="editButton"
+            onClick={() => {this.editProduct(item.rawId)}}
+          >
             <Icon type="note" size={32} />
           </button>
         </div>
         <div styleName="td tdDelete">
-          <button styleName="deleteButton">
+          <button
+            styleName="deleteButton"
+            onClick={() => {this.deleteProduct(item.id)}}
+          >
             <Icon type="basket" size="32" />
           </button>
         </div>
         <div styleName="td tdDropdawn">
-          <button
-            styleName="arrowExpand"
-            onClick={() => {}}
-          >
+          <button styleName="arrowExpand" onClick={() => {}}>
             <Icon inline type="arrowExpand" />
           </button>
         </div>
@@ -192,7 +271,6 @@ class Products extends Component<PropsType, StateType> {
       return newItem;
     }, baseProducts);
     const filteredProducts = filter(item => item.product, products);
-    console.log('---filteredProducts', filteredProducts);
     return (
       <Container>
         <Row>
@@ -204,7 +282,11 @@ class Products extends Component<PropsType, StateType> {
               <Header title="Goods" />
               <div styleName="wrapper">
                 <div styleName="addButton">
-                  <Button wireframe big onClick={() => {}}>
+                  <Button
+                    wireframe
+                    big
+                    onClick={this.addProduct}
+                  >
                     Add item
                   </Button>
                 </div>
@@ -214,9 +296,7 @@ class Products extends Component<PropsType, StateType> {
                 <div styleName="body">
                   <div styleName="headerRow">{this.renderHeaderRow()}</div>
                   <div styleName="list">
-                    {map(item => {
-                      return this.renderRows(item);
-                    }, filteredProducts)}
+                    {map(item => (this.renderRows(item)), filteredProducts)}
                   </div>
                 </div>
               </div>
