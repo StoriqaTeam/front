@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { splitAt } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Checkbox } from 'components/common/Checkbox';
@@ -86,15 +87,17 @@ class WindowModal extends React.Component<{}, StateType> {
     const {
       target: { value },
     } = e;
-    const ethReg = /^[a-z0-9]{40}$/;
-    const ethIsValid = ethReg.test(value);
-    if (value.length <= 40) {
+    const ethReg = /^[a-zA-Z0-9]{40}$/;
+    const clearValue =
+      splitAt(2, value)[0] === '0x' ? splitAt(2, value)[1] : value;
+    const ethIsValid = ethReg.test(clearValue);
+    if (clearValue.length <= 40) {
       this.setState({
         ...this.state,
         form: {
           ...this.state.form,
           eth: {
-            text: value,
+            text: clearValue,
             errors: ethIsValid ? null : ['invalid wallet number'],
           },
         },
