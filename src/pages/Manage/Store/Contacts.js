@@ -55,10 +55,11 @@ type StateType = {
   },
   activeItem: string,
   isLoading: boolean,
+  logoUrl?: string,
 };
 
 class Contacts extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     form: {
       email: '',
       phone: '',
@@ -110,6 +111,10 @@ class Contacts extends Component<PropsType, StateType> {
     });
   };
 
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
+  };
+
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
     const {
@@ -120,6 +125,7 @@ class Contacts extends Component<PropsType, StateType> {
     }
 
     const {
+      logoUrl,
       // param 'country' enter for 'this.handleUpdateForm'
       form: {
         email,
@@ -137,6 +143,7 @@ class Contacts extends Component<PropsType, StateType> {
       userId: parseInt(currentUser.rawId, 10),
       rawId: store.rawId,
       id: store.id,
+      logo: logoUrl,
       email,
       phone,
       country,
@@ -215,12 +222,25 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem, isLoading, form } = this.state;
+    // $FlowIgnoreMe
+    const store = pathOr(null, ['store'], this.props.me);
+
+    // $FlowIgnoreMe
+    const name = pathOr('', ['name', 0, 'text'], store);
+
+    const { logo } = store;
+    const { activeItem, isLoading, form, logoUrl } = this.state;
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem={activeItem} switchMenu={this.switchMenu} />
+            <Menu
+              activeItem={activeItem}
+              switchMenu={this.switchMenu}
+              storeName={name}
+              storeLogo={logoUrl || logo}
+              onLogoUpload={this.handleLogoUpload}
+            />
           </Col>
           <Col size={10}>
             <div styleName="container">
@@ -285,6 +305,7 @@ export default createFragmentContainer(
           lang
           text
         }
+        logo
         email
         phone
         facebookUrl

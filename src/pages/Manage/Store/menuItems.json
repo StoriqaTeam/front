@@ -3,13 +3,13 @@
     "id": "orders",
     "title": "Orders",
     "link": "",
-    "disabled": false
+    "disabled": true
   },
   {
     "id": "goods",
     "title": "Goods",
     "link": "",
-    "disabled": false
+    "disabled": true
   },
   {
     "id": "settings",

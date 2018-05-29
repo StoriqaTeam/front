@@ -38,14 +38,12 @@ class Menu extends PureComponent<PropsType, StateType> {
       this.props.onLogoUpload(result.url);
     }
   };
-  handleClick = ({ id, link }: MenuItemType): void => {
+  handleClick = ({ id, link, disabled }: MenuItemType): void => {
     const {
       router,
       switchMenu,
       match: {
-        params: {
-          storeId,
-        },
+        params: { storeId },
       },
     } = this.props;
     if (!isEmpty(link)) {
@@ -55,13 +53,16 @@ class Menu extends PureComponent<PropsType, StateType> {
         router.replace(path);
       }
     }
-    switchMenu(id);
+    if (!disabled) {
+      switchMenu(id);
+    }
   };
   render() {
     const { activeItem, storeName, storeLogo, onLogoUpload } = this.props;
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
+          {/* eslint-disable no-nested-ternary */}
           {onLogoUpload ? (
             <UploadWrapper
               id="new-store-id"
