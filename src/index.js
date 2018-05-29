@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 
 import buildApp from 'components/entry';
 
+import './windowModal';
 import './index.scss';
 
 if (process.env.BROWSER && buildApp) {
