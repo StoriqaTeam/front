@@ -90,7 +90,7 @@ const resetForm = {
 
 class ShippingAddresses extends Component<PropsType, StateType> {
   state = {
-    form: { ...resetForm },
+    form: resetForm,
     isLoading: false,
     isOpenNewForm: false,
     editableAddressId: null,
@@ -166,6 +166,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
           });
           return;
         }
+        this.resetForm();
         this.setState(() => ({
           isLoading: false,
           isOpenNewForm: false,
@@ -260,7 +261,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   resetForm = () => {
-    this.setState({ form: { ...resetForm } });
+    this.setState({ form: resetForm });
   };
 
   renderAddressForm = () => {

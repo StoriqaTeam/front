@@ -31,10 +31,12 @@ const setProductVariantValues = (variant: VariantType) => {
     );
 
   const calcCrossedPrice = (price: number, discount: ?number) =>
-    isNil(discount) ? 0 : price;
+    isNil(discount) || discount === 0 ? 0 : price;
 
   const calcPrice = (price: number, discount: ?number) =>
-    isNil(discount) ? price : formatPrice(price - price * discount);
+    isNil(discount) || discount === 0
+      ? price
+      : formatPrice(price - price * discount);
 
   const insertPhotoMain = (
     image: string | null,
