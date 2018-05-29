@@ -82,7 +82,7 @@ class Products extends Component<PropsType, StateType> {
             <Icon type="basket" size="32" />
           </button>
         </div>
-        <div styleName="td tdArrow" />
+        <div styleName="td tdDropdawn" />
       </div>
     );
   };
@@ -90,10 +90,12 @@ class Products extends Component<PropsType, StateType> {
   renderRows = item => {
     console.log('---item', item);
     const { product } = item;
+    const attributes = pathOr([], ['product', 'attributes'], item);
+    console.log('---attributes', attributes);
     return (
       <div key={item.rawId} styleName="itemRowWrap">
         <div styleName="td tdCheckbox">
-          <Checkbox id="product" onChange={() => {}} />
+          <Checkbox id={`product-${item.rawId}`} onChange={() => {}} />
         </div>
         <div styleName="td tdFoto">
           <div styleName="foto">
@@ -129,16 +131,44 @@ class Products extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="td tdCharacteristics">
-          <span>{}</span>
-          <Icon inline type="sortArrows" />
+          {!isEmpty(attributes) &&
+            <div>
+              <div styleName="characteristicItem">
+                <div styleName="characteristicLabels">
+                  {map(attributeItem => {
+                    const attributeName = getNameText(attributeItem.attribute.name, 'EN');
+                    return <div key={`attr-${attributeName}`}>{`${attributeName}: `}</div>;
+                  }, attributes)}
+                </div>
+                <div styleName="characteristicValues">
+                  {map(attributeItem => {
+                    const attributeName = getNameText(attributeItem.attribute.name, 'EN');
+                    const val = attributeItem.value;
+                    return <div key={`attr-${attributeName}`}>{`${val}`}</div>;
+                  }, attributes)}
+                </div>
+              </div>
+            </div>
+          }
         </div>
-        <div styleName="td tdEdit" />
+        <div styleName="td tdEdit">
+          <button styleName="editButton">
+            <Icon type="note" size={32} />
+          </button>
+        </div>
         <div styleName="td tdDelete">
           <button styleName="deleteButton">
             <Icon type="basket" size="32" />
           </button>
         </div>
-        <div styleName="td tdArrow" />
+        <div styleName="td tdDropdawn">
+          <button
+            styleName="arrowExpand"
+            onClick={() => {}}
+          >
+            <Icon inline type="arrowExpand" />
+          </button>
+        </div>
       </div>
     );
   };

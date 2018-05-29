@@ -33,7 +33,6 @@
 .headerRowWrap, .itemRowWrap {
   display: flex;
   margin: 0 -4rem;
-  padding: 1rem 0;
   border-bottom: 1px solid $color_grey_light;
 }
 
@@ -42,26 +41,39 @@
   align-items: center;
   font-size: 14px;
   line-height: 2.5rem;
-  color: $color_grey_bg;
-  
+  color: $color_grey_text;
 }
 
 .tdWrap {
   //
 }
 
-.tdCheckbox {width: 7%;}
+.tdCheckbox {width: 5%;}
 .tdFoto {width: 9%;}
 .tdName {width: 21%;}
-.tdCategory {width: 9%;}
-.tdPrice {width: 9%;}
-.tdCashback {width: 9%;}
+.tdCategory {width: 10%;}
+.tdPrice {width: 10%;}
+.tdCashback {width: 10%;}
 .tdCharacteristics {width: 24%;}
-.tdEdit {width: 4%;}
-.tdDelete {width: 4%;}
-.tdArrow {width: 4%;}
+.tdEdit {width: 4%; justify-content: flex-end;}
+.tdDelete {width: 4%; justify-content: flex-end;}
+.tdDropdawn {width: 3%; justify-content: flex-end;}
+
+.arrowExpand {
+
+}
+
+.headerRowWrap {
+  padding: 2rem 4rem;
+
+  & .tdWrap > span {
+    margin-right: 0.5rem;
+  }
+}
 
 .itemRowWrap {
+  padding: 1rem 4rem;
+
   .foto {
     position: relative;
     display: flex;
@@ -73,11 +85,25 @@
     background-color: $color_grey_border3;
     overflow: hidden;
   }
+
+  .characteristicItem {
+    display: flex;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .characteristicLabels {
+    color: $color_grey_bg;
+  }
+
+  .characteristicValues {
+    margin-left: 1.5rem;
+  }
 }
 
-.deleteButton {
+.deleteButton, .editButton {
   & svg {
-    fill: #e4e4e4;
+    fill: $color_grey_bg;
     transition: all .3s ease;
   }
 
