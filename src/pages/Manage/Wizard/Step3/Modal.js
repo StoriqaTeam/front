@@ -11,7 +11,7 @@ type ModalType = {
   children: React.Element<*>,
   showModal: boolean,
   onClose: () => void,
-  dark: ?boolean,
+  dark?: boolean,
 };
 
 const Modal = ({ dark, children, showModal, onClose }: ModalType) => {
@@ -19,9 +19,7 @@ const Modal = ({ dark, children, showModal, onClose }: ModalType) => {
     return null;
   }
   return (
-    <div
-      styleName={classNames('modalWrapper', { dark })}
-    >
+    <div styleName={classNames('modalWrapper', { dark })}>
       <div styleName="modal">
         <div styleName="modalContent">
           <div
@@ -38,6 +36,10 @@ const Modal = ({ dark, children, showModal, onClose }: ModalType) => {
       </div>
     </div>
   );
+};
+
+Modal.defaultProps = {
+  dark: false,
 };
 
 export default Modal;
