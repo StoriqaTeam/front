@@ -1,0 +1,73 @@
+@import "../styles/variables";
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $color_white;
+  width: 82rem;
+  height: 82rem;
+  padding: 9.5rem 8rem 10rem;
+
+  &.success {
+    height: 54rem;
+
+    .modalDescription {
+      padding: 2rem 6rem 2rem;
+    }
+  }
+  .modalTitle {
+    width: 70%;
+    font-family: $font_light;
+    font-size: 4.5rem;
+    color: $color_grey_text;
+    line-height: normal;
+    text-align: center;
+  }
+  .modalDescription {
+    width: 100%;
+    font-family: $font_regular;
+    font-size: 2rem;
+    color: $color_grey_bg;
+    line-height: normal;
+    text-align: center;
+    padding: 2rem 6rem 0;
+    .modalLink {
+      display: block;
+      margin-top: 0.75rem;
+    }
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+    .input {
+      width: 100%;
+      margin-bottom: 2.5rem;
+    }
+    .checkboxContainer {
+      width: 100%;
+      margin-top: 2rem;
+      .label {
+        margin-left: 1rem;
+        font-size: 2rem;
+      }
+    }
+  }
+}
+
+a {
+  font-size: 2rem;
+  color: $color_primary;
+}
+
+.policy {
+  font-size: 1.75rem;
+  margin-left: 1rem;
+  // float: right;
+}
+
+.buttonContainer {
+  margin-top: 2rem;
+}
