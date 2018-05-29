@@ -11,6 +11,10 @@
   overflow: scroll;
   padding: 13rem 0 26rem 0;
 
+  &.dark {
+    background-color: rgba(0, 0, 0, 0.35);
+  }
+
   .modal {
     display: flex;
     justify-content: center;
