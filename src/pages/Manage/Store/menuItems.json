@@ -2,31 +2,37 @@
   {
     "id": "orders",
     "title": "Orders",
+    "link": "",
     "disabled": false
   },
   {
     "id": "goods",
     "title": "Goods",
+    "link": "",
     "disabled": false
   },
   {
     "id": "settings",
     "title": "Settings",
+    "link": "/",
     "disabled": false
   },
   {
     "id": "contacts",
     "title": "Contacts",
+    "link": "/contacts",
     "disabled": false
   },
   {
     "id": "employees",
     "title": "Employees",
+    "link": "",
     "disabled": true
   },
   {
     "id": "warehouses",
     "title": "Warehouses",
+    "link": "",
     "disabled": true
   }
 ]

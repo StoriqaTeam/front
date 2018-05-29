@@ -1,7 +1,9 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
+import { isEmpty, isNil } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { uploadFile } from 'utils';
@@ -18,6 +20,8 @@ type PropsType = {
   storeName?: string,
   storeLogo?: string,
   onLogoUpload?: Function,
+  router: routerShape,
+  match: matchShape,
 };
 
 type StateType = {
@@ -34,7 +38,25 @@ class Menu extends PureComponent<PropsType, StateType> {
       this.props.onLogoUpload(result.url);
     }
   };
-
+  handleClick = ({ id, link }: MenuItemType): void => {
+    const {
+      router,
+      switchMenu,
+      match: {
+        params: {
+          storeId,
+        },
+      },
+    } = this.props;
+    if (!isEmpty(link)) {
+      if (!isNil(storeId)) {
+        const storePath = `/manage/store/${storeId}`;
+        const path = link === '/' ? storePath : `${storePath}${link}`;
+        router.replace(path);
+      }
+    }
+    switchMenu(id);
+  };
   render() {
     const { activeItem, storeName, storeLogo, onLogoUpload } = this.props;
     return (
@@ -58,17 +80,14 @@ class Menu extends PureComponent<PropsType, StateType> {
         <div styleName="items">
           {menuItems.map((item: MenuItemType) => {
             const isActive = item.id === activeItem;
-
             return (
               <div
                 key={item.id}
                 styleName={classNames('item', {
                   isActive,
-                  'isDisabled': item.disabled,
+                  isDisabled: item.disabled,
                 })}
-                onClick={() => {
-                  this.props.switchMenu(item.id);
-                }}
+                onClick={() => this.handleClick(item)}
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
@@ -83,4 +102,4 @@ class Menu extends PureComponent<PropsType, StateType> {
   }
 }
 
-export default Menu;
+export default withRouter(Menu);
