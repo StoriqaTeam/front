@@ -1,7 +1,16 @@
 // @flow
 
 import React, { Component } from 'react';
-import { head, last, slice, append, prepend } from 'ramda';
+import {
+  head,
+  last,
+  slice,
+  append,
+  prepend,
+  propEq,
+  findIndex,
+  concat,
+} from 'ramda';
 
 type PropsType = {
   slidesToShow: number,
@@ -21,6 +30,7 @@ type StateType = {
   isTransition: boolean,
   slideWidth: number,
   isClick: boolean,
+  previewLength: number,
 };
 
 export default (OriginalComponent: any) =>
@@ -34,6 +44,7 @@ export default (OriginalComponent: any) =>
       isTransition: false,
       slideWidth: 0,
       isClick: false,
+      previewLength: 3,
     };
 
     componentDidMount() {
@@ -87,6 +98,61 @@ export default (OriginalComponent: any) =>
     refreshTimer: TimeoutID;
     originalComponentElement: Element;
 
+    cropChildren = (direction?: string) => {
+      const { children, slidesToShow } = this.props;
+      const { children: stateChildren, previewLength, slideWidth } = this.state;
+      const totalSlidesAmount = children.length;
+      if (!direction) {
+        const firstSevenItems = slice(
+          0,
+          slidesToShow + previewLength,
+          children,
+        );
+        const lastThreeItems = slice(
+          totalSlidesAmount - previewLength,
+          totalSlidesAmount,
+          children,
+        );
+        this.setState({
+          children: concat(lastThreeItems, firstSevenItems),
+        });
+      }
+      if (direction === 'prev') {
+        // $FlowIgnoreMe
+        const headKey = head(stateChildren).key;
+        const headIdx = findIndex(propEq('key', headKey))(children);
+        const newFirstItem =
+          children[headIdx === 0 ? totalSlidesAmount - 1 : headIdx - 1];
+        const slicedChildren = slice(
+          0,
+          2 * previewLength + slidesToShow - 1,
+          stateChildren,
+        );
+        const newChildren = prepend(newFirstItem, slicedChildren);
+        this.setState(prevState => ({
+          children: newChildren,
+          slidesOffset: prevState.slidesOffset - slideWidth,
+        }));
+      }
+      if (direction === 'next') {
+        // $FlowIgnoreMe
+        const lastKey = last(stateChildren).key;
+        const lastIdx = findIndex(propEq('key', lastKey))(children);
+        const newLastItem =
+          children[lastIdx === totalSlidesAmount - 1 ? 0 : lastIdx + 1];
+        const slicedChildren = slice(
+          1,
+          2 * previewLength + slidesToShow,
+          stateChildren,
+        );
+        const newChildren = append(newLastItem, slicedChildren);
+        this.setState(prevState => ({
+          children: newChildren,
+          slidesOffset: prevState.slidesOffset + slideWidth,
+        }));
+      }
+    };
+
     activateAutoplayTimer = () => {
       const { autoplaySpeed } = this.props;
 
@@ -107,6 +173,7 @@ export default (OriginalComponent: any) =>
 
     sliderPropsCalc = (children: Array<{}>) => {
       const { infinity, slidesToShow, responsive, autoplaySpeed } = this.props;
+      const { previewLength } = this.state;
       const totalSlidesAmount = children.length;
       const sliderWrapperWidth = this.originalComponentElement.getBoundingClientRect()
         .width;
@@ -133,13 +200,45 @@ export default (OriginalComponent: any) =>
       this.setState({
         visibleSlidesAmount,
         totalSlidesAmount,
-        children,
         slideWidth,
-        slidesOffset: 0,
+        slidesOffset: slidesToShow === 1 ? 0 : -previewLength * slideWidth,
       });
+
+      if (slidesToShow > 1) {
+        this.cropChildren();
+      } else {
+        this.setState({ children });
+      }
     };
 
     handleSlide = (direction: 'prev' | 'next') => {
+      const { animationSpeed } = this.props;
+      const { slidesOffset, slideWidth, isTransition } = this.state;
+      if (isTransition) {
+        return;
+      }
+      const newSlidesOffset =
+        direction === 'next'
+          ? slidesOffset - slideWidth
+          : slidesOffset + slideWidth;
+      this.startAnimation();
+      this.setState(
+        {
+          slidesOffset: newSlidesOffset,
+        },
+        () => {
+          if (this.animationTimer) {
+            clearTimeout(this.animationTimer);
+          }
+          this.animationTimer = setTimeout(() => {
+            this.endAnimation();
+            this.cropChildren(direction);
+          }, animationSpeed);
+        },
+      );
+    };
+
+    handleSlideOld = (direction: 'prev' | 'next') => {
       const { infinity, autoplaySpeed } = this.props;
       const {
         visibleSlidesAmount,
@@ -261,10 +360,10 @@ export default (OriginalComponent: any) =>
           slidesOffset:
             direction === 'next' ? slidesOffset : slidesOffset - slideWidth,
           num: newNum,
-          children: newChildren,
         }),
         () => {
           if (direction === 'prev') {
+            this.cropChildren('prev');
             if (this.refreshTimer) {
               clearTimeout(this.refreshTimer);
             }
@@ -282,6 +381,7 @@ export default (OriginalComponent: any) =>
           }
 
           if (direction === 'next') {
+            this.setState({ children: newChildren });
             this.startAnimation();
             if (this.refreshTimer) {
               clearTimeout(this.refreshTimer);
@@ -328,18 +428,21 @@ export default (OriginalComponent: any) =>
         newSlidesOffset = -(slideWidth * (totalSlidesAmount - 1));
       }
       if (direction === 'next') {
-        const firstItem = head(children);
-        const slicedItems = slice(1, totalSlidesAmount, children);
-        newChildren = append(firstItem, slicedItems);
+        // const firstItem = head(children);
+        // const slicedItems = slice(1, totalSlidesAmount, children);
+        // newChildren = append(firstItem, slicedItems);
+        this.cropChildren('next');
         newSlidesOffset = 0;
       }
 
       this.setState({
         slidesOffset: newSlidesOffset,
         num: newNum,
-        children: newChildren,
         isClick: false,
       });
+      if (direction === 'prev') {
+        this.setState({ children: newChildren });
+      }
     };
 
     render() {
