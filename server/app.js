@@ -171,6 +171,7 @@ app.use(
       <div id="root" style="height: 100%; overflow: auto;">${ReactDOMServer.renderToString(
         element,
       )}</div>
+      <div id="global-modal-root"></div>
       <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
