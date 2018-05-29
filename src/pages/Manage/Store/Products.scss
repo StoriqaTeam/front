@@ -1,0 +1,89 @@
+@import "../../../styles/variables";
+
+.container {
+  //
+}
+
+.wrapper {
+  margin-top: 2rem;
+  padding: 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.subtitle {
+  margin-bottom: 5rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.addButton {
+  float: right;
+}
+
+.body {
+  //
+}
+
+.headerRow {
+
+}
+
+.headerRowWrap, .itemRowWrap {
+  display: flex;
+  margin: 0 -4rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid $color_grey_light;
+}
+
+.td {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 2.5rem;
+  color: $color_grey_bg;
+  
+}
+
+.tdWrap {
+  //
+}
+
+.tdCheckbox {width: 7%;}
+.tdFoto {width: 9%;}
+.tdName {width: 21%;}
+.tdCategory {width: 9%;}
+.tdPrice {width: 9%;}
+.tdCashback {width: 9%;}
+.tdCharacteristics {width: 24%;}
+.tdEdit {width: 4%;}
+.tdDelete {width: 4%;}
+.tdArrow {width: 4%;}
+
+.itemRowWrap {
+  .foto {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 0.5rem;
+    background-color: $color_grey_border3;
+    overflow: hidden;
+  }
+}
+
+.deleteButton {
+  & svg {
+    fill: #e4e4e4;
+    transition: all .3s ease;
+  }
+
+  &:hover svg {fill: $color_grey_text;}
+}
+
+.list {
+
+}
