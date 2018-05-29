@@ -103,19 +103,18 @@ export default (OriginalComponent: any) =>
       const { children: stateChildren, previewLength, slideWidth } = this.state;
       const totalSlidesAmount = children.length;
       if (!direction) {
-        const firstSevenItems = slice(
-          0,
-          slidesToShow + previewLength,
-          children,
-        );
-        const lastThreeItems = slice(
+        const firstItems = slice(0, slidesToShow + previewLength, children);
+        const lastItems = slice(
           totalSlidesAmount - previewLength,
           totalSlidesAmount,
           children,
         );
         this.setState({
-          children: concat(lastThreeItems, firstSevenItems),
+          children: concat(lastItems, firstItems),
         });
+      }
+      if (totalSlidesAmount <= slidesToShow + 1) {
+        return;
       }
       if (direction === 'prev') {
         // $FlowIgnoreMe
@@ -201,21 +200,55 @@ export default (OriginalComponent: any) =>
         visibleSlidesAmount,
         totalSlidesAmount,
         slideWidth,
-        slidesOffset: slidesToShow === 1 ? 0 : -previewLength * slideWidth,
+        slidesOffset:
+          slidesToShow === 1 || totalSlidesAmount <= slidesToShow + 1
+            ? 0
+            : -previewLength * slideWidth,
       });
 
-      if (slidesToShow > 1) {
-        this.cropChildren();
-      } else {
+      if (slidesToShow === 1 || totalSlidesAmount <= slidesToShow + 1) {
         this.setState({ children });
+      } else {
+        this.setState(
+          prevState => {
+            if (children.length <= slidesToShow + 3) {
+              return {
+                previewLength: 1,
+                slidesOffset: -1 * slideWidth,
+              };
+            } else if (children.length <= slidesToShow + 6) {
+              return {
+                previewLength: 2,
+                slidesOffset: -2 * slideWidth,
+              };
+            }
+            return prevState;
+          },
+          () => {
+            this.cropChildren();
+          },
+        );
       }
     };
 
     handleSlide = (direction: 'prev' | 'next') => {
-      const { animationSpeed } = this.props;
-      const { slidesOffset, slideWidth, isTransition } = this.state;
+      const { animationSpeed, slidesToShow } = this.props;
+      const {
+        slidesOffset,
+        slideWidth,
+        isTransition,
+        totalSlidesAmount,
+      } = this.state;
       if (isTransition) {
         return;
+      }
+      if (totalSlidesAmount <= slidesToShow + 1) {
+        if (
+          (direction === 'prev' && slidesOffset === 0) ||
+          (direction === 'next' && slidesOffset === -slideWidth)
+        ) {
+          return;
+        }
       }
       const newSlidesOffset =
         direction === 'next'
