@@ -140,8 +140,12 @@ class NewProduct extends Component<PropsType, StateType> {
     const { isLoading } = this.state;
     // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
-    // $FlowIgnoreMe
-    const name = getNameText(pathOr([], ['me', 'store', 'name'], this.props), 'EN');
+
+    const name = getNameText(
+      // $FlowIgnoreMe
+      pathOr([], ['me', 'store', 'name'], this.props),
+      'EN',
+    );
 
     return (
       <Container>

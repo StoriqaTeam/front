@@ -128,7 +128,10 @@ class EditProduct extends Component<PropsType, StateType> {
     const logo = storeLogoFromProps(this.props);
     // $FlowIgnoreMe
     const storeID = pathOr(null, ['store', 'id'], baseProduct);
-    const storeName = getNameText(pathOr([], ['store', 'name'], baseProduct), 'EN');
+    const storeName = getNameText(
+      pathOr([], ['store', 'name'], baseProduct),
+      'EN',
+    );
 
     if (!baseProduct) {
       return <span>Product not found</span>;

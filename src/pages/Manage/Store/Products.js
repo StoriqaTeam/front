@@ -269,7 +269,10 @@ class Products extends PureComponent<PropsType> {
       const { node } = item;
       const newItem = {
         ...item.node,
-        categoryName: getNameText(pathOr(null, ['category', 'name'], node), 'EN'),
+        categoryName: getNameText(
+          pathOr(null, ['category', 'name'], node),
+          'EN',
+        ),
         name: getNameText(pathOr(null, ['name'], node), 'EN'),
         product: head(pathOr([], ['products', 'edges'], node))
           ? head(node.products.edges).node

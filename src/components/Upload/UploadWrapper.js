@@ -40,7 +40,7 @@ const UploadWrapper = ({
   disabled,
 }: PropsType) => (
   <div styleName="wrapper">
-    <div styleName={classNames('upoloadContainer', { noIndents })}>
+    <div styleName={classNames('uploadContainer', { noIndents })}>
       <label
         htmlFor={id}
         styleName="uploadButton"
