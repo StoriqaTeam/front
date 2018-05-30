@@ -154,7 +154,7 @@ class WindowModal extends React.Component<{}, StateType> {
       </span>
     );
     const checkValid = () => {
-      if (form.email.errors || form.eth.errors) {
+      if (!form.email || !form.rth || form.email.errors || form.eth.errors) {
         return false;
       }
       if (!form.newsAccess || !form.storageAccess) {
