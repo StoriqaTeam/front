@@ -251,23 +251,20 @@ const routes = (
             })}
           />
 
-
           <Route
             path="/:storeId/products"
-            Component={({ me }) => <Products me={me} />}
+            Component={Products}
             query={graphql`
-              query routes_Products_Query($storeID: Int!) {
+              query routes_Products_Query($storeId: Int!) {
                 me {
-                  ...Products_me @arguments(storeId: $storeID)
+                  ...Products_me @arguments(storeId: $storeId)
                 }
               }
             `}
             prepareVariables={(_, { params }) => ({
-              storeID: parseInt(params.storeId, 10) || 0,
+              storeId: parseInt(params.storeId, 10) || 0,
             })}
           />
-
-
 
           <Route
             path="/:storeId/products/:productId"

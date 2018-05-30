@@ -1,15 +1,14 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import {assocPath, pathOr, toUpper, isEmpty, filter, map, head, path} from 'ramda';
+import { pathOr, isEmpty, map, head } from 'ramda';
 import { withRouter, routerShape } from 'found';
+import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
-import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
-// import { CreateStoreMutation } from 'relay/mutations';
 import { Container, Row, Col } from 'layout';
-import { getNameText, formatPrice, log, fromRelayError } from 'utils';
+import { getNameText, formatPrice, log } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
@@ -24,59 +23,41 @@ import { DeactivateBaseProductMutation } from 'relay/mutations';
 import Menu from './Menu';
 import Header from './Header';
 
+import type { Products_me as ProductsMe } from './__generated__/Products_me.graphql';
+
 import './Products.scss';
-import { createFragmentContainer, graphql, createPaginationContainer } from 'react-relay';
 
 type PropsType = {
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
+  relay: Relay,
+  me: ProductsMe,
 };
 
-type StateType = {
-  activeItem: string,
-  serverValidationErrors: any,
-  isLoading: boolean,
-};
-
-class Products extends Component<PropsType, StateType> {
-  // state: StateType = {
-  //   //
-  // };
-
+class Products extends PureComponent<PropsType> {
   addProduct = () => {
-    const storeId = pathOr(
-      null,
-      ['match', 'params', 'storeId'],
-      this.props,
-    );
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
 
     if (storeId) {
-      this.props.router.push(
-        `/manage/store/${storeId}/product/new`,
-      );
+      this.props.router.push(`/manage/store/${storeId}/product/new`);
     }
-  }
+  };
 
   editProduct = (id: number) => {
-    const storeId = pathOr(
-      null,
-      ['match', 'params', 'storeId'],
-      this.props,
-    );
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
 
     if (storeId) {
       this.props.router.push(
         `/manage/store/${storeId}/products/${parseInt(id, 10)}`,
       );
     }
-  }
+  };
 
   deleteProduct = (id: string) => {
-    const storeId = pathOr(
-      null,
-      ['me', 'store', 'id'],
-      this.props,
-    );
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
 
     DeactivateBaseProductMutation.commit({
       id,
@@ -109,54 +90,68 @@ class Products extends Component<PropsType, StateType> {
     });
   };
 
-  renderHeaderRow = () => {
-    return (
-      <div styleName="headerRowWrap">
-        <div styleName="td tdCheckbox">
-          <Checkbox id="header" onChange={() => {}} />
-        </div>
-        <div styleName="td tdFoto" />
-        <div styleName="td tdName">
-          <div styleName="tdWrap">
-            <span>Name</span>
-            <Icon inline type="sortArrows" />
-          </div>
-        </div>
-        <div styleName="td tdCategory">
-          <div styleName="tdWrap">
-            <span>Category</span>
-            <Icon inline type="sortArrows" />
-          </div>
-        </div>
-        <div styleName="td tdPrice">
-          <div styleName="tdWrap">
-            <span>Price</span>
-            <Icon inline type="sortArrows" />
-          </div>
-        </div>
-        <div styleName="td tdCashback">
-          <div styleName="tdWrap">
-            <span>Cashback</span>
-            <Icon inline type="sortArrows" />
-          </div>
-        </div>
-        <div styleName="td tdCharacteristics">
-          <span>Characteristics</span>
-          <Icon inline type="sortArrows" />
-        </div>
-        <div styleName="td tdEdit" />
-        <div styleName="td tdDelete">
-          <button styleName="deleteButton">
-            <Icon type="basket" size="32" />
-          </button>
-        </div>
-        <div styleName="td tdDropdawn" />
-      </div>
-    );
+  productsRefetch = () => {
+    this.props.relay.loadMore(8);
   };
 
-  renderRows = item => {
+  renderHeaderRow = () => (
+    <div styleName="headerRowWrap">
+      <div styleName="td tdCheckbox">
+        <Checkbox id="header" onChange={() => {}} />
+      </div>
+      <div styleName="td tdFoto" />
+      <div styleName="td tdName">
+        <div>
+          <span>Name</span>
+          <Icon inline type="sortArrows" />
+        </div>
+      </div>
+      <div styleName="td tdCategory">
+        <div>
+          <span>Category</span>
+          <Icon inline type="sortArrows" />
+        </div>
+      </div>
+      <div styleName="td tdPrice">
+        <div>
+          <span>Price</span>
+          <Icon inline type="sortArrows" />
+        </div>
+      </div>
+      <div styleName="td tdCashback">
+        <div>
+          <span>Cashback</span>
+          <Icon inline type="sortArrows" />
+        </div>
+      </div>
+      <div styleName="td tdCharacteristics">
+        <span>Characteristics</span>
+        <Icon inline type="sortArrows" />
+      </div>
+      <div styleName="td tdEdit" />
+      <div styleName="td tdDelete">
+        <button styleName="deleteButton">
+          <Icon type="basket" size="32" />
+        </button>
+      </div>
+      <div styleName="td tdDropdown" />
+    </div>
+  );
+
+  renderRows = (item: {
+    id: string,
+    rawId: number,
+    categoryName: string,
+    currencyId: number,
+    name: string,
+    product: {
+      cashback: ?number,
+      photoMain: ?string,
+      price: ?number,
+    },
+  }) => {
     const { product } = item;
+    // $FlowIgnoreMe
     const attributes = pathOr([], ['product', 'attributes'], item);
     return (
       <div key={item.rawId} styleName="itemRowWrap">
@@ -165,7 +160,7 @@ class Products extends Component<PropsType, StateType> {
         </div>
         <div styleName="td tdFoto">
           <div styleName="foto">
-            {!product.photoMain ? (
+            {!product || !product.photoMain ? (
               <Icon type="camera" size="40" />
             ) : (
               <ImageLoader
@@ -177,23 +172,29 @@ class Products extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="td tdName">
-          <div styleName="tdWrap">
+          <div>
             <span>{item.name}</span>
           </div>
         </div>
         <div styleName="td tdCategory">
-          <div styleName="tdWrap">
+          <div>
             <span>{item.categoryName}</span>
           </div>
         </div>
         <div styleName="td tdPrice">
-          <div styleName="tdWrap">
-            <span>{`${formatPrice(product.price)} STQ`}</span>
+          <div>
+            {product &&
+              product.price && (
+                <span>{`${formatPrice(product.price)} STQ`}</span>
+              )}
           </div>
         </div>
         <div styleName="td tdCashback">
-          <div styleName="tdWrap">
-            <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
+          <div>
+            {product &&
+              product.cashback && (
+                <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
+              )}
           </div>
         </div>
         <div styleName="td tdCharacteristics">
@@ -207,9 +208,9 @@ class Products extends Component<PropsType, StateType> {
                       'EN',
                     );
                     return (
-                      <div
-                        key={`attr-${attributeName}`}
-                      >{`${attributeName}: `}</div>
+                      <div key={`attr-${attributeName}`}>
+                        {`${attributeName}: `}
+                      </div>
                     );
                   }, attributes)}
                 </div>
@@ -230,7 +231,9 @@ class Products extends Component<PropsType, StateType> {
         <div styleName="td tdEdit">
           <button
             styleName="editButton"
-            onClick={() => {this.editProduct(item.rawId)}}
+            onClick={() => {
+              this.editProduct(item.rawId);
+            }}
           >
             <Icon type="note" size={32} />
           </button>
@@ -238,13 +241,15 @@ class Products extends Component<PropsType, StateType> {
         <div styleName="td tdDelete">
           <button
             styleName="deleteButton"
-            onClick={() => {this.deleteProduct(item.id)}}
+            onClick={() => {
+              this.deleteProduct(item.id);
+            }}
           >
             <Icon type="basket" size="32" />
           </button>
         </div>
-        <div styleName="td tdDropdawn">
-          <button styleName="arrowExpand" onClick={() => {}}>
+        <div styleName="td tdDropdown">
+          <button styleName="dropdownButton" onClick={() => {}}>
             <Icon inline type="arrowExpand" />
           </button>
         </div>
@@ -253,11 +258,9 @@ class Products extends Component<PropsType, StateType> {
   };
 
   render() {
-    const baseProducts = pathOr(
-      [],
-      ['me', 'store', 'baseProducts', 'edges'],
-      this.props,
-    );
+    const { me } = this.props;
+    // $FlowIgnoreMe
+    const baseProducts = pathOr([], ['store', 'baseProducts', 'edges'], me);
     const products = map(item => {
       const newItem = {
         ...item.node,
@@ -270,7 +273,6 @@ class Products extends Component<PropsType, StateType> {
       };
       return newItem;
     }, baseProducts);
-    const filteredProducts = filter(item => item.product, products);
     return (
       <Container>
         <Row>
@@ -282,23 +284,29 @@ class Products extends Component<PropsType, StateType> {
               <Header title="Goods" />
               <div styleName="wrapper">
                 <div styleName="addButton">
-                  <Button
-                    wireframe
-                    big
-                    onClick={this.addProduct}
-                  >
+                  <Button wireframe big onClick={this.addProduct}>
                     Add item
                   </Button>
                 </div>
                 <div styleName="subtitle">
                   <strong>Goods list</strong>
                 </div>
-                <div styleName="body">
-                  <div styleName="headerRow">{this.renderHeaderRow()}</div>
-                  <div styleName="list">
-                    {map(item => (this.renderRows(item)), filteredProducts)}
-                  </div>
+                <div>
+                  <div>{this.renderHeaderRow()}</div>
+                  <div>{map(item => this.renderRows(item), products)}</div>
                 </div>
+                {this.props.relay.hasMore() && (
+                  <div styleName="loadButton">
+                    <Button
+                      big
+                      load
+                      onClick={this.productsRefetch}
+                      dataTest="searchProductLoadMoreButton"
+                    >
+                      Load more
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </Col>
@@ -308,24 +316,25 @@ class Products extends Component<PropsType, StateType> {
   }
 }
 
-// export default withShowAlert(withRouter(Page(Products)));
-
 Products.contextTypes = {
   environment: PropTypes.object.isRequired,
-  directories: PropTypes.object,
-  currentUser: currentUserShape,
   showAlert: PropTypes.func,
 };
 
-export default createFragmentContainer(
+export default createPaginationContainer(
   withShowAlert(withRouter(Page(Products))),
   graphql`
     fragment Products_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
+      @argumentDefinitions(
+        first: { type: "Int", defaultValue: 8 }
+        after: { type: "ID", defaultValue: null }
+        storeId: { type: "Int!" }
+      ) {
       store(id: $storeId) {
         id
         logo
-        baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
+        baseProducts(first: $first, after: $after)
+          @connection(key: "Wizard_baseProducts") {
           edges {
             node {
               id
@@ -348,7 +357,7 @@ export default createFragmentContainer(
               }
               storeId
               currencyId
-              products(first: 1) @connection(key: "Wizard_products") {
+              products(first: 1) {
                 edges {
                   node {
                     id
@@ -385,8 +394,106 @@ export default createFragmentContainer(
               }
             }
           }
+          pageInfo {
+            endCursor
+          }
         }
       }
     }
   `,
+  {
+    direction: 'forward',
+    getConnectionFromProps: props =>
+      props.me &&
+      props.me.store &&
+      props.me.store.baseProducts &&
+      props.me.store.baseProducts,
+    getVariables: (props, _, prevFragmentVars) => ({
+      storeId: prevFragmentVars.storeId,
+      first: 8,
+      after: props.me.store.baseProducts.pageInfo.endCursor,
+    }),
+    query: graphql`
+      query Products_Query($first: Int, $after: ID, $storeId: Int!) {
+        me {
+          ...Products_me
+            @arguments(first: $first, after: $after, storeId: $storeId)
+        }
+      }
+    `,
+  },
 );
+
+// export default createFragmentContainer(
+//   withShowAlert(withRouter(Page(Products))),
+//   graphql`
+//     fragment Products_me on User
+//       @argumentDefinitions(storeId: { type: "Int!" }) {
+//       store(id: $storeId) {
+//         id
+//         logo
+//         baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
+//           edges {
+//             node {
+//               id
+//               rawId
+//               name {
+//                 text
+//                 lang
+//               }
+//               shortDescription {
+//                 lang
+//                 text
+//               }
+//               category {
+//                 id
+//                 rawId
+//                 name {
+//                   lang
+//                   text
+//                 }
+//               }
+//               storeId
+//               currencyId
+//               products(first: 1) @connection(key: "Wizard_products") {
+//                 edges {
+//                   node {
+//                     id
+//                     rawId
+//                     price
+//                     discount
+//                     photoMain
+//                     additionalPhotos
+//                     vendorCode
+//                     cashback
+//                     price
+//                     attributes {
+//                       value
+//                       metaField
+//                       attribute {
+//                         id
+//                         rawId
+//                         name {
+//                           lang
+//                           text
+//                         }
+//                         metaField {
+//                           values
+//                           translatedValues {
+//                             translations {
+//                               text
+//                             }
+//                           }
+//                         }
+//                       }
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `,
+// );

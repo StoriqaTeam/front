@@ -22,14 +22,6 @@
   float: right;
 }
 
-.body {
-  //
-}
-
-.headerRow {
-
-}
-
 .headerRowWrap, .itemRowWrap {
   display: flex;
   margin: 0 -4rem;
@@ -44,24 +36,16 @@
   color: $color_grey_text;
 }
 
-.tdWrap {
-  //
-}
-
 .tdCheckbox {width: 5%;}
 .tdFoto {width: 9%;}
 .tdName {width: 21%;}
 .tdCategory {width: 10%;}
-.tdPrice {width: 10%;}
+.tdPrice {width: 14%;}
 .tdCashback {width: 10%;}
-.tdCharacteristics {width: 24%;}
+.tdCharacteristics {width: 20%;}
 .tdEdit {width: 4%; justify-content: flex-end;}
 .tdDelete {width: 4%; justify-content: flex-end;}
-.tdDropdawn {width: 3%; justify-content: flex-end;}
-
-.arrowExpand {
-
-}
+.tdDropdown {width: 3%; justify-content: flex-end;}
 
 .headerRowWrap {
   padding: 2rem 4rem;
@@ -73,6 +57,13 @@
 
 .itemRowWrap {
   padding: 1rem 4rem;
+  cursor: pointer;
+
+  &:hover {
+    & .dropdownButton {
+      & svg {fill: $color_grey_text;}
+    }
+  }
 
   .foto {
     position: relative;
@@ -110,10 +101,13 @@
   &:hover svg {fill: $color_grey_text;}
 }
 
-.list {
-
+.dropdownButton {
+  & svg {
+    fill: $color_grey_bg;
+    transition: all .3s ease;
+  }
 }
 
-.loadButtonn {
-  margin-top: 2rem;
+.loadButton {
+  margin-top: 4rem;
 }

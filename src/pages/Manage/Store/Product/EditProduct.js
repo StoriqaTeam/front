@@ -122,7 +122,6 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { isLoading } = this.state;
     const baseProduct = baseProductFromProps(this.props);
     // $FlowIgnoreMe
