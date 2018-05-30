@@ -1,12 +1,6 @@
 @import "../../../../styles/variables";
 
 .wrapper {
-  // position: absolute;
-  // z-index: 1;
-  // top: 0;
-  // right: 0;
-  // bottom: 0;
-  // left: 0;
   display: flex;
   justify-content: center;
   width: 170rem;
@@ -39,7 +33,6 @@
     .form {
       width: 100%;
       background-color: $color_white;
-      // height: 760px;
 
       .section {
         margin-bottom: 6rem;
@@ -143,8 +136,6 @@
             }
             img {
               width: 100%;
-              // width: 10rem;
-              // height: 10rem;
             }
             .imageBG {
               width: 100%;
@@ -166,8 +157,6 @@
               background-color: $color_white;
               img {
                 width: 100%;
-                // width: 10rem;
-                // height: 10rem;
               }
             }
           }

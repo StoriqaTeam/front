@@ -37,28 +37,36 @@ type PropsType = {
   onClose: () => void,
 };
 
-const photoIcons = [{
-  type: 'mainFoto',
-  text: 'Add main photo',
-},{
-  type: 'angleView',
-  text: 'Add angle view',
-},{
-  type: 'showDetails',
-  text: 'Show details',
-},{
-  type: 'showInScene',
-  text: 'Show in scene',
-},{
-  type: 'showInUse',
-  text: 'Show in use',
-},{
-  type: 'showSizes',
-  text: 'Show sizes',
-},{
-  type: 'showVariety',
-  text: 'Show variety',
-}];
+const photoIcons = [
+  {
+    type: 'mainFoto',
+    text: 'Add main photo',
+  },
+  {
+    type: 'angleView',
+    text: 'Add angle view',
+  },
+  {
+    type: 'showDetails',
+    text: 'Show details',
+  },
+  {
+    type: 'showInScene',
+    text: 'Show in scene',
+  },
+  {
+    type: 'showInUse',
+    text: 'Show in use',
+  },
+  {
+    type: 'showSizes',
+    text: 'Show sizes',
+  },
+  {
+    type: 'showVariety',
+    text: 'Show variety',
+  },
+];
 
 class ThirdForm extends PureComponent<PropsType> {
   // TODO: remove useless function
@@ -243,20 +251,24 @@ class ThirdForm extends PureComponent<PropsType> {
                 additionalPhotos={data.product.additionalPhotos}
               />
               <div styleName="uploadDescriptionContainer">
-                <div styleName="description">* For better product appearance follow recomendations below and upload appropriate photos:</div>
+                <div styleName="description">
+                  * For better product appearance follow recomendations below
+                  and upload appropriate photos:
+                </div>
                 <div styleName="iconsContainer">
-                  {map(icon => (
-                    <div key={icon.type} styleName="iconBlock">
-                      <Icon type={icon.type} size={56} />
-                      <div styleName="iconDescription">{icon.text}</div>
-                    </div>
-                  ), photoIcons)}
+                  {map(
+                    icon => (
+                      <div key={icon.type} styleName="iconBlock">
+                        <Icon type={icon.type} size={56} />
+                        <div styleName="iconDescription">{icon.text}</div>
+                      </div>
+                    ),
+                    photoIcons,
+                  )}
                 </div>
               </div>
-              
             </div>
             <div styleName="section">
-
               <div styleName="sectionName">General settings and pricing</div>
               <div styleName="categorySelector">
                 <CategorySelector
