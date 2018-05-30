@@ -83,7 +83,9 @@
           .uploadItem {
             position: relative;
             display: inline-block;
-             margin-bottom: 2rem;
+            margin-bottom: 2rem;
+            width: 10rem;
+            height: 10rem;
 
             &:nth-child(3n+2) {
               margin-right: 2rem;
@@ -100,6 +102,8 @@
 
               img {
                 width: 100%;
+                // width: 10rem;
+                // height: 10rem;
               }
             }
           }

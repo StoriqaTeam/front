@@ -8,9 +8,10 @@ import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/common/Button';
+import { UploadWrapper } from 'components/Upload';
 
 import AttributesForm from './AttributesForm';
-import Uploaders from './Uploaders';
+import ProductsUploader from './ProductsUploader';
 
 import type { AttrValueType } from './AttributesForm';
 import type { BaseProductNodeType } from '../Wizard';
@@ -30,7 +31,6 @@ type PropsType = {
     [name: string]: any,
   }) => void,
   data: BaseProductNodeType,
-  aditionalPhotosMap: any,
   onUpload: (type: string, e: any) => Promise<*>,
   onSave: () => void,
   onClose: () => void,
@@ -114,9 +114,10 @@ class ThirdForm extends PureComponent<PropsType> {
   };
 
   render() {
-    const { data, aditionalPhotosMap, onSave, onClose } = this.props;
+    const { data, onSave, onClose, onUpload } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
+    console.log('>>> Form 3 render: ', { data });
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">
@@ -147,11 +148,36 @@ class ThirdForm extends PureComponent<PropsType> {
               </div>
             </div>
             <div styleName="section">
-              <div styleName="sectionName">Product photo</div>
-              <Uploaders
-                onUpload={this.props.onUpload}
-                photoMain={data.product.photoMain}
-                aditionalPhotosMap={aditionalPhotosMap}
+              <div styleName="sectionName">Product main photo</div>
+              <div styleName="uploadersWrapper">
+                <div styleName="uploadItem">
+                  <UploadWrapper
+                    id="upload_photo"
+                    onUpload={e => {
+                      onUpload('photoMain', e);
+                    }}
+                    buttonHeight={10}
+                    buttonWidth={10}
+                    noIndents
+                    buttonIconType="camera"
+                    buttonIconSize={20}
+                    buttonLabel="Add photo"
+                    dataTest="productPhotosUploader"
+                  >
+                    {data.product.photoMain && (
+                      <div styleName="uploadedPhotoWrapper">
+                        <img src={data.product.photoMain} alt="mainPhoto" />
+                      </div>
+                    )}
+                  </UploadWrapper>
+                </div>
+              </div>
+            </div>
+            <div styleName="section">
+              <div styleName="sectionName">Product photo gallery</div>
+              <ProductsUploader
+                onUpload={onUpload}
+                additionalPhotos={data.product.additionalPhotos}
               />
             </div>
             <div styleName="section">

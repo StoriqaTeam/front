@@ -79,14 +79,14 @@ type StateType = {
   showConfirm: boolean,
   step: number,
   baseProduct: BaseProductNodeType,
-  aditionalPhotosMap: {
-    photoAngle: string,
-    photoDetails: string,
-    photoScene: string,
-    photoUse: string,
-    photoSizes: string,
-    photoVarienty: string,
-  },
+  // additionalPhotosMap: {
+  //   photoAngle: string,
+  //   photoDetails: string,
+  //   photoScene: string,
+  //   photoUse: string,
+  //   photoSizes: string,
+  //   photoVarienty: string,
+  // },
 };
 
 export const initialProductState = {
@@ -107,14 +107,6 @@ export const initialProductState = {
       cashback: null,
     },
     attributes: [],
-  },
-  aditionalPhotosMap: {
-    photoAngle: '',
-    photoDetails: '',
-    photoScene: '',
-    photoUse: '',
-    photoSizes: '',
-    photoVarienty: '',
   },
 };
 
@@ -323,7 +315,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         // create variant after create base product
         const prepareDataForProduct = {
           product: {
-            ...baseProduct.product,
+            ...omit(['id'], baseProduct.product),
             cashback: (baseProduct.product.cashback || 0) / 100,
             baseProductId,
           },
@@ -406,7 +398,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           ...prevState.baseProduct,
           ...clearedData,
         },
-        aditionalPhotosMap: initialProductState.aditionalPhotosMap,
       };
     });
   };
@@ -441,6 +432,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const file = e.target.files[0];
     const result = await uploadFile(file);
     if (!result.url) return;
+    console.log('>>> handleOnUploadPhoto: ', { type });
     if (type === 'photoMain') {
       this.setState(prevState =>
         assocPath(
@@ -460,10 +452,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             ...prevState.baseProduct.product,
             additionalPhotos: [...additionalPhotos, result.url || ''],
           },
-        },
-        aditionalPhotosMap: {
-          ...this.state.aditionalPhotosMap,
-          [type]: result.url,
         },
       }));
     }
@@ -526,7 +514,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             <Step3
               formStateData={this.state.baseProduct}
               products={baseProducts ? baseProducts.edges : []}
-              aditionalPhotosMap={this.state.aditionalPhotosMap}
               onUpload={this.handleOnUploadPhoto}
               onChange={this.handleOnChangeProductForm}
               onClearProductState={this.handleOnClearProductState}
