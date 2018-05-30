@@ -109,6 +109,7 @@ class Contacts extends Component<PropsType, StateType> {
         ],
         store,
       ),
+      addressFull: pick(['addressFull'], store),
     });
   }
 
@@ -135,7 +136,7 @@ class Contacts extends Component<PropsType, StateType> {
     this.setState({
       addressFull: {
         ...addressFullData,
-      }
+      },
     });
   };
 
@@ -259,7 +260,7 @@ class Contacts extends Component<PropsType, StateType> {
     const name = pathOr('', ['name', 0, 'text'], store);
 
     const { logo } = store;
-    const { activeItem, isLoading, form, logoUrl } = this.state;
+    const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
     return (
       <Container>
         <Row>
@@ -296,7 +297,7 @@ class Contacts extends Component<PropsType, StateType> {
                 <div styleName="formItem">
                   <AddressForm
                     country={form.country}
-                    autocompleteValue={form.address}
+                    address={form.address}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
                     onChangeData={this.handleChangeData}
@@ -348,6 +349,12 @@ export default createFragmentContainer(
         addressFull {
           value
           country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          postalCode
+          streetNumber
+          route
         }
       }
     }
