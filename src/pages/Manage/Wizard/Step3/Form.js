@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { map, pathOr, whereEq } from 'ramda';
+import { map, pathOr, whereEq, filter } from 'ramda';
 
 import { findCategory } from 'utils';
 import { Input } from 'components/common/Input';
@@ -66,6 +66,18 @@ class ThirdForm extends PureComponent<PropsType> {
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
     const { onChange } = this.props;
     onChange({ attributes: attrs });
+  };
+
+  handleRemoveAddtionalPhoto = (url: string) => {
+    const { onChange, data } = this.props;
+    onChange({
+      product: {
+        ...data.product,
+        additionalPhotos: [
+          ...filter(u => u !== url, data.product.additionalPhotos),
+        ],
+      },
+    });
   };
 
   prepareValuesForAttributes = (
@@ -176,6 +188,7 @@ class ThirdForm extends PureComponent<PropsType> {
             <div styleName="section">
               <div styleName="sectionName">Product photo gallery</div>
               <ProductsUploader
+                onRemove={this.handleRemoveAddtionalPhoto}
                 onUpload={onUpload}
                 additionalPhotos={data.product.additionalPhotos}
               />

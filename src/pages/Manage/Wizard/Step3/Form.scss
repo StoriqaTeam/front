@@ -80,6 +80,10 @@
         }
 
         .uploadersWrapper {
+          .uploadedPhotoList {
+            display: flex;
+            flex-wrap: wrap;
+          }
           .uploadItem {
             position: relative;
             display: inline-block;
@@ -87,9 +91,30 @@
             width: 10rem;
             height: 10rem;
 
-            &:nth-child(3n+2) {
+            &:nth-child(2n) {
               margin-right: 2rem;
               margin-left: 2rem;
+            }
+            &:hover {
+              .itemHover {
+                display: flex;
+                svg {
+                  fill: $color_grey_2;
+                }
+              }
+            }
+            .itemHover {
+              display: none;
+              justify-content: center;
+              align-items: center;
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              background-color: $color_grey_10;
+              border-radius: 0.5rem;
+              cursor: pointer;
             }
             img {
               width: 100%;
@@ -102,10 +127,10 @@
               background-position: center;
               background-repeat: no-repeat;
               background-size: contain;
+              background-color: $color_grey_border3;
+              border-radius: 0.5rem;
             }
-            .uploadedPhotoList {
-
-            }
+            
             .uploadedPhotoWrapper {
               position: absolute;
               top: 0;
