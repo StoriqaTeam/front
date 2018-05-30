@@ -65,6 +65,7 @@ class Menu extends PureComponent<PropsType, StateType> {
           {/* eslint-disable no-nested-ternary */}
           {onLogoUpload ? (
             <UploadWrapper
+              disabled={activeItem !== 'settings'}
               id="new-store-id"
               onUpload={this.handleOnUpload}
               buttonHeight={26}
