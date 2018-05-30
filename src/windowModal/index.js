@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { splitAt } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Checkbox } from 'components/common/Checkbox';
@@ -77,7 +76,7 @@ class WindowModal extends React.Component<{}, StateType> {
         ...this.state.form,
         email: {
           text: value,
-          errors: emailIsValid ? null : ['invalid email'],
+          errors: emailIsValid ? null : ['Invalid email'],
         },
       },
     });
@@ -87,18 +86,18 @@ class WindowModal extends React.Component<{}, StateType> {
     const {
       target: { value },
     } = e;
-    const ethReg = /^[a-zA-Z0-9]{40}$/;
-    const clearValue =
-      splitAt(2, value)[0] === '0x' ? splitAt(2, value)[1] : value;
-    const ethIsValid = ethReg.test(clearValue);
-    if (clearValue.length <= 40) {
+    const ethReg = /^0?[x|X]?[a-zA-Z0-9]{40}$/;
+    // const clearValue =
+    //   splitAt(2, value)[0] === '0x' ? splitAt(2, value)[1] : value;
+    const ethIsValid = ethReg.test(value);
+    if (value.length <= 42) {
       this.setState({
         ...this.state,
         form: {
           ...this.state.form,
           eth: {
-            text: clearValue,
-            errors: ethIsValid ? null : ['invalid wallet number'],
+            text: value,
+            errors: ethIsValid ? null : ['Invalid wallet number'],
           },
         },
       });
@@ -129,7 +128,7 @@ class WindowModal extends React.Component<{}, StateType> {
     const { form } = this.state;
     const result = {
       email: form.email.text,
-      eth: form.email.text,
+      eth: form.eth.text,
       storageAccess: form.storageAccess,
       newsAccess: form.newsAccess,
     };
@@ -212,7 +211,7 @@ class WindowModal extends React.Component<{}, StateType> {
                 <Input
                   id="email"
                   value={form.email.text}
-                  label="e-mail"
+                  label="Email"
                   onChange={this.handleChangeEmail}
                   errors={form.email.errors}
                   fullWidth
@@ -222,7 +221,8 @@ class WindowModal extends React.Component<{}, StateType> {
                 <Input
                   id="eth"
                   value={form.eth.text}
-                  label="ETH wallet number"
+                  // value
+                  label="ETH address"
                   onChange={this.handleChangeETH}
                   errors={form.eth.errors}
                   fullWidth
