@@ -43,6 +43,7 @@ import Cats from 'components/Icon/svg/cats.svg';
 import Logout from 'components/Icon/svg/logout.svg';
 import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
 import Note from 'components/Icon/svg/note.svg';
+import Telegram from 'components/Icon/svg/telegram.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -108,6 +109,7 @@ const iconsMap = {
   note: <Note />,
   user: <User />,
   chat: <Chat />,
+  telegram: <Telegram />,
 
   // For product
   mainFoto: <MainFoto />,
