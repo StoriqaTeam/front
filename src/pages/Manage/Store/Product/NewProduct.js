@@ -112,7 +112,7 @@ class NewProduct extends Component<PropsType, StateType> {
           this.props.showAlert({
             type: 'success',
             text: 'Product created!',
-            link: { text: 'Ok!' },
+            link: { text: '' },
           });
         }
       },

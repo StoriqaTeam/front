@@ -185,7 +185,7 @@ class WindowModal extends React.Component<{}, StateType> {
                 https://t.me/storiqa_en
               </a>
             </div>
-            <div styleName="buttonContainer">
+            <div styleName="buttonContainerDone">
               <Button onClick={this.handleOnClose} big wireframe>
                 <span>Ok</span>
               </Button>
@@ -199,13 +199,13 @@ class WindowModal extends React.Component<{}, StateType> {
             <div styleName="modalDescription">
               To participate in airdrop, leave your email & wallet number.
             </div>
-            <div styleName="modalDescription">
+            {/* <div styleName="modalDescription">
               Join Telegram to get updates first!
               <a styleName="modalLink" href="https://t.me/storiqa_en">
                 <Icon type="telegram" inline size={20} />{' '}
                 https://t.me/storiqa_en
               </a>
-            </div>
+            </div> */}
             <div styleName="form">
               <div styleName="input">
                 <Input

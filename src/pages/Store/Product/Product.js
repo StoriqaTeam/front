@@ -121,7 +121,7 @@ class Product extends Component<PropsType, StateType> {
             this.props.showAlert({
               type: 'success',
               text: 'Product added to cart!',
-              link: { text: 'Ok.' },
+              link: { text: '' },
             });
           }
         },
