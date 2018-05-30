@@ -14,7 +14,6 @@ import {
   chain,
   reject,
   isNil,
-  assocPath,
 } from 'ramda';
 
 import { SearchInput } from 'components/SearchInput';
