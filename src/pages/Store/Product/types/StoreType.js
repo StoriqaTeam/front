@@ -6,4 +6,5 @@ export type StoreType = {
   name: Array<TranslationType>,
   rating: number,
   productsCount: string,
+  logo: ?string,
 };
