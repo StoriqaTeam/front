@@ -8,8 +8,8 @@
   {
     "id": "goods",
     "title": "Goods",
-    "link": "",
-    "disabled": true
+    "link": "/products",
+    "disabled": false
   },
   {
     "id": "settings",
