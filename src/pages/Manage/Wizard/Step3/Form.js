@@ -140,7 +140,6 @@ class ThirdForm extends PureComponent<PropsType> {
     const { data, onSave, onClose, onUpload } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
-    console.log('>>> Form 3 render: ', { data });
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">

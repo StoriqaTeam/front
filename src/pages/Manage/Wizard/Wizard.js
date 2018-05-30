@@ -432,7 +432,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const file = e.target.files[0];
     const result = await uploadFile(file);
     if (!result.url) return;
-    console.log('>>> handleOnUploadPhoto: ', { type });
     if (type === 'photoMain') {
       this.setState(prevState =>
         assocPath(
