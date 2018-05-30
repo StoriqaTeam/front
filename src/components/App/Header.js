@@ -23,6 +23,7 @@ import { Select } from 'components/common/Select';
 import { Icon } from 'components/Icon';
 import { Modal } from 'components/Modal';
 import { Authorization } from 'components/Authorization';
+import { setWindowTag } from 'utils';
 
 import { Container, Row, Col } from 'layout';
 
@@ -96,15 +97,26 @@ class Header extends Component<PropsType, StateType> {
     });
     const { dispose } = store.subscribe(snapshot, s => {
       this.setState({ cartCount: getCartCount(s.data) });
+      // tmp code
+      setWindowTag('cartCount', getCartCount(s.data));
+      // end tmp code
     });
     this.dispose = dispose;
     this.setState({ cartCount: getCartCount(snapshot.data) });
+    // tmp code
+    setWindowTag('cartCount', getCartCount(snapshot.data));
+    // end tmp code
 
     const meId = pathOr(
       null,
       ['me', '__ref'],
       store.getSource().get('client:root'),
     );
+    if (!meId) {
+      // tmp code
+      setWindowTag('user', null);
+      // end tmp code
+    }
     if (meId) {
       const queryUser = HEADER_FRAGMENT.me();
       const snapshotUser = store.lookup({
@@ -113,9 +125,15 @@ class Header extends Component<PropsType, StateType> {
       });
       const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
         this.setState({ userData: s.data });
+        // tmp code
+        setWindowTag('user', s.data);
+        // end tmp code
       });
       this.disposeUser = disposeUser;
       this.setState({ userData: snapshotUser.data });
+      // tmp code
+      setWindowTag('user', snapshotUser.data);
+      // end tmp code
     }
   }
 

@@ -13,6 +13,7 @@ import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
 import NewStore from 'pages/Manage/Store/NewStore';
+import Products from 'pages/Manage/Store/Products';
 import EditStore from 'pages/Manage/Store/EditStore';
 import Contacts from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
@@ -249,6 +250,22 @@ const routes = (
               storeID: parseInt(params.storeId, 10) || 0,
             })}
           />
+
+          <Route
+            path="/:storeId/products"
+            Component={Products}
+            query={graphql`
+              query routes_Products_Query($storeId: Int!) {
+                me {
+                  ...Products_me @arguments(storeId: $storeId)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeId: parseInt(params.storeId, 10) || 0,
+            })}
+          />
+
           <Route
             path="/:storeId/products/:productId"
             Component={EditProduct}
