@@ -33,7 +33,7 @@
   cursor: pointer;
   transition: all .3s ease;
 
-  &:hover {
+  &:hover:not(.isDisabled) {
     background-color: #FFFFFF;
   }
 }
@@ -43,6 +43,11 @@
   position: relative;
   background-color: $color_white;
 }
+
+.isDisabled {
+  color: $color_grey_bg;
+}
+
 
 .isActive:before {
   content: '';
