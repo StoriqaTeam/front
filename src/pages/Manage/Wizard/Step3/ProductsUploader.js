@@ -23,6 +23,9 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
             key={item}
             styleName="uploadItem"
             onClick={() => onRemove(item)}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="0"
           >
             <div
               styleName="imageBG"

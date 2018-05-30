@@ -9,6 +9,7 @@ import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/common/Button';
 import { UploadWrapper } from 'components/Upload';
+import { Icon } from 'components/Icon';
 
 import AttributesForm from './AttributesForm';
 import ProductsUploader from './ProductsUploader';
@@ -76,6 +77,16 @@ class ThirdForm extends PureComponent<PropsType> {
         additionalPhotos: [
           ...filter(u => u !== url, data.product.additionalPhotos),
         ],
+      },
+    });
+  };
+
+  handleOnRemoveMainPhoto = () => {
+    const { onChange, data } = this.props;
+    onChange({
+      product: {
+        ...data.product,
+        photoMain: '',
       },
     });
   };
@@ -162,26 +173,43 @@ class ThirdForm extends PureComponent<PropsType> {
             <div styleName="section">
               <div styleName="sectionName">Product main photo</div>
               <div styleName="uploadersWrapper">
-                <div styleName="uploadItem">
-                  <UploadWrapper
-                    id="upload_photo"
-                    onUpload={e => {
-                      onUpload('photoMain', e);
-                    }}
-                    buttonHeight={10}
-                    buttonWidth={10}
-                    noIndents
-                    buttonIconType="camera"
-                    buttonIconSize={20}
-                    buttonLabel="Add photo"
-                    dataTest="productPhotosUploader"
-                  >
-                    {data.product.photoMain && (
-                      <div styleName="uploadedPhotoWrapper">
-                        <img src={data.product.photoMain} alt="mainPhoto" />
+                <div styleName="uploadedPhotoList">
+                  {(data.product.photoMain && (
+                    <div
+                      styleName="uploadItem"
+                      onClick={this.handleOnRemoveMainPhoto}
+                      onKeyDown={() => {}}
+                      role="button"
+                      tabIndex="0"
+                    >
+                      <div
+                        styleName="imageBG"
+                        style={{
+                          backgroundImage: `url(${data.product.photoMain})`,
+                        }}
+                        alt="mainPhoto"
+                      />
+                      <div styleName="itemHover">
+                        <Icon type="basket" size={40} />
                       </div>
-                    )}
-                  </UploadWrapper>
+                    </div>
+                  )) || (
+                    <div styleName="uploadItem">
+                      <UploadWrapper
+                        id="upload_photo"
+                        onUpload={e => {
+                          onUpload('photoMain', e);
+                        }}
+                        buttonHeight={10}
+                        buttonWidth={10}
+                        noIndents
+                        buttonIconType="camera"
+                        buttonIconSize={20}
+                        buttonLabel="Add photo"
+                        dataTest="productPhotosUploader"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
