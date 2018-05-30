@@ -31,7 +31,6 @@ type InputType = {
   icon?: string,
   limit?: number,
 };
-/* eslint-enable */
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -49,6 +48,16 @@ type StateType = {
     facebookUrl: ?string,
     instagramUrl: ?string,
     twitterUrl: ?string,
+  },
+  addressFull: {
+    address: ?string,
+    administrativeAreaLevel1: ?string,
+    administrativeAreaLevel2: ?string,
+    country: ?string,
+    locality: ?string,
+    postalCode: ?string,
+    route: ?string,
+    streetNumber: ?string,
   },
   formErrors: {
     [string]: ?any,
@@ -68,6 +77,16 @@ class Contacts extends Component<PropsType, StateType> {
       facebookUrl: '',
       instagramUrl: '',
       twitterUrl: '',
+    },
+    addressFull: {
+      address: '',
+      administrativeAreaLevel1: '',
+      administrativeAreaLevel2: '',
+      country: '',
+      locality: '',
+      postalCode: '',
+      route: '',
+      streetNumber: '',
     },
     formErrors: {},
     activeItem: 'contacts',
@@ -110,6 +129,15 @@ class Contacts extends Component<PropsType, StateType> {
       },
     });
   };
+  // TODO: apply typing
+  handleChangeData = (addressFullData: any): void => {
+    // console.log('addressFullData', addressFullData);
+    this.setState({
+      addressFull: {
+        ...addressFullData,
+      }
+    });
+  };
 
   handleLogoUpload = (url: string) => {
     this.setState({ logoUrl: url });
@@ -136,7 +164,9 @@ class Contacts extends Component<PropsType, StateType> {
         instagramUrl,
         country,
       },
+      addressFull,
     } = this.state;
+
     this.setState({ formErrors: {}, isLoading: true });
 
     UpdateStoreMutation.commit({
@@ -152,6 +182,7 @@ class Contacts extends Component<PropsType, StateType> {
       twitterUrl,
       instagramUrl,
       environment,
+      ...addressFull,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
@@ -268,6 +299,7 @@ class Contacts extends Component<PropsType, StateType> {
                     autocompleteValue={form.address}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
+                    onChangeData={this.handleChangeData}
                   />
                 </div>
                 <div styleName="formItem">
