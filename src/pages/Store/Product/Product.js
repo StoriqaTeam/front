@@ -237,6 +237,7 @@ class Product extends Component<PropsType, StateType> {
                   Buy now
                 </Button>
                 <Button
+                  id="productAddToCart"
                   wireframe
                   big
                   onClick={() => this.handleAddToCart(productVariant.rawId)}

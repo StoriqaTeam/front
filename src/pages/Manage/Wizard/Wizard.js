@@ -323,7 +323,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         // create variant after create base product
         const prepareDataForProduct = {
           product: {
-            ...baseProduct.product,
+            ...omit(['id'], baseProduct.product),
             cashback: (baseProduct.product.cashback || 0) / 100,
             baseProductId,
           },
