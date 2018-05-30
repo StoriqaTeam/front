@@ -225,7 +225,6 @@ class Contacts extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const store = pathOr(null, ['store'], this.props.me);
 
-    // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], store);
 
     const { logo } = store;
