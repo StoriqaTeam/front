@@ -127,7 +127,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       this.props.showAlert({
         type: 'danger',
         text: 'Country and postal code are required parameters',
-        link: { text: 'Got it!' },
+        link: { text: '' },
       });
       return;
     }
@@ -175,7 +175,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: id ? 'Address update!' : 'Address create!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {
@@ -212,13 +212,21 @@ class ShippingAddresses extends Component<PropsType, StateType> {
           editableAddressId: null,
         }));
         this.resetForm();
+        this.props.showAlert({
+          type: 'success',
+          text: 'Address delete!',
+          link: { text: '' },
+        });
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        // eslint-disable-next-line
-        alert('Something going wrong :(');
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
       },
     };
     DeleteUserDeliveryAddressMutation.commit(params);

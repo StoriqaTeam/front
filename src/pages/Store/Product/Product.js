@@ -121,7 +121,7 @@ class Product extends Component<PropsType, StateType> {
             this.props.showAlert({
               type: 'success',
               text: 'Product added to cart!',
-              link: { text: 'Ok.' },
+              link: { text: '' },
             });
           }
         },
@@ -237,6 +237,7 @@ class Product extends Component<PropsType, StateType> {
                   Buy now
                 </Button>
                 <Button
+                  id="productAddToCart"
                   wireframe
                   big
                   onClick={() => this.handleAddToCart(productVariant.rawId)}

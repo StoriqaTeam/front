@@ -56,7 +56,7 @@ class VerifyEmail extends Component<PropsType, StateType> {
           this.props.showAlert({
             type: 'success',
             text: 'Verified successfully. Please login with your login data.',
-            link: { text: 'Ok :)' },
+            link: { text: '' },
           });
           this.props.router.replace('/');
         } else if (errors && errors.length > 0) {

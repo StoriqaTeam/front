@@ -76,7 +76,7 @@ class WindowModal extends React.Component<{}, StateType> {
         ...this.state.form,
         email: {
           text: value,
-          errors: emailIsValid ? null : ['invalid email'],
+          errors: emailIsValid ? null : ['Invalid email'],
         },
       },
     });
@@ -86,16 +86,18 @@ class WindowModal extends React.Component<{}, StateType> {
     const {
       target: { value },
     } = e;
-    const ethReg = /^[a-z0-9]{40}$/;
+    const ethReg = /^0?[x|X]?[a-zA-Z0-9]{40}$/;
+    // const clearValue =
+    //   splitAt(2, value)[0] === '0x' ? splitAt(2, value)[1] : value;
     const ethIsValid = ethReg.test(value);
-    if (value.length <= 40) {
+    if (value.length <= 42) {
       this.setState({
         ...this.state,
         form: {
           ...this.state.form,
           eth: {
             text: value,
-            errors: ethIsValid ? null : ['invalid wallet number'],
+            errors: ethIsValid ? null : ['Invalid wallet number'],
           },
         },
       });
@@ -126,7 +128,7 @@ class WindowModal extends React.Component<{}, StateType> {
     const { form } = this.state;
     const result = {
       email: form.email.text,
-      eth: form.email.text,
+      eth: form.eth.text,
       storageAccess: form.storageAccess,
       newsAccess: form.newsAccess,
     };
@@ -151,7 +153,12 @@ class WindowModal extends React.Component<{}, StateType> {
       </span>
     );
     const checkValid = () => {
-      if (form.email.errors || form.eth.errors) {
+      if (
+        !form.email.text ||
+        !form.eth.text ||
+        form.email.errors ||
+        form.eth.errors
+      ) {
         return false;
       }
       if (!form.newsAccess || !form.storageAccess) {
@@ -178,7 +185,7 @@ class WindowModal extends React.Component<{}, StateType> {
                 https://t.me/storiqa_en
               </a>
             </div>
-            <div styleName="buttonContainer">
+            <div styleName="buttonContainerDone">
               <Button onClick={this.handleOnClose} big wireframe>
                 <span>Ok</span>
               </Button>
@@ -192,19 +199,19 @@ class WindowModal extends React.Component<{}, StateType> {
             <div styleName="modalDescription">
               To participate in airdrop, leave your email & wallet number.
             </div>
-            <div styleName="modalDescription">
+            {/* <div styleName="modalDescription">
               Join Telegram to get updates first!
               <a styleName="modalLink" href="https://t.me/storiqa_en">
                 <Icon type="telegram" inline size={20} />{' '}
                 https://t.me/storiqa_en
               </a>
-            </div>
+            </div> */}
             <div styleName="form">
               <div styleName="input">
                 <Input
                   id="email"
                   value={form.email.text}
-                  label="e-mail"
+                  label="Email"
                   onChange={this.handleChangeEmail}
                   errors={form.email.errors}
                   fullWidth
@@ -214,7 +221,8 @@ class WindowModal extends React.Component<{}, StateType> {
                 <Input
                   id="eth"
                   value={form.eth.text}
-                  label="ETH wallet number"
+                  // value
+                  label="ETH address"
                   onChange={this.handleChangeETH}
                   errors={form.eth.errors}
                   fullWidth

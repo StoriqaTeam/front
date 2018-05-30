@@ -7,7 +7,7 @@ import { pathOr, isEmpty } from 'ramda';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { log, fromRelayError } from 'utils';
+import { log, fromRelayError, getNameText } from 'utils';
 import { UpdateBaseProductMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -98,7 +98,7 @@ class EditProduct extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Store updated!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {
@@ -128,6 +128,10 @@ class EditProduct extends Component<PropsType, StateType> {
     const logo = storeLogoFromProps(this.props);
     // $FlowIgnoreMe
     const storeID = pathOr(null, ['store', 'id'], baseProduct);
+    const storeName = getNameText(
+      pathOr([], ['store', 'name'], baseProduct),
+      'EN',
+    );
 
     if (!baseProduct) {
       return <span>Product not found</span>;
@@ -136,7 +140,12 @@ class EditProduct extends Component<PropsType, StateType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
+            <Menu
+              activeItem="goods"
+              switchMenu={() => {}}
+              storeName={storeName || ''}
+              storeLogo={logo || ''}
+            />
           </Col>
           <Col size={10}>
             <Form
@@ -236,6 +245,10 @@ export default createFragmentContainer(
           id
           rawId
           logo
+          name {
+            text
+            lang
+          }
         }
         name {
           lang
