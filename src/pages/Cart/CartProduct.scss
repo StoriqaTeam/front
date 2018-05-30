@@ -80,5 +80,12 @@
 
   & svg {
     fill: $color_grey_bg;
+    transition: all .3s ease;
+  }
+
+  &:hover {
+    & svg {
+      fill: $color_grey_text;
+    }
   }
 }
