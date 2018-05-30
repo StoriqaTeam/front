@@ -44,7 +44,6 @@ type ProductType = {
 };
 
 type PropsType = {
-  aditionalPhotosMap: any,
   onChange: (data: { [name: string]: any }) => void,
   onUpload: (type: string, e: any) => Promise<*>,
   onDelete: (ID: string) => void,
@@ -121,14 +120,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      formStateData,
-      aditionalPhotosMap,
-      onChange,
-      products,
-      onUpload,
-      onSave,
-    } = this.props;
+    const { formStateData, onChange, products, onUpload, onSave } = this.props;
     const { showForm } = this.state;
     const productsArr = map(item => item.node, products);
     const mapIndexed = addIndex(map);
@@ -208,7 +200,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           <Form
             data={formStateData}
             categories={this.context.directories.categories}
-            aditionalPhotosMap={aditionalPhotosMap}
             onChange={onChange}
             onUpload={onUpload}
             onSave={onSave}
