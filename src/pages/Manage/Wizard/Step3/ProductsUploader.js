@@ -15,31 +15,32 @@ type PropsType = {
 
 const Uploaders = ({ onUpload, photoMain, additionalPhotos }: PropsType) => (
   <div styleName="uploadersWrapper">
-    <div styleName="uploadItem">
-      <div styleName="uploadedPhotoWrapper">
-        {map(
-          item => (
-            <div key={item} styleName="uploadItem">
-              <img src={item} alt={item} />
-            </div>
-          ),
-          additionalPhotos,
-        )}
-      </div>
-      <UploadWrapper
-        id="upload_additional_photo"
-        onUpload={e => {
-          onUpload('additionalPhoto', e);
-        }}
-        buttonHeight={26}
-        buttonWidth={26}
-        noIndents
-        buttonIconType="mainFoto"
-        buttonIconSize={56}
-        buttonLabel="Add photo"
-        dataTest="productAdditionalPhotosUploader"
-      />
+    <div styleName="uploadedPhotoList">
+      {map(
+        item => (
+          <div key={item} styleName="uploadItem">
+            <div
+              styleName="imageBG"
+              style={{ backgroundImage: `url(${item})` }}
+            />
+          </div>
+        ),
+        additionalPhotos,
+      )}
     </div>
+    <UploadWrapper
+      id="upload_additional_photo"
+      onUpload={e => {
+        onUpload('additionalPhoto', e);
+      }}
+      buttonHeight={10}
+      buttonWidth={10}
+      noIndents
+      buttonIconType="camera"
+      buttonIconSize={20}
+      buttonLabel="Add photo"
+      dataTest="productAdditionalPhotosUploader"
+    />
   </div>
 );
 
