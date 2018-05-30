@@ -132,7 +132,9 @@ class CartTotal extends Component<PropsType, StateType> {
             {/* <div styleName="payments-group">
               <div styleName="title">My cards</div>
               <div styleName="payment-option">
-                <Checkbox isChecked={false} />
+                <div>
+                  <Checkbox isChecked={false} />
+                </div>
                 <div styleName="payment-option-value">5504 84** **** 3452</div>
                 <div styleName="payment-option-icon">
                   <img
@@ -144,7 +146,9 @@ class CartTotal extends Component<PropsType, StateType> {
               </div>
 
               <div styleName="payment-option">
-                <Checkbox isChecked={false} />
+                <div>
+                  <Checkbox isChecked={false} />
+                </div>
                 <div styleName="payment-option-value">5504 84** **** 5824</div>
                 <div styleName="payment-option-icon">
                   <img
@@ -159,8 +163,9 @@ class CartTotal extends Component<PropsType, StateType> {
             <div styleName="payments-group">
               <div styleName="title">Crypto payments</div>
               <div styleName="payment-option">
-                <Checkbox isChecked />
-                <div styleName="payment-option-value">STQ</div>
+                <div>
+                  <Checkbox isChecked label="STQ" />
+                </div>
                 <div styleName="payment-option-icon">
                   <img
                     // eslint-disable-next-line
@@ -171,8 +176,9 @@ class CartTotal extends Component<PropsType, StateType> {
               </div>
 
               <div styleName="payment-option">
-                <Checkbox isChecked={false} />
-                <div styleName="payment-option-value">BTC</div>
+                <div>
+                  <Checkbox isChecked={false} label="BTC" />
+                </div>
                 <div styleName="payment-option-icon">
                   <img
                     // eslint-disable-next-line
@@ -183,8 +189,9 @@ class CartTotal extends Component<PropsType, StateType> {
               </div>
 
               <div styleName="payment-option">
-                <Checkbox isChecked={false} />
-                <div styleName="payment-option-value">ETH</div>
+                <div>
+                  <Checkbox isChecked={false} label="ETH" />
+                </div>
                 <div styleName="payment-option-icon">
                   <img
                     // eslint-disable-next-line
