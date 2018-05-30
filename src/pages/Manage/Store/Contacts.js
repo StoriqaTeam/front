@@ -109,7 +109,7 @@ class Contacts extends Component<PropsType, StateType> {
         ],
         store,
       ),
-      addressFull: pick(['addressFull'], store),
+      ...pick(['addressFull'], store),
     });
   }
 
@@ -132,7 +132,7 @@ class Contacts extends Component<PropsType, StateType> {
   };
   // TODO: apply typing
   handleChangeData = (addressFullData: any): void => {
-    // console.log('addressFullData', addressFullData);
+    console.log('addressFullData', addressFullData);
     this.setState({
       addressFull: {
         ...addressFullData,
@@ -261,6 +261,7 @@ class Contacts extends Component<PropsType, StateType> {
 
     const { logo } = store;
     const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
+    console.log('addressFull', addressFull);
     return (
       <Container>
         <Row>
@@ -298,6 +299,7 @@ class Contacts extends Component<PropsType, StateType> {
                   <AddressForm
                     country={form.country}
                     address={form.address}
+                    addressFull={addressFull}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
                     onChangeData={this.handleChangeData}
