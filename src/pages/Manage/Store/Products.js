@@ -76,7 +76,7 @@ class Products extends PureComponent<PropsType> {
         this.props.showAlert({
           type: 'success',
           text: 'Product delete!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {

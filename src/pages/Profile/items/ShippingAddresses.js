@@ -127,7 +127,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       this.props.showAlert({
         type: 'danger',
         text: 'Country and postal code are required parameters',
-        link: { text: 'Got it!' },
+        link: { text: '' },
       });
       return;
     }
@@ -175,7 +175,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: id ? 'Address update!' : 'Address create!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {
@@ -215,7 +215,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Address delete!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {

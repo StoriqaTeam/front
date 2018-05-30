@@ -82,7 +82,7 @@ class EditStore extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Saved!',
-          link: { text: 'Ok!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {

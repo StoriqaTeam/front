@@ -6,12 +6,9 @@
   align-items: center;
   background-color: $color_white;
   width: 82rem;
-  height: 82rem;
   padding: 9.5rem 8rem 10rem;
 
   &.success {
-    height: 54rem;
-
     .modalDescription {
       padding: 2rem 6rem 2rem;
     }
@@ -42,6 +39,7 @@
     flex-direction: column;
     align-items: center;
     width: 70%;
+    margin-top: 2rem;
     .input {
       width: 100%;
       margin-bottom: 2.5rem;
@@ -55,19 +53,22 @@
       }
     }
   }
-}
 
-a {
-  font-size: 2rem;
-  color: $color_primary;
-}
+  a {
+    font-size: 2rem;
+    color: $color_primary;
+  }
 
-.policy {
-  font-size: 1.75rem;
-  margin-left: 1rem;
-  // float: right;
-}
+  .policy {
+    font-size: 1.75rem;
+    margin-left: 1rem;
+  }
 
-.buttonContainer {
-  margin-top: 2rem;
+  .buttonContainer {
+    margin-top: 7rem;
+  }
+
+  .buttonContainerDone {
+    margin-top: 5rem;
+  }
 }

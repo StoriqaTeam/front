@@ -98,7 +98,7 @@ class EditProduct extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Store updated!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {

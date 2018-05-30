@@ -91,7 +91,7 @@ class NewStore extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Store created!',
-          link: { text: 'Ok!' },
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {
@@ -110,7 +110,7 @@ class NewStore extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'danger',
           text: 'Something going wrong :(',
-          link: { text: 'Got it!' },
+          link: { text: '' },
         });
       },
     });

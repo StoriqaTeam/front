@@ -128,7 +128,7 @@ class Authorization extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Registration successful, please confirm your email and login.',
-          link: { text: 'Ok!' },
+          link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
         const { onCloseModal } = this.props;
