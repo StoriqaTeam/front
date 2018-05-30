@@ -114,8 +114,12 @@ app.use(
       jwt = null;
     }
 
+    const url = process.env.NODE_ENV === 'production' ?
+      process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS :
+      process.env.REACT_APP_GRAPHQL_ENDPOINT;
+
     const fetcher = new ServerFetcher(
-      process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      url,
       jwt,
       req.universalCookies.get('SESSION_ID'),
     );
