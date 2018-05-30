@@ -260,15 +260,22 @@ class Products extends PureComponent<PropsType> {
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
+    const name = getNameText(pathOr([], ['store', 'name'], me), 'EN');
+    // $FlowIgnoreMe
+    const logo = pathOr('', ['store', 'logo'], me);
+    // $FlowIgnoreMe
     const baseProducts = pathOr([], ['store', 'baseProducts', 'edges'], me);
     const products = map(item => {
+      const { node } = item;
       const newItem = {
         ...item.node,
-        categoryName: getNameText(item.node.category.name, 'EN'),
-        name: getNameText(item.node.name, 'EN'),
-        shortDescription: getNameText(item.node.shortDescription, 'EN'),
-        product: head(item.node.products.edges)
-          ? head(item.node.products.edges).node
+        categoryName: getNameText(
+          pathOr(null, ['category', 'name'], node),
+          'EN',
+        ),
+        name: getNameText(pathOr(null, ['name'], node), 'EN'),
+        product: head(pathOr([], ['products', 'edges'], node))
+          ? head(node.products.edges).node
           : null,
       };
       return newItem;
@@ -277,7 +284,12 @@ class Products extends PureComponent<PropsType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem="goods" switchMenu={() => {}} storeLogo="" />
+            <Menu
+              activeItem="goods"
+              storeName={name || ''}
+              storeLogo={logo}
+              onLogoUpload={() => {}}
+            />
           </Col>
           <Col size={10}>
             <div styleName="container">
@@ -333,6 +345,10 @@ export default createPaginationContainer(
       store(id: $storeId) {
         id
         logo
+        name {
+          text
+          lang
+        }
         baseProducts(first: $first, after: $after)
           @connection(key: "Wizard_baseProducts") {
           edges {

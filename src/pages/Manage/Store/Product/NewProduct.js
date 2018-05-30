@@ -7,7 +7,7 @@ import { pathOr, isEmpty, path } from 'ramda';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { log, fromRelayError } from 'utils';
+import { log, fromRelayError, getNameText } from 'utils';
 import { CreateBaseProductMutation } from 'relay/mutations';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
@@ -141,11 +141,22 @@ class NewProduct extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const logo = storeLogoFromProps(this.props);
 
+    const name = getNameText(
+      // $FlowIgnoreMe
+      pathOr([], ['me', 'store', 'name'], this.props),
+      'EN',
+    );
+
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem="" switchMenu={() => {}} storeLogo={logo || ''} />
+            <Menu
+              activeItem="goods"
+              switchMenu={() => {}}
+              storeName={name || ''}
+              storeLogo={logo || ''}
+            />
           </Col>
           <Col size={10}>
             <Form
@@ -175,6 +186,10 @@ export default createFragmentContainer(
       store(id: $storeId) {
         id
         logo
+        name {
+          text
+          lang
+        }
         baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
           edges {
             node {

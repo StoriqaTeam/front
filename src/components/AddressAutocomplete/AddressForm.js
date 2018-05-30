@@ -1,6 +1,16 @@
 // @flow
 import React, { Component } from 'react';
-import { pick, pathOr, forEach, isEmpty, map, find, omit } from 'ramda';
+import {
+  any,
+  pick,
+  pathOr,
+  forEach,
+  isEmpty,
+  map,
+  find,
+  omit,
+  isNil,
+} from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
@@ -66,9 +76,11 @@ class Form extends Component<PropsType, StateType> {
     )(countries);
     this.state = {
       country: country ? { id: country.code, label: country.name } : null,
-      address: props.addressFull
-        ? omit(['country', 'value'], props.addressFull)
-        : null,
+      address:
+        !isNil(props.addressFull) &&
+        any(val => !isNil(val))(Object.values(props.addressFull))
+          ? omit(['country', 'value'], props.addressFull)
+          : null,
       autocompleteValue: props.address,
       predictions: [],
     };

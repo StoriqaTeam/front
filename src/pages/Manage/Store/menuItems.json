@@ -1,26 +1,38 @@
 [
   {
     "id": "orders",
-    "title": "Orders"
+    "title": "Orders",
+    "link": "",
+    "disabled": true
   },
   {
     "id": "goods",
-    "title": "Goods"
+    "title": "Goods",
+    "link": "/products",
+    "disabled": false
   },
   {
     "id": "settings",
-    "title": "Settings"
+    "title": "Settings",
+    "link": "/",
+    "disabled": false
   },
   {
     "id": "contacts",
-    "title": "Contacts"
+    "title": "Contacts",
+    "link": "/contacts",
+    "disabled": false
   },
   {
     "id": "employees",
-    "title": "Employees"
+    "title": "Employees",
+    "link": "",
+    "disabled": true
   },
   {
     "id": "warehouses",
-    "title": "Warehouses"
+    "title": "Warehouses",
+    "link": "",
+    "disabled": true
   }
 ]

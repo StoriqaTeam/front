@@ -31,7 +31,6 @@ type InputType = {
   icon?: string,
   limit?: number,
 };
-/* eslint-enable */
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -50,15 +49,26 @@ type StateType = {
     instagramUrl: ?string,
     twitterUrl: ?string,
   },
+  addressFull: {
+    address: ?string,
+    administrativeAreaLevel1: ?string,
+    administrativeAreaLevel2: ?string,
+    country: ?string,
+    locality: ?string,
+    postalCode: ?string,
+    route: ?string,
+    streetNumber: ?string,
+  },
   formErrors: {
     [string]: ?any,
   },
   activeItem: string,
   isLoading: boolean,
+  logoUrl?: string,
 };
 
 class Contacts extends Component<PropsType, StateType> {
-  state = {
+  state: StateType = {
     form: {
       email: '',
       phone: '',
@@ -67,6 +77,16 @@ class Contacts extends Component<PropsType, StateType> {
       facebookUrl: '',
       instagramUrl: '',
       twitterUrl: '',
+    },
+    addressFull: {
+      address: '',
+      administrativeAreaLevel1: '',
+      administrativeAreaLevel2: '',
+      country: '',
+      locality: '',
+      postalCode: '',
+      route: '',
+      streetNumber: '',
     },
     formErrors: {},
     activeItem: 'contacts',
@@ -89,6 +109,7 @@ class Contacts extends Component<PropsType, StateType> {
         ],
         store,
       ),
+      ...pick(['addressFull'], store),
     });
   }
 
@@ -109,6 +130,19 @@ class Contacts extends Component<PropsType, StateType> {
       },
     });
   };
+  // TODO: apply typing
+  handleChangeData = (addressFullData: any): void => {
+    console.log('addressFullData', addressFullData);
+    this.setState({
+      addressFull: {
+        ...addressFullData,
+      },
+    });
+  };
+
+  handleLogoUpload = (url: string) => {
+    this.setState({ logoUrl: url });
+  };
 
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
@@ -120,6 +154,7 @@ class Contacts extends Component<PropsType, StateType> {
     }
 
     const {
+      logoUrl,
       // param 'country' enter for 'this.handleUpdateForm'
       form: {
         email,
@@ -130,13 +165,16 @@ class Contacts extends Component<PropsType, StateType> {
         instagramUrl,
         country,
       },
+      addressFull,
     } = this.state;
+
     this.setState({ formErrors: {}, isLoading: true });
 
     UpdateStoreMutation.commit({
       userId: parseInt(currentUser.rawId, 10),
       rawId: store.rawId,
       id: store.id,
+      logo: logoUrl,
       email,
       phone,
       country,
@@ -145,6 +183,7 @@ class Contacts extends Component<PropsType, StateType> {
       twitterUrl,
       instagramUrl,
       environment,
+      ...addressFull,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
@@ -215,12 +254,25 @@ class Contacts extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { activeItem, isLoading, form } = this.state;
+    // $FlowIgnoreMe
+    const store = pathOr(null, ['store'], this.props.me);
+
+    const name = pathOr('', ['name', 0, 'text'], store);
+
+    const { logo } = store;
+    const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
+    console.log('addressFull', addressFull);
     return (
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem={activeItem} switchMenu={this.switchMenu} />
+            <Menu
+              activeItem={activeItem}
+              switchMenu={this.switchMenu}
+              storeName={name}
+              storeLogo={logoUrl || logo}
+              onLogoUpload={this.handleLogoUpload}
+            />
           </Col>
           <Col size={10}>
             <div styleName="container">
@@ -246,9 +298,11 @@ class Contacts extends Component<PropsType, StateType> {
                 <div styleName="formItem">
                   <AddressForm
                     country={form.country}
-                    autocompleteValue={form.address}
+                    address={form.address}
+                    addressFull={addressFull}
                     onChangeFormInput={this.handleInputChange}
                     onUpdateForm={this.handleUpdateForm}
+                    onChangeData={this.handleChangeData}
                   />
                 </div>
                 <div styleName="formItem">
@@ -285,6 +339,7 @@ export default createFragmentContainer(
           lang
           text
         }
+        logo
         email
         phone
         facebookUrl
@@ -296,6 +351,12 @@ export default createFragmentContainer(
         addressFull {
           value
           country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          postalCode
+          streetNumber
+          route
         }
       }
     }
