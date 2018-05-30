@@ -282,6 +282,7 @@ export default createFragmentContainer(
         }
         rating
         productsCount
+        logo
       }
       variants {
         all {
