@@ -567,12 +567,23 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       }
       return false;
     };
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+    const isReadyChangeStep = () => {
+      if (step === 1 && isReadyToNext() && storeId) {
+        return true;
+      }
+      if (step === 2 && isReadyToNext()) {
+        return true;
+      }
+      return false;
+    };
 
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
           <WizardHeader
             currentStep={step}
+            isReadyToNext={isReadyChangeStep()}
             onChangeStep={this.handleOnChangeStep}
           />
         </div>
