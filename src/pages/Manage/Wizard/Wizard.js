@@ -20,6 +20,7 @@ import {
   CreateProductWithAttributesMutation,
   UpdateProductMutation,
   DeactivateBaseProductMutation,
+  DeleteWizardMutation,
 } from 'relay/mutations';
 import { uploadFile } from 'utils';
 
@@ -258,9 +259,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   handleEndingWizard = () => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
-    this.setState({ showConfirm: false }, () =>
-      this.props.router.push(`/manage/store/${storeId}`),
-    );
+    this.setState({ showConfirm: false }, () => {
+      this.props.router.push(`/manage/store/${storeId}`);
+      DeleteWizardMutation.commit({
+        environment: this.context.environment,
+        onCompleted: (response: ?Object, errors: ?Array<any>) => {
+          this.handleOnClearProductState();
+          resposeLogger(response, errors);
+        },
+        onError: (error: Error) => {
+          errorsLogger(error);
+        },
+      });
+    });
   };
 
   // delay for block tonns of query
@@ -567,12 +578,23 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       }
       return false;
     };
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+    const isReadyChangeStep = () => {
+      if (step === 1 && isReadyToNext() && storeId) {
+        return true;
+      }
+      if (step === 2 && isReadyToNext()) {
+        return true;
+      }
+      return false;
+    };
 
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
           <WizardHeader
             currentStep={step}
+            isReadyToNext={isReadyChangeStep()}
             onChangeStep={this.handleOnChangeStep}
           />
         </div>
