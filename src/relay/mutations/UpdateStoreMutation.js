@@ -15,6 +15,7 @@ const mutation = graphql`
       email
       phone
       slug
+      logo
       name {
         lang
         text
@@ -70,6 +71,7 @@ type MutationParamsType = {
   facebookUrl: string,
   twitterUrl: string,
   instagramUrl: string,
+  logo: string,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,
@@ -101,6 +103,7 @@ const commit = (params: MutationParamsType) => {
         facebookUrl: params.facebookUrl,
         twitterUrl: params.twitterUrl,
         instagramUrl: params.instagramUrl,
+        logo: params.logo,
       },
     },
     onCompleted: params.onCompleted,

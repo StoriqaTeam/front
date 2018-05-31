@@ -18,7 +18,10 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
-import { DeactivateBaseProductMutation } from 'relay/mutations';
+import {
+  DeactivateBaseProductMutation,
+  UpdateStoreMainMutation,
+} from 'relay/mutations';
 
 import Menu from './Menu';
 import Header from './Header';
@@ -76,6 +79,41 @@ class Products extends PureComponent<PropsType> {
         this.props.showAlert({
           type: 'success',
           text: 'Product delete!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
+
+  handleLogoUpload = (url: string) => {
+    const { environment } = this.context;
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+
+    UpdateStoreMainMutation.commit({
+      id: storeId,
+      logo: url,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: url ? 'Logo save!' : 'Logo delete!',
           link: { text: '' },
         });
       },
@@ -288,7 +326,7 @@ class Products extends PureComponent<PropsType> {
               activeItem="goods"
               storeName={name || ''}
               storeLogo={logo}
-              onLogoUpload={() => {}}
+              onLogoUpload={this.handleLogoUpload}
             />
           </Col>
           <Col size={10}>
@@ -440,76 +478,6 @@ export default createPaginationContainer(
   },
 );
 
-// export default createFragmentContainer(
-//   withShowAlert(withRouter(Page(Products))),
-//   graphql`
-//     fragment Products_me on User
-//       @argumentDefinitions(storeId: { type: "Int!" }) {
-//       store(id: $storeId) {
-//         id
-//         logo
-//         baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
-//           edges {
-//             node {
-//               id
-//               rawId
-//               name {
-//                 text
-//                 lang
-//               }
-//               shortDescription {
-//                 lang
-//                 text
-//               }
-//               category {
-//                 id
-//                 rawId
-//                 name {
-//                   lang
-//                   text
-//                 }
-//               }
-//               storeId
-//               currencyId
-//               products(first: 1) @connection(key: "Wizard_products") {
-//                 edges {
-//                   node {
-//                     id
-//                     rawId
-//                     price
-//                     discount
-//                     photoMain
-//                     additionalPhotos
-//                     vendorCode
-//                     cashback
-//                     price
-//                     attributes {
-//                       value
-//                       metaField
-//                       attribute {
-//                         id
-//                         rawId
-//                         name {
-//                           lang
-//                           text
-//                         }
-//                         metaField {
-//                           values
-//                           translatedValues {
-//                             translations {
-//                               text
-//                             }
-//                           }
-//                         }
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   `,
-// );
+Products.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
