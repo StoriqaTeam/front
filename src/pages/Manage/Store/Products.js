@@ -18,7 +18,10 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
-import { DeactivateBaseProductMutation } from 'relay/mutations';
+import {
+  DeactivateBaseProductMutation,
+  UpdateStoreMainMutation,
+} from 'relay/mutations';
 
 import Menu from './Menu';
 import Header from './Header';
@@ -76,7 +79,42 @@ class Products extends PureComponent<PropsType> {
         this.props.showAlert({
           type: 'success',
           text: 'Product delete!',
-          link: { text: 'Got it!' },
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
+
+  handleLogoUpload = (url: string) => {
+    const { environment } = this.context;
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+
+    UpdateStoreMainMutation.commit({
+      id: storeId,
+      logo: url,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: url ? 'Logo save!' : 'Logo delete!',
+          link: { text: '' },
         });
       },
       onError: (error: Error) => {
@@ -260,15 +298,22 @@ class Products extends PureComponent<PropsType> {
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
+    const name = getNameText(pathOr([], ['store', 'name'], me), 'EN');
+    // $FlowIgnoreMe
+    const logo = pathOr('', ['store', 'logo'], me);
+    // $FlowIgnoreMe
     const baseProducts = pathOr([], ['store', 'baseProducts', 'edges'], me);
     const products = map(item => {
+      const { node } = item;
       const newItem = {
         ...item.node,
-        categoryName: getNameText(item.node.category.name, 'EN'),
-        name: getNameText(item.node.name, 'EN'),
-        shortDescription: getNameText(item.node.shortDescription, 'EN'),
-        product: head(item.node.products.edges)
-          ? head(item.node.products.edges).node
+        categoryName: getNameText(
+          pathOr(null, ['category', 'name'], node),
+          'EN',
+        ),
+        name: getNameText(pathOr(null, ['name'], node), 'EN'),
+        product: head(pathOr([], ['products', 'edges'], node))
+          ? head(node.products.edges).node
           : null,
       };
       return newItem;
@@ -277,7 +322,12 @@ class Products extends PureComponent<PropsType> {
       <Container>
         <Row>
           <Col size={2}>
-            <Menu activeItem="goods" switchMenu={() => {}} storeLogo="" />
+            <Menu
+              activeItem="goods"
+              storeName={name || ''}
+              storeLogo={logo}
+              onLogoUpload={this.handleLogoUpload}
+            />
           </Col>
           <Col size={10}>
             <div styleName="container">
@@ -333,6 +383,10 @@ export default createPaginationContainer(
       store(id: $storeId) {
         id
         logo
+        name {
+          text
+          lang
+        }
         baseProducts(first: $first, after: $after)
           @connection(key: "Wizard_baseProducts") {
           edges {
@@ -424,76 +478,6 @@ export default createPaginationContainer(
   },
 );
 
-// export default createFragmentContainer(
-//   withShowAlert(withRouter(Page(Products))),
-//   graphql`
-//     fragment Products_me on User
-//       @argumentDefinitions(storeId: { type: "Int!" }) {
-//       store(id: $storeId) {
-//         id
-//         logo
-//         baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
-//           edges {
-//             node {
-//               id
-//               rawId
-//               name {
-//                 text
-//                 lang
-//               }
-//               shortDescription {
-//                 lang
-//                 text
-//               }
-//               category {
-//                 id
-//                 rawId
-//                 name {
-//                   lang
-//                   text
-//                 }
-//               }
-//               storeId
-//               currencyId
-//               products(first: 1) @connection(key: "Wizard_products") {
-//                 edges {
-//                   node {
-//                     id
-//                     rawId
-//                     price
-//                     discount
-//                     photoMain
-//                     additionalPhotos
-//                     vendorCode
-//                     cashback
-//                     price
-//                     attributes {
-//                       value
-//                       metaField
-//                       attribute {
-//                         id
-//                         rawId
-//                         name {
-//                           lang
-//                           text
-//                         }
-//                         metaField {
-//                           values
-//                           translatedValues {
-//                             translations {
-//                               text
-//                             }
-//                           }
-//                         }
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   `,
-// );
+Products.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};

@@ -79,14 +79,14 @@ type StateType = {
   showConfirm: boolean,
   step: number,
   baseProduct: BaseProductNodeType,
-  aditionalPhotosMap: {
-    photoAngle: string,
-    photoDetails: string,
-    photoScene: string,
-    photoUse: string,
-    photoSizes: string,
-    photoVarienty: string,
-  },
+  // additionalPhotosMap: {
+  //   photoAngle: string,
+  //   photoDetails: string,
+  //   photoScene: string,
+  //   photoUse: string,
+  //   photoSizes: string,
+  //   photoVarienty: string,
+  // },
 };
 
 export const initialProductState = {
@@ -107,14 +107,6 @@ export const initialProductState = {
       cashback: null,
     },
     attributes: [],
-  },
-  aditionalPhotosMap: {
-    photoAngle: '',
-    photoDetails: '',
-    photoScene: '',
-    photoUse: '',
-    photoSizes: '',
-    photoVarienty: '',
   },
 };
 
@@ -406,7 +398,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           ...prevState.baseProduct,
           ...clearedData,
         },
-        aditionalPhotosMap: initialProductState.aditionalPhotosMap,
       };
     });
   };
@@ -460,10 +451,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             ...prevState.baseProduct.product,
             additionalPhotos: [...additionalPhotos, result.url || ''],
           },
-        },
-        aditionalPhotosMap: {
-          ...this.state.aditionalPhotosMap,
-          [type]: result.url,
         },
       }));
     }
@@ -526,7 +513,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             <Step3
               formStateData={this.state.baseProduct}
               products={baseProducts ? baseProducts.edges : []}
-              aditionalPhotosMap={this.state.aditionalPhotosMap}
               onUpload={this.handleOnUploadPhoto}
               onChange={this.handleOnChangeProductForm}
               onClearProductState={this.handleOnClearProductState}

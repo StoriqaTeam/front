@@ -5,8 +5,16 @@
 }
 
 .imgWrap {
+  position: relative;
   border-radius: 0.5rem;
-  overflow: hidden;
+  //overflow: hidden;
+}
+
+.cross {
+  position: absolute;
+  top: 0.5rem;
+  left: -3rem;
+  cursor: pointer;
 }
 
 .img {
@@ -33,7 +41,7 @@
   cursor: pointer;
   transition: all .3s ease;
 
-  &:hover {
+  &:hover:not(.isDisabled) {
     background-color: #FFFFFF;
   }
 }
@@ -43,6 +51,11 @@
   position: relative;
   background-color: $color_white;
 }
+
+.isDisabled {
+  color: $color_grey_bg;
+}
+
 
 .isActive:before {
   content: '';

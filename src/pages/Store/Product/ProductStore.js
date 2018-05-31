@@ -19,7 +19,12 @@ const ProductStore = () => (
       <div styleName="container">
         <div styleName="storeInfoWrapper">
           <div styleName="storeInfo">
-            <div styleName="image" />
+            <div
+              styleName="image"
+              style={{
+                backgroundImage: store.logo ? `url(${store.logo})` : 'none',
+              }}
+            />
             <div>
               <h5 styleName="storeName">{extractText(store.name)}</h5>
               <Rating rating={store.rating} />
