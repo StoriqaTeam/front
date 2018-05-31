@@ -68,17 +68,35 @@ class Products extends PureComponent<PropsType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
-        if (errors) {
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong.',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Product delete!',
+          text: 'Saved!',
           link: { text: '' },
         });
       },
