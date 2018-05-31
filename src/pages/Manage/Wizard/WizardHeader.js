@@ -10,14 +10,20 @@ import './WizardHeader.scss';
 const WizardStepper = ({
   currentStep,
   onChangeStep,
+  isReadyToNext,
 }: {
   currentStep: number,
   onChangeStep: (val: number) => void,
+  isReadyToNext: boolean,
 }) => {
   const StepLabel = ({ step, text }: { step: number, text: string }) => (
     <div
       styleName={classNames('item', { active: currentStep === step })}
-      onClick={() => onChangeStep(step)}
+      onClick={() => {
+        if (isReadyToNext || step < currentStep) {
+          onChangeStep(step);
+        }
+      }}
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"

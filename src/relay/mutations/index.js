@@ -41,3 +41,4 @@ export { default as UpdateWizardMutation } from './UpdateWizardMutation';
 export {
   default as DeactivateBaseProductMutation,
 } from './DeactivateBaseProductMutation';
+export { default as DeleteWizardMutation } from './DeleteWizardMutation';
