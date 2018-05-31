@@ -80,14 +80,7 @@ type StateType = {
   showConfirm: boolean,
   step: number,
   baseProduct: BaseProductNodeType,
-  // additionalPhotosMap: {
-  //   photoAngle: string,
-  //   photoDetails: string,
-  //   photoScene: string,
-  //   photoUse: string,
-  //   photoSizes: string,
-  //   photoVarienty: string,
-  // },
+  isValid: boolean,
 };
 
 export const initialProductState = {
@@ -129,6 +122,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       showConfirm: false,
       step: 1,
       ...initialProductState,
+      isValid: false,
     };
   }
 
@@ -141,6 +135,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         resposeLogger(response, errors);
+        if (!errors) {
+          this.setState({ isValid: true });
+        } else {
+          this.setState({ isValid: false });
+        }
       },
       onError: (error: Error) => {
         errorsLogger(error);
@@ -159,6 +158,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         resposeLogger(response, errors);
+        if (!errors) {
+          this.setState({ isValid: true });
+        } else {
+          this.setState({ isValid: false });
+        }
       },
       onError: (error: Error) => {
         errorsLogger(error);
@@ -200,6 +204,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        if (!errors) {
+          this.setState({ isValid: true });
+        } else {
+          this.setState({ isValid: false });
+        }
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.updateWizard({ storeId });
         resposeLogger(response, errors);
@@ -220,6 +229,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         resposeLogger(response, errors);
+        if (!errors) {
+          this.setState({ isValid: true });
+        } else {
+          this.setState({ isValid: false });
+        }
       },
       onError: (error: Error) => {
         errorsLogger(error);
@@ -235,14 +249,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const { step } = this.state;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+    let errors = null;
     switch (step) {
       case 1:
-        this.handleOnChangeStep(changedStep);
         if (storeId) {
           this.updateStore();
+          this.handleOnChangeStep(changedStep);
           break;
         }
-        this.createStore();
+        // eslint
+        errors = this.createStore();
+        if (!errors) {
+          this.handleOnChangeStep(changedStep);
+        }
         break;
       case 2:
         this.handleOnChangeStep(changedStep);
@@ -540,7 +559,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { step, showConfirm } = this.state;
+    const { step, showConfirm, isValid } = this.state;
     const { wizardStore } = me;
     // $FlowIgnoreMe
     const baseProducts = pathOr(
@@ -567,17 +586,18 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       const isStepTwoPopulated = steptTwoChecker(stepTwo);
       const isStepThreePopulated =
         baseProducts && baseProducts.edges.length > 0;
-      if (step === 1 && isStepOnePopulated) {
+      if (step === 1 && isStepOnePopulated && isValid) {
         return true;
       }
-      if (step === 2 && isStepTwoPopulated) {
+      if (step === 2 && isStepTwoPopulated && isValid) {
         return true;
       }
-      if (step === 3 && isStepThreePopulated) {
+      if (step === 3 && isStepThreePopulated && isValid) {
         return true;
       }
       return false;
     };
+    // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     const isReadyChangeStep = () => {
       if (step === 1 && isReadyToNext() && storeId) {
