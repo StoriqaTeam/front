@@ -84,7 +84,10 @@ export default createFragmentContainer(
   Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
-      findMostViewedProducts(searchTerm: { options: { attrFilters: [] } }) {
+      findMostViewedProducts(
+        searchTerm: { options: { attrFilters: [] } }
+        first: 30
+      ) {
         edges {
           node {
             rawId
@@ -110,7 +113,10 @@ export default createFragmentContainer(
           }
         }
       }
-      findMostDiscountProducts(searchTerm: { options: { attrFilters: [] } }) {
+      findMostDiscountProducts(
+        searchTerm: { options: { attrFilters: [] } }
+        first: 30
+      ) {
         edges {
           node {
             rawId

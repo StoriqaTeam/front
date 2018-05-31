@@ -23,6 +23,7 @@ const mutation = graphql`
       defaultLanguage
       slug
       slogan
+      logo
     }
   }
 `;
@@ -60,6 +61,13 @@ const commit = (params: MutationParamsType) => {
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    updater: relayStore => {
+      const updateStore = relayStore.getRootField('updateStore');
+      const logo = updateStore.getValue('logo');
+      const storeId = updateStore.getValue('id');
+      const store = relayStore.get(storeId);
+      store.setValue(logo, 'logo');
+    },
   });
 };
 

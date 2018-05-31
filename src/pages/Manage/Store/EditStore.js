@@ -40,7 +40,38 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   handleLogoUpload = (url: string) => {
-    this.setState({ logoUrl: url });
+    const { environment } = this.context;
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+
+    UpdateStoreMainMutation.commit({
+      id: storeId,
+      logo: url,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: url ? 'Logo save!' : 'Logo delete!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
   };
 
   handleSave = ({ form, optionLanguage }) => {
@@ -129,7 +160,7 @@ class EditStore extends Component<PropsType, StateType> {
           <Col size={2}>
             <Menu
               activeItem={activeItem}
-              switchMenu={this.switchMenu}
+              switchMenu={() => {}}
               storeName={name}
               storeLogo={logoUrl || logo}
               onLogoUpload={this.handleLogoUpload}

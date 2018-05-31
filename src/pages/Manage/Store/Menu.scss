@@ -5,8 +5,16 @@
 }
 
 .imgWrap {
+  position: relative;
   border-radius: 0.5rem;
-  overflow: hidden;
+  //overflow: hidden;
+}
+
+.cross {
+  position: absolute;
+  top: 0.5rem;
+  left: -3rem;
+  cursor: pointer;
 }
 
 .img {
