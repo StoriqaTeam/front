@@ -85,6 +85,7 @@ class NewProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         log.debug({ validationErrors });
+
         // $FlowIgnoreMe
         const status: string = pathOr('', ['100', 'status'], relayErrors);
         if (!isEmpty(validationErrors)) {
@@ -125,8 +126,8 @@ class NewProduct extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
         }
@@ -156,7 +157,7 @@ class NewProduct extends Component<PropsType, StateType> {
 
         // $FlowIgnoreMe
         const statusError = pathOr({}, ['100', 'status'], relayErrors);
-        if (statusError) {
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
             text: 'You are not authorized to perform this action.',

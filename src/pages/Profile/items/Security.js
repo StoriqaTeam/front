@@ -185,7 +185,7 @@ class Security extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
           this.setState({
             formErrors: renameKeys(
