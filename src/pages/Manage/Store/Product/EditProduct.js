@@ -145,6 +145,7 @@ class EditProduct extends Component<PropsType, StateType> {
               switchMenu={() => {}}
               storeName={storeName || ''}
               storeLogo={logo || ''}
+              onLogoUpload={() => {}}
             />
           </Col>
           <Col size={10}>

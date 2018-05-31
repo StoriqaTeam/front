@@ -12,7 +12,7 @@ import { Container, Row, Col } from 'layout';
 import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
-import { UpdateStoreMutation } from 'relay/mutations';
+import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -141,7 +141,38 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   handleLogoUpload = (url: string) => {
-    this.setState({ logoUrl: url });
+    const { environment } = this.context;
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+
+    UpdateStoreMainMutation.commit({
+      id: storeId,
+      logo: url,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: url ? 'Logo save!' : 'Logo delete!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
   };
 
   handleUpdate = () => {

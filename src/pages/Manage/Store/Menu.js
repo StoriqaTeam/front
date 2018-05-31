@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { isEmpty, isNil } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
+import { Icon } from 'components/Icon';
 import { uploadFile } from 'utils';
 
 import type { MenuItemType } from './types';
@@ -38,10 +39,9 @@ class Menu extends PureComponent<PropsType, StateType> {
       this.props.onLogoUpload(result.url);
     }
   };
-  handleClick = ({ id, link, disabled }: MenuItemType): void => {
+  handleClick = ({ link }: MenuItemType): void => {
     const {
       router,
-      switchMenu,
       match: {
         params: { storeId },
       },
@@ -53,10 +53,17 @@ class Menu extends PureComponent<PropsType, StateType> {
         router.replace(path);
       }
     }
-    if (!disabled) {
-      switchMenu(id);
+    // if (!disabled) {
+    //   switchMenu(id);
+    // }
+  };
+
+  deleteAvatar = () => {
+    if (this.props.onLogoUpload) {
+      this.props.onLogoUpload('');
     }
   };
+
   render() {
     const { activeItem, storeName, storeLogo, onLogoUpload } = this.props;
     return (
@@ -65,17 +72,29 @@ class Menu extends PureComponent<PropsType, StateType> {
           {/* eslint-disable no-nested-ternary */}
           {onLogoUpload ? (
             <UploadWrapper
-              disabled={activeItem !== 'settings'}
               id="new-store-id"
               onUpload={this.handleOnUpload}
               buttonHeight={26}
               buttonWidth={26}
+              buttonIconSize={48}
               buttonIconType="upload"
+              buttonLabel="Click to download logo"
               overPicture={storeLogo}
               dataTest="storeImgUploader"
             />
           ) : (
-            <img src={storeLogo} alt="store logo" styleName="storeLogo" />
+            <img src={storeLogo} alt="store logo" />
+          )}
+          {storeLogo && (
+            <div
+              styleName="cross"
+              onClick={this.deleteAvatar}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
+              <Icon type="cross" />
+            </div>
           )}
         </div>
         {storeName && <div styleName="title">{storeName}</div>}
