@@ -79,6 +79,18 @@ class NewStore extends Component<PropsType, StateType> {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
+
+        // $FlowIgnoreMe
+        const statusError = pathOr({}, ['100', 'status'], relayErrors);
+        if (statusError) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'You are not authorized to perform this action.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
         // $FlowIgnoreMe
         const storeId: ?number = pathOr(
           null,
