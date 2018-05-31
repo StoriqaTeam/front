@@ -8,7 +8,10 @@ import { pathOr, isEmpty, path } from 'ramda';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { log, fromRelayError, getNameText } from 'utils';
-import { CreateBaseProductMutation } from 'relay/mutations';
+import {
+  CreateBaseProductMutation,
+  UpdateStoreMainMutation,
+} from 'relay/mutations';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -136,6 +139,60 @@ class NewProduct extends Component<PropsType, StateType> {
     });
   };
 
+  handleLogoUpload = (url: string) => {
+    const { environment } = this.context;
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+
+    UpdateStoreMainMutation.commit({
+      id: storeId,
+      logo: url,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const statusError = pathOr({}, ['100', 'status'], relayErrors);
+        if (statusError) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'You are not authorized to perform this action.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Saved!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
+
   render() {
     const { isLoading } = this.state;
     // $FlowIgnoreMe
@@ -156,6 +213,7 @@ class NewProduct extends Component<PropsType, StateType> {
               switchMenu={() => {}}
               storeName={name || ''}
               storeLogo={logo || ''}
+              onLogoUpload={this.handleLogoUpload}
             />
           </Col>
           <Col size={10}>

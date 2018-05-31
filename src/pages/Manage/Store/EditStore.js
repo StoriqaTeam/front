@@ -49,17 +49,36 @@ class EditStore extends Component<PropsType, StateType> {
       logo: url,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        if (errors) {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const statusError = pathOr({}, ['100', 'status'], relayErrors);
+        if (statusError) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong.',
+            text: 'You are not authorized to perform this action.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: url ? 'Logo save!' : 'Logo delete!',
+          text: 'Saved!',
           link: { text: '' },
         });
       },
@@ -108,6 +127,16 @@ class EditStore extends Component<PropsType, StateType> {
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
           this.setState({ serverValidationErrors: validationErrors });
+          return;
+        }
+        // $FlowIgnoreMe
+        const statusError = pathOr({}, ['100', 'status'], relayErrors);
+        if (statusError) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'You are not authorized to perform this action.',
+            link: { text: 'Close.' },
+          });
           return;
         }
         this.props.showAlert({
