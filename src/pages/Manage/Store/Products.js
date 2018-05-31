@@ -8,7 +8,7 @@ import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { getNameText, formatPrice, log } from 'utils';
+import { getNameText, formatPrice, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
@@ -103,17 +103,36 @@ class Products extends PureComponent<PropsType> {
       logo: url,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        if (errors) {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const statusError = pathOr({}, ['100', 'status'], relayErrors);
+        if (statusError) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong.',
+            text: 'You are not authorized to perform this action.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: url ? 'Logo save!' : 'Logo delete!',
+          text: 'Saved!',
           link: { text: '' },
         });
       },
