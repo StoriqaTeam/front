@@ -132,7 +132,6 @@ class Contacts extends Component<PropsType, StateType> {
   };
   // TODO: apply typing
   handleChangeData = (addressFullData: any): void => {
-    console.log('addressFullData', addressFullData);
     this.setState({
       addressFull: {
         ...addressFullData,
@@ -308,7 +307,7 @@ class Contacts extends Component<PropsType, StateType> {
 
     const { logo } = store;
     const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
-    console.log('addressFull', addressFull);
+
     return (
       <Container>
         <Row>
