@@ -233,7 +233,18 @@ class Contacts extends Component<PropsType, StateType> {
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
         }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Saved!',
+          link: { text: '' },
+        });
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -252,6 +263,11 @@ class Contacts extends Component<PropsType, StateType> {
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
           log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
           return;
         }
 
