@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr, pick } from 'ramda';
+import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -155,11 +155,11 @@ class Contacts extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
 
         // $FlowIgnoreMe
-        const statusError = pathOr({}, ['100', 'status'], relayErrors);
-        if (statusError) {
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'You are not authorized to perform this action.',
+            text: `Error: "${statusError}"`,
             link: { text: 'Close.' },
           });
           return;
@@ -239,20 +239,21 @@ class Contacts extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        // debugger;
 
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
         }
 
         // $FlowIgnoreMe
-        const statusError = pathOr({}, ['100', 'status'], relayErrors);
-        if (statusError) {
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'You are not authorized to perform this action.',
+            text: `Error: "${statusError}"`,
             link: { text: 'Close.' },
           });
           return;
@@ -282,8 +283,8 @@ class Contacts extends Component<PropsType, StateType> {
         this.setState(() => ({ isLoading: false }));
 
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
         }

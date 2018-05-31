@@ -55,11 +55,11 @@ class EditStore extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
 
         // $FlowIgnoreMe
-        const statusError = pathOr({}, ['100', 'status'], relayErrors);
-        if (statusError) {
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'You are not authorized to perform this action.',
+            text: `Error: "${statusError}"`,
             link: { text: 'Close.' },
           });
           return;
@@ -130,11 +130,11 @@ class EditStore extends Component<PropsType, StateType> {
           return;
         }
         // $FlowIgnoreMe
-        const statusError = pathOr({}, ['100', 'status'], relayErrors);
-        if (statusError) {
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'You are not authorized to perform this action.',
+            text: `Error: "${statusError}"`,
             link: { text: 'Close.' },
           });
           return;
