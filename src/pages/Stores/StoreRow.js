@@ -37,17 +37,13 @@ class StoreRow extends PureComponent<PropsType> {
         <Row>
           <Col size={6}>
             <div styleName="storeData">
-              <Link
-                to={`/store/${store.rawId}`}
-                styleName="storeLogo"
-                data-test="storeLink"
-              >
+              <div styleName="storeLogo" data-test="storeLink">
                 {store.logo ? (
                   <img src={store.logo} alt="img" />
                 ) : (
                   <Icon type="camera" size="32" />
                 )}
-              </Link>
+              </div>
               <div styleName="storeInfo">
                 <div styleName="storeName">{name}</div>
                 <div styleName="storeAdd">

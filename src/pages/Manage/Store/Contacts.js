@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, propOr, pick } from 'ramda';
+import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -132,7 +132,6 @@ class Contacts extends Component<PropsType, StateType> {
   };
   // TODO: apply typing
   handleChangeData = (addressFullData: any): void => {
-    console.log('addressFullData', addressFullData);
     this.setState({
       addressFull: {
         ...addressFullData,
@@ -150,17 +149,36 @@ class Contacts extends Component<PropsType, StateType> {
       logo: url,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        if (errors) {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong.',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: url ? 'Logo save!' : 'Logo delete!',
+          text: 'Saved!',
           link: { text: '' },
         });
       },
@@ -221,11 +239,23 @@ class Contacts extends Component<PropsType, StateType> {
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
+        // debugger;
 
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
           return;
         }
 
@@ -253,8 +283,8 @@ class Contacts extends Component<PropsType, StateType> {
         this.setState(() => ({ isLoading: false }));
 
         // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        if (validationErrors) {
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
         }
@@ -308,7 +338,7 @@ class Contacts extends Component<PropsType, StateType> {
 
     const { logo } = store;
     const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
-    console.log('addressFull', addressFull);
+
     return (
       <Container>
         <Row>

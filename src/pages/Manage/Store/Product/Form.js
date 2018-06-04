@@ -187,7 +187,7 @@ class Form extends Component<PropsType, StateType> {
             id: 'shortDescription',
             label: 'Short description',
           })}
-          {this.renderTextarea({ id: 'fullDesc', label: 'Full description' })}
+          {this.renderTextarea({ id: 'fullDesc', label: 'Long description' })}
           <div styleName="formItem">
             <CategorySelector
               categories={this.props.categories}

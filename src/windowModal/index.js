@@ -176,7 +176,7 @@ class WindowModal extends React.Component<{}, StateType> {
 
             <div styleName="modalDescription">
               Make sure you left your email and wallet address, we inform you
-              later when tokens will be distibuted.
+              later when tokens will be distributed.
             </div>
             <div styleName="modalDescription">
               Join Telegram to get updates first!

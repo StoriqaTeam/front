@@ -79,6 +79,18 @@ class NewStore extends Component<PropsType, StateType> {
           this.setState({ serverValidationErrors: validationErrors });
           return;
         }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
         // $FlowIgnoreMe
         const storeId: ?number = pathOr(
           null,
