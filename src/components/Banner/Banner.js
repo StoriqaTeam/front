@@ -22,7 +22,7 @@ class Banner extends PureComponent<PropsTypes> {
     return (
       <a styleName="container" target="_blank" href={item.link}>
         <div styleName="wrap">
-          <ImageLoader src={item.img} loader={<BannerLoading />} />
+          <ImageLoader fit left src={item.img} loader={<BannerLoading />} />
         </div>
       </a>
     );
