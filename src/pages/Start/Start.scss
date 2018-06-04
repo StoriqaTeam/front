@@ -7,15 +7,32 @@
   width: 100%;
 }
 
-.item + .item {
-  margin-top: 1rem;
+.item {
+  //
 }
 
 .bannerSliderItem {
-  min-height: 40rem;
+  min-height: 22rem;
+  margin-top: 1rem;
+
+  @media (min-width: 768px) {
+    min-height: 24rem;
+  }
+
+  @media (min-width: 992px) {
+    min-height: 29rem;
+  }
+
+  @media (min-width: 1200px) {
+    min-height: 40rem;
+  }
 }
 
 .goodSliderItem {
-  min-height: 48rem;
-  padding: 0 1rem;
+  margin-top: 1rem;
+  padding: 0 2rem;
+}
+
+.bannersItem {
+   margin-top: -1rem;
 }
