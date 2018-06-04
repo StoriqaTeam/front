@@ -29,7 +29,7 @@ import { MD } from 'utils/responsive';
 
 import { Container, Row, Col } from 'layout';
 
-import { HeaderTop } from './index';
+import { HeaderTop, AuthButtons } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 import './Header.scss';
@@ -150,14 +150,14 @@ class Header extends Component<PropsType, StateType> {
     }
   }
 
-  onOpenModal = (isSignUp: ?boolean) => {
+  handleOpenModal = (isSignUp: ?boolean): void => {
     this.setState({
       showModal: true,
       isSignUp,
     });
   };
 
-  onCloseModal = () => {
+  handleCloseModal = (): void => {
     this.setState({ showModal: false });
   };
 
@@ -192,30 +192,9 @@ class Header extends Component<PropsType, StateType> {
                   {userData ? (
                     <UserDropdown user={userData} />
                   ) : (
-                    <div styleName="authButtons">
-                      <div
-                        styleName="signUpButton"
-                        onClick={() => {
-                          this.onOpenModal(true);
-                        }}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex="0"
-                      >
-                        Sign Up
-                      </div>
-                      <div
-                        styleName="signInButton"
-                        onClick={() => {
-                          this.onOpenModal(false);
-                        }}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex="0"
-                      >
-                        <strong>Sign In</strong>
-                      </div>
-                    </div>
+                    <AuthButtons
+                      onOpenModal={this.handleOpenModal}
+                    />
                   )}
                 </div>
                 <div styleName="cartIcon">
@@ -225,8 +204,14 @@ class Header extends Component<PropsType, StateType> {
             </Col>
           </Row>
         </Container>
-        <Modal showModal={showModal} onClose={this.onCloseModal}>
-          <Authorization isSignUp={isSignUp} onCloseModal={this.onCloseModal} />
+        <Modal
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+        >
+          <Authorization
+            isSignUp={isSignUp}
+            onCloseModal={this.handleCloseModal}
+          />
         </Modal>
       </header>
     );
