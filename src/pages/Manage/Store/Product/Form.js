@@ -16,7 +16,11 @@ import Header from '../Header';
 import './Product.scss';
 
 type PropsType = {
-  baseProduct: ?{ [string]: any, shortDescription?: Array<any> },
+  baseProduct: ?{
+    [string]: any,
+    shortDescription?: Array<any>,
+    category: { rawId: number },
+  },
   onSave: Function,
   validationErrors: ?{},
   categories: Array<{}>,
@@ -169,7 +173,7 @@ class Form extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, baseProduct } = this.props;
     return (
       <div styleName="container">
         <Header title="Goods" />
@@ -191,6 +195,7 @@ class Form extends Component<PropsType, StateType> {
           <div styleName="formItem">
             <CategorySelector
               categories={this.props.categories}
+              category={baseProduct && baseProduct.category}
               onSelect={itemId => {
                 this.setState({
                   form: {
