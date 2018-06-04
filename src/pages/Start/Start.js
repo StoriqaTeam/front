@@ -65,7 +65,7 @@ class Start extends PureComponent<PropsTypes> {
               />
             )}
         </div>
-        <div styleName="item">
+        <div styleName="item bannersItem">
           <BannersRow items={bannersRow} count={2} />
         </div>
       </div>

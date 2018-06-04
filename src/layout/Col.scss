@@ -71,7 +71,7 @@
 
 /*  */
 
-@media (min-width: 72rem) {
+@media (min-width: 576px) {
   .col-sm {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -149,7 +149,7 @@
 
 /*  */
 
-@media (min-width: 96rem) {
+@media (min-width: 768px) {
   .col-md {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -227,7 +227,7 @@
 
 /* */
 
-@media (min-width: 124rem) {
+@media (min-width: 992px) {
   .col-lg {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -303,7 +303,7 @@
   }
 }
 
-@media (min-width: 150rem) {
+@media (min-width: 1200px) {
   .col-xl {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
