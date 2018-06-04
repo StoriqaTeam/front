@@ -7,15 +7,17 @@ import './Col.scss';
 
 type PropsTypes = {
   children: any,
-  size: number,
+  size: number, // Size layout's column
+  ds?: string, // ds: Device Size
 };
 
 class Col extends PureComponent<PropsTypes> {
   render() {
-    const { size } = this.props;
+    const { size, ds } = this.props;
+    const dsString = ds ? `-${ds}` : '';
 
     return (
-      <div styleName={classNames('col', { [`col-${size}`]: size })}>
+      <div styleName={classNames('col', { [`col${dsString}-${size}`]: true })}>
         {this.props.children}
       </div>
     );
