@@ -15,6 +15,7 @@ import {
   reject,
   isNil,
 } from 'ramda';
+import MediaQuery from 'react-responsive';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -217,15 +218,17 @@ class Header extends Component<PropsType, StateType> {
                 <Link to="/" data-test="logoLink">
                   <Icon type="logo" />
                 </Link>
-                <div styleName="searchInput">
-                  <SearchInput
-                    searchCategories={[
-                      { id: 'products', label: 'Products' },
-                      { id: 'stores', label: 'Shops' },
-                    ]}
-                    searchValue={searchValue}
-                  />
-                </div>
+                <MediaQuery minWidth={768}>
+                  <div styleName="searchInput">
+                    <SearchInput
+                      searchCategories={[
+                        { id: 'products', label: 'Products' },
+                        { id: 'stores', label: 'Shops' },
+                      ]}
+                      searchValue={searchValue}
+                    />
+                  </div>
+                </MediaQuery>
                 <div>
                   {userData ? (
                     <UserDropdown user={userData} />
