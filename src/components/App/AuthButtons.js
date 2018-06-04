@@ -3,12 +3,10 @@ import React from 'react';
 import './AuthButtons.scss';
 
 type PropsType = {
-  onOpenModal(boolean): void
-}
+  onOpenModal(boolean): void,
+};
 
-const AuthButtons = ({
-  onOpenModal,
-}: PropsType) => (
+const AuthButtons = ({ onOpenModal }: PropsType) => (
   <div styleName="container">
     <div
       styleName="signUpButton"

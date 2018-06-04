@@ -25,7 +25,7 @@ import { Icon } from 'components/Icon';
 import { Modal } from 'components/Modal';
 import { Authorization } from 'components/Authorization';
 import { setWindowTag } from 'utils';
-import { MD } from 'utils/responsive';
+import { LG } from 'utils/responsive';
 
 import { Container, Row, Col } from 'layout';
 
@@ -177,37 +177,34 @@ class Header extends Component<PropsType, StateType> {
                 <Link to="/" data-test="logoLink">
                   <Icon type="logo" />
                 </Link>
-                <MediaQuery minWidth={MD}>
-                  <div styleName="searchInput">
-                    <SearchInput
-                      searchCategories={[
-                        { id: 'products', label: 'Products' },
-                        { id: 'stores', label: 'Shops' },
-                      ]}
-                      searchValue={searchValue}
-                    />
-                  </div>
+                <MediaQuery minWidth={LG}>
+                  <SearchInput
+                    searchCategories={[
+                      { id: 'products', label: 'Products' },
+                      { id: 'stores', label: 'Shops' },
+                    ]}
+                    searchValue={searchValue}
+                  />
                 </MediaQuery>
-                <div>
+                <div
+                  style={{
+                    display: 'flex',
+                  }}
+                >
                   {userData ? (
                     <UserDropdown user={userData} />
                   ) : (
-                    <AuthButtons
-                      onOpenModal={this.handleOpenModal}
-                    />
+                    <AuthButtons onOpenModal={this.handleOpenModal} />
                   )}
-                </div>
-                <div styleName="cartIcon">
-                  <CartButton href="/cart" amount={this.state.cartCount} />
+                  <div styleName="cartIcon">
+                    <CartButton href="/cart" amount={this.state.cartCount} />
+                  </div>
                 </div>
               </div>
             </Col>
           </Row>
         </Container>
-        <Modal
-          showModal={showModal}
-          onClose={this.handleCloseModal}
-        >
+        <Modal showModal={showModal} onClose={this.handleCloseModal}>
           <Authorization
             isSignUp={isSignUp}
             onCloseModal={this.handleCloseModal}

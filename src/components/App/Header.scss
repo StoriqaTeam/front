@@ -16,15 +16,11 @@
 }
 
 .bottom {
+  align-items: center;
   background-color: $color_white;
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   margin-top: 3rem;
-}
-
-.searchInput {
-  margin-left: 18rem;
-  flex: 1;
 }
 
 .cartIcon {
