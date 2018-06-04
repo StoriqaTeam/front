@@ -51,7 +51,11 @@ export default (OriginalComponent: any) =>
       this.sliderPropsCalc(this.props.children);
       if (process.env.BROWSER) {
         if (document.body) {
+          const { onresize } = document.body;
           document.body.onresize = () => {
+            if (onresize) {
+              onresize();
+            }
             this.sliderPropsCalc(this.props.children);
           };
         }

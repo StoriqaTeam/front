@@ -13,10 +13,13 @@ class Img extends Component {
     decode: bool,
     src: oneOfType([string, arrayOf(string)]),
     container: func,
+    fit: bool,
+    left: bool,
   };
 
   static defaultProps = {
     fit: false,
+    left: false,
     loader: false,
     unloader: false,
     decode: true,
@@ -168,6 +171,7 @@ class Img extends Component {
       // clear non img props
       let {
         fit,
+        left,
         src,
         loader,
         unloader,
@@ -187,7 +191,7 @@ class Img extends Component {
                 right: '0',
                 bottom: '0',
                 backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                backgroundPosition: left ? 'left' : 'center',
                 backgroundRepeat: 'no-repeat',
               }}
               {...imgProps}
