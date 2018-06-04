@@ -99,11 +99,20 @@ export default (OriginalComponent: any) =>
     originalComponentElement: Element;
 
     cropChildren = (direction?: string) => {
-      const { children, slidesToShow } = this.props;
-      const { children: stateChildren, previewLength, slideWidth } = this.state;
+      const { children } = this.props;
+      const {
+        children: stateChildren,
+        previewLength,
+        slideWidth,
+        visibleSlidesAmount,
+      } = this.state;
       const totalSlidesAmount = children.length;
       if (!direction) {
-        const firstItems = slice(0, slidesToShow + previewLength, children);
+        const firstItems = slice(
+          0,
+          visibleSlidesAmount + previewLength,
+          children,
+        );
         const lastItems = slice(
           totalSlidesAmount - previewLength,
           totalSlidesAmount,
@@ -113,7 +122,7 @@ export default (OriginalComponent: any) =>
           children: concat(lastItems, firstItems),
         });
       }
-      if (totalSlidesAmount <= slidesToShow + 1) {
+      if (totalSlidesAmount <= visibleSlidesAmount + 1) {
         return;
       }
       if (direction === 'prev') {
@@ -124,7 +133,7 @@ export default (OriginalComponent: any) =>
           children[headIdx === 0 ? totalSlidesAmount - 1 : headIdx - 1];
         const slicedChildren = slice(
           0,
-          2 * previewLength + slidesToShow - 1,
+          2 * previewLength + visibleSlidesAmount - 1,
           stateChildren,
         );
         const newChildren = prepend(newFirstItem, slicedChildren);
@@ -141,7 +150,7 @@ export default (OriginalComponent: any) =>
           children[lastIdx === totalSlidesAmount - 1 ? 0 : lastIdx + 1];
         const slicedChildren = slice(
           1,
-          2 * previewLength + slidesToShow,
+          2 * previewLength + visibleSlidesAmount,
           stateChildren,
         );
         const newChildren = append(newLastItem, slicedChildren);

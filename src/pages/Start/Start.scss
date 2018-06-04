@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
+  width: 100%;
 }
 
 .item + .item {
@@ -16,4 +17,5 @@
 
 .goodSliderItem {
   min-height: 48rem;
+  padding: 0 1rem;
 }

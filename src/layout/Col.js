@@ -21,6 +21,7 @@ class Col extends PureComponent<PropsTypes> {
     return (
       <div
         styleName={classNames('col', {
+          // $FlowIgnoreMe
           [`col-${size || 12}`]: true,
           // $FlowIgnoreMe
           [`col-sm col-sm-${sm}`]: sm,
