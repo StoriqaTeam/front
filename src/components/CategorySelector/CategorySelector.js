@@ -2,8 +2,9 @@
 
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
+import { zipObj } from 'ramda';
 
-import { getNameText } from 'utils';
+import { getNameText, searchPathByParent, flattenFunc } from 'utils';
 
 import LevelList from './LevelList';
 
@@ -23,6 +24,9 @@ type CategoryType = {
 type PropsType = {
   categories: CategoryType,
   onSelect: (categoryId: number) => void,
+  category: {
+    rawId: number,
+  },
 };
 
 type StateType = {
@@ -41,13 +45,27 @@ type StateType = {
 class CategorySelector extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    const { categories, category } = props;
+    const flattenCategories = flattenFunc(categories.children);
+    const currentCategories = searchPathByParent(
+      flattenCategories,
+      category.rawId,
+    );
+
+    const items = zipObj(
+      ['level1Item', 'level2Item', 'level3Item'],
+      currentCategories,
+    );
+
     this.state = {
-      lang: 'EN',
-      isShow: false,
       level1Item: null,
       level2Item: null,
       level3Item: null,
-      snapshot: null,
+      snapshot: {
+        ...items,
+      },
+      lang: 'EN',
+      isShow: false,
     };
   }
 
