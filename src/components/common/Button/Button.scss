@@ -12,12 +12,12 @@
   cursor: pointer;
   color: $color_white;
   font-size: 14px;
-  background: $color_blue_1;
+  background-color: $color_blue;
   white-space: nowrap;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover:not([disabled]) {
-    background: $color_blue_1_hover;
+    background-color: $color_blue_hover;
   }
 }
 
@@ -29,8 +29,8 @@
 }
 
 .disabled {
-  background: #EFEFEF;
-  color: $color_white;
+  background-color: $color_grey_trival;
+  color: $color_grey_minor;
   cursor: default;
 }
 
@@ -39,13 +39,13 @@
   justify-content: flex-start;
   align-items: center;
   height: 5rem;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 14px;
-  background-color: #F7F7F7;
+  background-color: $color_grey_trival;
 
   &:hover {
     color: $color_white;
-    background-color: #F7F7F7;
+    background-color: $color_blue_hover;
   }
 }
 
@@ -57,33 +57,33 @@
 .load {
   font-family: $font_regular;
   width: 100%;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 16px;
-  background-color: $color_grey_1;
+  background-color: $color_grey_trival;
 
   &:hover {
     color: $color_white;
-    background-color: $color_blue_1;
+    background-color: $color_blue;
   }
 }
 
 .contour {
-  color: $color_blue_1;
-  border: 1px solid $color_blue_1;
+  color: $color_blue;
+  border: 1px solid $color_blue;
   background-color: transparent;
 
   &:hover {
     color: $color_white;
-    background-color: $color_blue_1;
+    background-color: $color_blue;
   }
 }
 
 .white {
   background-color: $color_white;
-  color: $color_blue_1;
+  color: $color_blue;
   &:hover {
     background-color: $color_white;
-    color: $color_blue_1;
+    color: $color_blue;
   }
 }
 
@@ -91,8 +91,8 @@
   background: transparent;
   font-family: $font_regular;
   font-size:  14px;
-  border: $color_primary 1px solid;
-  color: $color_primary;
+  border: $color_blue 1px solid;
+  color: $color_blue;
 
   &:hover {
     color: $color_white;
@@ -102,7 +102,7 @@
     opacity: .3;
 
     &:hover {
-      color: $color_primary;
+      color: $color_blue;
       background: transparent;
     }
   }

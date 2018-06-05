@@ -7,7 +7,7 @@
 .input input {
   position: relative;
   width: 100%;
-  border-bottom: 1px solid $color_grey_border2;
+  border-bottom: 1px solid $color_grey_light;
   font-size: 14px;
   line-height: 3rem;
   text-align: left;
@@ -19,7 +19,7 @@
 }
 
 .isError input {
-  border-bottom: 1px solid $color_red_error;
+  border-bottom: 1px solid $color_error;
 }
 
 .input hr {
@@ -27,7 +27,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  border: 1px solid $color_blue_1;
+  border: 1px solid $color_blue;
   transform: scaleX(0);
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
@@ -37,12 +37,12 @@
 }
 
 .isFocus.isError hr {
-  border: 1px solid $color_red_error;
+  border: 1px solid $color_error;
   transform: scaleX(1);
 }
 
 .isError.isFocus .labelFloat {
-  color: $color_red_error;
+  color: $color_error;
 }
 
 .validInput {
@@ -50,20 +50,20 @@
 }
 
 .invalidInput {
-  border-bottom: 1px solid #FD7DAA;
+  border-bottom: 1px solid $color_error;
 }
 
 .label {
   position: absolute;
   top: 0.5rem;
   left: 0;
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   font-size: 14px;
   line-height: 2rem;
   white-space: nowrap;
   transform: scale(1) translate(0, 0);
   transform-origin: left top 0;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .labelFloat {
@@ -72,14 +72,14 @@
 }
 
 .isFocus .labelFloat {
-  color: $color_blue_1;
+  color: $color_blue;
 }
 
 .message {
   position: absolute;
   bottom: -20px;
   left: 0;
-  color: #FF62A4;
+  color: $color_error;
   font-size: 10px;
   line-height: 16px;
 }
@@ -87,24 +87,24 @@
 .errors {
   position: relative;
   margin-top: 4px;
-  color: #FF62A4;
+  color: $color_error;
   font-size: 10px;
   text-align: left;
 }
 
 .icon {
   position: absolute;
-  top: 0;
+  top: -0.25rem;
   right: 0;
   cursor: pointer;
 
   & svg {
-    transition: all .3s ease;
+    transition: $transition_all_ease;
   }
 
   &.openIcon {
     & svg {
-      fill: $color_blue_1;
+      fill: $color_blue;
     }
     &:after {
       opacity: 0;
@@ -114,12 +114,12 @@
   &:after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 1.5rem;
+    top: 0.25rem;
+    left: 1.75rem;
     display: block;
     height: 3rem;
-    border-right: 2px solid $color_grey_link;
-    transform: rotate(45deg);
-    transition: all .3s ease;
+    border-right: 1px solid $color_grey_light;
+    transform: rotate(33deg);
+    transition: $transition_all_ease;
   }
 }

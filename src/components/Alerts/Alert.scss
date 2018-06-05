@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: $color_white;
   box-shadow: 0 7px 21px 5px rgba(0, 0, 0, 0.08);
   margin: 2rem;
 }
@@ -25,19 +25,19 @@
 }
 
 .default {
-  background-color: #d5d5d5;
+  background-color: $color_grey_minor;
 }
 
 .success {
-  background-color: #8fb62c;
+  background-color: $color_green;
 }
 
 .warning {
-  background-color: #ffd467;
+  background-color: $color_yellow;
 }
 
 .danger {
-  background-color: #ff408d;
+  background-color: $color_error;
 }
 
 .closeButton {
@@ -54,7 +54,7 @@
 }
 
 .title {
-  color: $color_grey_text;
+  color: $color_grey;
   font-family: $font_regular;
   font-size: 14px;
 }
@@ -65,13 +65,13 @@
   margin-right: 1.5rem;
   line-height: 1.43;
   letter-spacing: normal;
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   font-family: $font_regular;
   font-size: 14px;
 }
 
 .link {
-  color: $color_blue_1;
+  color: $color_blue;
   text-decoration: underline;
   font-family: $font_regular;
   font-size: 14px;

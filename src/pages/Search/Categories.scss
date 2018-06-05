@@ -16,7 +16,7 @@
   width: 25.95rem;
 
   .blockTitle {
-    color: $color_grey_bg;
+    color: $color_grey_minor;
     font-size: 14px;
   }
 
@@ -39,7 +39,7 @@
 
       .item {
         display: inline-block;
-        color: $color_grey_breadcrumbs;
+        color: $color_grey_minor;
         font-size: 1.75rem;
         cursor: pointer;
 
@@ -65,8 +65,8 @@
       .loadMoreButton {
         flex: 1;
         padding: 1rem;
-        border: 1px solid #f4f4f4;
-        color: #505050;
+        border: 1px solid $color_grey_light;
+        color: $color_grey;
         cursor: pointer;
         justify-content: center;
         align-items: center;
@@ -89,7 +89,7 @@
 }
 
 .active {
-  color: $color_primary!important;
+  color: $color_blue !important;
 }
 
 .parentCategory {

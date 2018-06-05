@@ -11,15 +11,15 @@
 .button {
   display: flex;
   align-items: center;
-  color: $color_grey_text;
-  transition: all .3s ease;
+  color: $color_grey;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_2;
+    color: $color_blue;
   }
 
-  & svg {transition: all .3s ease;}
-  &:hover svg {fill: $color_blue_1;}
+  & svg {transition: $transition_all_ease;}
+  &:hover svg {fill: $color_blue;}
 }
 
 .buttonText {
@@ -54,7 +54,7 @@
     left: 2rem;
     right: 2rem;
     padding: 0 4rem;
-    border-top: 2px solid $color_blue_2;
+    border-top: 2px solid $color_blue;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     background-color: $color_white;
@@ -66,7 +66,7 @@
       position: relative;
       width: 40rem;
       padding-right: 4rem;
-      border-right: 1px solid $color_grey_2;
+      border-right: 1px solid $color_grey_trival;
 
       & > ul {
         height: 30.5rem;
@@ -82,12 +82,12 @@
       display: block;
       padding: 0 2rem;
       font-size: 16px;
-      color: $color_grey_text;
+      color: $color_grey;
       line-height: 5rem;
       text-align: center;
       z-index: 1;
       transition: none;
-      transition: all .3s ease;
+      transition: $transition_all_ease;
       cursor: pointer;
     }
   }
@@ -95,7 +95,7 @@
   &:hover {
     & > .link {
       & > .text {
-        color: $color_blue_2;
+        color: $color_blue;
       }
     }
   }
@@ -117,7 +117,7 @@
   font-size: 14px;
   line-height: 7rem;
   text-transform: uppercase;
-  border-bottom: 1px solid $color_grey_2;
+  border-bottom: 1px solid $color_grey_trival;
   cursor: pointer;
 }
 
@@ -139,8 +139,8 @@
 
   & .link {
     display: block;
-    color: $color_grey_text;
-    transition: all .3s ease;
+    color: $color_grey;
+    transition: $transition_all_ease;
 
     & .text {
       position: relative;
@@ -150,8 +150,8 @@
 
   & svg {
     opacity: 0;
-    fill: $color_primary;
-    transition: all .3s ease;
+    fill: $color_blue;
+    transition: $transition_all_ease;
   }
 
   & > .items {
@@ -182,13 +182,13 @@
           & .link {
             display: block;
             width: 100%;
-            color: $color_grey_text;
-            transition: all .3s ease;
+            color: $color_grey;
+            transition: $transition_all_ease;
           }
 
           &:hover {
             & > .link {
-              color: $color_blue_2;
+              color: $color_blue;
             }
           }
         }
@@ -203,7 +203,7 @@
     }
 
     & > .link {
-      color: $color_blue_2 !important;
+      color: $color_blue !important;
     }
 
     & svg {

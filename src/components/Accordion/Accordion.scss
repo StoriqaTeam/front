@@ -13,13 +13,13 @@
 .separator {
   height: 1px;
   width: 100%;
-  background-color: $color_grey_border;
+  background-color: $color_grey_light;
   opacity: 0.2;
   margin: 2rem 0;
 }
 
 .showAll {
-  color: $color_primary!important;
+  color: $color_blue!important;
   font-size: 1.75rem;
   cursor: pointer;
   margin-top: -0.5rem;

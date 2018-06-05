@@ -6,9 +6,9 @@
   }
 
   span.cashback {
-    background-color: $color_primary;
+    background-color: $color_blue;
     border-radius: 0.25rem;
-    color: #ffffff;
+    color: $color_white;
     font-family: Roboto;
     font-size: 11px;
     font-stretch: normal;
@@ -22,7 +22,7 @@
   }
 
   .noCashback {
-    background: $color_grey_light !important;
+    background-color: $color_grey_trival !important;
   }
 
 }
@@ -35,7 +35,7 @@
 }
 
 .lastPrice {
-  color: #9a9a9a;
+  color: $color_grey_minor;
   font-size: 1.75rem;
   font-stretch: normal;
   font-style: normal;
@@ -49,7 +49,7 @@
 }
 
 .price {
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 2.5rem;
 }
 

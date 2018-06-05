@@ -63,13 +63,13 @@
 .navHeader {
   margin-bottom: 1rem;
   font-size: 16px;
-  color: $color_grey_text;
+  color: $color_grey;
 }
 
 .navItem {
   font-size: 14px;
   line-height: 3.5rem;
-  color: $color_grey_text;
+  color: $color_grey;
 
   &:hover {
     text-decoration: underline;
@@ -103,12 +103,12 @@
 }
 
 .aboutNavItem + .aboutNavItem {
-  border-left: 1px solid $color_grey_text;
+  border-left: 1px solid $color_grey;
 }
 
 .aboutNavItem a {
   font-size: 14px;
-  color: $color_grey_text;
+  color: $color_grey;
 
   &:hover {
     text-decoration: underline;
