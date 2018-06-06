@@ -81,29 +81,33 @@ class Footer extends PureComponent<{}, StateType> {
   };
   render() {
     const { market, sections, services } = this.state;
-    const FooterColumn = ({ title, links }: FooterCol) => (
-      <div>
-        <div styleName="navHeader">
-          <b>{title}</b>
-        </div>
-        {links.map(({ id, linkName }) => (
-          <a key={id} href="/" styleName="navItem">
-            {linkName}
-          </a>
-        ))}
-      </div>
-    );
     const FooterLogo = () => (
-      <div styleName="navBlockLogo">
+      <div styleName="footerLogo">
         <Icon type="logo" />
-        <div styleName="description">
-          Storiqa is a global marketplace for any kind of legal goods
-          supporting cryptocurrency payments
+        <div styleName="logoDescription">
+          Storiqa is a global marketplace for any kind of legal goods supporting
+          cryptocurrency payments
         </div>
       </div>
     );
-    const FooterButton = () => (
-      <div styleName="navBlockButton">
+    const FooterColumn = ({ title, links }: FooterCol) => (
+      <Col sm={12} md={4} lg={4} xl={4}>
+        <aside styleName="footerColumn">
+          <div>
+            <header styleName="navHeader">
+              <b>{title}</b>
+            </header>
+            {links.map(({ id, linkName }) => (
+              <a key={id} href="/" styleName="navItem">
+                {linkName}
+              </a>
+            ))}
+          </div>
+        </aside>
+      </Col>
+    );
+    const StartSellingButton = () => (
+      <div styleName="startSellingButton">
         <Button
           href={
             process.env.REACT_APP_HOST
@@ -121,56 +125,24 @@ class Footer extends PureComponent<{}, StateType> {
         <Container>
           <div styleName="footerTop">
             <Row>
-              <Col
-                xl={4}
-                lg={4}
-                md={8}
-              >
+              <Col md={12} lg={4} xl={4}>
                 <div>
                   <Row>
-                    <Col
-                      xl={9}
-                      lg={9}
-                    >
+                    <Col lg={9} xl={9}>
                       <FooterLogo />
                     </Col>
                   </Row>
                 </div>
               </Col>
-              <Col
-                xl={6}
-                lg={8}
-                md={12}
-              >
-                <div>
-                  <Row>
-                    <Col
-                      xl={4}
-                      lg={4}
-                    >
-                      <FooterColumn {...market} />
-                    </Col>
-                    <Col
-                      xl={4}
-                      lg={4}
-                    >
-                      <FooterColumn {...sections} />
-                    </Col>
-                    <Col
-                      xl={4}
-                      lg={4}
-                    >
-                      <FooterColumn {...services} />
-                    </Col>
-                  </Row>
-                </div>
+              <Col md={12} lg={8} xl={6}>
+                <Row>
+                  <FooterColumn {...market} />
+                  <FooterColumn {...sections} />
+                  <FooterColumn {...services} />
+                </Row>
               </Col>
-              <Col
-                xl={2}
-                lg={12}
-                md={12}
-              >
-                <FooterButton />
+              <Col md={12} lg={12} xl={2} >
+                <StartSellingButton />
               </Col>
             </Row>
           </div>
