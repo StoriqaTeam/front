@@ -46,16 +46,23 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { categories, category } = props;
-    const flattenCategories = flattenFunc(categories.children);
-    const currentCategories = searchPathByParent(
-      flattenCategories,
-      category.rawId,
-    );
+    let items = {
+      level1Item: null,
+      level2Item: null,
+      level3Item: null,
+    };
+    if (categories && category) {
+      const flattenCategories = flattenFunc(categories.children);
+      const currentCategories = searchPathByParent(
+        flattenCategories,
+        category.rawId,
+      );
 
-    const items = zipObj(
-      ['level1Item', 'level2Item', 'level3Item'],
-      currentCategories,
-    );
+      items = zipObj(
+        ['level1Item', 'level2Item', 'level3Item'],
+        currentCategories,
+      );
+    }
 
     this.state = {
       level1Item: null,

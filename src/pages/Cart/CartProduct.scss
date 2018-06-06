@@ -1,9 +1,9 @@
 @import "../../styles/variables.scss";
 
 .container {
-  color: $color_grey_text;
+  color: $color_grey;
   display: flex;
-  border-bottom: 1px solid $color_grey_light;
+  border-bottom: 1px solid $color_grey_trival;
   position: relative;
   padding-bottom: 3rem;
 
@@ -42,7 +42,7 @@
 
 .product-summary {
   width: 66%;
-  border-right: 1px solid $color_grey_2;
+  border-right: 1px solid $color_grey_trival;
 }
 
 .product-params {
@@ -67,7 +67,7 @@
 
 .total-container {
   width: 40em;
-  border: 1px solid $color_grey_light;
+  border: 1px solid $color_grey_trival;
 }
 
 .delivery-container {
@@ -79,13 +79,13 @@
   right: 0;
 
   & svg {
-    fill: $color_grey_bg;
-    transition: all .3s ease;
+    fill: $color_grey_light;
+    transition: $transition_all_ease;
   }
 
   &:hover {
     & svg {
-      fill: $color_grey_text;
+      fill: $color_grey;
     }
   }
 }

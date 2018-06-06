@@ -2,7 +2,7 @@
 
 .container {
   font-family: $font_regular;
-  color: #505050;
+  color: $color_grey;
   display: flex;
 }
 
@@ -10,13 +10,13 @@
   position: relative;
   height: 4rem;
   width: 14rem;
-  border: 1px solid #BFBFBF;
+  border: 1px solid $color_grey_minor;
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
 }
 
 .highlighted {
-  background-color: #F7F7F7;
+  background-color: $color_grey_trival;
   cursor: pointer;
 }
 
@@ -32,35 +32,33 @@
 .input {
   font-family: $font_regular;
   font-size: 14px;
-  color: $color_grey_text;
+  color: $color_grey;
   height: 4rem;
   width: 100%;
+  border: 1px solid $color_grey_minor;
   border-left: 0;
-  border-top: 1px solid #BFBFBF;
-  border-bottom: 1px solid #BFBFBF;
-  border-right: 1px solid #BFBFBF;
   padding-left: 1.5rem;
 }
 
-.input::-webkit-input-placeholder {color: $color_grey_text; opacity: 0.4;}
-.input::-moz-placeholder {color: $color_grey_text; opacity: 0.4;}
-.input:-ms-input-placeholder {color: $color_grey_text; opacity: 0.4;}
-.input:-moz-placeholder {color: $color_grey_text; opacity: 0.4;}
+.input::-webkit-input-placeholder {color: $color_grey; opacity: 0.4;}
+.input::-moz-placeholder {color: $color_grey; opacity: 0.4;}
+.input:-ms-input-placeholder {color: $color_grey; opacity: 0.4;}
+.input:-moz-placeholder {color: $color_grey; opacity: 0.4;}
 
 .searchButton {
   height: 4rem;
   width: 14rem;
   margin-left: -1px;
-  border: 1px solid $color_blue_1;
+  border: 1px solid $color_blue;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    background-color: $color_blue_1;
+    background-color: $color_blue;
   }
 
-  & svg {transition: all .3s ease;}
+  & svg {transition: $transition_all_ease;}
   &:hover svg {fill: $color_white;}
 }
 

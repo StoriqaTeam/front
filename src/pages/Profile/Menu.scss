@@ -30,13 +30,13 @@
   display: block;
   margin-left: -2rem;
   padding: 1.5rem 0 1.5rem 2rem;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 14px;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    background-color: #FFFFFF;
+    background-color: $color_white;
   }
 }
 
@@ -54,7 +54,7 @@
   left: 0;
   width: 0.25rem;
   display: block;
-  border-left: 2px solid $color_primary;
+  border-left: 2px solid $color_blue;
 }
 
 .storeLogo {

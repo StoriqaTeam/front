@@ -11,11 +11,11 @@
   position: absolute;
   top: 0.5rem;
   left: 0;
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   font-size: 14px;
   line-height: 2rem;
   white-space: nowrap;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .labelFloat {
@@ -24,7 +24,7 @@
 }
 
 .isError.isFocus .labelFloat {
-  color: $color_red_error;
+  color: $color_error;
 }
 
 .textarea {
@@ -34,7 +34,7 @@
 
 .textarea textarea {
   width: 100%;
-  border-bottom: 1px solid $color_grey_bg;
+  border-bottom: 1px solid $color_grey_minor;
   font-size: 14px;
   line-height: 3rem;
   text-align: left;
@@ -48,7 +48,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  border: 1px solid $color_grey_bg;
+  border: 1px solid $color_grey_minor;
   transform: scaleX(0);
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
@@ -58,12 +58,12 @@
 }
 
 .isError .textarea hr {
-  border: 1px solid $color_red_error;
+  border: 1px solid $color_error;
   transform: scaleX(1);
 }
 
 .isError .textarea textarea {
-  border-bottom: 1px solid $color_red_error;
+  border-bottom: 1px solid $color_error;
 }
 
 .errors {
@@ -73,6 +73,6 @@
   width: 100%;
   padding-right: 6rem;
   font-size: 12px;
-  color: $color_red_error;
+  color: $color_error;
   line-height: 3rem;
  }

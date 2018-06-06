@@ -1,20 +1,22 @@
+@import "../../styles/variables";
+
 .container {
   position: relative;
   display: inline-block;
-  padding: 0 16px 0 8px;
-  color: #FFFFFF;
+  padding: 0 2rem 0 1rem;
+  color: $color_white;
   font-size: 12px;
-  line-height: 24px;
-  background-color: #FF62A4;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25);
+  line-height: 3rem;
+  background-color: $color_pink;
+  box-shadow: $shadow_1;
 }
 
 .container:before {
   content: '';
   position: absolute;
   top: 0;
-  left: -24px;
+  left: -3rem;
   display: block;
-  border: 12px solid transparent;
-  border-right: 12px solid #FF62A4;
+  border: 1.5rem solid transparent;
+  border-right: 1.5rem solid $color_pink;
 }

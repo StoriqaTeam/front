@@ -19,7 +19,7 @@
   position: absolute;
   bottom: -0.375rem;
   width: 100%;
-  border-top: 1px solid $color_grey_border2;
+  border-top: 1px solid $color_grey_light;
 
   &:after {
     content: '';
@@ -27,9 +27,9 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    border: 1px solid $color_blue_1;
+    border: 1px solid $color_blue;
     transform: scaleX(0);
-    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    transition: $transition_all_cb;
   }
 }
 
@@ -61,13 +61,13 @@
   position: absolute;
   top: 0.75rem;
   left: 0;
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   font-size: 14px;
   line-height: 2rem;
   white-space: nowrap;
   transform: scale(1) translate(0, 0);
   transform-origin: left top 0;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .labelFloat {
@@ -76,12 +76,12 @@
 }
 
 .isExpanded .labelFloat {
-  color: $color_blue_1;
+  color: $color_blue;
 }
 
 .isBirthdate .labelFloat,
 .isBirthdate .label {
-  color: $color_grey_text;
+  color: $color_grey;
   transform: none;
 }
 
@@ -91,8 +91,8 @@
   height: 2.25rem;
   padding: 0 3rem 0 1rem;
   border-radius: 0.25rem;
-  color: $color_grey_text;
-  background-color: #FAFAFA;
+  color: $color_grey;
+  background-color: $color_grey_bg;
   font-size: 11px;
 }
 
@@ -153,12 +153,12 @@
   right: 0.5rem;
   border-radius: 0.25rem;
   z-index: 2;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .rotateIcon {
   transform: rotate(-180deg);
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .forForm .icon,
@@ -170,7 +170,7 @@
 }
 
 .isItem .icon {
-  background-color: #FAFAFA;
+  background-color: $color_grey_bg;
 }
 
 .forAutocomlete .icon {
@@ -189,7 +189,7 @@
   overflow: hidden;
   cursor: default;
   z-index: 11;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .itemsWrap::-webkit-scrollbar {
@@ -197,8 +197,8 @@
 }
 
 .itemsWrap::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background: #d8d8d8;
+  border-radius: 0.625rem;
+  background-color: $color_grey_light;
 }
 
 .itemsWrap::-webkit-scrollbar-track {
@@ -213,7 +213,7 @@
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   box-shadow: none;
-  border: 1px solid #BFBFBF;
+  border: 1px solid $color_grey_minor;
   border-top: 0;
 }
 
@@ -250,10 +250,10 @@
   line-height: 2rem;
   white-space: nowrap;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: #03a9ff;
+    color: $color_blue;
   }
 }
 
@@ -277,7 +277,7 @@
 }
 
 .active {
-  color: #03a9ff;
+  color: $color_blue;
 }
 
 .hidden {
