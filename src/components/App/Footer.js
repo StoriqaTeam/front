@@ -82,7 +82,7 @@ class Footer extends PureComponent<{}, StateType> {
   render() {
     const { market, sections, services } = this.state;
     const FooterColumn = ({ title, links }: FooterCol) => (
-      <div styleName="navBlockItem">
+      <div>
         <div styleName="navHeader">
           <b>{title}</b>
         </div>
@@ -93,35 +93,89 @@ class Footer extends PureComponent<{}, StateType> {
         ))}
       </div>
     );
+    const FooterLogo = () => (
+      <div styleName="navBlockLogo">
+        <Icon type="logo" />
+        <div styleName="description">
+          Storiqa is a global marketplace for any kind of legal goods
+          supporting cryptocurrency payments
+        </div>
+      </div>
+    );
+    const FooterButton = () => (
+      <div styleName="navBlockButton">
+        <Button
+          href={
+            process.env.REACT_APP_HOST
+              ? `${process.env.REACT_APP_HOST}/manage/wizard`
+              : '/'
+          }
+          dataTest="footerStartSellingButton"
+        >
+          Start selling
+        </Button>
+      </div>
+    );
     return (
       <footer styleName="container">
         <Container>
+          <div styleName="footerTop">
+            <Row>
+              <Col
+                xl={4}
+                lg={4}
+                md={8}
+              >
+                <div>
+                  <Row>
+                    <Col
+                      xl={9}
+                      lg={9}
+                    >
+                      <FooterLogo />
+                    </Col>
+                  </Row>
+                </div>
+              </Col>
+              <Col
+                xl={6}
+                lg={8}
+                md={12}
+              >
+                <div>
+                  <Row>
+                    <Col
+                      xl={4}
+                      lg={4}
+                    >
+                      <FooterColumn {...market} />
+                    </Col>
+                    <Col
+                      xl={4}
+                      lg={4}
+                    >
+                      <FooterColumn {...sections} />
+                    </Col>
+                    <Col
+                      xl={4}
+                      lg={4}
+                    >
+                      <FooterColumn {...services} />
+                    </Col>
+                  </Row>
+                </div>
+              </Col>
+              <Col
+                xl={2}
+                lg={12}
+                md={12}
+              >
+                <FooterButton />
+              </Col>
+            </Row>
+          </div>
           <Row>
-            <Col size={12}>
-              <div styleName="navBlock">
-                <div styleName="navBlockLogo">
-                  <Icon type="logo" />
-                  <div styleName="description">
-                    Storiqa is a global marketplace for any kind of legal goods
-                    supporting cryptocurrency payments
-                  </div>
-                </div>
-                <FooterColumn {...market} />
-                <FooterColumn {...sections} />
-                <FooterColumn {...services} />
-                <div styleName="navBlockButton">
-                  <Button
-                    href={
-                      process.env.REACT_APP_HOST
-                        ? `${process.env.REACT_APP_HOST}/manage/wizard`
-                        : '/'
-                    }
-                    dataTest="footerStartSellingButton"
-                  >
-                    Start selling
-                  </Button>
-                </div>
-              </div>
+            <Col>
               <InfoBlock />
               <div styleName="rightsBlock">
                 © Storiqa Marketplace. All rights reserved. 2018
