@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'components/Icon';
 
 import './AuthButtons.scss';
 
@@ -8,6 +9,9 @@ type PropsType = {
 
 const AuthButtons = ({ onOpenModal }: PropsType) => (
   <div styleName="container">
+    <div styleName="avatar">
+      <Icon type="person" size="16" />
+    </div>
     <div
       styleName="signUpButton"
       onClick={() => onOpenModal(true)}

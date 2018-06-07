@@ -3,6 +3,15 @@
 .container {
   display: flex;
 
+  & .avatar {
+    display: block;
+    padding-top: 1rem;
+  }
+
+  & .signInButton, .signUpButton {
+    display: none;
+  }
+
   & .signInButton {
     margin-left: 2rem;
     padding: 0 2rem;
@@ -29,6 +38,15 @@
 
     &:hover {
       color: $color_blue_1;
+    }
+  }
+
+  @media (min-width: 768px) {
+    & .signInButton, .signUpButton {
+      display: block;
+    }
+    .avatar {
+      display: none;
     }
   }
 }

@@ -27,24 +27,25 @@ import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import ArrowRight from 'components/Icon/svg/arrowRight.svg';
 //
 import ArrowLeft from 'components/Icon/svg/arrowLeft.svg';
-import Cross from 'components/Icon/svg/cross.svg';
-import Pencil from 'components/Icon/svg/pencil.svg';
-import Magnifier from 'components/Icon/svg/magnifier.svg';
-import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
-import Camera from 'components/Icon/svg/camera.svg';
-import Minus from 'components/Icon/svg/minus.svg';
-import Plus from 'components/Icon/svg/plus.svg';
-import Upload from 'components/Icon/svg/upload.svg';
 import Basket from 'components/Icon/svg/basket.svg';
-import CloseArrow from 'components/Icon/svg/closeArrow.svg';
-import OpenArrow from 'components/Icon/svg/openArrow.svg';
-import Heart from 'components/Icon/svg/heart.svg';
-import CrossWhite from 'components/Icon/svg/crossWhite.svg';
-import Cats from 'components/Icon/svg/cats.svg';
-import Logout from 'components/Icon/svg/logout.svg';
+import BurgerMenu from 'components/Icon/svg/menu-button.svg';
+import Camera from 'components/Icon/svg/camera.svg';
 import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
+import Cats from 'components/Icon/svg/cats.svg';
+import CloseArrow from 'components/Icon/svg/closeArrow.svg';
+import Cross from 'components/Icon/svg/cross.svg';
+import CrossWhite from 'components/Icon/svg/crossWhite.svg';
+import Heart from 'components/Icon/svg/heart.svg';
+import Logout from 'components/Icon/svg/logout.svg';
+import Magnifier from 'components/Icon/svg/magnifier.svg';
+import Minus from 'components/Icon/svg/minus.svg';
 import Note from 'components/Icon/svg/note.svg';
+import OpenArrow from 'components/Icon/svg/openArrow.svg';
+import Pencil from 'components/Icon/svg/pencil.svg';
+import Plus from 'components/Icon/svg/plus.svg';
+import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
 import Telegram from 'components/Icon/svg/telegram.svg';
+import Upload from 'components/Icon/svg/upload.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -68,49 +69,50 @@ type PropsTypes = {
 };
 
 const iconsMap = {
-  logo: <Logo />,
-  person: <Person />,
+  arrowExpand: <ArrowExpand />,
+  arrowLeft: <ArrowLeft />,
+  arrowRight: <ArrowRight />,
+  arrowSelect: <ArrowSelect />,
+  basket: <Basket />,
+  burgerMenu: <BurgerMenu />,
+  camera: <Camera />,
+  cameraPlus: <CameraPlus />,
   cart: <Cart />,
-  qa: <QA />,
-  prev: <Prev />,
-  next: <Next />,
+  cats: <Cats />,
+  chat: <Chat />,
+  closeArrow: <CloseArrow />,
+  cross: <Cross />,
+  crossWhite: <CrossWhite />,
   eye: <Eye />,
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
-  google: <Google />,
-  instagram: <Instagram />,
-  twitter: <Twitter />,
   facebookGray: <FacebookGray />,
-  pinterestGray: <PinterestGray />,
-  twitterGray: <TwitterGray />,
-  instagramGray: <InstagramGray />,
-  vkGray: <VkGray />,
-  spiner: <Spiner />,
-  arrowExpand: <ArrowExpand />,
-  arrowSelect: <ArrowSelect />,
-  arrowRight: <ArrowRight />,
-  arrowLeft: <ArrowLeft />,
-  cross: <Cross />,
-  pencil: <Pencil />,
-  magnifier: <Magnifier />,
-  qualityAssurance: <QualityAssurance />,
-  camera: <Camera />,
-  minus: <Minus />,
-  plus: <Plus />,
+  google: <Google />,
   heart: <Heart />,
-  upload: <Upload />,
-  basket: <Basket />,
-  closeArrow: <CloseArrow />,
-  openArrow: <OpenArrow />,
-  crossWhite: <CrossWhite />,
-  cats: <Cats />,
+  instagram: <Instagram />,
+  instagramGray: <InstagramGray />,
+  logo: <Logo />,
   logout: <Logout />,
-  sortArrows: <SortArrows />,
-  cameraPlus: <CameraPlus />,
+  magnifier: <Magnifier />,
+  minus: <Minus />,
+  next: <Next />,
   note: <Note />,
-  user: <User />,
-  chat: <Chat />,
+  openArrow: <OpenArrow />,
+  pencil: <Pencil />,
+  person: <Person />,
+  pinterestGray: <PinterestGray />,
+  plus: <Plus />,
+  prev: <Prev />,
+  qa: <QA />,
+  qualityAssurance: <QualityAssurance />,
+  sortArrows: <SortArrows />,
+  spiner: <Spiner />,
   telegram: <Telegram />,
+  twitter: <Twitter />,
+  twitterGray: <TwitterGray />,
+  upload: <Upload />,
+  user: <User />,
+  vkGray: <VkGray />,
 
   // For product
   mainFoto: <MainFoto />,

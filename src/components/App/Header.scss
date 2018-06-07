@@ -25,6 +25,15 @@
   margin-left: 1rem;
 }
 
+.searchIcon {
+  display: block;
+  margin-right: 2rem;
+  padding-top: 1rem;
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
 .searchBar {
   display: none;
   @media (min-width: 992px) {
@@ -38,5 +47,25 @@
 }
 
 .logo {
+  display: flex;
+  padding-top: 1rem;
+  @media (min-width: 768px) {
+    padding-top: 0;
+  }
+}
 
+.logoIcon {
+  width: 15rem;
+  @media (min-width: 768px) {
+    width: 24rem;
+  }
+}
+
+.burgerMenu {
+  width: 2rem;
+  margin-right: 5rem;
+  display: block;
+  @media (min-width: 768px) {
+    display: none;
+  }
 }

@@ -172,14 +172,19 @@ class Header extends Component<PropsType, StateType> {
           <HeaderTop />
           <div styleName="headerBottom">
             <Row>
-              <Col sm={4} md={4} lg={3} xl={3}>
+              <Col size={7} sm={4} md={4} lg={3} xl={3}>
                 <div styleName="logo">
-                  <Link to="/" data-test="logoLink">
-                    <Icon type="logo" />
-                  </Link>
+                  <div styleName="burgerMenu">
+                    <Icon type="burgerMenu" size={16} />
+                  </div>
+                  <div styleName="logoIcon">
+                    <Link to="/" data-test="logoLink">
+                      <Icon type="logo" />
+                    </Link>
+                  </div>
                 </div>
               </Col>
-              <Col sm={1} md={3} lg={6} xl={6}>
+              <Col size={1} sm={1} md={3} lg={6} xl={6}>
                 <div styleName="searchBar">
                   <SearchInput
                     searchCategories={[
@@ -190,8 +195,11 @@ class Header extends Component<PropsType, StateType> {
                   />
                 </div>
               </Col>
-              <Col sm={3} md={5} lg={3} xl={3}>
+              <Col size={4} sm={3} md={5} lg={3} xl={3}>
                 <div styleName="userData">
+                  <div styleName="searchIcon">
+                    <Icon type="magnifier" />
+                  </div>
                   {userData ? (
                     <UserDropdown user={userData} />
                   ) : (
