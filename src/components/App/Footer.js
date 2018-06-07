@@ -86,8 +86,8 @@ class Footer extends PureComponent<{}, StateType> {
         <div styleName="footerLogo">
           <Icon type="logo" />
           <div styleName="logoDescription">
-            Storiqa is a global marketplace for any kind of legal goods supporting
-            cryptocurrency payments
+            Storiqa is a global marketplace for any kind of legal goods
+            supporting cryptocurrency payments
           </div>
         </div>
       </Col>

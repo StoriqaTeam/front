@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Icon } from 'components/Icon';
+import { Row, Col } from 'layout';
 
 import './InfoBlock.scss';
 
@@ -26,9 +27,32 @@ class InfoBlock extends Component {
         href: 'https://www.instagram.com/storiqa',
       },
     ],
+    links: [
+      {
+        id: '0',
+        href: '/',
+        name: 'About Storiqa'
+      },
+      {
+        id: '1',
+        href: '/',
+        name: 'Privacy Policy'
+      },
+      {
+        id: '2',
+        href: '/',
+        name: 'Help'
+      },
+      {
+        id: '3',
+        href: '/',
+        name: 'Conditions of use'
+      },
+
+    ]
   };
   render() {
-    const { social } = this.state;
+    const { social, links } = this.state;
     return (
       <div styleName="container">
         <div styleName="address">
@@ -38,18 +62,11 @@ class InfoBlock extends Component {
           support@storiqa.com
         </a>
         <div styleName="aboutNavBlock">
-          <div styleName="aboutNavItem">
-            <a href="/">About Storiqa</a>
-          </div>
-          <div styleName="aboutNavItem">
-            <a href="/">Privacy Policy</a>
-          </div>
-          <div styleName="aboutNavItem">
-            <a href="/">Help</a>
-          </div>
-          <div styleName="aboutNavItem">
-            <a href="/">Conditions of use</a>
-          </div>
+          {links.map(({ id, href, name }) => (
+            <div key={id} styleName="aboutNavItem">
+              <a href={href}>{ name }</a>
+            </div>
+          ))}
         </div>
         <div styleName="icons">
           {social.map(({ id, href, size, type }) => (
