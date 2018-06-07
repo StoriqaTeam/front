@@ -23,7 +23,7 @@ import {
   UpdateStoreMainMutation,
 } from 'relay/mutations';
 
-import type { Products_me as ProductsMe } from '../__generated__/Products_me.graphql';
+import type { Products_me as ProductsMe } from './__generated__/Products_me.graphql';
 
 import './Products.scss';
 
