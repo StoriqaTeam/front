@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .container {
   //
 }
@@ -5,26 +7,26 @@
 .expanded {
   background-color: white;
   position: absolute;
-  width: 96px;
-  left: 8px;
-  top: -4px;
-  border-radius: 4px;
+  width: 12rem;
+  left: 1rem;
+  top: -0.5rem;
+  border-radius: 0.5rem;
   border: transparent;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  box-shadow: $shadow_2;
   z-index: 1;
 
   .item {
-    height: 24px;
+    height: 3rem;
   }
   .item:hover {
-    background-color: #F7F7F7;
-    height: 24px;
+    background-color: $color_grey_trival;
+    height: 3rem;
   }
   .itemLabel {
-    line-height: 24px;
-    margin: 0 8px;
+    line-height: 3rem;
+    margin: 0 1rem;
   }
   .inputChecked {
     //
@@ -36,10 +38,11 @@
 
 .collapsed {
   position: relative;
-  min-height: 32px;
-  max-height: 32px;
+  min-height: 4rem;
+  max-height: 4rem;
   overflow: hidden;
   width: 14rem;
+
   .item:hover {
     //
   }
@@ -47,23 +50,23 @@
 
 .toggleExpand {
   background: url('./svg/expand_arrow.svg');
-  height: 8px;
-  width: 8px;
+  height: 1rem;
+  width: 1rem;
   cursor: pointer;
   position: absolute;
-  top: 10px;
-  right: 13px;
+  top: 1.25rem;
+  right: 1.625rem;
 }
 
 .item {
-  height: 32px;
+  height: 4rem;
   font-size: 14px;
-  color: #505050; // TODO: get from global
+  color: $color_grey;
 }
 
 .item:hover {
-  background-color: #F7F7F7;
-  height: 30px;
+  background-color: $color_grey_trival;
+  height: 3.75rem;
 }
 
 .itemInput {
@@ -73,9 +76,9 @@
 .itemLabel {
   cursor: pointer;
   width: 100%;
-  line-height: 19px;
-  margin-top: 5px;
-  margin-left: 16px;
+  line-height: 2.375rem;
+  margin-top: 0.625rem;
+  margin-left: 2rem;
   display: inline-block;
 }
 

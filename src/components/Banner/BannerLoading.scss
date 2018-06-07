@@ -1,5 +1,7 @@
+@import "../../styles/variables.scss";
+
 .container {
-  background-color: #f1f1f1;
+  background-color: $color_grey_trival;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -8,7 +10,7 @@
 
 .spinner {
   border: 0.5rem solid transparent;
-  border-top: 0.5rem solid #d3d2d3;
+  border-top: 0.5rem solid $color_grey_spiner;
   border-radius: 50%;
   width: 5.25rem;
   height: 5.25rem;

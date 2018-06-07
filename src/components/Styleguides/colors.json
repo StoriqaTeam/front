@@ -1,27 +1,59 @@
 [
   {
-    "code": "#2FBAFD",
+    "code": "#03A9FF",
     "name": "Storiqa blue",
-    "var": "$color_primary"
+    "var": "$color_blue"
   }, {
-    "code": "#FF508E",
-    "name": "Marked for sale/incorrect/error alert",
-    "var": "$color_pink_1"
+    "code": "#51C1FB",
+    "name": "Storiqa blue HOVER",
+    "var": "$color_blue_hover"
   }, {
-    "code": "#9FC63C",
-    "name": "Granted/online/correct",
+    "code": "#FF62A4",
+    "name": "Pink",
+    "var": "$color_pink"
+  }, {
+    "code": "#8FB62C",
+    "name": "Green",
     "var": "$color_green"
   }, {
+    "code": "#F5CD7A",
+    "name": "Yellow",
+    "var": "$color_yellow"
+  }, {
+    "code": "#E62C6D",
+    "name": "Error",
+    "var": "$color_error"
+  }, {
     "code": "#505050",
-    "name": "Font grey",
-    "var": "$color_grey_text"
+    "name": "Grey",
+    "var": "$color_grey"
   }, {
     "code": "#A7A7A7",
-    "name": "Background grey",
+    "name": "Grey minor",
+    "var": "$color_grey_minor"
+  }, {
+    "code": "#F5F5F5",
+    "name": "Grey trival",
+    "var": "$color_grey_trival"
+  }, {
+    "code": "#E3E3E3",
+    "name": "Grey light",
+    "var": "$color_grey_light"
+  }, {
+    "code": "#FAFAFA",
+    "name": "Grey for background",
     "var": "$color_grey_bg"
+  }, {
+    "code": "#D3D2D3",
+    "name": "Grey for spiner",
+    "var": "$color_grey_spiner"
   }, {
     "code": "#FFFFFF",
     "name": "White",
     "var": "$color_white"
+  }, {
+    "code": "#000000",
+    "name": "Black",
+    "var": "$color_black"
   }
 ]

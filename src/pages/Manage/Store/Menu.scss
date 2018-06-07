@@ -39,10 +39,10 @@
   padding: 1.5rem 0 1.5rem 2rem;
   font-size: 14px;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover:not(.isDisabled) {
-    background-color: #FFFFFF;
+    background-color: $color_white;
   }
 }
 
@@ -53,7 +53,7 @@
 }
 
 .isDisabled {
-  color: $color_grey_bg;
+  color: $color_grey_minor;
 }
 
 
@@ -65,7 +65,7 @@
   left: 0;
   width: 0.25rem;
   display: block;
-  border-left: 2px solid $color_primary;
+  border-left: 2px solid $color_blue;
 }
 
 .storeLogo {

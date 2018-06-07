@@ -7,8 +7,8 @@
   background-color: $color_white;
   min-height: 101rem;
   margin: 0 2rem -2rem 2rem;
-  border-top: 1px solid $color_grey_border3;
-  border-bottom: 1px solid $color_grey_border3;
+  border-top: 1px solid $color_grey_trival;
+  border-bottom: 1px solid $color_grey_trival;
 
   .stepperWrapper {
     display: flex;
@@ -46,7 +46,7 @@
         width: 45rem;
         font-family: $font_regular;
         line-height: 2.7rem;
-        color: $color_grey_5;
+        color: $color_grey_minor;
         text-align: center;
         margin-bottom: 6.5rem;
       }

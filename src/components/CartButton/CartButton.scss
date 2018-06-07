@@ -10,8 +10,8 @@
   border-radius: 50%;
   cursor: pointer;
 
-  & svg {transition: all .3s ease;}
-  &:hover svg {fill: $color_blue_1;}
+  & svg {transition: $transition_all_ease;}
+  &:hover svg {fill: $color_blue;}
 }
 
 .amount {

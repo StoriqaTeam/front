@@ -17,7 +17,7 @@
 }
 
 .breadcrumbs {
-  color: #A29F9A;
+  color: $color_grey_minor;
   font-size: 14px;
   line-height: 2rem;
   letter-spacing: 0.1px;
@@ -30,7 +30,7 @@
 }
 
 .sortLabel {
-  color: #9C9C9C;
+  color: $color_grey_minor;
   font-size: 16px;
 }
 
@@ -60,7 +60,7 @@
   justify-content: center;
   width: 10rem;
   height: 10rem;
-  background-color: $color_grey_light;
+  background-color: $color_grey_trival;
   overflow: hidden;
 
   & img {
@@ -87,7 +87,7 @@
 
 .storeAdd {
   margin-top: 1rem;
-  color: #9C9C9C;
+  color: $color_grey_minor;
   font-size: 16px;
 
   & .productsCount {
@@ -127,7 +127,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: $color_grey_light;
+    background-color: $color_grey_trival;
     overflow: hidden;
   }
 

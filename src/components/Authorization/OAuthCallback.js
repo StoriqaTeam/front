@@ -10,6 +10,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import { log } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 import Logo from 'components/Icon/svg/logo.svg';
+import { Spinner } from 'components/common/Spinner';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -124,10 +125,7 @@ class OAuthCallback extends PureComponent<PropsType> {
           Loading...<br />Please wait.
         </span>
         <span styleName="description">- Storiqa team</span>
-        <div styleName="spinner">
-          <div styleName="double-bounce1" />
-          <div styleName="double-bounce2" />
-        </div>
+        <Spinner />
       </div>
     );
   }

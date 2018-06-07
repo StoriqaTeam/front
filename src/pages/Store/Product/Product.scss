@@ -1,8 +1,8 @@
 @import "../../../styles/variables";
 
 .ProductDetails {
-  background: $color_white;
-  border: solid 1px #f5f5f5;
+  background-color: $color_white;
+  border: 1px solid $color_grey_trival;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
@@ -35,7 +35,7 @@
 }
 
 .line {
-  background: #efefef;
+  background-color: $color_grey_trival;
   height: 1px;
   left: -2.125rem;
   margin: 3.375rem 0;
