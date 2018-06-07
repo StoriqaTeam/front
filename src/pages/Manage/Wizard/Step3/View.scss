@@ -26,7 +26,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: $color_grey_trival;
+        background-color: $color_grey_trivial;
         border-radius: 0.5rem;
       }
     }
@@ -59,7 +59,7 @@
       justify-content: center;
       align-items: center;
       opacity: 0;
-      background-color: $color_grey_trival;
+      background-color: $color_grey_trivial;
       z-index: 5;
       transition: $transition_all_ease;
 

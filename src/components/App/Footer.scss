@@ -27,7 +27,6 @@
   @media (min-width: 992px) {
     align-items: flex-start;
   }
-
 }
 
 .footerLogo {
@@ -41,7 +40,7 @@
 }
 
 .logoDescription {
-  color: rgba(80, 80, 80, .43);
+  color: $color_grey_minor;
   font-size: 13px;
   line-height: 20px;
   margin-top: 3rem;
@@ -98,7 +97,7 @@
 .rightsBlock {
   padding: 2rem;
   font-size: 13px;
-  color: rgba(80,80,80,.43);
+  color: $color_grey_minor;
   text-align: center;
 }
 

@@ -2,7 +2,7 @@
 
 .container {
   background-color: $color_white;
-  border: 1px solid $color_grey_trival;
+  border: 1px solid $color_grey_trivial;
   border-left: 1px solid transparent;
   display: flex;
   justify-content: space-between;
@@ -21,7 +21,7 @@
 }
 
 .favorite {
-  border-left: 1px solid $color_grey_trival;
+  border-left: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: center;
   align-items: center;

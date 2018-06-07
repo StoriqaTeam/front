@@ -29,7 +29,7 @@
 }
 
 .disabled {
-  background-color: $color_grey_trival;
+  background-color: $color_grey_trivial;
   color: $color_grey_minor;
   cursor: default;
 }
@@ -41,7 +41,7 @@
   height: 5rem;
   color: $color_grey;
   font-size: 14px;
-  background-color: $color_grey_trival;
+  background-color: $color_grey_trivial;
 
   &:hover {
     color: $color_white;
@@ -59,7 +59,7 @@
   width: 100%;
   color: $color_grey;
   font-size: 16px;
-  background-color: $color_grey_trival;
+  background-color: $color_grey_trivial;
 
   &:hover {
     color: $color_white;
