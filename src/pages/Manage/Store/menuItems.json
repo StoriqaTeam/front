@@ -2,7 +2,7 @@
   {
     "id": "orders",
     "title": "Orders",
-    "link": "",
+    "link": "/orders",
     "disabled": true
   },
   {
@@ -26,13 +26,13 @@
   {
     "id": "employees",
     "title": "Employees",
-    "link": "",
+    "link": "/employees",
     "disabled": true
   },
   {
     "id": "warehouses",
     "title": "Warehouses",
-    "link": "",
+    "link": "/warehouses",
     "disabled": true
   }
 ]

@@ -8,7 +8,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
-import { Container, Row, Col } from 'layout';
+import { ManageStore } from 'pages/Manage/Store';
 import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -16,9 +16,6 @@ import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
-
-import Header from './Header';
-import Menu from './Menu';
 
 import './Contacts.scss';
 
@@ -340,61 +337,40 @@ class Contacts extends Component<PropsType, StateType> {
     const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
 
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              activeItem={activeItem}
-              switchMenu={this.switchMenu}
-              storeName={name}
-              storeLogo={logoUrl || logo}
-              onLogoUpload={this.handleLogoUpload}
-            />
-          </Col>
-          <Col size={10}>
-            <div styleName="container">
-              <Header title="Contacts" />
-              <div styleName="form">
-                {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
-                {this.renderInput({ id: 'phone', label: 'Phone' })}
-                {this.renderInput({
-                  id: 'facebookUrl',
-                  label: 'Facebook',
-                  icon: 'facebook',
-                })}
-                {this.renderInput({
-                  id: 'instagramUrl',
-                  label: 'Instagram',
-                  icon: 'instagram',
-                })}
-                {this.renderInput({
-                  id: 'twitterUrl',
-                  label: 'Twitter',
-                  icon: 'twitter',
-                })}
-                <div styleName="formItem">
-                  <AddressForm
-                    country={form.country}
-                    address={form.address}
-                    addressFull={addressFull}
-                    onChangeFormInput={this.handleInputChange}
-                    onUpdateForm={this.handleUpdateForm}
-                    onChangeData={this.handleChangeData}
-                  />
-                </div>
-                <div styleName="formItem">
-                  <SpinnerButton
-                    onClick={this.handleUpdate}
-                    isLoading={isLoading}
-                  >
-                    Save
-                  </SpinnerButton>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <div styleName="container">
+        {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
+        {this.renderInput({ id: 'phone', label: 'Phone' })}
+        {this.renderInput({
+          id: 'facebookUrl',
+          label: 'Facebook',
+          icon: 'facebook',
+        })}
+        {this.renderInput({
+          id: 'instagramUrl',
+          label: 'Instagram',
+          icon: 'instagram',
+        })}
+        {this.renderInput({
+          id: 'twitterUrl',
+          label: 'Twitter',
+          icon: 'twitter',
+        })}
+        <div styleName="formItem">
+          <AddressForm
+            country={form.country}
+            address={form.address}
+            addressFull={addressFull}
+            onChangeFormInput={this.handleInputChange}
+            onUpdateForm={this.handleUpdateForm}
+            onChangeData={this.handleChangeData}
+          />
+        </div>
+        <div styleName="formItem">
+          <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
+            Save
+          </SpinnerButton>
+        </div>
+      </div>
     );
   }
 }
@@ -405,7 +381,7 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(Contacts)),
+  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
   graphql`
     fragment Contacts_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {

@@ -1,13 +1,13 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, isEmpty } from 'ramda';
 
 import { Page } from 'components/App';
-import { Container, Row, Col } from 'layout';
-import { log, fromRelayError, getNameText } from 'utils';
+import { ManageStore } from 'pages/Manage/Store';
+import { log, fromRelayError } from 'utils';
 import {
   UpdateBaseProductMutation,
   UpdateStoreMainMutation,
@@ -19,8 +19,6 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import Variants from './Variants/Variants';
 import Form from './Form';
 
-import Menu from '../Menu';
-
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -31,7 +29,6 @@ type StateType = {
 };
 
 const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
-const storeLogoFromProps = pathOr(null, ['me', 'baseProduct', 'store', 'logo']);
 const variantsFromProps = pathOr([], ['me', 'baseProduct', 'variants', 'all']);
 
 class EditProduct extends Component<PropsType, StateType> {
@@ -182,47 +179,28 @@ class EditProduct extends Component<PropsType, StateType> {
     const { isLoading } = this.state;
     const baseProduct = baseProductFromProps(this.props);
     // $FlowIgnoreMe
-    const logo = storeLogoFromProps(this.props);
-    // $FlowIgnoreMe
     const storeID = pathOr(null, ['store', 'id'], baseProduct);
-    const storeName = getNameText(
-      pathOr([], ['store', 'name'], baseProduct),
-      'EN',
-    );
 
     if (!baseProduct) {
       return <span>Product not found</span>;
     }
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              activeItem="goods"
-              switchMenu={() => {}}
-              storeName={storeName || ''}
-              storeLogo={logo || ''}
-              onLogoUpload={this.handleLogoUpload}
-            />
-          </Col>
-          <Col size={10}>
-            <Form
-              baseProduct={baseProduct}
-              onSave={this.handleSave}
-              validationErrors={this.state.formErrors}
-              categories={this.context.directories.categories}
-              isLoading={isLoading}
-            />
-            <Variants
-              productId={baseProduct.rawId}
-              category={baseProduct.category}
-              // $FlowIgnoreMe
-              variants={variantsFromProps(this.props)}
-              storeID={storeID}
-            />
-          </Col>
-        </Row>
-      </Container>
+      <Fragment>
+        <Form
+          baseProduct={baseProduct}
+          onSave={this.handleSave}
+          validationErrors={this.state.formErrors}
+          categories={this.context.directories.categories}
+          isLoading={isLoading}
+        />
+        <Variants
+          productId={baseProduct.rawId}
+          category={baseProduct.category}
+          // $FlowIgnoreMe
+          variants={variantsFromProps(this.props)}
+          storeID={storeID}
+        />
+      </Fragment>
     );
   }
 }
@@ -233,7 +211,7 @@ EditProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(EditProduct)),
+  withShowAlert(Page(ManageStore(EditProduct, 'Goods'))),
   graphql`
     fragment EditProduct_me on User
       @argumentDefinitions(productId: { type: "Int!" }) {
