@@ -31,25 +31,24 @@ class InfoBlock extends Component {
       {
         id: '0',
         href: '/',
-        name: 'About Storiqa'
+        name: 'About Storiqa',
       },
       {
         id: '1',
         href: '/',
-        name: 'Privacy Policy'
+        name: 'Privacy Policy',
       },
       {
         id: '2',
         href: '/',
-        name: 'Help'
+        name: 'Help',
       },
       {
         id: '3',
         href: '/',
-        name: 'Conditions of use'
+        name: 'Conditions of use',
       },
-
-    ]
+    ],
   };
   render() {
     const { social, links } = this.state;
@@ -64,7 +63,7 @@ class InfoBlock extends Component {
         <div styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
             <div key={id} styleName="aboutNavItem">
-              <a href={href}>{ name }</a>
+              <a href={href}>{name}</a>
             </div>
           ))}
         </div>

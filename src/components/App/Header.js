@@ -15,7 +15,6 @@ import {
   reject,
   isNil,
 } from 'ramda';
-import MediaQuery from 'react-responsive';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -170,14 +169,18 @@ class Header extends Component<PropsType, StateType> {
     return (
       <header styleName="container">
         <Container>
-          <Row>
-            <Col size={12}>
-              <HeaderTop />
-              <div styleName="bottom">
-                <Link to="/" data-test="logoLink">
-                  <Icon type="logo" />
-                </Link>
-                <MediaQuery minWidth={LG}>
+          <HeaderTop />
+          <div styleName="headerBottom">
+            <Row>
+              <Col sm={4} md={4} lg={3} xl={3}>
+                <div styleName="logo">
+                  <Link to="/" data-test="logoLink">
+                    <Icon type="logo" />
+                  </Link>
+                </div>
+              </Col>
+              <Col sm={1} md={3} lg={6} xl={6}>
+                <div styleName="searchBar">
                   <SearchInput
                     searchCategories={[
                       { id: 'products', label: 'Products' },
@@ -185,12 +188,10 @@ class Header extends Component<PropsType, StateType> {
                     ]}
                     searchValue={searchValue}
                   />
-                </MediaQuery>
-                <div
-                  style={{
-                    display: 'flex',
-                  }}
-                >
+                </div>
+              </Col>
+              <Col sm={3} md={5} lg={3} xl={3}>
+                <div styleName="userData">
                   {userData ? (
                     <UserDropdown user={userData} />
                   ) : (
@@ -200,9 +201,9 @@ class Header extends Component<PropsType, StateType> {
                     <CartButton href="/cart" amount={this.state.cartCount} />
                   </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          </div>
         </Container>
         <Modal showModal={showModal} onClose={this.handleCloseModal}>
           <Authorization

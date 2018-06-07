@@ -15,15 +15,28 @@
   margin-right: 0.5rem;
 }
 
-.bottom {
-  align-items: center;
+.headerBottom {
   background-color: $color_white;
-  display: flex;
-  justify-content: space-between;
   margin-top: 3rem;
 }
 
 .cartIcon {
   width: 4rem;
   margin-left: 1rem;
+}
+
+.searchBar {
+  display: none;
+  @media (min-width: 992px) {
+    display: block;
+  }
+}
+
+.userData {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logo {
+
 }
