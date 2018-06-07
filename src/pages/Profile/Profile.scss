@@ -15,7 +15,7 @@
 
 .title {
   font-family: $font_medium;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 24px;
 }
 
@@ -44,7 +44,7 @@
 .editAddressForm {
   margin: 4rem 0;
   padding: 4rem;
-  background-color: $color_grey_8;
+  background-color: $color_grey_bg;
 }
 
 .saveButtons {
@@ -62,12 +62,12 @@
 .cancelButton {
   margin-left: 3rem;
   font-size: 16px;
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_grey_text;
+    color: $color_grey;
   }
 }
 
@@ -94,7 +94,7 @@
 .item {
   padding: 4rem;
   border-radius: 4px;
-  background-color: $color_grey_8;
+  background-color: $color_grey_bg;
 
   & + .item {
     margin-top: 4rem;
@@ -102,7 +102,7 @@
 }
 
 .address {
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   line-height: 2.5rem;
 }
 
@@ -111,12 +111,12 @@
 }
 
 .email {
-  color: $color_grey_bg;
+  color: $color_grey_minor;
 }
 
 .preorityText {
   margin-bottom: 1.5rem;
-  color: $color_blue_1;
+  color: $color_blue;
   line-height: 2.5rem;
 }
 
@@ -135,17 +135,17 @@
 
 .icon {
   position: absolute;
-  top: 0;
+  top: -0.25rem;
   right: 0;
   cursor: pointer;
 
   & svg {
-    transition: all .3s ease;
+    transition: $transition_all_ease;
   }
 
   &.openIcon {
     & svg {
-      fill: $color_blue_1;
+      fill: $color_blue;
     }
     &:after {
       opacity: 0;
@@ -155,12 +155,12 @@
   &:after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 1.5rem;
+    top: 0.25rem;
+    left: 1.75rem;
     display: block;
     height: 3rem;
-    border-right: 2px solid $color_grey_link;
-    transform: rotate(45deg);
-    transition: all .3s ease;
+    border-right: 1px solid $color_grey_light;
+    transform: rotate(33deg);
+    transition: $transition_all_ease;
   }
 }

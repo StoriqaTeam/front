@@ -1,4 +1,6 @@
-@mixin progress-bar($value: red, $background: #ffffff, $height: 5px, $width: 100%) {
+@import '../variables';
+
+@mixin progress-bar($value: red, $backgroundColor: $color_white, $height: 0.5rem, $width: 100%) {
 
   &[value] {
     /* Reset the default appearance */
@@ -13,12 +15,12 @@
   }
 
   &[value]::-webkit-progress-bar {
-    background: $background;
+    background-color: $backgroundColor;
     border-radius: 2px;
   }
 
   &[value]::-webkit-progress-value {
-    background: $value;
+    background-color: $value;
   }
 
 }

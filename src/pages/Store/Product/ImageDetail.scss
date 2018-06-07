@@ -1,5 +1,7 @@
+@import "../../../styles/variables";
+
 .container {
-  color: #a29f9a;
+  color: $color_grey_minor;
   font-size: 13px;
   letter-spacing: 0.1px;
   padding: 0.9375rem;

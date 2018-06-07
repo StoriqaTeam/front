@@ -80,16 +80,13 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleRegistrationClick = () => {
     this.setState({ isLoading: true, errors: null });
-    const { email, password } = this.state;
-
-    /** Uncomment, when backend will appear */
-    // const { email, password, firstName, lastName } = this.state;
+    const { email, password, firstName, lastName } = this.state;
 
     const input = {
       clientMutationId: '',
       email,
-      // firstName,
-      // lastName,
+      firstName: firstName || null,
+      lastName: lastName || null,
       password,
     };
 
@@ -98,16 +95,14 @@ class Authorization extends Component<PropsType, StateType> {
       input,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
           // $FlowIgnoreMe
-          this.setState({
-            errors: validationErrors,
-            isLoading: false,
-          });
+          this.setState({ errors: validationErrors });
           return;
         }
         // $FlowIgnoreMe
@@ -122,7 +117,6 @@ class Authorization extends Component<PropsType, StateType> {
             text: errorStatus,
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
         this.props.showAlert({
@@ -135,10 +129,10 @@ class Authorization extends Component<PropsType, StateType> {
         if (onCloseModal) {
           onCloseModal();
         }
-        this.setState({ isLoading: false });
         log.debug({ response, errors });
       },
       onError: (error: Error) => {
+        this.setState({ isLoading: false });
         const relayErrors = fromRelayError(error);
         log.error({ error });
         log.debug({ relayErrors });
@@ -157,7 +151,6 @@ class Authorization extends Component<PropsType, StateType> {
           text: 'Something going wrong :(',
           link: { text: 'Close.' },
         });
-        this.setState({ isLoading: false });
       },
     };
     CreateUserMutation.commit(params);

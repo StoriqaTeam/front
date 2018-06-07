@@ -4,48 +4,46 @@ import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
 import classNames from 'classnames';
 
-import Logo from 'components/Icon/svg/logo.svg';
-import Person from 'components/Icon/svg/person.svg';
-import Cart from 'components/Icon/svg/cart.svg';
-import QA from 'components/Icon/svg/qa.svg';
-import Prev from 'components/Icon/svg/prev.svg';
-import Next from 'components/Icon/svg/next.svg';
-import Eye from 'components/Icon/svg/eye.svg';
-import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
-import Facebook from 'components/Icon/svg/facebook.svg';
-import Google from 'components/Icon/svg/google.svg';
-import Instagram from 'components/Icon/svg/instagram.svg';
-import Twitter from 'components/Icon/svg/twitter.svg';
-import FacebookGray from 'components/Icon/svg/facebook_gray.svg';
-import PinterestGray from 'components/Icon/svg/pinterest_gray.svg';
-import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
-import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
-import VkGray from 'components/Icon/svg/vk_gray.svg';
-import Spiner from 'components/Icon/svg/spiner.svg';
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
-import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
-import ArrowRight from 'components/Icon/svg/arrowRight.svg';
-//
 import ArrowLeft from 'components/Icon/svg/arrowLeft.svg';
+import ArrowRight from 'components/Icon/svg/arrowRight.svg';
+import ArrowSelect from 'components/Icon/svg/arrowSelect.svg';
 import Basket from 'components/Icon/svg/basket.svg';
 import BurgerMenu from 'components/Icon/svg/menu-button.svg';
 import Camera from 'components/Icon/svg/camera.svg';
 import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
+import Cart from 'components/Icon/svg/cart.svg';
 import Cats from 'components/Icon/svg/cats.svg';
 import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
+import Eye from 'components/Icon/svg/eye.svg';
+import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
+import Facebook from 'components/Icon/svg/facebook.svg';
+import FacebookGray from 'components/Icon/svg/facebook_gray.svg';
+import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
+import Instagram from 'components/Icon/svg/instagram.svg';
+import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import Logo from 'components/Icon/svg/logo.svg';
 import Logout from 'components/Icon/svg/logout.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
 import Minus from 'components/Icon/svg/minus.svg';
+import Next from 'components/Icon/svg/next.svg';
 import Note from 'components/Icon/svg/note.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
+import Person from 'components/Icon/svg/person.svg';
+import PinterestGray from 'components/Icon/svg/pinterest_gray.svg';
 import Plus from 'components/Icon/svg/plus.svg';
+import Prev from 'components/Icon/svg/prev.svg';
+import QA from 'components/Icon/svg/qa.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
 import Telegram from 'components/Icon/svg/telegram.svg';
+import Twitter from 'components/Icon/svg/twitter.svg';
+import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
 import Upload from 'components/Icon/svg/upload.svg';
+import VkGray from 'components/Icon/svg/vk_gray.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -64,7 +62,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 32 | 40 | 48 | 56 | 80,
+  size: 8 | 16 | 20 | 24 | 28 | 32 | 40 | 48 | 56 | 80,
   inline: ?boolean,
 };
 
@@ -106,7 +104,6 @@ const iconsMap = {
   qa: <QA />,
   qualityAssurance: <QualityAssurance />,
   sortArrows: <SortArrows />,
-  spiner: <Spiner />,
   telegram: <Telegram />,
   twitter: <Twitter />,
   twitterGray: <TwitterGray />,

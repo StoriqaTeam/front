@@ -25,7 +25,7 @@
 
     &:hover {
       color: $color_white;
-      background-color: $color_blue_1_hover;
+      background-color: $color_blue_hover;
     }
   }
 
@@ -37,7 +37,7 @@
     transition: all .3s ease;
 
     &:hover {
-      color: $color_blue_1;
+      color: $color_blue;
     }
   }
 

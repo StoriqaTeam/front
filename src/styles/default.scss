@@ -18,7 +18,7 @@ body {
   height: 100%;
   font-size: 16px;
   line-height: 24px;
-  color: $color_grey_text;
+  color: $color_grey;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -76,7 +76,7 @@ button::-moz-focus-inner {
 
 a {
   font-size: 12px;
-  color: $color_grey_link;
+  color: $color_grey_minor;
   text-decoration: none;
 }
 

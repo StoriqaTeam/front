@@ -26,7 +26,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: $color_grey_light;
+        background-color: $color_grey_trival;
         border-radius: 0.5rem;
       }
     }
@@ -46,7 +46,7 @@
       font-size: 14px;
       line-height: 2rem;
       margin-top: 0.5rem;
-      color: $color_grey_bg;
+      color: $color_grey_minor;
     }
 
     .layer {
@@ -59,9 +59,9 @@
       justify-content: center;
       align-items: center;
       opacity: 0;
-      background-color: $color_grey_border3;
+      background-color: $color_grey_trival;
       z-index: 5;
-      transition: all .3s ease;
+      transition: $transition_all_ease;
 
       & .editbutton {
         display: flex;
@@ -75,7 +75,7 @@
         }
 
         & svg {
-          fill: $color_grey_bg;
+          fill: $color_grey_minor;
         }
       }
     }
@@ -97,13 +97,13 @@
 
   .icon {
     & svg {
-      fill: $color_grey_9;
+      fill: $color_grey_minor;
     }
   }
 
   .text {
     margin-top: 1rem;
-    color: $color_grey_5;
+    color: $color_grey_minor;
     text-align: center;
   }
 
