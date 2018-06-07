@@ -20,8 +20,12 @@
   margin-bottom: 3rem;
 
   @media (min-width: 768px) {
-    align-items: flex-start;
+    align-items: center;
     text-align: left;
+  }
+
+  @media (min-width: 992px) {
+    align-items: flex-start;
   }
 
 }
