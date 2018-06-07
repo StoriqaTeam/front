@@ -1,0 +1,45 @@
+@import "../../styles/variables";
+
+.container {
+  border-top: solid 1px $color_grey_trivial;
+  border-bottom: solid 1px $color_grey_trivial;
+  padding: 3.5rem 4rem;
+  text-align: center;
+}
+
+.address, .email {
+  color: rgba(80, 80, 80, .43);
+  font-size: 13px;
+  line-height: 1.25rem;
+}
+
+.email:hover {
+  text-decoration: underline;
+}
+
+.aboutNavBlock {
+  margin-top: 2rem;
+}
+
+.aboutNavItem {
+  display: inline-block;
+  line-height: 2rem;
+  padding: 0 3rem;
+
+  &:not(:last-child) {
+    border-right: 1px solid $color_grey;
+  }
+
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+
+  & > * + * {
+    margin-left: 2rem;
+  }
+
+}

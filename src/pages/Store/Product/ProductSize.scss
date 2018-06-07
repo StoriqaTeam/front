@@ -26,7 +26,7 @@ h4 {
 
 .size {
   align-self: center;
-  border: solid 1px $color_grey_trival;
+  border: solid 1px $color_grey_trivial;
   color: $color_grey_minor;
   font-size: 2rem;
   height: 5rem;
@@ -45,7 +45,7 @@ h4 {
   }
 
   &.opaque:not(:first-child) {
-    border-left: 1px solid $color_grey_trival !important;
+    border-left: 1px solid $color_grey_trivial !important;
   }
   // apply transparent border-right except the last one
   &:not(:last-child) {
@@ -59,7 +59,7 @@ h4 {
 }
 
 .separator {
-  border-right: 1px solid $color_grey_trival !important;
+  border-right: 1px solid $color_grey_trivial !important;
   height: 5rem;
   position: absolute;
   right: -1px;

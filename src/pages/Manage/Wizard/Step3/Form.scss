@@ -6,7 +6,7 @@
   width: 170rem;
   background-color: $color_white;
   padding: 22.625rem 0 14rem 0;
-  border: 1px solid $color_grey_trival;
+  border: 1px solid $color_grey_trivial;
 
   .formWrapper {
     width: 82rem;
@@ -117,7 +117,7 @@
               .itemHover {
                 display: flex;
                 svg {
-                  fill: $color_grey_trival;
+                  fill: $color_grey_trivial;
                 }
               }
             }
@@ -143,7 +143,7 @@
               background-position: center;
               background-repeat: no-repeat;
               background-size: contain;
-              background-color: $color_grey_trival;
+              background-color: $color_grey_trivial;
               border-radius: 0.5rem;
             }
             

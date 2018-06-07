@@ -3,7 +3,7 @@
 .container {
   color: $color_grey;
   display: flex;
-  border-bottom: 1px solid $color_grey_trival;
+  border-bottom: 1px solid $color_grey_trivial;
   position: relative;
   padding-bottom: 3rem;
 
@@ -42,7 +42,7 @@
 
 .product-summary {
   width: 66%;
-  border-right: 1px solid $color_grey_trival;
+  border-right: 1px solid $color_grey_trivial;
 }
 
 .product-params {
@@ -67,7 +67,7 @@
 
 .total-container {
   width: 40em;
-  border: 1px solid $color_grey_trival;
+  border: 1px solid $color_grey_trivial;
 }
 
 .delivery-container {
