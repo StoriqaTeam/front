@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Icon } from 'components/Icon';
-import { Row, Col } from 'layout';
 
 import './InfoBlock.scss';
 

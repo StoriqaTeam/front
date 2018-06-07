@@ -19,12 +19,10 @@ import {
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
-import { Select } from 'components/common/Select';
 import { Icon } from 'components/Icon';
 import { Modal } from 'components/Modal';
 import { Authorization } from 'components/Authorization';
 import { setWindowTag } from 'utils';
-import { LG } from 'utils/responsive';
 
 import { Container, Row, Col } from 'layout';
 
