@@ -2,7 +2,11 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
-import { log } from 'utils';
+
+import type {
+  UpdateStoreMainMutationVariables,
+  UpdateStoreMainMutationResponse,
+} from './__generated__/UpdateStoreMainMutation.graphql';
 
 const mutation = graphql`
   mutation UpdateStoreMainMutation($input: UpdateStoreInput!) {
@@ -28,36 +32,21 @@ const mutation = graphql`
   }
 `;
 
-type MutationParamsType = {
-  id: string,
-  name: string,
-  longDescription: string,
-  shortDescription: string,
-  defaultLanguage: string,
-  slug: string,
-  slogan: string,
-  logo?: string,
+export type MutationParamsType = {
+  ...UpdateStoreMainMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?UpdateStoreMainMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => {
-  log.info('!!! UpdateStoreMainMutation params: ', params);
-  return commitMutation(params.environment, {
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
     mutation,
     variables: {
-      input: {
-        clientMutationId: '',
-        id: params.id,
-        name: params.name,
-        longDescription: params.longDescription,
-        shortDescription: params.shortDescription,
-        defaultLanguage: params.defaultLanguage,
-        slug: params.slug,
-        slogan: params.slogan,
-        logo: params.logo,
-      },
+      input: params.input,
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
@@ -69,6 +58,5 @@ const commit = (params: MutationParamsType) => {
       store.setValue(logo, 'logo');
     },
   });
-};
 
 export default { commit };

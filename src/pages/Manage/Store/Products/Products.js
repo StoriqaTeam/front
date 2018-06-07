@@ -7,7 +7,7 @@ import { withRouter, routerShape } from 'found';
 import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
 import { Page } from 'components/App';
-import { Container, Row, Col } from 'layout';
+import { ManageStore } from 'pages/Manage/Store';
 import { getNameText, formatPrice, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
@@ -22,9 +22,6 @@ import {
   DeactivateBaseProductMutation,
   UpdateStoreMainMutation,
 } from 'relay/mutations';
-
-import Menu from './Menu';
-import Header from './Header';
 
 import type { Products_me as ProductsMe } from './__generated__/Products_me.graphql';
 
@@ -96,7 +93,7 @@ class Products extends PureComponent<PropsType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Saved!',
+          text: 'Deleted!',
           link: { text: '' },
         });
       },
@@ -335,10 +332,6 @@ class Products extends PureComponent<PropsType> {
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
-    const name = getNameText(pathOr([], ['store', 'name'], me), 'EN');
-    // $FlowIgnoreMe
-    const logo = pathOr('', ['store', 'logo'], me);
-    // $FlowIgnoreMe
     const baseProducts = pathOr([], ['store', 'baseProducts', 'edges'], me);
     const products = map(item => {
       const { node } = item;
@@ -356,49 +349,32 @@ class Products extends PureComponent<PropsType> {
       return newItem;
     }, baseProducts);
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              activeItem="goods"
-              storeName={name || ''}
-              storeLogo={logo}
-              onLogoUpload={this.handleLogoUpload}
-            />
-          </Col>
-          <Col size={10}>
-            <div styleName="container">
-              <Header title="Goods" />
-              <div styleName="wrapper">
-                <div styleName="addButton">
-                  <Button wireframe big onClick={this.addProduct}>
-                    Add item
-                  </Button>
-                </div>
-                <div styleName="subtitle">
-                  <strong>Goods list</strong>
-                </div>
-                <div>
-                  <div>{this.renderHeaderRow()}</div>
-                  <div>{map(item => this.renderRows(item), products)}</div>
-                </div>
-                {this.props.relay.hasMore() && (
-                  <div styleName="loadButton">
-                    <Button
-                      big
-                      load
-                      onClick={this.productsRefetch}
-                      dataTest="searchProductLoadMoreButton"
-                    >
-                      Load more
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <div styleName="container">
+        <div styleName="addButton">
+          <Button wireframe big onClick={this.addProduct}>
+            Add item
+          </Button>
+        </div>
+        <div styleName="subtitle">
+          <strong>Goods list</strong>
+        </div>
+        <div>
+          <div>{this.renderHeaderRow()}</div>
+          <div>{map(item => this.renderRows(item), products)}</div>
+        </div>
+        {this.props.relay.hasMore() && (
+          <div styleName="loadButton">
+            <Button
+              big
+              load
+              onClick={this.productsRefetch}
+              dataTest="searchProductLoadMoreButton"
+            >
+              Load more
+            </Button>
+          </div>
+        )}
+      </div>
     );
   }
 }
@@ -409,7 +385,7 @@ Products.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withShowAlert(withRouter(Page(Products))),
+  withShowAlert(withRouter(Page(ManageStore(Products, 'Goods')))),
   graphql`
     fragment Products_me on User
       @argumentDefinitions(

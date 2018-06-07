@@ -7,20 +7,16 @@ import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
+import { ManageStore } from 'pages/Manage/Store';
 import { CreateStoreMutation } from 'relay/mutations';
-import { Container, Row, Col } from 'layout';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Form from './Form';
-import Menu from './Menu';
-
-import './EditStore.scss';
 
 type StateType = {
-  activeItem: string,
   serverValidationErrors: any,
   logoUrl?: string,
   isLoading: boolean,
@@ -33,17 +29,12 @@ type PropsType = {
 
 class NewStore extends Component<PropsType, StateType> {
   state: StateType = {
-    activeItem: 'settings',
     serverValidationErrors: {},
     isLoading: false,
   };
 
   handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
     this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
-  };
-
-  handleLogoUpload = (url: string) => {
-    this.setState({ logoUrl: url });
   };
 
   handleSave = ({ form, optionLanguage }) => {
@@ -128,39 +119,21 @@ class NewStore extends Component<PropsType, StateType> {
     });
   };
 
-  switchMenu = activeItem => {
-    this.setState({ activeItem });
-  };
-
   render() {
-    const { activeItem, logoUrl, isLoading } = this.state;
+    const { isLoading } = this.state;
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              activeItem={activeItem}
-              switchMenu={this.switchMenu}
-              onLogoUpload={this.handleLogoUpload}
-              storeLogo={logoUrl}
-            />
-          </Col>
-          <Col size={10}>
-            <div styleName="container">
-              <Form
-                onSave={this.handleSave}
-                isLoading={isLoading}
-                serverValidationErrors={this.state.serverValidationErrors}
-              />
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <Form
+        onSave={this.handleSave}
+        isLoading={isLoading}
+        serverValidationErrors={this.state.serverValidationErrors}
+      />
     );
   }
 }
 
-export default withShowAlert(withRouter(Page(NewStore)));
+export default withShowAlert(
+  withRouter(Page(ManageStore(NewStore, 'Settings'))),
+);
 
 NewStore.contextTypes = {
   environment: PropTypes.object.isRequired,

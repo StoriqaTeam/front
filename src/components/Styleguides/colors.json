@@ -22,7 +22,7 @@
   }, {
     "code": "#E62C6D",
     "name": "Error",
-    "var": "$color_error"
+    "var": "$color_red"
   }, {
     "code": "#505050",
     "name": "Grey",
