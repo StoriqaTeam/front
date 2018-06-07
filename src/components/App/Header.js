@@ -19,13 +19,14 @@ import {
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
-import { Select } from 'components/common/Select';
 import { Icon } from 'components/Icon';
 import { Modal } from 'components/Modal';
 import { Authorization } from 'components/Authorization';
 import { setWindowTag } from 'utils';
 
 import { Container, Row, Col } from 'layout';
+
+import { HeaderTop, AuthButtons } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 import './Header.scss';
@@ -146,14 +147,14 @@ class Header extends Component<PropsType, StateType> {
     }
   }
 
-  onOpenModal = (isSignUp: ?boolean) => {
+  handleOpenModal = (isSignUp: ?boolean): void => {
     this.setState({
       showModal: true,
       isSignUp,
     });
   };
 
-  onCloseModal = () => {
+  handleCloseModal = (): void => {
     this.setState({ showModal: false });
   };
 
@@ -166,58 +167,23 @@ class Header extends Component<PropsType, StateType> {
     return (
       <header styleName="container">
         <Container>
-          <Row>
-            <Col size={12}>
-              <div styleName="top">
-                <div styleName="item">
-                  <Select
-                    activeItem={{ id: '1', label: 'BTC' }}
-                    items={[
-                      { id: '1', label: 'BTC' },
-                      { id: '2', label: 'ETH' },
-                      { id: '3', label: 'STQ' },
-                      { id: '4', label: 'ADA' },
-                      { id: '5', label: 'NEM' },
-                      { id: '6', label: 'NEO' },
-                      { id: '7', label: 'NEM' },
-                      { id: '8', label: 'WAX' },
-                      { id: '9', label: 'PPT' },
-                      { id: '10', label: 'SUB' },
-                      { id: '11', label: 'STRAT' },
-                      { id: '12', label: 'WTC' },
-                      { id: '13', label: 'EOS' },
-                      { id: '14', label: 'LTC' },
-                      { id: '15', label: 'LSK' },
-                      { id: '16', label: 'NXT' },
-                    ]}
-                    onSelect={() => {}}
-                    dataTest="headerСurrenciesSelect"
-                  />
+          <HeaderTop />
+          <div styleName="headerBottom">
+            <Row>
+              <Col size={7} sm={4} md={4} lg={3} xl={3}>
+                <div styleName="logo">
+                  <div styleName="burgerMenu">
+                    <Icon type="burgerMenu" size={16} />
+                  </div>
+                  <div styleName="logoIcon">
+                    <Link to="/" data-test="logoLink">
+                      <Icon type="logo" />
+                    </Link>
+                  </div>
                 </div>
-                <div styleName="item">
-                  <Select
-                    activeItem={{ id: '1', label: 'ENG' }}
-                    items={[
-                      { id: '1', label: 'ENG' },
-                      { id: '2', label: 'CHN' },
-                      { id: '3', label: 'RUS' },
-                    ]}
-                    onSelect={() => {}}
-                    dataTest="headerLanguagesSelect"
-                  />
-                </div>
-                <div>
-                  <a href="_">Help</a> {/* eslint-disable-line */}
-                </div>
-                <div>
-                  <a href="/manage/wizard">Sell on Storiqa</a>
-                </div>
-              </div>
-              <div styleName="bottom">
-                <Link to="/" data-test="logoLink">
-                  <Icon type="logo" />
-                </Link>
-                <div styleName="searchInput">
+              </Col>
+              <Col size={1} sm={1} md={3} lg={6} xl={6}>
+                <div styleName="searchBar">
                   <SearchInput
                     searchCategories={[
                       { id: 'products', label: 'Products' },
@@ -226,45 +192,30 @@ class Header extends Component<PropsType, StateType> {
                     searchValue={searchValue}
                   />
                 </div>
-                <div>
+              </Col>
+              <Col size={4} sm={3} md={5} lg={3} xl={3}>
+                <div styleName="userData">
+                  <div styleName="searchIcon">
+                    <Icon type="magnifier" />
+                  </div>
                   {userData ? (
                     <UserDropdown user={userData} />
                   ) : (
-                    <div styleName="authButtons">
-                      <div
-                        styleName="signUpButton"
-                        onClick={() => {
-                          this.onOpenModal(true);
-                        }}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex="0"
-                      >
-                        Sign Up
-                      </div>
-                      <div
-                        styleName="signInButton"
-                        onClick={() => {
-                          this.onOpenModal(false);
-                        }}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex="0"
-                      >
-                        <strong>Sign In</strong>
-                      </div>
-                    </div>
+                    <AuthButtons onOpenModal={this.handleOpenModal} />
                   )}
+                  <div styleName="cartIcon">
+                    <CartButton href="/cart" amount={this.state.cartCount} />
+                  </div>
                 </div>
-                <div styleName="cartIcon">
-                  <CartButton href="/cart" amount={this.state.cartCount} />
-                </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          </div>
         </Container>
-        <Modal showModal={showModal} onClose={this.onCloseModal}>
-          <Authorization isSignUp={isSignUp} onCloseModal={this.onCloseModal} />
+        <Modal showModal={showModal} onClose={this.handleCloseModal}>
+          <Authorization
+            isSignUp={isSignUp}
+            onCloseModal={this.handleCloseModal}
+          />
         </Modal>
       </header>
     );

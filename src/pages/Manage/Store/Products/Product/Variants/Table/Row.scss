@@ -4,7 +4,7 @@
   position: relative;
   margin: 0 -4rem;
   padding: 0 4rem;
-  border-bottom: 1px solid $color_grey_trival;
+  border-bottom: 1px solid $color_grey_trivial;
 }
 
 .variantItem {
@@ -27,7 +27,7 @@
 }
 
 .variant + .variant {
-  border-bottom: 1px solid $color_grey_trival;
+  border-bottom: 1px solid $color_grey_trivial;
 }
 
 .text {
