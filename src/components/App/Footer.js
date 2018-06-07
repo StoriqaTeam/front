@@ -82,13 +82,15 @@ class Footer extends PureComponent<{}, StateType> {
   render() {
     const { market, sections, services } = this.state;
     const FooterLogo = () => (
-      <div styleName="footerLogo">
-        <Icon type="logo" />
-        <div styleName="logoDescription">
-          Storiqa is a global marketplace for any kind of legal goods supporting
-          cryptocurrency payments
+      <Col lg={9} xl={9}>
+        <div styleName="footerLogo">
+          <Icon type="logo" />
+          <div styleName="logoDescription">
+            Storiqa is a global marketplace for any kind of legal goods supporting
+            cryptocurrency payments
+          </div>
         </div>
-      </div>
+      </Col>
     );
     const FooterColumn = ({ title, links }: FooterCol) => (
       <Col sm={12} md={4} lg={4} xl={4}>
@@ -128,9 +130,7 @@ class Footer extends PureComponent<{}, StateType> {
               <Col md={12} lg={4} xl={4}>
                 <div>
                   <Row>
-                    <Col lg={9} xl={9}>
-                      <FooterLogo />
-                    </Col>
+                    <FooterLogo />
                   </Row>
                 </div>
               </Col>
@@ -141,7 +141,7 @@ class Footer extends PureComponent<{}, StateType> {
                   <FooterColumn {...services} />
                 </Row>
               </Col>
-              <Col md={12} lg={12} xl={2} >
+              <Col md={12} lg={12} xl={2}>
                 <StartSellingButton />
               </Col>
             </Row>
