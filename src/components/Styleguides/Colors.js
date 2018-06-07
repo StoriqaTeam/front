@@ -9,15 +9,15 @@ import colors from './colors.json';
 class Colors extends PureComponent {
   handleCopy = event => {
     const el = event.target;
-    el.addEventListener("copy", e => {
+    el.addEventListener('copy', e => {
       e.preventDefault();
       if (e.clipboardData) {
-        e.clipboardData.setData("text/plain", el.id);
-        log.info('copied: ', e.clipboardData.getData("text"));
+        e.clipboardData.setData('text/plain', el.id);
+        log.info('copied: ', e.clipboardData.getData('text'));
       }
     });
-    document.execCommand("copy");
-  }
+    document.execCommand('copy');
+  };
 
   render() {
     return (
@@ -34,7 +34,9 @@ class Colors extends PureComponent {
                 style={{
                   backgroundColor: item.code,
                   border: `1px solid ${
-                    item.code === '#FFFFFF' || item.code === '#FAFAFA' ? '#CCCCCC' : item.code
+                    item.code === '#FFFFFF' || item.code === '#FAFAFA'
+                      ? '#CCCCCC'
+                      : item.code
                   }`,
                 }}
                 onClick={this.handleCopy}
