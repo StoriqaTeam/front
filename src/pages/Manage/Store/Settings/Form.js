@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   assocPath,
@@ -23,9 +23,7 @@ import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
-import Header from './Header';
-
-import './EditStore.scss';
+import './Form.scss';
 
 type StateType = {
   form: {
@@ -277,8 +275,7 @@ class Form extends Component<PropsType, StateType> {
     );
 
     return (
-      <Fragment>
-        <Header title="Settings" />
+      <div styleName="container">
         <div styleName="form">
           {this.renderInput({
             id: 'name',
@@ -324,7 +321,7 @@ class Form extends Component<PropsType, StateType> {
             </SpinnerButton>
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

@@ -6,8 +6,8 @@ import { routerShape, withRouter, matchShape } from 'found';
 import { pathOr, isEmpty, path } from 'ramda';
 
 import { Page } from 'components/App';
-import { Container, Row, Col } from 'layout';
-import { log, fromRelayError, getNameText } from 'utils';
+import { ManageStore } from 'pages/Manage/Store';
+import { log, fromRelayError } from 'utils';
 import {
   CreateBaseProductMutation,
   UpdateStoreMainMutation,
@@ -18,8 +18,6 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Form from './Form';
-
-import Menu from '../Menu';
 
 type StateType = {
   formErrors: ?{},
@@ -36,8 +34,6 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
 };
-
-const storeLogoFromProps = pathOr(null, ['me', 'store', 'logo']);
 
 class NewProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -196,38 +192,15 @@ class NewProduct extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading } = this.state;
-    // $FlowIgnoreMe
-    const logo = storeLogoFromProps(this.props);
-
-    const name = getNameText(
-      // $FlowIgnoreMe
-      pathOr([], ['me', 'store', 'name'], this.props),
-      'EN',
-    );
 
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              activeItem="goods"
-              switchMenu={() => {}}
-              storeName={name || ''}
-              storeLogo={logo || ''}
-              onLogoUpload={this.handleLogoUpload}
-            />
-          </Col>
-          <Col size={10}>
-            <Form
-              onSave={this.handleSave}
-              validationErrors={this.state.formErrors}
-              categories={this.context.directories.categories}
-              baseProduct={null}
-              isLoading={isLoading}
-            />
-          </Col>
-        </Row>
-      </Container>
+      <Form
+        onSave={this.handleSave}
+        validationErrors={this.state.formErrors}
+        categories={this.context.directories.categories}
+        baseProduct={null}
+        isLoading={isLoading}
+      />
     );
   }
 }
@@ -238,7 +211,7 @@ NewProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(withShowAlert(Page(NewProduct))),
+  withRouter(withShowAlert(Page(ManageStore(NewProduct, 'Goods')))),
   graphql`
     fragment NewProduct_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {

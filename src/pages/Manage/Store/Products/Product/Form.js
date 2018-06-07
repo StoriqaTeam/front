@@ -11,8 +11,6 @@ import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 
-import Header from '../Header';
-
 import './Product.scss';
 
 type PropsType = {
@@ -176,7 +174,6 @@ class Form extends Component<PropsType, StateType> {
     const { isLoading, baseProduct } = this.props;
     return (
       <div styleName="container">
-        <Header title="Goods" />
         <div styleName="form">
           <div styleName="title">
             <strong>General characteristics</strong>

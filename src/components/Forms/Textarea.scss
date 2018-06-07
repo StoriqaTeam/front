@@ -24,7 +24,7 @@
 }
 
 .isError.isFocus .labelFloat {
-  color: $color_error;
+  color: $color_red;
 }
 
 .textarea {
@@ -58,12 +58,12 @@
 }
 
 .isError .textarea hr {
-  border: 1px solid $color_error;
+  border: 1px solid $color_red;
   transform: scaleX(1);
 }
 
 .isError .textarea textarea {
-  border-bottom: 1px solid $color_error;
+  border-bottom: 1px solid $color_red;
 }
 
 .errors {
@@ -73,6 +73,6 @@
   width: 100%;
   padding-right: 6rem;
   font-size: 12px;
-  color: $color_error;
+  color: $color_red;
   line-height: 3rem;
  }

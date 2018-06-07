@@ -8,16 +8,15 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
-import { UpdateStoreMainMutation } from 'relay/mutations';
-import { Container, Row, Col } from 'layout';
+import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
+
+import { UpdateStoreMainMutation } from 'relay/mutations';
+import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Form from './Form';
-import Menu from './Menu';
-
-import './EditStore.scss';
 
 type PropsType = {
   me?: { store?: { logo: string } },
@@ -25,16 +24,13 @@ type PropsType = {
 };
 
 type StateType = {
-  activeItem: string,
   serverValidationErrors: any,
-  activeItem: string,
   logoUrl?: string,
   isLoading: boolean,
 };
 
 class EditStore extends Component<PropsType, StateType> {
   state: StateType = {
-    activeItem: 'settings',
     serverValidationErrors: {},
     isLoading: false,
   };
@@ -107,15 +103,19 @@ class EditStore extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
     // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'store', 'id'], this.props);
-    UpdateStoreMainMutation.commit({
-      id,
-      name: [{ lang: optionLanguage, text: name }],
-      defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [{ lang: optionLanguage, text: longDescription }],
-      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
-      slug,
-      slogan,
-      logo: logoUrl,
+    const params: MutationParamsType = {
+      input: {
+        clientMutationId: '',
+        id,
+        name: [{ lang: optionLanguage, text: name }],
+        // $FlowIgnoreMe
+        defaultLanguage: toUpper(defaultLanguage),
+        longDescription: [{ lang: optionLanguage, text: longDescription }],
+        shortDescription: [{ lang: optionLanguage, text: shortDescription }],
+        slug,
+        slogan,
+        logo: logoUrl,
+      },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -164,55 +164,31 @@ class EditStore extends Component<PropsType, StateType> {
           link: { text: 'Close.' },
         });
       },
-    });
-  };
-
-  switchMenu = activeItem => {
-    this.setState({ activeItem });
+    };
+    UpdateStoreMainMutation.commit(params);
   };
 
   render() {
-    const { activeItem, logoUrl, isLoading } = this.state;
+    const { isLoading } = this.state;
     // $FlowIgnoreMe
     const store = pathOr(null, ['store'], this.props.me);
 
     if (!store) {
       return <div>Store not found :(</div>;
     }
-
-    // $FlowIgnoreMe
-    const name = pathOr('', ['name', 0, 'text'], store);
-    const { logo } = store;
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              activeItem={activeItem}
-              switchMenu={() => {}}
-              storeName={name}
-              storeLogo={logoUrl || logo}
-              onLogoUpload={this.handleLogoUpload}
-            />
-          </Col>
-          <Col size={10}>
-            <div styleName="container">
-              <Form
-                store={store}
-                onSave={this.handleSave}
-                isLoading={isLoading}
-                serverValidationErrors={this.state.serverValidationErrors}
-              />
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <Form
+        store={store}
+        onSave={this.handleSave}
+        isLoading={isLoading}
+        serverValidationErrors={this.state.serverValidationErrors}
+      />
     );
   }
 }
 
 export default createFragmentContainer(
-  Page(withShowAlert(EditStore)),
+  Page(withShowAlert(ManageStore(EditStore, 'Settings'))),
   graphql`
     fragment EditStore_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {
