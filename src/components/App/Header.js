@@ -26,7 +26,7 @@ import { setWindowTag } from 'utils';
 
 import { Container, Row, Col } from 'layout';
 
-import { HeaderTop, AuthButtons } from './index';
+import { HeaderTop, AuthButtons, MobileMenu } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 import './Header.scss';
@@ -66,7 +66,6 @@ const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
 
 type PropsType = {
   searchValue: string,
-  onBurgerMenu(): void => {},
 };
 
 type StateType = {
@@ -79,6 +78,7 @@ type StateType = {
     firstName: ?string,
     lastName: ?string,
   },
+  isMenuToggled: boolean,
 };
 
 class Header extends Component<PropsType, StateType> {
@@ -87,6 +87,7 @@ class Header extends Component<PropsType, StateType> {
     showModal: false,
     isSignUp: false,
     userData: null,
+    isMenuToggled: false,
   };
 
   componentWillMount() {
@@ -162,11 +163,17 @@ class Header extends Component<PropsType, StateType> {
   dispose: () => void;
   disposeUser: () => void;
 
+  handleMobileMenu = (): void => {
+    const { isMenuToggled } = this.state;
+    this.setState({ isMenuToggled: !isMenuToggled });
+  };
+
   render() {
-    const { searchValue, onBurgerMenu } = this.props;
-    const { showModal, isSignUp, userData } = this.state;
+    const { searchValue } = this.props;
+    const { showModal, isSignUp, userData, isMenuToggled } = this.state;
     return (
       <header styleName="container">
+        <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
         <Container>
           <HeaderTop />
           <div styleName="headerBottom">
@@ -174,7 +181,7 @@ class Header extends Component<PropsType, StateType> {
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
                 <div styleName="logo">
                   <div
-                    onClick={onBurgerMenu}
+                    onClick={this.handleMobileMenu}
                     onKeyPress={() => {}}
                     role="button"
                     styleName="burgerMenu"

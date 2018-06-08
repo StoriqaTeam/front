@@ -6,14 +6,14 @@ import './MobileMenu.scss';
 
 type PropsTypes = {
   isOpen: boolean,
-  onClose(): void => {}
-}
+  onClose(): void => {},
+};
 
 class MobileMenu extends Component<PropsTypes> {
   handleClick = () => {};
   render() {
     const { isOpen, onClose } = this.props;
-    return(
+    return (
       <section
         onKeyPress={() => {}}
         role="presentation"
