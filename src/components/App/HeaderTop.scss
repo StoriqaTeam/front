@@ -1,13 +1,16 @@
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-top: 1rem;
+  display: none;
 
-  a {
-    margin-left: 3rem;
+  @media (min-width: 992px) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 1rem;
+
+    a {
+      margin-left: 3rem;
+    }
   }
-
 }
 
 .item {
