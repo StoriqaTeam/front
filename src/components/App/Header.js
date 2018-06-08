@@ -171,24 +171,29 @@ class Header extends Component<PropsType, StateType> {
   render() {
     const { searchValue } = this.props;
     const { showModal, isSignUp, userData, isMenuToggled } = this.state;
+    const BurgerMenu = () => (
+      <div
+        onClick={this.handleMobileMenu}
+        onKeyPress={() => {}}
+        role="button"
+        styleName="burgerMenu"
+        tabIndex="-1"
+      >
+        <span role="img">
+          <Icon type="burgerMenu" size={28} />
+        </span>
+      </div>
+    );
     return (
       <header styleName="container">
         <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
         <Container>
+          <BurgerMenu />
           <HeaderTop />
           <div styleName="headerBottom">
             <Row>
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
                 <div styleName="logo">
-                  <div
-                    onClick={this.handleMobileMenu}
-                    onKeyPress={() => {}}
-                    role="button"
-                    styleName="burgerMenu"
-                    tabIndex="-1"
-                  >
-                    <Icon type="burgerMenu" size={16} />
-                  </div>
                   <div styleName="logoIcon">
                     <Link to="/" data-test="logoLink">
                       <Icon type="logo" />
