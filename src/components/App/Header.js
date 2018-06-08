@@ -196,7 +196,7 @@ class Header extends Component<PropsType, StateType> {
                   </div>
                 </div>
               </Col>
-              <Col size={1} sm={1} md={3} lg={6} xl={6}>
+              <Col size={1} sm={5} md={3} lg={6} xl={6}>
                 <div styleName="searchBar">
                   <SearchInput
                     searchCategories={[
