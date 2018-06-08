@@ -66,6 +66,7 @@ const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
 
 type PropsType = {
   searchValue: string,
+  onBurgerMenu(): void => {},
 };
 
 type StateType = {
@@ -162,7 +163,7 @@ class Header extends Component<PropsType, StateType> {
   disposeUser: () => void;
 
   render() {
-    const { searchValue } = this.props;
+    const { searchValue, onBurgerMenu } = this.props;
     const { showModal, isSignUp, userData } = this.state;
     return (
       <header styleName="container">
@@ -172,7 +173,13 @@ class Header extends Component<PropsType, StateType> {
             <Row>
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
                 <div styleName="logo">
-                  <div styleName="burgerMenu">
+                  <div
+                    onClick={onBurgerMenu}
+                    onKeyPress={() => {}}
+                    role="button"
+                    styleName="burgerMenu"
+                    tabIndex="-1"
+                  >
                     <Icon type="burgerMenu" size={16} />
                   </div>
                   <div styleName="logoIcon">

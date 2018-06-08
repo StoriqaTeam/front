@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+
+.container {
+  background: rgba(0, 0, 0, .7);
+  height: 100%;
+  left: 250px;
+  margin-left: -250px;
+  overflow-y: auto;
+  position: fixed;
+  transition: width 0.5s ease;
+  width: 0;
+  z-index: 1000;
+}
+
+.toggled {
+  width: 100vw;
+}
+
+.menu {
+  background: $color_white;
+  height: 100%;
+  max-width: 31.25rem;
+  padding: 0 2.25rem;
+}
+
+.title {
+  display: flex;
+  padding: 35px 0;
+  border-bottom: 1px solid $color_grey_minor;
+
+  & .close {
+    margin: 0 2rem;
+  }
+
+  & h3 {
+    font-size: 2.25rem;
+  }
+
+}
+
