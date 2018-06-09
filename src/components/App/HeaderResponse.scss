@@ -1,0 +1,71 @@
+@import '../../styles/variables';
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 170rem;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.qaIcon {
+  position: relative;
+  top: 0.5rem;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.headerBottom {
+  background-color: $color_white;
+  margin-top: 3rem;
+}
+
+.cartIcon {
+  width: 4rem;
+  margin-left: 1rem;
+}
+
+.searchIcon {
+  display: block;
+  margin-right: 2rem;
+  padding-top: 1rem;
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.searchBar {
+  display: none;
+  @media (min-width: 992px) {
+    display: block;
+  }
+}
+
+.userData {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logo {
+  display: flex;
+  padding-top: 1rem;
+  @media (min-width: 768px) {
+    padding-top: 0;
+  }
+}
+
+.logoIcon {
+  width: 15rem;
+  @media (min-width: 768px) {
+    width: 24rem;
+  }
+}
+
+.burgerMenu {
+  width: 2rem;
+  margin-right: 5rem;
+  display: block;
+  @media (min-width: 768px) {
+    display: none;
+  }
+}

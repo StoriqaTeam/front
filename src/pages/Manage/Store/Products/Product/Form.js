@@ -59,11 +59,14 @@ class Form extends Component<PropsType, StateType> {
     let form = {};
     if (baseProduct) {
       form = {
-        name: getNameText(baseProduct.name, 'EN'),
-        shortDescription: getNameText(baseProduct.shortDescription, 'EN'),
-        longDescription: getNameText(baseProduct.longDescription, 'EN'),
-        seoTitle: getNameText(baseProduct.seoTitle, 'EN'),
-        seoDescription: getNameText(baseProduct.seoDescription, 'EN'),
+        name: getNameText(baseProduct.name || [], 'EN') || '',
+        shortDescription:
+          getNameText(baseProduct.shortDescription || [], 'EN') || '',
+        longDescription:
+          getNameText(baseProduct.longDescription || [], 'EN') || '',
+        seoTitle: getNameText(baseProduct.seoTitle || [], 'EN') || '',
+        seoDescription:
+          getNameText(baseProduct.seoDescription || [], 'EN') || '',
         categoryId: baseProduct.category.rawId,
       };
     } else {
