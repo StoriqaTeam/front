@@ -75,29 +75,30 @@ export const errorsHandler = (
       text: `Error: "${status}"`,
       link: { text: 'Close.' },
     });
-    callback();
-  }
-  switch(keys(relayErrors)[0]) {
-    case '100': { 
+    if (callback) {
+      callback();
+    }
+  };
+  switch (keys(relayErrors)[0]) {
+    case '100': {
       const { messages } = relayErrors['100'];
-      if (!isEmpty(messages)) {
+      if (!isEmpty(messages) && callback) {
         callback(messages);
-      }
-      else {
+      } else {
         handleDefaultEvent('100');
       }
       break;
     }
-    case '200': 
+    case '200':
       handleDefaultEvent('200');
       break;
-    case '300': 
+    case '300':
       handleDefaultEvent('300');
       break;
-    case '400': 
+    case '400':
       handleDefaultEvent('400');
       break;
-    default: { 
+    default: {
       break;
     }
   }

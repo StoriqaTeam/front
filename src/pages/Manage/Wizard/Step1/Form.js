@@ -21,7 +21,7 @@ type DataType = {
 
 type ErrorsType = {
   [code: string]: Array<string>,
-}
+};
 
 type PropsType = {
   initialData: DataType,

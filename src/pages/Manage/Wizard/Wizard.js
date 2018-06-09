@@ -3,7 +3,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { assocPath, path, pick, pathOr, omit, where, complement, isEmpty } from 'ramda';
+import {
+  assocPath,
+  path,
+  pick,
+  pathOr,
+  omit,
+  where,
+  complement,
+  isEmpty,
+} from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
@@ -27,7 +36,12 @@ import { log, fromRelayError, uploadFile } from 'utils';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { ProcessedErrorType } from 'utils/fromRelayError';
 
-import { resposeLogger, errorsLogger, errorsHandler, transformTranslated } from './utils';
+import {
+  resposeLogger,
+  errorsLogger,
+  errorsHandler,
+  transformTranslated,
+} from './utils';
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
@@ -129,7 +143,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       showConfirm: false,
       step: 1,
       ...initialProductState,
-      isValid: false,
+      isValid: true,
       validationErrors: null,
     };
   }
@@ -140,23 +154,27 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   handleSuccess = (text: ?string) => {
     this.setState({ isValid: true });
-    if(text) { 
+    if (text) {
       this.props.showAlert({
         text,
         type: 'success',
         link: { text: '' },
       });
     }
-  }
+  };
 
-  handleWizardError = (
-    messages?: {
-      [string]: Array<string>,
-    },
-  ) => this.setState({
-    isValid: false,
-    validationErrors: messages || null,
-  });
+  handleWizardError = (messages?: { [string]: Array<string> }) =>
+    this.setState({
+      isValid: false,
+      validationErrors: messages || null,
+    });
+  
+  clearValidationErrors = () => 
+    this.setState({
+      isValid: true,
+      validationErrors: null,
+    });
+ 
 
   createWizard = () => {
     CreateWizardMutation.commit({
@@ -167,13 +185,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert);
+          errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
         }
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -193,27 +211,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+          return;
         }
-        else {
-          this.setState({
-            isValid: true,
-            validationErrors: null,
-          });
-        }
+        this.clearValidationErrors();
       },
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
-        if (relayErrors) {
-          errorsHandler(relayErrors, this.props.showAlert);
-        }
-        else {
-          this.setState({
-            isValid: true,
-            validationErrors: null,
-          });
-        }
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -252,17 +262,24 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        if (!errors) {
-          this.setState({ isValid: true });
-        } else {
-          this.setState({ isValid: false });
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+          return;
         }
+        this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.updateWizard({ storeId });
-        resposeLogger(response, errors);
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -276,15 +293,22 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        resposeLogger(response, errors);
-        if (!errors) {
-          this.setState({ isValid: true });
-        } else {
-          this.setState({ isValid: false });
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+          return;
         }
+        this.clearValidationErrors();
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -331,11 +355,22 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       DeleteWizardMutation.commit({
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
+          log.debug({ response, errors });
+          const relayErrors = fromRelayError({ source: { errors } });
+          if (relayErrors) {
+            errorsHandler(
+              relayErrors,
+              this.props.showAlert,
+            );
+            return;
+          }
+          this.clearValidationErrors();
           this.handleOnClearProductState();
-          resposeLogger(response, errors);
         },
         onError: (error: Error) => {
-          errorsLogger(error);
+          log.debug({ error });
+          const relayErrors = fromRelayError(error);
+          errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
         },
       });
     });
@@ -376,7 +411,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       parentID,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        resposeLogger(response, errors);
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+          return;
+        }
         const baseProductId = pathOr(
           null,
           ['createBaseProduct', 'rawId'],
@@ -387,9 +431,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           ['createBaseProduct', 'id'],
           response,
         );
-        if (!baseProductId) {
+        if (!baseProductId || !baseProductID) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error: Can\'t create variant without base product id',
+            link: { text: 'Close.' },
+          });
           return;
         }
+        this.clearValidationErrors();
         // create variant after create base product
         const prepareDataForProduct = {
           product: {
@@ -407,16 +457,30 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             productResponse: ?Object,
             productErrors: ?Array<any>,
           ) => {
+            log.debug({ productResponse, productErrors });
+            const productRelayErrors = fromRelayError({ source: { errors: productErrors } });
+            if (productRelayErrors) {
+              errorsHandler(
+                productRelayErrors,
+                this.props.showAlert,
+                this.handleWizardError,
+              );
+              return;
+            }
+            this.clearValidationErrors();
             this.handleOnClearProductState();
-            resposeLogger(productResponse, productErrors);
           },
           onError: (error: Error) => {
-            errorsLogger(error);
+            log.debug({ error });
+            const productRelayErrors = fromRelayError(error);
+            errorsHandler(productRelayErrors, this.props.showAlert, this.handleWizardError);
           },
         });
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -432,6 +496,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...preparedData,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+          return;
+        }
         const prepareDataForProduct = {
           id: baseProduct.product.id,
           product: {
@@ -451,17 +525,30 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             productResponse: ?Object,
             productErrors: ?Array<any>,
           ) => {
+            log.debug({ response: productResponse, errors: productErrors });
+            const productRelayErrors = fromRelayError({ source: { errors: productErrors } });
+            if (productRelayErrors) {
+              errorsHandler(
+                productRelayErrors,
+                this.props.showAlert,
+                this.handleWizardError,
+              );
+              return;
+            }
+            this.clearValidationErrors();
             this.handleOnClearProductState();
-            resposeLogger(productResponse, productErrors);
           },
           onError: (error: Error) => {
-            errorsLogger(error);
+            log.debug({ error });
+            const productRelayErrors = fromRelayError(error);
+            errorsHandler(productRelayErrors, this.props.showAlert, this.handleWizardError);
           },
         });
-        resposeLogger(response, errors);
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -487,11 +574,23 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       parentID: storeID,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+          return;
+        }
+        this.clearValidationErrors();
         this.handleOnClearProductState();
-        resposeLogger(response, errors);
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
       },
     });
   };
@@ -509,7 +608,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
-    if (!result.url) return;
+    if (!result.url) {
+      this.props.showAlert({
+        text: 'Can\'t upload photo',
+        type: 'success',
+        link: { text: '' },
+      });
+      return;
+    };
     if (type === 'photoMain') {
       this.setState(prevState =>
         assocPath(
@@ -600,6 +706,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               onClearProductState={this.handleOnClearProductState}
               onSave={this.handleOnSaveProduct}
               onDelete={this.handleOnDeleteProduct}
+              errors={this.state.validationErrors}
             />
           </div>
         );
