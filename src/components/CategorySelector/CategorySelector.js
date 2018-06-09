@@ -2,7 +2,7 @@
 
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
-import { zipObj } from 'ramda';
+import { zipObj, isEmpty } from 'ramda';
 
 import { getNameText, searchPathByParent, flattenFunc } from 'utils';
 
@@ -164,7 +164,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                 </span>
               ) : null,
           )}
-        {!snapshot && 'Choose category'}
+        {!isEmpty(snapshot) && 'Choose category'}
       </div>
     );
   };

@@ -32,15 +32,15 @@ type DeliveryAddressesType = {
   isPriority: boolean,
   userId: number,
   address: {
+    country: string,
     administrativeAreaLevel1: ?string,
     administrativeAreaLevel2: ?string,
-    country: string,
-    locality: ?string,
     political: ?string,
     postalCode: string,
-    route: ?string,
     streetNumber: ?string,
     value: ?string,
+    route: ?string,
+    locality: ?string,
   },
 };
 
@@ -55,21 +55,22 @@ type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
 };
 
+type FormType = {
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  country: string,
+  locality: ?string,
+  political: ?string,
+  postalCode: string,
+  route: ?string,
+  streetNumber: ?string,
+  value: ?string,
+  isPriority: boolean,
+};
+
 type StateType = {
   isLoading: boolean,
-  form: {
-    administrativeAreaLevel1: ?string,
-    administrativeAreaLevel2: ?string,
-    country: string,
-    locality: ?string,
-    political: ?string,
-    postalCode: string,
-    route: ?string,
-    streetNumber: ?string,
-    address: ?string,
-    value: ?string,
-    isPriority: boolean,
-  },
+  form: FormType,
   isOpenNewForm: boolean,
   editableAddressId: ?number,
 };
@@ -83,7 +84,6 @@ const resetForm = {
   postalCode: '',
   route: '',
   streetNumber: '',
-  address: '',
   value: '',
   isPriority: true,
 };
@@ -107,7 +107,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       political,
       postalCode,
       streetNumber,
-      address,
+      value,
       route,
       locality,
       isPriority,
@@ -142,7 +142,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       political: political || null,
       postalCode,
       streetNumber: streetNumber || null,
-      address: address || null,
+      address: value || null,
       route: route || null,
       locality: locality || null,
       isPriority,
@@ -232,7 +232,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     DeleteUserDeliveryAddressMutation.commit(params);
   };
 
-  handleUpdateForm = (form: any) => {
+  handleUpdateForm = (form: FormType) => {
     this.setState(() => ({
       form: {
         ...this.state.form,

@@ -2,10 +2,15 @@
 
 .container {
   position: relative;
-  width: 100%;
-  max-width: 170rem;
   margin: 0 auto;
   padding-bottom: 2rem;
+
+  /* This styles for responsive development */
+  // width: 100%;
+  // max-width: 170rem;
+
+  /* This styles must be in master */
+  width: 170rem;
 }
 
 .top {

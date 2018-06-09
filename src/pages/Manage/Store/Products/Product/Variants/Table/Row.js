@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { pathOr, map } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
@@ -10,6 +10,7 @@ import './Row.scss';
 
 type PropsType = {
   variant: {
+    id: string,
     rawId: number,
     vendorCode: string,
     price: number,
@@ -21,24 +22,21 @@ type PropsType = {
       value: string,
     }>,
   },
-  onExpandClick: Function,
+  onExpandClick: (id: number) => void,
+  handleDeleteVariant: (id: string) => void,
 };
 
-type StateType = {
-  // checked: boolean,
-};
-
-class Row extends Component<PropsType, StateType> {
-  state: StateType = {
-    // checked: false,
-  };
-
+class Row extends PureComponent<PropsType> {
   handleCheckboxClick = () => {
     // this.setState(prevState => ({ checked: !prevState.checked }));
   };
 
   handleExpandClick = () => {
     this.props.onExpandClick(this.props.variant.rawId);
+  };
+
+  handleDelete = () => {
+    this.props.handleDeleteVariant(this.props.variant.id);
   };
 
   render() {
@@ -113,7 +111,7 @@ class Row extends Component<PropsType, StateType> {
             </div>
           </div>
           <div styleName="variantItem tdBasket">
-            <button styleName="deleteButton">
+            <button styleName="deleteButton" onClick={this.handleDelete}>
               <Icon type="basket" size="32" />
             </button>
           </div>

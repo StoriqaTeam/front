@@ -42,7 +42,7 @@ export default (OriginalComponent: any, title: string) =>
               <Menu
                 activeItem={toLower(title)}
                 showAlert={this.props.showAlert}
-                storeData={store || baseProduct.store}
+                storeData={store || (baseProduct && baseProduct.store) || null}
                 baseProductData={baseProduct}
               />
             </Col>
