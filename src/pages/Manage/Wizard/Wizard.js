@@ -3,10 +3,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { assocPath, path, pick, pathOr, omit, where, complement } from 'ramda';
+import { assocPath, path, pick, pathOr, omit, where, complement, isEmpty } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
+import { withShowAlert } from 'components/App/AlertContext';
 import { Page } from 'components/App';
 import { Modal } from 'components/Modal';
 import { Button } from 'components/common/Button';
@@ -22,9 +23,11 @@ import {
   DeactivateBaseProductMutation,
   DeleteWizardMutation,
 } from 'relay/mutations';
-import { uploadFile } from 'utils';
+import { log, fromRelayError, uploadFile } from 'utils';
+import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { ProcessedErrorType } from 'utils/fromRelayError';
 
-import { resposeLogger, errorsLogger, transformTranslated } from './utils';
+import { resposeLogger, errorsLogger, errorsHandler, transformTranslated } from './utils';
 import WizardHeader from './WizardHeader';
 import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
@@ -59,6 +62,7 @@ export type BaseProductNodeType = {
 };
 
 type PropsType = {
+  showAlert: (input: AddAlertInputType) => void,
   router: routerShape,
   languages: Array<{
     isoCode: string,
@@ -81,6 +85,9 @@ type StateType = {
   step: number,
   baseProduct: BaseProductNodeType,
   isValid: boolean,
+  validationErrors: ?{
+    [string]: Array<string>,
+  },
 };
 
 export const initialProductState = {
@@ -123,6 +130,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       step: 1,
       ...initialProductState,
       isValid: false,
+      validationErrors: null,
     };
   }
 
@@ -130,19 +138,42 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     this.createWizard();
   }
 
+  handleSuccess = (text: ?string) => {
+    this.setState({ isValid: true });
+    if(text) { 
+      this.props.showAlert({
+        text,
+        type: 'success',
+        link: { text: '' },
+      });
+    }
+  }
+
+  handleWizardError = (
+    messages?: {
+      [string]: Array<string>,
+    },
+  ) => this.setState({
+    isValid: false,
+    validationErrors: messages || null,
+  });
+
   createWizard = () => {
     CreateWizardMutation.commit({
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        resposeLogger(response, errors);
-        if (!errors) {
-          this.setState({ isValid: true });
-        } else {
-          this.setState({ isValid: false });
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert);
         }
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
       },
     });
   };
@@ -157,15 +188,32 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        resposeLogger(response, errors);
-        if (!errors) {
-          this.setState({ isValid: true });
-        } else {
-          this.setState({ isValid: false });
+        log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, this.handleWizardError);
+        }
+        else {
+          this.setState({
+            isValid: true,
+            validationErrors: null,
+          });
         }
       },
       onError: (error: Error) => {
-        errorsLogger(error);
+        log.debug({ error });
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          errorsHandler(relayErrors, this.props.showAlert);
+        }
+        else {
+          this.setState({
+            isValid: true,
+            validationErrors: null,
+          });
+        }
       },
     });
   };
@@ -514,7 +562,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               Make a bright name for your store to attend your customers and
               encrease your sales
             </div>
-            <Step1 initialData={wizardStore} onChange={this.handleChangeForm} />
+            <Step1
+              initialData={wizardStore}
+              onChange={this.handleChangeForm}
+              errors={this.state.validationErrors}
+            />
           </div>
         );
       case 2:
@@ -668,7 +720,7 @@ WizardWrapper.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(Page(WizardWrapper)),
+  withRouter(Page(withShowAlert(WizardWrapper))),
   graphql`
     fragment Wizard_me on User {
       id
