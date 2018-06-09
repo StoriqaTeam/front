@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { map, pathOr, whereEq, filter } from 'ramda';
 
-import { findCategory } from 'utils';
+import { findCategory, convertSrc } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
@@ -215,7 +215,10 @@ class ThirdForm extends PureComponent<PropsType> {
                       <div
                         styleName="imageBG"
                         style={{
-                          backgroundImage: `url(${data.product.photoMain})`,
+                          backgroundImage: `url(${convertSrc(
+                            data.product.photoMain,
+                            'small',
+                          )})`,
                         }}
                         alt="mainPhoto"
                       />

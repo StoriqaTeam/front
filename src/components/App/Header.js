@@ -239,6 +239,7 @@ class Header extends Component<PropsType, StateType> {
                         onKeyDown={() => {}}
                         role="button"
                         tabIndex="0"
+                        data-test="headerSignUpButton"
                       >
                         Sign Up
                       </div>
@@ -250,6 +251,7 @@ class Header extends Component<PropsType, StateType> {
                         onKeyDown={() => {}}
                         role="button"
                         tabIndex="0"
+                        data-test="headerSignInButton"
                       >
                         <strong>Sign In</strong>
                       </div>
