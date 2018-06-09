@@ -13,6 +13,8 @@ import { currentUserShape } from 'utils/shapes';
 import type { AlertPropsType } from 'components/Alerts';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
+import { AppContext } from './index';
+
 import './App.scss';
 
 type StateType = {
@@ -81,18 +83,20 @@ class App extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me, mainPage, cart, children } = this.props;
+    const { me, mainPage, cart, children, categories } = this.props;
     return (
-      <Fragment>
-        <AlertsContainer alerts={this.state.alerts} />
-        <AlertContextProvider
-          value={{
-            addAlert: this.addAlert,
-          }}
-        >
-          {children && React.cloneElement(children, { me, mainPage, cart })}
-        </AlertContextProvider>
-      </Fragment>
+      <AppContext.Provider value={{ categories }}>
+        <Fragment>
+          <AlertsContainer alerts={this.state.alerts} />
+          <AlertContextProvider
+            value={{
+              addAlert: this.addAlert,
+            }}
+          >
+            {children && React.cloneElement(children, { me, mainPage, cart })}
+          </AlertContextProvider>
+        </Fragment>
+      </AppContext.Provider>
     );
   }
 }

@@ -3,8 +3,8 @@
 .container {
   background: rgba(0, 0, 0, .7);
   height: 100%;
-  left: 250px;
-  margin-left: -250px;
+  left: 31.25rem;
+  margin-left: -31.25rem;
   overflow-y: auto;
   position: fixed;
   transition: width 0.5s ease;
@@ -16,17 +16,17 @@
   width: 100vw;
 }
 
-.menu {
-  background: $color_white;
+.sidebar {
+  background: $color_grey_bg;
   height: 100%;
   max-width: 31.25rem;
-  padding: 0 2.25rem;
+  z-index: 1001;
 }
 
 .title {
-  display: flex;
-  padding: 35px 0;
   border-bottom: 1px solid $color_grey_minor;
+  display: flex;
+  padding: 3.25rem 0;
 
   & .close {
     margin: 0 2rem;
@@ -38,3 +38,35 @@
 
 }
 
+.menu {
+  & .item {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.75rem 3.25rem;
+
+    &:hover {
+      background: $color_white;
+      border-left: 2px solid $color_blue;
+    }
+
+    & span {
+      align-items: center;
+      display: flex;
+    }
+
+  }
+
+}
+
+.linkName {
+  color: $color_grey;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 1rem;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
