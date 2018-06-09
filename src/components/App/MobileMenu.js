@@ -7,21 +7,32 @@ import { buildMobileCategories } from './utils';
 
 import './MobileMenu.scss';
 
-type PropsTypes = {
+type PropsType = {
   isOpen: boolean,
   onClose(): void => {},
 };
 
-class MobileMenu extends Component<PropsTypes> {
-  handleClick = evt => {
+type StateType = {
+  selected: ?number,
+};
+
+class MobileMenu extends Component<PropsType, StateType> {
+  state = {
+    selected: null,
+  };
+  handleClick = (evt): void => {
     const { onClose } = this.props;
     const { tagName } = evt.target;
     if (tagName === 'svg' || tagName === 'path' || tagName === 'SECTION') {
       onClose();
     }
   };
+  handleSelected = (selected: number): void => {
+    this.setState({ selected });
+  };
   render() {
     const { isOpen } = this.props;
+    const { selected } = this.state;
     const Header = () => (
       <header styleName="title">
         <span
@@ -51,17 +62,21 @@ class MobileMenu extends Component<PropsTypes> {
               <nav>
                 <Header />
                 <ul styleName="menu">
-                  {/* <pre>{JSON.stringify(buildMobileCategories(categories), null, 2)}</pre> */}
-                  {buildMobileCategories(categories).map(cat => (
+                  {buildMobileCategories(categories).map((cat, index) => (
+                    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
                     <li
+                      onKeyPress={() => {}}
                       key={cat.rawId}
-                      styleName="item"
+                      styleName={`item ${selected === index ? 'active' : ''}`}
+                      onClick={() => this.handleSelected(index)}
+                      tabIndex="-1"
                     >
+                      {selected === index ? (
+                        <span styleName="activeBorder" />
+                      ) : null}
                       <span>
                         <Icon type="qualityAssurance" />
-                        <p styleName="linkName">
-                          {cat.name}
-                        </p>
+                        <p styleName="linkName">{cat.name}</p>
                       </span>
                       <Icon type="arrowRight" />
                     </li>

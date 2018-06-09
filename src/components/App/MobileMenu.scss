@@ -44,11 +44,7 @@
     display: flex;
     justify-content: space-between;
     padding: 1.75rem 3.25rem;
-
-    &:hover {
-      background: $color_white;
-      border-left: 2px solid $color_blue;
-    }
+    position: relative;
 
     & span {
       align-items: center;
@@ -59,10 +55,23 @@
 
 }
 
+.active {
+  background: $color_white;
+  font-weight: 500;
+}
+
+.activeBorder {
+  background: $color_blue;
+  height: 6rem;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 2px;
+}
+
 .linkName {
   color: $color_grey;
   font-size: 14px;
-  font-weight: 500;
   margin-left: 1rem;
   overflow: hidden;
   text-align: left;
