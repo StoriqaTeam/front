@@ -13,21 +13,6 @@
   width: 170rem;
 }
 
-.top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-top: 1rem;
-  a {
-    margin-left: 3rem;
-  }
-
-}
-
-.item {
-  margin-left: 3rem;
-}
-
 .qaIcon {
   position: relative;
   top: 0.5rem;
@@ -35,16 +20,9 @@
   margin-right: 0.5rem;
 }
 
-.bottom {
+.headerBottom {
   background-color: $color_white;
-  display: flex;
-  align-items: center;
   margin-top: 3rem;
-}
-
-.searchInput {
-  margin-left: 18rem;
-  flex: 1;
 }
 
 .cartIcon {
@@ -52,35 +30,47 @@
   margin-left: 1rem;
 }
 
-.authButtons {
-  display: flex;
-
-  & .signInButton {
-    margin-left: 2rem;
-    padding: 0 2rem;
-    border-radius: 0.5rem;
-    border: solid 1px rgba(151,151,151,.2);
-    font-size: 14px;
-    height: 4rem;
-    line-height: 4rem;
-    cursor: pointer;
-    transition: $transition_all_ease;
-
-    &:hover {
-      color: $color_white;
-      background-color: $color_blue_hover;
-    }
+.searchIcon {
+  display: block;
+  margin-right: 2rem;
+  padding-top: 1rem;
+  @media (min-width: 768px) {
+    display: none;
   }
+}
 
-  & .signUpButton {
-    font-size: 14px;
-    height: 4rem;
-    line-height: 4rem;
-    cursor: pointer;
-    transition: $transition_all_ease;
+.searchBar {
+  display: none;
+  @media (min-width: 992px) {
+    display: block;
+  }
+}
 
-    &:hover {
-      color: $color_blue;
-    }
+.userData {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logo {
+  display: flex;
+  padding-top: 1rem;
+  @media (min-width: 768px) {
+    padding-top: 0;
+  }
+}
+
+.logoIcon {
+  width: 15rem;
+  @media (min-width: 768px) {
+    width: 24rem;
+  }
+}
+
+.burgerMenu {
+  width: 2rem;
+  margin-right: 5rem;
+  display: block;
+  @media (min-width: 768px) {
+    display: none;
   }
 }

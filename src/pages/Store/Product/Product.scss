@@ -2,7 +2,7 @@
 
 .ProductDetails {
   background-color: $color_white;
-  border: 1px solid $color_grey_trival;
+  border: 1px solid $color_grey_trivial;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
@@ -35,7 +35,7 @@
 }
 
 .line {
-  background-color: $color_grey_trival;
+  background-color: $color_grey_trivial;
   height: 1px;
   left: -2.125rem;
   margin: 3.375rem 0;

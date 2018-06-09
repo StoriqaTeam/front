@@ -27,7 +27,7 @@
 .headerRowWrap, .itemRowWrap {
   display: flex;
   margin: 0 -4rem;
-  border-bottom: 1px solid $color_grey_trival;
+  border-bottom: 1px solid $color_grey_trivial;
 }
 
 .td {
@@ -75,7 +75,7 @@
     width: 10rem;
     height: 10rem;
     border-radius: 0.5rem;
-    background-color: $color_grey_trival;
+    background-color: $color_grey_trivial;
     overflow: hidden;
   }
 
