@@ -179,20 +179,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     );
     // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
-    // $FlowIgnoreMe
-    const userId = pathOr(null, ['me', 'rawId'], this.props);
     const preparedData = transformTranslated(
       'EN',
       ['name', 'shortDescription'],
       {
         id,
-        userId,
-        address: wizardStore.addressFull.value,
         ...pick(
           ['name', 'shortDescription', 'defaultLanguage', 'slug'],
           wizardStore,
         ),
-        ...omit(['value'], wizardStore.addressFull),
+        addressFull: wizardStore.addressFull,
       },
     );
     return preparedData;
@@ -225,7 +221,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       return;
     }
     UpdateStoreMutation.commit({
-      ...preparedData,
+      input: {
+        clientMutationId: '',
+        ...preparedData,
+      },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         resposeLogger(response, errors);

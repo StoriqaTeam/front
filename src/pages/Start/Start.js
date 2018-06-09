@@ -81,7 +81,7 @@ Start.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(Start),
+  Page(Start, true),
   graphql`
     fragment Start_mainPage on MainPage {
       findMostViewedProducts(
