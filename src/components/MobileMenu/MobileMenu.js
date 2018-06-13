@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import { Icon } from 'components/Icon';
 
-import { AppContext } from './index';
+import { AppContext } from 'components/App';
+
 import { buildMobileCategories } from './utils';
 
 import './MobileMenu.scss';

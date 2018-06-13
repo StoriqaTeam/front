@@ -16,19 +16,22 @@ import {
   isNil,
 } from 'ramda';
 
-import { SearchInput } from 'components/SearchInput';
-import { UserDropdown } from 'components/UserDropdown';
+import { Authorization } from 'components/Authorization';
 import { CartButton } from 'components/CartButton';
 import { Icon } from 'components/Icon';
+import { MobileMenu } from 'components/MobileMenu';
 import { Modal } from 'components/Modal';
-import { Authorization } from 'components/Authorization';
-import { setWindowTag } from 'utils';
+import { SearchInput } from 'components/SearchInput';
+import { UserDropdown } from 'components/UserDropdown';
 
 import { Container, Row, Col } from 'layout';
 
-import { HeaderTop, AuthButtons, MobileMenu } from './index';
+import { setWindowTag } from 'utils';
+
+import { HeaderTop, AuthButtons } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
+
 import './Header.scss';
 
 const STORES_FRAGMENT = graphql`
@@ -161,6 +164,7 @@ class Header extends Component<PropsType, StateType> {
   };
 
   dispose: () => void;
+
   disposeUser: () => void;
 
   handleMobileMenu = (): void => {

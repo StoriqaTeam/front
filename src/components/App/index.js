@@ -6,5 +6,4 @@ export { default as Header } from './Header';
 export { default as HeaderTop } from './HeaderTop';
 export { default as InfoBlock } from './InfoBlock';
 export { default as Main } from './Main';
-export { default as MobileMenu } from './MobileMenu';
 export { default as Page } from './PageDecorator';
