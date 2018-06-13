@@ -23,8 +23,8 @@ class MobileMenu extends Component<PropsType, StateType> {
   };
   handleClick = (evt): void => {
     const { onClose } = this.props;
-    const { tagName } = evt.target;
-    if (tagName === 'svg' || tagName === 'path' || tagName === 'SECTION') {
+    const { tagName, id } = evt.target;
+    if (tagName === 'svg' || tagName === 'path' || id === 'overlay') {
       onClose();
     }
   };

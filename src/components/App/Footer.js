@@ -66,7 +66,7 @@ class Footer extends PureComponent<{}, StateType> {
       ],
     },
     services: {
-      title: 'Sections',
+      title: 'Services',
       links: [
         {
           id: '0',
@@ -85,27 +85,29 @@ class Footer extends PureComponent<{}, StateType> {
       <Col lg={9} xl={9}>
         <div styleName="footerLogo">
           <Icon type="logo" />
-          <div styleName="logoDescription">
+          <p styleName="logoDescription">
             Storiqa is a global marketplace for any kind of legal goods
             supporting cryptocurrency payments
-          </div>
+          </p>
         </div>
       </Col>
     );
     const FooterColumn = ({ title, links }: FooterCol) => (
       <Col sm={12} md={4} lg={4} xl={4}>
-        <aside styleName="footerColumn">
-          <div>
-            <header styleName="navHeader">
-              <b>{title}</b>
-            </header>
+        <nav styleName="footerColumn">
+          <header styleName="navHeader">
+            <h3>{title}</h3>
+          </header>
+          <ul>
             {links.map(({ id, linkName }) => (
-              <a key={id} href="/" styleName="navItem">
-                {linkName}
-              </a>
+              <li key={id}>
+                <a href="/" styleName="navItem">
+                  {linkName}
+                </a>
+              </li>
             ))}
-          </div>
-        </aside>
+          </ul>
+        </nav>
       </Col>
     );
     const StartSellingButton = () => (
@@ -124,6 +126,7 @@ class Footer extends PureComponent<{}, StateType> {
     );
     return (
       <footer styleName="container">
+        <h2 styleName="offscreen">Storiqa Sections</h2>
         <Container>
           <div styleName="footerTop">
             <Row>
