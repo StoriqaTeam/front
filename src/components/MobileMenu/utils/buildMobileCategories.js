@@ -1,12 +1,16 @@
-import { map } from 'ramda';
+import { map, isEmpty, isNil } from 'ramda';
 
 import { extractText } from 'utils';
 
-const build = ({ name, rawId }) => ({
-  name: extractText(name),
-  rawId,
-});
-
-export default function buildMobileCategories(categories) {
-  return map(build, categories.children);
+function build({ name, rawId, children }) {
+  return {
+    name: extractText(name),
+    rawId,
+    children:
+      !isEmpty(children) && !isNil(children) ? map(build, children) : [],
+  };
 }
+
+const buildMobileCategories = categories => map(build, categories.children);
+
+export default buildMobileCategories;

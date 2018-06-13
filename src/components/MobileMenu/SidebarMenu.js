@@ -5,9 +5,9 @@ import { Icon } from 'components/Icon';
 import './SidebarMenu.scss';
 
 type PropsType = {
-  categories: Array<{rawId: number, name: string}>,
+  categories: Array<{ rawId: number, name: string }>,
   onClose(): void => {},
-}
+};
 
 type StateType = {
   selected: ?number,
