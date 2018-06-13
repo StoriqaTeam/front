@@ -1,5 +1,4 @@
 @import '../../styles/variables';
-@import '../../styles/mixins';
 
 .container {
   background: rgba(0, 0, 0, .7);
@@ -8,79 +7,11 @@
   margin-left: -31.25rem;
   overflow-y: auto;
   position: fixed;
-  transition: width 0.5s ease;
+  transition: width 0.4s ease;
   width: 0;
   z-index: 1000;
 }
 
-.offscreen {
-  @include offscreen;
-}
-
 .toggled {
   width: 100vw;
-}
-
-.sidebar {
-  background: $color_grey_bg;
-  height: 100%;
-  max-width: 31.25rem;
-  z-index: 1001;
-}
-
-.title {
-  border-bottom: 1px solid $color_grey_minor;
-  display: flex;
-  padding: 3.25rem 0;
-
-  & .close {
-    margin: 0 2rem;
-  }
-
-  & h3 {
-    font-size: 2.25rem;
-  }
-
-}
-
-.menu {
-  & .item {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    padding: 1.75rem 3.25rem;
-    position: relative;
-
-    & span {
-      align-items: center;
-      display: flex;
-    }
-
-  }
-
-}
-
-.active {
-  background: $color_white;
-  font-weight: 500;
-}
-
-.activeBorder {
-  background: $color_blue;
-  height: 6rem;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 2px;
-}
-
-.linkName {
-  color: $color_grey;
-  font-size: 14px;
-  margin-left: 1rem;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
 }
