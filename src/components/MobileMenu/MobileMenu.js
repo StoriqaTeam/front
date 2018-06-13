@@ -52,7 +52,7 @@ class MobileMenu extends Component<PropsType, StateType> {
     return (
       <AppContext.Consumer>
         {({ categories }) => (
-          <section
+          <div
             id="overlay"
             onKeyPress={() => {}}
             role="presentation"
@@ -60,6 +60,7 @@ class MobileMenu extends Component<PropsType, StateType> {
             styleName={`container ${isOpen ? 'toggled' : ''}`}
           >
             <aside styleName="sidebar">
+              <h2 styleName="offscreen">Sidebar Menu</h2>
               <nav>
                 <Header />
                 <ul styleName="menu">
@@ -85,7 +86,7 @@ class MobileMenu extends Component<PropsType, StateType> {
                 </ul>
               </nav>
             </aside>
-          </section>
+          </div>
         )}
       </AppContext.Consumer>
     );
