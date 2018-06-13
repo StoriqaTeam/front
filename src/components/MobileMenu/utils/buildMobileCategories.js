@@ -1,8 +1,20 @@
+// @flow
+
 import { map, isEmpty, isNil } from 'ramda';
 
 import { extractText } from 'utils';
 
-function build({ name, rawId, children }) {
+import type {
+  ChildrenType,
+  CategoryType,
+  TransformedCategoryType,
+} from '../types';
+
+function build({
+  name,
+  rawId,
+  children,
+}: ChildrenType): TransformedCategoryType {
   return {
     name: extractText(name),
     rawId,
@@ -11,6 +23,8 @@ function build({ name, rawId, children }) {
   };
 }
 
-const buildMobileCategories = categories => map(build, categories.children);
+const buildMobileCategories = (
+  categories: CategoryType,
+): Array<TransformedCategoryType> => map(build, categories.children);
 
 export default buildMobileCategories;

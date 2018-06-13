@@ -1,12 +1,16 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import { Icon } from 'components/Icon';
 
+import type { TransformedCategoryType } from './types';
+
 import './SidebarMenu.scss';
 
 type PropsType = {
-  categories: Array<{ rawId: number, name: string }>,
-  onClose(): void => {},
+  categories: Array<TransformedCategoryType>,
+  onClose: () => void,
 };
 
 type StateType = {

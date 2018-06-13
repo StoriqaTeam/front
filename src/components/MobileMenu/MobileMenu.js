@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import { AppContext } from 'components/App';
@@ -10,11 +12,11 @@ import './MobileMenu.scss';
 
 type PropsType = {
   isOpen: boolean,
-  onClose(): void => {},
+  onClose: () => void,
 };
 
 class MobileMenu extends Component<PropsType> {
-  handleClick = (evt): void => {
+  handleClick = (evt: any): void => {
     const { onClose } = this.props;
     const { id } = evt.target;
     if (id === 'overlay') {
