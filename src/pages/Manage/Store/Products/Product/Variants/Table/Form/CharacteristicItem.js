@@ -15,7 +15,7 @@ import {
 
 import { UploadWrapper } from 'components/Upload';
 import { Select } from 'components/common/Select';
-import { uploadFile, log } from 'utils';
+import { uploadFile, log, convertSrc } from 'utils';
 
 import './Characteristics.scss';
 
@@ -109,7 +109,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
             buttonHeight={10}
             buttonWidth={10}
             buttonIconType="upload"
-            overPicture={characteristicImg}
+            overPicture={convertSrc(characteristicImg, 'small')}
             dataTest="productCharacteristicImgUploader"
           />
         </div>
