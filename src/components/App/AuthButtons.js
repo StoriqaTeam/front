@@ -18,6 +18,7 @@ const AuthButtons = ({ onOpenModal }: PropsType) => (
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"
+      data-test="headerSignUpButton"
     >
       Sign Up
     </div>
@@ -27,6 +28,7 @@ const AuthButtons = ({ onOpenModal }: PropsType) => (
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"
+      data-test="headerSignInButton"
     >
       <strong>Sign In</strong>
     </div>

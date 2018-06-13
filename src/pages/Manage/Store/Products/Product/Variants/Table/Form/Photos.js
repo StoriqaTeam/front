@@ -4,7 +4,7 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { UploadWrapper } from 'components/Upload';
-import { uploadFile } from 'utils';
+import { uploadFile, convertSrc } from 'utils';
 
 import './Photos.scss';
 
@@ -46,7 +46,7 @@ class Photos extends PureComponent<PropsType> {
               {items.map(item => (
                 <div key={item} styleName="item">
                   <div styleName="itemWrap">
-                    <img src={item} alt="img" />
+                    <img src={convertSrc(item, 'small')} alt="img" />
                   </div>
                 </div>
               ))}

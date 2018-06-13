@@ -8,7 +8,13 @@ import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
-import { getNameText, formatPrice, log, fromRelayError } from 'utils';
+import {
+  getNameText,
+  formatPrice,
+  log,
+  fromRelayError,
+  convertSrc,
+} from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
@@ -180,7 +186,7 @@ class Products extends PureComponent<PropsType> {
             ) : (
               <ImageLoader
                 fit
-                src={product.photoMain}
+                src={convertSrc(product.photoMain, 'small')}
                 loader={<BannerLoading />}
               />
             )}

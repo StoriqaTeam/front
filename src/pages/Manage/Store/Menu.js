@@ -8,7 +8,13 @@ import { isEmpty, isNil, pathOr } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
-import { uploadFile, getNameText, log, fromRelayError } from 'utils';
+import {
+  uploadFile,
+  getNameText,
+  log,
+  fromRelayError,
+  convertSrc,
+} from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
@@ -166,7 +172,7 @@ class Menu extends PureComponent<PropsType> {
             buttonIconSize={48}
             buttonIconType="upload"
             buttonLabel="Click to download logo"
-            overPicture={storeLogo || null}
+            overPicture={convertSrc(storeLogo, 'medium') || null}
             dataTest="storeImgUploader"
           />
           {storeLogo && (
