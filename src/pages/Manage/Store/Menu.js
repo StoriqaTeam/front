@@ -8,7 +8,13 @@ import { isEmpty, isNil, pathOr } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
-import { uploadFile, getNameText, log, fromRelayError } from 'utils';
+import {
+  uploadFile,
+  getNameText,
+  log,
+  fromRelayError,
+  convertSrc,
+} from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
@@ -71,6 +77,7 @@ class Menu extends PureComponent<PropsType> {
         defaultLanguage: null,
         slug: null,
         slogan: null,
+        addressFull: {},
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -141,12 +148,19 @@ class Menu extends PureComponent<PropsType> {
   };
 
   render() {
-    const { activeItem, storeData: store } = this.props;
+    const {
+      activeItem,
+      storeData: store,
+      match: {
+        params: { storeId },
+      },
+    } = this.props;
     let storeName = '';
-    if (store && store.name) {
+    let storeLogo = '';
+    if (store) {
       storeName = getNameText(store.name, 'EN');
+      storeLogo = store.logo;
     }
-    const storeLogo = store.logo || null;
     return (
       <div styleName="menu">
         <div styleName="imgWrap">
@@ -158,7 +172,7 @@ class Menu extends PureComponent<PropsType> {
             buttonIconSize={48}
             buttonIconType="upload"
             buttonLabel="Click to download logo"
-            overPicture={storeLogo}
+            overPicture={convertSrc(storeLogo, 'medium') || null}
             dataTest="storeImgUploader"
           />
           {storeLogo && (
@@ -182,7 +196,8 @@ class Menu extends PureComponent<PropsType> {
                 key={item.id}
                 styleName={classNames('item', {
                   isActive,
-                  isDisabled: item.disabled,
+                  isDisabled:
+                    item.disabled || (!storeId && item.id !== 'settings'),
                 })}
                 onClick={() => this.handleClick(item)}
                 onKeyDown={() => {}}

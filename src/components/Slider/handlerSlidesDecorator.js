@@ -220,7 +220,7 @@ export default (OriginalComponent: any) =>
       });
 
       if (slidesToShow === 1 || totalSlidesAmount <= slidesToShow + 1) {
-        this.setState({ children });
+        this.setState({ children, num: 0 });
       } else {
         this.setState(
           prevState => {

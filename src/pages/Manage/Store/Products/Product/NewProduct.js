@@ -8,23 +8,26 @@ import { pathOr, isEmpty, path } from 'ramda';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
-import {
-  CreateBaseProductMutation,
-  UpdateStoreMainMutation,
-} from 'relay/mutations';
+import { CreateBaseProductMutation } from 'relay/mutations';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
 
 import Form from './Form';
 
-type StateType = {
-  formErrors: ?{},
-  isLoading: boolean,
+type FormType = {
+  name: string,
+  seoTitle: string,
+  seoDescription: string,
+  shortDescription: string,
+  longDescription: string,
+  categoryId: ?number,
 };
 
 type PropsType = {
+  me: NewProductMeType,
   showAlert: (input: AddAlertInputType) => void,
   match: {
     params: {
@@ -35,31 +38,40 @@ type PropsType = {
   match: matchShape,
 };
 
+type StateType = {
+  formErrors: {
+    [string]: Array<string>,
+  },
+  isLoading: boolean,
+};
+
 class NewProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
     isLoading: false,
   };
-  handleSave = (form: ?{ [string]: any }) => {
+
+  handleSave = (form: FormType) => {
     if (!form) {
       return;
     }
+    const { me } = this.props;
     const {
       name,
       categoryId,
       seoTitle,
       seoDescription,
       shortDescription,
-      fullDesc,
+      longDescription,
     } = form;
-    const storeID = path(['me', 'store', 'id'], this.props);
+    const storeID = path(['store', 'id'], me);
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
       parentID: storeID,
       name: [{ lang: 'EN', text: name }],
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
-      longDescription: [{ lang: 'EN', text: fullDesc }],
+      longDescription: [{ lang: 'EN', text: longDescription }],
       currencyId: 1,
       categoryId,
       seoTitle:
@@ -130,60 +142,6 @@ class NewProduct extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'danger',
           text: 'Something going wrong :(',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  };
-
-  handleLogoUpload = (url: string) => {
-    const { environment } = this.context;
-    // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
-
-    UpdateStoreMainMutation.commit({
-      id: storeId,
-      logo: url,
-      environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const statusError = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'You are not authorized to perform this action.',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Saved!',
-          link: { text: '' },
-        });
-      },
-      onError: (error: Error) => {
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
           link: { text: 'Close.' },
         });
       },

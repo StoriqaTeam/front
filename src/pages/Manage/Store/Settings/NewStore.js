@@ -3,14 +3,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, pathOr, toUpper, isEmpty } from 'ramda';
-import { withRouter, routerShape } from 'found';
+import { withRouter } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
-import { CreateStoreMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
+
+import { CreateStoreMutation } from 'relay/mutations';
+import type { MutationParamsType } from 'relay/mutations/CreateStoreMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -23,7 +25,6 @@ type StateType = {
 };
 
 type PropsType = {
-  router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
 };
 
@@ -50,20 +51,27 @@ class NewStore extends Component<PropsType, StateType> {
     const { logoUrl } = this.state;
     this.setState(() => ({ isLoading: true, serverValidationErrors: {} }));
 
-    CreateStoreMutation.commit({
-      userId: parseInt(currentUser.rawId, 10),
-      name: [{ lang: optionLanguage, text: name }],
-      defaultLanguage: toUpper(defaultLanguage),
-      longDescription: [{ lang: optionLanguage, text: longDescription }],
-      shortDescription: [{ lang: optionLanguage, text: shortDescription }],
-      slug,
-      slogan,
-      logo: logoUrl,
+    const params: MutationParamsType = {
+      input: {
+        clientMutationId: '',
+        userId: parseInt(currentUser.rawId, 10),
+        name: [{ lang: optionLanguage, text: name }],
+        // $FlowIgnoreMe
+        defaultLanguage: toUpper(defaultLanguage),
+        longDescription: [{ lang: optionLanguage, text: longDescription }],
+        shortDescription: [{ lang: optionLanguage, text: shortDescription }],
+        slug,
+        slogan,
+        logo: logoUrl,
+        addressFull: {},
+      },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState(() => ({ isLoading: false }));
+        log.debug({ response, errors });
+
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
+
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
@@ -72,7 +80,7 @@ class NewStore extends Component<PropsType, StateType> {
         }
 
         // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        const statusError: string = pathOr('', ['100', 'status'], relayErrors);
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
@@ -83,13 +91,15 @@ class NewStore extends Component<PropsType, StateType> {
         }
 
         // $FlowIgnoreMe
-        const storeId: ?number = pathOr(
-          null,
-          ['createStore', 'rawId'],
-          response,
-        );
-        if (storeId) {
-          this.props.router.push(`/manage/store/${storeId}`);
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
         }
         this.props.showAlert({
           type: 'success',
@@ -98,25 +108,15 @@ class NewStore extends Component<PropsType, StateType> {
         });
       },
       onError: (error: Error) => {
-        this.setState(() => ({ isLoading: false }));
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          this.setState({ serverValidationErrors: validationErrors });
-          return;
-        }
-
+        log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: '' },
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
         });
       },
-    });
+    };
+    CreateStoreMutation.commit(params);
   };
 
   render() {

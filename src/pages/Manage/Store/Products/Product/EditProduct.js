@@ -3,33 +3,40 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, isEmpty } from 'ramda';
+import { pathOr, isEmpty, map } from 'ramda';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
-import {
-  UpdateBaseProductMutation,
-  UpdateStoreMainMutation,
-} from 'relay/mutations';
+import { UpdateBaseProductMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
 
 import Variants from './Variants/Variants';
 import Form from './Form';
 
+type FormType = {
+  name: string,
+  seoTitle: string,
+  seoDescription: string,
+  shortDescription: string,
+  longDescription: string,
+  categoryId: ?number,
+};
+
 type PropsType = {
+  me: EditProductMeType,
   showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
-  formErrors: {},
+  formErrors: {
+    [string]: Array<string>,
+  },
   isLoading: boolean,
 };
-
-const baseProductFromProps = pathOr(null, ['me', 'baseProduct']);
-const variantsFromProps = pathOr([], ['me', 'baseProduct', 'variants', 'all']);
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
@@ -37,8 +44,21 @@ class EditProduct extends Component<PropsType, StateType> {
     isLoading: false,
   };
 
-  handleSave = (form: ?{ [string]: any }) => {
+  handleSave = (form: FormType) => {
+    this.setState({ formErrors: {} });
     if (!form) {
+      return;
+    }
+    const { me } = this.props;
+    let baseProduct = null;
+    if (me && me.baseProduct) {
+      ({ baseProduct } = me);
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something going wrong :(',
+        link: { text: 'Close.' },
+      });
       return;
     }
     const {
@@ -47,25 +67,19 @@ class EditProduct extends Component<PropsType, StateType> {
       seoTitle,
       seoDescription,
       shortDescription,
-      fullDesc,
+      longDescription,
     } = form;
     this.setState(() => ({ isLoading: true }));
     // $FlowIgnoreMe
-    const id = pathOr(null, ['id'], baseProductFromProps(this.props));
+    const id = pathOr(null, ['id'], baseProduct);
     UpdateBaseProductMutation.commit({
       id,
-      name: [{ lang: 'EN', text: name }],
-      shortDescription: isEmpty(shortDescription)
-        ? []
-        : [{ lang: 'EN', text: shortDescription }],
-      longDescription: isEmpty(fullDesc)
-        ? []
-        : [{ lang: 'EN', text: fullDesc }],
+      name: [{ lang: 'EN', text: name || '' }],
+      shortDescription: [{ lang: 'EN', text: shortDescription || '' }],
+      longDescription: [{ lang: 'EN', text: longDescription || '' }],
       categoryId,
-      seoTitle: isEmpty(seoTitle) ? [] : [{ lang: 'EN', text: seoTitle }],
-      seoDescription: isEmpty(seoDescription)
-        ? []
-        : [{ lang: 'EN', text: seoDescription }],
+      seoTitle: [{ lang: 'EN', text: seoTitle || '' }],
+      seoDescription: [{ lang: 'EN', text: seoDescription || '' }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -121,69 +135,20 @@ class EditProduct extends Component<PropsType, StateType> {
     });
   };
 
-  handleLogoUpload = (url: string) => {
-    const { environment } = this.context;
-    const baseProduct = baseProductFromProps(this.props);
-    const storeId = pathOr(null, ['store', 'id'], baseProduct);
-
-    UpdateStoreMainMutation.commit({
-      id: storeId,
-      logo: url,
-      environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Saved!',
-          link: { text: '' },
-        });
-      },
-      onError: (error: Error) => {
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  };
-
   render() {
+    const { me } = this.props;
     const { isLoading } = this.state;
-    const baseProduct = baseProductFromProps(this.props);
-    // $FlowIgnoreMe
-    const storeID = pathOr(null, ['store', 'id'], baseProduct);
-
-    if (!baseProduct) {
+    let baseProduct = null;
+    if (me && me.baseProduct) {
+      ({ baseProduct } = me);
+    } else {
       return <span>Product not found</span>;
     }
+    // $FlowIgnoreMe
+    const storeID = pathOr(null, ['store', 'id'], baseProduct);
+    // $FlowIgnoreMe
+    const variants = pathOr([], ['baseProduct', 'products', 'edges'], me);
+    const filteredVariants = map(item => item.node, variants);
     return (
       <Fragment>
         <Form
@@ -194,11 +159,13 @@ class EditProduct extends Component<PropsType, StateType> {
           isLoading={isLoading}
         />
         <Variants
-          productId={baseProduct.rawId}
-          category={baseProduct.category}
+          productRawId={baseProduct.rawId}
+          productId={baseProduct.id}
           // $FlowIgnoreMe
-          variants={variantsFromProps(this.props)}
+          category={baseProduct.category}
+          variants={filteredVariants}
           storeID={storeID}
+          showAlert={this.props.showAlert}
         />
       </Fragment>
     );
@@ -218,37 +185,37 @@ export default createFragmentContainer(
       baseProduct(id: $productID) {
         id
         rawId
-        variants {
-          all {
-            id
-            rawId
-            isActive
-            discount
-            photoMain
-            additionalPhotos
-            vendorCode
-            price
-            cashback
-            attributes {
-              value
-              metaField
-              attribute {
-                id
-                rawId
-                name {
-                  lang
-                  text
-                }
-                valueType
-                metaField {
-                  values
-                  translatedValues {
-                    translations {
-                      lang
-                      text
+        products(first: 100) @connection(key: "Wizard_products") {
+          edges {
+            node {
+              id
+              rawId
+              price
+              discount
+              photoMain
+              additionalPhotos
+              vendorCode
+              cashback
+              price
+              attributes {
+                attrId
+                value
+                metaField
+                attribute {
+                  id
+                  rawId
+                  name {
+                    lang
+                    text
+                  }
+                  metaField {
+                    values
+                    translatedValues {
+                      translations {
+                        text
+                      }
                     }
                   }
-                  uiElement
                 }
               }
             }

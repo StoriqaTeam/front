@@ -6,6 +6,7 @@ import { map, find, propEq, pathOr, head } from 'ramda';
 import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
 import { Link } from 'found';
+import { convertSrc } from 'utils';
 
 import './Stores.scss';
 
@@ -39,7 +40,7 @@ class StoreRow extends PureComponent<PropsType> {
             <div styleName="storeData">
               <div styleName="storeLogo" data-test="storeLink">
                 {store.logo ? (
-                  <img src={store.logo} alt="img" />
+                  <img src={convertSrc(store.logo, 'small')} alt="img" />
                 ) : (
                   <Icon type="camera" size="32" />
                 )}
@@ -84,7 +85,10 @@ class StoreRow extends PureComponent<PropsType> {
                       >
                         <div styleName="productFotoWrap">
                           {photoMain ? (
-                            <img src={photoMain} alt="img" />
+                            <img
+                              src={convertSrc(photoMain, 'small')}
+                              alt="img"
+                            />
                           ) : (
                             <Icon type="camera" size="32" />
                           )}

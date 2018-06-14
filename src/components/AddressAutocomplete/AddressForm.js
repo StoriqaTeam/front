@@ -168,7 +168,7 @@ class Form extends Component<PropsType, StateType> {
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
     if (onUpdateForm) {
-      onUpdateForm({ address: value });
+      onUpdateForm({ value });
     }
     if (isEmpty(value)) {
       this.setState({ predictions: [] });
@@ -212,7 +212,7 @@ class Form extends Component<PropsType, StateType> {
       onChangeData({
         ...address,
         country: country ? country.id : null,
-        address: autocompleteValue,
+        value: autocompleteValue,
       });
     }
   };

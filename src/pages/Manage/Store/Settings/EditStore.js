@@ -35,60 +35,6 @@ class EditStore extends Component<PropsType, StateType> {
     isLoading: false,
   };
 
-  handleLogoUpload = (url: string) => {
-    const { environment } = this.context;
-    // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
-
-    UpdateStoreMainMutation.commit({
-      id: storeId,
-      logo: url,
-      environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Saved!',
-          link: { text: '' },
-        });
-      },
-      onError: (error: Error) => {
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  };
-
   handleSave = ({ form, optionLanguage }) => {
     const { logoUrl } = this.state;
     const { environment } = this.context;
@@ -115,6 +61,7 @@ class EditStore extends Component<PropsType, StateType> {
         slug,
         slogan,
         logo: logoUrl,
+        addressFull: {},
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {

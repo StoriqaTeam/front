@@ -13,6 +13,7 @@ import './Main.scss';
 type PropsType = {
   children: Node,
   withoutCategories: ?boolean,
+  responsive: ?boolean,
 };
 
 class Main extends PureComponent<PropsType> {
@@ -25,7 +26,11 @@ class Main extends PureComponent<PropsType> {
     const { withoutCategories } = this.props;
     return (
       <main styleName={classNames('container', { isCategories: categories })}>
-        <div styleName="wrap">
+        <div
+          styleName={classNames('wrap', {
+            responsiveWrap: this.props.responsive,
+          })}
+        >
           {categories &&
             !withoutCategories && <CategoriesMenu categories={categories} />}
           {this.props.children}

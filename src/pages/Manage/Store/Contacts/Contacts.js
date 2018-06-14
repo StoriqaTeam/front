@@ -16,12 +16,25 @@ import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { MutationParamsType } from 'relay/mutations/UpdateStoreMutation';
 
 import './Contacts.scss';
 
 type NestedObject<T> = { [k: string]: T | NestedObject<T> };
 
-/* eslint-disable */
+type addressFullType = {
+  value?: ?string,
+  country?: ?string,
+  administrativeAreaLevel1?: ?string,
+  administrativeAreaLevel2?: ?string,
+  locality?: ?string,
+  political?: ?string,
+  postalCode?: ?string,
+  route?: ?string,
+  streetNumber?: ?string,
+  placeId?: ?string,
+};
+
 type InputType = {
   id: string,
   label: string,
@@ -40,26 +53,14 @@ type StateType = {
   form: {
     email: ?string,
     phone: ?string,
-    country: ?string,
-    address: ?string,
     facebookUrl: ?string,
     instagramUrl: ?string,
     twitterUrl: ?string,
   },
-  addressFull: {
-    address: ?string,
-    administrativeAreaLevel1: ?string,
-    administrativeAreaLevel2: ?string,
-    country: ?string,
-    locality: ?string,
-    postalCode: ?string,
-    route: ?string,
-    streetNumber: ?string,
-  },
+  addressFull: addressFullType,
   formErrors: {
-    [string]: ?any,
+    [string]: Array<string>,
   },
-  activeItem: string,
   isLoading: boolean,
   logoUrl?: string,
 };
@@ -69,24 +70,23 @@ class Contacts extends Component<PropsType, StateType> {
     form: {
       email: '',
       phone: '',
-      country: '',
-      address: '',
       facebookUrl: '',
       instagramUrl: '',
       twitterUrl: '',
     },
     addressFull: {
-      address: '',
+      value: '',
+      country: '',
       administrativeAreaLevel1: '',
       administrativeAreaLevel2: '',
-      country: '',
       locality: '',
+      political: '',
       postalCode: '',
       route: '',
       streetNumber: '',
+      placeId: '',
     },
     formErrors: {},
-    activeItem: 'contacts',
     isLoading: false,
   };
 
@@ -95,18 +95,10 @@ class Contacts extends Component<PropsType, StateType> {
     const store = pathOr({}, ['store'], this.props.me);
     this.setState({
       form: pick(
-        [
-          'email',
-          'phone',
-          'country',
-          'address',
-          'facebookUrl',
-          'instagramUrl',
-          'twitterUrl',
-        ],
+        ['email', 'phone', 'facebookUrl', 'instagramUrl', 'twitterUrl'],
         store,
       ),
-      ...pick(['addressFull'], store),
+      addressFull: store.addressFull,
     });
   }
 
@@ -119,16 +111,13 @@ class Contacts extends Component<PropsType, StateType> {
     }
   };
 
-  handleUpdateForm = (form: any) => {
-    this.setState({
-      form: {
-        ...this.state.form,
-        ...form,
-      },
-    });
+  handleUpdateForm = (form: { address: string }) => {
+    this.setState(
+      assocPath(['addressFull', 'value'], form.address, this.state),
+    );
   };
-  // TODO: apply typing
-  handleChangeData = (addressFullData: any): void => {
+
+  handleChangeData = (addressFullData: addressFullType): void => {
     this.setState({
       addressFull: {
         ...addressFullData,
@@ -195,51 +184,47 @@ class Contacts extends Component<PropsType, StateType> {
     const {
       me: { store },
     } = this.props;
-    if (!currentUser || !currentUser.rawId) {
+    if (!currentUser || !currentUser.rawId || !store || !store.id) {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something going wrong :(',
+        link: { text: 'Close.' },
+      });
       return;
     }
 
     const {
       logoUrl,
       // param 'country' enter for 'this.handleUpdateForm'
-      form: {
-        email,
-        phone,
-        address,
-        facebookUrl,
-        twitterUrl,
-        instagramUrl,
-        country,
-      },
+      form: { email, phone, facebookUrl, twitterUrl, instagramUrl },
       addressFull,
     } = this.state;
 
     this.setState({ formErrors: {}, isLoading: true });
 
-    UpdateStoreMutation.commit({
-      userId: parseInt(currentUser.rawId, 10),
-      rawId: store.rawId,
-      id: store.id,
-      logo: logoUrl,
-      email,
-      phone,
-      country,
-      address,
-      facebookUrl,
-      twitterUrl,
-      instagramUrl,
+    const params: MutationParamsType = {
+      input: {
+        clientMutationId: '',
+        id: store.id || '',
+        logo: logoUrl,
+        email,
+        phone,
+        facebookUrl,
+        twitterUrl,
+        instagramUrl,
+        addressFull,
+      },
       environment,
-      ...addressFull,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
         this.setState(() => ({ isLoading: false }));
-        // debugger;
 
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+
         if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
@@ -304,37 +289,31 @@ class Contacts extends Component<PropsType, StateType> {
           link: { text: 'Close.' },
         });
       },
-    });
-  };
-
-  switchMenu = activeItem => {
-    this.setState({ activeItem });
+    };
+    UpdateStoreMutation.commit(params);
   };
 
   // TODO: extract to helper
-  renderInput = ({ id, label, icon, limit }: InputType) => (
-    <div styleName="formItem">
-      <Input
-        isUrl={Boolean(icon)}
-        icon={icon}
-        id={id}
-        value={propOr('', id, this.state.form)}
-        label={label}
-        onChange={this.handleInputChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
-        limit={limit}
-      />
-    </div>
-  );
+  renderInput = (input: InputType) => {
+    const { id, label, icon, limit } = input;
+    return (
+      <div styleName="formItem">
+        <Input
+          isUrl={Boolean(icon)}
+          icon={icon}
+          id={id}
+          value={propOr('', id, this.state.form)}
+          label={label}
+          onChange={this.handleInputChange(id)}
+          errors={propOr(null, id, this.state.formErrors)}
+          limit={limit}
+        />
+      </div>
+    );
+  };
 
   render() {
-    // $FlowIgnoreMe
-    const store = pathOr(null, ['store'], this.props.me);
-
-    const name = pathOr('', ['name', 0, 'text'], store);
-
-    const { logo } = store;
-    const { activeItem, isLoading, form, logoUrl, addressFull } = this.state;
+    const { isLoading, addressFull } = this.state;
 
     return (
       <div styleName="container">
@@ -357,8 +336,8 @@ class Contacts extends Component<PropsType, StateType> {
         })}
         <div styleName="formItem">
           <AddressForm
-            country={form.country}
-            address={form.address}
+            country={addressFull.country}
+            address={addressFull.value}
             addressFull={addressFull}
             onChangeFormInput={this.handleInputChange}
             onUpdateForm={this.handleUpdateForm}
@@ -398,18 +377,17 @@ export default createFragmentContainer(
         facebookUrl
         twitterUrl
         instagramUrl
-        country
-        address
-        country
         addressFull {
           value
           country
           administrativeAreaLevel1
           administrativeAreaLevel2
           locality
+          political
           postalCode
-          streetNumber
           route
+          streetNumber
+          placeId
         }
       }
     }
