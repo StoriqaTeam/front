@@ -32,7 +32,7 @@ import { HeaderTop, AuthButtons } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 
-import './Header.scss';
+import './HeaderResponse.scss';
 
 const STORES_FRAGMENT = graphql`
   fragment HeaderStoresLocalFragment on CartStoresConnection {
@@ -84,7 +84,7 @@ type StateType = {
   isMenuToggled: boolean,
 };
 
-class Header extends Component<PropsType, StateType> {
+class HeaderResponse extends Component<PropsType, StateType> {
   state = {
     cartCount: 0,
     showModal: false,
@@ -245,8 +245,8 @@ class Header extends Component<PropsType, StateType> {
   }
 }
 
-export default Header;
+export default HeaderResponse;
 
-Header.contextTypes = {
+HeaderResponse.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
