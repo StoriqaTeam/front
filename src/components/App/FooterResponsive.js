@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
 
-import './FooterResponse.scss';
+import './FooterResponsive.scss';
 
 import { InfoBlock } from './index';
 
@@ -21,7 +21,7 @@ type StateType = {
   services: FooterCol,
 };
 
-class FooterResponse extends PureComponent<{}, StateType> {
+class FooterResponsive extends PureComponent<{}, StateType> {
   state = {
     market: {
       title: 'Storiqa market',
@@ -163,4 +163,4 @@ class FooterResponse extends PureComponent<{}, StateType> {
   }
 }
 
-export default FooterResponse;
+export default FooterResponsive;

@@ -32,10 +32,10 @@ import { HeaderTop, AuthButtons } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 
-import './HeaderResponse.scss';
+import './HeaderResponsive.scss';
 
 const STORES_FRAGMENT = graphql`
-  fragment HeaderResponseStoresLocalFragment on CartStoresConnection {
+  fragment HeaderResponsiveStoresLocalFragment on CartStoresConnection {
     edges {
       node {
         id
@@ -49,7 +49,7 @@ const STORES_FRAGMENT = graphql`
 `;
 
 const HEADER_FRAGMENT = graphql`
-  fragment HeaderResponse_me on User {
+  fragment HeaderResponsive_me on User {
     email
     firstName
     lastName
@@ -84,7 +84,7 @@ type StateType = {
   isMenuToggled: boolean,
 };
 
-class HeaderResponse extends Component<PropsType, StateType> {
+class HeaderResponsive extends Component<PropsType, StateType> {
   state = {
     cartCount: 0,
     showModal: false,
@@ -245,8 +245,8 @@ class HeaderResponse extends Component<PropsType, StateType> {
   }
 }
 
-export default HeaderResponse;
+export default HeaderResponsive;
 
-HeaderResponse.contextTypes = {
+HeaderResponsive.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
