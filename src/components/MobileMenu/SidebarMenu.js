@@ -6,8 +6,6 @@ import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 
-// import { CategoriesMenu } from './index';
-
 import type { TransformedCategoryType } from './types';
 
 import './SidebarMenu.scss';
