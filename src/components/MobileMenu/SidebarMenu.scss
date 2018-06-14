@@ -4,8 +4,17 @@
 .container {
   background: $color_grey_bg;
   height: 100%;
-  max-width: 31.25rem;
+  position: absolute;
+  top: 0;
+  left: -31.25rem;
+  transition: all 0.4s ease;
+  width: 0;
   z-index: 1001;
+}
+
+.toggled2 {
+  width: 31.25rem;
+  left: 0;
 }
 
 .offscreen {
@@ -15,7 +24,7 @@
 .header {
   border-bottom: 1px solid $color_grey_minor;
   display: flex;
-  padding: 3.25rem 0;
+  padding: 3.25rem 1.375rem 3.25rem 0;
 
   & .close {
     margin: 0 2rem;

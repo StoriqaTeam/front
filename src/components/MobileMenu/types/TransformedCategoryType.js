@@ -1,7 +1,7 @@
 // @flow
 
 export type TransformedCategoryType = {
-  rawId: number,
+  rawId?: number,
   parentId?: ?number,
   level?: ?number,
   name: string,
