@@ -1,0 +1,17 @@
+@import '../../styles/variables';
+
+.container {
+  background: rgba(0, 0, 0, .7);
+  height: 100%;
+  left: 31.25rem;
+  margin-left: -31.25rem;
+  overflow-y: auto;
+  position: fixed;
+  transition: width 0.4s ease;
+  width: 0;
+  z-index: 1000;
+}
+
+.toggled {
+  width: 100vw;
+}
