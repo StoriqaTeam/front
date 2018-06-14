@@ -6,12 +6,15 @@ import { find, append, head, pathOr, map, isEmpty } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
-import { log } from 'utils';
+import { log, fromRelayError } from 'utils';
+import { withShowAlert } from 'components/App/AlertContext';
+
 import {
   CreateProductWithAttributesMutation,
   UpdateProductMutation,
 } from 'relay/mutations';
-import { withShowAlert } from 'components/App/AlertContext';
+import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
+import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -23,33 +26,23 @@ import './Form.scss';
 type AttributeValueType = {
   attrId: number,
   value: string,
-  metaField?: {
-    translations: Array<{ lang: string, text: string }>,
-  },
-};
-
-type ValueForAttributeType = {
-  value: string,
-  metaField?: {
-    translations: Array<{ lang: string, text: string }>,
-  },
+  metaField?: ?string,
 };
 
 type StateType = {
-  productId?: string,
+  productRawId: ?string,
   vendorCode?: string,
   price?: number,
   cashback?: ?number,
-  isOpenVariantData?: boolean,
   mainPhoto?: ?string,
   photos?: Array<string>,
-  price?: ?number,
   attributeValues?: Array<AttributeValueType>,
 };
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
-  productId: number,
+  productRawId: number,
+  productId: string,
   category: {
     getAttributes: Array<{
       rawId: number,
@@ -57,6 +50,7 @@ type PropsType = {
   },
   variant: ?{
     id: string,
+    productRawId: string,
     vendorCode: string,
     price?: number,
     cashback?: ?number,
@@ -64,7 +58,7 @@ type PropsType = {
     additionalPhotos?: Array<string>,
   },
   onExpandClick: (id: string) => void,
-  storeID: string,
+  handleCollapseVariant: () => void,
 };
 
 type ValueForAttributeInputType = {
@@ -76,100 +70,179 @@ class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const product = props.variant;
-    const attrValues: Array<AttributeValueType> = map(
-      item => ({
-        attrId: item.rawId,
-        ...this.valueForAttribute({ attr: item, variant: props.variant }),
-      }),
-      props.category.getAttributes,
-    );
     if (!product) {
       this.state = {
-        attributeValues: attrValues,
+        attributeValues: this.resetAttrValues(),
+        productRawId: null,
       };
     } else {
       this.state = {
-        productId: product.id,
+        productRawId: product.id,
         vendorCode: product.vendorCode,
         price: product.price,
         cashback: Math.round((product.cashback || 0) * 100),
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
-        attributeValues: attrValues,
+        attributeValues: this.resetAttrValues(),
       };
     }
   }
-
-  state: StateType = {
-    //
-  };
 
   onChangeValues = (values: Array<AttributeValueType>) => {
     this.setState({ attributeValues: values });
   };
 
   handleUpdate = () => {
+    const { environment } = this.context;
     const variant = this.state;
-    log.debug({ variant });
-    UpdateProductMutation.commit({
-      id: variant.productId,
-      product: {
-        price: variant.price,
-        vendorCode: variant.vendorCode,
-        photoMain: variant.mainPhoto,
-        additionalPhotos: variant.photos,
-        cashback: variant.cashback != null ? variant.cashback / 100 : '',
+    if (!variant.productRawId) {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something going wrong :(',
+        link: { text: 'Close.' },
+      });
+      return;
+    }
+    const params: UpdateProductMutationType = {
+      input: {
+        clientMutationId: '',
+        id: variant.productRawId,
+        product: {
+          price: variant.price,
+          vendorCode: variant.vendorCode,
+          photoMain: variant.mainPhoto,
+          additionalPhotos: variant.photos,
+          cashback: variant.cashback ? variant.cashback / 100 : null,
+        },
+        attributes: variant.attributeValues,
       },
-      attributes: variant.attributeValues,
-      environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-        if (errors) {
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Check that fields are filled.',
+            text: 'Validation Error!',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Variant created!',
-          link: { text: 'Close.' },
+          text: 'Product update!',
+          link: { text: '' },
         });
-        log.debug({ response, errors });
-        window.location.reload(); // TODO: fix it!
+        this.props.handleCollapseVariant();
       },
       onError: (error: Error) => {
-        log.debug({ error });
+        log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Check that fields are filled.',
+          text: 'Something going wrong.',
           link: { text: 'Close.' },
         });
       },
-    });
+    };
+    UpdateProductMutation.commit(params);
   };
 
   handleCreate = () => {
-    const variant = this.state;
-    log.debug({ variant });
-    CreateProductWithAttributesMutation.commit({
-      storeID: this.props.storeID,
-      product: {
-        baseProductId: this.props.productId,
-        price: variant.price,
-        vendorCode: variant.vendorCode,
-        photoMain: variant.mainPhoto,
-        additionalPhotos: variant.photos,
-        cashback: variant.cashback != null ? variant.cashback / 100 : '',
+    const { environment } = this.context;
+    const {
+      price,
+      vendorCode,
+      mainPhoto,
+      photos,
+      cashback,
+      attributeValues,
+    } = this.state;
+    if (!price || !vendorCode) {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something going wrong.',
+        link: { text: 'Close.' },
+      });
+      return;
+    }
+    const params: CreateProductWithAttributesMutationType = {
+      input: {
+        clientMutationId: '',
+        product: {
+          baseProductId: this.props.productRawId,
+          price,
+          vendorCode,
+          photoMain: mainPhoto,
+          additionalPhotos: photos,
+          cashback: cashback ? cashback / 100 : null,
+        },
+        attributes: attributeValues || [],
       },
-      attributes: variant.attributeValues,
-      environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<Error>) => {
-        if (errors) {
+      parentID: this.props.productId,
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Check that fields are filled.',
+            text: 'Validation Error!',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
@@ -177,24 +250,40 @@ class Form extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'success',
           text: 'Variant created!',
-          link: { text: 'Close.' },
+          link: { text: '' },
         });
-        log.debug({ response, errors });
-        window.location.reload(); // TODO: fix it!
+        this.setState({
+          attributeValues: this.resetAttrValues(),
+          productRawId: null,
+          vendorCode: '',
+          price: 0,
+          cashback: null,
+          mainPhoto: null,
+          photos: [],
+        });
+        // this.props.handleCollapseVariant();
       },
       onError: (error: Error) => {
-        log.debug({ error });
+        log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Check that fields are filled.',
+          text: 'Something going wrong.',
           link: { text: 'Close.' },
         });
       },
-    });
+    };
+    CreateProductWithAttributesMutation.commit(params);
   };
 
-  handleCheckboxClick = (id: any) => {
-    log.info('id', id);
+  resetAttrValues = () => {
+    const attrValues: Array<AttributeValueType> = map(
+      item => ({
+        attrId: item.rawId,
+        ...this.valueForAttribute({ attr: item, variant: this.props.variant }),
+      }),
+      this.props.category.getAttributes,
+    );
+    return attrValues;
   };
 
   handleVendorCodeChange = (e: any) => {
@@ -206,7 +295,7 @@ class Form extends Component<PropsType, StateType> {
       target: { value },
     } = e;
     if (value === '') {
-      this.setState({ price: null });
+      this.setState({ price: 0 });
       return;
     } else if (Number.isNaN(parseFloat(value))) {
       return;
@@ -242,7 +331,7 @@ class Form extends Component<PropsType, StateType> {
 
   toggleDropdownVariant = () => {
     // $FlowIgnoreMe
-    const id: string = pathOr('', ['rawId'], this.props.variant);
+    const id: string = pathOr(null, ['rawId'], this.props.variant);
     if (this.props.onExpandClick) {
       this.props.onExpandClick(id);
     }
@@ -250,7 +339,7 @@ class Form extends Component<PropsType, StateType> {
 
   valueForAttribute = (
     input: ValueForAttributeInputType,
-  ): ValueForAttributeType => {
+  ): { value: string, metaField?: string } => {
     const { attr, variant } = input;
     const attrFromVariant =
       variant &&

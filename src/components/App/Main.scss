@@ -20,7 +20,16 @@
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 170rem;
+  width: 170rem;
   margin: 0 auto;
+
+  &.responsiveWrap {
+    width: 100%;
+    max-width: 170rem;
+  }
+
+  &.isResponsivee {
+    width: 100%;
+    max-width: 170rem;
+  }
 }

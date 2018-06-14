@@ -11,9 +11,7 @@ import './Characteristics.scss';
 type AttributeValueType = {
   attrId: number,
   value: string,
-  metaField?: {
-    translations: Array<{ lang: string, text: string }>,
-  },
+  metaField?: ?string,
 };
 
 type PropsType = {

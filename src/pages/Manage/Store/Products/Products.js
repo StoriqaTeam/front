@@ -8,7 +8,13 @@ import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
-import { getNameText, formatPrice, log, fromRelayError } from 'utils';
+import {
+  getNameText,
+  formatPrice,
+  log,
+  fromRelayError,
+  convertSrc,
+} from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
@@ -18,10 +24,7 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
-import {
-  DeactivateBaseProductMutation,
-  UpdateStoreMainMutation,
-} from 'relay/mutations';
+import { DeactivateBaseProductMutation } from 'relay/mutations';
 
 import type { Products_me as ProductsMe } from './__generated__/Products_me.graphql';
 
@@ -55,7 +58,7 @@ class Products extends PureComponent<PropsType> {
     }
   };
 
-  deleteProduct = (id: string) => {
+  handleDelete = (id: string) => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
 
@@ -94,60 +97,6 @@ class Products extends PureComponent<PropsType> {
         this.props.showAlert({
           type: 'success',
           text: 'Deleted!',
-          link: { text: '' },
-        });
-      },
-      onError: (error: Error) => {
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  };
-
-  handleLogoUpload = (url: string) => {
-    const { environment } = this.context;
-    // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
-
-    UpdateStoreMainMutation.commit({
-      id: storeId,
-      logo: url,
-      environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Saved!',
           link: { text: '' },
         });
       },
@@ -237,7 +186,7 @@ class Products extends PureComponent<PropsType> {
             ) : (
               <ImageLoader
                 fit
-                src={product.photoMain}
+                src={convertSrc(product.photoMain, 'small')}
                 loader={<BannerLoading />}
               />
             )}
@@ -314,7 +263,7 @@ class Products extends PureComponent<PropsType> {
           <button
             styleName="deleteButton"
             onClick={() => {
-              this.deleteProduct(item.id);
+              this.handleDelete(item.id);
             }}
           >
             <Icon type="basket" size="32" />

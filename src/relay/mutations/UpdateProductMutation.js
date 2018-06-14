@@ -3,6 +3,11 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
+import type {
+  UpdateProductMutationVariables,
+  UpdateProductMutationResponse,
+} from './__generated__/UpdateProductMutation.graphql';
+
 const mutation = graphql`
   mutation UpdateProductMutation($input: UpdateProductWithAttributesInput!) {
     updateProduct(input: $input) {
@@ -39,20 +44,13 @@ const mutation = graphql`
   }
 `;
 
-type MutationParamsType = {
-  id: number,
-  product: {
-    baseProductId: number,
-    price: number,
-    vendorCode: string,
-    photoMain?: string,
-    additionalPhotos?: Array<string>,
-    cashback: number,
-    discount: number,
-  },
-  attributes: Array<{ attrId: number, value: string, metaField?: string }>,
+export type MutationParamsType = {
+  ...UpdateProductMutationVariables,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?UpdateProductMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 
@@ -60,12 +58,7 @@ const commit = (params: MutationParamsType) =>
   commitMutation(params.environment, {
     mutation,
     variables: {
-      input: {
-        clientMutationId: '',
-        id: params.id,
-        product: params.product,
-        attributes: params.attributes,
-      },
+      input: params.input,
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
