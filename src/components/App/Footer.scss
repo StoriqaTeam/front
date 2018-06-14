@@ -1,0 +1,133 @@
+@import "../../styles/variables";
+
+.container {
+  position: relative;
+  flex: 0 0 auto;
+  width: 170rem;
+  margin: 0 auto;
+}
+
+.navBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5.75rem 0 6rem 4rem;
+  border-bottom: solid 1px rgba(239,239,239,.41);
+}
+
+.navBlockItem, .navBlockButton, .navBlockLogo {
+  display: flex;
+  flex-direction: column;
+}
+
+.navBlockLogo {
+  align-items: flex-end;
+  width: 25%;
+  padding-right: 5rem;
+}
+
+.navBlockItem {
+  align-items: flex-start;
+  width: 20%;
+
+  // delete this styles, then footer will be ready
+  &.market {
+    padding-left: 11rem;
+  }
+
+  &.sections {
+    padding-left: 7.5rem;
+  }
+
+  &.services {
+    padding-left: 2rem;
+  }
+
+}
+
+.navBlockButton {
+  align-items: flex-end;
+  width: 15%;
+}
+
+.description {
+  max-width: 24rem;
+  margin-top: 3rem;
+  color: rgba(80,80,80,.43);
+  font-size: 13px;
+  text-align: right;
+  line-height: 20px;
+}
+
+.navHeader {
+  margin-bottom: 1rem;
+  font-size: 16px;
+  color: $color_grey;
+}
+
+.navItem {
+  font-size: 14px;
+  line-height: 3.5rem;
+  color: $color_grey;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.infoBlock {
+  padding: 3.5rem 4rem;
+  text-align: center;
+  border-bottom: solid 1px rgba(239,239,239,.41);
+}
+
+.address, .email {
+  font-size: 13px;
+  line-height: 1.25rem;
+  color: rgba(80,80,80,.43);
+}
+
+.email:hover {
+  text-decoration: underline;
+}
+
+.aboutNavBlock {
+  margin-top: 2rem;
+}
+
+.aboutNavItem {
+  display: inline-block;
+  padding: 0 3rem;
+  line-height: 2rem;
+}
+
+.aboutNavItem + .aboutNavItem {
+  border-left: 1px solid $color_grey;
+}
+
+.aboutNavItem a {
+  font-size: 14px;
+  color: $color_grey;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+
+  & > * + * {
+    margin-left: 2rem;
+  }
+}
+
+.rightsBlock {
+  padding: 2rem;
+  font-size: 13px;
+  color: rgba(80,80,80,.43);
+  text-align: center;
+}

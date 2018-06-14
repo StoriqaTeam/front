@@ -35,7 +35,7 @@ import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFra
 import './HeaderResponse.scss';
 
 const STORES_FRAGMENT = graphql`
-  fragment HeaderStoresLocalFragment on CartStoresConnection {
+  fragment HeaderResponseStoresLocalFragment on CartStoresConnection {
     edges {
       node {
         id
@@ -49,7 +49,7 @@ const STORES_FRAGMENT = graphql`
 `;
 
 const HEADER_FRAGMENT = graphql`
-  fragment Header_me on User {
+  fragment HeaderResponse_me on User {
     email
     firstName
     lastName
