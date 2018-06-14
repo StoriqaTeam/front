@@ -16,23 +16,26 @@ import {
   isNil,
 } from 'ramda';
 
-import { SearchInput } from 'components/SearchInput';
-import { UserDropdown } from 'components/UserDropdown';
+import { Authorization } from 'components/Authorization';
 import { CartButton } from 'components/CartButton';
 import { Icon } from 'components/Icon';
+import { MobileMenu } from 'components/MobileMenu';
 import { Modal } from 'components/Modal';
-import { Authorization } from 'components/Authorization';
-import { setWindowTag } from 'utils';
+import { SearchInput } from 'components/SearchInput';
+import { UserDropdown } from 'components/UserDropdown';
 
 import { Container, Row, Col } from 'layout';
+
+import { setWindowTag } from 'utils';
 
 import { HeaderTop, AuthButtons } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
-import './HeaderResponse.scss';
+
+import './HeaderResponsive.scss';
 
 const STORES_FRAGMENT = graphql`
-  fragment HeaderResponseStoresLocalFragment on CartStoresConnection {
+  fragment HeaderResponsiveStoresLocalFragment on CartStoresConnection {
     edges {
       node {
         id
@@ -46,7 +49,7 @@ const STORES_FRAGMENT = graphql`
 `;
 
 const HEADER_FRAGMENT = graphql`
-  fragment HeaderResponse_me on User {
+  fragment HeaderResponsive_me on User {
     email
     firstName
     lastName
@@ -78,14 +81,16 @@ type StateType = {
     firstName: ?string,
     lastName: ?string,
   },
+  isMenuToggled: boolean,
 };
 
-class HeaderResponse extends Component<PropsType, StateType> {
+class HeaderResponsive extends Component<PropsType, StateType> {
   state = {
     cartCount: 0,
     showModal: false,
     isSignUp: false,
     userData: null,
+    isMenuToggled: false,
   };
 
   componentWillMount() {
@@ -159,22 +164,40 @@ class HeaderResponse extends Component<PropsType, StateType> {
   };
 
   dispose: () => void;
+
   disposeUser: () => void;
+
+  handleMobileMenu = (): void => {
+    const { isMenuToggled } = this.state;
+    this.setState({ isMenuToggled: !isMenuToggled });
+  };
 
   render() {
     const { searchValue } = this.props;
-    const { showModal, isSignUp, userData } = this.state;
+    const { showModal, isSignUp, userData, isMenuToggled } = this.state;
+    const BurgerMenu = () => (
+      <div
+        onClick={this.handleMobileMenu}
+        onKeyPress={() => {}}
+        role="button"
+        styleName="burgerMenu"
+        tabIndex="-1"
+      >
+        <span role="img">
+          <Icon type="burgerMenu" size={28} />
+        </span>
+      </div>
+    );
     return (
       <header styleName="container">
+        <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
         <Container>
+          <BurgerMenu />
           <HeaderTop />
           <div styleName="headerBottom">
             <Row>
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
                 <div styleName="logo">
-                  <div styleName="burgerMenu">
-                    <Icon type="burgerMenu" size={16} />
-                  </div>
                   <div styleName="logoIcon">
                     <Link to="/" data-test="logoLink">
                       <Icon type="logo" />
@@ -182,7 +205,7 @@ class HeaderResponse extends Component<PropsType, StateType> {
                   </div>
                 </div>
               </Col>
-              <Col size={1} sm={1} md={3} lg={6} xl={6}>
+              <Col size={1} sm={5} md={3} lg={6} xl={6}>
                 <div styleName="searchBar">
                   <SearchInput
                     searchCategories={[
@@ -222,8 +245,8 @@ class HeaderResponse extends Component<PropsType, StateType> {
   }
 }
 
-export default HeaderResponse;
+export default HeaderResponsive;
 
-HeaderResponse.contextTypes = {
+HeaderResponsive.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
