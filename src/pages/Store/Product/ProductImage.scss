@@ -13,34 +13,20 @@
     height: 3.375rem;
     width: 3.375rem;
   }
+
 }
 
-.image {
-  align-items: center;
-  display: flex;
-  flex-flow: column;
-  width: 69.875rem;
-}
-
-.bigImage {
+.imageWrapper {
   height: 69.875rem;
   position: relative;
   width: inherit;
 
-  & > img {
+  & > div[role="img"] {
     height: 100%;
     object-fit: contain;
     width: 100%;
   }
-}
 
-.thumbnailsWrapper {
-  max-width: 12rem;
-  margin: 2.375rem 1.80rem 0 2.125rem;
-}
-
-.noThumbnailsWrapper2 {
-  max-width: 12rem;
 }
 
 .discount {

@@ -8,11 +8,11 @@ import { ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-// import type { WidgetOptionType } from './types';
-
 type PropsType = {
-  mainImage: string,
+  photoMain: string,
   discount: number,
+  // eslint-disable-next-line
+  selected: string,
 };
 
 type StateType = {
@@ -20,12 +20,6 @@ type StateType = {
 };
 
 class ProductImage extends Component<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -36,17 +30,20 @@ class ProductImage extends Component<PropsType, StateType> {
         selected: '',
       };
     }
-    return prevState;
+    return {
+      ...prevState,
+      selected: nextProps.selected,
+    };
   }
   state = {
     selected: '',
   };
   render() {
-    const { mainImage, discount } = this.props;
+    const { photoMain, discount } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        <figure styleName="bigImage">
+        <figure styleName="imageWrapper">
           {discount > 0 ? (
             <span styleName="discount">
               Price <br /> Off <br />
@@ -63,11 +60,9 @@ class ProductImage extends Component<PropsType, StateType> {
             role="img"
             style={{
               backgroundImage: `url(${
-                !isEmpty(selected) ? selected : mainImage
-                })`,
+                !isEmpty(selected) ? selected : photoMain
+              })`,
               backgroundSize: 'contain',
-              width: '100%',
-              height: '100%',
               backgroundPosition: 'center top',
               backgroundRepeat: 'no-repeat',
             }}
