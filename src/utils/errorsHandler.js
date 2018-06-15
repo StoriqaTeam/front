@@ -4,11 +4,14 @@ import { keys, isEmpty } from 'ramda';
 
 import { log } from 'utils';
 
+import type { ProcessedErrorType } from 'utils/fromRelayError';
+import type { AlertPropsType } from 'components/Alerts/Alert';
+
 // first arg is relayErrors - standart error object
 // second arg is alertShow callback for show alerts in common cases
 // third arg is callback for handling validation errors
 export const errorsHandler = (
-  relayErrors: ProcessedErrorType,
+  relayErrors: ?ProcessedErrorType,
   showAlertHandler: (config: AlertPropsType) => void,
   callback?: (messages: {
     [string]: Array<string>,
@@ -16,7 +19,7 @@ export const errorsHandler = (
 ) => {
   log.debug({ relayErrors });
   const handleDefaultEvent = (code: string) => {
-    const { status } = relayErrors[code];
+    const { status } = relayErrors ? relayErrors[code] : null;
     showAlertHandler({
       type: 'danger',
       text: `Error: "${status}"`,

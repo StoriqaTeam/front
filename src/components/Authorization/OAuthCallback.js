@@ -41,7 +41,7 @@ class OAuthCallback extends PureComponent<PropsType> {
         provider: this.props.provider,
         token: accessToken,
         environment: this.context.environment,
-        onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        onCompleted: (response, errors) => {
           log.debug({ response, errors });
           const relayErrors = fromRelayError({ source: { errors } });
           if (relayErrors) {

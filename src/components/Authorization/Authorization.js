@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty } from 'ramda';
+import { pathOr } from 'ramda';
 import { withRouter, matchShape, routerShape } from 'found';
 import Cookies from 'universal-cookie';
 
@@ -38,7 +38,9 @@ type StateType = {
   password: string,
   passwordValid: boolean,
   formValid: boolean,
-  errors: ?Array<string>,
+  errors: ?{
+    [code: string]: Array<string>,
+  },
   isLoading: boolean,
   isSignUp: ?boolean,
 };
