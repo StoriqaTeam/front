@@ -1,0 +1,50 @@
+[
+  {
+    "node": {
+      "id": "id-1",
+      "rawId": "1",
+      "name": "Storage 1",
+      "address": "Address 1"
+    }
+  },
+  {
+    "node": {
+      "id": "id-2",
+      "rawId": "2",
+      "name": "Storage 2",
+      "address": "Address 2"
+    }
+  },
+  {
+    "node": {
+      "id": "id-3",
+      "rawId": "3",
+      "name": "Storage 3",
+      "address": "Address 3"
+    }
+  },
+  {
+    "node": {
+      "id": "id-4",
+      "rawId": "4",
+      "name": "Storage 4",
+      "address": "Address 4"
+    }
+  },
+  {
+    "node": {
+      "id": "id-5",
+      "rawId": "5",
+      "name": "Storage 5",
+      "address": "Address 5"
+    }
+  },
+  {
+    "node": {
+      "id": "id-6",
+      "rawId": "6",
+      "name": "Storage 6",
+      "address": "Address 6"
+    }
+  }
+]

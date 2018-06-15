@@ -1,0 +1,25 @@
+@import "../../../../../styles/variables";
+
+.form {
+  position: relative;
+}
+
+.formItem + .formItem {
+  margin-top: 6rem;
+}
+
+.subtitle {
+  margin-bottom: 3rem;
+}
+
+.address {
+  width: 41rem;
+}
+
+.buttons {
+  display: flex;
+
+  & .cancelButton {
+    margin-left: 3rem;
+  }
+}

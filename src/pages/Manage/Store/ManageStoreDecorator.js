@@ -6,7 +6,7 @@ import { pathOr, toLower } from 'ramda';
 import { Container, Row, Col } from 'layout';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
-import Menu from './Menu';
+import Menu from './ManageStoreMenu';
 
 import './ManageStoreDecorator.scss';
 

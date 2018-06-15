@@ -14,6 +14,8 @@ import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
 import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
 import { Products } from 'pages/Manage/Store/Products';
+import { Storages } from 'pages/Manage/Store/Storages';
+import { NewStorage, EditStorage } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
@@ -278,6 +280,51 @@ const routes = (
             `}
             prepareVariables={(_, { params }) => ({
               productID: parseInt(params.productId, 10) || 0,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storages"
+            Component={Storages}
+            query={graphql`
+              query routes_Storages_Query($storeId: Int!) {
+                me {
+                  ...Storages_me @arguments(storeId: $storeId)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeId: parseInt(params.storeId, 10) || 0,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storage/new"
+            Component={NewStorage}
+            query={graphql`
+              query routes_NewStorage_Query($storeId: Int!) {
+                me {
+                  ...NewStorage_me @arguments(storeId: $storeId)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeId: parseInt(params.storeId, 10) || 0,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storages/:storageId"
+            Component={EditStorage}
+            query={graphql`
+              query routes_EditStorage_Query($storeId: Int!) {
+                me {
+                  ...EditStorage_me @arguments(storeId: $storeId)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeId: parseInt(params.storeId, 10) || 0,
             })}
           />
         </Route>

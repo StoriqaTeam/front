@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { graphql } from 'react-relay';
 import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
@@ -23,7 +24,7 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import menuItems from './menuItems.json';
 
-import './Menu.scss';
+import './ManageStoreMenu.scss';
 
 type MenuItemType = {
   id: string,
