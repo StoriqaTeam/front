@@ -55,6 +55,7 @@ const routes = (
           }
           categories {
             name {
+              lang
               text
             }
             children {

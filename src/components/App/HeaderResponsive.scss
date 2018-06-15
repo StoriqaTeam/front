@@ -1,5 +1,7 @@
 @import '../../styles/variables';
 
+$burger_menu_size: 7.5rem;
+
 .container {
   position: relative;
   width: 100%;
@@ -17,7 +19,7 @@
 
 .headerBottom {
   background-color: $color_white;
-  margin-top: 3rem;
+  margin-top: 1.5rem;
 }
 
 .cartIcon {
@@ -49,23 +51,39 @@
 .logo {
   display: flex;
   padding-top: 1rem;
-  @media (min-width: 768px) {
+  @media (min-width: 992px) {
     padding-top: 0;
   }
 }
 
 .logoIcon {
-  width: 15rem;
+  margin-left: calc(#{$burger-menu-size} + 1.875rem);
+  max-width: 15rem;
+
   @media (min-width: 768px) {
-    width: 24rem;
+    max-width: 24rem;
   }
+
+  @media (min-width: 992px) {
+    margin-left: 0;
+  }
+
 }
 
 .burgerMenu {
-  width: 2rem;
-  margin-right: 5rem;
-  display: block;
-  @media (min-width: 768px) {
+  align-items: center;
+  border-right: 1px solid $color_grey_light;
+  display: flex;
+  height: $burger-menu-size;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: $burger-menu-size;
+  z-index: 10;
+
+  @media (min-width: 992px) {
     display: none;
   }
+
 }

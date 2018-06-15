@@ -5,10 +5,10 @@ import { pathOr } from 'ramda';
 
 import {
   Header,
-  HeaderResponse,
+  HeaderResponsive,
   Main,
   Footer,
-  FooterResponse,
+  FooterResponsive,
 } from 'components/App';
 
 import './Page.scss';
@@ -27,7 +27,7 @@ export default (
       return (
         <div styleName="container">
           {responsive ? (
-            <HeaderResponse
+            <HeaderResponsive
               user={this.props.me}
               searchValue={pathOr(
                 '',
@@ -48,7 +48,7 @@ export default (
           <Main responsive={responsive} withoutCategories={withoutCategories}>
             <OriginalComponent {...this.props} />
           </Main>
-          {responsive ? <FooterResponse /> : <Footer />}
+          {responsive ? <FooterResponsive /> : <Footer />}
         </div>
       );
     }
