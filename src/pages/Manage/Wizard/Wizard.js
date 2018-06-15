@@ -179,11 +179,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     );
     // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'wizardStore', 'store', 'id'], this.props);
+    // $FlowIgnoreMe
+    const userId = pathOr(null, ['me', 'rawId'], this.props);
     const preparedData = transformTranslated(
       'EN',
       ['name', 'shortDescription'],
       {
         id,
+        userId,
         ...pick(
           ['name', 'shortDescription', 'defaultLanguage', 'slug'],
           wizardStore,
@@ -197,7 +200,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   createStore = () => {
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
-      ...preparedData,
+      // $FlowIgnoreMe
+      input: {
+        clientMutationId: '',
+        ...omit(['id'], preparedData),
+      },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         if (!errors) {
@@ -221,9 +228,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       return;
     }
     UpdateStoreMutation.commit({
+      // $FlowIgnoreMe
       input: {
         clientMutationId: '',
-        ...preparedData,
+        ...omit(['userId'], preparedData),
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -351,7 +359,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           attributes: baseProduct.attributes,
         };
         CreateProductWithAttributesMutation.commit({
-          ...prepareDataForProduct,
+          input: {
+            clientMutationId: '',
+            ...prepareDataForProduct,
+          },
           parentID: baseProductID,
           environment: this.context.environment,
           onCompleted: (
@@ -396,7 +407,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           attributes: baseProduct.attributes,
         };
         UpdateProductMutation.commit({
-          ...prepareDataForProduct,
+          input: {
+            clientMutationId: '',
+            ...prepareDataForProduct,
+          },
           environment: this.context.environment,
           onCompleted: (
             productResponse: ?Object,
