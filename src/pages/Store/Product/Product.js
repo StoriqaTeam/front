@@ -228,15 +228,9 @@ class Product extends Component<PropsType, StateType> {
               </div>
             </Col>
             <Col sm={12} md={5} lg={5} xl={5}>
-              <ProductImage
-                selected={selected}
-                {...productVariant}
-              />
+              <ProductImage selected={selected} {...productVariant} />
               {process.env.BROWSER ? (
-                <ProductShare
-                  photoMain={productVariant.photoMain}
-                  description={productVariant.description}
-                />
+                <ProductShare {...productVariant} />
               ) : null}
             </Col>
             <Col sm={12} md={6} lg={6} xl={6}>
