@@ -4,16 +4,15 @@ import React, { Component } from 'react';
 
 import { isEmpty } from 'utils';
 
-import { ProductThumbnails, ImageDetail } from './index';
+import { ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-import type { WidgetOptionType } from './types';
+// import type { WidgetOptionType } from './types';
 
 type PropsType = {
   mainImage: string,
   discount: number,
-  thumbnails: Array<WidgetOptionType>,
 };
 
 type StateType = {
@@ -42,58 +41,39 @@ class ProductImage extends Component<PropsType, StateType> {
   state = {
     selected: '',
   };
-  handleClick = ({ image }: WidgetOptionType): void => {
-    this.setState({ selected: image });
-  };
   render() {
-    const { mainImage, thumbnails, discount } = this.props;
+    const { mainImage, discount } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        <div
-          styleName={
-            !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
-          }
-        >
-          {!isEmpty(thumbnails) ? (
-            <ProductThumbnails
-              isFirstSelected
-              isReset={isEmpty(selected)}
-              onClick={this.handleClick}
-              options={thumbnails}
-            />
-          ) : null}
-        </div>
-        <div styleName="image">
-          <figure styleName="bigImage">
-            {discount > 0 ? (
-              <span styleName="discount">
-                Price <br /> Off <br />
-                <span
-                  style={{
-                    fontSize: 16,
-                  }}
-                >
-                  {`- ${Math.round(discount * 100)} %`}
-                </span>
+        <figure styleName="bigImage">
+          {discount > 0 ? (
+            <span styleName="discount">
+              Price <br /> Off <br />
+              <span
+                style={{
+                  fontSize: 16,
+                }}
+              >
+                {`- ${Math.round(discount * 100)} %`}
               </span>
-            ) : null}
-            <div
-              role="img"
-              style={{
-                backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : mainImage
+            </span>
+          ) : null}
+          <div
+            role="img"
+            style={{
+              backgroundImage: `url(${
+                !isEmpty(selected) ? selected : mainImage
                 })`,
-                backgroundSize: 'contain',
-                width: '100%',
-                height: '100%',
-                backgroundPosition: 'center top',
-                backgroundRepeat: 'no-repeat',
-              }}
-            />
-          </figure>
-          <ImageDetail />
-        </div>
+              backgroundSize: 'contain',
+              width: '100%',
+              height: '100%',
+              backgroundPosition: 'center top',
+              backgroundRepeat: 'no-repeat',
+            }}
+          />
+        </figure>
+        <ImageDetail />
       </div>
     );
   }

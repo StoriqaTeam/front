@@ -1,10 +1,7 @@
 @import "../../../styles/variables";
 
 .container {
-  align-items: flex-start;
   border-right: 1px solid $color_grey_trivial;
-  display: flex;
-  justify-content: space-between;
 }
 
 .expand {
@@ -42,7 +39,7 @@
   margin: 2.375rem 1.80rem 0 2.125rem;
 }
 
-.noThumbnailsWrapper {
+.noThumbnailsWrapper2 {
   max-width: 12rem;
 }
 

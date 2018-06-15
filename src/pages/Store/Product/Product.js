@@ -23,12 +23,13 @@ import {
 } from './utils';
 
 import {
-  ProductPrice,
-  ProductImage,
-  ProductShare,
-  ProductDetails,
   ProductContext,
+  ProductDetails,
+  ProductImage,
+  ProductPrice,
+  ProductShare,
   ProductStore,
+  ProductThumbnails,
   Tab,
   Tabs,
   // TabRow,
@@ -54,6 +55,7 @@ type PropsType = {
 type StateType = {
   widgets: Array<WidgetType>,
   productVariant: ProductVariantType,
+  selected: string,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -69,13 +71,14 @@ class Product extends Component<PropsType, StateType> {
         variants: { all },
       },
     } = nextProps;
-    const { widgets } = prevState;
+    const { widgets, selected } = prevState;
     if (isEmpty(widgets)) {
       const madeWidgets = makeWidgets([])(all);
       const productVariant = getVariantFromSelection([])(all);
       return {
         widgets: madeWidgets,
         productVariant,
+        selected: !isEmpty(selected) ? '' : selected,
       };
     }
     return prevState;
@@ -93,6 +96,7 @@ class Product extends Component<PropsType, StateType> {
       discount: null,
       lastPrice: null,
     },
+    selected: '',
   };
   componentDidMount() {
     if (process.env.BROWSER) {
@@ -186,6 +190,9 @@ class Product extends Component<PropsType, StateType> {
       </Tabs>
     );
   };
+  handleThumbnailClick = ({ image }: WidgetOptionType): void => {
+    this.setState({ selected: image });
+  };
   render() {
     if (isNil(this.props.baseProduct)) {
       return (
@@ -197,13 +204,30 @@ class Product extends Component<PropsType, StateType> {
     const {
       baseProduct: { name, shortDescription, longDescription, store },
     } = this.props;
-    const { widgets, productVariant } = this.state;
+    const { widgets, productVariant, selected } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
+    const isAdditionalPhotosEmpty = !isEmpty(productVariant.additionalPhotos);
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
         <div styleName="ProductDetails">
           <Row>
-            <Col size={6}>
+            <Col size={1} sm={1} md={1} lg={1} xl={1}>
+              <div
+                styleName={
+                  isAdditionalPhotosEmpty ? 'thumbnailsWrapper' : 'noWrapper2'
+                }
+              >
+                {isAdditionalPhotosEmpty ? (
+                  <ProductThumbnails
+                    isFirstSelected
+                    isReset={isEmpty(selected)}
+                    onClick={this.handleThumbnailClick}
+                    options={productVariant.additionalPhotos}
+                  />
+                ) : null}
+              </div>
+            </Col>
+            <Col sm={12} md={5} lg={5} xl={5}>
               <ProductImage
                 discount={productVariant.discount}
                 mainImage={productVariant.photoMain}
@@ -216,7 +240,7 @@ class Product extends Component<PropsType, StateType> {
                 />
               ) : null}
             </Col>
-            <Col size={6}>
+            <Col sm={12} md={6} lg={6} xl={6}>
               <ProductDetails
                 productTitle={extractText(name)}
                 productDescription={description}
@@ -259,7 +283,7 @@ class Product extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(withErrorBoundary(Page(Product))),
+  withShowAlert(withErrorBoundary(Page(Product, true))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
