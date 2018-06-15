@@ -2,10 +2,19 @@
 
 .container {
   background-color: $color_white;
-  border: 1px solid $color_grey_trivial;
   border-left: 1px solid transparent;
+  border: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
+  margin-left: 0;
+
+  @media (min-width: 768px) {
+    margin-left: -8.3rem;
+  }
+  @media (min-width: 992px) {
+    margin-left: -14.3rem;
+  }
+
 }
 
 .socialIcons {
