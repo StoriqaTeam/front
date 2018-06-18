@@ -215,7 +215,6 @@ class CartProduct extends PureComponent<PropsType> {
               title="Quantity"
               value={
                 <Stepper
-                  dataTest={`product-${product.rawId}-quantity-stepper`}
                   value={quantity}
                   min={0}
                   max={9999}
