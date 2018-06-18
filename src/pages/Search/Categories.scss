@@ -1,9 +1,12 @@
 @import "../../styles/variables";
 
 .container {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
+  margin-top: 2.875rem;
+
+  @media (min-width: 992px) {
+    margin-top: 0;
+  }
+
 }
 
 .wrapper {
@@ -13,7 +16,8 @@
 }
 
 .sidebarContainer {
-  width: 25.95rem;
+  display: none;
+  max-width: 25.95rem;
 
   .blockTitle {
     color: $color_grey_minor;
@@ -23,11 +27,16 @@
   .attrBlock {
     margin: 2rem 0;
   }
+
+  @media (min-width: 992px) {
+    display: block;
+  }
+
 }
 
 .contentContainer {
   flex: 1;
-  margin: -0.5rem 2rem 0 2rem;
+  // margin: -0.5rem 2rem 0 2rem;
 
   .topContentContainer {
     display: flex;
@@ -46,7 +55,9 @@
         .separator {
           margin: 0 1rem;
         }
+
       }
+
     }
 
     .sortingContainer {
@@ -63,13 +74,13 @@
       padding: 0 1rem;
 
       .loadMoreButton {
-        flex: 1;
-        padding: 1rem;
+        align-items: center;
         border: 1px solid $color_grey_light;
         color: $color_grey;
         cursor: pointer;
+        flex: 1;
         justify-content: center;
-        align-items: center;
+        padding: 1rem;
         text-align: center;
       }
     }
@@ -77,11 +88,24 @@
 }
 
 .cardWrapper {
-  width: 25%;
+  display: inline-block;
   height: 40rem;
   position: relative;
-  display: inline-block;
   vertical-align: bottom;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media (min-width: 992px) {
+    width: 33%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 25%;
+  }
+
 }
 
 .button {

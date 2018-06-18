@@ -27,6 +27,7 @@ import {
   getNameText,
   searchPathByParent,
 } from 'utils';
+import { Container, Col, Row } from 'layout';
 import { Page } from 'components/App';
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { Button } from 'components/common/Button';
@@ -41,7 +42,7 @@ import './Categories.scss';
 type PropsType = {
   router: routerShape,
   relay: Relay,
-  /* eslint-disabled react/no-unused-prop-types */
+  /* eslint-disable react/no-unused-prop-types */
   search: CategoriesSearch,
 };
 
@@ -168,13 +169,13 @@ class Categories extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnRangeChange = (value: number, fieldName: string) => {
+  handleOnRangeChange = (value: number, fieldName: string): void => {
     this.setState({
       [fieldName]: value,
     });
   };
 
-  handleOnCompleteRange = (value: number, value2: number) => {
+  handleOnCompleteRange = (value: number, value2: number): void => {
     // getting current searchInput data change range and push to new url
     // $FlowIgnoreMe
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
@@ -229,7 +230,7 @@ class Categories extends Component<PropsType, StateType> {
     };
   };
 
-  productsRefetch = () => {
+  productsRefetch = (): void => {
     this.props.relay.loadMore(productsPerRequest);
   };
 
@@ -405,81 +406,87 @@ class Categories extends Component<PropsType, StateType> {
     const maxValue = (priceRange && priceRange.maxValue) || 0;
     return (
       <div styleName="container">
-        <div styleName="wrapper">
-          <div styleName="sidebarContainer">
-            <div>
-              {this.renderParentLink()}
-              {accordionItems && (
-                <Accordion
-                  items={accordionItems}
-                  onClick={this.handleOnChangeCategory}
-                  activeId={categoryId ? parseInt(categoryId, 10) : null}
-                />
-              )}
-              <div styleName="blockTitle">Price (STQ)</div>
-              <RangerSlider
-                min={0}
-                max={maxValue}
-                step={0.01}
-                value={volume > maxValue ? 0 : volume}
-                value2={volume2 > maxValue ? maxValue : volume2}
-                onChange={value => this.handleOnRangeChange(value, 'volume')}
-                onChange2={value => this.handleOnRangeChange(value, 'volume2')}
-                onChangeComplete={this.handleOnCompleteRange}
-              />
-              {attrFilters &&
-                sort(
-                  (a, b) => a.attribute.rawId - b.attribute.rawId,
-                  attrFilters,
-                ).map(attrFilter => {
-                  const initialAttr = find(
-                    whereEq({ id: attrFilter.attribute.rawId }),
-                    // $FlowIgnoreMe
-                    initialAttributes,
-                  );
-                  const initialValues = pathOr(
-                    [],
-                    ['equal', 'values'],
-                    initialAttr,
-                  );
-                  return (
-                    <div key={attrFilter.attribute.id} styleName="attrBlock">
-                      <AttributeControl
-                        attrFilter={attrFilter}
-                        initialValues={initialValues}
-                        onChange={this.handleOnChangeAttribute(attrFilter)}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-          <div styleName="contentContainer">
-            <div styleName="topContentContainer">
-              {this.renderBreadcrumbs()}
-            </div>
-            <div styleName="productsContainer">
-              {productsWithVariants &&
-                productsWithVariants.map(item => (
-                  <div key={item.id} styleName="cardWrapper">
-                    <CardProduct item={item} />
-                  </div>
-                ))}
-              {this.props.relay.hasMore() && (
-                <div styleName="button">
-                  <Button
-                    big
-                    load
-                    onClick={this.productsRefetch}
-                    dataTest="searchProductLoadMoreButton"
-                  >
-                    Load more
-                  </Button>
+        <Container>
+          <Row>
+            <Col sm={1} md={1} lg={2} xl={2}>
+              <div styleName="sidebarContainer">
+                <div>
+                  {this.renderParentLink()}
+                  {accordionItems && (
+                    <Accordion
+                      items={accordionItems}
+                      onClick={this.handleOnChangeCategory}
+                      activeId={categoryId ? parseInt(categoryId, 10) : null}
+                    />
+                  )}
+                  <div styleName="blockTitle">Price (STQ)</div>
+                  <RangerSlider
+                    min={0}
+                    max={maxValue}
+                    step={0.01}
+                    value={volume > maxValue ? 0 : volume}
+                    value2={volume2 > maxValue ? maxValue : volume2}
+                    onChange={value => this.handleOnRangeChange(value, 'volume')}
+                    onChange2={value => this.handleOnRangeChange(value, 'volume2')}
+                    onChangeComplete={this.handleOnCompleteRange}
+                  />
+                  {attrFilters &&
+                  sort(
+                    (a, b) => a.attribute.rawId - b.attribute.rawId,
+                    attrFilters,
+                  ).map(attrFilter => {
+                    const initialAttr = find(
+                      whereEq({ id: attrFilter.attribute.rawId }),
+                      // $FlowIgnoreMe
+                      initialAttributes,
+                    );
+                    const initialValues = pathOr(
+                      [],
+                      ['equal', 'values'],
+                      initialAttr,
+                    );
+                    return (
+                      <div key={attrFilter.attribute.id} styleName="attrBlock">
+                        <AttributeControl
+                          attrFilter={attrFilter}
+                          initialValues={initialValues}
+                          onChange={this.handleOnChangeAttribute(attrFilter)}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
-          </div>
-        </div>
+              </div>
+            </Col>
+            <Col sm={12} md={12} lg={10} xl={10}>
+              <div styleName="contentContainer">
+                <div styleName="topContentContainer">
+                  {this.renderBreadcrumbs()}
+                </div>
+                <div styleName="productsContainer">
+                  {productsWithVariants &&
+                  productsWithVariants.map(item => (
+                    <div key={item.id} styleName="cardWrapper">
+                      <CardProduct item={item} />
+                    </div>
+                  ))}
+                  {this.props.relay.hasMore() && (
+                    <div styleName="button">
+                      <Button
+                        big
+                        load
+                        onClick={this.productsRefetch}
+                        dataTest="searchProductLoadMoreButton"
+                      >
+                        Load more
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
@@ -490,7 +497,7 @@ Categories.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withErrorBoundary(withRouter(Page(Categories))),
+  withErrorBoundary(withRouter(Page(Categories, true))),
   graphql`
     fragment Categories_search on Search
       @argumentDefinitions(
