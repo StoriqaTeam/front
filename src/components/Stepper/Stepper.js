@@ -80,7 +80,7 @@ class Stepper extends Component<PropsType, StateType> {
         <button
           styleName="button"
           onClick={() => this.handleClick('decrease')}
-          data-test={`${this.props.dataTest || ''}-decrease`}
+          data-test="decreaseButton"
         >
           <Icon type="minus" size="16" />
         </button>
@@ -94,7 +94,7 @@ class Stepper extends Component<PropsType, StateType> {
         <button
           styleName="button"
           onClick={() => this.handleClick('increase')}
-          data-test={`${this.props.dataTest || ''}-increase`}
+          data-test="increaseButton"
         >
           <Icon type="plus" size="16" />
         </button>

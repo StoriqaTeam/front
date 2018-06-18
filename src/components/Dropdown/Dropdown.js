@@ -16,11 +16,12 @@ type PropsTypes = {
   children: Node,
   isContentOpen: boolean,
   withIcon?: boolean,
+  dataTest?: string,
 };
 
 class Dropdown extends Component<PropsTypes> {
   render() {
-    const { withIcon, isContentOpen } = this.props;
+    const { withIcon, isContentOpen, dataTest } = this.props;
     return (
       <div styleName="container">
         {Children.map(this.props.children, child => {
@@ -32,6 +33,7 @@ class Dropdown extends Component<PropsTypes> {
                   withIconTrigger: withIcon,
                   isContentOpen,
                 })}
+                data-test={dataTest || ''}
               >
                 {child.props.children}
                 {withIcon && (
@@ -48,6 +50,7 @@ class Dropdown extends Component<PropsTypes> {
                 styleName={classNames('content', {
                   withIconContent: isContentOpen,
                 })}
+                data-test={dataTest || ''}
               >
                 {child.props.children}
               </div>

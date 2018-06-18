@@ -146,7 +146,7 @@ class CartProduct extends PureComponent<PropsType> {
         <button
           styleName="recycle"
           onClick={() => this.handleDelete()}
-          data-test={`cart-product-${product.rawId}-delete`}
+          data-test="cartProductDeleteButton"
         >
           <Icon type="basket" size={32} />
         </button>
