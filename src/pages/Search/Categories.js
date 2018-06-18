@@ -41,6 +41,7 @@ import './Categories.scss';
 type PropsType = {
   router: routerShape,
   relay: Relay,
+  /* eslint-disabled react/no-unused-prop-types */
   search: CategoriesSearch,
 };
 
@@ -67,21 +68,23 @@ type AttrFilterType = {
 const productsPerRequest = 24;
 
 class Categories extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    prevState: StateType,
+  ): ?StateType {
     // maxValue of ranger from back (permanent for each category)
     // $FlowIgnoreMe
     const maxValue = pathOr(
       0,
       ['findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'maxValue'],
-      props.search,
+      nextProps.search,
     );
     // maxValue of ranger from url
     // $FlowIgnoreMe
     const maxValueFromUrl = pathOr(
       0,
       ['match', 'location', 'query', 'maxValue'],
-      this.props,
+      nextProps,
     );
     const maxValueFromUrlInt = parseInt(maxValueFromUrl, 10);
     // get initial maxValue ranger from url if we can
@@ -89,11 +92,17 @@ class Categories extends Component<PropsType, StateType> {
       maxValueFromUrlInt && maxValueFromUrlInt < maxValue
         ? maxValueFromUrlInt
         : maxValue;
-    this.state = {
+    return {
+      ...prevState,
       volume: 0,
       volume2,
     };
   }
+
+  state = {
+    volume: 0,
+    volume2: 0,
+  };
 
   generateTree = () => {
     // generate categories tree for render categories filter
