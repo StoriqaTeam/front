@@ -1,3 +1,28 @@
-.container {
+@import "../../styles/variables";
 
+.container {
+  display: none;
+  max-width: 25.95rem;
+
+  .blockTitle {
+    color: $color_grey_minor;
+    font-size: 14px;
+  }
+
+  .attrBlock {
+    margin: 2rem 0;
+  }
+
+  @media (min-width: 992px) {
+    display: block;
+  }
+
+}
+
+.parentCategory {
+  font-family: $font_medium;
+  font-size: 2rem;
+  line-height: 1.3;
+  margin-bottom: 2rem;
+  cursor: pointer;
 }
