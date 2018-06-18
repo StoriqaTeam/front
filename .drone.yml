@@ -49,6 +49,7 @@ pipeline:
       branch: master
   node_package4nightly:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=nightly
@@ -64,6 +65,7 @@ pipeline:
       branch: master
   static_package4nightly:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - nightly_${DRONE_BRANCH//\//_}
@@ -122,6 +124,7 @@ pipeline:
       branch: master
   node_package4stable:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=stable
@@ -138,6 +141,7 @@ pipeline:
       branch: master
   static_package4stable:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - stable_${DRONE_BRANCH//\//_}
@@ -197,6 +201,7 @@ pipeline:
       branch: release*
   node_package4stage:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=stage
@@ -212,6 +217,7 @@ pipeline:
       branch: release*
   static_package4stage:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - stage_${DRONE_BRANCH//\//_}
@@ -270,6 +276,7 @@ pipeline:
       branch: release*
   node_package4production:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=production
@@ -286,6 +293,7 @@ pipeline:
       branch: release*
   static_package4production:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - prod_${DRONE_BRANCH//\//_}
