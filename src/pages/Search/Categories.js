@@ -33,7 +33,11 @@ class Categories extends PureComponent<PropsType> {
               <SearchSidebar search={search} />
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
-              <SearchContent search={search} relay={relay} />
+              <SearchContent
+                productsPerRequest={productsPerRequest}
+                relay={relay}
+                search={search}
+              />
             </Col>
           </Row>
         </Container>

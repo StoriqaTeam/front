@@ -19,13 +19,12 @@ type PropsType = {
   relay: Relay,
   // eslint-disable-next-line
   search: CategoriesSearch,
+  productsPerRequest: number,
 };
-
-const productsPerRequest = 24;
 
 class SearchContent extends Component<PropsType> {
   productsRefetch = (): void => {
-    const { relay } = this.props;
+    const { relay, productsPerRequest } = this.props;
     relay.loadMore(productsPerRequest);
   };
   renderBreadcrumbs = () => {
