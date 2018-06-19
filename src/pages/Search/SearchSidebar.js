@@ -78,7 +78,6 @@ class SearchSidebar extends Component<PropsType, StateType> {
         : maxValue;
     return {
       ...prevState,
-      volume: 0,
       volume2,
     };
   }
