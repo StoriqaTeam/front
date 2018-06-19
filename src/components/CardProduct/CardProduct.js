@@ -90,25 +90,23 @@ class CardProduct extends PureComponent<PropsTypes> {
                 </div>
               )}
             </div>
+            {Boolean(discount) && (
+              <div styleName="undiscountedPrice">
+                {formatPrice(price)} STQ
+              </div>
+            )}
             <div styleName="price">
-              {Boolean(discount) && (
-                <div styleName="undiscountedPrice">
-                  {formatPrice(price)} STQ
-                </div>
-              )}
               {discountedPrice && (
                 <div styleName="actualPrice">
                   <strong>{formatPrice(discountedPrice)} STQ</strong>
                 </div>
               )}
-              <div styleName="cashbackWrap">
-                <div
-                  styleName={classNames('cashback', {
-                    noneCashback: !cashbackValue,
-                  })}
-                >
-                  <b>{`Cashback  ${cashbackValue || 0}%`}</b>
-                </div>
+              <div
+                styleName={classNames('cashback', {
+                  noneCashback: !cashbackValue,
+                })}
+              >
+                <b>{`Cashback  ${cashbackValue || 0}%`}</b>
               </div>
             </div>
           </div>
