@@ -20,6 +20,8 @@ type PropsType = {
   search: CategoriesSearch,
 };
 
+const productsPerRequest = 24;
+
 class Categories extends PureComponent<PropsType> {
   render() {
     const { search, relay } = this.props;

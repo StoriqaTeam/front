@@ -137,14 +137,14 @@ class SearchSidebar extends Component<PropsType, StateType> {
     return prepareForAccordion(filtered);
   };
   handleOnChangeCategory = (item): void => {
+    const { router } = this.props;
     const { volume, volume2 } = this.state;
-    // $FlowIgnoreMe
     const name = pathOr(
       '',
       ['match', 'location', 'query', 'search'],
       this.props,
     );
-    this.props.router.push(
+    router.push(
       `/categories?search=${name}&category=${
         item.id
       }&minValue=${volume}&maxValue=${volume2}`,
@@ -156,6 +156,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     });
   };
   handleOnChangeCategory = item => {
+    const { router } = this.props;
     const { volume, volume2 } = this.state;
     // $FlowIgnoreMe
     const name = pathOr(
@@ -163,7 +164,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ['match', 'location', 'query', 'search'],
       this.props,
     );
-    this.props.router.push(
+    router.push(
       `/categories?search=${name}&category=${
         item.id
       }&minValue=${volume}&maxValue=${volume2}`,
@@ -196,13 +197,14 @@ class SearchSidebar extends Component<PropsType, StateType> {
     return inputToUrl(newPreparedObj);
   };
   handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
+    const { router } = this.props;
     // $FlowIgnoreMe
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
     // $FlowIgnoreMe
     const rawId = pathOr(null, ['attribute', 'rawId'], attrFilter);
     return (value: string) => {
       const newUrl = this.prepareAttrsToUrlStr(rawId, value);
-      this.props.router.push(`/categories${newUrl}`);
+      router.push(`/categories${newUrl}`);
       if (id) {
         this.setState({
           [id]: value,
@@ -211,6 +213,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     };
   };
   handleOnCompleteRange = (value: number, value2: number): void => {
+    const { router } = this.props;
     // getting current searchInput data change range and push to new url
     // $FlowIgnoreMe
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
@@ -224,9 +227,10 @@ class SearchSidebar extends Component<PropsType, StateType> {
       oldPreparedObj,
     );
     const newUrl = inputToUrl(newPreparedObj);
-    this.props.router.push(`/categories${newUrl}`);
+    router.push(`/categories${newUrl}`);
   };
   renderParentLink = () => {
+    const { router } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(
       null,
@@ -251,9 +255,9 @@ class SearchSidebar extends Component<PropsType, StateType> {
         styleName="parentCategory"
         onClick={() => {
           if (!obj) {
-            this.props.router.push('/categories?search=');
+            router.push('/categories?search=');
           } else {
-            this.props.router.push(`/categories?search=&category=${obj.rawId}`);
+            router.push(`/categories?search=&category=${obj.rawId}`);
           }
         }}
         onKeyDown={() => {}}

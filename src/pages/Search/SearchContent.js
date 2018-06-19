@@ -103,7 +103,6 @@ class SearchContent extends Component<PropsType> {
     const { relay } = this.props;
     // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
-    // $FlowIgnoreMe
     const productsWithVariants = map(item => item.node, products);
     return (
       <div styleName="container">
