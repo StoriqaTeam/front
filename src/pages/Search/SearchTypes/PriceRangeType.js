@@ -1,6 +1,6 @@
 // @flow
 
-export type PriceRange = {
+export type PriceRangeType = {
   maxValue: number,
   minValue: number,
 };

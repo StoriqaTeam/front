@@ -87,7 +87,16 @@ class SearchSidebar extends Component<PropsType, StateType> {
     volume: 0,
     volume2: 0,
   };
-
+  
+  getSearchFilter = (filterProp: string) => {
+    const searchFiltersPath = ['search', 'findProduct', 'pageInfo', 'searchFilters'];
+    // $FlowIgnoreMe
+    return pathOr(
+      null,
+      [...searchFiltersPath, filterProp],
+      this.props,
+    );
+  }
   generateTree = () => {
     // generate categories tree for render categories filter
     // $FlowIgnoreMe
@@ -136,6 +145,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     const filtered = levelFilter(2)(flattenCategories);
     return prepareForAccordion(filtered);
   };
+  
   handleOnChangeCategory = (item): void => {
     const { router } = this.props;
     const { volume, volume2 } = this.state;
@@ -150,12 +160,14 @@ class SearchSidebar extends Component<PropsType, StateType> {
       }&minValue=${volume}&maxValue=${volume2}`,
     );
   };
+  
   handleOnRangeChange = (value: number, fieldName: string): void => {
     this.setState({
       [fieldName]: value,
     });
   };
-  handleOnChangeCategory = item => {
+  
+  handleOnChangeCategory = (item): void => {
     const { router } = this.props;
     const { volume, volume2 } = this.state;
     // $FlowIgnoreMe
@@ -170,11 +182,13 @@ class SearchSidebar extends Component<PropsType, StateType> {
       }&minValue=${volume}&maxValue=${volume2}`,
     );
   };
+  
   handleOnRangeChange = (value: number, fieldName: string): void => {
     this.setState({
       [fieldName]: value,
     });
   };
+  
   prepareAttrsToUrlStr = (id, values) => {
     // getting current searchInput data change attrs and push to new url
     // $FlowIgnoreMe
@@ -194,9 +208,11 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       oldPreparedObj,
     );
+    console.log('inputToUrl(newPreparedObj)', inputToUrl(newPreparedObj));
     return inputToUrl(newPreparedObj);
   };
-  handleOnChangeAttribute = (attrFilter: AttrFilterType) => {
+  
+  handleOnChangeAttribute = (attrFilter: AttrFilterType): (value: string) => void => {
     const { router } = this.props;
     // $FlowIgnoreMe
     const id = pathOr(null, ['attribute', 'id'], attrFilter);
@@ -212,6 +228,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       }
     };
   };
+  
   handleOnCompleteRange = (value: number, value2: number): void => {
     const { router } = this.props;
     // getting current searchInput data change range and push to new url
@@ -229,6 +246,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     const newUrl = inputToUrl(newPreparedObj);
     router.push(`/categories${newUrl}`);
   };
+  
   renderParentLink = () => {
     const { router } = this.props;
     // $FlowIgnoreMe
@@ -293,18 +311,8 @@ class SearchSidebar extends Component<PropsType, StateType> {
   };
   render() {
     const { volume, volume2 } = this.state;
-    // $FlowIgnoreMe
-    const priceRange = pathOr(
-      null,
-      ['search', 'findProduct', 'pageInfo', 'searchFilters', 'priceRange'],
-      this.props,
-    );
-    // $FlowIgnoreMe
-    const attrFilters = pathOr(
-      null,
-      ['search', 'findProduct', 'pageInfo', 'searchFilters', 'attrFilters'],
-      this.props,
-    );
+    const priceRange = this.getSearchFilter('priceRange');
+    const attrFilters = this.getSearchFilter('attrFilters');
     const accordionItems = this.generateTree();
     // $FlowIgnoreMe
     const categoryId = pathOr(
@@ -313,7 +321,6 @@ class SearchSidebar extends Component<PropsType, StateType> {
       this.props,
     );
 
-    // for attrs initial
     // $FlowIgnoreMe
     const queryObj = pathOr(0, ['match', 'location', 'query'], this.props);
     const initialSearchInput = urlToInput(queryObj);

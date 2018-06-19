@@ -1,3 +1,3 @@
 // @flow
 
-export type { PriceRange } from './PriceRange';
+export type { PriceRangeType } from './PriceRangeType';
