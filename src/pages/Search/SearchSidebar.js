@@ -14,12 +14,14 @@ import {
   complement,
 } from 'ramda';
 import { withRouter, routerShape } from 'found';
+import classNames from 'classnames';
 
 import { flattenFunc, urlToInput, inputToUrl, getNameText } from 'utils';
 
 import { Accordion, prepareForAccordion } from 'components/Accordion';
 import { RangerSlider } from 'components/Ranger';
 import { AttributeControl } from 'components/AttributeControl';
+import { Icon } from 'components/Icon';
 
 import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
 
@@ -29,6 +31,8 @@ type PropsType = {
   router: routerShape,
   /* eslint-disable react/no-unused-prop-types */
   search: CategoriesSearch,
+  onClose: () => void,
+  isOpen: boolean,
 };
 
 type StateType = {
@@ -52,6 +56,9 @@ type AttrFilterType = {
 };
 
 class SearchSidebar extends Component<PropsType, StateType> {
+  static defaultProps = {
+    onClose: () => {},
+  };
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -313,6 +320,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     return linkComponent(parentObj);
   };
   render() {
+    const { onClose, isOpen } = this.props;
     const { volume, volume2 } = this.state;
     const priceRange = this.getSearchFilter('priceRange');
     const attrFilters = this.getSearchFilter('attrFilters');
@@ -334,7 +342,23 @@ class SearchSidebar extends Component<PropsType, StateType> {
     );
     const maxValue = (priceRange && priceRange.maxValue) || 0;
     return (
-      <div styleName="container">
+      <aside
+        styleName={classNames('container', {
+          toggledSidebar: isOpen,
+        })}
+      >
+        <header styleName="header">
+          <h3>Filters</h3>
+          <span
+            id="close"
+            onClick={onClose}
+            onKeyPress={() => {}}
+            role="button"
+            tabIndex="-1"
+          >
+            <Icon type="cross" size={24} />
+          </span>
+        </header>
         <div>
           {this.renderParentLink()}
           {accordionItems && (
@@ -381,7 +405,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
               );
             })}
         </div>
-      </div>
+      </aside>
     );
   }
 }

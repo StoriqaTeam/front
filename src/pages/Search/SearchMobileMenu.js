@@ -15,7 +15,7 @@ class SearchMobileMenu extends Component<PropsType> {
     const { onClose } = this.props;
     const { id } = evt.target;
     if (id === 'overlay') {
-      onClose()
+      onClose();
     }
   };
   render() {

@@ -117,9 +117,7 @@ class SearchContent extends Component<PropsType> {
             tabIndex="-1"
           >
             <Icon type="controls" />
-            <span>
-              Filters
-            </span>
+            <span>Filters</span>
           </span>
         </div>
         <div styleName="productsContainer">

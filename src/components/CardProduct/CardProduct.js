@@ -91,9 +91,7 @@ class CardProduct extends PureComponent<PropsTypes> {
               )}
             </div>
             {Boolean(discount) && (
-              <div styleName="undiscountedPrice">
-                {formatPrice(price)} STQ
-              </div>
+              <div styleName="undiscountedPrice">{formatPrice(price)} STQ</div>
             )}
             <div styleName="price">
               {discountedPrice && (

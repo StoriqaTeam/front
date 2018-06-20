@@ -22,7 +22,7 @@ type PropsType = {
 
 type StateType = {
   isOpen: boolean,
-}
+};
 
 const productsPerRequest = 24;
 
@@ -40,17 +40,18 @@ class Categories extends PureComponent<PropsType, StateType> {
     const { isOpen } = this.state;
     return (
       <div styleName="container">
-        <SearchMobileMenu
-          isOpen={isOpen}
-          onClose={this.handleOpen}
-        >
-          <SearchSidebar search={search} />
+        <SearchMobileMenu isOpen={isOpen} onClose={this.handleOpen}>
+          <SearchSidebar
+            isOpen={isOpen}
+            onClose={this.handleOpen}
+            search={search}
+          />
         </SearchMobileMenu>
         <Container>
           <Row>
             <Col sm={1} md={1} lg={2} xl={2}>
               <div styleName="sidebarWrapper">
-                <SearchSidebar search={search} />
+                <SearchSidebar isOpen search={search} />
               </div>
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
