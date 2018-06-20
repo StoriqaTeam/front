@@ -31,7 +31,7 @@ class Categories extends PureComponent<PropsType, StateType> {
     isOpen: false,
   };
   handleOpen = (): void => {
-    this.setState(({ isOpen }: StateType) => ({
+    this.setState(({ isOpen }) => ({
       isOpen: !isOpen,
     }));
   };
