@@ -28,7 +28,7 @@ import { Container, Row, Col } from 'layout';
 
 import { setWindowTag } from 'utils';
 
-import { HeaderTop, AuthButtons } from './index';
+import { HeaderTop, AuthButtons, MobileSearchMenu } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 
@@ -82,6 +82,7 @@ type StateType = {
     lastName: ?string,
   },
   isMenuToggled: boolean,
+  isMobileSearchOpen: boolean,
 };
 
 class HeaderResponsive extends Component<PropsType, StateType> {
@@ -91,6 +92,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     isSignUp: false,
     userData: null,
     isMenuToggled: false,
+    isMobileSearchOpen: false,
   };
 
   componentWillMount() {
@@ -168,13 +170,24 @@ class HeaderResponsive extends Component<PropsType, StateType> {
   disposeUser: () => void;
 
   handleMobileMenu = (): void => {
-    const { isMenuToggled } = this.state;
-    this.setState({ isMenuToggled: !isMenuToggled });
+    this.setState(({ isMenuToggled }) => ({
+      isMenuToggled: !isMenuToggled,
+    }));
+  };
+
+  handleMobileSearch = () => {
+    this.setState(({ isMobileSearchOpen }) => ({
+      isMobileSearchOpen: !isMobileSearchOpen,
+    }))
   };
 
   render() {
     const { searchValue } = this.props;
-    const { showModal, isSignUp, userData, isMenuToggled } = this.state;
+    const { showModal, isSignUp, userData, isMenuToggled, isMobileSearchOpen } = this.state;
+    const searchCategories = [
+      { id: 'products', label: 'Products' },
+      { id: 'stores', label: 'Shops' },
+    ];
     const BurgerMenu = () => (
       <div
         onClick={this.handleMobileMenu}
@@ -190,6 +203,12 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     );
     return (
       <header styleName="container">
+        <MobileSearchMenu
+          isOpen={isMobileSearchOpen}
+          searchCategories={searchCategories}
+          searchValue={searchValue}
+          onClick={this.handleMobileSearch}
+        />
         <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
         <Container>
           <BurgerMenu />
@@ -208,17 +227,20 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               <Col size={1} sm={5} md={3} lg={6} xl={6}>
                 <div styleName="searchBar">
                   <SearchInput
-                    searchCategories={[
-                      { id: 'products', label: 'Products' },
-                      { id: 'stores', label: 'Shops' },
-                    ]}
+                    searchCategories={searchCategories}
                     searchValue={searchValue}
                   />
                 </div>
               </Col>
               <Col size={4} sm={3} md={5} lg={3} xl={3}>
                 <div styleName="userData">
-                  <div styleName="searchIcon">
+                  <div
+                    onClick={this.handleMobileSearch}
+                    onKeyPress={() => {}}
+                    role="button"
+                    styleName="searchIcon"
+                    tabIndex="-1"
+                  >
                     <Icon type="magnifier" />
                   </div>
                   {userData ? (

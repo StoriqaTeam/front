@@ -1,0 +1,17 @@
+@import '../../styles/variables';
+
+.container {
+  background: $color_white;
+  height: 7.3rem;
+  padding: 1.5rem 2rem 0 2rem;
+  position: absolute;
+  right: -100%;
+  transition: right 0.2s ease;
+  width: 100%;
+  z-index: 11;
+
+  &.isOpen {
+    right: 0;
+  }
+
+}
