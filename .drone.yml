@@ -1,4 +1,13 @@
 pipeline:
+#  restore-cache:
+#    image: plugins/s3-cache:1
+#    pull: true
+#    secrets: [ aws_access_key_id, aws_secret_access_key ]
+#    mount:
+#    - node_modules
+#    restore: true
+#    when:
+#      branch: [ master, release* ]
 
 ###
 # Test PR
@@ -49,6 +58,7 @@ pipeline:
       branch: master
   node_package4nightly:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=nightly
@@ -64,6 +74,7 @@ pipeline:
       branch: master
   static_package4nightly:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - nightly_${DRONE_BRANCH//\//_}
@@ -122,6 +133,7 @@ pipeline:
       branch: master
   node_package4stable:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=stable
@@ -138,6 +150,7 @@ pipeline:
       branch: master
   static_package4stable:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - stable_${DRONE_BRANCH//\//_}
@@ -197,6 +210,7 @@ pipeline:
       branch: release*
   node_package4stage:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=stage
@@ -212,6 +226,7 @@ pipeline:
       branch: release*
   static_package4stage:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - stage_${DRONE_BRANCH//\//_}
@@ -270,6 +285,7 @@ pipeline:
       branch: release*
   node_package4production:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=production
@@ -286,6 +302,7 @@ pipeline:
       branch: release*
   static_package4production:
     image: plugins/docker
+    group: package
     repo: storiqateam/stq-static
     tags:
     - prod_${DRONE_BRANCH//\//_}
@@ -330,6 +347,15 @@ pipeline:
 # Notifications and post-deploy ops
 ###
 
+#  rebuild-cache:
+#    image: plugins/s3-cache:1
+#    pull: true
+#    secrets: [ aws_access_key_id, aws_secret_access_key ]
+#    mount:
+#    - node_modules
+#    rebuild: true
+#    when:
+#      branch: [ master, release* ]
   notify_slack:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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

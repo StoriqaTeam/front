@@ -36,7 +36,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
 
     return (
       <div styleName="container">
-        <Dropdown withIcon>
+        <Dropdown withIcon dataTest="userDropdownButton">
           <trigger>
             <div styleName="user">
               <div styleName="avatar">

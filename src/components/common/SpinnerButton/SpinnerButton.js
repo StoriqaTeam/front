@@ -13,7 +13,7 @@ type PropsTypes = {
   medium: ?boolean,
   small: ?boolean,
   white: ?boolean,
-  dataTest: boolean,
+  dataTest: string,
 };
 
 const SpinerButton = ({
