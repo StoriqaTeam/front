@@ -1,0 +1,105 @@
+@import "../../styles/variables";
+
+.container {
+  flex: 1;
+
+  .topContentContainer {
+    display: flex;
+    flex-direction: row;
+    height: 3rem;
+    justify-content: space-between;
+    margin: 1rem 1rem 0.5rem 1rem;
+    position: relative;
+
+    .breadcrumbs {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: block;
+      }
+
+      .item {
+        display: inline-block;
+        color: $color_grey_minor;
+        font-size: 1.75rem;
+        cursor: pointer;
+
+        .separator {
+          margin: 0 1rem;
+        }
+
+      }
+
+    }
+
+    .sortingContainer {
+      display: flex;
+      flex-direction: row;
+    }
+
+  }
+  .productsContainer {
+
+    .loadMoreContainer {
+      display: flex;
+      height: 5rem;
+      margin-top: 2rem;
+      padding: 0 1rem;
+
+      .loadMoreButton {
+        align-items: center;
+        border: 1px solid $color_grey_light;
+        color: $color_grey;
+        cursor: pointer;
+        flex: 1;
+        justify-content: center;
+        padding: 1rem;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.cardWrapper {
+  display: inline-block;
+  height: 40rem;
+  position: relative;
+  vertical-align: bottom;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media (min-width: 992px) {
+    width: 33%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 25%;
+  }
+
+}
+
+.button {
+  margin-top: 2rem;
+}
+
+.active {
+  color: $color_blue !important;
+}
+
+.filtersButton {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8rem;
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+
+}

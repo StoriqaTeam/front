@@ -15,6 +15,7 @@ import CameraPlus from 'components/Icon/svg/cameraPlus.svg';
 import Cart from 'components/Icon/svg/cart.svg';
 import Cats from 'components/Icon/svg/cats.svg';
 import CloseArrow from 'components/Icon/svg/closeArrow.svg';
+import Controls from 'components/Icon/svg/controls.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
 import Eye from 'components/Icon/svg/eye.svg';
@@ -79,6 +80,7 @@ const iconsMap = {
   cats: <Cats />,
   chat: <Chat />,
   closeArrow: <CloseArrow />,
+  controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,
   eye: <Eye />,
