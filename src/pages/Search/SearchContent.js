@@ -9,6 +9,7 @@ import { Relay } from 'react-relay';
 import { flattenFunc, getNameText, searchPathByParent } from 'utils';
 import { Button } from 'components/common/Button';
 import { CardProduct } from 'components/CardProduct';
+import { Icon } from 'components/Icon';
 
 import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
 
@@ -20,6 +21,7 @@ type PropsType = {
   // eslint-disable-next-line
   search: CategoriesSearch,
   productsPerRequest: number,
+  onFilterMenu: () => void,
 };
 
 class SearchContent extends Component<PropsType> {
@@ -99,13 +101,27 @@ class SearchContent extends Component<PropsType> {
     );
   };
   render() {
-    const { relay } = this.props;
+    const { relay, onFilterMenu } = this.props;
     // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const productsWithVariants = map(item => item.node, products);
     return (
       <div styleName="container">
-        <div styleName="topContentContainer">{this.renderBreadcrumbs()}</div>
+        <div styleName="topContentContainer">
+          {this.renderBreadcrumbs()}
+          <span
+            onClick={onFilterMenu}
+            onKeyPress={() => {}}
+            role="button"
+            styleName="filtersButton"
+            tabIndex="-1"
+          >
+            <Icon type="controls" />
+            <span>
+              Filters
+            </span>
+          </span>
+        </div>
         <div styleName="productsContainer">
           {productsWithVariants &&
             map(

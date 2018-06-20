@@ -1,8 +1,9 @@
 @import "../../styles/variables";
 
 .container {
-  display: none;
-  max-width: 25.95rem;
+  background: $color_grey_bg;
+  padding: 1rem;
+  width: 25.95rem;
 
   .blockTitle {
     color: $color_grey_minor;
@@ -14,7 +15,7 @@
   }
 
   @media (min-width: 992px) {
-    display: block;
+    padding: 0;
   }
 
 }

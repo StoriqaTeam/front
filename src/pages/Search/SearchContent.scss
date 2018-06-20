@@ -6,10 +6,17 @@
   .topContentContainer {
     display: flex;
     flex-direction: row;
+    height: 3rem;
     justify-content: space-between;
-    margin: 0 1rem 0.5rem 1rem;
+    margin: 1rem 1rem 0.5rem 1rem;
+    position: relative;
 
     .breadcrumbs {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: block;
+      }
 
       .item {
         display: inline-block;
@@ -80,4 +87,19 @@
 
 .active {
   color: $color_blue !important;
+}
+
+.filtersButton {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8rem;
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+
 }

@@ -9,7 +9,7 @@ import { Page } from 'components/App';
 
 import SearchSidebar from './SearchSidebar';
 
-import { SearchContent } from './index';
+import { SearchContent, SearchMobileMenu } from './index';
 
 import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
 
@@ -20,20 +20,42 @@ type PropsType = {
   search: CategoriesSearch,
 };
 
+type StateType = {
+  isOpen: boolean,
+}
+
 const productsPerRequest = 24;
 
-class Categories extends PureComponent<PropsType> {
+class Categories extends PureComponent<PropsType, StateType> {
+  state = {
+    isOpen: false,
+  };
+  handleOpen = (): void => {
+    this.setState(({ isOpen }: StateType) => ({
+      isOpen: !isOpen,
+    }));
+  };
   render() {
     const { search, relay } = this.props;
+    const { isOpen } = this.state;
     return (
       <div styleName="container">
+        <SearchMobileMenu
+          isOpen={isOpen}
+          onClose={this.handleOpen}
+        >
+          <SearchSidebar search={search} />
+        </SearchMobileMenu>
         <Container>
           <Row>
             <Col sm={1} md={1} lg={2} xl={2}>
-              <SearchSidebar search={search} />
+              <div styleName="sidebarWrapper">
+                <SearchSidebar search={search} />
+              </div>
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
               <SearchContent
+                onFilterMenu={this.handleOpen}
                 productsPerRequest={productsPerRequest}
                 relay={relay}
                 search={search}
