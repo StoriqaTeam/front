@@ -175,7 +175,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     }));
   };
 
-  handleMobileSearch = () => {
+  handleMobileSearch = (): void => {
     this.setState(({ isMobileSearchOpen }) => ({
       isMobileSearchOpen: !isMobileSearchOpen,
     }));

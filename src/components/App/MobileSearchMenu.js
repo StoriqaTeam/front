@@ -37,9 +37,10 @@ const MobileSearchMenu = ({
           onClick={onClick}
           onKeyPress={() => {}}
           role="button"
+          styleName="close"
           tabIndex="-1"
         >
-          <Icon type="arrowRight" size="28" />
+          <Icon type="cross" size="16" />
         </span>
       </Col>
     </Row>

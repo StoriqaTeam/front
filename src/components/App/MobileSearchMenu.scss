@@ -18,10 +18,14 @@ $burger_menu_size: 7.5rem;
 
 }
 
-span[role="button"] {
+.close {
   left: -1rem;
   position: relative;
-  top: 2px;
+  top: 1.4rem;
+
+  svg {
+    fill: $color_blue;
+  }
 
   @media (min-width: 576px) {
     left: 0;
