@@ -1,17 +1,30 @@
 @import '../../styles/variables';
 
+$burger_menu_size: 7.5rem;
+
 .container {
   background: $color_white;
   height: 7.3rem;
   padding: 1.5rem 2rem 0 2rem;
   position: absolute;
   right: -100%;
-  transition: right 0.2s ease;
-  width: 100%;
+  transition: all 0.2s ease;
+  width: calc(100% - #{$burger_menu_size});
   z-index: 11;
 
   &.isOpen {
     right: 0;
+  }
+
+}
+
+span[role="button"] {
+  left: -1rem;
+  position: relative;
+  top: 2px;
+
+  @media (min-width: 576px) {
+    left: 0;
   }
 
 }

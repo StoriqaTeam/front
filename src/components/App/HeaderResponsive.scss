@@ -3,18 +3,19 @@
 $burger_menu_size: 7.5rem;
 
 .container {
+  margin: 0 auto;
+  max-width: 170rem;
+  overflow: hidden;
+  padding-bottom: 2rem;
   position: relative;
   width: 100%;
-  max-width: 170rem;
-  margin: 0 auto;
-  padding-bottom: 2rem;
 }
 
 .qaIcon {
-  position: relative;
-  top: 0.5rem;
   display: inline-block;
   margin-right: 0.5rem;
+  position: relative;
+  top: 0.5rem;
 }
 
 .headerBottom {
@@ -23,24 +24,28 @@ $burger_menu_size: 7.5rem;
 }
 
 .cartIcon {
-  width: 4rem;
   margin-left: 1rem;
+  width: 4rem;
 }
 
 .searchIcon {
   display: block;
   margin-right: 2rem;
   padding-top: 1rem;
-  @media (min-width: 768px) {
+
+  @media (min-width: 992px) {
     display: none;
   }
+
 }
 
 .searchBar {
   display: none;
+
   @media (min-width: 992px) {
     display: block;
   }
+
 }
 
 .userData {
@@ -57,14 +62,14 @@ $burger_menu_size: 7.5rem;
 }
 
 .logoIcon {
-  margin-left: calc(#{$burger-menu-size} + 1.875rem);
-  max-width: 15rem;
+  margin-left: calc(#{$burger_menu_size} + 1.875rem);
+  width: 15rem;
 
   @media (min-width: 768px) {
-    max-width: 24rem;
+    width: 24rem;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1200px) {
     margin-left: 0;
   }
 
@@ -74,12 +79,12 @@ $burger_menu_size: 7.5rem;
   align-items: center;
   border-right: 1px solid $color_grey_light;
   display: flex;
-  height: $burger-menu-size;
+  height: $burger_menu_size;
   justify-content: center;
   left: 0;
   position: absolute;
   top: 0;
-  width: $burger-menu-size;
+  width: $burger_menu_size;
   z-index: 10;
 
   @media (min-width: 992px) {

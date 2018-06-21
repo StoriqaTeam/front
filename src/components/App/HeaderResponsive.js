@@ -178,12 +178,18 @@ class HeaderResponsive extends Component<PropsType, StateType> {
   handleMobileSearch = () => {
     this.setState(({ isMobileSearchOpen }) => ({
       isMobileSearchOpen: !isMobileSearchOpen,
-    }))
+    }));
   };
 
   render() {
     const { searchValue } = this.props;
-    const { showModal, isSignUp, userData, isMenuToggled, isMobileSearchOpen } = this.state;
+    const {
+      showModal,
+      isSignUp,
+      userData,
+      isMenuToggled,
+      isMobileSearchOpen,
+    } = this.state;
     const searchCategories = [
       { id: 'products', label: 'Products' },
       { id: 'stores', label: 'Shops' },

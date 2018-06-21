@@ -9,9 +9,9 @@ import './MobileSearchMenu.scss';
 
 type PropsType = {
   isOpen: boolean,
-  searchCategories: Array<{id: string, label: string}>,
+  searchCategories: Array<{ id: string, label: string }>,
   searchValue: any,
-  onClick: () => void
+  onClick: () => void,
 };
 
 const MobileSearchMenu = ({
@@ -20,9 +20,10 @@ const MobileSearchMenu = ({
   searchValue,
   onClick,
 }: PropsType) => (
-  <div styleName={classNames('container', {
-    isOpen,
-  })}
+  <div
+    styleName={classNames('container', {
+      isOpen,
+    })}
   >
     <Row>
       <Col size={11} sm={11} md={11} lg={11} xl={11}>
