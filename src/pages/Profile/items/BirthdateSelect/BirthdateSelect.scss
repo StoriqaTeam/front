@@ -21,6 +21,8 @@
 }
 
 .item {
+  display: flex;
+  flex: 1;
   & + .item {
     margin-left: 2rem;
   }

@@ -252,7 +252,7 @@ class PersonalData extends Component<PropsType, StateType> {
     const { data, isLoading, formErrors } = this.state;
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
-      <Fragment>
+      <div styleName="personalData">
         <div styleName="subtitle">
           <strong>{subtitle}</strong>
         </div>
@@ -278,6 +278,7 @@ class PersonalData extends Component<PropsType, StateType> {
         </div>
         <div styleName="formItem">
           <BirthdateSelect
+            label="Birthdate"
             birthdate={data.birthdate}
             handleBirthdateSelect={this.handleBirthdateSelect}
             errors={propOr(null, 'birthdate', formErrors)}
@@ -296,7 +297,7 @@ class PersonalData extends Component<PropsType, StateType> {
             Save
           </SpinnerButton>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

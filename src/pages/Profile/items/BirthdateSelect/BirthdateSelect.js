@@ -10,6 +10,7 @@ import './BirthdateSelect.scss';
 type ItemType = { id: string, label: string };
 
 type PropsType = {
+  label: ?label,
   handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
   errors: ?Array<string>,
@@ -150,6 +151,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
     <div styleName="item">
       <Select
         isBirthdate
+        forForm
         label={label}
         activeItem={this.state[`${id}Value`]}
         items={this.state[`${id}s`]}
@@ -160,10 +162,10 @@ class BirthdateSelect extends Component<PropsType, StateType> {
   );
 
   render() {
-    const { errors } = this.props;
+    const { errors, label } = this.props;
     return (
       <div styleName="container">
-        <div styleName="label">Birthdate</div>
+        {label && <div styleName="label">{label}</div>}
         <div styleName="items">
           {this.renderSelect('year', 'Year')}
           {this.renderSelect('month', 'Month')}
