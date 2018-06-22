@@ -303,11 +303,37 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
     if (data) {
+      const addressFull = pathOr(null, ['addressFull'], data);
       this.updateWizard({
         ...omit(
-          ['id', 'rawId', 'stepOne', 'stepTwo', 'stepThree', 'store'],
+          [
+            'id',
+            'rawId',
+            'stepOne',
+            'stepTwo',
+            'stepThree',
+            'store',
+            'addressFull',
+          ],
           data,
         ),
+        addressFull: {
+          ...pick(
+            [
+              'value',
+              'country',
+              'administrativeAreaLevel1',
+              'administrativeAreaLevel2',
+              'locality',
+              'political',
+              'postalCode',
+              'route',
+              'streetNumber',
+              'placeId',
+            ],
+            addressFull,
+          ),
+        },
       });
     }
   }, 250);
