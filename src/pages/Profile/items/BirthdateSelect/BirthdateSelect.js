@@ -10,7 +10,7 @@ import './BirthdateSelect.scss';
 type ItemType = { id: string, label: string };
 
 type PropsType = {
-  label: ?label,
+  label: ?string,
   handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
   errors: ?Array<string>,
