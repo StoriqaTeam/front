@@ -15,10 +15,12 @@ import {
   reject,
   isNil,
 } from 'ramda';
+import classNames from 'classnames';
 
 import { Authorization } from 'components/Authorization';
 import { CartButton } from 'components/CartButton';
 import { Icon } from 'components/Icon';
+import { MobileListItems } from 'components/MobileListItems';
 import { MobileMenu } from 'components/MobileMenu';
 import { Modal } from 'components/Modal';
 import { SearchInput } from 'components/SearchInput';
@@ -83,6 +85,7 @@ type StateType = {
   },
   isMenuToggled: boolean,
   isMobileSearchOpen: boolean,
+  isMobileCategoriesOpen: boolean,
 };
 
 class HeaderResponsive extends Component<PropsType, StateType> {
@@ -93,6 +96,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     userData: null,
     isMenuToggled: false,
     isMobileSearchOpen: false,
+    isMobileCategoriesOpen: false,
   };
 
   componentWillMount() {
@@ -178,12 +182,14 @@ class HeaderResponsive extends Component<PropsType, StateType> {
   handleMobileSearch = (): void => {
     this.setState(({ isMobileSearchOpen }) => ({
       isMobileSearchOpen: !isMobileSearchOpen,
+      isMobileCategoriesOpen: false,
     }));
   };
 
   handleDropDown = (): void => {
-    // console.log('this.props!!!', this.props);
-    console.log('sisa');
+    this.setState(({ isMobileCategoriesOpen }) => ({
+      isMobileCategoriesOpen: !isMobileCategoriesOpen,
+    }));
   };
   render() {
     const { searchValue } = this.props;
@@ -193,6 +199,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       userData,
       isMenuToggled,
       isMobileSearchOpen,
+      isMobileCategoriesOpen,
     } = this.state;
     const searchCategories = [
       { id: 'products', label: 'Products' },
@@ -212,7 +219,12 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       </div>
     );
     return (
-      <header styleName="container">
+      <header styleName={
+        classNames('container', {
+          expand: isMobileCategoriesOpen
+        })
+      }
+      >
         <MobileSearchMenu
           isOpen={isMobileSearchOpen}
           searchCategories={searchCategories}
@@ -279,6 +291,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             onCloseModal={this.handleCloseModal}
           />
         </Modal>
+        {isMobileCategoriesOpen ? (
+          <MobileListItems
+            items={searchCategories}
+          />
+        ) : null }
       </header>
     );
   }
