@@ -153,6 +153,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         onKeyDown={() => {}}
         role="button"
         tabIndex="0"
+        data-test="categorySelector"
       >
         {snapshot &&
           [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map(
