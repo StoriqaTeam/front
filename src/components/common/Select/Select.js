@@ -13,11 +13,6 @@ type StateType = {
   items: Array<{ id: string, label: string }>,
 };
 
-type SelectType = {
-  id: string,
-  label: string,
-};
-
 type PropsType = {
   transparent: ?boolean,
   items: Array<{ id: string, label: string }>,
@@ -34,9 +29,20 @@ type PropsType = {
   dataTest: string,
   withEmpty?: boolean,
   isBirthdate?: boolean,
+  onClick: () => void,
+  isMobile: boolean,
+};
+
+type SelectType = {
+  id: string,
+  label: string,
 };
 
 class Select extends Component<PropsType, StateType> {
+  static defaultProps = {
+    onClick: () => {},
+    isMobile: false,
+  };
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -67,13 +73,14 @@ class Select extends Component<PropsType, StateType> {
   itemsWrap: any;
   items: any;
 
-  handleToggleExpand = (e: any) => {
+  handleToggleExpand = (e: any): void => {
+    const { onClick } = this.props;
     const isButtonClick = this.button && this.button.contains(e.target);
     const isItemsWrap = this.itemsWrap && this.itemsWrap.contains(e.target);
     const isItems = this.items && this.items.contains(e.target);
 
     if (isButtonClick && !isItems && !isItemsWrap) {
-      this.setState({ isExpanded: !this.state.isExpanded });
+      this.setState({ isExpanded: !this.state.isExpanded }, onClick);
       return;
     }
 
@@ -82,7 +89,7 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  handleItemClick = (e: any) => {
+  handleItemClick = (e: any): void => {
     const { onSelect, items } = this.props;
     if (this.props && onSelect) {
       onSelect(find(propEq('id', e.target.id))(items));
@@ -101,6 +108,7 @@ class Select extends Component<PropsType, StateType> {
       containerStyle,
       dataTest,
       isBirthdate,
+      isMobile,
     } = this.props;
     const { isExpanded, items } = this.state;
 
@@ -143,6 +151,7 @@ class Select extends Component<PropsType, StateType> {
             }}
             styleName={classNames('items', {
               hidden: !isExpanded,
+              isMobile,
             })}
           >
             <div

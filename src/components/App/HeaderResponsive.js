@@ -181,6 +181,10 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     }));
   };
 
+  handleDropDown = (): void => {
+    // console.log('this.props!!!', this.props);
+    console.log('sisa');
+  };
   render() {
     const { searchValue } = this.props;
     const {
@@ -214,7 +218,14 @@ class HeaderResponsive extends Component<PropsType, StateType> {
           searchCategories={searchCategories}
           searchValue={searchValue}
           onClick={this.handleMobileSearch}
-        />
+        >
+          <SearchInput
+            isMobile
+            onDropDown={this.handleDropDown}
+            searchCategories={searchCategories}
+            searchValue={searchValue}
+          />
+        </MobileSearchMenu>
         <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
         <Container>
           <BurgerMenu />
