@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import Header from './Header';
+import TableTitle from './TableTitle';
 
 type PropsType = {
   //
@@ -13,6 +14,7 @@ class Orders extends PureComponent<PropsType> {
     return (
       <div>
         <Header />
+        <TableTitle />
       </div>
     );
   }

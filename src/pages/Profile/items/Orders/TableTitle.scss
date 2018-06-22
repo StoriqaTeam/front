@@ -1,0 +1,36 @@
+@import '../../../../styles/variables';
+
+.container {
+  color: $color_grey_minor;
+  display: flex;
+  line-height: 2.5rem;
+  font-size: 14px;
+  justify-content: space-between;
+  margin-top: 4.5rem;
+  margin-bottom: 2rem;
+}
+
+.cellNumber {
+  width: 12.25rem;
+}
+.cellDate {
+  width: 13rem;
+}
+.cellShop {
+  width: 10rem;
+}
+.cellDelivery {
+  width: 15.25rem;
+}
+.cellItems {
+  width: 18.5rem;
+}
+.cellPrice {
+  width: 17.75rem;
+}
+.cellPayment {
+  width: 14.75rem;
+}
+.cellStatus {
+  width: 16.25rem;
+}
