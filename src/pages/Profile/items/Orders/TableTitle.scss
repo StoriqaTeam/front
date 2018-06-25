@@ -8,6 +8,7 @@
   justify-content: space-between;
   margin-top: 4.5rem;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .cellNumber {
@@ -33,4 +34,12 @@
 }
 .cellStatus {
   width: 16.25rem;
+}
+.border {
+  background-color: #efefef;
+  height: 0.125rem;
+  position: absolute;
+  bottom: -2rem;
+  left: -4rem;
+  right: -4rem;
 }

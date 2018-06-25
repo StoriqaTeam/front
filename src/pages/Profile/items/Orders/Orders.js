@@ -1,23 +1,19 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 import Header from './Header';
 import TableTitle from './TableTitle';
+import Table from './Table';
 
-type PropsType = {
-  //
-};
+import tableData from './table.mock.json';
 
-class Orders extends PureComponent<PropsType> {
-  render() {
-    return (
-      <div>
-        <Header />
-        <TableTitle />
-      </div>
-    );
-  }
-}
+const Orders = () => (
+  <div>
+    <Header />
+    <TableTitle />
+    <Table items={tableData} />
+  </div>
+);
 
 export default Orders;

@@ -14,6 +14,7 @@ const TableTitle = () => (
     <span styleName="cellPrice">Price</span>
     <span styleName="cellPayment">Payment</span>
     <span styleName="cellStatus">Status</span>
+    <div styleName="border" />
   </div>
 );
 
