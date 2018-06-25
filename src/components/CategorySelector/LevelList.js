@@ -38,6 +38,7 @@ const LevelList = ({ items, onClick, lang, selectedItem }: LevelListType) => (
             styleName={classNames('item', {
               selectedItem: selectedItem === item,
             })}
+            data-test={`categoryItem_${item.rawId || ''}`}
           >
             {getNameText(item.name, lang)}
           </div>
