@@ -25,13 +25,11 @@ class Header extends Component<PropsType, StateType> {
     this.setState({ searchTerm: e.target.value });
   };
 
-  handleOrderStatusChange = (item: { id: string, label: string }) => {
-    console.log({ item });
-  };
+  // eslint-disable-next-line
+  handleOrderStatusChange = (item: { id: string, label: string }) => {};
 
-  handleOrderDateChange = (item: { id: string, label: string }) => {
-    console.log({ item });
-  };
+  // eslint-disable-next-line
+  handleOrderDateChange = (item: { id: string, label: string }) => {};
 
   render() {
     const { searchTerm } = this.state;
