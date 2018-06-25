@@ -1,0 +1,53 @@
+@import '../../../../styles/variables';
+
+.container {
+  display: flex;
+  height: 12rem;
+  margin-left: -4rem;
+  margin-right: -4rem;
+  position: relative;
+  align-items: center;
+  color: $color_grey;
+}
+
+.numberCell {
+  margin-left: 4rem;
+  width: 12.25rem;
+}
+.dateCell {
+  margin-left: 2rem;
+  width: 12.25rem;
+}
+.shopCell {
+  margin-left: 2rem;
+  width: 10rem;
+}
+.deliveryCell {
+  margin-left: 2rem;
+  width: 14.75rem;
+}
+.itemCell {
+  margin-left: 2rem;
+  width: 18.5rem;
+}
+.priceCell {
+  margin-left: 2rem;
+  width: 17.75rem;
+}
+.paymentCell {
+  margin-left: 2rem;
+  width: 15rem;
+}
+.statusCell {
+  margin-left: 1rem;
+  width: 16.25rem;
+}
+
+.border {
+  background-color: #efefef;
+  height: 0.125rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
