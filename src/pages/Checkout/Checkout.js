@@ -59,20 +59,6 @@ class Checkout extends Component<PropsType, StateType> {
 
   componentWillUnmount() {}
 
-  getDeliveryItems = () => {
-    const deliveryAddresses = pathOr(
-      null,
-      ['me', 'deliveryAddresses'],
-      this.props,
-    );
-    return map(i => {
-      if (!i.address || !i.address.value) {
-        return null;
-      }
-      return { id: i.address.value, label: i.address.value };
-    }, deliveryAddresses);
-  };
-
   handleChangeStep = step => {
     console.log('**** step: ', step);
     this.setState({ step });
@@ -83,13 +69,9 @@ class Checkout extends Component<PropsType, StateType> {
     return true;
   };
 
-  handleOnSelectAddress = item => {
-    console.log('>>> handle on select address item: ', { item });
-    this.setState({ selectedAddress: item });
-  };
-
-  handleOnChangeNewAddress = (data: any) => {
-    this.setState(prevState => ({}));
+  handleOnChangeOrderInput = orderInput => {
+    console.log('>>> handleOnChangeOrderInput data: ', { orderInput });
+    this.setState({ orderInput });
   };
 
   render() {
@@ -97,7 +79,13 @@ class Checkout extends Component<PropsType, StateType> {
     // const deliveryAddresses = pathOr(null, ['me', 'deliveryAddresses'], this.props);
     // const { me } = this.props;
 
-    const { step, selectedAddress, newAddress } = this.state;
+    const deliveryAddresses = pathOr(
+      null,
+      ['me', 'deliveryAddresses'],
+      this.props,
+    );
+    const { step, selectedAddress, newAddress, orderInput } = this.state;
+    console.log('>>> Checkout state : ', { orderInput });
     return (
       <Container withoutGrow>
         <Row withoutGrow>
@@ -114,10 +102,9 @@ class Checkout extends Component<PropsType, StateType> {
                 <div styleName="container">
                   {step === 1 && (
                     <CheckoutAddress
-                      deliveryItems={this.getDeliveryItems()}
-                      onSelectAddress={this.handleOnSelectAddress}
-                      selectedAddress={selectedAddress}
-                      newAddress={newAddress}
+                      deliveryAddresses={deliveryAddresses || []}
+                      orderInput={orderInput}
+                      onChangeOrderInput={this.handleOnChangeOrderInput}
                     />
                   )}
                   {step === 2 && (

@@ -9,6 +9,15 @@
     font-size: 1.75rem;
   }
 
+  .receiverContainer {
+    margin-top: 2rem;
+
+    .label {
+      font-size: 1.75rem;
+      color: $color_grey_minor;
+    }
+  }
+
   .selectAddressContainer {
     padding-top: 2rem;
     margin-bottom: 4rem;
