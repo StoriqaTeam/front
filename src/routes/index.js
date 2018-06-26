@@ -21,6 +21,7 @@ import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
 import Cart from 'pages/Cart';
+import Checkout from 'pages/Checkout';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
@@ -120,6 +121,19 @@ const routes = (
         render={({ props, Component }) => <Component {...props} />}
         Component={Cart}
       />
+
+      <Route
+        path="/checkout"
+        Component={Checkout}
+        query={graphql`
+          query routes_Checkout_Query {
+            me {
+              ...Checkout_me
+            }
+          }
+        `}
+      />
+
       <Route
         path="/categories"
         Component={Categories}

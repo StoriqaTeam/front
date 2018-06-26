@@ -1,26 +1,13 @@
 @import "../../styles/variables.scss";
 
 .container {
-  padding: 0 2rem 2rem 2rem;
-  font-family: $font_medium;
-  color: $color_grey;
-  min-height: 90rem;
-}
+  width: 100%;
+  background-color: $color_white;
+  padding: 4rem;
 
-.stores-container {
-  flex-grow: 1;
-}
-
-.total-container {
-  position: relative;
-  width: 40rem;
-  margin-left: 2rem;
-}
-
-.body-container {
-  display: flex;
-}
-
-.header {
-  padding: 0 0 1rem 2rem;
+  .title {
+    text-transform: uppercase;
+    font-family: $font_medium;
+    font-size: 1.75rem;
+  }
 }

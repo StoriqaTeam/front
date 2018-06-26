@@ -1,0 +1,26 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  background-color: $color_white;
+
+  .title {
+    text-transform: uppercase;
+    font-family: $font_medium;
+    font-size: 1.75rem;
+  }
+
+  .selectAddressContainer {
+    padding-top: 2rem;
+    margin-bottom: 4rem;
+
+    .selectWrapper {
+      margin-top: 1rem;
+      padding-left: 3rem;
+      color: $color_grey_minor;
+      font-size: 1.75rem;
+    }
+  }
+  .newAddressForm {
+    
+  }
+}

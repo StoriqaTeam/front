@@ -1,17 +1,17 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React from 'react';
+import classNames from 'classnames';
 
 import './Container.scss';
 
 type PropsTypes = {
+  withoutGrow: ?boolean,
   children: any,
 };
 
-class Container extends PureComponent<PropsTypes> {
-  render() {
-    return <div styleName="container">{this.props.children}</div>;
-  }
-}
+const Container = ({ children, withoutGrow }: PropsTypes) => (
+  <div styleName={classNames('container', { withoutGrow })}>{children}</div>
+);
 
 export default Container;
