@@ -1,0 +1,41 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+  margin-top: 6.5rem;
+  position: relative;
+}
+
+.title {
+  font-size: 14px;
+  letter-spacing: 0.15rem;
+}
+
+.headerContainer {
+  display: flex;
+  color: $color_grey_minor;
+  font-size: 14px;
+  line-height: 1.43;
+  margin-top: 3.5rem;
+}
+
+.headerDate {
+}
+
+.headerManager {
+}
+
+.headerStatus {
+}
+
+.headerAdditionalInfo {
+}
+
+.border {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  background-color: #efefef;
+  margin-top: 2rem;
+}
