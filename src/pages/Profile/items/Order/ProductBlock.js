@@ -32,8 +32,9 @@ class ProductBlock extends PureComponent<PropsType> {
     }>,
   ) => (
     <div>
-      {attributes.map(item => (
-        <div styleName="attributeWrapper">
+      {attributes.map((item, idx) => (
+        // eslint-disable-next-line
+        <div styleName="attributeWrapper" key={`order-attribute-${idx}`}>
           <div styleName="attributeName">{item.name}</div>
           <div styleName="attributeValue">{item.value}</div>
         </div>
