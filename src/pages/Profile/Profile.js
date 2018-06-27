@@ -11,6 +11,7 @@ import {
   Security,
   KYC,
 } from 'pages/Profile/items';
+import { Orders } from 'pages/Profile/items/Orders';
 import Menu from 'pages/Profile/Menu';
 import { Container, Row, Col } from 'layout';
 
@@ -34,6 +35,7 @@ const menuItems = [
   { id: 'personal-data', title: 'Personal data' },
   { id: 'shipping-addresses', title: 'Shipping addresses' },
   { id: 'security', title: 'Security' },
+  { id: 'orders', title: 'My orders' },
   { id: 'kyc', title: 'KYC' },
 ];
 
@@ -41,6 +43,7 @@ const profileMenuMap = {
   'personal-data': <PersonalData />,
   'shipping-addresses': <ShippingAddresses />,
   security: <Security />,
+  orders: <Orders />,
   kyc: <KYC />,
 };
 
@@ -49,6 +52,7 @@ class Profile extends Component<PropsType, StateType> {
     const { activeItem, me } = this.props;
     // $FlowIgnoreMe
     const element = pathOr(null, [activeItem], profileMenuMap);
+    // $FlowIgnoreMe
     return cloneElement(element, {
       data: me,
       subtitle,

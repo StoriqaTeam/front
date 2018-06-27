@@ -1,17 +1,35 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React from 'react';
+import classNames from 'classnames';
 
 import './Row.scss';
 
 type PropsTypes = {
   children: any,
+  reverseSm: ?boolean,
+  reverseMd: ?boolean,
+  reverseLg: ?boolean,
+  reverseXl: ?boolean,
 };
 
-class Row extends PureComponent<PropsTypes> {
-  render() {
-    return <div styleName="container">{this.props.children}</div>;
-  }
-}
+const Row = ({
+  children,
+  reverseSm,
+  reverseMd,
+  reverseLg,
+  reverseXl,
+}: PropsTypes) => (
+  <div
+    styleName={classNames('container', {
+      reverseSm,
+      reverseMd,
+      reverseLg,
+      reverseXl,
+    })}
+  >
+    {children}
+  </div>
+);
 
 export default Row;
