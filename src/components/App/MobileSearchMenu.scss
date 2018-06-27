@@ -4,16 +4,19 @@ $burger_menu_size: 7.5rem;
 
 .container {
   background: $color_white;
+  display: none;
   height: 7.3rem;
   padding: 1.5rem 2rem 0 2rem;
   position: absolute;
   right: -100%;
   transition: all 0.2s ease;
-  width: calc(100% - #{$burger_menu_size});
+  width: 0;
   z-index: 11;
 
   &.isOpen {
+    display: block;
     right: 0;
+    width: calc(100% - #{$burger_menu_size});
   }
 
 }

@@ -22,7 +22,6 @@ import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { urlToInput, inputToUrl } from 'utils';
 
-
 import './SearchInput.scss';
 
 type PropsType = {

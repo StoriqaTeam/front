@@ -30,7 +30,12 @@ import { Container, Row, Col } from 'layout';
 
 import { setWindowTag } from 'utils';
 
-import { HeaderTop, AuthButtons, MobileSearchMenu, HeaderContext } from './index';
+import {
+  HeaderTop,
+  AuthButtons,
+  MobileSearchMenu,
+  HeaderContext,
+} from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 
@@ -71,7 +76,7 @@ const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
 
 type MobileCategory = {
   label: string,
-  id: string
+  id: string,
 };
 
 type PropsType = {
@@ -184,7 +189,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     this.setState(({ isMobileCategoriesOpen }) => ({
       isMobileCategoriesOpen: !isMobileCategoriesOpen,
     }));
-  }
+  };
 
   handleMobileMenu = (): void => {
     this.setState(({ isMenuToggled }) => ({
@@ -204,12 +209,14 @@ class HeaderResponsive extends Component<PropsType, StateType> {
   };
 
   handleMobileCategories = (selectedCategory: MobileCategory) => {
-    this.setState({
-      selectedCategory,
-    }, () => {
-      this.closeMobileCategories();
-    });
-
+    this.setState(
+      {
+        selectedCategory,
+      },
+      () => {
+        this.closeMobileCategories();
+      },
+    );
   };
 
   render() {
@@ -241,12 +248,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       </div>
     );
     return (
-      <HeaderContext.Provider value={{selectedCategory}}>
-        <header styleName={
-          classNames('container', {
-            expand: isMobileCategoriesOpen
-          })
-        }
+      <HeaderContext.Provider value={{ selectedCategory }}>
+        <header
+          styleName={classNames('container', {
+            expand: isMobileCategoriesOpen,
+          })}
         >
           <MobileSearchMenu
             isOpen={isMobileSearchOpen}
@@ -319,7 +325,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               onClick={this.handleMobileCategories}
               items={searchCategories}
             />
-          ) : null }
+          ) : null}
         </header>
       </HeaderContext.Provider>
     );

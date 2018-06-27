@@ -4,7 +4,7 @@ import { Icon } from 'components/Icon';
 import './MobileListItems.scss';
 
 type PropsType = {
-  items: Array<{id: string, label: string}>,
+  items: Array<{ id: string, label: string }>,
   onClick: any => any,
   idName: string,
 };
@@ -46,9 +46,7 @@ class MobileListItems extends Component<PropsType, StateType> {
             styleName={`item ${selected === index ? 'active' : ''}`}
             tabIndex="-1"
           >
-            {selected === index ? (
-              <span styleName="activeBorder" />
-            ) : null}
+            {selected === index ? <span styleName="activeBorder" /> : null}
             <span>
               <p styleName="linkName">{item.label}</p>
             </span>
