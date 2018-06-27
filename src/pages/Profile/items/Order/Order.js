@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import { Button } from 'components/common/Button';
+import { timeFromTimestamp, fullDateFromTimestamp } from 'utils/formatDate';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -41,7 +42,8 @@ class Order extends PureComponent<PropsType> {
     return order;
   };
 
-  getDateFromTimestamp = (timestamp: number): string => '2 november 2017';
+  getDateFromTimestamp = (timestamp: number): string =>
+    fullDateFromTimestamp(timestamp);
 
   getTimeFromTimestamp = (timestamp: number): string => '12:55';
 
