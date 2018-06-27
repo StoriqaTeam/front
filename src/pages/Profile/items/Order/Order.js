@@ -45,7 +45,8 @@ class Order extends PureComponent<PropsType> {
   getDateFromTimestamp = (timestamp: number): string =>
     fullDateFromTimestamp(timestamp);
 
-  getTimeFromTimestamp = (timestamp: number): string => '12:55';
+  getTimeFromTimestamp = (timestamp: number): string =>
+    timeFromTimestamp(timestamp);
 
   render() {
     const order = this.getOrderDTO();

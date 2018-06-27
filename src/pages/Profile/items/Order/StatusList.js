@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import { addIndex, map } from 'ramda';
 
+import { timeFromTimestamp, shortDateFromTimestamp } from 'utils/formatDate';
+
 import './StatusList.scss';
 
 export type OrderStatusType = {
@@ -17,7 +19,8 @@ type PropsType = {
 };
 
 class StatusList extends PureComponent<PropsType> {
-  dateStringFromTimestamp = (timestamp: number) => '8 nov 2017 08:12';
+  dateStringFromTimestamp = (timestamp: number) =>
+    `${shortDateFromTimestamp(timestamp)} ${timeFromTimestamp(timestamp)}`;
 
   renderTitle = () => (
     <div styleName="headerContainer">
