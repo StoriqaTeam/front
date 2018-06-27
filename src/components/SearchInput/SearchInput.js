@@ -17,7 +17,6 @@ import {
 import classNames from 'classnames';
 import { withRouter, matchShape } from 'found';
 
-import { HeaderContext } from 'components/App';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { urlToInput, inputToUrl } from 'utils';
@@ -32,6 +31,7 @@ type PropsType = {
   match: matchShape,
   onDropDown: () => void,
   isMobile: boolean,
+  selectedCategory: ?{ id: string, label: string },
 };
 
 type StateType = {
@@ -116,6 +116,7 @@ class SearchInput extends Component<PropsType, StateType> {
   };
 
   handleSearch = (): void => {
+    const { selectedCategory } = this.props;
     const { inputValue, activeItem } = this.state;
     // $FlowIgnoreMe
     const pathname = pathOr(
@@ -130,7 +131,9 @@ class SearchInput extends Component<PropsType, StateType> {
     const newPreparedObj = assocPath(['name'], inputValue, oldPreparedObj);
     const newUrl = inputToUrl(newPreparedObj);
 
-    switch (activeItem && activeItem.id) {
+    switch (
+      (selectedCategory && selectedCategory.id) || (activeItem && activeItem.id)
+    ) {
       case 'stores':
         if (pathname === 'stores') {
           this.props.router.push(`/stores${newUrl}`);
@@ -163,64 +166,60 @@ class SearchInput extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { onDropDown, isMobile } = this.props;
+    const { onDropDown, isMobile, selectedCategory } = this.props;
     return (
-      <HeaderContext.Consumer>
-        {({ selectedCategory }) => (
-          <div styleName="container">
-            <div styleName="searchCategorySelect">
-              <Select
-                isMobile={isMobile}
-                onClick={onDropDown}
-                forAutocomlete
-                activeItem={selectedCategory || this.state.activeItem}
-                items={this.props.searchCategories || []}
-                onSelect={this.handleSearchDropDownSelect}
-                dataTest="searchInputSelect"
-              />
-            </div>
-            <div styleName="searchInput">
-              <Autocomplete
-                wrapperStyle={{ display: 'flex', width: '100%' }}
-                renderInput={props => (
-                  <div styleName="inputWrapper">
-                    <input
-                      {...props}
-                      styleName="input"
-                      onFocus={this.onFocus}
-                      onBlur={this.onBlur}
-                      placeholder="I find..."
-                      data-test="searchInput"
-                    />
-                  </div>
-                )}
-                items={this.state.items}
-                getItemValue={item => item.label}
-                renderItem={(item, isHighlighted) => (
-                  <div
-                    key={item.id}
-                    styleName={classNames('searchMenuItem', {
-                      highlighted: isHighlighted,
-                    })}
-                  >
-                    {item.label}
-                  </div>
-                )}
-                value={this.state.inputValue}
-                onChange={this.handleInputChange}
-                open={false}
-              />
-            </div>
-            <button
-              styleName="searchButton"
-              onClick={this.handleSearch}
-              data-test="searchButton"
-            >
-              <Icon inline type="magnifier" size="16" />
-            </button>
-          </div>
-        )}
-      </HeaderContext.Consumer>
+      <div styleName="container">
+        <div styleName="searchCategorySelect">
+          <Select
+            isMobile={isMobile}
+            onClick={onDropDown}
+            forAutocomlete
+            activeItem={selectedCategory || this.state.activeItem}
+            items={this.props.searchCategories || []}
+            onSelect={this.handleSearchDropDownSelect}
+            dataTest="searchInputSelect"
+          />
+        </div>
+        <div styleName="searchInput">
+          <Autocomplete
+            wrapperStyle={{ display: 'flex', width: '100%' }}
+            renderInput={props => (
+              <div styleName="inputWrapper">
+                <input
+                  {...props}
+                  styleName="input"
+                  onFocus={this.onFocus}
+                  onBlur={this.onBlur}
+                  placeholder="I find..."
+                  data-test="searchInput"
+                />
+              </div>
+            )}
+            items={this.state.items}
+            getItemValue={item => item.label}
+            renderItem={(item, isHighlighted) => (
+              <div
+                key={item.id}
+                styleName={classNames('searchMenuItem', {
+                  highlighted: isHighlighted,
+                })}
+              >
+                {item.label}
+              </div>
+            )}
+            value={this.state.inputValue}
+            onChange={this.handleInputChange}
+            open={false}
+          />
+        </div>
+        <button
+          styleName="searchButton"
+          onClick={this.handleSearch}
+          data-test="searchButton"
+        >
+          <Icon inline type="magnifier" size="16" />
+        </button>
+      </div>
     );
   }
 }

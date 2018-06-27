@@ -4,7 +4,6 @@ export { default as AuthButtons } from './AuthButtons';
 export { default as Footer } from './Footer';
 export { default as FooterResponsive } from './FooterResponsive';
 export { default as Header } from './Header';
-export { default as HeaderContext } from './HeaderContext';
 export { default as HeaderResponsive } from './HeaderResponsive';
 export { default as HeaderTop } from './HeaderTop';
 export { default as InfoBlock } from './InfoBlock';

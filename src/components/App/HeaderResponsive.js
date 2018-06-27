@@ -30,12 +30,7 @@ import { Container, Row, Col } from 'layout';
 
 import { setWindowTag } from 'utils';
 
-import {
-  HeaderTop,
-  AuthButtons,
-  MobileSearchMenu,
-  HeaderContext,
-} from './index';
+import { HeaderTop, AuthButtons, MobileSearchMenu } from './index';
 
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 
@@ -248,86 +243,85 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       </div>
     );
     return (
-      <HeaderContext.Provider value={{ selectedCategory }}>
-        <header
-          styleName={classNames('container', {
-            expand: isMobileCategoriesOpen,
-          })}
+      <header
+        styleName={classNames('container', {
+          expand: isMobileCategoriesOpen,
+        })}
+      >
+        <MobileSearchMenu
+          isOpen={isMobileSearchOpen}
+          searchCategories={searchCategories}
+          searchValue={searchValue}
+          onClick={this.handleMobileSearch}
         >
-          <MobileSearchMenu
-            isOpen={isMobileSearchOpen}
+          <SearchInput
+            isMobile
+            selectedCategory={selectedCategory}
+            onDropDown={this.handleDropDown}
             searchCategories={searchCategories}
             searchValue={searchValue}
-            onClick={this.handleMobileSearch}
-          >
-            <SearchInput
-              isMobile
-              onDropDown={this.handleDropDown}
-              searchCategories={searchCategories}
-              searchValue={searchValue}
-            />
-          </MobileSearchMenu>
-          <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
-          <Container>
-            <BurgerMenu />
-            <HeaderTop />
-            <div styleName="headerBottom">
-              <Row>
-                <Col size={7} sm={4} md={4} lg={3} xl={3}>
-                  <div styleName="logo">
-                    <div styleName="logoIcon">
-                      <Link to="/" data-test="logoLink">
-                        <Icon type="logo" />
-                      </Link>
-                    </div>
+          />
+        </MobileSearchMenu>
+        <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
+        <Container>
+          <BurgerMenu />
+          <HeaderTop />
+          <div styleName="headerBottom">
+            <Row>
+              <Col size={7} sm={4} md={4} lg={3} xl={3}>
+                <div styleName="logo">
+                  <div styleName="logoIcon">
+                    <Link to="/" data-test="logoLink">
+                      <Icon type="logo" />
+                    </Link>
                   </div>
-                </Col>
-                <Col size={1} sm={5} md={3} lg={6} xl={6}>
-                  <div styleName="searchBar">
-                    <SearchInput
-                      searchCategories={searchCategories}
-                      searchValue={searchValue}
-                    />
+                </div>
+              </Col>
+              <Col size={1} sm={5} md={3} lg={6} xl={6}>
+                <div styleName="searchBar">
+                  <SearchInput
+                    searchCategories={searchCategories}
+                    searchValue={searchValue}
+                  />
+                </div>
+              </Col>
+              <Col size={4} sm={3} md={5} lg={3} xl={3}>
+                <div styleName="userData">
+                  <div
+                    onClick={this.handleMobileSearch}
+                    onKeyPress={() => {}}
+                    role="button"
+                    styleName="searchIcon"
+                    tabIndex="-1"
+                  >
+                    <Icon type="magnifier" />
                   </div>
-                </Col>
-                <Col size={4} sm={3} md={5} lg={3} xl={3}>
-                  <div styleName="userData">
-                    <div
-                      onClick={this.handleMobileSearch}
-                      onKeyPress={() => {}}
-                      role="button"
-                      styleName="searchIcon"
-                      tabIndex="-1"
-                    >
-                      <Icon type="magnifier" />
-                    </div>
-                    {userData ? (
-                      <UserDropdown user={userData} />
-                    ) : (
-                      <AuthButtons onOpenModal={this.handleOpenModal} />
-                    )}
-                    <div styleName="cartIcon">
-                      <CartButton href="/cart" amount={this.state.cartCount} />
-                    </div>
+                  {userData ? (
+                    <UserDropdown user={userData} />
+                  ) : (
+                    <AuthButtons onOpenModal={this.handleOpenModal} />
+                  )}
+                  <div styleName="cartIcon">
+                    <CartButton href="/cart" amount={this.state.cartCount} />
                   </div>
-                </Col>
-              </Row>
-            </div>
-          </Container>
-          <Modal showModal={showModal} onClose={this.handleCloseModal}>
-            <Authorization
-              isSignUp={isSignUp}
-              onCloseModal={this.handleCloseModal}
-            />
-          </Modal>
-          {isMobileCategoriesOpen ? (
-            <MobileListItems
-              onClick={this.handleMobileCategories}
-              items={searchCategories}
-            />
-          ) : null}
-        </header>
-      </HeaderContext.Provider>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Container>
+        <Modal showModal={showModal} onClose={this.handleCloseModal}>
+          <Authorization
+            isSignUp={isSignUp}
+            onCloseModal={this.handleCloseModal}
+          />
+        </Modal>
+        {isMobileCategoriesOpen ? (
+          <MobileListItems
+            onClick={this.handleMobileCategories}
+            items={searchCategories}
+          />
+        ) : null}
+      </header>
     );
   }
 }
