@@ -8,6 +8,11 @@ import { Icon } from 'components/Icon';
 
 import './Select.scss';
 
+type SelectType = {
+  id: string,
+  label: string,
+};
+
 type StateType = {
   isExpanded: boolean,
   items: Array<{ id: string, label: string }>,
@@ -31,11 +36,6 @@ type PropsType = {
   isBirthdate?: boolean,
   onClick: () => void,
   isMobile: boolean,
-};
-
-type SelectType = {
-  id: string,
-  label: string,
 };
 
 class Select extends Component<PropsType, StateType> {
