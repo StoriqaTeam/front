@@ -147,82 +147,84 @@ class Stores extends Component<PropsType, StateType> {
       this.props,
     );
     return (
-      <Container>
-        <Row>
-          <Col sm={1} md={3} lg={2} xl={2}>
-            <div styleName="countInfo">
-              <b>{totalCount}</b> stores found
-              {searchValue && <span> with {searchValue} in the title</span>}
-            </div>
-          </Col>
-          <Col sm={10} md={10} lg={10} xl={10}>
-            <div styleName="breadcrumbs">
-              All stores{category && ` / ${category.label}`}
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={1} md={3} lg={2} xl={2}>
-            <div styleName="storeSidebar">
-              {/* <div styleName="countInfo">
+      <div styleName="container">
+        <Container>
+          <Row>
+            <Col sm={1} md={3} lg={2} xl={2}>
+              <div styleName="countInfo">
+                <b>{totalCount}</b> stores found
+                {searchValue && <span> with {searchValue} in the title</span>}
+              </div>
+            </Col>
+            <Col sm={10} md={10} lg={10} xl={10}>
+              <div styleName="breadcrumbs">
+                All stores{category && ` / ${category.label}`}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={1} md={3} lg={2} xl={2}>
+              <div styleName="storeSidebar">
+                {/* <div styleName="countInfo">
                 <b>{totalCount}</b> stores found
                 {searchValue && <span> with {searchValue} in the title</span>}
               </div> */}
-              <div styleName="filterItem">
-                <Select
-                  forSearch
-                  withEmpty
-                  label="Categories"
-                  activeItem={category}
-                  items={categories}
-                  onSelect={this.handleCategory}
-                  dataTest="storesCategoriesSelect"
-                />
+                <div styleName="filterItem">
+                  <Select
+                    forSearch
+                    withEmpty
+                    label="Categories"
+                    activeItem={category}
+                    items={categories}
+                    onSelect={this.handleCategory}
+                    dataTest="storesCategoriesSelect"
+                  />
+                </div>
+                <div styleName="filterItem">
+                  <Select
+                    forSearch
+                    withEmpty
+                    label="Location"
+                    activeItem={country}
+                    items={countries}
+                    onSelect={this.handleLocation}
+                    dataTest="storesLocationSelect"
+                  />
+                </div>
               </div>
-              <div styleName="filterItem">
-                <Select
-                  forSearch
-                  withEmpty
-                  label="Location"
-                  activeItem={country}
-                  items={countries}
-                  onSelect={this.handleLocation}
-                  dataTest="storesLocationSelect"
-                />
+            </Col>
+            <Col sm={12} md={12} lg={10} xl={10}>
+              <div styleName="stores">
+                {stores && stores.length > 0 ? (
+                  map(
+                    storesItem => (
+                      <StoreRow
+                        store={storesItem.node}
+                        key={storesItem.node.id}
+                      />
+                    ),
+                    stores,
+                  )
+                ) : (
+                  <div>No stores found</div>
+                )}
               </div>
-            </div>
-          </Col>
-          <Col sm={10} md={10} lg={10} xl={10}>
-            <div styleName="stores">
-              {stores && stores.length > 0 ? (
-                map(
-                  storesItem => (
-                    <StoreRow
-                      store={storesItem.node}
-                      key={storesItem.node.id}
-                    />
-                  ),
-                  stores,
-                )
-              ) : (
-                <div>No stores found</div>
+              {this.props.relay.hasMore() && (
+                <div styleName="button">
+                  <Button
+                    big
+                    load
+                    onClick={this.storesRefetch}
+                    dataTest="searchStoresLoadMoreButton"
+                  >
+                    Load more
+                  </Button>
+                </div>
               )}
-            </div>
-            {this.props.relay.hasMore() && (
-              <div styleName="button">
-                <Button
-                  big
-                  load
-                  onClick={this.storesRefetch}
-                  dataTest="searchStoresLoadMoreButton"
-                >
-                  Load more
-                </Button>
-              </div>
-            )}
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }

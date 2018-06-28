@@ -1,9 +1,13 @@
 @import "../../styles/variables";
 
-.someHeader {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
+
+.container {
+  margin-top: 2.875rem;
+
+  @media (min-width: 992px) {
+    margin-top: 0;
+  }
+
 }
 
 .storeSidebar {
@@ -36,6 +40,7 @@
   font-size: 14px;
   line-height: 2rem;
   letter-spacing: 0.1px;
+  margin-top: 2rem;
 }
 
 .sort {
@@ -89,8 +94,6 @@
   flex-direction: column;
   justify-content: center;
   margin-left: 2rem;
-  //max-width: 45rem;
-  //min-width: 35rem;
   padding-right: 3rem;
 }
 
@@ -112,44 +115,17 @@
 
 .storeElect {
   align-items: center;
-  border-left: 1px solid rgba(186,186,186,.17);
+  border-left: 1px solid rgba(186, 186, 186, .17);
   cursor: pointer;
-  display: flex;
+  display: none;
   height: 10rem;
   justify-content: center;
   width: 10rem;
-}
 
-.productsData {
-  display: flex;
-  justify-content: flex-end;
-  align-items: stretch;
-}
-
-.productsWrap {
-  display: flex;
-}
-
-.productFoto {
-  display: flex;
-  height: 10rem;
-  justify-content: space-around;
-  margin-left: 2rem;
-  width: 10rem;
-
-  & .productFotoWrap {
-    align-items: center;
-    background-color: $color_grey_trivial;
+  @media (min-width: 576px) {
     display: flex;
-    justify-content: center;
-    overflow: hidden;
-    width: 100%;
   }
 
-  & img {
-    display: block;
-    height: 100%;
-  }
 }
 
 .button {
