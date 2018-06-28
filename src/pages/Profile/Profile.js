@@ -12,6 +12,7 @@ import {
   KYC,
 } from 'pages/Profile/items';
 import { Orders } from 'pages/Profile/items/Orders';
+import { Order } from 'pages/Profile/items/Order';
 import Menu from 'pages/Profile/Menu';
 import { Container, Row, Col } from 'layout';
 
@@ -36,6 +37,7 @@ const menuItems = [
   { id: 'shipping-addresses', title: 'Shipping addresses' },
   { id: 'security', title: 'Security' },
   { id: 'orders', title: 'My orders' },
+  { id: 'order', title: '' },
   { id: 'kyc', title: 'KYC' },
 ];
 
@@ -44,6 +46,7 @@ const profileMenuMap = {
   'shipping-addresses': <ShippingAddresses />,
   security: <Security />,
   orders: <Orders />,
+  order: <Order />,
   kyc: <KYC />,
 };
 

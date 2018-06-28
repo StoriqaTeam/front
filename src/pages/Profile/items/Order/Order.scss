@@ -1,0 +1,61 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+  position: relative;
+}
+
+.orderNumber {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.15rem;
+}
+
+.infoBlock {
+  display: flex;
+  margin-top: 6rem;
+}
+
+.left {
+  width: 41rem;
+}
+
+.right {
+}
+
+.statusBlock {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.statuses {
+  background-color: $color_grey_trivial;
+  border-radius: 0.5rem;
+  width: 18rem;
+  height: 16.25rem;
+  text-align: right;
+  padding-top: 1.5rem;
+  padding-right: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+.statusTitle {
+  font-size: 14px;
+  line-height: 2.5rem;
+}
+
+.secondStatusTitle {
+  margin-top: 3rem;
+}
+
+.statusInfo {
+  font-size: 16px;
+  line-height: 2.5rem;
+  color: $color_green;
+}
+
+.buttonWrapper {
+  margin-top: 2.75rem;
+  display: flex;
+  justify-content: center;
+}

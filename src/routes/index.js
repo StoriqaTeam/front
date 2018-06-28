@@ -319,6 +319,10 @@ const routes = (
       <Route path="/verify_email/:token" Component={VerifyEmail} />
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
       <Route
+        path="/profile/orders/:orderId"
+        Component={props => <Profile activeItem="order" me={props.me} />}
+      />
+      <Route
         path="/profile/:item"
         Component={props => (
           <Profile
