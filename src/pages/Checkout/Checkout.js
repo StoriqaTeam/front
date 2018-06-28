@@ -2,7 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   pipe,
@@ -110,6 +110,10 @@ class Checkout extends Component<PropsType, StateType> {
     );
     const { step, isAddressSelect, isNewAddress, orderInput } = this.state;
     const { cart } = this.props;
+    const stores = pipe(
+      pathOr([], ['cart', 'stores', 'edges']),
+      map(path(['node'])),
+    )(this.props);
     console.log('>>> Checkout state : ', { orderInput });
     return (
       <Container withoutGrow>
@@ -136,9 +140,20 @@ class Checkout extends Component<PropsType, StateType> {
                     />
                   )}
                   {step === 2 && (
-                    <CheckoutProducts me={me} orderInput={orderInput} />
+                    <div>
+                      <CheckoutProducts me={me} orderInput={orderInput} />
+                    </div>
                   )}
                 </div>
+                {stores.map(store => (
+                  <CartStore
+                    onlySelected
+                    unselectable
+                    key={store.__id}
+                    store={store}
+                    totals={1000}
+                  />
+                ))}
               </Col>
               <Col size={3}>
                 <CheckoutSidebar cart={cart} />
@@ -152,7 +167,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 // export default Page(Checkout);
-export default createFragmentContainer(
+export default createPaginationContainer(
   Page(Checkout),
   graphql`
     fragment Checkout_me on User {
@@ -176,22 +191,33 @@ export default createFragmentContainer(
         }
       }
     }
-
-    fragment Checkout_cart on Cart {
-      stores {
+    fragment Checkout_cart on Cart
+      @argumentDefinitions(
+        first: { type: "Int", defaultValue: null }
+        after: { type: "ID", defaultValue: null }
+      ) {
+      stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {
-            deliveryCost
-            totalCost
-            totalCount
-            productsCost
-            products {
-              rawId
-            }
             ...CartStore_store
           }
         }
       }
     }
   `,
+  {
+    direction: 'forward',
+    getConnectionFromProps: prop('cart'),
+    getVariables: () => ({
+      first: null,
+      after: null,
+    }),
+    query: graphql`
+      query Checkout_cart_Query($first: Int, $after: ID) {
+        cart {
+          ...Cart_cart @arguments(first: $first, after: $after)
+        }
+      }
+    `,
+  },
 );

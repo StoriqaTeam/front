@@ -28,6 +28,7 @@ import type CartProduct_product from './__generated__/CartProduct_product.graphq
 import './CartProduct.scss';
 
 type PropsType = {
+  unselectable: ?boolean,
   showAlert: (input: AddAlertInputType) => void,
   // eslint-disable-next-line
   ...CartProduct_product,
@@ -120,7 +121,7 @@ class CartProduct extends PureComponent<PropsType> {
   }
 
   render() {
-    const { product } = this.props;
+    const { product, unselectable } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -151,14 +152,16 @@ class CartProduct extends PureComponent<PropsType> {
           <Icon type="basket" size={32} />
         </button>
         <div styleName="left-container">
-          <div styleName="checkbox">
-            <Checkbox
-              id={`Cartproduct_${product.rawId}`}
-              label={false}
-              isChecked={selected}
-              onChange={() => this.handleSelectChange()}
-            />
-          </div>
+          {!unselectable &&
+            <div styleName="checkbox">
+              <Checkbox
+                id={`Cartproduct_${product.rawId}`}
+                label={false}
+                isChecked={selected}
+                onChange={() => this.handleSelectChange()}
+              />
+            </div>
+          }
           <img src={photoMain} styleName="picture" alt="product_picture" />
         </div>
         <div styleName="main-container">

@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { filter, whereEq } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
 import { Button } from 'components/common/Button';
@@ -18,6 +19,8 @@ import type CartStore_store from './__generated__/CartStore_store.graphql';
 import './CartStore.scss';
 
 type PropsType = {
+  onlySelected: ?boolean,
+  unselectable: ?boolean,
   // eslint-disable-next-line
   store: CartStore_store,
   totals: { productsCost: number, deliveryCost: number, totalCount: number },
@@ -26,13 +29,21 @@ type PropsType = {
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store } = this.props;
+    const { store, onlySelected, unselectable } = this.props;
     const { products } = store;
+    let filteredProducts = products;
+    if (onlySelected) {
+      filteredProducts = filter(whereEq({ selected: true }), products);
+    }
+    if (filteredProducts.length === 0) {
+      return null;
+    }
+    console.log('>>> CartStore products: ', { products, filteredProducts });
     return (
       <div styleName="container">
         <div styleName="products">
-          {products.map((product, idx) => (
-            <CartProduct key={idx} product={product} />
+          {filteredProducts.map((product, idx) => (
+            <CartProduct key={idx} product={product} onlySelected={onlySelected} unselectable={unselectable} />
           ))}
         </div>
         <div styleName="footer">
@@ -46,7 +57,7 @@ class CartStore extends PureComponent<PropsType> {
                 <Rating value={store.rating} />
               </div>
             </div>
-            <div styleName="chat-container">
+            {/* <div styleName="chat-container">
               <Icon type="chat" size={24} />
               <div styleName="chat-text">Chat with Seller</div>
             </div>
@@ -60,9 +71,13 @@ class CartStore extends PureComponent<PropsType> {
                 name="TBA"
                 label="Promocode"
               />
-            </div>
+            </div> */}
           </div>
           <div styleName="store-total">
+            <div styleName="label">Subtotal</div>
+            <div styleName="value">{store.productsCost} STQ</div>
+          </div>
+          {/* <div styleName="store-total">
             <div styleName="store-total-header">Seller summary</div>
             <CartProductAttribute
               title="Products cost"
@@ -83,8 +98,7 @@ class CartStore extends PureComponent<PropsType> {
               <Button type="wireframe" disabled big>
                 Buy from this seller
               </Button>
-            </div>
-          </div>
+            </div> */}
         </div>
       </div>
     );
@@ -95,7 +109,12 @@ export default createFragmentContainer(
   CartStore,
   graphql`
     fragment CartStore_store on CartStore {
+      productsCost
+      deliveryCost
+      totalCost
+      totalCount
       products {
+        selected
         ...CartProduct_product
       }
       name {

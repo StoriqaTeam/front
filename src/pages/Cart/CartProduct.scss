@@ -5,10 +5,10 @@
   display: flex;
   border-bottom: 1px solid $color_grey_trivial;
   position: relative;
-  padding-bottom: 3rem;
+  padding: 4rem;
 
   & + .container {
-    padding-top: 3rem;
+    padding: 4rem;
   }
 }
 
