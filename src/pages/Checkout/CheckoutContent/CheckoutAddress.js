@@ -7,6 +7,12 @@ import { Checkbox } from 'components/common/Checkbox';
 import { Select } from 'components/common/Select';
 import { Input } from 'components/common/Input';
 import { Row, Col } from 'layout';
+import { RadioGroup } from 'components/Forms';
+import { AddressForm } from 'components/AddressAutocomplete';
+
+import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
+
+import { getAddressFullByValue, addressesToSelect } from '../utils';
 
 import './CheckoutAddress.scss';
 
@@ -17,66 +23,29 @@ type AddressItemType = {
 
 type PropsType = {
   deliveryAddresses: any,
+  onChangeOrderInput: Function,
+  onChangeAddressType: Function,
+  orderInput: any,
+  isAddressSelect: boolean,
+  isNewAddress: boolean,
   // onSelectAddress: (item: AddressItemType) => void,
 };
 
 class CheckoutContent extends React.Component<PropsType> {
-  constructor(props: PropsType) {
-    super(props);
-    // const addressValue = pathOr(null, ['orderInput', 'addressFull', 'value'], props);
-    // const findInAddresses = filter(, this.getDeliveryItems(porp));
-    this.state = {
-      step: 1,
-      // deliveryItem: null,
-      isCheckedExistingAddress:
-        props.deliveryAddresses && props.deliveryAddresses.length > 0,
-      isCheckedNewAddress: false,
-    };
-  }
-
-  getDeliveryItems = () => {
-    const { deliveryAddresses } = this.props;
-    return map(i => {
-      if (!i.address || !i.address.value) {
-        return null;
-      }
-      return { id: i.address.value, label: i.address.value };
-    }, deliveryAddresses);
-  };
-
-  getDeliveryItemByValue = value => {
-    const { deliveryAddresses } = this.props;
-    console.log('>>> getDeliveryItemByValue value: ', {
-      value,
-      deliveryAddresses,
-    });
-    const addressValue = find(
-      item => item.address.value === value,
-      deliveryAddresses,
-    );
-    return addressValue.address;
-  };
-
   handleOnSelectAddress = item => {
-    console.log('>>> handle on select address item: ', { item });
-    const { onChangeOrderInput, orderInput } = this.props;
-    const addressFull = this.getDeliveryItemByValue(item.label);
-
+    const { onChangeOrderInput, orderInput, deliveryAddresses } = this.props;
+    const addressFull = getAddressFullByValue(deliveryAddresses, item.label);
     onChangeOrderInput({
       ...orderInput,
       addressFull,
     });
-    // this.setState({ selectedAddress: item });
   };
 
-  // handleOnChangeNewAddress = (data: any) => {
-  //   this.setState(prevState => ({}));
-  // };
-  handleChangeReceiver = (receiverName: string) => {
+  handleChangeReceiver = (e: any) => {
     const { onChangeOrderInput, orderInput } = this.props;
     onChangeOrderInput({
       ...orderInput,
-      receiverName,
+      receiverName: e.target.value,
     });
   };
 
@@ -94,14 +63,42 @@ class CheckoutContent extends React.Component<PropsType> {
     }));
   };
 
+  handleInputChange = (id: string) => (e: any) => {
+    const { onChangeOrderInput, orderInput } = this.props;
+    const { value } = e.target;
+    console.log('>>> handle Input change: ', { id, value });
+    onChangeOrderInput({
+      ...orderInput,
+      addressFull: {
+        ...orderInput.addressFull,
+        [id]: value,
+      },
+    });
+    // this.setState(
+    //   assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
+    // );
+  };
+
+  handleChangeData = (addressFullData: AddressFullType): void => {
+    const { onChangeOrderInput, orderInput } = this.props;
+    onChangeOrderInput({
+      ...orderInput,
+      addressFull: addressFullData,
+    });
+  };
+
   render() {
-    const { step, isCheckedExistingAddress, isCheckedNewAddress } = this.state;
     const {
-      // deliveryItems,
+      isAddressSelect,
+      isNewAddress,
       orderInput,
+      onChangeAddressType,
+      deliveryAddresses,
     } = this.props;
-    // console.log('>>> checkout me', { me });
     console.log('>>> orderInput');
+
+    const { addressFull } = orderInput;
+
     const addressValue = pathOr(
       null,
       ['orderInput', 'addressFull', 'value'],
@@ -126,14 +123,14 @@ class CheckoutContent extends React.Component<PropsType> {
               <Checkbox
                 id="existingAddressCheckbox"
                 label="choose your address"
-                isChecked={isCheckedExistingAddress}
-                onChange={this.handleOnCheckExistingAddress}
+                isChecked={isAddressSelect}
+                onChange={onChangeAddressType}
               />
-              {isCheckedExistingAddress && (
+              {isAddressSelect && (
                 <div styleName="selectWrapper">
                   Address
                   <Select
-                    items={this.getDeliveryItems()}
+                    items={addressesToSelect(deliveryAddresses)}
                     activeItem={
                       addressValue && { id: addressValue, label: addressValue }
                     }
@@ -148,11 +145,21 @@ class CheckoutContent extends React.Component<PropsType> {
               <Checkbox
                 id="newAddressCheckbox"
                 label="Or fill fields below and save as address"
-                isChecked={isCheckedNewAddress}
-                onChange={this.handleOnCheckNewAddress}
+                isChecked={isNewAddress}
+                onChange={onChangeAddressType}
               />
-              {isCheckedNewAddress && (
-                <div styleName="selectWrapper">address full</div>
+
+              {isNewAddress && (
+                <div styleName="formWrapper">
+                  <AddressForm
+                    // onChangeFormInput={this.handleInputChange}
+                    isOpen
+                    onChangeData={this.handleChangeData}
+                    country={addressFull ? addressFull.country : null}
+                    address={addressFull ? addressFull.value : null}
+                    addressFull={addressFull}
+                  />
+                </div>
               )}
             </div>
           </div>

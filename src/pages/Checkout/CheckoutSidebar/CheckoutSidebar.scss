@@ -1,7 +1,84 @@
 @import "../../../styles/variables.scss";
 
 .container {
-  height: 400px;
-  width: 100%;
-  background-color: #333;
+  padding: 3rem 3rem;
+  color: $color_grey;
+  background-color: $color-white;
+  border: 1px solid $color_grey_trivial;
+  width: 40rem;
+}
+
+.cart-total-title {
+  font-family: $font_medium;
+  text-transform: uppercase;
+  padding: 0rem 4rem 2rem 4rem;
+}
+
+.checkout {
+  margin-top: 0.5rem;
+
+  button {
+    width: 100%;
+  }
+}
+
+.payments-container {
+  background-color: $color_grey_trivial;
+  padding: 2rem 4rem;
+}
+
+.title {
+  color: $color_grey;
+  font-family: $font_medium;
+  font-size: 1.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.value {
+  font-family: $font_regular;
+  color: $color_grey;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-top: 0.5rem;
+}
+
+.payment-option-icon {
+  position: absolute;
+  right: 0;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  svg {
+    height: 2rem;
+  }
+  img {
+    height: 2rem;
+  }
+}
+
+.payments-group {
+  padding-top: 2rem;
+}
+
+.totalsContainer {
+  padding-top: 2.5rem;
+}
+
+.attributeContainer {
+  margin-bottom: 1rem;
+  .label {
+    font-size: 1.75rem;
+    color: $color_grey_minor;
+    .subLabel {
+      color: $color_green;
+    }
+  }
+  .value {
+
+  }
 }

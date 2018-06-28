@@ -1,26 +1,43 @@
 @import "../../../styles/variables.scss";
 
 .container {
-  height: 400px;
-  width: 100%;
   background-color: $color_white;
-  padding: 4rem;
 
-  .title {
-    text-transform: uppercase;
-    font-family: $font_medium;
-    font-size: 1.75rem;
-  }
+  .infoContainer {
+    margin-top: 3rem;
 
-  .selectAddressContainer {
-    padding-top: 2rem;
-    margin-bottom: 4rem;
-
-    .selectWrapper {
-      margin-top: 1rem;
-      padding-left: 3rem;
+    .infoContent {
+      background-color: $color_grey_trivial;
+      padding: 2rem 3rem;
+      margin-top: 2rem;
       color: $color_grey_minor;
-      font-size: 1.75rem;
+      line-height: 1.25;
+
+      .name {
+        margin-top: 1rem;
+        color: $color_grey;
+      }
+
+      .email {
+        font-style: italic;
+      }
     }
   }
+}
+
+.title {
+  text-transform: uppercase;
+  font-family: $font_medium;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  font-size: 2rem;
+}
+
+.centeredTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }

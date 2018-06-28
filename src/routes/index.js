@@ -130,6 +130,9 @@ const routes = (
             me {
               ...Checkout_me
             }
+            cart {
+              ...Checkout_cart
+            }
           }
         `}
       />
