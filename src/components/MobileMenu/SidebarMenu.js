@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { isEmpty, isNil } from 'ramda';
 import classNames from 'classnames';
+import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
 
@@ -81,7 +82,19 @@ class SidebarMenu extends Component<PropsType, StateType> {
                   ) : null}
                   <span>
                     {isSecondary ? null : <Icon type="qualityAssurance" />}
-                    <p styleName="linkName">{cat.name}</p>
+                    <Link
+                      styleName="linkName"
+                      to={{
+                        pathname: '/categories',
+                        query: {
+                          search: '',
+                          category: cat.rawId,
+                        },
+                      }}
+                      data-test="categoryLink"
+                    >
+                      {cat.name}
+                    </Link>
                   </span>
                   <Icon type="arrowRight" />
                 </li>
