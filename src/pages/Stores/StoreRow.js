@@ -1,13 +1,13 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { find, propEq, pathOr } from 'ramda';
+import { pathOr } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
-import { convertSrc } from 'utils';
 
 import StoresProducts from './StoresProducts';
+import StoresData from './StoresData';
 
 import './Stores.scss';
 
@@ -27,35 +27,14 @@ type PropsType = {
 class StoreRow extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
-    const lang = 'EN';
-    // $FlowIgnoreMe
-    const name = pathOr(null, ['text'], find(propEq('lang', lang), store.name));
     // $FlowIgnoreMe
     const baseProduct = pathOr(null, ['baseProducts', 'edges'], store);
     const storeId = store.rawId;
-    const { productsCount } = store;
     return (
       <div styleName="store" key={store.id}>
         <Row>
           <Col sm={12} md={4} lg={4} xl={4}>
-            <div styleName="storeData">
-              <div styleName="storeLogo" data-test="storeLink">
-                {store.logo ? (
-                  <img src={convertSrc(store.logo, 'small')} alt="img" />
-                ) : (
-                  <Icon type="camera" size="32" />
-                )}
-              </div>
-              <div styleName="storeInfo">
-                <div styleName="storeName">{name}</div>
-                <div styleName="storeAdd">
-                  <span>97,5% reviews</span>
-                  {productsCount && (
-                    <span styleName="productsCount">{productsCount} goods</span>
-                  )}
-                </div>
-              </div>
-            </div>
+            <StoresData store={store} />
           </Col>
           <Col sm={1} md={3} lg={3} xl={3}>
             <div styleName="storeElect">

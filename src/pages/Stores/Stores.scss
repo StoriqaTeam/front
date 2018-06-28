@@ -79,50 +79,6 @@
   margin-bottom: 2rem;
 }
 
-.storeData {
-  display: flex;
-  align-items: stretch;
-}
-
-.storeLogo {
-  align-items: center;
-  background-color: $color_grey_trivial;
-  display: flex;
-  height: 10rem;
-  justify-content: center;
-  overflow: hidden;
-  width: 10rem;
-
-  & img {
-    height: 100%;
-    display: block;
-  }
-}
-
-.storeInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 2rem;
-  padding-right: 3rem;
-}
-
-.storeName {
-  color: $color_black;
-  font-size: 17px;
-}
-
-.storeAdd {
-  margin-top: 1rem;
-  color: $color_grey_minor;
-  font-size: 16px;
-
-  & .productsCount {
-    display: inline-block;
-    margin-left: 2rem;
-  }
-}
-
 .storeElect {
   align-items: center;
   border-left: 1px solid rgba(186, 186, 186, .17);
