@@ -6,7 +6,7 @@ import './TableRow.scss';
 
 export type TableItemType = {
   number: string,
-  date: number,
+  date: string,
   shop: {
     id: number,
     title: string,
