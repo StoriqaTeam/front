@@ -5,7 +5,7 @@ import { Link } from 'found';
 import { Icon } from 'components/Icon';
 import { convertSrc } from 'utils';
 
-import './StoresProducts.scss'
+import './StoresProducts.scss';
 
 type PropsType = {
   storeId: number,
