@@ -36,7 +36,7 @@ class StoreRow extends PureComponent<PropsType> {
     return (
       <div styleName="store" key={store.id}>
         <Row>
-          <Col size={6}>
+          <Col sm={4} md={4} lg={4} xl={4}>
             <div styleName="storeData">
               <div styleName="storeLogo" data-test="storeLink">
                 {store.logo ? (
@@ -54,12 +54,14 @@ class StoreRow extends PureComponent<PropsType> {
                   )}
                 </div>
               </div>
-              <div styleName="storeElect">
-                <Icon type="heart" size="32" />
-              </div>
             </div>
           </Col>
-          <Col size={6}>
+          <Col sm={3} md={3} lg={3} xl={3}>
+            <div styleName="storeElect">
+              <Icon type="heart" size="32" />
+            </div>
+          </Col>
+          <Col sm={5} md={5} lg={5} xl={5}>
             {baseProduct && (
               <div styleName="productsData">
                 <div styleName="productsWrap">

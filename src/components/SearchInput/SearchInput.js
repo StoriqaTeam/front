@@ -29,6 +29,9 @@ type PropsType = {
   router: Object,
   searchValue: string,
   match: matchShape,
+  onDropDown: () => void,
+  isMobile: boolean,
+  selectedCategory: ?{ id: string, label: string },
 };
 
 type StateType = {
@@ -40,6 +43,9 @@ type StateType = {
 };
 
 class SearchInput extends Component<PropsType, StateType> {
+  static defaultProps = {
+    onDropDown: () => {},
+  };
   constructor(props: PropsType) {
     super(props);
     const { searchValue, searchCategories } = this.props;
@@ -53,6 +59,7 @@ class SearchInput extends Component<PropsType, StateType> {
     };
   }
 
+  // TODO: Life cycle-hook will DEPRECATE
   componentWillMount() {
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -76,15 +83,15 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   }
 
-  onFocus = () => {
+  onFocus = (): void => {
     this.setState({ isFocus: true });
   };
 
-  onBlur = () => {
+  onBlur = (): void => {
     this.setState({ isFocus: false });
   };
 
-  handleInputChange = (e: any) => {
+  handleInputChange = (e: any): void => {
     e.persist();
     const { value } = e.target;
     this.setState(() => ({ inputValue: value }));
@@ -101,11 +108,15 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleSearchDropdownSelect = (activeItem: { id: string, label: string }) => {
+  handleSearchDropDownSelect = (activeItem: {
+    id: string,
+    label: string,
+  }): void => {
     this.setState(() => ({ activeItem }));
   };
 
-  handleSearch = () => {
+  handleSearch = (): void => {
+    const { selectedCategory } = this.props;
     const { inputValue, activeItem } = this.state;
     // $FlowIgnoreMe
     const pathname = pathOr(
@@ -120,7 +131,9 @@ class SearchInput extends Component<PropsType, StateType> {
     const newPreparedObj = assocPath(['name'], inputValue, oldPreparedObj);
     const newUrl = inputToUrl(newPreparedObj);
 
-    switch (activeItem && activeItem.id) {
+    switch (
+      (selectedCategory && selectedCategory.id) || (activeItem && activeItem.id)
+    ) {
       case 'stores':
         if (pathname === 'stores') {
           this.props.router.push(`/stores${newUrl}`);
@@ -146,21 +159,24 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleKeydown = (e: any) => {
+  handleKeydown = (e: any): void => {
     if (e.keyCode === 13 && this.state.isFocus) {
       this.handleSearch();
     }
   };
 
   render() {
+    const { onDropDown, isMobile, selectedCategory } = this.props;
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
           <Select
+            isMobile={isMobile}
+            onClick={onDropDown}
             forAutocomlete
-            activeItem={this.state.activeItem}
+            activeItem={selectedCategory || this.state.activeItem}
             items={this.props.searchCategories || []}
-            onSelect={this.handleSearchDropdownSelect}
+            onSelect={this.handleSearchDropDownSelect}
             dataTest="searchInputSelect"
           />
         </div>

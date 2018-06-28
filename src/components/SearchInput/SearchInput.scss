@@ -4,15 +4,26 @@
   font-family: $font_regular;
   color: $color_grey;
   display: flex;
+  padding-top: 0.375rem;
+
+  @media (min-width: 992px) {
+    padding-top: 0;
+  }
+
 }
 
 .searchCategorySelect {
-  position: relative;
-  height: 4rem;
-  width: 14rem;
-  border: 1px solid $color_grey_minor;
-  border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border: none;
+  height: 4rem;
+  position: relative;
+  width: 14rem;
+
+  @media (min-width: 992px) {
+    border: 1px solid $color_grey_minor;
+  }
+
 }
 
 .highlighted {
@@ -35,9 +46,14 @@
   color: $color_grey;
   height: 4rem;
   width: 100%;
-  border: 1px solid $color_grey_minor;
+  border: none;
   border-left: 0;
   padding-left: 1.5rem;
+
+  @media (min-width: 992px) {
+    border: 1px solid $color_grey_minor;
+  }
+
 }
 
 .input::-webkit-input-placeholder {color: $color_grey; opacity: 0.4;}
@@ -46,20 +62,31 @@
 .input:-moz-placeholder {color: $color_grey; opacity: 0.4;}
 
 .searchButton {
-  height: 4rem;
-  width: 14rem;
-  margin-left: -1px;
-  border: 1px solid $color_blue;
-  border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border: 1px solid $color_blue;
+  display: none;
+  height: 4rem;
+  margin-left: -1px;
   transition: $transition_all_ease;
+  width: 14rem;
 
   &:hover {
     background-color: $color_blue;
   }
 
-  & svg {transition: $transition_all_ease;}
-  &:hover svg {fill: $color_white;}
+  & svg {
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {
+    fill: $color_white;
+  }
+
+  @media (min-width: 992px) {
+    display: block;
+  }
+
 }
 
 .searchButtonIcon {
