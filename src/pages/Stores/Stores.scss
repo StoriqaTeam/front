@@ -24,7 +24,11 @@
   font-size: 14px;
   line-height: 2rem;
   padding-bottom: 3rem;
-  border-bottom: 1px solid rgba(151,151,151,.2);
+  border-bottom: 0px solid transparent;
+
+  @media (min-width: 992px) {
+    border-bottom: 1px solid rgba(151,151,151,.2);
+  }
 }
 
 .filterItem {
@@ -37,10 +41,16 @@
 
 .breadcrumbs {
   color: $color_grey_minor;
+  display: none;
   font-size: 14px;
-  line-height: 2rem;
   letter-spacing: 0.1px;
+  line-height: 2rem;
   margin-top: 2rem;
+
+  @media (min-width: 992px) {
+    display: block;
+  }
+
 }
 
 .sort {

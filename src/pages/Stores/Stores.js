@@ -48,6 +48,7 @@ class Stores extends Component<PropsType, StateType> {
     }
   }
 
+  // TODO: Needs refactoring, this life-cycle will be deprecated
   componentWillMount() {
     const lang = 'EN';
     const rawCategories = pathOr(
@@ -163,12 +164,8 @@ class Stores extends Component<PropsType, StateType> {
             </Col>
           </Row>
           <Row>
-            <Col sm={1} md={3} lg={2} xl={2}>
+            <Col sm={1} md={1} lg={2} xl={2}>
               <div styleName="storeSidebar">
-                {/* <div styleName="countInfo">
-                <b>{totalCount}</b> stores found
-                {searchValue && <span> with {searchValue} in the title</span>}
-              </div> */}
                 <div styleName="filterItem">
                   <Select
                     forSearch
@@ -194,21 +191,19 @@ class Stores extends Component<PropsType, StateType> {
               </div>
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
-              <div styleName="stores">
-                {stores && stores.length > 0 ? (
-                  map(
-                    storesItem => (
-                      <StoreRow
-                        store={storesItem.node}
-                        key={storesItem.node.id}
-                      />
-                    ),
-                    stores,
-                  )
-                ) : (
-                  <div>No stores found</div>
-                )}
-              </div>
+              {stores && stores.length > 0 ? (
+                map(
+                  storesItem => (
+                    <StoreRow
+                      store={storesItem.node}
+                      key={storesItem.node.id}
+                    />
+                  ),
+                  stores,
+                )
+              ) : (
+                <div>No stores found</div>
+              )}
               {this.props.relay.hasMore() && (
                 <div styleName="button">
                   <Button
