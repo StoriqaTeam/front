@@ -1,8 +1,8 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Link } from 'found';
 import classNames from 'classnames';
+import { withRouter, routerShape, Link } from 'found';
 
 import './TableRow.scss';
 
@@ -25,13 +25,20 @@ export type TableItemType = {
 
 type PropsType = {
   item: TableItemType,
+  router: routerShape,
 };
 
 class TableRow extends PureComponent<PropsType> {
   render() {
     const rowItem: TableItemType = this.props.item;
     return (
-      <div styleName="container">
+      // eslint-disable-next-line
+      <div
+        styleName="container"
+        onClick={() =>
+          this.props.router.push(`/profile/orders/${rowItem.number}`)
+        }
+      >
         <div styleName="numberCell">{rowItem.number}</div>
         <div styleName="dateCell">{rowItem.date}</div>
         <div styleName="shopCell">{rowItem.shop.title}</div>
@@ -59,4 +66,4 @@ class TableRow extends PureComponent<PropsType> {
   }
 }
 
-export default TableRow;
+export default withRouter(TableRow);

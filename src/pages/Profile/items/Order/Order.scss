@@ -59,3 +59,11 @@
   display: flex;
   justify-content: center;
 }
+
+.paid {
+  color: $color_green;
+}
+
+.unpaid {
+  color: $color_pink;
+}

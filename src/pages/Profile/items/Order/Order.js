@@ -1,6 +1,10 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { createRefetchContainer, graphql } from 'react-relay';
+import { matchShape, withRouter } from 'found';
+import { pathOr, filter, prop, propEq, head } from 'ramda';
+import classNames from 'classnames';
 
 import { Button } from 'components/common/Button';
 import { timeFromTimestamp, fullDateFromTimestamp } from 'utils/formatDate';
@@ -8,7 +12,6 @@ import { timeFromTimestamp, fullDateFromTimestamp } from 'utils/formatDate';
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
-import orderMock from './order.mock';
 
 import type { ProductDTOType } from './ProductBlock';
 import type { OrderStatusType } from './StatusList';
@@ -33,13 +36,75 @@ type OrderDTOType = {
 };
 
 type PropsType = {
-  // item: OrderDTOType,
+  data: {
+    order: {
+      [string]: any,
+    },
+  },
+  relay: {
+    refetch: Function,
+  },
+  match: matchShape,
 };
 
 class Order extends PureComponent<PropsType> {
-  getOrderDTO = () => {
-    const order: OrderDTOType = orderMock;
-    return order;
+  componentDidMount() {
+    const orderId = pathOr(0, ['params', 'orderId'], this.props.match);
+    this.props.relay.refetch(
+      {
+        slug: parseInt(orderId, 10),
+      },
+      null,
+      () => {},
+      { force: true },
+    );
+  }
+
+  getOrderDTO = (): ?OrderDTOType => {
+    const { order } = this.props.data;
+
+    if (!order) {
+      return null;
+    }
+
+    const orderDTO: OrderDTOType = {
+      number: order.slug,
+      product: {
+        id: `${order.product.baseProduct.rawId}`,
+        storeId: order.storeId,
+        // $FlowIgnoreMe
+        name: pathOr('', ['name', 0, 'text'], order.product.baseProduct),
+        photoUrl: order.product.photoMain,
+        category: {
+          id: order.product.baseProduct.category.rawId,
+          // $FlowIgnoreMe
+          name: prop(
+            'text',
+            head(
+              filter(
+                propEq('lang', 'EN'),
+                order.product.baseProduct.category.name,
+              ),
+            ),
+          ),
+        },
+        price: order.product.price,
+        attributes: [],
+      },
+      customer: {
+        name: order.receiverName,
+        address: order.addressFull.value || '-',
+      },
+      date: order.createdAt,
+      delivery: order.deliveryCompany || '-',
+      trackId: order.trackId || '-',
+      quantity: order.quantity,
+      subtotal: order.subtotal,
+      status: order.state,
+      paymentStatus: order.paymentStatus ? 'Paid' : 'Not paid',
+      statusHistory: [],
+    };
+    return orderDTO;
   };
 
   getDateFromTimestamp = (timestamp: string): string =>
@@ -50,6 +115,11 @@ class Order extends PureComponent<PropsType> {
 
   render() {
     const order = this.getOrderDTO();
+
+    if (!order) {
+      return null;
+    }
+
     return (
       <div styleName="container">
         <div styleName="orderNumber">ORDER #{order.number}</div>
@@ -58,7 +128,14 @@ class Order extends PureComponent<PropsType> {
             <div styleName="statusTitle">Status</div>
             <div styleName="statusInfo">{order.status}</div>
             <div styleName="statusTitle secondStatusTitle">Payment status</div>
-            <div styleName="statusInfo">{order.paymentStatus}</div>
+            <div
+              styleName={classNames('statusInfo', {
+                paid: order.paymentStatus === 'Paid',
+                unpaid: order.paymentStatus !== 'Paid',
+              })}
+            >
+              {order.paymentStatus}
+            </div>
           </div>
           <div styleName="buttonWrapper">
             <Button wireframe big>
@@ -93,4 +170,59 @@ class Order extends PureComponent<PropsType> {
   }
 }
 
-export default Order;
+export default createRefetchContainer(
+  withRouter(Order),
+  graphql`
+    fragment Order on User
+      @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
+      order(slug: $slug) {
+        slug
+        storeId
+        product {
+          baseProduct {
+            rawId
+            name {
+              text
+            }
+            category {
+              rawId
+              name {
+                text
+                lang
+              }
+            }
+          }
+          price
+          attributes {
+            value
+            attribute {
+              name {
+                lang
+                text
+              }
+            }
+          }
+          photoMain
+        }
+        receiverName
+        addressFull {
+          value
+        }
+        createdAt
+        deliveryCompany
+        trackId
+        quantity
+        subtotal
+        state
+        paymentStatus
+      }
+    }
+  `,
+  graphql`
+    query Order_Query($slug: Int!) {
+      me {
+        ...Order @arguments(slug: $slug)
+      }
+    }
+  `,
+);
