@@ -11,6 +11,8 @@ import {
   Security,
   KYC,
 } from 'pages/Profile/items';
+import { Orders } from 'pages/Profile/items/Orders';
+import { Order } from 'pages/Profile/items/Order';
 import Menu from 'pages/Profile/Menu';
 import { Container, Row, Col } from 'layout';
 
@@ -34,6 +36,8 @@ const menuItems = [
   { id: 'personal-data', title: 'Personal data' },
   { id: 'shipping-addresses', title: 'Shipping addresses' },
   { id: 'security', title: 'Security' },
+  { id: 'orders', title: 'My orders' },
+  { id: 'order', title: '' },
   { id: 'kyc', title: 'KYC' },
 ];
 
@@ -41,6 +45,8 @@ const profileMenuMap = {
   'personal-data': <PersonalData />,
   'shipping-addresses': <ShippingAddresses />,
   security: <Security />,
+  orders: <Orders />,
+  order: <Order />,
   kyc: <KYC />,
 };
 
@@ -91,6 +97,8 @@ export default createFragmentContainer(
   Page(Profile),
   graphql`
     fragment Profile_me on User {
+      ...Orders
+      ...Order
       id
       rawId
       avatar
