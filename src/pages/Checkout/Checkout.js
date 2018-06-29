@@ -2,18 +2,9 @@
 /* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
-import {
-  createPaginationContainer,
-  graphql,
-} from 'react-relay';
+import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import {
-  pipe,
-  pathOr,
-  path,
-  map,
-  prop,
-} from 'ramda';
+import { pipe, pathOr, path, map, prop } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -41,6 +32,7 @@ import './Checkout.scss';
 
 type PropsType = {
   // eslint-disable-next-line
+  me: any,
   cart: Cart_cart,
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
@@ -122,7 +114,7 @@ class Checkout extends Component<PropsType, StateType> {
             text: 'Orders successfully created',
             link: { text: 'Close.' },
           });
-          this.props.router.push('/profile/personal-data');
+          this.props.router.push('/profile/orders');
         }
         if (errors) {
           log.debug('Errors: ', errors);
@@ -142,22 +134,17 @@ class Checkout extends Component<PropsType, StateType> {
 
   checkReadyToCheckout = () => {
     const {
-      step,
       orderInput: {
         addressFull: { value, country, locality, postalCode, streetNumber },
       },
     } = this.state;
-    if (
-      step === 2 &&
-      (!value || !country || !locality || !postalCode || !streetNumber)
-    ) {
+    if (!value || !country || !locality || !postalCode || !streetNumber) {
       return false;
     }
     return true;
   };
 
   render() {
-    console.log('>>> Checkout props: ', this.props);
     // const deliveryAddresses = pathOr(null, ['me', 'deliveryAddresses'], this.props);
     const { me } = this.props;
 

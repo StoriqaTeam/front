@@ -19,11 +19,13 @@ import {
   head,
   defaultTo,
 } from 'ramda';
+import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
 import CartTotal from './CartTotal';
+import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
 import type Cart_cart from './__generated__/Cart_cart.graphql';
@@ -51,6 +53,7 @@ const STORES_FRAGMENT = graphql`
 type PropsType = {
   // eslint-disable-next-line
   cart: Cart_cart,
+  router: routerShape,
 };
 
 type Totals = {
@@ -139,11 +142,17 @@ class Cart extends Component<PropsType, StateType> {
     );
   }
 
+  handleToCheckout = () => {
+    this.props.router.push('/checkout');
+  }
+
   render() {
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
+    const { cart } = this.props;
+    console.log('>>> cart props: ', { cart });
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
@@ -158,9 +167,17 @@ class Cart extends Component<PropsType, StateType> {
             ))}
           </div>
           <div styleName="total-container">
-            <CartTotal
+            {/* <CartTotal
               storesRef={this.state.storesRef}
               totals={this.state.totals}
+            /> */}
+            <CheckoutSidebar
+              storesRef={this.state.storesRef}
+              cart={cart}
+              buttonText="Checkout"
+              onClick={this.handleToCheckout}
+              // isReadyToClick={this.checkReadyToCheckout()}
+              isReadyToClick
             />
           </div>
         </div>
@@ -174,7 +191,7 @@ Cart.contextTypes = {
 };
 
 export default createPaginationContainer(
-  Page(Cart),
+  withRouter(Page(Cart)),
   graphql`
     fragment Cart_cart on Cart
       @argumentDefinitions(
@@ -184,6 +201,10 @@ export default createPaginationContainer(
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {
+            productsCost
+            deliveryCost
+            totalCost
+            totalCount
             ...CartStore_store
           }
         }
