@@ -190,6 +190,11 @@
   cursor: default;
   z-index: 11;
   transition: $transition_all_ease;
+
+  &.isMobile {
+    display: none;
+  }
+
 }
 
 .itemsWrap::-webkit-scrollbar {

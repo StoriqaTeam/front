@@ -18,16 +18,21 @@ import './Stores.scss';
 
 import storesData from './stores.json';
 
+type SelectedType = {
+  id: string,
+  label: string,
+};
+
 type PropsType = {
   router: routerShape,
   relay: Relay,
 };
 
 type StateType = {
-  category: ?{ id: string, label: string },
-  country: ?{ id: string, label: string },
-  categories: Array<{ id: string, label: string }>,
-  countries: Array<{ id: string, label: string }>,
+  category: ?SelectedType,
+  country: ?SelectedType,
+  categories: Array<SelectedType>,
+  countries: Array<SelectedType>,
 };
 
 class Stores extends Component<PropsType, StateType> {
@@ -144,54 +149,58 @@ class Stores extends Component<PropsType, StateType> {
     return (
       <Container>
         <Row>
-          <Col size={2}>
+          <Col sm={1} md={3} lg={2} xl={2}>
             <div styleName="countInfo">
               <b>{totalCount}</b> stores found
               {searchValue && <span> with {searchValue} in the title</span>}
             </div>
-            <div styleName="filterItem">
-              <Select
-                forSearch
-                withEmpty
-                label="Categories"
-                activeItem={category}
-                items={categories}
-                onSelect={this.handleCategory}
-                dataTest="storesCategoriesSelect"
-              />
-            </div>
-            <div styleName="filterItem">
-              <Select
-                forSearch
-                withEmpty
-                label="Location"
-                activeItem={country}
-                items={countries}
-                onSelect={this.handleLocation}
-                dataTest="storesLocationSelect"
-              />
+          </Col>
+          <Col sm={10} md={10} lg={10} xl={10}>
+            <div styleName="breadcrumbs">
+              All stores{category && ` / ${category.label}`}
             </div>
           </Col>
-          <Col size={10}>
-            <div styleName="header">
-              <Row>
-                <Col size={12}>
-                  <div styleName="breadcrumbs">
-                    All stores{category && ` / ${category.label}`}
-                  </div>
-                </Col>
-              </Row>
+        </Row>
+        <Row>
+          <Col sm={1} md={3} lg={2} xl={2}>
+            <div styleName="storeSidebar">
+              {/* <div styleName="countInfo">
+                <b>{totalCount}</b> stores found
+                {searchValue && <span> with {searchValue} in the title</span>}
+              </div> */}
+              <div styleName="filterItem">
+                <Select
+                  forSearch
+                  withEmpty
+                  label="Categories"
+                  activeItem={category}
+                  items={categories}
+                  onSelect={this.handleCategory}
+                  dataTest="storesCategoriesSelect"
+                />
+              </div>
+              <div styleName="filterItem">
+                <Select
+                  forSearch
+                  withEmpty
+                  label="Location"
+                  activeItem={country}
+                  items={countries}
+                  onSelect={this.handleLocation}
+                  dataTest="storesLocationSelect"
+                />
+              </div>
             </div>
+          </Col>
+          <Col sm={10} md={10} lg={10} xl={10}>
             <div styleName="stores">
               {stores && stores.length > 0 ? (
                 map(
                   storesItem => (
-                    <div key={storesItem.node.id}>
-                      <StoreRow
-                        store={storesItem.node}
-                        key={storesItem.node.id}
-                      />
-                    </div>
+                    <StoreRow
+                      store={storesItem.node}
+                      key={storesItem.node.id}
+                    />
                   ),
                   stores,
                 )
@@ -219,7 +228,7 @@ class Stores extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  withErrorBoundary(Page(Stores)),
+  withErrorBoundary(Page(Stores, true)),
   graphql`
     fragment Stores_search on Search
       @argumentDefinitions(
