@@ -24,6 +24,8 @@ import {
   defaultTo,
 } from 'ramda';
 
+import { log } from 'utils';
+import { CreateOrdersMutation } from 'relay/mutations';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 
@@ -82,10 +84,15 @@ class Checkout extends Component<PropsType, StateType> {
     },
   };
 
-  handleChangeStep = step => {
-    console.log('**** step: ', step);
-    return () => this.setState({ step });
-  };
+  setStoresRef(ref) {
+    if (ref && !this.state.storesRef) {
+      this.setState({ storesRef: ref });
+    }
+  }
+
+  storesRef: any;
+
+  handleChangeStep = step => () => this.setState({ step });
 
   handleCheckReadyToNext = () => {
     const { step, deliveryAddress } = this.state;
@@ -106,29 +113,48 @@ class Checkout extends Component<PropsType, StateType> {
 
   handleCheckout = () => {
     console.log('checkout');
+    const {
+      orderInput: { addressFull, receiverName },
+    } = this.state;
+    CreateOrdersMutation.commit({
+      input: { clientMutationId: '', addressFull, receiverName },
+      environment: this.context.environment,
+      onCompleted: (response, errors) => {
+        log.debug('Success for DeleteFromCart mutation');
+        if (response) {
+          log.debug('Response: ', response);
+        }
+        if (errors) {
+          log.debug('Errors: ', errors);
+        }
+      },
+      onError: error => {
+        log.error('Error in DeleteFromCart mutation');
+        log.error(error);
+        // this.props.showAlert({
+        //   type: 'danger',
+        //   text: 'Unable to delete product quantity in cart',
+        //   link: { text: 'Close.' },
+        // });
+      },
+    });
   };
 
   checkReadyToCheckout = () => {
-    const { step, orderInput: { addressFull: {
-      value,
-      country,
-      locality,
-      postalCode,
-      streetNumber,
-    } } } = this.state;
-    if (step === 2 && (!value || !country || !locality || !postalCode || !streetNumber)) {
+    const {
+      step,
+      orderInput: {
+        addressFull: { value, country, locality, postalCode, streetNumber },
+      },
+    } = this.state;
+    if (
+      step === 2 &&
+      (!value || !country || !locality || !postalCode || !streetNumber)
+    ) {
       return false;
     }
     return true;
-  }
-
-  setStoresRef(ref) {
-    if (ref && !this.state.storesRef) {
-      this.setState({ storesRef: ref });
-    }
-  }
-
-  storesRef: any;
+  };
 
   render() {
     console.log('>>> Checkout props: ', this.props);
@@ -177,7 +203,11 @@ class Checkout extends Component<PropsType, StateType> {
                   {step === 2 && (
                     <div>
                       <div styleName="container">
-                        <CheckoutProducts me={me} orderInput={orderInput} onChangeStep={this.handleChangeStep} />
+                        <CheckoutProducts
+                          me={me}
+                          orderInput={orderInput}
+                          onChangeStep={this.handleChangeStep}
+                        />
                       </div>
                       <div styleName="storeContainer">
                         {stores.map(store => (
@@ -273,3 +303,7 @@ export default createPaginationContainer(
     `,
   },
 );
+
+Checkout.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
