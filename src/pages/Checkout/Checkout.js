@@ -2,7 +2,11 @@
 /* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
-import { createFragmentContainer, createPaginationContainer, graphql } from 'react-relay';
+import {
+  createFragmentContainer,
+  createPaginationContainer,
+  graphql,
+} from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   pipe,
@@ -128,32 +132,36 @@ class Checkout extends Component<PropsType, StateType> {
           <Col size={12}>
             <Row withoutGrow>
               <Col size={9}>
+                {step === 1 && (
                 <div styleName="container">
-                  {step === 1 && (
-                    <CheckoutAddress
-                      isAddressSelect={isAddressSelect}
-                      isNewAddress={isNewAddress}
-                      onChangeAddressType={this.handleOnChangeAddressType}
-                      deliveryAddresses={deliveryAddresses || []}
-                      orderInput={orderInput}
-                      onChangeOrderInput={this.handleOnChangeOrderInput}
-                    />
-                  )}
-                  {step === 2 && (
-                    <div>
+                  <CheckoutAddress
+                    isAddressSelect={isAddressSelect}
+                    isNewAddress={isNewAddress}
+                    onChangeAddressType={this.handleOnChangeAddressType}
+                    deliveryAddresses={deliveryAddresses || []}
+                    orderInput={orderInput}
+                    onChangeOrderInput={this.handleOnChangeOrderInput}
+                  />
+                </div>
+                )}
+                {step === 2 && (
+                  <div>
+                    <div styleName="container">
                       <CheckoutProducts me={me} orderInput={orderInput} />
                     </div>
-                  )}
-                </div>
-                {stores.map(store => (
-                  <CartStore
-                    onlySelected
-                    unselectable
-                    key={store.__id}
-                    store={store}
-                    totals={1000}
-                  />
-                ))}
+                    <div styleName="storeContainer">
+                      {stores.map(store => (
+                        <CartStore
+                          onlySelected
+                          unselectable
+                          key={store.__id}
+                          store={store}
+                          totals={1000}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </Col>
               <Col size={3}>
                 <CheckoutSidebar cart={cart} />
@@ -191,6 +199,7 @@ export default createPaginationContainer(
         }
       }
     }
+
     fragment Checkout_cart on Cart
       @argumentDefinitions(
         first: { type: "Int", defaultValue: null }

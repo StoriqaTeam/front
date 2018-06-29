@@ -8,6 +8,7 @@ import { Rating } from 'components/common/Rating';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/common/Input';
 import { Icon } from 'components/Icon';
+import { Row, Col } from 'layout';
 import { formatPrice, getNameText } from 'utils';
 
 import CartProduct from './CartProduct';
@@ -40,67 +41,39 @@ class CartStore extends PureComponent<PropsType> {
     }
     console.log('>>> CartStore products: ', { products, filteredProducts });
     return (
-      <div styleName="container">
-        <div styleName="products">
-          {filteredProducts.map((product, idx) => (
-            <CartProduct key={idx} product={product} onlySelected={onlySelected} unselectable={unselectable} />
-          ))}
-        </div>
-        <div styleName="footer">
-          <div styleName="store">
-            <div styleName="store-info">
-              <img src={store.logo} alt="store_picture" styleName="image" />
-              <div styleName="store-description">
-                <div styleName="store-name">
-                  {getNameText(store.name, 'EN')}
+      <Row>
+        <Col size={12}>
+          <div styleName="container">
+            <div styleName="products">
+              {filteredProducts.map((product, idx) => (
+                <CartProduct
+                  key={idx}
+                  product={product}
+                  onlySelected={onlySelected}
+                  unselectable={unselectable}
+                />
+              ))}
+            </div>
+            <div styleName="footer">
+              <div styleName="store">
+                <div styleName="store-info">
+                  <img src={store.logo} alt="store_picture" styleName="image" />
+                  <div styleName="store-description">
+                    <div styleName="store-name">
+                      {getNameText(store.name, 'EN')}
+                    </div>
+                    <Rating value={store.rating} />
+                  </div>
                 </div>
-                <Rating value={store.rating} />
+              </div>
+              <div styleName="store-total">
+                <div styleName="label">Subtotal</div>
+                <div styleName="value">{store.productsCost} STQ</div>
               </div>
             </div>
-            {/* <div styleName="chat-container">
-              <Icon type="chat" size={24} />
-              <div styleName="chat-text">Chat with Seller</div>
-            </div>
-            <div styleName="promocode">
-              <Input
-                fullWidth
-                focus={false}
-                onChange={() => {}}
-                detectCapsLock
-                model="TBA"
-                name="TBA"
-                label="Promocode"
-              />
-            </div> */}
           </div>
-          <div styleName="store-total">
-            <div styleName="label">Subtotal</div>
-            <div styleName="value">{store.productsCost} STQ</div>
-          </div>
-          {/* <div styleName="store-total">
-            <div styleName="store-total-header">Seller summary</div>
-            <CartProductAttribute
-              title="Products cost"
-              value={`${formatPrice(this.props.totals.productsCost || 0)} STQ`}
-            />
-            <CartProductAttribute
-              title="Delivery cost"
-              value={`${formatPrice(this.props.totals.deliveryCost || 0)} STQ`}
-            />
-            <CartProductAttribute
-              title="Total cost"
-              value={`${formatPrice(
-                this.props.totals.deliveryCost +
-                  this.props.totals.productsCost || 0,
-              )} STQ`}
-            />
-            <div styleName="buy">
-              <Button type="wireframe" disabled big>
-                Buy from this seller
-              </Button>
-            </div> */}
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }
