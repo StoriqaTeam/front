@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react';
 import {
-  createFragmentContainer,
   createPaginationContainer,
   graphql,
 } from 'react-relay';
@@ -14,20 +13,14 @@ import {
   path,
   map,
   prop,
-  propEq,
-  groupBy,
-  filter,
-  reject,
-  isNil,
-  reduce,
-  head,
-  defaultTo,
 } from 'ramda';
+import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
 import { CreateOrdersMutation } from 'relay/mutations';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 
@@ -49,6 +42,8 @@ import './Checkout.scss';
 type PropsType = {
   // eslint-disable-next-line
   cart: Cart_cart,
+  router: routerShape,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type Totals = {};
@@ -112,7 +107,6 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
-    console.log('checkout');
     const {
       orderInput: { addressFull, receiverName },
     } = this.state;
@@ -123,6 +117,12 @@ class Checkout extends Component<PropsType, StateType> {
         log.debug('Success for DeleteFromCart mutation');
         if (response) {
           log.debug('Response: ', response);
+          this.props.showAlert({
+            type: 'success',
+            text: 'Orders successfully created',
+            link: { text: 'Close.' },
+          });
+          this.props.router.push('/profile/personal-data');
         }
         if (errors) {
           log.debug('Errors: ', errors);
@@ -131,11 +131,11 @@ class Checkout extends Component<PropsType, StateType> {
       onError: error => {
         log.error('Error in DeleteFromCart mutation');
         log.error(error);
-        // this.props.showAlert({
-        //   type: 'danger',
-        //   text: 'Unable to delete product quantity in cart',
-        //   link: { text: 'Close.' },
-        // });
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something went wrong :(',
+          link: { text: 'Close.' },
+        });
       },
     });
   };
@@ -245,7 +245,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(Checkout),
+  Page(withShowAlert(withRouter(Checkout))),
   graphql`
     fragment Checkout_me on User {
       id
