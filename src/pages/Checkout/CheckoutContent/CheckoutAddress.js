@@ -1,13 +1,12 @@
 // @flow
 
 import React from 'react';
-import { filter, find, map, pathOr } from 'ramda';
+import { pathOr } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { Select } from 'components/common/Select';
 import { Input } from 'components/common/Input';
 import { Row, Col } from 'layout';
-import { RadioGroup } from 'components/Forms';
 import { AddressForm } from 'components/AddressAutocomplete';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
@@ -18,23 +17,18 @@ import AddressInfo from './AddressInfo';
 
 import './CheckoutAddress.scss';
 
-type AddressItemType = {
-  id: string,
-  label: string,
-};
-
 type PropsType = {
   deliveryAddresses: any,
   onChangeOrderInput: Function,
   onChangeAddressType: Function,
   orderInput: any,
+  me: any,
   isAddressSelect: boolean,
   isNewAddress: boolean,
-  // onSelectAddress: (item: AddressItemType) => void,
 };
 
 class CheckoutContent extends React.Component<PropsType> {
-  handleOnSelectAddress = item => {
+  handleOnSelectAddress = (item: any) => {
     const { onChangeOrderInput, orderInput, deliveryAddresses } = this.props;
     const addressFull = getAddressFullByValue(deliveryAddresses, item.label);
     onChangeOrderInput({
@@ -52,14 +46,14 @@ class CheckoutContent extends React.Component<PropsType> {
   };
 
   handleOnCheckExistingAddress = () => {
-    console.log('>>> handle on check existing address: ');
+    // $FlowIgnore
     this.setState(({ isCheckedExistingAddress }) => ({
       isCheckedExistingAddress: !isCheckedExistingAddress,
     }));
   };
 
   handleOnCheckNewAddress = () => {
-    console.log('>>> handle on check new address: ');
+    // $FlowIgnore
     this.setState(({ isCheckedNewAddress }) => ({
       isCheckedNewAddress: !isCheckedNewAddress,
     }));
@@ -68,7 +62,6 @@ class CheckoutContent extends React.Component<PropsType> {
   handleInputChange = (id: string) => (e: any) => {
     const { onChangeOrderInput, orderInput } = this.props;
     const { value } = e.target;
-    console.log('>>> handle Input change: ', { id, value });
     onChangeOrderInput({
       ...orderInput,
       addressFull: {
@@ -76,9 +69,6 @@ class CheckoutContent extends React.Component<PropsType> {
         [id]: value,
       },
     });
-    // this.setState(
-    //   assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
-    // );
   };
 
   handleChangeData = (addressFullData: AddressFullType): void => {
@@ -98,10 +88,10 @@ class CheckoutContent extends React.Component<PropsType> {
       onChangeAddressType,
       deliveryAddresses,
     } = this.props;
-    console.log('>>> orderInput');
 
     const { addressFull } = orderInput;
 
+    // $FlowIgnore
     const addressValue = pathOr(
       null,
       ['orderInput', 'addressFull', 'value'],

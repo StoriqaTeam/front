@@ -13,7 +13,6 @@ type PropsType = {
 
 class Checkbox extends PureComponent<PropsType> {
   onChange = () => {
-    console.log('on change');
     const { id, onChange } = this.props;
     onChange(id);
   };

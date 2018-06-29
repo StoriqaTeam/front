@@ -14,10 +14,11 @@ import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
-import type CartStoresLocalFragment from '../Cart/__generated__/CartStoresLocalFragment.graphql';
+// eslint-disable-next-line
 import type Checkout_me from './__generated__/Checkout_me.graphql';
 
 import CheckoutHeader from './CheckoutHeader';
@@ -26,21 +27,23 @@ import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
 
 import CartStore from '../Cart/CartStore';
-import CartTotal from '../Cart/CartTotal';
 
 import './Checkout.scss';
 
 type PropsType = {
-  // eslint-disable-next-line
   me: any,
+  // eslint-disable-next-line
   cart: Cart_cart,
   router: routerShape,
+  // $FlowIgnore
   showAlert: (input: AddAlertInputType) => void,
 };
 
-type Totals = {};
-
 type StateType = {
+  storesRef: any,
+  step: number,
+  isAddressSelect: boolean,
+  isNewAddress: boolean,
   orderInput: {
     addressFull: AddressFullType,
     receiverName: string,
@@ -81,13 +84,7 @@ class Checkout extends Component<PropsType, StateType> {
 
   handleChangeStep = step => () => this.setState({ step });
 
-  handleCheckReadyToNext = () => {
-    const { step, deliveryAddress } = this.state;
-    return true;
-  };
-
   handleOnChangeOrderInput = orderInput => {
-    console.log('>>> handleOnChangeOrderInput data: ', { orderInput });
     this.setState({ orderInput });
   };
 
@@ -145,9 +142,8 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   render() {
-    // const deliveryAddresses = pathOr(null, ['me', 'deliveryAddresses'], this.props);
     const { me } = this.props;
-
+    // $FlowIgnore
     const deliveryAddresses = pathOr(
       null,
       ['me', 'deliveryAddresses'],
@@ -159,14 +155,13 @@ class Checkout extends Component<PropsType, StateType> {
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
-    console.log('>>> Checkout state : ', { orderInput });
     return (
       <Container withoutGrow>
         <Row withoutGrow>
           <Col size={12}>
             <CheckoutHeader
               currentStep={step}
-              isReadyToNext={this.handleCheckReadyToNext}
+              isReadyToNext={this.checkReadyToCheckout()}
               onChangeStep={this.handleChangeStep}
             />
           </Col>

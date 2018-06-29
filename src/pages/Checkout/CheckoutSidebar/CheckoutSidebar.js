@@ -13,17 +13,12 @@ import './CheckoutSidebar.scss';
 
 const STICKY_THRESHOLD_REM = 90;
 
-type Totals = {
-  [storeId: string]: {
-    productsCost: number,
-    deliveryCost: number,
-    totalCount: number,
-  },
-};
-
 type PropsType = {
   storesRef: ?Object,
-  totals: Totals,
+  cart: any,
+  onClick: Function,
+  isReadyToClick: Function,
+  buttonText: string,
 };
 
 type StateType = {
@@ -112,15 +107,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const {
-      cart,
-      onClick,
-      isReadyToClick,
-      buttonText,
-      totalCount,
-    } = this.props;
+    const { cart, onClick, isReadyToClick, buttonText } = this.props;
     const stores = map(i => i.node, pathOr([], ['stores', 'edges'], cart));
-    console.log('>>> sidebar cart: ', { cart, totalCount, stores });
+    // console.log('>>> sidebar cart: ', { cart, totalCount, stores });
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -167,14 +156,3 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
 }
 
 export default CheckoutSidebar;
-// export default createFragmentContainer(
-//   CheckoutSidebar,
-//   graphql`
-//     fragment CheckoutSidebar_store on CartStore {
-//       productsCost
-//       deliveryCost
-//       totalCost
-//       totalCount
-//     }
-//   `,
-// );

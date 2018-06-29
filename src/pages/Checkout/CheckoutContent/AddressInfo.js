@@ -4,7 +4,26 @@ import React from 'react';
 
 import './AddressInfo.scss';
 
-const AddressInfo = ({ receiverName, addressFull, email }) => (
+export type AddressFullType = {
+  value?: ?string,
+  country?: ?string,
+  administrativeAreaLevel1?: ?string,
+  administrativeAreaLevel2?: ?string,
+  locality?: ?string,
+  political?: ?string,
+  postalCode?: ?string,
+  route?: ?string,
+  streetNumber?: ?string,
+  placeId?: ?string,
+};
+
+type PropsType = {
+  receiverName: string,
+  addressFull: AddressFullType,
+  email: string,
+};
+
+const AddressInfo = ({ receiverName, addressFull, email }: PropsType) => (
   <div styleName="infoContent">
     <div>
       {addressFull.country}, {addressFull.locality}

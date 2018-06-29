@@ -24,8 +24,10 @@ type AddressParamsType = {
 };
 
 type CreateOrdersMutationVariables = {
-  receiverName: string,
-  addressFull: AddressParamsType,
+  input: {
+    receiverName: string,
+    addressFull: AddressParamsType,
+  },
 };
 
 export type MutationParamsType = {

@@ -24,7 +24,7 @@ import { routerShape, withRouter } from 'found';
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
-import CartTotal from './CartTotal';
+// import CartTotal from './CartTotal';
 import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
@@ -144,7 +144,7 @@ class Cart extends Component<PropsType, StateType> {
 
   handleToCheckout = () => {
     this.props.router.push('/checkout');
-  }
+  };
 
   render() {
     const stores = pipe(
@@ -152,7 +152,6 @@ class Cart extends Component<PropsType, StateType> {
       map(path(['node'])),
     )(this.props);
     const { cart } = this.props;
-    console.log('>>> cart props: ', { cart });
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>

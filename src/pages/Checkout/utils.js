@@ -1,8 +1,10 @@
 // @flow
 
-import { add, map, find } from 'ramda';
+import { map, find } from 'ramda';
 
-export const addressesToSelect = deliveryAddresses =>
+import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
+
+export const addressesToSelect = (deliveryAddresses: any) =>
   map(i => {
     if (!i.address || !i.address.value) {
       return null;
@@ -10,15 +12,18 @@ export const addressesToSelect = deliveryAddresses =>
     return { id: i.address.value, label: i.address.value };
   }, deliveryAddresses);
 
-export const getAddressFullByValue = (deliveryAddresses, value) => {
+export const getAddressFullByValue = (deliveryAddresses: any, value: any) => {
   const addressValue = find(
     item => item.address.value === value,
     deliveryAddresses,
   );
+  if (!addressValue) {
+    return null;
+  }
   return addressValue.address;
 };
 
-export const addressFullToString = (addressFull: any) => {
+export const addressFullToString = (addressFull: AddressFullType) => {
   if (
     !addressFull ||
     !addressFull.country ||
@@ -32,7 +37,7 @@ export const addressFullToString = (addressFull: any) => {
   }`;
 };
 
-export const calcTotal = (stores: Array<any>, fieldName) => {
+export const calcTotal = (stores: any, fieldName: string) => {
   let total = 0;
   // eslint-disable-next-line
   for (let i = 0; i < stores.length; i++) {
