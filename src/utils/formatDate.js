@@ -7,7 +7,7 @@ export const stringFromTimestamp = (input: {
   format: ?string,
 }): string => {
   // date object from timestamp
-  const dateObj = moment(input.timestamp).utc();
+  const dateObj = moment.utc(input.timestamp);
   return dateObj.format(input.format || 'DD-MM-YYYY HH:mm');
 };
 
