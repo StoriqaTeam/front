@@ -40,6 +40,7 @@ import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
 
 import CartStore from '../Cart/CartStore';
+import CartTotal from '../Cart/CartTotal';
 
 import './Checkout.scss';
 
@@ -60,6 +61,7 @@ type StateType = {
 /* eslint-disable react/no-array-index-key */
 class Checkout extends Component<PropsType, StateType> {
   state = {
+    storesRef: null,
     step: 1,
     isAddressSelect: true,
     isNewAddress: false,
@@ -102,6 +104,14 @@ class Checkout extends Component<PropsType, StateType> {
     }));
   };
 
+  setStoresRef(ref) {
+    if (ref && !this.state.storesRef) {
+      this.setState({ storesRef: ref });
+    }
+  }
+
+  storesRef: any;
+
   render() {
     console.log('>>> Checkout props: ', this.props);
     // const deliveryAddresses = pathOr(null, ['me', 'deliveryAddresses'], this.props);
@@ -130,43 +140,49 @@ class Checkout extends Component<PropsType, StateType> {
             />
           </Col>
           <Col size={12}>
-            <Row withoutGrow>
-              <Col size={9}>
-                {step === 1 && (
-                <div styleName="container">
-                  <CheckoutAddress
-                    isAddressSelect={isAddressSelect}
-                    isNewAddress={isNewAddress}
-                    onChangeAddressType={this.handleOnChangeAddressType}
-                    deliveryAddresses={deliveryAddresses || []}
-                    orderInput={orderInput}
-                    onChangeOrderInput={this.handleOnChangeOrderInput}
-                  />
-                </div>
-                )}
-                {step === 2 && (
-                  <div>
+            <div ref={ref => this.setStoresRef(ref)}>
+              <Row withoutGrow>
+                <Col size={9}>
+                  {step === 1 && (
                     <div styleName="container">
-                      <CheckoutProducts me={me} orderInput={orderInput} />
+                      <CheckoutAddress
+                        me={me}
+                        isAddressSelect={isAddressSelect}
+                        isNewAddress={isNewAddress}
+                        onChangeAddressType={this.handleOnChangeAddressType}
+                        deliveryAddresses={deliveryAddresses || []}
+                        orderInput={orderInput}
+                        onChangeOrderInput={this.handleOnChangeOrderInput}
+                      />
                     </div>
-                    <div styleName="storeContainer">
-                      {stores.map(store => (
-                        <CartStore
-                          onlySelected
-                          unselectable
-                          key={store.__id}
-                          store={store}
-                          totals={1000}
-                        />
-                      ))}
+                  )}
+                  {step === 2 && (
+                    <div>
+                      <div styleName="container">
+                        <CheckoutProducts me={me} orderInput={orderInput} />
+                      </div>
+                      <div styleName="storeContainer">
+                        {stores.map(store => (
+                          <CartStore
+                            onlySelected
+                            unselectable
+                            key={store.__id}
+                            store={store}
+                            totals={1000}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Col>
-              <Col size={3}>
-                <CheckoutSidebar cart={cart} />
-              </Col>
-            </Row>
+                  )}
+                </Col>
+                <Col size={3}>
+                  <CheckoutSidebar
+                    storesRef={this.state.storesRef}
+                    cart={cart}
+                  />
+                </Col>
+              </Row>
+            </div>
           </Col>
         </Row>
       </Container>

@@ -14,6 +14,8 @@ import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm
 
 import { getAddressFullByValue, addressesToSelect } from '../utils';
 
+import AddressInfo from './AddressInfo';
+
 import './CheckoutAddress.scss';
 
 type AddressItemType = {
@@ -89,6 +91,7 @@ class CheckoutContent extends React.Component<PropsType> {
 
   render() {
     const {
+      me,
       isAddressSelect,
       isNewAddress,
       orderInput,
@@ -152,7 +155,6 @@ class CheckoutContent extends React.Component<PropsType> {
               {isNewAddress && (
                 <div styleName="formWrapper">
                   <AddressForm
-                    // onChangeFormInput={this.handleInputChange}
                     isOpen
                     onChangeData={this.handleChangeData}
                     country={addressFull ? addressFull.country : null}
@@ -163,6 +165,16 @@ class CheckoutContent extends React.Component<PropsType> {
               )}
             </div>
           </div>
+        </Col>
+        <Col size={6}>
+          {orderInput.addressFull.value &&
+            <AddressInfo
+              addressFull={orderInput.addressFull}
+              receiverName={orderInput.receiverName ||
+                `${me.firstName} ${me.lastName}`}
+              email={me.email}
+            />
+          }
         </Col>
       </Row>
     );

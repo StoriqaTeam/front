@@ -11,6 +11,7 @@ import { Row, Col } from 'layout';
 import { addressFullToString } from '../utils';
 
 import './CheckoutProducts.scss';
+import AddressInfo from './AddressInfo';
 
 class CheckoutContent extends React.Component<PropsType> {
   state = {
@@ -47,19 +48,14 @@ class CheckoutContent extends React.Component<PropsType> {
                   </Button>
                 </Col>
                 <Col size={12}>
-                  <div styleName="infoContent">
-                    <div>
-                      {orderInput.addressFull.country},{' '}
-                      {orderInput.addressFull.locality}
-                    </div>
-                    <div>{orderInput.addressFull.value}</div>
-                    {/* {addressFullToString(orderInput.addressFull)} */}
-                    <div styleName="name">
-                      {orderInput.receiverName ||
+                  {orderInput.addressFull.value &&
+                    <AddressInfo
+                      addressFull={orderInput.addressFull}
+                      receiverName={orderInput.receiverName ||
                         `${me.firstName} ${me.lastName}`}
-                    </div>
-                    <div styleName="email">{me.email}</div>
-                  </div>
+                      email={me.email}
+                    />
+                  }
                 </Col>
               </Row>
             </div>

@@ -10,26 +10,113 @@ import { calcTotal } from '../utils';
 
 import './CheckoutSidebar.scss';
 
-class CheckoutSidebar extends React.Component<PropsType> {
+const STICKY_THRESHOLD_REM = 90;
+
+type Totals = {
+  [storeId: string]: {
+    productsCost: number,
+    deliveryCost: number,
+    totalCount: number,
+  },
+};
+
+type PropsType = {
+  storesRef: ?Object,
+  totals: Totals,
+};
+
+type StateType = {
+  currentClass: 'sticky' | 'top' | 'bottom',
+};
+
+const STICKY_PADDING_TOP_REM = 2;
+const STICKY_PADDING_BOTTOM_REM = 2;
+
+
+class CheckoutSidebar extends React.Component<PropsType, StateType> {
+
+  constructor(props: PropsType) {
+    super(props);
+    this.handleScroll = this.handleScrollEvent.bind(this);
+  }
+
   state = {
-    step: 1,
+    currentClass: 'top',
   };
 
-  // getCartTotalCount = (stores) => {
-  //   const { cart } = this.props;
-  //   const stores = map(i => i.node, pathOr([], ['stores', 'edges'], cart));
-  //   return calcCartTotalCout(stores);
-  // }
+  componentDidMount() {
+    if (!window) return;
+    window.addEventListener('scroll', this.handleScroll);
+  }
 
-  // getCartTotalCost =(stores) => {
-  //   const { cart } = this.props;
-  // }
+  componentWillUnmount() {
+    if (!window) return;
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  setRef(ref: ?Object) {
+    this.ref = ref;
+  }
+
+  ref: ?{ className: string };
+  scrolling: boolean;
+  handleScroll: () => void;
+  scrolling = false;
+
+  updateStickiness() {
+    if (!window) return;
+    if (!this.ref || !this.props.storesRef) return;
+    const rem = parseFloat(
+      window.getComputedStyle(document.documentElement).fontSize,
+    );
+    const offset = window.pageYOffset;
+    // $FlowIgnoreMe
+    const rect = this.ref.getBoundingClientRect();
+    const height = rect.bottom - rect.top;
+    const {
+      top: viewTop,
+      bottom: viewBottom,
+      // $FlowIgnoreMe
+    } = this.props.storesRef.getBoundingClientRect();
+    if (viewBottom - viewTop < STICKY_THRESHOLD_REM * rem) {
+      if (this.state.currentClass !== 'top') {
+        this.setState({ currentClass: 'top' });
+      }
+      return;
+    }
+    const top = viewTop + (offset - STICKY_PADDING_TOP_REM * rem);
+    const bottom =
+      viewBottom +
+      (offset - (STICKY_PADDING_TOP_REM + STICKY_PADDING_BOTTOM_REM) * rem);
+    let currentClass = 'top';
+    if (offset >= top) {
+      currentClass = 'sticky';
+    }
+    if (offset + height >= bottom) {
+      currentClass = 'bottom';
+    }
+    // $FlowIgnoreMe
+    if (this.ref.className !== currentClass) {
+      // $FlowIgnoreMe
+      this.ref.className = currentClass;
+    }
+  }
+
+  handleScrollEvent() {
+    if (!this.scrolling) {
+      window.requestAnimationFrame(() => {
+        this.updateStickiness();
+        this.scrolling = false;
+      });
+      this.scrolling = true;
+    }
+  }
 
   render() {
     const { cart } = this.props;
     const stores = map(i => i.node, pathOr([], ['stores', 'edges'], cart));
     return (
-      <div className="">
+      <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
           <div styleName="title">Subtotal</div>
           <div styleName="totalsContainer">

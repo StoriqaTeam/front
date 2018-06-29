@@ -158,7 +158,10 @@ class CartProduct extends PureComponent<PropsType> {
                   />
                 </div>
               )}
-              <div styleName="picture" style={{ backgroundImage: `url(${photoMain})`}}>
+              <div
+                styleName="picture"
+                style={{ backgroundImage: `url(${photoMain})` }}
+              >
                 {/* <img src={photoMain} styleName="picture" alt="product_picture" /> */}
               </div>
             </div>
@@ -168,32 +171,36 @@ class CartProduct extends PureComponent<PropsType> {
               <Col size={9}>
                 <div styleName="product-summary-header">{name}</div>
 
-                <ShowMore height={400} dataTest={`cart-product-${product.rawId}-showMore`}>
+                <ShowMore
+                  height={400}
+                  dataTest={`cart-product-${product.rawId}-showMore`}
+                >
                   <Row>
                     <Col size={9}>
                       <div styleName="contentBlock">
-
-                        {attrs.length > 0 &&
+                        {attrs.length > 0 && (
                           <div styleName="product-summary-attributes">
-                            <div styleName="cart-product-title">About product</div>
+                            <div styleName="cart-product-title">
+                              About product
+                            </div>
                             {attrs.map((attr, idx) => (
                               <div key={idx} styleName="half-width">
                                 <CartProductAttribute {...attr} />
                               </div>
                             ))}
                           </div>
-                        }
+                        )}
 
                         <div styleName="delivery-container">
-                          <div styleName="cart-product-title">Delivery and return</div>
+                          <div styleName="cart-product-title">
+                            Delivery and return
+                          </div>
                           <div styleName="half-width">
                             <CartProductAttribute
                               title="Shiping to"
                               value={
                                 <Select
-                                  items={[
-                                    { id: 1, label: 'Everywhere' },
-                                  ]}
+                                  items={[{ id: 1, label: 'Everywhere' }]}
                                   activeItem={{ id: 1, label: 'Everywhere' }}
                                   forForm
                                   containerStyle={{ width: '24rem' }}
@@ -202,7 +209,10 @@ class CartProduct extends PureComponent<PropsType> {
                             />
                           </div>
                           <div styleName="half-width">
-                            <CartProductAttribute title="Terms" value="14 days" />
+                            <CartProductAttribute
+                              title="Terms"
+                              value="14 days"
+                            />
                           </div>
                           <div styleName="half-width">
                             <CartProductAttribute
@@ -220,7 +230,6 @@ class CartProduct extends PureComponent<PropsType> {
                       </div>
                     </Col>
                     <Col size={3}>
-
                       {/* <div styleName="product-params"> */}
                       <div styleName="contentBlock">
                         <div styleName="cart-product-title">Price</div>
@@ -231,7 +240,9 @@ class CartProduct extends PureComponent<PropsType> {
                               value={quantity}
                               min={0}
                               max={9999}
-                              onChange={newVal => this.handleQuantityChange(newVal)}
+                              onChange={newVal =>
+                                this.handleQuantityChange(newVal)
+                              }
                             />
                           }
                         />
@@ -247,7 +258,6 @@ class CartProduct extends PureComponent<PropsType> {
                     </Col>
                   </Row>
                 </ShowMore>
-
               </Col>
               <Col size={3}>
                 <div styleName="recycleContainer">
