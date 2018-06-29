@@ -84,7 +84,7 @@ class Checkout extends Component<PropsType, StateType> {
 
   handleChangeStep = step => {
     console.log('**** step: ', step);
-    this.setState({ step });
+    return () => this.setState({ step });
   };
 
   handleCheckReadyToNext = () => {
@@ -103,6 +103,10 @@ class Checkout extends Component<PropsType, StateType> {
       isNewAddress: !prevState.isNewAddress,
     }));
   };
+
+  handleCheckout = () => {
+    console.log('checkout')
+  }
 
   setStoresRef(ref) {
     if (ref && !this.state.storesRef) {
@@ -179,6 +183,9 @@ class Checkout extends Component<PropsType, StateType> {
                   <CheckoutSidebar
                     storesRef={this.state.storesRef}
                     cart={cart}
+                    buttonText={step === 1 ? 'Next' : 'Checkout'}
+                    onClick={step === 1 && this.handleChangeStep(2) || this.handleCheckout}
+                    isReadyToClick
                   />
                 </Col>
               </Row>
@@ -190,7 +197,6 @@ class Checkout extends Component<PropsType, StateType> {
   }
 }
 
-// export default Page(Checkout);
 export default createPaginationContainer(
   Page(Checkout),
   graphql`
@@ -224,6 +230,10 @@ export default createPaginationContainer(
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {
+            productsCost
+            deliveryCost
+            totalCost
+            totalCount
             ...CartStore_store
           }
         }

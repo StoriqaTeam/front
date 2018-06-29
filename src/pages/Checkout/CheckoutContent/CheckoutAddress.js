@@ -167,14 +167,15 @@ class CheckoutContent extends React.Component<PropsType> {
           </div>
         </Col>
         <Col size={6}>
-          {orderInput.addressFull.value &&
+          {orderInput.addressFull.value && (
             <AddressInfo
               addressFull={orderInput.addressFull}
-              receiverName={orderInput.receiverName ||
-                `${me.firstName} ${me.lastName}`}
+              receiverName={
+                orderInput.receiverName || `${me.firstName} ${me.lastName}`
+              }
               email={me.email}
             />
-          }
+          )}
         </Col>
       </Row>
     );

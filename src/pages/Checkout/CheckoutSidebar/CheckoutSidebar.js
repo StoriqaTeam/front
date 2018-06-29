@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { pathOr, map } from 'ramda';
+// import { createFragmentContainer, graphql } from 'react-relay';
 
 import { formatPrice } from 'utils';
 import { Button } from 'components/common/Button';
@@ -32,9 +33,7 @@ type StateType = {
 const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
 
-
 class CheckoutSidebar extends React.Component<PropsType, StateType> {
-
   constructor(props: PropsType) {
     super(props);
     this.handleScroll = this.handleScrollEvent.bind(this);
@@ -113,8 +112,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { cart } = this.props;
+    const { cart, onClick, isReadyToClick, buttonText, totalCount } = this.props;
     const stores = map(i => i.node, pathOr([], ['stores', 'edges'], cart));
+    console.log(">>> sidebar cart: ", { cart, totalCount, stores })
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -145,8 +145,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             </div>
           </div>
           <div styleName="checkout">
-            <Button id="cartTotalCheckout" disabled={!100} big>
-              Checkout
+            <Button id="cartTotalCheckout" disabled={!isReadyToClick} big onClick={onClick}>
+              {buttonText}
             </Button>
           </div>
         </div>
@@ -156,3 +156,14 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
 }
 
 export default CheckoutSidebar;
+// export default createFragmentContainer(
+//   CheckoutSidebar,
+//   graphql`
+//     fragment CheckoutSidebar_store on CartStore {
+//       productsCost
+//       deliveryCost
+//       totalCost
+//       totalCount
+//     }
+//   `,
+// );
