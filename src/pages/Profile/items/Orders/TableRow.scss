@@ -8,6 +8,10 @@
   position: relative;
   align-items: center;
   color: $color_grey;
+  &:hover {
+    background-color: $color_grey_light;
+    cursor: pointer;
+  }
 }
 
 .numberCell {

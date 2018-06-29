@@ -98,6 +98,7 @@ export default createFragmentContainer(
   graphql`
     fragment Profile_me on User {
       ...Orders
+      ...Order
       id
       rawId
       avatar
