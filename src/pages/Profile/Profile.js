@@ -55,7 +55,6 @@ class Profile extends Component<PropsType, StateType> {
     const { activeItem, me } = this.props;
     // $FlowIgnoreMe
     const element = pathOr(null, [activeItem], profileMenuMap);
-    // $FlowIgnoreMe
     return cloneElement(element, {
       data: me,
       subtitle,
@@ -98,6 +97,7 @@ export default createFragmentContainer(
   Page(Profile),
   graphql`
     fragment Profile_me on User {
+      ...Orders
       id
       rawId
       avatar
