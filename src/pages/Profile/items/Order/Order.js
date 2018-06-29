@@ -22,7 +22,7 @@ type OrderDTOType = {
     name: string,
     address: string,
   },
-  date: number, // timestamp
+  date: string,
   delivery: string,
   trackId: string,
   quantity: number,
@@ -42,10 +42,10 @@ class Order extends PureComponent<PropsType> {
     return order;
   };
 
-  getDateFromTimestamp = (timestamp: number): string =>
+  getDateFromTimestamp = (timestamp: string): string =>
     fullDateFromTimestamp(timestamp);
 
-  getTimeFromTimestamp = (timestamp: number): string =>
+  getTimeFromTimestamp = (timestamp: string): string =>
     timeFromTimestamp(timestamp);
 
   render() {
