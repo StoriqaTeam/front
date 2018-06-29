@@ -1,6 +1,8 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'found';
+import classNames from 'classnames';
 
 import './TableRow.scss';
 
@@ -34,9 +36,22 @@ class TableRow extends PureComponent<PropsType> {
         <div styleName="dateCell">{rowItem.date}</div>
         <div styleName="shopCell">{rowItem.shop.title}</div>
         <div styleName="deliveryCell">{rowItem.delivery}</div>
-        <div styleName="itemCell">{rowItem.item.title}</div>
-        <div styleName="priceCell">{rowItem.price}</div>
-        <div styleName="paymentCell">{rowItem.payment}</div>
+        <div styleName="itemCell">
+          <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
+            {rowItem.item.title}
+          </Link>
+        </div>
+        <div styleName="priceCell">
+          {rowItem.price} <b>STQ</b>
+        </div>
+        <div
+          styleName={classNames('paymentCell', {
+            paid: rowItem.payment === 'Paid',
+            unpaid: rowItem.payment !== 'Paid',
+          })}
+        >
+          {rowItem.payment}
+        </div>
         <div styleName="statusCell">{rowItem.status}</div>
         <div styleName="border" />
       </div>

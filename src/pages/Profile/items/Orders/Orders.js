@@ -13,7 +13,7 @@ import Table from './Table';
 
 import type { TableItemType } from './TableRow';
 
-const itemsPerPage = 2;
+const itemsPerPage = 10;
 
 type PropsType = {
   // eslint-disable-next-line
@@ -45,14 +45,13 @@ class Orders extends Component<PropsType, StateType> {
   }
 
   loadPage = (pageNumber: number) => {
-    console.log('loadPage', { pageNumber });
     this.props.relay.refetch(
       {
         currentPage: pageNumber,
         itemsCount: itemsPerPage,
       },
       null,
-      () => console.log('refetch done'),
+      () => {},
       { force: true },
     );
   };
@@ -132,7 +131,7 @@ export default createRefetchContainer(
     fragment Orders on User
       @argumentDefinitions(
         currentPage: { type: "Int!", defaultValue: 1 }
-        itemsCount: { type: "Int!", defaultValue: 2 }
+        itemsCount: { type: "Int!", defaultValue: 10 }
       ) {
       orders(
         currentPage: $currentPage

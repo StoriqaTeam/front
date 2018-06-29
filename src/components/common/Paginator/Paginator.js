@@ -23,6 +23,7 @@ class Paginator extends PureComponent<PropsType> {
                 current: item === this.props.currentPage,
               })}
               onClick={() => this.props.onPageSelect(item)}
+              key={`orders-pagination-item-${item}`}
             >
               {item}
             </button>
