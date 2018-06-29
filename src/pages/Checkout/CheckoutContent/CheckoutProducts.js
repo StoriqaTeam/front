@@ -21,7 +21,7 @@ class CheckoutContent extends React.Component<PropsType> {
 
   render() {
     const { step } = this.state;
-    const { orderInput, me } = this.props;
+    const { orderInput, me, onChangeStep } = this.props;
     // console.log('>>> checkout me', { me });
     return (
       <Row>
@@ -40,7 +40,7 @@ class CheckoutContent extends React.Component<PropsType> {
                     big
                     contour
                     whireframe
-                    onClick={console.log}
+                    onClick={onChangeStep(1)}
                     type="button"
                     dataTest="changeAddress"
                   >

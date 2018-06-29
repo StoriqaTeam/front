@@ -112,9 +112,15 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { cart, onClick, isReadyToClick, buttonText, totalCount } = this.props;
+    const {
+      cart,
+      onClick,
+      isReadyToClick,
+      buttonText,
+      totalCount,
+    } = this.props;
     const stores = map(i => i.node, pathOr([], ['stores', 'edges'], cart));
-    console.log(">>> sidebar cart: ", { cart, totalCount, stores })
+    console.log('>>> sidebar cart: ', { cart, totalCount, stores });
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -145,7 +151,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             </div>
           </div>
           <div styleName="checkout">
-            <Button id="cartTotalCheckout" disabled={!isReadyToClick} big onClick={onClick}>
+            <Button
+              id="cartTotalCheckout"
+              disabled={!isReadyToClick}
+              big
+              onClick={onClick}
+            >
               {buttonText}
             </Button>
           </div>

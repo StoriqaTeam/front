@@ -105,7 +105,21 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
-    console.log('checkout')
+    console.log('checkout');
+  };
+
+  checkReadyToCheckout = () => {
+    const { step, orderInput: { addressFull: {
+      value,
+      country,
+      locality,
+      postalCode,
+      streetNumber,
+    } } } = this.state;
+    if (step === 2 && (!value || !country || !locality || !postalCode || !streetNumber)) {
+      return false;
+    }
+    return true;
   }
 
   setStoresRef(ref) {
@@ -163,7 +177,7 @@ class Checkout extends Component<PropsType, StateType> {
                   {step === 2 && (
                     <div>
                       <div styleName="container">
-                        <CheckoutProducts me={me} orderInput={orderInput} />
+                        <CheckoutProducts me={me} orderInput={orderInput} onChangeStep={this.handleChangeStep} />
                       </div>
                       <div styleName="storeContainer">
                         {stores.map(store => (
@@ -184,8 +198,11 @@ class Checkout extends Component<PropsType, StateType> {
                     storesRef={this.state.storesRef}
                     cart={cart}
                     buttonText={step === 1 ? 'Next' : 'Checkout'}
-                    onClick={step === 1 && this.handleChangeStep(2) || this.handleCheckout}
-                    isReadyToClick
+                    onClick={
+                      (step === 1 && this.handleChangeStep(2)) ||
+                      this.handleCheckout
+                    }
+                    isReadyToClick={this.checkReadyToCheckout()}
                   />
                 </Col>
               </Row>
