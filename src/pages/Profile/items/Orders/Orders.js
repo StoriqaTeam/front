@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { pathOr, map } from 'ramda';
 
+import { Paginator } from 'components/common/Paginator';
 import { shortDateFromTimestamp, timeFromTimestamp } from 'utils/formatDate';
 
 import Header from './Header';
@@ -19,6 +20,11 @@ type PropsType = {
   data: ?{
     orders: ?{
       edges: Array<any>,
+      pageInfo: {
+        totalPages: number,
+        currentPage: number,
+        pageItemsCount: number,
+      },
     },
   },
   relay: {
@@ -28,19 +34,18 @@ type PropsType = {
 
 type StateType = {
   currentPage: number,
-  pagesCount: number,
 };
 
 class Orders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
-    pagesCount: 1,
   };
   componentDidMount() {
     this.loadPage(this.state.currentPage);
   }
 
   loadPage = (pageNumber: number) => {
+    console.log('loadPage', { pageNumber });
     this.props.relay.refetch(
       {
         currentPage: pageNumber,
@@ -92,12 +97,30 @@ class Orders extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const edges = pathOr([], ['data', 'orders', 'edges'], this.props);
     const orderDTOs = map(item => this.orderToDTO(item.node), edges);
+
+    // $FlowIgnoreMe
+    const pagesCount = pathOr(
+      0,
+      ['data', 'orders', 'pageInfo', 'totalPages'],
+      this.props,
+    );
+
+    // $FlowIgnoreMe
+    const currentPage = pathOr(
+      0,
+      ['data', 'orders', 'pageInfo', 'currentPage'],
+      this.props,
+    );
     return (
       <div>
         <Header />
         <TableTitle />
         <Table items={orderDTOs} />
-        <button onClick={this.nextPage}>next</button>
+        <Paginator
+          pagesCount={pagesCount}
+          currentPage={currentPage}
+          onPageSelect={this.loadPage}
+        />
       </div>
     );
   }
