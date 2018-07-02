@@ -8,6 +8,10 @@
   position: relative;
   align-items: center;
   color: $color_grey;
+  &:hover {
+    background-color: $color_grey_light;
+    cursor: pointer;
+  }
 }
 
 .numberCell {
@@ -29,6 +33,10 @@
 .itemCell {
   margin-left: 2rem;
   width: 18.5rem;
+  a {
+    color: $color_blue;
+    font-size: 16px;
+  }
 }
 .priceCell {
   margin-left: 2rem;
@@ -50,4 +58,12 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.paid {
+  color: $color_green;
+}
+
+.unpaid {
+  color: $color_pink;
 }
