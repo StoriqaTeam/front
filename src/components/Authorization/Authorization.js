@@ -10,7 +10,7 @@ import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
 import { Spinner } from 'components/common/Spinner';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
-import { log, socialStrings, fromRelayError } from 'utils';
+import { log, socialStrings, fromRelayError, errorsHandler } from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -98,31 +98,18 @@ class Authorization extends Component<PropsType, StateType> {
       input,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          // $FlowIgnoreMe
-          this.setState({
-            errors: validationErrors,
-            isLoading: false,
-          });
-          return;
-        }
-        // $FlowIgnoreMe
-        const errorStatus: ?string = pathOr(
-          null,
-          ['100', 'status'],
-          relayErrors,
-        );
-        if (errorStatus) {
-          this.props.showAlert({
-            type: 'danger',
-            text: errorStatus,
-            link: { text: 'Close.' },
-          });
-          this.setState({ isLoading: false });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
           return;
         }
         this.props.showAlert({
@@ -135,29 +122,21 @@ class Authorization extends Component<PropsType, StateType> {
         if (onCloseModal) {
           onCloseModal();
         }
-        this.setState({ isLoading: false });
-        log.debug({ response, errors });
       },
       onError: (error: Error) => {
-        const relayErrors = fromRelayError(error);
         log.error({ error });
-        log.debug({ relayErrors });
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          this.setState({
-            isLoading: false,
-            // $FlowIgnoreMe
-            errors: validationErrors,
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
-        });
         this.setState({ isLoading: false });
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+        }
       },
     };
     CreateUserMutation.commit(params);
@@ -210,26 +189,29 @@ class Authorization extends Component<PropsType, StateType> {
           return;
         }
         const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-        // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        this.setState({
-          isLoading: false,
-          // $FlowIgnoreMe
-          errors: validationErrors,
-        });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+        }
       },
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
-        log.debug({ relayErrors });
-        // $FlowIgnoreMe
-        const validationErrors = pathOr(null, ['100', 'messages'], relayErrors);
-        this.setState({
-          isLoading: false,
-          // $FlowIgnoreMe
-          errors: validationErrors,
-        });
-        log.error({ error });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+        }
       },
     });
   };

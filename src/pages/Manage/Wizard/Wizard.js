@@ -3,15 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import {
-  assocPath,
-  path,
-  pick,
-  pathOr,
-  omit,
-  where,
-  complement,
-} from 'ramda';
+import { assocPath, path, pick, pathOr, omit, where, complement } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
