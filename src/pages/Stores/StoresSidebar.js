@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import { routerShape, withRouter } from 'found';
-import { addIndex, assocPath, find, isEmpty, map, pathOr, propEq } from 'ramda';
+import { routerShape, matchShape, withRouter } from 'found';
+import { addIndex, assocPath, find, map, pathOr, propEq } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
-import { urlToInput, inputToUrl, extractText } from 'utils';
+import { urlToInput, inputToUrl } from 'utils';
 
 import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
 
 import './StoresSidebar.scss';
+import { buildCategory, buildCategories } from './StoreUtils';
 
 type PropsType = {
   router: routerShape,
+  // eslint-disable-next-line
+  match: matchShape,
   // eslint-disable-next-line
   search: SearchType,
 };
@@ -28,28 +31,13 @@ class StoresSidebar extends Component<PropsType, StateType> {
     nextProps: PropsType,
     nextState: StateType,
   ): StateType | null {
-    const { search } = nextProps;
-    const rawCategories = pathOr(
-      [],
-      ['findStore', 'pageInfo', 'searchFilters', 'category', 'children'],
-      search,
-    );
-    const categories = map(item => {
-      const name = extractText(item.name);
-      return {
-        id: `${item.rawId}`,
-        label: !isEmpty(name) ? name : '',
-      };
-    }, rawCategories);
-    const category = pathOr(
-      null,
-      ['match', 'location', 'query', 'category'],
-      nextProps,
-    );
+    const { search, match } = nextProps;
+    const categories = buildCategories(search);
+    const category = buildCategory(search, match);
     if (category) {
       return {
         ...nextState,
-        category: find(propEq('id', category))(categories),
+        category,
       };
     }
     const rawCountries = pathOr(
@@ -96,13 +84,13 @@ class StoresSidebar extends Component<PropsType, StateType> {
     const isCountry = stateName === 'country';
     const pathPiece = isCountry ? stateName : 'categoryId';
     const propPiece = isCountry ? 'label' : 'id';
-    const oldPreparedObj = urlToInput(queryObj);
-    const newPreparedObj = assocPath(
+    const oldQueryObj = urlToInput(queryObj);
+    const newQueryObj = assocPath(
       ['options', pathPiece],
       item ? item[propPiece] : null,
-      oldPreparedObj,
+      oldQueryObj,
     );
-    const newUrl = inputToUrl(newPreparedObj);
+    const newUrl = inputToUrl(newQueryObj);
     this.setState({ [stateName]: item }, () => {
       this.push(newUrl);
     });

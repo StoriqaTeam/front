@@ -1,15 +1,16 @@
 // @flow
 
 import React, { Component } from 'react';
-
+import { matchShape } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { map, pathOr, find, propEq, isEmpty } from 'ramda';
+import { map, pathOr } from 'ramda';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
-import { extractText } from 'utils';
+
+import { buildCategory } from './StoreUtils';
 
 import StoresSidebar from './StoresSidebar';
 import StoreRow from './StoreRow';
@@ -26,6 +27,8 @@ type SelectedType = {
 };
 
 type PropsType = {
+  // eslint-disable-next-line
+  match: matchShape,
   search: SearchType,
   relay: Relay,
 };
@@ -35,45 +38,27 @@ type StateType = {
 };
 
 class Stores extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    nextState: StateType,
+  ): StateType | null {
+    const { search, match } = nextProps;
+    const category = buildCategory(search, match);
+    if (category) {
+      return {
+        ...nextState,
+        category
+      }
+    }
+    return null;
+  }
+  // TODO: I don't know what's for 'constructor' so I leave it in the meantime
   constructor(props: PropsType) {
     super(props);
     if (storesData) {
       this.state = {
         category: null,
       };
-    }
-  }
-
-  // TODO: Needs refactoring, this life-cycle will be deprecated
-  componentWillMount() {
-    // $FlowIgnore
-    const rawCategories = pathOr(
-      [],
-      [
-        'search',
-        'findStore',
-        'pageInfo',
-        'searchFilters',
-        'category',
-        'children',
-      ],
-      this.props,
-    );
-    const categories = map(item => {
-      const name = extractText(item.name);
-      return {
-        id: String(item.rawId),
-        label: !isEmpty(name) ? name : '',
-      };
-    }, rawCategories);
-    // $FlowIgnore
-    const category = pathOr(
-      null,
-      ['match', 'location', 'query', 'category'],
-      this.props,
-    );
-    if (category) {
-      this.setState({ category: find(propEq('id', category))(categories) });
     }
   }
 
