@@ -7,7 +7,7 @@ import Cookies from 'universal-cookie';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
-import { log } from 'utils';
+import { log, errorsHandler, fromRelayError } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
@@ -44,14 +44,13 @@ class OAuthCallback extends PureComponent<PropsType> {
         provider: this.props.provider,
         token: accessToken,
         environment: this.context.environment,
-        onCompleted: (response: ?Object, errors: ?Array<Error>) => {
+        onCompleted: (response, errors) => {
           log.debug({ response, errors });
-          if (errors) {
-            this.props.showAlert({
-              type: 'danger',
-              text: 'Something going wrong.',
-              link: { text: 'Close.' },
-            });
+          const relayErrors = fromRelayError({ source: { errors } });
+          if (relayErrors) {
+            // pass showAlert for show alert errors in common cases
+            // pass handleCallback specify validation errors
+            errorsHandler(relayErrors, this.props.showAlert);
             return;
           }
           const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
@@ -73,11 +72,12 @@ class OAuthCallback extends PureComponent<PropsType> {
         },
         onError: (error: Error) => {
           log.error(error);
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong.',
-            link: { text: 'Close.' },
-          });
+          const relayErrors = fromRelayError(error);
+          if (relayErrors) {
+            // pass showAlert for show alert errors in common cases
+            // pass handleCallback specify validation errors
+            errorsHandler(relayErrors, this.props.showAlert);
+          }
           this.props.router.replace('/login');
         },
       });
