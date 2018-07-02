@@ -23,6 +23,7 @@ const getStoreLink = () => {
   const cookies = new Cookies();
   const storeId = pathOr(null, ['value'], cookies.get('__storeId'));
   if (storeId) {
+    // $FlowIgnoreMe
     return `/manage/store/${storeId}`;
   }
   return '/manage/wizard';
