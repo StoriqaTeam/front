@@ -14,6 +14,7 @@ export {
   inputToUrl,
   findCategory,
 } from './search';
+export { errorsHandler } from './errorsHandler';
 export { default as rename, renameCamelCase } from './rename';
 export { default as socialStrings } from './socialStrings';
 export { default as uploadFile } from './uploadFile';

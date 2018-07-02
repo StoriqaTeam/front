@@ -19,8 +19,13 @@ type DataType = {
   defaultLanguage: ?string,
 };
 
+type ErrorsType = {
+  [code: string]: Array<string>,
+};
+
 type PropsType = {
   initialData: DataType,
+  errors: ?ErrorsType,
   onChange: ({
     id: string,
     rawId: number,
@@ -73,6 +78,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
 
   render() {
     const { name, slug, shortDescription } = this.state;
+    const { errors } = this.props;
     return (
       <div styleName="form">
         <div styleName="formItem">
@@ -82,6 +88,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
             label="Store name"
             onChange={this.handleOnChange}
             fullWidth
+            errors={errors && errors.name}
           />
         </div>
         <div styleName="formItem">
@@ -91,6 +98,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
             label="Slug"
             onChange={this.handleOnChange}
             fullWidth
+            errors={errors && errors.slug}
           />
         </div>
         <div>
@@ -100,6 +108,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
             label="Short description"
             onChange={this.handleOnChange}
             fullWidth
+            errors={errors && errors.shortDescription}
           />
         </div>
       </div>
