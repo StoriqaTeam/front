@@ -1,22 +1,24 @@
 // @flow
 
 import React, { Component } from 'react';
-import { routerShape } from 'found';
+
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { map, pathOr, find, propEq, assocPath, addIndex } from 'ramda';
+import { map, pathOr, find, propEq, isEmpty } from 'ramda';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
-import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
-import { urlToInput, inputToUrl } from 'utils';
+import { extractText } from 'utils';
 
+import StoresSidebar from './StoresSidebar';
 import StoreRow from './StoreRow';
 
 import './Stores.scss';
 
 import storesData from './stores.json';
+
+import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
 
 type SelectedType = {
   id: string,
@@ -24,15 +26,12 @@ type SelectedType = {
 };
 
 type PropsType = {
-  router: routerShape,
+  search: SearchType,
   relay: Relay,
 };
 
 type StateType = {
   category: ?SelectedType,
-  country: ?SelectedType,
-  categories: Array<SelectedType>,
-  countries: Array<SelectedType>,
 };
 
 class Stores extends Component<PropsType, StateType> {
@@ -41,16 +40,13 @@ class Stores extends Component<PropsType, StateType> {
     if (storesData) {
       this.state = {
         category: null,
-        country: null,
-        categories: [],
-        countries: [],
       };
     }
   }
 
   // TODO: Needs refactoring, this life-cycle will be deprecated
   componentWillMount() {
-    const lang = 'EN';
+    // $FlowIgnore
     const rawCategories = pathOr(
       [],
       [
@@ -64,13 +60,13 @@ class Stores extends Component<PropsType, StateType> {
       this.props,
     );
     const categories = map(item => {
-      const name = find(propEq('lang', lang))(item.name);
+      const name = extractText(item.name);
       return {
         id: String(item.rawId),
-        label: name && name.text ? name.text : '',
+        label: !isEmpty(name) ? name : '',
       };
     }, rawCategories);
-    this.setState({ categories });
+    // $FlowIgnore
     const category = pathOr(
       null,
       ['match', 'location', 'query', 'category'],
@@ -79,69 +75,26 @@ class Stores extends Component<PropsType, StateType> {
     if (category) {
       this.setState({ category: find(propEq('id', category))(categories) });
     }
-
-    const rawCountries = pathOr(
-      [],
-      ['search', 'findStore', 'pageInfo', 'searchFilters', 'country'],
-      this.props,
-    );
-    const mapIndexed = addIndex(map);
-    const countries = mapIndexed(
-      (item, idx) => ({
-        id: String(idx),
-        label: item,
-      }),
-      rawCountries,
-    );
-    this.setState({ countries });
-    const country = pathOr(
-      null,
-      ['match', 'location', 'query', 'country'],
-      this.props,
-    );
-    if (country) {
-      this.setState({ country: find(propEq('label', country))(countries) });
-    }
   }
 
-  storesRefetch = () => {
-    this.props.relay.loadMore(8);
-  };
-
-  handleCategory = (category: { id: string, label: string }) => {
-    this.setState({ category });
-    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
-    const oldPreparedObj = urlToInput(queryObj);
-    const newPreparedObj = assocPath(
-      ['options', 'categoryId'],
-      category ? category.id : null,
-      oldPreparedObj,
-    );
-    const newUrl = inputToUrl(newPreparedObj);
-    this.props.router.push(`/stores${newUrl}`);
-  };
-
-  handleLocation = (country: { id: string, label: string }) => {
-    this.setState({ country });
-    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
-    const oldPreparedObj = urlToInput(queryObj);
-    const newPreparedObj = assocPath(
-      ['options', 'country'],
-      country ? country.label : null,
-      oldPreparedObj,
-    );
-    const newUrl = inputToUrl(newPreparedObj);
-    this.props.router.push(`/stores${newUrl}`);
+  storesReFetch = (): void => {
+    const {
+      relay: { loadMore },
+    } = this.props;
+    loadMore(8);
   };
 
   render() {
-    const { categories, countries, category, country } = this.state;
+    const { category } = this.state;
+    // $FlowIgnore
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
+    // $FlowIgnore
     const totalCount = pathOr(
       0,
       ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'],
       this.props,
     );
+    // $FlowIgnore
     const searchValue = pathOr(
       null,
       ['location', 'query', 'search'],
@@ -165,30 +118,7 @@ class Stores extends Component<PropsType, StateType> {
           </Row>
           <Row>
             <Col sm={1} md={1} lg={2} xl={2}>
-              <div styleName="storeSidebar">
-                <div styleName="filterItem">
-                  <Select
-                    forSearch
-                    withEmpty
-                    label="Categories"
-                    activeItem={category}
-                    items={categories}
-                    onSelect={this.handleCategory}
-                    dataTest="storesCategoriesSelect"
-                  />
-                </div>
-                <div styleName="filterItem">
-                  <Select
-                    forSearch
-                    withEmpty
-                    label="Location"
-                    activeItem={country}
-                    items={countries}
-                    onSelect={this.handleLocation}
-                    dataTest="storesLocationSelect"
-                  />
-                </div>
-              </div>
+              <StoresSidebar search={this.props.search} />
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
               {stores && stores.length > 0 ? (
@@ -209,7 +139,7 @@ class Stores extends Component<PropsType, StateType> {
                   <Button
                     big
                     load
-                    onClick={this.storesRefetch}
+                    onClick={this.storesReFetch}
                     dataTest="searchStoresLoadMoreButton"
                   >
                     Load more
