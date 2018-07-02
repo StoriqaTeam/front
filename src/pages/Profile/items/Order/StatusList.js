@@ -8,7 +8,7 @@ import { timeFromTimestamp, shortDateFromTimestamp } from 'utils/formatDate';
 import './StatusList.scss';
 
 export type OrderStatusType = {
-  date: number,
+  date: string,
   manager: string,
   status: string,
   additionalInfo?: string,
@@ -19,7 +19,7 @@ type PropsType = {
 };
 
 class StatusList extends PureComponent<PropsType> {
-  dateStringFromTimestamp = (timestamp: number) =>
+  dateStringFromTimestamp = (timestamp: string) =>
     `${shortDateFromTimestamp(timestamp)} ${timeFromTimestamp(timestamp)}`;
 
   renderTitle = () => (

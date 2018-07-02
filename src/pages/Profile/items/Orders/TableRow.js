@@ -1,12 +1,14 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
+import { withRouter, routerShape, Link } from 'found';
 
 import './TableRow.scss';
 
 export type TableItemType = {
   number: string,
-  date: number,
+  date: string,
   shop: {
     id: number,
     title: string,
@@ -23,20 +25,40 @@ export type TableItemType = {
 
 type PropsType = {
   item: TableItemType,
+  router: routerShape,
 };
 
 class TableRow extends PureComponent<PropsType> {
   render() {
     const rowItem: TableItemType = this.props.item;
     return (
-      <div styleName="container">
+      // eslint-disable-next-line
+      <div
+        styleName="container"
+        onClick={() =>
+          this.props.router.push(`/profile/orders/${rowItem.number}`)
+        }
+      >
         <div styleName="numberCell">{rowItem.number}</div>
         <div styleName="dateCell">{rowItem.date}</div>
         <div styleName="shopCell">{rowItem.shop.title}</div>
         <div styleName="deliveryCell">{rowItem.delivery}</div>
-        <div styleName="itemCell">{rowItem.item.title}</div>
-        <div styleName="priceCell">{rowItem.price}</div>
-        <div styleName="paymentCell">{rowItem.payment}</div>
+        <div styleName="itemCell">
+          <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
+            {rowItem.item.title}
+          </Link>
+        </div>
+        <div styleName="priceCell">
+          {rowItem.price} <b>STQ</b>
+        </div>
+        <div
+          styleName={classNames('paymentCell', {
+            paid: rowItem.payment === 'Paid',
+            unpaid: rowItem.payment !== 'Paid',
+          })}
+        >
+          {rowItem.payment}
+        </div>
         <div styleName="statusCell">{rowItem.status}</div>
         <div styleName="border" />
       </div>
@@ -44,4 +66,4 @@ class TableRow extends PureComponent<PropsType> {
   }
 }
 
-export default TableRow;
+export default withRouter(TableRow);

@@ -30,17 +30,23 @@
 }
 
 .productName {
-  font-size: 16px;
-  line-height: 1.25;
-  font-weight: 500;
-  word-wrap: break-word;
-  overflow: hidden;
-  height: 2.5rem;
+  a {
+    font-size: 16px;
+    line-height: 1.25;
+    font-weight: 500;
+    word-wrap: break-word;
+    overflow: hidden;
+    height: 2.5rem;
+    color: $color_grey;
+  }
 }
 
 .productCategory {
-  font-size: 16px;
-  margin-top: 0.4rem;
+  a {
+    font-size: 16px;
+    margin-top: 0.4rem;
+    color: $color_grey;
+  }
 }
 
 .productPrice {

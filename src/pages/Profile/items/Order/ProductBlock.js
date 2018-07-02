@@ -2,11 +2,13 @@
 
 import React, { PureComponent } from 'react';
 import { slice } from 'ramda';
+import { Link } from 'found';
 
 import './ProductBlock.scss';
 
 export type ProductDTOType = {
   id: string,
+  storeId: number,
   name: string,
   photoUrl: ?string,
   category: {
@@ -52,10 +54,18 @@ class ProductBlock extends PureComponent<PropsType> {
         </div>
         <div styleName="productInfoBlock">
           <div styleName="productName">
-            <b>{product.name}</b>
+            <Link to={`/store/${product.storeId}/products/${product.id}`}>
+              <b>{product.name}</b>
+            </Link>
           </div>
-          <div styleName="productCategory">{product.category.name}</div>
-          <div styleName="productPrice">{product.price}</div>
+          <div styleName="productCategory">
+            <Link to={`/categories?category=${product.category.id}&search=`}>
+              {product.category.name}
+            </Link>
+          </div>
+          <div styleName="productPrice">
+            {product.price} <b>STQ</b>
+          </div>
         </div>
         {this.renderAttributes(attributes)}
       </div>
