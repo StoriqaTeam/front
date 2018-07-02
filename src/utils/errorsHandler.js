@@ -1,11 +1,20 @@
 // @flow
 
-import { keys, isEmpty } from 'ramda';
+import { keys, isEmpty, pathOr } from 'ramda';
 
 import { log } from 'utils';
 
 import type { ProcessedErrorType } from 'utils/fromRelayError';
-import type { AlertPropsType } from 'components/Alerts/Alert';
+
+export type AlertType = 'default' | 'success' | 'warning' | 'danger';
+
+export type AlertPropsType = {
+  type: AlertType,
+  text: string,
+  link: { text: string, path?: string },
+  onClose?: (timestamp: number) => void,
+  onClick?: () => void,
+};
 
 // first arg is relayErrors - standart error object
 // second arg is alertShow callback for show alerts in common cases
@@ -13,15 +22,17 @@ import type { AlertPropsType } from 'components/Alerts/Alert';
 export const errorsHandler = (
   relayErrors: ?ProcessedErrorType,
   showAlertHandler: (config: AlertPropsType) => void,
-  callback?: (messages: {
+  callback?: (messages?: {
     [string]: Array<string>,
   }) => void,
 ) => {
   log.debug({ relayErrors });
   const handleDefaultEvent = (code: string) => {
-    const { status } = relayErrors ? relayErrors[code] : null;
+    // $FlowIgnoreMe
+    const status = pathOr(null, [code, 'status'], relayErrors);
     showAlertHandler({
       type: 'danger',
+      // $FlowIgnoreMe
       text: `Error: "${status}"`,
       link: { text: 'Close.' },
     });
@@ -29,6 +40,9 @@ export const errorsHandler = (
       callback();
     }
   };
+  if (!relayErrors) {
+    return;
+  }
   switch (keys(relayErrors)[0]) {
     case '100': {
       const { messages } = relayErrors['100'];

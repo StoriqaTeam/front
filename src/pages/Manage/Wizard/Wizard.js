@@ -203,6 +203,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
+          // console.log('>>> update wizard mutation onComplete: ', !!relayErrors);
           errorsHandler(
             relayErrors,
             this.props.showAlert,
@@ -215,6 +216,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
+        // console.log('>>> update wizard mutation onError: ');
         errorsHandler(
           relayErrors,
           this.props.showAlert,
