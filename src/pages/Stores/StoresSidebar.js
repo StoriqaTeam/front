@@ -20,6 +20,7 @@ type PropsType = {
   match: matchShape,
   // eslint-disable-next-line
   search: SearchType,
+  onClose: () => void,
 };
 
 type StateType = {
@@ -90,6 +91,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
     push(`/stores${url}`);
   };
   render() {
+    const { onClose } = this.props;
     const { categories, countries, category, country } = this.state;
     return (
       <div styleName="container">
@@ -121,7 +123,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
           <Button
             wireframe
             big
-            onClick={() => {}}
+            onClick={onClose}
             dataTest="apply"
             style={{ width: '100%' }}
           >

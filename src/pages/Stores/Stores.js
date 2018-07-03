@@ -105,7 +105,10 @@ class Stores extends Component<PropsType, StateType> {
           onClose={this.handleSidebar}
           title={title}
         >
-          <StoresSidebar search={this.props.search} />
+          <StoresSidebar
+            search={this.props.search}
+            onClose={this.handleSidebar}
+          />
         </MobileSidebar>
         <Container>
           <StoresHeader
