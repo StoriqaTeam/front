@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { routerShape, matchShape, withRouter } from 'found';
 import { assocPath, pathOr } from 'ramda';
 
+import { Button } from 'components/common/Button';
 import { Select } from 'components/common/Select';
 
 import { urlToInput, inputToUrl } from 'utils';
@@ -92,27 +93,40 @@ class StoresSidebar extends Component<PropsType, StateType> {
     const { categories, countries, category, country } = this.state;
     return (
       <div styleName="container">
-        <div styleName="filterItem">
-          <Select
-            forSearch
-            withEmpty
-            label="Categories"
-            activeItem={category}
-            items={categories}
-            onSelect={item => this.handleClick('category', item)}
-            dataTest="storesCategoriesSelect"
-          />
+        <div>
+          <div styleName="filterItem">
+            <Select
+              forSearch
+              withEmpty
+              label="Categories"
+              activeItem={category}
+              items={categories}
+              onSelect={item => this.handleClick('category', item)}
+              dataTest="storesCategoriesSelect"
+            />
+          </div>
+          <div styleName="filterItem">
+            <Select
+              forSearch
+              withEmpty
+              label="Location"
+              activeItem={country}
+              items={countries}
+              onSelect={item => this.handleClick('country', item)}
+              dataTest="storesLocationSelect"
+            />
+          </div>
         </div>
-        <div styleName="filterItem">
-          <Select
-            forSearch
-            withEmpty
-            label="Location"
-            activeItem={country}
-            items={countries}
-            onSelect={item => this.handleClick('country', item)}
-            dataTest="storesLocationSelect"
-          />
+        <div styleName="apply">
+          <Button
+            wireframe
+            big
+            onClick={() => {}}
+            dataTest="apply"
+            style={{ width: '100%'}}
+          >
+            Apply
+          </Button>
         </div>
       </div>
     );

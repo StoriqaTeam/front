@@ -5,10 +5,12 @@ import { matchShape } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { map, pathOr } from 'ramda';
 
-import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Page } from 'components/App';
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
+import { Icon } from 'components/Icon';
+import { MobileSidebar } from 'components/MobileSidebar';
+import { Page } from 'components/App';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import { fromSearchFilters, fromQueryString } from './StoreUtils';
 
@@ -35,6 +37,7 @@ type PropsType = {
 
 type StateType = {
   category: ?SelectedType,
+  isSidebarOpen: boolean,
 };
 
 class Stores extends Component<PropsType, StateType> {
@@ -59,6 +62,7 @@ class Stores extends Component<PropsType, StateType> {
     if (storesData) {
       this.state = {
         category: null,
+        isSidebarOpen: false,
       };
     }
   }
@@ -68,8 +72,13 @@ class Stores extends Component<PropsType, StateType> {
     } = this.props;
     loadMore(8);
   };
+  handleSidebar = () => {
+    this.setState(({ isSidebarOpen }) => ({
+      isSidebarOpen: !isSidebarOpen,
+    }));
+  }
   render() {
-    const { category } = this.state;
+    const { category, isSidebarOpen } = this.state;
     // $FlowIgnore
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
     // $FlowIgnore
@@ -84,13 +93,31 @@ class Stores extends Component<PropsType, StateType> {
       ['location', 'query', 'search'],
       this.props,
     );
+    const title = (<span><b>{totalCount}</b> stores found</span>);
     return (
       <div styleName="container">
+        <MobileSidebar
+          isOpen={isSidebarOpen}
+          onClose={this.handleSidebar}
+          title={title}
+        >
+          <StoresSidebar search={this.props.search} />
+        </MobileSidebar>
         <Container>
           <Row>
-            <Col sm={1} md={3} lg={2} xl={2}>
+            <span
+              onClick={this.handleSidebar}
+              onKeyPress={() => {}}
+              role="button"
+              styleName="filtersButton"
+              tabIndex="-1"
+            >
+              <Icon type="controls" />
+              <span>Filters</span>
+            </span>
+            <Col sm={2} md={2} lg={2} xl={2}>
               <div styleName="countInfo">
-                <b>{totalCount}</b> stores found
+                { title }
                 {searchValue && <span> with {searchValue} in the title</span>}
               </div>
             </Col>
@@ -102,7 +129,9 @@ class Stores extends Component<PropsType, StateType> {
           </Row>
           <Row>
             <Col sm={1} md={1} lg={2} xl={2}>
-              <StoresSidebar search={this.props.search} />
+              <aside styleName="sidebar">
+                <StoresSidebar search={this.props.search} />
+              </aside>
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
               {stores && stores.length > 0 ? (
