@@ -10,7 +10,7 @@ import { Page } from 'components/App';
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
 
-import { buildCategory } from './StoreUtils';
+import { fromSearchFilters, fromQueryString } from './StoreUtils';
 
 import StoresSidebar from './StoresSidebar';
 import StoreRow from './StoreRow';
@@ -43,7 +43,8 @@ class Stores extends Component<PropsType, StateType> {
     nextState: StateType,
   ): StateType | null {
     const { search, match } = nextProps;
-    const category = buildCategory(search, match);
+    const categories = fromSearchFilters(search, ['category', 'children']);
+    const category = fromQueryString(match, 'category')(categories, 'id');
     if (category) {
       return {
         ...nextState,
