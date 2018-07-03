@@ -47,8 +47,8 @@ class Stores extends Component<PropsType, StateType> {
     if (category) {
       return {
         ...nextState,
-        category
-      }
+        category,
+      };
     }
     return null;
   }
@@ -61,14 +61,12 @@ class Stores extends Component<PropsType, StateType> {
       };
     }
   }
-
   storesReFetch = (): void => {
     const {
       relay: { loadMore },
     } = this.props;
     loadMore(8);
   };
-
   render() {
     const { category } = this.state;
     // $FlowIgnore

@@ -1,6 +1,8 @@
+// @flow
+
 import React, { Component } from 'react';
 import { routerShape, matchShape, withRouter } from 'found';
-import { addIndex, assocPath, find, map, pathOr, propEq } from 'ramda';
+import { assocPath, pathOr } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
@@ -9,7 +11,7 @@ import { urlToInput, inputToUrl } from 'utils';
 import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
 
 import './StoresSidebar.scss';
-import { buildCategory, buildCategories } from './StoreUtils';
+import { fromQueryString, fromSearchFilters } from './StoreUtils';
 
 type PropsType = {
   router: routerShape,
@@ -32,36 +34,20 @@ class StoresSidebar extends Component<PropsType, StateType> {
     nextState: StateType,
   ): StateType | null {
     const { search, match } = nextProps;
-    const categories = buildCategories(search);
-    const category = buildCategory(search, match);
+    const categories = fromSearchFilters(search, ['category', 'children']);
+    const category = fromQueryString(match, 'category')(categories, 'id');
     if (category) {
       return {
         ...nextState,
         category,
       };
     }
-    const rawCountries = pathOr(
-      [],
-      ['findStore', 'pageInfo', 'searchFilters', 'country'],
-      search,
-    );
-    const mapIndexed = addIndex(map);
-    const countries = mapIndexed(
-      (item, idx) => ({
-        id: `${idx}`,
-        label: item,
-      }),
-      rawCountries,
-    );
-    const country = pathOr(
-      null,
-      ['match', 'location', 'query', 'country'],
-      nextProps,
-    );
+    const countries = fromSearchFilters(search, ['country']);
+    const country = fromQueryString(match, 'country')(countries, 'label');
     if (country) {
       return {
         ...nextState,
-        country: find(propEq('label', country))(countries),
+        country,
       };
     }
     return {
@@ -80,6 +66,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
     stateName: string,
     item: { id: string, label: string },
   ): void => {
+    // $FlowIgnore
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
     const isCountry = stateName === 'country';
     const pathPiece = isCountry ? stateName : 'categoryId';
