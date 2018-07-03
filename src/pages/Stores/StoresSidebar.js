@@ -123,7 +123,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
             big
             onClick={() => {}}
             dataTest="apply"
-            style={{ width: '100%'}}
+            style={{ width: '100%' }}
           >
             Apply
           </Button>

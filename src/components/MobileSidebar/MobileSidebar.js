@@ -19,7 +19,7 @@ class MobileSidebar extends Component<PropsType> {
   static defaultProps = {
     left: false,
     title: '',
-  }
+  };
   handleClick = (evt: any): void => {
     const { onClose } = this.props;
     const { id } = evt.target;
@@ -40,7 +40,7 @@ class MobileSidebar extends Component<PropsType> {
         <aside
           styleName={classNames('sidebar', {
             left,
-            toggled: isOpen
+            toggled: isOpen,
           })}
         >
           <header styleName="header">
@@ -59,7 +59,7 @@ class MobileSidebar extends Component<PropsType> {
           {this.props.children}
         </aside>
       </div>
-    )
+    );
   }
 }
 

@@ -7,7 +7,6 @@ import { map, pathOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
-import { Icon } from 'components/Icon';
 import { MobileSidebar } from 'components/MobileSidebar';
 import { Page } from 'components/App';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -15,6 +14,7 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { fromSearchFilters, fromQueryString } from './StoreUtils';
 
 import StoresSidebar from './StoresSidebar';
+import StoresHeader from './StoresHeader';
 import StoreRow from './StoreRow';
 
 import './Stores.scss';
@@ -76,7 +76,7 @@ class Stores extends Component<PropsType, StateType> {
     this.setState(({ isSidebarOpen }) => ({
       isSidebarOpen: !isSidebarOpen,
     }));
-  }
+  };
   render() {
     const { category, isSidebarOpen } = this.state;
     // $FlowIgnore
@@ -93,7 +93,11 @@ class Stores extends Component<PropsType, StateType> {
       ['location', 'query', 'search'],
       this.props,
     );
-    const title = (<span><b>{totalCount}</b> stores found</span>);
+    const title = (
+      <span>
+        <b>{totalCount}</b> stores found
+      </span>
+    );
     return (
       <div styleName="container">
         <MobileSidebar
@@ -104,29 +108,12 @@ class Stores extends Component<PropsType, StateType> {
           <StoresSidebar search={this.props.search} />
         </MobileSidebar>
         <Container>
-          <Row>
-            <span
-              onClick={this.handleSidebar}
-              onKeyPress={() => {}}
-              role="button"
-              styleName="filtersButton"
-              tabIndex="-1"
-            >
-              <Icon type="controls" />
-              <span>Filters</span>
-            </span>
-            <Col sm={2} md={2} lg={2} xl={2}>
-              <div styleName="countInfo">
-                { title }
-                {searchValue && <span> with {searchValue} in the title</span>}
-              </div>
-            </Col>
-            <Col sm={10} md={10} lg={10} xl={10}>
-              <div styleName="breadcrumbs">
-                All stores{category && ` / ${category.label}`}
-              </div>
-            </Col>
-          </Row>
+          <StoresHeader
+            title={title}
+            category={category}
+            onFilter={this.handleSidebar}
+            searchValue={searchValue}
+          />
           <Row>
             <Col sm={1} md={1} lg={2} xl={2}>
               <aside styleName="sidebar">
