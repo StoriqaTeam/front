@@ -4,7 +4,21 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop } from 'ramda';
+import {
+  filter,
+  propEq,
+  reduce,
+  reject,
+  groupBy,
+  isNil,
+  head,
+  defaultTo,
+  pipe,
+  pathOr,
+  path,
+  map,
+  prop,
+} from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -19,6 +33,8 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
 // eslint-disable-next-line
+import type CartStoresLocalFragment from '../Cart/__generated__/CartStoresLocalFragment.graphql';
+// eslint-disable-next-line
 import type Checkout_me from './__generated__/Checkout_me.graphql';
 
 import CheckoutHeader from './CheckoutHeader';
@@ -27,6 +43,7 @@ import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
 
 import CartStore from '../Cart/CartStore';
+// import CartTotal from '../Cart/CartTotal';
 
 import './Checkout.scss';
 
@@ -48,6 +65,46 @@ type StateType = {
     addressFull: AddressFullType,
     receiverName: string,
   },
+};
+
+const STORES_FRAGMENT = graphql`
+  fragment CheckoutStoresLocalFragment on CartStoresConnection {
+    edges {
+      node {
+        id
+        products {
+          id
+          selected
+          quantity
+          price
+          deliveryCost
+        }
+      }
+    }
+  }
+`;
+
+const getTotals: (data: CheckoutStoresLocalFragment) => Totals = data => {
+  const defaultTotals = { productsCost: 0, deliveryCost: 0, totalCount: 0 };
+  const fold = pipe(
+    filter(propEq('selected', true)),
+    reduce(
+      (acc, elem) => ({
+        productsCost: acc.productsCost + elem.quantity * elem.price,
+        deliveryCost: acc.deliveryCost + elem.deliveryCost,
+        totalCount: acc.totalCount + elem.quantity,
+      }),
+      defaultTotals,
+    ),
+  );
+  return pipe(
+    pathOr([], ['edges']),
+    map(prop('node')),
+    reject(isNil),
+    map(store => ({ id: store.id, ...fold(store.products) })),
+    groupBy(prop('id')),
+    map(pipe(head, defaultTo(defaultTotals))),
+  )(data);
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -73,6 +130,30 @@ class Checkout extends Component<PropsType, StateType> {
       receiverName: '',
     },
   };
+
+  componentWillMount() {
+    const store = this.context.environment.getStore();
+    const connectionId = `client:root:cart:__Cart_stores_connection`;
+    const queryNode = STORES_FRAGMENT.data();
+    const snapshot = store.lookup({
+      dataID: connectionId, // root
+      node: queryNode, // query starting from root
+    });
+    // This will be triggered each time any field in our query changes
+    // Therefore it's important to include not only the data you need into the query,
+    // but also the data you need to watch for.
+    const { dispose } = store.subscribe(snapshot, s => {
+      this.setState({ totals: getTotals(s.data) });
+    });
+    this.dispose = dispose;
+    this.setState({ totals: getTotals(snapshot.data) });
+  }
+
+  componentWillUnmount() {
+    if (this.dispose) {
+      this.dispose();
+    }
+  }
 
   setStoresRef(ref) {
     if (ref && !this.state.storesRef) {
@@ -149,12 +230,19 @@ class Checkout extends Component<PropsType, StateType> {
       ['me', 'deliveryAddresses'],
       this.props,
     );
-    const { step, isAddressSelect, isNewAddress, orderInput } = this.state;
+    const {
+      step,
+      isAddressSelect,
+      isNewAddress,
+      orderInput,
+      totals,
+    } = this.state;
     const { cart } = this.props;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
+    console.log('>>> Checkout totals: ', { totals });
     return (
       <Container withoutGrow>
         <Row withoutGrow>
@@ -206,6 +294,18 @@ class Checkout extends Component<PropsType, StateType> {
                   )}
                 </Col>
                 <Col size={3}>
+                  {/* <CartTotal
+                    storesRef={this.state.storesRef}
+                    // cart={cart}
+                    totlas={totals}
+                    buttonText={step === 1 ? 'Next' : 'Checkout'}
+                    onClick={
+                      (step === 1 && this.handleChangeStep(2)) ||
+                      this.handleCheckout
+                    }
+                    isReadyToClick={this.checkReadyToCheckout()}
+
+                  /> */}
                   <CheckoutSidebar
                     storesRef={this.state.storesRef}
                     cart={cart}

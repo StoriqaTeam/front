@@ -1,8 +1,9 @@
 // @flow
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { graphql } from 'react-relay';
 import { pathOr, map } from 'ramda';
-// import { createFragmentContainer, graphql } from 'react-relay';
 
 import { formatPrice } from 'utils';
 import { Button } from 'components/common/Button';
@@ -21,12 +22,45 @@ type PropsType = {
   buttonText: string,
 };
 
+type Totals = {
+  [storeId: string]: {
+    productsCost: number,
+    deliveryCost: number,
+    totalCount: number,
+  },
+};
+
 type StateType = {
   currentClass: 'sticky' | 'top' | 'bottom',
+  totals: Totals,
 };
 
 const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
+
+const STORES_FRAGMENT = graphql`
+  fragment CheckoutSidebarStoresLocalFragment on CartStoresConnection {
+    edges {
+      node {
+        id
+        productsCost
+        deliveryCost
+        totalCost
+        totalCount
+      }
+    }
+  }
+`;
+
+const getTotals: (data: CartStoresLocalFragment) => Totals = data => {
+  const stores = map(i => i.node, pathOr([], ['edges'], data));
+  return {
+    productsCost: calcTotal(stores, 'productsCost') || 0,
+    deliveryCost: calcTotal(stores, 'deliveryCost') || 0,
+    totalCount: calcTotal(stores, 'totalCount') || 0,
+    totalCost: calcTotal(stores, 'totalCost') || 0,
+  };
+};
 
 class CheckoutSidebar extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -38,6 +72,29 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     currentClass: 'top',
   };
 
+  componentWillMount() {
+    const store = this.context.environment.getStore();
+    const connectionId = `client:root:cart:__Cart_stores_connection`;
+    const queryNode = STORES_FRAGMENT.data();
+    const snapshot = store.lookup({
+      dataID: connectionId, // root
+      node: queryNode, // query starting from root
+    });
+    // console.log('>>> CheckoutSidebar componentWillMount: ', { store, connectionId, queryNode, snapshot });
+    // This will be triggered each time any field in our query changes
+    // Therefore it's important to include not only the data you need into the query,
+    // but also the data you need to watch for.
+    const { dispose } = store.subscribe(snapshot, s => {
+      console.log('>>> CheckoutSidebar componentWillMount s: ', { s });
+      this.setState({ totals: getTotals(s.data) });
+    });
+    this.dispose = dispose;
+    console.log('>>> CheckoutSidebar componentWillMount snapshot: ', {
+      snapshot,
+    });
+    this.setState({ totals: getTotals(snapshot.data) });
+  }
+
   componentDidMount() {
     if (!window) return;
     window.addEventListener('scroll', this.handleScroll);
@@ -46,6 +103,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   componentWillUnmount() {
     if (!window) return;
     window.removeEventListener('scroll', this.handleScroll);
+    if (this.dispose) {
+      this.dispose();
+    }
   }
 
   setRef(ref: ?Object) {
@@ -107,9 +167,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { cart, onClick, isReadyToClick, buttonText } = this.props;
-    const stores = map(i => i.node, pathOr([], ['stores', 'edges'], cart));
-    // console.log('>>> sidebar cart: ', { cart, totalCount, stores });
+    const { totals } = this.state;
+    const { onClick, isReadyToClick, buttonText } = this.props;
+    // console.log('>>> sidebar cart: ', { totals });
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -118,24 +178,22 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <div styleName="attributeContainer">
               <div styleName="label">Subtotal</div>
               <div styleName="value">
-                {`${formatPrice(calcTotal(stores, 'productsCost') || 0)} STQ`}
+                {`${formatPrice(totals.productsCost)} STQ`}
               </div>
             </div>
             <div styleName="attributeContainer">
               <div styleName="label">Delivery</div>
               <div styleName="value">
-                {`${formatPrice(calcTotal(stores, 'deliveryCost') || 0)} STQ`}
+                {`${formatPrice(totals.deliveryCost)} STQ`}
               </div>
             </div>
             <div styleName="attributeContainer">
               <div styleName="label">
                 Total{' '}
-                <span styleName="subLabel">
-                  ({calcTotal(stores, 'totalCount')} items)
-                </span>
+                <span styleName="subLabel">({totals.totalCount} items)</span>
               </div>
               <div styleName="value">
-                {`${formatPrice(calcTotal(stores, 'totalCost') || 0)} STQ`}
+                {`${formatPrice(totals.totalCost)} STQ`}
               </div>
             </div>
           </div>
@@ -154,5 +212,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     );
   }
 }
+
+CheckoutSidebar.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default CheckoutSidebar;

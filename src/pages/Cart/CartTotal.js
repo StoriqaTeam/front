@@ -123,6 +123,7 @@ class CartTotal extends Component<PropsType, StateType> {
       ),
     )(this.props.totals);
     const { productsCost, deliveryCost, totalCount } = totals;
+    console.log('>>> CartTotals totals: ', { totals });
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">

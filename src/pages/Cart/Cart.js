@@ -172,7 +172,7 @@ class Cart extends Component<PropsType, StateType> {
             /> */}
             <CheckoutSidebar
               storesRef={this.state.storesRef}
-              cart={cart}
+              // cart={cart}
               buttonText="Checkout"
               onClick={this.handleToCheckout}
               // isReadyToClick={this.checkReadyToCheckout()}
