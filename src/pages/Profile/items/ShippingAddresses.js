@@ -298,6 +298,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
               this.handleSave(editableAddressId || null);
             }}
             isLoading={isLoading}
+            dataTest="addShippingAddressButton"
           >
             {editableAddressId ? 'Save' : 'Add'}
           </SpinnerButton>

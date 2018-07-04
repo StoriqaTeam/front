@@ -1,0 +1,45 @@
+@import '../../styles/variables';
+
+.container {
+  border-top: 1px solid $color_grey_light;
+  margin-top: 2rem;
+  & .item {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.75rem 3.25rem;
+    position: relative;
+
+    & span {
+      align-items: center;
+      display: flex;
+    }
+
+  }
+
+}
+
+.active {
+  background: $color_white;
+  font-weight: 500;
+}
+
+.activeBorder {
+  background: $color_blue;
+  height: 6rem;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 2px;
+}
+
+.linkName {
+  color: $color_grey;
+  font-size: 14px;
+  margin-left: 1rem;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}

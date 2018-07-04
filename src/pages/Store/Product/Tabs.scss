@@ -2,9 +2,13 @@
 
 .container {
   background-color: $color_white;
-  display: block;
+  display: none;
   overflow: hidden;
   padding: 3.25rem 3rem;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
 
 .label {

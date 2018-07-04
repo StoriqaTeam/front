@@ -8,4 +8,5 @@ export { default as HeaderResponsive } from './HeaderResponsive';
 export { default as HeaderTop } from './HeaderTop';
 export { default as InfoBlock } from './InfoBlock';
 export { default as Main } from './Main';
+export { default as MobileSearchMenu } from './MobileSearchMenu';
 export { default as Page } from './PageDecorator';

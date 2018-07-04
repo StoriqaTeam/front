@@ -1,0 +1,88 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+  margin-top: 6.5rem;
+  position: relative;
+}
+
+.title {
+  font-size: 14px;
+  letter-spacing: 0.15rem;
+}
+
+.headerContainer {
+  display: flex;
+  color: $color_grey_minor;
+  font-size: 14px;
+  line-height: 1.43;
+  margin-top: 3.5rem;
+  height: 4.5rem;
+  position: relative;
+}
+
+.headerDate {
+  width: 17.5rem;
+}
+
+.headerManager {
+  width: 14rem;
+  margin-left: 2rem;
+}
+
+.headerStatus {
+  width: 11rem;
+  margin-left: 2rem;
+}
+
+.headerAdditionalInfo {
+  width: 54rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.border {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  background-color: #efefef;
+  margin-top: 2rem;
+}
+
+.rowContainer {
+  display: flex;
+  height: 6.25rem;
+  align-items: center;
+  position: relative;
+}
+
+.rowDate {
+  width: 17.5rem;
+}
+
+.rowManager {
+  width: 14rem;
+  margin-left: 2rem;
+}
+
+.rowStatus {
+  width: 11rem;
+  margin-left: 2rem;
+}
+
+.rowAdditionalInfo {
+  width: 54rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.borderRow {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  background-color: #efefef;
+  margin-top: 2rem;
+}

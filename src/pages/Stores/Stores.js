@@ -1,225 +1,164 @@
 // @flow
 
 import React, { Component } from 'react';
-import { routerShape } from 'found';
+import { matchShape } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { map, pathOr, find, propEq, assocPath, addIndex } from 'ramda';
+import { map, pathOr } from 'ramda';
 
-import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Page } from 'components/App';
-import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
 import { Container, Row, Col } from 'layout';
-import { urlToInput, inputToUrl } from 'utils';
+import { MobileSidebar } from 'components/MobileSidebar';
+import { Page } from 'components/App';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
+import { fromSearchFilters, fromQueryString } from './StoreUtils';
+
+import StoresSidebar from './StoresSidebar';
+import StoresHeader from './StoresHeader';
 import StoreRow from './StoreRow';
 
 import './Stores.scss';
 
 import storesData from './stores.json';
 
+import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
+
+type SelectedType = {
+  id: string,
+  label: string,
+};
+
 type PropsType = {
-  router: routerShape,
+  // eslint-disable-next-line
+  match: matchShape,
+  search: SearchType,
   relay: Relay,
 };
 
 type StateType = {
-  category: ?{ id: string, label: string },
-  country: ?{ id: string, label: string },
-  categories: Array<{ id: string, label: string }>,
-  countries: Array<{ id: string, label: string }>,
+  category: ?SelectedType,
+  isSidebarOpen: boolean,
 };
 
 class Stores extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    nextState: StateType,
+  ): StateType | null {
+    const { search, match } = nextProps;
+    const categories = fromSearchFilters(search, ['category', 'children']);
+    const category = fromQueryString(match, 'category')(categories, 'id');
+    if (category) {
+      return {
+        ...nextState,
+        category,
+      };
+    }
+    return null;
+  }
+  // TODO: I don't know what's for 'constructor' so I leave it in the meantime
   constructor(props: PropsType) {
     super(props);
     if (storesData) {
       this.state = {
         category: null,
-        country: null,
-        categories: [],
-        countries: [],
+        isSidebarOpen: false,
       };
     }
   }
-
-  componentWillMount() {
-    const lang = 'EN';
-    const rawCategories = pathOr(
-      [],
-      [
-        'search',
-        'findStore',
-        'pageInfo',
-        'searchFilters',
-        'category',
-        'children',
-      ],
-      this.props,
-    );
-    const categories = map(item => {
-      const name = find(propEq('lang', lang))(item.name);
-      return {
-        id: String(item.rawId),
-        label: name && name.text ? name.text : '',
-      };
-    }, rawCategories);
-    this.setState({ categories });
-    const category = pathOr(
-      null,
-      ['match', 'location', 'query', 'category'],
-      this.props,
-    );
-    if (category) {
-      this.setState({ category: find(propEq('id', category))(categories) });
-    }
-
-    const rawCountries = pathOr(
-      [],
-      ['search', 'findStore', 'pageInfo', 'searchFilters', 'country'],
-      this.props,
-    );
-    const mapIndexed = addIndex(map);
-    const countries = mapIndexed(
-      (item, idx) => ({
-        id: String(idx),
-        label: item,
-      }),
-      rawCountries,
-    );
-    this.setState({ countries });
-    const country = pathOr(
-      null,
-      ['match', 'location', 'query', 'country'],
-      this.props,
-    );
-    if (country) {
-      this.setState({ country: find(propEq('label', country))(countries) });
-    }
-  }
-
-  storesRefetch = () => {
-    this.props.relay.loadMore(8);
+  storesReFetch = (): void => {
+    const {
+      relay: { loadMore },
+    } = this.props;
+    loadMore(8);
   };
-
-  handleCategory = (category: { id: string, label: string }) => {
-    this.setState({ category });
-    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
-    const oldPreparedObj = urlToInput(queryObj);
-    const newPreparedObj = assocPath(
-      ['options', 'categoryId'],
-      category ? category.id : null,
-      oldPreparedObj,
-    );
-    const newUrl = inputToUrl(newPreparedObj);
-    this.props.router.push(`/stores${newUrl}`);
+  handleSidebar = () => {
+    this.setState(({ isSidebarOpen }) => ({
+      isSidebarOpen: !isSidebarOpen,
+    }));
   };
-
-  handleLocation = (country: { id: string, label: string }) => {
-    this.setState({ country });
-    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
-    const oldPreparedObj = urlToInput(queryObj);
-    const newPreparedObj = assocPath(
-      ['options', 'country'],
-      country ? country.label : null,
-      oldPreparedObj,
-    );
-    const newUrl = inputToUrl(newPreparedObj);
-    this.props.router.push(`/stores${newUrl}`);
-  };
-
   render() {
-    const { categories, countries, category, country } = this.state;
+    const { category, isSidebarOpen } = this.state;
+    // $FlowIgnore
     const stores = pathOr([], ['search', 'findStore', 'edges'], this.props);
+    // $FlowIgnore
     const totalCount = pathOr(
       0,
       ['search', 'findStore', 'pageInfo', 'searchFilters', 'totalCount'],
       this.props,
     );
+    // $FlowIgnore
     const searchValue = pathOr(
       null,
       ['location', 'query', 'search'],
       this.props,
     );
+    const title = (
+      <span>
+        <b>{totalCount}</b> stores found
+      </span>
+    );
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <div styleName="countInfo">
-              <b>{totalCount}</b> stores found
-              {searchValue && <span> with {searchValue} in the title</span>}
-            </div>
-            <div styleName="filterItem">
-              <Select
-                forSearch
-                withEmpty
-                label="Categories"
-                activeItem={category}
-                items={categories}
-                onSelect={this.handleCategory}
-                dataTest="storesCategoriesSelect"
-              />
-            </div>
-            <div styleName="filterItem">
-              <Select
-                forSearch
-                withEmpty
-                label="Location"
-                activeItem={country}
-                items={countries}
-                onSelect={this.handleLocation}
-                dataTest="storesLocationSelect"
-              />
-            </div>
-          </Col>
-          <Col size={10}>
-            <div styleName="header">
-              <Row>
-                <Col size={12}>
-                  <div styleName="breadcrumbs">
-                    All stores{category && ` / ${category.label}`}
-                  </div>
-                </Col>
-              </Row>
-            </div>
-            <div styleName="stores">
+      <div styleName="container">
+        <MobileSidebar
+          isOpen={isSidebarOpen}
+          onClose={this.handleSidebar}
+          title={title}
+        >
+          <StoresSidebar
+            search={this.props.search}
+            onClose={this.handleSidebar}
+          />
+        </MobileSidebar>
+        <Container>
+          <StoresHeader
+            title={title}
+            category={category}
+            onFilter={this.handleSidebar}
+            searchValue={searchValue}
+          />
+          <Row>
+            <Col sm={1} md={1} lg={2} xl={2}>
+              <aside styleName="sidebar">
+                <StoresSidebar search={this.props.search} />
+              </aside>
+            </Col>
+            <Col sm={12} md={12} lg={10} xl={10}>
               {stores && stores.length > 0 ? (
                 map(
                   storesItem => (
-                    <div key={storesItem.node.id}>
-                      <StoreRow
-                        store={storesItem.node}
-                        key={storesItem.node.id}
-                      />
-                    </div>
+                    <StoreRow
+                      store={storesItem.node}
+                      key={storesItem.node.id}
+                    />
                   ),
                   stores,
                 )
               ) : (
                 <div>No stores found</div>
               )}
-            </div>
-            {this.props.relay.hasMore() && (
-              <div styleName="button">
-                <Button
-                  big
-                  load
-                  onClick={this.storesRefetch}
-                  dataTest="searchStoresLoadMoreButton"
-                >
-                  Load more
-                </Button>
-              </div>
-            )}
-          </Col>
-        </Row>
-      </Container>
+              {this.props.relay.hasMore() && (
+                <div styleName="button">
+                  <Button
+                    big
+                    load
+                    onClick={this.storesReFetch}
+                    dataTest="searchStoresLoadMoreButton"
+                  >
+                    Load more
+                  </Button>
+                </div>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
 
 export default createPaginationContainer(
-  withErrorBoundary(Page(Stores)),
+  withErrorBoundary(Page(Stores, true)),
   graphql`
     fragment Stores_search on Search
       @argumentDefinitions(

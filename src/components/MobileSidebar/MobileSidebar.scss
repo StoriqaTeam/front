@@ -1,0 +1,55 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+$sidebar-width: 31.25rem;
+
+.container {
+  background: rgba(0, 0, 0, .7);
+  height: 100%;
+  margin-right: -$sidebar-width;
+  overflow-y: auto;
+  position: fixed;
+  right: $sidebar-width;
+  top: 0;
+  transition: width 0.4s ease;
+  width: 0;
+  z-index: 1000;
+
+  &.toggled {
+    width: 100vw;
+  }
+
+}
+
+.sidebar {
+  background: $color_grey_bg;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  padding: 0 2rem;
+  right: -$sidebar-width;
+  transition: all 0.4s ease;
+  width: 0;
+  z-index: 1001;
+
+  &.toggled {
+    right: 0;
+    width: $sidebar-width;
+  }
+
+}
+
+.header {
+  border-bottom: 1px solid $color_grey_minor;
+  display: flex;
+  padding: 3.25rem 1.375rem 3.25rem 0;
+
+  & .close {
+    margin: 0 2rem;
+  }
+
+  & h3 {
+    font-size: 2.25rem;
+  }
+
+}

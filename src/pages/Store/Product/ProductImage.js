@@ -4,16 +4,15 @@ import React, { Component } from 'react';
 
 import { isEmpty } from 'utils';
 
-import { ProductThumbnails, ImageDetail } from './index';
+import { ImageDetail } from './index';
 
 import './ProductImage.scss';
 
-import type { WidgetOptionType } from './types';
-
 type PropsType = {
-  mainImage: string,
+  photoMain: string,
   discount: number,
-  thumbnails: Array<WidgetOptionType>,
+  // eslint-disable-next-line
+  selected: string,
 };
 
 type StateType = {
@@ -21,12 +20,6 @@ type StateType = {
 };
 
 class ProductImage extends Component<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -37,63 +30,45 @@ class ProductImage extends Component<PropsType, StateType> {
         selected: '',
       };
     }
-    return prevState;
+    return {
+      ...prevState,
+      selected: nextProps.selected,
+    };
   }
   state = {
     selected: '',
   };
-  handleClick = ({ image }: WidgetOptionType): void => {
-    this.setState({ selected: image });
-  };
   render() {
-    const { mainImage, thumbnails, discount } = this.props;
+    const { photoMain, discount } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        <div
-          styleName={
-            !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
-          }
-        >
-          {!isEmpty(thumbnails) ? (
-            <ProductThumbnails
-              isFirstSelected
-              isReset={isEmpty(selected)}
-              onClick={this.handleClick}
-              options={thumbnails}
-            />
-          ) : null}
-        </div>
-        <div styleName="image">
-          <figure styleName="bigImage">
-            {discount > 0 ? (
-              <span styleName="discount">
-                Price <br /> Off <br />
-                <span
-                  style={{
-                    fontSize: 16,
-                  }}
-                >
-                  {`- ${Math.round(discount * 100)} %`}
-                </span>
+        <figure styleName="imageWrapper">
+          {discount > 0 ? (
+            <span styleName="discount">
+              Price <br /> Off <br />
+              <span
+                style={{
+                  fontSize: 16,
+                }}
+              >
+                {`- ${Math.round(discount * 100)} %`}
               </span>
-            ) : null}
-            <div
-              role="img"
-              style={{
-                backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : mainImage
-                })`,
-                backgroundSize: 'contain',
-                width: '100%',
-                height: '100%',
-                backgroundPosition: 'center top',
-                backgroundRepeat: 'no-repeat',
-              }}
-            />
-          </figure>
-          <ImageDetail />
-        </div>
+            </span>
+          ) : null}
+          <div
+            role="img"
+            style={{
+              backgroundImage: `url(${
+                !isEmpty(selected) ? selected : photoMain
+              })`,
+              backgroundSize: 'contain',
+              backgroundPosition: 'center top',
+              backgroundRepeat: 'no-repeat',
+            }}
+          />
+        </figure>
+        <ImageDetail />
       </div>
     );
   }
