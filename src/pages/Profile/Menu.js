@@ -81,8 +81,9 @@ class Menu extends PureComponent<PropsType> {
           <UploadWrapper
             id="new-store-id"
             onUpload={this.handleOnUpload}
-            buttonHeight={26}
-            buttonWidth={26}
+            customUnit
+            buttonHeight="26rem"
+            buttonWidth="100%"
             buttonIconType="user"
             buttonIconSize={48}
             buttonLabel="Click to download avatar"

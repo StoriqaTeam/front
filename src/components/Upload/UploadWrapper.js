@@ -12,8 +12,8 @@ type PropsType = {
   children: Node,
   onUpload: (e: any) => void,
   buttonLabel: string,
-  buttonHeight: number,
-  buttonWidth: number,
+  buttonHeight: number | string,
+  buttonWidth: number | string,
   buttonIconType: ?string,
   overPicture: ?string,
   noIndents: ?boolean,
@@ -21,6 +21,7 @@ type PropsType = {
   dataTest: string,
   buttonIconSize: ?number,
   disabled: ?boolean,
+  customUnit?: boolean,
 };
 
 // TODO: refactor for avoid use style props
@@ -38,13 +39,17 @@ const UploadWrapper = ({
   dataTest,
   buttonIconSize,
   disabled,
+  customUnit,
 }: PropsType) => (
   <div styleName="wrapper">
     <div styleName={classNames('uploadContainer', { noIndents })}>
       <label
         htmlFor={id}
         styleName="uploadButton"
-        style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
+        style={{
+          height: `${buttonHeight}${customUnit ? '' : 'rem'}`,
+          width: `${buttonWidth}${customUnit ? '' : 'rem'}`,
+        }}
         data-test={dataTest}
       >
         {buttonIconType &&
@@ -77,5 +82,9 @@ const UploadWrapper = ({
     </div>
   </div>
 );
+
+UploadWrapper.defaultProps = {
+  customUnit: false,
+};
 
 export default UploadWrapper;

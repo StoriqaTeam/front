@@ -68,7 +68,7 @@ class Profile extends Component<PropsType, StateType> {
     return (
       <Container>
         <Row>
-          <Col size={2}>
+          <Col sm={3} md={3} lg={2} xl={2}>
             <Menu
               id={me.id}
               avatar={me.avatar}
@@ -79,7 +79,7 @@ class Profile extends Component<PropsType, StateType> {
               provider={me.provider || null}
             />
           </Col>
-          <Col size={10}>
+          <Col sm={9} md={9} lg={10} xl={10}>
             <div styleName="container">
               <div styleName="header">
                 <span styleName="title">Profile</span>
@@ -94,7 +94,7 @@ class Profile extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(Profile),
+  Page(Profile, true),
   graphql`
     fragment Profile_me on User {
       ...Orders
