@@ -5,6 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, find, propEq } from 'ramda';
 
 import { Page } from 'components/App';
+import { Collapse } from 'components/Collapse';
 import {
   PersonalData,
   ShippingAddresses,
@@ -70,6 +71,9 @@ class Profile extends Component<PropsType, StateType> {
         <Container>
           <Row>
             <Col sm={3} md={3} lg={2} xl={2}>
+              <Collapse
+                items={menuItems}
+              />
               <Menu
                 id={me.id}
                 avatar={me.avatar}
