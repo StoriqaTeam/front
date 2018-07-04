@@ -66,29 +66,31 @@ class Profile extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const { title: subtitle } = find(propEq('id', activeItem), menuItems);
     return (
-      <Container>
-        <Row>
-          <Col sm={3} md={3} lg={2} xl={2}>
-            <Menu
-              id={me.id}
-              avatar={me.avatar}
-              menuItems={menuItems}
-              activeItem={activeItem}
-              firstName={me.firstName || ''}
-              lastName={me.lastName || ''}
-              provider={me.provider || null}
-            />
-          </Col>
-          <Col sm={9} md={9} lg={10} xl={10}>
-            <div styleName="container">
-              <div styleName="header">
-                <span styleName="title">Profile</span>
+      <div styleName="container">
+        <Container>
+          <Row>
+            <Col sm={3} md={3} lg={2} xl={2}>
+              <Menu
+                id={me.id}
+                avatar={me.avatar}
+                menuItems={menuItems}
+                activeItem={activeItem}
+                firstName={me.firstName || ''}
+                lastName={me.lastName || ''}
+                provider={me.provider || null}
+              />
+            </Col>
+            <Col sm={9} md={9} lg={10} xl={10}>
+              <div styleName="content">
+                <div styleName="header">
+                  <span styleName="title">Profile</span>
+                </div>
+                <div styleName="form">{this.renderProfileItem(subtitle)}</div>
               </div>
-              <div styleName="form">{this.renderProfileItem(subtitle)}</div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }

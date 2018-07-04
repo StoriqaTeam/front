@@ -1,6 +1,14 @@
 @import "../../styles/variables";
 
 .container {
+  margin-top: 4.875rem;
+
+  @media (min-width: 992px) {
+    margin-top: 0;
+  }
+}
+
+.content {
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
