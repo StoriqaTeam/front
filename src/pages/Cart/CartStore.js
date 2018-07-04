@@ -9,7 +9,8 @@ import { Rating } from 'components/common/Rating';
 // import { Input } from 'components/common/Input';
 // import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
-import { getNameText } from 'utils';
+import { formatPrice, getNameText } from 'utils';
+import {} from 'utils';
 
 import CartProduct from './CartProduct';
 // import CartProductAttribute from './CartProductAttribute';
@@ -30,7 +31,7 @@ type PropsType = {
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store, onlySelected, unselectable } = this.props;
+    const { store, onlySelected, unselectable, totals } = this.props;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -39,6 +40,7 @@ class CartStore extends PureComponent<PropsType> {
     if (filteredProducts.length === 0) {
       return null;
     }
+    // console.log('>>> CartStore store: ', { store, totals });
     return (
       <Row>
         <Col size={12}>
@@ -48,6 +50,7 @@ class CartStore extends PureComponent<PropsType> {
                 <CartProduct
                   key={idx}
                   product={product}
+                  storeId={store.id}
                   onlySelected={onlySelected}
                   unselectable={unselectable}
                 />
@@ -67,7 +70,9 @@ class CartStore extends PureComponent<PropsType> {
               </div>
               <div styleName="store-total">
                 <div styleName="label">Subtotal</div>
-                <div styleName="value">{store.productsCost} STQ</div>
+                <div styleName="value">
+                  {formatPrice(store.productsCost || 0)} STQ
+                </div>
               </div>
             </div>
           </div>
@@ -81,6 +86,7 @@ export default createFragmentContainer(
   CartStore,
   graphql`
     fragment CartStore_store on CartStore {
+      id
       productsCost
       deliveryCost
       totalCost

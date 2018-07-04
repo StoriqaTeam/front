@@ -96,9 +96,11 @@ class CartProduct extends PureComponent<PropsType> {
 
   handleQuantityChange(newVal) {
     const { rawId: productId, id: nodeId } = this.props.product;
+    const { storeId } = this.props;
     SetQuantityInCartMutation.commit({
       input: { clientMutationId: '', productId, value: newVal },
       nodeId,
+      storeId,
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug('Success for SetQuantityInCart mutation');
@@ -122,7 +124,7 @@ class CartProduct extends PureComponent<PropsType> {
   }
 
   render() {
-    const { product, unselectable } = this.props;
+    const { product, unselectable, storeId } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -142,6 +144,7 @@ class CartProduct extends PureComponent<PropsType> {
       title: head(attr.attribute.name).text,
       value: attr.value.toString(),
     }))(attributes);
+    // console.log('>>> storeId: ', { storeId });
 
     return (
       <div styleName="container">

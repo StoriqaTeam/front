@@ -24,7 +24,7 @@ import { routerShape, withRouter } from 'found';
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
-// import CartTotal from './CartTotal';
+import CartTotal from './CartTotal';
 import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
@@ -111,9 +111,11 @@ class Cart extends Component<PropsType, StateType> {
     // Therefore it's important to include not only the data you need into the query,
     // but also the data you need to watch for.
     const { dispose } = store.subscribe(snapshot, s => {
+      console.log('>>> Cart s: ', { s });
       this.setState({ totals: getTotals(s.data) });
     });
     this.dispose = dispose;
+    console.log('>>> Cart snapshot: ', { snapshot });
     this.setState({ totals: getTotals(snapshot.data) });
   }
 

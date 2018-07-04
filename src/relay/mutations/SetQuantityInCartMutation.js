@@ -16,9 +16,18 @@ const mutation = graphql`
   }
 `;
 
+// const mutation = graphql`
+//   mutation SetQuantityInCartMutation($input: SetQuantityInCartInput!) {
+//     setQuantityInCart(input: $input) {
+//       ...Cart_cart
+//     }
+//   }
+// `;
+
 export type SetQuantityInCartParams = {
   ...SetQuantityInCartMutationVariables,
   nodeId: string,
+  storeId: string,
   environment: Environment,
   onCompleted: ?(
     response: ?SetQuantityInCartMutationResponse,
