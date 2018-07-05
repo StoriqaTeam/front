@@ -16,7 +16,6 @@ import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 
 import './Menu.scss';
-import {pathOr} from "ramda";
 
 type PropsType = {
   router: routerShape,

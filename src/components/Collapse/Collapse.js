@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { remove } from 'ramda';
+import { remove, isNil } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -16,12 +16,14 @@ type PropsType = {
 type StateType = {
   isOpen: boolean,
   index: number,
+  title: ?string,
 };
 
 class Collapse extends Component<PropsType, StateType> {
   state = {
     isOpen: false,
     index: 0,
+    title: null,
   };
   handleClick = () => {
     this.setState(({ isOpen }) => ({
@@ -30,13 +32,17 @@ class Collapse extends Component<PropsType, StateType> {
   };
   handleSelected = (item: { id: string, title: string }, index: number): void => {
     const { onSelected } = this.props;
-    this.setState({ index, isOpen: false }, () => {
+    this.setState({
+      index,
+      isOpen: false,
+      title: item.title,
+    }, () => {
       onSelected(item);
     });
   };
   render() {
     const { items } = this.props;
-    const { isOpen, index } = this.state;
+    const { isOpen, index, title } = this.state;
     return (
       <aside styleName="container">
         <h2 styleName="offscreen">Collapsable menu</h2>
@@ -46,7 +52,7 @@ class Collapse extends Component<PropsType, StateType> {
           onClick={this.handleClick}
           styleName="header"
         >
-          <span>{items[index].title}</span>
+          <span>{isNil(title) ? items[index].title : title}</span>
           <span styleName={classNames('icon', { rotate: isOpen })}>
             <Icon type="arrowExpand" />
           </span>
