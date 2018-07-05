@@ -70,7 +70,9 @@ class Menu extends PureComponent<PropsType> {
     UpdateUserMutation.commit(params);
   };
   handleSelected = (item: { id: string, title: string }): void => {
-    const { router: { push } } = this.props;
+    const {
+      router: { push },
+    } = this.props;
     push(`/profile/${item.id}`);
   };
   render() {

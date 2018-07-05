@@ -168,10 +168,14 @@ $max-width: 41rem !important;
 
 .passwordInput {
   position: relative;
-  width: 30rem;
+  width: 100%;
 
   &.passwordInput {
     margin-top: 6rem;
+  }
+
+  @media (min-width: 768px) {
+    width: 30rem;
   }
 }
 

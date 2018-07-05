@@ -30,15 +30,21 @@ class Collapse extends Component<PropsType, StateType> {
       isOpen: !isOpen,
     }));
   };
-  handleSelected = (item: { id: string, title: string }, index: number): void => {
+  handleSelected = (
+    item: { id: string, title: string },
+    index: number,
+  ): void => {
     const { onSelected } = this.props;
-    this.setState({
-      index,
-      isOpen: false,
-      title: item.title,
-    }, () => {
-      onSelected(item);
-    });
+    this.setState(
+      {
+        index,
+        isOpen: false,
+        title: item.title,
+      },
+      () => {
+        onSelected(item);
+      },
+    );
   };
   render() {
     const { items } = this.props;
