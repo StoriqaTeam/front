@@ -4,13 +4,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import {
-  pipe,
-  pathOr,
-  path,
-  map,
-  prop,
-} from 'ramda';
+import { pipe, pathOr, path, map, prop } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';

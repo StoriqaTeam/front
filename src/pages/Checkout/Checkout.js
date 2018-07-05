@@ -4,13 +4,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import {
-  pipe,
-  pathOr,
-  path,
-  map,
-  prop,
-} from 'ramda';
+import { pipe, pathOr, path, map, prop } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -156,12 +150,7 @@ class Checkout extends Component<PropsType, StateType> {
       ['me', 'deliveryAddresses'],
       this.props,
     );
-    const {
-      step,
-      isAddressSelect,
-      isNewAddress,
-      orderInput,
-    } = this.state;
+    const { step, isAddressSelect, isNewAddress, orderInput } = this.state;
     const { cart } = this.props;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),

@@ -3,10 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-relay';
-import {
-  pathOr,
-  map,
-} from 'ramda';
+import { pathOr, map } from 'ramda';
 
 import { formatPrice } from 'utils';
 import { Button } from 'components/common/Button';
@@ -72,7 +69,6 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       totals: null,
     };
   }
-
 
   componentWillMount() {
     const store = this.context.environment.getStore();
@@ -184,12 +180,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <div styleName="attributeContainer">
               <div styleName="label">
                 Total{' '}
-                <span styleName="subLabel">({totals && totals.totalCount} items)</span>
+                <span styleName="subLabel">
+                  ({totals && totals.totalCount} items)
+                </span>
               </div>
               <div styleName="value">
-                {totals && `${formatPrice(
-                  totals.totalCost || 0,
-                )} STQ`}
+                {totals && `${formatPrice(totals.totalCost || 0)} STQ`}
               </div>
             </div>
           </div>
