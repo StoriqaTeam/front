@@ -41,6 +41,7 @@ const STORES_FRAGMENT = graphql`
     edges {
       node {
         id
+        totalCount
         products {
           id
           quantity
@@ -108,6 +109,10 @@ class HeaderResponsive extends Component<PropsType, StateType> {
 
   componentWillMount() {
     const store = this.context.environment.getStore();
+    // const store = this.context.environment.getStore();
+    if (process.env.BROWSER) {
+      window.store = store;
+    }
     const connectionId = 'client:root:cart:__Cart_stores_connection';
     const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
@@ -115,11 +120,13 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       node: queryNode,
     });
     const { dispose } = store.subscribe(snapshot, s => {
+      // console.log('>>> HeaderResponsive cartCount s: ', { s: s.data });
       this.setState({ cartCount: getCartCount(s.data) });
       // tmp code
       setWindowTag('cartCount', getCartCount(s.data));
       // end tmp code
     });
+    // console.log('>>> HeaderResponsive cartCount snapshot: ', { snapshot: snapshot.data });
     this.dispose = dispose;
     this.setState({ cartCount: getCartCount(snapshot.data) });
     // tmp code

@@ -30,14 +30,32 @@ import { Container, Row, Col } from 'layout';
 import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
 import './Header.scss';
 
-const STORES_FRAGMENT = graphql`
-  fragment HeaderStoresLocalFragment on CartStoresConnection {
-    edges {
-      node {
-        id
-        products {
+// const STORES_FRAGMENT = graphql`
+//   fragment HeaderStoresLocalFragment on CartStoresConnection {
+//     edges {
+//       node {
+//         id
+//         products {
+//           id
+//           quantity
+//         }
+//       }
+//     }
+//   }
+// `;
+
+const CART_FRAGMENT = graphql`
+  fragment HeaderStoresLocalFragment on Cart {
+    id
+    stores {
+      edges {
+        node {
           id
-          quantity
+          totalCount
+          products {
+            id
+            quantity
+          }
         }
       }
     }
@@ -87,20 +105,74 @@ class Header extends Component<PropsType, StateType> {
     userData: null,
   };
 
+  // componentWillMount() {
+  //   const store = this.context.environment.getStore();
+  //   const connectionId = 'client:root:cart:__Cart_stores_connection';
+  //   const queryNode = STORES_FRAGMENT.data();
+  //   const snapshot = store.lookup({
+  //     dataID: connectionId,
+  //     node: queryNode,
+  //   });
+  //   const { dispose } = store.subscribe(snapshot, s => {
+  //     this.setState({ cartCount: getCartCount(s.data) });
+  //     // tmp code
+  //     setWindowTag('cartCount', getCartCount(s.data));
+  //     // end tmp code
+  //   });
+  //   this.dispose = dispose;
+  //   this.setState({ cartCount: getCartCount(snapshot.data) });
+  //   console.log('>>> header snapshot: ', { snapshot });
+  //   // tmp code
+  //   setWindowTag('cartCount', getCartCount(snapshot.data));
+  //   // end tmp code
+
+  //   const meId = pathOr(
+  //     null,
+  //     ['me', '__ref'],
+  //     store.getSource().get('client:root'),
+  //   );
+  //   if (!meId) {
+  //     // tmp code
+  //     setWindowTag('user', null);
+  //     // end tmp code
+  //   }
+  //   if (meId) {
+  //     const queryUser = HEADER_FRAGMENT.me();
+  //     const snapshotUser = store.lookup({
+  //       dataID: meId,
+  //       node: queryUser,
+  //     });
+  //     const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
+  //       this.setState({ userData: s.data });
+  //       // tmp code
+  //       setWindowTag('user', s.data);
+  //       // end tmp code
+  //     });
+  //     this.disposeUser = disposeUser;
+  //     this.setState({ userData: snapshotUser.data });
+  //     // tmp code
+  //     setWindowTag('user', snapshotUser.data);
+  //     // end tmp code
+  //   }
+  // }
+
   componentWillMount() {
     const store = this.context.environment.getStore();
-    const connectionId = 'client:root:cart:__Cart_stores_connection';
-    const queryNode = STORES_FRAGMENT.data();
+    // const connectionId = 'client:root:cart:__Cart_stores_connection';
+    const connectionCartId = 'client:root:cart';
+    const queryNode = CART_FRAGMENT.data();
     const snapshot = store.lookup({
-      dataID: connectionId,
+      dataID: connectionCartId,
       node: queryNode,
     });
     const { dispose } = store.subscribe(snapshot, s => {
+      console.log('>>> Header cartCount s: ', { s: s.data });
       this.setState({ cartCount: getCartCount(s.data) });
       // tmp code
       setWindowTag('cartCount', getCartCount(s.data));
       // end tmp code
     });
+    console.log('>>> Header cartCount snapshot: ', { snapshot: snapshot.data });
     this.dispose = dispose;
     this.setState({ cartCount: getCartCount(snapshot.data) });
     // tmp code

@@ -78,6 +78,7 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
+    console.log('>>> Cart stores: ', { stores });
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
@@ -118,6 +119,7 @@ export default createPaginationContainer(
         first: { type: "Int", defaultValue: null }
         after: { type: "ID", defaultValue: null }
       ) {
+      id
       productsCost
       deliveryCost
       totalCount
