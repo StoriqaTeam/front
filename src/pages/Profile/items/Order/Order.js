@@ -15,6 +15,7 @@ import StatusList from './StatusList';
 
 import type { ProductDTOType } from './ProductBlock';
 import type { OrderStatusType } from './StatusList';
+import type { Order as OrderType } from './__generated__/Order.graphql';
 
 import './Order.scss';
 
@@ -36,11 +37,7 @@ type OrderDTOType = {
 };
 
 type PropsType = {
-  data: {
-    order: {
-      [string]: any,
-    },
-  },
+  data: OrderType,
   relay: {
     refetch: Function,
   },
@@ -68,27 +65,40 @@ class Order extends PureComponent<PropsType> {
     }
 
     const orderDTO: OrderDTOType = {
-      number: order.slug,
+      number: `${order.slug}`,
       product: {
-        id: `${order.product.baseProduct.rawId}`,
+        id: `${
+          order.product && order.product.baseProduct
+            ? order.product.baseProduct.rawId
+            : 0
+        }`,
         storeId: order.storeId,
         // $FlowIgnoreMe
         name: pathOr('', ['name', 0, 'text'], order.product.baseProduct),
-        photoUrl: order.product.photoMain,
+        photoUrl: order.product && order.product.photoMain,
         category: {
-          id: order.product.baseProduct.category.rawId,
           // $FlowIgnoreMe
+          id: `${pathOr(
+            0,
+            ['product', 'baseProduct', 'category', 'rawId'],
+            order,
+          )}`,
           name: prop(
             'text',
             head(
               filter(
                 propEq('lang', 'EN'),
-                order.product.baseProduct.category.name,
+                // $FlowIgnoreMe
+                pathOr(
+                  [],
+                  ['product', 'baseProduct', 'category', 'name'],
+                  order,
+                ),
               ),
             ),
           ),
         },
-        price: order.product.price,
+        price: order.product ? order.product.price : -1,
         attributes: [],
       },
       customer: {
@@ -215,6 +225,19 @@ export default createRefetchContainer(
         subtotal
         state
         paymentStatus
+        history {
+          edges {
+            node {
+              state
+              committedAt
+              user {
+                firstName
+                lastName
+              }
+              comment
+            }
+          }
+        }
       }
     }
   `,
