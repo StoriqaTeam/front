@@ -1,41 +1,17 @@
 @import "../../styles/variables";
 
-.someHeader {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-}
 
-.storeSidebar {
-  display: none;
+.container {
+  margin-top: 2.875rem;
 
   @media (min-width: 992px) {
-    display: block;
+    margin-top: 0;
   }
 
 }
 
-.countInfo {
-  margin-top: 2rem;
-  font-size: 14px;
-  line-height: 2rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid rgba(151,151,151,.2);
-}
-
-.filterItem {
-  margin-top: 5rem;
-}
-
 .header {
   margin-top: 2rem;
-}
-
-.breadcrumbs {
-  color: $color_grey_minor;
-  font-size: 14px;
-  line-height: 2rem;
-  letter-spacing: 0.1px;
 }
 
 .sort {
@@ -50,13 +26,9 @@
 }
 
 .sortSelect {
-  width: 21rem;
-  margin-top: -0.25rem;
   margin-left: 2rem;
-}
-
-.stores {
-  //
+  margin-top: -0.25rem;
+  width: 21rem;
 }
 
 .store {
@@ -64,94 +36,30 @@
   margin-bottom: 2rem;
 }
 
-.storeData {
-  display: flex;
-  align-items: stretch;
-}
-
-.storeLogo {
-  align-items: center;
-  background-color: $color_grey_trivial;
-  display: flex;
-  height: 10rem;
-  justify-content: center;
-  overflow: hidden;
-  width: 10rem;
-
-  & img {
-    height: 100%;
-    display: block;
-  }
-}
-
-.storeInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 2rem;
-  //max-width: 45rem;
-  //min-width: 35rem;
-  padding-right: 3rem;
-}
-
-.storeName {
-  color: $color_black;
-  font-size: 17px;
-}
-
-.storeAdd {
-  margin-top: 1rem;
-  color: $color_grey_minor;
-  font-size: 16px;
-
-  & .productsCount {
-    display: inline-block;
-    margin-left: 2rem;
-  }
-}
-
 .storeElect {
   align-items: center;
-  border-left: 1px solid rgba(186,186,186,.17);
+  border-left: 1px solid rgba(186, 186, 186, .17);
   cursor: pointer;
-  display: flex;
+  display: none;
   height: 10rem;
   justify-content: center;
   width: 10rem;
-}
 
-.productsData {
-  display: flex;
-  justify-content: flex-end;
-  align-items: stretch;
-}
-
-.productsWrap {
-  display: flex;
-}
-
-.productFoto {
-  display: flex;
-  height: 10rem;
-  justify-content: space-around;
-  margin-left: 2rem;
-  width: 10rem;
-
-  & .productFotoWrap {
-    align-items: center;
-    background-color: $color_grey_trivial;
+  @media (min-width: 576px) {
     display: flex;
-    justify-content: center;
-    overflow: hidden;
-    width: 100%;
   }
 
-  & img {
-    display: block;
-    height: 100%;
-  }
 }
 
 .button {
   margin-top: 2rem;
+}
+
+.sidebar {
+  display: none;
+  height: 100%;
+
+  @media (min-width: 992px) {
+    display: block;
+  }
 }
