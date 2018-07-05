@@ -24,6 +24,7 @@ import Cart from 'pages/Cart';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
+import { StoreOrders } from 'pages/Store/Orders';
 
 const routes = (
   <Route>
@@ -206,6 +207,17 @@ const routes = (
         />
         <Route path="/store">
           <Route path="/new" exact Component={NewStore} />
+          <Route
+            path="/orders"
+            Component={StoreOrders}
+            query={graphql`
+              query routes_StoreOrders_Query {
+                me {
+                  ...StoreOrders_me
+                }
+              }
+            `}
+          />
           <Route
             path="/:storeId"
             Component={EditStore}
