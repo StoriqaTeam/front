@@ -46,4 +46,5 @@ export {
   default as DeactivateProductMutation,
 } from './DeactivateProductMutation';
 export { default as CreateWarehouseMutation } from './CreateWarehouseMutation';
+export { default as DeleteWarehouseMutation } from './DeleteWarehouseMutation';
 export { default as UpdateWarehouseMutation } from './UpdateWarehouseMutation';

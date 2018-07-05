@@ -288,9 +288,9 @@ const routes = (
             path="/:storeId/storages"
             Component={Storages}
             query={graphql`
-              query routes_Storages_Query($storeId: Int!) {
+              query routes_Storages_Query {
                 me {
-                  ...Storages_me @arguments(storeId: $storeId)
+                  ...Storages_me
                 }
               }
             `}

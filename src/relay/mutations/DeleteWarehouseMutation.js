@@ -8,7 +8,7 @@ import type {
 } from './__generated__/DeleteWarehouseMutation.graphql';
 
 const mutation = graphql`
-  mutation DeleteWarehouseMutation($id: Int!) {
+  mutation DeleteWarehouseMutation($id: String!) {
     deleteWarehouse(id: $id) {
       id
     }

@@ -81,7 +81,6 @@ class NewStorage extends Component<PropsType, StateType> {
         addressFull: {
           ...data.addressFull,
         },
-        kind: 'STORE',
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -110,6 +109,7 @@ class NewStorage extends Component<PropsType, StateType> {
           text: 'Storage create!',
           link: { text: '' },
         });
+        this.props.router.push(`/manage/store/${storeId}/storages`);
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -134,6 +134,7 @@ class NewStorage extends Component<PropsType, StateType> {
   render() {
     // const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     const { name, addressFull, isLoading, formErrors } = this.state;
+    console.log('---this.props', this.props);
     return (
       <div styleName="container">
         <Form

@@ -19,7 +19,7 @@ import type { MutationParamsType } from 'relay/mutations/DeleteWarehouseMutation
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { Storages_me as StoragesMeType } from './__generated__/Storages_me.graphql';
 
-import storages from './storages.json';
+// import storages from './storages.json';
 
 import './Storages.scss';
 
@@ -49,12 +49,11 @@ class Storages extends PureComponent<PropsType> {
 
   handleDelete = (id: string) => {
     log.info('---id', id);
-    /*
     const { environment } = this.context;
     const params: MutationParamsType = {
       input: {
         clientMutationId: '',
-        id: parseInt(id, 10),
+        id,
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -98,7 +97,6 @@ class Storages extends PureComponent<PropsType> {
       },
     };
     DeleteWarehouseMutation.commit(params);
-    */
   };
 
   // storagesRefetch = () => {
@@ -131,33 +129,31 @@ class Storages extends PureComponent<PropsType> {
     </div>
   );
 
-  renderRows = (item: {
-    id: string,
-    rawId: number,
-    name: string,
-    address: string,
-  }) => {
-    const { id, rawId, name, address } = item;
+  renderRows = (item: { id: string, name: string, addressFull: any }) => {
+    const { id, name, addressFull } = item;
     return (
-      <div key={item.rawId} styleName="itemRowWrap">
+      <div key={item.id} styleName="itemRowWrap">
         <div styleName="td tdCheckbox">
-          <Checkbox id={`storage-${item.rawId}`} onChange={() => {}} />
+          <Checkbox id={`storage-${item.id}`} onChange={() => {}} />
         </div>
         <div styleName="td tdStorage">
-          <div>
-            <span>{name}</span>
-          </div>
+          <div>{name}</div>
         </div>
         <div styleName="td tdAddress">
-          <div>
-            <span>{address}</span>
+          <div styleName="address">
+            <span>{`${addressFull.country}`}</span>
+            <span>{addressFull.locality && `, ${addressFull.locality}`}</span>
+            <span>{addressFull.route && `, ${addressFull.route}`}</span>
+            <span>
+              {addressFull.streetNumber && `, ${addressFull.streetNumber}`}
+            </span>
           </div>
         </div>
         <div styleName="td tdEdit">
           <button
             styleName="editButton"
             onClick={() => {
-              this.editStorage(rawId);
+              this.editStorage(id);
             }}
           >
             <Icon type="note" size={32} />
@@ -178,6 +174,9 @@ class Storages extends PureComponent<PropsType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
+    // $FlowIgnoreMe
+    const storages = pathOr([], ['me', 'myStore', 'warehouses'], this.props);
     return (
       <div styleName="container">
         <div styleName="addButton">
@@ -190,7 +189,7 @@ class Storages extends PureComponent<PropsType> {
         </div>
         <div>
           <div>{this.renderHeaderRow()}</div>
-          <div>{map(item => this.renderRows(item.node), storages)}</div>
+          <div>{map(item => this.renderRows(item), storages)}</div>
         </div>
         {/* this.props.relay.hasMore() && (
           <div styleName="loadButton">
@@ -219,18 +218,28 @@ Storages.contextTypes = {
 export default createFragmentContainer(
   withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages')))),
   graphql`
-    fragment Storages_me on User
-      @argumentDefinitions(
-        first: { type: "Int", defaultValue: 8 }
-        after: { type: "ID", defaultValue: null }
-        storeId: { type: "Int!" }
-      ) {
-      store(id: $storeId) {
+    fragment Storages_me on User {
+      myStore {
         id
         logo
         name {
           text
           lang
+        }
+        warehouses {
+          id
+          name
+          addressFull {
+            country
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            political
+            postalCode
+            streetNumber
+            value
+            route
+            locality
+          }
         }
       }
     }

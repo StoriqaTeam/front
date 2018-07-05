@@ -12,7 +12,6 @@ const mutation = graphql`
   mutation CreateWarehouseMutation($input: CreateWarehouseInput!) {
     createWarehouse(input: $input) {
       id
-      rawId
       name
       storeId
       addressFull {

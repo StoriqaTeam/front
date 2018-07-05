@@ -211,7 +211,7 @@ class Form extends Component<PropsType, StateType> {
     if (onChangeData) {
       onChangeData({
         ...address,
-        country: country ? country.id : null,
+        country: country ? country.label : null,
         value: autocompleteValue,
       });
     }
