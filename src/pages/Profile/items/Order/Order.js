@@ -3,11 +3,15 @@
 import React, { PureComponent } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { matchShape, withRouter } from 'found';
-import { pathOr, filter, prop, propEq, head } from 'ramda';
+import { pathOr, filter, prop, propEq, head, map, slice } from 'ramda';
 import classNames from 'classnames';
 
 import { Button } from 'components/common/Button';
-import { timeFromTimestamp, fullDateFromTimestamp } from 'utils/formatDate';
+import {
+  timeFromTimestamp,
+  fullDateFromTimestamp,
+  shortDateFromTimestamp,
+} from 'utils/formatDate';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -112,9 +116,55 @@ class Order extends PureComponent<PropsType> {
       subtotal: order.subtotal,
       status: order.state,
       paymentStatus: order.paymentStatus ? 'Paid' : 'Not paid',
-      statusHistory: [],
+      // $FlowIgnoreMe
+      statusHistory: map(historyEdge => {
+        let manager = '';
+        if (historyEdge.node.user) {
+          if (historyEdge.node.user.lastName) {
+            manager = historyEdge.node.user.lastName;
+            if (historyEdge.node.user.firstName) {
+              manager = `${manager} ${slice(
+                0,
+                1,
+                historyEdge.node.user.firstName,
+              )}.`;
+            }
+          }
+        }
+        return {
+          date: `${shortDateFromTimestamp(
+            historyEdge.node.committedAt,
+          )}\n${timeFromTimestamp(historyEdge.node.committedAt)}`,
+          manager,
+          status: this.getStatusString(historyEdge.node.state),
+          additionalInfo: historyEdge.node.comment,
+        };
+      }, order && order.history ? order.history.edges : []),
     };
     return orderDTO;
+  };
+
+  getStatusString = (orderStatus: string): string => {
+    switch (orderStatus) {
+      case 'CANCELLED':
+        return 'Cancelled';
+      case 'COMPLETE':
+        return 'Completed';
+      case 'DELIVERED':
+        return 'Delivered';
+      case 'IN_PROCESSING':
+        return 'In process';
+      case 'PAID':
+        return 'Paid';
+      case 'PAIMENT_AWAITED':
+        return 'Wait for payment';
+      case 'RECEIVED':
+        return 'Received';
+      case 'SENT':
+        return 'Sent';
+      default:
+        return 'Undefined';
+    }
   };
 
   getDateFromTimestamp = (timestamp: string): string =>
@@ -136,7 +186,9 @@ class Order extends PureComponent<PropsType> {
         <div styleName="statusBlock">
           <div styleName="statuses">
             <div styleName="statusTitle">Status</div>
-            <div styleName="statusInfo">{order.status}</div>
+            <div styleName="statusInfo">
+              {this.getStatusString(order.status)}
+            </div>
             <div styleName="statusTitle secondStatusTitle">Payment status</div>
             <div
               styleName={classNames('statusInfo', {
