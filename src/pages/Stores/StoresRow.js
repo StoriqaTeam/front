@@ -9,7 +9,7 @@ import { Row, Col } from 'layout';
 import StoresProducts from './StoresProducts';
 import StoresData from './StoresData';
 
-import './Stores.scss';
+import './StoresRow.scss';
 
 type PropsType = {
   store: {
@@ -24,16 +24,16 @@ type PropsType = {
   },
 };
 
-class StoreRow extends PureComponent<PropsType> {
+class StoresRow extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
     // $FlowIgnoreMe
     const baseProduct = pathOr(null, ['baseProducts', 'edges'], store);
     const storeId = store.rawId;
     return (
-      <div styleName="store" key={store.id}>
+      <div styleName="container" key={store.id}>
         <Row>
-          <Col sm={12} md={4} lg={4} xl={4}>
+          <Col size={12} sm={4} md={4} lg={4} xl={4}>
             <StoresData store={store} />
           </Col>
           <Col sm={1} md={3} lg={3} xl={3}>
@@ -41,7 +41,7 @@ class StoreRow extends PureComponent<PropsType> {
               <Icon type="heart" size="32" />
             </div>
           </Col>
-          <Col sm={1} md={5} lg={5} xl={5}>
+          <Col sm={7} md={5} lg={5} xl={5}>
             {baseProduct && (
               <StoresProducts storeId={storeId} baseProduct={baseProduct} />
             )}
@@ -52,4 +52,4 @@ class StoreRow extends PureComponent<PropsType> {
   }
 }
 
-export default StoreRow;
+export default StoresRow;

@@ -11,7 +11,7 @@ import type {
 const mutation = graphql`
   mutation SetSelectionInCartMutation($input: SetSelectionInCartInput!) {
     setSelectionInCart(input: $input) {
-      ...CartProduct_product
+      ...Cart_cart
     }
   }
 `;

@@ -15,7 +15,7 @@ import { fromSearchFilters, fromQueryString } from './StoreUtils';
 
 import StoresSidebar from './StoresSidebar';
 import StoresHeader from './StoresHeader';
-import StoreRow from './StoreRow';
+import StoresRow from './StoresRow';
 
 import './Stores.scss';
 
@@ -127,7 +127,7 @@ class Stores extends Component<PropsType, StateType> {
               {stores && stores.length > 0 ? (
                 map(
                   storesItem => (
-                    <StoreRow
+                    <StoresRow
                       store={storesItem.node}
                       key={storesItem.node.id}
                     />
