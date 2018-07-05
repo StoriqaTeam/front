@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { remove } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -9,26 +10,33 @@ import './Collapse.scss';
 
 type PropsType = {
   items: Array<{ id: string, title: string }>,
+  onSelected: (item: { id: string, title: string }) => void,
 };
 
 type StateType = {
-  title: string,
   isOpen: boolean,
+  index: number,
 };
 
 class Collapse extends Component<PropsType, StateType> {
   state = {
-    title: this.props.items[0].title,
     isOpen: false,
+    index: 0,
   };
   handleClick = () => {
     this.setState(({ isOpen }) => ({
       isOpen: !isOpen,
     }));
   };
+  handleSelected = (item: { id: string, title: string }, index: number): void => {
+    const { onSelected } = this.props;
+    this.setState({ index, isOpen: false }, () => {
+      onSelected(item);
+    });
+  };
   render() {
     const { items } = this.props;
-    const { isOpen, title } = this.state;
+    const { isOpen, index } = this.state;
     return (
       <aside styleName="container">
         <h2 styleName="offscreen">Collapsable menu</h2>
@@ -38,7 +46,7 @@ class Collapse extends Component<PropsType, StateType> {
           onClick={this.handleClick}
           styleName="header"
         >
-          <span>{title}</span>
+          <span>{items[index].title}</span>
           <span styleName={classNames('icon', { rotate: isOpen })}>
             <Icon type="arrowExpand" />
           </span>
@@ -48,7 +56,18 @@ class Collapse extends Component<PropsType, StateType> {
             show: isOpen,
           })}
         >
-          <ul>{items.map(item => <li key={item.id}>{item.title}</li>)}</ul>
+          <ul>
+            {remove(index, 1, items).map((item, idx) => (
+              <li
+                key={item.id}
+                onClick={() => this.handleSelected(item, idx)}
+                onKeyPress={() => {}}
+                role="none"
+              >
+                {item.title}
+              </li>
+            ))}
+          </ul>
         </nav>
       </aside>
     );

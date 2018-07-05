@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'found';
+import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
 
 import { Collapse } from 'components/Collapse';
@@ -16,8 +16,10 @@ import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 
 import './Menu.scss';
+import {pathOr} from "ramda";
 
 type PropsType = {
+  router: routerShape,
   menuItems: Array<{ id: string, title: string }>,
   activeItem: string,
   firstName: string,
@@ -68,7 +70,10 @@ class Menu extends PureComponent<PropsType> {
     };
     UpdateUserMutation.commit(params);
   };
-
+  handleSelected = (item: { id: string, title: string }): void => {
+    const { router: { push } } = this.props;
+    push(`/profile/${item.id}`);
+  };
   render() {
     const {
       activeItem,
@@ -81,7 +86,7 @@ class Menu extends PureComponent<PropsType> {
     return (
       <div styleName="menu">
         <div styleName="mobileMenu">
-          <Collapse items={menuItems} />
+          <Collapse items={menuItems} onSelected={this.handleSelected} />
           <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
             avatar={avatar}
@@ -150,4 +155,4 @@ Menu.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Menu;
+export default withRouter(Menu);
