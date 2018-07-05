@@ -8,10 +8,18 @@ import type {
   SetSelectionInCartMutationResponse,
 } from './__generated__/SetSelectionInCartMutation.graphql';
 
+// const mutation = graphql`
+//   mutation SetSelectionInCartMutation($input: SetSelectionInCartInput!) {
+//     setSelectionInCart(input: $input) {
+//       ...CartProduct_product
+//     }
+//   }
+// `;
+
 const mutation = graphql`
   mutation SetSelectionInCartMutation($input: SetSelectionInCartInput!) {
     setSelectionInCart(input: $input) {
-      ...CartProduct_product
+      ...Cart_cart
     }
   }
 `;

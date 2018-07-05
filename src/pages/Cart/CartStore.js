@@ -5,15 +5,10 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { filter, whereEq } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
-// import { Button } from 'components/common/Button';
-// import { Input } from 'components/common/Input';
-// import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
 import { formatPrice, getNameText } from 'utils';
-import {} from 'utils';
 
 import CartProduct from './CartProduct';
-// import CartProductAttribute from './CartProductAttribute';
 
 // eslint-disable-next-line
 import type CartStore_store from './__generated__/CartStore_store.graphql';
@@ -25,13 +20,12 @@ type PropsType = {
   unselectable: ?boolean,
   // eslint-disable-next-line
   store: CartStore_store,
-  // totals: { productsCost: number, deliveryCost: number, totalCount: number },
 };
 
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store, onlySelected, unselectable, totals } = this.props;
+    const { store, onlySelected, unselectable } = this.props;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -40,7 +34,6 @@ class CartStore extends PureComponent<PropsType> {
     if (filteredProducts.length === 0) {
       return null;
     }
-    // console.log('>>> CartStore store: ', { store, totals });
     return (
       <Row>
         <Col size={12}>
@@ -50,7 +43,6 @@ class CartStore extends PureComponent<PropsType> {
                 <CartProduct
                   key={idx}
                   product={product}
-                  storeId={store.id}
                   onlySelected={onlySelected}
                   unselectable={unselectable}
                 />

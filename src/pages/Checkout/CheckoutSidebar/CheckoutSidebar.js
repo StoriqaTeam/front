@@ -4,20 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-relay';
 import {
-  pipe,
   pathOr,
-  path,
-  values,
   map,
-  prop,
-  propEq,
-  groupBy,
-  filter,
-  reject,
-  isNil,
-  reduce,
-  head,
-  defaultTo,
 } from 'ramda';
 
 import { formatPrice } from 'utils';
@@ -31,18 +19,16 @@ const STICKY_THRESHOLD_REM = 90;
 
 type PropsType = {
   storesRef: ?Object,
-  cart: any,
   onClick: Function,
   isReadyToClick: Function,
   buttonText: string,
 };
 
-type Totals = {
-  [storeId: string]: {
-    productsCost: number,
-    deliveryCost: number,
-    totalCount: number,
-  },
+type Totals = ?{
+  productsCost: number,
+  deliveryCost: number,
+  totalCount: number,
+  totalCost: number,
 };
 
 type StateType = {
@@ -58,60 +44,35 @@ const STORES_FRAGMENT = graphql`
     edges {
       node {
         id
-        products {
-          id
-          selected
-          quantity
-          price
-          deliveryCost
-        }
+        productsCost
+        deliveryCost
+        totalCost
+        totalCount
       }
     }
   }
 `;
 
-// const getTotals: (data: CartStoresLocalFragment) => Totals = data => {
-//   const stores = map(i => i.node, pathOr([], ['edges'], data));
-//   return {
-//     productsCost: calcTotal(stores, 'productsCost') || 0,
-//     deliveryCost: calcTotal(stores, 'deliveryCost') || 0,
-//     totalCount: calcTotal(stores, 'totalCount') || 0,
-//     totalCost: calcTotal(stores, 'totalCost') || 0,
-//   };
-// };
-
-const getTotals: (data: CartStoresLocalFragment) => Totals = data => {
-  const defaultTotals = { productsCost: 0, deliveryCost: 0, totalCount: 0 };
-  const fold = pipe(
-    filter(propEq('selected', true)),
-    reduce(
-      (acc, elem) => ({
-        productsCost: acc.productsCost + elem.quantity * elem.price,
-        deliveryCost: acc.deliveryCost + elem.deliveryCost,
-        totalCount: acc.totalCount + elem.quantity,
-      }),
-      defaultTotals,
-    ),
-  );
-  return pipe(
-    pathOr([], ['edges']),
-    map(prop('node')),
-    reject(isNil),
-    map(store => ({ id: store.id, ...fold(store.products) })),
-    groupBy(prop('id')),
-    map(pipe(head, defaultTo(defaultTotals))),
-  )(data);
+const getTotals = (data: any) => {
+  const stores = map(i => i.node, pathOr([], ['edges'], data));
+  return {
+    productsCost: calcTotal(stores, 'productsCost') || 0,
+    deliveryCost: calcTotal(stores, 'deliveryCost') || 0,
+    totalCount: calcTotal(stores, 'totalCount') || 0,
+    totalCost: calcTotal(stores, 'totalCost') || 0,
+  };
 };
 
 class CheckoutSidebar extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.handleScroll = this.handleScrollEvent.bind(this);
+    this.state = {
+      currentClass: 'top',
+      totals: null,
+    };
   }
 
-  state = {
-    currentClass: 'top',
-  };
 
   componentWillMount() {
     const store = this.context.environment.getStore();
@@ -121,10 +82,6 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       dataID: connectionId, // root
       node: queryNode, // query starting from root
     });
-    // console.log('>>> CheckoutSidebar componentWillMount: ', { store, connectionId, queryNode, snapshot });
-    // This will be triggered each time any field in our query changes
-    // Therefore it's important to include not only the data you need into the query,
-    // but also the data you need to watch for.
     const { dispose } = store.subscribe(snapshot, s => {
       this.setState({ totals: getTotals(s.data) });
     });
@@ -149,6 +106,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     this.ref = ref;
   }
 
+  dispose: Function;
   ref: ?{ className: string };
   scrolling: boolean;
   handleScroll: () => void;
@@ -204,21 +162,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    // const { totals } = this.state;
+    const { totals } = this.state;
     const { onClick, isReadyToClick, buttonText } = this.props;
-    const totals = pipe(
-      values,
-      reduce(
-        (acc, elem) => ({
-          productsCost: acc.productsCost + elem.productsCost,
-          deliveryCost: acc.deliveryCost + elem.deliveryCost,
-          totalCount: acc.totalCount + elem.totalCount,
-        }),
-        { productsCost: 0, deliveryCost: 0, totalCount: 0 },
-      ),
-    )(this.state.totals);
-    // const { productsCost, deliveryCost, totalCount } = totals;
-    console.log('>>> sidebar cart: ', { totals });
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -227,23 +172,23 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <div styleName="attributeContainer">
               <div styleName="label">Subtotal</div>
               <div styleName="value">
-                {`${formatPrice(totals.productsCost || 0)} STQ`}
+                {totals && `${formatPrice(totals.productsCost || 0)} STQ`}
               </div>
             </div>
             <div styleName="attributeContainer">
               <div styleName="label">Delivery</div>
               <div styleName="value">
-                {`${formatPrice(totals.deliveryCost || 0)} STQ`}
+                {totals && `${formatPrice(totals.deliveryCost || 0)} STQ`}
               </div>
             </div>
             <div styleName="attributeContainer">
               <div styleName="label">
                 Total{' '}
-                <span styleName="subLabel">({totals.totalCount} items)</span>
+                <span styleName="subLabel">({totals && totals.totalCount} items)</span>
               </div>
               <div styleName="value">
-                {`${formatPrice(
-                  totals.productsCost + totals.deliveryCost || 0,
+                {totals && `${formatPrice(
+                  totals.totalCost || 0,
                 )} STQ`}
               </div>
             </div>

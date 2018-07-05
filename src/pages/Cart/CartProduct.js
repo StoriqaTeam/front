@@ -124,7 +124,7 @@ class CartProduct extends PureComponent<PropsType> {
   }
 
   render() {
-    const { product, unselectable, storeId } = this.props;
+    const { product, unselectable } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -144,7 +144,6 @@ class CartProduct extends PureComponent<PropsType> {
       title: head(attr.attribute.name).text,
       value: attr.value.toString(),
     }))(attributes);
-    // console.log('>>> storeId: ', { storeId });
 
     return (
       <div styleName="container">
@@ -164,9 +163,7 @@ class CartProduct extends PureComponent<PropsType> {
               <div
                 styleName="picture"
                 style={{ backgroundImage: `url(${photoMain})` }}
-              >
-                {/* <img src={photoMain} styleName="picture" alt="product_picture" /> */}
-              </div>
+              />
             </div>
           </Col>
           <Col size={10}>

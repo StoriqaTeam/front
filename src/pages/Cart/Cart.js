@@ -10,45 +10,19 @@ import {
   path,
   map,
   prop,
-  propEq,
-  groupBy,
-  filter,
-  reject,
-  isNil,
-  reduce,
-  head,
-  defaultTo,
 } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
-import CartTotal from './CartTotal';
 import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
 import type Cart_cart from './__generated__/Cart_cart.graphql';
-import type CartStoresLocalFragment from './__generated__/CartStoresLocalFragment.graphql';
+// import type CartStoresLocalFragment from './__generated__/CartStoresLocalFragment.graphql';
 
 import './Cart.scss';
-
-const STORES_FRAGMENT = graphql`
-  fragment CartStoresLocalFragment on CartStoresConnection {
-    edges {
-      node {
-        id
-        products {
-          id
-          selected
-          quantity
-          price
-          deliveryCost
-        }
-      }
-    }
-  }
-`;
 
 type PropsType = {
   // eslint-disable-next-line
@@ -69,55 +43,12 @@ type StateType = {
   totals: Totals,
 };
 
-const getTotals: (data: CartStoresLocalFragment) => Totals = data => {
-  const defaultTotals = { productsCost: 0, deliveryCost: 0, totalCount: 0 };
-  const fold = pipe(
-    filter(propEq('selected', true)),
-    reduce(
-      (acc, elem) => ({
-        productsCost: acc.productsCost + elem.quantity * elem.price,
-        deliveryCost: acc.deliveryCost + elem.deliveryCost,
-        totalCount: acc.totalCount + elem.quantity,
-      }),
-      defaultTotals,
-    ),
-  );
-  return pipe(
-    pathOr([], ['edges']),
-    map(prop('node')),
-    reject(isNil),
-    map(store => ({ id: store.id, ...fold(store.products) })),
-    groupBy(prop('id')),
-    map(pipe(head, defaultTo(defaultTotals))),
-  )(data);
-};
-
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
   state = {
     storesRef: null,
     totals: {},
   };
-
-  componentWillMount() {
-    const store = this.context.environment.getStore();
-    const connectionId = `client:root:cart:__Cart_stores_connection`;
-    const queryNode = STORES_FRAGMENT.data();
-    const snapshot = store.lookup({
-      dataID: connectionId, // root
-      node: queryNode, // query starting from root
-    });
-    // This will be triggered each time any field in our query changes
-    // Therefore it's important to include not only the data you need into the query,
-    // but also the data you need to watch for.
-    const { dispose } = store.subscribe(snapshot, s => {
-      console.log('>>> Cart s: ', { s });
-      this.setState({ totals: getTotals(s.data) });
-    });
-    this.dispose = dispose;
-    console.log('>>> Cart snapshot: ', { snapshot });
-    this.setState({ totals: getTotals(snapshot.data) });
-  }
 
   componentWillUnmount() {
     if (this.dispose) {
@@ -153,7 +84,6 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
-    const { cart } = this.props;
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
@@ -168,13 +98,8 @@ class Cart extends Component<PropsType, StateType> {
             ))}
           </div>
           <div styleName="total-container">
-            {/* <CartTotal
-              storesRef={this.state.storesRef}
-              totals={this.state.totals}
-            /> */}
             <CheckoutSidebar
               storesRef={this.state.storesRef}
-              // cart={cart}
               buttonText="Checkout"
               onClick={this.handleToCheckout}
               // isReadyToClick={this.checkReadyToCheckout()}
@@ -199,6 +124,10 @@ export default createPaginationContainer(
         first: { type: "Int", defaultValue: null }
         after: { type: "ID", defaultValue: null }
       ) {
+      productsCost
+      deliveryCost
+      totalCount
+      totalCost
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {

@@ -9,10 +9,18 @@ import type {
   IncrementInCartMutationResponse,
 } from './__generated__/IncrementInCartMutation.graphql';
 
+// const mutation = graphql`
+//   mutation IncrementInCartMutation($input: IncrementInCartInput!) {
+//     incrementInCart(input: $input) {
+//       ...CartStore_store
+//     }
+//   }
+// `;
+
 const mutation = graphql`
   mutation IncrementInCartMutation($input: IncrementInCartInput!) {
     incrementInCart(input: $input) {
-      ...CartStore_store
+      ...Cart_cart
     }
   }
 `;

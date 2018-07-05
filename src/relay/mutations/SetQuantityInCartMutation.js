@@ -11,18 +11,10 @@ import type {
 const mutation = graphql`
   mutation SetQuantityInCartMutation($input: SetQuantityInCartInput!) {
     setQuantityInCart(input: $input) {
-      ...CartProduct_product
+      ...Cart_cart
     }
   }
 `;
-
-// const mutation = graphql`
-//   mutation SetQuantityInCartMutation($input: SetQuantityInCartInput!) {
-//     setQuantityInCart(input: $input) {
-//       ...Cart_cart
-//     }
-//   }
-// `;
 
 export type SetQuantityInCartParams = {
   ...SetQuantityInCartMutationVariables,
