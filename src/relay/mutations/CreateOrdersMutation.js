@@ -6,7 +6,18 @@ import { Environment } from 'relay-runtime';
 const mutation = graphql`
   mutation CreateOrdersMutation($input: CreateOrderInput!) {
     createOrders(input: $input) {
-      id
+      cart {
+        stores {
+          edges {
+            node {
+              id
+            }
+          }
+        }
+      }
+      orders {
+        id
+      }
     }
   }
 `;

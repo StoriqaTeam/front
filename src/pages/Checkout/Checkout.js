@@ -27,7 +27,6 @@ import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
 
 import CartStore from '../Cart/CartStore';
-// import CartTotal from '../Cart/CartTotal';
 
 import './Checkout.scss';
 

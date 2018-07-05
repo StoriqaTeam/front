@@ -34,14 +34,6 @@ const commit = (params: SetQuantityInCartParams) =>
     variables: {
       input: { ...params.input },
     },
-    optimisticUpdater: relayStore => {
-      const {
-        input: { value },
-        nodeId,
-      } = params;
-      const product = relayStore.get(nodeId);
-      product.setValue(value, 'quantity');
-    },
     onCompleted: params.onCompleted,
     onError: params.onError,
   });
