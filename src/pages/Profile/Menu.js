@@ -82,7 +82,7 @@ class Menu extends PureComponent<PropsType> {
       <div styleName="menu">
         <div styleName="mobileMenu">
           <Collapse items={menuItems} />
-          <div style={{ margin: '1.05rem 0'}} />
+          <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
             avatar={avatar}
             id={this.props.id}

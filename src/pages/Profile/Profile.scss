@@ -1,5 +1,7 @@
 @import "../../styles/variables";
 
+$max-width: 41rem !important;
+
 .container {
   margin-top: 4.875rem;
 
@@ -22,34 +24,55 @@
 }
 
 .header {
-  display: flex;
   align-items: center;
+  display: none;
   margin-top: 1rem;
   padding-left: 2rem;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+
 }
 
 .personalData {
-  width: 41rem;
+  max-width: $max-width;
 }
 
 .title {
-  font-family: $font_medium;
   color: $color_grey;
+  font-family: $font_medium;
   font-size: 24px;
 }
 
 .subtitle {
-  margin-bottom: 5rem;
   font-size: 14px;
-  text-transform: uppercase;
   letter-spacing: 1px;
+  margin-bottom: 5rem;
+  text-transform: uppercase;
 }
 
 .form {
-  margin-top: 2rem;
-  padding: 4rem;
   background-color: $color_white;
   flex: 1 0 auto;
+  margin-top: 0;
+  padding: 4rem;
+
+  [class*="Select"], [class*="Input__container"] {
+    width: 100%;
+  }
+
+  [class*="SpinnerButton"] {
+    width: 100%;
+    @media (min-width: 768px) {
+      width: initial;
+    }
+  }
+
+  @media (min-width: 768px) {
+    margin-top: 2rem;
+  }
+
 }
 
 .formItem + .formItem {
@@ -57,7 +80,7 @@
 }
 
 .addressForm {
-  width: 41rem;
+  max-width: $max-width;
 }
 
 .editAddressForm {
