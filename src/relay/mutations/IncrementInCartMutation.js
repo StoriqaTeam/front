@@ -12,7 +12,7 @@ import type {
 const mutation = graphql`
   mutation IncrementInCartMutation($input: IncrementInCartInput!) {
     incrementInCart(input: $input) {
-      ...CartStore_store
+      ...Cart_cart
     }
   }
 `;
