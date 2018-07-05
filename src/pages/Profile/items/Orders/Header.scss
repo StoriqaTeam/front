@@ -1,18 +1,20 @@
 .container {
-  display: flex;
-  align-items: baseline;
+   display: flex;
+   align-items: baseline;
 }
 
 .inputsWrapper {
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: baseline;
+
+  @media (min-width: 992px) {
+    display: flex;
+  }
+
 }
 
 .buttonWrapper {
-  margin-left: 22.25rem;
-}
-
-.searchTermInputWrapper {
-  width: 27rem;
+  display: flex;
+  justify-content: flex-end;
 }
