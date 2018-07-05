@@ -5,8 +5,6 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, find, propEq } from 'ramda';
 
 import { Page } from 'components/App';
-import { Collapse } from 'components/Collapse';
-import { MobileUpload } from 'components/MobileUpload';
 import {
   PersonalData,
   ShippingAddresses,
@@ -72,7 +70,6 @@ class Profile extends Component<PropsType, StateType> {
         <Container>
           <Row>
             <Col sm={3} md={3} lg={2} xl={2}>
-              <Collapse items={menuItems} />
               <Menu
                 activeItem={activeItem}
                 avatar={me.avatar}
@@ -84,7 +81,6 @@ class Profile extends Component<PropsType, StateType> {
               />
             </Col>
             <Col sm={9} md={9} lg={10} xl={10}>
-              <MobileUpload onUpload={() => {}} />
               <div styleName="content">
                 <div styleName="header">
                   <span styleName="title">Profile</span>

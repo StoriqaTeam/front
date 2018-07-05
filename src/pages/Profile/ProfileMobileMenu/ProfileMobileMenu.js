@@ -15,7 +15,7 @@ import { uploadFile, log, fromRelayError } from 'utils';
 import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 
-import './Menu.scss';
+import './ProfileMobileMenu.scss';
 
 type PropsType = {
   menuItems: Array<{ id: string, title: string }>,
@@ -27,7 +27,7 @@ type PropsType = {
   provider: ?string,
 };
 
-class Menu extends PureComponent<PropsType> {
+class ProfileMobileMenu extends PureComponent<PropsType> {
   handleOnUpload = async (e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
@@ -80,16 +80,7 @@ class Menu extends PureComponent<PropsType> {
     } = this.props;
     return (
       <div styleName="menu">
-        <div styleName="mobileMenu">
-          <Collapse items={menuItems} />
-          <div style={{ margin: '1.05rem 0'}} />
-          <MobileUpload
-            avatar={avatar}
-            id={this.props.id}
-            onUpload={this.handleOnUpload}
-          />
-        </div>
-        <div styleName="imageArea">
+        <div styleName="imgWrap">
           <UploadWrapper
             id="new-store-id"
             onUpload={this.handleOnUpload}
@@ -146,8 +137,8 @@ class Menu extends PureComponent<PropsType> {
   }
 }
 
-Menu.contextTypes = {
+ProfileMobileMenu.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Menu;
+export default ProfileMobileMenu;
