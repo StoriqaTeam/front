@@ -109,10 +109,6 @@ class HeaderResponsive extends Component<PropsType, StateType> {
 
   componentWillMount() {
     const store = this.context.environment.getStore();
-    // const store = this.context.environment.getStore();
-    if (process.env.BROWSER) {
-      window.store = store;
-    }
     const connectionId = 'client:root:cart:__Cart_stores_connection';
     const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({

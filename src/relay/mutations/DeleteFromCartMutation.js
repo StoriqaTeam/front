@@ -1,8 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment, ConnectionHandler } from 'relay-runtime';
-import { filter } from 'ramda';
+import { Environment } from 'relay-runtime';
 
 import type {
   DeleteFromCartMutationVariables,
@@ -12,8 +11,7 @@ import type {
 const mutation = graphql`
   mutation DeleteFromCartMutation($input: DeleteFromCartInput!) {
     deleteFromCart(input: $input) {
-      productId
-      storeId
+      ...Cart_cart
     }
   }
 `;

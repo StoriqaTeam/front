@@ -37,13 +37,13 @@ const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
 
 const STORES_FRAGMENT = graphql`
-  fragment CheckoutSidebarStoresLocalFragment on CartStoresConnection {
-    edges {
-      node {
-        id
-        productsCost
-        deliveryCost
-        totalCost
+  fragment CheckoutSidebarStoresLocalFragment on CartStoresConnection { 
+    edges { 
+      node { 
+        id 
+        productsCost 
+        deliveryCost 
+        totalCost 
         totalCount
       }
     }
@@ -72,16 +72,22 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
 
   componentWillMount() {
     const store = this.context.environment.getStore();
-    const connectionId = `client:root:cart:__Cart_stores_connection`;
+    if (process.env.BROWSER) {
+      window.store = store;
+    }
+    const connectionId = `client:root:cart:__Cart_stores_connection`; 
+    // const connectionId = `client:root:__Cart_stores_connection`;
     const queryNode = STORES_FRAGMENT.data();
     const snapshot = store.lookup({
       dataID: connectionId, // root
       node: queryNode, // query starting from root
     });
     const { dispose } = store.subscribe(snapshot, s => {
+      console.log('>>> CheckoutSidebar snapshot: ', { s: s.data, store });
       this.setState({ totals: getTotals(s.data) });
     });
     this.dispose = dispose;
+    console.log('>>> CheckoutSide:__Cart_stores_connectionbar snapshot: ', { snapshot: snapshot.data, store });
     this.setState({ totals: getTotals(snapshot.data) });
   }
 
