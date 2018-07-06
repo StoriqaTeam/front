@@ -18,11 +18,13 @@ import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
+import ManageOrderBlock from './ManageOrderBlock';
 
 import './OrderPage.scss';
 
 type PropsType = {
   order: any, // TODO: use common type here.
+  isAbleToManageOrder?: boolean,
 };
 
 type OrderDTOType = {
@@ -197,6 +199,11 @@ class OrderPage extends PureComponent<PropsType> {
             <TextWithLabel label="Subtotal" text={`${order.subtotal} STQ`} />
           </div>
         </div>
+        <ManageOrderBlock
+          isAbleToSend={this.props.isAbleToManageOrder}
+          isAbleToCancel={this.props.isAbleToManageOrder}
+          orderSlug={parseInt(order.number, 10)}
+        />
         <StatusList items={order.statusHistory} />
       </div>
     );
