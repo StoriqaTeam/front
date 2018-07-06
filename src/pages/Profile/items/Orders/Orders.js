@@ -36,6 +36,7 @@ class Orders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
   };
+
   componentDidMount() {
     this.loadPage(this.state.currentPage);
   }
