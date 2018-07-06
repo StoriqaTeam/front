@@ -1,19 +1,39 @@
 // @flow
 
 import React from 'react';
+import { Col } from 'layout';
 
 import './TableTitle.scss';
 
 const TableTitle = () => (
   <div styleName="container">
-    <span styleName="cellNumber">Number</span>
-    <span styleName="cellDate">Date</span>
-    <span styleName="cellShop">Shop</span>
-    <span styleName="cellDelivery">Delivery</span>
-    <span styleName="cellItems">Items</span>
-    <span styleName="cellPrice">Price</span>
-    <span styleName="cellPayment">Payment</span>
-    <span styleName="cellStatus">Status</span>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellNumber">Number</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellDate">Date</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellShop">Shop</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellDelivery">Delivery</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellItems">Items</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellPrice">Price</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellPayment">Payment</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={1}>
+      <span styleName="cellStatus">Status</span>
+    </Col>
+    <Col sm={6} md={1} lg={1} xl={2}>
+      <span styleName="cellStatus">Status</span>
+    </Col>
     <div styleName="border" />
   </div>
 );

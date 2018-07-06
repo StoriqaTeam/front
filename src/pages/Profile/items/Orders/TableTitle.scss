@@ -12,28 +12,36 @@
 }
 
 .cellNumber {
-  width: 12.25rem;
+  // width: 12.25rem;
 }
 .cellDate {
-  width: 13rem;
+  // width: 13rem;
 }
 .cellShop {
-  width: 10rem;
+  display: none;
+
+  @media (min-width: 992px) {
+    display: block;
+  }
 }
 .cellDelivery {
-  width: 15.25rem;
+  display: none;
+
+  @media (min-width: 992px) {
+    display: initial;
+  }
 }
 .cellItems {
-  width: 18.5rem;
+  // width: 18.5rem;
 }
 .cellPrice {
-  width: 17.75rem;
+  // width: 17.75rem;
 }
 .cellPayment {
-  width: 14.75rem;
+  // width: 14.75rem;
 }
 .cellStatus {
-  width: 16.25rem;
+  // width: 16.25rem;
 }
 .border {
   background-color: #efefef;
