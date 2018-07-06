@@ -41,33 +41,29 @@ class TableRow extends PureComponent<PropsType> {
           this.props.router.push(`/profile/orders/${rowItem.number}`)
         }
       >
-        <Col sm={6} md={3} lg={1} xl={1}>
-          <div styleName="numberCell">{rowItem.number}</div>
+        <Col size={4} sm={4} md={3} lg={2} xl={1}>
+          {rowItem.number}
         </Col>
-        <Col sm={6} md={3} lg={1} xl={1}>
-          <div styleName="dateCell">{rowItem.date}</div>
+        <Col size={4} sm={4} md={3} lg={2} xl={1}>
+          {rowItem.date}
         </Col>
-        <Col sm={1} md={1} lg={1} xl={1} lgVisible>
-          <div styleName="shopCell">{rowItem.shop.title}</div>
+        <Col lg={2} xl={1} xlVisible>
+          {rowItem.shop.title}
         </Col>
-        <Col sm={1} md={1} lg={1} xl={1}>
-          <div styleName="deliveryCell">{rowItem.delivery}</div>
+        <Col lg={2} xl={1} xlVisible>
+          {rowItem.delivery}
         </Col>
-        <Col sm={3} md={3} lg={1} xl={1}>
-          <div styleName="itemCell">
-            <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
-              {rowItem.item.title}
-            </Link>
-          </div>
+        <Col size={4} sm={4} md={3} lg={2} xl={1}>
+          <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
+            {rowItem.item.title}
+          </Link>
         </Col>
-        <Col sm={3} md={2} lg={1} xl={1}>
-          <div styleName="priceCell">
-            {rowItem.price} <b>STQ</b>
-          </div>
+        <Col md={2} lg={2} xl={1} mdVisible>
+          {rowItem.price} <b>STQ</b>
         </Col>
-        <Col sm={6} md={1} lg={1} xl={1}>
+        <Col lg={2} xl={1} lgVisible>
           <div
-            styleName={classNames('paymentCell', {
+            styleName={classNames({
               paid: rowItem.payment === 'Paid',
               unpaid: rowItem.payment !== 'Paid',
             })}
@@ -75,8 +71,8 @@ class TableRow extends PureComponent<PropsType> {
             {rowItem.payment}
           </div>
         </Col>
-        <Col sm={6} md={1} lg={1} xl={1}>
-          <div styleName="statusCell">{rowItem.status}</div>
+        <Col lg={2} xl={1} lgVisible>
+          {rowItem.status}
         </Col>
         <div styleName="border" />
       </div>

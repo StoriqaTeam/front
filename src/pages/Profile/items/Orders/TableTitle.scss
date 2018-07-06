@@ -11,46 +11,6 @@
   position: relative;
 }
 
-.cellNumber {
-  // width: 12.25rem;
-}
-.cellDate {
-  // width: 13rem;
-}
-.cellShop {
-  display: none;
-
-  @media (min-width: $xl) {
-    display: initial;
-  }
-}
-.cellDelivery {
-  display: none;
-
-  @media (min-width: $xl) {
-    display: initial;
-  }
-}
-.cellItems {
-  // width: 18.5rem;
-}
-.cellPrice {
-  // width: 17.75rem;
-}
-.cellPayment {
-  display: none;
-
-  @media (min-width: $lg) {
-    display: initial;
-  }
-}
-.cellStatus {
-  display: none;
-
-  @media (min-width: $lg) {
-    display: initial;
-  }
-}
 .border {
   background-color: #efefef;
   height: 0.125rem;

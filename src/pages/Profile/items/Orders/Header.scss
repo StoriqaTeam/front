@@ -1,6 +1,9 @@
 .container {
-   display: flex;
-   align-items: baseline;
+  align-items: initial;
+
+  @media (min-width: 768px) {
+    align-items: baseline;
+  }
 }
 
 .inputsWrapper {

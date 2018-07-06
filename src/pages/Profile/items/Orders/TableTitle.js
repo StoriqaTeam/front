@@ -7,31 +7,31 @@ import './TableTitle.scss';
 
 const TableTitle = () => (
   <div styleName="container">
-    <Col sm={6} md={3} lg={1} xl={1}>
-      <span styleName="cellNumber">Number</span>
+    <Col size={4} sm={4} md={3} lg={2} xl={1}>
+      Number
     </Col>
-    <Col sm={6} md={3} lg={1} xl={1}>
-      <span styleName="cellDate">Date</span>
+    <Col size={4} sm={4} md={3} lg={2} xl={1}>
+      Date
     </Col>
-    <Col sm={6} md={1} lg={1} xl={1}>
-      <span styleName="cellShop">Shop</span>
+    <Col lg={2} xl={1} xlVisible>
+      Shop
     </Col>
-    <Col sm={6} md={1} lg={1} xl={1}>
-      <span styleName="cellDelivery">Delivery</span>
+    <Col lg={2} xl={1} xlVisible>
+      Delivery
     </Col>
-    <Col sm={6} md={3} lg={1} xl={1}>
-      <span styleName="cellItems">Items</span>
+    <Col size={4} sm={4} md={3} lg={2} xl={1}>
+      Items
     </Col>
-    <Col sm={6} md={2} lg={1} xl={1}>
-      <span styleName="cellPrice">Price</span>
+    <Col md={2} lg={2} xl={1} mdVisible>
+      Price
     </Col>
-    <Col sm={6} md={1} lg={1} xl={1}>
-      <span styleName="cellPayment">Payment</span>
+    <Col md={1} lg={2} xl={1} lgVisible>
+      Payment
     </Col>
-    <Col sm={6} md={1} lg={1} xl={1}>
-      <span styleName="cellStatus">Status</span>
+    <Col md={1} lg={2} xl={1} lgVisible>
+      Status
     </Col>
-    <Col sm={6} md={3} lg={1} xl={2} />
+    <Col md={3} lg={2} xl={2} mdVisible />
     <div styleName="border" />
   </div>
 );

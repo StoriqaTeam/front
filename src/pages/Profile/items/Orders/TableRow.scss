@@ -14,55 +14,6 @@
   }
 }
 
-.numberCell {
-  // margin-left: 4rem;
-  // width: 12.25rem;
-}
-.dateCell {
-  // margin-left: 2rem;
-  // width: 12.25rem;
-}
-.shopCell {
-  //display: none;
-  //
-  //@media (min-width: $xl) {
-  //  display: initial;
-  //}
-}
-.deliveryCell {
-  display: none;
-
-  @media (min-width: $xl) {
-    display: initial;
-  }
-}
-.itemCell {
-  // margin-left: 2rem;
-  // width: 18.5rem;
-  a {
-    color: $color_blue;
-    font-size: 16px;
-  }
-}
-.priceCell {
-  // margin-left: 2rem;
-  // width: 17.75rem;
-}
-.paymentCell {
-  display: none;
-
-  @media (min-width: $lg) {
-    display: initial;
-  }
-}
-.statusCell {
-  display: none;
-
-  @media (min-width: $lg) {
-    display: initial;
-  }
-}
-
 .border {
   background-color: #efefef;
   bottom: 0;
