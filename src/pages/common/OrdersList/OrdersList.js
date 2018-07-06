@@ -15,13 +15,14 @@ type PropsType = {
   currentPage: number,
   pagesCount: number,
   onPageSelect: (pageNumber: number) => void,
+  linkFactory: (item: TableItemType) => string,
 };
 
 const OrdersList = (props: PropsType) => (
   <div>
     <Header />
     <TableTitle />
-    <Table items={props.orders} />
+    <Table items={props.orders} linkFactory={props.linkFactory} />
     <Paginator
       pagesCount={props.pagesCount}
       currentPage={props.currentPage}

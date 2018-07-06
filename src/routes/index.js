@@ -24,7 +24,7 @@ import Cart from 'pages/Cart';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
-import { StoreOrders } from 'pages/Store/Orders';
+import { StoreOrders } from 'pages/Manage/Store/Orders';
 
 const routes = (
   <Route>

@@ -102,6 +102,7 @@ class StoreOrders extends Component<PropsType, StateType> {
         pagesCount={pagesCount}
         currentPage={currentPage}
         onPageSelect={this.loadPage}
+        linkFactory={item => `/manage/store/orders/${item.number}`}
       />
     );
   }

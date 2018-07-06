@@ -113,6 +113,7 @@ class Orders extends Component<PropsType, StateType> {
         pagesCount={pagesCount}
         currentPage={currentPage}
         onPageSelect={this.loadPage}
+        linkFactory={item => `/profile/orders/${item.number}`}
       />
     );
   }

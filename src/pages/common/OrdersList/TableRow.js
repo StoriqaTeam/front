@@ -26,6 +26,7 @@ export type TableItemType = {
 type PropsType = {
   item: TableItemType,
   router: routerShape,
+  linkFactory: (item: TableItemType) => string,
 };
 
 class TableRow extends PureComponent<PropsType> {
@@ -35,9 +36,7 @@ class TableRow extends PureComponent<PropsType> {
       // eslint-disable-next-line
       <div
         styleName="container"
-        onClick={() =>
-          this.props.router.push(`/profile/orders/${rowItem.number}`)
-        }
+        onClick={() => this.props.router.push(this.props.linkFactory(rowItem))}
       >
         <div styleName="numberCell">{rowItem.number}</div>
         <div styleName="dateCell">{rowItem.date}</div>
