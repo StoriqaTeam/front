@@ -20,14 +20,14 @@
 .cellShop {
   display: none;
 
-  @media (min-width: 992px) {
-    display: block;
+  @media (min-width: $xl) {
+    display: initial;
   }
 }
 .cellDelivery {
   display: none;
 
-  @media (min-width: 992px) {
+  @media (min-width: $xl) {
     display: initial;
   }
 }
@@ -38,10 +38,18 @@
   // width: 17.75rem;
 }
 .cellPayment {
-  // width: 14.75rem;
+  display: none;
+
+  @media (min-width: $lg) {
+    display: initial;
+  }
 }
 .cellStatus {
-  // width: 16.25rem;
+  display: none;
+
+  @media (min-width: $lg) {
+    display: initial;
+  }
 }
 .border {
   background-color: #efefef;

@@ -1,13 +1,13 @@
 @import '../../../../styles/variables';
 
 .container {
-  display: flex;
-  height: 12rem;
-  margin-left: -4rem;
-  margin-right: -4rem;
-  position: relative;
   align-items: center;
   color: $color_grey;
+  display: flex;
+  height: 12rem;
+  // margin-left: -4rem;
+  // margin-right: -4rem;
+  position: relative;
   &:hover {
     background-color: $color_grey_light;
     cursor: pointer;
@@ -15,48 +15,60 @@
 }
 
 .numberCell {
-  margin-left: 4rem;
-  width: 12.25rem;
+  // margin-left: 4rem;
+  // width: 12.25rem;
 }
 .dateCell {
-  margin-left: 2rem;
-  width: 12.25rem;
+  // margin-left: 2rem;
+  // width: 12.25rem;
 }
 .shopCell {
-  margin-left: 2rem;
-  width: 10rem;
+  //display: none;
+  //
+  //@media (min-width: $xl) {
+  //  display: initial;
+  //}
 }
 .deliveryCell {
-  margin-left: 2rem;
-  width: 14.75rem;
+  display: none;
+
+  @media (min-width: $xl) {
+    display: initial;
+  }
 }
 .itemCell {
-  margin-left: 2rem;
-  width: 18.5rem;
+  // margin-left: 2rem;
+  // width: 18.5rem;
   a {
     color: $color_blue;
     font-size: 16px;
   }
 }
 .priceCell {
-  margin-left: 2rem;
-  width: 17.75rem;
+  // margin-left: 2rem;
+  // width: 17.75rem;
 }
 .paymentCell {
-  margin-left: 2rem;
-  width: 15rem;
+  display: none;
+
+  @media (min-width: $lg) {
+    display: initial;
+  }
 }
 .statusCell {
-  margin-left: 1rem;
-  width: 16.25rem;
+  display: none;
+
+  @media (min-width: $lg) {
+    display: initial;
+  }
 }
 
 .border {
   background-color: #efefef;
-  height: 0.125rem;
-  position: absolute;
   bottom: 0;
+  height: 0.125rem;
   left: 0;
+  position: absolute;
   right: 0;
 }
 
