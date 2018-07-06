@@ -12,8 +12,7 @@ import type {
 const mutation = graphql`
   mutation DeleteFromCartMutation($input: DeleteFromCartInput!) {
     deleteFromCart(input: $input) {
-      productId
-      storeId
+      ...Cart_cart
     }
   }
 `;
