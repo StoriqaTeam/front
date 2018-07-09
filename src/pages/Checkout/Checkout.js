@@ -125,6 +125,7 @@ class Checkout extends Component<PropsType, StateType> {
           text: 'Something went wrong :(',
           link: { text: 'Close.' },
         });
+        this.props.router.push('/checkout');
       },
     });
   };

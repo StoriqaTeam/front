@@ -102,8 +102,7 @@ class Cart extends Component<PropsType, StateType> {
               totalCount={totalCount}
               totalCost={totalCost}
               onClick={this.handleToCheckout}
-              // isReadyToClick={this.checkReadyToCheckout()}
-              isReadyToClick
+              isReadyToClick={totalCount > 0}
             />
           </div>
         </div>
