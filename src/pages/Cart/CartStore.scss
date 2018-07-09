@@ -1,15 +1,10 @@
 @import "../../styles/variables.scss";
 
 .container {
-  // padding: 4rem;
   color: $color_grey;
   background-color: $color-white;
   border: 1px solid $color_grey_trivial;
   margin-bottom: 2rem;
-}
-
-.products {
-  // padding: 4rem;
 }
 
 .header {
@@ -41,10 +36,6 @@
   height: 5rem;
 }
 
-.name {
-
-}
-
 .store {
   width: 66%;
 }
@@ -71,25 +62,3 @@
   color: $color_grey;
   font-family: $font_bold;
 }
-
-// .buy {
-//   button {
-//     width: 100%;
-//   }
-// }
-
-// .chat-container {
-//   display: flex;
-//   align-items: center;
-//   cursor: pointer;
-// }
-
-// .chat-text {
-//   color: $color_grey_minor;
-//   font-family: $font_regular;
-//   margin-left: 1rem;
-// }
-
-// .promocode {
-//   width: 24rem;
-// }

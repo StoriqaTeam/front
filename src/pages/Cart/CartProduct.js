@@ -191,7 +191,7 @@ class CartProduct extends PureComponent<PropsType> {
                           </div>
                         )}
 
-                        <div styleName="delivery-container">
+                        <div>
                           <div styleName="cart-product-title">
                             Delivery and return
                           </div>

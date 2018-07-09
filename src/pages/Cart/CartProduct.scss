@@ -17,11 +17,6 @@
   align-items: flex-start;
 }
 
-.main-container {
-  // flex-grow: 1;
-  // display: flex;
-}
-
 .checkbox {
   margin-right: 2rem;
 }
@@ -32,23 +27,15 @@
   height: 16.25rem;
   background-size: cover;
   background-position: center;
-  // width: 100%;
-  // margin-right: 4rem;
 }
 
 .header {
   padding: 0 0 1rem 2rem;
 }
 
-
 .half-width {
   width: 50%;
   display: inline-block;
-}
-
-.product-summary {
-  // width: 66%;
-  // border-right: 1px solid $color_grey_trivial;
 }
 
 .product-params {
@@ -82,10 +69,6 @@
   border: 1px solid $color_grey_trivial;
 }
 
-.delivery-container {
-  // margin-top: 2rem;
-}
-
 .recycleContainer {
   display: flex;
   flex-direction: row;
@@ -93,9 +76,6 @@
 }
 
 .recycle {
-  // position: absolute;
-  // right: 0;
-
   & svg {
     fill: $color_grey_light;
     transition: $transition_all_ease;

@@ -38,7 +38,7 @@ class CartStore extends PureComponent<PropsType> {
       <Row>
         <Col size={12}>
           <div styleName="container">
-            <div styleName="products">
+            <div>
               {filteredProducts.map((product, idx) => (
                 <CartProduct
                   key={idx}
