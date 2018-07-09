@@ -46,3 +46,4 @@ export {
   default as DeactivateProductMutation,
 } from './DeactivateProductMutation';
 export { default as CancelOrderMutation } from './CancelOrderMutation';
+export { default as SendOrderMutation } from './SendOrderMutation';
