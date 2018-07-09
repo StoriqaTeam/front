@@ -35,7 +35,6 @@ type PropsType = {
   // eslint-disable-next-line
   cart: Cart_cart,
   router: routerShape,
-  // $FlowIgnore
   showAlert: (input: AddAlertInputType) => void,
 };
 
@@ -157,6 +156,7 @@ class Checkout extends Component<PropsType, StateType> {
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
+      // $FlowIgnore
     )(this.props);
     return (
       <Container withoutGrow>
