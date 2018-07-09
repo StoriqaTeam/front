@@ -1,0 +1,43 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  background-color: $color_white;
+
+  .infoContainer {
+    margin-top: 3rem;
+
+    .infoContent {
+      background-color: $color_grey_trivial;
+      padding: 2rem 3rem;
+      margin-top: 2rem;
+      color: $color_grey_minor;
+      line-height: 1.25;
+
+      .name {
+        margin-top: 1rem;
+        color: $color_grey;
+      }
+
+      .email {
+        font-style: italic;
+      }
+    }
+  }
+}
+
+.title {
+  text-transform: uppercase;
+  font-family: $font_medium;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  font-size: 2rem;
+}
+
+.centeredTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}

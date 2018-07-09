@@ -1,7 +1,7 @@
-@import "../../styles/variables.scss";
+@import "../../../styles/variables.scss";
 
 .container {
-  padding: 4rem 0rem;
+  padding: 3rem 3rem;
   color: $color_grey;
   background-color: $color-white;
   border: 1px solid $color_grey_trivial;
@@ -22,7 +22,7 @@
   .top {
     position: absolute;
     top: 0;
-  }
+  }  
 }
 
 .cart-total-title {
@@ -33,7 +33,6 @@
 
 .checkout {
   margin-top: 0.5rem;
-  padding: 0rem 4rem;
 
   button {
     width: 100%;
@@ -46,9 +45,11 @@
 }
 
 .title {
-  color: $color_grey_minor;
-  font-family: $font_regular;
+  color: $color_grey;
+  font-family: $font_medium;
   font-size: 1.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
 }
 
 .value {
@@ -81,6 +82,20 @@
   padding-top: 2rem;
 }
 
-.totals-container {
-  padding: 2.5rem 4rem;
+.totalsContainer {
+  padding-top: 2.5rem;
+}
+
+.attributeContainer {
+  margin-bottom: 1rem;
+  .label {
+    font-size: 1.75rem;
+    color: $color_grey_minor;
+    .subLabel {
+      color: $color_green;
+    }
+  }
+  .value {
+
+  }
 }

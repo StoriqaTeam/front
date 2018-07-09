@@ -1,8 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment, ConnectionHandler } from 'relay-runtime';
-import { filter } from 'ramda';
+import { Environment } from 'relay-runtime';
 
 import type {
   DeleteFromCartMutationVariables,
@@ -32,28 +31,6 @@ const commit = (params: DeleteFromCartParams) =>
     mutation,
     variables: {
       input: { ...params.input },
-    },
-    updater: relayStore => {
-      const productId = relayStore
-        .getRootField('deleteFromCart')
-        .getValue('productId');
-      const storeId = relayStore
-        .getRootField('deleteFromCart')
-        .getValue('storeId');
-      const store = relayStore.get(storeId);
-      const products = store.getLinkedRecords('products');
-      if (products.length > 1) {
-        const filtered = filter(
-          product => product.getDataID() === productId,
-          products,
-        );
-        store.setLinkedRecords(filtered, 'products');
-      } else {
-        const cart = relayStore.getRoot().getLinkedRecord('cart');
-        const connection = ConnectionHandler.getConnection(cart, 'Cart_stores');
-        ConnectionHandler.deleteNode(connection, storeId);
-        relayStore.delete(storeId);
-      }
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
