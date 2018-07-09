@@ -84,7 +84,6 @@ class App extends Component<PropsType, StateType> {
 
   render() {
     const { me, mainPage, cart, children, categories } = this.props;
-    console.log('>>> App props: ', { props: this.props });
     return (
       <AppContext.Provider value={{ categories }}>
         <Fragment>

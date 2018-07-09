@@ -81,6 +81,7 @@ class Header extends Component<PropsType, StateType> {
     const totalCount = pathOr(0, ['data', 'totalCount'], snapshot);
 
     this.dispose = dispose;
+    // $FlowIgnoreMe
     this.setState({ totalCount });
     // tmp code
     setWindowTag('cartCount', totalCount);

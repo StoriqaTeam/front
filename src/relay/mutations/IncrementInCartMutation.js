@@ -1,8 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment, ConnectionHandler } from 'relay-runtime';
-import { findIndex } from 'ramda';
+import { Environment } from 'relay-runtime';
 
 import type {
   IncrementInCartMutationVariables,

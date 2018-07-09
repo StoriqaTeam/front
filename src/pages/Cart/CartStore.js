@@ -28,7 +28,6 @@ class CartStore extends PureComponent<PropsType> {
     const { store, onlySelected, unselectable } = this.props;
     const { products } = store;
     let filteredProducts = products;
-    console.log('>>> CartStore products: ', { props: this.props, products });
     if (onlySelected) {
       filteredProducts = filter(whereEq({ selected: true }), products);
     }
