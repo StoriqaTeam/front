@@ -150,7 +150,9 @@ class Checkout extends Component<PropsType, StateType> {
       this.props,
     );
     const { step, isAddressSelect, isNewAddress, orderInput } = this.state;
-    const { cart } = this.props;
+    const {
+      cart: { totalCost, totalCount, deliveryCost, productsCost },
+    } = this.props;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
@@ -208,12 +210,15 @@ class Checkout extends Component<PropsType, StateType> {
                 <Col size={3}>
                   <CheckoutSidebar
                     storesRef={this.state.storesRef}
-                    cart={cart}
                     buttonText={step === 1 ? 'Next' : 'Checkout'}
                     onClick={
                       (step === 1 && this.handleChangeStep(2)) ||
                       this.handleCheckout
                     }
+                    productsCost={productsCost}
+                    deliveryCost={deliveryCost}
+                    totalCount={totalCount}
+                    totalCost={totalCost}
                     isReadyToClick={this.checkReadyToCheckout()}
                   />
                 </Col>
@@ -256,6 +261,11 @@ export default createPaginationContainer(
         first: { type: "Int", defaultValue: null }
         after: { type: "ID", defaultValue: null }
       ) {
+      id
+      productsCost
+      deliveryCost
+      totalCost
+      totalCount
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {

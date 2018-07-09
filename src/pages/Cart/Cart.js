@@ -14,7 +14,6 @@ import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
 import type Cart_cart from './__generated__/Cart_cart.graphql';
-// import type CartStoresLocalFragment from './__generated__/CartStoresLocalFragment.graphql';
 
 import './Cart.scss';
 
@@ -78,7 +77,9 @@ class Cart extends Component<PropsType, StateType> {
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
     )(this.props);
-    console.log('>>> Cart props: ', { props: this.props });
+    const {
+      cart: { totalCost, totalCount, deliveryCost, productsCost },
+    } = this.props;
     return (
       <div styleName="container">
         <div styleName="header">Cart</div>
@@ -96,6 +97,10 @@ class Cart extends Component<PropsType, StateType> {
             <CheckoutSidebar
               storesRef={this.state.storesRef}
               buttonText="Checkout"
+              productsCost={productsCost}
+              deliveryCost={deliveryCost}
+              totalCount={totalCount}
+              totalCost={totalCost}
               onClick={this.handleToCheckout}
               // isReadyToClick={this.checkReadyToCheckout()}
               isReadyToClick

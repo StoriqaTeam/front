@@ -2,13 +2,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-relay';
-import { pathOr, map } from 'ramda';
 
 import { formatPrice } from 'utils';
 import { Button } from 'components/common/Button';
-
-import { calcTotal } from '../utils';
 
 import './CheckoutSidebar.scss';
 
@@ -19,9 +15,6 @@ type PropsType = {
   onClick: Function,
   isReadyToClick: Function,
   buttonText: string,
-};
-
-type Totals = ?{
   productsCost: number,
   deliveryCost: number,
   totalCount: number,
@@ -30,35 +23,10 @@ type Totals = ?{
 
 type StateType = {
   currentClass: 'sticky' | 'top' | 'bottom',
-  totals: Totals,
 };
 
 const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
-
-const STORES_FRAGMENT = graphql`
-  fragment CheckoutSidebarStoresLocalFragment on CartStoresConnection { 
-    edges { 
-      node { 
-        id 
-        productsCost 
-        deliveryCost 
-        totalCost 
-        totalCount
-      }
-    }
-  }
-`;
-
-const getTotals = (data: any) => {
-  const stores = map(i => i.node, pathOr([], ['edges'], data));
-  return {
-    productsCost: calcTotal(stores, 'productsCost') || 0,
-    deliveryCost: calcTotal(stores, 'deliveryCost') || 0,
-    totalCount: calcTotal(stores, 'totalCount') || 0,
-    totalCost: calcTotal(stores, 'totalCost') || 0,
-  };
-};
 
 class CheckoutSidebar extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -66,29 +34,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     this.handleScroll = this.handleScrollEvent.bind(this);
     this.state = {
       currentClass: 'top',
-      totals: null,
     };
-  }
-
-  componentWillMount() {
-    const store = this.context.environment.getStore();
-    if (process.env.BROWSER) {
-      window.store = store;
-    }
-    const connectionId = `client:root:cart:__Cart_stores_connection`; 
-    // const connectionId = `client:root:__Cart_stores_connection`;
-    const queryNode = STORES_FRAGMENT.data();
-    const snapshot = store.lookup({
-      dataID: connectionId, // root
-      node: queryNode, // query starting from root
-    });
-    const { dispose } = store.subscribe(snapshot, s => {
-      console.log('>>> CheckoutSidebar snapshot: ', { s: s.data, store });
-      this.setState({ totals: getTotals(s.data) });
-    });
-    this.dispose = dispose;
-    console.log('>>> CheckoutSide:__Cart_stores_connectionbar snapshot: ', { snapshot: snapshot.data, store });
-    this.setState({ totals: getTotals(snapshot.data) });
   }
 
   componentDidMount() {
@@ -164,8 +110,15 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { totals } = this.state;
-    const { onClick, isReadyToClick, buttonText } = this.props;
+    const {
+      onClick,
+      isReadyToClick,
+      buttonText,
+      productsCost,
+      deliveryCost,
+      totalCost,
+      totalCount,
+    } = this.props;
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -174,24 +127,24 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <div styleName="attributeContainer">
               <div styleName="label">Subtotal</div>
               <div styleName="value">
-                {totals && `${formatPrice(totals.productsCost || 0)} STQ`}
+                {productsCost && `${formatPrice(productsCost || 0)} STQ`}
               </div>
             </div>
             <div styleName="attributeContainer">
               <div styleName="label">Delivery</div>
               <div styleName="value">
-                {totals && `${formatPrice(totals.deliveryCost || 0)} STQ`}
+                {deliveryCost && `${formatPrice(deliveryCost || 0)} STQ`}
               </div>
             </div>
             <div styleName="attributeContainer">
               <div styleName="label">
                 Total{' '}
                 <span styleName="subLabel">
-                  ({totals && totals.totalCount} items)
+                  ({totalCount && totalCount} items)
                 </span>
               </div>
               <div styleName="value">
-                {totals && `${formatPrice(totals.totalCost || 0)} STQ`}
+                {totalCost && `${formatPrice(totalCost || 0)} STQ`}
               </div>
             </div>
           </div>

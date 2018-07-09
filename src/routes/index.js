@@ -40,6 +40,8 @@ const routes = (
             ...App_me
           }
           cart {
+            id
+            totalCount
             ...Cart_cart
           }
           mainPage {
