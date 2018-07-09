@@ -45,3 +45,4 @@ export { default as DeleteWizardMutation } from './DeleteWizardMutation';
 export {
   default as DeactivateProductMutation,
 } from './DeactivateProductMutation';
+export { default as CancelOrderMutation } from './CancelOrderMutation';

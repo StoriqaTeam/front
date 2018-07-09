@@ -2,7 +2,8 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { pathOr, filter, prop, propEq, head, map, slice } from 'ramda';
+import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
+import moment from 'moment';
 
 import { Button } from 'components/common/Button';
 
@@ -11,9 +12,11 @@ import {
   fullDateFromTimestamp,
   shortDateFromTimestamp,
 } from 'utils/formatDate';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -24,7 +27,7 @@ import './OrderPage.scss';
 
 type PropsType = {
   order: any, // TODO: use common type here.
-  isAbleToManageOrder?: boolean,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type OrderDTOType = {
@@ -145,9 +148,49 @@ class OrderPage extends PureComponent<PropsType> {
           status: this.getStatusString(historyEdge.node.state),
           additionalInfo: historyEdge.node.comment,
         };
-      }, order && order.history ? order.history.edges : []),
+      }, order && order.history ? sort((a, b) => moment(a.node.committedAt).isBefore(b.node.committedAt), order.history.edges) : []),
     };
     return orderDTO;
+  };
+
+  handleOrderSent = (success: boolean) => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: 'Order was successfully sent.',
+        link: {
+          text: 'Ok',
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something is going wrong :(',
+        link: {
+          text: 'Ok',
+        },
+      });
+    }
+  };
+
+  handleOrderCanceled = (success: boolean) => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: 'Order successfully canceled.',
+        link: {
+          text: 'Ok',
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something is going wrong :(',
+        link: {
+          text: 'Ok',
+        },
+      });
+    }
   };
 
   render() {
@@ -200,9 +243,14 @@ class OrderPage extends PureComponent<PropsType> {
           </div>
         </div>
         <ManageOrderBlock
-          isAbleToSend={this.props.isAbleToManageOrder}
-          isAbleToCancel={this.props.isAbleToManageOrder}
+          isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
+          isAbleToCancel={
+            orderFromProps.state === 'PAIMENT_AWAITED' ||
+            orderFromProps.state === 'IN_PROCESSING'
+          }
           orderSlug={parseInt(order.number, 10)}
+          onOrderSend={this.handleOrderSent}
+          onOrderCancel={this.handleOrderCanceled}
         />
         <StatusList items={order.statusHistory} />
       </div>
@@ -210,4 +258,4 @@ class OrderPage extends PureComponent<PropsType> {
   }
 }
 
-export default OrderPage;
+export default withShowAlert(OrderPage);

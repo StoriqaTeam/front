@@ -50,6 +50,7 @@ export default createRefetchContainer(
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       myStore {
         order(slug: $slug) {
+          id
           slug
           storeId
           product {

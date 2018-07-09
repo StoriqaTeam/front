@@ -1,3 +1,16 @@
 .container {
   margin-top: 4rem;
+  display: flex;
+}
+
+.sendButtonWrapper {
+  padding-right: 2.5rem;
+}
+
+.sendButtonWrapper,
+.cancelButtonWrapper {
+  width: 28.25rem;
+  button {
+    width: 100%;
+  }
 }
