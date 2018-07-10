@@ -249,7 +249,10 @@ class HeaderResponsive extends Component<PropsType, StateType> {
           <div styleName="headerBottom">
             <Row>
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
-                <div styleName="logo">
+                <div styleName={classNames('logo', {
+                  isUserLoggedIn: userData,
+                })}
+                >
                   <div styleName="logoIcon">
                     <Link to="/" data-test="logoLink">
                       <Icon type="logo" />
