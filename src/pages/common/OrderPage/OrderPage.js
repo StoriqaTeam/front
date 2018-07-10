@@ -28,6 +28,7 @@ import './OrderPage.scss';
 type PropsType = {
   order: any, // TODO: use common type here.
   showAlert: (input: AddAlertInputType) => void,
+  isAbleToManageOrder?: boolean,
 };
 
 type OrderDTOType = {
@@ -242,16 +243,18 @@ class OrderPage extends PureComponent<PropsType> {
             <TextWithLabel label="Subtotal" text={`${order.subtotal} STQ`} />
           </div>
         </div>
-        <ManageOrderBlock
-          isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
-          isAbleToCancel={
-            orderFromProps.state === 'PAIMENT_AWAITED' ||
-            orderFromProps.state === 'IN_PROCESSING'
-          }
-          orderSlug={parseInt(order.number, 10)}
-          onOrderSend={this.handleOrderSent}
-          onOrderCancel={this.handleOrderCanceled}
-        />
+        {this.props.isAbleToManageOrder && (
+          <ManageOrderBlock
+            isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
+            isAbleToCancel={
+              orderFromProps.state === 'PAIMENT_AWAITED' ||
+              orderFromProps.state === 'IN_PROCESSING'
+            }
+            orderSlug={parseInt(order.number, 10)}
+            onOrderSend={this.handleOrderSent}
+            onOrderCancel={this.handleOrderCanceled}
+          />
+        )}
         <StatusList items={order.statusHistory} />
       </div>
     );
