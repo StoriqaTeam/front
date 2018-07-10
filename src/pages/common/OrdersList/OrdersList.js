@@ -17,7 +17,7 @@ type PropsType = {
   onPageSelect: (pageNumber: number) => void,
   linkFactory: (item: TableItemType) => string,
   onSearchTermFilterChanged: string => void,
-  onOrderStatusFilterChanged: string => void,
+  onOrderStatusFilterChanged: (?string) => void,
   onOrderDateFilterChanged: string => void,
 };
 
@@ -26,7 +26,7 @@ class OrdersList extends PureComponent<PropsType> {
     this.props.onSearchTermFilterChanged(value);
   };
 
-  handleOrderStatusFilterChanged = (value: string) => {
+  handleOrderStatusFilterChanged = (value: ?string) => {
     this.props.onOrderStatusFilterChanged(value);
   };
 
