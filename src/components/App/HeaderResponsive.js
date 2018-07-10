@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react';
 import { graphql } from 'react-relay';
-import PropTypes from 'prop-types';
 import { Link } from 'found';
 import { pathOr } from 'ramda';
 import classNames from 'classnames';
+import type { Environment } from 'relay-runtime';
 
 import { Authorization } from 'components/Authorization';
 import { CartButton } from 'components/CartButton';
@@ -47,6 +47,7 @@ type MobileCategory = {
 
 type PropsType = {
   searchValue: string,
+  environment: Environment,
 };
 
 type StateType = {
@@ -66,19 +67,19 @@ type StateType = {
 };
 
 class HeaderResponsive extends Component<PropsType, StateType> {
-  state = {
-    totalCount: 0,
-    showModal: false,
-    isSignUp: false,
-    userData: null,
-    isMenuToggled: false,
-    isMobileSearchOpen: false,
-    isMobileCategoriesOpen: false,
-    selectedCategory: null,
-  };
-
-  componentWillMount() {
-    const store = this.context.environment.getStore();
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      totalCount: 0,
+      showModal: false,
+      isSignUp: false,
+      userData: null,
+      isMenuToggled: false,
+      isMobileSearchOpen: false,
+      isMobileCategoriesOpen: false,
+      selectedCategory: null,
+    };
+    const store = this.props.environment.getStore();
     const cartId = pathOr(
       null,
       ['cart', '__ref'],
@@ -91,7 +92,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     });
     const { dispose } = store.subscribe(snapshot, s => {
       const newTotalCount = pathOr(0, ['data', 'totalCount'], s);
-      this.setState({ totalCount: newTotalCount });
+      this.state.totalCount = newTotalCount;
       // tmp code
       setWindowTag('cartCount', newTotalCount);
       // end tmp code
@@ -100,7 +101,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
 
     this.dispose = dispose;
     // $FlowIgnoreMe
-    this.setState({ totalCount });
+    this.state.totalCount = totalCount;
     // tmp code
     setWindowTag('cartCount', totalCount);
     // end tmp code
@@ -122,13 +123,13 @@ class HeaderResponsive extends Component<PropsType, StateType> {
         node: queryUser,
       });
       const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
-        this.setState({ userData: s.data });
+        this.state.userData = s.data;
         // tmp code
         setWindowTag('user', s.data);
         // end tmp code
       });
       this.disposeUser = disposeUser;
-      this.setState({ userData: snapshotUser.data });
+      this.state.userData = snapshotUser.data;
       // tmp code
       setWindowTag('user', snapshotUser.data);
       // end tmp code
@@ -249,9 +250,10 @@ class HeaderResponsive extends Component<PropsType, StateType> {
           <div styleName="headerBottom">
             <Row>
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
-                <div styleName={classNames('logo', {
-                  isUserLoggedIn: userData,
-                })}
+                <div
+                  styleName={classNames('logo', {
+                    isUserLoggedIn: userData,
+                  })}
                 >
                   <div styleName="logoIcon">
                     <Link to="/" data-test="logoLink">
@@ -310,7 +312,3 @@ class HeaderResponsive extends Component<PropsType, StateType> {
 }
 
 export default HeaderResponsive;
-
-HeaderResponsive.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
