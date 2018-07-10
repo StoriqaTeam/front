@@ -42,7 +42,9 @@ class TableRow extends PureComponent<PropsType> {
         onClick={() => this.props.router.push(this.props.linkFactory(rowItem))}
       >
         <Col size={2} sm={4} md={3} lg={2} xl={1}>
-          {rowItem.number}
+          <span styleName="number">
+            {rowItem.number}
+          </span>
         </Col>
         <Col size={5} sm={4} md={3} lg={2} xl={1}>
           <span styleName="date">{rowItem.date}</span>
