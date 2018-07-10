@@ -24,6 +24,9 @@ export {
 export {
   default as SetSelectionInCartMutation,
 } from './SetSelectionInCartMutation';
+export {
+  default as SetCommentInCartMutation,
+} from './SetCommentInCartMutation';
 export { default as DeleteFromCartMutation } from './DeleteFromCartMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';
 export {

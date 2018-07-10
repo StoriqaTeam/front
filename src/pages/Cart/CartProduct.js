@@ -1,14 +1,16 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pipe, path, pathOr, map, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
 
 import { withShowAlert } from 'components/App/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
+import { Input } from 'components/common/Input';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { Col, Row } from 'layout';
@@ -16,6 +18,7 @@ import {
   SetQuantityInCartMutation,
   SetSelectionInCartMutation,
   DeleteFromCartMutation,
+  SetCommentInCartMutation,
 } from 'relay/mutations';
 import { log, formatPrice } from 'utils';
 
@@ -35,8 +38,19 @@ type PropsType = {
   ...CartProduct_product,
 };
 
+type StateType = {
+  comment: string,
+};
+
 /* eslint-disable react/no-array-index-key */
-class CartProduct extends PureComponent<PropsType> {
+class CartProduct extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      comment: props.product && props.product.comment,
+    };
+  }
+
   handleDelete() {
     const id = this.props.product.rawId;
     DeleteFromCartMutation.commit({
@@ -122,6 +136,42 @@ class CartProduct extends PureComponent<PropsType> {
       },
     });
   }
+
+  handleOnChangeComment = (e: any) => {
+    const { rawId: productId } = this.props.product;
+    const {
+      target: { value },
+    } = e;
+    this.setState({ comment: value });
+    this.handleOnSaveComment(productId, value);
+  };
+
+  handleOnSaveComment = debounce((productId, value) => {
+    if (value) {
+      SetCommentInCartMutation.commit({
+        input: { clientMutationId: '', productId, value },
+        environment: this.context.environment,
+        onCompleted: (response, errors) => {
+          log.debug('Success for SetCommentInCart mutation');
+          if (response) {
+            log.debug('Response: ', response);
+          }
+          if (errors) {
+            log.debug('Errors: ', errors);
+          }
+        },
+        onError: error => {
+          log.error('Error in SetCommentInCart mutation');
+          log.error(error);
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Unable to set comment for product',
+            link: { text: 'Close.' },
+          });
+        },
+      });
+    }
+  }, 250);
 
   render() {
     const { product, unselectable } = this.props;
@@ -226,6 +276,15 @@ class CartProduct extends PureComponent<PropsType> {
                               value="Seller pays"
                             />
                           </div>
+                          <div styleName="comment">
+                            <div styleName="title">Customer comment</div>
+                            <Input
+                              fullWidth
+                              id="customerComment"
+                              onChange={this.handleOnChangeComment}
+                              value={this.state.comment}
+                            />
+                          </div>
                         </div>
                       </div>
                     </Col>
@@ -291,6 +350,7 @@ export default createFragmentContainer(
       photoMain
       price
       quantity
+      comment
       selected
       deliveryCost
       attributes {
