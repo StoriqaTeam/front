@@ -2,11 +2,14 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'found';
+import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
 
-import { UploadWrapper } from 'components/Upload';
+import { Collapse } from 'components/Collapse';
 import { Icon } from 'components/Icon';
+import { MobileUpload } from 'components/MobileUpload';
+import { UploadWrapper } from 'components/Upload';
+
 import { uploadFile, log, fromRelayError } from 'utils';
 
 import { UpdateUserMutation } from 'relay/mutations';
@@ -15,6 +18,7 @@ import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 import './Menu.scss';
 
 type PropsType = {
+  router: routerShape,
   menuItems: Array<{ id: string, title: string }>,
   activeItem: string,
   firstName: string,
@@ -65,7 +69,12 @@ class Menu extends PureComponent<PropsType> {
     };
     UpdateUserMutation.commit(params);
   };
-
+  handleSelected = (item: { id: string, title: string }): void => {
+    const {
+      router: { push },
+    } = this.props;
+    push(`/profile/${item.id}`);
+  };
   render() {
     const {
       activeItem,
@@ -76,13 +85,24 @@ class Menu extends PureComponent<PropsType> {
       provider,
     } = this.props;
     return (
-      <div styleName="menu">
-        <div styleName="imgWrap">
+      <sidebar styleName="container">
+        <h3 styleName="offscreen">Profile Menu</h3>
+        <div styleName="mobileMenu">
+          <Collapse items={menuItems} onSelected={this.handleSelected} />
+          <div style={{ margin: '1.05rem 0' }} />
+          <MobileUpload
+            avatar={avatar}
+            id={this.props.id}
+            onUpload={this.handleOnUpload}
+          />
+        </div>
+        <div styleName="imageArea">
           <UploadWrapper
             id="new-store-id"
             onUpload={this.handleOnUpload}
-            buttonHeight={26}
-            buttonWidth={26}
+            customUnit
+            buttonHeight="26rem"
+            buttonWidth="100%"
             buttonIconType="user"
             buttonIconSize={48}
             buttonLabel="Click to download avatar"
@@ -128,7 +148,7 @@ class Menu extends PureComponent<PropsType> {
             );
           })}
         </div>
-      </div>
+      </sidebar>
     );
   }
 }
@@ -137,4 +157,4 @@ Menu.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default Menu;
+export default withRouter(Menu);
