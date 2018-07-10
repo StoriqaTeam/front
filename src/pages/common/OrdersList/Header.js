@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { addIndex, map } from 'ramda';
 
+import { Col } from 'layout';
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
@@ -80,47 +81,55 @@ class Header extends Component<PropsType, StateType> {
     );
 
     return (
-      <div styleName="container">
+      <header styleName="container">
         <div styleName="inputsWrapper">
           <div styleName="searchTermInputWrapper">
-            <Input
-              id="searchTermInput"
-              label="Search order"
-              onChange={this.handleSearchTermChange}
-              value={this.state.searchTerm || ''}
-              limit={100}
-              icon="magnifier"
-              fullWidth
-            />
-          </div>
-          <Select
-            items={orderStatusesItems}
-            activeItem={this.state.orderStatus || undefined}
-            dataTest="OrderStatusSelect"
-            forForm
-            onSelect={this.handleOrderStatusChange}
-            containerStyle={{
-              width: '26.25rem',
-              marginLeft: '3rem',
-              marginBottom: '1px',
-            }}
-            label="Order status"
-            withEmpty
-          />
-          <div styleName="birthdateSelect">
-            <BirthdateSelect
-              label="Order date"
-              handleBirthdateSelect={this.handleOrderDateChange}
-              birthdate={this.state.orderDate}
-            />
+            <Col size={12} sm={6} md={4} lg={3} xl={3}>
+              <Input
+                id="searchTermInput"
+                label="Search order"
+                onChange={this.handleSearchTermChange}
+                value={this.state.searchTerm || ''}
+                limit={100}
+                icon="magnifier"
+                fullWidth
+              />
+            </Col>
+            <Col size={12} sm={6} md={4} lg={3} xl={3}>
+              <Select
+                items={orderStatusesItems}
+                activeItem={this.state.orderStatus || undefined}
+                dataTest="OrderStatusSelect"
+                forForm
+                onSelect={this.handleOrderStatusChange}
+                containerStyle={{
+                  marginBottom: '1px',
+                  marginLeft: '3rem',
+                  // width: '26.25rem',
+                }}
+                label="Order status"
+                withEmpty
+              />
+            </Col>
+            <Col md={3} lg={3} xl={3} lgVisible>
+              <div styleName="birthdateSelect">
+                <BirthdateSelect
+                  label="Order date"
+                  handleBirthdateSelect={this.handleOrderDateChange}
+                  birthdate={this.state.orderDate}
+                />
+              </div>
+            </Col>
+            <Col size={12} sm={6} md={8} lg={3} xl={3}>
+              <div styleName="buttonWrapper">
+                <Button wireframe big>
+                  Open ticket
+                </Button>
+              </div>
+            </Col>
           </div>
         </div>
-        <div styleName="buttonWrapper">
-          <Button wireframe big>
-            Open ticket
-          </Button>
-        </div>
-      </div>
+      </header>
     );
   }
 }

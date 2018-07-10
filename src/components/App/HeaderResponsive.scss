@@ -66,6 +66,15 @@ $burger_menu_size: 7.5rem;
   @media (min-width: 992px) {
     padding-top: 0;
   }
+
+  &.isUserLoggedIn {
+    display: none;
+    @media (min-width: 768px) {
+      display: inherit;
+    }
+  }
+
+
 }
 
 .logoIcon {

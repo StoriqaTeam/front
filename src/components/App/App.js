@@ -92,9 +92,16 @@ class App extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me, mainPage, cart, children, categories } = this.props;
+    const {
+      me,
+      mainPage,
+      cart,
+      children,
+      categories,
+      relay: { environment },
+    } = this.props;
     return (
-      <AppContext.Provider value={{ categories }}>
+      <AppContext.Provider value={{ categories, environment }}>
         <Fragment>
           <AlertsContainer alerts={this.state.alerts} />
           <AlertContextProvider

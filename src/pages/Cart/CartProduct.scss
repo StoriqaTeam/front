@@ -60,6 +60,7 @@
 
 .cart-product-title {
   font-family: $font_medium;
+  font-size: 1.75rem;
   text-transform: uppercase;
   padding-bottom: 1.75rem;
 }
@@ -67,6 +68,15 @@
 .total-container {
   width: 40em;
   border: 1px solid $color_grey_trivial;
+}
+
+.comment {
+  .title {
+    color: $color_grey_minor;
+    font-family: $font_regular;
+    font-size: 1.75rem;
+    margin-bottom: -3rem;
+  }
 }
 
 .recycleContainer {

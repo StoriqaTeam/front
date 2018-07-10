@@ -66,35 +66,37 @@ class Profile extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const { title: subtitle } = find(propEq('id', activeItem), menuItems);
     return (
-      <Container>
-        <Row>
-          <Col size={2}>
-            <Menu
-              id={me.id}
-              avatar={me.avatar}
-              menuItems={menuItems}
-              activeItem={activeItem}
-              firstName={me.firstName || ''}
-              lastName={me.lastName || ''}
-              provider={me.provider || null}
-            />
-          </Col>
-          <Col size={10}>
-            <div styleName="container">
-              <div styleName="header">
-                <span styleName="title">Profile</span>
+      <div styleName="container">
+        <Container>
+          <Row>
+            <Col sm={3} md={3} lg={2} xl={2}>
+              <Menu
+                activeItem={activeItem}
+                avatar={me.avatar}
+                firstName={me.firstName || ''}
+                id={me.id}
+                lastName={me.lastName || ''}
+                menuItems={menuItems}
+                provider={me.provider || null}
+              />
+            </Col>
+            <Col sm={9} md={9} lg={10} xl={10}>
+              <div styleName="content">
+                <div styleName="header">
+                  <span styleName="title">Profile</span>
+                </div>
+                <div styleName="form">{this.renderProfileItem(subtitle)}</div>
               </div>
-              <div styleName="form">{this.renderProfileItem(subtitle)}</div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
 
 export default createFragmentContainer(
-  Page(Profile),
+  Page(Profile, true),
   graphql`
     fragment Profile_me on User {
       ...Orders

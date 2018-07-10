@@ -34,11 +34,11 @@
 }
 
 .root {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
   width: 100%;
   z-index: 10;
-  white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
 }
 
 .rootItem {
@@ -55,25 +55,26 @@
   }
 
   & > .items {
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
-    left: 2rem;
-    right: 2rem;
-    padding: 0 4rem;
-    border-top: 2px solid $color_blue;
+    background-color: $color_white;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
-    background-color: $color_white;
+    border-top: 2px solid $color_blue;
     box-shadow: $shadow_1;
-    z-index: 10;
+    left: 2rem;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 4rem;
+    position: absolute;
+    right: 2rem;
     transition: all .15s ease-in;
+    visibility: hidden;
+    z-index: 10;
 
     & > .itemsWrap {
+      border-right: 1px solid $color_grey_trivial;
+      padding-right: 4rem;
       position: relative;
       width: 40rem;
-      padding-right: 4rem;
-      border-right: 1px solid $color_grey_trivial;
 
       & > ul {
         height: 30.5rem;
@@ -85,17 +86,17 @@
 
   & > .link {
     & > .text {
-      position: relative;
-      display: block;
-      padding: 0 2rem;
-      font-size: 16px;
       color: $color_grey;
-      line-height: 5rem;
-      text-align: center;
-      z-index: 1;
-      transition: none;
-      transition: $transition_all_ease;
       cursor: pointer;
+      display: block;
+      font-size: 16px;
+      line-height: 5rem;
+      padding: 0 2rem;
+      position: relative;
+      text-align: center;
+      transition: $transition_all_ease;
+      transition: none;
+      z-index: 1;
     }
   }
 
@@ -115,23 +116,23 @@
 }
 
 .rootButtonItem {
-  padding-right: 2rem;
   padding-left: 0;
+  padding-right: 2rem;
 }
 
 .title {
+  border-bottom: 1px solid $color_grey_trivial;
+  cursor: pointer;
   font-family: $font_medium;
   font-size: 14px;
   line-height: 7rem;
   text-transform: uppercase;
-  border-bottom: 1px solid $color_grey_trivial;
-  cursor: pointer;
 }
 
 .icon {
   position: absolute;
-  top: 1.5rem;
   right: 3.5rem;
+  top: 1.5rem;
 }
 
 .link {
@@ -140,9 +141,9 @@
 
 .midItem {
   font-family: $font_medium;
-  margin-right: -4rem;
   font-size: 16px;
   line-height: 4rem;
+  margin-right: -4rem;
 
   & .link {
     display: block;
@@ -162,11 +163,11 @@
   }
 
   & > .items {
+    left: 100%;
     opacity: 0;
-    visibility: hidden;
     position: absolute;
     top: 0;
-    left: 100%;
+    visibility: hidden;
     width: 118rem;
 
     & > .itemsWrap {
@@ -174,23 +175,23 @@
       padding-left: 4rem;
 
       & > ul {
-        width: 80rem;
-        height: 29.5rem;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        height: 29.5rem;
         margin-top: 1rem;
+        width: 80rem;
 
         & > li {
+          cursor: pointer;
           font-size: 14px;
           line-height: 4rem;
-          cursor: pointer;
 
           & .link {
-            display: block;
-            width: 100%;
             color: $color_grey;
+            display: block;
             transition: $transition_all_ease;
+            width: 100%;
           }
 
           &:hover {

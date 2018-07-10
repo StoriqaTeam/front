@@ -1,0 +1,43 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.container {
+  background: $color_white;
+  border-radius: 0.5rem;
+  border: 1px solid $color_grey_light;
+}
+
+.offscreen {
+  @include offscreen();
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  height: 5.125rem;
+  justify-content: space-between;
+  padding: 0 1rem;
+  text-transform: uppercase;
+}
+
+.icon {
+  // border-radius: 0.25rem;
+  transition: $transition_all_ease;
+  z-index: 2;
+
+  &.rotate {
+    transform: rotate(-180deg);
+    transition: $transition_all_ease;
+  }
+
+}
+
+.content {
+  display: none;
+  padding: 0 0.5rem;
+
+  &.show {
+    display: block;
+  }
+
+}

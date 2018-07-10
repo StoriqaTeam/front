@@ -1,20 +1,44 @@
-.container {
-  display: flex;
-  align-items: baseline;
-}
+@import '../../../styles/variables';
 
-.inputsWrapper {
+.container {
+  align-items: center;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  flex-wrap: wrap;
+
+  @media (min-width: $md) {
+    align-items: baseline;
+  }
 }
 
 .buttonWrapper {
-  margin-left: 22.25rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+  [class*='Button__container'] {
+    width: 100% !important;
+  }
+
+  @media (min-width: $sm) {
+    justify-content: flex-end;
+    margin-top: 0;
+
+    [class*='Button__container'] {
+      width: initial !important;
+    }
+
+  }
+
+  //@media (min-width: #{$md + 2}) {
+  //  [class*='Button__container'] {
+  //    width: initial;
+  //  }
+  //}
+
 }
 
-.searchTermInputWrapper {
-  width: 27rem;
+[class*='Select__forForm'] {
+  width: 100% !important;
 }
 
 .birthdateSelect {
