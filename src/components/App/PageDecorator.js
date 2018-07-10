@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
 
 import {
+  AppContext,
   Header,
   HeaderResponsive,
   Main,
@@ -25,31 +26,39 @@ export default (
   class Page extends PureComponent<PropsType> {
     render() {
       return (
-        <div styleName="container">
-          {responsive ? (
-            <HeaderResponsive
-              user={this.props.me}
-              searchValue={pathOr(
-                '',
-                ['match', 'location', 'query', 'search'],
-                this.props,
+        <AppContext.Consumer>
+          {({ environment }) => (
+            <div styleName="container">
+              {responsive ? (
+                <HeaderResponsive
+                  environment={environment}
+                  user={this.props.me}
+                  searchValue={pathOr(
+                    '',
+                    ['match', 'location', 'query', 'search'],
+                    this.props,
+                  )}
+                />
+              ) : (
+                <Header
+                  user={this.props.me}
+                  searchValue={pathOr(
+                    '',
+                    ['match', 'location', 'query', 'search'],
+                    this.props,
+                  )}
+                />
               )}
-            />
-          ) : (
-            <Header
-              user={this.props.me}
-              searchValue={pathOr(
-                '',
-                ['match', 'location', 'query', 'search'],
-                this.props,
-              )}
-            />
+              <Main
+                responsive={responsive}
+                withoutCategories={withoutCategories}
+              >
+                <OriginalComponent {...this.props} />
+              </Main>
+              {responsive ? <FooterResponsive /> : <Footer />}
+            </div>
           )}
-          <Main responsive={responsive} withoutCategories={withoutCategories}>
-            <OriginalComponent {...this.props} />
-          </Main>
-          {responsive ? <FooterResponsive /> : <Footer />}
-        </div>
+        </AppContext.Consumer>
       );
     }
   };
