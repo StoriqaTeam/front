@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { withRouter, routerShape, Link } from 'found';
 
 import { Col } from 'layout';
+import { getStatusStringFromEnum } from '../OrderPage/utils';
 
 import './TableRow.scss';
 
@@ -74,7 +75,7 @@ class TableRow extends PureComponent<PropsType> {
           </div>
         </Col>
         <Col lg={2} xl={2} lgVisible>
-          {rowItem.status}
+          {getStatusStringFromEnum(rowItem.status)}
         </Col>
         <div styleName="border" />
       </div>

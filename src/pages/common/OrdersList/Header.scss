@@ -40,3 +40,11 @@
 [class*='Select__forForm'] {
   width: 100% !important;
 }
+
+.birthdateSelect {
+  & > div:first-child {
+    width: 26.25rem;
+    margin-left: 3rem;
+    margin-bottom: 1px;
+  }
+}

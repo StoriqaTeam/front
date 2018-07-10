@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
-import { pathOr, map } from 'ramda';
+import { pathOr, map, isEmpty } from 'ramda';
+import moment from 'moment';
 
 import { OrdersList } from 'pages/common/OrdersList';
 import { shortDateFromTimestamp, timeFromTimestamp } from 'utils/formatDate';
@@ -30,11 +31,17 @@ type PropsType = {
 
 type StateType = {
   currentPage: number,
+  searchTerm: ?string,
+  orderDate: ?string,
+  orderStatus: ?string,
 };
 
 class Orders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
+    searchTerm: null,
+    orderDate: null,
+    orderStatus: null,
   };
 
   componentDidMount() {
@@ -46,6 +53,19 @@ class Orders extends Component<PropsType, StateType> {
       {
         currentPage: pageNumber,
         itemsCount: itemsPerPage,
+        searchTermOptions: {
+          slug: isEmpty(this.state.searchTerm)
+            ? null
+            : parseInt(this.state.searchTerm, 10),
+          createdFrom:
+            this.state.orderDate && moment(this.state.orderDate).utc(),
+          createdTo:
+            this.state.orderDate &&
+            moment(this.state.orderDate)
+              .utc()
+              .add(1, 'd'),
+          orderStatus: this.state.orderStatus,
+        },
       },
       null,
       () => {},
@@ -80,13 +100,22 @@ class Orders extends Component<PropsType, StateType> {
     return `${shortDate}\n${time}`;
   };
 
-  nextPage = () => {
-    this.setState(
-      prevState => ({
-        currentPage: prevState.currentPage + 1,
-      }),
-      () => this.loadPage(this.state.currentPage),
-    );
+  handleSearchTermFilterChanged = (value: string) => {
+    this.setState({ searchTerm: value }, () => {
+      this.loadPage(this.state.currentPage);
+    });
+  };
+
+  handleOrderStatusFilterChanged = (value: ?string) => {
+    this.setState({ orderStatus: value }, () => {
+      this.loadPage(this.state.currentPage);
+    });
+  };
+
+  handleOrderDateFilterChanged = (value: string) => {
+    this.setState({ orderDate: value }, () => {
+      this.loadPage(this.state.currentPage);
+    });
   };
 
   render() {
@@ -114,6 +143,9 @@ class Orders extends Component<PropsType, StateType> {
         currentPage={currentPage}
         onPageSelect={this.loadPage}
         linkFactory={item => `/profile/orders/${item.number}`}
+        onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
+        onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
+        onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
       />
     );
   }
@@ -126,11 +158,12 @@ export default createRefetchContainer(
       @argumentDefinitions(
         currentPage: { type: "Int!", defaultValue: 1 }
         itemsCount: { type: "Int!", defaultValue: 10 }
+        searchTermOptions: { type: "SearchOrderOptionInput!", defaultValue: {} }
       ) {
       orders(
         currentPage: $currentPage
         itemsCount: $itemsCount
-        searchTermOptions: {}
+        searchTermOptions: $searchTermOptions
       ) {
         edges {
           node {
@@ -168,9 +201,18 @@ export default createRefetchContainer(
     }
   `,
   graphql`
-    query Orders_Query($currentPage: Int!, $itemsCount: Int!) {
+    query Orders_Query(
+      $currentPage: Int!
+      $itemsCount: Int!
+      $searchTermOptions: SearchOrderOptionInput!
+    ) {
       me {
-        ...Orders @arguments(currentPage: $currentPage, itemsCount: $itemsCount)
+        ...Orders
+          @arguments(
+            currentPage: $currentPage
+            itemsCount: $itemsCount
+            searchTermOptions: $searchTermOptions
+          )
       }
     }
   `,

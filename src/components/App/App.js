@@ -28,6 +28,7 @@ type PropsType = {
   languages: ?Array<{ id: number, name: string }>,
   currencies: ?Array<{ id: number, name: string }>,
   categories: any,
+  orderStatuses: Array<string>,
   children: any,
   relay: {
     environment: Environment,
@@ -41,7 +42,14 @@ class App extends Component<PropsType, StateType> {
   };
 
   getChildContext() {
-    const { languages, currencies, categories, relay, me = {} } = this.props;
+    const {
+      languages,
+      currencies,
+      categories,
+      orderStatuses,
+      relay,
+      me = {},
+    } = this.props;
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
@@ -50,6 +58,7 @@ class App extends Component<PropsType, StateType> {
         languages,
         currencies,
         categories,
+        orderStatuses,
       },
     };
   }
