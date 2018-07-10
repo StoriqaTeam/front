@@ -1,8 +1,9 @@
 @import '../../../../styles/variables';
 
 .container {
-  align-items: initial;
+  align-items: center;
   display: flex;
+  flex-wrap: wrap;
 
   @media (min-width: $md) {
     align-items: baseline;
@@ -11,7 +12,29 @@
 
 .buttonWrapper {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-top: 2rem;
+
+  [class*='Button__container'] {
+    width: 100% !important;
+  }
+
+  @media (min-width: $sm) {
+    justify-content: flex-end;
+    margin-top: 0;
+
+    [class*='Button__container'] {
+      width: initial !important;
+    }
+
+  }
+
+  //@media (min-width: #{$md + 2}) {
+  //  [class*='Button__container'] {
+  //    width: initial;
+  //  }
+  //}
+
 }
 
 [class*='Select__forForm'] {

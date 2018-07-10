@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { Row, Col } from 'layout';
+import { Col } from 'layout';
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
@@ -36,7 +36,7 @@ class Header extends Component<PropsType, StateType> {
     const { searchTerm } = this.state;
     return (
       <div styleName="container">
-        <Col size={12} sm={6} md={3} lg={3} xl={3}>
+        <Col size={12} sm={6} md={4} lg={3} xl={3}>
           <Input
             id="searchTermInput"
             label="Search order"
@@ -71,7 +71,7 @@ class Header extends Component<PropsType, StateType> {
             containerStyle={{ marginLeft: '3rem' }}
           />
         </Col>
-        <Col size={12} sm={4} md={3} lg={3} xl={3}>
+        <Col size={12} sm={6} md={8} lg={3} xl={3}>
           <div styleName="buttonWrapper">
             <Button wireframe big>
               Open ticket
