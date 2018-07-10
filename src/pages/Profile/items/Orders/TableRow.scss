@@ -12,6 +12,14 @@
     background-color: $color_grey_light;
     cursor: pointer;
   }
+
+  & > div[class*="Col_"] {
+    margin-right: 0;
+    @media (min-width: $xl) {
+      margin-right: 3rem;
+    }
+  }
+
 }
 
 .border {
@@ -21,6 +29,25 @@
   left: 0;
   position: absolute;
   right: 0;
+}
+
+.date {
+  width: 12.25rem;
+  display: none;
+  @media (min-width: $xl) {
+    display: inline-block;
+  }
+}
+
+.dateFormatted {
+  display: inline-block;
+  @media (min-width: #{$xl - 2}) {
+    display: none;
+  }
+}
+
+.price {
+  width: 12.25rem;
 }
 
 .paid {

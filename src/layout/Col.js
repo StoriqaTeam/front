@@ -13,11 +13,19 @@ type PropsTypes = {
   lg?: number | 'auto', // Size layout column: >= 992
   xl?: number | 'auto', // Size layout column: >= 1200
   hidden?: boolean, // Hidden: all
+  smHiddenOnly?: boolean, // HiddenOnly: >= 576
+  mdHiddenOnly?: boolean, // HiddenOnly: >= 768
+  lgHiddenOnly?: boolean, // HiddenOnly: >= 992
+  xlHiddenOnly?: boolean, // HiddenOnly: >= 1200
   smHidden?: boolean, // Hidden: >= 576
   mdHidden?: boolean, // Hidden: >= 768
   lgHidden?: boolean, // Hidden: >= 992
   xlHidden?: boolean, // Hidden: >= 1200
-  visible?: boolean, // Hidden: all
+  visible?: boolean, // VisibleOnly: all
+  smVisibleOnly?: boolean, // VisibleOnly: >= 576
+  mdVisibleOnly?: boolean, // VisibleOnly: >= 768
+  lgVisibleOnly?: boolean, // VisibleOnly: >= 992
+  xlVisibleOnly?: boolean, // VisibleOnly: >= 1200
   smVisible?: boolean, // Visible: >= 576
   mdVisible?: boolean, // Visible: >= 768
   lgVisible?: boolean, // Visible: >= 992
@@ -37,11 +45,19 @@ class Col extends PureComponent<PropsTypes> {
       mdHidden,
       lgHidden,
       xlHidden,
+      smHiddenOnly,
+      mdHiddenOnly,
+      lgHiddenOnly,
+      xlHiddenOnly,
       visible,
       smVisible,
       mdVisible,
       lgVisible,
       xlVisible,
+      smVisibleOnly,
+      mdVisibleOnly,
+      lgVisibleOnly,
+      xlVisibleOnly,
     } = this.props;
     return (
       <div
@@ -49,23 +65,35 @@ class Col extends PureComponent<PropsTypes> {
           // $FlowIgnoreMe
           [`d-none`]: hidden,
           // $FlowIgnoreMe
-          [`d-none d-sm-flex`]: smHidden,
+          [`d-sm-none d-md-block`]: smHiddenOnly,
           // $FlowIgnoreMe
-          [`d-sm-none d-md-flex`]: mdHidden,
+          [`d-sm-none d-md-flex`]: mdHiddenOnly,
           // $FlowIgnoreMe
-          [`d-lg-none d-xl-flex`]: lgHidden,
+          [`d-lg-none d-xl-flex`]: lgHiddenOnly,
           // $FlowIgnoreMe
-          [`d-xl-none`]: xlHidden,
+          [`d-sm-none`]: smHidden,
+          // $FlowIgnoreMe
+          [`d-md-flex`]: mdHidden,
+          // $FlowIgnoreMe
+          [`d-lg-none`]: lgHidden,
+          // $FlowIgnoreMe
+          [`d-xl-none`]: xlHiddenOnly || xlHidden,
           // $FlowIgnoreMe
           [`d-flex`]: visible,
           // $FlowIgnoreMe
-          [`d-none d-sm-flex d-md-none`]: smVisible,
+          [`d-none d-sm-flex d-md-none`]: smVisibleOnly,
           // $FlowIgnoreMe
-          [`d-none d-md-flex d-lg-none`]: mdVisible,
+          [`d-none d-md-flex d-lg-none`]: mdVisibleOnly,
           // $FlowIgnoreMe
-          [`d-none d-lg-flex d-xl-none`]: lgVisible,
+          [`d-none d-lg-flex d-xl-none`]: lgVisibleOnly,
           // $FlowIgnoreMe
-          [`d-none d-xl-flex`]: xlVisible,
+          [`d-none d-sm-flex`]: smVisible,
+          // $FlowIgnoreMe
+          [`d-none d-md-flex`]: mdVisible,
+          // $FlowIgnoreMe
+          [`d-none d-lg-flex`]: lgVisible,
+          // $FlowIgnoreMe
+          [`d-none d-xl-flex`]: xlVisibleOnly || xlVisible,
           // $FlowIgnoreMe
           [`col-${size || 12}`]: true,
           // $FlowIgnoreMe

@@ -1,23 +1,19 @@
+@import '../../../../styles/variables';
+
 .container {
   align-items: initial;
+  display: flex;
 
-  @media (min-width: 768px) {
+  @media (min-width: $md) {
     align-items: baseline;
   }
-}
-
-.inputsWrapper {
-  display: none;
-  justify-content: space-between;
-  align-items: baseline;
-
-  @media (min-width: 992px) {
-    display: flex;
-  }
-
 }
 
 .buttonWrapper {
   display: flex;
   justify-content: flex-end;
+}
+
+[class*='Select__forForm'] {
+  width: 100% !important;
 }
