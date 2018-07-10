@@ -6,6 +6,10 @@
   flex: 1 0 auto;
 }
 
+.withoutGrow {
+  flex-grow: 0;
+}
+
 @media (min-width: 576px) { 
   .reverseSm { 
     flex-direction: row-reverse;   

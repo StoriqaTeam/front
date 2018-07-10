@@ -4,14 +4,10 @@ import React, { Component } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { pathOr, map } from 'ramda';
 
-import { Paginator } from 'components/common/Paginator';
+import { OrdersList } from 'pages/common/OrdersList';
 import { shortDateFromTimestamp, timeFromTimestamp } from 'utils/formatDate';
 
-import Header from './Header';
-import TableTitle from './TableTitle';
-import Table from './Table';
-
-import type { TableItemType } from './TableRow';
+import type { TableItemType } from 'pages/common/OrdersList/TableRow';
 
 const itemsPerPage = 10;
 
@@ -40,6 +36,7 @@ class Orders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
   };
+
   componentDidMount() {
     this.loadPage(this.state.currentPage);
   }
@@ -111,16 +108,13 @@ class Orders extends Component<PropsType, StateType> {
       this.props,
     );
     return (
-      <div>
-        <Header />
-        <TableTitle />
-        <Table items={orderDTOs} />
-        <Paginator
-          pagesCount={pagesCount}
-          currentPage={currentPage}
-          onPageSelect={this.loadPage}
-        />
-      </div>
+      <OrdersList
+        orders={orderDTOs}
+        pagesCount={pagesCount}
+        currentPage={currentPage}
+        onPageSelect={this.loadPage}
+        linkFactory={item => `/profile/orders/${item.number}`}
+      />
     );
   }
 }
