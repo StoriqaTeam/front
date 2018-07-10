@@ -16,3 +16,11 @@
 .searchTermInputWrapper {
   width: 27rem;
 }
+
+.birthdateSelect {
+  & > div:first-child {
+    width: 26.25rem;
+    margin-left: 3rem;
+    margin-bottom: 1px;
+  }
+}

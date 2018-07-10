@@ -1,38 +1,84 @@
 // @flow
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { addIndex, map } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
 import { Button } from 'components/common/Button';
+import { BirthdateSelect } from 'components/common/BirthdateSelect';
+
+import {
+  getStatusStringFromEnum,
+  getEnumFromStatusString,
+} from '../OrderPage/utils';
 
 import './Header.scss';
 
 type PropsType = {
-  //
+  onSearchTermFilterChanged: string => void,
+  onOrderStatusFilterChanged: (?string) => void,
+  onOrderDateFilterChanged: string => void,
 };
 
 type StateType = {
   searchTerm: ?string,
+  orderStatus: ?{ id: string, label: string },
+  orderDate: ?string,
 };
 
 class Header extends Component<PropsType, StateType> {
   state: StateType = {
     searchTerm: null,
+    orderStatus: null,
+    orderDate: null,
   };
 
-  handleSearchTermChange = (e: { target: { value: any } }) => {
-    this.setState({ searchTerm: e.target.value });
+  handleSearchTermChange = (e: {
+    target: { value: any },
+    persist: () => void,
+  }) => {
+    e.persist();
+    this.setState({ searchTerm: e.target.value }, () =>
+      this.props.onSearchTermFilterChanged(e.target.value),
+    );
+  };
+
+  handleOrderStatusChange = (item: { id: string, label: string }) => {
+    if (!item) {
+      this.setState({ orderStatus: null }, () => {
+        this.props.onOrderStatusFilterChanged(null);
+      });
+      return;
+    }
+
+    if (getEnumFromStatusString(item.label)) {
+      this.setState({ orderStatus: item }, () =>
+        this.props.onOrderStatusFilterChanged(
+          getEnumFromStatusString(item.label),
+        ),
+      );
+    }
   };
 
   // eslint-disable-next-line
-  handleOrderStatusChange = (item: { id: string, label: string }) => {};
-
-  // eslint-disable-next-line
-  handleOrderDateChange = (item: { id: string, label: string }) => {};
+  handleOrderDateChange = (value: string) => {
+    this.setState({ orderDate: value }, () =>
+      this.props.onOrderDateFilterChanged(value),
+    );
+  };
 
   render() {
-    const { searchTerm } = this.state;
+    const indexedMap = addIndex(map);
+    const orderStatusesItems = indexedMap(
+      (label, id) => ({
+        id: `order_status_${id}`,
+        label: getStatusStringFromEnum(label),
+      }),
+      this.context.directories.orderStatuses,
+    );
+
     return (
       <div styleName="container">
         <div styleName="inputsWrapper">
@@ -41,15 +87,15 @@ class Header extends Component<PropsType, StateType> {
               id="searchTermInput"
               label="Search order"
               onChange={this.handleSearchTermChange}
-              value={searchTerm || ''}
+              value={this.state.searchTerm || ''}
               limit={100}
               icon="magnifier"
               fullWidth
             />
           </div>
           <Select
-            items={[{ id: 'title', label: 'Order status' }]}
-            activeItem={{ id: 'title', label: 'Order status' }}
+            items={orderStatusesItems}
+            activeItem={this.state.orderStatus || undefined}
             dataTest="OrderStatusSelect"
             forForm
             onSelect={this.handleOrderStatusChange}
@@ -58,15 +104,16 @@ class Header extends Component<PropsType, StateType> {
               marginLeft: '3rem',
               marginBottom: '1px',
             }}
+            label="Order status"
+            withEmpty
           />
-          <Select
-            items={[{ id: 'title', label: 'Order date' }]}
-            activeItem={{ id: 'title', label: 'Order date' }}
-            dataTest="OrderDateSelect"
-            forForm
-            onSelect={this.handleOrderDateChange}
-            containerStyle={{ width: '26.25rem', marginLeft: '3rem' }}
-          />
+          <div styleName="birthdateSelect">
+            <BirthdateSelect
+              label="Order date"
+              handleBirthdateSelect={this.handleOrderDateChange}
+              birthdate={this.state.orderDate}
+            />
+          </div>
         </div>
         <div styleName="buttonWrapper">
           <Button wireframe big>
@@ -77,5 +124,9 @@ class Header extends Component<PropsType, StateType> {
     );
   }
 }
+
+Header.contextTypes = {
+  directories: PropTypes.object.isRequired,
+};
 
 export default Header;

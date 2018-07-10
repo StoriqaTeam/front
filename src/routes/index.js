@@ -103,6 +103,7 @@ const routes = (
               }
             }
           }
+          orderStatuses
         }
       `}
       render={args => {

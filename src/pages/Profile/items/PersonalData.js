@@ -17,7 +17,7 @@ import { validate } from '@storiqa/shared';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
-import { BirthdateSelect } from 'pages/Profile/items/BirthdateSelect';
+import { BirthdateSelect } from 'components/common/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { withShowAlert } from 'components/App/AlertContext';
 

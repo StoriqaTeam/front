@@ -22,6 +22,7 @@ import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
 import ManageOrderBlock from './ManageOrderBlock';
+import { getStatusStringFromEnum } from './utils';
 
 import './OrderPage.scss';
 
@@ -54,29 +55,6 @@ class OrderPage extends PureComponent<PropsType> {
 
   getTimeFromTimestamp = (timestamp: string): string =>
     timeFromTimestamp(timestamp);
-
-  getStatusString = (orderStatus: string): string => {
-    switch (orderStatus) {
-      case 'CANCELLED':
-        return 'Cancelled';
-      case 'COMPLETE':
-        return 'Completed';
-      case 'DELIVERED':
-        return 'Delivered';
-      case 'IN_PROCESSING':
-        return 'In process';
-      case 'PAID':
-        return 'Paid';
-      case 'PAIMENT_AWAITED':
-        return 'Wait for payment';
-      case 'RECEIVED':
-        return 'Received';
-      case 'SENT':
-        return 'Sent';
-      default:
-        return 'Undefined';
-    }
-  };
 
   getOrderDTO = (order: any): OrderDTOType => {
     const orderDTO: OrderDTOType = {
@@ -146,7 +124,7 @@ class OrderPage extends PureComponent<PropsType> {
             historyEdge.node.committedAt,
           )}\n${timeFromTimestamp(historyEdge.node.committedAt)}`,
           manager,
-          status: this.getStatusString(historyEdge.node.state),
+          status: getStatusStringFromEnum(historyEdge.node.state),
           additionalInfo: historyEdge.node.comment,
         };
       }, order && order.history ? sort((a, b) => moment(a.node.committedAt).isBefore(b.node.committedAt), order.history.edges) : []),
@@ -204,7 +182,7 @@ class OrderPage extends PureComponent<PropsType> {
           <div styleName="statuses">
             <div styleName="statusTitle">Status</div>
             <div styleName="statusInfo">
-              {this.getStatusString(order.status)}
+              {getStatusStringFromEnum(order.status)}
             </div>
             <div styleName="statusTitle secondStatusTitle">Payment status</div>
             <div

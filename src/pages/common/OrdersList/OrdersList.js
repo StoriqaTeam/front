@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 import { Paginator } from 'components/common/Paginator';
 
@@ -16,19 +16,42 @@ type PropsType = {
   pagesCount: number,
   onPageSelect: (pageNumber: number) => void,
   linkFactory: (item: TableItemType) => string,
+  onSearchTermFilterChanged: string => void,
+  onOrderStatusFilterChanged: string => void,
+  onOrderDateFilterChanged: string => void,
 };
 
-const OrdersList = (props: PropsType) => (
-  <div>
-    <Header />
-    <TableTitle />
-    <Table items={props.orders} linkFactory={props.linkFactory} />
-    <Paginator
-      pagesCount={props.pagesCount}
-      currentPage={props.currentPage}
-      onPageSelect={props.onPageSelect}
-    />
-  </div>
-);
+class OrdersList extends PureComponent<PropsType> {
+  handleSearchTermFilterChanged = (value: string) => {
+    this.props.onSearchTermFilterChanged(value);
+  };
+
+  handleOrderStatusFilterChanged = (value: string) => {
+    this.props.onOrderStatusFilterChanged(value);
+  };
+
+  handleOrderDateFilterChanged = (value: string) => {
+    this.props.onOrderDateFilterChanged(value);
+  };
+
+  render() {
+    return (
+      <div>
+        <Header
+          onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
+          onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
+          onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
+        />
+        <TableTitle />
+        <Table items={this.props.orders} linkFactory={this.props.linkFactory} />
+        <Paginator
+          pagesCount={this.props.pagesCount}
+          currentPage={this.props.currentPage}
+          onPageSelect={this.props.onPageSelect}
+        />
+      </div>
+    );
+  }
+}
 
 export default OrdersList;

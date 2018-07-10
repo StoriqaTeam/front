@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { withRouter, routerShape, Link } from 'found';
 
+import { getStatusStringFromEnum } from '../OrderPage/utils';
+
 import './TableRow.scss';
 
 export type TableItemType = {
@@ -58,7 +60,9 @@ class TableRow extends PureComponent<PropsType> {
         >
           {rowItem.payment}
         </div>
-        <div styleName="statusCell">{rowItem.status}</div>
+        <div styleName="statusCell">
+          {getStatusStringFromEnum(rowItem.status)}
+        </div>
         <div styleName="border" />
       </div>
     );
