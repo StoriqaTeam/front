@@ -62,39 +62,22 @@ class Col extends PureComponent<PropsTypes> {
     return (
       <div
         styleName={classNames('col', {
-          // $FlowIgnoreMe
           [`d-none`]: hidden,
-          // $FlowIgnoreMe
           [`d-sm-none d-md-block`]: smHiddenOnly,
-          // $FlowIgnoreMe
           [`d-sm-none d-md-flex`]: mdHiddenOnly,
-          // $FlowIgnoreMe
           [`d-lg-none d-xl-flex`]: lgHiddenOnly,
-          // $FlowIgnoreMe
           [`d-sm-none`]: smHidden,
-          // $FlowIgnoreMe
           [`d-md-flex`]: mdHidden,
-          // $FlowIgnoreMe
           [`d-lg-none`]: lgHidden,
-          // $FlowIgnoreMe
           [`d-xl-none`]: xlHiddenOnly || xlHidden,
-          // $FlowIgnoreMe
           [`d-flex`]: visible,
-          // $FlowIgnoreMe
           [`d-none d-sm-flex d-md-none`]: smVisibleOnly,
-          // $FlowIgnoreMe
           [`d-none d-md-flex d-lg-none`]: mdVisibleOnly,
-          // $FlowIgnoreMe
           [`d-none d-lg-flex d-xl-none`]: lgVisibleOnly,
-          // $FlowIgnoreMe
           [`d-none d-sm-flex`]: smVisible,
-          // $FlowIgnoreMe
           [`d-none d-md-flex`]: mdVisible,
-          // $FlowIgnoreMe
           [`d-none d-lg-flex`]: lgVisible,
-          // $FlowIgnoreMe
           [`d-none d-xl-flex`]: xlVisibleOnly || xlVisible,
-          // $FlowIgnoreMe
           [`col-${size || 12}`]: true,
           // $FlowIgnoreMe
           [`col-sm col-sm-${sm}`]: sm,
