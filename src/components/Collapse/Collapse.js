@@ -51,7 +51,7 @@ class Collapse extends Component<PropsType, StateType> {
     const { isOpen, index, title } = this.state;
     return (
       <aside styleName="container">
-        <h2 styleName="offscreen">Collapsable menu</h2>
+        <h2 styleName="offscreen">Profile Mobile Menu</h2>
         <header
           role="none"
           onKeyPress={() => {}}
@@ -68,6 +68,7 @@ class Collapse extends Component<PropsType, StateType> {
             show: isOpen,
           })}
         >
+          <h3 styleName="offscreen">Collapsable menu</h3>
           <ul>
             {remove(index, 1, items).map((item, idx) => (
               <li

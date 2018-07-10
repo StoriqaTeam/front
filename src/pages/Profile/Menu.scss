@@ -1,7 +1,12 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
-.menu {
+.container {
   position: relative;
+}
+
+.offscreen {
+  @include offscreen();
 }
 
 .imageArea {

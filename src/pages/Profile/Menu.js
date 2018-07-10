@@ -85,7 +85,8 @@ class Menu extends PureComponent<PropsType> {
       provider,
     } = this.props;
     return (
-      <div styleName="menu">
+      <sidebar styleName="container">
+        <h3 styleName="offscreen">Profile Menu</h3>
         <div styleName="mobileMenu">
           <Collapse items={menuItems} onSelected={this.handleSelected} />
           <div style={{ margin: '1.05rem 0' }} />
@@ -147,7 +148,7 @@ class Menu extends PureComponent<PropsType> {
             );
           })}
         </div>
-      </div>
+      </sidebar>
     );
   }
 }

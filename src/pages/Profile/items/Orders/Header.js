@@ -35,7 +35,7 @@ class Header extends Component<PropsType, StateType> {
   render() {
     const { searchTerm } = this.state;
     return (
-      <div styleName="container">
+      <header styleName="container">
         <Col size={12} sm={6} md={4} lg={3} xl={3}>
           <Input
             id="searchTermInput"
@@ -78,7 +78,7 @@ class Header extends Component<PropsType, StateType> {
             </Button>
           </div>
         </Col>
-      </div>
+      </header>
     );
   }
 }
