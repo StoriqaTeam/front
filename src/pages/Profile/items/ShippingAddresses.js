@@ -150,8 +150,6 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     const createInput = { ...input, userId: data.rawId };
     const updateInput = { ...input, id };
 
-    // return;
-
     // $FlowIgnoreMe
     const params: UpdateMutationParamsType | CreateMutationParamsType = {
       input: id ? updateInput : createInput,
