@@ -365,7 +365,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                   <Fragment key={item.rawId}>
                     <div styleName="item">
                       {item.isPriority && (
-                        <div styleName="preorityText">Priority address</div>
+                        <div styleName="priorityText">Priority address</div>
                       )}
                       <div styleName="address">
                         {`${country}, `}
