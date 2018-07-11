@@ -6,7 +6,7 @@ import { pathOr, toLower } from 'ramda';
 import { Container, Row, Col } from 'layout';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
-import Menu from './Menu';
+import Menu from './ManageStoreMenu';
 
 import './ManageStoreDecorator.scss';
 
@@ -34,6 +34,8 @@ export default (OriginalComponent: any, title: string) =>
       // $FlowIgnoreMe
       const store = pathOr(null, ['me', 'store'], this.props);
       // $FlowIgnoreMe
+      const myStore = pathOr(null, ['me', 'myStore'], this.props);
+      // $FlowIgnoreMe
       const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
       return (
         <Container>
@@ -42,7 +44,9 @@ export default (OriginalComponent: any, title: string) =>
               <Menu
                 activeItem={toLower(title)}
                 showAlert={this.props.showAlert}
-                storeData={store || (baseProduct && baseProduct.store) || null}
+                storeData={
+                  store || myStore || (baseProduct && baseProduct.store) || null
+                }
                 baseProductData={baseProduct}
               />
             </Col>

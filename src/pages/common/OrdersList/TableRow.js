@@ -4,6 +4,9 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { withRouter, routerShape, Link } from 'found';
 
+import { Col } from 'layout';
+import { getStatusStringFromEnum } from '../OrderPage/utils';
+
 import './TableRow.scss';
 
 export type TableItemType = {
@@ -38,27 +41,44 @@ class TableRow extends PureComponent<PropsType> {
         styleName="container"
         onClick={() => this.props.router.push(this.props.linkFactory(rowItem))}
       >
-        <div styleName="numberCell">{rowItem.number}</div>
-        <div styleName="dateCell">{rowItem.date}</div>
-        <div styleName="shopCell">{rowItem.shop.title}</div>
-        <div styleName="deliveryCell">{rowItem.delivery}</div>
-        <div styleName="itemCell">
-          <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
-            {rowItem.item.title}
-          </Link>
-        </div>
-        <div styleName="priceCell">
-          {rowItem.price} <b>STQ</b>
-        </div>
-        <div
-          styleName={classNames('paymentCell', {
-            paid: rowItem.payment === 'Paid',
-            unpaid: rowItem.payment !== 'Paid',
-          })}
-        >
-          {rowItem.payment}
-        </div>
-        <div styleName="statusCell">{rowItem.status}</div>
+        <Col size={2} sm={4} md={3} lg={2} xl={1}>
+          <span styleName="number">{rowItem.number}</span>
+        </Col>
+        <Col size={5} sm={4} md={3} lg={2} xl={1}>
+          <span styleName="date">{rowItem.date}</span>
+          <span styleName="dateFormatted">11/11/2018</span>
+        </Col>
+        <Col lg={2} xl={1} xlVisible>
+          <span styleName="link">{rowItem.shop.title}</span>
+        </Col>
+        <Col lg={2} xl={1} xlVisible>
+          {rowItem.delivery}
+        </Col>
+        <Col size={5} sm={4} md={3} lg={2} xl={2}>
+          <span styleName="link">
+            <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
+              {rowItem.item.title}
+            </Link>
+          </span>
+        </Col>
+        <Col md={2} lg={2} xl={1} mdVisible>
+          <span styleName="price">
+            {rowItem.price} <b>STQ</b>
+          </span>
+        </Col>
+        <Col lg={2} xl={1} lgVisible>
+          <div
+            styleName={classNames({
+              paid: rowItem.payment === 'Paid',
+              unpaid: rowItem.payment !== 'Paid',
+            })}
+          >
+            {rowItem.payment}
+          </div>
+        </Col>
+        <Col lg={2} xl={2} lgVisible>
+          {getStatusStringFromEnum(rowItem.status)}
+        </Col>
         <div styleName="border" />
       </div>
     );

@@ -23,7 +23,7 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import menuItems from './menuItems.json';
 
-import './Menu.scss';
+import './ManageStoreMenu.scss';
 
 type MenuItemType = {
   id: string,
@@ -171,7 +171,7 @@ class Menu extends PureComponent<PropsType> {
             buttonWidth={26}
             buttonIconSize={48}
             buttonIconType="upload"
-            buttonLabel="Click to download logo"
+            buttonLabel="Click to upload logo"
             overPicture={convertSrc(storeLogo, 'medium') || null}
             dataTest="storeImgUploader"
           />

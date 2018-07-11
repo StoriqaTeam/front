@@ -5,36 +5,34 @@
   display: flex;
   line-height: 2.5rem;
   font-size: 14px;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-top: 4.5rem;
   margin-bottom: 2rem;
   position: relative;
+
+  & > div[class*="Col_"] {
+    margin-right: 0;
+    @media (min-width: $xl) {
+      margin-right: 3rem;
+    }
+  }
 }
 
-.cellNumber {
-  width: 12.25rem;
+.number {
+  display: none;
+  @media (min-width: $md) {
+    display: inline-block;
+  }
+
 }
-.cellDate {
-  width: 13rem;
+
+.poundSign {
+  display: inline-block;
+  @media (min-width: $sm) {
+    display: none;
+  }
 }
-.cellShop {
-  width: 10rem;
-}
-.cellDelivery {
-  width: 15.25rem;
-}
-.cellItems {
-  width: 18.5rem;
-}
-.cellPrice {
-  width: 17.75rem;
-}
-.cellPayment {
-  width: 14.75rem;
-}
-.cellStatus {
-  width: 16.25rem;
-}
+
 .border {
   background-color: #efefef;
   height: 0.125rem;

@@ -30,9 +30,9 @@
     "disabled": true
   },
   {
-    "id": "warehouses",
-    "title": "Warehouses",
-    "link": "/warehouses",
-    "disabled": true
+    "id": "storages",
+    "title": "Storages",
+    "link": "/storages",
+    "disabled": false
   }
 ]

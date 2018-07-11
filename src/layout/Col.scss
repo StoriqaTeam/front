@@ -1,4 +1,6 @@
- .col {
+@import '../styles/variables';
+
+.col {
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -71,7 +73,7 @@
 
 /*  */
 
-@media (min-width: 576px) {
+@media (min-width: $sm) {
   .col-sm {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -149,7 +151,7 @@
 
 /*  */
 
-@media (min-width: 768px) {
+@media (min-width: $md) {
   .col-md {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -227,7 +229,7 @@
 
 /* */
 
-@media (min-width: 992px) {
+@media (min-width: $lg) {
   .col-lg {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -303,7 +305,7 @@
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: $xl) {
   .col-xl {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -379,3 +381,62 @@
   }
 }
 
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+@media (min-width: $sm) {
+  .d-sm-none {
+    display: none !important;
+  }
+  .d-sm-block {
+    display: block !important;
+  }
+  .d-sm-flex {
+    display: flex !important;
+  }
+}
+
+@media (min-width: $md) {
+  .d-md-none {
+    display: none !important;
+  }
+  .d-md-block {
+    display: block !important;
+  }
+  .d-md-flex {
+    display: flex !important;
+  }
+}
+
+@media (min-width: $lg) {
+  .d-lg-none {
+    display: none !important;
+  }
+  .d-lg-block {
+    display: block !important;
+  }
+  .d-lg-flex {
+    display: flex !important;
+  }
+}
+
+@media (min-width: $xl) {
+  .d-xl-none {
+    display: none !important;
+  }
+  .d-xl-block {
+    display: block !important;
+  }
+  .d-xl-flex {
+    display: flex !important;
+  }
+}

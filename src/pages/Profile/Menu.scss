@@ -1,18 +1,23 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
-.menu {
+.container {
   position: relative;
 }
 
-.imgWrap {
+.offscreen {
+  @include offscreen();
+}
+
+.imageArea {
   border-radius: 0.5rem;
   overflow: hidden;
 }
 
 .img {
   display: block;
-  width: 100%;
   height: auto;
+  width: 100%;
 }
 
 .title {
@@ -23,16 +28,22 @@
 }
 
 .items {
+  display: none;
   position: relative;
+
+  @media (min-width: $md) {
+    display: block;
+  }
+
 }
 
 .item {
+  color: $color_grey;
+  cursor: pointer;
   display: block;
+  font-size: 14px;
   margin-left: -2rem;
   padding: 1.5rem 0 1.5rem 2rem;
-  color: $color_grey;
-  font-size: 14px;
-  cursor: pointer;
   transition: $transition_all_ease;
 
   &:hover {
@@ -41,30 +52,41 @@
 }
 
 .isActive {
+  background-color: $color_white;
   font-family: $font_medium;
   position: relative;
-  background-color: $color_white;
 }
 
 .isActive:before {
+  border-left: 2px solid $color_blue;
+  bottom: 0;
   content: '';
+  display: block;
+  left: 0;
   position: absolute;
   top: 0;
-  bottom: 0;
-  left: 0;
   width: 0.25rem;
-  display: block;
-  border-left: 2px solid $color_blue;
 }
 
 .storeLogo {
-  width: 26rem;
   height: 26rem;
+  width: 26rem;
 }
 
 .cross {
+  cursor: pointer;
+  left: -3rem;
   position: absolute;
   top: 0.5rem;
-  left: -3rem;
-  cursor: pointer;
+}
+
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media (min-width: $md) {
+    display: none;
+  }
+
 }
