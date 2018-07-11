@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import Rating from 'components/Rating';
+import { Rating } from 'components/common/Rating';
 
 import { extractText } from 'utils';
 
@@ -27,7 +27,7 @@ const ProductStore = () => (
             />
             <div>
               <h5 styleName="storeName">{extractText(store.name)}</h5>
-              <Rating rating={store.rating} />
+              <Rating value={store.rating} />
             </div>
           </div>
           <div styleName="storeDetails">
