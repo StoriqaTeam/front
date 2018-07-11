@@ -1,7 +1,6 @@
 @import "../../styles/variables.scss";
 
 .container {
-  padding: 4rem;
   color: $color_grey;
   background-color: $color-white;
   border: 1px solid $color_grey_trivial;
@@ -12,26 +11,13 @@
   padding: 0 0 1rem 2rem;
 }
 
-.image {
-  width: 5rem;
-  height: 5rem;
-}
-
-.name {
-
-}
-
-.products {
-
-}
-
-.store {
-  width: 66%;
+.footer {
+  padding: 4rem;
+  display: flex;
 }
 
 .store-info {
   display: flex;
-  margin-bottom: 3rem;
 
   & img {
     display: block;
@@ -39,50 +25,40 @@
   }
 }
 
-.store-total {
-  width: 34%;
-  padding-left: 4rem;
-}
-
 .store-description {
   margin-left: 1rem;
   font-family: $font_regular;
-  top: -0.5rem;
   position: relative;
+}
+
+.image {
+  width: 5rem;
+  height: 5rem;
+}
+
+.store {
+  width: 66%;
+}
+
+.store-total {
+  width: 34%;
+  padding-left: 4rem;
 }
 
 .store-name {
   margin-bottom: 0.5rem;
 }
 
-.footer {
-  padding-top: 3rem;
-  padding-left: 26rem;
-  display: flex;
-}
-
 .store-total-header {
   text-transform: uppercase;
 }
 
-.buy {
-  button {
-    width: 100%;
-  }
-}
-
-.chat-container {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.chat-text {
+.label {
+  font-size: 1.75rem;
   color: $color_grey_minor;
-  font-family: $font_regular;
-  margin-left: 1rem;
 }
 
-.promocode {
-  width: 24rem;
+.value {
+  color: $color_grey;
+  font-family: $font_bold;
 }

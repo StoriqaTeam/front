@@ -32,6 +32,19 @@ type AutocompleteItemType = {
   place_id: string,
 };
 
+export type AddressFullType = {
+  value?: ?string,
+  country?: ?string,
+  administrativeAreaLevel1?: ?string,
+  administrativeAreaLevel2?: ?string,
+  locality?: ?string,
+  political?: ?string,
+  postalCode?: ?string,
+  route?: ?string,
+  streetNumber?: ?string,
+  placeId?: ?string,
+};
+
 type PropsType = {
   autocompleteService: any,
   geocoderService: any,
@@ -40,7 +53,7 @@ type PropsType = {
   onChangeData: (data: any) => void,
   country: string,
   address: string,
-  addressFull: any,
+  addressFull: AddressFullType,
   isOpen?: boolean,
 };
 

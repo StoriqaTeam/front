@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import './Row.scss';
 
 type PropsTypes = {
+  withoutGrow: ?boolean,
   children: any,
   reverseSm: ?boolean,
   reverseMd: ?boolean,
@@ -14,6 +15,7 @@ type PropsTypes = {
 };
 
 const Row = ({
+  withoutGrow,
   children,
   reverseSm,
   reverseMd,
@@ -22,6 +24,7 @@ const Row = ({
 }: PropsTypes) => (
   <div
     styleName={classNames('container', {
+      withoutGrow,
       reverseSm,
       reverseMd,
       reverseLg,

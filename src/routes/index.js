@@ -27,9 +27,11 @@ import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
 import Cart from 'pages/Cart';
+import Checkout from 'pages/Checkout';
 import { Error } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
+import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 
 const routes = (
   <Route>
@@ -45,6 +47,8 @@ const routes = (
             ...App_me
           }
           cart {
+            id
+            totalCount
             ...Cart_cart
           }
           mainPage {
@@ -105,6 +109,7 @@ const routes = (
               }
             }
           }
+          orderStatuses
         }
       `}
       render={args => {
@@ -126,6 +131,22 @@ const routes = (
         render={({ props, Component }) => <Component {...props} />}
         Component={Cart}
       />
+
+      <Route
+        path="/checkout"
+        Component={Checkout}
+        query={graphql`
+          query routes_Checkout_Query {
+            me {
+              ...Checkout_me
+            }
+            cart {
+              ...Checkout_cart
+            }
+          }
+        `}
+      />
+
       <Route
         path="/categories"
         Component={Categories}
@@ -212,6 +233,28 @@ const routes = (
         />
         <Route path="/store">
           <Route path="/new" exact Component={NewStore} />
+          <Route
+            path="/orders"
+            Component={StoreOrders}
+            query={graphql`
+              query routes_StoreOrders_Query {
+                me {
+                  ...StoreOrders_me
+                }
+              }
+            `}
+          />
+          <Route
+            path="/orders/:orderId"
+            Component={StoreOrder}
+            query={graphql`
+              query routes_StoreOrder_Query {
+                me {
+                  ...StoreOrder_me
+                }
+              }
+            `}
+          />
           <Route
             path="/:storeId"
             Component={EditStore}

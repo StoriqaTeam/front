@@ -2,20 +2,10 @@
 
 import React, { Component } from 'react';
 import { graphql } from 'react-relay';
-import PropTypes from 'prop-types';
 import { Link } from 'found';
-import {
-  pipe,
-  pathOr,
-  map,
-  prop,
-  sum,
-  // $FlowIgnoreMe
-  chain,
-  reject,
-  isNil,
-} from 'ramda';
+import { pathOr } from 'ramda';
 import classNames from 'classnames';
+import type { Environment } from 'relay-runtime';
 
 import { Authorization } from 'components/Authorization';
 import { CartButton } from 'components/CartButton';
@@ -32,21 +22,12 @@ import { setWindowTag } from 'utils';
 
 import { HeaderTop, AuthButtons, MobileSearchMenu } from './index';
 
-import type HeaderStoresLocalFragment from './__generated__/HeaderStoresLocalFragment.graphql';
-
 import './HeaderResponsive.scss';
 
-const STORES_FRAGMENT = graphql`
-  fragment HeaderResponsiveStoresLocalFragment on CartStoresConnection {
-    edges {
-      node {
-        id
-        products {
-          id
-          quantity
-        }
-      }
-    }
+const TOTAL_FRAGMENT = graphql`
+  fragment HeaderResponsiveTotalLocalFragment on Cart {
+    id
+    totalCount
   }
 `;
 
@@ -59,16 +40,6 @@ const HEADER_FRAGMENT = graphql`
   }
 `;
 
-const getCartCount: (data: HeaderStoresLocalFragment) => number = data =>
-  pipe(
-    pathOr([], ['edges']),
-    chain(pathOr([], ['node', 'products'])),
-    reject(isNil),
-    map(prop('quantity')),
-    reject(isNil),
-    sum,
-  )(data);
-
 type MobileCategory = {
   label: string,
   id: string,
@@ -76,10 +47,11 @@ type MobileCategory = {
 
 type PropsType = {
   searchValue: string,
+  environment: Environment,
 };
 
 type StateType = {
-  cartCount: number,
+  totalCount: number,
   showModal: boolean,
   isSignUp: ?boolean,
   userData: ?{
@@ -95,35 +67,43 @@ type StateType = {
 };
 
 class HeaderResponsive extends Component<PropsType, StateType> {
-  state = {
-    cartCount: 0,
-    showModal: false,
-    isSignUp: false,
-    userData: null,
-    isMenuToggled: false,
-    isMobileSearchOpen: false,
-    isMobileCategoriesOpen: false,
-    selectedCategory: null,
-  };
-
-  componentWillMount() {
-    const store = this.context.environment.getStore();
-    const connectionId = 'client:root:cart:__Cart_stores_connection';
-    const queryNode = STORES_FRAGMENT.data();
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      totalCount: 0,
+      showModal: false,
+      isSignUp: false,
+      userData: null,
+      isMenuToggled: false,
+      isMobileSearchOpen: false,
+      isMobileCategoriesOpen: false,
+      selectedCategory: null,
+    };
+    const store = this.props.environment.getStore();
+    const cartId = pathOr(
+      null,
+      ['cart', '__ref'],
+      store.getSource().get('client:root'),
+    );
+    const queryNode = TOTAL_FRAGMENT.data();
     const snapshot = store.lookup({
-      dataID: connectionId,
+      dataID: cartId,
       node: queryNode,
     });
     const { dispose } = store.subscribe(snapshot, s => {
-      this.setState({ cartCount: getCartCount(s.data) });
+      const newTotalCount = pathOr(0, ['data', 'totalCount'], s);
+      this.state.totalCount = newTotalCount;
       // tmp code
-      setWindowTag('cartCount', getCartCount(s.data));
+      setWindowTag('cartCount', newTotalCount);
       // end tmp code
     });
+    const totalCount = pathOr(0, ['data', 'totalCount'], snapshot);
+
     this.dispose = dispose;
-    this.setState({ cartCount: getCartCount(snapshot.data) });
+    // $FlowIgnoreMe
+    this.state.totalCount = totalCount;
     // tmp code
-    setWindowTag('cartCount', getCartCount(snapshot.data));
+    setWindowTag('cartCount', totalCount);
     // end tmp code
 
     const meId = pathOr(
@@ -143,13 +123,13 @@ class HeaderResponsive extends Component<PropsType, StateType> {
         node: queryUser,
       });
       const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
-        this.setState({ userData: s.data });
+        this.state.userData = s.data;
         // tmp code
         setWindowTag('user', s.data);
         // end tmp code
       });
       this.disposeUser = disposeUser;
-      this.setState({ userData: snapshotUser.data });
+      this.state.userData = snapshotUser.data;
       // tmp code
       setWindowTag('user', snapshotUser.data);
       // end tmp code
@@ -224,6 +204,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       isMobileSearchOpen,
       isMobileCategoriesOpen,
       selectedCategory,
+      totalCount,
     } = this.state;
     const searchCategories = [
       { id: 'products', label: 'Products' },
@@ -269,7 +250,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
           <div styleName="headerBottom">
             <Row>
               <Col size={7} sm={4} md={4} lg={3} xl={3}>
-                <div styleName="logo">
+                <div
+                  styleName={classNames('logo', {
+                    isUserLoggedIn: userData,
+                  })}
+                >
                   <div styleName="logoIcon">
                     <Link to="/" data-test="logoLink">
                       <Icon type="logo" />
@@ -302,7 +287,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                     <AuthButtons onOpenModal={this.handleOpenModal} />
                   )}
                   <div styleName="cartIcon">
-                    <CartButton href="/cart" amount={this.state.cartCount} />
+                    <CartButton href="/cart" amount={totalCount} />
                   </div>
                 </div>
               </Col>
@@ -327,7 +312,3 @@ class HeaderResponsive extends Component<PropsType, StateType> {
 }
 
 export default HeaderResponsive;
-
-HeaderResponsive.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};

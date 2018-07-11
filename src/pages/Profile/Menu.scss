@@ -1,12 +1,21 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
-.menu {
+.container {
   position: relative;
 }
 
-.imgWrap {
+.offscreen {
+  @include offscreen();
+}
+
+.imageArea {
   border-radius: 0.5rem;
   overflow: hidden;
+  display: none;
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
 
 .img {
@@ -24,6 +33,10 @@
 
 .items {
   position: relative;
+  display: none;
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
 
 .item {
@@ -67,4 +80,13 @@
   top: 0.5rem;
   left: -3rem;
   cursor: pointer;
+}
+
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (min-width: 768px) {
+    display: none;
+  }
 }

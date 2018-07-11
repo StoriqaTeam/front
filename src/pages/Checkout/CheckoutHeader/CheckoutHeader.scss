@@ -1,0 +1,13 @@
+@import "../../../styles/variables.scss";
+
+.stepperContainer {
+  height: 8.25rem;
+  width: 100%;
+  border: 1px solid $color_grey_trivial;
+  background-color: $color_white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+

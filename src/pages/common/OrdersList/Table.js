@@ -9,11 +9,21 @@ import type { TableItemType } from './TableRow';
 
 type PropsType = {
   items: Array<TableItemType>,
+  linkFactory: (item: TableItemType) => string,
 };
 
 class Table extends PureComponent<PropsType> {
   renderItems = (items: Array<TableItemType>) =>
-    map(item => <TableRow key={item.number} item={item} />, items);
+    map(
+      item => (
+        <TableRow
+          key={item.number}
+          item={item}
+          linkFactory={this.props.linkFactory}
+        />
+      ),
+      items,
+    );
 
   render() {
     return <div>{this.renderItems(this.props.items)}</div>;

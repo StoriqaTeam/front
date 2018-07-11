@@ -1,0 +1,70 @@
+@import '../../../styles/variables';
+
+.container {
+  align-items: center;
+  color: $color_grey;
+  display: flex;
+  height: 12rem;
+  margin-left: -4rem;
+  margin-right: -4rem;
+  position: relative;
+  &:hover {
+    background-color: $color_grey_light;
+    cursor: pointer;
+  }
+
+  & > div[class*="Col_"] {
+    margin-right: 0;
+    @media (min-width: $xl) {
+      margin-right: 3rem;
+    }
+  }
+
+}
+
+.link {
+  color: $color_blue !important;
+  a[href] {
+    color: $color_blue !important;
+  }
+}
+
+.number {
+  margin-left: 4rem;
+}
+
+.border {
+  background-color: #efefef;
+  bottom: 0;
+  height: 0.125rem;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.date {
+  display: none;
+  width: 12.25rem;
+  @media (min-width: $xl) {
+    display: inline-block;
+  }
+}
+
+.dateFormatted {
+  display: inline-block;
+  @media (min-width: #{$xl - 2}) {
+    display: none;
+  }
+}
+
+.price {
+  width: 12.25rem;
+}
+
+.paid {
+  color: $color_green;
+}
+
+.unpaid {
+  color: $color_pink;
+}
