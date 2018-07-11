@@ -23,7 +23,7 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import menuItems from './menuItems.json';
 
-import './Menu.scss';
+import './ManageStoreMenu.scss';
 
 type MenuItemType = {
   id: string,

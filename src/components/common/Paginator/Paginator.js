@@ -16,20 +16,21 @@ class Paginator extends PureComponent<PropsType> {
   render() {
     return (
       <div styleName="container">
-        {map(
-          item => (
-            <button
-              styleName={classNames('item', {
-                current: item === this.props.currentPage,
-              })}
-              onClick={() => this.props.onPageSelect(item)}
-              key={`orders-pagination-item-${item}`}
-            >
-              {item}
-            </button>
-          ),
-          range(1, this.props.pagesCount),
-        )}
+        {this.props.pagesCount > 1 &&
+          map(
+            item => (
+              <button
+                styleName={classNames('item', {
+                  current: item === this.props.currentPage,
+                })}
+                onClick={() => this.props.onPageSelect(item)}
+                key={`orders-pagination-item-${item}`}
+              >
+                {item}
+              </button>
+            ),
+            range(1, this.props.pagesCount + 1),
+          )}
       </div>
     );
   }

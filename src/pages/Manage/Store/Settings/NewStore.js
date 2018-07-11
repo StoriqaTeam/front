@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, pathOr, toUpper, isEmpty } from 'ramda';
-import { withRouter } from 'found';
+import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -25,6 +25,7 @@ type StateType = {
 };
 
 type PropsType = {
+  router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
 };
 
@@ -100,6 +101,15 @@ class NewStore extends Component<PropsType, StateType> {
             link: { text: 'Close.' },
           });
           return;
+        }
+        // $FlowIgnoreMe
+        const storeId: ?number = pathOr(
+          null,
+          ['createStore', 'rawId'],
+          response,
+        );
+        if (storeId) {
+          this.props.router.push(`/manage/store/${storeId}`);
         }
         this.props.showAlert({
           type: 'success',

@@ -1,0 +1,128 @@
+@import "../../../../../styles/variables";
+
+.container {
+  margin-top: 2rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.wrapper {
+  margin-top: 2rem;
+  padding: 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.subtitle {
+  margin-bottom: 5rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.addButton {
+  float: right;
+}
+
+.headerRowWrap, .itemRowWrap {
+  display: flex;
+  margin: 0 -4rem;
+  border-bottom: 1px solid $color_grey_trivial;
+}
+
+.headerRowWrap {
+  & .td {
+    color: $color_grey_minor;
+  }
+}
+
+.itemRowWrap {
+  & .td {
+    font-size: 16px;
+  }
+
+  & .tdStorage, .tdAddress {
+    padding-right: 2rem;
+  }
+}
+
+.td {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 2.5rem;
+  color: $color_grey;
+}
+
+.tdCheckbox {width: 5%;}
+.tdFoto {width: 9%;}
+.tdName {width: 21%;}
+.tdCategory {width: 10%;}
+.tdPrice {width: 14%;}
+.tdCharacteristics {width: 20%;}
+.tdQuantity {width: 17%;}
+.tdMove {width: 4%;}
+
+.tdQuantity {
+  display: flex;
+}
+
+.headerRowWrap {
+  padding: 2rem 4rem;
+
+  & .tdWrap > span {
+    margin-right: 0.5rem;
+  }
+}
+
+.itemRowWrap {
+  min-height: 11.75rem;
+  padding: 1rem 4rem;
+
+  .foto {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 0.5rem;
+    background-color: $color_grey_trivial;
+    overflow: hidden;
+  }
+
+  .characteristicItem {
+    display: flex;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .characteristicLabels {
+    color: $color_grey_minor;
+  }
+
+  .characteristicValues {
+    margin-left: 1.5rem;
+  }
+}
+
+.moveButton {
+  & svg {
+    fill: $color_grey_light;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
+
+.quantityInput {
+  width: 6rem;
+  margin-right: 2rem;
+}
+
+.searchInput {
+  position: absolute;
+  top: -2rem;
+  right: 1rem;
+  width: 30rem;
+}
