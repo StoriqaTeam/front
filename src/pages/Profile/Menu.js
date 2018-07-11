@@ -106,7 +106,7 @@ class Menu extends PureComponent<PropsType> {
             buttonWidth="100%"
             buttonIconType="user"
             buttonIconSize={48}
-            buttonLabel="Click to download avatar"
+            buttonLabel="Click to upload avatar"
             overPicture={avatar}
             dataTest="storeImgUploader"
           />
