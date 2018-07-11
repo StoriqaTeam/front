@@ -93,7 +93,7 @@ class Header extends Component<PropsType, StateType> {
             fullWidth
           />
         </Col>
-        <Col size={12} sm={6} md={4} lg={3} xl={3}>
+        <Col size={12} sm={6} md={4} lg={3} xl={3} lgVisible>
           <Select
             items={orderStatusesItems}
             activeItem={this.state.orderStatus || undefined}

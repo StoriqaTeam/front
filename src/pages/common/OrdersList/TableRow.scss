@@ -5,8 +5,8 @@
   color: $color_grey;
   display: flex;
   height: 12rem;
-  // margin-left: -4rem;
-  // margin-right: -4rem;
+  margin-left: -4rem;
+  margin-right: -4rem;
   position: relative;
   &:hover {
     background-color: $color_grey_light;
@@ -22,6 +22,17 @@
 
 }
 
+.link {
+  color: $color_blue !important;
+  a[href] {
+    color: $color_blue !important;
+  }
+}
+
+.number {
+  margin-left: 4rem;
+}
+
 .border {
   background-color: #efefef;
   bottom: 0;
@@ -32,8 +43,8 @@
 }
 
 .date {
-  width: 12.25rem;
   display: none;
+  width: 12.25rem;
   @media (min-width: $xl) {
     display: inline-block;
   }
