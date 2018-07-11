@@ -188,6 +188,26 @@ export default createFragmentContainer(
         products(first: 100) @connection(key: "Wizard_products") {
           edges {
             node {
+              stocks {
+                id
+                productId
+                warehouseId
+                warehouse {
+                  name
+                  addressFull {
+                    country
+                    administrativeAreaLevel1
+                    administrativeAreaLevel2
+                    political
+                    postalCode
+                    streetNumber
+                    value
+                    route
+                    locality
+                  }
+                }
+                quantity
+              }
               id
               rawId
               price

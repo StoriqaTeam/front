@@ -72,18 +72,32 @@
   margin-left: 1.5rem;
 }
 
+.more {
+  color: $color_grey;
+}
+
+.warehouseName {
+  width: 11rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .storagesItem {
   display: flex;
+  width: 100%;
   font-size: 14px;
   line-height: 20px;
 }
 
 .storagesLabels {
+  width: 100%;
   color: $color_grey_minor;
 }
 
 .storagesValues {
   margin-left: 1.5rem;
+  text-align: right;
 }
 
 .deleteButton {
@@ -100,6 +114,6 @@
 .tdCharacteristics {width: 15%;}
 .tdArticle {width: 20%;}
 .tdPrice {width: 20%;}
-.tdCount {width: 15%; align-items: flex-start;}
+.tdCount {width: 15%; align-items: flex-start; padding-right: 4rem;}
 .tdBasket {width: 5%;}
 .tdDropdawn {width: 5%;}

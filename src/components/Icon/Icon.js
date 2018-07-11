@@ -45,6 +45,7 @@ import Twitter from 'components/Icon/svg/twitter.svg';
 import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
 import Upload from 'components/Icon/svg/upload.svg';
 import VkGray from 'components/Icon/svg/vk_gray.svg';
+import Move from 'components/Icon/svg/move.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -112,6 +113,7 @@ const iconsMap = {
   upload: <Upload />,
   user: <User />,
   vkGray: <VkGray />,
+  move: <Move />,
 
   // For product
   mainFoto: <MainFoto />,

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { pathOr, map } from 'ramda';
+import { pathOr, map, addIndex, isEmpty, filter } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
@@ -20,6 +20,18 @@ type PropsType = {
         name: Array<{ text: string }>,
       },
       value: string,
+    }>,
+    stocks: Array<{
+      id: string,
+      productId: number,
+      warehouseId: string,
+      quantity: number,
+      warehouse: {
+        name: string,
+        addressFull: {
+          value: string,
+        },
+      },
     }>,
   },
   onExpandClick: (id: number) => void,
@@ -45,7 +57,9 @@ class Row extends PureComponent<PropsType> {
       price,
       cashback: cashbackValue,
       attributes: attrs,
+      stocks,
     } = this.props.variant;
+    const filteredStocks = filter(item => item.quantity > 0, stocks);
     const cashback =
       Math.round(cashbackValue * 100) != null
         ? Math.round(cashbackValue * 100)
@@ -71,10 +85,10 @@ class Row extends PureComponent<PropsType> {
             <div styleName="characteristicItem">
               <div styleName="characteristicLabels">
                 {map(item => {
+                  // $FlowIgnoreMe
                   const name = pathOr(
                     '',
                     ['attribute', 'name', 0, 'text'],
-                    // $FlowIgnoreMe
                     item,
                   );
                   return <div key={`attr-${name}`}>{`${name}: `}</div>;
@@ -82,10 +96,10 @@ class Row extends PureComponent<PropsType> {
               </div>
               <div styleName="characteristicValues">
                 {map(item => {
+                  // $FlowIgnoreMe
                   const name = pathOr(
                     '',
                     ['attribute', 'name', 0, 'text'],
-                    // $FlowIgnoreMe
                     item,
                   );
                   const val = item.value;
@@ -97,16 +111,39 @@ class Row extends PureComponent<PropsType> {
           <div styleName="variantItem tdCount">
             <div styleName="storagesItem">
               <div styleName="storagesLabels">
-                <div>1 storage</div>
-                <div>2 storage</div>
+                {addIndex(map)((item, idx) => {
+                  // $FlowIgnoreMe
+                  const warehouseName = pathOr('', ['warehouse', 'name'], item);
+                  return idx >= 2 ? (
+                    false
+                  ) : (
+                    <div key={item.id} styleName="warehouseName">
+                      {warehouseName}
+                    </div>
+                  );
+                }, filteredStocks)}
+                {!isEmpty(filteredStocks) &&
+                  filteredStocks.length > 2 && (
+                    <div styleName="more">
+                      {`+${filteredStocks.length - 2} ${
+                        filteredStocks.length > 3 ? 'storages' : 'storage'
+                      }`}
+                    </div>
+                  )}
+                {isEmpty(filteredStocks) && <div>No storages</div>}
               </div>
               <div styleName="storagesValues">
-                <div>
-                  <strong>56</strong>
-                </div>
-                <div>
-                  <strong>67</strong>
-                </div>
+                {addIndex(map)(
+                  (item, idx) =>
+                    idx >= 2 ? (
+                      false
+                    ) : (
+                      <div key={item.id}>
+                        <strong>{item.quantity}</strong>
+                      </div>
+                    ),
+                  filteredStocks,
+                )}
               </div>
             </div>
           </div>

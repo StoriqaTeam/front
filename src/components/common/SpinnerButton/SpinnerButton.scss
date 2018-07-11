@@ -20,11 +20,11 @@
     background-color: $color_blue_hover;
   }
   &.small {
+    min-width: auto;
     font-size: 14px;
-    height: 4rem;
-    min-width: 11rem;
-    line-height: 4rem;
-    padding: 0 1.25rem;
+    height: 2.75rem;
+    line-height: 2.75rem;
+    padding: 0 1.5rem;
   }
   &.white {
     font-family: $font_regular;
@@ -42,6 +42,12 @@
     .spinner {
       opacity: 1;
     }
+  }
+
+  &.disabled {
+    background-color: $color_grey_trivial;
+    color: $color_grey_minor;
+    cursor: default;
   }
 }
 

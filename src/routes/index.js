@@ -14,6 +14,12 @@ import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
 import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
 import { Products } from 'pages/Manage/Store/Products';
+import { Storages } from 'pages/Manage/Store/Storages';
+import {
+  NewStorage,
+  EditStorage,
+  StorageProducts,
+} from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
@@ -322,6 +328,66 @@ const routes = (
             `}
             prepareVariables={(_, { params }) => ({
               productID: parseInt(params.productId, 10) || 0,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storages"
+            Component={Storages}
+            query={graphql`
+              query routes_Storages_Query {
+                me {
+                  ...Storages_me
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeId: parseInt(params.storeId, 10) || 0,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storage/new"
+            Component={NewStorage}
+            query={graphql`
+              query routes_NewStorage_Query($storeId: Int!) {
+                me {
+                  ...NewStorage_me @arguments(storeId: $storeId)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storeId: parseInt(params.storeId, 10) || 0,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storages/:storageSlug"
+            Component={StorageProducts}
+            query={graphql`
+              query routes_StorageProducts_Query($storageSlug: String!) {
+                me {
+                  ...StorageProducts_me @arguments(storageSlug: $storageSlug)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storageSlug: params.storageSlug,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storages/:storageSlug/edit"
+            Component={EditStorage}
+            query={graphql`
+              query routes_EditStorage_Query($storageSlug: String!) {
+                me {
+                  ...EditStorage_me @arguments(storageSlug: $storageSlug)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storageSlug: params.storageSlug,
             })}
           />
         </Route>
