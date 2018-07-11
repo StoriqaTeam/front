@@ -15,6 +15,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
 
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
@@ -25,6 +26,7 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
+import PaymentPopup from './PaymentPopup';
 
 import CartStore from '../Cart/CartStore';
 
@@ -47,6 +49,8 @@ type StateType = {
     addressFull: AddressFullType,
     receiverName: string,
   },
+  isPaymentPopupShown: boolean,
+  paymentPageUrl: ?string,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -71,6 +75,8 @@ class Checkout extends Component<PropsType, StateType> {
       },
       receiverName: '',
     },
+    isPaymentPopupShown: false,
+    paymentPageUrl: null,
   };
 
   setStoresRef(ref) {
@@ -80,6 +86,10 @@ class Checkout extends Component<PropsType, StateType> {
   }
 
   storesRef: any;
+
+  showPaymentPopup = (url: string) => {
+    this.setState({ isPaymentPopupShown: true, paymentPageUrl: url });
+  };
 
   handleChangeStep = step => () => this.setState({ step });
 
@@ -101,7 +111,7 @@ class Checkout extends Component<PropsType, StateType> {
     CreateOrdersMutation.commit({
       input: { clientMutationId: '', addressFull, receiverName },
       environment: this.context.environment,
-      onCompleted: (response, errors) => {
+      onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
         log.debug('Success for DeleteFromCart mutation');
         if (response) {
           log.debug('Response: ', response);
@@ -110,7 +120,7 @@ class Checkout extends Component<PropsType, StateType> {
             text: 'Orders successfully created',
             link: { text: 'Close.' },
           });
-          this.props.router.push('/profile/orders');
+          this.showPaymentPopup(response.createOrders.billingUrl);
         }
         if (errors) {
           log.debug('Errors: ', errors);
@@ -141,6 +151,12 @@ class Checkout extends Component<PropsType, StateType> {
     return true;
   };
 
+  handlePaymentPopupClose = () => {
+    this.setState({ isPaymentPopupShown: true, paymentPageUrl: null }, () => {
+      this.props.router.push('/profile/orders');
+    });
+  };
+
   render() {
     const { me } = this.props;
     // $FlowIgnore
@@ -160,6 +176,14 @@ class Checkout extends Component<PropsType, StateType> {
     )(this.props);
     return (
       <Container withoutGrow>
+        {this.state.paymentPageUrl && (
+          <PaymentPopup
+            onCloseClicked={this.handlePaymentPopupClose}
+            isShown={this.state.isPaymentPopupShown}
+            // url={this.state.paymentPageUrl}
+            url="http://localhost:3003"
+          />
+        )}
         <Row withoutGrow>
           <Col size={12}>
             <CheckoutHeader
