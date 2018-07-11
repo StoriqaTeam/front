@@ -3,10 +3,9 @@
 $burger_menu_size: 7.5rem;
 
 .container {
-  border-bottom: 1px solid $color_grey_light;
+  // border-bottom: 1px solid $color_grey_light;
   margin: 0 auto;
   max-width: 170rem;
-  // overflow: hidden;
   padding-bottom: 2rem;
   position: relative;
   transition: padding-bottom 0.2s ease;
