@@ -162,31 +162,35 @@ class Checkout extends Component<PropsType, StateType> {
       <Container withoutGrow>
         <Row withoutGrow>
           <Col size={12}>
-            <CheckoutHeader
-              currentStep={step}
-              isReadyToNext={this.checkReadyToCheckout()}
-              onChangeStep={this.handleChangeStep}
-            />
+            <div styleName="headerWrapper">
+              <CheckoutHeader
+                currentStep={step}
+                isReadyToNext={this.checkReadyToCheckout()}
+                onChangeStep={this.handleChangeStep}
+              />
+            </div>
           </Col>
           <Col size={12}>
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
-                <Col size={9}>
-                  {step === 1 && (
-                    <div styleName="container">
-                      <CheckoutAddress
-                        me={me}
-                        isAddressSelect={isAddressSelect}
-                        isNewAddress={isNewAddress}
-                        onChangeAddressType={this.handleOnChangeAddressType}
-                        deliveryAddresses={deliveryAddresses || []}
-                        orderInput={orderInput}
-                        onChangeOrderInput={this.handleOnChangeOrderInput}
-                      />
-                    </div>
-                  )}
+                <Col size={12} md={8} lg={9}>
+                  <div styleName="wrapper">
+                    {step === 1 && (
+                      <div styleName="container">
+                        <CheckoutAddress
+                          me={me}
+                          isAddressSelect={isAddressSelect}
+                          isNewAddress={isNewAddress}
+                          onChangeAddressType={this.handleOnChangeAddressType}
+                          deliveryAddresses={deliveryAddresses || []}
+                          orderInput={orderInput}
+                          onChangeOrderInput={this.handleOnChangeOrderInput}
+                        />
+                      </div>
+                    )}
+                  </div>
                   {step === 2 && (
-                    <div>
+                    <div styleName="wrapper">
                       <div styleName="container">
                         <CheckoutProducts
                           me={me}
@@ -208,7 +212,7 @@ class Checkout extends Component<PropsType, StateType> {
                     </div>
                   )}
                 </Col>
-                <Col size={3}>
+                <Col size={12} md={4} lg={3}>
                   <CheckoutSidebar
                     storesRef={this.state.storesRef}
                     buttonText={step === 1 ? 'Next' : 'Checkout'}
@@ -233,7 +237,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout))),
+  Page(withShowAlert(withRouter(Checkout)), true),
   graphql`
     fragment Checkout_me on User {
       id

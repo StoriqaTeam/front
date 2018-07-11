@@ -13,7 +13,7 @@ type PropsType = {
   onChangeStep: Function,
 };
 
-const CheckoutContent = ({ orderInput, me, onChangeStep }: PropsType) => (
+const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
@@ -55,4 +55,4 @@ const CheckoutContent = ({ orderInput, me, onChangeStep }: PropsType) => (
   </Row>
 );
 
-export default CheckoutContent;
+export default CheckoutProducts;
