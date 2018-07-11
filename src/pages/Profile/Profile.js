@@ -4,7 +4,7 @@ import React, { Component, cloneElement } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, find, propEq } from 'ramda';
 
-import { Page } from 'components/App';
+import { AppContext, Page } from 'components/App';
 import {
   PersonalData,
   ShippingAddresses,
@@ -66,31 +66,38 @@ class Profile extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const { title: subtitle } = find(propEq('id', activeItem), menuItems);
     return (
-      <div styleName="container">
-        <Container>
-          <Row>
-            <Col sm={3} md={3} lg={2} xl={2}>
-              <Menu
-                activeItem={activeItem}
-                avatar={me.avatar}
-                firstName={me.firstName || ''}
-                id={me.id}
-                lastName={me.lastName || ''}
-                menuItems={menuItems}
-                provider={me.provider || null}
-              />
-            </Col>
-            <Col sm={9} md={9} lg={10} xl={10}>
-              <div styleName="content">
-                <div styleName="header">
-                  <span styleName="title">Profile</span>
-                </div>
-                <div styleName="form">{this.renderProfileItem(subtitle)}</div>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <AppContext.Consumer>
+        {({ environment }) => (
+          <div styleName="container">
+            <Container>
+              <Row>
+                <Col sm={3} md={3} lg={2} xl={2} mdVisible>
+                  <Menu
+                    environment={environment}
+                    activeItem={activeItem}
+                    avatar={me.avatar}
+                    firstName={me.firstName || ''}
+                    id={me.id}
+                    lastName={me.lastName || ''}
+                    menuItems={menuItems}
+                    provider={me.provider || null}
+                  />
+                </Col>
+                <Col sm={9} md={9} lg={10} xl={10}>
+                  <div styleName="content">
+                    <div styleName="header">
+                      <span styleName="title">Profile</span>
+                    </div>
+                    <div styleName="form">
+                      {this.renderProfileItem(subtitle)}
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        )}
+      </AppContext.Consumer>
     );
   }
 }

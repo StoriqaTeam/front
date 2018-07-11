@@ -1,9 +1,9 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
+import type { Environment } from 'relay-runtime';
 
 import { Collapse } from 'components/Collapse';
 import { Icon } from 'components/Icon';
@@ -26,10 +26,11 @@ type PropsType = {
   avatar: ?string,
   id: string,
   provider: ?string,
+  environment: Environment,
 };
 
 class Menu extends PureComponent<PropsType> {
-  handleOnUpload = async (e: any) => {
+  handleOnUpload = async (e: any): Promise<any> => {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
@@ -39,8 +40,8 @@ class Menu extends PureComponent<PropsType> {
     }
   };
 
-  handleUpdateUser = (avatar: string) => {
-    const { environment } = this.context;
+  handleUpdateUser = (avatar: string): void => {
+    const { environment } = this.props;
 
     const params: MutationParamsType = {
       input: {
@@ -54,12 +55,12 @@ class Menu extends PureComponent<PropsType> {
         gender: null,
       },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?Object, errors: ?Array<any>): void => {
         log.debug({ response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
       },
-      onError: (error: Error) => {
+      onError: (error: Error): void => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
@@ -85,7 +86,7 @@ class Menu extends PureComponent<PropsType> {
       provider,
     } = this.props;
     return (
-      <sidebar styleName="container">
+      <aside styleName="container">
         <h3 styleName="offscreen">Profile Menu</h3>
         <div styleName="mobileMenu">
           <Collapse items={menuItems} onSelected={this.handleSelected} />
@@ -148,13 +149,9 @@ class Menu extends PureComponent<PropsType> {
             );
           })}
         </div>
-      </sidebar>
+      </aside>
     );
   }
 }
-
-Menu.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
 
 export default withRouter(Menu);
