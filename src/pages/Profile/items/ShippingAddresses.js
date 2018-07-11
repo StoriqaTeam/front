@@ -7,7 +7,6 @@ import { assocPath, map, assoc } from 'ramda';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
-import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -151,6 +150,8 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     const createInput = { ...input, userId: data.rawId };
     const updateInput = { ...input, id };
 
+    // return;
+
     // $FlowIgnoreMe
     const params: UpdateMutationParamsType | CreateMutationParamsType = {
       input: id ? updateInput : createInput,
@@ -174,9 +175,10 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         }));
         this.props.showAlert({
           type: 'success',
-          text: id ? 'Address update!' : 'Address create!',
+          text: id ? 'Address updated!' : 'Address created!',
           link: { text: '' },
         });
+        this.resetForm();
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -214,7 +216,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         this.resetForm();
         this.props.showAlert({
           type: 'success',
-          text: 'Address delete!',
+          text: 'Address deleted!',
           link: { text: '' },
         });
       },
@@ -269,7 +271,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   resetForm = () => {
-    this.setState({ form: resetForm });
+    this.setState({
+      form: resetForm,
+    });
   };
 
   renderAddressForm = () => {
@@ -292,16 +296,17 @@ class ShippingAddresses extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="saveButtons">
-          <SpinnerButton
-            white
+          <Button
+            big
+            wireframe={!editableAddressId}
             onClick={() => {
               this.handleSave(editableAddressId || null);
             }}
             isLoading={isLoading}
-            dataTest="addShippingAddressButton"
+            dataTest="saveShippingAddressButton"
           >
             {editableAddressId ? 'Save' : 'Add'}
-          </SpinnerButton>
+          </Button>
           {(editableAddressId || isOpenNewForm) && (
             <div
               styleName="cancelButton"
@@ -340,6 +345,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
               wireframe
               big
               onClick={this.toggleNewAddressForm}
+              dataTest="addShippingAddressButton"
             >
               Add address
             </Button>
@@ -389,19 +395,22 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                           onClick={() => {
                             this.toggleEditAddressForm(item.rawId, item);
                           }}
+                          dataTest="editShippingAddressButton"
                         >
                           Edit
                         </Button>
-                        <div
-                          styleName="cancelButton"
-                          onClick={() => {
-                            this.handleDelete(item.rawId);
-                          }}
-                          onKeyDown={() => {}}
-                          role="button"
-                          tabIndex="0"
-                        >
-                          Delete address
+                        <div styleName="deleteButton">
+                          <Button
+                            big
+                            pink
+                            wireframe
+                            onClick={() => {
+                              this.handleDelete(item.rawId);
+                            }}
+                            dataTest="deleteShippingAddressButton"
+                          >
+                            Delete
+                          </Button>
                         </div>
                       </div>
                     </div>

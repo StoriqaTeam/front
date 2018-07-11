@@ -104,13 +104,18 @@ $max-width: 41rem !important;
 .cancelButton {
   margin-left: 3rem;
   font-size: 16px;
-  color: $color_grey_minor;
+  color: $color_blue;
   cursor: pointer;
   transition: $transition_all_ease;
 
   &:hover {
-    color: $color_grey;
+    color: $color_blue_hover;
   }
+}
+
+
+.deleteButton {
+  margin-left: 3rem;
 }
 
 .addButton {
