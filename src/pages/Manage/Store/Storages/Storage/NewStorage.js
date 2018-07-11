@@ -68,8 +68,6 @@ class NewStorage extends Component<PropsType, StateType> {
   }
 
   handleSave = (data: { name: string, addressFull: AddressFullType }) => {
-    log.info('---data', data);
-    // return;
     const { environment } = this.context;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
@@ -132,9 +130,7 @@ class NewStorage extends Component<PropsType, StateType> {
   };
 
   render() {
-    // const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     const { name, addressFull, isLoading, formErrors } = this.state;
-    console.log('---this.props', this.props);
     return (
       <div styleName="container">
         <Form
@@ -153,8 +149,6 @@ class NewStorage extends Component<PropsType, StateType> {
 NewStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
-
-// export default withShowAlert(Page(ManageStore(NewStorage, 'Storages', 'Add new storage')));
 
 export default createFragmentContainer(
   withShowAlert(Page(ManageStore(NewStorage, 'Storages', 'Add new storage'))),

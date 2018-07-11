@@ -20,6 +20,7 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
+import Warehouses from './Warehouses';
 
 import './Form.scss';
 
@@ -56,6 +57,18 @@ type PropsType = {
     cashback?: ?number,
     photoMain?: ?string,
     additionalPhotos?: Array<string>,
+    stocks: {
+      id: string,
+      productId: number,
+      warehouseId: string,
+      quantity: number,
+      warehouse: {
+        name: string,
+        addressFull: {
+          value: string,
+        },
+      },
+    },
   },
   onExpandClick: (id: string) => void,
   handleCollapseVariant: () => void,
@@ -403,22 +416,7 @@ class Form extends Component<PropsType, StateType> {
           <span styleName="inputPostfix">%</span>
         </div>
         <div styleName="variantItem tdCharacteristics" />
-        <div styleName="variantItem tdCount">
-          <div styleName="storagesItem">
-            <div styleName="storagesLabels">
-              <div>1 storage</div>
-              <div>2 storage</div>
-            </div>
-            <div styleName="storagesValues">
-              <div>
-                <strong>56</strong>
-              </div>
-              <div>
-                <strong>67</strong>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div styleName="variantItem tdCount" />
         <div styleName="variantItem tdBasket" />
         <div styleName="variantItem tdDropdawn">
           <button styleName="arrowExpand" onClick={this.toggleDropdownVariant}>
@@ -430,6 +428,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { category, variant } = this.props;
     const { photos = [], mainPhoto } = this.state;
     return (
       <div styleName="container">
@@ -439,13 +438,14 @@ class Form extends Component<PropsType, StateType> {
           onAddPhoto={this.handleAddPhoto}
         />
         <Characteristics
-          category={this.props.category}
+          category={category}
           values={this.state.attributeValues || []}
           onChange={this.onChangeValues}
         />
+        {variant && <Warehouses stocks={variant.stocks} />}
         <Button
           type="button"
-          onClick={this.props.variant ? this.handleUpdate : this.handleCreate}
+          onClick={variant ? this.handleUpdate : this.handleCreate}
           dataTest="variantsProductSaveButton"
         >
           Save

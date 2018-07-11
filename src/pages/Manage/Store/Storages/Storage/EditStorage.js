@@ -19,7 +19,6 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import Form from './Form';
 
 import './EditStorage.scss';
-import storage from './storage.json';
 
 type AddressFullType = {
   administrativeAreaLevel1: ?string,
@@ -50,30 +49,30 @@ type StateType = {
 class EditStorage extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    // $FlowIgnoreMe
+    const warehouse = pathOr({}, ['me', 'warehouse'], this.props);
     this.state = {
       isLoading: false,
       formErrors: {},
-      name: storage.name,
-      addressFull: storage.addressFull,
+      name: warehouse.name,
+      addressFull: warehouse.addressFull,
     };
   }
 
   handleSave = (data: { name: string, addressFull: AddressFullType }) => {
-    log.info('---data', data);
-    // return;
     const { environment } = this.context;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
+    // $FlowIgnoreMe
+    const id = pathOr(null, ['me', 'warehouse', 'id'], this.props);
     const params: MutationParamsType = {
       input: {
         clientMutationId: '',
-        storeId: parseInt(storeId, 10),
-        id: storage.id,
+        id,
         name: data.name,
         addressFull: {
           ...data.addressFull,
         },
-        kind: 'STORE',
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -102,6 +101,7 @@ class EditStorage extends Component<PropsType, StateType> {
           text: 'Storage update!',
           link: { text: '' },
         });
+        this.props.router.push(`/manage/store/${storeId}/storages`);
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -124,7 +124,6 @@ class EditStorage extends Component<PropsType, StateType> {
   };
 
   render() {
-    // const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     const { name, addressFull, isLoading, formErrors } = this.state;
     return (
       <div styleName="container">
@@ -145,32 +144,27 @@ EditStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-// export default withShowAlert(Page(ManageStore(EditStorage, 'Storages', 'Add new storage')));
-
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(EditStorage, 'Storages', 'Add new storage'))),
+  withShowAlert(Page(ManageStore(EditStorage, 'Storages', 'Edit storage'))),
   graphql`
     fragment EditStorage_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
+      @argumentDefinitions(storageSlug: { type: "String!" }) {
+      warehouse(slug: $storageSlug) {
         id
-        rawId
-        name {
-          lang
-          text
-        }
-        logo
-        slogan
-        defaultLanguage
+        name
         slug
-        shortDescription {
-          lang
-          text
+        addressFull {
+          country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          political
+          postalCode
+          streetNumber
+          value
+          route
+          locality
         }
-        longDescription {
-          lang
-          text
-        }
+        storeId
       }
     }
   `,

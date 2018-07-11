@@ -15,7 +15,11 @@ import Start from 'pages/Start/Start';
 import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
 import { Products } from 'pages/Manage/Store/Products';
 import { Storages } from 'pages/Manage/Store/Storages';
-import { NewStorage, EditStorage } from 'pages/Manage/Store/Storages/Storage';
+import {
+  NewStorage,
+  EditStorage,
+  StorageProducts,
+} from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
@@ -315,17 +319,32 @@ const routes = (
           />
 
           <Route
-            path="/:storeId/storages/:storageId"
-            Component={EditStorage}
+            path="/:storeId/storages/:storageSlug"
+            Component={StorageProducts}
             query={graphql`
-              query routes_EditStorage_Query($storeId: Int!) {
+              query routes_StorageProducts_Query($storageSlug: String!) {
                 me {
-                  ...EditStorage_me @arguments(storeId: $storeId)
+                  ...StorageProducts_me @arguments(storageSlug: $storageSlug)
                 }
               }
             `}
             prepareVariables={(_, { params }) => ({
-              storeId: parseInt(params.storeId, 10) || 0,
+              storageSlug: params.storageSlug,
+            })}
+          />
+
+          <Route
+            path="/:storeId/storages/:storageSlug/edit"
+            Component={EditStorage}
+            query={graphql`
+              query routes_EditStorage_Query($storageSlug: String!) {
+                me {
+                  ...EditStorage_me @arguments(storageSlug: $storageSlug)
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              storageSlug: params.storageSlug,
             })}
           />
         </Route>

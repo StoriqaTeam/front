@@ -13,10 +13,15 @@
 
 .fullWidth {
   width: 100%;
+
   input {
     width: 100%!important;
     min-width: 100%!important;
   }
+}
+
+.inline {
+  margin-top: 0;
 }
 
 .label {
@@ -47,6 +52,20 @@
 
 .isIcon .labelFloat {
   left: 0;
+}
+
+.isSearch {
+  & svg {
+    fill: $color_grey_minor;
+  }
+}
+
+.isFocus {
+  &.isSearch {
+    & svg {
+      fill: $color_blue_hover;
+    }
+  }
 }
 
 .isError.isFocus .labelFloat {

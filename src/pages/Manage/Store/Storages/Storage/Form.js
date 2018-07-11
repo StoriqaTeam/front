@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { isEmpty, omit, pathOr, propOr } from 'ramda';
+import { omit, propOr } from 'ramda';
 
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';

@@ -208,9 +208,24 @@ class Form extends Component<PropsType, StateType> {
   handleOnChangeData = () => {
     const { onChangeData } = this.props;
     const { address, country, autocompleteValue } = this.state;
-    if (onChangeData) {
+    if (onChangeData && address) {
+      // $FlowIgnore
       onChangeData({
-        ...address,
+        ...pick(
+          [
+            'value',
+            'country',
+            'administrativeAreaLevel1',
+            'administrativeAreaLevel2',
+            'locality',
+            'political',
+            'postalCode',
+            'route',
+            'streetNumber',
+            'placeId',
+          ],
+          address,
+        ),
         country: country ? country.label : null,
         value: autocompleteValue,
       });

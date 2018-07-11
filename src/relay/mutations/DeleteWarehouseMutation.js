@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { filter } from 'ramda';
 import type {
   DeleteWarehouseMutationVariables,
   DeleteWarehouseMutationResponse,
@@ -29,10 +30,21 @@ const commit = (params: MutationParamsType) =>
   commitMutation(params.environment, {
     mutation,
     variables: {
-      input: params.input,
+      id: params.id,
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    updater: relayStore => {
+      const storageId = relayStore
+        .getRootField('deleteWarehouse')
+        .getValue('id');
+      relayStore.delete(storageId);
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      const myStore = me.getLinkedRecord('myStore');
+      const storages = myStore.getLinkedRecords('warehouses');
+      const newStorages = filter(storage => storage !== null, storages);
+      myStore.setLinkedRecords(newStorages, 'warehouses');
+    },
   });
 
 export default { commit };

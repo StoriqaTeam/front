@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import "../../../../../styles/variables";
 
 .container {
   margin-top: 2rem;
@@ -55,11 +55,17 @@
 }
 
 .tdCheckbox {width: 5%;}
-.tdStorage {width: 25%;}
-.tdAddress {width: 62%; color: $color_grey_minor;}
-.tdEdit {width: 4%; justify-content: flex-end;}
-.tdDelete {width: 4%; justify-content: flex-end;}
+.tdFoto {width: 9%;}
+.tdName {width: 21%;}
+.tdCategory {width: 10%;}
+.tdPrice {width: 14%;}
+.tdCharacteristics {width: 20%;}
+.tdQuantity {width: 17%;}
+.tdMove {width: 4%;}
 
+.tdQuantity {
+  display: flex;
+}
 
 .headerRowWrap {
   padding: 2rem 4rem;
@@ -72,13 +78,6 @@
 .itemRowWrap {
   min-height: 11.75rem;
   padding: 1rem 4rem;
-  cursor: pointer;
-
-  &:hover {
-    & .dropdownButton {
-      & svg {fill: $color_grey;}
-    }
-  }
 
   .foto {
     position: relative;
@@ -107,7 +106,7 @@
   }
 }
 
-.deleteButton, .editButton {
+.moveButton {
   & svg {
     fill: $color_grey_light;
     transition: $transition_all_ease;
@@ -116,23 +115,14 @@
   &:hover svg {fill: $color_grey;}
 }
 
-.dropdownButton {
-  & svg {
-    fill: $color_grey_minor;
-    transition: $transition_all_ease;
-  }
+.quantityInput {
+  width: 6rem;
+  margin-right: 2rem;
 }
 
-.loadButton {
-  margin-top: 4rem;
-}
-
-.address {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.emptyStoragesBlock {
-  line-height: 11rem;
+.searchInput {
+  position: absolute;
+  top: -2rem;
+  right: 1rem;
+  width: 30rem;
 }

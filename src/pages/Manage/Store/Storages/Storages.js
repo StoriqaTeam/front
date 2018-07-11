@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, isEmpty, map } from 'ramda';
 import { withRouter, routerShape } from 'found';
-import { graphql, Relay, createFragmentContainer } from 'react-relay';
+import { graphql, createFragmentContainer } from 'react-relay';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -19,9 +19,19 @@ import type { MutationParamsType } from 'relay/mutations/DeleteWarehouseMutation
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { Storages_me as StoragesMeType } from './__generated__/Storages_me.graphql';
 
-// import storages from './storages.json';
-
 import './Storages.scss';
+
+type AddressFullType = {
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  country: string,
+  locality: ?string,
+  political: ?string,
+  postalCode: string,
+  route: ?string,
+  streetNumber: ?string,
+  value: ?string,
+};
 
 type PropsType = {
   router: routerShape,
@@ -39,22 +49,24 @@ class Storages extends PureComponent<PropsType> {
     }
   };
 
-  editStorage = (id: number) => {
+  editStorage = (slug: ?string, isStorageData: boolean, e: any) => {
+    e.stopPropagation();
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
-    if (storeId) {
-      this.props.router.push(`/manage/store/${storeId}/storages/${id}`);
+    if (storeId && slug) {
+      this.props.router.push(
+        `/manage/store/${storeId}/storages/${slug}${
+          isStorageData ? '/edit' : ''
+        }`,
+      );
     }
   };
 
-  handleDelete = (id: string) => {
-    log.info('---id', id);
+  handleDelete = (id: string, e: any) => {
+    e.stopPropagation();
     const { environment } = this.context;
     const params: MutationParamsType = {
-      input: {
-        clientMutationId: '',
-        id,
-      },
+      id,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -83,7 +95,7 @@ class Storages extends PureComponent<PropsType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Saved!',
+          text: 'Storage delete!',
           link: { text: '' },
         });
       },
@@ -129,31 +141,52 @@ class Storages extends PureComponent<PropsType> {
     </div>
   );
 
-  renderRows = (item: { id: string, name: string, addressFull: any }) => {
-    const { id, name, addressFull } = item;
+  renderRows = (item: {
+    id: string,
+    name: string,
+    slug: string,
+    addressFull: AddressFullType,
+  }) => {
+    const { id, name, slug, addressFull } = item;
+    const { country, locality, value } = addressFull;
     return (
-      <div key={item.id} styleName="itemRowWrap">
+      <div
+        key={item.id}
+        styleName="itemRowWrap"
+        onClick={(e: any) => {
+          this.editStorage(slug, false, e);
+        }}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+      >
         <div styleName="td tdCheckbox">
-          <Checkbox id={`storage-${item.id}`} onChange={() => {}} />
+          <span
+            onClick={(e: any) => {
+              this.editStorage(null, false, e);
+            }}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="0"
+          >
+            <Checkbox id={`storage-${item.id}`} onChange={() => {}} />
+          </span>
         </div>
         <div styleName="td tdStorage">
           <div>{name}</div>
         </div>
         <div styleName="td tdAddress">
           <div styleName="address">
-            <span>{`${addressFull.country}`}</span>
-            <span>{addressFull.locality && `, ${addressFull.locality}`}</span>
-            <span>{addressFull.route && `, ${addressFull.route}`}</span>
-            <span>
-              {addressFull.streetNumber && `, ${addressFull.streetNumber}`}
-            </span>
+            <span>{`${country}`}</span>
+            {locality && <span>{`, ${locality}`}</span>}
+            {value && <span>{`, ${value}`}</span>}
           </div>
         </div>
         <div styleName="td tdEdit">
           <button
             styleName="editButton"
-            onClick={() => {
-              this.editStorage(id);
+            onClick={(e: any) => {
+              this.editStorage(slug, true, e);
             }}
           >
             <Icon type="note" size={32} />
@@ -162,8 +195,8 @@ class Storages extends PureComponent<PropsType> {
         <div styleName="td tdDelete">
           <button
             styleName="deleteButton"
-            onClick={() => {
-              this.handleDelete(id);
+            onClick={(e: any) => {
+              this.handleDelete(id, e);
             }}
           >
             <Icon type="basket" size="32" />
@@ -174,9 +207,9 @@ class Storages extends PureComponent<PropsType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
+    const { me } = this.props;
     // $FlowIgnoreMe
-    const storages = pathOr([], ['me', 'myStore', 'warehouses'], this.props);
+    const storages = pathOr([], ['myStore', 'warehouses'], me);
     return (
       <div styleName="container">
         <div styleName="addButton">
@@ -189,20 +222,14 @@ class Storages extends PureComponent<PropsType> {
         </div>
         <div>
           <div>{this.renderHeaderRow()}</div>
-          <div>{map(item => this.renderRows(item), storages)}</div>
-        </div>
-        {/* this.props.relay.hasMore() && (
-          <div styleName="loadButton">
-            <Button
-              big
-              load
-              onClick={this.storagesRefetch}
-              dataTest="searchProductLoadMoreButton"
-            >
-              Load more
-            </Button>
+          <div>
+            {isEmpty(storages) ? (
+              <div styleName="emptyStoragesBlock">No storages</div>
+            ) : (
+              map(item => this.renderRows(item), storages)
+            )}
           </div>
-        )} */}
+        </div>
       </div>
     );
   }
@@ -212,8 +239,6 @@ Storages.contextTypes = {
   environment: PropTypes.object.isRequired,
   showAlert: PropTypes.func,
 };
-
-// export default withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages'))));
 
 export default createFragmentContainer(
   withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages')))),
@@ -229,6 +254,7 @@ export default createFragmentContainer(
         warehouses {
           id
           name
+          slug
           addressFull {
             country
             administrativeAreaLevel1
