@@ -12,4 +12,5 @@ export type ProductType = {
   variants: {
     all: Array<VariantType>,
   },
+  rating: number,
 };

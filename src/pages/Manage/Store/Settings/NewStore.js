@@ -69,6 +69,7 @@ class NewStore extends Component<PropsType, StateType> {
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
+        this.setState({ isLoading: false });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
@@ -119,6 +120,7 @@ class NewStore extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         log.error(error);
+        this.setState({ isLoading: false });
         this.props.showAlert({
           type: 'danger',
           text: 'Something going wrong.',
