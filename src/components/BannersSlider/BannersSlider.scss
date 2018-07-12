@@ -1,10 +1,4 @@
 .container {
-  margin-top: 2rem;
   padding: 0 2rem;
   position: relative;
-
-  @media (min-width: 992px) {
-    margin-top: 0;
-  }
-
 }
