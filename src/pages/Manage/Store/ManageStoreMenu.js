@@ -171,7 +171,7 @@ class Menu extends PureComponent<PropsType> {
             buttonWidth={26}
             buttonIconSize={48}
             buttonIconType="upload"
-            buttonLabel="Click to download logo"
+            buttonLabel="Click to upload logo"
             overPicture={convertSrc(storeLogo, 'medium') || null}
             dataTest="storeImgUploader"
           />

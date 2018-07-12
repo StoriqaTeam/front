@@ -148,12 +148,20 @@ class Row extends PureComponent<PropsType> {
             </div>
           </div>
           <div styleName="variantItem tdBasket">
-            <button styleName="deleteButton" onClick={this.handleDelete}>
+            <button
+              styleName="deleteButton"
+              onClick={this.handleDelete}
+              data-test="deleteVariantButton"
+            >
               <Icon type="basket" size="32" />
             </button>
           </div>
           <div styleName="variantItem tdDropdawn">
-            <button styleName="arrowExpand" onClick={this.handleExpandClick}>
+            <button
+              styleName="arrowExpand"
+              onClick={this.handleExpandClick}
+              data-test="toggleOpenVariantButton"
+            >
               <Icon inline type="arrowExpand" />
             </button>
           </div>

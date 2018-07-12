@@ -63,8 +63,8 @@ class SecondForm extends React.Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['initialData', 'storeId'], nextProps);
     const newState = {
-      ...nextProps.initialData,
       ...prevState,
+      ...nextProps.initialData,
       store,
       storeId,
     };

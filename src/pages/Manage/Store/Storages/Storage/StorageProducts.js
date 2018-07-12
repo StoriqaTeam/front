@@ -383,6 +383,7 @@ class StorageProducts extends Component<PropsType, StateType> {
                 onClick={() => {
                   this.handleSave(productId);
                 }}
+                dataTest="saveQuantityButton"
               >
                 Save
               </Button>
