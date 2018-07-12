@@ -21,6 +21,7 @@ import { CategoriesMenu } from 'components/CategoriesMenu';
 import { Container, Row, Col } from 'layout';
 
 import { setWindowTag } from 'utils';
+import type { DirectoriesType } from 'types';
 
 import { HeaderTop, AuthButtons, MobileSearchMenu } from './index';
 
@@ -197,7 +198,8 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     );
   };
 
-  makeCategories = (directories: any) =>
+  makeCategories = (directories: DirectoriesType) =>
+    // $FlowIgnore
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
@@ -237,7 +239,6 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               expand: isMobileCategoriesOpen,
             })}
           >
-            <pre>{JSON.stringify(directories, null, 2)}</pre>
             <MobileSearchMenu
               isOpen={isMobileSearchOpen}
               searchCategories={searchCategories}
@@ -305,6 +306,10 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                   </Col>
                 </Row>
               </div>
+              {this.makeCategories(directories) &&
+              !withoutCategories && (
+                <CategoriesMenu categories={this.makeCategories(directories)} />
+              )}
             </Container>
             <Modal showModal={showModal} onClose={this.handleCloseModal}>
               <Authorization
@@ -318,10 +323,6 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                 items={searchCategories}
               />
             ) : null}
-            {this.makeCategories(directories) &&
-              !withoutCategories && (
-                <CategoriesMenu categories={this.makeCategories(directories)} />
-              )}
           </header>
         )}
       </AppContext.Consumer>

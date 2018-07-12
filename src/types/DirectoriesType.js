@@ -1,5 +1,10 @@
 // @flow
-import type { CategoryType, CurrencyType, LanguageType, OrderStatusesType } from './index'
+import type {
+  CategoryType,
+  CurrencyType,
+  LanguageType,
+  OrderStatusesType,
+} from './index';
 
 export type DirectoriesType = {
   categories: CategoryType,

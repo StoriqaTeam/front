@@ -7,5 +7,5 @@ export type OrderStatusesType = [
   'SENT',
   'DELIVERED',
   'RECEIVED',
-  'COMPLETE'
+  'COMPLETE',
 ];

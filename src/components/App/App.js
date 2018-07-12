@@ -13,7 +13,13 @@ import { currentUserShape } from 'utils/shapes';
 import type { AlertPropsType } from 'components/Alerts';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
-import type { CategoryType, LanguageType, CurrencyType, OrderStatusesType, DirectoriesType } from 'types'
+import type {
+  CategoryType,
+  LanguageType,
+  CurrencyType,
+  OrderStatusesType,
+  DirectoriesType,
+} from 'types';
 
 import { AppContext } from './index';
 
