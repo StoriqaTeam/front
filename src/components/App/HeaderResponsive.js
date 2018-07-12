@@ -7,6 +7,7 @@ import { pathOr } from 'ramda';
 import classNames from 'classnames';
 import type { Environment } from 'relay-runtime';
 
+import { AppContext } from 'components/App';
 import { Authorization } from 'components/Authorization';
 import { CartButton } from 'components/CartButton';
 import { Icon } from 'components/Icon';
@@ -15,6 +16,7 @@ import { MobileMenu } from 'components/MobileMenu';
 import { Modal } from 'components/Modal';
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
+import { CategoriesMenu } from 'components/CategoriesMenu';
 
 import { Container, Row, Col } from 'layout';
 
@@ -48,6 +50,7 @@ type MobileCategory = {
 type PropsType = {
   searchValue: string,
   environment: Environment,
+  withoutCategories: ?boolean,
 };
 
 type StateType = {
@@ -194,8 +197,14 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     );
   };
 
+  makeCategories = (directories: any) => pathOr(
+    null,
+    ['categories', 'children'],
+    directories,
+  );
+
   render() {
-    const { searchValue } = this.props;
+    const { searchValue, withoutCategories } = this.props;
     const {
       showModal,
       isSignUp,
@@ -224,89 +233,95 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       </div>
     );
     return (
-      <header
-        styleName={classNames('container', {
-          expand: isMobileCategoriesOpen,
-        })}
-      >
-        <MobileSearchMenu
-          isOpen={isMobileSearchOpen}
-          searchCategories={searchCategories}
-          searchValue={searchValue}
-          onClick={this.handleMobileSearch}
-        >
-          <SearchInput
-            isMobile
-            selectedCategory={selectedCategory}
-            onDropDown={this.handleDropDown}
-            searchCategories={searchCategories}
-            searchValue={searchValue}
-          />
-        </MobileSearchMenu>
-        <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
-        <Container>
-          <BurgerMenu />
-          <HeaderTop />
-          <div styleName="headerBottom">
-            <Row>
-              <Col size={7} sm={4} md={4} lg={3} xl={3}>
-                <div
-                  styleName={classNames('logo', {
-                    isUserLoggedIn: userData,
-                  })}
-                >
-                  <div styleName="logoIcon">
-                    <Link to="/" data-test="logoLink">
-                      <Icon type="logo" />
-                    </Link>
-                  </div>
-                </div>
-              </Col>
-              <Col size={1} sm={5} md={3} lg={6} xl={6}>
-                <div styleName="searchBar">
-                  <SearchInput
-                    searchCategories={searchCategories}
-                    searchValue={searchValue}
-                  />
-                </div>
-              </Col>
-              <Col size={4} sm={3} md={5} lg={3} xl={3}>
-                <div styleName="userData">
-                  <div
-                    onClick={this.handleMobileSearch}
-                    onKeyPress={() => {}}
-                    role="button"
-                    styleName="searchIcon"
-                    tabIndex="-1"
-                  >
-                    <Icon type="magnifier" />
-                  </div>
-                  {userData ? (
-                    <UserDropdown user={userData} />
-                  ) : (
-                    <AuthButtons onOpenModal={this.handleOpenModal} />
-                  )}
-                  <div styleName="cartIcon">
-                    <CartButton href="/cart" amount={totalCount} />
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </Container>
-        <Modal showModal={showModal} onClose={this.handleCloseModal}>
-          <Authorization
-            isSignUp={isSignUp}
-            onCloseModal={this.handleCloseModal}
-          />
-        </Modal>
-        {isMobileCategoriesOpen ? (
-          <MobileListItems
-            onClick={this.handleMobileCategories}
-            items={searchCategories}
-          />
-        ) : null}
-      </header>
+      <AppContext.Consumer>
+        {({ directories }) => (
+          <header
+            styleName={classNames('container', {
+              expand: isMobileCategoriesOpen,
+            })}
+          >
+            <MobileSearchMenu
+              isOpen={isMobileSearchOpen}
+              searchCategories={searchCategories}
+              searchValue={searchValue}
+              onClick={this.handleMobileSearch}
+            >
+              <SearchInput
+                isMobile
+                selectedCategory={selectedCategory}
+                onDropDown={this.handleDropDown}
+                searchCategories={searchCategories}
+                searchValue={searchValue}
+              />
+            </MobileSearchMenu>
+            <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
+            <Container>
+              <BurgerMenu />
+              <HeaderTop />
+              <div styleName="headerBottom">
+                <Row>
+                  <Col size={7} sm={4} md={4} lg={3} xl={3}>
+                    <div
+                      styleName={classNames('logo', {
+                        isUserLoggedIn: userData,
+                      })}
+                    >
+                      <div styleName="logoIcon">
+                        <Link to="/" data-test="logoLink">
+                          <Icon type="logo" />
+                        </Link>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col size={1} sm={5} md={3} lg={6} xl={6}>
+                    <div styleName="searchBar">
+                      <SearchInput
+                        searchCategories={searchCategories}
+                        searchValue={searchValue}
+                      />
+                    </div>
+                  </Col>
+                  <Col size={4} sm={3} md={5} lg={3} xl={3}>
+                    <div styleName="userData">
+                      <div
+                        onClick={this.handleMobileSearch}
+                        onKeyPress={() => {}}
+                        role="button"
+                        styleName="searchIcon"
+                        tabIndex="-1"
+                      >
+                        <Icon type="magnifier" />
+                      </div>
+                      {userData ? (
+                        <UserDropdown user={userData} />
+                      ) : (
+                        <AuthButtons onOpenModal={this.handleOpenModal} />
+                      )}
+                      <div styleName="cartIcon">
+                        <CartButton href="/cart" amount={totalCount} />
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </Container>
+            <Modal showModal={showModal} onClose={this.handleCloseModal}>
+              <Authorization
+                isSignUp={isSignUp}
+                onCloseModal={this.handleCloseModal}
+              />
+            </Modal>
+            {isMobileCategoriesOpen ? (
+              <MobileListItems
+                onClick={this.handleMobileCategories}
+                items={searchCategories}
+              />
+            ) : null}
+            {this.makeCategories(directories) &&
+            !withoutCategories && <CategoriesMenu categories={this.makeCategories(directories)} />}
+          </header>
+        )}
+      </AppContext.Consumer>
     );
   }
 }

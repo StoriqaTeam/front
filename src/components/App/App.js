@@ -43,10 +43,6 @@ class App extends Component<PropsType, StateType> {
 
   getChildContext() {
     const {
-      languages,
-      currencies,
-      categories,
-      orderStatuses,
       relay,
       me = {},
     } = this.props;
@@ -55,13 +51,25 @@ class App extends Component<PropsType, StateType> {
       handleLogin: this.handleLogin,
       currentUser: pick(['id', 'rawId'], me || {}),
       directories: {
-        languages,
-        currencies,
-        categories,
-        orderStatuses,
+        ...this.makeDirectories(),
       },
     };
   }
+
+  makeDirectories = () => {
+    const {
+      languages,
+      currencies,
+      categories,
+      orderStatuses,
+    } = this.props;
+    return {
+      languages,
+      currencies,
+      categories,
+      orderStatuses,
+    };
+  };
 
   handleLogin = () => {
     this.props.relay.refetch({}, null, () => {}, { force: true });
@@ -100,8 +108,9 @@ class App extends Component<PropsType, StateType> {
       categories,
       relay: { environment },
     } = this.props;
+    const directories = this.makeDirectories();
     return (
-      <AppContext.Provider value={{ categories, environment }}>
+      <AppContext.Provider value={{ categories, environment, directories }}>
         <Fragment>
           <AlertsContainer alerts={this.state.alerts} />
           <AlertContextProvider
