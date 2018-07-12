@@ -15,15 +15,15 @@
   min-height: 22rem;
   margin-top: 1rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: $md) {
     min-height: 24rem;
   }
 
-  @media (min-width: 992px) {
+  @media (min-width: $lg) {
     min-height: 29rem;
   }
 
-  @media (min-width: 1200px) {
+  @media (min-width: $xl) {
     min-height: 40rem;
   }
 }
