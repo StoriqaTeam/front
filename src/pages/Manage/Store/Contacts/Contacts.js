@@ -93,7 +93,6 @@ class Contacts extends Component<PropsType, StateType> {
   componentWillMount() {
     // $FlowIgnoreMe
     const store = pathOr({}, ['store'], this.props.me);
-    // console.log('---store.addressFull', store.addressFull);
     this.setState({
       form: pick(
         ['email', 'phone', 'facebookUrl', 'instagramUrl', 'twitterUrl'],
@@ -119,13 +118,6 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   handleChangeData = (addressFullData: addressFullType): void => {
-    // console.log('---addressFullData', addressFullData);
-    // this.setState({
-    //   addressFull: {
-    //     ...addressFullData,
-    //   },
-    // });
-
     this.setState(() => ({
       addressFull: {
         ...this.state.addressFull,
@@ -323,8 +315,6 @@ class Contacts extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading, addressFull } = this.state;
-    // console.log('---country, address, addressFull', addressFull.country, addressFull.value, addressFull);
-
     return (
       <div styleName="container">
         {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
