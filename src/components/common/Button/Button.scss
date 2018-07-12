@@ -14,6 +14,7 @@
   cursor: pointer;
   color: $color_white;
   font-size: 14px;
+  border: 1px solid $color_blue;
   background-color: $color_blue;
   white-space: nowrap;
   transition: $transition_all_ease;
@@ -34,13 +35,14 @@
 .small {
   height: 2.75rem;
   min-width: auto;
-  line-height: 2.75rem;
+  line-height: 2.5rem;
   padding: 0 1.5rem;
   font-size: 14px;
 }
 
 .disabled {
   background-color: $color_grey_trivial;
+  border: 1px solid $color_grey_trivial;
   color: $color_grey_minor;
   cursor: default;
 }
@@ -53,10 +55,12 @@
   color: $color_grey;
   font-size: 14px;
   background-color: $color_grey_trivial;
+  border: 1px solid $color_grey_trivial;
 
   &:hover {
     color: $color_white;
     background-color: $color_blue_hover;
+    border: 1px solid $color_blue_hover;
   }
 }
 
@@ -139,7 +143,7 @@
   width: 2rem;
   height: 2rem;
   animation: spin 2s linear infinite;
-  transition: $transition_all_ease;
+  // transition: $transition_all_ease;
 }
 
 .isLoading {
