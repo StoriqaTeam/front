@@ -2,21 +2,18 @@
 
 .container {
   display: none;
-  height: 5rem;
-  padding: 0 2rem;
-  position: relative;
-  top: -2rem;
+  margin-top: 2rem;
 
-  @media (min-width: 992px) {
+  @media (min-width: $lg) {
     display: flex;
   }
 
 }
 
 .button {
-  display: flex;
   align-items: center;
   color: $color_grey;
+  display: flex;
   transition: $transition_all_ease;
 
   &:hover {
@@ -29,8 +26,8 @@
 
 .buttonText {
   display: inline-block;
+  font-size: 2rem;
   margin-left: 1rem;
-  font-size: 16px;
 }
 
 .root {
