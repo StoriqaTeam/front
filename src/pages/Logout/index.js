@@ -3,18 +3,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'universal-cookie';
-import { routerShape, withRouter } from 'found';
+import { withRouter } from 'found';
 import { pathOr } from 'ramda';
 
 import Logo from 'components/Icon/svg/logo.svg';
 
 import './index.scss';
 
-type PropsType = {
-  router: routerShape,
-};
-
-class Logout extends PureComponent<PropsType> {
+class Logout extends PureComponent<{}> {
   componentDidMount() {
     if (!process.env.BROWSER) {
       return;
@@ -31,7 +27,8 @@ class Logout extends PureComponent<PropsType> {
     if (meId) {
       store.getSource().delete(meId);
     }
-    this.props.router.replace('/');
+    // this.props.router.replace('/');
+    window.location.replace('/');
   }
 
   render() {

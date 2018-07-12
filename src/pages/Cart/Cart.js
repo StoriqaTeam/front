@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop } from 'ramda';
+import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
@@ -81,11 +81,12 @@ class Cart extends Component<PropsType, StateType> {
     const {
       cart: { totalCost, totalCount, deliveryCost, productsCost },
     } = this.props;
+    const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
       <div styleName="container">
         <div styleName="header">My cart</div>
         <div styleName="body-container">
-          {totalCount === 0 ? (
+          {emptyCart ? (
             <div styleName="empty-container">
               <CartEmpty />
             </div>
@@ -103,7 +104,7 @@ class Cart extends Component<PropsType, StateType> {
               ))}
             </div>
           )}
-          {totalCount !== 0 && (
+          {!emptyCart && (
             <div styleName="total-container">
               <CheckoutSidebar
                 storesRef={this.state.storesRef}
