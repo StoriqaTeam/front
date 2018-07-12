@@ -194,6 +194,7 @@ class Warehouses extends Component<PropsType, StateType> {
                         onClick={() => {
                           this.handleSave(item.productId, item.warehouseId);
                         }}
+                        dataTest="saveQuantityButton"
                       >
                         Save
                       </Button>

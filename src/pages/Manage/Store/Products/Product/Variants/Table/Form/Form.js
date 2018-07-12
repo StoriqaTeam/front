@@ -444,6 +444,7 @@ class Form extends Component<PropsType, StateType> {
         />
         {variant && <Warehouses stocks={variant.stocks} />}
         <Button
+          big
           type="button"
           onClick={variant ? this.handleUpdate : this.handleCreate}
           dataTest="variantsProductSaveButton"
