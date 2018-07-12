@@ -197,11 +197,8 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     );
   };
 
-  makeCategories = (directories: any) => pathOr(
-    null,
-    ['categories', 'children'],
-    directories,
-  );
+  makeCategories = (directories: any) =>
+    pathOr(null, ['categories', 'children'], directories);
 
   render() {
     const { searchValue, withoutCategories } = this.props;
@@ -240,6 +237,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               expand: isMobileCategoriesOpen,
             })}
           >
+            <pre>{JSON.stringify(directories, null, 2)}</pre>
             <MobileSearchMenu
               isOpen={isMobileSearchOpen}
               searchCategories={searchCategories}
@@ -254,7 +252,10 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                 searchValue={searchValue}
               />
             </MobileSearchMenu>
-            <MobileMenu isOpen={isMenuToggled} onClose={this.handleMobileMenu} />
+            <MobileMenu
+              isOpen={isMenuToggled}
+              onClose={this.handleMobileMenu}
+            />
             <Container>
               <BurgerMenu />
               <HeaderTop />
@@ -318,7 +319,9 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               />
             ) : null}
             {this.makeCategories(directories) &&
-            !withoutCategories && <CategoriesMenu categories={this.makeCategories(directories)} />}
+              !withoutCategories && (
+                <CategoriesMenu categories={this.makeCategories(directories)} />
+              )}
           </header>
         )}
       </AppContext.Consumer>

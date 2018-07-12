@@ -13,6 +13,8 @@ import { currentUserShape } from 'utils/shapes';
 import type { AlertPropsType } from 'components/Alerts';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
+import type { CategoryType, LanguageType, CurrencyType, OrderStatusesType, DirectoriesType } from 'types'
+
 import { AppContext } from './index';
 
 import './App.scss';
@@ -25,10 +27,10 @@ type PropsType = {
   me: ?{},
   mainPage: ?{},
   cart: ?{},
-  languages: ?Array<{ id: number, name: string }>,
-  currencies: ?Array<{ id: number, name: string }>,
-  categories: any,
-  orderStatuses: Array<string>,
+  languages: Array<LanguageType>,
+  currencies: Array<CurrencyType>,
+  categories: CategoryType,
+  orderStatuses: OrderStatusesType,
   children: any,
   relay: {
     environment: Environment,
@@ -42,10 +44,7 @@ class App extends Component<PropsType, StateType> {
   };
 
   getChildContext() {
-    const {
-      relay,
-      me = {},
-    } = this.props;
+    const { relay, me = {} } = this.props;
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
@@ -56,26 +55,21 @@ class App extends Component<PropsType, StateType> {
     };
   }
 
-  makeDirectories = () => {
-    const {
-      languages,
-      currencies,
-      categories,
-      orderStatuses,
-    } = this.props;
+  makeDirectories = (): DirectoriesType => {
+    const { languages, currencies, categories, orderStatuses } = this.props;
     return {
-      languages,
-      currencies,
       categories,
+      currencies,
+      languages,
       orderStatuses,
     };
   };
 
-  handleLogin = () => {
+  handleLogin = (): void => {
     this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
-  handleAlertClose = (timestamp: number) => {
+  handleAlertClose = (timestamp: number): void => {
     this.setState(prevState => ({
       alerts: filter(
         complement(propEq('createdAtTimestamp', timestamp)),
@@ -84,7 +78,7 @@ class App extends Component<PropsType, StateType> {
     }));
   };
 
-  addAlert = (alert: AddAlertInputType) => {
+  addAlert = (alert: AddAlertInputType): void => {
     this.setState(prevState => ({
       alerts: concat(
         [

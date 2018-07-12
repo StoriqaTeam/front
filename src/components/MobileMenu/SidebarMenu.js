@@ -7,7 +7,7 @@ import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
 
-import type { TransformedCategoryType } from './types';
+import type { TransformedCategoryType } from 'types';
 
 import './SidebarMenu.scss';
 
