@@ -46,7 +46,6 @@ import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
 import Upload from 'components/Icon/svg/upload.svg';
 import VkGray from 'components/Icon/svg/vk_gray.svg';
 import Move from 'components/Icon/svg/move.svg';
-//
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
 
 // For product

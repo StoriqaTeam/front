@@ -137,9 +137,6 @@ const routes = (
         Component={Checkout}
         render={({ props, Component }) => {
           if (props && !props.me) {
-            // const {
-            //   location: { pathname },
-            // } = props;
             const cookies = new Cookies();
             cookies.remove('__jwt');
             throw new RedirectException(`/login?from=/checkout`);
