@@ -20,22 +20,25 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
         <div styleName="title">Submit</div>
         <div styleName="infoContainer">
           <Row>
-            <Col size={9}>
+            <Col size={3}>
               <div styleName="centeredTitle">
                 <div>Address</div>
               </div>
             </Col>
-            <Col size={3}>
-              <Button
-                big
-                contour
-                whireframe
-                onClick={onChangeStep(1)}
-                type="button"
-                dataTest="changeAddress"
-              >
-                <span>Replace address</span>
-              </Button>
+            <Col size={9} smVisible>
+              <div styleName="wrapperAddressButton">
+                <div styleName="containerAddressButton">
+                  <Button
+                    big
+                    contour
+                    onClick={onChangeStep(1)}
+                    type="button"
+                    dataTest="changeAddress"
+                  >
+                    <span>Replace address</span>
+                  </Button>
+                </div>
+              </div>
             </Col>
             <Col size={12}>
               {orderInput.addressFull.value && (
@@ -47,6 +50,20 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                   email={me.email}
                 />
               )}
+            </Col>
+            <Col size={12} smHidden>
+              <div styleName="containerAddressButton2">
+                <Button
+                  big
+                  contour
+                  whireframe
+                  onClick={onChangeStep(1)}
+                  type="button"
+                  dataTest="changeAddress"
+                >
+                  <span>Replace address</span>
+                </Button>
+              </div>
             </Col>
           </Row>
         </div>

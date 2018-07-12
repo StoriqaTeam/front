@@ -5,7 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { filter, whereEq } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
-import { Row, Col } from 'layout';
+import { Container, Row, Col } from 'layout';
 import { formatPrice, getNameText } from 'utils';
 
 import CartProduct from './CartProduct';
@@ -35,10 +35,10 @@ class CartStore extends PureComponent<PropsType> {
       return null;
     }
     return (
-      <Row>
-        <Col size={12}>
-          <div styleName="container">
-            <div>
+      <div styleName="container">
+        <Container correct>
+          <Row>
+            <Col size={12}>
               {filteredProducts.map((product, idx) => (
                 <CartProduct
                   key={idx}
@@ -47,29 +47,33 @@ class CartStore extends PureComponent<PropsType> {
                   unselectable={unselectable}
                 />
               ))}
-            </div>
-            <div styleName="footer">
-              <div styleName="store">
-                <div styleName="store-info">
-                  <img src={store.logo} alt="store_picture" styleName="image" />
-                  <div styleName="store-description">
-                    <div styleName="store-name">
-                      {getNameText(store.name, 'EN')}
+              <div styleName="footer">
+                <div styleName="store">
+                  <div styleName="store-info">
+                    <img
+                      src={store.logo}
+                      alt="store_picture"
+                      styleName="image"
+                    />
+                    <div styleName="store-description">
+                      <div styleName="store-name">
+                        {getNameText(store.name, 'EN')}
+                      </div>
+                      <Rating value={store.rating} />
                     </div>
-                    <Rating value={store.rating} />
+                  </div>
+                </div>
+                <div styleName="store-total">
+                  <div styleName="label">Subtotal</div>
+                  <div styleName="value">
+                    {formatPrice(store.productsCost || 0)} STQ
                   </div>
                 </div>
               </div>
-              <div styleName="store-total">
-                <div styleName="label">Subtotal</div>
-                <div styleName="value">
-                  {formatPrice(store.productsCost || 0)} STQ
-                </div>
-              </div>
-            </div>
-          </div>
-        </Col>
-      </Row>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }

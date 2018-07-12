@@ -25,6 +25,21 @@
   }
 }
 
+.wrapperAddressButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.containerAddressButton {
+  width: 23.25rem;
+}
+
+.containerAddressButton2 {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.75rem;
+}
+
 .title {
   text-transform: uppercase;
   font-family: $font_medium;

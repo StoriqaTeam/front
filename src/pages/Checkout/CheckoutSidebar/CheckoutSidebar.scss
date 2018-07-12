@@ -14,7 +14,7 @@
 }
 
 :global {
-  @media (min-width: 992px) { 
+  @media (min-width: $lg) { 
     .sticky {
       // width: 100%;
       // left: 7.5px;
@@ -38,21 +38,6 @@
     }  
   } 
 }
-
-// .sticky {
-//   position: fixed;
-//   top: 2rem;
-// }
-
-// .bottom {
-//   position: absolute;
-//   bottom: 2rem;
-// }
-
-// .top {
-//   position: absolute;
-//   top: 0;
-// }  
 
 .cart-total-title {
   font-family: $font_medium;

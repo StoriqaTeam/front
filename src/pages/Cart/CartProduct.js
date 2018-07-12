@@ -13,7 +13,7 @@ import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
-import { Col, Row } from 'layout';
+import { Container, Col, Row } from 'layout';
 import {
   SetQuantityInCartMutation,
   SetSelectionInCartMutation,
@@ -24,7 +24,7 @@ import { log, formatPrice } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
-import CartProductAttribute from './CartProductAttribute';
+import ProductInfo from './ProductInfo';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -108,7 +108,7 @@ class CartProduct extends Component<PropsType, StateType> {
     });
   }
 
-  handleQuantityChange(newVal) {
+  handleQuantityChange = newVal => {
     const { rawId: productId, id: nodeId } = this.props.product;
     const { storeId } = this.props;
     SetQuantityInCartMutation.commit({
@@ -135,7 +135,7 @@ class CartProduct extends Component<PropsType, StateType> {
         });
       },
     });
-  }
+  };
 
   handleOnChangeComment = (e: any) => {
     const { rawId: productId } = this.props.product;
@@ -182,156 +182,77 @@ class CartProduct extends Component<PropsType, StateType> {
       defaultTo({}),
       path(['text']),
     )(product);
-    const {
-      photoMain,
-      attributes,
-      price,
-      quantity,
-      deliveryCost,
-      selected,
-    } = product;
-    const attrs = map(attr => ({
-      title: head(attr.attribute.name).text,
-      value: attr.value.toString(),
-    }))(attributes);
-
+    const { photoMain, selected } = product;
     return (
       <div styleName="container">
-        <Row>
-          <Col size={2}>
-            <div styleName="left-container">
-              {!unselectable && (
-                <div styleName="checkbox">
-                  <Checkbox
-                    id={`Cartproduct_${product.rawId}`}
-                    label={false}
-                    isChecked={selected}
-                    onChange={() => this.handleSelectChange()}
-                  />
-                </div>
-              )}
-              <div
-                styleName="picture"
-                style={{ backgroundImage: `url(${photoMain})` }}
-              />
-            </div>
-          </Col>
-          <Col size={10}>
-            <Row withoutGrow>
-              <Col size={9}>
-                <div styleName="product-summary-header">{name}</div>
-
-                <ShowMore
-                  height={400}
-                  dataTest={`cart-product-${product.rawId}-showMore`}
-                >
-                  <Row>
-                    <Col size={9}>
-                      <div styleName="contentBlock">
-                        {attrs.length > 0 && (
-                          <div styleName="product-summary-attributes">
-                            <div styleName="cart-product-title">
-                              About product
-                            </div>
-                            {attrs.map((attr, idx) => (
-                              <div key={idx} styleName="half-width">
-                                <CartProductAttribute {...attr} />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        <div>
-                          <div styleName="cart-product-title">
-                            Delivery and return
-                          </div>
-                          <div styleName="half-width">
-                            <CartProductAttribute
-                              title="Shiping to"
-                              value={
-                                <Select
-                                  items={[{ id: 1, label: 'Everywhere' }]}
-                                  activeItem={{ id: 1, label: 'Everywhere' }}
-                                  forForm
-                                  containerStyle={{ width: '24rem' }}
-                                />
-                              }
-                            />
-                          </div>
-                          <div styleName="half-width">
-                            <CartProductAttribute
-                              title="Terms"
-                              value="14 days"
-                            />
-                          </div>
-                          <div styleName="half-width">
-                            <CartProductAttribute
-                              title="Return tyoe on return"
-                              value="Exchange or funds return"
-                            />
-                          </div>
-                          <div styleName="half-width">
-                            <CartProductAttribute
-                              title="Delivery on return"
-                              value="Seller pays"
-                            />
-                          </div>
-                          <div styleName="comment">
-                            <div styleName="title">Customer comment</div>
-                            <Input
-                              fullWidth
-                              id="customerComment"
-                              onChange={this.handleOnChangeComment}
-                              value={this.state.comment}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                    <Col size={3}>
-                      {/* <div styleName="product-params"> */}
-                      <div styleName="contentBlock">
-                        <div styleName="cart-product-title">Price</div>
-                        <CartProductAttribute
-                          title="Count"
-                          value={
-                            <Stepper
-                              value={quantity}
-                              min={0}
-                              max={9999}
-                              onChange={newVal =>
-                                this.handleQuantityChange(newVal)
-                              }
-                            />
-                          }
-                        />
-                        <CartProductAttribute
-                          title="Subtotal"
-                          value={`${formatPrice(quantity * price || 0)} STQ`}
-                        />
-                        <CartProductAttribute
-                          title="Delivery"
-                          value={`${formatPrice(deliveryCost || 0)} STQ`}
+        <Container correct>
+          <Row>
+            <Col size={12} sm={3}>
+              <Row>
+                <Col size={4} sm={12}>
+                  <div styleName="left-container">
+                    {!unselectable && (
+                      <div styleName="checkbox">
+                        <Checkbox
+                          id={`Cartproduct_${product.rawId}`}
+                          label={false}
+                          isChecked={selected}
+                          onChange={() => this.handleSelectChange()}
                         />
                       </div>
-                    </Col>
-                  </Row>
-                </ShowMore>
-              </Col>
-              <Col size={3}>
-                <div styleName="recycleContainer">
-                  <button
-                    styleName="recycle"
-                    onClick={() => this.handleDelete()}
-                    data-test="cartProductDeleteButton"
-                  >
-                    <Icon type="basket" size={32} />
-                  </button>
-                </div>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+                    )}
+                    <div
+                      styleName="picture"
+                      style={{ backgroundImage: `url(${photoMain})` }}
+                    />
+                  </div>
+                </Col>
+                <Col size={6} smHidden>
+                  <div styleName="product-summary-header">{name}</div>
+                </Col>
+                <Col size={2} smHidden>
+                  <div styleName="recycleContainer">
+                    <button
+                      styleName="recycle"
+                      onClick={() => this.handleDelete()}
+                      data-test="cartProductDeleteButton"
+                    >
+                      <Icon type="basket" size={32} />
+                    </button>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col size={12} sm={9}>
+              <Row withoutGrow>
+                <Col size={10} sm={11} hidden smVisible>
+                  <div styleName="product-summary-header">{name}</div>
+                </Col>
+                <Col size={2} sm={1} hidden smVisible>
+                  <div styleName="recycleContainer">
+                    <button
+                      styleName="recycle"
+                      onClick={() => this.handleDelete()}
+                      data-test="cartProductDeleteButton"
+                    >
+                      <Icon type="basket" size={32} />
+                    </button>
+                  </div>
+                </Col>
+                <Col size={12}>
+                  <div styleName="productInfoWrapper">
+                    <ProductInfo
+                      product={product}
+                      onQuantityChange={this.handleQuantityChange}
+                      onChangeComment={this.handleOnChangeComment}
+                      comment={this.state.comment}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }

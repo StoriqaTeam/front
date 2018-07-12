@@ -10,14 +10,14 @@
   margin-right: -15px;
 }
 
-@media (min-width: 1200px) { 
+@media (min-width: $xl) { 
   .headerWrapper {
     margin-left: 0;
     margin-right: 0;
   }
 }
 
-@media (min-width: 768px) { 
+@media (min-width: $md) { 
   .wrapper {
     margin-left: 0;
     margin-right: 0;
