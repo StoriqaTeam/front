@@ -307,9 +307,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                 </Row>
               </div>
               {this.makeCategories(directories) &&
-              !withoutCategories && (
-                <CategoriesMenu categories={this.makeCategories(directories)} />
-              )}
+                !withoutCategories && (
+                  <CategoriesMenu
+                    categories={this.makeCategories(directories)}
+                  />
+                )}
             </Container>
             <Modal showModal={showModal} onClose={this.handleCloseModal}>
               <Authorization

@@ -8,33 +8,12 @@
   padding: 2rem 0 4rem;
 }
 
-.isCategories {
-  margin-top: 0;
-
-  @media (min-width: 992px) {
-    margin-top: 5rem;
-  }
-
-  & .wrap {
-    margin-top: -5rem;
-  }
-
-}
-
 .wrap {
-  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  width: 170rem;
+  flex: 1 0 auto;
   margin: 0 auto;
+  max-width: 170rem;
+  width: 100%;
 
-  &.responsiveWrap {
-    width: 100%;
-    max-width: 170rem;
-  }
-
-  &.isResponsivee {
-    width: 100%;
-    max-width: 170rem;
-  }
 }
