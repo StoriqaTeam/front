@@ -10,6 +10,7 @@ import { routerShape, withRouter } from 'found';
 import { Page } from 'components/App';
 
 import CartStore from './CartStore';
+import CartEmpty from './CartEmpty';
 import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
@@ -82,29 +83,40 @@ class Cart extends Component<PropsType, StateType> {
     } = this.props;
     return (
       <div styleName="container">
-        <div styleName="header">Cart</div>
+        <div styleName="header">My cart</div>
         <div styleName="body-container">
-          <div styleName="stores-container" ref={ref => this.setStoresRef(ref)}>
-            {stores.map(store => (
-              <CartStore
-                key={store.__id}
-                store={store}
-                totals={this.totalsForStore(store.__id)}
+          {totalCount === 0 ? (
+            <div styleName="empty-container">
+              <CartEmpty />
+            </div>
+          ) : (
+            <div
+              styleName="stores-container"
+              ref={ref => this.setStoresRef(ref)}
+            >
+              {stores.map(store => (
+                <CartStore
+                  key={store.__id}
+                  store={store}
+                  totals={this.totalsForStore(store.__id)}
+                />
+              ))}
+            </div>
+          )}
+          {totalCount !== 0 && (
+            <div styleName="total-container">
+              <CheckoutSidebar
+                storesRef={this.state.storesRef}
+                buttonText="Checkout"
+                productsCost={productsCost}
+                deliveryCost={deliveryCost}
+                totalCount={totalCount}
+                totalCost={totalCost}
+                onClick={this.handleToCheckout}
+                isReadyToClick={totalCount > 0}
               />
-            ))}
-          </div>
-          <div styleName="total-container">
-            <CheckoutSidebar
-              storesRef={this.state.storesRef}
-              buttonText="Checkout"
-              productsCost={productsCost}
-              deliveryCost={deliveryCost}
-              totalCount={totalCount}
-              totalCost={totalCost}
-              onClick={this.handleToCheckout}
-              isReadyToClick={totalCount > 0}
-            />
-          </div>
+            </div>
+          )}
         </div>
       </div>
     );
