@@ -32,7 +32,6 @@ $max-width: 41rem !important;
   @media (min-width: $md) {
     display: flex;
   }
-
 }
 
 .personalData {
@@ -57,22 +56,9 @@ $max-width: 41rem !important;
   flex: 1 0 auto;
   margin-top: 0;
   padding: 4rem;
-
-  [class*="Input__container"] {
-    width: 100%;
-  }
-
-  [class*="SpinnerButton"] {
-    width: 100%;
-    @media (min-width: $md) {
-      width: initial;
-    }
-  }
-
   @media (min-width: $md) {
     margin-top: 2rem;
   }
-
 }
 
 .formItem + .formItem {
@@ -84,33 +70,38 @@ $max-width: 41rem !important;
 }
 
 .editAddressForm {
+  background-color: $color_grey_bg;
   margin: 4rem 0;
   padding: 4rem;
-  background-color: $color_grey_bg;
 }
 
 .saveButtons {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-top: 5rem;
 }
 
 .editButtons {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-top: 3rem;
 }
 
 .cancelButton {
   margin-left: 3rem;
   font-size: 16px;
-  color: $color_grey_minor;
+  color: $color_blue;
   cursor: pointer;
   transition: $transition_all_ease;
 
   &:hover {
-    color: $color_grey;
+    color: $color_blue_hover;
   }
+}
+
+
+.deleteButton {
+  margin-left: 3rem;
 }
 
 .addButton {
@@ -134,9 +125,9 @@ $max-width: 41rem !important;
 }
 
 .item {
-  padding: 4rem;
-  border-radius: 4px;
   background-color: $color_grey_bg;
+  border-radius: 4px;
+  padding: 4rem;
 
   & + .item {
     margin-top: 4rem;
@@ -156,10 +147,10 @@ $max-width: 41rem !important;
   color: $color_grey_minor;
 }
 
-.preorityText {
-  margin-bottom: 1.5rem;
+.priorityText {
   color: $color_blue;
   line-height: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .passwordInputs {
@@ -180,10 +171,10 @@ $max-width: 41rem !important;
 }
 
 .icon {
-  position: absolute;
-  top: -0.25rem;
-  right: 0;
   cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: -0.25rem;
 
   & svg {
     transition: $transition_all_ease;
@@ -199,13 +190,13 @@ $max-width: 41rem !important;
   }
 
   &:after {
+    border-right: 1px solid $color_grey_light;
     content: '';
-    position: absolute;
-    top: 0.25rem;
-    left: 1.75rem;
     display: block;
     height: 3rem;
-    border-right: 1px solid $color_grey_light;
+    left: 1.75rem;
+    position: absolute;
+    top: 0.25rem;
     transform: rotate(33deg);
     transition: $transition_all_ease;
   }

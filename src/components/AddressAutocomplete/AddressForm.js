@@ -65,7 +65,7 @@ type SelectType = {
 type StateType = {
   country: ?SelectType,
   address: ?any,
-  autocompleteValue: ?string,
+  autocompleteValue: string,
   predictions: Array<{ mainText: string, secondaryText: string }>,
 };
 
@@ -82,18 +82,59 @@ type GeocoderType = {
 };
 
 class Form extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const country = find(
+      item =>
+        item.name === nextProps.country || item.code === nextProps.country,
+    )(countries);
+    const propsCountry = country
+      ? { id: country.code, label: country.name }
+      : null;
+    const uneqCountry =
+      JSON.stringify(propsCountry) !== JSON.stringify(prevState.country);
+
+    const address =
+      !isNil(nextProps.addressFull) &&
+      any(val => !isNil(val))(Object.values(nextProps.addressFull))
+        ? omit(['country', 'value'], nextProps.addressFull)
+        : null;
+    const uneqAddress =
+      JSON.stringify(address) !== JSON.stringify(prevState.address);
+
+    const autocompleteValue = nextProps.address;
+    const uneqAutocompleteValue =
+      autocompleteValue !== prevState.autocompleteValue;
+
+    return {
+      ...prevState,
+      country: uneqCountry ? propsCountry : prevState.country,
+      address: uneqAddress ? address : prevState.address,
+      autocompleteValue: uneqAutocompleteValue
+        ? autocompleteValue
+        : prevState.autocompleteValue,
+    };
+  }
+
   constructor(props: PropsType) {
     super(props);
+    const { addressFull } = props;
     const country = find(
       item => item.name === props.country || item.code === props.country,
     )(countries);
     this.state = {
       country: country ? { id: country.code, label: country.name } : null,
-      address:
-        !isNil(props.addressFull) &&
-        any(val => !isNil(val))(Object.values(props.addressFull))
-          ? omit(['country', 'value'], props.addressFull)
-          : null,
+      address: {
+        value: addressFull.value || '',
+        country: addressFull.country || '',
+        administrativeAreaLevel1: addressFull.administrativeAreaLevel1 || '',
+        administrativeAreaLevel2: addressFull.administrativeAreaLevel2 || '',
+        locality: addressFull.locality || '',
+        political: addressFull.political || '',
+        postalCode: addressFull.postalCode || '',
+        route: addressFull.route || '',
+        streetNumber: addressFull.streetNumber || '',
+        placeId: addressFull.placeId || '',
+      },
       autocompleteValue: props.address,
       predictions: [],
     };

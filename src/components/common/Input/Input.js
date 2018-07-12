@@ -35,14 +35,21 @@ type StateType = {
 };
 
 class Input extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    if (Boolean(nextProps.value) !== prevState.labelFloat) {
+      return {
+        ...prevState,
+        labelFloat: prevState.isFocus ? true : Boolean(nextProps.value),
+      };
+    }
+
+    return null;
+  }
+
   state = {
     labelFloat: false,
     isFocus: false,
   };
-
-  componentWillMount() {
-    this.setState({ labelFloat: Boolean(this.props.value) });
-  }
 
   input: ?HTMLInputElement;
 

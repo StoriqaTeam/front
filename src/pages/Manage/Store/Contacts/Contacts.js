@@ -118,11 +118,12 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   handleChangeData = (addressFullData: addressFullType): void => {
-    this.setState({
+    this.setState(() => ({
       addressFull: {
+        ...this.state.addressFull,
         ...addressFullData,
       },
-    });
+    }));
   };
 
   handleLogoUpload = (url: string) => {
@@ -314,7 +315,6 @@ class Contacts extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading, addressFull } = this.state;
-
     return (
       <div styleName="container">
         {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
@@ -335,14 +335,14 @@ class Contacts extends Component<PropsType, StateType> {
           icon: 'twitter',
         })}
         <div styleName="formItem">
-          <AddressForm
-            country={addressFull.country}
-            address={addressFull.value}
-            addressFull={addressFull}
-            onChangeFormInput={this.handleInputChange}
-            onUpdateForm={this.handleUpdateForm}
-            onChangeData={this.handleChangeData}
-          />
+          <div styleName="address">
+            <AddressForm
+              country={addressFull.country}
+              address={addressFull.value}
+              addressFull={addressFull}
+              onChangeData={this.handleChangeData}
+            />
+          </div>
         </div>
         <div styleName="formItem">
           <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>

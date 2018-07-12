@@ -5,6 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { filter, whereEq } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
+import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
 import { formatPrice, getNameText } from 'utils';
 
@@ -51,7 +52,17 @@ class CartStore extends PureComponent<PropsType> {
             <div styleName="footer">
               <div styleName="store">
                 <div styleName="store-info">
-                  <img src={store.logo} alt="store_picture" styleName="image" />
+                  {store.logo ? (
+                    <img
+                      src={store.logo}
+                      alt="store_picture"
+                      styleName="image"
+                    />
+                  ) : (
+                    <div styleName="noLogo">
+                      <Icon type="camera" size={28} />
+                    </div>
+                  )}
                   <div styleName="store-description">
                     <div styleName="store-name">
                       {getNameText(store.name, 'EN')}

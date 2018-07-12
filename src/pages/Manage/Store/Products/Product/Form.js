@@ -5,7 +5,7 @@ import { assocPath, prop, propOr, isEmpty, omit } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { SpinnerButton } from 'components/common/SpinnerButton';
+import { Button } from 'components/common/Button';
 import { CategorySelector } from 'components/CategorySelector';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
@@ -225,9 +225,14 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
+            <Button
+              big
+              onClick={this.handleSave}
+              isLoading={isLoading}
+              dataTest="saveProductButton"
+            >
               Save
-            </SpinnerButton>
+            </Button>
           </div>
         </div>
       </div>
