@@ -442,7 +442,9 @@ class Form extends Component<PropsType, StateType> {
           values={this.state.attributeValues || []}
           onChange={this.onChangeValues}
         />
-        {variant && <Warehouses stocks={variant.stocks} />}
+        {variant &&
+          variant.stocks &&
+          !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
         <Button
           big
           type="button"
