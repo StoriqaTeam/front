@@ -211,7 +211,7 @@ class Product extends Component<PropsType, StateType> {
       <ProductContext.Provider value={this.props.baseProduct}>
         <div styleName="ProductDetails">
           <Row>
-            <Col size={1} sm={1} md={1} lg={1} xl={1}>
+            <Col size={1} sm={1} md={1} lg={1} xl={1} lgHidden>
               <div
                 styleName={
                   isAdditionalPhotosEmpty ? 'thumbnailsWrapper' : 'noWrapper'

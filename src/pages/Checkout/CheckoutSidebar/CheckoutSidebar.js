@@ -142,7 +142,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
         <div
           className="top"
           ref={ref => this.setRef(ref)}
-          style={{ width: sidebarWidth ? sidebarWidth : '100%' }}
+          style={{ width: sidebarWidth || '100%' }}
         >
           <div styleName="container">
             <div styleName="title">Subtotal</div>
@@ -185,6 +185,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                 disabled={!isReadyToClick}
                 big
                 onClick={onClick}
+                dataTest="checkoutNext"
               >
                 {buttonText}
               </Button>

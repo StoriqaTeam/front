@@ -130,6 +130,7 @@ class CheckoutContent extends React.Component<PropsType> {
                     onSelect={this.handleOnSelectAddress}
                     forForm
                     containerStyle={{ width: '24rem' }}
+                    dataTest="selectExistingAddress"
                   />
                 </div>
               )}

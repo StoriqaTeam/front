@@ -10,14 +10,25 @@ import { formatPrice } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
 
+// eslint-disable-next-line
+import type CartProduct_product from './__generated__/CartProduct_product.graphql';
+
 import './ProductInfo.scss';
+
+type PropsType = {
+  onQuantityChange: Function,
+  onChangeComment: Function,
+  comment: string,
+  // eslint-disable-next-line
+  ...CartProduct_product,
+};
 
 const ProductInfo = ({
   product,
   onQuantityChange,
   onChangeComment,
   comment,
-}) => {
+}: PropsType) => {
   const attrs = map(attr => ({
     title: head(attr.attribute.name).text,
     value: attr.value.toString(),
@@ -26,63 +37,101 @@ const ProductInfo = ({
     <ShowMore height={400} dataTest={`cart-product-${product.rawId}-showMore`}>
       <Container correct>
         <Row>
-          <Col size={9}>
-            <div styleName="contentBlock">
-              {attrs.length > 0 && (
-                <div styleName="product-summary-attributes">
-                  <div styleName="cart-product-title">About product</div>
-                  {attrs.map((attr, idx) => (
-                    <div key={idx} styleName="half-width">
-                      <CartProductAttribute {...attr} />
+          <Col size={12} xl={8}>
+            <Row>
+              <Col size={6} xl={12}>
+                <div styleName="contentBlock">
+                  {attrs.length > 0 && (
+                    <div styleName="product-summary-attributes">
+                      <div styleName="cart-product-title">About product</div>
+                      <Row>
+                        {attrs.map(attr => (
+                          <Col key={`attr-${attr.value}`} size={12} xl={6}>
+                            <CartProductAttribute {...attr} />
+                          </Col>
+                        ))}
+                      </Row>
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-
-              <div>
-                <div styleName="cart-product-title">Delivery and return</div>
-                <div styleName="half-width">
+              </Col>
+              <Col size={6} xlHidden>
+                <div styleName="contentBlock">
+                  <div styleName="cart-product-title">Price</div>
                   <CartProductAttribute
-                    title="Shiping to"
+                    title="Count"
                     value={
-                      <Select
-                        items={[{ id: 1, label: 'Everywhere' }]}
-                        activeItem={{ id: 1, label: 'Everywhere' }}
-                        forForm
-                        containerStyle={{ width: '24rem' }}
+                      <Stepper
+                        value={product.quantity}
+                        min={0}
+                        max={9999}
+                        onChange={newVal => onQuantityChange(newVal)}
                       />
                     }
                   />
-                </div>
-                <div styleName="half-width">
-                  <CartProductAttribute title="Terms" value="14 days" />
-                </div>
-                <div styleName="half-width">
                   <CartProductAttribute
-                    title="Return tyoe on return"
-                    value="Exchange or funds return"
+                    title="Subtotal"
+                    value={`${formatPrice(
+                      product.quantity * product.price || 0,
+                    )} STQ`}
                   />
-                </div>
-                <div styleName="half-width">
                   <CartProductAttribute
-                    title="Delivery on return"
-                    value="Seller pays"
+                    title="Delivery"
+                    value={`${formatPrice(product.deliveryCost || 0)} STQ`}
                   />
                 </div>
-                <div styleName="comment">
-                  <div styleName="title">Customer comment</div>
-                  <Input
-                    fullWidth
-                    id="customerComment"
-                    onChange={onChangeComment}
-                    value={comment}
-                  />
+              </Col>
+              <Col size={12}>
+                <div styleName="contentBlock">
+                  <div>
+                    <div styleName="cart-product-title">
+                      Delivery and return
+                    </div>
+                    <Row>
+                      <Col size={6}>
+                        <CartProductAttribute
+                          title="Shiping to"
+                          value={
+                            <Select
+                              items={[{ id: 1, label: 'Everywhere' }]}
+                              activeItem={{ id: 1, label: 'Everywhere' }}
+                              forForm
+                              containerStyle={{ width: '24rem' }}
+                            />
+                          }
+                        />
+                      </Col>
+                      <Col size={6}>
+                        <CartProductAttribute title="Terms" value="14 days" />
+                      </Col>
+                      <Col size={6}>
+                        <CartProductAttribute
+                          title="Return tyoe on return"
+                          value="Exchange or funds return"
+                        />
+                      </Col>
+                      <Col size={6}>
+                        <CartProductAttribute
+                          title="Delivery on return"
+                          value="Seller pays"
+                        />
+                      </Col>
+                    </Row>
+                    <div styleName="comment">
+                      <div styleName="title">Customer comment</div>
+                      <Input
+                        fullWidth
+                        id="customerComment"
+                        onChange={onChangeComment}
+                        value={comment}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </Col>
+            </Row>
           </Col>
-          <Col size={3}>
-            {/* <div styleName="product-params"> */}
+          <Col size={4} xlVisibleOnly>
             <div styleName="contentBlock">
               <div styleName="cart-product-title">Price</div>
               <CartProductAttribute

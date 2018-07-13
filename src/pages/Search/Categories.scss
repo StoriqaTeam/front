@@ -1,18 +1,12 @@
 @import "../../styles/variables";
 
 .container {
-  margin-top: 2.875rem;
-
-  @media (min-width: 992px) {
-    margin-top: 0;
-  }
-
 }
 
 .sidebarWrapper {
   display: none;
 
-  @media (min-width: 992px) {
+  @media (min-width: $lg) {
     display: block;
   }
 

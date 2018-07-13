@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { omit, propOr } from 'ramda';
 
-import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/common/Input';
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -111,17 +110,23 @@ class Form extends Component<PropsType, StateType> {
         </div>
         <div styleName="formItem">
           <div styleName="buttons">
-            <SpinnerButton
+            <Button
+              big
               onClick={() => {
                 handleSave({ name, addressFull });
               }}
               isLoading={isLoading}
-              dataTest="saveButton"
+              dataTest="saveStorageButton"
             >
               Save
-            </SpinnerButton>
+            </Button>
             <div styleName="cancelButton">
-              <Button wireframe big onClick={handleCancel}>
+              <Button
+                wireframe
+                big
+                onClick={handleCancel}
+                dataTest="cancelSaveStorageButton"
+              >
                 Cancel
               </Button>
             </div>

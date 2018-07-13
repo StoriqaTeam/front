@@ -38,6 +38,7 @@ export default (
                     ['match', 'location', 'query', 'search'],
                     this.props,
                   )}
+                  withoutCategories={withoutCategories}
                 />
               ) : (
                 <Header

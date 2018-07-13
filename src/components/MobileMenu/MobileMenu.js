@@ -5,9 +5,9 @@ import { isEmpty } from 'ramda';
 
 import { AppContext } from 'components/App';
 
-import { SidebarMenu } from './index';
+import type { TransformedCategoryType } from 'types';
 
-import type { TransformedCategoryType } from './types';
+import { SidebarMenu } from './index';
 
 import { buildMobileCategories } from './utils';
 

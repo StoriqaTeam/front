@@ -255,6 +255,7 @@ class Products extends PureComponent<PropsType> {
             onClick={() => {
               this.editProduct(item.rawId);
             }}
+            data-test="editProductButton"
           >
             <Icon type="note" size={32} />
           </button>
@@ -265,6 +266,7 @@ class Products extends PureComponent<PropsType> {
             onClick={() => {
               this.handleDelete(item.id);
             }}
+            data-test="deleteProductButton"
           >
             <Icon type="basket" size="32" />
           </button>
@@ -300,7 +302,12 @@ class Products extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="addButton">
-          <Button wireframe big onClick={this.addProduct}>
+          <Button
+            wireframe
+            big
+            onClick={this.addProduct}
+            dataTest="addProductButton"
+          >
             Add item
           </Button>
         </div>
@@ -317,7 +324,7 @@ class Products extends PureComponent<PropsType> {
               big
               load
               onClick={this.productsRefetch}
-              dataTest="searchProductLoadMoreButton"
+              dataTest="storeProductsLoadMoreButton"
             >
               Load more
             </Button>

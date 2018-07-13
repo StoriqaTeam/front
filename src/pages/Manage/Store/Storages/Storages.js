@@ -159,6 +159,7 @@ class Storages extends PureComponent<PropsType> {
         onKeyDown={() => {}}
         role="button"
         tabIndex="0"
+        data-test="editStorageField"
       >
         <div styleName="td tdCheckbox">
           <span
@@ -188,6 +189,7 @@ class Storages extends PureComponent<PropsType> {
             onClick={(e: any) => {
               this.editStorage(slug, true, e);
             }}
+            data-test="editStorageDataButton"
           >
             <Icon type="note" size={32} />
           </button>
@@ -198,6 +200,7 @@ class Storages extends PureComponent<PropsType> {
             onClick={(e: any) => {
               this.handleDelete(id, e);
             }}
+            data-test="deleteStorageButton"
           >
             <Icon type="basket" size="32" />
           </button>
@@ -213,7 +216,12 @@ class Storages extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="addButton">
-          <Button wireframe big onClick={this.createStorage}>
+          <Button
+            wireframe
+            big
+            onClick={this.createStorage}
+            dataTest="createStorageButton"
+          >
             Add storage
           </Button>
         </div>
