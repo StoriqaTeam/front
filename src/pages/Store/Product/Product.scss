@@ -8,14 +8,8 @@
   flex: 1 0 auto;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 2.875rem;
   position: relative;
   width: 100%;
-
-  @media (min-width: 992px) {
-    margin-top: 0;
-  }
-
 }
 
 .buttons-container {
@@ -51,17 +45,7 @@
 
 .thumbnailsWrapper {
   margin: 2.375rem 0 0 2rem;
-  display: none;
-
-  @media (min-width: 992px) {
-    display: block;
-  }
 }
 
 .noWrapper {
-  display: none;
-
-  @media (min-width: 992px) {
-    display: block;
-  }
 }

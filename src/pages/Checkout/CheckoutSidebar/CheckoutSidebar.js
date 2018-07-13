@@ -154,6 +154,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
               disabled={!isReadyToClick}
               big
               onClick={onClick}
+              dataTest="checkoutNext"
             >
               {buttonText}
             </Button>
