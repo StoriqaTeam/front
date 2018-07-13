@@ -135,6 +135,15 @@ const routes = (
       <Route
         path="/checkout"
         Component={Checkout}
+        render={({ props, Component }) => {
+          if (props && !props.me) {
+            const cookies = new Cookies();
+            cookies.remove('__jwt');
+            throw new RedirectException(`/login?from=/checkout`);
+          } else {
+            return <Component {...props} />;
+          }
+        }}
         query={graphql`
           query routes_Checkout_Query {
             me {
