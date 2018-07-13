@@ -1,13 +1,19 @@
 @import "../../styles/variables.scss";
 
 .container {
-  font-family: $font_medium;
+  display: flex;
+  flex-direction: column;
   color: $color_grey;
-  min-height: 90rem;
+  min-height: 80rem;
 }
 
 .stores-container {
   flex-grow: 1;
+}
+
+.empty-container {
+  width: 100%;
+  padding: 0 2rem;
 }
 
 .total-container {
@@ -18,8 +24,11 @@
 
 .body-container {
   display: flex;
+  flex: 1 0 auto;
 }
 
 .header {
-  padding: 0 0 1rem 2rem;
+  margin-bottom: 1rem;
+  padding: 0 2rem;
+  font-size: 24px;
 }

@@ -46,6 +46,7 @@ import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
 import Upload from 'components/Icon/svg/upload.svg';
 import VkGray from 'components/Icon/svg/vk_gray.svg';
 import Move from 'components/Icon/svg/move.svg';
+import EmptyCart from 'components/Icon/svg/emptyCart.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -64,7 +65,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 28 | 32 | 40 | 48 | 56 | 80,
+  size: 8 | 16 | 20 | 24 | 28 | 32 | 40 | 48 | 56 | 80 | 120,
   inline: ?boolean,
 };
 
@@ -114,6 +115,7 @@ const iconsMap = {
   user: <User />,
   vkGray: <VkGray />,
   move: <Move />,
+  emptyCart: <EmptyCart />,
 
   // For product
   mainFoto: <MainFoto />,
