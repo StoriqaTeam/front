@@ -2,6 +2,7 @@
 
 .container {
   background-color: $color_white;
+  padding: 2rem;
 
   .infoContainer {
     margin-top: 3rem;
@@ -22,6 +23,12 @@
         font-style: italic;
       }
     }
+  }
+}
+
+@media (min-width: $sm) {
+  .container {
+    padding: 3rem;
   }
 }
 

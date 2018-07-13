@@ -10,6 +10,10 @@
   margin-right: -15px;
 }
 
+.addressContainer {
+  padding-bottom: 2rem;
+}
+
 @media (min-width: $xl) { 
   .headerWrapper {
     margin-left: 0;
@@ -27,7 +31,7 @@
 .container {
   width: 100%;
   background-color: $color_white;
-  padding: 4rem;
+  // padding: 4rem;
   margin-bottom: 2rem;
 
   .title {

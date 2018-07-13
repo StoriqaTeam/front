@@ -174,9 +174,9 @@ class Checkout extends Component<PropsType, StateType> {
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
                 <Col size={12} md={8} lg={9}>
-                  <div styleName="wrapper">
-                    {step === 1 && (
-                      <div styleName="container">
+                  {step === 1 && (
+                    <div styleName="wrapper">
+                      <div styleName="container addressContainer">
                         <CheckoutAddress
                           me={me}
                           isAddressSelect={isAddressSelect}
@@ -187,8 +187,8 @@ class Checkout extends Component<PropsType, StateType> {
                           onChangeOrderInput={this.handleOnChangeOrderInput}
                         />
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                   {step === 2 && (
                     <div styleName="wrapper">
                       <div styleName="container">

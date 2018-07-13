@@ -6,7 +6,7 @@ import { pathOr } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
 import { Select } from 'components/common/Select';
 import { Input } from 'components/common/Input';
-import { Row, Col } from 'layout';
+import { Container, Row, Col } from 'layout';
 import { AddressForm } from 'components/AddressAutocomplete';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
@@ -98,79 +98,98 @@ class CheckoutContent extends React.Component<PropsType> {
       this.props,
     );
     return (
-      <Row>
-        <Col size={6}>
-          <div styleName="container">
-            <div styleName="title">Delivery info</div>
-            <div styleName="receiverContainer">
-              <Input
-                fullWidth
-                id="receiverName"
-                label="Receiver name"
-                onChange={this.handleChangeReceiver}
-                value={orderInput.receiverName}
-                limit={50}
-              />
-            </div>
-            <div styleName="selectAddressContainer">
-              <Checkbox
-                id="existingAddressCheckbox"
-                label="choose your address"
-                isChecked={isAddressSelect}
-                onChange={onChangeAddressType}
-              />
-              {isAddressSelect && (
-                <div styleName="selectWrapper">
-                  Address
-                  <Select
-                    items={addressesToSelect(deliveryAddresses)}
-                    activeItem={
-                      addressValue && { id: addressValue, label: addressValue }
-                    }
-                    onSelect={this.handleOnSelectAddress}
-                    forForm
-                    containerStyle={{ width: '24rem' }}
-                    dataTest="selectExistingAddress"
-                  />
-                </div>
-              )}
-            </div>
-            <div styleName="newAddressForm">
-              <Checkbox
-                id="newAddressCheckbox"
-                label="Or fill fields below and save as address"
-                isChecked={isNewAddress}
-                onChange={onChangeAddressType}
-              />
+      <Container correct>
+        <Row>
+          <Col size={9} xl={6}>
+            <div styleName="addressWrapper">
+              <div styleName="title">Delivery info</div>
+              <div styleName="receiverContainer">
+                <Input
+                  fullWidth
+                  id="receiverName"
+                  label="Receiver name"
+                  onChange={this.handleChangeReceiver}
+                  value={orderInput.receiverName}
+                  limit={50}
+                />
+              </div>
+              <div styleName="selectAddressContainer">
+                <Checkbox
+                  id="existingAddressCheckbox"
+                  label="choose your address"
+                  isChecked={isAddressSelect}
+                  onChange={onChangeAddressType}
+                />
+                {isAddressSelect && (
+                  <div styleName="selectWrapper">
+                    Address
+                    <Select
+                      items={addressesToSelect(deliveryAddresses)}
+                      activeItem={
+                        addressValue && {
+                          id: addressValue,
+                          label: addressValue,
+                        }
+                      }
+                      onSelect={this.handleOnSelectAddress}
+                      forForm
+                      containerStyle={{ width: '24rem' }}
+                      dataTest="selectExistingAddress"
+                    />
+                  </div>
+                )}
+              </div>
+              <Row>
+                <Col size={12} xlHidden>
+                  {orderInput.addressFull.value && (
+                    <AddressInfo
+                      addressFull={orderInput.addressFull}
+                      receiverName={
+                        orderInput.receiverName ||
+                        `${me.firstName} ${me.lastName}`
+                      }
+                      email={me.email}
+                    />
+                  )}
+                </Col>
+              </Row>
+              <div styleName="newAddressForm">
+                <Checkbox
+                  id="newAddressCheckbox"
+                  label="Or fill fields below and save as address"
+                  isChecked={isNewAddress}
+                  onChange={onChangeAddressType}
+                />
 
-              {isNewAddress && (
-                <div styleName="formWrapper">
-                  <AddressForm
-                    isOpen
-                    onChangeData={this.handleChangeData}
-                    country={addressFull ? addressFull.country : null}
-                    address={addressFull ? addressFull.value : null}
-                    addressFull={addressFull}
-                  />
-                </div>
-              )}
+                {isNewAddress && (
+                  <div styleName="formWrapper">
+                    <AddressForm
+                      isOpen
+                      onChangeData={this.handleChangeData}
+                      country={addressFull ? addressFull.country : null}
+                      address={addressFull ? addressFull.value : null}
+                      addressFull={addressFull}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </Col>
-        <Col size={6}>
-          {orderInput.addressFull.value && (
-            <div styleName="addressInfoContainer">
-              <AddressInfo
-                addressFull={orderInput.addressFull}
-                receiverName={
-                  orderInput.receiverName || `${me.firstName} ${me.lastName}`
-                }
-                email={me.email}
-              />
-            </div>
-          )}
-        </Col>
-      </Row>
+          </Col>
+          <Col size={6} xlVisibleOnly>
+            {orderInput.addressFull.value && (
+              <div styleName="addressInfoContainer">
+                <AddressInfo
+                  addressFull={orderInput.addressFull}
+                  receiverName={
+                    orderInput.receiverName || `${me.firstName} ${me.lastName}`
+                  }
+                  email={me.email}
+                />
+              </div>
+            )}
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
