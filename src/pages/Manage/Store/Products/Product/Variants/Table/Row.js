@@ -59,7 +59,10 @@ class Row extends PureComponent<PropsType> {
       attributes: attrs,
       stocks,
     } = this.props.variant;
-    const filteredStocks = filter(item => item.quantity > 0, stocks);
+    let filteredStocks = [];
+    if (stocks) {
+      filteredStocks = filter(item => item.quantity > 0, stocks);
+    }
     const cashback =
       Math.round(cashbackValue * 100) != null
         ? Math.round(cashbackValue * 100)

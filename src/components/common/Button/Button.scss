@@ -75,10 +75,12 @@
   color: $color_grey;
   font-size: 16px;
   background-color: $color_grey_trivial;
+  border: 1px solid $color_grey_trivial;
 
   &:hover {
     color: $color_white;
     background-color: $color_blue;
+    border: 1px solid $color_blue;
   }
 }
 

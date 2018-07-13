@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { pathOr, toLower } from 'ramda';
+import { toLower } from 'ramda';
 
 import { Container, Row, Col } from 'layout';
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -10,33 +10,13 @@ import Menu from './ManageStoreMenu';
 
 import './ManageStoreDecorator.scss';
 
-type StoreType = {
-  name: Array<{
-    text: string,
-    lang: string,
-  }>,
-  logo: ?string,
-};
-
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
-  me: {
-    store?: StoreType,
-    baseProduct?: {
-      store?: StoreType,
-    },
-  },
 };
 
 export default (OriginalComponent: any, title: string) =>
   class Manage extends PureComponent<PropsType> {
     render() {
-      // $FlowIgnoreMe
-      const store = pathOr(null, ['me', 'store'], this.props);
-      // $FlowIgnoreMe
-      const myStore = pathOr(null, ['me', 'myStore'], this.props);
-      // $FlowIgnoreMe
-      const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
       return (
         <Container>
           <Row>
@@ -44,10 +24,6 @@ export default (OriginalComponent: any, title: string) =>
               <Menu
                 activeItem={toLower(title)}
                 showAlert={this.props.showAlert}
-                storeData={
-                  store || myStore || (baseProduct && baseProduct.store) || null
-                }
-                baseProductData={baseProduct}
               />
             </Col>
             <Col size={10}>
