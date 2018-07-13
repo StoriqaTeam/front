@@ -7,13 +7,18 @@
   margin-bottom: 2rem;
 }
 
-.header {
-  padding: 0 0 1rem 2rem;
+.footer {
+  padding: 2rem 0;
 }
 
-.footer {
-  padding: 4rem;
-  display: flex;
+@media (min-width: $sm) {
+  .footer {
+    padding: 4rem 2rem;
+  }
+}
+
+.header {
+  padding: 0 0 1rem 2rem;
 }
 
 .store-info {
@@ -36,13 +41,25 @@
   height: 5rem;
 }
 
+.devider {
+  height: 1px;
+  background-color: $color_grey_trivial;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
 .store {
-  width: 66%;
+  // width: 66%;
+}
+
+.storeTotalWrapper {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .store-total {
-  width: 34%;
-  padding-left: 4rem;
+  // width: 34%;
+  // padding-left: 4rem;
 }
 
 .store-name {

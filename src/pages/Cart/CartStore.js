@@ -41,40 +41,53 @@ class CartStore extends PureComponent<PropsType> {
           <Row>
             <Col size={12}>
               {filteredProducts.map((product, idx) => (
-                <CartProduct
-                  key={idx}
-                  product={product}
-                  onlySelected={onlySelected}
-                  unselectable={unselectable}
-                />
+                <div>
+                  <CartProduct
+                    key={idx}
+                    product={product}
+                    onlySelected={onlySelected}
+                    unselectable={unselectable}
+                  />
+                  <div styleName="devider" />
+                </div>
               ))}
               <div styleName="footer">
                 <div styleName="store">
-                  <div styleName="store-info">
-                    {store.logo ? (
-                      <img
-                        src={store.logo}
-                        alt="store_picture"
-                        styleName="image"
-                      />
-                    ) : (
-                      <div styleName="noLogo">
-                        <Icon type="camera" size={28} />
-                      </div>
-                    )}
-                    <div styleName="store-description">
-                      <div styleName="store-name">
-                        {getNameText(store.name, 'EN')}
-                      </div>
-                      <Rating value={store.rating} />
-                    </div>
-                  </div>
-                  <div styleName="store-total">
-                    <div styleName="label">Subtotal</div>
-                    <div styleName="value">
-                      {formatPrice(store.productsCost || 0)} STQ
-                    </div>
-                  </div>
+                  <Container correct>
+                    <Row>
+                      <Col size={6}>
+                        <div styleName="store-info">
+                          {store.logo ? (
+                            <img
+                              src={store.logo}
+                              alt="store_picture"
+                              styleName="image"
+                            />
+                          ) : (
+                            <div styleName="noLogo">
+                              <Icon type="camera" size={28} />
+                            </div>
+                          )}
+                          <div styleName="store-description">
+                            <div styleName="store-name">
+                              {getNameText(store.name, 'EN')}
+                            </div>
+                            <Rating value={store.rating} />
+                          </div>
+                        </div>
+                      </Col>
+                      <Col size={6}>
+                        <div styleName="storeTotalWrapper">
+                          <div styleName="store-total">
+                            <div styleName="label">Subtotal</div>
+                            <div styleName="value">
+                              {formatPrice(store.productsCost || 0)} STQ
+                            </div>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
                 </div>
               </div>
             </Col>
