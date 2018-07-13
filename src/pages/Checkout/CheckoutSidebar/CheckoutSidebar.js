@@ -148,34 +148,40 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <div styleName="title">Subtotal</div>
             <div styleName="totalsContainer">
               <Row>
-                <Col size={12} sm={4} md={12}>
-                  <div styleName="attributeContainer">
-                    <div styleName="label">Subtotal</div>
-                    <div styleName="value">
-                      {productsCost && `${formatPrice(productsCost || 0)} STQ`}
-                    </div>
-                  </div>
-                </Col>
-                <Col size={12} sm={4} md={12}>
-                  <div styleName="attributeContainer">
-                    <div styleName="label">Delivery</div>
-                    <div styleName="value">
-                      {deliveryCost && `${formatPrice(deliveryCost || 0)} STQ`}
-                    </div>
-                  </div>
-                </Col>
-                <Col size={12} sm={4} md={12}>
-                  <div styleName="attributeContainer">
-                    <div styleName="label">
-                      Total{' '}
-                      <span styleName="subLabel">
-                        ({totalCount && totalCount} items)
-                      </span>
-                    </div>
-                    <div styleName="value bold">
-                      {totalCost && `${formatPrice(totalCost || 0)} STQ`}
-                    </div>
-                  </div>
+                <Col size={12} sm={9} md={12}>
+                  <Row>
+                    <Col size={12} sm={4} md={12}>
+                      <div styleName="attributeContainer">
+                        <div styleName="label">Subtotal</div>
+                        <div styleName="value">
+                          {productsCost &&
+                            `${formatPrice(productsCost || 0)} STQ`}
+                        </div>
+                      </div>
+                    </Col>
+                    <Col size={12} sm={4} md={12}>
+                      <div styleName="attributeContainer">
+                        <div styleName="label">Delivery</div>
+                        <div styleName="value">
+                          {deliveryCost &&
+                            `${formatPrice(deliveryCost || 0)} STQ`}
+                        </div>
+                      </div>
+                    </Col>
+                    <Col size={12} sm={4} md={12}>
+                      <div styleName="attributeContainer">
+                        <div styleName="label">
+                          Total{' '}
+                          <span styleName="subLabel">
+                            ({totalCount && totalCount} items)
+                          </span>
+                        </div>
+                        <div styleName="value bold">
+                          {totalCost && `${formatPrice(totalCost || 0)} STQ`}
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </div>
