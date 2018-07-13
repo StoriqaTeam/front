@@ -10,6 +10,7 @@ import { routerShape, withRouter } from 'found';
 import { log } from 'utils';
 import { CreateOrdersMutation } from 'relay/mutations';
 import { Page } from 'components/App';
+import { PaymentPopup } from 'pages/common/PaymentPopup';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -26,7 +27,6 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
-import PaymentPopup from './PaymentPopup';
 
 import CartStore from '../Cart/CartStore';
 
@@ -50,7 +50,9 @@ type StateType = {
     receiverName: string,
   },
   isPaymentPopupShown: boolean,
-  paymentPageUrl: ?string,
+  wallet: ?string,
+  amount: ?number,
+  resevedDueDate: ?string,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -77,6 +79,9 @@ class Checkout extends Component<PropsType, StateType> {
     },
     isPaymentPopupShown: false,
     paymentPageUrl: null,
+    wallet: null,
+    amount: null,
+    resevedDueDate: null,
   };
 
   setStoresRef(ref) {
@@ -87,8 +92,15 @@ class Checkout extends Component<PropsType, StateType> {
 
   storesRef: any;
 
-  showPaymentPopup = (url: string) => {
-    this.setState({ isPaymentPopupShown: true, paymentPageUrl: url });
+  showPaymentPopup = (input: {
+    wallet: string,
+    amount: number,
+    resevedDueDate: string,
+  }) => {
+    this.setState({
+      isPaymentPopupShown: true,
+      ...input,
+    });
   };
 
   handleChangeStep = step => () => this.setState({ step });
@@ -105,7 +117,12 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
-    const {
+    this.showPaymentPopup({
+      wallet: '0x0702dfed3d8b0bb356afccf2bd59ba4fb7a3f1a0',
+      amount: 123321,
+      resevedDueDate: '1',
+    });
+    /* const {
       orderInput: { addressFull, receiverName },
     } = this.state;
     CreateOrdersMutation.commit({
@@ -136,7 +153,7 @@ class Checkout extends Component<PropsType, StateType> {
         });
         this.props.router.push('/checkout');
       },
-    });
+    }); */
   };
 
   checkReadyToCheckout = () => {
@@ -152,9 +169,9 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handlePaymentPopupClose = () => {
-    this.setState({ isPaymentPopupShown: true, paymentPageUrl: null }, () => {
-      this.props.router.push('/profile/orders');
-    });
+    // this.setState({ isPaymentPopupShown: true, paymentPageUrl: null }, () => {
+    //   this.props.router.push('/profile/orders');
+    // });
   };
 
   render() {
@@ -174,16 +191,20 @@ class Checkout extends Component<PropsType, StateType> {
       map(path(['node'])),
       // $FlowIgnore
     )(this.props);
+    const { wallet, amount, resevedDueDate } = this.state;
     return (
       <Container withoutGrow>
-        {this.state.paymentPageUrl && (
-          <PaymentPopup
-            onCloseClicked={this.handlePaymentPopupClose}
-            isShown={this.state.isPaymentPopupShown}
-            // url={this.state.paymentPageUrl}
-            url="http://localhost:3003"
-          />
-        )}
+        {wallet &&
+          amount &&
+          resevedDueDate && (
+            <PaymentPopup
+              onCloseClicked={this.handlePaymentPopupClose}
+              isShown={this.state.isPaymentPopupShown}
+              walletAddress={wallet}
+              amount={amount}
+              reservedDueDate={resevedDueDate}
+            />
+          )}
         <Row withoutGrow>
           <Col size={12}>
             <CheckoutHeader

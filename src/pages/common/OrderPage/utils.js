@@ -12,7 +12,9 @@ const getStatusStringFromEnum = (orderStatus: string): string => {
       return 'In process';
     case 'PAID':
       return 'Paid';
-    case 'PAIMENT_AWAITED':
+    case 'TRANSACTION_PENDING':
+      return 'Transaction pending';
+    case 'PAYMENT_AWAITED':
       return 'Wait for payment';
     case 'RECEIVED':
       return 'Received';
@@ -36,7 +38,9 @@ const getEnumFromStatusString = (orderStatus: string): ?string => {
     case 'Paid':
       return 'PAID';
     case 'Wait for payment':
-      return 'PAIMENT_AWAITED';
+      return 'PAYMENT_AWAITED';
+    case 'Transaction pending':
+      return 'TRANSACTION_PENDING';
     case 'Received':
       return 'RECEIVED';
     case 'Sent':

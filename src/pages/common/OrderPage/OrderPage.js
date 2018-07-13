@@ -1,11 +1,12 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
 
 import { Button } from 'components/common/Button';
+import { PaymentPopup } from 'pages/common/PaymentPopup';
 
 import {
   timeFromTimestamp,
@@ -47,9 +48,25 @@ type OrderDTOType = {
   status: string,
   paymentStatus: string,
   statusHistory: Array<OrderStatusType>,
+  transactionInfo?: {
+    wallet: string,
+    amount: number,
+    reservedDueDate: string,
+    transactionId: ?string,
+    status: string,
+    ordersInInvoice: number,
+  },
 };
 
-class OrderPage extends PureComponent<PropsType> {
+type StateType = {
+  isPaymentInfoPopupShown: boolean,
+};
+
+class OrderPage extends Component<PropsType, StateType> {
+  state: StateType = {
+    isPaymentInfoPopupShown: false,
+  };
+
   getDateFromTimestamp = (timestamp: string): string =>
     fullDateFromTimestamp(timestamp);
 
@@ -128,6 +145,17 @@ class OrderPage extends PureComponent<PropsType> {
           additionalInfo: historyEdge.node.comment,
         };
       }, order && order.history ? sort((a, b) => moment(a.node.committedAt).isBefore(b.node.committedAt), order.history.edges) : []),
+      transactionInfo: {
+        wallet: '0x0702dfed3d8b0bb356afccf2bd59ba4fb7a3f1a0',
+        amount: 123321,
+        reservedDueDate: moment()
+          .utc()
+          .add(20, 'm')
+          .format(),
+        transactionId: null,
+        status: 'asdf',
+        ordersInInvoice: 3,
+      },
     };
     return orderDTO;
   };
@@ -172,11 +200,27 @@ class OrderPage extends PureComponent<PropsType> {
     }
   };
 
+  showPaymentInfoPopup = () => {
+    this.setState({ isPaymentInfoPopupShown: true });
+  };
+
   render() {
     const { order: orderFromProps } = this.props;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
       <div styleName="container">
+        {order.transactionInfo &&
+          this.state.isPaymentInfoPopupShown && (
+            <PaymentPopup
+              isShown={this.state.isPaymentInfoPopupShown}
+              onCloseClicked={() =>
+                this.setState({ isPaymentInfoPopupShown: false })
+              }
+              walletAddress={order.transactionInfo.wallet}
+              amount={order.transactionInfo.amount}
+              reservedDueDate={order.transactionInfo.reservedDueDate}
+            />
+          )}
         <div styleName="orderNumber">ORDER #{order.number}</div>
         <div styleName="statusBlock">
           <div styleName="statuses">
@@ -190,15 +234,21 @@ class OrderPage extends PureComponent<PropsType> {
                 paid: order.paymentStatus === 'Paid',
                 unpaid: order.paymentStatus !== 'Paid',
               })}
-            >
-              {order.paymentStatus}
-            </div>
+            />
           </div>
           <div styleName="buttonWrapper">
             <Button wireframe big>
               Open ticket
             </Button>
           </div>
+          {order.paymentStatus !== 'Paid' &&
+            order.transactionInfo && (
+              <div styleName="buttonWrapper">
+                <Button wireframe big onClick={this.showPaymentInfoPopup}>
+                  Payment info
+                </Button>
+              </div>
+            )}
         </div>
         <ProductBlock product={order.product} />
         <div styleName="infoBlock">

@@ -1,0 +1,136 @@
+@import '../../../styles/variables.scss';
+
+.container {
+  width: 78rem;
+  height: 67.75rem;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin-top: 5rem;
+  height: 5.25rem;
+  font-size: 36px;
+  text-align: center;
+  font-family: $font_light;
+}
+
+.description {
+  margin-top: 2.25rem;
+  margin-left: 13rem;
+  margin-right: 13rem;
+  font-size: 16px;
+  color: $color_grey_minor;
+  text-align: center;
+}
+
+.paymentInfoWrapper {
+  margin-top: 2.25rem;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  display: flex;
+}
+
+.paymentInfo {
+  margin-left: 3rem;
+}
+
+.addressTitle {
+  font-size: 16px;
+  color: $color_grey_minor;
+  margin-top: 2rem;
+}
+
+.address {
+  font-size: 16px;
+}
+
+.amountTitle {
+  font-size: 16px;
+  color: $color_grey_minor;
+  margin-top: 2rem;
+}
+
+.amount {
+  font-size: 20px;
+  font-weight: bold;
+  color: $color_grey;
+}
+
+.reserveInfo {
+  margin-top: 4.5rem;
+  font-size: 14px;
+  color: $color_grey_minor;
+}
+
+.timer {
+  color: $color_grey;
+}
+
+.sendButtonWrapper {
+  width: 32.5rem;
+  margin-top: 7.75rem;
+  button {
+    width: 100%;
+  }
+}
+
+.paymentStatusContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  color: $color_grey_minor;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .description {
+    margin-top: 4.75rem;
+  }
+
+  .close {
+    margin-top: 2rem;
+    cursor: pointer;
+  }
+
+  .loader,
+  .loader:after {
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;
+  }
+  .loader {
+    font-size: 10px;
+    position: relative;
+    border-top: 1.1em solid #f3f3f3;
+    border-right: 1.1em solid #f3f3f3;
+    border-bottom: 1.1em solid #f3f3f3;
+    border-left: 1.1em solid $color_blue;
+    transform: translateZ(0);
+    animation: load8 1.1s infinite linear;
+  }
+  @-webkit-keyframes load8 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load8 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
