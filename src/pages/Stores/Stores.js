@@ -118,10 +118,8 @@ class Stores extends Component<PropsType, StateType> {
             searchValue={searchValue}
           />
           <Row>
-            <Col sm={1} md={1} lg={2} xl={2}>
-              <aside styleName="sidebar">
-                <StoresSidebar search={this.props.search} />
-              </aside>
+            <Col sm={1} md={1} lg={2} xl={2} lgVisible>
+              <StoresSidebar search={this.props.search} />
             </Col>
             <Col sm={12} md={12} lg={10} xl={10}>
               {stores && stores.length > 0 ? (

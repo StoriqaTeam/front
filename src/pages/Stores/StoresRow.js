@@ -36,7 +36,7 @@ class StoresRow extends PureComponent<PropsType> {
           <Col size={12} sm={4} md={4} lg={4} xl={4}>
             <StoresData store={store} />
           </Col>
-          <Col sm={1} md={3} lg={3} xl={3}>
+          <Col sm={1} md={3} lg={3} xl={3} mdVisible>
             <div styleName="storeElect">
               <Icon type="heart" size="32" />
             </div>

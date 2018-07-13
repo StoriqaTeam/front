@@ -2,10 +2,10 @@
 
 import type { TranslationType } from './index';
 
-export type ChildrenType = {
+export type CategoryChildrenType = {
   rawId: number,
   parentId?: ?number,
   level?: ?number,
   name: Array<TranslationType>,
-  children: Array<ChildrenType>,
+  children: Array<CategoryChildrenType>,
 };

@@ -159,10 +159,10 @@ class Checkout extends Component<PropsType, StateType> {
   checkReadyToCheckout = () => {
     const {
       orderInput: {
-        addressFull: { value, country, locality, postalCode, streetNumber },
+        addressFull: { value, country, locality, postalCode },
       },
     } = this.state;
-    if (!value || !country || !locality || !postalCode || !streetNumber) {
+    if (!value || !country || !locality || !postalCode) {
       return false;
     }
     return true;

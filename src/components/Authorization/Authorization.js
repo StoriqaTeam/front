@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
-import { withRouter, matchShape, routerShape } from 'found';
+import { withRouter, matchShape } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
@@ -23,7 +23,6 @@ type PropsType = {
   isSignUp: ?boolean,
   alone: ?boolean,
   match: matchShape,
-  router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
   onCloseModal?: () => void,
 };
@@ -177,7 +176,7 @@ class Authorization extends Component<PropsType, StateType> {
             this.context.handleLogin();
             if (alone) {
               if (from && from !== '') {
-                this.props.router.replace(from);
+                window.location.replace(from);
               } else {
                 window.location = '/';
               }

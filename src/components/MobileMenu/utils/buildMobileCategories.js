@@ -5,16 +5,16 @@ import { map, isEmpty, isNil } from 'ramda';
 import { extractText } from 'utils';
 
 import type {
-  ChildrenType,
+  CategoryChildrenType,
   CategoryType,
   TransformedCategoryType,
-} from '../types';
+} from 'types';
 
 function build({
   name,
   rawId,
   children,
-}: ChildrenType): TransformedCategoryType {
+}: CategoryChildrenType): TransformedCategoryType {
   return {
     name: extractText(name),
     rawId,
