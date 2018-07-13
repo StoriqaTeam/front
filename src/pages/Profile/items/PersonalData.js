@@ -243,6 +243,7 @@ class PersonalData extends Component<PropsType, StateType> {
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
+        fullWidth
       />
     </div>
   );
@@ -274,6 +275,7 @@ class PersonalData extends Component<PropsType, StateType> {
             items={genderItems}
             onSelect={this.handleGenderSelect}
             dataTest="profileGenderSelect"
+            fullWidth
           />
         </div>
         <div styleName="formItem">

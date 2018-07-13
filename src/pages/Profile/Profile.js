@@ -71,7 +71,7 @@ class Profile extends Component<PropsType, StateType> {
           <div styleName="container">
             <Container>
               <Row>
-                <Col sm={3} md={3} lg={2} xl={2} mdVisible>
+                <Col sm={3} md={3} lg={2} xl={2}>
                   <Menu
                     environment={environment}
                     activeItem={activeItem}
