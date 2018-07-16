@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { assocPath, map, assoc } from 'ramda';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
@@ -44,7 +45,7 @@ type DeliveryAddressesType = {
 };
 
 type PropsType = {
-  data: {
+  me: {
     rawId: number,
     firstName: string,
     lastName: string,
@@ -97,7 +98,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
 
   handleSave = (id: ?number) => {
     const { environment } = this.context;
-    const { data } = this.props;
+    const { me } = this.props;
     const { form } = this.state;
     const {
       country,
@@ -147,7 +148,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       isPriority,
     };
 
-    const createInput = { ...input, userId: data.rawId };
+    const createInput = { ...input, userId: me.rawId };
     const updateInput = { ...input, id };
 
     // $FlowIgnoreMe
@@ -326,9 +327,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { data } = this.props;
+    const { me } = this.props;
     const { editableAddressId, isOpenNewForm } = this.state;
-    const { deliveryAddresses = [] } = data;
+    const { deliveryAddresses = [] } = me;
     return (
       <Fragment>
         {deliveryAddresses.length === 0 && (
@@ -381,10 +382,10 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                         {postalCode && `${postalCode}`}
                       </div>
                       <div styleName="name">
-                        {`${data.firstName} ${data.lastName}`}
+                        {`${me.firstName} ${me.lastName}`}
                       </div>
                       <div styleName="email">
-                        <i>{data.email}</i>
+                        <i>{me.email}</i>
                       </div>
                       <div styleName="editButtons">
                         <Button
@@ -432,4 +433,31 @@ ShippingAddresses.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(ShippingAddresses);
+export default createFragmentContainer(
+  withShowAlert(ShippingAddresses),
+  graphql`
+    fragment ShippingAddresses_me on User {
+      rawId
+      firstName
+      lastName
+      email
+      deliveryAddresses {
+        rawId
+        id
+        userId
+        isPriority
+        address {
+          country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          political
+          postalCode
+          streetNumber
+          value
+          route
+          locality
+        }
+      }
+    }
+  `,
+);

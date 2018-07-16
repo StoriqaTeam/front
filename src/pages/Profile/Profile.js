@@ -56,7 +56,7 @@ class Profile extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const element = pathOr(null, [activeItem], profileMenuMap);
     return cloneElement(element, {
-      data: me,
+      me,
       subtitle,
     });
   };
@@ -108,33 +108,14 @@ export default createFragmentContainer(
     fragment Profile_me on User {
       ...Orders
       ...Order
+      ...PersonalData_me
+      ...ShippingAddresses_me
       id
       rawId
       avatar
-      email
-      phone
       firstName
       lastName
-      birthdate
-      gender
       provider
-      deliveryAddresses {
-        rawId
-        id
-        userId
-        isPriority
-        address {
-          country
-          administrativeAreaLevel1
-          administrativeAreaLevel2
-          political
-          postalCode
-          streetNumber
-          value
-          route
-          locality
-        }
-      }
     }
   `,
 );
