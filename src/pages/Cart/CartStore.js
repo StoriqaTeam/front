@@ -41,9 +41,8 @@ class CartStore extends PureComponent<PropsType> {
           <Row>
             <Col size={12}>
               {filteredProducts.map((product, idx) => (
-                <div>
+                <div key={idx}>
                   <CartProduct
-                    key={idx}
                     product={product}
                     onlySelected={onlySelected}
                     unselectable={unselectable}

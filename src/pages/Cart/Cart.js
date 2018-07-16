@@ -90,10 +90,16 @@ class Cart extends Component<PropsType, StateType> {
             <div styleName="header">My cart</div>
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
-                <Col size={12} md={8} lg={9}>
-                  {emptyCart ? (
-                    <CartEmpty />
-                  ) : (
+                {emptyCart ? (
+                  <Col size={12}>
+                    <div styleName="wrapper">
+                      <div styleName="storeContainer">
+                        <CartEmpty />
+                      </div>
+                    </div>
+                  </Col>
+                ) : (
+                  <Col size={12} md={8} lg={9}>
                     <div styleName="wrapper">
                       <div styleName="storeContainer">
                         {stores.map(store => (
@@ -105,8 +111,8 @@ class Cart extends Component<PropsType, StateType> {
                         ))}
                       </div>
                     </div>
-                  )}
-                </Col>
+                  </Col>
+                )}
                 <Col size={12} md={4} lg={3}>
                   {!emptyCart && (
                     <div styleName="sidebarWrapper">

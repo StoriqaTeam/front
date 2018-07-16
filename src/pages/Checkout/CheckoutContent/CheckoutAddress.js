@@ -97,6 +97,8 @@ class CheckoutContent extends React.Component<PropsType> {
       ['orderInput', 'addressFull', 'value'],
       this.props,
     );
+    const items = addressesToSelect(deliveryAddresses);
+    console.log('>>> CheckoutAddress address items: ', { items });
     return (
       <Container correct>
         <Row>
@@ -124,7 +126,7 @@ class CheckoutContent extends React.Component<PropsType> {
                   <div styleName="selectWrapper">
                     Address
                     <Select
-                      items={addressesToSelect(deliveryAddresses)}
+                      items={items}
                       activeItem={
                         addressValue && {
                           id: addressValue,
