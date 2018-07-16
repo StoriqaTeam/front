@@ -27,6 +27,7 @@ import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
 
 import CartStore from '../Cart/CartStore';
+import CartEmpty from '../Cart/CartEmpty';
 
 import './Checkout.scss';
 
@@ -158,71 +159,90 @@ class Checkout extends Component<PropsType, StateType> {
       map(path(['node'])),
       // $FlowIgnore
     )(this.props);
+    const emptyCart = totalCount === 0;
     return (
       <Container withoutGrow>
         <Row withoutGrow>
-          <Col size={12}>
-            <CheckoutHeader
-              currentStep={step}
-              isReadyToNext={this.checkReadyToCheckout()}
-              onChangeStep={this.handleChangeStep}
-            />
-          </Col>
+          {!emptyCart && (
+            <Col size={12}>
+              <div styleName="headerWrapper">
+                <CheckoutHeader
+                  currentStep={step}
+                  isReadyToNext={this.checkReadyToCheckout()}
+                  onChangeStep={this.handleChangeStep}
+                />
+              </div>
+            </Col>
+          )}
           <Col size={12}>
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
-                <Col size={9}>
-                  {step === 1 && (
-                    <div styleName="container">
-                      <CheckoutAddress
-                        me={me}
-                        isAddressSelect={isAddressSelect}
-                        isNewAddress={isNewAddress}
-                        onChangeAddressType={this.handleOnChangeAddressType}
-                        deliveryAddresses={deliveryAddresses || []}
-                        orderInput={orderInput}
-                        onChangeOrderInput={this.handleOnChangeOrderInput}
-                      />
-                    </div>
-                  )}
-                  {step === 2 && (
-                    <div>
-                      <div styleName="container">
-                        <CheckoutProducts
-                          me={me}
-                          orderInput={orderInput}
-                          onChangeStep={this.handleChangeStep}
-                        />
-                      </div>
+                {emptyCart ? (
+                  <Col size={12}>
+                    <div styleName="wrapper">
                       <div styleName="storeContainer">
-                        {stores.map(store => (
-                          <CartStore
-                            onlySelected
-                            unselectable
-                            key={store.__id}
-                            store={store}
-                            totals={1000}
-                          />
-                        ))}
+                        <CartEmpty />
                       </div>
                     </div>
-                  )}
-                </Col>
-                <Col size={3}>
-                  <CheckoutSidebar
-                    storesRef={this.state.storesRef}
-                    buttonText={step === 1 ? 'Next' : 'Checkout'}
-                    onClick={
-                      (step === 1 && this.handleChangeStep(2)) ||
-                      this.handleCheckout
-                    }
-                    productsCost={productsCost}
-                    deliveryCost={deliveryCost}
-                    totalCount={totalCount}
-                    totalCost={totalCost}
-                    isReadyToClick={this.checkReadyToCheckout()}
-                  />
-                </Col>
+                  </Col>
+                ) : (
+                  <Col size={12} md={8} lg={9}>
+                    {step === 1 && (
+                      <div styleName="wrapper">
+                        <div styleName="container addressContainer">
+                          <CheckoutAddress
+                            me={me}
+                            isAddressSelect={isAddressSelect}
+                            isNewAddress={isNewAddress}
+                            onChangeAddressType={this.handleOnChangeAddressType}
+                            deliveryAddresses={deliveryAddresses || []}
+                            orderInput={orderInput}
+                            onChangeOrderInput={this.handleOnChangeOrderInput}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {step === 2 && (
+                      <div styleName="wrapper">
+                        <div styleName="container">
+                          <CheckoutProducts
+                            me={me}
+                            orderInput={orderInput}
+                            onChangeStep={this.handleChangeStep}
+                          />
+                        </div>
+                        <div styleName="storeContainer">
+                          {stores.map(store => (
+                            <CartStore
+                              onlySelected
+                              unselectable
+                              key={store.__id}
+                              store={store}
+                              totals={1000}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </Col>
+                )}
+                {!emptyCart && (
+                  <Col size={12} md={4} lg={3}>
+                    <CheckoutSidebar
+                      storesRef={this.state.storesRef}
+                      buttonText={step === 1 ? 'Next' : 'Checkout'}
+                      onClick={
+                        (step === 1 && this.handleChangeStep(2)) ||
+                        this.handleCheckout
+                      }
+                      productsCost={productsCost}
+                      deliveryCost={deliveryCost}
+                      totalCount={totalCount}
+                      totalCost={totalCost}
+                      isReadyToClick={this.checkReadyToCheckout()}
+                    />
+                  </Col>
+                )}
               </Row>
             </div>
           </Col>
@@ -233,7 +253,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout))),
+  Page(withShowAlert(withRouter(Checkout)), true),
   graphql`
     fragment Checkout_me on User {
       id

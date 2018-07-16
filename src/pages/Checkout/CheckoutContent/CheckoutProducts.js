@@ -13,29 +13,32 @@ type PropsType = {
   onChangeStep: Function,
 };
 
-const CheckoutContent = ({ orderInput, me, onChangeStep }: PropsType) => (
+const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
         <div styleName="title">Submit</div>
         <div styleName="infoContainer">
           <Row>
-            <Col size={9}>
+            <Col size={3}>
               <div styleName="centeredTitle">
                 <div>Address</div>
               </div>
             </Col>
-            <Col size={3}>
-              <Button
-                big
-                contour
-                whireframe
-                onClick={onChangeStep(1)}
-                type="button"
-                dataTest="changeAddress"
-              >
-                <span>Replace address</span>
-              </Button>
+            <Col size={9} smVisible>
+              <div styleName="wrapperAddressButton">
+                <div styleName="containerAddressButton">
+                  <Button
+                    big
+                    contour
+                    onClick={onChangeStep(1)}
+                    type="button"
+                    dataTest="changeAddress"
+                  >
+                    <span>Replace address</span>
+                  </Button>
+                </div>
+              </div>
             </Col>
             <Col size={12}>
               {orderInput.addressFull.value && (
@@ -48,6 +51,20 @@ const CheckoutContent = ({ orderInput, me, onChangeStep }: PropsType) => (
                 />
               )}
             </Col>
+            <Col size={12} smHidden>
+              <div styleName="containerAddressButton2">
+                <Button
+                  big
+                  contour
+                  whireframe
+                  onClick={onChangeStep(1)}
+                  type="button"
+                  dataTest="changeAddress"
+                >
+                  <span>Replace address</span>
+                </Button>
+              </div>
+            </Col>
           </Row>
         </div>
       </div>
@@ -55,4 +72,4 @@ const CheckoutContent = ({ orderInput, me, onChangeStep }: PropsType) => (
   </Row>
 );
 
-export default CheckoutContent;
+export default CheckoutProducts;
