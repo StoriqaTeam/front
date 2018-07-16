@@ -2,17 +2,13 @@
 
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pipe, path, pathOr, map, head, defaultTo } from 'ramda';
+import { pipe, path, pathOr, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 
 import { withShowAlert } from 'components/App/AlertContext';
 import { Checkbox } from 'components/Checkbox';
-import ShowMore from 'components/ShowMore';
-import Stepper from 'components/Stepper';
-import { Input } from 'components/common/Input';
 import { Icon } from 'components/Icon';
-import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
 import {
   SetQuantityInCartMutation,
@@ -20,7 +16,7 @@ import {
   DeleteFromCartMutation,
   SetCommentInCartMutation,
 } from 'relay/mutations';
-import { log, formatPrice } from 'utils';
+import { log } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 

@@ -59,6 +59,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     // eslint-disable-next-line
     const sidebarWidth = ReactDOM.findDOMNode(
       this.wrapperRef,
+      // $FlowIgnore
     ).getBoundingClientRect().width;
     this.setState({ sidebarWidth });
   };
@@ -73,6 +74,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
 
   dispose: Function;
   ref: ?{ className: string };
+  wrapperRef: any;
   scrolling: boolean;
   handleScroll: () => void;
   scrolling = false;
