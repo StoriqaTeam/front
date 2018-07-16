@@ -32,6 +32,7 @@ type PropsType = {
     [name: string]: any,
   },
   dataTest: string,
+  // eslint-disable-next-line
   withEmpty?: boolean,
   isBirthdate?: boolean,
   onClick: () => void,
@@ -39,6 +40,14 @@ type PropsType = {
 };
 
 class Select extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    const { items, withEmpty } = nextProps;
+    return {
+      ...prevState,
+      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
+    };
+  }
+
   static defaultProps = {
     onClick: () => {},
     isMobile: false,
@@ -49,13 +58,6 @@ class Select extends Component<PropsType, StateType> {
       isExpanded: false,
       items: props.items,
     };
-  }
-
-  componentWillMount() {
-    const { items, withEmpty } = this.props;
-    this.setState({
-      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
-    });
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
       window.addEventListener('keydown', this.handleToggleExpand);
@@ -111,7 +113,6 @@ class Select extends Component<PropsType, StateType> {
       isMobile,
     } = this.props;
     const { isExpanded, items } = this.state;
-
     return (
       <div
         ref={node => {

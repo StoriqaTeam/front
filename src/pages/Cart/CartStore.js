@@ -6,7 +6,7 @@ import { filter, whereEq } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
-import { Row, Col } from 'layout';
+import { Container, Row, Col } from 'layout';
 import { formatPrice, getNameText } from 'utils';
 
 import CartProduct from './CartProduct';
@@ -36,51 +36,63 @@ class CartStore extends PureComponent<PropsType> {
       return null;
     }
     return (
-      <Row>
-        <Col size={12}>
-          <div styleName="container">
-            <div>
+      <div styleName="container">
+        <Container correct>
+          <Row>
+            <Col size={12}>
               {filteredProducts.map((product, idx) => (
-                <CartProduct
-                  key={idx}
-                  product={product}
-                  onlySelected={onlySelected}
-                  unselectable={unselectable}
-                />
+                <div key={idx}>
+                  <CartProduct
+                    product={product}
+                    onlySelected={onlySelected}
+                    unselectable={unselectable}
+                  />
+                  <div styleName="devider" />
+                </div>
               ))}
-            </div>
-            <div styleName="footer">
-              <div styleName="store">
-                <div styleName="store-info">
-                  {store.logo ? (
-                    <img
-                      src={store.logo}
-                      alt="store_picture"
-                      styleName="image"
-                    />
-                  ) : (
-                    <div styleName="noLogo">
-                      <Icon type="camera" size={28} />
-                    </div>
-                  )}
-                  <div styleName="store-description">
-                    <div styleName="store-name">
-                      {getNameText(store.name, 'EN')}
-                    </div>
-                    <Rating value={store.rating} />
-                  </div>
+              <div styleName="footer">
+                <div>
+                  <Container correct>
+                    <Row>
+                      <Col size={6}>
+                        <div styleName="store-info">
+                          {store.logo ? (
+                            <img
+                              src={store.logo}
+                              alt="store_picture"
+                              styleName="image"
+                            />
+                          ) : (
+                            <div styleName="noLogo">
+                              <Icon type="camera" size={28} />
+                            </div>
+                          )}
+                          <div styleName="store-description">
+                            <div styleName="store-name">
+                              {getNameText(store.name, 'EN')}
+                            </div>
+                            <Rating value={store.rating} />
+                          </div>
+                        </div>
+                      </Col>
+                      <Col size={6}>
+                        <div styleName="storeTotalWrapper">
+                          <div>
+                            <div styleName="label">Subtotal</div>
+                            <div styleName="value">
+                              {formatPrice(store.productsCost || 0)} STQ
+                            </div>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
                 </div>
               </div>
-              <div styleName="store-total">
-                <div styleName="label">Subtotal</div>
-                <div styleName="value">
-                  {formatPrice(store.productsCost || 0)} STQ
-                </div>
-              </div>
-            </div>
-          </div>
-        </Col>
-      </Row>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }

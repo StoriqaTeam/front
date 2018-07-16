@@ -2,6 +2,7 @@
 
 .container {
   background-color: $color_white;
+  padding: 2rem;
 
   .infoContainer {
     margin-top: 3rem;
@@ -23,6 +24,27 @@
       }
     }
   }
+}
+
+@media (min-width: $sm) {
+  .container {
+    padding: 3rem;
+  }
+}
+
+.wrapperAddressButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.containerAddressButton {
+  width: 23.25rem;
+}
+
+.containerAddressButton2 {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.75rem;
 }
 
 .title {
