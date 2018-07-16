@@ -100,7 +100,6 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
       setWindowTag('user', snapshotUser.data);
       // end tmp code
 
-      // $FlowIgnoreMe
       const myStoreId = pathOr(null, ['myStore', 'rawId'], snapshotUser.data);
       // $FlowIgnoreMe
       const routeStoreId = pathOr(
