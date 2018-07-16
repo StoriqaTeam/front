@@ -1,25 +1,34 @@
 @import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
 
-.menu {
+.container {
   position: relative;
+}
+
+.offscreen {
+  @include offscreen();
 }
 
 .imgWrap {
-  position: relative;
   border-radius: 0.5rem;
+  display: none;
+  position: relative;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .cross {
+  cursor: pointer;
+  left: -3rem;
   position: absolute;
   top: 0.5rem;
-  left: -3rem;
-  cursor: pointer;
 }
 
 .img {
   display: block;
-  width: 100%;
   height: auto;
+  width: 100%;
 }
 
 .title {
@@ -30,14 +39,18 @@
 }
 
 .items {
+  display: none;
   position: relative;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .item {
+  cursor: pointer;
+  font-size: 14px;
   margin-left: -2rem;
   padding: 1.5rem 0 1.5rem 2rem;
-  font-size: 14px;
-  cursor: pointer;
   transition: $transition_all_ease;
 
   &:hover:not(.isDisabled) {
@@ -46,28 +59,38 @@
 }
 
 .isActive {
+  background-color: $color_white;
   font-family: $font_medium;
   position: relative;
-  background-color: $color_white;
 }
 
 .isDisabled {
   color: $color_grey_minor;
 }
 
-
 .isActive:before {
+  border-left: 2px solid $color_blue;
+  bottom: 0;
   content: '';
+  display: block;
+  left: 0;
   position: absolute;
   top: 0;
-  bottom: 0;
-  left: 0;
   width: 0.25rem;
-  display: block;
-  border-left: 2px solid $color_blue;
 }
 
 .storeLogo {
   width: 26rem;
   height: 26rem;
+}
+
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 2rem;
+  @media (min-width: $md) {
+    display: none;
+  }
+
 }

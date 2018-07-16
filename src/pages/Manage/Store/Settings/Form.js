@@ -247,6 +247,7 @@ class Form extends Component<PropsType, StateType> {
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
+        fullWidth
       />
     </div>
   );
@@ -259,6 +260,7 @@ class Form extends Component<PropsType, StateType> {
         label={label}
         onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        fullWidth
       />
     </div>
   );
@@ -291,6 +293,7 @@ class Form extends Component<PropsType, StateType> {
               onSelect={this.handleDefaultLanguage}
               tabIndexValue={0}
               dataTest="storeLangSelect"
+              fullWidth
             />
           </div>
           {this.renderInput({

@@ -5,9 +5,13 @@ import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
+import type { Environment } from 'relay-runtime';
 
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
+import { Collapse } from 'components/Collapse';
+import { MobileUpload } from 'components/MobileUpload';
+
 import {
   uploadFile,
   getNameText,
@@ -44,6 +48,7 @@ type PropsType = {
     }>,
     logo: ?string,
   },
+  environment: Environment,
 };
 
 class Menu extends PureComponent<PropsType> {
@@ -56,7 +61,7 @@ class Menu extends PureComponent<PropsType> {
   };
 
   handleLogoUpload = (url: string) => {
-    const { environment } = this.context;
+    const { environment } = this.props;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['storeData', 'id'], this.props);
     if (!storeId) {
@@ -146,7 +151,12 @@ class Menu extends PureComponent<PropsType> {
   deleteAvatar = () => {
     this.handleLogoUpload('');
   };
-
+  handleSelected = (item: { id: string, title: string }): void => {
+    const {
+      router: { push },
+    } = this.props;
+    push(`/profile/${item.id}`);
+  };
   render() {
     const {
       activeItem,
@@ -162,13 +172,24 @@ class Menu extends PureComponent<PropsType> {
       storeLogo = store.logo;
     }
     return (
-      <div styleName="menu">
+      <aside styleName="container">
+        <h2 styleName="offscreen">Manage</h2>
+        <div styleName="mobileMenu">
+          <Collapse items={menuItems} onSelected={this.handleSelected} />
+          <div style={{ margin: '1.05rem 0' }} />
+          <MobileUpload
+            avatar={convertSrc(storeLogo, 'medium') || null}
+            id="some"
+            onUpload={this.handleOnUpload}
+          />
+        </div>
         <div styleName="imgWrap">
           <UploadWrapper
             id="new-store-id"
             onUpload={this.handleOnUpload}
-            buttonHeight={26}
-            buttonWidth={26}
+            customUnit
+            buttonHeight="26rem"
+            buttonWidth="100%"
             buttonIconSize={48}
             buttonIconType="upload"
             buttonLabel="Click to upload logo"
@@ -209,7 +230,7 @@ class Menu extends PureComponent<PropsType> {
             );
           })}
         </div>
-      </div>
+      </aside>
     );
   }
 }
