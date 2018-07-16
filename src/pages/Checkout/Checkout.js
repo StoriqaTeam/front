@@ -78,7 +78,6 @@ class Checkout extends Component<PropsType, StateType> {
       receiverName: '',
     },
     isPaymentPopupShown: false,
-    paymentPageUrl: null,
     wallet: null,
     amount: null,
     resevedDueDate: null,
