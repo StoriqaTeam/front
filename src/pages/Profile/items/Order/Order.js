@@ -10,7 +10,7 @@ import { OrderPage } from 'pages/common/OrderPage';
 import type { Order as OrderType } from './__generated__/Order.graphql';
 
 type PropsType = {
-  data: OrderType,
+  me: OrderType,
   relay: {
     refetch: Function,
   },
@@ -31,7 +31,7 @@ class Order extends PureComponent<PropsType> {
   }
 
   render() {
-    const { order } = this.props.data;
+    const { order } = this.props.me;
     if (!order) {
       return null;
     }
