@@ -134,7 +134,9 @@ class Menu extends PureComponent<PropsType> {
   handleClick = (item: MenuItemType): void => {
     const { link } = item;
     const {
-      router,
+      router: {
+        replace,
+      },
       match: {
         params: { storeId },
       },
@@ -143,19 +145,13 @@ class Menu extends PureComponent<PropsType> {
       if (!isNil(storeId)) {
         const storePath = `/manage/store/${storeId}`;
         const path = link === '/' ? storePath : `${storePath}${link}`;
-        router.replace(path);
+        replace(path);
       }
     }
   };
 
-  deleteAvatar = () => {
+  deleteAvatar = (): void => {
     this.handleLogoUpload('');
-  };
-  handleSelected = (item: { id: string, title: string }): void => {
-    const {
-      router: { push },
-    } = this.props;
-    push(`/profile/${item.id}`);
   };
   render() {
     const {
@@ -175,7 +171,7 @@ class Menu extends PureComponent<PropsType> {
       <aside styleName="container">
         <h2 styleName="offscreen">Manage</h2>
         <div styleName="mobileMenu">
-          <Collapse items={menuItems} onSelected={this.handleSelected} />
+          <Collapse items={menuItems} onSelected={this.handleClick} isDisabled={isNil(storeId)} />
           <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
             avatar={convertSrc(storeLogo, 'medium') || null}

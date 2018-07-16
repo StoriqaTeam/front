@@ -49,7 +49,10 @@ export default (OriginalComponent: any, title: string) =>
                     activeItem={toLower(title)}
                     showAlert={this.props.showAlert}
                     storeData={
-                      store || myStore || (baseProduct && baseProduct.store) || null
+                      store ||
+                      myStore ||
+                      (baseProduct && baseProduct.store) ||
+                      null
                     }
                     baseProductData={baseProduct}
                   />

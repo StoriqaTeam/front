@@ -11,6 +11,7 @@ import './Collapse.scss';
 type PropsType = {
   items: Array<{ id: string, title: string }>,
   onSelected: (item: { id: string, title: string }) => void,
+  isDisabled: boolean,
 };
 
 type StateType = {
@@ -20,15 +21,21 @@ type StateType = {
 };
 
 class Collapse extends Component<PropsType, StateType> {
+  static defaultProps = {
+    isDisabled:  false,
+  };
   state = {
     isOpen: false,
     index: 0,
     title: null,
   };
   handleClick = () => {
-    this.setState(({ isOpen }) => ({
-      isOpen: !isOpen,
-    }));
+    const { isDisabled } = this.props;
+    if (!isDisabled) {
+      this.setState(({ isOpen }) => ({
+        isOpen: !isOpen,
+      }));
+    }
   };
   handleSelected = (
     item: { id: string, title: string },
@@ -50,8 +57,7 @@ class Collapse extends Component<PropsType, StateType> {
     const { items } = this.props;
     const { isOpen, index, title } = this.state;
     return (
-      <aside styleName="container">
-        <h2 styleName="offscreen">Profile Mobile Menu</h2>
+      <div styleName="container">
         <header
           role="none"
           onKeyPress={() => {}}
@@ -82,7 +88,7 @@ class Collapse extends Component<PropsType, StateType> {
             ))}
           </ul>
         </nav>
-      </aside>
+      </div>
     );
   }
 }
