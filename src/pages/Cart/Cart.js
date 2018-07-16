@@ -8,6 +8,7 @@ import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
+import { Container, Row, Col } from 'layout';
 
 import CartStore from './CartStore';
 import CartEmpty from './CartEmpty';
@@ -83,43 +84,50 @@ class Cart extends Component<PropsType, StateType> {
     } = this.props;
     const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
-      <div styleName="container">
-        <div styleName="header">My cart</div>
-        <div styleName="body-container">
-          {emptyCart ? (
-            <div styleName="empty-container">
-              <CartEmpty />
+      <Container withoutGrow>
+        <Row withoutGrow>
+          <Col size={12}>
+            <div styleName="header">My cart</div>
+            <div ref={ref => this.setStoresRef(ref)}>
+              <Row withoutGrow>
+                <Col size={12} md={8} lg={9}>
+                  {emptyCart ? (
+                    <CartEmpty />
+                  ) : (
+                    <div styleName="wrapper">
+                      <div styleName="storeContainer">
+                        {stores.map(store => (
+                          <CartStore
+                            key={store.__id}
+                            store={store}
+                            totals={this.totalsForStore(store.__id)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </Col>
+                <Col size={12} md={4} lg={3}>
+                  {!emptyCart && (
+                    <div styleName="sidebarWrapper">
+                      <CheckoutSidebar
+                        storesRef={this.state.storesRef}
+                        buttonText="Checkout"
+                        productsCost={productsCost}
+                        deliveryCost={deliveryCost}
+                        totalCount={totalCount}
+                        totalCost={totalCost}
+                        onClick={this.handleToCheckout}
+                        isReadyToClick={totalCount > 0}
+                      />
+                    </div>
+                  )}
+                </Col>
+              </Row>
             </div>
-          ) : (
-            <div
-              styleName="stores-container"
-              ref={ref => this.setStoresRef(ref)}
-            >
-              {stores.map(store => (
-                <CartStore
-                  key={store.__id}
-                  store={store}
-                  totals={this.totalsForStore(store.__id)}
-                />
-              ))}
-            </div>
-          )}
-          {!emptyCart && (
-            <div styleName="total-container">
-              <CheckoutSidebar
-                storesRef={this.state.storesRef}
-                buttonText="Checkout"
-                productsCost={productsCost}
-                deliveryCost={deliveryCost}
-                totalCount={totalCount}
-                totalCost={totalCost}
-                onClick={this.handleToCheckout}
-                isReadyToClick={totalCount > 0}
-              />
-            </div>
-          )}
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

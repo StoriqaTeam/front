@@ -3,6 +3,7 @@
 .wrapper {
   display: flex;
   flex: 1;
+  position: relative;
 }
 
 .container {
@@ -14,25 +15,18 @@
 }
 
 :global {
-  @media (min-width: $lg) { 
+  @media (min-width: $md) { 
     .sticky {
-      // width: 100%;
-      // left: 7.5px;
-      // right: 7.5px;
       position: fixed;
       top: 2rem;
     }
     
     .bottom {
-      left: 7.5px;
-      right: 7.5px;
       position: absolute;
       bottom: 2rem;
     }
     
     .top {
-      left: 7.5px;
-      right: 7.5px;
       position: absolute;
       top: 0;
     }  
