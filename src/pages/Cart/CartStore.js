@@ -51,7 +51,7 @@ class CartStore extends PureComponent<PropsType> {
                 </div>
               ))}
               <div styleName="footer">
-                <div styleName="store">
+                <div>
                   <Container correct>
                     <Row>
                       <Col size={6}>
@@ -77,7 +77,7 @@ class CartStore extends PureComponent<PropsType> {
                       </Col>
                       <Col size={6}>
                         <div styleName="storeTotalWrapper">
-                          <div styleName="store-total">
+                          <div>
                             <div styleName="label">Subtotal</div>
                             <div styleName="value">
                               {formatPrice(store.productsCost || 0)} STQ

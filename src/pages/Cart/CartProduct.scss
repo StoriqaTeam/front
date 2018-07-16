@@ -2,9 +2,6 @@
 
 .container {
   color: $color_grey;
-  // display: flex;
-  // position: relative;
-  // border-bottom: 1px solid $color_grey_trivial;
   padding: 2rem 0;
 }
 
@@ -27,8 +24,6 @@
 
 .picture {
   width: 100%;
-  // max-width: 16.25rem;
-  // height: 16.25rem;
   background-size: cover;
   background-position: center;
   &:before{
