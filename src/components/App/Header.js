@@ -151,24 +151,12 @@ class Header extends Component<PropsType, StateType> {
               <div styleName="top">
                 <div styleName="item">
                   <Select
-                    activeItem={{ id: '1', label: 'BTC' }}
+                    activeItem={{ id: '3', label: 'STQ' }}
                     items={[
                       { id: '1', label: 'BTC' },
                       { id: '2', label: 'ETH' },
                       { id: '3', label: 'STQ' },
-                      { id: '4', label: 'ADA' },
-                      { id: '5', label: 'NEM' },
-                      { id: '6', label: 'NEO' },
-                      { id: '7', label: 'NEM' },
-                      { id: '8', label: 'WAX' },
-                      { id: '9', label: 'PPT' },
-                      { id: '10', label: 'SUB' },
-                      { id: '11', label: 'STRAT' },
-                      { id: '12', label: 'WTC' },
-                      { id: '13', label: 'EOS' },
-                      { id: '14', label: 'LTC' },
-                      { id: '15', label: 'LSK' },
-                      { id: '16', label: 'NXT' },
+                      { id: '4', label: 'EOS' },
                     ]}
                     onSelect={() => {}}
                     dataTest="headerСurrenciesSelect"

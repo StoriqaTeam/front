@@ -16,6 +16,26 @@ const mutation = graphql`
     createProduct(input: $input) {
       id
       rawId
+      stocks {
+        id
+        productId
+        warehouseId
+        warehouse {
+          name
+          addressFull {
+            country
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            political
+            postalCode
+            streetNumber
+            value
+            route
+            locality
+          }
+        }
+        quantity
+      }
       discount
       photoMain
       additionalPhotos
