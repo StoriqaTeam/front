@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
+import { pipe, pathOr, path, map, prop } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -159,7 +159,7 @@ class Checkout extends Component<PropsType, StateType> {
       map(path(['node'])),
       // $FlowIgnore
     )(this.props);
-    const emptyCart = isEmpty(stores);
+    const emptyCart = totalCount === 0;
     return (
       <Container withoutGrow>
         <Row withoutGrow>

@@ -98,7 +98,6 @@ class CheckoutContent extends React.Component<PropsType> {
       this.props,
     );
     const items = addressesToSelect(deliveryAddresses);
-    console.log('>>> CheckoutAddress address items: ', { items });
     return (
       <Container correct>
         <Row>

@@ -32,6 +32,7 @@ type PropsType = {
     [name: string]: any,
   },
   dataTest: string,
+  // eslint-disable-next-line
   withEmpty?: boolean,
   isBirthdate?: boolean,
   onClick: () => void,
@@ -39,7 +40,7 @@ type PropsType = {
 };
 
 class Select extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const { items, withEmpty } = nextProps;
     return {
       ...prevState,
