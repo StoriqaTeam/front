@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
@@ -22,8 +21,8 @@ import {
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
-
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { TranslationType } from 'types';
 
 import menuItems from './menuItems.json';
 
@@ -42,10 +41,7 @@ type PropsType = {
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
   storeData: {
-    name: Array<{
-      text: string,
-      lang: string,
-    }>,
+    name: Array<TranslationType>,
     logo: ?string,
   },
   environment: Environment,
@@ -90,7 +86,6 @@ class Menu extends PureComponent<PropsType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-
         // $FlowIgnoreMe
         const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
         if (!isEmpty(statusError)) {
@@ -101,7 +96,6 @@ class Menu extends PureComponent<PropsType> {
           });
           return;
         }
-
         // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
@@ -134,9 +128,7 @@ class Menu extends PureComponent<PropsType> {
   handleClick = (item: MenuItemType): void => {
     const { link } = item;
     const {
-      router: {
-        replace,
-      },
+      router: { replace },
       match: {
         params: { storeId },
       },
@@ -171,7 +163,12 @@ class Menu extends PureComponent<PropsType> {
       <aside styleName="container">
         <h2 styleName="offscreen">Manage</h2>
         <div styleName="mobileMenu">
-          <Collapse items={menuItems} onSelected={this.handleClick} isDisabled={isNil(storeId)} />
+          <Collapse
+            selected={activeItem}
+            items={menuItems}
+            onSelected={this.handleClick}
+            isDisabled={isNil(storeId)}
+          />
           <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
             avatar={convertSrc(storeLogo, 'medium') || null}
@@ -230,9 +227,5 @@ class Menu extends PureComponent<PropsType> {
     );
   }
 }
-
-Menu.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
 
 export default withRouter(Menu);

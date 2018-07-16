@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { remove, isNil } from 'ramda';
+import { remove, isNil, findIndex, propEq, isEmpty } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -9,9 +9,10 @@ import { Icon } from 'components/Icon';
 import './Collapse.scss';
 
 type PropsType = {
-  items: Array<{ id: string, title: string }>,
+  items: Array<{ id: string, title: string, link?: string }>,
   onSelected: (item: { id: string, title: string }) => void,
   isDisabled: boolean,
+  selected: string,
 };
 
 type StateType = {
@@ -22,13 +23,22 @@ type StateType = {
 
 class Collapse extends Component<PropsType, StateType> {
   static defaultProps = {
-    isDisabled:  false,
+    isDisabled: false,
+    selected: '',
   };
-  state = {
-    isOpen: false,
-    index: 0,
-    title: null,
-  };
+  constructor(props: PropsType) {
+    super(props);
+    const { selected, items } = this.props;
+    const index =
+      !isNil(selected) && !isEmpty(selected)
+        ? findIndex(propEq('id', selected))(items)
+        : 0;
+    this.state = {
+      index,
+      isOpen: false,
+      title: null,
+    };
+  }
   handleClick = () => {
     const { isDisabled } = this.props;
     if (!isDisabled) {
