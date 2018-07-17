@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
@@ -50,10 +50,7 @@ type StateType = {
     myStore: {
       id: string,
       rawId: number,
-      name: {
-        lang: string,
-        text: string,
-      },
+      name: TranslationType,
       logo: string,
     },
   },
@@ -73,7 +70,7 @@ const MANAGE_STORE_MENU_FRAGMENT = graphql`
   }
 `;
 
-class ManageStoreMenu extends PureComponent<PropsType, StateType> {
+class ManageStoreMenu extends Component<PropsType, StateType> {
   state = {
     storeData: null,
   };
@@ -192,7 +189,6 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
     };
     UpdateStoreMainMutation.commit(params);
   };
-
   handleClick = (item: MenuItemType): void => {
     const { link } = item;
     const {
@@ -209,7 +205,6 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
       }
     }
   };
-
   deleteAvatar = (): void => {
     this.handleLogoUpload('');
   };
