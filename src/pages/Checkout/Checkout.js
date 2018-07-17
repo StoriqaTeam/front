@@ -10,7 +10,6 @@ import { routerShape, withRouter } from 'found';
 import { log } from 'utils';
 import { CreateOrdersMutation } from 'relay/mutations';
 import { Page } from 'components/App';
-import { PaymentPopup } from 'pages/common/PaymentPopup';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -50,10 +49,6 @@ type StateType = {
     addressFull: AddressFullType,
     receiverName: string,
   },
-  isPaymentPopupShown: boolean,
-  wallet: ?string,
-  amount: ?number,
-  resevedDueDate: ?string,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -78,10 +73,6 @@ class Checkout extends Component<PropsType, StateType> {
       },
       receiverName: '',
     },
-    isPaymentPopupShown: false,
-    wallet: null,
-    amount: null,
-    resevedDueDate: null,
   };
 
   setStoresRef(ref) {
@@ -91,17 +82,6 @@ class Checkout extends Component<PropsType, StateType> {
   }
 
   storesRef: any;
-
-  showPaymentPopup = (input: {
-    wallet: string,
-    amount: number,
-    resevedDueDate: string,
-  }) => {
-    this.setState({
-      isPaymentPopupShown: true,
-      ...input,
-    });
-  };
 
   handleChangeStep = step => () => this.setState({ step });
 
@@ -117,11 +97,6 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
-    // this.showPaymentPopup({
-    //   wallet: '0x0702dfed3d8b0bb356afccf2bd59ba4fb7a3f1a0',
-    //   amount: 123321,
-    //   resevedDueDate: '1',
-    // });
     const {
       orderInput: { addressFull, receiverName },
     } = this.state;
@@ -137,7 +112,7 @@ class Checkout extends Component<PropsType, StateType> {
             text: 'Orders successfully created',
             link: { text: 'Close.' },
           });
-          this.showPaymentPopup(response.createOrders.billingUrl);
+          this.handleChangeStep(3)();
         }
         if (errors) {
           log.debug('Errors: ', errors);
@@ -168,12 +143,6 @@ class Checkout extends Component<PropsType, StateType> {
     return true;
   };
 
-  handlePaymentPopupClose = () => {
-    // this.setState({ isPaymentPopupShown: true, paymentPageUrl: null }, () => {
-    //   this.props.router.push('/profile/orders');
-    // });
-  };
-
   render() {
     const { me } = this.props;
     // $FlowIgnore
@@ -192,23 +161,11 @@ class Checkout extends Component<PropsType, StateType> {
       // $FlowIgnore
     )(this.props);
 
-    const { wallet, amount, resevedDueDate } = this.state;
     const emptyCart = totalCount === 0;
     return (
       <Container withoutGrow>
-        {wallet &&
-          amount &&
-          resevedDueDate && (
-            <PaymentPopup
-              onCloseClicked={this.handlePaymentPopupClose}
-              isShown={this.state.isPaymentPopupShown}
-              walletAddress={wallet}
-              amount={amount}
-              reservedDueDate={resevedDueDate}
-            />
-          )}
         <Row withoutGrow>
-          {!emptyCart && (
+          {(!emptyCart || step === 3) && (
             <Col size={12}>
               <div styleName="headerWrapper">
                 <CheckoutHeader
@@ -222,7 +179,7 @@ class Checkout extends Component<PropsType, StateType> {
           <Col size={12}>
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
-                {emptyCart ? (
+                {emptyCart && step !== 3 ? (
                   <Col size={12}>
                     <div styleName="wrapper">
                       <div styleName="storeContainer">
@@ -269,6 +226,7 @@ class Checkout extends Component<PropsType, StateType> {
                         </div>
                       </div>
                     )}
+                    {step === 3 && <div>Payment info here</div>}
                   </Col>
                 )}
                 {!emptyCart && (
