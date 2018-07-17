@@ -28,9 +28,18 @@ class Logout extends PureComponent<PropsType> {
       ['me', '__ref'],
       store.getSource().get('client:root'),
     );
+    const cartId = pathOr(
+      null,
+      ['cart', '__ref'],
+      store.getSource().get('client:root'),
+    );
     if (meId) {
       store.getSource().delete(meId);
     }
+    if (cartId) {
+      store.getSource().delete(cartId);
+    }
+
     this.props.router.replace('/');
   }
 

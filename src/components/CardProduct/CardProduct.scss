@@ -73,17 +73,10 @@
 }
 
 .price {
-  align-items: flex-start;
+  align-items: center;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   position: relative;
-
-  @media (min-width: 1200px) {
-    align-items: center;
-    flex-direction: row;
-  }
-
 }
 
 .actualPrice {

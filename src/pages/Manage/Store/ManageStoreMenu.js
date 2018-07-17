@@ -5,6 +5,7 @@ import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
+import { graphql } from 'react-relay';
 
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
@@ -17,6 +18,7 @@ import {
   log,
   fromRelayError,
   convertSrc,
+  setWindowTag,
 } from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
@@ -40,14 +42,78 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
-  storeData: {
-    name: Array<TranslationType>,
-    logo: ?string,
-  },
   environment: Environment,
 };
 
-class Menu extends PureComponent<PropsType> {
+type StateType = {
+  storeData: ?{
+    myStore: {
+      id: string,
+      rawId: number,
+      name: {
+        lang: string,
+        text: string,
+      },
+      logo: string,
+    },
+  },
+};
+
+const MANAGE_STORE_MENU_FRAGMENT = graphql`
+  fragment ManageStoreMenu_me on User {
+    myStore {
+      id
+      rawId
+      name {
+        lang
+        text
+      }
+      logo
+    }
+  }
+`;
+
+class ManageStoreMenu extends PureComponent<PropsType, StateType> {
+  state = {
+    storeData: null,
+  };
+
+  componentWillMount() {
+    const store = this.props.environment.getStore();
+    const meId = pathOr(
+      null,
+      ['me', '__ref'],
+      store.getSource().get('client:root'),
+    );
+
+    if (meId) {
+      const queryUser = MANAGE_STORE_MENU_FRAGMENT.me();
+      const snapshotUser = store.lookup({
+        dataID: meId,
+        node: queryUser,
+      });
+      const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
+        this.setState({ storeData: s.data });
+        // tmp code
+        setWindowTag('user', s.data);
+        // end tmp code
+      });
+      this.disposeUser = disposeUser;
+      this.setState({ storeData: snapshotUser.data });
+      // tmp code
+      setWindowTag('user', snapshotUser.data);
+      // end tmp code
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.disposeUser) {
+      this.disposeUser();
+    }
+  }
+
+  disposeUser: () => void;
+
   handleOnUpload = async (e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
@@ -59,13 +125,15 @@ class Menu extends PureComponent<PropsType> {
   handleLogoUpload = (url: string) => {
     const { environment } = this.props;
     // $FlowIgnoreMe
-    const storeId = pathOr(null, ['storeData', 'id'], this.props);
+    const storeId = pathOr(null, ['storeData', 'myStore', 'id'], this.state);
+
     if (!storeId) {
       this.props.showAlert({
         type: 'danger',
         text: 'Something going wrong.',
         link: { text: 'Close.' },
       });
+      return;
     }
     const params: MutationParamsType = {
       input: {
@@ -146,18 +214,19 @@ class Menu extends PureComponent<PropsType> {
     this.handleLogoUpload('');
   };
   render() {
-    const {
-      activeItem,
-      storeData: store,
-      match: {
-        params: { storeId },
-      },
-    } = this.props;
+    const { activeItem } = this.props;
+    const { storeData } = this.state;
+    if (!storeData) {
+      return <div />;
+    }
+    const { myStore } = storeData;
+    let storeId = '';
     let storeName = '';
     let storeLogo = '';
-    if (store) {
-      storeName = getNameText(store.name, 'EN');
-      storeLogo = store.logo;
+    if (myStore) {
+      storeName = getNameText(myStore.name, 'EN');
+      storeLogo = myStore.logo;
+      storeId = myStore.rawId;
     }
     return (
       <aside styleName="container">
@@ -201,7 +270,7 @@ class Menu extends PureComponent<PropsType> {
             </div>
           )}
         </div>
-        {storeName && <div styleName="title">{storeName}</div>}
+        <div styleName="title">{storeName || ''}</div>
         <div styleName="items">
           {menuItems.map((item: MenuItemType) => {
             const isActive = item.id === activeItem;
@@ -213,7 +282,7 @@ class Menu extends PureComponent<PropsType> {
                   isDisabled:
                     item.disabled || (!storeId && item.id !== 'settings'),
                 })}
-                onClick={() => this.handleClick(item)}
+                onClick={item.disabled ? null : () => this.handleClick(item)}
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
@@ -228,4 +297,4 @@ class Menu extends PureComponent<PropsType> {
   }
 }
 
-export default withRouter(Menu);
+export default withRouter(ManageStoreMenu);

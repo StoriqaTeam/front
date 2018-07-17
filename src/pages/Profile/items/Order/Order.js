@@ -7,10 +7,10 @@ import { pathOr } from 'ramda';
 
 import { OrderPage } from 'pages/common/OrderPage';
 
-import type { Order as OrderType } from './__generated__/Order.graphql';
+import type { Order as OrderType } from './__generated__/Order_me.graphql';
 
 type PropsType = {
-  data: OrderType,
+  me: OrderType,
   relay: {
     refetch: Function,
   },
@@ -31,7 +31,7 @@ class Order extends PureComponent<PropsType> {
   }
 
   render() {
-    const { order } = this.props.data;
+    const { order } = this.props.me;
     if (!order) {
       return null;
     }
@@ -43,7 +43,7 @@ class Order extends PureComponent<PropsType> {
 export default createRefetchContainer(
   withRouter(Order),
   graphql`
-    fragment Order on User
+    fragment Order_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       order(slug: $slug) {
         slug
@@ -104,7 +104,7 @@ export default createRefetchContainer(
   graphql`
     query Order_Query($slug: Int!) {
       me {
-        ...Order @arguments(slug: $slug)
+        ...Order_me @arguments(slug: $slug)
       }
     }
   `,

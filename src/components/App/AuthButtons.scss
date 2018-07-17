@@ -26,6 +26,7 @@
     &:hover {
       color: $color_white;
       background-color: $color_blue_hover;
+      border: solid 1px $color_blue_hover;
     }
   }
 

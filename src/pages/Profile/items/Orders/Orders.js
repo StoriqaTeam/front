@@ -14,7 +14,7 @@ const itemsPerPage = 10;
 
 type PropsType = {
   // eslint-disable-next-line
-  data: ?{
+  me: ?{
     orders: ?{
       edges: Array<any>,
       pageInfo: {
@@ -120,20 +120,20 @@ class Orders extends Component<PropsType, StateType> {
 
   render() {
     // $FlowIgnoreMe
-    const edges = pathOr([], ['data', 'orders', 'edges'], this.props);
+    const edges = pathOr([], ['me', 'orders', 'edges'], this.props);
     const orderDTOs = map(item => this.orderToDTO(item.node), edges);
 
     // $FlowIgnoreMe
     const pagesCount = pathOr(
       0,
-      ['data', 'orders', 'pageInfo', 'totalPages'],
+      ['me', 'orders', 'pageInfo', 'totalPages'],
       this.props,
     );
 
     // $FlowIgnoreMe
     const currentPage = pathOr(
       0,
-      ['data', 'orders', 'pageInfo', 'currentPage'],
+      ['me', 'orders', 'pageInfo', 'currentPage'],
       this.props,
     );
     return (
@@ -154,7 +154,7 @@ class Orders extends Component<PropsType, StateType> {
 export default createRefetchContainer(
   Orders,
   graphql`
-    fragment Orders on User
+    fragment Orders_me on User
       @argumentDefinitions(
         currentPage: { type: "Int!", defaultValue: 1 }
         itemsCount: { type: "Int!", defaultValue: 10 }
@@ -207,7 +207,7 @@ export default createRefetchContainer(
       $searchTermOptions: SearchOrderOptionInput!
     ) {
       me {
-        ...Orders
+        ...Orders_me
           @arguments(
             currentPage: $currentPage
             itemsCount: $itemsCount

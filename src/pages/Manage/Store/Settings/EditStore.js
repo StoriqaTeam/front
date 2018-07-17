@@ -119,7 +119,6 @@ class EditStore extends Component<PropsType, StateType> {
     const { isLoading } = this.state;
     // $FlowIgnoreMe
     const store = pathOr(null, ['store'], this.props.me);
-
     if (!store) {
       return <div>Store not found :(</div>;
     }
