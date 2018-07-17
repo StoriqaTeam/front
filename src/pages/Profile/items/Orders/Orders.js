@@ -154,7 +154,7 @@ class Orders extends Component<PropsType, StateType> {
 export default createRefetchContainer(
   Orders,
   graphql`
-    fragment Orders on User
+    fragment Orders_me on User
       @argumentDefinitions(
         currentPage: { type: "Int!", defaultValue: 1 }
         itemsCount: { type: "Int!", defaultValue: 10 }
@@ -207,7 +207,7 @@ export default createRefetchContainer(
       $searchTermOptions: SearchOrderOptionInput!
     ) {
       me {
-        ...Orders
+        ...Orders_me
           @arguments(
             currentPage: $currentPage
             itemsCount: $itemsCount
