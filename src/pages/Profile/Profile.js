@@ -106,8 +106,8 @@ export default createFragmentContainer(
   Page(Profile, true),
   graphql`
     fragment Profile_me on User {
-      ...Orders
-      ...Order
+      ...Orders_me
+      ...Order_me
       ...PersonalData_me
       ...ShippingAddresses_me
       id
