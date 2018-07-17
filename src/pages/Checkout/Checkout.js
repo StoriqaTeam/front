@@ -117,12 +117,12 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
-    this.showPaymentPopup({
-      wallet: '0x0702dfed3d8b0bb356afccf2bd59ba4fb7a3f1a0',
-      amount: 123321,
-      resevedDueDate: '1',
-    });
-    /* const {
+    // this.showPaymentPopup({
+    //   wallet: '0x0702dfed3d8b0bb356afccf2bd59ba4fb7a3f1a0',
+    //   amount: 123321,
+    //   resevedDueDate: '1',
+    // });
+    const {
       orderInput: { addressFull, receiverName },
     } = this.state;
     CreateOrdersMutation.commit({
@@ -153,7 +153,7 @@ class Checkout extends Component<PropsType, StateType> {
         });
         this.props.router.push('/checkout');
       },
-    }); */
+    });
   };
 
   checkReadyToCheckout = () => {
