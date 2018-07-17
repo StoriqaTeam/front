@@ -23,6 +23,7 @@ import './Profile.scss';
 type PropsType = {
   me: ProfileMeType,
   activeItem: string,
+  isOrder?: boolean,
 };
 
 type StateType = {
@@ -37,7 +38,6 @@ const menuItems = [
   { id: 'shipping-addresses', title: 'Shipping addresses' },
   { id: 'security', title: 'Security' },
   { id: 'orders', title: 'My orders' },
-  { id: 'order', title: '' },
   { id: 'kyc', title: 'KYC' },
 ];
 
@@ -52,9 +52,13 @@ const profileMenuMap = {
 
 class Profile extends Component<PropsType, StateType> {
   renderProfileItem = subtitle => {
-    const { activeItem, me } = this.props;
+    const { activeItem, me, isOrder } = this.props;
     // $FlowIgnoreMe
-    const element = pathOr(null, [activeItem], profileMenuMap);
+    const element = pathOr(
+      null,
+      [isOrder ? 'order' : activeItem],
+      profileMenuMap,
+    );
     return cloneElement(element, {
       me,
       subtitle,

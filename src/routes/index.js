@@ -436,57 +436,44 @@ const routes = (
       />
       <Route path="/verify_email/:token" Component={VerifyEmail} />
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
-      <Route
-        path="/profile/orders/:orderId"
-        Component={Profile}
-        query={graphql`
-          query routes_ProfileOrders_Query {
-            me {
-              ...Profile_me
+      <Route path="/profile">
+        <Route
+          path="/:item/:orderId?"
+          Component={Profile}
+          query={graphql`
+            query routes_ProfileItem_Query {
+              me {
+                ...Profile_me
+              }
             }
-          }
-        `}
-        render={({ props, Component }) => {
-          if (props && !props.me) {
-            const {
-              location: { pathname },
-            } = props;
-            const cookies = new Cookies();
-            cookies.remove('__jwt');
-            throw new RedirectException(`/login?from=${pathname}`);
-          } else {
-            return <Component {...props} activeItem="order" />;
-          }
-        }}
-      />
-      <Route
-        path="/profile/:item"
-        Component={Profile}
-        query={graphql`
-          query routes_ProfileItem_Query {
-            me {
-              ...Profile_me
+          `}
+          render={({ props, Component }) => {
+            if (props) {
+              if (props && !props.me) {
+                const {
+                  location: { pathname },
+                } = props;
+                const cookies = new Cookies();
+                cookies.remove('__jwt');
+                throw new RedirectException(`/login?from=${pathname}`);
+              } else {
+                const isOrder = pathOr(null, ['params', 'orderId'], props);
+                const item = pathOr('personal-data', ['params', 'item'], props);
+                return (
+                  <Component
+                    {...props}
+                    activeItem={isOrder && item === 'orders' ? 'orders' : item}
+                    isOrder={isOrder}
+                  />
+                );
+              }
+            } else {
+              return null;
             }
-          }
-        `}
-        render={({ props, Component }) => {
-          if (props && !props.me) {
-            const {
-              location: { pathname },
-            } = props;
-            const cookies = new Cookies();
-            cookies.remove('__jwt');
-            throw new RedirectException(`/login?from=${pathname}`);
-          } else {
-            return (
-              <Component
-                {...props}
-                activeItem={pathOr('personal-data', ['params', 'item'], props)}
-              />
-            );
-          }
-        }}
-      />
+          }}
+          prepareVariables={() => {}}
+        />
+      </Route>
     </Route>
   </Route>
 );
