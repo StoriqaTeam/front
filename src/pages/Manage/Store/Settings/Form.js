@@ -4,15 +4,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   assocPath,
-  propOr,
-  pathOr,
-  map,
-  toUpper,
-  toLower,
   find,
-  propEq,
   isEmpty,
+  map,
   omit,
+  pathOr,
+  propEq,
+  propOr,
+  toLower,
+  toUpper,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 
@@ -129,7 +129,7 @@ class Form extends Component<PropsType, StateType> {
     }
   }
 
-  handleDefaultLanguage = (defaultLanguage: { id: string, label: string }) => {
+  handleDefaultLanguage = (defaultLanguage: { id: string, label: string }): void => {
     this.setState(
       assocPath(['form', 'defaultLanguage'], toUpper(defaultLanguage.id)),
     );
@@ -239,7 +239,7 @@ class Form extends Component<PropsType, StateType> {
     limit?: number,
   }) => (
     /* eslint-enable */
-    <div styleName="formItem">
+    <div styleName="formItem maxWidthInput">
       <Input
         id={id}
         value={propOr('', id, this.state.form)}
@@ -253,7 +253,7 @@ class Form extends Component<PropsType, StateType> {
   );
 
   renderTextarea = ({ id, label }: { [string]: any }) => (
-    <div styleName="formItem">
+    <div styleName="formItem maxWidthTextArea">
       <Textarea
         id={id}
         value={propOr('', id, this.state.form)}
@@ -284,7 +284,7 @@ class Form extends Component<PropsType, StateType> {
             label: 'Store name',
             limit: 50,
           })}
-          <div styleName="formItem">
+          <div styleName="formItem maxWidthInput">
             <Select
               forForm
               label="Language"
