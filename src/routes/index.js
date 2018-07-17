@@ -438,16 +438,54 @@ const routes = (
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
       <Route
         path="/profile/orders/:orderId"
-        Component={props => <Profile activeItem="order" me={props.me} />}
+        Component={Profile}
+        query={graphql`
+          query routes_ProfileOrders_Query {
+            me {
+              ...Profile_me
+            }
+          }
+        `}
+        render={({ props, Component }) => {
+          if (props && !props.me) {
+            const {
+              location: { pathname },
+            } = props;
+            const cookies = new Cookies();
+            cookies.remove('__jwt');
+            throw new RedirectException(`/login?from=${pathname}`);
+          } else {
+            return <Component {...props} activeItem="order" />;
+          }
+        }}
       />
       <Route
         path="/profile/:item"
-        Component={props => (
-          <Profile
-            activeItem={pathOr('personal-data', ['params', 'item'], props)}
-            me={props.me}
-          />
-        )}
+        Component={Profile}
+        query={graphql`
+          query routes_ProfileItem_Query {
+            me {
+              ...Profile_me
+            }
+          }
+        `}
+        render={({ props, Component }) => {
+          if (props && !props.me) {
+            const {
+              location: { pathname },
+            } = props;
+            const cookies = new Cookies();
+            cookies.remove('__jwt');
+            throw new RedirectException(`/login?from=${pathname}`);
+          } else {
+            return (
+              <Component
+                {...props}
+                activeItem={pathOr('personal-data', ['params', 'item'], props)}
+              />
+            );
+          }
+        }}
       />
     </Route>
   </Route>

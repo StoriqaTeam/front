@@ -1,10 +1,12 @@
 // @flow
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import { formatPrice } from 'utils';
 import { Button } from 'components/common/Button';
+import { Row, Col } from 'layout';
 
 import './CheckoutSidebar.scss';
 
@@ -23,6 +25,7 @@ type PropsType = {
 
 type StateType = {
   currentClass: 'sticky' | 'top' | 'bottom',
+  sidebarWidth: ?number,
 };
 
 const STICKY_PADDING_TOP_REM = 2;
@@ -34,12 +37,14 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     this.handleScroll = this.handleScrollEvent.bind(this);
     this.state = {
       currentClass: 'top',
+      sidebarWidth: null,
     };
   }
 
   componentDidMount() {
     if (!window) return;
     window.addEventListener('scroll', this.handleScroll);
+    this.setWidth();
   }
 
   componentWillUnmount() {
@@ -50,12 +55,26 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     }
   }
 
+  setWidth = () => {
+    // eslint-disable-next-line
+    const sidebarWidth = ReactDOM.findDOMNode(
+      this.wrapperRef,
+      // $FlowIgnore
+    ).getBoundingClientRect().width;
+    this.setState({ sidebarWidth });
+  };
+
   setRef(ref: ?Object) {
     this.ref = ref;
   }
 
+  setWrapperRef(ref: ?Object) {
+    this.wrapperRef = ref;
+  }
+
   dispose: Function;
   ref: ?{ className: string };
+  wrapperRef: any;
   scrolling: boolean;
   handleScroll: () => void;
   scrolling = false;
@@ -119,45 +138,66 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       totalCost,
       totalCount,
     } = this.props;
+    const { sidebarWidth } = this.state;
     return (
-      <div className="top" ref={ref => this.setRef(ref)}>
-        <div styleName="container">
-          <div styleName="title">Subtotal</div>
-          <div styleName="totalsContainer">
-            <div styleName="attributeContainer">
-              <div styleName="label">Subtotal</div>
-              <div styleName="value">
-                {productsCost && `${formatPrice(productsCost || 0)} STQ`}
-              </div>
+      <div styleName="wrapper" ref={ref => this.setWrapperRef(ref)}>
+        <div
+          className="top"
+          ref={ref => this.setRef(ref)}
+          style={{ width: sidebarWidth || '100%' }}
+        >
+          <div styleName="container">
+            <div styleName="title">Subtotal</div>
+            <div styleName="totalsContainer">
+              <Row>
+                <Col size={12} sm={9} md={12}>
+                  <Row>
+                    <Col size={12} sm={4} md={12}>
+                      <div styleName="attributeContainer">
+                        <div styleName="label">Subtotal</div>
+                        <div styleName="value">
+                          {productsCost &&
+                            `${formatPrice(productsCost || 0)} STQ`}
+                        </div>
+                      </div>
+                    </Col>
+                    <Col size={12} sm={4} md={12}>
+                      <div styleName="attributeContainer">
+                        <div styleName="label">Delivery</div>
+                        <div styleName="value">
+                          {deliveryCost &&
+                            `${formatPrice(deliveryCost || 0)} STQ`}
+                        </div>
+                      </div>
+                    </Col>
+                    <Col size={12} sm={4} md={12}>
+                      <div styleName="attributeContainer">
+                        <div styleName="label">
+                          Total{' '}
+                          <span styleName="subLabel">
+                            ({totalCount && totalCount} items)
+                          </span>
+                        </div>
+                        <div styleName="value bold">
+                          {totalCost && `${formatPrice(totalCost || 0)} STQ`}
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
             </div>
-            <div styleName="attributeContainer">
-              <div styleName="label">Delivery</div>
-              <div styleName="value">
-                {deliveryCost && `${formatPrice(deliveryCost || 0)} STQ`}
-              </div>
+            <div styleName="checkout">
+              <Button
+                id="cartTotalCheckout"
+                disabled={!isReadyToClick}
+                big
+                onClick={onClick}
+                dataTest="checkoutNext"
+              >
+                {buttonText}
+              </Button>
             </div>
-            <div styleName="attributeContainer">
-              <div styleName="label">
-                Total{' '}
-                <span styleName="subLabel">
-                  ({totalCount && totalCount} items)
-                </span>
-              </div>
-              <div styleName="value">
-                {totalCost && `${formatPrice(totalCost || 0)} STQ`}
-              </div>
-            </div>
-          </div>
-          <div styleName="checkout">
-            <Button
-              id="cartTotalCheckout"
-              disabled={!isReadyToClick}
-              big
-              onClick={onClick}
-              dataTest="checkoutNext"
-            >
-              {buttonText}
-            </Button>
           </div>
         </div>
       </div>

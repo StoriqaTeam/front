@@ -8,6 +8,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
+}
+
+@media (min-width: $sm) {
+  .stepperContainer {
+    margin-bottom: 2rem;
+  }
 }
 

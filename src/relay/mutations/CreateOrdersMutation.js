@@ -13,6 +13,8 @@ const mutation = graphql`
   mutation CreateOrdersMutation($input: CreateOrderInput!) {
     createOrders(input: $input) {
       cart {
+        id
+        totalCount
         stores {
           edges {
             node {

@@ -1,28 +1,36 @@
 @import "../../../styles/variables.scss";
 
+.wrapper {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
 .container {
   padding: 3rem 3rem;
   color: $color_grey;
   background-color: $color-white;
   border: 1px solid $color_grey_trivial;
-  width: 40rem;
+  width: 100%;
 }
 
 :global {
-  .sticky {
-    position: fixed;
-    top: 2rem;
-  }
-  
-  .bottom {
-    position: absolute;
-    bottom: 2rem;
-  }
-  
-  .top {
-    position: absolute;
-    top: 0;
-  }  
+  @media (min-width: $md) { 
+    .sticky {
+      position: fixed;
+      top: 2rem;
+    }
+    
+    .bottom {
+      position: absolute;
+      bottom: 2rem;
+    }
+    
+    .top {
+      position: absolute;
+      top: 0;
+    }  
+  } 
 }
 
 .cart-total-title {
@@ -97,5 +105,9 @@
   }
   .value {
 
+  }
+  .bold {
+    font-size: 2.5rem;
+    font-family: $font_bold;
   }
 }

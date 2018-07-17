@@ -14,7 +14,7 @@ const itemsPerPage = 10;
 
 type PropsType = {
   // eslint-disable-next-line
-  data: ?{
+  me: ?{
     orders: ?{
       edges: Array<any>,
       pageInfo: {
@@ -120,20 +120,20 @@ class Orders extends Component<PropsType, StateType> {
 
   render() {
     // $FlowIgnoreMe
-    const edges = pathOr([], ['data', 'orders', 'edges'], this.props);
+    const edges = pathOr([], ['me', 'orders', 'edges'], this.props);
     const orderDTOs = map(item => this.orderToDTO(item.node), edges);
 
     // $FlowIgnoreMe
     const pagesCount = pathOr(
       0,
-      ['data', 'orders', 'pageInfo', 'totalPages'],
+      ['me', 'orders', 'pageInfo', 'totalPages'],
       this.props,
     );
 
     // $FlowIgnoreMe
     const currentPage = pathOr(
       0,
-      ['data', 'orders', 'pageInfo', 'currentPage'],
+      ['me', 'orders', 'pageInfo', 'currentPage'],
       this.props,
     );
     return (

@@ -13,6 +13,7 @@ import {
   pathOr,
   omit,
 } from 'ramda';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { validate } from '@storiqa/shared';
 
 import { Input } from 'components/common/Input';
@@ -40,7 +41,7 @@ type DataType = {
 };
 
 type PropsType = {
-  data: {
+  me: {
     id: string,
     firstName: string,
     lastName: string,
@@ -68,14 +69,14 @@ const genderItems = [
 class PersonalData extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { data } = props;
+    const { me } = props;
     this.state = {
       data: {
-        phone: data.phone || '',
-        firstName: data.firstName || '',
-        lastName: data.lastName || '',
-        birthdate: data.birthdate || '',
-        gender: data.gender || 'UNDEFINED',
+        phone: me.phone || '',
+        firstName: me.firstName || '',
+        lastName: me.lastName || '',
+        birthdate: me.birthdate || '',
+        gender: me.gender || 'UNDEFINED',
       },
       formErrors: {},
       isLoading: false,
@@ -84,7 +85,7 @@ class PersonalData extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { environment } = this.context;
-    const { data: propsData } = this.props;
+    const { me: propsData } = this.props;
     const { data } = this.state;
     const { phone, firstName, lastName, birthdate, gender } = data;
 
@@ -306,4 +307,16 @@ PersonalData.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(PersonalData);
+export default createFragmentContainer(
+  withShowAlert(PersonalData),
+  graphql`
+    fragment PersonalData_me on User {
+      id
+      phone
+      firstName
+      lastName
+      birthdate
+      gender
+    }
+  `,
+);
