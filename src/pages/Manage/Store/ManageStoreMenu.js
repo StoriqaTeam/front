@@ -99,21 +99,6 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
       // tmp code
       setWindowTag('user', snapshotUser.data);
       // end tmp code
-
-      const myStoreId = pathOr(null, ['myStore', 'rawId'], snapshotUser.data);
-      // $FlowIgnoreMe
-      const routeStoreId = pathOr(
-        null,
-        ['match', 'params', 'storeId'],
-        this.props,
-      );
-      if (!myStoreId && !routeStoreId) {
-        this.props.router.replace('/_');
-      }
-      if (myStoreId && myStoreId !== Number(routeStoreId)) {
-        // $FlowIgnoreMe
-        this.props.router.replace(`/manage/store/${myStoreId}`);
-      }
     }
   }
 
