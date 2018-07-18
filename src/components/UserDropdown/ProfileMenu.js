@@ -2,8 +2,6 @@
 
 import React from 'react';
 import { Link } from 'found';
-import Cookies from 'universal-cookie';
-import { pathOr } from 'ramda';
 
 import { Count } from 'components/Count';
 import { Icon } from 'components/Icon';
@@ -16,15 +14,13 @@ type PropsTypes = {
   messagesCount: number,
   email: string,
   avatar: string,
+  myStoreId: ?number,
 };
 
 // TODO: need back & refactor
-const getStoreLink = () => {
-  const cookies = new Cookies();
-  const storeId = pathOr(null, ['value'], cookies.get('__storeId'));
-  if (storeId) {
-    // $FlowIgnoreMe
-    return `/manage/store/${storeId}`;
+const getStoreLink = (myStoreId: ?number) => {
+  if (myStoreId) {
+    return `/manage/store/${myStoreId}`;
   }
   return '/manage/wizard';
 };
@@ -35,6 +31,7 @@ const ProfileMenu = ({
   messagesCount,
   email,
   avatar,
+  myStoreId,
 }: PropsTypes) => (
   <div styleName="menu">
     <div styleName="top">
@@ -73,9 +70,9 @@ const ProfileMenu = ({
       <a href="/" styleName="item">
         History
       </a>
-      <a href={getStoreLink()} styleName="item">
-        <span>My shops</span>
-      </a>
+      <Link to={getStoreLink(myStoreId)} styleName="item">
+        <span>My shop</span>
+      </Link>
     </div>
     <Link
       styleName="logout"
