@@ -32,6 +32,9 @@ const HEADER_FRAGMENT = graphql`
     firstName
     lastName
     avatar
+    myStore {
+      rawId
+    }
   }
 `;
 
@@ -47,6 +50,9 @@ type StateType = {
     email: ?string,
     firstName: ?string,
     lastName: ?string,
+    myStore: ?{
+      rawId: number,
+    },
   },
   totalCount: number,
 };

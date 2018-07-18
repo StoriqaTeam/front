@@ -17,6 +17,7 @@ import { log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMutation';
+import type { Contacts_me as ContactsMeType } from './__generated__/Contacts_me.graphql';
 
 import './Contacts.scss';
 
@@ -44,9 +45,7 @@ type InputType = {
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
-  me: {
-    store: { [string]: ?string },
-  },
+  me: ContactsMeType,
 };
 
 type StateType = {
@@ -92,7 +91,7 @@ class Contacts extends Component<PropsType, StateType> {
 
   componentWillMount() {
     // $FlowIgnoreMe
-    const store = pathOr({}, ['store'], this.props.me);
+    const store = pathOr({}, ['myStore'], this.props.me);
     this.setState({
       form: pick(
         ['email', 'phone', 'facebookUrl', 'instagramUrl', 'twitterUrl'],
@@ -129,7 +128,7 @@ class Contacts extends Component<PropsType, StateType> {
   handleLogoUpload = (url: string) => {
     const { environment } = this.context;
     // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+    const storeId = pathOr(null, ['me', 'myStore', 'id'], this.props);
 
     UpdateStoreMainMutation.commit({
       id: storeId,
@@ -183,9 +182,9 @@ class Contacts extends Component<PropsType, StateType> {
   handleUpdate = () => {
     const { currentUser, environment } = this.context;
     const {
-      me: { store },
+      me: { myStore },
     } = this.props;
-    if (!currentUser || !currentUser.rawId || !store || !store.id) {
+    if (!currentUser || !currentUser.rawId || !myStore || !myStore.id) {
       this.props.showAlert({
         type: 'danger',
         text: 'Something going wrong :(',
@@ -206,7 +205,7 @@ class Contacts extends Component<PropsType, StateType> {
     const params: MutationParamsType = {
       input: {
         clientMutationId: '',
-        id: store.id || '',
+        id: myStore.id || '',
         logo: logoUrl,
         email,
         phone,
@@ -361,11 +360,10 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(Contacts, 'Contacts'), true)),
+  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
   graphql`
-    fragment Contacts_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
+    fragment Contacts_me on User {
+      myStore {
         id
         rawId
         name {
