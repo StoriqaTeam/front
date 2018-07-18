@@ -17,8 +17,10 @@ const mutation = graphql`
           }
         }
       }
-      orders {
-        id
+      invoice {
+        orders {
+          id
+        }
       }
     }
   }
