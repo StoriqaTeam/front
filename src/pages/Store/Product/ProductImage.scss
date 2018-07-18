@@ -1,7 +1,10 @@
 @import "../../../styles/variables";
 
 .container {
+  align-items: flex-start;
   border-right: 1px solid $color_grey_trivial;
+  display: flex;
+  justify-content: space-between;
 }
 
 .expand {
@@ -13,20 +16,43 @@
     height: 3.375rem;
     width: 3.375rem;
   }
-
 }
 
-.imageWrapper {
+.image {
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+.bigImage {
   height: 69.875rem;
   position: relative;
   width: inherit;
 
-  & > div[role="img"] {
+  & > img {
     height: 100%;
     object-fit: contain;
     width: 100%;
   }
+}
 
+
+.thumbnailsWrapper {
+  max-width: 12rem;
+  margin: 2.375rem 1.80rem 0 2.125rem;
+  display: none;
+  @media (min-width: $lg) {
+    display: block;
+  }
+}
+
+.noThumbnailsWrapper {
+  max-width: 12rem;
+  display: none;
+  @media (min-width: $lg) {
+    display: block;
+  }
 }
 
 .discount {
