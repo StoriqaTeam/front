@@ -56,7 +56,10 @@ class TableRow extends PureComponent<PropsType> {
         </Col>
         <Col size={5} sm={4} md={3} lg={2} xl={2}>
           <span styleName="link">
-            <Link to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}>
+            <Link
+              to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}
+              onClick={(e: any) => e.stopPropagation()}
+            >
               {rowItem.item.title}
             </Link>
           </span>
