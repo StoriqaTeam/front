@@ -32,6 +32,9 @@ const HEADER_FRAGMENT = graphql`
     firstName
     lastName
     avatar
+    myStore {
+      rawId
+    }
   }
 `;
 

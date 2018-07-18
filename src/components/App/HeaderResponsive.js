@@ -40,6 +40,9 @@ const HEADER_FRAGMENT = graphql`
     firstName
     lastName
     avatar
+    myStore {
+      rawId
+    }
   }
 `;
 
@@ -84,6 +87,9 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       selectedCategory: null,
     };
     const store = this.props.environment.getStore();
+    if (process.env.BROWSER) {
+      window.store = store;
+    }
     const cartId = pathOr(
       null,
       ['cart', '__ref'],
@@ -203,7 +209,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const { searchValue, withoutCategories } = this.props;
+    const { searchValue, withoutCategories, environment } = this.props;
     const {
       showModal,
       isSignUp,
@@ -259,7 +265,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             />
             <Container>
               <BurgerMenu />
-              <HeaderTop />
+              <HeaderTop user={userData} />
               <div styleName="headerBottom">
                 <Row>
                   <Col size={7} sm={4} md={4} lg={3} xl={3}>

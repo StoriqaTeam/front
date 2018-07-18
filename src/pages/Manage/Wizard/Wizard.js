@@ -6,7 +6,6 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { assocPath, path, pick, pathOr, omit, where, complement } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
-import Cookies from 'universal-cookie';
 
 import { withShowAlert } from 'components/App/AlertContext';
 import { Page } from 'components/App';
@@ -132,6 +131,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       isValid: true,
       validationErrors: null,
     };
+    // const storeId = pathOr(null, ['me', 'myStore', 'rawId'], props);
+    // console.log('>>> Wizard storeId: ', { storeId });
+    // if (storeId) {
+    //   props.router.push(`/manage/store/${storeId}`);
+    // }
   }
 
   componentDidMount() {
@@ -276,18 +280,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         }
         this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        const cookies = new Cookies(); // TODO: waiting for back posabilities for get last user store
-        const today = new Date();
-        const expirationDate = new Date();
-        expirationDate.setDate(today.getDate() + 30);
-        cookies.set(
-          '__storeId',
-          { value: storeId },
-          {
-            path: '/',
-            expires: expirationDate,
-          },
-        );
         this.updateWizard({ storeId });
       },
       onError: (error: Error) => {
@@ -914,6 +906,9 @@ export default createFragmentContainer(
     fragment Wizard_me on User {
       id
       rawId
+      myStore {
+        rawId
+      }
       wizardStore {
         id
         rawId

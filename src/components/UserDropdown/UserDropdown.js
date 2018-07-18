@@ -32,6 +32,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
       email,
       messagesCount,
       shopsCount,
+      myStore,
     } = user;
 
     return (
@@ -61,6 +62,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
               shopsCount={shopsCount}
               email={email}
               avatar={avatar}
+              storeId={myStore && myStore.rawId}
             />
           </content>
         </Dropdown>

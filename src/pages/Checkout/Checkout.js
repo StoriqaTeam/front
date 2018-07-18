@@ -133,10 +133,10 @@ class Checkout extends Component<PropsType, StateType> {
   checkReadyToCheckout = () => {
     const {
       orderInput: {
-        addressFull: { value, country, locality, postalCode },
+        addressFull: { value, country, postalCode },
       },
     } = this.state;
-    if (!value || !country || !locality || !postalCode) {
+    if (!value || !country || !postalCode) {
       return false;
     }
     return true;
@@ -253,7 +253,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout)), true),
+  Page(withShowAlert(withRouter(Checkout)), true, false),
   graphql`
     fragment Checkout_me on User {
       id

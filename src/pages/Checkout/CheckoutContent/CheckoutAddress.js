@@ -120,6 +120,7 @@ class CheckoutContent extends React.Component<PropsType> {
                   label="choose your address"
                   isChecked={isAddressSelect}
                   onChange={onChangeAddressType}
+                  isRadioStyle
                 />
                 {isAddressSelect && (
                   <div styleName="selectWrapper">
@@ -160,8 +161,8 @@ class CheckoutContent extends React.Component<PropsType> {
                   label="Or fill fields below and save as address"
                   isChecked={isNewAddress}
                   onChange={onChangeAddressType}
+                  isRadioStyle
                 />
-
                 {isNewAddress && (
                   <div styleName="formWrapper">
                     <AddressForm
