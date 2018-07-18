@@ -50,10 +50,7 @@ export default (
                   )}
                 />
               )}
-              <Main
-                responsive={responsive}
-                withoutCategories={withoutCategories}
-              >
+              <Main>
                 <OriginalComponent {...this.props} />
               </Main>
               {responsive ? <FooterResponsive /> : <Footer />}

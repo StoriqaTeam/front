@@ -13,13 +13,13 @@ import { log, fromRelayError } from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
-
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { EditStore_me as EditStoreMeType } from './__generated__/EditStore_me.graphql';
 
 import Form from './Form';
 
 type PropsType = {
-  me?: { store?: { logo: string } },
+  me: EditStoreMeType,
   showAlert: (input: AddAlertInputType) => void,
 };
 
@@ -48,7 +48,7 @@ class EditStore extends Component<PropsType, StateType> {
     } = form;
     this.setState(() => ({ isLoading: true }));
     // $FlowIgnoreMe
-    const id = pathOr(null, ['me', 'store', 'id'], this.props);
+    const id = pathOr(null, ['me', 'myStore', 'id'], this.props);
     const params: MutationParamsType = {
       input: {
         clientMutationId: '',
@@ -118,7 +118,7 @@ class EditStore extends Component<PropsType, StateType> {
   render() {
     const { isLoading } = this.state;
     // $FlowIgnoreMe
-    const store = pathOr(null, ['store'], this.props.me);
+    const store = pathOr(null, ['myStore'], this.props.me);
     if (!store) {
       return <div>Store not found :(</div>;
     }
@@ -136,9 +136,8 @@ class EditStore extends Component<PropsType, StateType> {
 export default createFragmentContainer(
   Page(withShowAlert(ManageStore(EditStore, 'Settings'))),
   graphql`
-    fragment EditStore_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
+    fragment EditStore_me on User {
+      myStore {
         id
         rawId
         name {

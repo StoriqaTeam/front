@@ -31,39 +31,28 @@ type StateType = {
 };
 
 class StoresSidebar extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    nextState: StateType,
-  ): StateType | null {
-    const { search, match } = nextProps;
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: '',
+      categories: '',
+      country: '',
+      countries: '',
+    };
+    const { search, match } = this.props;
     const categories = fromSearchFilters(search, ['category', 'children']);
+    this.state.categories = categories;
     const category = fromQueryString(match, 'category')(categories, 'id');
     if (category) {
-      return {
-        ...nextState,
-        category,
-      };
+      this.state.category = category;
     }
     const countries = fromSearchFilters(search, ['country']);
+    this.state.countries = countries;
     const country = fromQueryString(match, 'country')(countries, 'label');
     if (country) {
-      return {
-        ...nextState,
-        country,
-      };
+      this.state.country = country;
     }
-    return {
-      ...nextState,
-      categories,
-      countries,
-    };
   }
-  state = {
-    category: '',
-    categories: '',
-    country: '',
-    countries: '',
-  };
   handleClick = (
     stateName: string,
     item: { id: string, label: string },

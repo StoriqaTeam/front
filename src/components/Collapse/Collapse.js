@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { remove, isNil } from 'ramda';
+import { remove, isNil, findIndex, propEq, isEmpty } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -9,8 +9,10 @@ import { Icon } from 'components/Icon';
 import './Collapse.scss';
 
 type PropsType = {
-  items: Array<{ id: string, title: string }>,
+  items: Array<{ id: string, title: string, link?: string }>,
   onSelected: (item: { id: string, title: string }) => void,
+  isDisabled: boolean,
+  selected: string,
 };
 
 type StateType = {
@@ -20,15 +22,30 @@ type StateType = {
 };
 
 class Collapse extends Component<PropsType, StateType> {
-  state = {
-    isOpen: false,
-    index: 0,
-    title: null,
+  static defaultProps = {
+    isDisabled: false,
+    selected: '',
   };
+  constructor(props: PropsType) {
+    super(props);
+    const { selected, items } = this.props;
+    const index =
+      !isNil(selected) && !isEmpty(selected)
+        ? findIndex(propEq('id', selected))(items)
+        : 0;
+    this.state = {
+      index,
+      isOpen: false,
+      title: null,
+    };
+  }
   handleClick = () => {
-    this.setState(({ isOpen }) => ({
-      isOpen: !isOpen,
-    }));
+    const { isDisabled } = this.props;
+    if (!isDisabled) {
+      this.setState(({ isOpen }) => ({
+        isOpen: !isOpen,
+      }));
+    }
   };
   handleSelected = (
     item: { id: string, title: string },
@@ -50,8 +67,7 @@ class Collapse extends Component<PropsType, StateType> {
     const { items } = this.props;
     const { isOpen, index, title } = this.state;
     return (
-      <aside styleName="container">
-        <h2 styleName="offscreen">Profile Mobile Menu</h2>
+      <div styleName="container">
         <header
           role="none"
           onKeyPress={() => {}}
@@ -82,7 +98,7 @@ class Collapse extends Component<PropsType, StateType> {
             ))}
           </ul>
         </nav>
-      </aside>
+      </div>
     );
   }
 }

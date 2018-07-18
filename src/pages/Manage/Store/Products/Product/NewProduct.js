@@ -64,7 +64,7 @@ class NewProduct extends Component<PropsType, StateType> {
       shortDescription,
       longDescription,
     } = form;
-    const storeID = path(['store', 'id'], me);
+    const storeID = path(['myStore', 'id'], me);
     this.setState(() => ({ isLoading: true }));
     CreateBaseProductMutation.commit({
       parentID: storeID,
@@ -171,9 +171,8 @@ NewProduct.contextTypes = {
 export default createFragmentContainer(
   withRouter(withShowAlert(Page(ManageStore(NewProduct, 'Goods')))),
   graphql`
-    fragment NewProduct_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
+    fragment NewProduct_me on User {
+      myStore {
         id
         logo
         name {

@@ -12,6 +12,10 @@
 .imageArea {
   border-radius: 0.5rem;
   overflow: hidden;
+  display: none;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .img {

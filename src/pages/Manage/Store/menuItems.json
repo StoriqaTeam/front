@@ -3,7 +3,7 @@
     "id": "orders",
     "title": "Orders",
     "link": "/orders",
-    "disabled": true
+    "disabled": false
   },
   {
     "id": "goods",
