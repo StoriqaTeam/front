@@ -113,6 +113,8 @@ class StoreOrders extends Component<PropsType, StateType> {
   };
 
   render() {
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     const edges = map(
       prop('node'),
       // $FlowIgnoreMe
@@ -140,7 +142,7 @@ class StoreOrders extends Component<PropsType, StateType> {
         pagesCount={pagesCount}
         currentPage={currentPage}
         onPageSelect={this.loadPage}
-        linkFactory={item => `/manage/store/orders/${item.number}`}
+        linkFactory={item => `/manage/store/${storeId}/orders/${item.number}`}
         onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
         onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
         onOrderDateFilterChanged={this.handleOrderDateFilterChanged}

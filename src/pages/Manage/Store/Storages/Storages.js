@@ -253,6 +253,7 @@ export default createFragmentContainer(
   graphql`
     fragment Storages_me on User {
       myStore {
+        rawId
         warehouses {
           id
           name
