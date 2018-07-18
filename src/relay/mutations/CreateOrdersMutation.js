@@ -24,11 +24,14 @@ const mutation = graphql`
         }
       }
       invoice {
-        orders {
-          id
-        }
+        id
+        amount
+        priceReservedDueDateTime
+        state
+        wallet
+        transactionId
+        transactionCapturedAmount
       }
-      billingUrl
     }
   }
 `;

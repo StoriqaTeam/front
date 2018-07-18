@@ -209,7 +209,7 @@ class OrderPage extends PureComponent<PropsType> {
               <TextWithLabel label="Delivery" text={order.delivery} />
               <TextWithLabel label="Quantity" text={`${order.quantity}`} />
             </div>
-            <div styleName="right">
+            <div>
               <TextWithLabel label="Address" text={order.customer.address} />
               <TextWithLabel
                 label="Time"

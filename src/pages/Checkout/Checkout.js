@@ -26,6 +26,7 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
+import { PaymentInfo } from './PaymentInfo';
 
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
@@ -49,13 +50,14 @@ type StateType = {
     addressFull: AddressFullType,
     receiverName: string,
   },
+  invoiceId: ?string,
 };
 
 /* eslint-disable react/no-array-index-key */
 class Checkout extends Component<PropsType, StateType> {
   state = {
     storesRef: null,
-    step: 1,
+    step: 3,
     isAddressSelect: true,
     isNewAddress: false,
     orderInput: {
@@ -73,6 +75,7 @@ class Checkout extends Component<PropsType, StateType> {
       },
       receiverName: '',
     },
+    invoiceId: 'null',
   };
 
   setStoresRef(ref) {
@@ -101,21 +104,32 @@ class Checkout extends Component<PropsType, StateType> {
       orderInput: { addressFull, receiverName },
     } = this.state;
     CreateOrdersMutation.commit({
-      input: { clientMutationId: '', addressFull, receiverName },
+      input: { clientMutationId: '', addressFull, receiverName, currencyId: 6 },
       environment: this.context.environment,
       onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
         log.debug('Success for DeleteFromCart mutation');
-        if (response) {
+        if (response && response.createOrders) {
           log.debug('Response: ', response);
           this.props.showAlert({
             type: 'success',
             text: 'Orders successfully created',
             link: { text: 'Close.' },
           });
+          this.setState({ invoiceId: response.createOrders.invoice.id });
           this.handleChangeStep(3)();
-        }
-        if (errors) {
+        } else if (!errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error :(',
+            link: { text: 'Close.' },
+          });
+        } else {
           log.debug('Errors: ', errors);
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error :(',
+            link: { text: 'Close.' },
+          });
         }
       },
       onError: error => {
@@ -188,7 +202,11 @@ class Checkout extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 ) : (
-                  <Col size={12} md={8} lg={9}>
+                  <Col
+                    size={12}
+                    md={step !== 3 ? 8 : 12}
+                    lg={step !== 3 ? 9 : 12}
+                  >
                     {step === 1 && (
                       <div styleName="wrapper">
                         <div styleName="container addressContainer">
@@ -226,26 +244,30 @@ class Checkout extends Component<PropsType, StateType> {
                         </div>
                       </div>
                     )}
-                    {step === 3 && <div>Payment info here</div>}
+                    {step === 3 &&
+                      this.state.invoiceId && (
+                        <PaymentInfo invoiceId={this.state.invoiceId} />
+                      )}
                   </Col>
                 )}
-                {!emptyCart && (
-                  <Col size={12} md={4} lg={3}>
-                    <CheckoutSidebar
-                      storesRef={this.state.storesRef}
-                      buttonText={step === 1 ? 'Next' : 'Checkout'}
-                      onClick={
-                        (step === 1 && this.handleChangeStep(2)) ||
-                        this.handleCheckout
-                      }
-                      productsCost={productsCost}
-                      deliveryCost={deliveryCost}
-                      totalCount={totalCount}
-                      totalCost={totalCost}
-                      isReadyToClick={this.checkReadyToCheckout()}
-                    />
-                  </Col>
-                )}
+                {false &&
+                  !emptyCart && (
+                    <Col size={12} md={4} lg={3}>
+                      <CheckoutSidebar
+                        storesRef={this.state.storesRef}
+                        buttonText={step === 1 ? 'Next' : 'Checkout'}
+                        onClick={
+                          (step === 1 && this.handleChangeStep(2)) ||
+                          this.handleCheckout
+                        }
+                        productsCost={productsCost}
+                        deliveryCost={deliveryCost}
+                        totalCount={totalCount}
+                        totalCost={totalCost}
+                        isReadyToClick={this.checkReadyToCheckout()}
+                      />
+                    </Col>
+                  )}
               </Row>
             </div>
           </Col>
