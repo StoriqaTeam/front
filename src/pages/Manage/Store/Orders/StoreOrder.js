@@ -49,6 +49,7 @@ export default createRefetchContainer(
     fragment StoreOrder_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       myStore {
+        rawId
         order(slug: $slug) {
           id
           slug

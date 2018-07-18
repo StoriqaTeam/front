@@ -507,13 +507,6 @@ export default createRefetchContainer(
         currentPage: { type: "Int!", defaultValue: 1 }
         itemsCount: { type: "Int!", defaultValue: 10 }
       ) {
-      myStore {
-        logo
-        name {
-          lang
-          text
-        }
-      }
       warehouse(slug: $storageSlug) {
         id
         name
