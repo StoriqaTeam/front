@@ -23,22 +23,12 @@
     justify-content: flex-end;
     margin-top: 0;
 
-    [class*='Button__container'] {
+    & > [class*='Button__container'] {
       width: initial !important;
     }
 
   }
 
-  //@media (min-width: #{$md + 2}) {
-  //  [class*='Button__container'] {
-  //    width: initial;
-  //  }
-  //}
-
-}
-
-[class*='Select__forForm'] {
-  width: 100% !important;
 }
 
 .birthdateSelect {

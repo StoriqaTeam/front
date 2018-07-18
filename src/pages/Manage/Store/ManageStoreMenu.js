@@ -1,14 +1,17 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { routerShape, withRouter, matchShape } from 'found';
 import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
+import type { Environment } from 'relay-runtime';
 import { graphql } from 'react-relay';
 
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
+import { Collapse } from 'components/Collapse';
+import { MobileUpload } from 'components/MobileUpload';
+
 import {
   uploadFile,
   getNameText,
@@ -20,8 +23,8 @@ import {
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
-
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { TranslationType } from 'types';
 
 import menuItems from './menuItems.json';
 
@@ -39,6 +42,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
+  environment: Environment,
 };
 
 type StateType = {
@@ -46,10 +50,7 @@ type StateType = {
     myStore: {
       id: string,
       rawId: number,
-      name: {
-        lang: string,
-        text: string,
-      },
+      name: TranslationType,
       logo: string,
     },
   },
@@ -69,13 +70,13 @@ const MANAGE_STORE_MENU_FRAGMENT = graphql`
   }
 `;
 
-class ManageStoreMenu extends PureComponent<PropsType, StateType> {
+class ManageStoreMenu extends Component<PropsType, StateType> {
   state = {
     storeData: null,
   };
 
   componentWillMount() {
-    const store = this.context.environment.getStore();
+    const store = this.props.environment.getStore();
     const meId = pathOr(
       null,
       ['me', '__ref'],
@@ -119,7 +120,7 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
   };
 
   handleLogoUpload = (url: string) => {
-    const { environment } = this.context;
+    const { environment } = this.props;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['storeData', 'myStore', 'id'], this.state);
 
@@ -150,7 +151,6 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-
         // $FlowIgnoreMe
         const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
         if (!isEmpty(statusError)) {
@@ -161,7 +161,6 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
           });
           return;
         }
-
         // $FlowIgnoreMe
         const parsingError = pathOr(null, ['300', 'message'], relayErrors);
         if (parsingError) {
@@ -190,11 +189,10 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
     };
     UpdateStoreMainMutation.commit(params);
   };
-
   handleClick = (item: MenuItemType): void => {
     const { link } = item;
     const {
-      router,
+      router: { replace },
       match: {
         params: { storeId },
       },
@@ -203,15 +201,13 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
       if (!isNil(storeId)) {
         const storePath = `/manage/store/${storeId}`;
         const path = link === '/' ? storePath : `${storePath}${link}`;
-        router.replace(path);
+        replace(path);
       }
     }
   };
-
-  deleteAvatar = () => {
+  deleteAvatar = (): void => {
     this.handleLogoUpload('');
   };
-
   render() {
     const { activeItem } = this.props;
     const { storeData } = this.state;
@@ -228,13 +224,29 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
       storeId = myStore.rawId;
     }
     return (
-      <div styleName="menu">
+      <aside styleName="container">
+        <h2 styleName="offscreen">Manage</h2>
+        <div styleName="mobileMenu">
+          <Collapse
+            selected={activeItem}
+            items={menuItems}
+            onSelected={this.handleClick}
+            isDisabled={isNil(storeId)}
+          />
+          <div style={{ margin: '1.05rem 0' }} />
+          <MobileUpload
+            avatar={convertSrc(storeLogo, 'medium') || null}
+            id="some"
+            onUpload={this.handleOnUpload}
+          />
+        </div>
         <div styleName="imgWrap">
           <UploadWrapper
             id="new-store-id"
             onUpload={this.handleOnUpload}
-            buttonHeight={26}
-            buttonWidth={26}
+            customUnit
+            buttonHeight="26rem"
+            buttonWidth="100%"
             buttonIconSize={48}
             buttonIconType="upload"
             buttonLabel="Click to upload logo"
@@ -275,13 +287,9 @@ class ManageStoreMenu extends PureComponent<PropsType, StateType> {
             );
           })}
         </div>
-      </div>
+      </aside>
     );
   }
 }
-
-ManageStoreMenu.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
 
 export default withRouter(ManageStoreMenu);

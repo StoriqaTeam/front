@@ -89,8 +89,8 @@ class Header extends Component<PropsType, StateType> {
             onChange={this.handleSearchTermChange}
             value={this.state.searchTerm || ''}
             limit={100}
-            icon="magnifier"
             fullWidth
+            search
           />
         </Col>
         <Col size={12} sm={6} md={4} lg={3} xl={3} lgVisible>
