@@ -62,14 +62,15 @@ const ProfileMenu = ({
       <a href="/" styleName="item">
         History
       </a>
-      {storeId &&
+      {(storeId && (
         <a href={`/manage/store/${storeId}`} styleName="item">
           <span>My shops</span>
-        </a> ||
+        </a>
+      )) || (
         <a href="/manage/wizard" styleName="item">
           <span>My shops</span>
         </a>
-      }
+      )}
     </div>
     <Link
       styleName="logout"

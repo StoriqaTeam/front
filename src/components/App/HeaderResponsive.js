@@ -86,7 +86,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       isMobileCategoriesOpen: false,
       selectedCategory: null,
     };
-    const store = this.props.environment.getStore();
+    const store = props.environment.getStore();
     if (process.env.BROWSER) {
       window.store = store;
     }
@@ -108,6 +108,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       // end tmp code
     });
     const totalCount = pathOr(0, ['data', 'totalCount'], snapshot);
+    // console.log('>>> snapshot: ', { snapshot: snapshot.data });
 
     this.dispose = dispose;
     // $FlowIgnoreMe
@@ -209,7 +210,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const { searchValue, withoutCategories, environment } = this.props;
+    const { searchValue, withoutCategories } = this.props;
     const {
       showModal,
       isSignUp,

@@ -48,6 +48,7 @@ const routes = (
           }
           cart {
             id
+            ...Cart_cart
           }
           mainPage {
             ...Start_mainPage
