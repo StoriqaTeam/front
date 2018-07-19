@@ -111,19 +111,21 @@ class Storages extends PureComponent<PropsType> {
     const storages = pathOr([], ['myStore', 'warehouses'], me);
     return (
       <div styleName="container">
-        <div styleName="addButton">
-          <Button
-            wireframe
-            big
-            onClick={this.createStorage}
-            dataTest="createStorageButton"
-          >
-            Add storage
-          </Button>
-        </div>
-        <div styleName="subtitle">
-          <strong>Items list</strong>
-        </div>
+        <header styleName="headerBar">
+          <div styleName="subtitle">
+            <strong>Items list</strong>
+          </div>
+          <div styleName="addButton">
+            <Button
+              wireframe
+              big
+              onClick={this.createStorage}
+              dataTest="createStorageButton"
+            >
+              Add storage
+            </Button>
+          </div>
+        </header>
         <div>
           <StoragesHeader />
           <div>
