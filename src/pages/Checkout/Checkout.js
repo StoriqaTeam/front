@@ -8,7 +8,10 @@ import { pipe, pathOr, path, map, prop } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
-import { CreateOrdersMutation } from 'relay/mutations';
+import {
+  CreateUserDeliveryAddressFullMutation,
+  CreateOrdersMutation,
+} from 'relay/mutations';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
@@ -44,6 +47,7 @@ type StateType = {
   step: number,
   isAddressSelect: boolean,
   isNewAddress: boolean,
+  saveAsNewAddress: boolean,
   orderInput: {
     addressFull: AddressFullType,
     receiverName: string,
@@ -57,6 +61,7 @@ class Checkout extends Component<PropsType, StateType> {
     step: 1,
     isAddressSelect: true,
     isNewAddress: false,
+    saveAsNewAddress: true,
     orderInput: {
       addressFull: {
         value: '',
@@ -82,7 +87,59 @@ class Checkout extends Component<PropsType, StateType> {
 
   storesRef: any;
 
-  handleChangeStep = step => () => this.setState({ step });
+  createAddress = () => {
+    const addressFull = pathOr(null, ['orderInput', 'addressFull'], this.state);
+    const userId = pathOr(null, ['me', 'rawId'], this.props);
+    CreateUserDeliveryAddressFullMutation.commit({
+      input: {
+        clientMutationId: '',
+        userId,
+        addressFull,
+        isPriority: false,
+      },
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState(() => ({
+          isAddressSelect: true,
+          isNewAddress: false,
+        }));
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong. New address was not created.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Address created!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.setState(() => ({
+          isAddressSelect: true,
+          isNewAddress: false,
+        }));
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong. New address was not created.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
+
+  handleChangeStep = step => () => {
+    const { saveAsNewAddress, isNewAddress } = this.state;
+    if (saveAsNewAddress && isNewAddress) {
+      this.createAddress();
+    }
+    this.setState({ step });
+  };
 
   handleOnChangeOrderInput = orderInput => {
     this.setState({ orderInput });
@@ -92,6 +149,12 @@ class Checkout extends Component<PropsType, StateType> {
     this.setState(prevState => ({
       isAddressSelect: !prevState.isAddressSelect,
       isNewAddress: !prevState.isNewAddress,
+    }));
+  };
+
+  handleChangeSaveCheckbox = () => {
+    this.setState(prevState => ({
+      saveAsNewAddress: !prevState.saveAsNewAddress,
     }));
   };
 
@@ -150,7 +213,13 @@ class Checkout extends Component<PropsType, StateType> {
       ['me', 'deliveryAddresses'],
       this.props,
     );
-    const { step, isAddressSelect, isNewAddress, orderInput } = this.state;
+    const {
+      step,
+      isAddressSelect,
+      isNewAddress,
+      saveAsNewAddress,
+      orderInput,
+    } = this.state;
     const {
       cart: { totalCost, totalCount, deliveryCost, productsCost },
     } = this.props;
@@ -194,6 +263,8 @@ class Checkout extends Component<PropsType, StateType> {
                             me={me}
                             isAddressSelect={isAddressSelect}
                             isNewAddress={isNewAddress}
+                            saveAsNewAddress={saveAsNewAddress}
+                            onChangeSaveCheckbox={this.handleChangeSaveCheckbox}
                             onChangeAddressType={this.handleOnChangeAddressType}
                             deliveryAddresses={deliveryAddresses || []}
                             orderInput={orderInput}

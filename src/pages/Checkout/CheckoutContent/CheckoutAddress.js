@@ -85,8 +85,10 @@ class CheckoutContent extends React.Component<PropsType> {
       me,
       isAddressSelect,
       isNewAddress,
+      saveAsNewAddress,
       orderInput,
       onChangeAddressType,
+      onChangeSaveCheckbox,
       deliveryAddresses,
     } = this.props;
 
@@ -173,6 +175,14 @@ class CheckoutContent extends React.Component<PropsType> {
                       address={addressFull ? addressFull.value : null}
                       addressFull={addressFull}
                     />
+                    <div styleName="saveAddressWrapper">
+                      <Checkbox
+                        id="saveAddressCheckbox"
+                        label="Save as a new address"
+                        isChecked={saveAsNewAddress}
+                        onChange={onChangeSaveCheckbox}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
