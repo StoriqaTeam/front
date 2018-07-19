@@ -4,9 +4,11 @@
   border-bottom: 1px solid $color_grey_trivial;
   display: flex;
   margin: 0 -4rem;
-  padding: 2rem 3rem;
-
+  padding: 0;
   color: $color_grey_minor;
+  @media (min-width: $md) {
+    padding: 2rem 3rem;
+  }
 }
 
 .headerCheckbox {

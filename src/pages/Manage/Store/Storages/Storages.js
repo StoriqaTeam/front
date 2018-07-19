@@ -12,29 +12,15 @@ import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
-import { Checkbox } from 'components/common/Checkbox';
-import { Icon } from 'components/Icon';
 
 import { DeleteWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/DeleteWarehouseMutation';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { Storages_me as StoragesMeType } from './__generated__/Storages_me.graphql';
 
-import { StoragesHeader } from './index';
+import { StoragesHeader, StoragesRow } from './index';
 
 import './Storages.scss';
-
-type AddressFullType = {
-  administrativeAreaLevel1: ?string,
-  administrativeAreaLevel2: ?string,
-  country: string,
-  locality: ?string,
-  political: ?string,
-  postalCode: string,
-  route: ?string,
-  streetNumber: ?string,
-  value: ?string,
-};
 
 type PropsType = {
   router: routerShape,
@@ -53,7 +39,7 @@ class Storages extends PureComponent<PropsType> {
     }
   };
 
-  editStorage = (slug: ?string, isStorageData: boolean, e: any) => {
+  handleEdit = (slug: ?string, isStorageData: boolean, e: any): void => {
     e.stopPropagation();
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
@@ -119,74 +105,6 @@ class Storages extends PureComponent<PropsType> {
   //   this.props.relay.loadMore(8);
   // };
 
-  renderRows = (item: {
-    id: string,
-    name: string,
-    slug: string,
-    addressFull: AddressFullType,
-  }) => {
-    const { id, name, slug, addressFull } = item;
-    const { country, locality, value } = addressFull;
-    return (
-      <div
-        key={item.id}
-        styleName="itemRowWrap"
-        onClick={(e: any) => {
-          this.editStorage(slug, false, e);
-        }}
-        onKeyDown={() => {}}
-        role="button"
-        tabIndex="0"
-        data-test="editStorageField"
-      >
-        <div styleName="td tdCheckbox">
-          <span
-            onClick={(e: any) => {
-              this.editStorage(null, false, e);
-            }}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            <Checkbox id={`storage-${item.id}`} onChange={() => {}} />
-          </span>
-        </div>
-        <div styleName="td tdStorage">
-          <div>{name}</div>
-        </div>
-        <div styleName="td tdAddress">
-          <div styleName="address">
-            <span>{`${country}`}</span>
-            {locality && <span>{`, ${locality}`}</span>}
-            {value && <span>{`, ${value}`}</span>}
-          </div>
-        </div>
-        <div styleName="td tdEdit">
-          <button
-            styleName="editButton"
-            onClick={(e: any) => {
-              this.editStorage(slug, true, e);
-            }}
-            data-test="editStorageDataButton"
-          >
-            <Icon type="note" size={32} />
-          </button>
-        </div>
-        <div styleName="td tdDelete">
-          <button
-            styleName="deleteButton"
-            onClick={(e: any) => {
-              this.handleDelete(id, e);
-            }}
-            data-test="deleteStorageButton"
-          >
-            <Icon type="basket" size="32" />
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
@@ -212,7 +130,17 @@ class Storages extends PureComponent<PropsType> {
             {isEmpty(storages) ? (
               <div styleName="emptyStoragesBlock">No storages</div>
             ) : (
-              map(item => this.renderRows(item), storages)
+              map(
+                item => (
+                  <StoragesRow
+                    key={item.id}
+                    {...item}
+                    onEdit={this.handleEdit}
+                    onDelete={this.handleDelete}
+                  />
+                ),
+                storages,
+              )
             )}
           </div>
         </div>
