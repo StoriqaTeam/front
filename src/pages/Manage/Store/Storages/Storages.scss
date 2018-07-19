@@ -24,7 +24,7 @@
   float: right;
 }
 
-.headerRowWrap, .itemRowWrap {
+.itemRowWrap {
   display: flex;
   margin: 0 -4rem;
   border-bottom: 1px solid $color_grey_trivial;
@@ -34,12 +34,6 @@
   align-items: baseline;
   display: flex;
   justify-content: flex-start;
-}
-
-.headerRowWrap {
-  & .td {
-    color: $color_grey_minor;
-  }
 }
 
 .itemRowWrap {
@@ -69,15 +63,6 @@
 .tdAddress {width: 62%; color: $color_grey_minor;}
 .tdEdit {width: 4%; justify-content: flex-end;}
 .tdDelete {width: 4%; justify-content: flex-end;}
-
-
-.headerRowWrap {
-  padding: 2rem 3rem;
-
-  & .tdWrap > span {
-    margin-right: 0.5rem;
-  }
-}
 
 .itemRowWrap {
   min-height: 11.75rem;
@@ -117,18 +102,13 @@
   }
 }
 
-.deleteButton, .editButton {
+.editButton {
   & svg {
     fill: $color_grey_light;
     transition: $transition_all_ease;
   }
 
   &:hover svg {fill: $color_grey;}
-}
-
-.deleteButtonWrapper {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .dropdownButton {

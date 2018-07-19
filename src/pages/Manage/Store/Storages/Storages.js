@@ -14,12 +14,13 @@ import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
-import { Col } from 'layout';
 
 import { DeleteWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/DeleteWarehouseMutation';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { Storages_me as StoragesMeType } from './__generated__/Storages_me.graphql';
+
+import { StoragesHeader } from './index';
 
 import './Storages.scss';
 
@@ -118,36 +119,6 @@ class Storages extends PureComponent<PropsType> {
   //   this.props.relay.loadMore(8);
   // };
 
-  renderHeaderRow = () => (
-    <div styleName="headerRowWrap">
-      <Col size={12} sm={6} md={4} lg={3} xl={3}>
-        <div styleName="headerCheckbox">
-          <div styleName="checkBox">
-            <Checkbox id="header" onChange={() => {}} />
-          </div>
-          <div>
-            <span>Storage</span>
-            <Icon inline type="sortArrows" />
-          </div>
-        </div>
-      </Col>
-      <Col size={12} sm={6} md={4} lg={8} xl={8}>
-        <div>
-          <span>Address</span>
-          <Icon inline type="sortArrows" />
-        </div>
-      </Col>
-      <div styleName="td tdEdit" />
-      <Col size={12} sm={6} md={4} lg={1} xl={1}>
-        <div styleName="deleteButtonWrapper">
-          <button styleName="deleteButton">
-            <Icon type="basket" size="32" />
-          </button>
-        </div>
-      </Col>
-    </div>
-  );
-
   renderRows = (item: {
     id: string,
     name: string,
@@ -236,7 +207,7 @@ class Storages extends PureComponent<PropsType> {
           <strong>Items list</strong>
         </div>
         <div>
-          <div>{this.renderHeaderRow()}</div>
+          <StoragesHeader />
           <div>
             {isEmpty(storages) ? (
               <div styleName="emptyStoragesBlock">No storages</div>

@@ -1,0 +1,34 @@
+@import "../../../../styles/variables";
+
+.container {
+  border-bottom: 1px solid $color_grey_trivial;
+  display: flex;
+  margin: 0 -4rem;
+  padding: 2rem 3rem;
+
+  color: $color_grey_minor;
+}
+
+.headerCheckbox {
+  align-items: baseline;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.checkBox {
+  margin-right: 4rem;
+}
+
+.deleteButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  & svg {
+    fill: $color_grey_light;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
