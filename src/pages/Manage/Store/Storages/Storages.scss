@@ -30,6 +30,12 @@
   border-bottom: 1px solid $color_grey_trivial;
 }
 
+.headerCheckbox {
+  align-items: baseline;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .headerRowWrap {
   & .td {
     color: $color_grey_minor;
@@ -54,6 +60,10 @@
   color: $color_grey;
 }
 
+.checkBox {
+  margin-right: 4rem;
+}
+
 .tdCheckbox {width: 5%;}
 .tdStorage {width: 25%;}
 .tdAddress {width: 62%; color: $color_grey_minor;}
@@ -62,7 +72,7 @@
 
 
 .headerRowWrap {
-  padding: 2rem 4rem;
+  padding: 2rem 3rem;
 
   & .tdWrap > span {
     margin-right: 0.5rem;
@@ -114,6 +124,11 @@
   }
 
   &:hover svg {fill: $color_grey;}
+}
+
+.deleteButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .dropdownButton {

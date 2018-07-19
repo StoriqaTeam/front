@@ -36,7 +36,10 @@ export default (OriginalComponent: any, title: string) =>
                       <span styleName="title">{title}</span>
                     </div>
                     <div styleName="form">
-                      <OriginalComponent {...this.props} />
+                      <OriginalComponent
+                        environment={environment}
+                        {...this.props}
+                      />
                     </div>
                   </div>
                 </Col>

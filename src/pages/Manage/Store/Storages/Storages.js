@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { pathOr, isEmpty, map } from 'ramda';
 import { withRouter, routerShape } from 'found';
 import { graphql, createFragmentContainer } from 'react-relay';
+import type { Environment } from 'relay-runtime';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -13,6 +14,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
+import { Col } from 'layout';
 
 import { DeleteWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/DeleteWarehouseMutation';
@@ -37,6 +39,7 @@ type PropsType = {
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
   me: StoragesMeType,
+  environment: Environment,
 };
 
 class Storages extends PureComponent<PropsType> {
@@ -64,7 +67,7 @@ class Storages extends PureComponent<PropsType> {
 
   handleDelete = (id: string, e: any) => {
     e.stopPropagation();
-    const { environment } = this.context;
+    const { environment } = this.props;
     const params: MutationParamsType = {
       id,
       environment,
@@ -117,27 +120,31 @@ class Storages extends PureComponent<PropsType> {
 
   renderHeaderRow = () => (
     <div styleName="headerRowWrap">
-      <div styleName="td tdCheckbox">
-        <Checkbox id="header" onChange={() => {}} />
-      </div>
-      <div styleName="td tdStorage">
-        <div>
-          <span>Storage</span>
-          <Icon inline type="sortArrows" />
+      <Col size={12} sm={6} md={4} lg={3} xl={3}>
+        <div styleName="headerCheckbox">
+          <div styleName="checkBox">
+            <Checkbox id="header" onChange={() => {}} />
+          </div>
+          <div>
+            <span>Storage</span>
+            <Icon inline type="sortArrows" />
+          </div>
         </div>
-      </div>
-      <div styleName="td tdAddress">
+      </Col>
+      <Col size={12} sm={6} md={4} lg={8} xl={8}>
         <div>
           <span>Address</span>
           <Icon inline type="sortArrows" />
         </div>
-      </div>
+      </Col>
       <div styleName="td tdEdit" />
-      <div styleName="td tdDelete">
-        <button styleName="deleteButton">
-          <Icon type="basket" size="32" />
-        </button>
-      </div>
+      <Col size={12} sm={6} md={4} lg={1} xl={1}>
+        <div styleName="deleteButtonWrapper">
+          <button styleName="deleteButton">
+            <Icon type="basket" size="32" />
+          </button>
+        </div>
+      </Col>
     </div>
   );
 
@@ -244,12 +251,11 @@ class Storages extends PureComponent<PropsType> {
 }
 
 Storages.contextTypes = {
-  environment: PropTypes.object.isRequired,
   showAlert: PropTypes.func,
 };
 
 export default createFragmentContainer(
-  withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages')))),
+  withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages'), true))),
   graphql`
     fragment Storages_me on User {
       myStore {
