@@ -125,19 +125,21 @@ class CheckoutContent extends React.Component<PropsType> {
                 {isAddressSelect && (
                   <div styleName="selectWrapper">
                     Address
-                    <Select
-                      items={items}
-                      activeItem={
-                        addressValue && {
-                          id: addressValue,
-                          label: addressValue,
+                    <div>
+                      <Select
+                        items={items}
+                        activeItem={
+                          addressValue && {
+                            id: addressValue,
+                            label: addressValue,
+                          }
                         }
-                      }
-                      onSelect={this.handleOnSelectAddress}
-                      forForm
-                      containerStyle={{ width: '24rem' }}
-                      dataTest="selectExistingAddress"
-                    />
+                        onSelect={this.handleOnSelectAddress}
+                        forForm
+                        containerStyle={{ width: '26rem' }}
+                        dataTest="selectExistingAddress"
+                      />
+                    </div>
                   </div>
                 )}
               </div>

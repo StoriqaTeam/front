@@ -34,7 +34,11 @@ const ProductInfo = ({
     value: attr.value.toString(),
   }))(product.attributes);
   return (
-    <ShowMore initialState height={400} dataTest={`cart-product-${product.rawId}-showMore`}>
+    <ShowMore
+      initialState
+      height={400}
+      dataTest={`cart-product-${product.rawId}-showMore`}
+    >
       <Container correct>
         <Row>
           <Col size={12} xl={8}>
