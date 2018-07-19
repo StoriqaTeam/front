@@ -86,7 +86,7 @@ class Form extends Component<PropsType, StateType> {
     const { name, addressFull, formErrors } = this.state;
     return (
       <div styleName="form">
-        <div styleName="formItem">
+        <div styleName="formItem storageName">
           <Input
             id="name"
             value={name || ''}
@@ -94,6 +94,7 @@ class Form extends Component<PropsType, StateType> {
             onChange={this.handleInputChange}
             errors={propOr(null, 'name', formErrors)}
             limit={50}
+            fullWidth
           />
         </div>
         <div styleName="formItem">
