@@ -13,7 +13,7 @@ describe('search utils tests', () => {
       expect(getNameText(translatedValues, 'RU')).toBe('привет');
     });
     it('should return EN text if lang not passed', () => {
-      expect(getNameText(translatedValues)).toBe('hello');
+      expect(getNameText(translatedValues)).toBe(null);
     });
     it('should return null if passing data incorect', () => {
       expect(getNameText({})).toBe(null);

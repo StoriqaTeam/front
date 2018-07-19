@@ -26,6 +26,9 @@ type NameType = {
 };
 
 export const getNameText = (arr: Array<NameType>, lang: string) => {
+  if (!arr || !lang) {
+    return null;
+  }
   let name = byLang(lang)(arr);
   if (!name || !name.text) name = byLang('EN')(arr);
   return name ? name.text : null;

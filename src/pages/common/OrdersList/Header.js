@@ -107,6 +107,7 @@ class Header extends Component<PropsType, StateType> {
             }}
             label="Order status"
             withEmpty
+            fullWidth
           />
         </Col>
         <Col md={3} lg={3} xl={3} lgVisible>

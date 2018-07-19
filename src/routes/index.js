@@ -248,6 +248,7 @@ const routes = (
               query routes_NewStore_Query {
                 me {
                   myStore {
+                    id
                     rawId
                   }
                 }
@@ -269,7 +270,13 @@ const routes = (
               query routes_CheckStore_Query {
                 me {
                   myStore {
+                    id
                     rawId
+                    logo
+                    name {
+                      lang
+                      text
+                    }
                   }
                 }
               }
