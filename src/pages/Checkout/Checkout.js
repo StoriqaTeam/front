@@ -57,7 +57,7 @@ type StateType = {
 class Checkout extends Component<PropsType, StateType> {
   state = {
     storesRef: null,
-    step: 3,
+    step: 1,
     isAddressSelect: true,
     isNewAddress: false,
     orderInput: {
@@ -75,7 +75,7 @@ class Checkout extends Component<PropsType, StateType> {
       },
       receiverName: '',
     },
-    invoiceId: 'null',
+    invoiceId: null,
   };
 
   setStoresRef(ref) {
@@ -246,28 +246,30 @@ class Checkout extends Component<PropsType, StateType> {
                     )}
                     {step === 3 &&
                       this.state.invoiceId && (
-                        <PaymentInfo invoiceId={this.state.invoiceId} />
+                        <PaymentInfo
+                          invoiceId={this.state.invoiceId}
+                          me={this.props.me}
+                        />
                       )}
                   </Col>
                 )}
-                {false &&
-                  !emptyCart && (
-                    <Col size={12} md={4} lg={3}>
-                      <CheckoutSidebar
-                        storesRef={this.state.storesRef}
-                        buttonText={step === 1 ? 'Next' : 'Checkout'}
-                        onClick={
-                          (step === 1 && this.handleChangeStep(2)) ||
-                          this.handleCheckout
-                        }
-                        productsCost={productsCost}
-                        deliveryCost={deliveryCost}
-                        totalCount={totalCount}
-                        totalCost={totalCost}
-                        isReadyToClick={this.checkReadyToCheckout()}
-                      />
-                    </Col>
-                  )}
+                {!emptyCart && (
+                  <Col size={12} md={4} lg={3}>
+                    <CheckoutSidebar
+                      storesRef={this.state.storesRef}
+                      buttonText={step === 1 ? 'Next' : 'Checkout'}
+                      onClick={
+                        (step === 1 && this.handleChangeStep(2)) ||
+                        this.handleCheckout
+                      }
+                      productsCost={productsCost}
+                      deliveryCost={deliveryCost}
+                      totalCount={totalCount}
+                      totalCost={totalCost}
+                      isReadyToClick={this.checkReadyToCheckout()}
+                    />
+                  </Col>
+                )}
               </Row>
             </div>
           </Col>
@@ -281,6 +283,7 @@ export default createPaginationContainer(
   Page(withShowAlert(withRouter(Checkout)), true),
   graphql`
     fragment Checkout_me on User {
+      ...PaymentInfo_me
       id
       rawId
       email

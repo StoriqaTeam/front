@@ -142,7 +142,6 @@ export default createRefetchContainer(
     fragment App_me on User {
       ...Profile_me
       ...ManageStoreMenu_me
-      ...PaymentInfo_me
       id
       rawId
       email

@@ -140,6 +140,8 @@ const routes = (
             const cookies = new Cookies();
             cookies.remove('__jwt');
             throw new RedirectException(`/login?from=/checkout`);
+          } else if (!props) {
+            return null;
           } else {
             return <Component {...props} />;
           }

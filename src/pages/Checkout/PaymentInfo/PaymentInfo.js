@@ -9,13 +9,16 @@ import { pathOr } from 'ramda';
 import type {
   OrderState as OrderStateType,
   PaymentInfo_me as PaymentInfoMeType,
-} from './__generated__/PaymentInfo_me.graphql';
+} from './__generated__/PaymentInfo.graphql';
 
 import './PaymentInfo.scss';
 
 type PropsType = {
   invoiceId: string,
   me: PaymentInfoMeType,
+  relay: {
+    refetch: Function,
+  },
 };
 
 type StateType = {
@@ -30,6 +33,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   componentDidMount() {
     this.unmounted = false;
     this.updateCountdown();
+    this.refetchInvoice();
   }
 
   componentWillUnmount() {
@@ -38,8 +42,30 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 
   unmounted: boolean = true;
 
+  refetchInvoice = () => {
+    if (
+      this.unmounted ||
+      !this.props.invoiceId ||
+      this.props.invoiceId === ''
+    ) {
+      return;
+    }
+
+    this.props.relay.refetch(
+      {
+        id: this.props.invoiceId,
+      },
+      null,
+      () => {
+        setTimeout(() => {
+          this.refetchInvoice();
+        }, 5000);
+      },
+      { force: true },
+    );
+  };
+
   updateCountdown = () => {
-    // $FlowIgnoreMe
     const priceReservedDueDateTime = pathOr(
       null,
       ['invoice', 'priceReservedDueDateTime'],
@@ -70,17 +96,12 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    // $FlowIgnoreMe
-    // const invoice = pathOr(null, ['me', 'invoice'], this.props);
-    // if (!invoice) {
-    //   return null;
-    // }
-    const invoice = {
-      amount: 123321,
-      priceReservedDueDateTime: '',
-      wallet: 'sdfasdf',
-      transactionId: 'asdfasdfasdf',
-    };
+    console.log({ props: this.props });
+    // $FlowIgnoreMe;
+    const invoice = pathOr(null, ['me', 'invoice'], this.props);
+    if (!invoice) {
+      return <div>no data</div>;
+    }
 
     const { wallet, amount, transactionId } = invoice;
     return (
@@ -144,7 +165,7 @@ export default createRefetchContainer(
   graphql`
     fragment PaymentInfo_me on User
       @argumentDefinitions(id: { type: "String!", defaultValue: "" }) {
-      invoice(id: "asfasf") {
+      invoice(id: $id) {
         id
         amount
         priceReservedDueDateTime
