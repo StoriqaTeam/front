@@ -72,7 +72,7 @@ class NewProduct extends Component<PropsType, StateType> {
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: longDescription }],
-      currencyId: 1,
+      currencyId: 6,
       categoryId,
       seoTitle:
         !seoTitle || seoTitle.length === 0
