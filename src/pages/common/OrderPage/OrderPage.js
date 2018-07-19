@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
+import { withRouter, routerShape } from 'found';
 
 import { Button } from 'components/common/Button';
 
@@ -30,6 +31,7 @@ type PropsType = {
   order: any, // TODO: use common type here.
   showAlert: (input: AddAlertInputType) => void,
   isAbleToManageOrder?: boolean,
+  router: routerShape,
 };
 
 type OrderDTOType = {
@@ -248,9 +250,20 @@ class OrderPage extends PureComponent<PropsType> {
           >
             {order.paymentStatus}
           </div>
-          <div styleName="paymentButtonWrapper">
-            <Button big>Payment info</Button>
-          </div>
+          {order.status !== 'Not paid' && (
+            <div styleName="paymentButtonWrapper">
+              <Button
+                big
+                onClick={() => {
+                  this.props.router.push(
+                    `/profile/orders/${order.number}/payment-info`,
+                  );
+                }}
+              >
+                Payment info
+              </Button>
+            </div>
+          )}
           <div styleName="ticketButtonTitle">Having troubles?</div>
           <div styleName="ticketButtonWrapper">
             <Button big>Open ticket</Button>
@@ -261,4 +274,4 @@ class OrderPage extends PureComponent<PropsType> {
   }
 }
 
-export default withShowAlert(OrderPage);
+export default withShowAlert(withRouter(OrderPage));

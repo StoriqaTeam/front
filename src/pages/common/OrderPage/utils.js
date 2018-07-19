@@ -2,6 +2,8 @@
 
 const getStatusStringFromEnum = (orderStatus: string): string => {
   switch (orderStatus) {
+    case 'NEW':
+      return 'New';
     case 'CANCELLED':
       return 'Cancelled';
     case 'COMPLETE':
@@ -27,6 +29,8 @@ const getStatusStringFromEnum = (orderStatus: string): string => {
 
 const getEnumFromStatusString = (orderStatus: string): ?string => {
   switch (orderStatus) {
+    case 'New':
+      return 'NEW';
     case 'Cancelled':
       return 'CANCELLED';
     case 'Completed':
