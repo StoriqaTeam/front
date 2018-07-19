@@ -113,7 +113,6 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       // end tmp code
     });
     const totalCount = pathOr(0, ['data', 'totalCount'], snapshot);
-    // console.log('>>> snapshot: ', { snapshot: snapshot.data });
 
     this.dispose = dispose;
     // $FlowIgnoreMe

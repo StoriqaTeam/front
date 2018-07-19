@@ -127,7 +127,6 @@ const routes = (
 
       <Route
         path="/cart"
-        // render={({ props, Component }) => <Component {...props} />}
         Component={Cart}
         query={graphql`
           query routes_Cart_Query {
