@@ -27,6 +27,9 @@ type StateType = {
 type PropsType = {
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
+  newStoreLogo: ?string,
+  newStoreName: ?string,
+  handleNewStoreNameChange: (value: string) => void,
 };
 
 class NewStore extends Component<PropsType, StateType> {
@@ -41,29 +44,36 @@ class NewStore extends Component<PropsType, StateType> {
 
   handleSave = ({ form, optionLanguage }) => {
     const { environment, currentUser } = this.context;
+    const { newStoreName, newStoreLogo } = this.props;
+    if (!newStoreName) {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something going wrong :(',
+        link: { text: 'Close.' },
+      });
+      return;
+    }
     const {
-      name,
       longDescription,
       shortDescription,
       defaultLanguage,
       slug,
       slogan,
     } = form;
-    const { logoUrl } = this.state;
     this.setState(() => ({ isLoading: true, serverValidationErrors: {} }));
 
     const params: MutationParamsType = {
       input: {
         clientMutationId: '',
         userId: parseInt(currentUser.rawId, 10),
-        name: [{ lang: optionLanguage, text: name }],
+        name: [{ lang: optionLanguage, text: newStoreName }],
         // $FlowIgnoreMe
         defaultLanguage: toUpper(defaultLanguage),
         longDescription: [{ lang: optionLanguage, text: longDescription }],
         shortDescription: [{ lang: optionLanguage, text: shortDescription }],
         slug,
         slogan,
-        logo: logoUrl,
+        logo: newStoreLogo,
         addressFull: {},
       },
       environment,
@@ -132,19 +142,20 @@ class NewStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, serverValidationErrors } = this.state;
     return (
       <Form
         onSave={this.handleSave}
         isLoading={isLoading}
-        serverValidationErrors={this.state.serverValidationErrors}
+        serverValidationErrors={serverValidationErrors}
+        handleNewStoreNameChange={this.props.handleNewStoreNameChange}
       />
     );
   }
 }
 
 export default withShowAlert(
-  withRouter(Page(ManageStore(NewStore, 'Settings'), true)),
+  withRouter(Page(ManageStore(NewStore, 'Settings', true))),
 );
 
 NewStore.contextTypes = {
