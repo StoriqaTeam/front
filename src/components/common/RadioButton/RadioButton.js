@@ -33,7 +33,7 @@ class RadioCheckbox extends PureComponent<PropsType> {
         <div styleName="box">
           <div styleName="radio" />
         </div>
-        <span styleName="labelText">{label}</span>
+        <div styleName="labelText">{label}</div>
       </div>
     );
   }

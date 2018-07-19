@@ -2,15 +2,14 @@
 
 .container {
   position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
   cursor: pointer;
 
   .box {
     display: flex;
     justify-content: center;
     align-items: center;
+    float: left;
+    margin-top: 0.5rem;
     width: 17px;
     height: 17px;
     background-color: $color_white;
@@ -40,5 +39,5 @@
   position: relative;
   color: $color_grey;
   font-size: 1.75rem;
-  margin-left: 1rem;
+  margin-left: 3rem;
 }
