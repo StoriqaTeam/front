@@ -96,11 +96,10 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    console.log({ props: this.props });
     // $FlowIgnoreMe;
     const invoice = pathOr(null, ['me', 'invoice'], this.props);
     if (!invoice) {
-      return <div>no data</div>;
+      return null;
     }
 
     const { wallet, amount, transactionId } = invoice;

@@ -474,7 +474,7 @@ const routes = (
           Component={Invoice}
           render={({ props, Component }) => {
             if (!props) {
-              return null;
+              return undefined;
             }
             return <Component {...props} />;
           }}
