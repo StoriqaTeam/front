@@ -35,7 +35,6 @@ class UserDropdown extends PureComponent<PropsTypes> {
       email,
       messagesCount,
       shopsCount,
-      myStore,
     } = user;
 
     // $FlowIgnoreMe

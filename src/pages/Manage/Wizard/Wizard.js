@@ -131,7 +131,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       isValid: true,
       validationErrors: null,
     };
+    // $FlowIgnore
     const completed = pathOr(null, ['me', 'wizardStore', 'completed'], props);
+    // $FlowIgnore
     const storeId = pathOr(null, ['me', 'myStore', 'rawId'], props);
     if (completed && storeId) {
       props.router.push(`/manage/store/${storeId}`);
