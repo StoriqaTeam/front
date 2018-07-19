@@ -88,7 +88,9 @@ class Checkout extends Component<PropsType, StateType> {
   storesRef: any;
 
   createAddress = () => {
+    // $FlowIgnore
     const addressFull = pathOr(null, ['orderInput', 'addressFull'], this.state);
+    // $FlowIgnore
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     CreateUserDeliveryAddressFullMutation.commit({
       input: {

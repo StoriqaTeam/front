@@ -19,6 +19,9 @@ type PropsTypes = {
     lastName: string,
     firstName: string,
     email: string,
+    myStore: ?{
+      rawId: number,
+    },
   },
 };
 

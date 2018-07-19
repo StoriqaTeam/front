@@ -22,10 +22,12 @@ type PropsType = {
   deliveryAddresses: any,
   onChangeOrderInput: Function,
   onChangeAddressType: Function,
+  onChangeSaveCheckbox: Function,
   orderInput: any,
   me: any,
   isAddressSelect: boolean,
   isNewAddress: boolean,
+  saveAsNewAddress: boolean,
 };
 
 class CheckoutContent extends React.Component<PropsType> {

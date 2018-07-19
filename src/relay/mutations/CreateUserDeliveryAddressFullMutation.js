@@ -34,10 +34,10 @@ const mutation = graphql`
 `;
 
 export type MutationParamsType = {
-  ...CreateUserDeliveryAddressMutationVariables,
+  ...CreateUserDeliveryAddressFullMutationVariables,
   environment: Environment,
   onCompleted: ?(
-    response: ?CreateUserDeliveryAddressMutationResponse,
+    response: ?CreateUserDeliveryAddressFullMutationResponse,
     errors: ?Array<Error>,
   ) => void,
   onError: ?(error: Error) => void,
