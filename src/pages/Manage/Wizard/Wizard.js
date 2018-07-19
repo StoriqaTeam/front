@@ -131,11 +131,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       isValid: true,
       validationErrors: null,
     };
-    // const storeId = pathOr(null, ['me', 'myStore', 'rawId'], props);
-    // console.log('>>> Wizard storeId: ', { storeId });
-    // if (storeId) {
-    //   props.router.push(`/manage/store/${storeId}`);
-    // }
+    const completed = pathOr(null, ['me', 'wizardStore', 'completed'], props);
+    const storeId = pathOr(null, ['me', 'myStore', 'rawId'], props);
+    if (completed && storeId) {
+      props.router.push(`/manage/store/${storeId}`);
+    }
   }
 
   componentDidMount() {
@@ -917,6 +917,7 @@ export default createFragmentContainer(
         slug
         shortDescription
         defaultLanguage
+        completed
         addressFull {
           country
           value
