@@ -29,7 +29,6 @@ import {
   ProductPrice,
   ProductShare,
   ProductStore,
-  ProductThumbnails,
   Tab,
   Tabs,
   // TabRow,
@@ -55,7 +54,6 @@ type PropsType = {
 type StateType = {
   widgets: Array<WidgetType>,
   productVariant: ProductVariantType,
-  selected?: string,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -78,7 +76,6 @@ class Product extends Component<PropsType, StateType> {
       return {
         widgets: madeWidgets,
         productVariant,
-        // selected: !isEmpty(selected) ? '' : selected,
       };
     }
     return prevState;
@@ -96,7 +93,6 @@ class Product extends Component<PropsType, StateType> {
       discount: null,
       lastPrice: null,
     },
-    selected: '',
   };
   componentDidMount() {
     if (process.env.BROWSER) {
@@ -190,9 +186,6 @@ class Product extends Component<PropsType, StateType> {
       </Tabs>
     );
   };
-  handleThumbnailClick = ({ image }: WidgetOptionType): void => {
-    this.setState({ selected: image });
-  };
   render() {
     if (isNil(this.props.baseProduct)) {
       return (
@@ -204,31 +197,18 @@ class Product extends Component<PropsType, StateType> {
     const {
       baseProduct: { name, shortDescription, longDescription, rating },
     } = this.props;
-    const { widgets, productVariant, selected } = this.state;
+    const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
-    const isAdditionalPhotosEmpty = !isEmpty(productVariant.additionalPhotos);
     return (
       <ProductContext.Provider value={this.props.baseProduct}>
         <div styleName="ProductDetails">
           <Row>
-            <Col size={1} sm={1} md={1} lg={1} xl={1} lgHidden>
-              <div
-                styleName={
-                  isAdditionalPhotosEmpty ? 'thumbnailsWrapper' : 'noWrapper'
-                }
-              >
-                {isAdditionalPhotosEmpty ? (
-                  <ProductThumbnails
-                    isFirstSelected
-                    isReset={isEmpty(selected)}
-                    onClick={this.handleThumbnailClick}
-                    options={productVariant.additionalPhotos}
-                  />
-                ) : null}
-              </div>
-            </Col>
             <Col sm={12} md={5} lg={5} xl={5}>
-              <ProductImage selected={selected} {...productVariant} />
+              <ProductImage
+                discount={productVariant.discount}
+                mainImage={productVariant.photoMain}
+                thumbnails={productVariant.additionalPhotos}
+              />
               {process.env.BROWSER ? (
                 <ProductShare {...productVariant} />
               ) : null}
