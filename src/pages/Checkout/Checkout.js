@@ -326,7 +326,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout)), true, false),
+  Page(withShowAlert(withRouter(Checkout)), true, true),
   graphql`
     fragment Checkout_me on User {
       id
