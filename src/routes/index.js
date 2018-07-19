@@ -254,6 +254,7 @@ const routes = (
               query routes_NewStore_Query {
                 me {
                   myStore {
+                    id
                     rawId
                   }
                 }
@@ -275,7 +276,13 @@ const routes = (
               query routes_CheckStore_Query {
                 me {
                   myStore {
+                    id
                     rawId
+                    logo
+                    name {
+                      lang
+                      text
+                    }
                   }
                 }
               }
@@ -293,31 +300,23 @@ const routes = (
             <Route
               Component={EditStore}
               query={graphql`
-                query routes_Store_Query($storeID: Int!) {
+                query routes_Store_Query {
                   me {
-                    ...EditStore_me @arguments(storeId: $storeID)
+                    ...EditStore_me
                   }
                 }
               `}
-              prepareVariables={(_, { params }) => ({
-                storeID: parseInt(params.storeId, 10),
-              })}
             />
             <Route
               path="/contacts"
               Component={Contacts}
               query={graphql`
-                query routes_Contacts_Query($storeID: Int!) {
+                query routes_Contacts_Query {
                   me {
-                    id
-                    rawId
-                    ...Contacts_me @arguments(storeId: $storeID)
+                    ...Contacts_me
                   }
                 }
               `}
-              prepareVariables={(_, { params }) => ({
-                storeID: parseInt(params.storeId, 10),
-              })}
             />
             <Route
               path="/orders"
@@ -345,29 +344,23 @@ const routes = (
               path="/product/new"
               Component={({ me }) => <NewProduct me={me} />}
               query={graphql`
-                query routes_NewProduct_Query($storeID: Int!) {
+                query routes_NewProduct_Query {
                   me {
-                    ...NewProduct_me @arguments(storeId: $storeID)
+                    ...NewProduct_me
                   }
                 }
               `}
-              prepareVariables={(_, { params }) => ({
-                storeID: parseInt(params.storeId, 10) || 0,
-              })}
             />
             <Route
               path="/products"
               Component={Products}
               query={graphql`
-                query routes_Products_Query($storeId: Int!) {
+                query routes_Products_Query {
                   me {
-                    ...Products_me @arguments(storeId: $storeId)
+                    ...Products_me
                   }
                 }
               `}
-              prepareVariables={(_, { params }) => ({
-                storeId: parseInt(params.storeId, 10) || 0,
-              })}
             />
             <Route
               path="/products/:productId"

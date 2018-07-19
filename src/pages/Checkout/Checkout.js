@@ -165,7 +165,7 @@ class Checkout extends Component<PropsType, StateType> {
       orderInput: { addressFull, receiverName },
     } = this.state;
     CreateOrdersMutation.commit({
-      input: { clientMutationId: '', addressFull, receiverName },
+      input: { clientMutationId: '', addressFull, receiverName, currencyId: 6 },
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug('Success for DeleteFromCart mutation');

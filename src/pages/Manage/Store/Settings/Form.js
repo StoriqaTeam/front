@@ -54,6 +54,7 @@ type PropsType = {
   serverValidationErrors: {
     [string]: ?any,
   },
+  handleNewStoreNameChange: (value: string) => void,
 };
 
 // TODO: extract to shared lib
@@ -145,6 +146,9 @@ class Form extends Component<PropsType, StateType> {
       this.setState((prevState: StateType) =>
         assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
       );
+      if (this.props.handleNewStoreNameChange && id === 'name') {
+        this.props.handleNewStoreNameChange(value);
+      }
     }
   };
 

@@ -7,6 +7,7 @@ import { isEmpty, isNil, pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 import { graphql } from 'react-relay';
 
+import { withShowAlert } from 'components/App/AlertContext';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Collapse } from 'components/Collapse';
@@ -43,6 +44,10 @@ type PropsType = {
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
   environment: Environment,
+  newStoreLogo: ?string,
+  newStoreName: ?string,
+  handleOnUpload: () => void,
+  deleteAvatar: () => void,
 };
 
 type StateType = {
@@ -211,6 +216,12 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
   render() {
     const { activeItem } = this.props;
     const { storeData } = this.state;
+    const {
+      newStoreName,
+      newStoreLogo,
+      handleOnUpload,
+      deleteAvatar,
+    } = this.props;
     if (!storeData) {
       return <div />;
     }
@@ -243,20 +254,22 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
         <div styleName="imgWrap">
           <UploadWrapper
             id="new-store-id"
-            onUpload={this.handleOnUpload}
+            onUpload={myStore ? this.handleOnUpload : handleOnUpload}
             customUnit
             buttonHeight="26rem"
             buttonWidth="100%"
             buttonIconSize={48}
             buttonIconType="upload"
             buttonLabel="Click to upload logo"
-            overPicture={convertSrc(storeLogo, 'medium') || null}
+            overPicture={
+              myStore ? convertSrc(storeLogo, 'medium') || null : newStoreLogo
+            }
             dataTest="storeImgUploader"
           />
-          {storeLogo && (
+          {((myStore && storeLogo) || (!myStore && newStoreLogo)) && (
             <div
               styleName="cross"
-              onClick={this.deleteAvatar}
+              onClick={myStore ? this.deleteAvatar : deleteAvatar}
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
@@ -265,7 +278,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
             </div>
           )}
         </div>
-        <div styleName="title">{storeName || ''}</div>
+        <div styleName="title">{myStore ? storeName || '' : newStoreName}</div>
         <div styleName="items">
           {menuItems.map((item: MenuItemType) => {
             const isActive = item.id === activeItem;
@@ -292,4 +305,4 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
   }
 }
 
-export default withRouter(ManageStoreMenu);
+export default withRouter(withShowAlert(ManageStoreMenu));

@@ -46,6 +46,16 @@ const HEADER_FRAGMENT = graphql`
   }
 `;
 
+type UserDataType = {
+  avatar: ?string,
+  email: ?string,
+  firstName: ?string,
+  lastName: ?string,
+  myStore: ?{
+    rawId: number,
+  },
+};
+
 type MobileCategory = {
   label: string,
   id: string,
@@ -61,12 +71,7 @@ type StateType = {
   totalCount: number,
   showModal: boolean,
   isSignUp: ?boolean,
-  userData: ?{
-    avatar: ?string,
-    email: ?string,
-    firstName: ?string,
-    lastName: ?string,
-  },
+  userData: ?UserDataType,
   isMenuToggled: boolean,
   isMobileSearchOpen: boolean,
   isMobileCategoriesOpen: boolean,
@@ -102,7 +107,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     });
     const { dispose } = store.subscribe(snapshot, s => {
       const newTotalCount = pathOr(0, ['data', 'totalCount'], s);
-      this.state.totalCount = newTotalCount;
+      this.updateStateTotalCount(newTotalCount);
       // tmp code
       setWindowTag('cartCount', newTotalCount);
       // end tmp code
@@ -134,7 +139,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
         node: queryUser,
       });
       const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
-        this.state.userData = s.data;
+        this.updateStateUserData(s.data);
         // tmp code
         setWindowTag('user', s.data);
         // end tmp code
@@ -155,6 +160,14 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       this.disposeUser();
     }
   }
+
+  updateStateTotalCount = (totalCount: number) => {
+    this.setState({ totalCount });
+  };
+
+  updateStateUserData = (data: ?UserDataType) => {
+    this.setState({ userData: data });
+  };
 
   handleOpenModal = (isSignUp: ?boolean): void => {
     this.setState({

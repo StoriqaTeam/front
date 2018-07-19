@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { toUpper } from 'ramda';
+import { toUpper, pathOr } from 'ramda';
 
 import { Dropdown } from 'components/Dropdown';
 import { Icon } from 'components/Icon';
@@ -38,6 +38,9 @@ class UserDropdown extends PureComponent<PropsTypes> {
       myStore,
     } = user;
 
+    // $FlowIgnoreMe
+    const myStoreId = pathOr(null, ['myStore', 'rawId'], user);
+
     return (
       <div styleName="container">
         <Dropdown withIcon dataTest="userDropdownButton">
@@ -65,7 +68,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
               shopsCount={shopsCount}
               email={email}
               avatar={avatar}
-              storeId={myStore && myStore.rawId}
+              myStoreId={myStoreId}
             />
           </content>
         </Dropdown>

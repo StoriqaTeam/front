@@ -60,7 +60,7 @@ class Products extends PureComponent<PropsType> {
 
   handleDelete = (id: string) => {
     // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'store', 'id'], this.props);
+    const storeId = pathOr(null, ['me', 'myStore', 'id'], this.props);
 
     DeactivateBaseProductMutation.commit({
       id,
@@ -283,7 +283,7 @@ class Products extends PureComponent<PropsType> {
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
-    const baseProducts = pathOr([], ['store', 'baseProducts', 'edges'], me);
+    const baseProducts = pathOr([], ['myStore', 'baseProducts', 'edges'], me);
     const products = map(item => {
       const { node } = item;
       const newItem = {
@@ -347,9 +347,8 @@ export default createPaginationContainer(
       @argumentDefinitions(
         first: { type: "Int", defaultValue: 8 }
         after: { type: "ID", defaultValue: null }
-        storeId: { type: "Int!" }
       ) {
-      store(id: $storeId) {
+      myStore {
         id
         logo
         name {
@@ -428,19 +427,17 @@ export default createPaginationContainer(
     direction: 'forward',
     getConnectionFromProps: props =>
       props.me &&
-      props.me.store &&
-      props.me.store.baseProducts &&
-      props.me.store.baseProducts,
-    getVariables: (props, _, prevFragmentVars) => ({
-      storeId: prevFragmentVars.storeId,
+      props.me.myStore &&
+      props.me.myStore.baseProducts &&
+      props.me.myStore.baseProducts,
+    getVariables: props => ({
       first: 8,
-      after: props.me.store.baseProducts.pageInfo.endCursor,
+      after: props.me.myStore.baseProducts.pageInfo.endCursor,
     }),
     query: graphql`
-      query Products_Query($first: Int, $after: ID, $storeId: Int!) {
+      query Products_Query($first: Int, $after: ID) {
         me {
-          ...Products_me
-            @arguments(first: $first, after: $after, storeId: $storeId)
+          ...Products_me @arguments(first: $first, after: $after)
         }
       }
     `,

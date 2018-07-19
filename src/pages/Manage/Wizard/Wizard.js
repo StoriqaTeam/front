@@ -93,7 +93,7 @@ export const initialProductState = {
   baseProduct: {
     id: null,
     storeId: null,
-    currencyId: 1,
+    currencyId: 6,
     categoryId: null,
     name: '',
     shortDescription: '',

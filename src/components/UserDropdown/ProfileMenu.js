@@ -14,7 +14,15 @@ type PropsTypes = {
   messagesCount: number,
   email: string,
   avatar: string,
-  storeId: number,
+  myStoreId: ?number,
+};
+
+// TODO: need back & refactor
+const getStoreLink = (myStoreId: ?number) => {
+  if (myStoreId) {
+    return `/manage/store/${myStoreId}`;
+  }
+  return '/manage/wizard';
 };
 
 const ProfileMenu = ({
@@ -23,7 +31,7 @@ const ProfileMenu = ({
   messagesCount,
   email,
   avatar,
-  storeId,
+  myStoreId,
 }: PropsTypes) => (
   <div styleName="menu">
     <div styleName="top">
@@ -62,15 +70,9 @@ const ProfileMenu = ({
       <a href="/" styleName="item">
         History
       </a>
-      {(storeId && (
-        <a href={`/manage/store/${storeId}`} styleName="item">
-          <span>My shops</span>
-        </a>
-      )) || (
-        <a href="/manage/wizard" styleName="item">
-          <span>My shops</span>
-        </a>
-      )}
+      <Link to={getStoreLink(myStoreId)} styleName="item">
+        <span>My shop</span>
+      </Link>
     </div>
     <Link
       styleName="logout"

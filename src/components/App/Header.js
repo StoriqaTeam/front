@@ -50,6 +50,9 @@ type StateType = {
     email: ?string,
     firstName: ?string,
     lastName: ?string,
+    myStore: ?{
+      rawId: number,
+    },
   },
   totalCount: number,
 };
