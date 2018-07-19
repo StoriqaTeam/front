@@ -4,6 +4,7 @@ import React from 'react';
 import { pathOr } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
+import { RadioButton } from 'components/common/RadioButton';
 import { Select } from 'components/common/Select';
 import { Input } from 'components/common/Input';
 import { Container, Row, Col } from 'layout';
@@ -115,12 +116,11 @@ class CheckoutContent extends React.Component<PropsType> {
                 />
               </div>
               <div styleName="selectAddressContainer">
-                <Checkbox
+                <RadioButton
                   id="existingAddressCheckbox"
                   label="choose your address"
                   isChecked={isAddressSelect}
                   onChange={onChangeAddressType}
-                  isRadioStyle
                 />
                 {isAddressSelect && (
                   <div styleName="selectWrapper">
@@ -156,12 +156,11 @@ class CheckoutContent extends React.Component<PropsType> {
                 </Col>
               </Row>
               <div styleName="newAddressForm">
-                <Checkbox
+                <RadioButton
                   id="newAddressCheckbox"
                   label="Or fill fields below and save as address"
                   isChecked={isNewAddress}
                   onChange={onChangeAddressType}
-                  isRadioStyle
                 />
                 {isNewAddress && (
                   <div styleName="formWrapper">

@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 
 import './Checkbox.scss';
 
@@ -19,7 +18,7 @@ class Checkbox extends PureComponent<PropsType> {
   };
 
   render() {
-    const { id, label, isChecked, isRadioStyle } = this.props;
+    const { id, label, isChecked } = this.props;
     return (
       <div styleName="container">
         <input
@@ -30,7 +29,7 @@ class Checkbox extends PureComponent<PropsType> {
           onChange={this.onChange}
           data-test={id}
         />
-        <label htmlFor={id} styleName={classNames('label', { isRadioStyle })}>
+        <label htmlFor={id} styleName="label">
           <span styleName="labelText">{label}</span>
         </label>
       </div>
