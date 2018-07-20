@@ -9,7 +9,13 @@ type PropsType = {
 
 const AuthButtons = ({ onOpenModal }: PropsType) => (
   <div styleName="container">
-    <div styleName="avatar">
+    <div
+      styleName="avatar"
+      onClick={() => onOpenModal(true)}
+      onKeyDown={() => {}}
+      role="button"
+      tabIndex="0"
+    >
       <Icon type="person" size="16" />
     </div>
     <div
