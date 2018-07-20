@@ -18,6 +18,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
 
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
@@ -28,6 +29,7 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
+import { PaymentInfo } from './PaymentInfo';
 
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
@@ -52,6 +54,7 @@ type StateType = {
     addressFull: AddressFullType,
     receiverName: string,
   },
+  invoiceId: ?string,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -77,6 +80,7 @@ class Checkout extends Component<PropsType, StateType> {
       },
       receiverName: '',
     },
+    invoiceId: null,
   };
 
   setStoresRef(ref) {
@@ -167,19 +171,30 @@ class Checkout extends Component<PropsType, StateType> {
     CreateOrdersMutation.commit({
       input: { clientMutationId: '', addressFull, receiverName, currencyId: 6 },
       environment: this.context.environment,
-      onCompleted: (response, errors) => {
+      onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
         log.debug('Success for DeleteFromCart mutation');
-        if (response) {
+        if (response && response.createOrders) {
           log.debug('Response: ', response);
           this.props.showAlert({
             type: 'success',
             text: 'Orders successfully created',
             link: { text: 'Close.' },
           });
-          this.props.router.push('/profile/orders');
-        }
-        if (errors) {
+          this.setState({ invoiceId: response.createOrders.invoice.id });
+          this.handleChangeStep(3)();
+        } else if (!errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error :(',
+            link: { text: 'Close.' },
+          });
+        } else {
           log.debug('Errors: ', errors);
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error :(',
+            link: { text: 'Close.' },
+          });
         }
       },
       onError: error => {
@@ -230,11 +245,12 @@ class Checkout extends Component<PropsType, StateType> {
       map(path(['node'])),
       // $FlowIgnore
     )(this.props);
+
     const emptyCart = totalCount === 0;
     return (
       <Container withoutGrow>
         <Row withoutGrow>
-          {!emptyCart && (
+          {(!emptyCart || step === 3) && (
             <Col size={12}>
               <div styleName="headerWrapper">
                 <CheckoutHeader
@@ -248,7 +264,7 @@ class Checkout extends Component<PropsType, StateType> {
           <Col size={12}>
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
-                {emptyCart ? (
+                {emptyCart && step !== 3 ? (
                   <Col size={12}>
                     <div styleName="wrapper">
                       <div styleName="storeContainer">
@@ -257,7 +273,11 @@ class Checkout extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 ) : (
-                  <Col size={12} md={8} lg={9}>
+                  <Col
+                    size={12}
+                    md={step !== 3 ? 8 : 12}
+                    lg={step !== 3 ? 9 : 12}
+                  >
                     {step === 1 && (
                       <div styleName="wrapper">
                         <div styleName="container addressContainer">
@@ -297,6 +317,13 @@ class Checkout extends Component<PropsType, StateType> {
                         </div>
                       </div>
                     )}
+                    {step === 3 &&
+                      this.state.invoiceId && (
+                        <PaymentInfo
+                          invoiceId={this.state.invoiceId}
+                          me={this.props.me}
+                        />
+                      )}
                   </Col>
                 )}
                 {!emptyCart && (
@@ -329,6 +356,7 @@ export default createPaginationContainer(
   Page(withShowAlert(withRouter(Checkout)), true, true),
   graphql`
     fragment Checkout_me on User {
+      ...PaymentInfo_me
       id
       rawId
       email

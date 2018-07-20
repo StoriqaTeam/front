@@ -25,7 +25,7 @@ class CartEmpty extends PureComponent<PropsType> {
             <Icon type="emptyCart" size={120} />
           </div>
           <div styleName="text">
-            Currently your is empty.<br />Go to market and place some goods in
+            Currently cart is empty.<br />Go to market and place some goods in
             your cart.
           </div>
           <div styleName="button">

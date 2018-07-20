@@ -35,6 +35,14 @@ const CheckoutHeader = ({
       isReadyToNext={isReadyToNext}
       onChangeStep={onChangeStep}
     />
+    <Icon type="arrowRight" />
+    <StepLabel
+      step={3}
+      text="Payment info"
+      currentStep={currentStep}
+      isReadyToNext={isReadyToNext}
+      onChangeStep={onChangeStep}
+    />
   </div>
 );
 
