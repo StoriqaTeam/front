@@ -253,6 +253,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
           <header
             styleName={classNames('container', {
               expand: isMobileCategoriesOpen,
+              withoutCategories,
             })}
           >
             <MobileSearchMenu
