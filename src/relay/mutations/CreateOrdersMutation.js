@@ -29,8 +29,10 @@ const mutation = graphql`
         priceReservedDueDateTime
         state
         wallet
-        transactionId
-        transactionCapturedAmount
+        transactions {
+          id
+          amount
+        }
       }
     }
   }

@@ -250,7 +250,9 @@ class OrderPage extends PureComponent<PropsType> {
           >
             {order.paymentStatus}
           </div>
-          {order.status !== 'Not paid' && (
+          {(orderFromProps.state === 'NEW' ||
+            orderFromProps.state === 'PAYMENT_AWAITED' ||
+            orderFromProps.state === 'TRANSACTION_PENDING') && (
             <div styleName="paymentButtonWrapper">
               <Button
                 big

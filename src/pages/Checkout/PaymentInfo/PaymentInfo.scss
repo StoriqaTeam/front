@@ -1,7 +1,7 @@
 @import '../../../styles/variables.scss';
 
 .container {
-  background-color: #ffffff;
+  background-color: $color_white;
   border: solid 1px $color_grey_trivial;
   display: flex;
   flex-direction: column;
@@ -71,13 +71,32 @@
 .loader {
   font-size: 10px;
   position: relative;
-  border-top: 0.75rem solid #f3f3f3;
-  border-right: 0.75rem solid #f3f3f3;
-  border-bottom: 0.75rem solid #f3f3f3;
+  border-top: 0.75rem solid $color_grey_trivial;
+  border-right: 0.75rem solid $color_grey_trivial;
+  border-bottom: 0.75rem solid $color_grey_trivial;
   border-left: 0.75rem solid $color_blue;
   transform: translateZ(0);
   animation: load8 1.1s infinite linear;
 }
+
+.loader-small,
+.loader-small:after {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 50%;
+}
+.loader-small {
+  font-size: 10px;
+  position: relative;
+  border-top: 0.25rem solid $color_grey_trivial;
+  border-right: 0.25rem solid $color_grey_trivial;
+  border-bottom: 0.25rem solid $color_grey_trivial;
+  border-left: 0.25rem solid $color_blue;
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear;
+  margin-left: 1rem;
+}
+
 @-webkit-keyframes load8 {
   0% {
     transform: rotate(0deg);
@@ -163,13 +182,65 @@
     }
     .statusValue {
       margin-left: 2rem;
+      display: flex;
+      align-items: center;
+    }
+    .statusInProcess {
+      color: $color_green;
+    }
+    .statusPaymentAwaited {
+      color: $color_pink;
     }
   }
 
   .transactions {
     width: 65.5rem;
-    background-color: #f9f9f9;
+    background-color: $color_grey_trivial;
     padding: 2.5rem;
     margin-top: 3rem;
+
+    .row {
+      display: flex;
+    }
+
+    .transactions-title-tx {
+      color: $color_grey_minor;
+      width: 25rem;
+    }
+
+    .transactions-title-amount {
+      color: $color_grey_minor;
+      width: 25rem;
+      margin-left: 4rem;
+    }
+
+    .row-tx {
+      width: 25rem;
+      overflow: hidden;
+      display: flex;
+      justify-content: right;
+      position: relative;
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 6rem;
+        height: 100%;
+        width: 15rem;
+        background: linear-gradient(to right, $color_grey_trivial, transparent);
+      }
+      a {
+        color: $color_blue;
+        text-decoration: none;
+        font-size: 16px;
+      }
+    }
+
+    .row-amount {
+      width: 25rem;
+      margin-left: 4rem;
+    }
   }
 }

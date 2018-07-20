@@ -4,12 +4,13 @@ import React, { PureComponent, Fragment } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import QRCode from 'qrcode.react';
 import moment from 'moment';
-import { pathOr } from 'ramda';
+import { map, pathOr } from 'ramda';
+import classNames from 'classnames';
 
 import type {
   OrderState as OrderStateType,
   PaymentInfo_me as PaymentInfoMeType,
-} from './__generated__/PaymentInfo.graphql';
+} from './__generated__/PaymentInfo_me.graphql';
 
 import './PaymentInfo.scss';
 
@@ -51,6 +52,12 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
       return;
     }
 
+    // $FlowIgnoreMe
+    const state = pathOr(null, ['invoice', 'state'], this.props.me);
+    if (state === 'PAID') {
+      return;
+    }
+
     this.props.relay.refetch(
       {
         id: this.props.invoiceId,
@@ -66,6 +73,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   updateCountdown = () => {
+    // $FlowIgnoreMe
     const priceReservedDueDateTime = pathOr(
       null,
       ['invoice', 'priceReservedDueDateTime'],
@@ -95,6 +103,17 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     );
   };
 
+  stateToString = (state: OrderStateType): string => {
+    switch (state) {
+      case 'TRANSACTION_PENDING':
+        return 'In process';
+      case 'PAYMENT_AWAITED':
+        return 'Payment awaited';
+      default:
+        return '';
+    }
+  };
+
   render() {
     // $FlowIgnoreMe;
     const invoice = pathOr(null, ['me', 'invoice'], this.props);
@@ -102,47 +121,96 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
       return null;
     }
 
-    const { wallet, amount, transactionId } = invoice;
+    const { wallet, amount, transactions } = invoice;
+
+    // eslint-disable-next-line
+    const state: OrderStateType = invoice.state;
     return (
       <div styleName="container">
-        <div styleName="title">Payment</div>
-        <div styleName="description">
-          Please wait until payment data<br />will be uploaded
-        </div>
+        {state !== 'PAID' && (
+          <Fragment>
+            <div styleName="title">Payment</div>
+            <div styleName="description">
+              Please wait until payment data<br />will be uploaded
+            </div>
+          </Fragment>
+        )}
         <div styleName="info">
-          {wallet ? (
-            <Fragment>
-              <div styleName="paymentInfoWrapper">
-                <div styleName="qr">
-                  <QRCode
-                    value={`ethereum:${wallet}[?gas=21000][?value=${amount}]`}
-                    renderAs="svg"
-                    size={165}
-                  />
-                </div>
-                <div styleName="paymentInfo">
-                  <div styleName="addressTitle">Address</div>
-                  <div styleName="address">{wallet}</div>
-                  <div styleName="amountTitle">Amount</div>
-                  <div styleName="amount">{amount} STQ</div>
-                  <div styleName="reserveInfo">
-                    Current price reserved for{' '}
-                    <span styleName="timer">{this.state.timerValue}</span>
+          {state === 'NEW' && <div styleName="loader" />}
+          {wallet &&
+            (state === 'TRANSACTION_PENDING' ||
+              state === 'PAYMENT_AWAITED') && (
+              <Fragment>
+                <div styleName="paymentInfoWrapper">
+                  <div styleName="qr">
+                    <QRCode
+                      value={`ethereum:${wallet}[?gas=21000][?value=${amount}]`}
+                      renderAs="svg"
+                      size={165}
+                    />
+                  </div>
+                  <div styleName="paymentInfo">
+                    <div styleName="addressTitle">Address</div>
+                    <div styleName="address">{wallet}</div>
+                    <div styleName="amountTitle">Amount</div>
+                    <div styleName="amount">{amount} STQ</div>
+                    {false && (
+                      <div styleName="reserveInfo">
+                        Current price reserved for{' '}
+                        <span styleName="timer">{this.state.timerValue}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-              {transactionId && (
                 <div styleName="transactionsBlock">
                   <div styleName="statusBlock">
                     <div styleName="statusTitle">Payment status</div>
-                    <div styleName="statusValue">In process</div>
+                    <div
+                      styleName={classNames('statusValue', {
+                        statusInProcess: state === 'TRANSACTION_PENDING',
+                        statusPaymentAwaited: state === 'PAYMENT_AWAITED',
+                      })}
+                    >
+                      {this.stateToString(state)}
+                      <div styleName="loader-small" />
+                    </div>
                   </div>
-                  <div styleName="transactions" />
+                  {transactions.length > 0 && (
+                    <div styleName="transactions">
+                      <div styleName="row">
+                        <div styleName="transactions-title-tx">
+                          Transaction ID
+                        </div>
+                        <div styleName="transactions-title-amount">Amount</div>
+                      </div>
+                      {map(
+                        (item: { id: string, amount: number }) => (
+                          <div key={item.id} styleName="row">
+                            <div styleName="row-tx">
+                              <a
+                                href={`https://etherscan.io/tx/${item.id}`}
+                                target="_blank"
+                              >
+                                {item.id}
+                              </a>
+                            </div>
+                            <div styleName="row-amount">{item.amount} STQ</div>
+                          </div>
+                        ),
+                        transactions,
+                      )}
+                    </div>
+                  )}
                 </div>
-              )}
-            </Fragment>
-          ) : (
-            <div styleName="loader" />
+              </Fragment>
+            )}
+          {state === 'PAID' && (
+            <div>
+              <div styleName="title">Success</div>
+              <div styleName="description">
+                Your payment was successfully completed.
+              </div>
+            </div>
           )}
         </div>
         <div styleName="separator" />
@@ -170,8 +238,10 @@ export default createRefetchContainer(
         priceReservedDueDateTime
         state
         wallet
-        transactionId
-        transactionCapturedAmount
+        transactions {
+          id
+          amount
+        }
       }
     }
   `,
