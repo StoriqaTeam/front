@@ -4,6 +4,7 @@ import React from 'react';
 import { pathOr } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
+import { RadioButton } from 'components/common/RadioButton';
 import { Select } from 'components/common/Select';
 import { Input } from 'components/common/Input';
 import { Container, Row, Col } from 'layout';
@@ -21,10 +22,12 @@ type PropsType = {
   deliveryAddresses: any,
   onChangeOrderInput: Function,
   onChangeAddressType: Function,
+  onChangeSaveCheckbox: Function,
   orderInput: any,
   me: any,
   isAddressSelect: boolean,
   isNewAddress: boolean,
+  saveAsNewAddress: boolean,
 };
 
 class CheckoutContent extends React.Component<PropsType> {
@@ -84,8 +87,10 @@ class CheckoutContent extends React.Component<PropsType> {
       me,
       isAddressSelect,
       isNewAddress,
+      saveAsNewAddress,
       orderInput,
       onChangeAddressType,
+      onChangeSaveCheckbox,
       deliveryAddresses,
     } = this.props;
 
@@ -115,7 +120,7 @@ class CheckoutContent extends React.Component<PropsType> {
                 />
               </div>
               <div styleName="selectAddressContainer">
-                <Checkbox
+                <RadioButton
                   id="existingAddressCheckbox"
                   label="choose your address"
                   isChecked={isAddressSelect}
@@ -124,19 +129,21 @@ class CheckoutContent extends React.Component<PropsType> {
                 {isAddressSelect && (
                   <div styleName="selectWrapper">
                     Address
-                    <Select
-                      items={items}
-                      activeItem={
-                        addressValue && {
-                          id: addressValue,
-                          label: addressValue,
+                    <div>
+                      <Select
+                        items={items}
+                        activeItem={
+                          addressValue && {
+                            id: addressValue,
+                            label: addressValue,
+                          }
                         }
-                      }
-                      onSelect={this.handleOnSelectAddress}
-                      forForm
-                      containerStyle={{ width: '24rem' }}
-                      dataTest="selectExistingAddress"
-                    />
+                        onSelect={this.handleOnSelectAddress}
+                        forForm
+                        containerStyle={{ width: '26rem' }}
+                        dataTest="selectExistingAddress"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -155,13 +162,12 @@ class CheckoutContent extends React.Component<PropsType> {
                 </Col>
               </Row>
               <div styleName="newAddressForm">
-                <Checkbox
+                <RadioButton
                   id="newAddressCheckbox"
                   label="Or fill fields below and save as address"
                   isChecked={isNewAddress}
                   onChange={onChangeAddressType}
                 />
-
                 {isNewAddress && (
                   <div styleName="formWrapper">
                     <AddressForm
@@ -171,6 +177,14 @@ class CheckoutContent extends React.Component<PropsType> {
                       address={addressFull ? addressFull.value : null}
                       addressFull={addressFull}
                     />
+                    <div styleName="saveAddressWrapper">
+                      <Checkbox
+                        id="saveAddressCheckbox"
+                        label="Save as a new address"
+                        isChecked={saveAsNewAddress}
+                        onChange={onChangeSaveCheckbox}
+                      />
+                    </div>
                   </div>
                 )}
               </div>

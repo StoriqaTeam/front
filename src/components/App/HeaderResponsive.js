@@ -91,7 +91,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       isMobileCategoriesOpen: false,
       selectedCategory: null,
     };
-    const store = this.props.environment.getStore();
+    const store = props.environment.getStore();
     const cartId = pathOr(
       null,
       ['cart', '__ref'],
@@ -275,7 +275,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             />
             <Container>
               <BurgerMenu />
-              <HeaderTop />
+              <HeaderTop user={userData} />
               <div styleName="headerBottom">
                 <Row>
                   <Col size={7} sm={4} md={4} lg={3} xl={3}>

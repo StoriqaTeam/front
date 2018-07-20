@@ -2,7 +2,18 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
+import {
+  pathOr,
+  filter,
+  prop,
+  propEq,
+  head,
+  map,
+  slice,
+  sort,
+  values,
+  join,
+} from 'ramda';
 import moment from 'moment';
 import { withRouter, routerShape } from 'found';
 
@@ -18,6 +29,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import { addressToString } from 'utils';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -31,16 +43,14 @@ type PropsType = {
   order: any, // TODO: use common type here.
   showAlert: (input: AddAlertInputType) => void,
   isAbleToManageOrder?: boolean,
+  isPaymentInfoCanBeShown?: boolean,
   router: routerShape,
 };
 
 type OrderDTOType = {
   number: string,
   product: ProductDTOType,
-  customer: {
-    name: string,
-    address: string,
-  },
+  customerName: string,
   date: string,
   delivery: string,
   trackId: string,
@@ -49,14 +59,8 @@ type OrderDTOType = {
   status: string,
   paymentStatus: string,
   statusHistory: Array<OrderStatusType>,
-  transactionInfo?: {
-    wallet: string,
-    amount: number,
-    reservedDueDate: string,
-    transactionId: ?string,
-    status: string,
-    ordersInInvoice: number,
-  },
+  customerName: string,
+  customerAddress: string,
 };
 
 class OrderPage extends PureComponent<PropsType> {
@@ -67,6 +71,18 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
+    const { customer } = order;
+    const customerDTO = customer
+      ? {
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+        }
+      : null;
+    const customerName =
+      customerDTO && (customerDTO.firstName || customerDTO.lastName)
+        ? join(' ', filter(item => Boolean(item), values(customerDTO)))
+        : '-';
+    const customerAddress = addressToString(order.addressFull) || '-';
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -104,10 +120,8 @@ class OrderPage extends PureComponent<PropsType> {
         price: order.product ? order.product.price : -1,
         attributes: [],
       },
-      customer: {
-        name: order.receiverName,
-        address: order.addressFull.value || '-',
-      },
+      customerName,
+      customerAddress,
       date: order.createdAt,
       delivery: order.deliveryCompany || '-',
       trackId: order.trackId || '-',
@@ -138,17 +152,6 @@ class OrderPage extends PureComponent<PropsType> {
           additionalInfo: historyEdge.node.comment,
         };
       }, order && order.history ? sort((a, b) => moment(a.node.committedAt).isBefore(b.node.committedAt), order.history.edges) : []),
-      transactionInfo: {
-        wallet: '0x0702dfed3d8b0bb356afccf2bd59ba4fb7a3f1a0',
-        amount: 123321,
-        reservedDueDate: moment()
-          .utc()
-          .add(20, 'm')
-          .format(),
-        transactionId: null,
-        status: 'asdf',
-        ordersInInvoice: 3,
-      },
     };
     return orderDTO;
   };
@@ -203,7 +206,7 @@ class OrderPage extends PureComponent<PropsType> {
           <ProductBlock product={order.product} />
           <div styleName="infoBlock">
             <div styleName="left">
-              <TextWithLabel label="Customer" text={order.customer.name} />
+              <TextWithLabel label="Customer" text={order.customerName} />
               <TextWithLabel
                 label="Date"
                 text={this.getDateFromTimestamp(order.date)}
@@ -212,7 +215,7 @@ class OrderPage extends PureComponent<PropsType> {
               <TextWithLabel label="Quantity" text={`${order.quantity}`} />
             </div>
             <div>
-              <TextWithLabel label="Address" text={order.customer.address} />
+              <TextWithLabel label="Address" text={order.customerAddress} />
               <TextWithLabel
                 label="Time"
                 text={this.getTimeFromTimestamp(order.date)}
@@ -225,7 +228,7 @@ class OrderPage extends PureComponent<PropsType> {
             <ManageOrderBlock
               isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
               isAbleToCancel={
-                orderFromProps.state === 'PAIMENT_AWAITED' ||
+                orderFromProps.state === 'PAYMENT_AWAITED' ||
                 orderFromProps.state === 'IN_PROCESSING'
               }
               orderSlug={parseInt(order.number, 10)}
@@ -250,22 +253,23 @@ class OrderPage extends PureComponent<PropsType> {
           >
             {order.paymentStatus}
           </div>
-          {(orderFromProps.state === 'NEW' ||
-            orderFromProps.state === 'PAYMENT_AWAITED' ||
-            orderFromProps.state === 'TRANSACTION_PENDING') && (
-            <div styleName="paymentButtonWrapper">
-              <Button
-                big
-                onClick={() => {
-                  this.props.router.push(
-                    `/profile/orders/${order.number}/payment-info`,
-                  );
-                }}
-              >
-                Payment info
-              </Button>
-            </div>
-          )}
+          {this.props.isPaymentInfoCanBeShown &&
+            (orderFromProps.state === 'NEW' ||
+              orderFromProps.state === 'PAYMENT_AWAITED' ||
+              orderFromProps.state === 'TRANSACTION_PENDING') && (
+              <div styleName="paymentButtonWrapper">
+                <Button
+                  big
+                  onClick={() => {
+                    this.props.router.push(
+                      `/profile/orders/${order.number}/payment-info`,
+                    );
+                  }}
+                >
+                  Payment info
+                </Button>
+              </div>
+            )}
           <div styleName="ticketButtonTitle">Having troubles?</div>
           <div styleName="ticketButtonWrapper">
             <Button big>Open ticket</Button>

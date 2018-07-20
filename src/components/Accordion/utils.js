@@ -17,7 +17,7 @@ type ChildrenType = {
   children: Array<ChildrenType>,
 };
 
-const prepareForAccordion = (arr: Array<ChildrenType>, lang?: string) =>
+const prepareForAccordion = (arr: Array<ChildrenType>, lang: string) =>
   reduce(
     (acc, next) => [
       ...acc,

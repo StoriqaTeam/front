@@ -36,7 +36,7 @@ class Order extends PureComponent<PropsType> {
       return null;
     }
 
-    return <OrderPage order={order} />;
+    return <OrderPage order={order} isPaymentInfoCanBeShown />;
   }
 }
 
