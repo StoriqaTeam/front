@@ -32,6 +32,7 @@ import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
+import { Invoice } from 'pages/Profile/items/Order';
 
 const routes = (
   <Route>
@@ -145,6 +146,8 @@ const routes = (
             const cookies = new Cookies();
             cookies.remove('__jwt');
             throw new RedirectException(`/login?from=/checkout`);
+          } else if (!props) {
+            return null;
           } else {
             return <Component {...props} />;
           }
@@ -472,6 +475,26 @@ const routes = (
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
       <Route path="/profile">
         <Route
+          path="/orders/:orderId/payment-info"
+          Component={Invoice}
+          render={({ props, Component }) => {
+            if (!props) {
+              return undefined;
+            }
+            return <Component {...props} />;
+          }}
+          query={graphql`
+            query routes_Invoice_Query($slug: Int!) {
+              me {
+                ...Invoice_me @arguments(slug: $slug)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => ({
+            slug: parseInt(params.orderId, 10),
+          })}
+        />
+        <Route
           path="/:item/:orderId?"
           Component={Profile}
           query={graphql`
@@ -502,7 +525,7 @@ const routes = (
                 );
               }
             } else {
-              return null;
+              return undefined;
             }
           }}
           prepareVariables={() => {}}

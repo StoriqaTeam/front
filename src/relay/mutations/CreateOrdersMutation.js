@@ -3,6 +3,12 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
+import type { CreateOrdersMutationResponse } from './__generated__/CreateOrdersMutation.graphql';
+
+export type {
+  CreateOrdersMutationResponse as CreateOrdersMutationResponseType,
+};
+
 const mutation = graphql`
   mutation CreateOrdersMutation($input: CreateOrderInput!) {
     createOrders(input: $input) {
@@ -18,8 +24,14 @@ const mutation = graphql`
         }
       }
       invoice {
-        orders {
+        id
+        amount
+        priceReservedDueDateTime
+        state
+        wallet
+        transactions {
           id
+          amount
         }
       }
     }
