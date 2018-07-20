@@ -131,16 +131,20 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       isValid: true,
       validationErrors: null,
     };
-    // $FlowIgnore
-    const completed = pathOr(null, ['me', 'wizardStore', 'completed'], props);
-    // $FlowIgnore
-    const storeId = pathOr(null, ['me', 'myStore', 'rawId'], props);
-    if (completed && storeId) {
-      props.router.push(`/manage/store/${storeId}`);
-    }
   }
 
   componentDidMount() {
+    // $FlowIgnore
+    const completed = pathOr(
+      null,
+      ['me', 'wizardStore', 'completed'],
+      this.props,
+    );
+    // $FlowIgnore
+    const storeId = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
+    if (completed && storeId) {
+      this.props.router.push(`/manage/store/${storeId}`);
+    }
     this.createWizard();
   }
 
