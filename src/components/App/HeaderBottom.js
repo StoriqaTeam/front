@@ -8,27 +8,14 @@ import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
 import { Row, Col } from 'layout';
 
+import type { UserDataType, MobileCategoryType } from 'types';
+
 import { AuthButtons } from './index';
 
 import './HeaderBottom.scss';
 
-type UserDataType = {
-  avatar: ?string,
-  email: ?string,
-  firstName: ?string,
-  lastName: ?string,
-  myStore: ?{
-    rawId: number,
-  },
-};
-
-type MobileCategory = {
-  label: string,
-  id: string,
-};
-
 type PropsType = {
-  searchCategories: ?MobileCategory,
+  searchCategories: ?MobileCategoryType,
   searchValue: string,
   totalCount: number,
   userData: UserDataType,

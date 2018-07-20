@@ -9,16 +9,9 @@ $burger_menu_size: 7.5rem;
 
 .logoIcon {
   margin-left: calc(#{$burger_menu_size} + 1.875rem);
-  //width: 15rem;
-  //
-  //@media (min-width: $md) {
-  //  width: 24rem;
-  //}
-  //
   @media (min-width: $lg) {
     margin-left: 0;
   }
-
 }
 
 .logo {
@@ -39,11 +32,9 @@ $burger_menu_size: 7.5rem;
 
 .searchBar {
   display: none;
-
   @media (min-width: $lg) {
     display: block;
   }
-
 }
 
 .userData {

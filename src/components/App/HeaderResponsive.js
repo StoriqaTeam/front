@@ -18,7 +18,7 @@ import { CategoriesMenu } from 'components/CategoriesMenu';
 import { Container } from 'layout';
 
 import { setWindowTag } from 'utils';
-import type { DirectoriesType } from 'types';
+import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
 
 import { HeaderBottom, HeaderTop, MobileSearchMenu } from './index';
 
@@ -43,21 +43,6 @@ const HEADER_FRAGMENT = graphql`
   }
 `;
 
-type UserDataType = {
-  avatar: ?string,
-  email: ?string,
-  firstName: ?string,
-  lastName: ?string,
-  myStore: ?{
-    rawId: number,
-  },
-};
-
-type MobileCategory = {
-  label: string,
-  id: string,
-};
-
 type PropsType = {
   searchValue: string,
   environment: Environment,
@@ -72,7 +57,7 @@ type StateType = {
   isMenuToggled: boolean,
   isMobileSearchOpen: boolean,
   isMobileCategoriesOpen: boolean,
-  selectedCategory: ?MobileCategory,
+  selectedCategory: ?MobileCategoryType,
 };
 
 class HeaderResponsive extends Component<PropsType, StateType> {
@@ -154,11 +139,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     }
   }
 
-  updateStateTotalCount = (totalCount: number) => {
+  updateStateTotalCount = (totalCount: number): void => {
     this.setState({ totalCount });
   };
 
-  updateStateUserData = (data: ?UserDataType) => {
+  updateStateUserData = (data: ?UserDataType): void => {
     this.setState({ userData: data });
   };
 
@@ -177,7 +162,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
 
   disposeUser: () => void;
 
-  closeMobileCategories = () => {
+  closeMobileCategories = (): void => {
     this.setState(({ isMobileCategoriesOpen }) => ({
       isMobileCategoriesOpen: !isMobileCategoriesOpen,
     }));
@@ -200,7 +185,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     this.closeMobileCategories();
   };
 
-  handleMobileCategories = (selectedCategory: MobileCategory) => {
+  handleMobileCategories = (selectedCategory: MobileCategoryType): void => {
     this.setState(
       {
         selectedCategory,
