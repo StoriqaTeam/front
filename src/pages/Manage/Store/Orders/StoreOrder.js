@@ -80,9 +80,22 @@ export default createRefetchContainer(
             }
             photoMain
           }
+          customer {
+            firstName
+            lastName
+          }
           receiverName
           addressFull {
             value
+            country
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            locality
+            political
+            postalCode
+            route
+            streetNumber
+            placeId
           }
           createdAt
           deliveryCompany
