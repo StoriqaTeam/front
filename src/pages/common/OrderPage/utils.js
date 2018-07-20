@@ -2,22 +2,26 @@
 
 const getStatusStringFromEnum = (orderStatus: string): string => {
   switch (orderStatus) {
-    case 'CANCELLED':
-      return 'Cancelled';
-    case 'COMPLETE':
-      return 'Completed';
-    case 'DELIVERED':
-      return 'Delivered';
-    case 'IN_PROCESSING':
-      return 'In process';
+    case 'NEW':
+      return 'New';
+    case 'PAYMENT_AWAITED':
+      return 'Payment awaited';
+    case 'TRANSACTION_PENDING':
+      return 'Transaction pending';
     case 'PAID':
       return 'Paid';
-    case 'PAIMENT_AWAITED':
-      return 'Wait for payment';
-    case 'RECEIVED':
-      return 'Received';
+    case 'IN_PROCESSING':
+      return 'In processing';
+    case 'CANCELLED':
+      return 'Cancelled';
     case 'SENT':
       return 'Sent';
+    case 'DELIVERED':
+      return 'Delivered';
+    case 'RECEIVED':
+      return 'Received';
+    case 'COMPLETE':
+      return 'Complete';
     default:
       return 'Undefined';
   }
@@ -25,22 +29,26 @@ const getStatusStringFromEnum = (orderStatus: string): string => {
 
 const getEnumFromStatusString = (orderStatus: string): ?string => {
   switch (orderStatus) {
-    case 'Cancelled':
-      return 'CANCELLED';
-    case 'Completed':
-      return 'COMPLETE';
-    case 'Delivered':
-      return 'DELIVERED';
-    case 'In process':
-      return 'IN_PROCESSING';
+    case 'New':
+      return 'NEW';
+    case 'Payment awaited':
+      return 'PAYMENT_AWAITED';
+    case 'Transaction pending':
+      return 'TRANSACTION_PENDING';
     case 'Paid':
       return 'PAID';
-    case 'Wait for payment':
-      return 'PAIMENT_AWAITED';
-    case 'Received':
-      return 'RECEIVED';
+    case 'In processing':
+      return 'IN_PROCESSING';
+    case 'Cancelled':
+      return 'CANCELLED';
     case 'Sent':
       return 'SENT';
+    case 'Delivered':
+      return 'DELIVERED';
+    case 'Received':
+      return 'RECEIVED';
+    case 'Complete':
+      return 'COMPLETE';
     default:
       return null;
   }

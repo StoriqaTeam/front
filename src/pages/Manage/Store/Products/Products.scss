@@ -30,6 +30,12 @@
   border-bottom: 1px solid $color_grey_trivial;
 }
 
+.headerRowWrap {
+  .td {
+    color: $color_grey_minor;
+  }
+}
+
 .td {
   display: flex;
   align-items: center;
