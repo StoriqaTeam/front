@@ -48,7 +48,6 @@ const routes = (
           }
           cart {
             id
-            totalCount
             ...Cart_cart
           }
           mainPage {
@@ -128,8 +127,14 @@ const routes = (
 
       <Route
         path="/cart"
-        render={({ props, Component }) => <Component {...props} />}
         Component={Cart}
+        query={graphql`
+          query routes_Cart_Query {
+            cart {
+              ...Cart_cart
+            }
+          }
+        `}
       />
 
       <Route

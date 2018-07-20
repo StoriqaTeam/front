@@ -143,7 +143,7 @@ Cart.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withRouter(Page(Cart)),
+  withRouter(Page(Cart, true, true)),
   graphql`
     fragment Cart_cart on Cart
       @argumentDefinitions(

@@ -2,7 +2,18 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
+import {
+  pathOr,
+  filter,
+  prop,
+  propEq,
+  head,
+  map,
+  slice,
+  sort,
+  values,
+  join,
+} from 'ramda';
 import moment from 'moment';
 
 import { Button } from 'components/common/Button';
@@ -17,6 +28,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import { addressToString } from 'utils';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -35,10 +47,7 @@ type PropsType = {
 type OrderDTOType = {
   number: string,
   product: ProductDTOType,
-  customer: {
-    name: string,
-    address: string,
-  },
+  customerName: string,
   date: string,
   delivery: string,
   trackId: string,
@@ -47,6 +56,8 @@ type OrderDTOType = {
   status: string,
   paymentStatus: string,
   statusHistory: Array<OrderStatusType>,
+  customerName: string,
+  customerAddress: string,
 };
 
 class OrderPage extends PureComponent<PropsType> {
@@ -57,6 +68,18 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
+    const { customer } = order;
+    const customerDTO = customer
+      ? {
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+        }
+      : null;
+    const customerName =
+      customerDTO && (customerDTO.firstName || customerDTO.lastName)
+        ? join(' ', filter(item => Boolean(item), values(customerDTO)))
+        : '-';
+    const customerAddress = addressToString(order.addressFull) || '-';
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -94,10 +117,8 @@ class OrderPage extends PureComponent<PropsType> {
         price: order.product ? order.product.price : -1,
         attributes: [],
       },
-      customer: {
-        name: order.receiverName,
-        address: order.addressFull.value || '-',
-      },
+      customerName,
+      customerAddress,
       date: order.createdAt,
       delivery: order.deliveryCompany || '-',
       trackId: order.trackId || '-',
@@ -203,7 +224,7 @@ class OrderPage extends PureComponent<PropsType> {
         <ProductBlock product={order.product} />
         <div styleName="infoBlock">
           <div styleName="left">
-            <TextWithLabel label="Customer" text={order.customer.name} />
+            <TextWithLabel label="Customer" text={order.customerName} />
             <TextWithLabel
               label="Date"
               text={this.getDateFromTimestamp(order.date)}
@@ -212,7 +233,7 @@ class OrderPage extends PureComponent<PropsType> {
             <TextWithLabel label="Quantity" text={`${order.quantity}`} />
           </div>
           <div styleName="right">
-            <TextWithLabel label="Address" text={order.customer.address} />
+            <TextWithLabel label="Address" text={order.customerAddress} />
             <TextWithLabel
               label="Time"
               text={this.getTimeFromTimestamp(order.date)}

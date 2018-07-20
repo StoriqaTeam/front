@@ -53,6 +53,21 @@
   transform: rotate(-45deg);
 }
 
+.label.isRadioStyle:after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid;
+  border-color: $color_blue;
+  border-radius: 3px;
+  background-color: $color_blue;
+  opacity: 0;
+  transform: none;
+}
+
 .labelText {
   position: relative;
   color: $color_grey;
@@ -68,6 +83,9 @@
     &:before {
       border: 1px solid $color_blue;
       background-color: $color_blue;
+    }
+    &.isRadioStyle:before {
+      background-color: $color_white;
     }
     &:after {
       opacity: 1;

@@ -38,6 +38,9 @@ export {
 export {
   default as UpdateUserDeliveryAddressMutation,
 } from './UpdateUserDeliveryAddressMutation';
+export {
+  default as CreateUserDeliveryAddressFullMutation,
+} from './CreateUserDeliveryAddressFullMutation';
 export { default as ChangePasswordMutation } from './ChangePasswordMutation';
 export { default as CreateWizardMutation } from './CreateWizardMutation';
 export { default as UpdateWizardMutation } from './UpdateWizardMutation';
