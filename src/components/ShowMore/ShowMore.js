@@ -11,6 +11,7 @@ type PropsType = {
   height?: ?number, // max container height in rem (needed for animation)
   children?: any,
   dataTest?: string,
+  initialState?: boolean,
 };
 
 type StateType = {
@@ -18,9 +19,12 @@ type StateType = {
 };
 
 class ShowMore extends Component<PropsType, StateType> {
-  state = {
-    on: false,
-  };
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      on: props.initialState || false,
+    };
+  }
 
   handleClick() {
     this.setState({ on: !this.state.on });
