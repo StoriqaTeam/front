@@ -92,9 +92,6 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       selectedCategory: null,
     };
     const store = props.environment.getStore();
-    if (process.env.BROWSER) {
-      window.store = store;
-    }
     const cartId = pathOr(
       null,
       ['cart', '__ref'],
