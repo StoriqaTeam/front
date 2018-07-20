@@ -11,6 +11,11 @@ $burger_menu_size: 7.5rem;
   @media (min-width: $lg) {
     padding-bottom: 0;
   }
+
+  &.expanded {
+    padding-bottom: 0;
+  }
+
 }
 
 .withoutCategories {
@@ -22,72 +27,6 @@ $burger_menu_size: 7.5rem;
   margin-right: 0.5rem;
   position: relative;
   top: 0.5rem;
-}
-
-.headerBottom {
-  background-color: $color_white;
-  margin-top: 1.5rem;
-}
-
-.cartIcon {
-  margin-left: 1rem;
-  width: 4rem;
-}
-
-.searchIcon {
-  display: block;
-  margin-right: 2rem;
-  padding-top: 1rem;
-
-  @media (min-width: $lg) {
-    display: none;
-  }
-
-}
-
-.searchBar {
-  display: none;
-
-  @media (min-width: $lg) {
-    display: block;
-  }
-
-}
-
-.userData {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.logo {
-  display: flex;
-  padding-top: 1rem;
-  @media (min-width: $lg) {
-    padding-top: 0;
-  }
-
-  &.isUserLoggedIn {
-    display: none;
-    @media (min-width: $md) {
-      display: inherit;
-    }
-  }
-
-
-}
-
-.logoIcon {
-  margin-left: calc(#{$burger_menu_size} + 1.875rem);
-  width: 15rem;
-
-  @media (min-width: $md) {
-    width: 24rem;
-  }
-
-  @media (min-width: $xl) {
-    margin-left: 0;
-  }
-
 }
 
 .burgerMenu {
