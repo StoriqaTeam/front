@@ -148,10 +148,10 @@ class SearchSidebar extends Component<PropsType, StateType> {
     const isFirstCategory = any(isFirstCatPred, flattenCategories);
     if (isFirstCategory) {
       const filtered = levelFilter(1)(flattenCategories);
-      return prepareForAccordion(filtered);
+      return prepareForAccordion(filtered, 'EN');
     }
     const filtered = levelFilter(2)(flattenCategories);
-    return prepareForAccordion(filtered);
+    return prepareForAccordion(filtered, 'EN');
   };
 
   handleOnChangeCategory = (item): void => {

@@ -171,6 +171,7 @@ export default createRefetchContainer(
             id
             state
             price
+            quantity
             createdAt
             paymentStatus
             deliveryCompany

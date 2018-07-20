@@ -80,9 +80,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
-    const name = item.name ? getNameText(item.name) : '';
+    const name = item.name ? getNameText(item.name, 'EN') : '';
     const shortDescription = item.shortDescription
-      ? getNameText(item.shortDescription)
+      ? getNameText(item.shortDescription, 'EN')
       : '';
     // $FlowIgnoreMe
     const productsEdges = pathOr(null, ['products', 'edges'], item);
