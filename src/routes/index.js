@@ -33,7 +33,7 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
-import { Store } from 'pages/Store';
+import { Store, StoreAbout } from 'pages/Store';
 
 const routes = (
   <Route>
@@ -542,16 +542,22 @@ const routes = (
             store(id: $storeId) {
               id
               rawId
+              ...StoreAbout_shop
             }
           }
         `}
+        render={({ props, Component }) => {
+          if (props) {
+            return <Component {...props} />;
+          }
+          return null;
+        }}
         prepareVariables={(_, { params }) => ({
           storeId: parseInt(params.storeId, 10),
         })}
       >
-        <Route /> {/* Shop tab here */}
+        <Route path="/about" Component={StoreAbout} />
       </Route>
-      {/*  */}
     </Route>
   </Route>
 );
