@@ -2,15 +2,18 @@
 
 .container {
   align-items: center;
+  border-left: 2px solid transparent;
   color: $color_grey;
+  cursor: pointer;
   display: flex;
   height: 12rem;
   margin-left: -4rem;
   margin-right: -4rem;
   position: relative;
+  transition: $transition_all_ease;
+
   &:hover {
-    background-color: $color_grey_light;
-    cursor: pointer;
+    border-left: 2px solid $color_blue_hover;
   }
 
   & > div[class*="Col_"] {
