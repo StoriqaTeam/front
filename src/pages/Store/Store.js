@@ -1,27 +1,24 @@
 // @flow
 
 import React, { Fragment, PureComponent, cloneElement } from 'react';
+import type { Element } from 'react';
 
 import { Page } from 'components/App';
 
-import type { Node } from 'react';
+import type { routes_Store_QueryResponse as StoreType } from 'routes/__generated__/routes_Store_Query.graphql';
 
 type PropsType = {
-  children: Node,
-  store: any,
+  children: Element<*>,
+  store: StoreType,
 };
 
 class Store extends PureComponent<PropsType> {
   render() {
     const { children, store } = this.props;
-    console.log('---children, store', children, store);
     return (
       <Fragment>
         <div className="header">header</div>
-        {cloneElement(
-          <div>Element</div>,
-          { store: this.props.store },
-        )}
+        {children && cloneElement(children, { shop: store })}
       </Fragment>
     );
   }

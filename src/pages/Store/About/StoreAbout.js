@@ -1,15 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { withRouter, routerShape } from 'found';
-import { createFragmentContainer, graphql, Relay } from 'react-relay';
-import { map, pathOr } from 'ramda';
-
-import { Button } from 'components/common/Button';
-import { Container, Row, Col } from 'layout';
-import { MobileSidebar } from 'components/MobileSidebar';
-import { Page } from 'components/App';
-import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { withRouter } from 'found';
+import { createFragmentContainer, graphql } from 'react-relay';
+// import { map, pathOr } from 'ramda';
 
 import './About.scss';
 
@@ -20,17 +14,17 @@ type SelectedType = {
 };
 
 type PropsType = {
-  router: routerShape,
+  // router: routerShape,
 };
 
 type StateType = {
   category: ?SelectedType,
   isSidebarOpen: boolean,
 };
-
+// eslint-disable-next-line
 class StoreAbout extends Component<PropsType, StateType> {
   render() {
-    console.log('---this.props', this.props);
+    // console.log('---this.props', this.props);
     return <div styleName="container">About</div>;
   }
 }
@@ -38,7 +32,7 @@ class StoreAbout extends Component<PropsType, StateType> {
 export default createFragmentContainer(
   withRouter(StoreAbout),
   graphql`
-    fragment StoreAbout_store on Store {
+    fragment StoreAbout_shop on Store {
       id
       rawId
       name {

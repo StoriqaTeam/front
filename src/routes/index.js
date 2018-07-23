@@ -542,36 +542,22 @@ const routes = (
             store(id: $storeId) {
               id
               rawId
-              ...StoreAbout_store
+              ...StoreAbout_shop
             }
           }
         `}
         render={({ props, Component }) => {
           if (props) {
-            console.log('---children', props.children);
-            return <Component {...props} />
-          } else {
-            return null;
+            return <Component {...props} />;
           }
+          return null;
         }}
         prepareVariables={(_, { params }) => ({
           storeId: parseInt(params.storeId, 10),
         })}
       >
-        <Route
-          path="/about"
-          Component={StoreAbout}
-          render={({ props, Component }) => {
-            if (props) {
-              console.log('---props', props);
-              return <Component />
-            } else {
-              return null;
-            }
-          }}
-        />
+        <Route path="/about" Component={StoreAbout} />
       </Route>
-      {/*  */}
     </Route>
   </Route>
 );
