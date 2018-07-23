@@ -33,6 +33,7 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
+import StoreAbout from 'pages/Store/About/About';
 
 const routes = (
   <Route>
@@ -197,6 +198,22 @@ const routes = (
         }}
       />
       <Route path="/store">
+        <Route path="/:storeId">
+          <Route
+            path="/about"
+            Component={StoreAbout}
+            query={graphql`
+              query routes_StoreAbout_Query($storeId: Int!) {
+                baseProduct(id: $storeId) {
+                  ...Product_baseProduct
+                }
+              }
+            `}
+            prepareVariables={(_, { params }) => ({
+              productID: parseInt(params.productId, 10),
+            })}
+          />
+        </Route>
         <Route
           path="/:storeId/products/:productId"
           Component={ProductCard}
