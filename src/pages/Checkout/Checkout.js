@@ -276,8 +276,8 @@ class Checkout extends Component<PropsType, StateType> {
                 ) : (
                   <Col
                     size={12}
-                    md={step !== 3 ? 8 : 12}
-                    lg={step !== 3 ? 9 : 12}
+                    lg={step !== 3 ? 8 : 12}
+                    xl={step !== 3 ? 9 : 12}
                   >
                     {step === 1 && (
                       <div styleName="wrapper">
@@ -328,7 +328,7 @@ class Checkout extends Component<PropsType, StateType> {
                   </Col>
                 )}
                 {!emptyCart && (
-                  <Col size={12} md={4} lg={3}>
+                  <Col size={12} lg={4} xl={3}>
                     <StickyBar>
                       <CheckoutSidebar
                         buttonText={step === 1 ? 'Next' : 'Checkout'}
