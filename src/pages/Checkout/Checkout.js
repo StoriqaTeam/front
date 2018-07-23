@@ -8,13 +8,17 @@ import { pipe, pathOr, path, map, prop } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
-import { CreateOrdersMutation } from 'relay/mutations';
+import {
+  CreateUserDeliveryAddressFullMutation,
+  CreateOrdersMutation,
+} from 'relay/mutations';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
 
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
@@ -25,6 +29,7 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
+import { PaymentInfo } from './PaymentInfo';
 
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
@@ -44,10 +49,12 @@ type StateType = {
   step: number,
   isAddressSelect: boolean,
   isNewAddress: boolean,
+  saveAsNewAddress: boolean,
   orderInput: {
     addressFull: AddressFullType,
     receiverName: string,
   },
+  invoiceId: ?string,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -57,6 +64,7 @@ class Checkout extends Component<PropsType, StateType> {
     step: 1,
     isAddressSelect: true,
     isNewAddress: false,
+    saveAsNewAddress: true,
     orderInput: {
       addressFull: {
         value: '',
@@ -72,6 +80,7 @@ class Checkout extends Component<PropsType, StateType> {
       },
       receiverName: '',
     },
+    invoiceId: null,
   };
 
   setStoresRef(ref) {
@@ -82,7 +91,61 @@ class Checkout extends Component<PropsType, StateType> {
 
   storesRef: any;
 
-  handleChangeStep = step => () => this.setState({ step });
+  createAddress = () => {
+    // $FlowIgnore
+    const addressFull = pathOr(null, ['orderInput', 'addressFull'], this.state);
+    // $FlowIgnore
+    const userId = pathOr(null, ['me', 'rawId'], this.props);
+    CreateUserDeliveryAddressFullMutation.commit({
+      input: {
+        clientMutationId: '',
+        userId,
+        addressFull,
+        isPriority: false,
+      },
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState(() => ({
+          isAddressSelect: true,
+          isNewAddress: false,
+        }));
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong. New address was not created.',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Address created!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        log.error(error);
+        this.setState(() => ({
+          isAddressSelect: true,
+          isNewAddress: false,
+        }));
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong. New address was not created.',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
+
+  handleChangeStep = step => () => {
+    const { saveAsNewAddress, isNewAddress } = this.state;
+    if (saveAsNewAddress && isNewAddress) {
+      this.createAddress();
+    }
+    this.setState({ step });
+  };
 
   handleOnChangeOrderInput = orderInput => {
     this.setState({ orderInput });
@@ -95,6 +158,12 @@ class Checkout extends Component<PropsType, StateType> {
     }));
   };
 
+  handleChangeSaveCheckbox = () => {
+    this.setState(prevState => ({
+      saveAsNewAddress: !prevState.saveAsNewAddress,
+    }));
+  };
+
   handleCheckout = () => {
     const {
       orderInput: { addressFull, receiverName },
@@ -102,19 +171,30 @@ class Checkout extends Component<PropsType, StateType> {
     CreateOrdersMutation.commit({
       input: { clientMutationId: '', addressFull, receiverName, currencyId: 6 },
       environment: this.context.environment,
-      onCompleted: (response, errors) => {
+      onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
         log.debug('Success for DeleteFromCart mutation');
-        if (response) {
+        if (response && response.createOrders) {
           log.debug('Response: ', response);
           this.props.showAlert({
             type: 'success',
             text: 'Orders successfully created',
             link: { text: 'Close.' },
           });
-          this.props.router.push('/profile/orders');
-        }
-        if (errors) {
+          this.setState({ invoiceId: response.createOrders.invoice.id });
+          this.handleChangeStep(3)();
+        } else if (!errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error :(',
+            link: { text: 'Close.' },
+          });
+        } else {
           log.debug('Errors: ', errors);
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Error :(',
+            link: { text: 'Close.' },
+          });
         }
       },
       onError: error => {
@@ -133,10 +213,10 @@ class Checkout extends Component<PropsType, StateType> {
   checkReadyToCheckout = () => {
     const {
       orderInput: {
-        addressFull: { value, country, locality, postalCode },
+        addressFull: { value, country, postalCode },
       },
     } = this.state;
-    if (!value || !country || !locality || !postalCode) {
+    if (!value || !country || !postalCode) {
       return false;
     }
     return true;
@@ -150,7 +230,13 @@ class Checkout extends Component<PropsType, StateType> {
       ['me', 'deliveryAddresses'],
       this.props,
     );
-    const { step, isAddressSelect, isNewAddress, orderInput } = this.state;
+    const {
+      step,
+      isAddressSelect,
+      isNewAddress,
+      saveAsNewAddress,
+      orderInput,
+    } = this.state;
     const {
       cart: { totalCost, totalCount, deliveryCost, productsCost },
     } = this.props;
@@ -159,11 +245,12 @@ class Checkout extends Component<PropsType, StateType> {
       map(path(['node'])),
       // $FlowIgnore
     )(this.props);
+
     const emptyCart = totalCount === 0;
     return (
       <Container withoutGrow>
         <Row withoutGrow>
-          {!emptyCart && (
+          {(!emptyCart || step === 3) && (
             <Col size={12}>
               <div styleName="headerWrapper">
                 <CheckoutHeader
@@ -177,7 +264,7 @@ class Checkout extends Component<PropsType, StateType> {
           <Col size={12}>
             <div ref={ref => this.setStoresRef(ref)}>
               <Row withoutGrow>
-                {emptyCart ? (
+                {emptyCart && step !== 3 ? (
                   <Col size={12}>
                     <div styleName="wrapper">
                       <div styleName="storeContainer">
@@ -186,7 +273,11 @@ class Checkout extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 ) : (
-                  <Col size={12} md={8} lg={9}>
+                  <Col
+                    size={12}
+                    md={step !== 3 ? 8 : 12}
+                    lg={step !== 3 ? 9 : 12}
+                  >
                     {step === 1 && (
                       <div styleName="wrapper">
                         <div styleName="container addressContainer">
@@ -194,6 +285,8 @@ class Checkout extends Component<PropsType, StateType> {
                             me={me}
                             isAddressSelect={isAddressSelect}
                             isNewAddress={isNewAddress}
+                            saveAsNewAddress={saveAsNewAddress}
+                            onChangeSaveCheckbox={this.handleChangeSaveCheckbox}
                             onChangeAddressType={this.handleOnChangeAddressType}
                             deliveryAddresses={deliveryAddresses || []}
                             orderInput={orderInput}
@@ -224,6 +317,13 @@ class Checkout extends Component<PropsType, StateType> {
                         </div>
                       </div>
                     )}
+                    {step === 3 &&
+                      this.state.invoiceId && (
+                        <PaymentInfo
+                          invoiceId={this.state.invoiceId}
+                          me={this.props.me}
+                        />
+                      )}
                   </Col>
                 )}
                 {!emptyCart && (
@@ -253,9 +353,10 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout)), true),
+  Page(withShowAlert(withRouter(Checkout)), true, true),
   graphql`
     fragment Checkout_me on User {
+      ...PaymentInfo_me
       id
       rawId
       email

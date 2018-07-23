@@ -21,7 +21,7 @@ export type TableItemType = {
     id: number,
     title: string,
   },
-  price: number,
+  subtotal: number,
   payment: string,
   status: string,
 };
@@ -66,7 +66,7 @@ class TableRow extends PureComponent<PropsType> {
         </Col>
         <Col md={2} lg={2} xl={1} mdVisible>
           <span styleName="price">
-            {rowItem.price} <b>STQ</b>
+            {rowItem.subtotal} <b>STQ</b>
           </span>
         </Col>
         <Col lg={2} xl={1} lgVisible>

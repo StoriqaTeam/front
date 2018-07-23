@@ -2,8 +2,20 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
+import {
+  pathOr,
+  filter,
+  prop,
+  propEq,
+  head,
+  map,
+  slice,
+  sort,
+  values,
+  join,
+} from 'ramda';
 import moment from 'moment';
+import { withRouter, routerShape } from 'found';
 
 import { Button } from 'components/common/Button';
 
@@ -17,6 +29,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import { addressToString } from 'utils';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -30,15 +43,14 @@ type PropsType = {
   order: any, // TODO: use common type here.
   showAlert: (input: AddAlertInputType) => void,
   isAbleToManageOrder?: boolean,
+  isPaymentInfoCanBeShown?: boolean,
+  router: routerShape,
 };
 
 type OrderDTOType = {
   number: string,
   product: ProductDTOType,
-  customer: {
-    name: string,
-    address: string,
-  },
+  customerName: string,
   date: string,
   delivery: string,
   trackId: string,
@@ -47,6 +59,8 @@ type OrderDTOType = {
   status: string,
   paymentStatus: string,
   statusHistory: Array<OrderStatusType>,
+  customerName: string,
+  customerAddress: string,
 };
 
 class OrderPage extends PureComponent<PropsType> {
@@ -57,6 +71,18 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
+    const { customer } = order;
+    const customerDTO = customer
+      ? {
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+        }
+      : null;
+    const customerName =
+      customerDTO && (customerDTO.firstName || customerDTO.lastName)
+        ? join(' ', filter(item => Boolean(item), values(customerDTO)))
+        : '-';
+    const customerAddress = addressToString(order.addressFull) || '-';
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -94,10 +120,8 @@ class OrderPage extends PureComponent<PropsType> {
         price: order.product ? order.product.price : -1,
         attributes: [],
       },
-      customer: {
-        name: order.receiverName,
-        address: order.addressFull.value || '-',
-      },
+      customerName,
+      customerAddress,
       date: order.createdAt,
       delivery: order.deliveryCompany || '-',
       trackId: order.trackId || '-',
@@ -177,66 +201,83 @@ class OrderPage extends PureComponent<PropsType> {
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
       <div styleName="container">
-        <div styleName="orderNumber">ORDER #{order.number}</div>
+        <div styleName="mainBlock">
+          <div styleName="orderNumber">ORDER #{order.number}</div>
+          <ProductBlock product={order.product} />
+          <div styleName="infoBlock">
+            <div styleName="left">
+              <TextWithLabel label="Customer" text={order.customerName} />
+              <TextWithLabel
+                label="Date"
+                text={this.getDateFromTimestamp(order.date)}
+              />
+              <TextWithLabel label="Delivery" text={order.delivery} />
+              <TextWithLabel label="Quantity" text={`${order.quantity}`} />
+            </div>
+            <div>
+              <TextWithLabel label="Address" text={order.customerAddress} />
+              <TextWithLabel
+                label="Time"
+                text={this.getTimeFromTimestamp(order.date)}
+              />
+              <TextWithLabel label="Track ID" text={order.trackId} />
+              <TextWithLabel label="Subtotal" text={`${order.subtotal} STQ`} />
+            </div>
+          </div>
+          {this.props.isAbleToManageOrder && (
+            <ManageOrderBlock
+              isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
+              isAbleToCancel={
+                orderFromProps.state === 'PAYMENT_AWAITED' ||
+                orderFromProps.state === 'IN_PROCESSING'
+              }
+              orderSlug={parseInt(order.number, 10)}
+              onOrderSend={this.handleOrderSent}
+              onOrderCancel={this.handleOrderCanceled}
+            />
+          )}
+          <StatusList items={order.statusHistory} />
+        </div>
         <div styleName="statusBlock">
-          <div styleName="statuses">
-            <div styleName="statusTitle">Status</div>
-            <div styleName="statusInfo">
-              {getStatusStringFromEnum(order.status)}
-            </div>
-            <div styleName="statusTitle secondStatusTitle">Payment status</div>
-            <div
-              styleName={classNames('statusInfo', {
-                paid: order.paymentStatus === 'Paid',
-                unpaid: order.paymentStatus !== 'Paid',
-              })}
-            >
-              {order.paymentStatus}
-            </div>
+          <div styleName="title">Order status info</div>
+          <div styleName="statusTitle">Status</div>
+          <div styleName="statusInfo">
+            {getStatusStringFromEnum(order.status)}
           </div>
-          <div styleName="buttonWrapper">
-            <Button wireframe big>
-              Open ticket
-            </Button>
+          <div styleName="statusTitle">Payment status</div>
+          <div
+            styleName={classNames('statusInfo', {
+              paid: order.paymentStatus === 'Paid',
+              unpaid: order.paymentStatus !== 'Paid',
+            })}
+          >
+            {order.paymentStatus}
           </div>
-        </div>
-        <ProductBlock product={order.product} />
-        <div styleName="infoBlock">
-          <div styleName="left">
-            <TextWithLabel label="Customer" text={order.customer.name} />
-            <TextWithLabel
-              label="Date"
-              text={this.getDateFromTimestamp(order.date)}
-            />
-            <TextWithLabel label="Delivery" text={order.delivery} />
-            <TextWithLabel label="Quantity" text={`${order.quantity}`} />
-          </div>
-          <div styleName="right">
-            <TextWithLabel label="Address" text={order.customer.address} />
-            <TextWithLabel
-              label="Time"
-              text={this.getTimeFromTimestamp(order.date)}
-            />
-            <TextWithLabel label="Track ID" text={order.trackId} />
-            <TextWithLabel label="Subtotal" text={`${order.subtotal} STQ`} />
+          {this.props.isPaymentInfoCanBeShown &&
+            (orderFromProps.state === 'NEW' ||
+              orderFromProps.state === 'PAYMENT_AWAITED' ||
+              orderFromProps.state === 'TRANSACTION_PENDING') && (
+              <div styleName="paymentButtonWrapper">
+                <Button
+                  big
+                  onClick={() => {
+                    this.props.router.push(
+                      `/profile/orders/${order.number}/payment-info`,
+                    );
+                  }}
+                >
+                  Payment info
+                </Button>
+              </div>
+            )}
+          <div styleName="ticketButtonTitle">Having troubles?</div>
+          <div styleName="ticketButtonWrapper">
+            <Button big>Open ticket</Button>
           </div>
         </div>
-        {this.props.isAbleToManageOrder && (
-          <ManageOrderBlock
-            isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
-            isAbleToCancel={
-              orderFromProps.state === 'PAIMENT_AWAITED' ||
-              orderFromProps.state === 'IN_PROCESSING'
-            }
-            orderSlug={parseInt(order.number, 10)}
-            onOrderSend={this.handleOrderSent}
-            onOrderCancel={this.handleOrderCanceled}
-          />
-        )}
-        <StatusList items={order.statusHistory} />
       </div>
     );
   }
 }
 
-export default withShowAlert(OrderPage);
+export default withShowAlert(withRouter(OrderPage));

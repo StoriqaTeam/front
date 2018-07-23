@@ -36,7 +36,7 @@ class Order extends PureComponent<PropsType> {
       return null;
     }
 
-    return <OrderPage order={order} />;
+    return <OrderPage order={order} isPaymentInfoCanBeShown />;
   }
 }
 
@@ -48,6 +48,10 @@ export default createRefetchContainer(
       order(slug: $slug) {
         slug
         storeId
+        customer {
+          firstName
+          lastName
+        }
         product {
           baseProduct {
             rawId
@@ -77,6 +81,15 @@ export default createRefetchContainer(
         receiverName
         addressFull {
           value
+          country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          political
+          postalCode
+          route
+          streetNumber
+          placeId
         }
         createdAt
         deliveryCompany

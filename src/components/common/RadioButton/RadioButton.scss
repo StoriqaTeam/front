@@ -1,0 +1,43 @@
+@import '../../../styles/variables';
+
+.container {
+  position: relative;
+  cursor: pointer;
+
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    margin-top: 0.5rem;
+    width: 17px;
+    height: 17px;
+    background-color: $color_white;
+    border: 1px solid $color_blue;
+    border-radius: 4px;
+
+    .radio {
+      width: 7px;
+      height: 7px;
+      background-color: $color_white;
+      border: 1px solid $color_white;
+      border-radius: 2px;
+    }
+  }
+
+  &.isChecked {
+    .box {
+      .radio {
+        background-color: $color_blue;
+        border-color: $color_blue;
+      }
+    }
+  }
+}
+
+.labelText {
+  position: relative;
+  color: $color_grey;
+  font-size: 1.75rem;
+  margin-left: 3rem;
+}
