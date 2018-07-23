@@ -1,28 +1,46 @@
 @import '../../../styles/variables';
 
 .container {
-  align-items: center;
   border-left: 2px solid transparent;
   color: $color_grey;
   cursor: pointer;
-  display: flex;
-  height: 12rem;
+  // height: 12rem;
   margin-left: -4rem;
   margin-right: -4rem;
+  padding: 3rem 0;
   position: relative;
-  transition: $transition_all_ease;
 
-  &:hover {
-    border-left: 2px solid $color_blue_hover;
+  &:before {
+    background-color: transparent;
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: $transition_all_ease;
+    width: 2px;
   }
 
+  &:hover {
+    &:before {
+      background-color: $color_blue_hover;
+    }
+  }
+
+}
+
+.rowWrapper {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 4rem;
   & > div[class*="Col_"] {
     margin-right: 0;
     @media (min-width: $xl) {
       margin-right: 3rem;
     }
   }
-
 }
 
 .link {
@@ -40,10 +58,6 @@
       color: $color_blue_hover !important;
     }
   }
-}
-
-.number {
-  margin-left: 4rem;
 }
 
 .border {
