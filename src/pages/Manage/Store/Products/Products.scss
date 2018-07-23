@@ -47,13 +47,11 @@
 .tdCheckbox {width: 5%;}
 .tdFoto {width: 9%;}
 .tdName {width: 21%;}
-.tdCategory {width: 10%;}
-.tdPrice {width: 14%;}
+.tdCategory {width: 18%;}
+.tdPrice {width: 10%;}
 .tdCashback {width: 10%;}
-.tdCharacteristics {width: 20%;}
-.tdEdit {width: 4%; justify-content: flex-end;}
+.tdCharacteristics {width: 24%;}
 .tdDelete {width: 4%; justify-content: flex-end;}
-.tdDropdown {width: 3%; justify-content: flex-end;}
 
 .headerRowWrap {
   padding: 2rem 4rem;
@@ -64,10 +62,27 @@
 }
 
 .itemRowWrap {
+  position: relative;
   padding: 1rem 4rem;
   cursor: pointer;
 
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 2px;
+    background-color: transparent;
+    transition: $transition_all_ease;
+  }
+
   &:hover {
+    &:before {
+      background-color: $color_blue_hover;
+    }
+
     & .dropdownButton {
       & svg {fill: $color_grey;}
     }

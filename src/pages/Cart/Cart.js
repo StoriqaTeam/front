@@ -100,7 +100,7 @@ class Cart extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 ) : (
-                  <Col size={12} md={8} lg={9}>
+                  <Col size={12} lg={8} xl={9}>
                     <div styleName="wrapper">
                       <div styleName="storeContainer">
                         {stores.map(store => (
@@ -114,7 +114,7 @@ class Cart extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 )}
-                <Col size={12} md={4} lg={3}>
+                <Col size={12} lg={4} xl={3}>
                   {!emptyCart && (
                     <div styleName="sidebarWrapper">
                       <StickyBar>
