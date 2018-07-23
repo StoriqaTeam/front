@@ -1,0 +1,58 @@
+@import '../../styles/variables';
+
+$burger_menu_size: 7.5rem;
+
+.container {
+  background-color: $color_white;
+  margin-top: 1.5rem;
+}
+
+.logoIcon {
+  margin-left: calc(#{$burger_menu_size} + 1.875rem);
+  @media (min-width: $lg) {
+    margin-left: 0;
+  }
+}
+
+.logo {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 1rem;
+  @media (min-width: $lg) {
+    padding-top: 0;
+  }
+
+  &.isUserLoggedIn {
+    display: none;
+    @media (min-width: $md) {
+      display: inherit;
+    }
+  }
+}
+
+.searchBar {
+  display: none;
+  @media (min-width: $lg) {
+    display: block;
+  }
+}
+
+.userData {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cartIcon {
+  margin-left: 1rem;
+  width: 4rem;
+}
+
+.searchIcon {
+  display: block;
+  margin-right: 2rem;
+  padding-top: 1rem;
+
+  @media (min-width: $lg) {
+    display: none;
+  }
+}
