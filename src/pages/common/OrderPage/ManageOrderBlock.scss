@@ -1,0 +1,58 @@
+@import '../../../styles/variables.scss';
+
+.container {
+  margin-top: 4rem;
+  display: flex;
+}
+
+.sendButtonWrapper {
+  padding-right: 2.5rem;
+}
+
+.sendButtonWrapper,
+.cancelButtonWrapper {
+  width: 28.25rem;
+  button {
+    width: 100%;
+  }
+}
+
+.sendOrderModal {
+  width: 82rem;
+  height: 74rem;
+  background-color: white;
+  padding: 13rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    font-family: $font_light !important;
+    font-size: 36px;
+    text-align: center;
+    color: $color_grey;
+    line-height: normal;
+  }
+  .description {
+    color: $color_grey_minor;
+    font-size: 16px;
+    text-align: center;
+    line-height: normal;
+    margin-top: 4rem;
+  }
+  .inputWrapperTrackId {
+    width: 47.5rem;
+    margin-top: 6rem;
+  }
+  .inputWrapperComment {
+    width: 47.5rem;
+    margin-top: 2rem;
+  }
+  .sendOrderButtonWrapper {
+    width: 28.25rem;
+    margin-top: 7.75rem;
+    button {
+      width: 100%;
+    }
+  }
+}

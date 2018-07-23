@@ -6,7 +6,6 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { assocPath, path, pick, pathOr, omit, where, complement } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
-import Cookies from 'universal-cookie';
 
 import { withShowAlert } from 'components/App/AlertContext';
 import { Page } from 'components/App';
@@ -94,7 +93,7 @@ export const initialProductState = {
   baseProduct: {
     id: null,
     storeId: null,
-    currencyId: 1,
+    currencyId: 6,
     categoryId: null,
     name: '',
     shortDescription: '',
@@ -135,6 +134,17 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
+    // $FlowIgnore
+    const completed = pathOr(
+      null,
+      ['me', 'wizardStore', 'completed'],
+      this.props,
+    );
+    // $FlowIgnore
+    const storeId = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
+    if (completed && storeId) {
+      this.props.router.push(`/manage/store/${storeId}`);
+    }
     this.createWizard();
   }
 
@@ -244,12 +254,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       {
         id,
         userId,
-        address: wizardStore.addressFull.value,
         ...pick(
           ['name', 'shortDescription', 'defaultLanguage', 'slug'],
           wizardStore,
         ),
-        ...omit(['value'], wizardStore.addressFull),
+        addressFull: wizardStore.addressFull,
       },
     );
     return preparedData;
@@ -258,7 +267,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   createStore = () => {
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
-      ...preparedData,
+      // $FlowIgnoreMe
+      input: {
+        clientMutationId: '',
+        ...omit(['id'], preparedData),
+      },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -273,18 +286,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         }
         this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        const cookies = new Cookies(); // TODO: waiting for back posabilities for get last user store
-        const today = new Date();
-        const expirationDate = new Date();
-        expirationDate.setDate(today.getDate() + 30);
-        cookies.set(
-          '__storeId',
-          { value: storeId },
-          {
-            path: '/',
-            expires: expirationDate,
-          },
-        );
         this.updateWizard({ storeId });
       },
       onError: (error: Error) => {
@@ -305,7 +306,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       return;
     }
     UpdateStoreMutation.commit({
-      ...preparedData,
+      // $FlowIgnoreMe
+      input: {
+        clientMutationId: '',
+        ...omit(['userId'], preparedData),
+      },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -399,11 +404,37 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   // delay for block tonns of query
   handleOnSaveWizard = debounce(data => {
     if (data) {
+      const addressFull = pathOr(null, ['addressFull'], data);
       this.updateWizard({
         ...omit(
-          ['id', 'rawId', 'stepOne', 'stepTwo', 'stepThree', 'store'],
+          [
+            'id',
+            'rawId',
+            'stepOne',
+            'stepTwo',
+            'stepThree',
+            'store',
+            'addressFull',
+          ],
           data,
         ),
+        addressFull: {
+          ...pick(
+            [
+              'value',
+              'country',
+              'administrativeAreaLevel1',
+              'administrativeAreaLevel2',
+              'locality',
+              'political',
+              'postalCode',
+              'route',
+              'streetNumber',
+              'placeId',
+            ],
+            addressFull,
+          ),
+        },
       });
     }
   }, 250);
@@ -470,7 +501,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           attributes: baseProduct.attributes,
         };
         CreateProductWithAttributesMutation.commit({
-          ...prepareDataForProduct,
+          input: {
+            clientMutationId: '',
+            ...prepareDataForProduct,
+          },
           parentID: baseProductID,
           environment: this.context.environment,
           onCompleted: (
@@ -549,7 +583,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           attributes: baseProduct.attributes,
         };
         UpdateProductMutation.commit({
-          ...prepareDataForProduct,
+          input: {
+            clientMutationId: '',
+            ...prepareDataForProduct,
+          },
           environment: this.context.environment,
           onCompleted: (
             productResponse: ?Object,
@@ -875,6 +912,9 @@ export default createFragmentContainer(
     fragment Wizard_me on User {
       id
       rawId
+      myStore {
+        rawId
+      }
       wizardStore {
         id
         rawId
@@ -883,6 +923,7 @@ export default createFragmentContainer(
         slug
         shortDescription
         defaultLanguage
+        completed
         addressFull {
           country
           value

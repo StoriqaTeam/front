@@ -10,8 +10,11 @@ import { withShowAlert } from 'components/App/AlertContext';
 import { log, errorsHandler, fromRelayError } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 import Logo from 'components/Icon/svg/logo.svg';
+import { Spinner } from 'components/common/Spinner';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+
+import prepareQueryString from './OAuthCallback.utils';
 
 import './OAuthCallback.scss';
 
@@ -84,16 +87,11 @@ class OAuthCallback extends PureComponent<PropsType> {
   }
 
   extractFacebookAccessToken = (url: string) => {
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     // <callback_url from .env>?#access_token=<token_here>&expires_in=6232
     // $FlowIgnore
     const fbCallbackUri: string =
       process.env.REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI;
-    const queryString = replace(
-      `${fbCallbackUri}${isSafari ? '' : '?'}#`,
-      '',
-      url,
-    );
+    const queryString = prepareQueryString({ url, callbackUrl: fbCallbackUri });
     return this.extractToken(queryString);
   };
 
@@ -124,10 +122,7 @@ class OAuthCallback extends PureComponent<PropsType> {
           Loading...<br />Please wait.
         </span>
         <span styleName="description">- Storiqa team</span>
-        <div styleName="spinner">
-          <div styleName="double-bounce1" />
-          <div styleName="double-bounce2" />
-        </div>
+        <Spinner />
       </div>
     );
   }

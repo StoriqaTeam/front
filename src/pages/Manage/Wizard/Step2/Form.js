@@ -21,16 +21,16 @@ const languagesDic = {
 };
 
 type AddressType = {
-  administrativeAreaLevel1: ?string,
-  administrativeAreaLevel2: ?string,
-  country: ?string,
-  locality: ?string,
-  political: ?string,
-  postalCode: ?string,
-  route: ?string,
-  streetNumber: ?string,
-  address: ?string,
-  value: ?string,
+  value?: ?string,
+  country?: ?string,
+  administrativeAreaLevel1?: ?string,
+  administrativeAreaLevel2?: ?string,
+  locality?: ?string,
+  political?: ?string,
+  postalCode?: ?string,
+  route?: ?string,
+  streetNumber?: ?string,
+  placeId?: ?string,
 };
 
 type DataType = {
@@ -41,7 +41,6 @@ type DataType = {
   shortDescription: ?string,
   defaultLanguage: ?string,
   country: ?string,
-  address: ?string,
   value: ?string,
   addressFull: AddressType,
 };
@@ -64,8 +63,8 @@ class SecondForm extends React.Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['initialData', 'storeId'], nextProps);
     const newState = {
-      ...nextProps.initialData,
       ...prevState,
+      ...nextProps.initialData,
       store,
       storeId,
     };
@@ -99,8 +98,7 @@ class SecondForm extends React.Component<PropsType, StateType> {
       onChange({
         ...this.state,
         addressFull: {
-          ...omit(['address', 'postalCodeSuffix'], addressData),
-          value: addressData.address,
+          ...omit(['postalCodeSuffix'], addressData),
         },
       });
     }

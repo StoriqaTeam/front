@@ -7,7 +7,7 @@
 .rangeslider {
   margin: 1.5rem 0 2rem;
   position: relative;
-  background: $color_grey_ranger;
+  background-color: $color_grey_light;
   -ms-touch-action: none;
   touch-action: none;
 
@@ -16,7 +16,7 @@
     display: block;
   }
   .rangesliderHandle, .rangesliderHandle2 {
-    background: #fff;
+    background-color: $color_white;
     cursor: pointer;
     display: inline-block;
     position: absolute;
@@ -32,7 +32,7 @@
   border-radius: 4px;
   .rangesliderFill {
     height: 100%;
-    background-color: $color_blue_1;
+    background-color: $color_blue;
     border-radius: 4px;
     top: 0;
   }
@@ -73,9 +73,9 @@
   justify-content: center;
   height: 4rem;
   border-radius: 3px;
-  background-color: $color_grey_ranger_value;
+  background-color: $color_grey_trivial;
   font-size: 1.75rem;
-  color: $color_grey_ranger_value_number;
+  color: $color_grey;
 }
 
 .leftValue {

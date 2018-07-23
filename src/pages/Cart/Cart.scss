@@ -1,14 +1,44 @@
 @import "../../styles/variables.scss";
 
+.wrapper {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.sidebarWrapper {
+  display: flex;
+  flex: 1;
+  margin-top: 2rem;
+}
+
+@media (min-width: $md) { 
+  .wrapper {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.storeContainer {
+  margin-top: 2rem;
+}
+
+
+// old styles
+
 .container {
-  padding: 0 2rem 2rem 2rem;
-  font-family: $font_medium;
-  color: $color_grey_text;
-  min-height: 90rem;
+  display: flex;
+  flex-direction: column;
+  color: $color_grey;
+  min-height: 80rem;
 }
 
 .stores-container {
   flex-grow: 1;
+}
+
+.empty-container {
+  width: 100%;
+  padding: 0 2rem;
 }
 
 .total-container {
@@ -19,8 +49,10 @@
 
 .body-container {
   display: flex;
+  flex: 1 0 auto;
 }
 
 .header {
-  padding: 0 0 1rem 2rem;
+  font-size: 24px;
+  font-family: $font_medium;
 }

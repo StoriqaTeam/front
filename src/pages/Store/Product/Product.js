@@ -11,7 +11,7 @@ import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
-import Rating from 'components/Rating';
+import { Rating } from 'components/common/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -23,11 +23,11 @@ import {
 } from './utils';
 
 import {
-  ProductPrice,
-  ProductImage,
-  ProductShare,
-  ProductDetails,
   ProductContext,
+  ProductDetails,
+  ProductImage,
+  ProductPrice,
+  ProductShare,
   ProductStore,
   Tab,
   Tabs,
@@ -195,7 +195,7 @@ class Product extends Component<PropsType, StateType> {
       );
     }
     const {
-      baseProduct: { name, shortDescription, longDescription, store },
+      baseProduct: { name, shortDescription, longDescription, rating },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
@@ -203,20 +203,17 @@ class Product extends Component<PropsType, StateType> {
       <ProductContext.Provider value={this.props.baseProduct}>
         <div styleName="ProductDetails">
           <Row>
-            <Col size={6}>
+            <Col sm={12} md={5} lg={5} xl={5}>
               <ProductImage
                 discount={productVariant.discount}
                 mainImage={productVariant.photoMain}
                 thumbnails={productVariant.additionalPhotos}
               />
               {process.env.BROWSER ? (
-                <ProductShare
-                  photoMain={productVariant.photoMain}
-                  description={productVariant.description}
-                />
+                <ProductShare {...productVariant} />
               ) : null}
             </Col>
-            <Col size={6}>
+            <Col sm={12} md={6} lg={6} xl={6}>
               <ProductDetails
                 productTitle={extractText(name)}
                 productDescription={description}
@@ -224,7 +221,7 @@ class Product extends Component<PropsType, StateType> {
                 onWidgetClick={this.handleWidget}
               >
                 <div styleName="rating">
-                  <Rating rating={store.rating} />
+                  <Rating value={rating} />
                 </div>
                 <ProductPrice
                   price={productVariant.price}
@@ -259,7 +256,7 @@ class Product extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(withErrorBoundary(Page(Product))),
+  withShowAlert(withErrorBoundary(Page(Product, true))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
@@ -284,6 +281,7 @@ export default createFragmentContainer(
         productsCount
         logo
       }
+      rating
       variants {
         all {
           id

@@ -15,6 +15,7 @@
   a {
     margin-left: 3rem;
   }
+
 }
 
 .item {
@@ -57,11 +58,11 @@
     height: 4rem;
     line-height: 4rem;
     cursor: pointer;
-    transition: all .3s ease;
+    transition: $transition_all_ease;
 
     &:hover {
       color: $color_white;
-      background-color: $color_blue_1_hover;
+      background-color: $color_blue_hover;
     }
   }
 
@@ -70,10 +71,10 @@
     height: 4rem;
     line-height: 4rem;
     cursor: pointer;
-    transition: all .3s ease;
+    transition: $transition_all_ease;
 
     &:hover {
-      color: $color_blue_1;
+      color: $color_blue;
     }
   }
 }

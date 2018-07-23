@@ -6,7 +6,7 @@ import { log } from 'utils';
 
 import type { ProcessedErrorType } from 'utils/fromRelayError';
 
-export type AlertType = 'default' | 'success' | 'warning' | 'danger';
+import type { AlertType } from 'components/Alerts/Alert';
 
 export type AlertPropsType = {
   type: AlertType,

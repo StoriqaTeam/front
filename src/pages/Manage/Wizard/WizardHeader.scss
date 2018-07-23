@@ -3,7 +3,7 @@
 .stepperContainer {
   height: 8.25rem;
   width: 100%;
-  border-bottom: 2px solid $color_grey_light;
+  border-bottom: 2px solid $color_grey_trivial;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,13 +19,13 @@
     span {
       font-family: $font_medium;
       font-size: 1.75rem;
-      color: $color_grey_bg;
+      color: $color_grey_minor;
       text-transform: uppercase;
     }
 
     &.active {
       span {
-        color: $color_blue_1;
+        color: $color_blue;
       }
 
       &::after {
@@ -35,7 +35,7 @@
         bottom: 0;
         height: 3px;
         width: 100%;
-        background-color: $color_blue_1;
+        background-color: $color_blue;
       }
     }
   }

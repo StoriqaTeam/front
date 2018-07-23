@@ -2,8 +2,8 @@
   {
     "id": "orders",
     "title": "Orders",
-    "link": "",
-    "disabled": true
+    "link": "/orders",
+    "disabled": false
   },
   {
     "id": "goods",
@@ -26,13 +26,13 @@
   {
     "id": "employees",
     "title": "Employees",
-    "link": "",
+    "link": "/employees",
     "disabled": true
   },
   {
-    "id": "warehouses",
-    "title": "Warehouses",
-    "link": "",
-    "disabled": true
+    "id": "storages",
+    "title": "Storages",
+    "link": "/storages",
+    "disabled": false
   }
 ]

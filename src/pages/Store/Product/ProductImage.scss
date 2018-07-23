@@ -1,10 +1,8 @@
 @import "../../../styles/variables";
 
-$bigImageSize: 69.875rem;
-
 .container {
   align-items: flex-start;
-  border-right: 1px solid #efefef;
+  border-right: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
 }
@@ -13,6 +11,7 @@ $bigImageSize: 69.875rem;
   position: absolute;
   right: 3rem;
   top: 3rem;
+
   svg {
     height: 3.375rem;
     width: 3.375rem;
@@ -23,13 +22,14 @@ $bigImageSize: 69.875rem;
   align-items: center;
   display: flex;
   flex-flow: column;
-  width: $bigImageSize;
+  width: 100%;
 }
 
 .bigImage {
-  height: $bigImageSize;
+  height: 69.875rem;
   position: relative;
   width: inherit;
+
   & > img {
     height: 100%;
     object-fit: contain;
@@ -37,17 +37,26 @@ $bigImageSize: 69.875rem;
   }
 }
 
+
 .thumbnailsWrapper {
   max-width: 12rem;
   margin: 2.375rem 1.80rem 0 2.125rem;
+  display: none;
+  @media (min-width: $lg) {
+    display: block;
+  }
 }
 
 .noThumbnailsWrapper {
   max-width: 12rem;
+  display: none;
+  @media (min-width: $lg) {
+    display: block;
+  }
 }
 
 .discount {
-  background-color: #ff62a4;
+  background-color: $color_pink;
   border-bottom: 1px solid $color_white;
   border-left: 1px solid $color_white;
   border-radius: 0 0 0.5rem 0.5rem;

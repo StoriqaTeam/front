@@ -5,11 +5,11 @@
   display: flex;
   align-items: center;
   width: 100%;
+  height: 2rem;
 }
 
 .label {
   display: block;
-  margin-top: -0.5rem;
   margin-left: 1.5rem;
   cursor: pointer;
 
@@ -20,21 +20,21 @@
     left: 0;
     width: 2rem;
     height: 2rem;
-    border: 1px solid $color_grey_border2;
+    border: 1px solid $color_grey_light;
     border-radius: 0.5rem;
     line-height: 2rem;
-    transition: all .3s ease;
+    transition: $transition_all_ease;
   }
 
   &:hover {
     &:before {
-      border: 1px solid $color_grey_text;
+      border: 1px solid $color_grey;
     }
   }
 }
 
 .active {
-  border-color: $color_primary;
+  border-color: $color_blue;
 }
 
 .label:after {
@@ -45,7 +45,7 @@
   width: 0.75rem;
   height: 0.5rem;
   border: 0.25rem solid;
-  border-color: $color_primary;
+  border-color: $color_blue;
   border-top: none;
   border-right: none;
   background-color: transparent;
@@ -53,9 +53,24 @@
   transform: rotate(-45deg);
 }
 
+.label.isRadioStyle:after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid;
+  border-color: $color_blue;
+  border-radius: 3px;
+  background-color: $color_blue;
+  opacity: 0;
+  transform: none;
+}
+
 .labelText {
   position: relative;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 1.75rem;
 }
 
@@ -66,8 +81,11 @@
 .input:checked {
   & + label {
     &:before {
-      border: 1px solid $color_blue_1;
-      background-color: $color_blue_1;
+      border: 1px solid $color_blue;
+      background-color: $color_blue;
+    }
+    &.isRadioStyle:before {
+      background-color: $color_white;
     }
     &:after {
       opacity: 1;

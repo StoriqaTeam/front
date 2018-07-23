@@ -65,7 +65,7 @@ class Start extends PureComponent<PropsTypes> {
               />
             )}
         </div>
-        <div styleName="item">
+        <div styleName="item bannersItem">
           <BannersRow items={bannersRow} count={2} />
         </div>
       </div>
@@ -81,7 +81,7 @@ Start.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(Start),
+  Page(Start, true),
   graphql`
     fragment Start_mainPage on MainPage {
       findMostViewedProducts(

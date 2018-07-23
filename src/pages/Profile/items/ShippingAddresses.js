@@ -4,10 +4,10 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { assocPath, map, assoc } from 'ramda';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
-import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Button } from 'components/common/Button';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -32,20 +32,20 @@ type DeliveryAddressesType = {
   isPriority: boolean,
   userId: number,
   address: {
+    country: string,
     administrativeAreaLevel1: ?string,
     administrativeAreaLevel2: ?string,
-    country: string,
-    locality: ?string,
     political: ?string,
     postalCode: string,
-    route: ?string,
     streetNumber: ?string,
     value: ?string,
+    route: ?string,
+    locality: ?string,
   },
 };
 
 type PropsType = {
-  data: {
+  me: {
     rawId: number,
     firstName: string,
     lastName: string,
@@ -55,21 +55,22 @@ type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
 };
 
+type FormType = {
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  country: string,
+  locality: ?string,
+  political: ?string,
+  postalCode: string,
+  route: ?string,
+  streetNumber: ?string,
+  value: ?string,
+  isPriority: boolean,
+};
+
 type StateType = {
   isLoading: boolean,
-  form: {
-    administrativeAreaLevel1: ?string,
-    administrativeAreaLevel2: ?string,
-    country: string,
-    locality: ?string,
-    political: ?string,
-    postalCode: string,
-    route: ?string,
-    streetNumber: ?string,
-    address: ?string,
-    value: ?string,
-    isPriority: boolean,
-  },
+  form: FormType,
   isOpenNewForm: boolean,
   editableAddressId: ?number,
 };
@@ -83,7 +84,6 @@ const resetForm = {
   postalCode: '',
   route: '',
   streetNumber: '',
-  address: '',
   value: '',
   isPriority: true,
 };
@@ -98,7 +98,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
 
   handleSave = (id: ?number) => {
     const { environment } = this.context;
-    const { data } = this.props;
+    const { me } = this.props;
     const { form } = this.state;
     const {
       country,
@@ -107,7 +107,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       political,
       postalCode,
       streetNumber,
-      address,
+      value,
       route,
       locality,
       isPriority,
@@ -142,13 +142,13 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       political: political || null,
       postalCode,
       streetNumber: streetNumber || null,
-      address: address || null,
+      address: value || null,
       route: route || null,
       locality: locality || null,
       isPriority,
     };
 
-    const createInput = { ...input, userId: data.rawId };
+    const createInput = { ...input, userId: me.rawId };
     const updateInput = { ...input, id };
 
     // $FlowIgnoreMe
@@ -174,9 +174,10 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         }));
         this.props.showAlert({
           type: 'success',
-          text: id ? 'Address update!' : 'Address create!',
+          text: id ? 'Address updated!' : 'Address created!',
           link: { text: '' },
         });
+        this.resetForm();
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -214,7 +215,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         this.resetForm();
         this.props.showAlert({
           type: 'success',
-          text: 'Address delete!',
+          text: 'Address deleted!',
           link: { text: '' },
         });
       },
@@ -232,7 +233,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     DeleteUserDeliveryAddressMutation.commit(params);
   };
 
-  handleUpdateForm = (form: any) => {
+  handleUpdateForm = (form: FormType) => {
     this.setState(() => ({
       form: {
         ...this.state.form,
@@ -269,7 +270,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   resetForm = () => {
-    this.setState({ form: resetForm });
+    this.setState({
+      form: resetForm,
+    });
   };
 
   renderAddressForm = () => {
@@ -292,15 +295,17 @@ class ShippingAddresses extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="saveButtons">
-          <SpinnerButton
-            white
+          <Button
+            big
+            wireframe={!editableAddressId}
             onClick={() => {
               this.handleSave(editableAddressId || null);
             }}
             isLoading={isLoading}
+            dataTest="saveShippingAddressButton"
           >
             {editableAddressId ? 'Save' : 'Add'}
-          </SpinnerButton>
+          </Button>
           {(editableAddressId || isOpenNewForm) && (
             <div
               styleName="cancelButton"
@@ -322,9 +327,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { data } = this.props;
+    const { me } = this.props;
     const { editableAddressId, isOpenNewForm } = this.state;
-    const { deliveryAddresses = [] } = data;
+    const { deliveryAddresses = [] } = me;
     return (
       <Fragment>
         {deliveryAddresses.length === 0 && (
@@ -339,6 +344,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
               wireframe
               big
               onClick={this.toggleNewAddressForm}
+              dataTest="addShippingAddressButton"
             >
               Add address
             </Button>
@@ -364,7 +370,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                   <Fragment key={item.rawId}>
                     <div styleName="item">
                       {item.isPriority && (
-                        <div styleName="preorityText">Priority address</div>
+                        <div styleName="priorityText">Priority address</div>
                       )}
                       <div styleName="address">
                         {`${country}, `}
@@ -376,10 +382,10 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                         {postalCode && `${postalCode}`}
                       </div>
                       <div styleName="name">
-                        {`${data.firstName} ${data.lastName}`}
+                        {`${me.firstName} ${me.lastName}`}
                       </div>
                       <div styleName="email">
-                        <i>{data.email}</i>
+                        <i>{me.email}</i>
                       </div>
                       <div styleName="editButtons">
                         <Button
@@ -388,19 +394,22 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                           onClick={() => {
                             this.toggleEditAddressForm(item.rawId, item);
                           }}
+                          dataTest="editShippingAddressButton"
                         >
                           Edit
                         </Button>
-                        <div
-                          styleName="cancelButton"
-                          onClick={() => {
-                            this.handleDelete(item.rawId);
-                          }}
-                          onKeyDown={() => {}}
-                          role="button"
-                          tabIndex="0"
-                        >
-                          Delete address
+                        <div styleName="deleteButton">
+                          <Button
+                            big
+                            pink
+                            wireframe
+                            onClick={() => {
+                              this.handleDelete(item.rawId);
+                            }}
+                            dataTest="deleteShippingAddressButton"
+                          >
+                            Delete
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -424,4 +433,31 @@ ShippingAddresses.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(ShippingAddresses);
+export default createFragmentContainer(
+  withShowAlert(ShippingAddresses),
+  graphql`
+    fragment ShippingAddresses_me on User {
+      rawId
+      firstName
+      lastName
+      email
+      deliveryAddresses {
+        rawId
+        id
+        userId
+        isPriority
+        address {
+          country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          political
+          postalCode
+          streetNumber
+          value
+          route
+          locality
+        }
+      }
+    }
+  `,
+);

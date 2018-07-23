@@ -10,15 +10,18 @@ type PropsTypes = {
   children: Node,
   type: string,
   onClick: ?Function,
-  disabled: boolean,
+  disabled?: boolean,
   iconic: boolean,
   href: ?string,
   wireframe?: boolean,
   load?: boolean,
   contour: ?boolean,
+  small: ?boolean,
   big: ?boolean,
   dataTest: string,
   white: ?boolean,
+  isLoading?: boolean,
+  pink?: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -33,9 +36,12 @@ class Button extends PureComponent<PropsTypes> {
       load,
       contour,
       big,
+      small,
       dataTest,
       white,
       wireframe,
+      isLoading,
+      pink,
     } = this.props;
 
     const props = {
@@ -52,8 +58,11 @@ class Button extends PureComponent<PropsTypes> {
       load,
       contour,
       big,
+      small,
       white,
       wireframe,
+      isLoading,
+      pink,
     });
 
     if (href) {
@@ -66,11 +75,14 @@ class Button extends PureComponent<PropsTypes> {
     return (
       <button
         styleName={styleName}
-        disabled={disabled}
+        disabled={disabled || isLoading}
         type="button"
         data-test={dataTest}
         {...props}
-      />
+      >
+        <div styleName={classNames('spinner')} />
+        {!isLoading && <div>{children}</div>}
+      </button>
     );
   }
 }

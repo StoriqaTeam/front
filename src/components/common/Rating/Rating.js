@@ -10,7 +10,7 @@ const Rating = ({ value }: { value: ?number }) => (
   <div styleName="container">
     <div
       styleName="background"
-      style={{ width: `${value ? value * 20 : '0'}%` }}
+      style={{ width: `calc(${value ? value * 20 : '0'}% - 4px)` }}
     />
     <Stars />
   </div>

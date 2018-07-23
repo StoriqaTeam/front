@@ -1,0 +1,33 @@
+@import "../../../../../styles/variables";
+
+.form {
+  position: relative;
+}
+
+.formItem + .formItem {
+  margin-top: 6rem;
+}
+
+.subtitle {
+  margin-bottom: 3rem;
+}
+
+.storageName {
+  max-width: 41rem;
+}
+
+.address {
+  max-width: 41rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  @media(min-width: $md) {
+    justify-content: initial;
+  }
+
+  & .cancelButton {
+    margin-left: 3rem;
+  }
+}

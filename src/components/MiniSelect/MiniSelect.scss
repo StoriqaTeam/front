@@ -16,7 +16,7 @@
   position: absolute;
   bottom: -0.375rem;
   width: 100%;
-  border-bottom: 1px solid $color_grey_bg;
+  border-bottom: 1px solid $color_grey_minor;
 }
 
 .fullWidth {
@@ -30,7 +30,7 @@
 
 .label {
   font-family: $font_medium;
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   font-size: 12px;
   white-space: nowrap;
 }
@@ -41,8 +41,8 @@
   height: 2.5rem;
   padding: 0 3rem 0 1rem;
   border-radius: 0.25rem;
-  color: $color_grey_text;
-  background-color: #FAFAFA;
+  color: $color_grey;
+  background-color: $color_grey_bg;
   font-size: 11px;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .isDropdown {
-  color: $color_grey_link;
+  color: $color_grey_minor;
   background-color: transparent;
 }
 
@@ -106,7 +106,7 @@
 }
 
 .isItem .icon {
-  background-color: #FAFAFA;
+  background-color: $color_grey_bg;
 }
 
 .forAutocomlete .icon {
@@ -175,11 +175,11 @@
 }
 
 .item:hover {
-  background-color: #F7F7F7;
+  background-color: $color_grey_trivial;
 }
 
 .active {
-  background-color: #F7F7F7;
+  background-color: $color_grey_trivial;
 }
 
 .isDropdown .active {

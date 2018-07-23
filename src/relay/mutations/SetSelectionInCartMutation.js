@@ -11,7 +11,7 @@ import type {
 const mutation = graphql`
   mutation SetSelectionInCartMutation($input: SetSelectionInCartInput!) {
     setSelectionInCart(input: $input) {
-      ...CartProduct_product
+      ...Cart_cart
     }
   }
 `;
@@ -32,14 +32,6 @@ const commit = (params: SetSelectionInCartParams) =>
     mutation,
     variables: {
       input: { ...params.input },
-    },
-    optimisticUpdater: relayStore => {
-      const {
-        input: { value },
-        nodeId,
-      } = params;
-      const product = relayStore.get(nodeId);
-      product.setValue(value, 'selected');
     },
     onCompleted: params.onCompleted,
     onError: params.onError,

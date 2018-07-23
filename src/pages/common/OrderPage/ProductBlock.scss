@@ -1,0 +1,69 @@
+@import '../../../styles/variables.scss';
+
+.container {
+  height: 10rem;
+  display: flex;
+  margin-top: 2.5rem;
+}
+
+.photoWrapper {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo {
+  height: 100%;
+  display: block;
+}
+
+.productInfoBlock {
+  display: flex;
+  flex-direction: column;
+  width: 33.25rem;
+  display: flex;
+  margin-left: 2rem;
+}
+
+.productName {
+  a {
+    font-size: 16px;
+    line-height: 1.25;
+    font-weight: 500;
+    word-wrap: break-word;
+    overflow: hidden;
+    height: 2.5rem;
+    color: $color_grey;
+  }
+}
+
+.productCategory {
+  a {
+    font-size: 16px;
+    margin-top: 0.4rem;
+    color: $color_grey;
+  }
+}
+
+.productPrice {
+  font-size: 16px;
+}
+
+.attributeWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.attributeName {
+  width: 8rem;
+  color: $color_grey_minor;
+  font-size: 14px;
+}
+
+.attributeValue {
+  width: 20rem;
+}

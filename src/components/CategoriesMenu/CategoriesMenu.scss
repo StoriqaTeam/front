@@ -1,37 +1,41 @@
 @import "../../styles/variables";
 
 .container {
-  position: relative;
-  display: flex;
-  height: 5rem;
-  top: -2rem;
-  padding: 0 2rem;
+  display: none;
+  margin-top: 2rem;
+
+  @media (min-width: $lg) {
+    display: flex;
+  }
+
 }
 
 .button {
-  display: flex;
   align-items: center;
-  color: $color_grey_text;
-  transition: all .3s ease;
+  color: $color_grey;
+  display: flex;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_2;
+    color: $color_blue;
   }
 
-  & svg {transition: all .3s ease;}
-  &:hover svg {fill: $color_blue_1;}
+  & svg {transition: $transition_all_ease;}
+  &:hover svg {fill: $color_blue;}
 }
 
 .buttonText {
   display: inline-block;
+  font-size: 2rem;
   margin-left: 1rem;
-  font-size: 16px;
 }
 
 .root {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
   width: 100%;
   z-index: 10;
-  white-space: nowrap;
 }
 
 .rootItem {
@@ -48,25 +52,26 @@
   }
 
   & > .items {
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
-    left: 2rem;
-    right: 2rem;
-    padding: 0 4rem;
-    border-top: 2px solid $color_blue_2;
+    background-color: $color_white;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
-    background-color: $color_white;
+    border-top: 2px solid $color_blue;
     box-shadow: $shadow_1;
-    z-index: 10;
+    left: 2rem;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 4rem;
+    position: absolute;
+    right: 2rem;
     transition: all .15s ease-in;
+    visibility: hidden;
+    z-index: 10;
 
     & > .itemsWrap {
+      border-right: 1px solid $color_grey_trivial;
+      padding-right: 4rem;
       position: relative;
       width: 40rem;
-      padding-right: 4rem;
-      border-right: 1px solid $color_grey_2;
 
       & > ul {
         height: 30.5rem;
@@ -78,24 +83,24 @@
 
   & > .link {
     & > .text {
-      position: relative;
-      display: block;
-      padding: 0 2rem;
-      font-size: 16px;
-      color: $color_grey_text;
-      line-height: 5rem;
-      text-align: center;
-      z-index: 1;
-      transition: none;
-      transition: all .3s ease;
+      color: $color_grey;
       cursor: pointer;
+      display: block;
+      font-size: 16px;
+      line-height: 5rem;
+      padding: 0 2rem;
+      position: relative;
+      text-align: center;
+      transition: $transition_all_ease;
+      transition: none;
+      z-index: 1;
     }
   }
 
   &:hover {
     & > .link {
       & > .text {
-        color: $color_blue_2;
+        color: $color_blue;
       }
     }
   }
@@ -108,23 +113,23 @@
 }
 
 .rootButtonItem {
-  padding-right: 2rem;
   padding-left: 0;
+  padding-right: 2rem;
 }
 
 .title {
+  border-bottom: 1px solid $color_grey_trivial;
+  cursor: pointer;
   font-family: $font_medium;
   font-size: 14px;
   line-height: 7rem;
   text-transform: uppercase;
-  border-bottom: 1px solid $color_grey_2;
-  cursor: pointer;
 }
 
 .icon {
   position: absolute;
-  top: 1.5rem;
   right: 3.5rem;
+  top: 1.5rem;
 }
 
 .link {
@@ -133,14 +138,14 @@
 
 .midItem {
   font-family: $font_medium;
-  margin-right: -4rem;
   font-size: 16px;
   line-height: 4rem;
+  margin-right: -4rem;
 
   & .link {
     display: block;
-    color: $color_grey_text;
-    transition: all .3s ease;
+    color: $color_grey;
+    transition: $transition_all_ease;
 
     & .text {
       position: relative;
@@ -150,16 +155,16 @@
 
   & svg {
     opacity: 0;
-    fill: $color_primary;
-    transition: all .3s ease;
+    fill: $color_blue;
+    transition: $transition_all_ease;
   }
 
   & > .items {
+    left: 100%;
     opacity: 0;
-    visibility: hidden;
     position: absolute;
     top: 0;
-    left: 100%;
+    visibility: hidden;
     width: 118rem;
 
     & > .itemsWrap {
@@ -167,28 +172,28 @@
       padding-left: 4rem;
 
       & > ul {
-        width: 80rem;
-        height: 29.5rem;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        height: 29.5rem;
         margin-top: 1rem;
+        width: 80rem;
 
         & > li {
+          cursor: pointer;
           font-size: 14px;
           line-height: 4rem;
-          cursor: pointer;
 
           & .link {
+            color: $color_grey;
             display: block;
+            transition: $transition_all_ease;
             width: 100%;
-            color: $color_grey_text;
-            transition: all .3s ease;
           }
 
           &:hover {
             & > .link {
-              color: $color_blue_2;
+              color: $color_blue;
             }
           }
         }
@@ -203,7 +208,7 @@
     }
 
     & > .link {
-      color: $color_blue_2 !important;
+      color: $color_blue !important;
     }
 
     & svg {

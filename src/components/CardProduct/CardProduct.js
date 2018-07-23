@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice } from 'utils';
+import { getNameText, formatPrice, convertSrc } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
 import './CardProduct.scss';
@@ -53,9 +53,6 @@ class CardProduct extends PureComponent<PropsTypes> {
     if (product) {
       ({ discount, photoMain, cashback, price } = product.node);
     }
-    if (photoMain) {
-      photoMain = photoMain.replace(/.(png|jpg)/, '-medium.$1');
-    }
 
     if (!storeId || !rawId || !currencyId || !price) return null;
 
@@ -76,7 +73,11 @@ class CardProduct extends PureComponent<PropsTypes> {
             {!photoMain ? (
               <Icon type="camera" size="40" />
             ) : (
-              <ImageLoader fit src={photoMain} loader={<BannerLoading />} />
+              <ImageLoader
+                fit
+                src={convertSrc(photoMain || '', 'medium')}
+                loader={<BannerLoading />}
+              />
             )}
           </div>
           <div styleName="bottom">
@@ -89,25 +90,21 @@ class CardProduct extends PureComponent<PropsTypes> {
                 </div>
               )}
             </div>
+            {Boolean(discount) && (
+              <div styleName="undiscountedPrice">{formatPrice(price)} STQ</div>
+            )}
             <div styleName="price">
-              {Boolean(discount) && (
-                <div styleName="undiscountedPrice">
-                  {formatPrice(price)} STQ
-                </div>
-              )}
               {discountedPrice && (
                 <div styleName="actualPrice">
                   <strong>{formatPrice(discountedPrice)} STQ</strong>
                 </div>
               )}
-              <div styleName="cashbackWrap">
-                <div
-                  styleName={classNames('cashback', {
-                    noneCashback: !cashbackValue,
-                  })}
-                >
-                  <b>{`Cashback  ${cashbackValue || 0}%`}</b>
-                </div>
+              <div
+                styleName={classNames('cashback', {
+                  noneCashback: !cashbackValue,
+                })}
+              >
+                <b>{`Cashback  ${cashbackValue || 0}%`}</b>
               </div>
             </div>
           </div>

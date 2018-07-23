@@ -4,6 +4,11 @@ import { graphql, commitMutation } from 'react-relay';
 import { Environment, ConnectionHandler } from 'relay-runtime';
 import { log } from 'utils';
 
+import type {
+  CreateProductWithAttributesMutationVariables,
+  CreateProductWithAttributesMutationResponse,
+} from './__generated__/CreateProductWithAttributesMutation.graphql';
+
 const mutation = graphql`
   mutation CreateProductWithAttributesMutation(
     $input: CreateProductWithAttributesInput!
@@ -11,6 +16,26 @@ const mutation = graphql`
     createProduct(input: $input) {
       id
       rawId
+      stocks {
+        id
+        productId
+        warehouseId
+        warehouse {
+          name
+          addressFull {
+            country
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            political
+            postalCode
+            streetNumber
+            value
+            route
+            locality
+          }
+        }
+        quantity
+      }
       discount
       photoMain
       additionalPhotos
@@ -42,32 +67,22 @@ const mutation = graphql`
   }
 `;
 
-type MutationParamsType = {
-  product: {
-    price: number,
-    vendorCode: string,
-    photoMain?: string,
-    additionalPhotos?: Array<string>,
-    cashback: number,
-    discount: number,
-  },
-  attributes: Array<{ attrId: number, value: string, metaField?: string }>,
-  parentID: number,
+export type MutationParamsType = {
+  ...CreateProductWithAttributesMutationVariables,
+  parentID: string,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?CreateProductWithAttributesMutationResponse,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
-  updater: ?(proxyStore: any) => void,
 };
 
 const commit = (params: MutationParamsType) =>
   commitMutation(params.environment, {
     mutation,
     variables: {
-      input: {
-        clientMutationId: '',
-        product: params.product,
-        attributes: params.attributes,
-      },
+      input: params.input,
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
@@ -76,8 +91,6 @@ const commit = (params: MutationParamsType) =>
         params,
         newData,
       });
-      // const me = relayStore.getRoot().getLinkedRecord('me');
-      // const wizardStore = me.getLinkedRecord('wizardStore');
       if (!params || !params.parentID) {
         return;
       }
@@ -93,27 +106,8 @@ const commit = (params: MutationParamsType) =>
         newProduct,
         'ProductsEdge',
       );
-      ConnectionHandler.insertEdgeAfter(conn, edge);
+      ConnectionHandler.insertEdgeBefore(conn, edge);
     },
   });
 
 export default { commit };
-
-/* {
-  "input": {
-    "clientMutationId": "",
-    "product": {
-      "baseProductId": 1,
-      "discount": 12,
-      "photoMain": "https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png",
-      "additionalPhotos": ["https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png","https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png"],
-      "vendorCode": "1q11q1q-1q1q1",
-      "cashback": 22,
-      "price": 123123123
-    },
-    "attributes": [
-      { "attrId": 1, "value": "44", "metaField": "https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png" },
-      { "attrId": 1, "value": "52", "metaField": "https://s3.amazonaws.com/storiqa-dev/img-QFoCm1LVrzkC.png" }
-    ]
-  }
-} */

@@ -15,6 +15,8 @@ const mutation = graphql`
       rawId
       email
       isActive
+      firstName
+      lastName
     }
   }
 `;

@@ -8,14 +8,14 @@ import { Icon } from 'components/Icon';
 
 import './Select.scss';
 
-type StateType = {
-  isExpanded: boolean,
-  items: Array<{ id: string, label: string }>,
-};
-
 type SelectType = {
   id: string,
   label: string,
+};
+
+type StateType = {
+  isExpanded: boolean,
+  items: Array<{ id: string, label: string }>,
 };
 
 type PropsType = {
@@ -32,24 +32,32 @@ type PropsType = {
     [name: string]: any,
   },
   dataTest: string,
+  // eslint-disable-next-line
   withEmpty?: boolean,
   isBirthdate?: boolean,
+  onClick: () => void,
+  isMobile: boolean,
 };
 
 class Select extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    const { items, withEmpty } = nextProps;
+    return {
+      ...prevState,
+      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
+    };
+  }
+
+  static defaultProps = {
+    onClick: () => {},
+    isMobile: false,
+  };
   constructor(props: PropsType) {
     super(props);
     this.state = {
       isExpanded: false,
       items: props.items,
     };
-  }
-
-  componentWillMount() {
-    const { items, withEmpty } = this.props;
-    this.setState({
-      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
-    });
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
       window.addEventListener('keydown', this.handleToggleExpand);
@@ -67,13 +75,14 @@ class Select extends Component<PropsType, StateType> {
   itemsWrap: any;
   items: any;
 
-  handleToggleExpand = (e: any) => {
+  handleToggleExpand = (e: any): void => {
+    const { onClick } = this.props;
     const isButtonClick = this.button && this.button.contains(e.target);
     const isItemsWrap = this.itemsWrap && this.itemsWrap.contains(e.target);
     const isItems = this.items && this.items.contains(e.target);
 
     if (isButtonClick && !isItems && !isItemsWrap) {
-      this.setState({ isExpanded: !this.state.isExpanded });
+      this.setState({ isExpanded: !this.state.isExpanded }, onClick);
       return;
     }
 
@@ -82,7 +91,7 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  handleItemClick = (e: any) => {
+  handleItemClick = (e: any): void => {
     const { onSelect, items } = this.props;
     if (this.props && onSelect) {
       onSelect(find(propEq('id', e.target.id))(items));
@@ -101,9 +110,9 @@ class Select extends Component<PropsType, StateType> {
       containerStyle,
       dataTest,
       isBirthdate,
+      isMobile,
     } = this.props;
     const { isExpanded, items } = this.state;
-
     return (
       <div
         ref={node => {
@@ -143,6 +152,7 @@ class Select extends Component<PropsType, StateType> {
             }}
             styleName={classNames('items', {
               hidden: !isExpanded,
+              isMobile,
             })}
           >
             <div
@@ -164,7 +174,7 @@ class Select extends Component<PropsType, StateType> {
                     styleName={classNames('item', {
                       active: activeItem && activeItem.id === id,
                     })}
-                    data-test={id}
+                    data-test={`${dataTest}_items`}
                   >
                     {item.label}
                   </div>

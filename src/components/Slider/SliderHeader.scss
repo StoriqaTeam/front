@@ -12,7 +12,7 @@
 }
 
 .title {
-  color: $color_black;
+  color: $color_grey;
   float: left;
   font-size: 20px;
   line-height: 4rem;
@@ -33,22 +33,22 @@
     margin-left: 0.75rem;
   }
 
-  & svg {transition: all .3s ease;}
-  &:hover svg {fill: $color_blue_1;}
+  & svg {transition: $transition_all_ease;}
+  &:hover svg {fill: $color_blue;}
 }
 
 .reveal, .settings {
-  color: #9C9C9C;
+  color: $color_grey_minor;
   font-size: 16px;
   line-height: 4rem;
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   float: right;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_1;
+    color: $color_blue;
   }
 }
 

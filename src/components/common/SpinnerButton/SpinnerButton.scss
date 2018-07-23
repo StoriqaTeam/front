@@ -13,24 +13,24 @@
   padding: 0 2rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  background: $color_blue_1;
+  background-color: $color_blue;
   white-space: nowrap;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
   &:hover {
-    background: $color_blue_1_hover;
+    background-color: $color_blue_hover;
   }
   &.small {
+    min-width: auto;
     font-size: 14px;
-    height: 4rem;
-    min-width: 11rem;
-    line-height: 4rem;
-    padding: 0 1.25rem;
+    height: 2.75rem;
+    line-height: 2.75rem;
+    padding: 0 1.5rem;
   }
   &.white {
     font-family: $font_regular;
-    color: $color_blue_1;
-    background: $color_white; 
-    border: 1px solid $color_blue_1;
+    color: $color_blue;
+    background-color: $color_white;
+    border: 1px solid $color_blue;
   }
   &.isLoading {
     &:hover {
@@ -43,6 +43,12 @@
       opacity: 1;
     }
   }
+
+  &.disabled {
+    background-color: $color_grey_trivial;
+    color: $color_grey_minor;
+    cursor: default;
+  }
 }
 
 .childrenWrapper {
@@ -54,7 +60,7 @@
   position: absolute;
   opacity: 0;
   border: 1px solid transparent;
-  border-top: 1px solid $color_blue_1;
+  border-top: 1px solid $color_blue;
   border-radius: 50%;
   width: 2rem;
   height: 2rem;

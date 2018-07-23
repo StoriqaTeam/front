@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
-import { withRouter, matchShape, routerShape } from 'found';
+import { withRouter, matchShape } from 'found';
 import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
@@ -23,7 +23,6 @@ type PropsType = {
   isSignUp: ?boolean,
   alone: ?boolean,
   match: matchShape,
-  router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
   onCloseModal?: () => void,
 };
@@ -82,16 +81,13 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleRegistrationClick = () => {
     this.setState({ isLoading: true, errors: null });
-    const { email, password } = this.state;
-
-    /** Uncomment, when backend will appear */
-    // const { email, password, firstName, lastName } = this.state;
+    const { email, password, firstName, lastName } = this.state;
 
     const input = {
       clientMutationId: '',
       email,
-      // firstName,
-      // lastName,
+      firstName: firstName || null,
+      lastName: lastName || null,
       password,
     };
 
@@ -180,7 +176,7 @@ class Authorization extends Component<PropsType, StateType> {
             this.context.handleLogin();
             if (alone) {
               if (from && from !== '') {
-                this.props.router.replace(from);
+                window.location.replace(from);
               } else {
                 window.location = '/';
               }

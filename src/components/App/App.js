@@ -13,6 +13,16 @@ import { currentUserShape } from 'utils/shapes';
 import type { AlertPropsType } from 'components/Alerts';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
+import type {
+  CategoryType,
+  LanguageType,
+  CurrencyType,
+  OrderStatusesType,
+  DirectoriesType,
+} from 'types';
+
+import { AppContext } from './index';
+
 import './App.scss';
 
 type StateType = {
@@ -23,9 +33,10 @@ type PropsType = {
   me: ?{},
   mainPage: ?{},
   cart: ?{},
-  languages: ?Array<{ id: number, name: string }>,
-  currencies: ?Array<{ id: number, name: string }>,
-  categories: any,
+  languages: Array<LanguageType>,
+  currencies: Array<CurrencyType>,
+  categories: CategoryType,
+  orderStatuses: OrderStatusesType,
   children: any,
   relay: {
     environment: Environment,
@@ -39,24 +50,32 @@ class App extends Component<PropsType, StateType> {
   };
 
   getChildContext() {
-    const { languages, currencies, categories, relay, me = {} } = this.props;
+    const { relay, me = {} } = this.props;
     return {
       environment: relay.environment,
       handleLogin: this.handleLogin,
       currentUser: pick(['id', 'rawId'], me || {}),
       directories: {
-        languages,
-        currencies,
-        categories,
+        ...this.makeDirectories(),
       },
     };
   }
 
-  handleLogin = () => {
+  makeDirectories = (): DirectoriesType => {
+    const { languages, currencies, categories, orderStatuses } = this.props;
+    return {
+      categories,
+      currencies,
+      languages,
+      orderStatuses,
+    };
+  };
+
+  handleLogin = (): void => {
     this.props.relay.refetch({}, null, () => {}, { force: true });
   };
 
-  handleAlertClose = (timestamp: number) => {
+  handleAlertClose = (timestamp: number): void => {
     this.setState(prevState => ({
       alerts: filter(
         complement(propEq('createdAtTimestamp', timestamp)),
@@ -65,7 +84,7 @@ class App extends Component<PropsType, StateType> {
     }));
   };
 
-  addAlert = (alert: AddAlertInputType) => {
+  addAlert = (alert: AddAlertInputType): void => {
     this.setState(prevState => ({
       alerts: concat(
         [
@@ -81,18 +100,28 @@ class App extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me, mainPage, cart, children } = this.props;
+    const {
+      me,
+      mainPage,
+      cart,
+      children,
+      categories,
+      relay: { environment },
+    } = this.props;
+    const directories = this.makeDirectories();
     return (
-      <Fragment>
-        <AlertsContainer alerts={this.state.alerts} />
-        <AlertContextProvider
-          value={{
-            addAlert: this.addAlert,
-          }}
-        >
-          {children && React.cloneElement(children, { me, mainPage, cart })}
-        </AlertContextProvider>
-      </Fragment>
+      <AppContext.Provider value={{ categories, environment, directories }}>
+        <Fragment>
+          <AlertsContainer alerts={this.state.alerts} />
+          <AlertContextProvider
+            value={{
+              addAlert: this.addAlert,
+            }}
+          >
+            {children && React.cloneElement(children, { me, mainPage, cart })}
+          </AlertContextProvider>
+        </Fragment>
+      </AppContext.Provider>
     );
   }
 }
@@ -112,6 +141,7 @@ export default createRefetchContainer(
   graphql`
     fragment App_me on User {
       ...Profile_me
+      ...ManageStoreMenu_me
       id
       rawId
       email

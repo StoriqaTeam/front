@@ -6,10 +6,10 @@
 
 .user {
   white-space: nowrap;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_1;
+    color: $color_blue;
   }
 }
 
@@ -22,7 +22,7 @@
   height: 4rem;
   vertical-align: middle;
   border-radius: 50%;
-  background-color: $color_grey_7;
+  background-color: $color_grey_bg;
   overflow: hidden;
 }
 
@@ -60,7 +60,7 @@
 
   & .email {
     font-family: $font_italic;
-    color: $color_grey_3;
+    color: $color_grey_minor;
     font-size: 11px;
     line-height: 2.5rem;
   }
@@ -76,13 +76,13 @@
   height: 4rem;
   margin: 0 -1rem;
   padding: 0 2rem;
-  color: $color_grey_text;
+  color: $color_grey;
   line-height: 4rem;
   font-size: 14px;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_1;
+    color: $color_blue;
   }
 }
 
@@ -92,17 +92,17 @@
   align-items: center;
   margin: 1.5rem -1rem -2rem;
   padding: 2rem;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 14px;
-  border-top: 1px solid $color_grey_light;
-  transition: all .3s ease;
+  border-top: 1px solid $color_grey_trivial;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_1;
+    color: $color_blue;
   }
 
-  & svg {transition: all .3s ease;}
-  &:hover svg {fill: $color_blue_1;}
+  & svg {transition: $transition_all_ease;}
+  &:hover svg {fill: $color_blue;}
 }
 
 .logoutText {
@@ -122,14 +122,14 @@
   height: 5rem;
   margin: 0 -1rem;
   padding: 0 2rem;
-  color: #505050;
+  color: $color_grey;
   line-height: 5rem;
   font-size: 16px;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_blue_1;
+    color: $color_blue;
   }
 }
 
@@ -142,7 +142,7 @@
   margin: 0 -1rem;
   padding-top: 1rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid $color_grey_light;
+  border-bottom: 1px solid $color_grey_trivial;
 }
 
 .icon {

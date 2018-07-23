@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import { Slider } from 'components/Slider';
+// import { Container, Row, Col } from 'layout';
 
 import './GoodsSlider.scss';
 
@@ -49,6 +50,11 @@ class GoodsSlider extends PureComponent<PropsTypes> {
           items={items}
           slidesToShow={4}
           seeAllUrl={seeAllUrl}
+          responsive={[
+            { breakpoint: 1200, slidesToShow: 3 },
+            { breakpoint: 992, slidesToShow: 2 },
+            { breakpoint: 576, slidesToShow: 1 },
+          ]}
         />
       </div>
     );

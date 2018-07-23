@@ -1,142 +1,39 @@
 @import "../../styles/variables";
 
-.countInfo {
-  margin-top: 2rem;
-  font-size: 14px;
-  line-height: 2rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid rgba(151,151,151,.2);
-}
+.container {
 
-.filterItem {
-  margin-top: 5rem;
 }
 
 .header {
   margin-top: 2rem;
 }
 
-.breadcrumbs {
-  color: #A29F9A;
-  font-size: 14px;
-  line-height: 2rem;
-  letter-spacing: 0.1px;
-}
-
 .sort {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: flex-end;
 }
 
 .sortLabel {
-  color: #9C9C9C;
+  color: $color_grey_minor;
   font-size: 16px;
 }
 
 .sortSelect {
-  width: 21rem;
+  margin-left: 2rem;
   margin-top: -0.25rem;
-  margin-left: 2rem;
-}
-
-.stores {
-  //
-}
-
-.store {
-  height: 10rem;
-  margin-top: 2rem;
-}
-
-.storeData {
-  display: flex;
-  align-items: stretch;
-}
-
-.storeLogo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10rem;
-  height: 10rem;
-  background-color: $color_grey_light;
-  overflow: hidden;
-
-  & img {
-    height: 100%;
-    display: block;
-  }
-}
-
-.storeInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 35rem;
-  max-width: 45rem;
-  margin-left: 2rem;
-  padding-right: 3rem;
-  border-right: 1px solid rgba(186,186,186,.17);
-}
-
-.storeName {
-  color: $color_black;
-  font-size: 17px;
-}
-
-.storeAdd {
-  margin-top: 1rem;
-  color: #9C9C9C;
-  font-size: 16px;
-
-  & .productsCount {
-    display: inline-block;
-    margin-left: 2rem;
-  }
-}
-
-.storeElect {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 10rem;
-  height: 10rem;
-  cursor: pointer;
-}
-
-.productsData {
-  display: flex;
-  justify-content: flex-end;
-  align-items: stretch;
-}
-
-.productsWrap {
-  display: flex;
-}
-
-.productFoto {
-  display: flex;
-  justify-content: space-around;
-  margin-left: 2rem;
-  width: 10rem;
-  height: 10rem;
-
-  & .productFotoWrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    background-color: $color_grey_light;
-    overflow: hidden;
-  }
-
-  & img {
-    display: block;
-    height: 100%;
-  }
+  width: 21rem;
 }
 
 .button {
   margin-top: 2rem;
+}
+
+.sidebar {
+  display: none;
+  height: 100%;
+
+  @media (min-width: 992px) {
+    display: block;
+  }
 }

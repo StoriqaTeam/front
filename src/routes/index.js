@@ -12,19 +12,27 @@ import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
-import NewStore from 'pages/Manage/Store/NewStore';
-import Products from 'pages/Manage/Store/Products';
-import EditStore from 'pages/Manage/Store/EditStore';
-import Contacts from 'pages/Manage/Store/Contacts';
+import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
+import { Products } from 'pages/Manage/Store/Products';
+import { Storages } from 'pages/Manage/Store/Storages';
+import {
+  NewStorage,
+  EditStorage,
+  StorageProducts,
+} from 'pages/Manage/Store/Storages/Storage';
+import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
-import { NewProduct, EditProduct } from 'pages/Manage/Store/Product';
+import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
 import Cart from 'pages/Cart';
-import { Error } from 'pages/Errors';
+import Checkout from 'pages/Checkout';
+import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
+import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
+import { Invoice } from 'pages/Profile/items/Order';
 
 const routes = (
   <Route>
@@ -40,6 +48,7 @@ const routes = (
             ...App_me
           }
           cart {
+            id
             ...Cart_cart
           }
           mainPage {
@@ -54,6 +63,7 @@ const routes = (
           }
           categories {
             name {
+              lang
               text
             }
             children {
@@ -99,6 +109,7 @@ const routes = (
               }
             }
           }
+          orderStatuses
         }
       `}
       render={args => {
@@ -117,9 +128,42 @@ const routes = (
 
       <Route
         path="/cart"
-        render={({ props, Component }) => <Component {...props} />}
         Component={Cart}
+        query={graphql`
+          query routes_Cart_Query {
+            cart {
+              ...Cart_cart
+            }
+          }
+        `}
       />
+
+      <Route
+        path="/checkout"
+        Component={Checkout}
+        render={({ props, Component }) => {
+          if (props && !props.me) {
+            const cookies = new Cookies();
+            cookies.remove('__jwt');
+            throw new RedirectException(`/login?from=/checkout`);
+          } else if (!props) {
+            return null;
+          } else {
+            return <Component {...props} />;
+          }
+        }}
+        query={graphql`
+          query routes_Checkout_Query {
+            me {
+              ...Checkout_me
+            }
+            cart {
+              ...Checkout_cart
+            }
+          }
+        `}
+      />
+
       <Route
         path="/categories"
         Component={Categories}
@@ -205,82 +249,193 @@ const routes = (
           `}
         />
         <Route path="/store">
-          <Route path="/new" exact Component={NewStore} />
+          <Route
+            path="/new"
+            exact
+            query={graphql`
+              query routes_NewStore_Query {
+                me {
+                  myStore {
+                    id
+                    rawId
+                  }
+                }
+              }
+            `}
+            render={({ props, Component }) => {
+              const myStoreId = pathOr(null, ['me', 'myStore', 'rawId'], props);
+              if (myStoreId) {
+                throw new RedirectException(`/manage/store/${myStoreId}`);
+              } else {
+                return <Component {...props} />;
+              }
+            }}
+            Component={NewStore}
+          />
           <Route
             path="/:storeId"
-            Component={EditStore}
             query={graphql`
-              query routes_Store_Query($storeID: Int!) {
+              query routes_CheckStore_Query {
                 me {
-                  ...EditStore_me @arguments(storeId: $storeID)
+                  myStore {
+                    id
+                    rawId
+                    logo
+                    name {
+                      lang
+                      text
+                    }
+                  }
                 }
               }
             `}
-            prepareVariables={(_, { params }) => ({
-              storeID: parseInt(params.storeId, 10),
-            })}
-          />
-          <Route
-            path="/:storeId/contacts"
-            Component={Contacts}
-            query={graphql`
-              query routes_Contacts_Query($storeID: Int!) {
-                me {
-                  id
-                  rawId
-                  ...Contacts_me @arguments(storeId: $storeID)
-                }
+            render={({ props, Component }) => {
+              const myStoreId = pathOr(null, ['me', 'myStore', 'rawId'], props);
+              const routeStoreId = pathOr(null, ['params', 'storeId'], props);
+              if (!myStoreId || `${myStoreId}` !== `${routeStoreId}`) {
+                return <Component />;
               }
-            `}
-            prepareVariables={(_, { params }) => ({
-              storeID: parseInt(params.storeId, 10),
-            })}
-          />
-          <Route
-            path="/:storeId/product/new"
-            Component={({ me }) => <NewProduct me={me} />}
-            query={graphql`
-              query routes_NewProduct_Query($storeID: Int!) {
-                me {
-                  ...NewProduct_me @arguments(storeId: $storeID)
+              return undefined;
+            }}
+            Component={Error404}
+          >
+            <Route
+              Component={EditStore}
+              query={graphql`
+                query routes_Store_Query {
+                  me {
+                    ...EditStore_me
+                  }
                 }
-              }
-            `}
-            prepareVariables={(_, { params }) => ({
-              storeID: parseInt(params.storeId, 10) || 0,
-            })}
-          />
-
-          <Route
-            path="/:storeId/products"
-            Component={Products}
-            query={graphql`
-              query routes_Products_Query($storeId: Int!) {
-                me {
-                  ...Products_me @arguments(storeId: $storeId)
+              `}
+            />
+            <Route
+              path="/contacts"
+              Component={Contacts}
+              query={graphql`
+                query routes_Contacts_Query {
+                  me {
+                    ...Contacts_me
+                  }
                 }
-              }
-            `}
-            prepareVariables={(_, { params }) => ({
-              storeId: parseInt(params.storeId, 10) || 0,
-            })}
-          />
-
-          <Route
-            path="/:storeId/products/:productId"
-            Component={EditProduct}
-            query={graphql`
-              query routes_Product_Query($productID: Int!) {
-                me {
-                  id
-                  ...EditProduct_me @arguments(productId: $productID)
+              `}
+            />
+            <Route
+              path="/orders"
+              Component={StoreOrders}
+              query={graphql`
+                query routes_StoreOrders_Query {
+                  me {
+                    ...StoreOrders_me
+                  }
                 }
-              }
-            `}
-            prepareVariables={(_, { params }) => ({
-              productID: parseInt(params.productId, 10) || 0,
-            })}
-          />
+              `}
+            />
+            <Route
+              path="/orders/:orderId"
+              Component={StoreOrder}
+              query={graphql`
+                query routes_StoreOrder_Query {
+                  me {
+                    ...StoreOrder_me
+                  }
+                }
+              `}
+            />
+            <Route
+              path="/product/new"
+              Component={({ me }) => <NewProduct me={me} />}
+              query={graphql`
+                query routes_NewProduct_Query {
+                  me {
+                    ...NewProduct_me
+                  }
+                }
+              `}
+            />
+            <Route
+              path="/products"
+              Component={Products}
+              query={graphql`
+                query routes_Products_Query {
+                  me {
+                    ...Products_me
+                  }
+                }
+              `}
+            />
+            <Route
+              path="/products/:productId"
+              Component={EditProduct}
+              query={graphql`
+                query routes_Product_Query($productID: Int!) {
+                  me {
+                    id
+                    ...EditProduct_me @arguments(productId: $productID)
+                  }
+                }
+              `}
+              prepareVariables={(_, { params }) => ({
+                productID: parseInt(params.productId, 10) || 0,
+              })}
+            />
+            <Route
+              path="/storages"
+              Component={Storages}
+              query={graphql`
+                query routes_Storages_Query {
+                  me {
+                    ...Storages_me
+                  }
+                }
+              `}
+              prepareVariables={(_, { params }) => ({
+                storeId: parseInt(params.storeId, 10) || 0,
+              })}
+            />
+            <Route
+              path="/storage/new"
+              Component={NewStorage}
+              query={graphql`
+                query routes_NewStorage_Query($storeId: Int!) {
+                  me {
+                    ...NewStorage_me @arguments(storeId: $storeId)
+                  }
+                }
+              `}
+              prepareVariables={(_, { params }) => ({
+                storeId: parseInt(params.storeId, 10) || 0,
+              })}
+            />
+            <Route
+              path="/storages/:storageSlug"
+              Component={StorageProducts}
+              query={graphql`
+                query routes_StorageProducts_Query($storageSlug: String!) {
+                  me {
+                    ...StorageProducts_me @arguments(storageSlug: $storageSlug)
+                  }
+                }
+              `}
+              prepareVariables={(_, { params }) => ({
+                storageSlug: params.storageSlug,
+              })}
+            />
+            <Route
+              path="/storages/:storageSlug/edit"
+              Component={EditStorage}
+              query={graphql`
+                query routes_EditStorage_Query($storageSlug: String!) {
+                  me {
+                    ...EditStorage_me @arguments(storageSlug: $storageSlug)
+                  }
+                }
+              `}
+              prepareVariables={(_, { params }) => ({
+                storageSlug: params.storageSlug,
+              })}
+            />
+          </Route>
         </Route>
       </Route>
       <Route
@@ -318,15 +473,64 @@ const routes = (
       />
       <Route path="/verify_email/:token" Component={VerifyEmail} />
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
-      <Route
-        path="/profile/:item"
-        Component={props => (
-          <Profile
-            activeItem={pathOr('personal-data', ['params', 'item'], props)}
-            me={props.me}
-          />
-        )}
-      />
+      <Route path="/profile">
+        <Route
+          path="/orders/:orderId/payment-info"
+          Component={Invoice}
+          render={({ props, Component }) => {
+            if (!props) {
+              return undefined;
+            }
+            return <Component {...props} />;
+          }}
+          query={graphql`
+            query routes_Invoice_Query($slug: Int!) {
+              me {
+                ...Invoice_me @arguments(slug: $slug)
+              }
+            }
+          `}
+          prepareVariables={(_, { params }) => ({
+            slug: parseInt(params.orderId, 10),
+          })}
+        />
+        <Route
+          path="/:item/:orderId?"
+          Component={Profile}
+          query={graphql`
+            query routes_ProfileItem_Query {
+              me {
+                ...Profile_me
+              }
+            }
+          `}
+          render={({ props, Component }) => {
+            if (props) {
+              if (props && !props.me) {
+                const {
+                  location: { pathname },
+                } = props;
+                const cookies = new Cookies();
+                cookies.remove('__jwt');
+                throw new RedirectException(`/login?from=${pathname}`);
+              } else {
+                const isOrder = pathOr(null, ['params', 'orderId'], props);
+                const item = pathOr('personal-data', ['params', 'item'], props);
+                return (
+                  <Component
+                    {...props}
+                    activeItem={isOrder && item === 'orders' ? 'orders' : item}
+                    isOrder={isOrder}
+                  />
+                );
+              }
+            } else {
+              return undefined;
+            }
+          }}
+          prepareVariables={() => {}}
+        />
+      </Route>
     </Route>
   </Route>
 );

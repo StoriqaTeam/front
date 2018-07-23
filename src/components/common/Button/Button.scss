@@ -3,21 +3,25 @@
 .container {
   font-family: $font_medium;
   height: 4rem;
-  display: inline-block;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   min-width: 12rem;
   padding: 0 1rem;
   border-radius: 0.5rem;
-  line-height: 4rem;
+  //line-height: 4rem;
   text-align: center;
   cursor: pointer;
   color: $color_white;
   font-size: 14px;
-  background: $color_blue_1;
+  border: 1px solid $color_blue;
+  background-color: $color_blue;
   white-space: nowrap;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover:not([disabled]) {
-    background: $color_blue_1_hover;
+    background-color: $color_blue_hover;
+    border: 1px solid $color_blue_hover;
   }
 }
 
@@ -28,9 +32,18 @@
   font-size: 16px;
 }
 
+.small {
+  height: 2.75rem;
+  min-width: auto;
+  line-height: 2.5rem;
+  padding: 0 1.5rem;
+  font-size: 14px;
+}
+
 .disabled {
-  background: #EFEFEF;
-  color: $color_white;
+  background-color: $color_grey_trivial;
+  border: 1px solid $color_grey_trivial;
+  color: $color_grey_minor;
   cursor: default;
 }
 
@@ -39,13 +52,15 @@
   justify-content: flex-start;
   align-items: center;
   height: 5rem;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 14px;
-  background-color: #F7F7F7;
+  background-color: $color_grey_trivial;
+  border: 1px solid $color_grey_trivial;
 
   &:hover {
     color: $color_white;
-    background-color: #F7F7F7;
+    background-color: $color_blue_hover;
+    border: 1px solid $color_blue_hover;
   }
 }
 
@@ -57,33 +72,35 @@
 .load {
   font-family: $font_regular;
   width: 100%;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 16px;
-  background-color: $color_grey_1;
+  background-color: $color_grey_trivial;
+  border: 1px solid $color_grey_trivial;
 
   &:hover {
     color: $color_white;
-    background-color: $color_blue_1;
+    background-color: $color_blue;
+    border: 1px solid $color_blue;
   }
 }
 
 .contour {
-  color: $color_blue_1;
-  border: 1px solid $color_blue_1;
+  color: $color_blue;
+  border: 1px solid $color_blue;
   background-color: transparent;
 
   &:hover {
     color: $color_white;
-    background-color: $color_blue_1;
+    background-color: $color_blue;
   }
 }
 
 .white {
   background-color: $color_white;
-  color: $color_blue_1;
+  color: $color_blue;
   &:hover {
     background-color: $color_white;
-    color: $color_blue_1;
+    color: $color_blue;
   }
 }
 
@@ -91,8 +108,8 @@
   background: transparent;
   font-family: $font_regular;
   font-size:  14px;
-  border: $color_primary 1px solid;
-  color: $color_primary;
+  border: $color_blue 1px solid;
+  color: $color_blue;
 
   &:hover {
     color: $color_white;
@@ -102,8 +119,43 @@
     opacity: .3;
 
     &:hover {
-      color: $color_primary;
+      color: $color_blue;
       background: transparent;
     }
   }
+
+  &.pink {
+    border: 1px solid $color_pink;
+    color: $color_pink;
+
+    &:hover {
+      background: $color_pink;
+      color: $color_white;
+      border: 1px solid $color_pink;
+    }
+  }
+}
+
+.spinner {
+  position: absolute;
+  opacity: 0;
+  border: 1px solid transparent;
+  border-top: 1px solid $color_white;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 2s linear infinite;
+  // transition: $transition_all_ease;
+}
+
+.isLoading {
+  background-color: $color_blue_hover;
+  border: 1px solid $color_blue_hover;
+
+  & .spinner {opacity: 1;}
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
 }

@@ -1,0 +1,25 @@
+@import "../../../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.form {
+  margin-top: 2rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.formItem + .formItem {
+  margin-top: 6rem;
+}
+
+.maxWidthInput {
+  max-width: 41rem;
+}
+
+.maxWidthTextArea {
+  max-width: 96rem;
+}

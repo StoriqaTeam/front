@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   assocPath,
@@ -13,11 +13,12 @@ import {
   pathOr,
   omit,
 } from 'ramda';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { validate } from '@storiqa/shared';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
-import { BirthdateSelect } from 'pages/Profile/items/BirthdateSelect';
+import { BirthdateSelect } from 'components/common/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -40,7 +41,7 @@ type DataType = {
 };
 
 type PropsType = {
-  data: {
+  me: {
     id: string,
     firstName: string,
     lastName: string,
@@ -68,14 +69,14 @@ const genderItems = [
 class PersonalData extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { data } = props;
+    const { me } = props;
     this.state = {
       data: {
-        phone: data.phone || '',
-        firstName: data.firstName || '',
-        lastName: data.lastName || '',
-        birthdate: data.birthdate || '',
-        gender: data.gender || 'UNDEFINED',
+        phone: me.phone || '',
+        firstName: me.firstName || '',
+        lastName: me.lastName || '',
+        birthdate: me.birthdate || '',
+        gender: me.gender || 'UNDEFINED',
       },
       formErrors: {},
       isLoading: false,
@@ -84,7 +85,7 @@ class PersonalData extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { environment } = this.context;
-    const { data: propsData } = this.props;
+    const { me: propsData } = this.props;
     const { data } = this.state;
     const { phone, firstName, lastName, birthdate, gender } = data;
 
@@ -243,6 +244,7 @@ class PersonalData extends Component<PropsType, StateType> {
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
+        fullWidth
       />
     </div>
   );
@@ -252,7 +254,7 @@ class PersonalData extends Component<PropsType, StateType> {
     const { data, isLoading, formErrors } = this.state;
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
-      <Fragment>
+      <div styleName="personalData">
         <div styleName="subtitle">
           <strong>{subtitle}</strong>
         </div>
@@ -274,10 +276,12 @@ class PersonalData extends Component<PropsType, StateType> {
             items={genderItems}
             onSelect={this.handleGenderSelect}
             dataTest="profileGenderSelect"
+            fullWidth
           />
         </div>
         <div styleName="formItem">
           <BirthdateSelect
+            label="Birthdate"
             birthdate={data.birthdate}
             handleBirthdateSelect={this.handleBirthdateSelect}
             errors={propOr(null, 'birthdate', formErrors)}
@@ -296,7 +300,7 @@ class PersonalData extends Component<PropsType, StateType> {
             Save
           </SpinnerButton>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
@@ -305,4 +309,16 @@ PersonalData.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(PersonalData);
+export default createFragmentContainer(
+  withShowAlert(PersonalData),
+  graphql`
+    fragment PersonalData_me on User {
+      id
+      phone
+      firstName
+      lastName
+      birthdate
+      gender
+    }
+  `,
+);

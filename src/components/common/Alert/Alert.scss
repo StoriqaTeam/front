@@ -1,19 +1,21 @@
+@import "../../../styles/variables";
+
 .container {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background-color: #9FC63C;
+  background-color: $color_green;
   z-index: 100;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: $shadow_3;
 }
 
 .isError {
-  background-color: #FF62A4;
+  background-color: $color_red;
 }
 
 .wrap {
-  width: 1360px;
+  width: 170rem;
   height: 8rem;
   margin: 0 auto;
 }
@@ -35,7 +37,7 @@
 
 .text {
   width: 100%;
-  color: #fff;
+  color: $color_white;
 }
 
 .cross {

@@ -1,0 +1,97 @@
+@import '../../.././styles/variables.scss';
+
+.container {
+  position: relative;
+  margin: -4rem;
+  background-color: $color_grey_bg;
+}
+
+.mainBlock {
+  padding: 4rem;
+  width: 110rem;
+  background-color: white;
+  border: solid 1px $color_grey_trivial;
+}
+
+.orderNumber {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.15rem;
+}
+
+.infoBlock {
+  display: flex;
+  margin-top: 6rem;
+}
+
+.left {
+  width: 41rem;
+}
+
+.statusBlock {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 26rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px $color_grey_trivial;
+
+  .title {
+    margin-top: 3.25rem;
+    margin-left: 2.5rem;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    letter-spacing: 0.15rem;
+  }
+
+  .statusTitle {
+    font-size: 14px;
+    line-height: 2.5rem;
+    margin-top: 2.5rem;
+    margin-left: 2.5rem;
+  }
+
+  .statusInfo {
+    font-size: 16px;
+    line-height: 2.5rem;
+    color: $color_green;
+    margin-left: 2.5rem;
+  }
+
+  .paid {
+    color: $color_green;
+  }
+
+  .unpaid {
+    color: $color_pink !important;
+  }
+}
+
+.paymentButtonWrapper {
+  margin-top: 3.25rem;
+  width: 21.25rem;
+  align-self: center;
+  button {
+    width: 100%;
+  }
+}
+
+.ticketButtonTitle {
+  margin-top: 10rem;
+  align-self: center;
+  font-size: 14px;
+}
+
+.ticketButtonWrapper {
+  margin-top: 2rem;
+  margin-bottom: 2.75rem;
+  width: 21.25rem;
+  align-self: center;
+  button {
+    width: 100%;
+  }
+}

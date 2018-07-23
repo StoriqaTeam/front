@@ -2,8 +2,9 @@
 
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
+import { zipObj, isEmpty } from 'ramda';
 
-import { getNameText } from 'utils';
+import { getNameText, searchPathByParent, flattenFunc } from 'utils';
 
 import LevelList from './LevelList';
 
@@ -23,6 +24,9 @@ type CategoryType = {
 type PropsType = {
   categories: CategoryType,
   onSelect: (categoryId: number) => void,
+  category: {
+    rawId: number,
+  },
 };
 
 type StateType = {
@@ -41,13 +45,34 @@ type StateType = {
 class CategorySelector extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    this.state = {
-      lang: 'EN',
-      isShow: false,
+    const { categories, category } = props;
+    let items = {
       level1Item: null,
       level2Item: null,
       level3Item: null,
-      snapshot: null,
+    };
+    if (categories && category) {
+      const flattenCategories = flattenFunc(categories.children);
+      const currentCategories = searchPathByParent(
+        flattenCategories,
+        category.rawId,
+      );
+
+      items = zipObj(
+        ['level1Item', 'level2Item', 'level3Item'],
+        currentCategories,
+      );
+    }
+
+    this.state = {
+      level1Item: null,
+      level2Item: null,
+      level3Item: null,
+      snapshot: {
+        ...items,
+      },
+      lang: 'EN',
+      isShow: false,
     };
   }
 
@@ -128,6 +153,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         onKeyDown={() => {}}
         role="button"
         tabIndex="0"
+        data-test="categorySelector"
       >
         {snapshot &&
           [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map(
@@ -139,7 +165,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                 </span>
               ) : null,
           )}
-        {!snapshot && 'Choose category'}
+        {!isEmpty(snapshot) && 'Choose category'}
       </div>
     );
   };

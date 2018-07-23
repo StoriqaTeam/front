@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
+
 import { Icon } from 'components/Icon';
 
 import './Input.scss';
@@ -24,6 +25,8 @@ type PropsType = {
   type?: string,
   fullWidth?: boolean,
   postfix: ?string,
+  inline: ?boolean,
+  search?: boolean,
 };
 
 type StateType = {
@@ -32,14 +35,21 @@ type StateType = {
 };
 
 class Input extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    if (Boolean(nextProps.value) !== prevState.labelFloat) {
+      return {
+        ...prevState,
+        labelFloat: prevState.isFocus ? true : Boolean(nextProps.value),
+      };
+    }
+
+    return null;
+  }
+
   state = {
     labelFloat: false,
     isFocus: false,
   };
-
-  componentWillMount() {
-    this.setState({ labelFloat: Boolean(this.props.value) });
-  }
 
   input: ?HTMLInputElement;
 
@@ -70,8 +80,6 @@ class Input extends Component<PropsType, StateType> {
     const { onChange, inputRef, isAutocomplete, id, value, type } = this.props;
     return isAutocomplete ? (
       <input
-        id={id}
-        name={id}
         type="text"
         ref={inputRef}
         value={this.props.value || ''}
@@ -107,6 +115,8 @@ class Input extends Component<PropsType, StateType> {
       limit,
       fullWidth,
       postfix,
+      inline,
+      search,
     } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
@@ -115,8 +125,10 @@ class Input extends Component<PropsType, StateType> {
         styleName={classNames('container', {
           isFocus,
           isError: errors,
-          isIcon: icon,
+          isIcon: icon || search,
+          isSearch: search,
           fullWidth,
+          inline,
         })}
       >
         {label && (
@@ -126,9 +138,9 @@ class Input extends Component<PropsType, StateType> {
             {label}
           </span>
         )}
-        {icon && (
+        {(icon || search) && (
           <div styleName="icon">
-            <Icon type={icon} />
+            <Icon type={search ? 'magnifier' : icon} />
           </div>
         )}
         <div styleName="input">

@@ -13,7 +13,8 @@ type PropsTypes = {
   medium: ?boolean,
   small: ?boolean,
   white: ?boolean,
-  dataTest: boolean,
+  dataTest: string,
+  disabled: ?boolean,
 };
 
 const SpinerButton = ({
@@ -24,15 +25,17 @@ const SpinerButton = ({
   medium,
   small,
   dataTest,
+  disabled,
 }: PropsTypes) => (
   <button
     onClick={onClick}
-    disabled={isLoading}
+    disabled={isLoading || disabled}
     styleName={classNames('container', {
       isLoading,
       white,
       medium,
       small,
+      disabled,
     })}
     type="button"
     data-test={dataTest}

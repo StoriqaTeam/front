@@ -5,6 +5,7 @@ import { map } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
+import { convertSrc } from 'utils';
 
 import './Form.scss';
 
@@ -29,7 +30,7 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
           >
             <div
               styleName="imageBG"
-              style={{ backgroundImage: `url(${item})` }}
+              style={{ backgroundImage: `url(${convertSrc(item, 'small')})` }}
             />
             <div styleName="itemHover">
               <Icon type="basket" size={40} />

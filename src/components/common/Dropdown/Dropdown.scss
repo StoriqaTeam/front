@@ -15,16 +15,16 @@
 }
 
 .label {
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   font-size: 14px;
   white-space: nowrap;
   transform: scale(0.9) translate(0, 1rem);
   transform-origin: left top 0;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .isExpanded .label {
-  color: $color_blue_1;
+  color: $color_blue;
 }
 
 .wrap {
@@ -33,7 +33,7 @@
   height: 2.25rem;
   padding: 0 3rem 0 1rem;
   border-radius: 0.25rem;
-  color: $color_grey_text;
+  color: $color_grey;
   font-size: 11px;
 }
 
@@ -49,12 +49,12 @@
   right: 0.5rem;
   border-radius: 0.25rem;
   z-index: 2;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .rotateIcon {
   transform: rotate(-180deg);
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .items {
@@ -64,12 +64,12 @@
   right: 0;
   padding: 0.5rem 0.5rem 0.5rem 0;
   border-radius: 0.25rem;
-  background-color: #FFFFFF;
+  background-color: $color_white;
   box-shadow: $shadow_1;
   overflow: hidden;
   cursor: default;
   z-index: 11;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 }
 
 .itemsWrap::-webkit-scrollbar {
@@ -77,8 +77,8 @@
 }
 
 .itemsWrap::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background: #d8d8d8;
+  border-radius: 0.625rem;
+  background-color: $color_grey_light;
 }
 
 .itemsWrap::-webkit-scrollbar-track {
@@ -98,10 +98,10 @@
   line-height: 2.25rem;
   white-space: nowrap;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: #03a9ff;
+    color: $color_blue;
   }
 }
 

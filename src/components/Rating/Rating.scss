@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   display: flex;
 }
@@ -9,12 +11,12 @@
 
 .on {
   path {
-    fill: #FFB652;
+    fill: $color_yellow;
   }
 }
 
 .off {
   path {
-    fill: #D8D8D8;
+    fill: $color_grey_light;
   }
 }

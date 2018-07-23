@@ -1,36 +1,64 @@
 @import "../../styles/variables";
 
+$max-width: 41rem !important;
+
 .container {
+  margin-top: 2.4375rem;
+
+  @media (min-width: $lg) {
+    margin-top: 0;
+  }
+}
+
+.sidebar {
+  display: none;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.content {
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
 }
 
 .header {
-  display: flex;
   align-items: center;
+  display: none;
   margin-top: 1rem;
   padding-left: 2rem;
+
+  @media (min-width: $md) {
+    display: flex;
+  }
+}
+
+.personalData {
+  max-width: $max-width;
 }
 
 .title {
+  color: $color_grey;
   font-family: $font_medium;
-  color: $color_grey_text;
   font-size: 24px;
 }
 
 .subtitle {
-  margin-bottom: 5rem;
   font-size: 14px;
-  text-transform: uppercase;
   letter-spacing: 1px;
+  margin-bottom: 5rem;
+  text-transform: uppercase;
 }
 
 .form {
-  margin-top: 2rem;
-  padding: 4rem;
   background-color: $color_white;
   flex: 1 0 auto;
+  margin-top: 0;
+  padding: 4rem;
+  @media (min-width: $md) {
+    margin-top: 2rem;
+  }
 }
 
 .formItem + .formItem {
@@ -38,37 +66,42 @@
 }
 
 .addressForm {
-  width: 41rem;
+  max-width: $max-width;
 }
 
 .editAddressForm {
+  background-color: $color_grey_bg;
   margin: 4rem 0;
   padding: 4rem;
-  background-color: $color_grey_8;
 }
 
 .saveButtons {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-top: 5rem;
 }
 
 .editButtons {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-top: 3rem;
 }
 
 .cancelButton {
   margin-left: 3rem;
   font-size: 16px;
-  color: $color_grey_bg;
+  color: $color_blue;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: $transition_all_ease;
 
   &:hover {
-    color: $color_grey_text;
+    color: $color_blue_hover;
   }
+}
+
+
+.deleteButton {
+  margin-left: 3rem;
 }
 
 .addButton {
@@ -92,9 +125,9 @@
 }
 
 .item {
-  padding: 4rem;
+  background-color: $color_grey_bg;
   border-radius: 4px;
-  background-color: $color_grey_8;
+  padding: 4rem;
 
   & + .item {
     margin-top: 4rem;
@@ -102,7 +135,7 @@
 }
 
 .address {
-  color: $color_grey_bg;
+  color: $color_grey_minor;
   line-height: 2.5rem;
 }
 
@@ -111,13 +144,13 @@
 }
 
 .email {
-  color: $color_grey_bg;
+  color: $color_grey_minor;
 }
 
-.preorityText {
-  margin-bottom: 1.5rem;
-  color: $color_blue_1;
+.priorityText {
+  color: $color_blue;
   line-height: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .passwordInputs {
@@ -126,26 +159,30 @@
 
 .passwordInput {
   position: relative;
-  width: 30rem;
+  width: 100%;
 
   &.passwordInput {
     margin-top: 6rem;
   }
+
+  @media (min-width: $md) {
+    width: 30rem;
+  }
 }
 
 .icon {
-  position: absolute;
-  top: 0;
-  right: 0;
   cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: -0.25rem;
 
   & svg {
-    transition: all .3s ease;
+    transition: $transition_all_ease;
   }
 
   &.openIcon {
     & svg {
-      fill: $color_blue_1;
+      fill: $color_blue;
     }
     &:after {
       opacity: 0;
@@ -153,14 +190,14 @@
   }
 
   &:after {
+    border-right: 1px solid $color_grey_light;
     content: '';
-    position: absolute;
-    top: 0;
-    left: 1.5rem;
     display: block;
     height: 3rem;
-    border-right: 2px solid $color_grey_link;
-    transform: rotate(45deg);
-    transition: all .3s ease;
+    left: 1.75rem;
+    position: absolute;
+    top: 0.25rem;
+    transform: rotate(33deg);
+    transition: $transition_all_ease;
   }
 }

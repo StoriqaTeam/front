@@ -9,3 +9,12 @@
   flex-direction: column;
   flex: 1 0 auto;
 }
+
+.withoutGrow {
+  flex-grow: 0;
+}
+
+.correct {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}

@@ -1,0 +1,55 @@
+@import "../../../styles/variables.scss";
+
+.addressWrapper {
+  padding: 2rem;
+}
+
+.container {
+  background-color: $color_white;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.receiverContainer {
+  width: 26rem;
+}
+
+.label {
+  font-size: 1.75rem;
+  color: $color_grey_minor;
+}
+
+.selectAddressContainer {
+  padding-top: 3rem;
+  margin-bottom: 4rem;
+}
+
+.selectWrapper {
+  margin-top: 1rem;
+  padding-left: 3rem;
+  color: $color_grey_minor;
+  font-size: 1.75rem;
+}
+
+.newAddressForm {
+  margin-top: 2rem;
+}
+
+.saveAddressWrapper {
+  margin-top: 4rem;
+}
+
+.formWrapper {
+  margin-top: 4rem;
+}
+
+.title {
+  text-transform: uppercase;
+  font-family: $font_medium;
+  font-size: 1.75rem;
+}
+
+.addressInfoContainer {
+  margin-top: 2rem;
+  padding: 0 1rem;
+}

@@ -5,3 +5,31 @@
   margin-left: -1rem;
   flex: 1 0 auto;
 }
+
+.withoutGrow {
+  flex-grow: 0;
+}
+
+@media (min-width: 576px) { 
+  .reverseSm { 
+    flex-direction: row-reverse;   
+  } 
+} 
+ 
+@media (min-width: 768px) { 
+  .reverseMd { 
+    flex-direction: row-reverse;   
+  } 
+} 
+ 
+@media (min-width: 992px) { 
+  .reverseLg { 
+    flex-direction: row-reverse;   
+  } 
+} 
+ 
+@media (min-width: 1200px) { 
+  .reverseXl { 
+    flex-direction: row-reverse;   
+  } 
+} 

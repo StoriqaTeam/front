@@ -2,7 +2,7 @@
 
 .container {
   position: absolute;
-  background-color: #fbfbfb;
+  background-color: $color_grey_bg;
   height: 100%;
   width: 100%;
 }
@@ -46,11 +46,11 @@
   height: 225px;
   font-size: 200px;
   font-weight: bold;
-  color: $color_blue_2;
+  color: $color_blue;
 }
 
 .linkBack {
-  color: $color_blue_1;
+  color: $color_blue;
   height: 22px;
   font-family: Roboto;
   font-size: 16px;

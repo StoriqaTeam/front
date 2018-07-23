@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { omit, pathOr, head, map, addIndex, isEmpty } from 'ramda';
+import { omit, pathOr, head, map, addIndex, isEmpty, filter } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
@@ -80,9 +80,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   handleOnShowForm = (item: ProductNodeType) => {
     const { onChange, formStateData } = this.props;
-    const name = item.name ? getNameText(item.name) : '';
+    const name = item.name ? getNameText(item.name, 'EN') : '';
     const shortDescription = item.shortDescription
-      ? getNameText(item.shortDescription)
+      ? getNameText(item.shortDescription, 'EN')
       : '';
     // $FlowIgnoreMe
     const productsEdges = pathOr(null, ['products', 'edges'], item);
@@ -123,10 +123,15 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const { formStateData, onChange, products, onUpload, onSave } = this.props;
     const { showForm } = this.state;
     const productsArr = map(item => item.node, products);
+    const filteredProductsArr = filter(item => {
+      // $FlowIgnoreMe
+      const edges = pathOr([], ['products', 'edges'], item);
+      return !isEmpty(edges);
+    }, productsArr);
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
-        {!isEmpty(productsArr) ? (
+        {!isEmpty(filteredProductsArr) ? (
           <div
             styleName="productItem uploaderItem"
             role="button"
@@ -163,7 +168,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             </div>
           </div>
         )}
-        {!isEmpty(productsArr) &&
+        {!isEmpty(filteredProductsArr) &&
           mapIndexed(
             (item, index) => (
               <div key={index} styleName="productItem cardItem">
@@ -194,7 +199,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                 </div>
               </div>
             ),
-            productsArr,
+            filteredProductsArr,
           )}
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form

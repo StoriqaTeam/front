@@ -23,14 +23,21 @@ type StateType = {
 };
 
 class AutocompleteInput extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    if (Boolean(nextProps.value) !== prevState.labelFloat) {
+      return {
+        ...prevState,
+        labelFloat: prevState.isFocus ? true : Boolean(nextProps.value),
+      };
+    }
+
+    return null;
+  }
+
   state = {
     labelFloat: false,
     isFocus: false,
   };
-
-  componentWillMount() {
-    this.setState({ labelFloat: Boolean(this.props.value) });
-  }
 
   input: ?HTMLInputElement;
 
@@ -42,7 +49,7 @@ class AutocompleteInput extends Component<PropsType, StateType> {
   handleFocus = () => {
     const { onFocus } = this.props;
     this.setState({
-      labelFloat: true,
+      labelFloat: !this.state.labelFloat || true,
       isFocus: true,
     });
     if (onFocus) onFocus();
@@ -64,7 +71,11 @@ class AutocompleteInput extends Component<PropsType, StateType> {
     return (
       <label htmlFor={id} styleName={classNames('container', { isFocus })}>
         {label && (
-          <span styleName={classNames('label', { labelFloat })}>{label}</span>
+          <span
+            styleName={classNames('label', { labelFloat: labelFloat || value })}
+          >
+            {label}
+          </span>
         )}
         <div styleName="input">
           <input
@@ -76,7 +87,7 @@ class AutocompleteInput extends Component<PropsType, StateType> {
             onBlur={this.handleBlur}
             onKeyDown={this.props.onKeyDown}
             onClick={this.props.onClick}
-            data-test={id}
+            data-test="autocompleteAddress"
           />
           <hr />
         </div>

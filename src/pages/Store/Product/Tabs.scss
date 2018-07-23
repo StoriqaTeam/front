@@ -1,14 +1,18 @@
 @import "../../../styles/variables";
 
 .container {
-  background: $color_white;
-  display: block;
+  background-color: $color_white;
+  display: none;
   overflow: hidden;
   padding: 3.25rem 3rem;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
 
 .label {
-  color: #9c9c9c;
+  color: $color_grey_minor;
   cursor: pointer;
   font-size: 1.75rem;
   font-stretch: normal;
@@ -22,13 +26,13 @@
 }
 
 .labels {
-  border-bottom: 0.25rem solid #efefef;
+  border-bottom: 0.25rem solid $color_grey_trivial;
   display: flex;
   justify-content: flex-start;
   margin-bottom: 2.75rem;
 }
 
 .active {
-  color: $color_primary;
-  border-bottom: 0.25rem solid $color_primary;;
+  color: $color_blue;
+  border-bottom: 0.25rem solid $color_blue;;
 }

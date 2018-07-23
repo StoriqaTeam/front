@@ -1,0 +1,46 @@
+@import "../../../../styles/variables";
+
+.container {
+  background-color: $color_white;
+  flex: 1 0 auto;
+  margin-top: 0;
+  @media (min-width: $md) {
+    margin-top: 2rem;
+  }
+}
+
+.subtitle {
+  display: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.headerBar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4rem;
+
+  @media (min-width: $md) {
+    justify-content: space-between;
+    margin-bottom: 5rem;
+  }
+}
+
+.addButton {
+  width: 100%;
+  & > button {
+    width: 100% !important;
+  }
+  @media (min-width: $md) {
+    width: initial;
+  }
+
+}
+
+.emptyStoragesBlock {
+  line-height: 11rem;
+}

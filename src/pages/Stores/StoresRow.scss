@@ -1,0 +1,19 @@
+.container {
+  height: 10rem;
+  margin-bottom: 2rem;
+}
+
+.storeElect {
+  align-items: center;
+  border-left: 1px solid rgba(186, 186, 186, .17);
+  cursor: pointer;
+  display: none;
+  height: 10rem;
+  justify-content: center;
+  max-width: 10rem;
+
+  @media (min-width: 576px) {
+    display: flex;
+  }
+
+}
