@@ -32,11 +32,14 @@
 }
 
 .title {
+  display: none;
   font-family: $font_medium;
-  min-height: 3rem;
-  max-height: 6rem;
-  margin-top: 3.25rem;
   margin-bottom: 2rem;
+  margin-top: 3.25rem;
+  max-height: 6rem;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .items {

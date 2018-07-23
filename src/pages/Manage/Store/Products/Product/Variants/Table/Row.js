@@ -6,6 +6,8 @@ import { pathOr, map, addIndex, isEmpty, filter } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
+import { log } from 'utils';
+
 import './Row.scss';
 
 type PropsType = {
@@ -39,7 +41,8 @@ type PropsType = {
 };
 
 class Row extends PureComponent<PropsType> {
-  handleCheckboxClick = () => {
+  handleCheckboxClick = (id: string | number) => {
+    log.info('id', id);
     // this.setState(prevState => ({ checked: !prevState.checked }));
   };
 
@@ -47,12 +50,14 @@ class Row extends PureComponent<PropsType> {
     this.props.onExpandClick(this.props.variant.rawId);
   };
 
-  handleDelete = () => {
+  handleDelete = (e: any) => {
+    e.stopPropagation();
     this.props.handleDeleteVariant(this.props.variant.id);
   };
 
   render() {
     const {
+      rawId,
       vendorCode,
       price,
       cashback: cashbackValue,
@@ -68,10 +73,17 @@ class Row extends PureComponent<PropsType> {
         ? Math.round(cashbackValue * 100)
         : null;
     return (
-      <div styleName="container">
+      <div
+        styleName="container"
+        onClick={this.handleExpandClick}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+        data-test="toggleOpenVariantButton"
+      >
         <div styleName="variant">
           <div styleName="variantItem tdCheckbox">
-            <Checkbox id="id-variant" onChange={this.handleCheckboxClick} />
+            <Checkbox id={rawId} onChange={this.handleCheckboxClick} />
           </div>
           <div styleName="variantItem tdArticle">
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
@@ -160,13 +172,9 @@ class Row extends PureComponent<PropsType> {
             </button>
           </div>
           <div styleName="variantItem tdDropdawn">
-            <button
-              styleName="arrowExpand"
-              onClick={this.handleExpandClick}
-              data-test="toggleOpenVariantButton"
-            >
+            <div styleName="arrowExpand">
               <Icon inline type="arrowExpand" />
-            </button>
+            </div>
           </div>
         </div>
       </div>

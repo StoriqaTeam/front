@@ -9,6 +9,7 @@ import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
+import { StickyBar } from 'components/StickyBar';
 
 import CartStore from './CartStore';
 import CartEmpty from './CartEmpty';
@@ -80,7 +81,7 @@ class Cart extends Component<PropsType, StateType> {
       map(path(['node'])),
     )(this.props);
     const {
-      cart: { totalCost, totalCount, deliveryCost, productsCost },
+      cart: { totalCount },
     } = this.props;
     const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
@@ -99,7 +100,7 @@ class Cart extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 ) : (
-                  <Col size={12} md={8} lg={9}>
+                  <Col size={12} lg={8} xl={9}>
                     <div styleName="wrapper">
                       <div styleName="storeContainer">
                         {stores.map(store => (
@@ -113,19 +114,16 @@ class Cart extends Component<PropsType, StateType> {
                     </div>
                   </Col>
                 )}
-                <Col size={12} md={4} lg={3}>
+                <Col size={12} lg={4} xl={3}>
                   {!emptyCart && (
                     <div styleName="sidebarWrapper">
-                      <CheckoutSidebar
-                        storesRef={this.state.storesRef}
-                        buttonText="Checkout"
-                        productsCost={productsCost}
-                        deliveryCost={deliveryCost}
-                        totalCount={totalCount}
-                        totalCost={totalCost}
-                        onClick={this.handleToCheckout}
-                        isReadyToClick={totalCount > 0}
-                      />
+                      <StickyBar>
+                        <CheckoutSidebar
+                          buttonText="Checkout"
+                          onClick={this.handleToCheckout}
+                          isReadyToClick={totalCount > 0}
+                        />
+                      </StickyBar>
                     </div>
                   )}
                 </Col>

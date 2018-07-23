@@ -15,6 +15,7 @@ import {
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
+import { StickyBar } from 'components/StickyBar';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -238,7 +239,7 @@ class Checkout extends Component<PropsType, StateType> {
       orderInput,
     } = this.state;
     const {
-      cart: { totalCost, totalCount, deliveryCost, productsCost },
+      cart: { totalCount },
     } = this.props;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
@@ -275,8 +276,8 @@ class Checkout extends Component<PropsType, StateType> {
                 ) : (
                   <Col
                     size={12}
-                    md={step !== 3 ? 8 : 12}
-                    lg={step !== 3 ? 9 : 12}
+                    lg={step !== 3 ? 8 : 12}
+                    xl={step !== 3 ? 9 : 12}
                   >
                     {step === 1 && (
                       <div styleName="wrapper">
@@ -327,20 +328,17 @@ class Checkout extends Component<PropsType, StateType> {
                   </Col>
                 )}
                 {!emptyCart && (
-                  <Col size={12} md={4} lg={3}>
-                    <CheckoutSidebar
-                      storesRef={this.state.storesRef}
-                      buttonText={step === 1 ? 'Next' : 'Checkout'}
-                      onClick={
-                        (step === 1 && this.handleChangeStep(2)) ||
-                        this.handleCheckout
-                      }
-                      productsCost={productsCost}
-                      deliveryCost={deliveryCost}
-                      totalCount={totalCount}
-                      totalCost={totalCost}
-                      isReadyToClick={this.checkReadyToCheckout()}
-                    />
+                  <Col size={12} lg={4} xl={3}>
+                    <StickyBar>
+                      <CheckoutSidebar
+                        buttonText={step === 1 ? 'Next' : 'Checkout'}
+                        onClick={
+                          (step === 1 && this.handleChangeStep(2)) ||
+                          this.handleCheckout
+                        }
+                        isReadyToClick={this.checkReadyToCheckout()}
+                      />
+                    </StickyBar>
                   </Col>
                 )}
               </Row>
