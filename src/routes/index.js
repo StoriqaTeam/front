@@ -33,7 +33,7 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
-import StoreAbout from 'pages/Store/About/About';
+import { Store, StoreAbout } from 'pages/Store';
 
 const routes = (
   <Route>
@@ -198,22 +198,6 @@ const routes = (
         }}
       />
       <Route path="/store">
-        <Route path="/:storeId">
-          <Route
-            path="/about"
-            Component={StoreAbout}
-            query={graphql`
-              query routes_StoreAbout_Query($storeId: Int!) {
-                baseProduct(id: $storeId) {
-                  ...Product_baseProduct
-                }
-              }
-            `}
-            prepareVariables={(_, { params }) => ({
-              productID: parseInt(params.productId, 10),
-            })}
-          />
-        </Route>
         <Route
           path="/:storeId/products/:productId"
           Component={ProductCard}
@@ -319,7 +303,7 @@ const routes = (
             <Route
               Component={EditStore}
               query={graphql`
-                query routes_Store_Query {
+                query routes_ManageStore_Query {
                   me {
                     ...EditStore_me
                   }
@@ -548,6 +532,46 @@ const routes = (
           prepareVariables={() => {}}
         />
       </Route>
+
+      {/* /store */}
+      <Route
+        path="/store/:storeId"
+        Component={Store}
+        query={graphql`
+          query routes_Store_Query($storeId: Int!) {
+            store(id: $storeId) {
+              id
+              rawId
+              ...StoreAbout_store
+            }
+          }
+        `}
+        render={({ props, Component }) => {
+          if (props) {
+            console.log('---children', props.children);
+            return <Component {...props} />
+          } else {
+            return null;
+          }
+        }}
+        prepareVariables={(_, { params }) => ({
+          storeId: parseInt(params.storeId, 10),
+        })}
+      >
+        <Route
+          path="/about"
+          Component={StoreAbout}
+          render={({ props, Component }) => {
+            if (props) {
+              console.log('---props', props);
+              return <Component />
+            } else {
+              return null;
+            }
+          }}
+        />
+      </Route>
+      {/*  */}
     </Route>
   </Route>
 );

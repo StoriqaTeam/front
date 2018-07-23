@@ -28,40 +28,38 @@ type StateType = {
   isSidebarOpen: boolean,
 };
 
-class Store extends Component<PropsType, StateType> {
+class StoreAbout extends Component<PropsType, StateType> {
   render() {
+    console.log('---this.props', this.props);
     return <div styleName="container">About</div>;
   }
 }
 
 export default createFragmentContainer(
-  withRouter(Page(Store)),
+  withRouter(StoreAbout),
   graphql`
-    fragment StoreAbout_me on User
-      @argumentDefinitions(storeId: { type: "Int" }) {
-      store(id: $storeId) {
-        id
-        rawId
-        name {
-          lang
-          text
-        }
-        addressFull {
-          value
-          country
-          administrativeAreaLevel1
-          administrativeAreaLevel2
-          locality
-          political
-          postalCode
-          route
-          streetNumber
-          placeId
-        }
-        longDescription {
-          lang
-          text
-        }
+    fragment StoreAbout_store on Store {
+      id
+      rawId
+      name {
+        lang
+        text
+      }
+      addressFull {
+        value
+        country
+        administrativeAreaLevel1
+        administrativeAreaLevel2
+        locality
+        political
+        postalCode
+        route
+        streetNumber
+        placeId
+      }
+      longDescription {
+        lang
+        text
       }
     }
   `,
