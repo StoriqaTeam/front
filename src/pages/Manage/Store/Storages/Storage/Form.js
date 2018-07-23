@@ -121,16 +121,13 @@ class Form extends Component<PropsType, StateType> {
             >
               Save
             </Button>
-            <div styleName="cancelButton">
-              <Button
-                wireframe
-                big
-                onClick={handleCancel}
-                dataTest="cancelSaveStorageButton"
-              >
-                Cancel
-              </Button>
-            </div>
+            <button
+              styleName="cancelButton"
+              onClick={handleCancel}
+              data-test="cancelSaveStorageButton"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>

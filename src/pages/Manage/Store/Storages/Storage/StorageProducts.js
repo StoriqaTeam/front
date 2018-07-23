@@ -209,6 +209,10 @@ class StorageProducts extends Component<PropsType, StateType> {
     );
   };
 
+  handleCheckboxClick = (id: string | number) => {
+    log.info('id', id);
+  };
+
   handleOnSetAutocomplete = (value: string) => {
     // $FlowIgnoreMe
     const storageSlug = pathOr(
@@ -304,7 +308,7 @@ class StorageProducts extends Component<PropsType, StateType> {
     return (
       <div key={productId} styleName="itemRowWrap">
         <div styleName="td tdCheckbox">
-          <Checkbox id={`product-${productId}`} onChange={() => {}} />
+          <Checkbox id={productId} onChange={this.handleCheckboxClick} />
         </div>
         <div styleName="td tdFoto">
           <div styleName="foto">
