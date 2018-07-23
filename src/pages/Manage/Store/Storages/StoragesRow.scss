@@ -1,0 +1,48 @@
+@import "../../../../styles/variables";
+
+.container {
+  align-items: center;
+  border-bottom: 1px solid $color_grey_trivial;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -4rem;
+  min-height: 11.75rem;
+  padding: 1rem 3rem;
+}
+
+.storageName {
+  align-items: baseline;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.checkBox {
+  display: none;
+  margin-right: 4rem;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.address {
+  color: $color_grey_minor;
+  font-style: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deleteButton, .editButton {
+  & svg {
+    fill: $color_grey_light;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
+
+.buttonsWrapper {
+  display: flex;
+  justify-content: flex-end;
+}

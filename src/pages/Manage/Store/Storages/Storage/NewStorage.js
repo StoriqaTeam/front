@@ -151,7 +151,9 @@ NewStorage.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(NewStorage, 'Storages', 'Add new storage'))),
+  withShowAlert(
+    Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
+  ),
   graphql`
     fragment NewStorage_me on User
       @argumentDefinitions(storeId: { type: "Int!" }) {
