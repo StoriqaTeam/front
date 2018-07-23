@@ -58,7 +58,12 @@ class Products extends PureComponent<PropsType> {
     }
   };
 
-  handleDelete = (id: string) => {
+  handleCheckboxClick = (id: string) => {
+    log.info('id', id);
+  };
+
+  handleDelete = (id: string, e) => {
+    e.stopPropagation();
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'myStore', 'id'], this.props);
 
@@ -149,13 +154,11 @@ class Products extends PureComponent<PropsType> {
         <span>Characteristics</span>
         <Icon inline type="sortArrows" />
       </div>
-      <div styleName="td tdEdit" />
       <div styleName="td tdDelete">
         <button styleName="deleteButton">
           <Icon type="basket" size="32" />
         </button>
       </div>
-      <div styleName="td tdDropdown" />
     </div>
   );
 
@@ -175,9 +178,19 @@ class Products extends PureComponent<PropsType> {
     // $FlowIgnoreMe
     const attributes = pathOr([], ['product', 'attributes'], item);
     return (
-      <div key={item.rawId} styleName="itemRowWrap">
+      <div
+        key={item.rawId}
+        styleName="itemRowWrap"
+        onClick={() => {
+          this.editProduct(item.rawId);
+        }}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+        data-test="editProductButton"
+      >
         <div styleName="td tdCheckbox">
-          <Checkbox id={`product-${item.rawId}`} onChange={() => {}} />
+          <Checkbox id={item.rawId} onChange={this.handleCheckboxClick} />
         </div>
         <div styleName="td tdFoto">
           <div styleName="foto">
@@ -249,31 +262,15 @@ class Products extends PureComponent<PropsType> {
             </div>
           )}
         </div>
-        <div styleName="td tdEdit">
-          <button
-            styleName="editButton"
-            onClick={() => {
-              this.editProduct(item.rawId);
-            }}
-            data-test="editProductButton"
-          >
-            <Icon type="note" size={32} />
-          </button>
-        </div>
         <div styleName="td tdDelete">
           <button
             styleName="deleteButton"
-            onClick={() => {
-              this.handleDelete(item.id);
+            onClick={(e: any) => {
+              this.handleDelete(item.id, e);
             }}
             data-test="deleteProductButton"
           >
             <Icon type="basket" size="32" />
-          </button>
-        </div>
-        <div styleName="td tdDropdown">
-          <button styleName="dropdownButton" onClick={() => {}}>
-            <Icon inline type="arrowExpand" />
           </button>
         </div>
       </div>

@@ -62,6 +62,10 @@ class Storages extends PureComponent<PropsType> {
     }
   };
 
+  handleCheckboxClick = (id: string) => {
+    log.info('id', id);
+  };
+
   handleDelete = (id: string, e: any) => {
     e.stopPropagation();
     const { environment } = this.context;
@@ -162,16 +166,7 @@ class Storages extends PureComponent<PropsType> {
         data-test="editStorageField"
       >
         <div styleName="td tdCheckbox">
-          <span
-            onClick={(e: any) => {
-              this.editStorage(null, false, e);
-            }}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            <Checkbox id={`storage-${item.id}`} onChange={() => {}} />
-          </span>
+          <Checkbox id={item.slug} onChange={this.handleCheckboxClick} />
         </div>
         <div styleName="td tdStorage">
           <div>{name}</div>

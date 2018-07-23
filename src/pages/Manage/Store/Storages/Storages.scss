@@ -37,6 +37,27 @@
 }
 
 .itemRowWrap {
+  position: relative;
+  cursor: pointer;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 2px;
+    background-color: transparent;
+    transition: $transition_all_ease;
+  }
+
+  &:hover {
+    &:before {
+      background-color: $color_blue_hover;
+    }
+  }
+
   & .td {
     font-size: 16px;
   }

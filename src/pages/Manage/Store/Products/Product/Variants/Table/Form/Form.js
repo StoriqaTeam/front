@@ -385,6 +385,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   renderVariant = () => {
+    const { variant } = this.props;
     const { vendorCode, price, cashback } = this.state;
     return (
       <div styleName="variant">
@@ -419,9 +420,14 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="variantItem tdCount" />
         <div styleName="variantItem tdBasket" />
         <div styleName="variantItem tdDropdawn">
-          <button styleName="arrowExpand" onClick={this.toggleDropdownVariant}>
-            <Icon inline type="arrowExpand" />
-          </button>
+          {variant && (
+            <button
+              styleName="arrowExpand"
+              onClick={this.toggleDropdownVariant}
+            >
+              <Icon inline type="arrowExpand" />
+            </button>
+          )}
         </div>
       </div>
     );
@@ -445,14 +451,24 @@ class Form extends Component<PropsType, StateType> {
         {variant &&
           variant.stocks &&
           !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
-        <Button
-          big
-          type="button"
-          onClick={variant ? this.handleUpdate : this.handleCreate}
-          dataTest="variantsProductSaveButton"
-        >
-          Save
-        </Button>
+        <div styleName="buttons">
+          <Button
+            big
+            type="button"
+            onClick={variant ? this.handleUpdate : this.handleCreate}
+            dataTest="variantsProductSaveButton"
+          >
+            Save
+          </Button>
+          {variant && (
+            <button
+              styleName="cancelButton"
+              onClick={this.props.handleCollapseVariant}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
     );
   }
