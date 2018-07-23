@@ -25,7 +25,7 @@ class StatusList extends PureComponent<PropsType> {
   renderTitle = () => (
     <div styleName="headerContainer">
       <span styleName="headerDate">Date</span>
-      <span styleName="headerManager">Manager</span>
+      <span styleName="headerManager">User</span>
       <span styleName="headerStatus">Status</span>
       <span styleName="headerAdditionalInfo">Additional info</span>
       <div styleName="border" />

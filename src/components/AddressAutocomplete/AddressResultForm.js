@@ -39,7 +39,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="locality"
-          label="City"
+          label="Locality"
           onChange={onChangeForm('locality')}
           value={address ? address.locality : ''}
           limit={50}
