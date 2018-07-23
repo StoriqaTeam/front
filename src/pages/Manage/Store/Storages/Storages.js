@@ -5,38 +5,28 @@ import PropTypes from 'prop-types';
 import { pathOr, isEmpty, map } from 'ramda';
 import { withRouter, routerShape } from 'found';
 import { graphql, createFragmentContainer } from 'react-relay';
+import type { Environment } from 'relay-runtime';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
-import { Checkbox } from 'components/common/Checkbox';
-import { Icon } from 'components/Icon';
 
 import { DeleteWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/DeleteWarehouseMutation';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { Storages_me as StoragesMeType } from './__generated__/Storages_me.graphql';
 
-import './Storages.scss';
+import { StoragesHeader, StoragesRow } from './index';
 
-type AddressFullType = {
-  administrativeAreaLevel1: ?string,
-  administrativeAreaLevel2: ?string,
-  country: string,
-  locality: ?string,
-  political: ?string,
-  postalCode: string,
-  route: ?string,
-  streetNumber: ?string,
-  value: ?string,
-};
+import './Storages.scss';
 
 type PropsType = {
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
   me: StoragesMeType,
+  environment: Environment,
 };
 
 class Storages extends PureComponent<PropsType> {
@@ -49,7 +39,7 @@ class Storages extends PureComponent<PropsType> {
     }
   };
 
-  editStorage = (slug: ?string, isStorageData: boolean, e: any) => {
+  handleEdit = (slug: ?string, isStorageData: boolean, e: any): void => {
     e.stopPropagation();
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
@@ -64,7 +54,7 @@ class Storages extends PureComponent<PropsType> {
 
   handleDelete = (id: string, e: any) => {
     e.stopPropagation();
-    const { environment } = this.context;
+    const { environment } = this.props;
     const params: MutationParamsType = {
       id,
       environment,
@@ -115,126 +105,44 @@ class Storages extends PureComponent<PropsType> {
   //   this.props.relay.loadMore(8);
   // };
 
-  renderHeaderRow = () => (
-    <div styleName="headerRowWrap">
-      <div styleName="td tdCheckbox">
-        <Checkbox id="header" onChange={() => {}} />
-      </div>
-      <div styleName="td tdStorage">
-        <div>
-          <span>Storage</span>
-          <Icon inline type="sortArrows" />
-        </div>
-      </div>
-      <div styleName="td tdAddress">
-        <div>
-          <span>Address</span>
-          <Icon inline type="sortArrows" />
-        </div>
-      </div>
-      <div styleName="td tdEdit" />
-      <div styleName="td tdDelete">
-        <button styleName="deleteButton">
-          <Icon type="basket" size="32" />
-        </button>
-      </div>
-    </div>
-  );
-
-  renderRows = (item: {
-    id: string,
-    name: string,
-    slug: string,
-    addressFull: AddressFullType,
-  }) => {
-    const { id, name, slug, addressFull } = item;
-    const { country, locality, value } = addressFull;
-    return (
-      <div
-        key={item.id}
-        styleName="itemRowWrap"
-        onClick={(e: any) => {
-          this.editStorage(slug, false, e);
-        }}
-        onKeyDown={() => {}}
-        role="button"
-        tabIndex="0"
-        data-test="editStorageField"
-      >
-        <div styleName="td tdCheckbox">
-          <span
-            onClick={(e: any) => {
-              this.editStorage(null, false, e);
-            }}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            <Checkbox id={`storage-${item.id}`} onChange={() => {}} />
-          </span>
-        </div>
-        <div styleName="td tdStorage">
-          <div>{name}</div>
-        </div>
-        <div styleName="td tdAddress">
-          <div styleName="address">
-            <span>{`${country}`}</span>
-            {locality && <span>{`, ${locality}`}</span>}
-            {value && <span>{`, ${value}`}</span>}
-          </div>
-        </div>
-        <div styleName="td tdEdit">
-          <button
-            styleName="editButton"
-            onClick={(e: any) => {
-              this.editStorage(slug, true, e);
-            }}
-            data-test="editStorageDataButton"
-          >
-            <Icon type="note" size={32} />
-          </button>
-        </div>
-        <div styleName="td tdDelete">
-          <button
-            styleName="deleteButton"
-            onClick={(e: any) => {
-              this.handleDelete(id, e);
-            }}
-            data-test="deleteStorageButton"
-          >
-            <Icon type="basket" size="32" />
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
     const storages = pathOr([], ['myStore', 'warehouses'], me);
     return (
       <div styleName="container">
-        <div styleName="addButton">
-          <Button
-            wireframe
-            big
-            onClick={this.createStorage}
-            dataTest="createStorageButton"
-          >
-            Add storage
-          </Button>
-        </div>
-        <div styleName="subtitle">
-          <strong>Items list</strong>
-        </div>
+        <header styleName="headerBar">
+          <div styleName="subtitle">
+            <strong>Items list</strong>
+          </div>
+          <div styleName="addButton">
+            <Button
+              wireframe
+              big
+              onClick={this.createStorage}
+              dataTest="createStorageButton"
+            >
+              Add storage
+            </Button>
+          </div>
+        </header>
         <div>
-          <div>{this.renderHeaderRow()}</div>
+          <StoragesHeader />
           <div>
             {isEmpty(storages) ? (
               <div styleName="emptyStoragesBlock">No storages</div>
             ) : (
-              map(item => this.renderRows(item), storages)
+              map(
+                item => (
+                  <StoragesRow
+                    key={item.id}
+                    {...item}
+                    onEdit={this.handleEdit}
+                    onDelete={this.handleDelete}
+                  />
+                ),
+                storages,
+              )
             )}
           </div>
         </div>
@@ -244,12 +152,11 @@ class Storages extends PureComponent<PropsType> {
 }
 
 Storages.contextTypes = {
-  environment: PropTypes.object.isRequired,
   showAlert: PropTypes.func,
 };
 
 export default createFragmentContainer(
-  withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages')))),
+  withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages'), true))),
   graphql`
     fragment Storages_me on User {
       myStore {

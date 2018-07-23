@@ -80,7 +80,6 @@ class StickyBar extends React.Component<PropsType, StateType> {
     const {
       top: viewTop,
       bottom: viewBottom,
-      // $FlowIgnoreMe
     } = this.wrapperRef.getBoundingClientRect();
     if (viewBottom - viewTop < STICKY_THRESHOLD_REM * rem) {
       if (this.state.currentClass !== 'top') {

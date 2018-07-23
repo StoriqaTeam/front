@@ -76,7 +76,10 @@ export default (OriginalComponent: any, title: string, isNewStore?: boolean) =>
                       <span styleName="title">{title}</span>
                     </div>
                     <div styleName="form">
-                      <OriginalComponent {...formProps} />
+                      <OriginalComponent
+                        environment={environment}
+                        {...formProps}
+                      />
                     </div>
                   </div>
                 </Col>

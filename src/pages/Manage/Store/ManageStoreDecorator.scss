@@ -14,15 +14,23 @@
 }
 
 .title {
-  font-family: $font_medium;
   color: $color_grey;
+  display: none;
+  font-family: $font_medium;
   font-size: 24px;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .form {
-  margin-top: 2rem;
+  margin-top: 0;
   padding: 4rem;
   background-color: $color_white;
   flex: 1 0 auto;
+
+  @media (min-width: $md) {
+    margin-top: 2rem;
+  }
 }
 
