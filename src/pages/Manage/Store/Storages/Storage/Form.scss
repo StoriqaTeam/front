@@ -12,12 +12,20 @@
   margin-bottom: 3rem;
 }
 
+.storageName {
+  max-width: 41rem;
+}
+
 .address {
-  width: 41rem;
+  max-width: 41rem;
 }
 
 .buttons {
   display: flex;
+  justify-content: space-between;
+  @media(min-width: $md) {
+    justify-content: initial;
+  }
 
   & .cancelButton {
     margin-left: 3rem;

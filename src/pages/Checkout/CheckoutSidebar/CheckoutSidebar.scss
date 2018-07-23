@@ -1,36 +1,12 @@
 @import "../../../styles/variables.scss";
 
-.wrapper {
-  display: flex;
-  flex: 1;
-  position: relative;
-}
-
 .container {
   padding: 3rem 3rem;
   color: $color_grey;
   background-color: $color-white;
-  border: 1px solid $color_grey_trivial;
+  border-left: 1px solid $color_grey_trivial;
+  border-right: 1px solid $color_grey_trivial;
   width: 100%;
-}
-
-:global {
-  @media (min-width: $md) { 
-    .sticky {
-      position: fixed;
-      top: 2rem;
-    }
-    
-    .bottom {
-      position: absolute;
-      bottom: 2rem;
-    }
-    
-    .top {
-      position: absolute;
-      top: 0;
-    }  
-  } 
 }
 
 .cart-total-title {
@@ -109,5 +85,49 @@
   .bold {
     font-size: 2.5rem;
     font-family: $font_bold;
+  }
+}
+
+.paperWrapper {
+  display: flex;
+  flex-direction: row;
+  height: 1rem;
+
+  .corner {
+    width: 0.5rem;
+    height: 100%;
+    background-color: $color_white;
+
+    &.tl {
+      border-left: 1px solid $color_grey_trivial;
+      border-top: 1px solid $color_grey_trivial;
+    }
+    &.tr {
+      border-right: 1px solid $color_grey_trivial;
+      border-top: 1px solid $color_grey_trivial;
+    }
+    &.br {
+      border-right: 1px solid $color_grey_trivial;
+      border-bottom: 1px solid $color_grey_trivial;
+    }
+    &.bl {
+      border-left: 1px solid $color_grey_trivial;
+      border-bottom: 1px solid $color_grey_trivial;
+    }
+  }
+  .paper {
+    display: flex;
+    flex: 1;
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-image: url('./png/particle.png');
+
+    &.bottom {
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
   }
 }

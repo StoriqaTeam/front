@@ -15,6 +15,7 @@ import {
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
+import { StickyBar } from 'components/StickyBar';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -238,7 +239,7 @@ class Checkout extends Component<PropsType, StateType> {
       orderInput,
     } = this.state;
     const {
-      cart: { totalCost, totalCount, deliveryCost, productsCost },
+      cart: { totalCount },
     } = this.props;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
@@ -328,19 +329,16 @@ class Checkout extends Component<PropsType, StateType> {
                 )}
                 {!emptyCart && (
                   <Col size={12} md={4} lg={3}>
-                    <CheckoutSidebar
-                      storesRef={this.state.storesRef}
-                      buttonText={step === 1 ? 'Next' : 'Checkout'}
-                      onClick={
-                        (step === 1 && this.handleChangeStep(2)) ||
-                        this.handleCheckout
-                      }
-                      productsCost={productsCost}
-                      deliveryCost={deliveryCost}
-                      totalCount={totalCount}
-                      totalCost={totalCost}
-                      isReadyToClick={this.checkReadyToCheckout()}
-                    />
+                    <StickyBar>
+                      <CheckoutSidebar
+                        buttonText={step === 1 ? 'Next' : 'Checkout'}
+                        onClick={
+                          (step === 1 && this.handleChangeStep(2)) ||
+                          this.handleCheckout
+                        }
+                        isReadyToClick={this.checkReadyToCheckout()}
+                      />
+                    </StickyBar>
                   </Col>
                 )}
               </Row>
