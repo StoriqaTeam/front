@@ -52,6 +52,10 @@ class Storages extends PureComponent<PropsType> {
     }
   };
 
+  handleCheckboxClick = (id: string | number) => {
+    log.info('id', id);
+  };
+
   handleDelete = (id: string, e: any) => {
     e.stopPropagation();
     const { environment } = this.props;
@@ -139,6 +143,7 @@ class Storages extends PureComponent<PropsType> {
                     {...item}
                     onEdit={this.handleEdit}
                     onDelete={this.handleDelete}
+                    handleCheckboxClick={this.handleCheckboxClick}
                   />
                 ),
                 storages,

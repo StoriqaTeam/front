@@ -307,19 +307,16 @@ class ShippingAddresses extends Component<PropsType, StateType> {
             {editableAddressId ? 'Save' : 'Add'}
           </Button>
           {(editableAddressId || isOpenNewForm) && (
-            <div
+            <button
               styleName="cancelButton"
               onClick={
                 isOpenNewForm
                   ? this.toggleNewAddressForm
                   : this.toggleEditAddressForm
               }
-              onKeyDown={() => {}}
-              role="button"
-              tabIndex="0"
             >
               Cancel
-            </div>
+            </button>
           )}
         </div>
       </div>
