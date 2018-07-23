@@ -7,6 +7,8 @@ import { withRouter, routerShape, Link } from 'found';
 import { Col } from 'layout';
 import { getStatusStringFromEnum } from '../OrderPage/utils';
 
+import { formatDate } from './OrdersListUtils';
+
 import './TableRow.scss';
 
 export type TableItemType = {
@@ -47,7 +49,7 @@ class TableRow extends PureComponent<PropsType> {
           </Col>
           <Col size={5} sm={4} md={3} lg={2} xl={1}>
             <span styleName="date">{rowItem.date}</span>
-            <span styleName="dateFormatted">11/11/2018</span>
+            <span styleName="dateFormatted">{formatDate(rowItem.date)}</span>
           </Col>
           <Col lg={2} xl={1} xlVisible>
             <span styleName="link">{rowItem.shop.title}</span>
