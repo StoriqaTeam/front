@@ -464,6 +464,7 @@ class Form extends Component<PropsType, StateType> {
             <button
               styleName="cancelButton"
               onClick={this.props.handleCollapseVariant}
+              data-test="cancelEditVariantButton"
             >
               Cancel
             </button>

@@ -58,7 +58,7 @@ class Products extends PureComponent<PropsType> {
     }
   };
 
-  handleCheckboxClick = (id: string) => {
+  handleCheckboxClick = (id: string | number) => {
     log.info('id', id);
   };
 

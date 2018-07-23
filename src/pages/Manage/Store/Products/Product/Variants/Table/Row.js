@@ -41,7 +41,7 @@ type PropsType = {
 };
 
 class Row extends PureComponent<PropsType> {
-  handleCheckboxClick = (id: string) => {
+  handleCheckboxClick = (id: string | number) => {
     log.info('id', id);
     // this.setState(prevState => ({ checked: !prevState.checked }));
   };

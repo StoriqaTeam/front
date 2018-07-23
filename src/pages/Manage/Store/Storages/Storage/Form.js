@@ -124,7 +124,7 @@ class Form extends Component<PropsType, StateType> {
             <button
               styleName="cancelButton"
               onClick={handleCancel}
-              dataTest="cancelSaveStorageButton"
+              data-test="cancelSaveStorageButton"
             >
               Cancel
             </button>
