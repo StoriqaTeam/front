@@ -116,7 +116,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <Row>
               <Col size={12} sm={9} md={12}>
                 <Row>
-                  <Col size={12} sm={4} md={12}>
+                  <Col size={12} sm={4} lg={12}>
                     <div styleName="attributeContainer">
                       <div styleName="label">Subtotal</div>
                       <div styleName="value">
@@ -125,7 +125,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                       </div>
                     </div>
                   </Col>
-                  <Col size={12} sm={4} md={12}>
+                  <Col size={12} sm={4} lg={12}>
                     <div styleName="attributeContainer">
                       <div styleName="label">Delivery</div>
                       <div styleName="value">
@@ -134,7 +134,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                       </div>
                     </div>
                   </Col>
-                  <Col size={12} sm={4} md={12}>
+                  <Col size={12} sm={4} lg={12}>
                     <div styleName="attributeContainer">
                       <div styleName="label">
                         Total{' '}
