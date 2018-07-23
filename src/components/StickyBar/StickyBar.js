@@ -12,10 +12,14 @@ type StateType = {
   sidebarWidth: ?number,
 };
 
+type PropsType = {
+  children: any,
+};
+
 const STICKY_PADDING_TOP_REM = 2;
 const STICKY_PADDING_BOTTOM_REM = 2;
 
-class StickyBar extends React.Component<{}, StateType> {
+class StickyBar extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.handleScroll = this.handleScrollEvent.bind(this);

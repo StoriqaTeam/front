@@ -18,7 +18,6 @@ type PropsType = {
 };
 
 type StateType = {
-  sidebarWidth: ?number,
   productsCost: number,
   deliveryCost: number,
   totalCount: number,
@@ -79,7 +78,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     this.wrapperRef = ref;
   }
 
-  updateTotal = data => {
+  updateTotal = (data: {
+    productsCost: number,
+    deliveryCost: number,
+    totalCost: number,
+    totalCount: number,
+  }) => {
     const { productsCost, deliveryCost, totalCost, totalCount } = data;
     this.setState({
       productsCost,
