@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { StoreContext, StoreHeaderBottom } from './index';
+import { StoreContext, StoreHeaderBottom, StoreHeaderTabs } from './index';
 
 import './StoreHeader.scss';
 
@@ -16,6 +16,7 @@ const StoreHeader = () => (
           </figure>
         </div>
         <StoreHeaderBottom />
+        <StoreHeaderTabs />
       </header>
     )}
   </StoreContext.Consumer>

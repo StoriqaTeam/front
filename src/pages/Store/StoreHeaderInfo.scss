@@ -6,6 +6,7 @@
   flex-direction: column;
   justify-content: center;
   margin-bottom: 1.625rem;
+  margin-left: 0;
   position: relative;
 
   @media (min-width: $md) {
@@ -13,6 +14,7 @@
     flex-direction: row;
     justify-content: flex-start;
     margin-bottom: 0;
+    margin-left: 3rem;
   }
 
   & > .controls {

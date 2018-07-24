@@ -6,3 +6,4 @@ export { default as StoreHeader } from './StoreHeader';
 export { default as StoreHeaderBottom } from './StoreHeaderBottom';
 export { default as StoreHeaderButtons } from './StoreHeaderButtons';
 export { default as StoreHeaderInfo } from './StoreHeaderInfo';
+export { default as StoreHeaderTabs } from './StoreHeaderTabs';
