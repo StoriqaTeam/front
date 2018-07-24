@@ -1,36 +1,98 @@
 // @flow
 
-import React, { Component } from 'react';
-import { withRouter } from 'found';
+import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-// import { map, pathOr } from 'ramda';
+import { addressToString, getNameText } from 'utils';
+
+import ImageLoader from 'libs/react-image-loader';
+import BannerLoading from 'components/Banner/BannerLoading';
 
 import './About.scss';
 
-// import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
+type AddressFullType = {
+  value: ?string,
+  country: ?string,
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  locality: ?string,
+  political: ?string,
+  postalCode: ?string,
+  route: ?string,
+  streetNumber: ?string,
+  placeId: ?string,
+};
 
-type SelectedType = {
-  //
+type LangType = {
+  lang: string,
+  text: string,
 };
 
 type PropsType = {
-  // router: routerShape,
+  shop: {
+    id: string,
+    rawId: number,
+    name: LangType,
+    longDescription: LangType,
+    addressFull: AddressFullType,
+  },
 };
 
-type StateType = {
-  category: ?SelectedType,
-  isSidebarOpen: boolean,
-};
-// eslint-disable-next-line
-class StoreAbout extends Component<PropsType, StateType> {
+class StoreAbout extends PureComponent<PropsType> {
   render() {
-    // console.log('---this.props', this.props);
-    return <div styleName="container">About</div>;
+    const { shop } = this.props;
+    const name = getNameText(shop.name, 'EN');
+    const longDescription = getNameText(shop.longDescription, 'EN').replace(
+      /\n/g,
+      '<hr />',
+    );
+    const address = addressToString(shop.addressFull);
+    return (
+      <div styleName="container">
+        <div styleName="title">
+          <strong>About store</strong>
+        </div>
+        <div styleName="body">
+          <div styleName="left">
+            <div styleName="item">
+              <div styleName="subtitle">Full shop name</div>
+              <div>{name}</div>
+            </div>
+            <div styleName="item">
+              <div styleName="subtitle">Location</div>
+              <div>{address}</div>
+            </div>
+            <div styleName="item">
+              <div styleName="subtitle">Description</div>
+              <div
+                styleName="description"
+                dangerouslySetInnerHTML={{ __html: longDescription }} // eslint-disable-line
+              />
+            </div>
+          </div>
+          <div styleName="right">
+            <div styleName="banners">
+              <div styleName="banner">
+                <ImageLoader
+                  src="https://s3.amazonaws.com/storiqa-dev/img-0jRIr3M3cT0C.png"
+                  loader={<BannerLoading />}
+                />
+              </div>
+              <div styleName="banner">
+                <ImageLoader
+                  src="https://s3.amazonaws.com/storiqa-dev/img-wbAUMdeXXPgC.png"
+                  loader={<BannerLoading />}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 
 export default createFragmentContainer(
-  withRouter(StoreAbout),
+  StoreAbout,
   graphql`
     fragment StoreAbout_shop on Store {
       id

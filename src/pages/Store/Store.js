@@ -24,4 +24,4 @@ class Store extends PureComponent<PropsType> {
   }
 }
 
-export default Page(Store);
+export default Page(Store, true);
