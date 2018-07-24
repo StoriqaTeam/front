@@ -1,9 +1,13 @@
 @import "../../styles/variables";
 
 .container {
+  border-bottom: none;
+  padding: 0;
   position: relative;
   top: -6rem;
   @media (min-width: $md) {
+    border-bottom: 1px solid $color_grey_trivial;
+    padding: 2rem;
     top: 0;
   }
 }
