@@ -126,6 +126,7 @@ const routes = (
       }}
     >
       <Route Component={Start} />
+      <Route path="/404" Component={Error404} />
 
       <Route
         path="/cart"
@@ -548,7 +549,10 @@ const routes = (
         `}
         render={({ props, Component }) => {
           if (props) {
-            return <Component {...props} />;
+            if (props.store) {
+              return <Component {...props} />;
+            }
+            throw new RedirectException(`/404`);
           }
           return undefined;
         }}
