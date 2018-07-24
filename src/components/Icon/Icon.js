@@ -18,6 +18,7 @@ import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import Controls from 'components/Icon/svg/controls.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
+import Email from 'components/Icon/svg/email.svg';
 import Eye from 'components/Icon/svg/eye.svg';
 import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
 import Facebook from 'components/Icon/svg/facebook.svg';
@@ -35,6 +36,7 @@ import Note from 'components/Icon/svg/note.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
 import Person from 'components/Icon/svg/person.svg';
+import Phone from 'components/Icon/svg/phone.svg';
 import PinterestGray from 'components/Icon/svg/pinterest_gray.svg';
 import Plus from 'components/Icon/svg/plus.svg';
 import Prev from 'components/Icon/svg/prev.svg';
@@ -86,6 +88,7 @@ const iconsMap = {
   controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,
+  email: <Email />,
   eye: <Eye />,
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
@@ -103,6 +106,7 @@ const iconsMap = {
   openArrow: <OpenArrow />,
   pencil: <Pencil />,
   person: <Person />,
+  phone: <Phone />,
   pinterestGray: <PinterestGray />,
   plus: <Plus />,
   prev: <Prev />,

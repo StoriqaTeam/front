@@ -1,0 +1,50 @@
+@import "../../styles/variables";
+
+.container {
+  display: none;
+  margin-top: 3rem;
+  width: 100%;
+  @media (min-width: $md) {
+   display: block;
+  }
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.tab {
+  color: $color_grey;
+  cursor: pointer;
+  font-size: 14px;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 4rem;
+  letter-spacing: 1.2px;
+  line-height: normal;
+  padding-bottom: 1.5rem;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  width: 12.125rem;
+
+  &:hover {
+    color: $color_blue;
+    border-bottom: 3px solid $color_blue;
+  }
+}
+
+.new {
+  background: $color_blue;
+  border-radius: 2px;
+  color: $color_white;
+  font-size: 11px;
+  padding: 1px 3px;
+  position: absolute;
+  right: -2rem;
+  text-transform: capitalize;
+  top: -2rem;
+}

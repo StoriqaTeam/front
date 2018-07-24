@@ -1,0 +1,64 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.container {
+  background: $color_white;
+  border: 1px solid $color_grey_trivial;
+  height: calc(100% - 3rem);
+  margin: 0 auto;
+  max-width: 170rem;
+  position: relative;
+  width: 100%;
+  @media (min-width: $md) {
+    height: auto;
+  }
+}
+
+.offscreen {
+  @include offscreen;
+}
+
+.social {
+  display: none;
+  right: 3rem;
+  bottom: 3rem;
+  position: absolute;
+
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.imageWrapper {
+  margin-bottom: 0;
+  position: relative;
+  @media (min-width: $md) {
+    margin-bottom: 3rem;
+  }
+}
+
+.image {
+
+  @media (min-width: $sm) {
+    height: 13.75rem;
+  }
+
+  @media (min-width: $md) {
+    height: 21.375rem;
+  }
+
+  @media (min-width: $lg) {
+    height: 30.625rem;
+  }
+
+  @media (min-width: $xl) {
+    height: 41.625rem;
+  }
+
+  & > img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
