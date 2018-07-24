@@ -7,7 +7,7 @@ import { pathOr, map } from 'ramda';
 
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
-import { Container, Col, Row } from 'layout';
+import { Col, Row } from 'layout';
 
 import './StoreItems.scss';
 
@@ -29,7 +29,7 @@ class StoreItems extends PureComponent<PropsType> {
       pathOr([], ['shop', 'baseProducts', 'edges'], this.props),
     );
     return (
-      <Container>
+      <div styleName="container">
         <Row>
           {products &&
             map(
@@ -55,7 +55,7 @@ class StoreItems extends PureComponent<PropsType> {
             </Button>
           </div>
         )}
-      </Container>
+      </div>
     );
   }
 }
