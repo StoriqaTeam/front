@@ -20,6 +20,7 @@
 
   & .message {
     display: none;
+    margin-right: 0.5rem;
     @media (min-width: $md) {
       display: inline;
     }
@@ -32,7 +33,11 @@
   }
 
   & .buttonIcon {
+    display: block;
     margin-right: 0.5rem;
+    @media (min-width: $md) {
+      display: none;
+    }
   }
 
   & .email svg {

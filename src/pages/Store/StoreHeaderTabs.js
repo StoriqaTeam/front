@@ -37,8 +37,8 @@ const StoreHeaderTabs = () => (
     <ul styleName="tabs">
       {tabs.map(tab => (
         <li key={tab.id} styleName="tab">
-          {tab.isNew ? (<span styleName="new">New</span>) : null}
-          { tab.title }
+          {tab.isNew ? <span styleName="new">New</span> : null}
+          {tab.title}
         </li>
       ))}
     </ul>
