@@ -68,6 +68,9 @@
   & > .cartIcon {
     margin-left: 2rem;
     padding-top: 1rem;
+    svg {
+      fill: $color_blue;
+    }
   }
 }
 
