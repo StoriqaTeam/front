@@ -7,44 +7,23 @@ import { addressToString, getNameText } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
 
+import type { About_shop as AboutShopType } from './__generated__/About_shop.graphql';
+
 import './About.scss';
 
-type AddressFullType = {
-  value: ?string,
-  country: ?string,
-  administrativeAreaLevel1: ?string,
-  administrativeAreaLevel2: ?string,
-  locality: ?string,
-  political: ?string,
-  postalCode: ?string,
-  route: ?string,
-  streetNumber: ?string,
-  placeId: ?string,
-};
-
-type LangType = {
-  lang: string,
-  text: string,
-};
-
 type PropsType = {
-  shop: {
-    id: string,
-    rawId: number,
-    name: LangType,
-    longDescription: LangType,
-    addressFull: AddressFullType,
-  },
+  shop: AboutShopType,
 };
 
 class About extends PureComponent<PropsType> {
   render() {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');
-    const longDescription = getNameText(shop.longDescription, 'EN').replace(
-      /\n/g,
-      '<hr />',
-    );
+    const longDescription = getNameText(shop.longDescription, 'EN');
+    const modifLongDescription = longDescription
+      ? longDescription.replace(/\n/g, '<hr />')
+      : null;
+    // $FlowIgnoreMe
     const address = addressToString(shop.addressFull);
     return (
       <div styleName="container">
@@ -53,21 +32,27 @@ class About extends PureComponent<PropsType> {
         </div>
         <div styleName="body">
           <div styleName="left">
-            <div styleName="item">
-              <div styleName="subtitle">Full shop name</div>
-              <div>{name}</div>
-            </div>
-            <div styleName="item">
-              <div styleName="subtitle">Location</div>
-              <div>{address}</div>
-            </div>
-            <div styleName="item">
-              <div styleName="subtitle">Description</div>
-              <div
-                styleName="description"
-                dangerouslySetInnerHTML={{ __html: longDescription }} // eslint-disable-line
-              />
-            </div>
+            {name && (
+              <div styleName="item">
+                <div styleName="subtitle">Full shop name</div>
+                <div>{name}</div>
+              </div>
+            )}
+            {address && (
+              <div styleName="item">
+                <div styleName="subtitle">Location</div>
+                <div>{address}</div>
+              </div>
+            )}
+            {modifLongDescription && (
+              <div styleName="item">
+                <div styleName="subtitle">Description</div>
+                <div
+                  styleName="description"
+                  dangerouslySetInnerHTML={{ __html: modifLongDescription }} // eslint-disable-line
+                />
+              </div>
+            )}
           </div>
           <div styleName="right">
             <div styleName="banners">

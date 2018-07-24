@@ -33,7 +33,7 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
-import { Store, StoreAbout } from 'pages/Store';
+import { Store, StoreAbout, Showcase } from 'pages/Store';
 
 const routes = (
   <Route>
@@ -533,7 +533,6 @@ const routes = (
         />
       </Route>
 
-      {/* /store */}
       <Route
         path="/store/:storeId"
         Component={Store}
@@ -543,6 +542,7 @@ const routes = (
               id
               rawId
               ...About_shop
+              ...Showcase_shop
             }
           }
         `}
@@ -550,12 +550,13 @@ const routes = (
           if (props) {
             return <Component {...props} />;
           }
-          return null;
+          return undefined;
         }}
         prepareVariables={(_, { params }) => ({
           storeId: parseInt(params.storeId, 10),
         })}
       >
+        <Route Component={Showcase} />
         <Route path="/about" Component={StoreAbout} />
       </Route>
     </Route>
