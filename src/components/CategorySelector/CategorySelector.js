@@ -2,7 +2,7 @@
 
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
-import { zipObj, isEmpty } from 'ramda';
+import { zipObj, isEmpty, filter, values } from 'ramda';
 
 import { getNameText, searchPathByParent, flattenFunc } from 'utils';
 
@@ -156,7 +156,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         data-test="categorySelector"
       >
         {snapshot &&
-          [snapshot.level1Item, snapshot.level2Item, snapshot.level3Item].map(
+          values(snapshot).map(
             (item, index) =>
               item ? (
                 <span key={item.rawId}>
@@ -165,7 +165,9 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                 </span>
               ) : null,
           )}
-        {!isEmpty(snapshot) && 'Choose category'}
+        {snapshot &&
+          isEmpty(filter(item => Boolean(item), values(snapshot))) &&
+          'Choose category'}
       </div>
     );
   };
