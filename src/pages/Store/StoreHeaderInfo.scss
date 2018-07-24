@@ -19,7 +19,7 @@
 
   & > .controls {
     display: block;
-    left: 0;
+    left: 2rem;
     position: absolute;
     top: 8rem;
     @media (min-width: $md) {
@@ -30,7 +30,7 @@
   & > .magnifier {
     display: block;
     position: absolute;
-    right: 0;
+    right: 2rem;
     top: 8rem;
     @media (min-width: $md) {
       display: none;

@@ -4,6 +4,12 @@
   display: flex;
   justify-content: space-between;
   margin-top: 0;
+  padding: 0 2rem;
+
+  @media (min-width: $md) {
+    padding: 0;
+  }
+
   button {
     width: 15rem;
     @media (min-width: $md) {

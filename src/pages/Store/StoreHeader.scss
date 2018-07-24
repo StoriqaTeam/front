@@ -4,10 +4,14 @@
 .container {
   background: $color_white;
   border: 1px solid $color_grey_trivial;
+  height: calc(100% - 3rem);
   margin: 0 auto;
   max-width: 170rem;
   position: relative;
   width: 100%;
+  @media (min-width: $md) {
+    height: auto;
+  }
 }
 
 .offscreen {
