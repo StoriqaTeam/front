@@ -1,0 +1,55 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0;
+  button {
+    width: 15rem;
+    @media (min-width: $md) {
+      width: 15.5rem;
+    }
+    @media (min-width: $lg) {
+      width: 21.25rem;
+    }
+  }
+  @media (min-width: $md) {
+    justify-content: space-around;
+    margin-top: 4rem;
+  }
+
+  & .message {
+    display: none;
+    @media (min-width: $md) {
+      display: inline;
+    }
+  }
+
+  & .buttonText {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  & .buttonIcon {
+    margin-right: 0.5rem;
+  }
+
+  & .email svg {
+    fill: $color_white;
+    transition: $transition_all_ease;
+  }
+
+  & .phone svg {
+    fill: $color_blue;
+    transition: $transition_all_ease;
+  }
+
+}
+
+.button {
+  margin-left: 0;
+  @media (min-width: $md) {
+    margin-left: 2rem;
+  }
+}
