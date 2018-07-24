@@ -1,4 +1,5 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .container {
   margin: 0 auto;
@@ -7,8 +8,24 @@
   width: 100%;
 }
 
+.offscreen {
+  @include offscreen;
+}
+
+.social {
+  display: none;
+  right: 3rem;
+  bottom: 3rem;
+  position: absolute;
+
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
 .imageWrapper {
   margin-bottom: 0;
+  position: relative;
   @media (min-width: $md) {
     margin-bottom: 3rem;
   }
