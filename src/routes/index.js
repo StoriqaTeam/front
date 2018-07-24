@@ -33,7 +33,7 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
-import { Store, StoreAbout } from 'pages/Store';
+import { Store, StoreAbout, StoreItems } from 'pages/Store';
 
 const routes = (
   <Route>
@@ -543,6 +543,7 @@ const routes = (
               id
               rawId
               ...StoreAbout_shop
+              ...StoreItems_shop @arguments(storeId: $storeId)
             }
           }
         `}
@@ -557,6 +558,7 @@ const routes = (
         })}
       >
         <Route path="/about" Component={StoreAbout} />
+        <Route path="/items" Component={StoreItems} />
       </Route>
     </Route>
   </Route>
