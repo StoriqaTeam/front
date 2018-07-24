@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import Rating from 'components/Rating';
+import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 
 import { StoreContext } from './index';
@@ -30,7 +30,9 @@ const StoreHeader = () => (
             </span>
           </h2>
           <div styleName="shopRating">
-            <Rating rating={3} />
+            <div className="rating">
+              <Rating value={3} />
+            </div>
             <span styleName="reviews">380 Reviews</span>
           </div>
         </div>
