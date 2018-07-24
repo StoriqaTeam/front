@@ -100,7 +100,8 @@ class CardProduct extends PureComponent<PropsTypes> {
                   noneCashback: !cashbackValue,
                 })}
               >
-                <b>{`Cashback  ${cashbackValue || 0}%`}</b>
+                <b>Cashback</b>
+                <b styleName="value">{`${cashbackValue || 0}%`}</b>
               </div>
             </div>
           </div>
