@@ -1,9 +1,11 @@
 // @flow
 
-import React, { Fragment, PureComponent, cloneElement } from 'react';
+import React, { PureComponent, cloneElement } from 'react';
 import type { Element } from 'react';
 
 import { Page } from 'components/App';
+import { Container } from 'layout';
+
 
 import type { routes_Store_QueryResponse as StoreType } from 'routes/__generated__/routes_Store_Query.graphql';
 
@@ -16,10 +18,10 @@ class Store extends PureComponent<PropsType> {
   render() {
     const { children, store } = this.props;
     return (
-      <Fragment>
+      <Container>
         <div className="header">header</div>
         {children && cloneElement(children, { shop: store })}
-      </Fragment>
+      </Container>
     );
   }
 }
