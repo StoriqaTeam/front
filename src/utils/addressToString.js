@@ -2,7 +2,7 @@
 
 import { filter, join } from 'ramda';
 
-export default (addressFull: {
+export default (addressFull: {|
   value: ?string,
   country: ?string,
   administrativeAreaLevel1: ?string,
@@ -13,7 +13,7 @@ export default (addressFull: {
   route: ?string,
   streetNumber: ?string,
   placeId: ?string,
-}) => {
+|}) => {
   const {
     // value,
     country,

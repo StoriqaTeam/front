@@ -18,7 +18,7 @@ const Header = (props: PropsType) => (
     </div>
     <div styleName="headerItem tdArticle">
       <div styleName="headerItemWrap">
-        <span>Article</span>
+        <span>Vendor code</span>
         <Icon inline type="sortArrows" />
       </div>
     </div>

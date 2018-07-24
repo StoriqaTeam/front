@@ -1,21 +1,24 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent, cloneElement } from 'react';
+import type { Element } from 'react';
 
 import { Page } from 'components/App';
 import { Container } from 'layout';
 
-import type { Node } from 'react';
+import type { routes_Store_QueryResponse as StoreType } from 'routes/__generated__/routes_Store_Query.graphql';
 
 import { StoreContext, StoreHeader } from './index';
 
 type PropsType = {
-  children: Node,
+  children: Element<*>,
+  store: StoreType,
 };
 
-class Store extends Component<PropsType> {
+class Store extends PureComponent<PropsType> {
   handleClick = () => {};
   render() {
+    const { children, store } = this.props;
     return (
       <StoreContext.Provider
         value={{
@@ -27,7 +30,7 @@ class Store extends Component<PropsType> {
       >
         <Container>
           <StoreHeader />
-          {this.props.children}
+          {children && cloneElement(children, { shop: store })}
         </Container>
       </StoreContext.Provider>
     );

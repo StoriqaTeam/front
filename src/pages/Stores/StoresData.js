@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
 
@@ -20,7 +21,7 @@ type PropsType = {
 };
 
 const StoresData = ({ store }: PropsType) => (
-  <div styleName="container">
+  <Link to={`/store/${store.rawId}`} styleName="container">
     <div styleName="storeLogo" data-test="storeLink">
       {store.logo ? (
         <img src={convertSrc(store.logo, 'small')} alt="img" />
@@ -37,7 +38,7 @@ const StoresData = ({ store }: PropsType) => (
         )}
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 export default StoresData;

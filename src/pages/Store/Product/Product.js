@@ -274,6 +274,7 @@ export default createFragmentContainer(
         lang
       }
       store {
+        rawId
         name {
           lang
           text

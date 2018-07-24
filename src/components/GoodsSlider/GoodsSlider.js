@@ -51,9 +51,8 @@ class GoodsSlider extends PureComponent<PropsTypes> {
           slidesToShow={4}
           seeAllUrl={seeAllUrl}
           responsive={[
-            { breakpoint: 1200, slidesToShow: 3 },
-            { breakpoint: 992, slidesToShow: 2 },
-            { breakpoint: 576, slidesToShow: 1 },
+            { breakpoint: 1024, slidesToShow: 3 },
+            { breakpoint: 768, slidesToShow: 2 },
           ]}
         />
       </div>

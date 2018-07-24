@@ -74,12 +74,18 @@ class EditProduct extends Component<PropsType, StateType> {
     const id = pathOr(null, ['id'], baseProduct);
     UpdateBaseProductMutation.commit({
       id,
-      name: [{ lang: 'EN', text: name || '' }],
-      shortDescription: [{ lang: 'EN', text: shortDescription || '' }],
-      longDescription: [{ lang: 'EN', text: longDescription || '' }],
+      name: name ? [{ lang: 'EN', text: name }] : null,
+      shortDescription: shortDescription
+        ? [{ lang: 'EN', text: shortDescription }]
+        : null,
+      longDescription: longDescription
+        ? [{ lang: 'EN', text: longDescription }]
+        : null,
       categoryId,
-      seoTitle: [{ lang: 'EN', text: seoTitle || '' }],
-      seoDescription: [{ lang: 'EN', text: seoDescription || '' }],
+      seoTitle: seoTitle ? [{ lang: 'EN', text: seoTitle }] : null,
+      seoDescription: seoDescription
+        ? [{ lang: 'EN', text: seoDescription }]
+        : null,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
