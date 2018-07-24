@@ -14,7 +14,7 @@ const StoreHeaderButtons = () => (
         <span styleName="buttonIcon email">
           <Icon type="email" size={20} />
         </span>
-        <span styleName="message">Message to</span>  seller
+        <span styleName="message">Message to</span> seller
       </span>
     </Button>
     <Button big wireframe onClick={() => {}}>
