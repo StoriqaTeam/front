@@ -69,8 +69,7 @@ class Autocomplete extends PureComponent<PropsType> {
             }
             return (
               <div styleName="items">
-                <div styleName="itemsWrap" />
-                {items}
+                <div styleName="itemsWrap">{items}</div>
               </div>
             );
           }}
