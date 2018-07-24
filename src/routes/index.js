@@ -542,7 +542,6 @@ const routes = (
             store(id: $storeId) {
               id
               rawId
-              ...StoreAbout_shop
               ...StoreItems_shop @arguments(storeId: $storeId)
               ...About_shop
               ...Showcase_shop
