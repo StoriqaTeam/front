@@ -31,10 +31,17 @@
 
 }
 
+.orderSelect {
+  position: relative;
+  top: 1rem;
+}
+
 .birthdateSelect {
+  position: relative;
+  top: 1rem;
   & > div:first-child {
-    width: 26.25rem;
-    margin-left: 3rem;
     margin-bottom: 1px;
+    margin-left: 3rem;
+    width: 26.25rem;
   }
 }
