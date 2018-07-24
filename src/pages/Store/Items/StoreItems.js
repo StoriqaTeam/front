@@ -1,9 +1,9 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withRouter } from 'found';
-import { createPaginationContainer, graphql } from 'react-relay';
-import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
+import { createPaginationContainer, graphql, Relay } from 'react-relay';
+import { pathOr, map } from 'ramda';
 
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
@@ -11,30 +11,19 @@ import { Container, Col, Row } from 'layout';
 
 import './StoreItems.scss';
 
-type SelectedType = {
-  //
-};
+const productsPerRequest = 24;
 
 type PropsType = {
-  // router: routerShape,
+  relay: Relay,
 };
 
-type StateType = {
-  category: ?SelectedType,
-  isSidebarOpen: boolean,
-};
 // eslint-disable-next-line
-class StoreItems extends Component<PropsType, StateType> {
+class StoreItems extends PureComponent<PropsType> {
   productsRefetch = () => {
     this.props.relay.loadMore(2);
   };
 
   render() {
-    console.log('---this.props', {
-      props: this.props,
-      hasMore: this.props.relay.hasMore(),
-    });
-    const { shop } = this.props;
     const products = map(
       item => item.node,
       pathOr([], ['shop', 'baseProducts', 'edges'], this.props),
@@ -60,7 +49,7 @@ class StoreItems extends Component<PropsType, StateType> {
               big
               load
               onClick={this.productsRefetch}
-              dataTest="storeProductsLoadMoreButton"
+              dataTest="shopProductsLoadMoreButton"
             >
               Load more
             </Button>
@@ -77,7 +66,7 @@ export default createPaginationContainer(
     fragment StoreItems_shop on Store
       @argumentDefinitions(
         storeId: { type: "Int", defaultValue: null }
-        first: { type: "Int", defaultValue: 2 }
+        first: { type: "Int", defaultValue: 24 }
         after: { type: "ID", defaultValue: null }
       ) {
       baseProducts(first: $first, after: $after)
@@ -120,21 +109,12 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps: props => {
-      console.log('>>> get connction from props: ', { props });
-      return props.shop && props.shop.baseProducts;
-    },
-    getVariables: (props, _, prevFragmentVars) => {
-      console.log('>>> StoreItems refetch props: ', {
-        props,
-        prevFragmentVars,
-      });
-      return {
-        storeId: prevFragmentVars.storeId,
-        first: 2,
-        after: props.shop.baseProducts.pageInfo.endCursor,
-      };
-    },
+    getConnectionFromProps: props => props.shop && props.shop.baseProducts,
+    getVariables: (props, _, prevFragmentVars) => ({
+      storeId: prevFragmentVars.storeId,
+      first: productsPerRequest,
+      after: props.shop.baseProducts.pageInfo.endCursor,
+    }),
     query: graphql`
       query StoreItems_shop_Query($storeId: Int!, $first: Int, $after: ID) {
         store(id: $storeId) {

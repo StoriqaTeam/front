@@ -1,7 +1,6 @@
 @import "../../styles/variables.scss";
 
 .container {
-  // height: 40rem;
   padding: 1rem;
   position: relative;
 }
@@ -55,9 +54,6 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 2rem;
-  // position: absolute;
-  // top: 21.25rem;
-  // bottom: 0;
   width: 100%;
   z-index: 1;
 }
