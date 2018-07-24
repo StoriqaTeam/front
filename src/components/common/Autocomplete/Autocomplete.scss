@@ -9,7 +9,7 @@
   top: 4rem;
   left: 0;
   right: 0;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
   border-radius: 0.25rem;
   background-color: $color-white;
   box-shadow: $shadow_1;
@@ -20,6 +20,21 @@
 
 .itemsWrap {
   position: relative;
+  overflow-y: auto;
+  max-height: 20rem;
+}
+
+.itemsWrap::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.itemsWrap::-webkit-scrollbar-thumb {
+  border-radius: 0.625rem;
+  background-color: $color_grey_light;
+}
+
+.itemsWrap::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .item {
