@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { Link } from 'found';
 
 import { Rating } from 'components/common/Rating';
 
@@ -18,7 +19,7 @@ const ProductStore = () => (
     {({ store }: ProductType) => (
       <div styleName="container">
         <div styleName="storeInfoWrapper">
-          <div styleName="storeInfo">
+          <Link to={`/store/${store.rawId}`} styleName="storeInfo">
             <div
               styleName="image"
               style={{
@@ -29,7 +30,7 @@ const ProductStore = () => (
               <h5 styleName="storeName">{extractText(store.name)}</h5>
               <Rating value={store.rating} />
             </div>
-          </div>
+          </Link>
           <div styleName="storeDetails">
             <p>{store.productsCount} goods</p>
             <p>97,5% user reviews</p>

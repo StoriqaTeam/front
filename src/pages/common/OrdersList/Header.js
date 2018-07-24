@@ -94,21 +94,23 @@ class Header extends Component<PropsType, StateType> {
           />
         </Col>
         <Col size={12} sm={6} md={4} lg={3} xl={3} lgVisible>
-          <Select
-            items={orderStatusesItems}
-            activeItem={this.state.orderStatus || undefined}
-            dataTest="OrderStatusSelect"
-            forForm
-            onSelect={this.handleOrderStatusChange}
-            containerStyle={{
-              marginBottom: '1px',
-              marginLeft: '3rem',
-              // width: '26.25rem',
-            }}
-            label="Order status"
-            withEmpty
-            fullWidth
-          />
+          <div styleName="orderSelect">
+            <Select
+              items={orderStatusesItems}
+              activeItem={this.state.orderStatus || undefined}
+              dataTest="OrderStatusSelect"
+              forForm
+              onSelect={this.handleOrderStatusChange}
+              containerStyle={{
+                marginBottom: '1px',
+                marginLeft: '3rem',
+                // width: '26.25rem',
+              }}
+              label="Order status"
+              withEmpty
+              fullWidth
+            />
+          </div>
         </Col>
         <Col md={3} lg={3} xl={3} lgVisible>
           <div styleName="birthdateSelect">

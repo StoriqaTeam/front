@@ -33,7 +33,7 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
-import { Store, StoreAbout, StoreItems } from 'pages/Store';
+import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 
 const routes = (
   <Route>
@@ -126,6 +126,7 @@ const routes = (
       }}
     >
       <Route Component={Start} />
+      <Route path="/404" Component={Error404} />
 
       <Route
         path="/cart"
@@ -533,7 +534,6 @@ const routes = (
         />
       </Route>
 
-      {/* /store */}
       <Route
         path="/store/:storeId"
         Component={Store}
@@ -544,19 +544,25 @@ const routes = (
               rawId
               ...StoreAbout_shop
               ...StoreItems_shop @arguments(storeId: $storeId)
+              ...About_shop
+              ...Showcase_shop
             }
           }
         `}
         render={({ props, Component }) => {
           if (props) {
-            return <Component {...props} />;
+            if (props.store) {
+              return <Component {...props} />;
+            }
+            throw new RedirectException(`/404`);
           }
-          return null;
+          return undefined;
         }}
         prepareVariables={(_, { params }) => ({
           storeId: parseInt(params.storeId, 10),
         })}
       >
+        <Route Component={Showcase} />
         <Route path="/about" Component={StoreAbout} />
         <Route path="/items" Component={StoreItems} />
       </Route>

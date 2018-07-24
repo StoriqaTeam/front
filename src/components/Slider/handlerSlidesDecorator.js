@@ -193,7 +193,7 @@ export default (OriginalComponent: any) =>
 
       if (responsive) {
         responsive.forEach(i => {
-          if (sliderWrapperWidth < i.breakpoint) {
+          if (window.innerWidth < i.breakpoint) {
             visibleSlidesAmount = i.slidesToShow;
           }
         });
