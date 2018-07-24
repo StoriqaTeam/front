@@ -256,7 +256,7 @@ class PersonalData extends Component<PropsType, StateType> {
     return (
       <div styleName="personalData">
         <div styleName="subtitle">
-          <strong>{subtitle}</strong>
+          <strong>Personal data settings</strong>
         </div>
         {this.renderInput({
           id: 'firstName',
