@@ -6,7 +6,6 @@ import type { Element } from 'react';
 import { Page } from 'components/App';
 import { Container } from 'layout';
 
-
 import type { routes_Store_QueryResponse as StoreType } from 'routes/__generated__/routes_Store_Query.graphql';
 
 type PropsType = {

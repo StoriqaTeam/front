@@ -37,7 +37,7 @@ type PropsType = {
   },
 };
 
-class StoreAbout extends PureComponent<PropsType> {
+class About extends PureComponent<PropsType> {
   render() {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');
@@ -92,9 +92,9 @@ class StoreAbout extends PureComponent<PropsType> {
 }
 
 export default createFragmentContainer(
-  StoreAbout,
+  About,
   graphql`
-    fragment StoreAbout_shop on Store {
+    fragment About_shop on Store {
       id
       rawId
       name {

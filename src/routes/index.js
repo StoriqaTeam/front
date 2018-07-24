@@ -542,7 +542,7 @@ const routes = (
             store(id: $storeId) {
               id
               rawId
-              ...StoreAbout_shop
+              ...About_shop
             }
           }
         `}

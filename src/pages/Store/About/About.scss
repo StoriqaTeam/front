@@ -55,6 +55,8 @@
 }
 
 .banners {
+  margin-top: 3rem;
+
   @media (max-width: $md) {
     display: flex;
     flex-direction: column;
