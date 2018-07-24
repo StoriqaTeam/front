@@ -34,6 +34,7 @@ import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import { Store, StoreAbout } from 'pages/Store';
+import { StartSelling } from 'pages/StartSelling';
 
 const routes = (
   <Route>
@@ -214,6 +215,7 @@ const routes = (
         />
       </Route>
       {/* TODO: вынести в HOC ли придумать что-то */}
+      <Route path="start-selling" Component={StartSelling} />
       <Route
         path="/manage"
         query={graphql`

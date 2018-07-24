@@ -1,0 +1,425 @@
+@import '../../styles/variables.scss';
+
+.container {
+  background-color: #f9f9f9;
+}
+
+.block-1 {
+  display: flex;
+
+  .map {
+    width: 121rem;
+    height: 70rem;
+    background-image: url('./img/01_map.svg');
+    background-repeat: no-repeat;
+    margin-top: 2rem;
+    padding-top: 15.5rem;
+
+    .title {
+      object-fit: contain;
+      font-family: $font_regular;
+      font-size: 60px;
+      font-weight: 900;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 0.87;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_blue;
+      margin-left: 6.75rem;
+    }
+    .subtitle {
+      font-size: 38px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 0.42;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_grey;
+      margin-left: 6.75rem;
+      margin-top: 3rem;
+    }
+  }
+  .customers {
+    width: 108.5rem;
+    height: 23.5rem;
+    margin-top: 11rem;
+  }
+  .shop {
+    width: 57.75rem;
+    height: 55rem;
+    margin-top: 8.5rem;
+  }
+}
+
+.block-2 {
+  height: 99.5rem;
+  background-image: url('./img/02_bg.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  margin-top: -17.5rem;
+  display: flex;
+  justify-content: center;
+
+  .wrapper {
+    margin-top: 37rem;
+    width: 110rem;
+
+    .title {
+      object-fit: contain;
+      font-family: $font_regular;
+      font-size: 60px;
+      font-weight: 900;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 0.87;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_blue;
+    }
+
+    .info-block {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: stretch;
+
+      div {
+        margin: 1rem;
+        font-size: 20px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.6;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color_grey;
+      }
+    }
+  }
+}
+
+.block-3 {
+  display: flex;
+  justify-content: center;
+
+  .wrapper {
+    width: 110rem;
+
+    .title {
+      font-size: 60px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_blue;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.6;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_grey;
+      margin-top: 1rem;
+    }
+
+    .blocksWrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .block {
+        width: 40rem;
+        display: flex;
+        flex-direction: column;
+        margin-top: 8rem;
+
+        img {
+          height: 12rem;
+          width: auto;
+        }
+        .title {
+          font-size: 24px;
+          font-weight: 500;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.17;
+          letter-spacing: normal;
+          text-align: center;
+          color: #2fbafd;
+          margin-top: 2rem;
+        }
+
+        .text {
+          text-align: justify;
+          margin-top: 3rem;
+        }
+      }
+    }
+  }
+}
+
+.block-4 {
+  height: 99.5rem;
+  background-image: url('./img/04_bg.svg');
+  background-repeat: no-repeat;
+  background-size: 120% 100%;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+
+  .wrapper {
+    width: 110rem;
+    padding-top: 19.5rem;
+  }
+
+  .title {
+    font-size: 60px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-align: left;
+    color: $color_blue;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: $color_grey;
+    margin-top: 2rem;
+  }
+
+  .blocks {
+    .block {
+      width: 54rem;
+      margin-top: 5rem;
+
+      .title {
+        font-size: 24px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.17;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color_grey;
+
+        img {
+          width: 2rem;
+          height: 2rem;
+        }
+
+        span {
+          margin-left: 1rem;
+        }
+      }
+
+      .text {
+        font-size: 16px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.5;
+        letter-spacing: normal;
+        text-align: left;
+        color: $color_grey;
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+
+.block-5 {
+  display: flex;
+  justify-content: center;
+
+  .wrapper {
+    width: 110rem;
+    padding-top: 8.75rem;
+
+    .title {
+      font-size: 60px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_blue;
+    }
+
+    .items {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4rem;
+
+      .itemBlock {
+        width: 35.25rem;
+        height: 49rem;
+        border-radius: 4px;
+        border: solid 1px #2fbafd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .planName {
+          font-size: 20px;
+          line-height: 1.4;
+          margin-top: 3.75rem;
+        }
+        .planDesc {
+          font-size: 12px;
+          margin-top: 1rem;
+        }
+        .planPrice {
+          font-size: 32px;
+          font-weight: 500;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 0.88;
+          letter-spacing: normal;
+          color: $color_blue;
+          margin-top: 2rem;
+        }
+        .planItems {
+          margin-top: 2rem;
+          font-size: 12px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 2;
+          letter-spacing: normal;
+          text-align: left;
+          color: $color_grey;
+
+          ul {
+            li {
+              list-style: disc;
+              color: $color_blue;
+
+              span {
+                color: $color_grey;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.block-6 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-image: url('./img/06_bg.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  margin-top: 10rem;
+
+  .wrapper {
+    width: 110rem;
+    padding-top: 18.5rem;
+
+    .title {
+      font-size: 60px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-align: left;
+      color: $color_blue;
+    }
+    .subtitle {
+      font-size: 16px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.5;
+      letter-spacing: normal;
+      color: $color_grey;
+      margin-top: 2rem;
+    }
+
+    .questions {
+      .question {
+        .title {
+          font-size: 16px;
+          font-weight: 500;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.75;
+          letter-spacing: normal;
+          text-align: left;
+          color: $color_grey;
+          margin-top: 3rem;
+        }
+        .text {
+          font-size: 16px;
+          font-weight: normal;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: 1.5;
+          letter-spacing: normal;
+          text-align: left;
+          margin-top: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.block-7 {
+  margin-top: 21rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  height: 58rem;
+
+  .wrapper {
+    width: 110rem;
+  }
+
+  .title {
+    font-size: 60px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-align: left;
+    color: $color_blue;
+  }
+
+  .buttonWrapper {
+    width: 26rem;
+    margin-top: 4rem;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .customers {
+    width: 90rem;
+    height: 21.5rem;
+    transform: scaleX(-1);
+    position: absolute;
+    top: 16rem;
+    right: 0;
+  }
+}
