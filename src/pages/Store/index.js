@@ -2,6 +2,7 @@
 
 export { default as Showcase } from './Showcase/Showcase';
 export { default as Store } from './Store';
+export { default as StoreItems } from './Items/StoreItems';
 export { default as StoreAbout } from './About/About';
 export { default as StoreContext } from './StoreContext';
 export { default as StoreHeader } from './StoreHeader';
