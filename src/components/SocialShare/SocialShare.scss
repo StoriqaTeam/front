@@ -12,6 +12,9 @@
     background-color: $color_white;
     border-radius: 0;
   }
+  &.noBorder {
+    border: none;
+  }
 }
 
 .socialIcons {
@@ -51,6 +54,11 @@
   &.big {
     border-left: 1px solid $color_grey_trivial;
     padding: 0 4.25rem;
+  }
+
+  &.noBorder {
+    border-left: none;
+    padding: 0 4rem 0 0;
   }
 
   svg {

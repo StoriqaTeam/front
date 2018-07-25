@@ -42,6 +42,7 @@ import Plus from 'components/Icon/svg/plus.svg';
 import Prev from 'components/Icon/svg/prev.svg';
 import QA from 'components/Icon/svg/qa.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
+import Share from 'components/Icon/svg/share.svg';
 import Telegram from 'components/Icon/svg/telegram.svg';
 import Twitter from 'components/Icon/svg/twitter.svg';
 import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
@@ -113,6 +114,7 @@ const iconsMap = {
   prev: <Prev />,
   qa: <QA />,
   qualityAssurance: <QualityAssurance />,
+  share: <Share />,
   verifiedShop: <VerifiedShop />,
   sortArrows: <SortArrows />,
   telegram: <Telegram />,
