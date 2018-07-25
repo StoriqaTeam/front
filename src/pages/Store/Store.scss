@@ -1,6 +1,14 @@
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
+.mobileTabs {
+  display: block;
+  margin-top: 2rem;
+  @media (min-width: $md) {
+    display: none;
+  }
+}
+
 .storeNotFound {
   display: flex;
   flex: 1 0 auto;
@@ -12,4 +20,3 @@
     margin-top: 4rem;
   }
 }
-

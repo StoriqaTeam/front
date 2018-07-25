@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 0;
-  padding: 0 2rem;
+  padding: 0 1rem;
 
   @media (min-width: $md) {
     padding: 0;
@@ -19,9 +19,13 @@
       width: 21.25rem;
     }
   }
+
+  button:first-child {
+    margin-right: 2rem;
+  }
   @media (min-width: $md) {
-    justify-content: space-around;
-    margin-top: 4rem;
+    justify-content: flex-end;
+    margin-top: 5rem;
   }
 
   & .message {
@@ -37,6 +41,10 @@
     display: flex;
     justify-content: space-between;
     width: 11rem;
+    @media (min-width: $md) {
+      width: initial;
+    }
+
   }
 
   & .buttonIcon {

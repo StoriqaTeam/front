@@ -10,7 +10,7 @@ import './StoreHeader.scss';
 
 const StoreHeader = () => (
   <StoreContext.Consumer>
-    {({ image }) => (
+    {({ image, tabs }) => (
       <header styleName="container">
         <div styleName="imageWrapper">
           <figure styleName="image">
@@ -22,7 +22,7 @@ const StoreHeader = () => (
           </figure>
         </div>
         <StoreHeaderBottom />
-        <StoreHeaderTabs />
+        <StoreHeaderTabs tabs={tabs} />
       </header>
     )}
   </StoreContext.Consumer>
