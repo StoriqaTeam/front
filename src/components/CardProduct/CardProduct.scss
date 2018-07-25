@@ -119,6 +119,13 @@
   }
 }
 
+.cashbackWrapper {
+  display: block;
+  @media (min-width: $md) {
+    display: flex;
+  }
+}
+
 .cashback {
   display: flex;
   justify-content: space-between;
@@ -139,9 +146,5 @@
 
   .value {
     margin-left: 1rem;
-  }
-
-  @media (min-width: $md) {
-    width: 50%;
   }
 }

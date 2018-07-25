@@ -23,11 +23,15 @@
 }
 
 .productNotFound {
-  align-items: center;
   display: flex;
-  flex-direction: column;
-  height: calc(100vh - 83.375rem);
+  flex: 1 0 auto;
+  align-items: center;
   justify-content: center;
+  font-size: 30px;
+
+  @media (max-width: #{$lg - 1px}) {
+    margin-top: 4rem;
+  }
 }
 
 .rating {

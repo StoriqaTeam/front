@@ -550,10 +550,7 @@ const routes = (
         `}
         render={({ props, Component }) => {
           if (props) {
-            if (props.store) {
-              return <Component {...props} />;
-            }
-            throw new RedirectException(`/404`);
+            return <Component {...props} />;
           }
           return undefined;
         }}

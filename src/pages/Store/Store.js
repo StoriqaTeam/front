@@ -2,6 +2,7 @@
 
 import React, { PureComponent, cloneElement } from 'react';
 import type { Element } from 'react';
+import { isNil } from 'ramda';
 
 import { Page } from 'components/App';
 import { Collapse } from 'components/Collapse';
@@ -50,6 +51,9 @@ class Store extends PureComponent<PropsType> {
   handleSelected = () => {};
   render() {
     const { children, store } = this.props;
+    if (isNil(store)) {
+      return <div styleName="storeNotFound">Store Not Found</div>;
+    }
     return (
       <StoreContext.Provider
         value={{
