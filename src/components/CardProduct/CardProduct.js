@@ -95,13 +95,15 @@ class CardProduct extends PureComponent<PropsTypes> {
                   {formatPrice(discountedPrice)} STQ
                 </div>
               )}
-              <div
-                styleName={classNames('cashback', {
-                  noneCashback: !cashbackValue,
-                })}
-              >
-                <b>Cashback</b>
-                <b styleName="value">{`${cashbackValue || 0}%`}</b>
+              <div styleName="cashbackWrapper">
+                <div
+                  styleName={classNames('cashback', {
+                    noneCashback: !cashbackValue,
+                  })}
+                >
+                  <b>Cashback</b>
+                  <b styleName="value">{`${cashbackValue || 0}%`}</b>
+                </div>
               </div>
             </div>
           </div>
