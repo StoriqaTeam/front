@@ -36,6 +36,11 @@
 }
 
 .image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color_grey_trivial;
 
   @media (min-width: $sm) {
     height: 13.75rem;
@@ -51,12 +56,6 @@
 
   @media (min-width: $xl) {
     height: 41.625rem;
-  }
-
-  & > img {
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
   }
 }
 

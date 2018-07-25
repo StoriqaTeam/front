@@ -542,6 +542,13 @@ const routes = (
             store(id: $storeId) {
               id
               rawId
+              logo
+              cover
+              name {
+                lang
+                text
+              }
+              rating
               ...StoreItems_shop @arguments(storeId: $storeId)
               ...About_shop
               ...Showcase_shop
@@ -558,9 +565,26 @@ const routes = (
           storeId: parseInt(params.storeId, 10),
         })}
       >
-        <Route Component={Showcase} />
-        <Route path="/about" Component={StoreAbout} />
-        <Route path="/items" Component={StoreItems} />
+        <Route
+          Component={Showcase}
+          render={({ props, Component }) => (
+            <Component {...props} key="showcase" />
+          )}
+        />
+        <Route
+          path="/about"
+          Component={StoreAbout}
+          render={({ props, Component }) => (
+            <Component {...props} key="about" />
+          )}
+        />
+        <Route
+          path="/items"
+          Component={StoreItems}
+          render={({ props, Component }) => (
+            <Component {...props} key="items" />
+          )}
+        />
       </Route>
     </Route>
   </Route>

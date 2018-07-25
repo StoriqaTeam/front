@@ -34,7 +34,7 @@ class StoreItems extends PureComponent<PropsType> {
           {products &&
             map(
               item => (
-                <Col size={6} md={4} xl={3}>
+                <Col key={item.rawId} size={6} md={4} xl={3}>
                   <div key={item.id} styleName="cardWrapper">
                     <CardProduct item={item} />
                   </div>
