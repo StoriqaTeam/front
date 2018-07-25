@@ -2,6 +2,7 @@
 
 import React, { PureComponent, cloneElement } from 'react';
 import type { Element } from 'react';
+import { isNil } from 'ramda';
 
 import { Page } from 'components/App';
 import { Container } from 'layout';
@@ -9,6 +10,8 @@ import { Container } from 'layout';
 import type { routes_Store_QueryResponse as StoreType } from 'routes/__generated__/routes_Store_Query.graphql';
 
 import { StoreContext, StoreHeader } from './index';
+
+import './Store.scss';
 
 type PropsType = {
   children: Element<*>,
@@ -19,6 +22,9 @@ class Store extends PureComponent<PropsType> {
   handleClick = () => {};
   render() {
     const { children, store } = this.props;
+    if (isNil(store)) {
+      return <div styleName="storeNotFound">Store Not Found</div>;
+    }
     return (
       <StoreContext.Provider
         value={{
