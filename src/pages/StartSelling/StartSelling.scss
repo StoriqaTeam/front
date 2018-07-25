@@ -11,6 +11,10 @@
   @media (max-width: 1359px) and (min-width: 1024px) {
     font-size: 50px;
   }
+  @media (max-width: 1023px) and (min-width: 768px) {
+    font-size: 38px;
+  }
+
   font-weight: bold;
   font-style: normal;
   font-stretch: normal;
@@ -40,6 +44,9 @@
     @media (max-width: 1359px) and (min-width: 1024px) {
       width: 102rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 91rem;
+    }
   }
 
   .map {
@@ -52,6 +59,11 @@
       width: 90.5rem;
       height: 53.75rem;
       padding-top: 8rem;
+    }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 66rem;
+      height: 42.5rem;
+      padding-top: 5rem;
     }
     background-image: url('./img/01_map.svg');
     background-repeat: no-repeat;
@@ -74,6 +86,9 @@
         font-size: 32px;
         margin-left: 3rem;
       }
+      @media (max-width: 1023px) and (min-width: 768px) {
+        font-size: 26px;
+      }
       margin-top: 0rem;
     }
   }
@@ -88,6 +103,11 @@
       height: 18rem;
       margin-top: 7rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 60rem;
+      height: 14.25rem;
+      margin-top: 8rem;
+    }
   }
   .shop {
     @media (min-width: 1360px) {
@@ -100,6 +120,12 @@
       height: 42.25rem;
       margin-top: 6rem;
       margin-left: -9rem;
+    }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 31rem;
+      height: 29.5rem;
+      margin-top: 5rem;
+      margin-left: -6rem;
     }
   }
 }
@@ -127,6 +153,10 @@
       margin-top: 28rem;
       width: 102rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      padding-top: 24rem;
+      width: 91rem;
+    }
 
     .subtitle {
       margin-top: 1rem;
@@ -143,6 +173,10 @@
         }
         @media (max-width: 1359px) and (min-width: 1024px) {
           font-size: 20px;
+        }
+        @media (max-width: 1023px) and (min-width: 768px) {
+          font-size: 18px;
+          line-height: 1.22;
         }
         font-weight: normal;
         font-style: normal;
@@ -168,6 +202,9 @@
   @media (max-width: 1359px) and (min-width: 1024px) {
     padding-top: 10rem;
   }
+  @media (max-width: 1023px) and (min-width: 768px) {
+    margin-top: 11rem;
+  }
 
   .wrapper {
     @media (min-width: 1360px) {
@@ -176,11 +213,19 @@
     @media (max-width: 1359px) and (min-width: 1024px) {
       width: 102rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 91rem;
+    }
 
     .subtitle {
       margin-top: 1rem;
       @media (max-width: 1359px) and (min-width: 1024px) {
         width: 50rem;
+      }
+      @media (max-width: 1023px) and (min-width: 768px) {
+        width: 44.5rem;
+        font-size: 18px;
+        line-height: 1.22;
       }
     }
 
@@ -197,6 +242,9 @@
           width: 46.25rem;
           font-size: 20px;
           line-height: 1.4;
+        }
+        @media (max-width: 1023px) and (min-width: 768px) {
+          width: 44.5rem;
         }
 
         display: flex;
@@ -222,6 +270,14 @@
         .text {
           text-align: justify;
           margin-top: 3rem;
+          @media (max-width: 1023px) and (min-width: 768px) {
+            font-size: 18px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 1.22;
+            letter-spacing: normal;
+          }
         }
       }
     }
@@ -251,6 +307,10 @@
       width: 102rem;
       padding-top: 14.5rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 91rem;
+      margin-top: 12rem;
+    }
   }
 
   .subtitle {
@@ -258,6 +318,12 @@
     @media (max-width: 1359px) and (min-width: 1024px) {
       width: 47.5rem;
       line-height: 1.4;
+    }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 44.5rem;
+      line-height: 1.22;
+      font-weight: normal;
+      font-size: 18px;
     }
   }
 
@@ -268,6 +334,9 @@
       }
       @media (max-width: 1359px) and (min-width: 1024px) {
         width: 47.5rem;
+      }
+      @media (max-width: 1023px) and (min-width: 768px) {
+        width: 54rem;
       }
 
       margin-top: 5rem;
@@ -299,6 +368,11 @@
         @media (max-width: 1359px) and (min-width: 1024px) {
           font-size: 20px;
         }
+        @media (max-width: 1023px) and (min-width: 768px) {
+          font-size: 18px;
+          line-height: 1.22;
+        }
+
         font-weight: normal;
         font-style: normal;
         font-stretch: normal;
@@ -323,6 +397,10 @@
     @media (max-width: 1359px) and (min-width: 1024px) {
       width: 102rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 91rem;
+      padding-top: 12rem;
+    }
     padding-top: 8.75rem;
 
     .items {
@@ -339,6 +417,10 @@
           width: 32.5rem;
           height: 58.25rem;
         }
+        @media (max-width: 1023px) and (min-width: 768px) {
+          width: 29rem;
+          height: 44rem;
+        }
 
         border-radius: 4px;
         border: solid 1px $color_blue;
@@ -353,6 +435,9 @@
           @media (max-width: 1359px) and (min-width: 1024px) {
             font-weight: 600;
           }
+          @media (max-width: 1023px) and (min-width: 768px) {
+            margin-top: 2.75rem;
+          }
         }
         .planDesc {
           @media (min-width: 1360px) {
@@ -363,6 +448,15 @@
             text-align: center;
             line-height: 1.2;
           }
+          @media (max-width: 1023px) and (min-width: 768px) {
+            font-size: 18px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 1.22;
+            text-align: center;
+          }
+
           margin-top: 1rem;
         }
         .planPrice {
@@ -372,6 +466,10 @@
           @media (max-width: 1359px) and (min-width: 1024px) {
             font-size: 36px;
           }
+          @media (max-width: 1023px) and (min-width: 768px) {
+            font-size: 32px;
+          }
+
           font-weight: 500;
           font-style: normal;
           font-stretch: normal;
@@ -389,6 +487,10 @@
             line-height: 1.3;
             padding-left: 1.5rem;
           }
+          @media (max-width: 1023px) and (min-width: 768px) {
+            line-height: 1.22;
+          }
+
           margin-top: 2rem;
           font-weight: normal;
           font-style: normal;
@@ -422,6 +524,9 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
   margin-top: 10rem;
+  @media (max-width: 1023px) and (min-width: 768px) {
+    margin-top: 8rem;
+  }
 
   .wrapper {
     @media (min-width: 1360px) {
@@ -429,6 +534,10 @@
     }
     @media (max-width: 1359px) and (min-width: 1024px) {
       width: 102rem;
+    }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 91rem;
+      padding-top: 0;
     }
     padding-top: 18.5rem;
 
@@ -439,6 +548,9 @@
             font-size: 16px;
           }
           @media (max-width: 1359px) and (min-width: 1024px) {
+            font-size: 20px;
+          }
+          @media (max-width: 1023px) and (min-width: 768px) {
             font-size: 20px;
           }
           font-weight: 500;
@@ -457,6 +569,11 @@
           @media (max-width: 1359px) and (min-width: 1024px) {
             font-size: 20px;
           }
+          @media (max-width: 1023px) and (min-width: 768px) {
+            font-size: 18px;
+            line-height: 1.22;
+          }
+
           font-weight: normal;
           font-style: normal;
           font-stretch: normal;
@@ -478,12 +595,20 @@
   position: relative;
   height: 58rem;
 
+  @media (max-width: 1023px) and (min-width: 768px) {
+    margin-top: 7.5rem;
+    overflow: hidden;
+  }
+
   .wrapper {
     @media (min-width: 1360px) {
       width: 110rem;
     }
     @media (max-width: 1359px) and (min-width: 1024px) {
       width: 102rem;
+    }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      width: 91rem;
     }
   }
 
@@ -494,6 +619,9 @@
     }
     @media (max-width: 1359px) and (min-width: 1024px) {
       margin-top: 15rem;
+    }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      margin-top: 13rem;
     }
 
     button {
@@ -508,6 +636,11 @@
     @media (max-width: 1359px) and (min-width: 1024px) {
       top: 24rem;
     }
+    @media (max-width: 1023px) and (min-width: 768px) {
+      margin-top: 15rem;
+      right: -30rem;
+    }
+
     width: 90rem;
     height: 21.5rem;
     transform: scaleX(-1);
