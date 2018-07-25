@@ -49,6 +49,7 @@ import Upload from 'components/Icon/svg/upload.svg';
 import VkGray from 'components/Icon/svg/vk_gray.svg';
 import Move from 'components/Icon/svg/move.svg';
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
+import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
 //
 
 // For product
@@ -112,6 +113,7 @@ const iconsMap = {
   prev: <Prev />,
   qa: <QA />,
   qualityAssurance: <QualityAssurance />,
+  verifiedShop: <VerifiedShop />,
   sortArrows: <SortArrows />,
   telegram: <Telegram />,
   twitter: <Twitter />,
