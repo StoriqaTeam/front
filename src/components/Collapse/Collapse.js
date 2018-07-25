@@ -94,6 +94,7 @@ class Collapse extends Component<PropsType, StateType> {
                 onClick={() => this.handleSelected(item, idx)}
                 onKeyPress={() => {}}
                 role="none"
+                styleName="item"
               >
                 {item.title}
               </li>
