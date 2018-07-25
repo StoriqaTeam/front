@@ -67,6 +67,7 @@
   font-style: normal;
   font-weight: 800;
   max-height: 4.375rem;
+  margin: 1rem 0;
   letter-spacing: 0.3px;
   line-height: normal;
   & > .cartIcon {
@@ -82,6 +83,9 @@
         width: 28px;
       }
     }
+  }
+  @media (min-width: $md) {
+   margin: 3rem 0 0 0;
   }
   @media (min-width: $lg) {
    font-size: 3rem;
