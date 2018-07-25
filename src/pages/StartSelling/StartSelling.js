@@ -39,6 +39,10 @@ const StartSelling = () => (
               STORIQA IS YOUR DOOR<br />TO GLOBAL MARKET
             </b>
           </div>
+          <div styleName="subtitle">
+            Our goal is to guarantee the quality of experience and goods, for
+            both buyers and sellers.
+          </div>
           <div styleName="info-block">
             <div>
               Storiqa is an online marketplace offering global access with
