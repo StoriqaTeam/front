@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { path, isNil } from 'ramda';
+
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
+import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
@@ -27,7 +29,6 @@ import {
   ProductDetails,
   ProductImage,
   ProductPrice,
-  ProductShare,
   ProductStore,
   Tab,
   Tabs,
@@ -210,7 +211,7 @@ class Product extends Component<PropsType, StateType> {
                 thumbnails={productVariant.additionalPhotos}
               />
               {process.env.BROWSER ? (
-                <ProductShare {...productVariant} />
+                <SocialShare big {...productVariant} />
               ) : null}
             </Col>
             <Col sm={12} md={6} lg={6} xl={6}>
@@ -273,6 +274,7 @@ export default createFragmentContainer(
         lang
       }
       store {
+        rawId
         name {
           lang
           text

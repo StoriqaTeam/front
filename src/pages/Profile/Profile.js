@@ -90,7 +90,7 @@ class Profile extends Component<PropsType, StateType> {
                 <Col sm={9} md={9} lg={10} xl={10}>
                   <div styleName="content">
                     <div styleName="header">
-                      <span styleName="title">Profile</span>
+                      <span styleName="title">{subtitle}</span>
                     </div>
                     <div styleName="form">
                       {this.renderProfileItem(subtitle)}

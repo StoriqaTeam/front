@@ -1,7 +1,6 @@
 @import "../../styles/variables.scss";
 
 .container {
-  height: 40rem;
   padding: 1rem;
   position: relative;
 }
@@ -51,50 +50,78 @@
 
 .bottom {
   background-color: $color_white;
-  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 2rem;
-  position: absolute;
-  top: 21.25rem;
   width: 100%;
   z-index: 1;
 }
 
 .title {
+  font-size: 1.5rem;
+  font-family: $font_regular;
   color: $color_grey;
-  font-size: 16px;
   margin-top: 1rem;
-  max-height: 48px;
+  height: 6rem;
   overflow: hidden;
   transition: $transition_all_ease;
   white-space: normal;
-}
 
-.price {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-}
+  @media (min-width: $md) {
+    font-size: 2rem;
+    height: 8rem;
+  }
 
-.actualPrice {
-  font-size: 18px;
-  line-height: 2.25rem;
-  color: $color_blue;
+  @media (min-width: $xl) {
+    font-size: 2rem;
+    font-family: $font_medium;
+    text-transform: uppercase;
+  }
 }
 
 .undiscountedPrice {
   color: $color_grey_minor;
-  font-size: 14px;
+  font-size: 1.5rem;
   line-height: 2.5rem;
+  height: 2.5rem;
   margin-bottom: 0.6rem;
   text-decoration: line-through;
+
+  @media (min-width: $md) {
+    font-size: 1.75rem;
+  }
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: space-between;
+
+  @media (min-width: $xl) {
+    flex-direction: row;
+  }
+}
+
+.actualPrice {
+  font-family: $font_medium;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  color: $color_black;
+  margin-bottom: 1rem;
+
+  @media (min-width: $md) {
+    font-size: 2rem;
+  }
+  @media (min-width: $xl) {
+    margin-bottom: 0rem;
+  }
 }
 
 .cashback {
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
   height: 2.25rem;
   padding: 0 1rem;
   color: $color_white;
@@ -104,8 +131,17 @@
   vertical-align: bottom;
   border-radius: 0.25rem;
   background-color: $color_blue;
+  margin-bottom: 1rem;
 
   &.noneCashback {
     background-color: $color_grey_light;
+  }
+
+  .value {
+    margin-left: 1rem;
+  }
+
+  @media (min-width: $md) {
+    width: 50%;
   }
 }
