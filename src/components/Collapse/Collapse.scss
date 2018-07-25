@@ -7,6 +7,10 @@
   border: 1px solid $color_grey_light;
 }
 
+.transparent2 {
+  background: transparent;
+}
+
 .offscreen {
   @include offscreen();
 }

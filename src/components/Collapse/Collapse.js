@@ -13,6 +13,7 @@ type PropsType = {
   onSelected: (item: { id: string, title: string }) => void,
   isDisabled: boolean,
   selected: string,
+  transparent: boolean,
 };
 
 type StateType = {
@@ -25,6 +26,7 @@ class Collapse extends Component<PropsType, StateType> {
   static defaultProps = {
     isDisabled: false,
     selected: '',
+    transparent: false,
   };
   constructor(props: PropsType) {
     super(props);
@@ -64,10 +66,10 @@ class Collapse extends Component<PropsType, StateType> {
     );
   };
   render() {
-    const { items } = this.props;
+    const { items, transparent } = this.props;
     const { isOpen, index, title } = this.state;
     return (
-      <div styleName="container">
+      <div styleName={classNames('container', { transparent2: transparent })}>
         <header
           role="none"
           onKeyPress={() => {}}
