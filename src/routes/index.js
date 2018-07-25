@@ -567,9 +567,7 @@ const routes = (
       >
         <Route
           Component={Showcase}
-          render={({ props, Component }) => (
-            <Component {...props} key="showcase" />
-          )}
+          render={({ props, Component }) => <Component {...props} key="shop" />}
         />
         <Route
           path="/about"

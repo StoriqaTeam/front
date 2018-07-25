@@ -11,7 +11,7 @@
   }
 
   button {
-    width: 15rem;
+    width: 100%;
     @media (min-width: $md) {
       width: 17.5rem;
     }
@@ -30,8 +30,8 @@
 
   & .message {
     display: none;
-    margin-right: 0.5rem;
-    @media (min-width: $md) {
+    margin-left: 0.5rem;
+    @media (min-width: $lg) {
       display: inline;
     }
   }
@@ -49,7 +49,7 @@
 
   & .buttonIcon {
     display: block;
-    margin-right: 0.5rem;
+    margin-right: 0.6rem;
     @media (min-width: $md) {
       display: none;
     }

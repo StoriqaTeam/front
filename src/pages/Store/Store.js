@@ -3,6 +3,7 @@
 import React, { PureComponent, cloneElement } from 'react';
 import type { Element } from 'react';
 import { isNil, pathOr } from 'ramda';
+import { routerShape } from 'found';
 
 import { Page } from 'components/App';
 import { Collapse } from 'components/Collapse';
@@ -15,8 +16,8 @@ import './Store.scss';
 
 const tabs = [
   {
-    id: 'showcase',
-    title: 'Show',
+    id: 'shop',
+    title: 'Shop',
     isNew: false,
     link: '',
   },
@@ -59,9 +60,17 @@ type PropsType = {
     },
     rating: number,
   },
+  router: routerShape,
 };
 
 class Store extends PureComponent<PropsType> {
+  onSelected = (item: { link: string }) => {
+    const { store } = this.props;
+    if (store) {
+      this.props.router.push(`/store/${store.rawId}${item.link || ''}`);
+    }
+  };
+
   render() {
     const { children, store } = this.props;
     if (isNil(store)) {
@@ -88,7 +97,12 @@ class Store extends PureComponent<PropsType> {
         <Container>
           <StoreHeader />
           <div styleName="mobileTabs">
-            <Collapse transparent items={tabs} />
+            <Collapse
+              transparent
+              items={tabs}
+              onSelected={this.onSelected}
+              selected={children.key}
+            />
           </div>
           {children && cloneElement(children, { shop: store })}
         </Container>

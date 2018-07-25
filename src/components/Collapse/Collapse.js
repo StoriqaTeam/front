@@ -69,7 +69,7 @@ class Collapse extends Component<PropsType, StateType> {
     const { items, transparent } = this.props;
     const { isOpen, index, title } = this.state;
     return (
-      <div styleName={classNames('container', { transparent2: transparent })}>
+      <div styleName={classNames('container', { transparent })}>
         <header
           role="none"
           onKeyPress={() => {}}
@@ -94,6 +94,7 @@ class Collapse extends Component<PropsType, StateType> {
                 onClick={() => this.handleSelected(item, idx)}
                 onKeyPress={() => {}}
                 role="none"
+                styleName="item"
               >
                 {item.title}
               </li>
