@@ -2,13 +2,13 @@
 
 import React, { PureComponent, cloneElement } from 'react';
 import type { Element } from 'react';
-import { isNil } from 'ramda';
+import { isNil, pathOr } from 'ramda';
+import { routerShape } from 'found';
 
 import { Page } from 'components/App';
 import { Collapse } from 'components/Collapse';
 import { Container } from 'layout';
-
-import type { routes_Store_QueryResponse as StoreType } from 'routes/__generated__/routes_Store_Query.graphql';
+import { getNameText } from 'utils';
 
 import { StoreContext, StoreHeader } from './index';
 
@@ -16,52 +16,82 @@ import './Store.scss';
 
 const tabs = [
   {
-    id: '0',
-    title: 'Show',
+    id: 'shop',
+    title: 'Shop',
     isNew: false,
+    link: '',
   },
   {
-    id: '1',
+    id: 'items',
     title: 'Items',
     isNew: false,
+    link: '/items',
   },
   {
-    id: '2',
+    id: 'reviews',
     title: 'Reviews',
     isNew: false,
+    link: null,
   },
   {
-    id: '3',
+    id: 'actions',
     title: 'Actions',
     isNew: true,
+    link: null,
   },
   {
-    id: '4',
+    id: 'about',
     title: 'About',
     isNew: false,
+    link: '/about',
   },
 ];
 
 type PropsType = {
   children: Element<*>,
-  store: StoreType,
+  store: ?{
+    id: string,
+    rawId: number,
+    logo: ?string,
+    cover: ?string,
+    name: {
+      lang: string,
+      text: string,
+    },
+    rating: number,
+  },
+  router: routerShape,
 };
 
 class Store extends PureComponent<PropsType> {
-  handleSelected = () => {};
+  onSelected = (item: { link: string }) => {
+    const { store } = this.props;
+    if (store) {
+      this.props.router.push(`/store/${store.rawId}${item.link || ''}`);
+    }
+  };
+
   render() {
     const { children, store } = this.props;
     if (isNil(store)) {
       return <div styleName="storeNotFound">Store Not Found</div>;
     }
+    // $FlowIgnore
+    const logo = pathOr(null, ['logo'], store);
+    // $FlowIgnore
+    const cover = pathOr(null, ['cover'], store);
+    const name = getNameText(store.name, 'EN');
     return (
       <StoreContext.Provider
         value={{
-          logo:
-            'https://vignette.wikia.nocookie.net/zimwiki/images/5/53/Irken_Invader_Logo_by_Danial79_%281%29.jpg/revision/latest?cb=20120611162935',
-          image:
-            'https://1256852360.rsc.cdn77.org/en/100593/air-jordan-1-mid-black-white-black.jpg',
+          logo,
+          cover,
           tabs,
+          storeId: store.rawId,
+          name,
+          rating: store.rating,
+          // $FlowIgnore
+          active: children.key,
         }}
       >
         <Container>
@@ -70,7 +100,8 @@ class Store extends PureComponent<PropsType> {
             <Collapse
               transparent
               items={tabs}
-              onSelected={this.handleSelected}
+              onSelected={this.onSelected}
+              selected={children.key}
             />
           </div>
           {children && cloneElement(children, { shop: store })}

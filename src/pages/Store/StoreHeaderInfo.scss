@@ -44,15 +44,12 @@
 }
 
 .shopLogo {
+  position: relative;
   height: 10rem;
-  margin-right: 0;
   width: 10rem;
-  & > img {
-    border-radius: 0.5rem;
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
-  }
+  border-radius: 0.5rem;
+  overflow: hidden;
+
   @media (min-width: $md) {
     margin-right: 2rem;
   }
