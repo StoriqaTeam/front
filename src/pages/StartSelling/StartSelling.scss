@@ -4,62 +4,113 @@
   background-color: #f9f9f9;
 }
 
+.title {
+  @media (min-width: 1360px) {
+    font-size: 60px;
+  }
+  @media (max-width: 1359px) and (min-width: 1024px) {
+    font-size: 50px;
+  }
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: left;
+  color: $color_blue;
+}
+.subtitle {
+  font-size: 20px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: $color_grey;
+}
+
 .block-1 {
   display: flex;
   justify-content: center;
 
   .wrapper {
-    width: 110rem;
+    @media (min-width: 1360px) {
+      width: 110rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 102rem;
+    }
   }
 
   .map {
-    width: 121rem;
-    height: 70rem;
+    @media (min-width: 1360px) {
+      width: 121rem;
+      height: 70rem;
+      padding-top: 15.5rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 90.5rem;
+      height: 53.75rem;
+      padding-top: 8rem;
+    }
     background-image: url('./img/01_map.svg');
     background-repeat: no-repeat;
     margin-top: 2rem;
-    padding-top: 15.5rem;
 
     .title {
-      object-fit: contain;
-      font-family: $font_regular;
-      font-size: 60px;
-      font-weight: 900;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 0.87;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_blue;
-      margin-left: 6.75rem;
+      @media (min-width: 1360px) {
+        margin-left: 6.75rem;
+      }
+      @media (max-width: 1359px) and (min-width: 1024px) {
+        margin-left: 3rem;
+      }
     }
     .subtitle {
-      font-size: 38px;
-      font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 0.42;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_grey;
-      margin-left: 6.75rem;
-      margin-top: 3rem;
+      @media (min-width: 1360px) {
+        font-size: 38px;
+        margin-left: 6.75rem;
+      }
+      @media (max-width: 1359px) and (min-width: 1024px) {
+        font-size: 32px;
+        margin-left: 3rem;
+      }
+      margin-top: 0rem;
     }
   }
   .customers {
-    width: 108.5rem;
-    height: 23.5rem;
-    margin-top: 11rem;
+    @media (min-width: 1360px) {
+      width: 108.5rem;
+      height: 23.5rem;
+      margin-top: 11rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 83rem;
+      height: 18rem;
+      margin-top: 7rem;
+    }
   }
   .shop {
-    width: 57.75rem;
-    height: 55rem;
-    margin-top: 8.5rem;
+    @media (min-width: 1360px) {
+      width: 57.75rem;
+      height: 55rem;
+      margin-top: 8.5rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 44.25rem;
+      height: 42.25rem;
+      margin-top: 6rem;
+      margin-left: -9rem;
+    }
   }
 }
 
 .block-2 {
-  height: 99.5rem;
+  @media (min-width: 1360px) {
+    height: 99.5rem;
+  }
+  @media (max-width: 1359px) and (min-width: 1024px) {
+    height: 77.5rem;
+  }
   background-image: url('./img/02_bg.svg');
   background-repeat: no-repeat;
   background-size: 100% auto;
@@ -68,24 +119,16 @@
   justify-content: center;
 
   .wrapper {
-    margin-top: 37rem;
-    width: 110rem;
-
-    .title {
-      object-fit: contain;
-      font-family: $font_regular;
-      font-size: 60px;
-      font-weight: 900;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.2;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_blue;
+    @media (min-width: 1360px) {
+      margin-top: 37rem;
+      width: 110rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      margin-top: 28rem;
+      width: 102rem;
     }
 
     .subtitle {
-      font-size: 20px;
       margin-top: 1rem;
     }
 
@@ -95,7 +138,12 @@
       justify-content: stretch;
 
       div {
-        font-size: 16px;
+        @media (min-width: 1360px) {
+          font-size: 16px;
+        }
+        @media (max-width: 1359px) and (min-width: 1024px) {
+          font-size: 20px;
+        }
         font-weight: normal;
         font-style: normal;
         font-stretch: normal;
@@ -115,31 +163,25 @@
 .block-3 {
   display: flex;
   justify-content: center;
+  @media (min-width: 1360px) {
+  }
+  @media (max-width: 1359px) and (min-width: 1024px) {
+    padding-top: 10rem;
+  }
 
   .wrapper {
-    width: 110rem;
-
-    .title {
-      font-size: 60px;
-      font-weight: bold;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.2;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_blue;
+    @media (min-width: 1360px) {
+      width: 110rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 102rem;
     }
 
     .subtitle {
-      font-size: 20px;
-      font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.6;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_grey;
       margin-top: 1rem;
+      @media (max-width: 1359px) and (min-width: 1024px) {
+        width: 50rem;
+      }
     }
 
     .blocksWrapper {
@@ -148,7 +190,15 @@
       justify-content: space-between;
 
       .block {
-        width: 40rem;
+        @media (min-width: 1360px) {
+          width: 40rem;
+        }
+        @media (max-width: 1359px) and (min-width: 1024px) {
+          width: 46.25rem;
+          font-size: 20px;
+          line-height: 1.4;
+        }
+
         display: flex;
         flex-direction: column;
         margin-top: 8rem;
@@ -179,7 +229,12 @@
 }
 
 .block-4 {
-  height: 99.5rem;
+  @media (min-width: 1360px) {
+    height: 99.5rem;
+  }
+  @media (max-width: 1359px) and (min-width: 1024px) {
+    height: 115.5rem;
+  }
   background-image: url('./img/04_bg.svg');
   background-repeat: no-repeat;
   background-size: 120% 100%;
@@ -188,35 +243,33 @@
   justify-content: center;
 
   .wrapper {
-    width: 110rem;
-    padding-top: 19.5rem;
-  }
-
-  .title {
-    font-size: 60px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.2;
-    letter-spacing: normal;
-    text-align: left;
-    color: $color_blue;
+    @media (min-width: 1360px) {
+      width: 110rem;
+      padding-top: 19.5rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 102rem;
+      padding-top: 14.5rem;
+    }
   }
 
   .subtitle {
-    font-size: 20px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.5;
-    letter-spacing: normal;
-    color: $color_grey;
     margin-top: 2rem;
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 47.5rem;
+      line-height: 1.4;
+    }
   }
 
   .blocks {
     .block {
-      width: 54rem;
+      @media (min-width: 1360px) {
+        width: 54rem;
+      }
+      @media (max-width: 1359px) and (min-width: 1024px) {
+        width: 47.5rem;
+      }
+
       margin-top: 5rem;
 
       .title {
@@ -240,13 +293,18 @@
       }
 
       .text {
-        font-size: 16px;
+        @media (min-width: 1360px) {
+          font-size: 16px;
+        }
+        @media (max-width: 1359px) and (min-width: 1024px) {
+          font-size: 20px;
+        }
         font-weight: normal;
         font-style: normal;
         font-stretch: normal;
         line-height: 1.5;
         letter-spacing: normal;
-        text-align: left;
+        text-align: justify;
         color: $color_grey;
         margin-top: 1rem;
       }
@@ -259,19 +317,13 @@
   justify-content: center;
 
   .wrapper {
-    width: 110rem;
-    padding-top: 8.75rem;
-
-    .title {
-      font-size: 60px;
-      font-weight: bold;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.2;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_blue;
+    @media (min-width: 1360px) {
+      width: 110rem;
     }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 102rem;
+    }
+    padding-top: 8.75rem;
 
     .items {
       display: flex;
@@ -279,8 +331,15 @@
       margin-top: 4rem;
 
       .itemBlock {
-        width: 35.25rem;
-        height: 49rem;
+        @media (min-width: 1360px) {
+          width: 35.25rem;
+          height: 49rem;
+        }
+        @media (max-width: 1359px) and (min-width: 1024px) {
+          width: 32.5rem;
+          height: 58.25rem;
+        }
+
         border-radius: 4px;
         border: solid 1px $color_blue;
         display: flex;
@@ -291,13 +350,28 @@
           font-size: 20px;
           line-height: 1.4;
           margin-top: 3.75rem;
+          @media (max-width: 1359px) and (min-width: 1024px) {
+            font-weight: 600;
+          }
         }
         .planDesc {
-          font-size: 12px;
+          @media (min-width: 1360px) {
+            font-size: 12px;
+          }
+          @media (max-width: 1359px) and (min-width: 1024px) {
+            font-size: 20px;
+            text-align: center;
+            line-height: 1.2;
+          }
           margin-top: 1rem;
         }
         .planPrice {
-          font-size: 32px;
+          @media (min-width: 1360px) {
+            font-size: 32px;
+          }
+          @media (max-width: 1359px) and (min-width: 1024px) {
+            font-size: 36px;
+          }
           font-weight: 500;
           font-style: normal;
           font-stretch: normal;
@@ -307,8 +381,15 @@
           margin-top: 2rem;
         }
         .planItems {
+          @media (min-width: 1360px) {
+            font-size: 12px;
+          }
+          @media (max-width: 1359px) and (min-width: 1024px) {
+            font-size: 20px;
+            line-height: 1.3;
+            padding-left: 1.5rem;
+          }
           margin-top: 2rem;
-          font-size: 12px;
           font-weight: normal;
           font-style: normal;
           font-stretch: normal;
@@ -343,34 +424,23 @@
   margin-top: 10rem;
 
   .wrapper {
-    width: 110rem;
+    @media (min-width: 1360px) {
+      width: 110rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 102rem;
+    }
     padding-top: 18.5rem;
-
-    .title {
-      font-size: 60px;
-      font-weight: bold;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.2;
-      letter-spacing: normal;
-      text-align: left;
-      color: $color_blue;
-    }
-    .subtitle {
-      font-size: 20px;
-      font-weight: normal;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.5;
-      letter-spacing: normal;
-      color: $color_grey;
-      margin-top: 2rem;
-    }
 
     .questions {
       .question {
         .title {
-          font-size: 16px;
+          @media (min-width: 1360px) {
+            font-size: 16px;
+          }
+          @media (max-width: 1359px) and (min-width: 1024px) {
+            font-size: 20px;
+          }
           font-weight: 500;
           font-style: normal;
           font-stretch: normal;
@@ -381,7 +451,12 @@
           margin-top: 3rem;
         }
         .text {
-          font-size: 16px;
+          @media (min-width: 1360px) {
+            font-size: 16px;
+          }
+          @media (max-width: 1359px) and (min-width: 1024px) {
+            font-size: 20px;
+          }
           font-weight: normal;
           font-style: normal;
           font-stretch: normal;
@@ -404,23 +479,22 @@
   height: 58rem;
 
   .wrapper {
-    width: 110rem;
-  }
-
-  .title {
-    font-size: 60px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.2;
-    letter-spacing: normal;
-    text-align: left;
-    color: $color_blue;
+    @media (min-width: 1360px) {
+      width: 110rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      width: 102rem;
+    }
   }
 
   .buttonWrapper {
     width: 26rem;
-    margin-top: 4rem;
+    @media (min-width: 1360px) {
+      margin-top: 4rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      margin-top: 15rem;
+    }
 
     button {
       width: 100%;
@@ -428,11 +502,16 @@
   }
 
   .customers {
+    @media (min-width: 1360px) {
+      top: 16rem;
+    }
+    @media (max-width: 1359px) and (min-width: 1024px) {
+      top: 24rem;
+    }
     width: 90rem;
     height: 21.5rem;
     transform: scaleX(-1);
     position: absolute;
-    top: 16rem;
     right: 0;
   }
 }
