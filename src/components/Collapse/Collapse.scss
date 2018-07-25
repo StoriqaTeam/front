@@ -7,7 +7,7 @@
   border: 1px solid $color_grey_light;
 }
 
-.transparent2 {
+.transparent {
   background: transparent;
 }
 
@@ -18,10 +18,17 @@
 .header {
   align-items: center;
   display: flex;
+  font-weight: 500;
   height: 5.125rem;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0 2rem;
   text-transform: uppercase;
+}
+
+.item {
+  color: $color_grey;
+  font-size: 14px;
+  height: 4.375rem;
 }
 
 .icon {
@@ -38,7 +45,7 @@
 
 .content {
   display: none;
-  padding: 0 0.5rem;
+  padding: 0 2rem;
 
   &.show {
     display: block;

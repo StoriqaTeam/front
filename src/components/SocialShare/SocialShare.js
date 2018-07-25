@@ -16,20 +16,22 @@ type PropsType = {
   photoMain: string,
   description: string,
   big: boolean,
+  noBorder: boolean,
 };
 
 class SocialShare extends Component<PropsType> {
   static defaultProps = {
     big: false,
+    noBorder: false,
   };
   handleShare = () => {};
   render() {
-    const { photoMain, description, big } = this.props;
+    const { photoMain, description, big, noBorder } = this.props;
     const { href } = window.location;
     const url = window.encodeURIComponent(href);
     // const url = 'https://nightly.stq.cloud/store/129/products/468';
     return (
-      <nav styleName={classNames('container', { big })}>
+      <nav styleName={classNames('container', { big, noBorder })}>
         <ul styleName={classNames('socialIcons', { big })}>
           <li styleName="linkContainer">
             <a
@@ -75,7 +77,7 @@ class SocialShare extends Component<PropsType> {
             </a>
           </li>
         </ul>
-        <div styleName={classNames('favorite', { big })}>
+        <div styleName={classNames('favorite', { big, noBorder })}>
           <HeartIcon />
         </div>
       </nav>

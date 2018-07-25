@@ -15,7 +15,7 @@
     margin-bottom: 0;
   }
 
-  & > .controls {
+  & > .share {
     display: block;
     left: 2rem;
     position: absolute;
@@ -63,13 +63,8 @@
   color: $color_grey;
   display: flex;
   font-size: 2.25rem;
-  font-stretch: normal;
-  font-style: normal;
-  font-weight: 800;
   max-height: 4.375rem;
   margin: 1rem 0;
-  letter-spacing: 0.3px;
-  line-height: normal;
   & > .cartIcon {
     margin-left: 2rem;
     padding-top: 0;
@@ -92,6 +87,24 @@
   }
   @media (min-width: $xl) {
     font-size: 3.75rem;
+  }
+}
+
+.mobileSearch {
+  display: block;
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0 2rem;
+  transition: $transition_all_cb;
+  width: 100%;
+  @media (min-width: $md) {
+    display: none;
+  }
+  &.isOpened {
+    height: 6rem;
+    margin: 2rem 0 2rem 0;
+    opacity: 1;
   }
 }
 
