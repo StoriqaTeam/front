@@ -326,6 +326,9 @@ class Form extends Component<PropsType, StateType> {
     } else if (value === 0) {
       this.setState({ cashback: 0 });
       return;
+    } else if (value > 100) {
+      this.setState({ cashback: 99 });
+      return;
     } else if (Number.isNaN(parseFloat(value))) {
       return;
     }
