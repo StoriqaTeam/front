@@ -1,5 +1,13 @@
 @import "../../styles/variables.scss";
 
+.mainContainer {
+  margin: 0 0 4rem;
+
+  @media (min-width: $xl) {
+    margin: 2rem 0 4rem;
+  }
+}
+
 .headerWrapper {
   margin-left: -15px;
   margin-right: -15px;

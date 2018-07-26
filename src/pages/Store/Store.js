@@ -94,18 +94,20 @@ class Store extends PureComponent<PropsType> {
           active: children.key,
         }}
       >
-        <Container>
-          <StoreHeader />
-          <div styleName="mobileTabs">
-            <Collapse
-              transparent
-              items={tabs}
-              onSelected={this.onSelected}
-              selected={children.key}
-            />
-          </div>
-          {children && cloneElement(children, { shop: store })}
-        </Container>
+        <div styleName="container">
+          <Container>
+            <StoreHeader />
+            <div styleName="mobileTabs">
+              <Collapse
+                transparent
+                items={tabs}
+                onSelected={this.onSelected}
+                selected={children.key}
+              />
+            </div>
+            {children && cloneElement(children, { shop: store })}
+          </Container>
+        </div>
       </StoreContext.Provider>
     );
   }

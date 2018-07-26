@@ -249,103 +249,109 @@ class Checkout extends Component<PropsType, StateType> {
 
     const emptyCart = totalCount === 0;
     return (
-      <Container withoutGrow>
-        <Row withoutGrow>
-          {(!emptyCart || step === 3) && (
+      <div styleName="mainContainer">
+        <Container withoutGrow>
+          <Row withoutGrow>
+            {(!emptyCart || step === 3) && (
+              <Col size={12}>
+                <div styleName="headerWrapper">
+                  <CheckoutHeader
+                    currentStep={step}
+                    isReadyToNext={this.checkReadyToCheckout()}
+                    onChangeStep={this.handleChangeStep}
+                  />
+                </div>
+              </Col>
+            )}
             <Col size={12}>
-              <div styleName="headerWrapper">
-                <CheckoutHeader
-                  currentStep={step}
-                  isReadyToNext={this.checkReadyToCheckout()}
-                  onChangeStep={this.handleChangeStep}
-                />
+              <div ref={ref => this.setStoresRef(ref)}>
+                <Row withoutGrow>
+                  {emptyCart && step !== 3 ? (
+                    <Col size={12}>
+                      <div styleName="wrapper">
+                        <div styleName="storeContainer">
+                          <CartEmpty />
+                        </div>
+                      </div>
+                    </Col>
+                  ) : (
+                    <Col
+                      size={12}
+                      lg={step !== 3 ? 8 : 12}
+                      xl={step !== 3 ? 9 : 12}
+                    >
+                      {step === 1 && (
+                        <div styleName="wrapper">
+                          <div styleName="container addressContainer">
+                            <CheckoutAddress
+                              me={me}
+                              isAddressSelect={isAddressSelect}
+                              isNewAddress={isNewAddress}
+                              saveAsNewAddress={saveAsNewAddress}
+                              onChangeSaveCheckbox={
+                                this.handleChangeSaveCheckbox
+                              }
+                              onChangeAddressType={
+                                this.handleOnChangeAddressType
+                              }
+                              deliveryAddresses={deliveryAddresses || []}
+                              orderInput={orderInput}
+                              onChangeOrderInput={this.handleOnChangeOrderInput}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {step === 2 && (
+                        <div styleName="wrapper">
+                          <div styleName="container">
+                            <CheckoutProducts
+                              me={me}
+                              orderInput={orderInput}
+                              onChangeStep={this.handleChangeStep}
+                            />
+                          </div>
+                          <div styleName="storeContainer">
+                            {stores.map(store => (
+                              <CartStore
+                                onlySelected
+                                unselectable
+                                key={store.__id}
+                                store={store}
+                                totals={1000}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {step === 3 &&
+                        this.state.invoiceId && (
+                          <PaymentInfo
+                            invoiceId={this.state.invoiceId}
+                            me={this.props.me}
+                          />
+                        )}
+                    </Col>
+                  )}
+                  {!emptyCart && (
+                    <Col size={12} lg={4} xl={3}>
+                      <StickyBar>
+                        <CheckoutSidebar
+                          buttonText={step === 1 ? 'Next' : 'Checkout'}
+                          onClick={
+                            (step === 1 && this.handleChangeStep(2)) ||
+                            this.handleCheckout
+                          }
+                          isReadyToClick={this.checkReadyToCheckout()}
+                        />
+                      </StickyBar>
+                    </Col>
+                  )}
+                </Row>
               </div>
             </Col>
-          )}
-          <Col size={12}>
-            <div ref={ref => this.setStoresRef(ref)}>
-              <Row withoutGrow>
-                {emptyCart && step !== 3 ? (
-                  <Col size={12}>
-                    <div styleName="wrapper">
-                      <div styleName="storeContainer">
-                        <CartEmpty />
-                      </div>
-                    </div>
-                  </Col>
-                ) : (
-                  <Col
-                    size={12}
-                    lg={step !== 3 ? 8 : 12}
-                    xl={step !== 3 ? 9 : 12}
-                  >
-                    {step === 1 && (
-                      <div styleName="wrapper">
-                        <div styleName="container addressContainer">
-                          <CheckoutAddress
-                            me={me}
-                            isAddressSelect={isAddressSelect}
-                            isNewAddress={isNewAddress}
-                            saveAsNewAddress={saveAsNewAddress}
-                            onChangeSaveCheckbox={this.handleChangeSaveCheckbox}
-                            onChangeAddressType={this.handleOnChangeAddressType}
-                            deliveryAddresses={deliveryAddresses || []}
-                            orderInput={orderInput}
-                            onChangeOrderInput={this.handleOnChangeOrderInput}
-                          />
-                        </div>
-                      </div>
-                    )}
-                    {step === 2 && (
-                      <div styleName="wrapper">
-                        <div styleName="container">
-                          <CheckoutProducts
-                            me={me}
-                            orderInput={orderInput}
-                            onChangeStep={this.handleChangeStep}
-                          />
-                        </div>
-                        <div styleName="storeContainer">
-                          {stores.map(store => (
-                            <CartStore
-                              onlySelected
-                              unselectable
-                              key={store.__id}
-                              store={store}
-                              totals={1000}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {step === 3 &&
-                      this.state.invoiceId && (
-                        <PaymentInfo
-                          invoiceId={this.state.invoiceId}
-                          me={this.props.me}
-                        />
-                      )}
-                  </Col>
-                )}
-                {!emptyCart && (
-                  <Col size={12} lg={4} xl={3}>
-                    <StickyBar>
-                      <CheckoutSidebar
-                        buttonText={step === 1 ? 'Next' : 'Checkout'}
-                        onClick={
-                          (step === 1 && this.handleChangeStep(2)) ||
-                          this.handleCheckout
-                        }
-                        isReadyToClick={this.checkReadyToCheckout()}
-                      />
-                    </StickyBar>
-                  </Col>
-                )}
-              </Row>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
