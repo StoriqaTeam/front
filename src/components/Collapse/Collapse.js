@@ -12,6 +12,7 @@ type PropsType = {
   items: Array<{ id: string, title: string, link?: string }>,
   onSelected: (item: { id: string, title: string }) => void,
   isDisabled: boolean,
+  // eslint-disable-next-line
   selected: string,
   transparent: boolean,
 };
@@ -28,20 +29,23 @@ class Collapse extends Component<PropsType, StateType> {
     selected: '',
     transparent: false,
   };
-  constructor(props: PropsType) {
-    super(props);
-    const { selected, items } = this.props;
+  static getDerivedStateFromProps(
+    nextProps: PropsType,
+    nextState: StateType,
+  ): StateType | null {
+    const { selected, items } = nextProps;
     const index =
       !isNil(selected) && !isEmpty(selected)
         ? findIndex(propEq('id', selected))(items)
         : 0;
-    this.state = {
+    return {
+      ...nextState,
       index,
       isOpen: false,
       title: null,
     };
   }
-  handleClick = () => {
+  handleClick = (): void => {
     const { isDisabled } = this.props;
     if (!isDisabled) {
       this.setState(({ isOpen }) => ({
