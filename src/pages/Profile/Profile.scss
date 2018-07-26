@@ -3,11 +3,7 @@
 $max-width: 41rem !important;
 
 .container {
-  margin-top: 2.4375rem;
-
-  @media (min-width: $lg) {
-    margin-top: 0;
-  }
+  margin: 2rem 0 4rem;
 }
 
 .sidebar {

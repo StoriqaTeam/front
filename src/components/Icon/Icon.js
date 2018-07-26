@@ -27,6 +27,7 @@ import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
 import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import Login from 'components/Icon/svg/login.svg';
 import Logo from 'components/Icon/svg/logo.svg';
 import Logout from 'components/Icon/svg/logout.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
@@ -99,6 +100,7 @@ const iconsMap = {
   heart: <Heart />,
   instagram: <Instagram />,
   instagramGray: <InstagramGray />,
+  login: <Login />,
   logo: <Logo />,
   logout: <Logout />,
   magnifier: <Magnifier />,

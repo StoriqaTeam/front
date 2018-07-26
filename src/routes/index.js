@@ -533,7 +533,6 @@ const routes = (
           prepareVariables={() => {}}
         />
       </Route>
-
       <Route
         path="/store/:storeId"
         Component={Store}
