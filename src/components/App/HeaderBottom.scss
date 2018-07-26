@@ -31,13 +31,6 @@ $burger_menu_size: 7.5rem;
   @media (min-width: $lg) {
     padding-top: 0;
   }
-
-  &.isUserLoggedIn {
-    display: none;
-    @media (min-width: $md) {
-      display: inherit;
-    }
-  }
 }
 
 .searchBar {
@@ -54,6 +47,9 @@ $burger_menu_size: 7.5rem;
 
 .cartIcon {
   margin-left: 1rem;
+  &.isUserLoggedIn {
+    margin-left: 0;
+  }
   width: 4rem;
 }
 
@@ -61,6 +57,10 @@ $burger_menu_size: 7.5rem;
   display: block;
   margin-right: 2rem;
   padding-top: 1rem;
+
+  &.isUserLoggedIn {
+    margin-right: 1.5rem;
+  }
 
   @media (min-width: $lg) {
     display: none;

@@ -5,8 +5,8 @@
 }
 
 .user {
-  white-space: nowrap;
   transition: $transition_all_ease;
+  white-space: nowrap;
 
   &:hover {
     color: $color_blue;
@@ -14,16 +14,16 @@
 }
 
 .avatar {
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
   align-items: center;
-  width: 4rem;
-  height: 4rem;
-  vertical-align: middle;
-  border-radius: 50%;
   background-color: $color_grey_bg;
+  border-radius: 50%;
+  display: inline-flex;
+  height: 4rem;
+  justify-content: center;
   overflow: hidden;
+  position: relative;
+  vertical-align: middle;
+  width: 4rem;
 }
 
 .avatarImg {
@@ -32,9 +32,12 @@
 }
 
 .greeting {
-  display: inline-block;
+  display: none;
   margin-left: 1rem;
   vertical-align: middle;
+  @media (min-width: $lg) {
+    display: inline-block;
+  }
 }
 
 .menu {
@@ -71,14 +74,14 @@
 }
 
 .item {
-  position: relative;
+  color: $color_grey;
   display: block;
+  font-size: 14px;
   height: 4rem;
+  line-height: 4rem;
   margin: 0 -1rem;
   padding: 0 2rem;
-  color: $color_grey;
-  line-height: 4rem;
-  font-size: 14px;
+  position: relative;
   transition: $transition_all_ease;
 
   &:hover {
@@ -87,14 +90,14 @@
 }
 
 .logout {
-  position: relative;
-  display: flex;
   align-items: center;
+  border-top: 1px solid $color_grey_trivial;
+  color: $color_grey;
+  display: flex;
+  font-size: 14px;
   margin: 1.5rem -1rem -2rem;
   padding: 2rem;
-  color: $color_grey;
-  font-size: 14px;
-  border-top: 1px solid $color_grey_trivial;
+  position: relative;
   transition: $transition_all_ease;
 
   &:hover {
@@ -112,20 +115,20 @@
 
 .count {
   display: inline-block;
-  margin-top: -1px;
   float: right;
+  margin-top: -1px;
 }
 
 .link {
-  position: relative;
+  color: $color_grey;
+  cursor: pointer;
   display: block;
+  font-size: 16px;
   height: 5rem;
+  line-height: 5rem;
   margin: 0 -1rem;
   padding: 0 2rem;
-  color: $color_grey;
-  line-height: 5rem;
-  font-size: 16px;
-  cursor: pointer;
+  position: relative;
   transition: $transition_all_ease;
 
   &:hover {
@@ -138,22 +141,22 @@
 }
 
 .top {
+  border-bottom: 1px solid $color_grey_trivial;
   display: flex;
   margin: 0 -1rem;
-  padding-top: 1rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid $color_grey_trivial;
+  padding-top: 1rem;
 }
 
 .icon {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  width: 6rem;
-  height: 6rem;
-  margin-left: 3rem;
   border-radius: 50%;
+  display: flex;
+  height: 6rem;
+  justify-content: center;
+  margin-left: 3rem;
   overflow: hidden;
+  width: 6rem;
 }
 
 .topImg {
