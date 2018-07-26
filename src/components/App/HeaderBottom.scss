@@ -5,10 +5,17 @@ $burger_menu_size: 7.5rem;
 .container {
   background-color: $color_white;
   margin-top: 1.5rem;
+  padding-left: 6rem;
+  @media (min-width: $lg) {
+    padding-left: 0;
+  }
 }
 
 .logoIcon {
-  margin-left: calc(#{$burger_menu_size} + 1.875rem);
+  width: 14rem;
+  @media (min-width: $md) {
+    width: 19rem;
+  }
   @media (min-width: $lg) {
     margin-left: 0;
   }
@@ -17,7 +24,10 @@ $burger_menu_size: 7.5rem;
 .logo {
   display: flex;
   justify-content: flex-start;
-  padding-top: 1rem;
+  padding-top: 1.2rem;
+  @media (min-width: $md) {
+    padding-top: 0.8rem;
+  }
   @media (min-width: $lg) {
     padding-top: 0;
   }

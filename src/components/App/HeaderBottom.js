@@ -35,7 +35,7 @@ const HeaderBottom = ({
 }: PropsType) => (
   <div styleName="container">
     <Row>
-      <Col size={8} sm={4} md={7} lg={3} xl={3}>
+      <Col size={6} sm={4} md={6} lg={3} xl={3}>
         <div
           styleName={classNames('logo', {
             isUserLoggedIn: userData,
@@ -48,11 +48,13 @@ const HeaderBottom = ({
           </div>
         </div>
       </Col>
-      <Col size={4} sm={5} md={3} lg={6} xl={6} lgVisible>
-        <SearchInput
-          searchCategories={searchCategories}
-          searchValue={searchValue}
-        />
+      <Col size={2} sm={5} md={1} lg={6} xl={6}>
+        <div styleName="searchBar">
+          <SearchInput
+            searchCategories={searchCategories}
+            searchValue={searchValue}
+          />
+        </div>
       </Col>
       <Col size={4} sm={3} md={5} lg={3} xl={3}>
         <div styleName="userData">
