@@ -51,7 +51,7 @@ import VkGray from 'components/Icon/svg/vk_gray.svg';
 import Move from 'components/Icon/svg/move.svg';
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
 import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
-//
+import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -125,6 +125,7 @@ const iconsMap = {
   vkGray: <VkGray />,
   move: <Move />,
   emptyCart: <EmptyCart />,
+  searchNoResults: <SearchNoResults />,
 
   // For product
   mainFoto: <MainFoto />,

@@ -3,35 +3,86 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { pathOr, map } from 'ramda';
+import { pathOr, map, addIndex, isEmpty } from 'ramda';
 
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
+import { Autocomplete } from 'components/common/Autocomplete';
+import { SearchNoResults } from 'components/SearchNoResults';
+
 import { Col, Row } from 'layout';
 
 import './StoreItems.scss';
-
-const productsPerRequest = 24;
 
 type PropsType = {
   relay: Relay,
 };
 
+type StateType = {
+  autocompleteValue: string,
+  autocompleteItems: Array<{ id: string, label: string }>,
+};
+
 // eslint-disable-next-line
-class StoreItems extends PureComponent<PropsType> {
+class StoreItems extends PureComponent<PropsType, StateType> {
+  state = {
+    autocompleteValue: '',
+    autocompleteItems: [],
+  };
+
   productsRefetch = () => {
-    this.props.relay.loadMore(2);
+    this.props.relay.loadMore(8);
+  };
+
+  handleOnChangeAutocomplete = (value: string) => {
+    this.setState({ autocompleteValue: value });
+    this.props.relay.refetchConnection(
+      8,
+      () => {
+        const items = pathOr(
+          [],
+          ['shop', 'autoCompleteProductName', 'edges'],
+          this.props,
+        );
+        this.setState({
+          autocompleteItems: addIndex(map)(
+            (item, idx) => ({ id: `${idx}`, label: item.node }),
+            items,
+          ),
+        });
+      },
+      { autocompleteValue: value, searchTerm: { name: value } },
+    );
+  };
+
+  handleOnSetAutocomplete = (value: string) => {
+    this.setState({ autocompleteValue: value });
+    this.props.relay.refetchConnection(8, () => {}, {
+      autocompleteValue: value,
+      searchTerm: { name: value },
+    });
   };
 
   render() {
+    const { autocompleteItems, autocompleteValue } = this.state;
     const products = map(
       item => item.node,
-      pathOr([], ['shop', 'baseProducts', 'edges'], this.props),
+      pathOr([], ['shop', 'findProduct', 'edges'], this.props),
     );
     return (
       <div styleName="container">
+        <div styleName="searchInput">
+          <Autocomplete
+            autocompleteItems={autocompleteItems}
+            onChange={this.handleOnChangeAutocomplete}
+            onSet={this.handleOnSetAutocomplete}
+            label="Search shop’s products"
+            search
+            fullWidth
+          />
+        </div>
         <Row>
-          {products &&
+          {products && !isEmpty(products) ? (
             map(
               item => (
                 <Col key={item.rawId} size={6} md={4} xl={3}>
@@ -41,10 +92,13 @@ class StoreItems extends PureComponent<PropsType> {
                 </Col>
               ),
               products,
-            )}
+            )
+          ) : (
+            <SearchNoResults value={autocompleteValue} />
+          )}
         </Row>
         {this.props.relay.hasMore() && (
-          <div styleName="">
+          <div styleName="loadButton">
             <Button
               big
               load
@@ -65,12 +119,14 @@ export default createPaginationContainer(
   graphql`
     fragment StoreItems_shop on Store
       @argumentDefinitions(
+        autocompleteValue: { type: "String!", defaultValue: "" }
+        searchTerm: { type: "SearchProductInput!", defaultValue: { name: "" } }
         storeId: { type: "Int", defaultValue: null }
-        first: { type: "Int", defaultValue: 24 }
+        first: { type: "Int", defaultValue: 8 }
         after: { type: "ID", defaultValue: null }
       ) {
-      baseProducts(first: $first, after: $after)
-        @connection(key: "StoreItems_baseProducts") {
+      findProduct(first: $first, after: $after, searchTerm: $searchTerm)
+        @connection(key: "StoreItems_findProduct") {
         edges {
           node {
             id
@@ -102,24 +158,47 @@ export default createPaginationContainer(
                 }
               }
             }
+            rating
           }
+        }
+        pageInfo {
+          endCursor
+        }
+      }
+      autoCompleteProductName(name: $autocompleteValue) {
+        edges {
+          node
         }
       }
     }
   `,
   {
     direction: 'forward',
-    getConnectionFromProps: props => props.shop && props.shop.baseProducts,
-    getVariables: (props, _, prevFragmentVars) => ({
+    getConnectionFromProps: props => props.shop && props.shop.findProduct,
+    getVariables: (props, { count }, prevFragmentVars) => ({
       storeId: prevFragmentVars.storeId,
-      first: productsPerRequest,
-      after: props.shop.baseProducts.pageInfo.endCursor,
+      first: count,
+      after: props.shop.findProduct.pageInfo.endCursor,
+      autocompleteValue: prevFragmentVars.autocompleteValue,
+      searchTerm: prevFragmentVars.searchTerm,
     }),
     query: graphql`
-      query StoreItems_shop_Query($storeId: Int!, $first: Int, $after: ID) {
+      query StoreItems_shop_Query(
+        $storeId: Int!
+        $first: Int
+        $after: ID
+        $autocompleteValue: String!
+        $searchTerm: SearchProductInput!
+      ) {
         store(id: $storeId) {
           ...StoreItems_shop
-            @arguments(storeId: $storeId, first: $first, after: $after)
+            @arguments(
+              storeId: $storeId
+              first: $first
+              after: $after
+              autocompleteValue: $autocompleteValue
+              searchTerm: $searchTerm
+            )
         }
       }
     `,

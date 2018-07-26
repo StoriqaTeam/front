@@ -1,10 +1,31 @@
 @import "../../../styles/variables";
 
 .container {
+  position: relative;
   margin-top: 1rem;
 }
 
 .cardWrapper {
   margin-right: -1rem;
   margin-left: -1rem;
+}
+
+.searchInput {
+  position: absolute;
+  top: -9rem;
+  right: 3rem;
+  width: 30rem;
+}
+
+.loadButton {
+  margin-top: 2rem;
+}
+
+.productsNotFound {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 80rem;
+  font-size: 30px;
 }
