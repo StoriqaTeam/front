@@ -172,49 +172,57 @@ const StartSelling = () => (
                 efficiently manage sales around the world
               </div>
               <div styleName="blocks">
-                <div styleName="block">
-                  <div styleName="title">
-                    <img
-                      // eslint-disable-next-line
-                      src={require('./img/04_arrow.svg')}
-                      alt=""
-                    />
-                    <span>CRM Analytics</span>
+                <div>
+                  <div styleName="block">
+                    <div styleName="title">
+                      <img
+                        // eslint-disable-next-line
+                        src={require('./img/04_arrow.svg')}
+                        alt=""
+                      />
+                      <span>CRM Analytics</span>
+                    </div>
+                    <div styleName="text">
+                      Manage your store, sales, employees, warehouses in a
+                      convenient interface anywhere in the world. Get statistics
+                      and analytics online
+                    </div>
                   </div>
-                  <div styleName="text">
-                    Manage your store, sales, employees, warehouses in a
-                    convenient interface anywhere in the world. Get statistics
-                    and analytics online
+                  <div styleName="block">
+                    <div styleName="title">
+                      <img
+                        // eslint-disable-next-line
+                        src={require('./img/04_arrow.svg')}
+                        alt=""
+                      />
+                      <span>CPA networks</span>
+                    </div>
+                    <div styleName="text">
+                      Use our CPA network in order to advertise your products
+                      and increase sales
+                    </div>
+                  </div>
+                  <div styleName="block">
+                    <div styleName="title">
+                      <img
+                        // eslint-disable-next-line
+                        src={require('./img/04_arrow.svg')}
+                        alt=""
+                      />
+                      <span>Mobile Wallet</span>
+                    </div>
+                    <div styleName="text">
+                      Track all cash inflows in a convenient mobile application,
+                      convert and withdraw funds
+                    </div>
                   </div>
                 </div>
-                <div styleName="block">
-                  <div styleName="title">
-                    <img
-                      // eslint-disable-next-line
-                      src={require('./img/04_arrow.svg')}
-                      alt=""
-                    />
-                    <span>CPA networks</span>
-                  </div>
-                  <div styleName="text">
-                    Use our CPA network in order to advertise your products and
-                    increase sales
-                  </div>
-                </div>
-                <div styleName="block">
-                  <div styleName="title">
-                    <img
-                      // eslint-disable-next-line
-                      src={require('./img/04_arrow.svg')}
-                      alt=""
-                    />
-                    <span>Mobile Wallet</span>
-                  </div>
-                  <div styleName="text">
-                    Track all cash inflows in a convenient mobile application,
-                    convert and withdraw funds
-                  </div>
-                </div>
+                <img
+                  // eslint-disable-next-line
+                  src={require('./img/04_imac.png')}
+                  alt=""
+                  styleName="imac"
+                />
               </div>
             </div>
           </div>
