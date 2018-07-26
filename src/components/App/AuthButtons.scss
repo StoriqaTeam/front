@@ -3,9 +3,9 @@
 .container {
   display: flex;
 
-  & .avatar {
+  & .login {
     display: block;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
   }
 
   & .signInButton, .signUpButton {
@@ -42,7 +42,7 @@
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: $lg) {
     & .signInButton, .signUpButton {
       display: block;
     }

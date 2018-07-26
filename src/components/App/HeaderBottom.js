@@ -36,11 +36,7 @@ const HeaderBottom = ({
   <div styleName="container">
     <Row>
       <Col size={6} sm={4} md={6} lg={3} xl={3}>
-        <div
-          styleName={classNames('logo', {
-            isUserLoggedIn: userData,
-          })}
-        >
+        <div styleName="logo">
           <div styleName="logoIcon">
             <Link to="/" data-test="logoLink">
               <Icon type="logo" />
@@ -62,7 +58,9 @@ const HeaderBottom = ({
             onClick={onMobileSearch}
             onKeyPress={() => {}}
             role="button"
-            styleName="searchIcon"
+            styleName={classNames('searchIcon', {
+              isUserLoggedIn: userData
+            })}
             tabIndex="-1"
           >
             <Icon type="magnifier" />
@@ -72,7 +70,10 @@ const HeaderBottom = ({
           ) : (
             <AuthButtons onOpenModal={onOpenModal} />
           )}
-          <div styleName="cartIcon">
+          <div styleName={classNames('cartIcon', {
+            isUserLoggedIn: userData
+          })}
+          >
             <CartButton href="/cart" amount={totalCount} />
           </div>
         </div>
