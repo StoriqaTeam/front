@@ -1,6 +1,11 @@
 @import "../../styles/variables";
 
 .container {
+  padding: 0 0 4rem;
+
+  @media (min-width: $lg) {
+    padding: 2rem 0 4rem;
+  }
 }
 
 .sidebarWrapper {

@@ -1,6 +1,14 @@
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
+.container {
+  margin: 0 0 4rem;
+
+  @media (min-width: $lg) {
+    margin: 2rem 0 4rem;
+  }
+}
+
 .mobileTabs {
   display: block;
   margin-top: 2rem;
