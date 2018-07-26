@@ -671,6 +671,7 @@
   }
 
   .wrapper {
+    width: 100%;
     @media (min-width: 1360px) {
       width: 110rem;
     }
@@ -693,7 +694,25 @@
     }
 
     .questions {
+      margin-top: 2rem;
+
       .question {
+        margin-bottom: 2rem;
+
+        & .text {
+          display: none;
+        }
+        & input:checked + .text {
+          display: block;
+        }
+
+        label {
+          cursor: pointer;
+        }
+
+        input[type='checkbox'] {
+          display: none;
+        }
         .title {
           @media (min-width: 1360px) {
             font-size: 16px;
