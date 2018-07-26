@@ -12,7 +12,7 @@ const SearchNoResults = (props: PropsType) => (
   <div styleName="container">
     <Icon type="searchNoResults" size={120} />
     <div
-      className="text" /* eslint-disable */
+      styleName="text" /* eslint-disable */
       dangerouslySetInnerHTML={{
         /* eslint-enable */
         __html: `Sorry, but no results for ‘<strong>${

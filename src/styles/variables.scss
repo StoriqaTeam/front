@@ -3,7 +3,7 @@ $color_blue: #03A9FF;
 $color_blue_hover: #51C1FB;
 $color_pink: #FF62A4;
 $color_green: #8FB62C;
-$color_yellow: #F5CD7A;
+$color_yellow: #FFB652;
 $color_red: #E62C6D;
 $color_red: #d8d8d8;
 $color_red: #d5d5d5;
@@ -17,6 +17,9 @@ $color_grey_spiner: #D3D2D3;
 
 $color_white: #FFFFFF;
 $color_black: #000000;
+
+// Colors with opacity
+$color_opacity_white: rgba(255, 255, 255, 0.95);
 
 // Fonts
 $font_regular: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;

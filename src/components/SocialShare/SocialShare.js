@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import Facebook from './svg/logo-facebook.svg';
 import Pinterest from './svg/logo-pinterest.svg';
 import Twitter from './svg/logo-twitter.svg';
-// import Instagram from './svg/logo-instagram.svg';
+import Instagram from './svg/logo-instagram.svg';
 import VK from './svg/logo-vk.svg';
 import HeartIcon from './svg/heart.svg';
 
@@ -65,7 +65,16 @@ class SocialShare extends Component<PropsType> {
               <Twitter />
             </a>
           </li>
-          {/* <Instagram /> */}
+          <li styleName="linkContainer">
+            <a
+              styleName="link"
+              rel="noopener noreferrer"
+              target="_blank"
+              href={`https://www.instagram.com//share.php?url=${url}`}
+            >
+              <Instagram />
+            </a>
+          </li>
           <li styleName="linkContainer">
             <a
               styleName="link"
@@ -77,9 +86,11 @@ class SocialShare extends Component<PropsType> {
             </a>
           </li>
         </ul>
-        <div styleName={classNames('favorite', { big, noBorder })}>
-          <HeartIcon />
-        </div>
+        {!noBorder && (
+          <div styleName={classNames('favorite', { big, noBorder })}>
+            <HeartIcon />
+          </div>
+        )}
       </nav>
     );
   }

@@ -6,10 +6,22 @@
   flex: 1 0 auto;
   align-items: center;
   justify-content: center;
+  width: 100%;
   min-height: 88.25rem;
+
+  @media (max-width: #{$md - 1px}) {
+    min-height: 44rem;
+  }
 }
 
 .text {
-  margin-top: 9rem;
+  max-width: 57rem;
+  margin-top: 8rem;
+  padding: 0 1rem;
   line-height: 3rem;
+  text-align: center;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-top: 4rem;
+  }
 }

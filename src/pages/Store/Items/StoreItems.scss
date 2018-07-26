@@ -14,7 +14,15 @@
   position: absolute;
   top: -9rem;
   right: 3rem;
-  width: 30rem;
+  width: 24rem;
+
+  @media (max-width: #{$md - 1px}) {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
 }
 
 .loadButton {

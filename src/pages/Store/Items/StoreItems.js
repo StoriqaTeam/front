@@ -31,35 +31,43 @@ class StoreItems extends PureComponent<PropsType, StateType> {
   };
 
   productsRefetch = () => {
-    this.props.relay.loadMore(8);
+    // this.props.relay.loadMore(8);
+    const { autocompleteValue } = this.state;
+    this.props.relay.refetchConnection(8, () => {}, {
+      autocompleteValue,
+      searchTerm: { name: autocompleteValue },
+    });
   };
 
   handleOnChangeAutocomplete = (value: string) => {
-    this.setState({ autocompleteValue: value });
-    this.props.relay.refetchConnection(
-      8,
-      () => {
-        const items = pathOr(
-          [],
-          ['shop', 'autoCompleteProductName', 'edges'],
-          this.props,
-        );
-        this.setState({
-          autocompleteItems: addIndex(map)(
-            (item, idx) => ({ id: `${idx}`, label: item.node }),
-            items,
-          ),
-        });
-      },
-      { autocompleteValue: value, searchTerm: { name: value } },
-    );
+    this.setState({ autocompleteValue: value }, () => {
+      this.props.relay.refetchConnection(
+        8,
+        () => {
+          const items = pathOr(
+            [],
+            ['shop', 'autoCompleteProductName', 'edges'],
+            this.props,
+          );
+          this.setState({
+            autocompleteItems: addIndex(map)(
+              (item, idx) => ({ id: `${idx}`, label: item.node }),
+              items,
+            ),
+          });
+        },
+        { autocompleteValue: value, searchTerm: { name: value }, after: null },
+      );
+    });
   };
 
   handleOnSetAutocomplete = (value: string) => {
-    this.setState({ autocompleteValue: value });
-    this.props.relay.refetchConnection(8, () => {}, {
-      autocompleteValue: value,
-      searchTerm: { name: value },
+    this.setState({ autocompleteValue: value }, () => {
+      this.props.relay.refetchConnection(8, () => {}, {
+        autocompleteValue: value,
+        searchTerm: { name: value },
+        after: null,
+      });
     });
   };
 
