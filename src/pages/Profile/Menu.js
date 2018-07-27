@@ -89,7 +89,11 @@ class Menu extends PureComponent<PropsType> {
       <aside styleName="container">
         <h3 styleName="offscreen">Profile Menu</h3>
         <div styleName="mobileMenu">
-          <Collapse items={menuItems} onSelected={this.handleSelected} />
+          <Collapse
+            selected={activeItem}
+            items={menuItems}
+            onSelected={this.handleSelected}
+          />
           <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
             avatar={avatar}
