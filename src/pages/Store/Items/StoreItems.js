@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
 import { pathOr, map, addIndex, isEmpty } from 'ramda';
@@ -14,6 +14,8 @@ import { Col, Row } from 'layout';
 
 import './StoreItems.scss';
 
+const productsPerRequest = 8;
+
 type PropsType = {
   relay: Relay,
 };
@@ -24,16 +26,15 @@ type StateType = {
 };
 
 // eslint-disable-next-line
-class StoreItems extends PureComponent<PropsType, StateType> {
+class StoreItems extends Component<PropsType, StateType> {
   state = {
     autocompleteValue: '',
     autocompleteItems: [],
   };
 
   productsRefetch = () => {
-    // this.props.relay.loadMore(8);
     const { autocompleteValue } = this.state;
-    this.props.relay.refetchConnection(8, () => {}, {
+    this.props.relay.refetchConnection(productsPerRequest, () => {}, {
       autocompleteValue,
       searchTerm: { name: autocompleteValue },
     });
@@ -42,7 +43,7 @@ class StoreItems extends PureComponent<PropsType, StateType> {
   handleOnChangeAutocomplete = (value: string) => {
     this.setState({ autocompleteValue: value }, () => {
       this.props.relay.refetchConnection(
-        8,
+        productsPerRequest,
         () => {
           const items = pathOr(
             [],
@@ -63,7 +64,7 @@ class StoreItems extends PureComponent<PropsType, StateType> {
 
   handleOnSetAutocomplete = (value: string) => {
     this.setState({ autocompleteValue: value }, () => {
-      this.props.relay.refetchConnection(8, () => {}, {
+      this.props.relay.refetchConnection(productsPerRequest, () => {}, {
         autocompleteValue: value,
         searchTerm: { name: value },
         after: null,

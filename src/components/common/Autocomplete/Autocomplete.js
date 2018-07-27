@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import ReactAutocomplete from 'react-autocomplete';
 import { pick, isEmpty } from 'ramda';
 import debounce from 'lodash.debounce';
@@ -22,7 +22,7 @@ type StateType = {
   value: string,
 };
 
-class Autocomplete extends PureComponent<PropsType, StateType> {
+class Autocomplete extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {

@@ -15,9 +15,13 @@ const SearchNoResults = (props: PropsType) => (
       styleName="text" /* eslint-disable */
       dangerouslySetInnerHTML={{
         /* eslint-enable */
-        __html: `Sorry, but no results for ‘<strong>${
+        __html: `Sorry, but no results${
           props.value
-        }</strong>’. Check your search request for mistakes or try to find somethind else.`,
+            ? ` for ‘<strong>${
+                props.value
+              }</strong>’. Check your search request for mistakes or try to find somethind else.`
+            : ''
+        }.`,
       }}
     />
   </div>

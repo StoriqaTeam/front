@@ -49,9 +49,13 @@
 
 .shopLogo {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 10rem;
   width: 10rem;
   border-radius: 0.5rem;
+  background-color: $color_grey_trivial;
   overflow: hidden;
 
   @media (min-width: $md) {

@@ -16,12 +16,12 @@
 
 .text {
   max-width: 57rem;
-  margin-top: 8rem;
+  margin-top: 6rem;
   padding: 0 1rem;
   line-height: 3rem;
   text-align: center;
 
   @media (max-width: #{$md - 1px}) {
-    margin-top: 4rem;
+    margin-top: 3rem;
   }
 }
