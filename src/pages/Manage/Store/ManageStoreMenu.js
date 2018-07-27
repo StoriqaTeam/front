@@ -253,7 +253,6 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="imgWrap">
-          <pre>{JSON.stringify(storeLogo, null, 2)}</pre>
           <UploadWrapper
             id="new-store-id"
             onUpload={myStore ? this.handleOnUpload : handleOnUpload}
@@ -270,13 +269,13 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           />
           {((myStore && storeLogo) || (!myStore && newStoreLogo)) && (
             <div
-              styleName="cross"
+              styleName="trash"
               onClick={myStore ? this.deleteAvatar : deleteAvatar}
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
             >
-              <Icon type="cross" />
+              <Icon type="basket" size={28} />
             </div>
           )}
         </div>
