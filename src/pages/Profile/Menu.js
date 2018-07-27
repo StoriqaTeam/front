@@ -94,6 +94,7 @@ class Menu extends PureComponent<PropsType> {
           <MobileUpload
             avatar={avatar}
             id={this.props.id}
+            onDelete={() => this.handleUpdateUser('')}
             onUpload={this.handleOnUpload}
           />
         </div>

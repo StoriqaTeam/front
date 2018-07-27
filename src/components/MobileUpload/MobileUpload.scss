@@ -8,9 +8,24 @@ $icon-size: 5rem;
 }
 
 .image {
-  border-radius: 50%;
-  height: $icon-size;
-  width: $icon-size;
+  position: relative;
+  img {
+    border-radius: 50%;
+    height: $icon-size;
+    width: $icon-size;
+  }
+
+  .trash {
+    background: $color_white;
+    border-radius: 50%;
+    border: 1px solid $color_grey_minor;
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    svg {
+      fill: $color_grey_minor;
+    }
+  }
 }
 
 .imageArea {
@@ -32,6 +47,6 @@ $icon-size: 5rem;
   display: flex;
   height: 5rem;
   justify-content: center;
-  width: 80%;
+  width: 84%;
   // background-color: $color_grey_trivial;
 }
