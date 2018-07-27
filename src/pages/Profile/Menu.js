@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
 import type { Environment } from 'relay-runtime';
@@ -94,13 +94,18 @@ class Menu extends PureComponent<PropsType> {
             items={menuItems}
             onSelected={this.handleSelected}
           />
-          <div style={{ margin: '1.05rem 0' }} />
-          <MobileUpload
-            avatar={avatar}
-            id={this.props.id}
-            onDelete={() => this.handleUpdateUser('')}
-            onUpload={this.handleOnUpload}
-          />
+          <div style={{ margin: '1.5rem 0' }} />
+          {activeItem === 'personal-data' ? (
+            <Fragment>
+              <MobileUpload
+                avatar={avatar}
+                id={this.props.id}
+                onDelete={() => this.handleUpdateUser('')}
+                onUpload={this.handleOnUpload}
+              />
+              <div style={{ margin: '1rem 0' }} />
+            </Fragment>
+          ) : null}
         </div>
         <div styleName="imageArea">
           <UploadWrapper

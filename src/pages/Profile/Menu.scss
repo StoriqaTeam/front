@@ -29,6 +29,10 @@
   max-height: 6rem;
   margin-top: 1rem;
   margin-bottom: 3rem;
+  display: none;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .items {
