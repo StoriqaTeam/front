@@ -15,6 +15,10 @@ import { Spinner } from 'components/common/Spinner';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import prepareQueryString from './OAuthCallback.utils';
+import {
+  getPathForRedirectAfterLogin,
+  clearPathForRedirectAfterLogin,
+} from './utils';
 
 import './OAuthCallback.scss';
 
@@ -67,7 +71,14 @@ class OAuthCallback extends PureComponent<PropsType> {
                 expires: expirationDate,
               },
             );
-            window.location.href = '/'; // TODO: use refetch or store update
+
+            const redirectPath = getPathForRedirectAfterLogin();
+            if (redirectPath) {
+              clearPathForRedirectAfterLogin();
+              this.props.router.push(redirectPath);
+            } else {
+              window.location.href = '/'; // TODO: use refetch or store update
+            }
           }
         },
         onError: (error: Error) => {
