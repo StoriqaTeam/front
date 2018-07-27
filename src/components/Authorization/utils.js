@@ -152,7 +152,7 @@ const setPathForRedirectAfterLogin = (path: string) => {
     path: '/',
     expires: moment()
       .utc()
-      .add(30, 's')
+      .add(3, 'm')
       .toDate(),
   });
 };
