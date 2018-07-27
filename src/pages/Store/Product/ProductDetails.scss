@@ -2,30 +2,31 @@
 
 .container {
   padding-left: 1.625rem;
-}
 
-h2 {
-  color: $color_black;
-  font-family: $font_regular;
-  font-size: 3.75rem;
-  font-stretch: normal;
-  font-style: normal;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  line-height: normal;
-  margin-bottom: 0.625rem;
-  margin-top: 2rem;
-  text-align: left;
-}
 
-p {
-  color: $color_grey_minor;
-  font-size: 2rem;
-  font-stretch: normal;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: -0.4px;
-  line-height: 1.5;
-  max-width: 61.75rem;
-  text-align: left;
+  & h2 {
+    color: $color_black;
+    font-family: $font_regular;
+    font-size: 3.75rem;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    line-height: normal;
+    margin-bottom: 0.625rem;
+    margin-top: 2rem;
+    text-align: left;
+  }
+
+  & p {
+    color: $color_grey_minor;
+    font-size: 2rem;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: -0.4px;
+    line-height: 1.5;
+    max-width: 61.75rem;
+    text-align: left;
+  }
 }

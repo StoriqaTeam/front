@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, map } from 'ramda';
+import { pathOr, isEmpty, map, addIndex } from 'ramda';
 import { graphql, createRefetchContainer } from 'react-relay';
 
 import { Paginator } from 'components/common/Paginator';
@@ -48,7 +48,7 @@ type StateType = {
   currentPage: number,
   autocompleteValue: string,
   searchTermValue: string,
-  autocompleteItems: Array<string>,
+  autocompleteItems: Array<{ id: string, label: string }>,
 };
 
 class StorageProducts extends Component<PropsType, StateType> {
@@ -200,9 +200,11 @@ class StorageProducts extends Component<PropsType, StateType> {
           ['warehouse', 'autoCompleteProductName', 'edges'],
           me,
         );
-        const filteredItems = map(item => item.node, items);
         this.setState({
-          autocompleteItems: filteredItems,
+          autocompleteItems: addIndex(map)(
+            (item, idx) => ({ id: `${idx}`, label: item.node }),
+            items,
+          ),
         });
       },
       { force: true },
@@ -405,7 +407,7 @@ class StorageProducts extends Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { autocompleteItems, autocompleteValue } = this.state;
+    const { autocompleteItems } = this.state;
     // $FlowIgnoreMe
     const storageName = pathOr({}, ['warehouse', 'name'], me);
     const products = map(item => {
@@ -462,7 +464,6 @@ class StorageProducts extends Component<PropsType, StateType> {
         <div styleName="searchInput">
           <Autocomplete
             autocompleteItems={autocompleteItems}
-            autocompleteValue={autocompleteValue}
             onChange={this.handleOnChangeAutocomplete}
             onSet={this.handleOnSetAutocomplete}
             label="Search item"
