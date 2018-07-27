@@ -8,7 +8,8 @@
   max-width: 170rem;
   position: relative;
   width: 100%;
-  @media (min-width: $md) {
+
+  @media (min-width: $lg) {
     margin-top: 0;
   }
 }
@@ -30,6 +31,7 @@
 .imageWrapper {
   margin-bottom: 0;
   position: relative;
+
   @media (min-width: $md) {
     margin-bottom: 3rem;
   }
@@ -40,11 +42,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 13.75rem;
   background-color: $color_grey_trivial;
-
-  @media (min-width: $sm) {
-    height: 13.75rem;
-  }
 
   @media (min-width: $md) {
     height: 21.375rem;
