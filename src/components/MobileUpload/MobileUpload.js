@@ -20,7 +20,7 @@ const MobileUpload = ({
   disabled,
   id,
   onUpload,
-                        onDelete,
+  onDelete,
   avatar,
 }: PropsType) => (
   <div styleName="container">

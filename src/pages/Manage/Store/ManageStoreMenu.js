@@ -246,12 +246,14 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           />
           <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
-            avatar={convertSrc(storeLogo, 'medium') || null}
+            avatar={storeLogo}
             id="some"
             onUpload={this.handleOnUpload}
+            onDelete={this.deleteAvatar}
           />
         </div>
         <div styleName="imgWrap">
+          <pre>{JSON.stringify(storeLogo, null, 2)}</pre>
           <UploadWrapper
             id="new-store-id"
             onUpload={myStore ? this.handleOnUpload : handleOnUpload}
