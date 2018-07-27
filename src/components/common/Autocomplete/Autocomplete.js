@@ -1,16 +1,16 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import ReactAutocomplete from 'react-autocomplete';
 import { pick, isEmpty } from 'ramda';
+import debounce from 'lodash.debounce';
 
 import { Input } from 'components/common/Input';
 
 import './Autocomplete.scss';
 
 type PropsType = {
-  autocompleteItems: Array<string>,
-  autocompleteValue: string,
+  autocompleteItems: Array<{ id: string, label: string }>,
   onChange: (value: string) => void,
   onSet: (value: string) => void,
   label: string,
@@ -18,17 +18,34 @@ type PropsType = {
   fullWidth?: boolean,
 };
 
-class Autocomplete extends PureComponent<PropsType> {
+type StateType = {
+  value: string,
+};
+
+class Autocomplete extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      value: '',
+    };
+    this.handleOnChange = debounce(this.handleOnChange, 250);
+  }
+
+  handleOnChangeInput = (value: string) => {
+    this.setState(() => ({ value }), this.handleOnChange(value));
+  };
+
+  handleOnChange = (value: string) => {
+    this.props.onChange(value);
+  };
+
+  handleOnSet = (value: string) => {
+    this.setState(() => ({ value }), this.props.onSet(value));
+  };
+
   render() {
-    const {
-      autocompleteItems,
-      autocompleteValue,
-      label,
-      search,
-      fullWidth,
-      onChange,
-      onSet,
-    } = this.props;
+    const { value } = this.state;
+    const { autocompleteItems, label, search, fullWidth } = this.props;
     return (
       <div className="container">
         <ReactAutocomplete
@@ -36,10 +53,10 @@ class Autocomplete extends PureComponent<PropsType> {
           id="autocompleteId"
           wrapperStyle={{ position: 'relative' }}
           items={autocompleteItems}
-          getItemValue={item => item}
+          getItemValue={item => item.label}
           renderItem={(item: any) => (
-            <div key={item} styleName="item">
-              {item}
+            <div key={item.id} styleName="item">
+              {item.label}
             </div>
           )}
           renderInput={props => (
@@ -73,13 +90,12 @@ class Autocomplete extends PureComponent<PropsType> {
               </div>
             );
           }}
-          value={autocompleteValue}
+          value={value}
           onChange={(e: any) => {
-            onChange(e.target.value);
+            this.handleOnChangeInput(e.target.value);
           }}
           onSelect={(selectedValue: string) => {
-            onChange(selectedValue);
-            onSet(selectedValue);
+            this.handleOnSet(selectedValue);
           }}
         />
       </div>

@@ -1,10 +1,39 @@
 @import "../../../styles/variables";
 
 .container {
+  position: relative;
   margin-top: 1rem;
 }
 
 .cardWrapper {
   margin-right: -1rem;
   margin-left: -1rem;
+}
+
+.searchInput {
+  position: absolute;
+  top: -9rem;
+  right: 3rem;
+  width: 24rem;
+
+  @media (max-width: #{$md - 1px}) {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+}
+
+.loadButton {
+  margin-top: 2rem;
+}
+
+.productsNotFound {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 80rem;
+  font-size: 30px;
 }
