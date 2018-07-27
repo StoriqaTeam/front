@@ -122,7 +122,7 @@ class Menu extends PureComponent<PropsType> {
           />
           {avatar && (
             <div
-              styleName="cross"
+              styleName="trash"
               onClick={() => {
                 this.handleUpdateUser('');
               }}
@@ -130,7 +130,7 @@ class Menu extends PureComponent<PropsType> {
               role="button"
               tabIndex="0"
             >
-              <Icon type="cross" />
+              <Icon type="basket" size={28} />
             </div>
           )}
         </div>
