@@ -43,17 +43,21 @@ $max-width: 41rem !important;
 .subtitle {
   font-size: 14px;
   letter-spacing: 1px;
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
   text-transform: uppercase;
+  @media (min-width: $md) {
+    margin-bottom: 5rem;
+  }
 }
 
 .form {
   background-color: $color_white;
   flex: 1 0 auto;
   margin-top: 0;
-  padding: 4rem;
+  padding: 2rem;
   @media (min-width: $md) {
     margin-top: 2rem;
+    padding: 4rem;
   }
 }
 
@@ -80,7 +84,14 @@ $max-width: 41rem !important;
 .editButtons {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   margin-top: 3rem;
+  button {
+    width: 100%;
+    @media (min-width: $md) {
+      width: 12rem;
+    }
+  }
 }
 
 .cancelButton {
@@ -95,15 +106,36 @@ $max-width: 41rem !important;
   }
 }
 
-
 .deleteButton {
-  margin-left: 3rem;
+  margin-left: 0;
+  margin-top: 2rem;
+  width: 100%;
+  @media (min-width: $md) {
+    margin-left: 3rem;
+    margin-top: 0;
+    width: initial;
+  }
 }
 
 .addButton {
   //display: flex;
   //justify-content: flex-end;
   float: right;
+  display: none;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.addButtonMobile {
+  display: block;
+  margin-top: 2rem;
+  @media (min-width: $md) {
+    display: none;
+  }
+  button {
+    width: 100%;
+  }
 }
 
 .priorityCheckbox {
@@ -123,11 +155,16 @@ $max-width: 41rem !important;
 .item {
   background-color: $color_grey_bg;
   border-radius: 4px;
-  padding: 4rem;
+  padding: 2rem;
 
   & + .item {
     margin-top: 4rem;
   }
+
+  @media (min-width: $md) {
+    padding: 4rem;
+  }
+
 }
 
 .address {
