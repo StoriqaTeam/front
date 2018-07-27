@@ -964,6 +964,7 @@ export default createFragmentContainer(
                       rawId
                       price
                       discount
+                      quantity
                       photoMain
                       additionalPhotos
                       vendorCode

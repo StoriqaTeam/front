@@ -299,7 +299,6 @@ class ThirdForm extends PureComponent<PropsType> {
                     onChange={this.handleChangeProductState}
                     fullWidth
                   />
-                  {/* <span styleName="">STQ</span> */}
                 </div>
                 <div styleName="productState">
                   <Input
@@ -311,7 +310,16 @@ class ThirdForm extends PureComponent<PropsType> {
                     type="number"
                     postfix="%"
                   />
-                  {/* <span styleName="">STQ</span> */}
+                </div>
+                <div styleName="productState">
+                  <Input
+                    id="quantity"
+                    value={data.product.quantity || ''}
+                    label="Quantity"
+                    onChange={this.handleChangeProductState}
+                    fullWidth
+                    type="number"
+                  />
                 </div>
               </div>
             </div>
