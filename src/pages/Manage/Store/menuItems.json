@@ -12,6 +12,12 @@
     "disabled": false
   },
   {
+    "id": "storages",
+    "title": "Storages",
+    "link": "/storages",
+    "disabled": false
+  },
+  {
     "id": "settings",
     "title": "Settings",
     "link": "/",
@@ -21,18 +27,6 @@
     "id": "contacts",
     "title": "Contacts",
     "link": "/contacts",
-    "disabled": false
-  },
-  {
-    "id": "employees",
-    "title": "Employees",
-    "link": "/employees",
-    "disabled": true
-  },
-  {
-    "id": "storages",
-    "title": "Storages",
-    "link": "/storages",
     "disabled": false
   }
 ]
