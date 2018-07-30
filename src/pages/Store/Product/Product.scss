@@ -3,15 +3,8 @@
 .ProductDetails {
   background-color: $color_white;
   border: 1px solid $color_grey_trivial;
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
-  margin-left: auto;
-  margin-right: auto;
   margin: 0 0 4rem;
   position: relative;
-  width: 100%;
-
   @media (min-width: $lg) {
     margin: 2rem 0 4rem;
   }

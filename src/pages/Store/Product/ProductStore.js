@@ -21,13 +21,14 @@ const ProductStore = () => (
         <div styleName="storeInfoWrapper">
           <Link to={`/store/${store.rawId}`} styleName="storeInfo">
             <div
+              role="img"
               styleName="image"
               style={{
                 backgroundImage: store.logo ? `url(${store.logo})` : 'none',
               }}
             />
             <div>
-              <h5 styleName="storeName">{extractText(store.name)}</h5>
+              <h4 styleName="storeName">{extractText(store.name)}</h4>
               <Rating value={store.rating} />
             </div>
           </Link>
