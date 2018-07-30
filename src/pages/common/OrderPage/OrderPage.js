@@ -260,23 +260,23 @@ class OrderPage extends PureComponent<PropsType> {
           <div styleName="infoBlock">
             <div styleName="infoBlockItem">
               <Row>
-                <Col size={12} lg={4}>
+                <Col size={12} lg={5}>
                   <TextWithLabel label="Customer" text={order.customerName} />
                 </Col>
-                <Col size={12} lg={8}>
+                <Col size={12} lg={7}>
                   <TextWithLabel label="Address" text={order.customerAddress} />
                 </Col>
               </Row>
             </div>
             <div styleName="infoBlockItem">
               <Row>
-                <Col size={12} lg={4}>
+                <Col size={12} lg={5}>
                   <TextWithLabel
                     label="Date"
                     text={this.getDateFromTimestamp(order.date)}
                   />
                 </Col>
-                <Col size={12} lg={8}>
+                <Col size={12} lg={7}>
                   <TextWithLabel
                     label="Time"
                     text={this.getTimeFromTimestamp(order.date)}

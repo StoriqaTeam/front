@@ -2,18 +2,13 @@
 @import '../../.././styles/mixins.scss';
 
 .container {
-  // display: flex;
   position: relative;
-  //margin: -4rem;
-  //background-color: $color_grey_bg;
 }
 
 .mainBlock {
-  //width: 100%;
   margin-right: 28rem;
   padding: 2.5rem 3.75rem 2.5rem;
   background-color: white;
-  // border: solid 1px $color_grey_trivial;
 
   @media (max-width: #{$lg - 1px}) {
     margin-right: 0;
@@ -51,7 +46,6 @@
 }
 
 .infoBlock {
-  // display: flex;
   margin-top: 6rem;
 
   & .infoBlockItem {
@@ -79,9 +73,6 @@
   top: 0;
   width: 26rem;
   min-width: 26rem;
-  // background-color: white;
-  // border: solid 1px $color_grey_trivial;
-  // float: right;
   padding: 2.5rem 2rem 2rem;
   background-color: $color_white;
 
@@ -95,8 +86,6 @@
   }
 
   .title {
-    //margin-top: 3.25rem;
-    //margin-left: 2.5rem;
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 500;
@@ -155,15 +144,11 @@
 
   .statusTitle {
     font-size: 14px;
-    //line-height: 2.5rem;
-    //margin-left: 2.5rem;
   }
 
   .statusInfo {
     font-size: 16px;
-    //line-height: 2.5rem;
     color: $color_green;
-    //margin-left: 2.5rem;
   }
 
   .paid {

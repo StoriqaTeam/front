@@ -26,6 +26,11 @@
     }
   }
 
+  @media (min-width: $md) {
+    margin-left: -4rem;
+    margin-right: -4rem;
+  }
+
 }
 
 .rowWrapper {
