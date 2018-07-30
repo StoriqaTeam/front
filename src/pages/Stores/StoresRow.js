@@ -28,7 +28,11 @@ class StoresRow extends PureComponent<PropsType> {
   render() {
     const { store } = this.props;
     // $FlowIgnoreMe
-    const baseProduct = pathOr(null, ['baseProducts', 'edges'], store);
+    const findMostViewedProducts = pathOr(
+      null,
+      ['findMostViewedProducts', 'edges'],
+      store,
+    );
     const storeId = store.rawId;
     return (
       <div styleName="container" key={store.id}>
@@ -42,8 +46,11 @@ class StoresRow extends PureComponent<PropsType> {
             </div>
           </Col>
           <Col sm={7} md={5} lg={5} xl={5}>
-            {baseProduct && (
-              <StoresProducts storeId={storeId} baseProduct={baseProduct} />
+            {findMostViewedProducts && (
+              <StoresProducts
+                storeId={storeId}
+                findMostViewedProducts={findMostViewedProducts}
+              />
             )}
           </Col>
         </Row>

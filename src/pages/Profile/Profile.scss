@@ -30,7 +30,16 @@ $max-width: 41rem !important;
   }
 }
 
-.personalData {
+.personalData,
+.shippingAddresses,
+.security {
+  width: 100%;
+  padding: 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.personalDataWrap {
   max-width: $max-width;
 }
 
@@ -48,10 +57,12 @@ $max-width: 41rem !important;
 }
 
 .form {
-  background-color: $color_white;
+  //background-color: $color_white;
+  display: flex;
+  flex-direction: column;
   flex: 1 0 auto;
   margin-top: 0;
-  padding: 4rem;
+  //padding: 4rem;
   @media (min-width: $md) {
     margin-top: 2rem;
   }

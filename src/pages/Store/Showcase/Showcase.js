@@ -5,6 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { isEmpty, map, pathOr } from 'ramda';
 
 import { GoodsSlider } from 'components/GoodsSlider';
+import { SearchNoResults } from 'components/SearchNoResults';
 
 import type { Showcase_shop as ShowcaseShopType } from './__generated__/Showcase_shop.graphql';
 
@@ -45,6 +46,8 @@ class Showcase extends PureComponent<PropsType> {
               <GoodsSlider items={discountProducts} title="Sale" />
             </div>
           )}
+        {isEmpty(viewedProducts) &&
+          isEmpty(discountProducts) && <SearchNoResults />}
       </div>
     );
   }

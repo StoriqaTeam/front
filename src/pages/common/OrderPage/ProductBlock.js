@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 import { slice } from 'ramda';
 import { Link } from 'found';
 
+import { formatPrice } from 'utils';
+
 import './ProductBlock.scss';
 
 export type ProductDTOType = {
@@ -55,7 +57,7 @@ class ProductBlock extends PureComponent<PropsType> {
         <div styleName="productInfoBlock">
           <div styleName="productName">
             <Link to={`/store/${product.storeId}/products/${product.id}`}>
-              <b>{product.name}</b>
+              <strong styleName="productNameText">{product.name}</strong>
             </Link>
           </div>
           <div styleName="productCategory">
@@ -64,7 +66,7 @@ class ProductBlock extends PureComponent<PropsType> {
             </Link>
           </div>
           <div styleName="productPrice">
-            {product.price} <b>STQ</b>
+            {formatPrice(product.price)} <strong>STQ</strong>
           </div>
         </div>
         {this.renderAttributes(attributes)}

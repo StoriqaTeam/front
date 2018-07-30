@@ -18,6 +18,7 @@ import moment from 'moment';
 import { withRouter, routerShape } from 'found';
 
 import { Button } from 'components/common/Button';
+import { Row, Col } from 'layout';
 
 import {
   timeFromTimestamp,
@@ -29,7 +30,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import { addressToString } from 'utils';
+import { addressToString, formatPrice } from 'utils';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -81,8 +82,8 @@ class OrderPage extends PureComponent<PropsType> {
     const customerName =
       customerDTO && (customerDTO.firstName || customerDTO.lastName)
         ? join(' ', filter(item => Boolean(item), values(customerDTO)))
-        : '-';
-    const customerAddress = addressToString(order.addressFull) || '-';
+        : '—';
+    const customerAddress = addressToString(order.addressFull) || '—';
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -123,8 +124,8 @@ class OrderPage extends PureComponent<PropsType> {
       customerName,
       customerAddress,
       date: order.createdAt,
-      delivery: order.deliveryCompany || '-',
-      trackId: order.trackId || '-',
+      delivery: order.deliveryCompany || '—',
+      trackId: order.trackId || '—',
       quantity: order.quantity,
       subtotal: order.subtotal,
       status: order.state,
@@ -202,77 +203,130 @@ class OrderPage extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="mainBlock">
-          <div styleName="orderNumber">ORDER #{order.number}</div>
+          <div styleName="orderNumber">
+            <strong>ORDER #{order.number}</strong>
+          </div>
+          <div styleName="statusBlock">
+            <div styleName="title">
+              <strong>Order status info</strong>
+            </div>
+            <div styleName="statusPaymentBlock">
+              <div styleName="statusesBlock">
+                <div styleName="statusItem">
+                  <div styleName="statusTitle">Status</div>
+                  <div styleName="statusInfo">
+                    {getStatusStringFromEnum(order.status)}
+                  </div>
+                </div>
+                <div styleName="statusItem">
+                  <div styleName="statusTitle">Payment status</div>
+                  <div
+                    styleName={classNames('statusInfo', {
+                      paid: order.paymentStatus === 'Paid',
+                      unpaid: order.paymentStatus !== 'Paid',
+                    })}
+                  >
+                    {order.paymentStatus}
+                  </div>
+                </div>
+              </div>
+              {this.props.isPaymentInfoCanBeShown &&
+                (orderFromProps.state === 'NEW' ||
+                  orderFromProps.state === 'PAYMENT_AWAITED' ||
+                  orderFromProps.state === 'TRANSACTION_PENDING') && (
+                  <div styleName="paymentButtonWrapper">
+                    <Button
+                      big
+                      fullWidth
+                      onClick={() => {
+                        this.props.router.push(
+                          `/profile/orders/${order.number}/payment-info`,
+                        );
+                      }}
+                    >
+                      Payment info
+                    </Button>
+                  </div>
+                )}
+            </div>
+            <div styleName="ticketButtonTitle">Having troubles?</div>
+            <div styleName="ticketButtonWrapper">
+              <Button big wireframe fullWidth>
+                Open ticket
+              </Button>
+            </div>
+          </div>
           <ProductBlock product={order.product} />
           <div styleName="infoBlock">
-            <div styleName="left">
-              <TextWithLabel label="Customer" text={order.customerName} />
-              <TextWithLabel
-                label="Date"
-                text={this.getDateFromTimestamp(order.date)}
-              />
-              <TextWithLabel label="Delivery" text={order.delivery} />
-              <TextWithLabel label="Quantity" text={`${order.quantity}`} />
+            <div styleName="infoBlockItem">
+              <Row>
+                <Col size={12} lg={4}>
+                  <TextWithLabel label="Customer" text={order.customerName} />
+                </Col>
+                <Col size={12} lg={8}>
+                  <TextWithLabel label="Address" text={order.customerAddress} />
+                </Col>
+              </Row>
             </div>
-            <div>
-              <TextWithLabel label="Address" text={order.customerAddress} />
-              <TextWithLabel
-                label="Time"
-                text={this.getTimeFromTimestamp(order.date)}
-              />
-              <TextWithLabel label="Track ID" text={order.trackId} />
-              <TextWithLabel label="Subtotal" text={`${order.subtotal} STQ`} />
+            <div styleName="infoBlockItem">
+              <Row>
+                <Col size={12} lg={4}>
+                  <TextWithLabel
+                    label="Date"
+                    text={this.getDateFromTimestamp(order.date)}
+                  />
+                </Col>
+                <Col size={12} lg={8}>
+                  <TextWithLabel
+                    label="Time"
+                    text={this.getTimeFromTimestamp(order.date)}
+                  />
+                </Col>
+              </Row>
+            </div>
+            <div styleName="infoBlockItem">
+              <Row>
+                <Col size={12} lg={5}>
+                  <TextWithLabel label="Delivery" text={order.delivery} />
+                </Col>
+                <Col size={12} lg={7}>
+                  <TextWithLabel label="Track ID" text={order.trackId} />
+                </Col>
+              </Row>
+            </div>
+            <div styleName="infoBlockItem">
+              <Row>
+                <Col size={12} lg={5}>
+                  <TextWithLabel label="Quantity" text={`${order.quantity}`} />
+                </Col>
+                <Col size={12} lg={7}>
+                  <TextWithLabel
+                    label="Subtotal"
+                    text={`${formatPrice(order.subtotal)} STQ`}
+                  />
+                </Col>
+              </Row>
             </div>
           </div>
-          {this.props.isAbleToManageOrder && (
-            <ManageOrderBlock
-              isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
-              isAbleToCancel={
-                orderFromProps.state === 'PAYMENT_AWAITED' ||
-                orderFromProps.state === 'IN_PROCESSING'
-              }
-              orderSlug={parseInt(order.number, 10)}
-              onOrderSend={this.handleOrderSent}
-              onOrderCancel={this.handleOrderCanceled}
-            />
-          )}
-          <StatusList items={order.statusHistory} />
-        </div>
-        <div styleName="statusBlock">
-          <div styleName="title">Order status info</div>
-          <div styleName="statusTitle">Status</div>
-          <div styleName="statusInfo">
-            {getStatusStringFromEnum(order.status)}
-          </div>
-          <div styleName="statusTitle">Payment status</div>
-          <div
-            styleName={classNames('statusInfo', {
-              paid: order.paymentStatus === 'Paid',
-              unpaid: order.paymentStatus !== 'Paid',
-            })}
-          >
-            {order.paymentStatus}
-          </div>
-          {this.props.isPaymentInfoCanBeShown &&
-            (orderFromProps.state === 'NEW' ||
+          {this.props.isAbleToManageOrder &&
+            (orderFromProps.state === 'IN_PROCESSING' ||
               orderFromProps.state === 'PAYMENT_AWAITED' ||
-              orderFromProps.state === 'TRANSACTION_PENDING') && (
-              <div styleName="paymentButtonWrapper">
-                <Button
-                  big
-                  onClick={() => {
-                    this.props.router.push(
-                      `/profile/orders/${order.number}/payment-info`,
-                    );
-                  }}
-                >
-                  Payment info
-                </Button>
+              orderFromProps.state === 'IN_PROCESSING') && (
+              <div styleName="manageBlock">
+                <ManageOrderBlock
+                  isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
+                  isAbleToCancel={
+                    orderFromProps.state === 'PAYMENT_AWAITED' ||
+                    orderFromProps.state === 'IN_PROCESSING'
+                  }
+                  orderSlug={parseInt(order.number, 10)}
+                  onOrderSend={this.handleOrderSent}
+                  onOrderCancel={this.handleOrderCanceled}
+                />
               </div>
             )}
-          <div styleName="ticketButtonTitle">Having troubles?</div>
-          <div styleName="ticketButtonWrapper">
-            <Button big>Open ticket</Button>
+          <div styleName="statusList">
+            <StatusList items={order.statusHistory} />
           </div>
         </div>
       </div>

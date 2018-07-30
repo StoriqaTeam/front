@@ -1,16 +1,23 @@
 @import '../../.././styles/variables.scss';
+@import '../../.././styles/mixins.scss';
 
 .container {
+  // display: flex;
   position: relative;
-  margin: -4rem;
-  background-color: $color_grey_bg;
+  //margin: -4rem;
+  //background-color: $color_grey_bg;
 }
 
 .mainBlock {
-  padding: 4rem;
-  width: 110rem;
+  //width: 100%;
+  margin-right: 28rem;
+  padding: 2.5rem 3.75rem 2.5rem;
   background-color: white;
-  border: solid 1px $color_grey_trivial;
+  // border: solid 1px $color_grey_trivial;
+
+  @media (max-width: #{$lg - 1px}) {
+    margin-right: 0;
+  }
 }
 
 .orderNumber {
@@ -19,13 +26,51 @@
   letter-spacing: 0.15rem;
 }
 
+.statusList {
+  width: 100%;
+  overflow-x: scroll;
+}
+
+@media (max-width: #{$xxl - 1px}) {
+  .statusList {
+    padding-bottom: 1rem;
+  }
+
+  .statusList::-webkit-scrollbar {
+    height: 0.6rem;
+  }
+
+  .statusList::-webkit-scrollbar-thumb {
+    border-radius: 0.625rem;
+    background-color: $color_grey_light;
+  }
+
+  .statusList::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
 .infoBlock {
-  display: flex;
+  // display: flex;
   margin-top: 6rem;
+
+  & .infoBlockItem {
+    margin-top: 2rem;
+
+    @media (max-width: #{$lg - 1px}) {
+      & > div > div + div {
+        margin-top: 2rem;
+      }
+    }
+  }
 }
 
 .left {
   width: 41rem;
+}
+
+.statusBlockWrap {
+
 }
 
 .statusBlock {
@@ -33,33 +78,92 @@
   right: 0;
   top: 0;
   width: 26rem;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  border: solid 1px $color_grey_trivial;
+  min-width: 26rem;
+  // background-color: white;
+  // border: solid 1px $color_grey_trivial;
+  // float: right;
+  padding: 2.5rem 2rem 2rem;
+  background-color: $color_white;
+
+  @media (max-width: #{$lg - 1px}) {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 100%;
+    margin-bottom: 3.5rem;
+    padding: 0;
+  }
 
   .title {
-    margin-top: 3.25rem;
-    margin-left: 2.5rem;
+    //margin-top: 3.25rem;
+    //margin-left: 2.5rem;
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 500;
     font-style: normal;
     letter-spacing: 0.15rem;
+
+    @media (max-width: #{$lg - 1px}) {
+      display: none;
+    }
+  }
+
+  .statusPaymentBlock {
+    @media (max-width: #{$lg - 1px}) {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      display: block;
+    }
+  }
+
+  .statusesBlock {
+    @media (max-width: #{$lg - 1px}) {
+      display: flex;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: #{$sm - 1px}) {
+      display: block;
+    }
+  }
+
+  .statusItem {
+    margin-top: 2.5rem;
+
+    & + .statusItem {
+      @media (max-width: #{$lg - 1px}) {
+        margin-left: 8rem;
+      }
+
+      @media (max-width: #{$sm - 1px}) {
+        margin-left: 0;
+        margin-top: 2rem;
+      }
+    }
+
+    @media (max-width: #{$lg - 1px}) {
+      margin-top: 0;
+    }
   }
 
   .statusTitle {
     font-size: 14px;
-    line-height: 2.5rem;
-    margin-top: 2.5rem;
-    margin-left: 2.5rem;
+    //line-height: 2.5rem;
+    //margin-left: 2.5rem;
   }
 
   .statusInfo {
     font-size: 16px;
-    line-height: 2.5rem;
+    //line-height: 2.5rem;
     color: $color_green;
-    margin-left: 2.5rem;
+    //margin-left: 2.5rem;
   }
 
   .paid {
@@ -72,26 +176,28 @@
 }
 
 .paymentButtonWrapper {
-  margin-top: 3.25rem;
-  width: 21.25rem;
-  align-self: center;
-  button {
-    width: 100%;
+  margin-top: 2.5rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    margin-top: 0;
   }
 }
 
 .ticketButtonTitle {
-  margin-top: 10rem;
+  margin-top: 7rem;
   align-self: center;
   font-size: 14px;
+  text-align: center;
+
+  @media (max-width: #{$lg - 1px}) {
+    margin-top: 3rem;
+  }
 }
 
 .ticketButtonWrapper {
-  margin-top: 2rem;
-  margin-bottom: 2.75rem;
-  width: 21.25rem;
-  align-self: center;
-  button {
-    width: 100%;
-  }
+  margin-top: 1.5rem;
+}
+
+.manageBlock {
+  margin-top: 5rem;
 }

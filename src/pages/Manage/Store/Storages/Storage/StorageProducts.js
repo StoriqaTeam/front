@@ -515,7 +515,7 @@ export default createRefetchContainer(
       warehouse(slug: $storageSlug) {
         id
         name
-        autoCompleteProductName(name: $autocompleteValue) {
+        autoCompleteProductName(first: 8, name: $autocompleteValue) {
           edges {
             node
           }
