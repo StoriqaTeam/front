@@ -12,6 +12,7 @@
   &.big {
     background-color: $color_white;
     border-radius: 0;
+    justify-content: space-between;
   }
 
   &.noBorder {
