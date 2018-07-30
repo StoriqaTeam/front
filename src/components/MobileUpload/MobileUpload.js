@@ -8,6 +8,7 @@ import './MobileUpload.scss';
 
 type PropsType = {
   onUpload: (e: any) => void,
+  onDelete: (e: any) => void,
   id: string,
   avatar: ?string,
   dataTest: string,
@@ -19,6 +20,7 @@ const MobileUpload = ({
   disabled,
   id,
   onUpload,
+  onDelete,
   avatar,
 }: PropsType) => (
   <div styleName="container">
@@ -27,7 +29,18 @@ const MobileUpload = ({
         <Icon type="user" />
       </span>
     ) : (
-      <img src={avatar} styleName="image" alt="" />
+      <figure styleName="image">
+        <span
+          onClick={onDelete}
+          onKeyPress={() => {}}
+          role="button"
+          styleName="trash"
+          tabIndex="-1"
+        >
+          <Icon type="basket" size={24} />
+        </span>
+        <img src={avatar} alt="" />
+      </figure>
     )}
     <label htmlFor={id} styleName="upload" data-test={dataTest}>
       Upload Photo

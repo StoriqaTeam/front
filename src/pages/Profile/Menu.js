@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
 import type { Environment } from 'relay-runtime';
@@ -89,13 +89,23 @@ class Menu extends PureComponent<PropsType> {
       <aside styleName="container">
         <h3 styleName="offscreen">Profile Menu</h3>
         <div styleName="mobileMenu">
-          <Collapse items={menuItems} onSelected={this.handleSelected} />
-          <div style={{ margin: '1.05rem 0' }} />
-          <MobileUpload
-            avatar={avatar}
-            id={this.props.id}
-            onUpload={this.handleOnUpload}
+          <Collapse
+            selected={activeItem}
+            items={menuItems}
+            onSelected={this.handleSelected}
           />
+          <div style={{ margin: '1.5rem 0' }} />
+          {activeItem === 'personal-data' ? (
+            <Fragment>
+              <MobileUpload
+                avatar={avatar}
+                id={this.props.id}
+                onDelete={() => this.handleUpdateUser('')}
+                onUpload={this.handleOnUpload}
+              />
+              <div style={{ margin: '1rem 0' }} />
+            </Fragment>
+          ) : null}
         </div>
         <div styleName="imageArea">
           <UploadWrapper
@@ -112,7 +122,7 @@ class Menu extends PureComponent<PropsType> {
           />
           {avatar && (
             <div
-              styleName="cross"
+              styleName="trash"
               onClick={() => {
                 this.handleUpdateUser('');
               }}
@@ -120,7 +130,7 @@ class Menu extends PureComponent<PropsType> {
               role="button"
               tabIndex="0"
             >
-              <Icon type="cross" />
+              <Icon type="basket" size={28} />
             </div>
           )}
         </div>

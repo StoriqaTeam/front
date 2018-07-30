@@ -64,6 +64,19 @@ const UploadWrapper = ({
             styleName="overPictureWrap"
             style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
           >
+            {overPicture && (
+              <span styleName="overlay">
+                <span
+                  onClick={() => {}}
+                  onKeyPress={() => {}}
+                  role="button"
+                  styleName="delete"
+                  tabIndex="-1"
+                >
+                  <Icon type="basket" size={24} />
+                </span>
+              </span>
+            )}
             <img styleName="overPicture" src={overPicture} alt="img" />
           </div>
         )}

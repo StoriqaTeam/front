@@ -107,7 +107,7 @@ class Profile extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(Profile),
+  Page(Profile, true),
   graphql`
     fragment Profile_me on User {
       ...Orders_me
