@@ -2,9 +2,17 @@
 
 import * as React from 'react';
 
+import { Rating } from 'components/common/Rating';
+
 import type { WidgetType, WidgetOptionType } from './types';
 
-import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
+import {
+  ProductContext,
+  ProductMaterial,
+  ProductPrice,
+  ProductSize,
+  ProductThumbnails,
+} from './index';
 
 import { sortByProp } from './utils';
 
@@ -67,12 +75,24 @@ class ProductDetails extends React.Component<PropsType, {}> {
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
-      <div styleName="container">
-        <h2>{productTitle}</h2>
-        {children}
-        <p>{productDescription}</p>
-        {sortByProp('id')(widgets).map(this.generateWidget)}
-      </div>
+      <ProductContext.Consumer>
+        {({ productVariant, rating }) => (
+          <div styleName="container">
+            <h2>{productTitle}</h2>
+            <div styleName="rating">
+              <Rating value={rating} />
+            </div>
+            <ProductPrice
+              price={productVariant.price}
+              lastPrice={productVariant.lastPrice}
+              cashback={productVariant.cashback}
+            />
+            <p>{productDescription}</p>
+            {sortByProp('id')(widgets).map(this.generateWidget)}
+            {children}
+          </div>
+        )}
+      </ProductContext.Consumer>
     );
   }
 }

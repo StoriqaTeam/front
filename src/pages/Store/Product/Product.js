@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { path, isNil } from 'ramda';
@@ -13,7 +13,6 @@ import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
-import { Rating } from 'components/common/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -28,7 +27,6 @@ import {
   ProductContext,
   ProductDetails,
   ProductImage,
-  ProductPrice,
   ProductStore,
   Tab,
   Tabs,
@@ -192,61 +190,55 @@ class Product extends Component<PropsType, StateType> {
       return <div styleName="productNotFound">Product Not Found</div>;
     }
     const {
-      baseProduct: { name, shortDescription, longDescription, rating },
+      baseProduct: { name, shortDescription, longDescription, rating, store },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
-      <ProductContext.Provider value={this.props.baseProduct}>
-        <div styleName="ProductDetails">
-          <Row>
-            <Col sm={12} md={5} lg={5} xl={5}>
-              <ProductImage
-                discount={productVariant.discount}
-                mainImage={productVariant.photoMain}
-                thumbnails={productVariant.additionalPhotos}
-              />
-              {process.env.BROWSER ? (
-                <SocialShare big {...productVariant} />
-              ) : null}
-            </Col>
-            <Col sm={12} md={6} lg={6} xl={6}>
-              <ProductDetails
-                productTitle={extractText(name)}
-                productDescription={description}
-                widgets={widgets}
-                onWidgetClick={this.handleWidget}
-              >
-                <div styleName="rating">
-                  <Rating value={rating} />
-                </div>
-                <ProductPrice
-                  price={productVariant.price}
-                  lastPrice={productVariant.lastPrice}
-                  cashback={productVariant.cashback}
+      <ProductContext.Provider value={{ store, productVariant, rating }}>
+        <Fragment>
+          <div styleName="ProductDetails">
+            <Row>
+              <Col sm={12} md={5} lg={5} xl={5}>
+                <ProductImage
+                  discount={productVariant.discount}
+                  mainImage={productVariant.photoMain}
+                  thumbnails={productVariant.additionalPhotos}
                 />
-              </ProductDetails>
-              <div styleName="buttons-container">
-                <Button disabled big>
-                  Buy now
-                </Button>
-                <Button
-                  id="productAddToCart"
-                  wireframe
-                  big
-                  onClick={() => this.handleAddToCart(productVariant.rawId)}
-                  dataTest="product-addToCart"
+                {process.env.BROWSER ? (
+                  <SocialShare big {...productVariant} />
+                ) : null}
+              </Col>
+              <Col sm={12} md={6} lg={6} xl={6}>
+                <ProductDetails
+                  productTitle={extractText(name)}
+                  productDescription={description}
+                  widgets={widgets}
+                  onWidgetClick={this.handleWidget}
                 >
-                  Add to cart
-                </Button>
-              </div>
-              <div styleName="line" />
-              <ProductStore />
-              {/* {!loggedIn && <div>Please login to use cart</div>} */}
-            </Col>
-          </Row>
+                  <div styleName="buttons-container">
+                    <Button disabled big>
+                      Buy now
+                    </Button>
+                    <Button
+                      id="productAddToCart"
+                      wireframe
+                      big
+                      onClick={() => this.handleAddToCart(productVariant.rawId)}
+                      dataTest="product-addToCart"
+                    >
+                      Add to cart
+                    </Button>
+                  </div>
+                  <div styleName="line" />
+                  <ProductStore />
+                  {/* {!loggedIn && <div>Please login to use cart</div>} */}
+                </ProductDetails>
+              </Col>
+            </Row>
+          </div>
           {this.makeTabs(longDescription)}
-        </div>
+        </Fragment>
       </ProductContext.Provider>
     );
   }
