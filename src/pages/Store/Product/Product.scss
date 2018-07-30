@@ -10,12 +10,22 @@
   margin-right: auto;
   position: relative;
   width: 100%;
-
   margin: 0 0 4rem;
 
   @media (min-width: $lg) {
     margin: 2rem 0 4rem;
   }
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.detailsWrapper {
+  border-left: 1px solid $color_grey_trivial;
+  margin-left: -2rem;
+  height: 100%;
 }
 
 .buttons-container {

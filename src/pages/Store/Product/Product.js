@@ -199,7 +199,7 @@ class Product extends Component<PropsType, StateType> {
         <Fragment>
           <div styleName="ProductDetails">
             <Row>
-              <Col sm={12} md={5} lg={5} xl={5}>
+              <Col sm={12} md={12} lg={6} xl={6}>
                 <ProductImage
                   discount={productVariant.discount}
                   mainImage={productVariant.photoMain}
@@ -209,31 +209,33 @@ class Product extends Component<PropsType, StateType> {
                   <SocialShare big {...productVariant} />
                 ) : null}
               </Col>
-              <Col sm={12} md={6} lg={6} xl={6}>
-                <ProductDetails
-                  productTitle={extractText(name)}
-                  productDescription={description}
-                  widgets={widgets}
-                  onWidgetClick={this.handleWidget}
-                >
-                  <div styleName="buttons-container">
-                    <Button disabled big>
-                      Buy now
-                    </Button>
-                    <Button
-                      id="productAddToCart"
-                      wireframe
-                      big
-                      onClick={() => this.handleAddToCart(productVariant.rawId)}
-                      dataTest="product-addToCart"
-                    >
-                      Add to cart
-                    </Button>
-                  </div>
-                  <div styleName="line" />
-                  <ProductStore />
-                  {/* {!loggedIn && <div>Please login to use cart</div>} */}
-                </ProductDetails>
+              <Col sm={12} md={12} lg={6} xl={6}>
+                <div styleName="detailsWrapper">
+                  <ProductDetails
+                    productTitle={extractText(name)}
+                    productDescription={description}
+                    widgets={widgets}
+                    onWidgetClick={this.handleWidget}
+                  >
+                    <div styleName="buttons-container">
+                      <Button disabled big>
+                        Buy now
+                      </Button>
+                      <Button
+                        id="productAddToCart"
+                        wireframe
+                        big
+                        onClick={() => this.handleAddToCart(productVariant.rawId)}
+                        dataTest="product-addToCart"
+                      >
+                        Add to cart
+                      </Button>
+                    </div>
+                    <div styleName="line" />
+                    <ProductStore />
+                    {/* {!loggedIn && <div>Please login to use cart</div>} */}
+                  </ProductDetails>
+                </div>
               </Col>
             </Row>
           </div>

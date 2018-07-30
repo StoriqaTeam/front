@@ -1,7 +1,8 @@
 @import "../../../styles/variables";
 
 .container {
-  border-left: 1px solid $color_grey_trivial;
+  // border-left: 1px solid $color_grey_trivial;
+  padding-bottom: 3rem;
   padding-left: 2rem;
 
   & h2 {

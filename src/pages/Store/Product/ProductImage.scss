@@ -2,7 +2,7 @@
 
 .container {
   align-items: flex-start;
-  border-right: 1px solid $color_grey_trivial;
+  // border-right: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
 }
@@ -11,7 +11,6 @@
   position: absolute;
   right: 3rem;
   top: 3rem;
-
   svg {
     height: 3.375rem;
     width: 3.375rem;
