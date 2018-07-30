@@ -10,6 +10,7 @@ import {
   ProductContext,
   ProductMaterial,
   ProductPrice,
+  ProductQuantity,
   ProductSize,
   ProductThumbnails,
 } from './index';
@@ -89,7 +90,8 @@ class ProductDetails extends React.Component<PropsType, {}> {
             />
             <p>{productDescription}</p>
             {sortByProp('id')(widgets).map(this.generateWidget)}
-            {children}
+            <ProductQuantity />
+            { children }
           </div>
         )}
       </ProductContext.Consumer>

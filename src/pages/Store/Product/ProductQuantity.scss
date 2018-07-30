@@ -1,0 +1,20 @@
+@import "../../../styles/variables";
+
+.container {
+
+}
+
+.counter {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.stock {
+  padding-left: 2rem;
+}
+
+.inStock {
+  color: $color_green;
+  padding-left: 1rem;
+}
