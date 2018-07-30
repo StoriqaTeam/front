@@ -203,8 +203,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     defaultLanguage?: string,
     addressFull?: { value: any },
   }) => {
+    console.log('>>> updateWizardMutation: ', { data });
     UpdateWizardMutation.commit({
-      ...data,
+      ...omit(['completed'], data),
       defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
@@ -907,7 +908,7 @@ WizardWrapper.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(Page(withShowAlert(WizardWrapper))),
+  withRouter(Page(withShowAlert(WizardWrapper), true, true)),
   graphql`
     fragment Wizard_me on User {
       id

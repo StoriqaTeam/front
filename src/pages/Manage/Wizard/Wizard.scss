@@ -9,7 +9,7 @@
   margin: 0 2rem -2rem 2rem;
   border-top: 1px solid $color_grey_trivial;
   border-bottom: 1px solid $color_grey_trivial;
-  margin: 0 0 4rem;
+  margin: 0;
 
   @media (min-width: $lg) {
     margin: 2rem 0 4rem;
@@ -31,7 +31,7 @@
       align-items: center;
 
       &.firstForm {
-        width: 54rem;
+        max-width: 54rem;
       }
       &.secondForm {
         width: 54rem;
@@ -42,18 +42,27 @@
 
       .headerTitle {
         font-family: $font_light;
-        font-size: 4.5rem;
-        margin-bottom: 2.7rem;
+        font-size: 3rem;
+        margin-bottom: 2rem;
         text-align: center;
+        @media (min-width: $md) {
+          font-size: 4.5rem;
+          margin-bottom: 2.7rem;
+        }
       }
 
       .headerDescription {
-        width: 45rem;
+        max-width: 45rem;
         font-family: $font_regular;
-        line-height: 2.7rem;
+        font-size: 1.75rem;
+        line-height: 2.2rem;
         color: $color_grey_minor;
         text-align: center;
         margin-bottom: 6.5rem;
+        @media (min-width: $md) {
+          font-size: 2rem;
+          line-height: 2.7rem;
+        }
       }
     }
   }
