@@ -206,7 +206,7 @@ class Product extends Component<PropsType, StateType> {
                   thumbnails={productVariant.additionalPhotos}
                 />
                 {process.env.BROWSER ? (
-                  <SocialShare big {...productVariant} />
+                  <SocialShare noBorderX big {...productVariant} />
                 ) : null}
               </Col>
               <Col sm={12} md={12} lg={6} xl={6}>
@@ -225,7 +225,9 @@ class Product extends Component<PropsType, StateType> {
                         id="productAddToCart"
                         wireframe
                         big
-                        onClick={() => this.handleAddToCart(productVariant.rawId)}
+                        onClick={() =>
+                          this.handleAddToCart(productVariant.rawId)
+                        }
                         dataTest="product-addToCart"
                       >
                         Add to cart

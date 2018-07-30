@@ -25,7 +25,7 @@
 }
 
 .bigImage {
-  height: 69.875rem;
+  height: 41.875rem;
   position: relative;
   width: inherit;
 
@@ -33,6 +33,20 @@
     height: 100%;
     object-fit: contain;
     width: 100%;
+  }
+
+  @media (min-width: $sm) {
+    height: 41.875rem;
+  }
+  @media (min-width: $md) {
+    // height: 41.875rem;
+    height: 97.125rem;
+  }
+  @media (min-width: $lg) {
+    height: 61.625rem;
+  }
+  @media (min-width: $xl) {
+    height: 69.875rem;
   }
 }
 

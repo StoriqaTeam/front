@@ -31,9 +31,12 @@
   }
 
   &.big {
-    padding: 4.5rem;
+    padding: 2rem 2rem 1rem 2rem;
     .linkContainer {
       margin-right: 3rem;
+    }
+    @media (min-width: $md) {
+      padding: 4.5rem;
     }
   }
 
@@ -56,7 +59,10 @@
 
   &.big {
     border-left: 1px solid $color_grey_trivial;
-    padding: 0 4.25rem;
+    padding: 0 2.25rem;
+    @media (min-width: $md) {
+      padding: 0 4.25rem;
+    }
   }
 
   &.noBorder {
