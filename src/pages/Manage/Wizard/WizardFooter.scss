@@ -6,7 +6,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem;
+  padding: 2rem 1rem;
 
   @media (min-width: $md) {
     border-top: 2px solid $color_grey_trivial;
@@ -39,13 +39,14 @@
   @media (min-width: $md) {
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
     margin: 0 0;
   }
 }
 
 .leftButtonContainer {
   display: flex;
-  // flex: 1;
+  flex: 1;
   // flex-direction: column;
   // justify-content: center;
 }
