@@ -22,6 +22,7 @@ import {
   UpdateProductMutation,
   DeactivateBaseProductMutation,
   DeleteWizardMutation,
+  CreateWarehouseMutation,
 } from 'relay/mutations';
 import { errorsHandler, log, fromRelayError, uploadFile } from 'utils';
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -204,7 +205,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     addressFull?: { value: any },
   }) => {
     UpdateWizardMutation.commit({
-      ...data,
+      ...omit(['completed'], data),
       defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
@@ -300,7 +301,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  updateStore = () => {
+  updateStore = (callback?: () => void) => {
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -323,7 +324,70 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           );
           return;
         }
-        this.clearValidationErrors();
+
+        if (callback) {
+          // create storage if not exists
+          const addressFull = pathOr(
+            null,
+            ['updateStore', 'addressFull'],
+            response,
+          );
+          // $FlowIgnoreMe
+          const warehouses = pathOr(
+            [null],
+            ['me', 'wizardStore', 'store', 'warehouses'],
+            this.props,
+          );
+          // $FlowIgnoreMe
+          const storeId = pathOr(
+            [null],
+            ['me', 'wizardStore', 'store', 'rawId'],
+            this.props,
+          );
+          if (warehouses && warehouses.length === 0 && addressFull) {
+            CreateWarehouseMutation.commit({
+              input: {
+                clientMutationId: '',
+                storeId,
+                addressFull,
+              },
+              environment: this.context.environment,
+              onCompleted: (responze: ?Object, errorz: ?Array<any>) => {
+                log.debug('CreateWarehouseMutation', { responze });
+                const relayErrorz = fromRelayError({ source: { errorz } });
+                if (relayErrors) {
+                  errorsHandler(
+                    relayErrorz,
+                    this.props.showAlert,
+                    this.handleWizardError,
+                  );
+                  // $FlowIgnoreMe
+                  callback();
+                  return;
+                }
+                this.clearValidationErrors();
+                // $FlowIgnoreMe
+                callback();
+              },
+              onError: (error: Error) => {
+                const relayErrorz = fromRelayError(error);
+                errorsHandler(
+                  relayErrorz,
+                  this.props.showAlert,
+                  this.handleWizardError,
+                );
+
+                // $FlowIgnoreMe
+                callback();
+              },
+            });
+          } else {
+            this.clearValidationErrors();
+            callback();
+          }
+        } else {
+          this.clearValidationErrors();
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -360,8 +424,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         }
         break;
       case 2:
-        this.handleOnChangeStep(changedStep);
-        this.updateStore();
+        this.updateStore(() => {
+          this.handleOnChangeStep(changedStep);
+        });
         break;
       case 3:
         this.setState({ showConfirm: true });
@@ -938,6 +1003,9 @@ export default createFragmentContainer(
         store {
           id
           rawId
+          warehouses {
+            id
+          }
           baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
             edges {
               node {

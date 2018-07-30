@@ -14,6 +14,12 @@ const mutation = graphql`
       id
       name
       storeId
+      store {
+        id
+        warehouses {
+          id
+        }
+      }
       addressFull {
         country
         administrativeAreaLevel1
