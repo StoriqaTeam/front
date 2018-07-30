@@ -2,11 +2,15 @@
 
 .stepperContainer {
   height: 8.25rem;
-  width: 100%;
-  border-bottom: 2px solid $color_grey_trivial;
+  min-width: 96rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+
+  @media (min-width: $md) {
+    justify-content: center;
+    width: 100%;
+  }
 
   .item {
     position: relative;

@@ -17,6 +17,12 @@
 
   .stepperWrapper {
     display: flex;
+    justify-content: flex-start;
+    border-bottom: 2px solid $color_grey_trivial;
+    overflow: auto;
+    @media (min-width: $md) {
+      justify-content: center;
+    }
   }
 
   .contentWrapper {
