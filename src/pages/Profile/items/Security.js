@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   assocPath,
@@ -296,7 +296,7 @@ class Security extends Component<PropsType, StateType> {
       newPasswordFocus,
     } = this.state;
     return (
-      <Fragment>
+      <div styleName="security">
         <div styleName="subtitle">
           <strong>Security settings</strong>
         </div>
@@ -351,7 +351,7 @@ class Security extends Component<PropsType, StateType> {
         <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
           Save
         </SpinnerButton>
-      </Fragment>
+      </div>
     );
   }
 }

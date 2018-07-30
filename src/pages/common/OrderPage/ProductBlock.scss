@@ -1,43 +1,53 @@
 @import '../../../styles/variables.scss';
 
 .container {
-  height: 10rem;
   display: flex;
+  width: 100%;
   margin-top: 2.5rem;
 }
 
 .photoWrapper {
   width: 10rem;
   height: 10rem;
-  border-radius: 0.5rem;
-  overflow: hidden;
+}
+
+.emptyLogo {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  background-color: $color_grey_trivial;
 }
 
 .photo {
-  height: 100%;
+  width: 10rem;
+  height: 10rem;
   display: block;
+  border-radius: 0.5rem;
+  object-fit: cover;
 }
 
 .productInfoBlock {
-  display: flex;
-  flex-direction: column;
-  width: 33.25rem;
-  display: flex;
+  min-width: 0;
   margin-left: 2rem;
 }
 
 .productName {
   a {
     font-size: 16px;
-    line-height: 1.25;
-    font-weight: 500;
-    word-wrap: break-word;
-    overflow: hidden;
-    height: 2.5rem;
     color: $color_grey;
+  }
+
+  .productNameText {
+    display: block;
+
+    @media (max-width: #{$sm - 1px}) {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 }
 
