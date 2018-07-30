@@ -7,7 +7,18 @@
 }
 
 .photoWrapper {
-  //
+  width: 10rem;
+  height: 10rem;
+}
+
+.emptyLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  background-color: $color_grey_trivial;
 }
 
 .photo {
@@ -15,6 +26,7 @@
   height: 10rem;
   display: block;
   border-radius: 0.5rem;
+  object-fit: cover;
 }
 
 .productInfoBlock {
