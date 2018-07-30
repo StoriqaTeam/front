@@ -9,10 +9,10 @@ import './StoresProducts.scss';
 
 type PropsType = {
   storeId: number,
-  baseProduct: any,
+  findMostViewedProducts: any,
 };
 
-const StoresProducts = ({ storeId, baseProduct }: PropsType) => (
+const StoresProducts = ({ storeId, findMostViewedProducts }: PropsType) => (
   <div styleName="container">
     <div styleName="productsWrap">
       {map(baseProductNode => {
@@ -36,7 +36,7 @@ const StoresProducts = ({ storeId, baseProduct }: PropsType) => (
             </div>
           </Link>
         );
-      }, map(baseProductItem => baseProductItem.node, baseProduct))}
+      }, map(baseProductItem => baseProductItem.node, findMostViewedProducts))}
     </div>
   </div>
 );

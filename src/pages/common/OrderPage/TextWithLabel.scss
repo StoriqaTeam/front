@@ -4,7 +4,10 @@
   display: flex;
   color: $color_grey;
   flex-direction: column;
-  margin-top: 3rem;
+
+  & + .container {
+    margin-top: 3rem;
+  }
 }
 
 .label {

@@ -1,0 +1,29 @@
+@import '../../styles/variables.scss';
+
+.container {
+  overflow: hidden;
+}
+
+.text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  margin-bottom: 0.35rem;
+  color: $color_grey_minor;
+  font-size: 14px;
+  cursor: pointer;
+
+  & .buttonText {
+    position: relative;
+    top: -1px;
+  }
+
+  & svg {
+    fill: $color_grey_minor;
+  }
+}
