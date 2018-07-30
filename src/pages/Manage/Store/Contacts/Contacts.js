@@ -369,7 +369,7 @@ class Contacts extends Component<PropsType, StateType> {
             <button styleName="trash" onClick={this.handleDeleteCover}>
               <Icon type="basket" size={28} />
             </button>
-            <img src={cover} alt="Store cover" />
+            <img src={convertSrc(cover, 'medium')} alt="Store cover" />
           </div>
         )}
         {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
