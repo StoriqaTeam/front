@@ -1,7 +1,10 @@
 @import "../../../styles/variables";
 
 .container {
-  padding-left: 1.625rem;
+  padding-left: 0;
+  @media (min-width: $lg) {
+    padding-left: 1.625rem;
+  }
 }
 
 .storeInfo {

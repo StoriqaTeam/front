@@ -24,8 +24,11 @@
 
 .detailsWrapper {
   border-left: 1px solid $color_grey_trivial;
-  margin-left: -2rem;
+  margin-left: 0;
   height: 100%;
+  @media (min-width: $md) {
+    margin-left: -2rem;
+  }
 }
 
 .buttons-container {
@@ -38,11 +41,11 @@
 }
 
 .productNotFound {
+  align-items: center;
   display: flex;
   flex: 1 0 auto;
-  align-items: center;
-  justify-content: center;
   font-size: 30px;
+  justify-content: center;
 
   @media (max-width: #{$lg - 1px}) {
     margin-top: 4rem;
@@ -56,10 +59,10 @@
 .line {
   background-color: $color_grey_trivial;
   height: 1px;
-  left: -2.125rem;
+  left: -3rem;
   margin: 3.375rem 0;
   position: relative;
-  width: calc(100% + 2.125rem);
+  width: calc(100% + 3rem);
 }
 
 .thumbnailsWrapper {
