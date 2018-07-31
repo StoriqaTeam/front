@@ -26,13 +26,14 @@ const StartSelling = () => (
                 styleName="customers"
               />
             </div>
-            <img
-              // eslint-disable-next-line
-              src={require('./img/01_shop.svg')}
-              alt=""
-              styleName="shop"
-              className="Group-1310"
-            />
+            <div styleName="shop">
+              <a
+                // eslint-disable-next-line
+                href="/manage/wizard"
+              >
+                {' '}
+              </a>
+            </div>
           </div>
           <div styleName="block-2">
             <div styleName="wrapper">
@@ -422,7 +423,14 @@ const StartSelling = () => (
                 </b>
               </div>
               <div styleName="buttonWrapper">
-                <Button big>Start selling with Storiqa</Button>
+                <Button
+                  big
+                  onClick={() => {
+                    window.location = '/manage/wizard';
+                  }}
+                >
+                  Start selling with Storiqa
+                </Button>
               </div>
             </div>
             <img

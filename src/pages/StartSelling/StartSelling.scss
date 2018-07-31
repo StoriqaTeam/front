@@ -142,6 +142,9 @@
     }
   }
   .shop {
+    background-image: url('./img/01_shop.svg');
+    position: relative;
+
     @media (min-width: 1360px) {
       width: 57.75rem;
       height: 55rem;
@@ -165,6 +168,15 @@
       margin-top: 9rem;
       right: 1rem;
       position: absolute;
+    }
+
+    a {
+      display: block;
+      position: absolute;
+      width: 60%;
+      height: 15%;
+      top: 40%;
+      left: 23%;
     }
   }
 }
