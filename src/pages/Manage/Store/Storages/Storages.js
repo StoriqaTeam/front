@@ -105,10 +105,6 @@ class Storages extends PureComponent<PropsType> {
     DeleteWarehouseMutation.commit(params);
   };
 
-  // storagesRefetch = () => {
-  //   this.props.relay.loadMore(8);
-  // };
-
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
@@ -161,7 +157,7 @@ Storages.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages'), true))),
+  Page(withShowAlert(withRouter(ManageStore(Storages, 'Storages'))), true),
   graphql`
     fragment Storages_me on User {
       myStore {

@@ -189,11 +189,7 @@ class Product extends Component<PropsType, StateType> {
   };
   render() {
     if (isNil(this.props.baseProduct)) {
-      return (
-        <div styleName="productNotFound">
-          <h1>Product Not Found</h1>
-        </div>
-      );
+      return <div styleName="productNotFound">Product Not Found</div>;
     }
     const {
       baseProduct: { name, shortDescription, longDescription, rating },

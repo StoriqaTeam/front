@@ -16,6 +16,20 @@
   @media (min-width: $md) {
     display: block;
   }
+
+  .trash {
+    background: $color_white;
+    border-radius: 50%;
+    border: 1px solid $color_grey_minor;
+    cursor: pointer;
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    svg {
+      fill: $color_grey_minor;
+    }
+  }
+
 }
 
 .img {
@@ -29,6 +43,10 @@
   max-height: 6rem;
   margin-top: 1rem;
   margin-bottom: 3rem;
+  display: none;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .items {

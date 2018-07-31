@@ -22,6 +22,7 @@ type PropsTypes = {
   white: ?boolean,
   isLoading?: boolean,
   pink?: boolean,
+  fullWidth?: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -42,6 +43,7 @@ class Button extends PureComponent<PropsTypes> {
       wireframe,
       isLoading,
       pink,
+      fullWidth,
     } = this.props;
 
     const props = {
@@ -63,6 +65,7 @@ class Button extends PureComponent<PropsTypes> {
       wireframe,
       isLoading,
       pink,
+      fullWidth,
     });
 
     if (href) {

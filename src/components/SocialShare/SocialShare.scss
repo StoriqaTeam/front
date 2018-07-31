@@ -1,16 +1,21 @@
 @import "../../styles/variables";
 
 .container {
-  background: rgba(255, 255, 255, 0.95);
+  background-color: $color_opacity_white;
   border-left: 1px solid transparent;
   border-radius: 5px;
   border: 1px solid $color_grey_trivial;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-left: 0;
+
   &.big {
     background-color: $color_white;
     border-radius: 0;
+  }
+
+  &.noBorder {
+    border: none;
   }
 }
 
@@ -51,6 +56,11 @@
   &.big {
     border-left: 1px solid $color_grey_trivial;
     padding: 0 4.25rem;
+  }
+
+  &.noBorder {
+    border-left: none;
+    padding: 0 4rem 0 0;
   }
 
   svg {

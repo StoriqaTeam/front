@@ -12,8 +12,10 @@ import { ManageStore } from 'pages/Manage/Store';
 import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
+import { UploadWrapper } from 'components/Upload';
+import { Icon } from 'components/Icon';
 import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
-import { log, fromRelayError } from 'utils';
+import { log, fromRelayError, uploadFile, convertSrc } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMutation';
@@ -55,6 +57,7 @@ type StateType = {
     facebookUrl: ?string,
     instagramUrl: ?string,
     twitterUrl: ?string,
+    cover: ?string,
   },
   addressFull: addressFullType,
   formErrors: {
@@ -72,6 +75,7 @@ class Contacts extends Component<PropsType, StateType> {
       facebookUrl: '',
       instagramUrl: '',
       twitterUrl: '',
+      cover: '',
     },
     addressFull: {
       value: '',
@@ -94,7 +98,14 @@ class Contacts extends Component<PropsType, StateType> {
     const store = pathOr({}, ['myStore'], this.props.me);
     this.setState({
       form: pick(
-        ['email', 'phone', 'facebookUrl', 'instagramUrl', 'twitterUrl'],
+        [
+          'email',
+          'phone',
+          'facebookUrl',
+          'instagramUrl',
+          'twitterUrl',
+          'cover',
+        ],
         store,
       ),
       addressFull: store.addressFull,
@@ -196,7 +207,7 @@ class Contacts extends Component<PropsType, StateType> {
     const {
       logoUrl,
       // param 'country' enter for 'this.handleUpdateForm'
-      form: { email, phone, facebookUrl, twitterUrl, instagramUrl },
+      form: { email, phone, facebookUrl, twitterUrl, instagramUrl, cover },
       addressFull,
     } = this.state;
 
@@ -213,6 +224,7 @@ class Contacts extends Component<PropsType, StateType> {
         twitterUrl,
         instagramUrl,
         addressFull,
+        cover,
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -293,6 +305,18 @@ class Contacts extends Component<PropsType, StateType> {
     UpdateStoreMutation.commit(params);
   };
 
+  handleOnUpload = async (e: any) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    this.setState(assocPath(['form', 'cover'], result.url, this.state));
+  };
+
+  handleDeleteCover = () => {
+    this.setState(assocPath(['form', 'cover'], '', this.state));
+  };
+
   // TODO: extract to helper
   renderInput = (input: InputType) => {
     const { id, label, icon, limit } = input;
@@ -314,9 +338,40 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { isLoading, addressFull } = this.state;
+    const { isLoading, addressFull, form } = this.state;
+    const { cover } = form;
     return (
       <div styleName="container">
+        {!cover ? (
+          <div styleName="coverUploadWrap">
+            <div styleName="uploadButton">
+              <UploadWrapper
+                id="cover-store"
+                onUpload={this.handleOnUpload}
+                customUnit
+                buttonHeight="10rem"
+                buttonWidth="100%"
+                buttonIconSize={32}
+                buttonIconType="upload"
+                dataTest="storeCoverUploader"
+              />
+            </div>
+            <div>
+              <div>Upload main photo</div>
+              <div styleName="uploadRec">
+                Strongly recommend to upload:<br />1360px × 350px | .jpg .jpeg
+                .png
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div styleName="cover">
+            <button styleName="trash" onClick={this.handleDeleteCover}>
+              <Icon type="basket" size={28} />
+            </button>
+            <img src={convertSrc(cover, 'medium')} alt="Store cover" />
+          </div>
+        )}
         {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
         {this.renderInput({ id: 'phone', label: 'Phone' })}
         {this.renderInput({
@@ -360,7 +415,7 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
+  withShowAlert(Page(ManageStore(Contacts, 'Contacts'), true)),
   graphql`
     fragment Contacts_me on User {
       myStore {
@@ -371,6 +426,7 @@ export default createFragmentContainer(
           text
         }
         logo
+        cover
         email
         phone
         facebookUrl

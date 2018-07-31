@@ -4,16 +4,15 @@
 .container {
   background: $color_white;
   border: 1px solid $color_grey_trivial;
-  height: calc(100% - 3rem);
-  margin: 0 auto;
+  margin: 2rem auto 0 auto;
   max-width: 170rem;
   position: relative;
   width: 100%;
-  @media (min-width: $md) {
-    height: auto;
+
+  @media (min-width: $lg) {
+    margin-top: 0;
   }
 }
-
 .offscreen {
   @include offscreen;
 }
@@ -32,16 +31,19 @@
 .imageWrapper {
   margin-bottom: 0;
   position: relative;
+
   @media (min-width: $md) {
     margin-bottom: 3rem;
   }
 }
 
 .image {
-
-  @media (min-width: $sm) {
-    height: 13.75rem;
-  }
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 13.75rem;
+  background-color: $color_grey_trivial;
 
   @media (min-width: $md) {
     height: 21.375rem;
@@ -53,12 +55,6 @@
 
   @media (min-width: $xl) {
     height: 41.625rem;
-  }
-
-  & > img {
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
   }
 }
 

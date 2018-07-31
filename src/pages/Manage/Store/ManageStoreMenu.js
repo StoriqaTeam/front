@@ -246,9 +246,11 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           />
           <div style={{ margin: '1.05rem 0' }} />
           <MobileUpload
-            avatar={convertSrc(storeLogo, 'medium') || null}
+            img={storeLogo}
+            iconType="upload"
             id="some"
             onUpload={this.handleOnUpload}
+            onDelete={this.deleteAvatar}
           />
         </div>
         <div styleName="imgWrap">
@@ -256,7 +258,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
             id="new-store-id"
             onUpload={myStore ? this.handleOnUpload : handleOnUpload}
             customUnit
-            buttonHeight="26rem"
+            square
             buttonWidth="100%"
             buttonIconSize={48}
             buttonIconType="upload"
@@ -268,13 +270,13 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           />
           {((myStore && storeLogo) || (!myStore && newStoreLogo)) && (
             <div
-              styleName="cross"
+              styleName="trash"
               onClick={myStore ? this.deleteAvatar : deleteAvatar}
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
             >
-              <Icon type="cross" />
+              <Icon type="basket" size={28} />
             </div>
           )}
         </div>

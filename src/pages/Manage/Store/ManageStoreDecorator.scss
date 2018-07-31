@@ -1,5 +1,13 @@
 @import "../../../styles/variables";
 
+.wrapper {
+  margin: 0 0 4rem;
+
+  @media (min-width: $lg) {
+    margin: 2rem 0 4rem;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -32,5 +40,10 @@
   @media (min-width: $md) {
     margin-top: 2rem;
   }
+}
+
+.formOrder {
+  padding: 0;
+  background-color: transparent;
 }
 

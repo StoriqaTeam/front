@@ -225,7 +225,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
         tabIndex="-1"
       >
         <span role="img">
-          <Icon type="burgerMenu" size={28} />
+          <Icon type="burgerMenu" size={24} />
         </span>
       </div>
     );

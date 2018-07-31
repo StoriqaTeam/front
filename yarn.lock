@@ -10526,7 +10526,14 @@ universal-cookie-express@2.1.2:
   dependencies:
     universal-cookie "^2.1.2"
 
-universal-cookie@2.1.2, universal-cookie@^2.1.2:
+universal-cookie@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-2.2.0.tgz#328dc3883cf0ebd5b4904902033ad4dfdb907ed2"
+  dependencies:
+    cookie "^0.3.1"
+    object-assign "^4.1.0"
+
+universal-cookie@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-2.1.2.tgz#7c0824c0e027f572789538932f066315611c2836"
   dependencies:

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Col, Row } from 'layout';
+import { Col } from 'layout';
 
 import { StoreHeaderInfo, StoreHeaderButtons } from './index';
 
@@ -10,15 +10,12 @@ import './StoreHeaderBottom.scss';
 
 const StoreHeaderBottom = () => (
   <div styleName="container">
-    <Row>
-      <Col sm={12} md={6} lg={5} xl={4}>
-        <StoreHeaderInfo />
-      </Col>
-      <Col lg={2} xl={4} lgVisible />
-      <Col sm={12} md={6} lg={5} xl={4}>
-        <StoreHeaderButtons />
-      </Col>
-    </Row>
+    <Col sm={12} md={7} lg={8} xl={8}>
+      <StoreHeaderInfo />
+    </Col>
+    <Col sm={12} md={5} lg={4} xl={4}>
+      <StoreHeaderButtons />
+    </Col>
   </div>
 );
 

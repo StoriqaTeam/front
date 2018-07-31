@@ -6,7 +6,6 @@
   flex-direction: column;
   justify-content: center;
   margin-bottom: 1.625rem;
-  margin-left: 0;
   position: relative;
 
   @media (min-width: $md) {
@@ -14,63 +13,116 @@
     flex-direction: row;
     justify-content: flex-start;
     margin-bottom: 0;
-    margin-left: 3rem;
   }
 
-  & > .controls {
+  & > .share {
     display: block;
-    left: 2rem;
+    left: 1rem;
     position: absolute;
     top: 8rem;
+
     @media (min-width: $md) {
       display: none;
     }
+
+    svg {
+      fill: $color_grey_minor;
+    }
   }
 
-  & > .magnifier {
+  & > .heart {
     display: block;
     position: absolute;
-    right: 2rem;
+    right: 1rem;
     top: 8rem;
+
     @media (min-width: $md) {
       display: none;
+    }
+
+    svg {
+      fill: $color_grey_minor;
     }
   }
 
 }
 
 .shopLogo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 10rem;
-  margin-right: 0;
   width: 10rem;
-  & > img {
-    border-radius: 0.5rem;
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
-  }
+  border-radius: 0.5rem;
+  background-color: $color_grey_trivial;
+  overflow: hidden;
+
   @media (min-width: $md) {
     margin-right: 2rem;
   }
 }
 
-.shopTitle {
-  align-content: baseline;
-  color: $color_grey;
+.shopTitleWrap {
   display: flex;
-  font-size: 3.75rem;
-  font-stretch: normal;
-  font-style: normal;
-  font-weight: 500;
-  height: 4.375rem;
-  letter-spacing: 0.3px;
-  line-height: normal;
-  & > .cartIcon {
-    margin-left: 2rem;
-    padding-top: 1rem;
-    svg {
-      fill: $color_blue;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-top: 2rem;
+  }
+
+  & .shopTitle {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: $color_grey;
+    font-size: 30px;
+    max-height: 4.375rem;
+
+    & > .cartIcon {
+      margin-left: 1rem;
+      padding-top: 0;
+
+      & > div {
+        @media (min-width: $xl) {
+          height: 3.5rem;
+          width: 3.5rem;
+        }
+
+        & svg {
+          fill: $color_blue;
+        }
+      }
     }
+
+    @media (max-width: #{$lg - 1px}) {
+      font-size: 24px;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      font-size: 18px;
+    }
+  }
+}
+
+.mobileSearch {
+  display: block;
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0 2rem;
+  transition: $transition_all_cb;
+  width: 100%;
+
+  @media (min-width: $md) {
+    display: none;
+  }
+
+  &.isOpened {
+    height: 6rem;
+    margin-top: 2rem;
+    opacity: 1;
   }
 }
 
@@ -79,26 +131,35 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+
   @media (min-width: $md) {
-    top: 0;
     align-items: initial;
     flex-direction: row;
     justify-content: flex-start;
+    top: 0;
+  }
+
+  .rating {
+    padding-top: 0.6rem;
   }
 }
 
 .reviews {
   color: $color_grey_minor;
-  font-size: 2.125rem;
+  font-size: 15px;
   font-stretch: normal;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
   line-height: normal;
   margin-left: 0;
-  margin-top: 2rem;
+  margin-top: 1rem;
+
   @media (min-width: $md) {
     margin-left: 2rem;
     margin-top: 0;
+    font-size: 17px;
   }
 }

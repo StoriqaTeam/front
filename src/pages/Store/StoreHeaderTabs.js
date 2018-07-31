@@ -1,47 +1,44 @@
 // @flow
 
 import React from 'react';
+import { Link } from 'found';
+import classNames from 'classnames';
 
 import './StoreHeaderTabs.scss';
 
-const tabs = [
-  {
-    id: '0',
-    title: 'Show',
-    isNew: false,
-  },
-  {
-    id: '1',
-    title: 'Items',
-    isNew: false,
-  },
-  {
-    id: '2',
-    title: 'Reviews',
-    isNew: false,
-  },
-  {
-    id: '3',
-    title: 'Actions',
-    isNew: true,
-  },
-  {
-    id: '4',
-    title: 'About',
-    isNew: false,
-  },
-];
+type PropsType = {
+  tabs: Array<{ id: string, title: string, isNew: boolean, link: string }>,
+  storeId: number,
+  active: ?string,
+};
 
-const StoreHeaderTabs = () => (
+const StoreHeaderTabs = ({ tabs, storeId, active }: PropsType) => (
   <nav styleName="container">
-    <ul styleName="tabs">
-      {tabs.map(tab => (
-        <li key={tab.id} styleName="tab">
-          {tab.isNew ? <span styleName="new">New</span> : null}
-          {tab.title}
-        </li>
-      ))}
-    </ul>
+    <div styleName="tabs">
+      {tabs.map(
+        tab =>
+          tab.link !== null ? (
+            <Link
+              to={`/store/${storeId}${tab.link}`}
+              key={tab.id}
+              //
+              styleName={classNames('tab', { active: active === tab.id })}
+            >
+              <strong styleName="text">
+                {tab.title}
+                {tab.isNew && <span styleName="new">New</span>}
+              </strong>
+            </Link>
+          ) : (
+            <div key={tab.id} styleName="tab">
+              <strong styleName="text">
+                {tab.title}
+                {tab.isNew && <span styleName="new">New</span>}
+              </strong>
+            </div>
+          ),
+      )}
+    </div>
   </nav>
 );
 

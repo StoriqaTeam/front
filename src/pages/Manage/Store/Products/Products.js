@@ -313,7 +313,11 @@ class Products extends PureComponent<PropsType> {
         </div>
         <div>
           <div>{this.renderHeaderRow()}</div>
-          <div>{map(item => this.renderRows(item), products)}</div>
+          {isEmpty(products) ? (
+            <div styleName="emptyProductsBlock">No products</div>
+          ) : (
+            <div>{map(item => this.renderRows(item), products)}</div>
+          )}
         </div>
         {this.props.relay.hasMore() && (
           <div styleName="loadButton">
@@ -338,7 +342,7 @@ Products.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withShowAlert(withRouter(Page(ManageStore(Products, 'Goods')))),
+  withShowAlert(withRouter(Page(ManageStore(Products, 'Goods'), true))),
   graphql`
     fragment Products_me on User
       @argumentDefinitions(

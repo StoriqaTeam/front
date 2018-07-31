@@ -1,7 +1,11 @@
 @import "../../styles/variables";
 
 .container {
+  margin: 0 0 4rem;
 
+  @media (min-width: $lg) {
+    margin: 2rem 0 4rem;
+  }
 }
 
 .header {

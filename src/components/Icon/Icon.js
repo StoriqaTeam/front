@@ -27,6 +27,7 @@ import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
 import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import Login from 'components/Icon/svg/login.svg';
 import Logo from 'components/Icon/svg/logo.svg';
 import Logout from 'components/Icon/svg/logout.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
@@ -42,6 +43,7 @@ import Plus from 'components/Icon/svg/plus.svg';
 import Prev from 'components/Icon/svg/prev.svg';
 import QA from 'components/Icon/svg/qa.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
+import Share from 'components/Icon/svg/share.svg';
 import Telegram from 'components/Icon/svg/telegram.svg';
 import Twitter from 'components/Icon/svg/twitter.svg';
 import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
@@ -49,7 +51,8 @@ import Upload from 'components/Icon/svg/upload.svg';
 import VkGray from 'components/Icon/svg/vk_gray.svg';
 import Move from 'components/Icon/svg/move.svg';
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
-//
+import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
+import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -85,6 +88,7 @@ const iconsMap = {
   cats: <Cats />,
   chat: <Chat />,
   closeArrow: <CloseArrow />,
+  //
   controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,
@@ -97,6 +101,7 @@ const iconsMap = {
   heart: <Heart />,
   instagram: <Instagram />,
   instagramGray: <InstagramGray />,
+  login: <Login />,
   logo: <Logo />,
   logout: <Logout />,
   magnifier: <Magnifier />,
@@ -112,6 +117,8 @@ const iconsMap = {
   prev: <Prev />,
   qa: <QA />,
   qualityAssurance: <QualityAssurance />,
+  share: <Share />,
+  verifiedShop: <VerifiedShop />,
   sortArrows: <SortArrows />,
   telegram: <Telegram />,
   twitter: <Twitter />,
@@ -121,6 +128,7 @@ const iconsMap = {
   vkGray: <VkGray />,
   move: <Move />,
   emptyCart: <EmptyCart />,
+  searchNoResults: <SearchNoResults />,
 
   // For product
   mainFoto: <MainFoto />,
