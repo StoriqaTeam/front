@@ -1,30 +1,40 @@
 // @flow
 
-import * as React from 'react';
+import React, { Component } from 'react';
+import type { Node } from 'react';
+
+import { Rating } from 'components/common/Rating';
 
 import type { WidgetType, WidgetOptionType } from './types';
 
-import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
+import {
+  ProductContext,
+  ProductMaterial,
+  ProductPrice,
+  ProductQuantity,
+  ProductSize,
+  ProductThumbnails,
+} from './index';
 
 import { sortByProp } from './utils';
 
 import './ProductDetails.scss';
 
 type PropsType = {
-  widgets: Array<WidgetType>,
-  productTitle: string,
-  productDescription: string,
+  children: Node,
   onWidgetClick: Function,
-  children: React.Node,
+  productDescription: string,
+  productTitle: string,
+  widgets: Array<WidgetType>,
 };
 
-class ProductDetails extends React.Component<PropsType, {}> {
+class ProductDetails extends Component<PropsType, {}> {
   handleWidgetClick = (selected: WidgetOptionType): void => {
     const { onWidgetClick } = this.props;
     onWidgetClick(selected);
   };
 
-  generateWidget = (widget: WidgetType, index: number): React.Node => {
+  generateWidget = (widget: WidgetType, index: number): Node => {
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
@@ -67,12 +77,25 @@ class ProductDetails extends React.Component<PropsType, {}> {
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
-      <div styleName="container">
-        <h2>{productTitle}</h2>
-        {children}
-        <p>{productDescription}</p>
-        {sortByProp('id')(widgets).map(this.generateWidget)}
-      </div>
+      <ProductContext.Consumer>
+        {({ productVariant, rating }) => (
+          <div styleName="container">
+            <h2>{productTitle}</h2>
+            <div styleName="rating">
+              <Rating value={rating} />
+            </div>
+            <ProductPrice
+              price={productVariant.price}
+              lastPrice={productVariant.lastPrice}
+              cashback={productVariant.cashback}
+            />
+            <p>{productDescription}</p>
+            {sortByProp('id')(widgets).map(this.generateWidget)}
+            <ProductQuantity />
+            {children}
+          </div>
+        )}
+      </ProductContext.Consumer>
     );
   }
 }

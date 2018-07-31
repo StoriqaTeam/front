@@ -22,6 +22,7 @@ type PropsType = {
   buttonIconSize: ?number,
   disabled: ?boolean,
   customUnit?: boolean,
+  square?: boolean,
 };
 
 // TODO: refactor for avoid use style props
@@ -40,8 +41,9 @@ const UploadWrapper = ({
   buttonIconSize,
   disabled,
   customUnit,
+  square,
 }: PropsType) => (
-  <div styleName="wrapper">
+  <div styleName={classNames('wrapper', { square })}>
     <div styleName={classNames('uploadContainer', { noIndents })}>
       <label
         htmlFor={id}
@@ -98,6 +100,7 @@ const UploadWrapper = ({
 
 UploadWrapper.defaultProps = {
   customUnit: false,
+  square: false,
 };
 
 export default UploadWrapper;

@@ -4,11 +4,14 @@ $icon-size: 5rem;
 
 .container {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
 }
 
 .image {
   position: relative;
+  height: $icon-size;
+  width: $icon-size;
+
   img {
     border-radius: 50%;
     height: $icon-size;
@@ -22,6 +25,7 @@ $icon-size: 5rem;
     position: absolute;
     right: -1rem;
     top: -1rem;
+
     svg {
       fill: $color_grey_minor;
     }
@@ -32,7 +36,6 @@ $icon-size: 5rem;
   align-items: center;
   background-color: $color_grey_trivial;
   border-radius: 0.5rem;
-  cursor: pointer;
   display: flex;
   height: $icon-size;
   justify-content: center;
@@ -48,5 +51,6 @@ $icon-size: 5rem;
   height: 5rem;
   justify-content: center;
   margin-left: 2rem;
-  width: 100%;
+  flex: 1 0;
+  cursor: pointer;
 }
