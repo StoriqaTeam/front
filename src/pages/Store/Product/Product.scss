@@ -55,7 +55,10 @@
   left: -3rem;
   margin: 3.375rem 0;
   position: relative;
-  width: calc(100% + 3rem);
+  width: calc(100% + 6rem);
+  @media (min-width: $md) {
+    width: calc(100% + 3rem);
+  }
 }
 
 .thumbnailsWrapper {

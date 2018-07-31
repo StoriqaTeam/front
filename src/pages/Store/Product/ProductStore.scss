@@ -12,17 +12,34 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  margin-bottom: 2.75rem;
   max-width: 100%;
   @media (min-width: $md) {
     flex-direction: row;
-    max-width: 73%;
+    margin-bottom: 0;
+    max-width: 75%;
   }
 }
 
 .iconsWrapper {
+  border-bottom: 1px solid $color_grey_trivial;
+  border-top: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
-  max-width: 38.125rem;
+  margin-left: -3rem;
+  margin-right: -3rem;
+  max-width: initial;
+  // padding: 3.2125rem 3rem;
+
+  @media (min-width: $md) {
+    border-bottom: none;
+    border-top: none;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 38.125rem;
+    padding: 0;
+  }
+
 }
 
 .storeName {
@@ -50,12 +67,14 @@
 }
 
 .iconInfo {
-  margin-top: 1.9625rem;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding: 3.2125rem 4rem;
   @media (min-width: $md) {
     flex-direction: row;
+    padding: 0;
   }
 }
 
@@ -74,11 +93,15 @@
 }
 
 .separator {
-  background-color: $color_grey_minor;
-  height: 3.375rem;
+  background-color: $color_grey_trivial;
+  height: 14rem;
   position: relative;
-  top: 2.125rem;
+  top: 0;
   width: 1px;
+  @media (min-width: $md) {
+    height: 3.375rem;
+    top: 1rem;
+  }
 }
 
 .image {
