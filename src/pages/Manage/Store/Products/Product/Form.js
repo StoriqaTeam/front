@@ -157,6 +157,7 @@ class Form extends Component<PropsType, StateType> {
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
+        fullWidth
       />
     );
   };
@@ -170,6 +171,7 @@ class Form extends Component<PropsType, StateType> {
         label={label}
         onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        fullWidth
       />
     );
   };
@@ -192,19 +194,19 @@ class Form extends Component<PropsType, StateType> {
               limit: 50,
             })}
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem textArea">
             {this.renderTextarea({
               id: 'seoDescription',
               label: 'SEO description',
             })}
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem textArea">
             {this.renderTextarea({
               id: 'shortDescription',
               label: 'Short description',
             })}
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem textArea">
             {this.renderTextarea({
               id: 'longDescription',
               label: 'Long description',

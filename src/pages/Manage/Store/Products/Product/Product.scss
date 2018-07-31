@@ -19,6 +19,14 @@
   letter-spacing: 1.2px;
 }
 
+.formItem {
+  max-width: 41rem;
+
+  &.textArea {
+    max-width: 96rem;
+  }
+}
+
 .formItem + .formItem {
   margin-top: 6rem;
 }
