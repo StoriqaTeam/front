@@ -20,13 +20,28 @@
   .trash {
     background: $color_white;
     border-radius: 50%;
-    border: 1px solid $color_grey_minor;
+    border: 1px solid $color_grey_light;
     cursor: pointer;
     position: absolute;
     right: -1rem;
     top: -1rem;
+    transition: $transition_all_ease;
+
     svg {
-      fill: $color_grey_minor;
+      fill: $color_grey_light;
+    }
+
+    svg {
+      fill: $color_grey_light;
+      transition: $transition_all_ease;
+    }
+
+    &:hover {
+      border: 1px solid $color_grey_minor;
+
+      svg {
+        fill: $color_grey_minor;
+      }
     }
   }
 

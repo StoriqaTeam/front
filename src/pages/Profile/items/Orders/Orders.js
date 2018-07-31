@@ -10,6 +10,8 @@ import { shortDateFromTimestamp, timeFromTimestamp } from 'utils/formatDate';
 
 import type { TableItemType } from 'pages/common/OrdersList/TableRow';
 
+import '../../Profile.scss';
+
 const itemsPerPage = 10;
 
 type PropsType = {
@@ -138,16 +140,18 @@ class Orders extends Component<PropsType, StateType> {
       this.props,
     );
     return (
-      <OrdersList
-        orders={orderDTOs}
-        pagesCount={pagesCount}
-        currentPage={currentPage}
-        onPageSelect={this.loadPage}
-        linkFactory={item => `/profile/orders/${item.number}`}
-        onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
-        onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
-        onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
-      />
+      <div styleName="ordersList">
+        <OrdersList
+          orders={orderDTOs}
+          pagesCount={pagesCount}
+          currentPage={currentPage}
+          onPageSelect={this.loadPage}
+          linkFactory={item => `/profile/orders/${item.number}`}
+          onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
+          onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
+          onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
+        />
+      </div>
     );
   }
 }

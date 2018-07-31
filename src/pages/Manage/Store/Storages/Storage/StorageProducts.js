@@ -471,11 +471,6 @@ class StorageProducts extends Component<PropsType, StateType> {
             fullWidth
           />
         </div>
-        <div styleName="addButton">
-          <Button wireframe big onClick={() => {}}>
-            Add item
-          </Button>
-        </div>
         <div styleName="subtitle">
           <strong>{storageName}</strong>
         </div>
@@ -515,7 +510,7 @@ export default createRefetchContainer(
       warehouse(slug: $storageSlug) {
         id
         name
-        autoCompleteProductName(name: $autocompleteValue) {
+        autoCompleteProductName(first: 8, name: $autocompleteValue) {
           edges {
             node
           }
