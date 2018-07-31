@@ -39,11 +39,14 @@
 
 .breadcrumbs {
   display: inline-block;
-  min-width: 41rem;
+  min-width: 28rem;
   color: $color_blue;
   font-size: 1.75rem;
   cursor: pointer;
   border-bottom: 1px dashed $color_blue;
+  @media (min-width: $md) {
+    min-width: 41rem;
+  }
 }
 
 .levelWrapper {
