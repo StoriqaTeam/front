@@ -226,7 +226,7 @@ class Form extends Component<PropsType, StateType> {
               }}
             />
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem button">
             <Button
               big
               onClick={this.handleSave}

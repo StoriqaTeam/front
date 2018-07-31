@@ -25,6 +25,15 @@
   &.textArea {
     max-width: 96rem;
   }
+
+  &.button {
+    button {
+      width: 100%;
+      @media (min-width: $md) {
+        width: initial;
+      }
+    }
+  }
 }
 
 .formItem + .formItem {
