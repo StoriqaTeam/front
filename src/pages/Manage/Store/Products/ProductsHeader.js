@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 
 import { Checkbox } from 'components/common/Checkbox';
@@ -40,7 +41,6 @@ const ProductsHeader = () => (
       <Icon inline type="sortArrows" />
     </div>
     <div styleName="td tdDelete">
-
       <button styleName="deleteButton">
         <Icon type="basket" size="32" />
       </button>

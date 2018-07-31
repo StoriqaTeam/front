@@ -8,27 +8,17 @@ import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
-import {
-  getNameText,
-  formatPrice,
-  log,
-  fromRelayError,
-  convertSrc,
-} from 'utils';
+import { getNameText, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Button } from 'components/common/Button';
-import { Checkbox } from 'components/common/Checkbox';
-import { Icon } from 'components/Icon';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import BannerLoading from 'components/Banner/BannerLoading';
-import ImageLoader from 'libs/react-image-loader';
 
 import { DeactivateBaseProductMutation } from 'relay/mutations';
 
 import type { Products_me as ProductsMe } from './__generated__/Products_me.graphql';
 
-import { ProductsHeader } from './index';
+import { ProductsHeader, ProductsRow } from './index';
 
 import './Products.scss';
 
@@ -122,121 +112,6 @@ class Products extends PureComponent<PropsType> {
     this.props.relay.loadMore(8);
   };
 
-  renderRows = (item: {
-    id: string,
-    rawId: number,
-    categoryName: string,
-    currencyId: number,
-    name: string,
-    product: {
-      cashback: ?number,
-      photoMain: ?string,
-      price: ?number,
-    },
-  }) => {
-    const { product } = item;
-    // $FlowIgnoreMe
-    const attributes = pathOr([], ['product', 'attributes'], item);
-    return (
-      <div
-        key={item.rawId}
-        styleName="itemRowWrap"
-        onClick={() => {
-          this.editProduct(item.rawId);
-        }}
-        onKeyDown={() => {}}
-        role="button"
-        tabIndex="0"
-        data-test="editProductButton"
-      >
-        <div styleName="td tdCheckbox">
-          <Checkbox id={item.rawId} onChange={this.handleCheckboxClick} />
-        </div>
-        <div styleName="td tdFoto">
-          <div styleName="foto">
-            {!product || !product.photoMain ? (
-              <Icon type="camera" size="40" />
-            ) : (
-              <ImageLoader
-                fit
-                src={convertSrc(product.photoMain, 'small')}
-                loader={<BannerLoading />}
-              />
-            )}
-          </div>
-        </div>
-        <div styleName="td tdName">
-          <div>
-            <span>{item.name}</span>
-          </div>
-        </div>
-        <div styleName="td tdCategory">
-          <div>
-            <span>{item.categoryName}</span>
-          </div>
-        </div>
-        <div styleName="td tdPrice">
-          <div>
-            {product &&
-              product.price && (
-                <span>{`${formatPrice(product.price)} STQ`}</span>
-              )}
-          </div>
-        </div>
-        <div styleName="td tdCashback">
-          <div>
-            {product &&
-              product.cashback && (
-                <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
-              )}
-          </div>
-        </div>
-        <div styleName="td tdCharacteristics">
-          {!isEmpty(attributes) && (
-            <div>
-              <div styleName="characteristicItem">
-                <div styleName="characteristicLabels">
-                  {map(attributeItem => {
-                    const attributeName = getNameText(
-                      attributeItem.attribute.name,
-                      'EN',
-                    );
-                    return (
-                      <div key={`attr-${attributeName}`}>
-                        {`${attributeName}: `}
-                      </div>
-                    );
-                  }, attributes)}
-                </div>
-                <div styleName="characteristicValues">
-                  {map(attributeItem => {
-                    const attributeName = getNameText(
-                      attributeItem.attribute.name,
-                      'EN',
-                    );
-                    const val = attributeItem.value;
-                    return <div key={`attr-${attributeName}`}>{`${val}`}</div>;
-                  }, attributes)}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <div styleName="td tdDelete">
-          <button
-            styleName="deleteButton"
-            onClick={(e: any) => {
-              this.handleDelete(item.id, e);
-            }}
-            data-test="deleteProductButton"
-          >
-            <Icon type="basket" size="32" />
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
@@ -273,7 +148,19 @@ class Products extends PureComponent<PropsType> {
         </div>
         <div>
           <ProductsHeader />
-          <div>{map(item => this.renderRows(item), products)}</div>
+          <div>
+            {map(
+              item => (
+                <ProductsRow
+                  item={item}
+                  onEdit={this.editProduct}
+                  onDelete={this.handleDelete}
+                  onCheckbox={this.handleCheckboxClick}
+                />
+              ),
+              products,
+            )}
+          </div>
         </div>
         {this.props.relay.hasMore() && (
           <div styleName="loadButton">
