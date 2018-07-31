@@ -37,7 +37,7 @@ const menuItems = [
   { id: 'personal-data', title: 'Personal data' },
   { id: 'shipping-addresses', title: 'Shipping addresses' },
   { id: 'security', title: 'Security' },
-  { id: 'orders', title: 'My orders' },
+  { id: 'orders', title: 'Orders' },
   { id: 'kyc', title: 'KYC' },
 ];
 

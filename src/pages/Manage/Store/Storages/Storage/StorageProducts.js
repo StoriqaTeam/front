@@ -471,11 +471,6 @@ class StorageProducts extends Component<PropsType, StateType> {
             fullWidth
           />
         </div>
-        <div styleName="addButton">
-          <Button wireframe big onClick={() => {}}>
-            Add item
-          </Button>
-        </div>
         <div styleName="subtitle">
           <strong>{storageName}</strong>
         </div>

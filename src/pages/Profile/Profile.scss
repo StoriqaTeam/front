@@ -8,6 +8,7 @@ $max-width: 41rem !important;
 
 .sidebar {
   display: none;
+
   @media (min-width: $md) {
     display: block;
   }
@@ -32,17 +33,24 @@ $max-width: 41rem !important;
 
 .personalData,
 .shippingAddresses,
-.security {
+.security,
+.ordersList {
   width: 100%;
   padding: 4rem;
   background-color: $color_white;
   flex: 1 0 auto;
 }
 
+.ordersList {
+  padding: 0;
+}
+
 .personalDataWrap {
   max-width: $max-width;
+
   & > .subtitle {
     display: none;
+
     @media (min-width: $md) {
       display: block;
     }
@@ -60,6 +68,7 @@ $max-width: 41rem !important;
   letter-spacing: 1px;
   margin-bottom: 2rem;
   text-transform: uppercase;
+
   @media (min-width: $md) {
     margin-bottom: 5rem;
   }
@@ -70,6 +79,7 @@ $max-width: 41rem !important;
   flex-direction: column;
   flex: 1 0 auto;
   margin-top: 0;
+
   @media (min-width: $md) {
     margin-top: 2rem;
   }
@@ -97,6 +107,7 @@ $max-width: 41rem !important;
 
   button {
     width: 100%;
+
     @media (min-width: $md) {
       width: initial;
     }
@@ -109,8 +120,10 @@ $max-width: 41rem !important;
   display: flex;
   flex-wrap: wrap;
   margin-top: 3rem;
+
   button {
     width: 100%;
+
     @media (min-width: $md) {
       width: 12rem;
     }
@@ -139,6 +152,7 @@ $max-width: 41rem !important;
   margin-left: 0;
   margin-top: 2rem;
   width: 100%;
+
   @media (min-width: $md) {
     margin-left: 3rem;
     margin-top: 0;
@@ -147,10 +161,9 @@ $max-width: 41rem !important;
 }
 
 .addButton {
-  //display: flex;
-  //justify-content: flex-end;
   float: right;
   display: none;
+
   @media (min-width: $md) {
     display: block;
   }
@@ -159,9 +172,11 @@ $max-width: 41rem !important;
 .addButtonMobile {
   display: block;
   margin-top: 2rem;
+
   @media (min-width: $md) {
     display: none;
   }
+
   button {
     width: 100%;
   }
