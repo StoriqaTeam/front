@@ -142,11 +142,7 @@ class Menu extends PureComponent<PropsType> {
               (item.id === 'security' && provider !== 'EMAIL') ||
               item.id === 'kyc'
             ) {
-              return (
-                <div key={item.id} styleName="item">
-                  {item.title}
-                </div>
-              );
+              return null;
             }
             return (
               <Link
