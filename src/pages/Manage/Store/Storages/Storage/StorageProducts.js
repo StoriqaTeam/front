@@ -476,8 +476,10 @@ class StorageProducts extends Component<PropsType, StateType> {
         </div>
         <div>
           <div>{this.renderHeaderRow()}</div>
-          {!isEmpty(products) && (
+          {!isEmpty(products) ? (
             <div>{map(item => this.renderRows(item), products)}</div>
+          ) : (
+            <div styleName="emptyProductsBlock">No products</div>
           )}
         </div>
         <Paginator
@@ -496,7 +498,7 @@ StorageProducts.contextTypes = {
 
 export default createRefetchContainer(
   withShowAlert(
-    Page(ManageStore(StorageProducts, 'Storages', 'Storage products')),
+    Page(ManageStore(StorageProducts, 'Storages', 'Storage products'), true),
   ),
   graphql`
     fragment StorageProducts_me on User
