@@ -283,7 +283,9 @@ class ThirdForm extends PureComponent<PropsType> {
                 <div styleName="productState">
                   <Input
                     id="price"
-                    value={data.product.price || ''}
+                    value={
+                      data.product.price == null ? '' : `${data.product.price}`
+                    }
                     label="Price"
                     onChange={this.handleChangeProductState}
                     fullWidth
@@ -303,7 +305,11 @@ class ThirdForm extends PureComponent<PropsType> {
                 <div styleName="productState">
                   <Input
                     id="cashback"
-                    value={data.product.cashback || ''}
+                    value={
+                      data.product.cashback == null
+                        ? ''
+                        : `${data.product.cashback}`
+                    }
                     label="Cashback"
                     onChange={this.handleChangeProductState}
                     fullWidth
@@ -314,7 +320,11 @@ class ThirdForm extends PureComponent<PropsType> {
                 <div styleName="productState">
                   <Input
                     id="quantity"
-                    value={data.product.quantity || ''}
+                    value={
+                      data.product.quantity == null
+                        ? ''
+                        : `${data.product.quantity}`
+                    }
                     label="Quantity"
                     onChange={this.handleChangeProductState}
                     fullWidth
