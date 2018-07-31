@@ -8,6 +8,8 @@ import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
 import { getNameText } from 'utils';
+import ProductLayer from './ProductLayer';
+import { Container, Col, Row } from 'layout';
 
 import type { BaseProductNodeType } from '../Wizard';
 import Form from './Form';
@@ -119,6 +121,46 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     onDelete(ID);
   };
 
+  renderUploaderItem = () => (
+    <div
+      styleName="productItem uploaderItem"
+      role="button"
+      onClick={() => this.setState({ showForm: true })}
+      onKeyDown={() => {}}
+      tabIndex={0}
+      data-test="wizardUploaderProductFoto"
+    >
+      <div styleName="productContent">
+        <Icon type="cameraPlus" size={56} />
+        <span styleName="buttonLabel">Add new product</span>
+      </div>
+    </div>
+  );
+
+  renderFirstUploaderItem = () => (
+    <div styleName="firstUploaderItem">
+      <div styleName="firstUploaderItemWrapper">
+        <div styleName="icon">
+          <Icon type="cameraPlus" size={80} />
+        </div>
+        <div styleName="text">
+          Currently you have no products in your store. Click ‘Add’ to start
+          filling your store with products.
+        </div>
+        <div styleName="button">
+          <Button
+            onClick={() => this.setState({ showForm: true })}
+            dataTest="wizardUploaderProductFotoFirst"
+            big
+            wireframe
+          >
+            <span>Add first product</span>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
   render() {
     const { formStateData, onChange, products, onUpload, onSave } = this.props;
     const { showForm } = this.state;
@@ -131,76 +173,32 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const mapIndexed = addIndex(map);
     return (
       <div styleName="view">
-        {!isEmpty(filteredProductsArr) ? (
-          <div
-            styleName="productItem uploaderItem"
-            role="button"
-            onClick={() => this.setState({ showForm: true })}
-            onKeyDown={() => {}}
-            tabIndex={0}
-            data-test="wizardUploaderProductFoto"
-          >
-            <div styleName="productContent">
-              <Icon type="cameraPlus" size={56} />
-              <span styleName="buttonLabel">Add new product</span>
-            </div>
-          </div>
-        ) : (
-          <div styleName="firstUploaderItem">
-            <div styleName="firstUploaderItemWrapper">
-              <div styleName="icon">
-                <Icon type="cameraPlus" size={80} />
-              </div>
-              <div styleName="text">
-                Currently you have no products in your store. Click ‘Add’ to
-                start filling your store with products.
-              </div>
-              <div styleName="button">
-                <Button
-                  onClick={() => this.setState({ showForm: true })}
-                  dataTest="wizardUploaderProductFotoFirst"
-                  big
-                  wireframe
-                >
-                  <span>Add first product</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-        {!isEmpty(filteredProductsArr) &&
-          mapIndexed(
-            (item, index) => (
-              <div key={index} styleName="productItem cardItem">
-                <div styleName="productContent">
-                  <CardProduct item={item} />
-                  <div styleName="layer">
-                    <div
-                      styleName="editbutton"
-                      onClick={this.handleOnShowForm(item)}
-                      role="button"
-                      onKeyDown={() => {}}
-                      tabIndex={0}
-                    >
-                      <Icon type="note" size={56} />
-                      <span styleName="buttonLabel">Edit product</span>
-                    </div>
-                    <div
-                      styleName="editbutton"
-                      onClick={this.handleOnDelete(item.id)}
-                      role="button"
-                      onKeyDown={() => {}}
-                      tabIndex={0}
-                    >
-                      <Icon type="basket" size={56} />
-                      <span styleName="buttonLabel">Delete product</span>
+        <Row>
+          {!isEmpty(filteredProductsArr) ? (
+            <Col size={12} md={4} xl={3}>
+              {this.renderUploaderItem()}
+            </Col>
+          ) : (
+            this.renderFirstUploaderItem()
+          )}
+          {!isEmpty(filteredProductsArr) &&
+            mapIndexed(
+              (item, index) => (
+                <Col size={12} md={4} xl={3}>
+                  <div key={index} styleName="productItem cardItem">
+                    <div styleName="productContent">
+                      <CardProduct item={item} />
+                      <ProductLayer
+                        onDelete={this.handleOnDelete(item.id)}
+                        onEdit={this.handleOnShowForm(item)}
+                      />
                     </div>
                   </div>
-                </div>
-              </div>
-            ),
-            filteredProductsArr,
-          )}
+                </Col>
+              ),
+              filteredProductsArr,
+            )}
+        </Row>
         <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
           <Form
             data={formStateData}

@@ -140,11 +140,19 @@ const iconsMap = {
 
 class Icon extends PureComponent<PropsTypes> {
   render() {
-    const { type, size, inline } = this.props;
+    const { type, size, sm, md, lg, xl, inline } = this.props;
     return (
       <div
         styleName={classNames('container', {
           [`size-${size || '16'}`]: type !== 'logo',
+          // $FlowIgnoreMe
+          [`size-sm-${sm}`]: sm && type !== 'logo',
+          // $FlowIgnoreMe
+          [`size-md-${md}`]: md && type !== 'logo',
+          // $FlowIgnoreMe
+          [`size-lg-${lg}`]: lg && type !== 'logo',
+          // $FlowIgnoreMe
+          [`size-xl-${xl}`]: xl && type !== 'logo',
           isLogo: type === 'logo',
           inline,
         })}

@@ -4,16 +4,14 @@
   width: 100%;
 
   .productItem {
-    display: inline-block;
-    vertical-align: middle;
-    height: 40rem;
-    width: 40rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    height: 100%;
 
     .productContent {
       position: relative;
       height: 100%;
     }
-
     &.uploaderItem {
       padding: 1rem;
 
@@ -28,6 +26,7 @@
         align-items: center;
         background-color: $color_grey_trivial;
         border-radius: 0.5rem;
+        padding: 2rem;
       }
     }
 

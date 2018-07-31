@@ -1,7 +1,6 @@
 @import "../../../styles/variables";
 
 .footerContainer {
-  // height: 8.875rem;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -47,8 +46,6 @@
 .leftButtonContainer {
   display: flex;
   flex: 1;
-  // flex-direction: column;
-  // justify-content: center;
 }
 
 .leftButton {
@@ -57,7 +54,6 @@
   align-items: center;
   color: $color_blue;
   padding: 1rem 1rem 1rem 0;
-  // margin-right: 6.5rem;
   cursor: pointer;
 
   span {

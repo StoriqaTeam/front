@@ -24,7 +24,12 @@ const WizardFooter = ({
 
     <Container correct>
       <Row>
-        <Col size={12} md={2} mdVisible hidden={currentStep === 1}>
+        <Col
+          size={12}
+          md={2}
+          mdVisible={currentStep !== 1}
+          hidden={currentStep === 1}
+        >
           <div styleName="leftButtonContainer">
             <div
               styleName="leftButton"
@@ -38,7 +43,7 @@ const WizardFooter = ({
             </div>
           </div>
         </Col>
-        <Col size={12} md={6}>
+        <Col size={12} md={currentStep !== 1 ? 6 : 8}>
           <div styleName="footerTextContainer">
             <span styleName="footerText">
               This listing isn’t active yet. It will be available to shoppers
@@ -56,12 +61,14 @@ const WizardFooter = ({
               big
               disabled={!isReadyToNext}
             >
-              <span>Next step</span>
+              {(currentStep === 3 && <span>Publish my store</span>) || (
+                <span>Next step</span>
+              )}
             </Button>
           </div>
         </Col>
         {/* <Col md={12} mdHidden hidden={currentStep === 1}> */}
-        <Col md={12} mdHidden>
+        <Col md={12} mdHidden hidden={currentStep === 1}>
           <div
             styleName="leftButton"
             onClick={() => onChangeStep(currentStep - 1)}
