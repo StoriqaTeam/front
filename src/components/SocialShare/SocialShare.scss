@@ -18,6 +18,11 @@
   &.noBorder {
     border: none;
   }
+
+  &.noBorderX {
+    border-left: none;
+    border-right: none;
+  }
 }
 
 .socialIcons {
