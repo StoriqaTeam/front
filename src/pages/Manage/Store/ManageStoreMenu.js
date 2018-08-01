@@ -245,12 +245,14 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
             isDisabled={isNil(storeId)}
           />
           <div style={{ margin: '1.05rem 0' }} />
-          <MobileUpload
-            avatar={storeLogo}
-            id="some"
-            onUpload={this.handleOnUpload}
-            onDelete={this.deleteAvatar}
-          />
+          {activeItem === 'settings' ? (
+            <MobileUpload
+              avatar={storeLogo}
+              id="some"
+              onUpload={this.handleOnUpload}
+              onDelete={this.deleteAvatar}
+            />
+          ) : null}
         </div>
         <div styleName="imgWrap">
           <UploadWrapper
