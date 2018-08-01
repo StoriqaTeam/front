@@ -5,6 +5,10 @@
   flex-direction: column;
   max-width: 41rem;
   height: 100%;
+  padding: 0;
+  @media (min-width: $md) {
+    padding: 2rem;
+  }
 }
 
 .form {
@@ -98,7 +102,6 @@
 }
 
 .saveButton {
-  margin-top: 2rem;
   button {
     width: 100%;
     @media (min-width: $md) {
