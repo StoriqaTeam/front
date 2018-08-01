@@ -93,6 +93,7 @@ class Input extends Component<PropsType, StateType> {
     ) : (
       <input
         id={id}
+        ref={inputRef}
         name={id}
         type={type || 'text'}
         value={value || ''}
