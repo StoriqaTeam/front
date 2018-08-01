@@ -313,7 +313,6 @@ class ThirdForm extends PureComponent<PropsType> {
                           onChange={this.handleChangeProductState}
                           fullWidth
                         />
-                        {/* <span styleName="">STQ</span> */}
                       </div>
                       <div styleName="productState">
                         <Input
@@ -325,13 +324,12 @@ class ThirdForm extends PureComponent<PropsType> {
                           type="number"
                           postfix="%"
                         />
-                        {/* <span styleName="">STQ</span> */}
                       </div>
                     </div>
                   </div>
                   {categoryId && this.renderAttributes()}
                   <div styleName="buttons">
-                    <div>
+                    <div styleName="buttonContainer">
                       <Button
                         onClick={() => {
                           onSave();
@@ -340,19 +338,21 @@ class ThirdForm extends PureComponent<PropsType> {
                         dataTest="wizardSaveProductButton"
                         big
                         disabled={this.checkForSave()}
+                        fullWidth
                       >
                         <span>Save</span>
                       </Button>
                     </div>
-                    <div styleName="cancelButton">
-                      <Button
+                    <div styleName="buttonContainer">
+                      <div
+                        styleName="cancelButton"
                         onClick={onClose}
-                        dataTest="wizardCancelProductButton"
-                        big
-                        wireframe
+                        onKeyDown={() => {}}
+                        role="button"
+                        tabIndex="0"
                       >
                         <span>Cancel</span>
-                      </Button>
+                      </div>
                     </div>
                   </div>
                 </div>

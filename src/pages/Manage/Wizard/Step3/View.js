@@ -15,7 +15,6 @@ import FormWrapper from '../FormWrapper';
 
 import type { BaseProductNodeType } from '../Wizard';
 import Form from './Form';
-import Modal from './Modal';
 
 import './View.scss';
 
@@ -55,6 +54,7 @@ type PropsType = {
   onSave: () => void,
   onClearProductState: () => void,
   formStateData: BaseProductNodeType,
+  onChangeEditingProduct: (val: boolean) => void,
 };
 
 type StateType = {
@@ -83,7 +83,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     );
 
   handleOnShowForm = (item: ProductNodeType) => {
-    const { onChange, formStateData } = this.props;
+    const { onChange, formStateData, onChangeEditingProduct } = this.props;
     const name = item.name ? getNameText(item.name, 'EN') : '';
     const shortDescription = item.shortDescription
       ? getNameText(item.shortDescription, 'EN')
@@ -107,14 +107,15 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     };
     return () => {
       onChange(prepareStateObj);
-      this.setState({ showForm: true });
+      this.setState({ showForm: true }, () => onChangeEditingProduct(true));
     };
   };
 
   handleOnCloseModal = () => {
-    const { onClearProductState } = this.props;
+    const { onClearProductState, onChangeEditingProduct } = this.props;
     this.setState({ showForm: false }, () => {
       onClearProductState();
+      onChangeEditingProduct(false);
     });
   };
 
@@ -123,45 +124,57 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     onDelete(ID);
   };
 
-  renderUploaderItem = () => (
-    <div
-      styleName="productItem uploaderItem"
-      role="button"
-      onClick={() => this.setState({ showForm: true })}
-      onKeyDown={() => {}}
-      tabIndex={0}
-      data-test="wizardUploaderProductFoto"
-    >
-      <div styleName="productContent">
-        <Icon type="cameraPlus" size={56} />
-        <span styleName="buttonLabel">Add new product</span>
+  renderUploaderItem = () => {
+    const { onChangeEditingProduct } = this.props;
+    return (
+      <div
+        styleName="productItem uploaderItem"
+        role="button"
+        onClick={() =>
+          this.setState({ showForm: true }, () => onChangeEditingProduct(true))
+        }
+        onKeyDown={() => {}}
+        tabIndex={0}
+        data-test="wizardUploaderProductFoto"
+      >
+        <div styleName="productContent">
+          <Icon type="cameraPlus" size={56} />
+          <span styleName="buttonLabel">Add new product</span>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
-  renderFirstUploaderItem = () => (
-    <div styleName="firstUploaderItem">
-      <div styleName="firstUploaderItemWrapper">
-        <div styleName="icon">
-          <Icon type="cameraPlus" size={80} />
-        </div>
-        <div styleName="text">
-          Currently you have no products in your store. Click ‘Add’ to start
-          filling your store with products.
-        </div>
-        <div styleName="button">
-          <Button
-            onClick={() => this.setState({ showForm: true })}
-            dataTest="wizardUploaderProductFotoFirst"
-            big
-            wireframe
-          >
-            <span>Add first product</span>
-          </Button>
+  renderFirstUploaderItem = () => {
+    const { onChangeEditingProduct } = this.props;
+    return (
+      <div styleName="firstUploaderItem">
+        <div styleName="firstUploaderItemWrapper">
+          <div styleName="icon">
+            <Icon type="cameraPlus" size={80} />
+          </div>
+          <div styleName="text">
+            Currently you have no products in your store. Click ‘Add’ to start
+            filling your store with products.
+          </div>
+          <div styleName="button">
+            <Button
+              onClick={() =>
+                this.setState({ showForm: true }, () =>
+                  onChangeEditingProduct(true),
+                )
+              }
+              dataTest="wizardUploaderProductFotoFirst"
+              big
+              wireframe
+            >
+              <span>Add first product</span>
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   render() {
     const { formStateData, onChange, products, onUpload, onSave } = this.props;

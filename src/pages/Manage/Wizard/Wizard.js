@@ -82,6 +82,7 @@ type PropsType = {
 type StateType = {
   showConfirm: boolean,
   step: number,
+  editingProduct: boolean,
   baseProduct: BaseProductNodeType,
   isValid: boolean,
   validationErrors: ?{
@@ -127,6 +128,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     this.state = {
       showConfirm: false,
       step: 1,
+      editingProduct: false,
       ...initialProductState,
       isValid: true,
       validationErrors: null,
@@ -203,7 +205,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     defaultLanguage?: string,
     addressFull?: { value: any },
   }) => {
-    console.log('>>> updateWizardMutation: ', { data });
     UpdateWizardMutation.commit({
       ...omit(['completed'], data),
       defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
@@ -215,7 +216,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          // console.log('>>> update wizard mutation onComplete: ', !!relayErrors);
           errorsHandler(
             relayErrors,
             this.props.showAlert,
@@ -228,7 +228,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
-        // console.log('>>> update wizard mutation onError: ');
         errorsHandler(
           relayErrors,
           this.props.showAlert,
@@ -442,6 +441,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   handleChangeForm = data => {
     this.handleOnSaveWizard(data);
+  };
+
+  handleOnChangeEditingProduct = (value: boolean) => {
+    this.setState({ editingProduct: value });
   };
 
   // Product handlers
@@ -769,6 +772,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             onSave={this.handleOnSaveProduct}
             onDelete={this.handleOnDeleteProduct}
             errors={this.state.validationErrors}
+            onChangeEditingProduct={this.handleOnChangeEditingProduct}
           />
         );
       default:
@@ -779,7 +783,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { step, showConfirm, isValid } = this.state;
+    const { step, showConfirm, isValid, editingProduct } = this.state;
     const { wizardStore } = me;
     // $FlowIgnoreMe
     const baseProducts = pathOr(
@@ -839,14 +843,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           />
         </div>
         <div styleName="contentWrapper">{this.renderForm()}</div>
-        <div styleName="footerWrapper">
-          <WizardFooter
-            currentStep={step}
-            onChangeStep={this.handleOnChangeStep}
-            onSaveStep={this.handleOnSaveStep}
-            isReadyToNext={isReadyToNext()}
-          />
-        </div>
+        {!editingProduct && (
+          <div styleName="footerWrapper">
+            <WizardFooter
+              currentStep={step}
+              onChangeStep={this.handleOnChangeStep}
+              onSaveStep={this.handleOnSaveStep}
+              isReadyToNext={isReadyToNext()}
+            />
+          </div>
+        )}
         <Modal
           showModal={showConfirm}
           onClose={() => this.setState({ showConfirm: false })}

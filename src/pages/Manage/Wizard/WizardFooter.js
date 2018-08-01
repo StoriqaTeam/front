@@ -20,8 +20,6 @@ const WizardFooter = ({
   isReadyToNext?: boolean,
 }) => (
   <div styleName="footerContainer">
-    {/* <div styleName="backContainer"> */}
-
     <Container correct>
       <Row>
         <Col
@@ -67,7 +65,6 @@ const WizardFooter = ({
             </Button>
           </div>
         </Col>
-        {/* <Col md={12} mdHidden hidden={currentStep === 1}> */}
         <Col md={12} mdHidden hidden={currentStep === 1}>
           <div
             styleName="leftButton"
@@ -82,8 +79,6 @@ const WizardFooter = ({
         </Col>
       </Row>
     </Container>
-
-    {/* </div> */}
   </div>
 );
 
