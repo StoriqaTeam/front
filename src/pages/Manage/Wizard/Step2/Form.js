@@ -6,6 +6,8 @@ import { pathOr, omit, map, find } from 'ramda';
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
 
+import FormWrapper from '../FormWrapper';
+
 import './Form.scss';
 
 const languagesDic = {
@@ -116,28 +118,34 @@ class SecondForm extends React.Component<PropsType, StateType> {
     );
     const findActiveItem = find(item => item.id === defaultLanguage);
     return (
-      <div styleName="form">
-        <div styleName="formItem">
-          <Select
-            forForm
-            fullWidth
-            label="Main language"
-            activeItem={findActiveItem(languagesItems)}
-            items={languagesItems}
-            onSelect={this.handleOnSelectLanguage}
-            dataTest="wizardLanguagesSelect"
-          />
+      <FormWrapper
+        secondForm
+        title="Set up store"
+        description="Define a few settings that will make your sells effective and comfortable."
+      >
+        <div styleName="form">
+          <div styleName="formItem">
+            <Select
+              forForm
+              fullWidth
+              label="Main language"
+              activeItem={findActiveItem(languagesItems)}
+              items={languagesItems}
+              onSelect={this.handleOnSelectLanguage}
+              dataTest="wizardLanguagesSelect"
+            />
+          </div>
+          <div styleName="formItem addressForm">
+            <AddressForm
+              isOpen
+              onChangeData={this.handleChangeAddressData}
+              country={addressFull ? addressFull.country : null}
+              address={addressFull ? addressFull.value : null}
+              addressFull={addressFull}
+            />
+          </div>
         </div>
-        <div styleName="formItem addressForm">
-          <AddressForm
-            isOpen
-            onChangeData={this.handleChangeAddressData}
-            country={addressFull ? addressFull.country : null}
-            address={addressFull ? addressFull.value : null}
-            addressFull={addressFull}
-          />
-        </div>
-      </div>
+      </FormWrapper>
     );
   }
 }

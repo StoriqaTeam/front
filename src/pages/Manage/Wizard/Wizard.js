@@ -744,53 +744,32 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     switch (step) {
       case 1:
         return (
-          <div styleName="formWrapper firstForm">
-            <div styleName="headerTitle">Give your store a name</div>
-            <div styleName="headerDescription">
-              Make a bright name for your store to attend your customers and
-              encrease your sales
-            </div>
-            <Step1
-              initialData={wizardStore}
-              onChange={this.handleChangeForm}
-              errors={this.state.validationErrors}
-            />
-          </div>
+          <Step1
+            initialData={wizardStore}
+            onChange={this.handleChangeForm}
+            errors={this.state.validationErrors}
+          />
         );
       case 2:
         return (
-          <div styleName="formWrapper secondForm">
-            <div styleName="headerTitle">Set up store</div>
-            <div styleName="headerDescription">
-              Define a few settings that will make your sells effective and
-              comfortable.
-            </div>
-            <Step2
-              initialData={wizardStore}
-              languages={this.props.languages}
-              onChange={this.handleChangeForm}
-            />
-          </div>
+          <Step2
+            initialData={wizardStore}
+            languages={this.props.languages}
+            onChange={this.handleChangeForm}
+          />
         );
       case 3:
         return (
-          <div styleName="formWrapper thirdForm">
-            <div styleName="headerTitle">Fill your store with goods</div>
-            <div styleName="headerDescription">
-              Choose what you gonna sale in your marketplace and add it with
-              ease
-            </div>
-            <Step3
-              formStateData={this.state.baseProduct}
-              products={baseProducts ? baseProducts.edges : []}
-              onUpload={this.handleOnUploadPhoto}
-              onChange={this.handleOnChangeProductForm}
-              onClearProductState={this.handleOnClearProductState}
-              onSave={this.handleOnSaveProduct}
-              onDelete={this.handleOnDeleteProduct}
-              errors={this.state.validationErrors}
-            />
-          </div>
+          <Step3
+            formStateData={this.state.baseProduct}
+            products={baseProducts ? baseProducts.edges : []}
+            onUpload={this.handleOnUploadPhoto}
+            onChange={this.handleOnChangeProductForm}
+            onClearProductState={this.handleOnClearProductState}
+            onSave={this.handleOnSaveProduct}
+            onDelete={this.handleOnDeleteProduct}
+            errors={this.state.validationErrors}
+          />
         );
       default:
         break;

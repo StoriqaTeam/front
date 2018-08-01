@@ -10,6 +10,7 @@ import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/common/Button';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
+import { Container, Col, Row } from 'layout';
 
 import AttributesForm from './AttributesForm';
 import ProductsUploader from './ProductsUploader';
@@ -174,174 +175,190 @@ class ThirdForm extends PureComponent<PropsType> {
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">
-          <div styleName="headerTitle">Add new product</div>
-          <div styleName="headerDescription">
-            Fill up the forms below to show up as many attributes of your good
-            to make it clear for buyer
-          </div>
-          <div styleName="form">
-            <div styleName="section">
-              <div styleName="input">
-                <Input
-                  id="name"
-                  value={data.name}
-                  label="Product name"
-                  onChange={this.handleChangeBaseProductState}
-                  fullWidth
-                />
-              </div>
-              <div styleName="input">
-                <Textarea
-                  id="shortDescription"
-                  value={data.shortDescription}
-                  label="Short description"
-                  onChange={this.handleChangeBaseProductState}
-                  fullWidth
-                />
-              </div>
-            </div>
-            <div styleName="section">
-              <div styleName="sectionName">Product main photo</div>
-              <div styleName="uploadersWrapper">
-                <div styleName="uploadedPhotoList">
-                  {(data.product.photoMain && (
-                    <div
-                      styleName="uploadItem"
-                      onClick={this.handleOnRemoveMainPhoto}
-                      onKeyDown={() => {}}
-                      role="button"
-                      tabIndex="0"
-                    >
-                      <div
-                        styleName="imageBG"
-                        style={{
-                          backgroundImage: `url(${convertSrc(
-                            data.product.photoMain,
-                            'small',
-                          )})`,
-                        }}
-                        alt="mainPhoto"
-                      />
-                      <div styleName="itemHover">
-                        <Icon type="basket" size={40} />
-                      </div>
-                    </div>
-                  )) || (
-                    <div styleName="uploadItem">
-                      <UploadWrapper
-                        id="upload_photo"
-                        onUpload={e => {
-                          onUpload('photoMain', e);
-                        }}
-                        buttonHeight={10}
-                        buttonWidth={10}
-                        noIndents
-                        buttonIconType="camera"
-                        buttonIconSize={20}
-                        buttonLabel="Add photo"
-                        dataTest="productPhotosUploader"
+          <Container correct>
+            <Row>
+              <Col size={12}>
+                <div styleName="centered">
+                  <div styleName="headerTitle">Add new product</div>
+                  <div styleName="headerDescription">
+                    Fill up the forms below to show up as many attributes of
+                    your good to make it clear for buyer
+                  </div>
+                </div>
+              </Col>
+              <Col size={12}>
+                <div styleName="form">
+                  <div styleName="section">
+                    <div styleName="input">
+                      <Input
+                        id="name"
+                        value={data.name}
+                        label="Product name"
+                        onChange={this.handleChangeBaseProductState}
+                        fullWidth
                       />
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div styleName="section">
-              <div styleName="sectionName">Product photo gallery</div>
-              <ProductsUploader
-                onRemove={this.handleRemoveAddtionalPhoto}
-                onUpload={onUpload}
-                additionalPhotos={data.product.additionalPhotos}
-              />
-              <div styleName="uploadDescriptionContainer">
-                <div styleName="description">
-                  * For better product appearance follow recomendations below
-                  and upload appropriate photos:
-                </div>
-                <div styleName="iconsContainer">
-                  {map(
-                    icon => (
-                      <div key={icon.type} styleName="iconBlock">
-                        <Icon type={icon.type} size={56} />
-                        <div styleName="iconDescription">{icon.text}</div>
+                    <div styleName="input">
+                      <Textarea
+                        id="shortDescription"
+                        value={data.shortDescription}
+                        label="Short description"
+                        onChange={this.handleChangeBaseProductState}
+                        fullWidth
+                      />
+                    </div>
+                  </div>
+                  <div styleName="section">
+                    <div styleName="sectionName">Product main photo</div>
+                    <div styleName="uploadersWrapper">
+                      <div styleName="uploadedPhotoList">
+                        {(data.product.photoMain && (
+                          <div
+                            styleName="uploadItem"
+                            onClick={this.handleOnRemoveMainPhoto}
+                            onKeyDown={() => {}}
+                            role="button"
+                            tabIndex="0"
+                          >
+                            <div
+                              styleName="imageBG"
+                              style={{
+                                backgroundImage: `url(${convertSrc(
+                                  data.product.photoMain,
+                                  'small',
+                                )})`,
+                              }}
+                              alt="mainPhoto"
+                            />
+                            <div styleName="itemHover">
+                              <Icon type="basket" size={40} />
+                            </div>
+                          </div>
+                        )) || (
+                          <div styleName="uploadItem">
+                            <UploadWrapper
+                              id="upload_photo"
+                              onUpload={e => {
+                                onUpload('photoMain', e);
+                              }}
+                              buttonHeight={10}
+                              buttonWidth={10}
+                              noIndents
+                              buttonIconType="camera"
+                              buttonIconSize={20}
+                              buttonLabel="Add photo"
+                              dataTest="productPhotosUploader"
+                            />
+                          </div>
+                        )}
                       </div>
-                    ),
-                    photoIcons,
-                  )}
+                    </div>
+                  </div>
+                  <div styleName="section">
+                    <div styleName="sectionName">Product photo gallery</div>
+                    <ProductsUploader
+                      onRemove={this.handleRemoveAddtionalPhoto}
+                      onUpload={onUpload}
+                      additionalPhotos={data.product.additionalPhotos}
+                    />
+                    <div styleName="uploadDescriptionContainer">
+                      <div styleName="description">
+                        * For better product appearance follow recomendations
+                        below and upload appropriate photos:
+                      </div>
+                      <div styleName="iconsWrapper">
+                        <div styleName="iconsContainer">
+                          {map(
+                            icon => (
+                              <div key={icon.type} styleName="iconBlock">
+                                <Icon type={icon.type} size={56} />
+                                <div styleName="iconDescription">
+                                  {icon.text}
+                                </div>
+                              </div>
+                            ),
+                            photoIcons,
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div styleName="section">
+                    <div styleName="sectionName">
+                      General settings and pricing
+                    </div>
+                    <div styleName="categorySelector">
+                      <CategorySelector
+                        categories={this.props.categories}
+                        onSelect={id => this.props.onChange({ categoryId: id })}
+                      />
+                    </div>
+                    <div styleName="productStates formItem">
+                      <div styleName="productState">
+                        <Input
+                          id="price"
+                          value={data.product.price || ''}
+                          label="Price"
+                          onChange={this.handleChangeProductState}
+                          fullWidth
+                          type="number"
+                          postfix="STQ"
+                        />
+                      </div>
+                      <div styleName="productState">
+                        <Input
+                          id="vendorCode"
+                          value={data.product.vendorCode || ''}
+                          label="Vendor code"
+                          onChange={this.handleChangeProductState}
+                          fullWidth
+                        />
+                        {/* <span styleName="">STQ</span> */}
+                      </div>
+                      <div styleName="productState">
+                        <Input
+                          id="cashback"
+                          value={data.product.cashback || ''}
+                          label="Cashback"
+                          onChange={this.handleChangeProductState}
+                          fullWidth
+                          type="number"
+                          postfix="%"
+                        />
+                        {/* <span styleName="">STQ</span> */}
+                      </div>
+                    </div>
+                  </div>
+                  {categoryId && this.renderAttributes()}
+                  <div styleName="buttons">
+                    <div>
+                      <Button
+                        onClick={() => {
+                          onSave();
+                          onClose();
+                        }}
+                        dataTest="wizardSaveProductButton"
+                        big
+                        disabled={this.checkForSave()}
+                      >
+                        <span>Save</span>
+                      </Button>
+                    </div>
+                    <div styleName="cancelButton">
+                      <Button
+                        onClick={onClose}
+                        dataTest="wizardCancelProductButton"
+                        big
+                        wireframe
+                      >
+                        <span>Cancel</span>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div styleName="section">
-              <div styleName="sectionName">General settings and pricing</div>
-              <div styleName="categorySelector">
-                <CategorySelector
-                  categories={this.props.categories}
-                  onSelect={id => this.props.onChange({ categoryId: id })}
-                />
-              </div>
-              <div styleName="productStates formItem">
-                <div styleName="productState">
-                  <Input
-                    id="price"
-                    value={data.product.price || ''}
-                    label="Price"
-                    onChange={this.handleChangeProductState}
-                    fullWidth
-                    type="number"
-                    postfix="STQ"
-                  />
-                </div>
-                <div styleName="productState">
-                  <Input
-                    id="vendorCode"
-                    value={data.product.vendorCode || ''}
-                    label="Vendor code"
-                    onChange={this.handleChangeProductState}
-                    fullWidth
-                  />
-                  {/* <span styleName="">STQ</span> */}
-                </div>
-                <div styleName="productState">
-                  <Input
-                    id="cashback"
-                    value={data.product.cashback || ''}
-                    label="Cashback"
-                    onChange={this.handleChangeProductState}
-                    fullWidth
-                    type="number"
-                    postfix="%"
-                  />
-                  {/* <span styleName="">STQ</span> */}
-                </div>
-              </div>
-            </div>
-            {categoryId && this.renderAttributes()}
-            <div styleName="buttons">
-              <div>
-                <Button
-                  onClick={() => {
-                    onSave();
-                    onClose();
-                  }}
-                  dataTest="wizardSaveProductButton"
-                  big
-                  disabled={this.checkForSave()}
-                >
-                  <span>Save</span>
-                </Button>
-              </div>
-              <div styleName="cancelButton">
-                <Button
-                  onClick={onClose}
-                  dataTest="wizardCancelProductButton"
-                  big
-                  wireframe
-                >
-                  <span>Cancel</span>
-                </Button>
-              </div>
-            </div>
-          </div>
+              </Col>
+            </Row>
+          </Container>
         </div>
       </div>
     );

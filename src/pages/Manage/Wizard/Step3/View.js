@@ -3,13 +3,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, pathOr, head, map, addIndex, isEmpty, filter } from 'ramda';
+import { Col, Row } from 'layout';
 
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
 import { getNameText } from 'utils';
+
 import ProductLayer from './ProductLayer';
-import { Container, Col, Row } from 'layout';
+import FormWrapper from '../FormWrapper';
 
 import type { BaseProductNodeType } from '../Wizard';
 import Form from './Form';
@@ -171,45 +173,55 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       return !isEmpty(edges);
     }, productsArr);
     const mapIndexed = addIndex(map);
+    if (showForm) {
+      return (
+        <Form
+          data={formStateData}
+          categories={this.context.directories.categories}
+          onChange={onChange}
+          onUpload={onUpload}
+          onSave={onSave}
+          onClose={this.handleOnCloseModal}
+        />
+      );
+    }
     return (
-      <div styleName="view">
-        <Row>
-          {!isEmpty(filteredProductsArr) ? (
-            <Col size={12} md={4} xl={3}>
-              {this.renderUploaderItem()}
-            </Col>
-          ) : (
-            this.renderFirstUploaderItem()
-          )}
-          {!isEmpty(filteredProductsArr) &&
-            mapIndexed(
-              (item, index) => (
-                <Col size={12} md={4} xl={3}>
-                  <div key={index} styleName="productItem cardItem">
-                    <div styleName="productContent">
-                      <CardProduct item={item} />
-                      <ProductLayer
-                        onDelete={this.handleOnDelete(item.id)}
-                        onEdit={this.handleOnShowForm(item)}
-                      />
-                    </div>
-                  </div>
-                </Col>
-              ),
-              filteredProductsArr,
+      <FormWrapper
+        thirdForm
+        title="Fill your store with goods"
+        description="Choose what you gonna sale in your marketplace and add it with ease"
+      >
+        <div styleName="view">
+          <Row>
+            {!isEmpty(filteredProductsArr) ? (
+              <Col size={12} md={4} xl={3}>
+                {this.renderUploaderItem()}
+              </Col>
+            ) : (
+              this.renderFirstUploaderItem()
             )}
-        </Row>
-        <Modal showModal={showForm} onClose={this.handleOnCloseModal}>
-          <Form
-            data={formStateData}
-            categories={this.context.directories.categories}
-            onChange={onChange}
-            onUpload={onUpload}
-            onSave={onSave}
-            onClose={this.handleOnCloseModal}
-          />
-        </Modal>
-      </div>
+            {!isEmpty(filteredProductsArr) &&
+              mapIndexed(
+                (item, index) => (
+                  <Col size={12} md={4} xl={3}>
+                    <div key={index} styleName="productItem cardItem">
+                      <div styleName="productContent">
+                        <CardProduct item={item} />
+                        <ProductLayer
+                          onDelete={this.handleOnDelete(item.id)}
+                          onEdit={this.handleOnShowForm(item)}
+                        />
+                      </div>
+                    </div>
+                  </Col>
+                ),
+                filteredProductsArr,
+              )}
+          </Row>
+          {/* <Modal showModal={showForm} onClose={this.handleOnCloseModal}> */}
+          {/* </Modal> */}
+        </div>
+      </FormWrapper>
     );
   }
 }
