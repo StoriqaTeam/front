@@ -6,6 +6,7 @@ import ImageLoader from 'libs/react-image-loader';
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 import BannerLoading from 'components/Banner/BannerLoading';
+import { Col } from 'layout';
 
 import { convertSrc, formatPrice, getNameText } from 'utils';
 
@@ -48,7 +49,7 @@ const ProductsRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
       <div styleName="td tdCheckbox">
         <Checkbox id={item.rawId} onChange={onCheckbox} />
       </div>
-      <div styleName="td tdFoto">
+      <Col size={4} sm={4} md={2} lg={2} xl={1}>
         <div styleName="foto">
           {!product || !product.photoMain ? (
             <Icon type="camera" size="40" />
@@ -60,32 +61,32 @@ const ProductsRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
             />
           )}
         </div>
-      </div>
-      <div styleName="td tdName">
-        <div>
+      </Col>
+      <Col size={4} sm={4} md={4} lg={3} xl={2}>
+        <div styleName="name">
           <span>{item.name}</span>
         </div>
-      </div>
-      <div styleName="td tdCategory">
+      </Col>
+      <Col size={2} sm={2} md={2} lg={2} xl={2} xlVisible>
         <div>
           <span>{item.categoryName}</span>
         </div>
-      </div>
-      <div styleName="td tdPrice">
+      </Col>
+      <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
         <div>
           {product &&
             product.price && <span>{`${formatPrice(product.price)} STQ`}</span>}
         </div>
-      </div>
-      <div styleName="td tdCashback">
+      </Col>
+      <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
         <div>
           {product &&
             product.cashback && (
               <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
             )}
         </div>
-      </div>
-      <div styleName="td tdCharacteristics">
+      </Col>
+      <Col size={2} sm={2} md={2} lg={2} xl={2} xlVisible>
         {!isEmpty(attributes) && (
           <div>
             <div styleName="characteristicItem">
@@ -115,18 +116,25 @@ const ProductsRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
             </div>
           </div>
         )}
-      </div>
-      <div styleName="td tdDelete">
-        <button
-          styleName="deleteButton"
-          onClick={(e: any) => {
-            onDelete(item.id, e);
-          }}
-          data-test="deleteProductButton"
-        >
-          <Icon type="basket" size="32" />
-        </button>
-      </div>
+      </Col>
+      <Col size={4} sm={4} md={3} lg={1} xl={1}>
+        <div styleName="buttons">
+          <button
+            styleName="editButton"
+          >
+            <Icon type="note" size={32} />
+          </button>
+          <button
+            styleName="deleteButton"
+            onClick={(e: any) => {
+              onDelete(item.id, e);
+            }}
+            data-test="deleteProductButton"
+          >
+            <Icon type="basket" size="32" />
+          </button>
+        </div>
+      </Col>
     </div>
   );
 };

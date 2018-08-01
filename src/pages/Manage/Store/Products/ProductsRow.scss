@@ -1,57 +1,24 @@
 @import "../../../../styles/variables";
 
 .itemRowWrap {
+  align-items: center;
+  border-bottom: 1px solid $color_grey_trivial;
   display: flex;
   margin: 0 -4rem;
-  border-bottom: 1px solid $color_grey_trivial;
-}
-
-.headerRowWrap {
-  .td {
-    color: $color_grey_minor;
-  }
-}
-
-.td {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  line-height: 2.5rem;
-  color: $color_grey;
-}
-
-.tdCheckbox {width: 5%;}
-.tdFoto {width: 9%;}
-.tdName {width: 21%;}
-.tdCategory {width: 18%;}
-.tdPrice {width: 10%;}
-.tdCashback {width: 10%;}
-.tdCharacteristics {width: 24%;}
-.tdDelete {width: 4%; justify-content: flex-end;}
-
-.headerRowWrap {
-  padding: 2rem 4rem;
-
-  & .tdWrap > span {
-    margin-right: 0.5rem;
-  }
-}
-
-.itemRowWrap {
   position: relative;
-  padding: 1rem 4rem;
+  padding: 1rem 0;
   cursor: pointer;
 
   &:before {
+    background-color: transparent;
+    bottom: 0;
     content: '';
+    display: block;
+    left: 0;
     position: absolute;
     top: 0;
-    bottom: 0;
-    left: 0;
-    display: block;
-    width: 2px;
-    background-color: transparent;
     transition: $transition_all_ease;
+    width: 2px;
   }
 
   &:hover {
@@ -65,15 +32,19 @@
   }
 
   .foto {
-    position: relative;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    width: 10rem;
-    height: 10rem;
-    border-radius: 0.5rem;
     background-color: $color_grey_trivial;
+    border-radius: 0.5rem;
+    display: flex;
+    height: 10rem;
+    justify-content: center;
+    margin-left: 1rem;
     overflow: hidden;
+    position: relative;
+    width: 10rem;
+    @media (min-width: $md) {
+      margin-left: 1.5rem;
+    }
   }
 
   .characteristicItem {
@@ -89,11 +60,55 @@
   .characteristicValues {
     margin-left: 1.5rem;
   }
+
+  @media (min-width: $md) {
+    padding: 1rem 4rem;
+  }
 }
+
+.name {
+  font-size: 2rem;
+  line-height: 20px;
+  overflow: hidden;
+  padding-left: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media (min-width: $md) {
+    padding-left: 3rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+.td {
+  align-items: center;
+  color: $color_grey;
+  display: flex;
+  font-size: 14px;
+  line-height: 2.5rem;
+}
+
+.tdCheckbox {
+  display: none;
+  width: 5%;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+.tdFoto {width: 9%;}
+.tdName {width: 21%;}
+.tdCategory {width: 18%;}
+.tdPrice {width: 10%;}
+.tdCashback {width: 10%;}
+.tdCharacteristics {width: 24%;}
+.tdDelete {width: 4%; justify-content: flex-end;}
+
 
 .deleteButton, .editButton {
   & svg {
-    fill: $color_grey_light;
+    fill: $color_grey_minor;
     transition: $transition_all_ease;
   }
 

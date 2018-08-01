@@ -1,15 +1,34 @@
 @import "../../../../styles/variables";
 
-.headerRowWrap, .itemRowWrap {
-  display: flex;
-  margin: 0 -4rem;
+.headerRowWrap {
+  align-items: center;
   border-bottom: 1px solid $color_grey_trivial;
+  display: none;
+  margin: 0 -4rem;
+  padding: 2rem 4rem;
+
+  & .tdWrap > span {
+    margin-right: 0.5rem;
+  }
+
+  @media (min-width: $md) {
+    display: flex;
+  }
+}
+
+.name {
+  padding-left: 3rem;
 }
 
 .headerRowWrap {
   .td {
     color: $color_grey_minor;
   }
+}
+
+.colColor {
+  color: $color_grey_minor;
+ // padding-left: 3rem;
 }
 
 .td {
@@ -20,28 +39,34 @@
   color: $color_grey;
 }
 
-.tdCheckbox {width: 5%;}
-.tdFoto {width: 9%;}
+.tdCheckbox {
+  display: none;
+  width: 5%;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+.tdFoto {
+  margin-right: 2rem;
+  width: 9%;
+}
 .tdName {width: 21%;}
 .tdCategory {width: 18%;}
 .tdPrice {width: 10%;}
 .tdCashback {width: 10%;}
 .tdCharacteristics {width: 24%;}
-.tdDelete {width: 4%; justify-content: flex-end;}
-
-.headerRowWrap {
-  padding: 2rem 4rem;
-
-  & .tdWrap > span {
-    margin-right: 0.5rem;
-  }
+.tdDelete {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .deleteButton, .editButton {
   & svg {
-    fill: $color_grey_light;
+    fill: $color_grey_minor;
     transition: $transition_all_ease;
   }
 
-  &:hover svg {fill: $color_grey;}
+  &:hover svg {
+    fill: $color_grey;
+  }
 }
