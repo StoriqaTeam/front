@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91 88.814">
+    <defs>
+        <style>
+            .cls-1{fill:#fff}.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-7,.cls-8{stroke:#2fbafd;stroke-linecap:round;stroke-linejoin:round;stroke-width:4px}.cls-1,.cls-2{stroke-miterlimit:10}.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-7,.cls-8{fill:none}.cls-4{stroke-dasharray:19.009 19.009}.cls-5{stroke-dasharray:13.781 13.781}.cls-6{stroke-dasharray:13.966 13.966}.cls-7{stroke-dasharray:13.851 13.851}.cls-8{stroke-dasharray:13.317 13.317}
+        </style>
+    </defs>
+    <g id="Group_1322" data-name="Group 1322" transform="translate(-2 -2)">
+        <path id="Path_1164" d="M81.24 102.886l-14.94-6.65V79.2l14.94 6.65z" class="cls-1" data-name="Path 1164" transform="translate(-33.923 -40.947)"/>
+        <path id="Path_1165" d="M99.1 102.886l14.94-6.65V79.2L99.1 85.85z" class="cls-1" data-name="Path 1165" transform="translate(-51.782 -40.947)"/>
+        <path id="Path_1166" d="M96.135 74.182L81.514 69.9 66.3 74.182l14.94 6.559z" class="cls-1" data-name="Path 1166" transform="translate(-33.923 -35.883)"/>
+        <circle id="Ellipse_148" cx="5.876" cy="5.876" r="5.876" class="cls-2" data-name="Ellipse 148" transform="translate(4 17.164)"/>
+        <circle id="Ellipse_149" cx="5.876" cy="5.876" r="5.876" class="cls-2" data-name="Ellipse 149" transform="translate(79.248 17.164)"/>
+        <circle id="Ellipse_150" cx="5.876" cy="5.876" r="5.876" class="cls-2" data-name="Ellipse 150" transform="translate(41.624 4)"/>
+        <circle id="Ellipse_151" cx="5.876" cy="5.876" r="5.876" class="cls-2" data-name="Ellipse 151" transform="translate(79.248 63.943)"/>
+        <circle id="Ellipse_152" cx="5.876" cy="5.876" r="5.876" class="cls-2" data-name="Ellipse 152" transform="translate(4 63.943)"/>
+        <circle id="Ellipse_153" cx="5.876" cy="5.876" r="5.876" class="cls-2" data-name="Ellipse 153" transform="translate(41.624 77.062)"/>
+        <path id="Line_378" d="M0 0l10.568 7.607" class="cls-2" data-name="Line 378" transform="translate(14.385 26.684)"/>
+        <path id="Line_379" d="M10.613 0L0 7.607" class="cls-2" data-name="Line 379" transform="translate(70.002 26.684)"/>
+        <path id="Line_380" d="M10.613 7.652L0 0" class="cls-2" data-name="Line 380" transform="translate(70.002 58.295)"/>
+        <path id="Line_381" d="M0 7.652L10.568 0" class="cls-2" data-name="Line 381" transform="translate(14.385 58.295)"/>
+        <g id="Group_1322-2" data-name="Group 1322" transform="translate(10.195 28.961)">
+            <path id="Line_382" d="M0 0v4.555" class="cls-3" data-name="Line 382"/>
+            <path id="Line_383" d="M0 0v12.982" class="cls-4" data-name="Line 383" transform="translate(0 13.209)"/>
+            <path id="Line_384" d="M0 0v4.555" class="cls-3" data-name="Line 384" transform="translate(0 30.518)"/>
+        </g>
+        <g id="Group_1323" data-name="Group 1323" transform="translate(15.479 11.561)">
+            <path id="Line_385" d="M4.282 0L0 1.549" class="cls-3" data-name="Line 385" transform="translate(22.001)"/>
+            <path id="Line_386" d="M8.837 0L0 3.188" class="cls-5" data-name="Line 386" transform="translate(7.242 3.644)"/>
+            <path id="Line_387" d="M4.282 0L0 1.549" class="cls-3" data-name="Line 387" transform="translate(0 7.88)"/>
+        </g>
+        <g id="Group_1324" data-name="Group 1324" transform="translate(53.103 10.969)">
+            <path id="Line_388" d="M4.282 1.549L0 0" class="cls-3" data-name="Line 388" transform="translate(22.274 7.926)"/>
+            <path id="Line_389" d="M8.973 3.188L0 0" class="cls-6" data-name="Line 389" transform="translate(7.288 2.596)"/>
+            <path id="Line_390" d="M4.282 1.503L0 0" class="cls-3" data-name="Line 390"/>
+        </g>
+        <g id="Group_1325" data-name="Group 1325" transform="translate(86.399 29.098)">
+            <path id="Line_391" d="M0 4.555V0" class="cls-3" data-name="Line 391" transform="translate(0 30.564)"/>
+            <path id="Line_392" d="M0 13.027V0" class="cls-4" data-name="Line 392" transform="translate(0 8.882)"/>
+            <path id="Line_393" d="M0 4.555V0" class="cls-3" data-name="Line 393"/>
+        </g>
+        <g id="Group_1326" data-name="Group 1326" transform="translate(53.239 71.641)">
+            <path id="Line_394" d="M0 1.64L4.236 0" class="cls-3" data-name="Line 394" transform="translate(0 8.563)"/>
+            <path id="Line_395" d="M0 3.416L8.837 0" class="cls-7" data-name="Line 395" transform="translate(10.112 2.824)"/>
+            <path id="Line_396" d="M0 1.685L4.236 0" class="cls-3" data-name="Line 396" transform="translate(21.864)"/>
+        </g>
+        <g id="Group_1327" data-name="Group 1327" transform="translate(15.934 71.14)">
+            <path id="Line_397" d="M0 0l4.236 1.64" class="cls-3" data-name="Line 397"/>
+            <path id="Line_398" d="M0 0l8.472 3.28" class="cls-8" data-name="Line 398" transform="translate(9.884 3.872)"/>
+            <path id="Line_399" d="M0 0l4.236 1.64" class="cls-3" data-name="Line 399" transform="translate(21.181 8.29)"/>
+        </g>
+    </g>
+</svg>
