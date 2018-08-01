@@ -18,7 +18,7 @@ import { DeactivateBaseProductMutation } from 'relay/mutations';
 
 import type { Products_me as ProductsMe } from './__generated__/Products_me.graphql';
 
-import { ProductsHeader, ProductsRow } from './index';
+import { ProductsHeader, ProductsTableHeader, ProductsTableRow } from './index';
 
 import './Products.scss';
 
@@ -133,35 +133,20 @@ class Products extends PureComponent<PropsType> {
     }, baseProducts);
     return (
       <div styleName="container">
-        <div styleName="addButton">
-          <Button
-            wireframe
-            big
-            onClick={this.addProduct}
-            dataTest="addProductButton"
-          >
-            Add item
-          </Button>
-        </div>
-        <div styleName="subtitle">
-          <strong>Goods list</strong>
-        </div>
-        <div>
-          <ProductsHeader />
-          <div>
-            {map(
-              item => (
-                <ProductsRow
-                  item={item}
-                  onEdit={this.editProduct}
-                  onDelete={this.handleDelete}
-                  onCheckbox={this.handleCheckboxClick}
-                />
-              ),
-              products,
-            )}
-          </div>
-        </div>
+        <ProductsHeader onAdd={this.addProduct} />
+        <ProductsTableHeader />
+        {map(
+          item => (
+            <ProductsTableRow
+              key={item.rawId}
+              item={item}
+              onEdit={this.editProduct}
+              onDelete={this.handleDelete}
+              onCheckbox={this.handleCheckboxClick}
+            />
+          ),
+          products,
+        )}
         {this.props.relay.hasMore() && (
           <div styleName="loadButton">
             <Button

@@ -10,7 +10,7 @@ import { Col } from 'layout';
 
 import { convertSrc, formatPrice, getNameText } from 'utils';
 
-import './ProductsRow.scss';
+import './ProductsTableRow.scss';
 
 type PropsType = {
   item: {
@@ -30,13 +30,12 @@ type PropsType = {
   onDelete: (any, any) => any,
 };
 
-const ProductsRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
+const ProductsTableRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
   const { product } = item;
   // $FlowIgnoreMe
   const attributes = pathOr([], ['product', 'attributes'], item);
   return (
     <div
-      key={item.rawId}
       styleName="itemRowWrap"
       onClick={() => {
         onEdit(item.rawId);
@@ -73,55 +72,47 @@ const ProductsRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
         </div>
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
-        <div>
-          {product &&
-            product.price && <span>{`${formatPrice(product.price)} STQ`}</span>}
-        </div>
+        {product &&
+        product.price && <span>{`${formatPrice(product.price)} STQ`}</span>}
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
-        <div>
-          {product &&
-            product.cashback && (
-              <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
-            )}
-        </div>
+        {product &&
+        product.cashback && (
+          <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
+        )}
       </Col>
       <Col size={2} sm={2} md={2} lg={2} xl={2} xlVisible>
         {!isEmpty(attributes) && (
-          <div>
-            <div styleName="characteristicItem">
-              <div styleName="characteristicLabels">
-                {map(attributeItem => {
-                  const attributeName = getNameText(
-                    attributeItem.attribute.name,
-                    'EN',
-                  );
-                  return (
-                    <div key={`attr-${attributeName}`}>
-                      {`${attributeName}: `}
-                    </div>
-                  );
-                }, attributes)}
-              </div>
-              <div styleName="characteristicValues">
-                {map(attributeItem => {
-                  const attributeName = getNameText(
-                    attributeItem.attribute.name,
-                    'EN',
-                  );
-                  const val = attributeItem.value;
-                  return <div key={`attr-${attributeName}`}>{`${val}`}</div>;
-                }, attributes)}
-              </div>
+          <div styleName="characteristicItem">
+            <div styleName="characteristicLabels">
+              {map(attributeItem => {
+                const attributeName = getNameText(
+                  attributeItem.attribute.name,
+                  'EN',
+                );
+                return (
+                  <div key={`attr-${attributeName}`}>
+                    {`${attributeName}: `}
+                  </div>
+                );
+              }, attributes)}
+            </div>
+            <div styleName="characteristicValues">
+              {map(attributeItem => {
+                const attributeName = getNameText(
+                  attributeItem.attribute.name,
+                  'EN',
+                );
+                const val = attributeItem.value;
+                return <div key={`attr-${attributeName}`}>{`${val}`}</div>;
+              }, attributes)}
             </div>
           </div>
         )}
       </Col>
       <Col size={4} sm={4} md={3} lg={1} xl={1}>
         <div styleName="buttons">
-          <button
-            styleName="editButton"
-          >
+          <button styleName="editButton">
             <Icon type="note" size={32} />
           </button>
           <button
@@ -139,4 +130,4 @@ const ProductsRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
   );
 };
 
-export default ProductsRow;
+export default ProductsTableRow;

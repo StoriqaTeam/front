@@ -1,7 +1,6 @@
 @import "../../../../styles/variables";
 
 .container {
-  margin-top: 2rem;
   background-color: $color_white;
   flex: 1 0 auto;
 }
@@ -11,17 +10,6 @@
   padding: 4rem;
   background-color: $color_white;
   flex: 1 0 auto;
-}
-
-.subtitle {
-  margin-bottom: 5rem;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.addButton {
-  float: right;
 }
 
 .dropdownButton {
