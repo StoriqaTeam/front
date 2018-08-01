@@ -153,7 +153,7 @@ class StoreOrders extends Component<PropsType, StateType> {
 }
 
 export default createRefetchContainer(
-  Page(ManageStore(StoreOrders, 'Orders')),
+  Page(ManageStore(StoreOrders, 'Orders'), true),
   graphql`
     fragment StoreOrders_me on User
       @argumentDefinitions(

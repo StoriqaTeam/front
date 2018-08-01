@@ -1,10 +1,8 @@
 @import '../../../styles/variables';
 
 .container {
-  border-left: 2px solid transparent;
   color: $color_grey;
   cursor: pointer;
-  // height: 12rem;
   margin-left: -4rem;
   margin-right: -4rem;
   padding: 3rem 0;
@@ -26,6 +24,11 @@
     &:before {
       background-color: $color_blue_hover;
     }
+  }
+
+  @media (min-width: $md) {
+    margin-left: -4rem;
+    margin-right: -4rem;
   }
 
 }

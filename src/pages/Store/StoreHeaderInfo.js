@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import { Input } from 'components/common/Input';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { SocialShare } from 'components/SocialShare';
@@ -38,10 +37,10 @@ class StoreHeader extends Component<{}, StateTypes> {
   };
   handleInputChange = () => {};
   render() {
-    const { search, isOpened, isSearch, isShare } = this.state;
+    const { isOpened, isShare } = this.state;
     return (
       <StoreContext.Consumer>
-        {({ logo, cover, name, rating }) => (
+        {({ logo, name, rating }) => (
           <div styleName="container">
             <span
               styleName="share"
@@ -56,18 +55,8 @@ class StoreHeader extends Component<{}, StateTypes> {
                 <Icon type="cross" size={20} />
               )}
             </span>
-            <span
-              styleName="magnifier"
-              role="button"
-              onClick={() => this.handleClick('isSearch')}
-              onKeyPress={() => {}}
-              tabIndex="-1"
-            >
-              {!isSearch ? (
-                <Icon type="magnifier" size={20} />
-              ) : (
-                <Icon type="cross" size={20} />
-              )}
+            <span styleName="heart">
+              <Icon type="heart" size={28} />
             </span>
             <figure styleName="shopLogo">
               {logo ? (
@@ -77,20 +66,9 @@ class StoreHeader extends Component<{}, StateTypes> {
               )}
             </figure>
             <div styleName={classNames('mobileSearch', { isOpened })}>
-              {/* eslint-disable no-nested-ternary */}
-              {!isShare ? (
-                <Input
-                  id="search"
-                  value={search}
-                  label="Search"
-                  onChange={this.handleInputChange}
-                  fullWidth
-                />
-              ) : process.env.BROWSER ? (
-                <SocialShare noBorder photoMain={cover} />
-              ) : null}
+              {process.env.BROWSER ? <SocialShare noBorder /> : null}
             </div>
-            <div>
+            <div styleName="shopTitleWrap">
               <h2 styleName="shopTitle">
                 <strong>{name}</strong>
                 <span styleName="cartIcon">

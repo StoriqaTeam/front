@@ -1,19 +1,27 @@
 @import "../../styles/variables";
 
 .container {
-  background: rgba(255, 255, 255, 0.95);
+  background-color: $color_opacity_white;
   border-left: 1px solid transparent;
   border-radius: 5px;
   border: 1px solid $color_grey_trivial;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-left: 0;
+
   &.big {
     background-color: $color_white;
     border-radius: 0;
+    justify-content: space-between;
   }
+
   &.noBorder {
     border: none;
+  }
+
+  &.noBorderX {
+    border-left: none;
+    border-right: none;
   }
 }
 
@@ -28,9 +36,12 @@
   }
 
   &.big {
-    padding: 4.5rem;
+    padding: 2rem 2rem 1rem 2rem;
     .linkContainer {
       margin-right: 3rem;
+    }
+    @media (min-width: $md) {
+      padding: 4.5rem;
     }
   }
 
@@ -53,7 +64,10 @@
 
   &.big {
     border-left: 1px solid $color_grey_trivial;
-    padding: 0 4.25rem;
+    padding: 0 2.25rem;
+    @media (min-width: $md) {
+      padding: 0 4.25rem;
+    }
   }
 
   &.noBorder {

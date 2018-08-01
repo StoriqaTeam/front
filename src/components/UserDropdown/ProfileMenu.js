@@ -3,7 +3,6 @@
 import React from 'react';
 import { Link } from 'found';
 
-import { Count } from 'components/Count';
 import { Icon } from 'components/Icon';
 
 import './UserDropdown.scss';
@@ -11,7 +10,6 @@ import './UserDropdown.scss';
 type PropsTypes = {
   lastName: ?string,
   firstName: ?string,
-  messagesCount: number,
   email: string,
   avatar: string,
   myStoreId: ?number,
@@ -28,7 +26,7 @@ const getStoreLink = (myStoreId: ?number) => {
 const ProfileMenu = ({
   lastName,
   firstName,
-  messagesCount,
+  // messagesCount,
   email,
   avatar,
   myStoreId,
@@ -52,14 +50,13 @@ const ProfileMenu = ({
       </div>
     </div>
     <div styleName="items">
-      <a href="/" styleName="item">
-        <span>Messages</span>
-        {Boolean(messagesCount) && (
-          <div styleName="count">
-            <Count tip amount={messagesCount} styles="blue" />
-          </div>
-        )}
-      </a>
+      <Link
+        to="/profile/orders"
+        styleName="item"
+        data-test="header-user-menu-profileOrdersLink"
+      >
+        Orders
+      </Link>
       <Link
         to="/profile"
         styleName="item"
@@ -67,11 +64,8 @@ const ProfileMenu = ({
       >
         Profile settings
       </Link>
-      <a href="/" styleName="item">
-        History
-      </a>
       <Link to={getStoreLink(myStoreId)} styleName="item">
-        <span>My shop</span>
+        <span>{myStoreId ? 'My shop' : 'Start selling'}</span>
       </Link>
     </div>
     <Link

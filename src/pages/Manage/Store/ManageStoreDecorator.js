@@ -1,7 +1,8 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { toLower } from 'ramda';
+import { toLower, pathOr } from 'ramda';
+import classNames from 'classnames';
 
 import { Container, Row, Col } from 'layout';
 import { AppContext } from 'components/App';
@@ -68,15 +69,23 @@ export default (OriginalComponent: any, title: string, isNewStore?: boolean) =>
             <div styleName="wrapper">
               <Container>
                 <Row>
-                  <Col sm={3} md={3} lg={2} xl={2}>
+                  <Col md={3} lg={2} xl={2}>
                     <Menu {...menuProps} environment={environment} />
                   </Col>
-                  <Col sm={9} md={9} lg={10} xl={10}>
+                  <Col md={9} lg={10} xl={10}>
                     <div styleName="container">
                       <div styleName="header">
                         <span styleName="title">{title}</span>
                       </div>
-                      <div styleName="form">
+                      <div
+                        styleName={classNames('form', {
+                          formOrder: pathOr(
+                            false,
+                            ['match', 'params', 'orderId'],
+                            this.props,
+                          ),
+                        })}
+                      >
                         <OriginalComponent
                           environment={environment}
                           {...formProps}

@@ -69,6 +69,12 @@ if (process.env.NODE_ENV === 'production') {
 // healthcheck
 app.use('/healthcheck', (req, res) => res.status(200).send());
 
+// logout
+app.use('/logout', (req, res) => {
+  req.universalCookies.remove('__jwt');
+  res.redirect('/');
+});
+
 app.use('/favicon.ico', express.static(path.resolve('./build/favicon.ico')));
 app.use(
   '/manifest.json',
@@ -114,9 +120,10 @@ app.use(
       jwt = null;
     }
 
-    const url = process.env.NODE_ENV === 'production' ?
-      process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS :
-      process.env.REACT_APP_GRAPHQL_ENDPOINT;
+    const url =
+      process.env.NODE_ENV === 'production'
+        ? process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS
+        : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
     const fetcher = new ServerFetcher(
       url,

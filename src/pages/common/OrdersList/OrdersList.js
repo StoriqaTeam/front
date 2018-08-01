@@ -10,6 +10,8 @@ import Header from './Header';
 import TableTitle from './TableTitle';
 import Table from './Table';
 
+import './OrdersList.scss';
+
 type PropsType = {
   orders: Array<TableItemType>,
   currentPage: number,
@@ -36,7 +38,7 @@ class OrdersList extends PureComponent<PropsType> {
 
   render() {
     return (
-      <div>
+      <div styleName="container">
         <Header
           onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
           onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}

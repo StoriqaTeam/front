@@ -216,7 +216,7 @@
 .forAutocomlete .items {
   top: 3rem;
   left: -1px;
-  width: 14rem;
+  width: 12.2rem;
   padding: 1rem 0 0.5rem;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
@@ -230,6 +230,7 @@
 .isBirthdate .items {
   top: 100%;
   left: 0;
+  width: 100%;
   margin-left: 0;
   margin-top: 1.5rem;
 }

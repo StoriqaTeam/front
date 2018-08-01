@@ -328,7 +328,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     const { editableAddressId, isOpenNewForm } = this.state;
     const { deliveryAddresses = [] } = me;
     return (
-      <Fragment>
+      <div styleName="shippingAddresses">
         {deliveryAddresses.length === 0 && (
           <div styleName="subtitle">
             <strong>Shipping address</strong>
@@ -419,9 +419,22 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                 );
               }, deliveryAddresses)}
             </div>
+            {deliveryAddresses.length > 0 && (
+              <div styleName="addButtonMobile">
+                <Button
+                  disabled={isOpenNewForm}
+                  wireframe
+                  big
+                  onClick={this.toggleNewAddressForm}
+                  dataTest="addShippingAddressButton"
+                >
+                  Add address
+                </Button>
+              </div>
+            )}
           </div>
         )}
-      </Fragment>
+      </div>
     );
   }
 }

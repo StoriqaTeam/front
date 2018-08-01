@@ -200,7 +200,7 @@ export default createPaginationContainer(
               lang
               text
             }
-            baseProducts(first: 4) {
+            findMostViewedProducts(first: 4, searchTerm: {}) {
               edges {
                 node {
                   id

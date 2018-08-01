@@ -143,7 +143,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // $FlowIgnore
     const storeId = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
     if (completed && storeId) {
-      this.props.router.push(`/manage/store/${storeId}`);
+      this.props.router.push(`/manage/store/${storeId}/products`);
     }
     this.createWizard();
   }
@@ -376,7 +376,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     this.setState({ showConfirm: false }, () => {
-      this.props.router.push(`/manage/store/${storeId}`);
+      this.props.router.push(`/manage/store/${storeId}/products`);
       DeleteWizardMutation.commit({
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
