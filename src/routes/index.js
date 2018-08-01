@@ -271,17 +271,41 @@ const routes = (
       >
         <Route
           path="/wizard"
-          Component={Wizard}
           query={graphql`
             query routes_Wizard_Query {
               languages {
                 isoCode
               }
               me {
+                id
+                wizardStore {
+                  id
+                  completed
+                  storeId
+                }
                 ...Wizard_me
               }
             }
           `}
+          Component={Wizard}
+          render={({ props, Component }) => {
+            if (props) {
+              if (!props.me) {
+                throw new RedirectException(`/login?from=/start-selling`);
+              } else if (
+                props.me.wizardStore &&
+                props.me.wizardStore.completed
+              ) {
+                throw new RedirectException(
+                  `/manage/store/${props.me.wizardStore.storeId}/products`,
+                );
+              } else {
+                return <Component {...props} />;
+              }
+            } else {
+              return null;
+            }
+          }}
         />
         <Route path="/store">
           <Route
@@ -300,7 +324,9 @@ const routes = (
             render={({ props, Component }) => {
               const myStoreId = pathOr(null, ['me', 'myStore', 'rawId'], props);
               if (myStoreId) {
-                throw new RedirectException(`/manage/store/${myStoreId}`);
+                throw new RedirectException(
+                  `/manage/store/${myStoreId}/products`,
+                );
               } else {
                 return <Component {...props} />;
               }
