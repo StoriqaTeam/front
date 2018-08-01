@@ -181,8 +181,8 @@ class ThirdForm extends PureComponent<PropsType> {
                 <div styleName="centered">
                   <div styleName="headerTitle">Add new product</div>
                   <div styleName="headerDescription">
-                    Fill up the forms below to show up as many attributes of
-                    your good to make it clear for buyer
+                    Choose what you gonna sale in your marketplace and add it
+                    with ease
                   </div>
                 </div>
               </Col>

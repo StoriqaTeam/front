@@ -1,16 +1,10 @@
 @import "../../../../styles/variables";
 
 .wrapper {
-  // display: flex;
-  // justify-content: center;
-  // width: 170rem;
-  // background-color: $color_white;
-  // margin-bottom: 5rem;
-  // padding: 22.625rem 0 14rem 0;
-  // border: 1px solid $color_grey_trivial;
+  width: 100%;
+  max-width: 81.75rem;
 
   .formWrapper {
-    // width: 82rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,7 +17,6 @@
         margin-bottom: 6rem;
 
         .uploadDescriptionContainer {
-          // overflow: auto;
 
           .description {
             font-size: 1.75rem;
@@ -148,8 +141,6 @@
               background-color: $color_white;
               img {
                 width: 100%;
-                // width: 10rem;
-                // height: 10rem;
               }
             }
           }
@@ -186,16 +177,24 @@
 
 .headerTitle {
   font-family: $font_light;
-  font-size: 4.5rem;
+  font-size: 3rem;
   margin-bottom: 2.7rem;
   text-align: center;
+  @media (min-width: $md) {
+    font-size: 4.5rem;
+  }
 }
 
 .headerDescription {
-  // max-width: 54rem;
   font-family: $font_regular;
-  line-height: 2.7rem;
+  font-size: 1.75rem;
+  line-height: 2.2rem;
   color: $color_grey_minor;
   text-align: center;
-  margin-bottom: 6.5rem;
+  margin-bottom: 3rem;
+  @media (min-width: $md) {
+    font-size: 2rem;
+    margin-bottom: 6.5rem;
+    line-height: 2.7rem;
+  }
 }

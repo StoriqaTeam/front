@@ -218,8 +218,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                 filteredProductsArr,
               )}
           </Row>
-          {/* <Modal showModal={showForm} onClose={this.handleOnCloseModal}> */}
-          {/* </Modal> */}
         </div>
       </FormWrapper>
     );
