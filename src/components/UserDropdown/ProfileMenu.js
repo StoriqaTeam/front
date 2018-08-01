@@ -20,7 +20,7 @@ const getStoreLink = (myStoreId: ?number) => {
   if (myStoreId) {
     return `/manage/store/${myStoreId}`;
   }
-  return '/manage/wizard';
+  return '/start-selling';
 };
 
 const ProfileMenu = ({
