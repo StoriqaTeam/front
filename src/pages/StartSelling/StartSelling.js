@@ -338,77 +338,95 @@ const StartSelling = () => (
               <div styleName="questions">
                 <div styleName="question">
                   <label styleName="title" htmlFor="faq-cb-1">
-                    <b>Question #0</b>
+                    <b>What is Storiqa marketlace?</b>
                   </label>
                   <div>
                     <input type="checkbox" id="faq-cb-1" />
                     <div styleName="text">
-                      Равным образом постоянный количественный рост и сфера
-                      нашей активности требуют определения и уточнения форм
-                      развития. Значимость этих проблем настолько очевидна, что
-                      дальнейшее развитие различных форм деятельности
-                      обеспечивает широкому кругу (специалистов) участие в
-                      формировании модели развития. Не следует, однако забывать,
-                      что консультация с широким активом влечет за собой процесс
-                      внедрения и модернизации соответствующий условий
-                      активизации.
+                      Storiqa is a platform based on Blockchain giving the
+                      possibility to pay for the goods using cryptocurrency
+                      (particularly, STQ token), you can create your own online
+                      page there and provide a variety of goods you produce.
                     </div>
                   </div>
                 </div>
                 <div styleName="question">
                   <label styleName="title" htmlFor="faq-cb-2">
-                    <b>Question #1</b>
+                    <b>
+                      What kind of goods will I be able to sell on Storiqa
+                      platform?
+                    </b>
                   </label>
                   <div>
                     <input type="checkbox" id="faq-cb-2" />
                     <div styleName="text">
-                      Равным образом постоянный количественный рост и сфера
-                      нашей активности требуют определения и уточнения форм
-                      развития. Значимость этих проблем настолько очевидна, что
-                      дальнейшее развитие различных форм деятельности
-                      обеспечивает широкому кругу (специалистов) участие в
-                      формировании модели развития. Не следует, однако забывать,
-                      что консультация с широким активом влечет за собой процесс
-                      внедрения и модернизации соответствующий условий
-                      активизации.
+                      We will start with giving the possibility to sell goods
+                      like clothes, accessories, decorations, designer stuff.
+                      Later all the categories and a number of good possible for
+                      selling will be widened. Also, we are planning to
+                      implement the possibility to offer services using Storiqa
+                      platform. Our main aim is to help small businesses to
+                      enter the international market and overcome related
+                      difficulties. Combining all possible benefits of many
+                      marketplaces using one platform creates a comparative
+                      advantage over other markets offers both for customers and
+                      sellers. Decentralization and opportunities presented by
+                      the use of cryptocurrency in the project can satisfy the
+                      needs in speed, global market access and transaction
+                      security.
                     </div>
                   </div>
                 </div>
                 <div styleName="question">
                   <label styleName="title" htmlFor="faq-cb-3">
-                    <b>Question #2</b>
+                    <b>What countries will I be able to send my goods to?</b>
                   </label>
                   <div>
                     <input type="checkbox" id="faq-cb-3" />
                     <div styleName="text">
-                      Равным образом постоянный количественный рост и сфера
-                      нашей активности требуют определения и уточнения форм
-                      развития. Значимость этих проблем настолько очевидна, что
-                      дальнейшее развитие различных форм деятельности
-                      обеспечивает широкому кругу (специалистов) участие в
-                      формировании модели развития. Не следует, однако забывать,
-                      что консультация с широким активом влечет за собой процесс
-                      внедрения и модернизации соответствующий условий
-                      активизации.
+                      Our main target is a global market, but Storiqa
+                      marketplace starting location will be South-East Asia.
                     </div>
                   </div>
                 </div>
                 <div styleName="question">
                   <label styleName="title" htmlFor="faq-cb-4">
-                    <b>Question #3</b>
+                    <b>What currencies will I be able to sell my goods with?</b>
                   </label>
                   <div>
                     <input type="checkbox" id="faq-cb-4" />
                     <div styleName="text">
-                      Равным образом постоянный количественный рост и сфера
-                      нашей активности требуют определения и уточнения форм
-                      развития. Значимость этих проблем настолько очевидна, что
-                      дальнейшее развитие различных форм деятельности
-                      обеспечивает широкому кругу (специалистов) участие в
-                      формировании модели развития. Не следует, однако забывать,
-                      что консультация с широким активом влечет за собой процесс
-                      внедрения и модернизации соответствующий условий
-                      активизации.
+                      Storiqa gives an opportunity to sell goods to
+                      cryptocurrency holders. This is a brand new market niche
+                      where buyers are ready to purchase your stuff using
+                      cryptocurrency. Initially, it will be possible to sell and
+                      buy only using STQ but later we will add other popular
+                      cryptocurrency (e.g. BTC, ETH) and we are also planning to
+                      implement the option of paying with fiat money.
+                    </div>
+                  </div>
+                </div>
+                <div styleName="question">
+                  <label styleName="title" htmlFor="faq-cb-5">
+                    <b>
+                      What is STQ token and how can I conver it to fiat
+                      currency?
+                    </b>
+                  </label>
+                  <div>
+                    <input type="checkbox" id="faq-cb-5" />
+                    <div styleName="text">
+                      STQ is a token that is intended for internal operations
+                      with goods and services in Storiqa marketpace. These are
+                      the main fields of token usage:<br />1. Purchasing goods<br />2.
+                      Marketplace services - Storiqa seller functionality and
+                      new store slots are unlocked exclusively by payments made
+                      in STQ tokens<br />3. Community services - community
+                      members earn rewards in STQ token Our token is based on
+                      ERC-20 standard and works on Ethereum network,
+                      accordingly. You can always convert your STQ tokens to
+                      other cryptocurrency or fiat money using exchanges and
+                      exchangers.
                     </div>
                   </div>
                 </div>
