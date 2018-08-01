@@ -154,15 +154,13 @@ class ThirdForm extends PureComponent<PropsType> {
     return (
       catObj &&
       catObj.getAttributes && (
-        <div styleName="section">
+        <div styleName="section correctMargin">
           <div styleName="sectionName">Properties</div>
-          <div styleName="attributesForm">
-            <AttributesForm
-              attributes={catObj.getAttributes}
-              values={attributes}
-              onChange={this.handleAttributesChange}
-            />
-          </div>
+          <AttributesForm
+            attributes={catObj.getAttributes}
+            values={attributes}
+            onChange={this.handleAttributesChange}
+          />
         </div>
       )
     );
@@ -312,37 +310,41 @@ class ThirdForm extends PureComponent<PropsType> {
                       />
                     </div>
                     <div styleName="productStates formItem">
-                      <div styleName="productState">
-                        <Input
-                          id="price"
-                          value={data.product.price || ''}
-                          label="Price"
-                          onChange={this.handleChangeProductState}
-                          fullWidth
-                          type="number"
-                          postfix="STQ"
-                        />
-                      </div>
-                      <div styleName="productState">
-                        <Input
-                          id="vendorCode"
-                          value={data.product.vendorCode || ''}
-                          label="Vendor code"
-                          onChange={this.handleChangeProductState}
-                          fullWidth
-                        />
-                      </div>
-                      <div styleName="productState">
-                        <Input
-                          id="cashback"
-                          value={data.product.cashback || ''}
-                          label="Cashback"
-                          onChange={this.handleChangeProductState}
-                          fullWidth
-                          type="number"
-                          postfix="%"
-                        />
-                      </div>
+                      <Container correct>
+                        <Row>
+                          <Col size={12} md={6}>
+                            <Input
+                              id="price"
+                              value={data.product.price || ''}
+                              label="Price"
+                              onChange={this.handleChangeProductState}
+                              fullWidth
+                              type="number"
+                              postfix="STQ"
+                            />
+                          </Col>
+                          <Col size={12} md={6}>
+                            <Input
+                              id="vendorCode"
+                              value={data.product.vendorCode || ''}
+                              label="Vendor code"
+                              onChange={this.handleChangeProductState}
+                              fullWidth
+                            />
+                          </Col>
+                          <Col size={12} md={6}>
+                            <Input
+                              id="cashback"
+                              value={data.product.cashback || ''}
+                              label="Cashback"
+                              onChange={this.handleChangeProductState}
+                              fullWidth
+                              type="number"
+                              postfix="%"
+                            />
+                          </Col>
+                        </Row>
+                      </Container>
                     </div>
                   </div>
                   {categoryId && this.renderAttributes()}
