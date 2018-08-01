@@ -96,3 +96,13 @@
     }
   }
 }
+
+.saveButton {
+  margin-top: 2rem;
+  button {
+    width: 100%;
+    @media (min-width: $md) {
+      width: 22.5rem;
+    }
+  }
+}

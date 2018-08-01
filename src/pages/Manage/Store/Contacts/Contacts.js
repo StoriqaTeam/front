@@ -400,9 +400,11 @@ class Contacts extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="formItem">
-          <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
-            Save
-          </SpinnerButton>
+          <div styleName="saveButton">
+            <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
+              Save
+            </SpinnerButton>
+          </div>
         </div>
       </div>
     );
