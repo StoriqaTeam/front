@@ -208,7 +208,7 @@ class ThirdForm extends PureComponent<PropsType> {
                       />
                     </div>
                   </div>
-                  <div styleName="section">
+                  <div styleName="section correctMargin">
                     <div styleName="sectionName">Product main photo</div>
                     <div styleName="uploadersWrapper">
                       <div styleName="uploadedPhotoList">
@@ -235,21 +235,39 @@ class ThirdForm extends PureComponent<PropsType> {
                             </div>
                           </div>
                         )) || (
-                          <div styleName="uploadItem">
-                            <UploadWrapper
-                              id="upload_photo"
-                              onUpload={e => {
-                                onUpload('photoMain', e);
-                              }}
-                              buttonHeight={10}
-                              buttonWidth={10}
-                              noIndents
-                              buttonIconType="camera"
-                              buttonIconSize={20}
-                              buttonLabel="Add photo"
-                              dataTest="productPhotosUploader"
-                            />
-                          </div>
+                          <Row>
+                            <Col size={12} mdHidden>
+                              <UploadWrapper
+                                id="upload_photo"
+                                onUpload={e => {
+                                  onUpload('photoMain', e);
+                                }}
+                                buttonHeight={10}
+                                buttonWidth={10}
+                                fullWidth
+                                noIndents
+                                buttonIconType="camera"
+                                buttonIconSize={20}
+                                buttonLabel="Add photo"
+                                dataTest="productPhotosUploader"
+                              />
+                            </Col>
+                            <Col size={12} mdVisible>
+                              <UploadWrapper
+                                id="upload_photo"
+                                onUpload={e => {
+                                  onUpload('photoMain', e);
+                                }}
+                                buttonHeight={10}
+                                buttonWidth={10}
+                                noIndents
+                                buttonIconType="camera"
+                                buttonIconSize={20}
+                                buttonLabel="Add photo"
+                                dataTest="productPhotosUploader"
+                              />
+                            </Col>
+                          </Row>
                         )}
                       </div>
                     </div>
