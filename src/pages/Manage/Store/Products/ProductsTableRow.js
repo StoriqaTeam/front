@@ -30,7 +30,12 @@ type PropsType = {
   onDelete: (any, any) => any,
 };
 
-const ProductsTableRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => {
+const ProductsTableRow = ({
+  item,
+  onEdit,
+  onDelete,
+  onCheckbox,
+}: PropsType) => {
   const { product } = item;
   // $FlowIgnoreMe
   const attributes = pathOr([], ['product', 'attributes'], item);
@@ -73,13 +78,13 @@ const ProductsTableRow = ({ item, onEdit, onDelete, onCheckbox }: PropsType) => 
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
         {product &&
-        product.price && <span>{`${formatPrice(product.price)} STQ`}</span>}
+          product.price && <span>{`${formatPrice(product.price)} STQ`}</span>}
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
         {product &&
-        product.cashback && (
-          <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
-        )}
+          product.cashback && (
+            <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
+          )}
       </Col>
       <Col size={2} sm={2} md={2} lg={2} xl={2} xlVisible>
         {!isEmpty(attributes) && (

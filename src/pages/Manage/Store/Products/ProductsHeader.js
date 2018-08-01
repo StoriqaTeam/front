@@ -8,21 +8,18 @@ import './ProductsHeader.scss';
 
 type PropsType = {
   onAdd: () => any,
-}
+};
 
 const ProductsHeader = ({ onAdd }: PropsType) => (
   <header styleName="container">
     <h3 styleName="subtitle">
       <strong>Goods list</strong>
     </h3>
-    <Button
-      wireframe
-      big
-      onClick={onAdd}
-      dataTest="addProductButton"
-    >
-      Add item
-    </Button>
+    <div styleName="addItem">
+      <Button wireframe big onClick={onAdd} dataTest="addProductButton">
+        Add item
+      </Button>
+    </div>
   </header>
 );
 
