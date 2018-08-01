@@ -54,10 +54,9 @@ class AttributesForm extends PureComponent<PropsType> {
   renderCharacteristics = map((item: AttributeType) => {
     const value = find(propEq('attrId', item.rawId), this.props.values);
     return (
-      <Col size={12} md={6}>
+      <Col size={12} md={6} key={item.id}>
         <div styleName="itemWrapper">
           <CharacteristicItem
-            key={item.id}
             attribute={item}
             onSelect={this.handleCharectiristicItemChange}
             value={value}

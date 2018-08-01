@@ -216,8 +216,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             {!isEmpty(filteredProductsArr) &&
               mapIndexed(
                 (item, index) => (
-                  <Col size={12} md={4} xl={3}>
-                    <div key={index} styleName="productItem cardItem">
+                  <Col size={12} md={4} xl={3} key={index}>
+                    <div styleName="productItem cardItem">
                       <div styleName="productContent">
                         <CardProduct item={item} />
                         <ProductLayer
