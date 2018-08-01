@@ -6,7 +6,7 @@ import { map } from 'ramda';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { convertSrc } from 'utils';
-import { Container, Col, Row } from 'layout';
+import { Col, Row } from 'layout';
 
 import './ProductsUploader.scss';
 

@@ -6,9 +6,9 @@ import classNames from 'classnames';
 import './FormWrapper.scss';
 
 type PropsType = {
-  firstForm: ?boolean,
-  secondForm: ?boolean,
-  thirdForm: ?boolean,
+  firstForm?: boolean,
+  secondForm?: boolean,
+  thirdForm?: boolean,
   children: any,
   title: string,
   description: string,
@@ -34,5 +34,11 @@ const FormWrapper = ({
     {children && children}
   </div>
 );
+
+FormWrapper.defaultProps = {
+  firstForm: false,
+  secondForm: false,
+  thirdForm: false,
+};
 
 export default FormWrapper;
