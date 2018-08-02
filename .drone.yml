@@ -48,6 +48,7 @@ pipeline:
     commands:
     - . ./.env.nightly
     - rm -f yarn.lock || true
+    - npm config delete _auth
     - yarn -s --no-progress --non-interactive --production=false
     - yarn updateSchema
     - yarn relay
@@ -122,6 +123,7 @@ pipeline:
     commands:
     - . ./.env.stable
     - rm -f yarn.lock || true
+    - npm config delete _auth
     - yarn -s --no-progress --non-interactive --production=false
     - yarn updateSchema
     - yarn relay
