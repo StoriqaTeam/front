@@ -21,6 +21,7 @@ import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Select } from 'components/common/Select';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
+import { InputSlug } from 'components/common/InputSlug';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 
 import './Form.scss';
@@ -234,6 +235,13 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
+  writeSlug = (slugValue: string) => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'slug'], slugValue, prevState),
+    );
+    this.setState({ formErrors: omit(['slug'], this.state.formErrors) });
+  };
+
   // TODO: extract to helper
   /* eslint-disable */
   renderInput = ({
@@ -276,6 +284,7 @@ class Form extends Component<PropsType, StateType> {
     const {
       langItems,
       form: { defaultLanguage },
+      formErrors,
     } = this.state;
     const { isLoading } = this.props;
     const defaultLanguageValue = find(
@@ -308,11 +317,13 @@ class Form extends Component<PropsType, StateType> {
             label: 'Slogan',
             limit: 50,
           })}
-          {this.renderInput({
-            id: 'slug',
-            label: 'Slug',
-            limit: 50,
-          })}
+          <div styleName="formItem maxWidthInput">
+            <InputSlug
+              errors={formErrors.slug}
+              slug={this.state.form.slug}
+              onChange={this.writeSlug}
+            />
+          </div>
           {this.renderTextarea({
             id: 'shortDescription',
             label: 'Short description',
