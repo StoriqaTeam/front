@@ -60,3 +60,6 @@ export { default as UpdateWarehouseMutation } from './UpdateWarehouseMutation';
 export {
   default as SetProductQuantityInWarehouseMutation,
 } from './SetProductQuantityInWarehouseMutation';
+export {
+  default as RecalcInvoiceAmountMutation,
+} from './RecalcInvoiceAmountMutation';

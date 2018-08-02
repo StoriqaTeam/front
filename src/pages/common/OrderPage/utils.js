@@ -22,6 +22,8 @@ const getStatusStringFromEnum = (orderStatus: string): string => {
       return 'Received';
     case 'COMPLETE':
       return 'Complete';
+    case 'AMOUNT_EXPIRED':
+      return 'Amount expired';
     default:
       return 'Undefined';
   }
@@ -49,6 +51,8 @@ const getEnumFromStatusString = (orderStatus: string): ?string => {
       return 'RECEIVED';
     case 'Complete':
       return 'COMPLETE';
+    case 'Amount expired':
+      return 'AMOUNT_EXPIRED';
     default:
       return null;
   }

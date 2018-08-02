@@ -2,10 +2,20 @@
 
 import React, { PureComponent, Fragment } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
+import { Environment } from 'relay-runtime';
 import QRCode from 'qrcode.react';
 import moment from 'moment';
 import { map, pathOr } from 'ramda';
 import classNames from 'classnames';
+import { routerShape, withRouter } from 'found';
+
+import { RecalcInvoiceAmountMutation } from 'relay/mutations';
+
+import type {
+  RecalcInvoiceAmountMutationVariablesType,
+  RecalcInvoiceAmountMutationResponseType,
+  MutationParamsType,
+} from 'relay/mutations/RecalcInvoiceAmountMutation';
 
 import type {
   OrderState as OrderStateType,
@@ -19,7 +29,9 @@ type PropsType = {
   me: PaymentInfoMeType,
   relay: {
     refetch: Function,
+    environment: Environment,
   },
+  router: routerShape,
 };
 
 type StateType = {
@@ -55,6 +67,14 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     // $FlowIgnoreMe
     const state = pathOr(null, ['invoice', 'state'], this.props.me);
     if (state === 'PAID') {
+      setTimeout(() => {
+        this.props.router.push('/profile/orders');
+      }, 2000);
+      return;
+    }
+
+    if (state === 'AMOUNT_EXPIRED') {
+      this.recalculateAmount(this.refetchInvoice);
       return;
     }
 
@@ -72,6 +92,29 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     );
   };
 
+  recalculateAmount = (callback: (success: boolean) => void) => {
+    const variables: RecalcInvoiceAmountMutationVariablesType = {
+      id: this.props.invoiceId,
+    };
+
+    const params: MutationParamsType = {
+      ...variables,
+      environment: this.props.relay.environment,
+      onCompleted: (
+        response: ?RecalcInvoiceAmountMutationResponseType,
+        errors: ?Array<Error>, // eslint-disable-line
+      ) => {
+        callback(!!response);
+      },
+      // eslint-disable-next-line
+      onError: (error: Error) => {
+        callback(false);
+      },
+    };
+
+    RecalcInvoiceAmountMutation.commit(params);
+  };
+
   updateCountdown = () => {
     // $FlowIgnoreMe
     const priceReservedDueDateTime = pathOr(
@@ -79,7 +122,15 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
       ['invoice', 'priceReservedDueDateTime'],
       this.props.me,
     );
-    if (this.unmounted || !priceReservedDueDateTime) {
+
+    if (this.unmounted) {
+      return;
+    }
+
+    if (!priceReservedDueDateTime) {
+      this.setState({ timerValue: '-' }, () => {
+        setTimeout(this.updateCountdown, 1000);
+      });
       return;
     }
 
@@ -136,7 +187,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
           </Fragment>
         )}
         <div styleName="info">
-          {state === 'NEW' && <div styleName="loader" />}
+          {(state === 'NEW' || state === 'AMOUNT_EXPIRED') && (
+            <div styleName="loader" />
+          )}
           {wallet &&
             (state === 'TRANSACTION_PENDING' ||
               state === 'PAYMENT_AWAITED') && (
@@ -144,7 +197,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                 <div styleName="paymentInfoWrapper">
                   <div styleName="qr">
                     <QRCode
-                      value={`ethereum:${wallet}[?gas=21000][?value=${amount}]`}
+                      value={`ethereum:${wallet}?gas=21000?value=${amount}`}
                       renderAs="svg"
                       size={165}
                     />
@@ -154,12 +207,12 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     <div styleName="address">{wallet}</div>
                     <div styleName="amountTitle">Amount</div>
                     <div styleName="amount">{amount} STQ</div>
-                    {false && (
+                    {
                       <div styleName="reserveInfo">
                         Current price reserved for{' '}
                         <span styleName="timer">{this.state.timerValue}</span>
                       </div>
-                    )}
+                    }
                   </div>
                 </div>
                 <div styleName="transactionsBlock">
@@ -228,7 +281,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 }
 
 export default createRefetchContainer(
-  PaymentInfo,
+  withRouter(PaymentInfo),
   graphql`
     fragment PaymentInfo_me on User
       @argumentDefinitions(id: { type: "String!", defaultValue: "" }) {
