@@ -14,6 +14,7 @@ type PropsType = {
   buttonLabel: string,
   buttonHeight: number | string,
   buttonWidth: number | string,
+  fullWidth: ?boolean,
   buttonIconType: ?string,
   overPicture: ?string,
   noIndents: ?boolean,
@@ -33,6 +34,7 @@ const UploadWrapper = ({
   onUpload,
   buttonHeight,
   buttonWidth,
+  fullWidth,
   buttonIconType,
   overPicture,
   noIndents,
@@ -47,10 +49,10 @@ const UploadWrapper = ({
     <div styleName={classNames('uploadContainer', { noIndents })}>
       <label
         htmlFor={id}
-        styleName="uploadButton"
+        styleName={classNames('uploadButton', { fullWidth })}
         style={{
           height: `${buttonHeight}${customUnit ? '' : 'rem'}`,
-          width: `${buttonWidth}${customUnit ? '' : 'rem'}`,
+          width: !fullWidth && `${buttonWidth}${customUnit ? '' : 'rem'}`,
         }}
         data-test={dataTest}
       >

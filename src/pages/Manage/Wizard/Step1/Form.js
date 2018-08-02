@@ -5,6 +5,8 @@ import React from 'react';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 
+import FormWrapper from '../FormWrapper';
+
 import './Form.scss';
 
 type TranslatedType = {
@@ -80,38 +82,44 @@ class FirstForm extends React.Component<PropsType, StateType> {
     const { name, slug, shortDescription } = this.state;
     const { errors } = this.props;
     return (
-      <div styleName="form">
-        <div styleName="formItem">
-          <Input
-            id="name"
-            value={name}
-            label="Store name"
-            onChange={this.handleOnChange}
-            fullWidth
-            errors={errors && errors.name}
-          />
+      <FormWrapper
+        firstForm
+        title="Give your store a name"
+        description="Make a bright name for your store to attend your customers and encrease your sales"
+      >
+        <div styleName="form">
+          <div styleName="formItem">
+            <Input
+              id="name"
+              value={name}
+              label="Store name"
+              onChange={this.handleOnChange}
+              fullWidth
+              errors={errors && errors.name}
+            />
+          </div>
+          <div styleName="formItem">
+            <Input
+              id="slug"
+              value={slug}
+              label="Slug"
+              onChange={this.handleOnChange}
+              fullWidth
+              errors={errors && errors.slug}
+            />
+          </div>
+          <div>
+            <Textarea
+              id="shortDescription"
+              value={shortDescription}
+              label="Short description"
+              onChange={this.handleOnChange}
+              fullWidth
+              errors={errors && errors.shortDescription}
+            />
+          </div>
         </div>
-        <div styleName="formItem">
-          <Input
-            id="slug"
-            value={slug}
-            label="Slug"
-            onChange={this.handleOnChange}
-            fullWidth
-            errors={errors && errors.slug}
-          />
-        </div>
-        <div>
-          <Textarea
-            id="shortDescription"
-            value={shortDescription}
-            label="Short description"
-            onChange={this.handleOnChange}
-            fullWidth
-            errors={errors && errors.shortDescription}
-          />
-        </div>
-      </div>
+      </FormWrapper>
     );
   }
 }
