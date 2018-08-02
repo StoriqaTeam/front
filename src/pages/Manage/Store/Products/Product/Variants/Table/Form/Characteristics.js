@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { filter, propEq, head, pathOr } from 'ramda';
 
+import { Col } from 'layout';
+
 import CharacteristicItem from './CharacteristicItem';
 
 import './Characteristics.scss';
@@ -45,14 +47,16 @@ class Characteristics extends PureComponent<PropsType> {
         </div>
         <div styleName="items">
           {attributes.map(item => (
-            <CharacteristicItem
-              key={item.id}
-              attribute={item}
-              onSelect={this.handleItemChange}
-              value={head(
-                filter(propEq('attrId', item.rawId), this.props.values),
-              )}
-            />
+            <Col size={12} sm={12} md={6} lg={4} xl={4} noGutter>
+              <CharacteristicItem
+                key={item.id}
+                attribute={item}
+                onSelect={this.handleItemChange}
+                value={head(
+                  filter(propEq('attrId', item.rawId), this.props.values),
+                )}
+              />
+            </Col>
           ))}
         </div>
       </div>

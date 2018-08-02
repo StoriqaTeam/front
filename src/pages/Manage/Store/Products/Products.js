@@ -137,17 +137,19 @@ class Products extends PureComponent<PropsType> {
         <ProductsTableHeader />
         {isEmpty(products) ? (
           <div styleName="emptyProductsBlock">No products</div>
-        ) : map(
-          item => (
-            <ProductsTableRow
-              key={item.rawId}
-              item={item}
-              onEdit={this.editProduct}
-              onDelete={this.handleDelete}
-              onCheckbox={this.handleCheckboxClick}
-            />
-          ),
-          products,
+        ) : (
+          map(
+            item => (
+              <ProductsTableRow
+                key={item.rawId}
+                item={item}
+                onEdit={this.editProduct}
+                onDelete={this.handleDelete}
+                onCheckbox={this.handleCheckboxClick}
+              />
+            ),
+            products,
+          )
         )}
         {this.props.relay.hasMore() && (
           <div styleName="loadButton">

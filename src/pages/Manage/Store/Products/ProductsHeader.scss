@@ -6,8 +6,8 @@
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 5rem;
-  margin-left: -1rem;
-  margin-right: -1rem;
+  //margin-left: -1rem;
+  //margin-right: -1rem;
   @media (min-width: $md) {
     flex-direction: row;
   }
@@ -16,8 +16,9 @@
 .subtitle {
   display: none;
   font-size: 14px;
-  text-transform: uppercase;
   letter-spacing: 1px;
+  margin-left: 2rem;
+  text-transform: uppercase;
   @media (min-width: $md) {
     display: block;
   }

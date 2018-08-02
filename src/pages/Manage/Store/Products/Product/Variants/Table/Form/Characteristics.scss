@@ -1,32 +1,38 @@
 @import "../../../../../../../../styles/variables";
 
 .container {
-  margin-top: 2rem;
   margin-bottom: 8.5rem;
+  margin-top: 2rem;
 }
 
 .title {
-  margin-bottom: 2.5rem;
   font-size: 14px;
-  line-height: 18px;
-  text-transform: uppercase;
   letter-spacing: 1.2px;
+  line-height: 18px;
+  margin-bottom: 2.5rem;
+  text-transform: uppercase;
 }
 
 .items {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 2rem;
 }
 
 .item {
-  display: flex;
   align-items: flex-start;
+  display: flex;
+  margin-bottom: 2rem;
   width: 100%;
 }
 
 .item + .item {
   margin-left: 4rem;
+}
+
+.itemWrapper {
+  max-width: 23.875rem;
 }
 
 .characteristicImg {
@@ -36,6 +42,9 @@
 }
 
 .characteristicSelect {
-  width: 100%;
   margin-top: 1.5rem;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 23.875rem;
+  }
 }
