@@ -60,7 +60,7 @@ type PropsType = {
 
 type StateType = {
   showForm: boolean,
-  deleteId: ?number,
+  deleteId: ?string,
 };
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
@@ -122,10 +122,12 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnDelete = (ID: string) => () => {
+  handleOnDelete = (ID: ?string) => () => {
     const { onDelete } = this.props;
-    onDelete(ID);
-    this.handleOnCloseDelete();
+    if (ID) {
+      onDelete(ID);
+      this.handleOnCloseDelete();
+    }
   };
 
   handleOnCloseDelete = () => {
@@ -133,8 +135,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   handleOnShowDelete = (ID: string) => () => {
-    // const { onDelete } = this.props;
-    // onDelete(ID);
     this.setState({ deleteId: ID });
   };
 
