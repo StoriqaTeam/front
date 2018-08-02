@@ -191,7 +191,11 @@ class ThirdForm extends PureComponent<PropsType> {
                       <Input
                         id="name"
                         value={data.name}
-                        label="Product name"
+                        label={
+                          <span>
+                            Product name <span styleName="red">*</span>
+                          </span>
+                        }
                         onChange={this.handleChangeBaseProductState}
                         fullWidth
                       />
@@ -200,7 +204,11 @@ class ThirdForm extends PureComponent<PropsType> {
                       <Textarea
                         id="shortDescription"
                         value={data.shortDescription}
-                        label="Short description"
+                        label={
+                          <span>
+                            Short description <span styleName="red">*</span>
+                          </span>
+                        }
                         onChange={this.handleChangeBaseProductState}
                         fullWidth
                       />
@@ -316,7 +324,11 @@ class ThirdForm extends PureComponent<PropsType> {
                             <Input
                               id="price"
                               value={data.product.price || ''}
-                              label="Price"
+                              label={
+                                <span>
+                                  Price <span styleName="red">*</span>
+                                </span>
+                              }
                               onChange={this.handleChangeProductState}
                               fullWidth
                               type="number"
@@ -327,7 +339,11 @@ class ThirdForm extends PureComponent<PropsType> {
                             <Input
                               id="vendorCode"
                               value={data.product.vendorCode || ''}
-                              label="Vendor code"
+                              label={
+                                <span>
+                                  Vendor code <span styleName="red">*</span>
+                                </span>
+                              }
                               onChange={this.handleChangeProductState}
                               fullWidth
                             />
