@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { pathOr, omit, map, find } from 'ramda';
+import { pathOr, omit, map, find, filter } from 'ramda';
 
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -114,7 +114,7 @@ class SecondForm extends React.Component<PropsType, StateType> {
         id: item.isoCode.toUpperCase(),
         label: languagesDic[item.isoCode.toUpperCase()],
       }),
-      languages,
+      filter(l => l.isoCode === 'en', languages),
     );
     const findActiveItem = find(item => item.id === defaultLanguage);
     return (
