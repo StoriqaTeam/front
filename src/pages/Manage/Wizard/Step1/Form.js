@@ -92,7 +92,11 @@ class FirstForm extends React.Component<PropsType, StateType> {
             <Input
               id="name"
               value={name}
-              label="Store name"
+              label={
+                <span>
+                  Store name <span styleName="red">*</span>
+                </span>
+              }
               onChange={this.handleOnChange}
               fullWidth
               errors={errors && errors.name}
@@ -102,7 +106,11 @@ class FirstForm extends React.Component<PropsType, StateType> {
             <Input
               id="slug"
               value={slug}
-              label="Slug"
+              label={
+                <span>
+                  Slug <span styleName="red">*</span>
+                </span>
+              }
               onChange={this.handleOnChange}
               fullWidth
               errors={errors && errors.slug}
@@ -112,7 +120,11 @@ class FirstForm extends React.Component<PropsType, StateType> {
             <Textarea
               id="shortDescription"
               value={shortDescription}
-              label="Short description"
+              label={
+                <span>
+                  Short description <span styleName="red">*</span>
+                </span>
+              }
               onChange={this.handleOnChange}
               fullWidth
               errors={errors && errors.shortDescription}
