@@ -115,7 +115,7 @@ class FooterResponsive extends PureComponent<{}, StateType> {
         <Button
           href={
             process.env.REACT_APP_HOST
-              ? `${process.env.REACT_APP_HOST}/manage/wizard`
+              ? `${process.env.REACT_APP_HOST}/start-selling`
               : '/'
           }
           dataTest="footerStartSellingButton"

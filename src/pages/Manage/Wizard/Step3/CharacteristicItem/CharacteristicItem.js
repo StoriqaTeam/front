@@ -15,7 +15,7 @@ import {
 
 import { UploadWrapper } from 'components/Upload';
 import { Select } from 'components/common/Select';
-import { uploadFile, log, convertSrc } from 'utils';
+import { uploadFile, convertSrc } from 'utils';
 
 import './Characteristics.scss';
 
@@ -72,7 +72,6 @@ class CharacteristicItem extends PureComponent<PropsType> {
   };
 
   handleSelect = (value: { label: string }) => {
-    // log.info('>>> CharacteristicItem handleSelect: ', value);
     this.props.onSelect({
       ...this.props.value,
       value: value ? value.label : null,
@@ -90,12 +89,6 @@ class CharacteristicItem extends PureComponent<PropsType> {
 
   render() {
     const { attribute, value } = this.props;
-    // if (!value) {
-    //   log.warn('CharacteristicItem', 'value is nil');
-    //   return null;
-    // }
-    // const emptyItem = { id: '-1', label: 'NotSelected' };
-    // const items = [emptyItem, ...this.getSelectItems(attribute)];
     const items = this.getSelectItems(attribute);
     const selectedItem = value
       ? {
@@ -103,14 +96,10 @@ class CharacteristicItem extends PureComponent<PropsType> {
           label: value.value,
         }
       : null;
-    // : emptyItem;
-    // : items;
-    // const { metaField: characteristicImg } = this.props.value;
     // $FlowIgnoreMe
     const characteristicImg = pathOr('', ['metaField'], this.props.value);
     // $FlowIgnoreMe
     const name = pathOr('', ['name', 0, 'text'], attribute);
-    log.info('>>> CharacteristicItem render: ', { value, selectedItem });
     return (
       <div styleName="item">
         <div styleName="characteristicImg">

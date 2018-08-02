@@ -6,8 +6,9 @@ import { map } from 'ramda';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { convertSrc } from 'utils';
+import { Col, Row } from 'layout';
 
-import './Form.scss';
+import './ProductsUploader.scss';
 
 type PropsType = {
   onUpload: (type: string, e: any) => Promise<*>,
@@ -16,30 +17,54 @@ type PropsType = {
 };
 
 const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
-  <div styleName="uploadersWrapper">
-    <div styleName="uploadedPhotoList">
-      {map(
-        item => (
-          <div
-            key={item}
-            styleName="uploadItem"
-            onClick={() => onRemove(item)}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            <div
-              styleName="imageBG"
-              style={{ backgroundImage: `url(${convertSrc(item, 'small')})` }}
-            />
-            <div styleName="itemHover">
-              <Icon type="basket" size={40} />
-            </div>
-          </div>
-        ),
-        additionalPhotos,
-      )}
-      <div styleName="uploadItem">
+  <div styleName="wrapper">
+    {additionalPhotos.length !== 0 && (
+      <div styleName="uploadersWrapper">
+        <div styleName="uploadedPhotoList">
+          {map(
+            item => (
+              <div
+                key={item}
+                styleName="uploadItem"
+                onClick={() => onRemove(item)}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                <div
+                  styleName="imageBG"
+                  style={{
+                    backgroundImage: `url(${convertSrc(item, 'small')})`,
+                  }}
+                />
+                <div styleName="itemHover">
+                  <Icon type="basket" size={40} />
+                </div>
+              </div>
+            ),
+            additionalPhotos,
+          )}
+        </div>
+      </div>
+    )}
+    <Row>
+      <Col size={12} mdHidden>
+        <UploadWrapper
+          id="upload_additional_photo"
+          onUpload={e => {
+            onUpload('additionalPhoto', e);
+          }}
+          buttonHeight={10}
+          buttonWidth={10}
+          fullWidth
+          noIndents
+          buttonIconType="camera"
+          buttonIconSize={20}
+          buttonLabel="Add photo"
+          dataTest="productAdditionalPhotosUploader"
+        />
+      </Col>
+      <Col size={12} mdVisible>
         <UploadWrapper
           id="upload_additional_photo"
           onUpload={e => {
@@ -53,8 +78,8 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
           buttonLabel="Add photo"
           dataTest="productAdditionalPhotosUploader"
         />
-      </div>
-    </div>
+      </Col>
+    </Row>
   </div>
 );
 
