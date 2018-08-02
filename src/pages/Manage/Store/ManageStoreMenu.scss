@@ -22,11 +22,17 @@
 }
 
 .imgWrap {
-  border-radius: 0.5rem;
+  border-radius: 1.5rem;
   display: none;
   position: relative;
+  overflow: hidden;
+
   @media (min-width: $md) {
     display: block;
+  }
+
+  @media (min-width: $md) and (max-width: #{$lg - 1px}) {
+    margin-top: 2rem;
   }
 
   .trash {

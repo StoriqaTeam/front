@@ -94,11 +94,12 @@ class Menu extends PureComponent<PropsType> {
             items={menuItems}
             onSelected={this.handleSelected}
           />
-          <div style={{ margin: '1.5rem 0' }} />
+          <div style={{ margin: '1rem 0' }} />
           {activeItem === 'personal-data' ? (
             <Fragment>
               <MobileUpload
-                avatar={avatar}
+                img={avatar}
+                iconType="user"
                 id={this.props.id}
                 onDelete={() => this.handleUpdateUser('')}
                 onUpload={this.handleOnUpload}
@@ -112,7 +113,7 @@ class Menu extends PureComponent<PropsType> {
             id="new-store-id"
             onUpload={this.handleOnUpload}
             customUnit
-            buttonHeight="26rem"
+            square
             buttonWidth="100%"
             buttonIconType="user"
             buttonIconSize={48}

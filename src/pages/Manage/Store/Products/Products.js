@@ -135,7 +135,9 @@ class Products extends PureComponent<PropsType> {
       <div styleName="container">
         <ProductsHeader onAdd={this.addProduct} />
         <ProductsTableHeader />
-        {map(
+        {isEmpty(products) ? (
+          <div styleName="emptyProductsBlock">No products</div>
+        ) : map(
           item => (
             <ProductsTableRow
               key={item.rawId}

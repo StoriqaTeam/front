@@ -1,0 +1,35 @@
+@import "../../../styles/variables";
+
+.container {
+
+}
+
+.counter {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  @media (min-width: $md) {
+    align-items: center;
+    flex-direction: row;
+    padding: 0;
+  }
+}
+
+.stock {
+  padding-left: 0;
+  padding-top: 1rem;
+  @media (min-width: $md) {
+    padding-left: 2rem;
+    padding-top: 0;
+  }
+}
+
+.inStock {
+  color: $color_green;
+  padding-left: 0;
+  padding-top: 0;
+  @media (min-width: $md) {
+    padding-left: 1rem;
+  }
+}

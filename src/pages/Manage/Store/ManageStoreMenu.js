@@ -247,7 +247,8 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           <div style={{ margin: '1.05rem 0' }} />
           {activeItem === 'settings' ? (
             <MobileUpload
-              avatar={storeLogo}
+              img={storeLogo}
+              iconType="upload"
               id="some"
               onUpload={this.handleOnUpload}
               onDelete={this.deleteAvatar}
@@ -259,7 +260,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
             id="new-store-id"
             onUpload={myStore ? this.handleOnUpload : handleOnUpload}
             customUnit
-            buttonHeight="26rem"
+            square
             buttonWidth="100%"
             buttonIconSize={48}
             buttonIconType="upload"
