@@ -9,6 +9,7 @@ import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
 import { getNameText } from 'utils';
+import { Modal } from 'components/Modal';
 
 import ProductLayer from './ProductLayer';
 import FormWrapper from '../FormWrapper';
@@ -59,11 +60,13 @@ type PropsType = {
 
 type StateType = {
   showForm: boolean,
+  deleteId: ?number,
 };
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
   state = {
     showForm: false,
+    deleteId: null,
   };
 
   prepareAttributesValues = (
@@ -122,6 +125,17 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   handleOnDelete = (ID: string) => () => {
     const { onDelete } = this.props;
     onDelete(ID);
+    this.handleOnCloseDelete();
+  };
+
+  handleOnCloseDelete = () => {
+    this.setState({ deleteId: null });
+  };
+
+  handleOnShowDelete = (ID: string) => () => {
+    // const { onDelete } = this.props;
+    // onDelete(ID);
+    this.setState({ deleteId: ID });
   };
 
   renderUploaderItem = () => {
@@ -178,7 +192,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
 
   render() {
     const { formStateData, onChange, products, onUpload, onSave } = this.props;
-    const { showForm } = this.state;
+    const { showForm, deleteId } = this.state;
     const productsArr = map(item => item.node, products);
     const filteredProductsArr = filter(item => {
       // $FlowIgnoreMe
@@ -221,7 +235,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                       <div styleName="productContent">
                         <CardProduct item={item} />
                         <ProductLayer
-                          onDelete={this.handleOnDelete(item.id)}
+                          // onDelete={this.handleOnDelete(item.id)}
+                          onDelete={this.handleOnShowDelete(item.id)}
                           onEdit={this.handleOnShowForm(item)}
                         />
                       </div>
@@ -231,6 +246,37 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                 filteredProductsArr,
               )}
           </Row>
+          <Modal showModal={deleteId} onClose={this.handleOnCloseDelete}>
+            <div styleName="deleteWrapper">
+              <div styleName="deleteContent">
+                <div styleName="title">Delete your product?</div>
+                <div styleName="description">
+                  Are you sure you want to delete this listing? All the listing
+                  information will be discarded and cannot be retrieved.
+                </div>
+                <div styleName="buttonsContainer">
+                  <Button
+                    onClick={this.handleOnCloseDelete}
+                    dataTest="wizardBackButton"
+                    wireframe
+                    big
+                  >
+                    <span>Cancel</span>
+                  </Button>
+                  <div styleName="deleteButton">
+                    <Button
+                      onClick={this.handleOnDelete(deleteId)}
+                      dataTest="wizardBackButton"
+                      big
+                      pink
+                    >
+                      <span>Yes, delete, please</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal>
         </div>
       </FormWrapper>
     );
