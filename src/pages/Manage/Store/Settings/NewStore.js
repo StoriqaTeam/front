@@ -155,7 +155,7 @@ class NewStore extends Component<PropsType, StateType> {
 }
 
 export default withShowAlert(
-  withRouter(Page(ManageStore(NewStore, 'Settings', true))),
+  Page(withRouter(ManageStore(NewStore, 'Settings')), true),
 );
 
 NewStore.contextTypes = {

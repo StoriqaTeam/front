@@ -14,6 +14,8 @@ type PropsType = {
   slug: string,
   onChange: (value: string) => void,
   relay: Relay,
+  realSlug: ?string,
+  resetErrors: () => void,
 };
 
 type StateType = {
@@ -47,6 +49,11 @@ class InputSlug extends Component<PropsType, StateType> {
   }
 
   checkSlug = (value: string) => {
+    const { realSlug } = this.props;
+    if (realSlug && value === realSlug) {
+      this.props.onChange(realSlug);
+      return;
+    }
     this.props.relay.refetch(
       {
         slug: value,
@@ -60,7 +67,7 @@ class InputSlug extends Component<PropsType, StateType> {
           store.getSource().get('client:root'),
         );
 
-        if (storeSlugExists) {
+        if (!storeSlugExists) {
           this.props.onChange(this.state.value);
         }
         // $FlowIgnore
@@ -73,7 +80,8 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   handleChange = (e: any) => {
-    const { slug } = this.props;
+    const { slug, resetErrors } = this.props;
+    resetErrors();
     const { value } = e.target;
     const correctValue = value
       .toString()
@@ -102,9 +110,12 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
+    const { realSlug } = this.props;
+    const { value, storeSlugExists } = this.state;
     this.setState({
       isFocus: false,
-      value: this.props.slug,
+      value:
+        realSlug === null && storeSlugExists && value ? '' : this.props.slug,
       storeSlugExists: null,
     });
     this.checkSlug.cancel();
@@ -114,43 +125,45 @@ class InputSlug extends Component<PropsType, StateType> {
     const { isFocus, value, storeSlugExists, errors } = this.state;
     return (
       <div styleName="container">
-        <Input
-          id="slug"
-          fullWidth
-          label="Web address"
-          value={value}
-          onChange={this.handleChange}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          errors={errors}
-        />
-        {isFocus &&
-          storeSlugExists !== null && (
-            <div
-              styleName={classNames('light', {
-                green: storeSlugExists,
-                red: !storeSlugExists,
-              })}
-            >
-              {storeSlugExists ? 'Vacant' : 'In use'}
-            </div>
-          )}
+        <div styleName="input">
+          <Input
+            id="slug"
+            fullWidth
+            label="Web address"
+            value={value}
+            onChange={this.handleChange}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            errors={errors}
+          />
+          {isFocus &&
+            storeSlugExists !== null && (
+              <div
+                styleName={classNames('light', {
+                  green: !storeSlugExists,
+                  red: storeSlugExists,
+                })}
+              >
+                {storeSlugExists ? 'In use' : 'Vacant'}
+              </div>
+            )}
+          {isFocus &&
+            storeSlugExists !== null && (
+              <div
+                styleName={classNames('hint', {
+                  green: !storeSlugExists,
+                  red: storeSlugExists,
+                })}
+              >
+                {storeSlugExists
+                  ? 'Oops! Someone has already using this address.'
+                  : 'Hoorah! Name is vacant!'}
+              </div>
+            )}
+        </div>
         <div styleName="domen">
           <span>.storiqa.com</span>
         </div>
-        {isFocus &&
-          storeSlugExists !== null && (
-            <div
-              styleName={classNames('hint', {
-                green: storeSlugExists,
-                red: !storeSlugExists,
-              })}
-            >
-              {storeSlugExists
-                ? 'Hoorah! Name is vacant!'
-                : 'Oops! Someone has already using this address.'}
-            </div>
-          )}
       </div>
     );
   }
