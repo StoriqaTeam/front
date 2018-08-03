@@ -12,10 +12,8 @@ import { ManageStore } from 'pages/Manage/Store';
 import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { AddressForm } from 'components/AddressAutocomplete';
-import { UploadWrapper } from 'components/Upload';
-import { Icon } from 'components/Icon';
 import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
-import { log, fromRelayError, uploadFile, convertSrc } from 'utils';
+import { log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMutation';
@@ -305,18 +303,6 @@ class Contacts extends Component<PropsType, StateType> {
     UpdateStoreMutation.commit(params);
   };
 
-  handleOnUpload = async (e: any) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    this.setState(assocPath(['form', 'cover'], result.url, this.state));
-  };
-
-  handleDeleteCover = () => {
-    this.setState(assocPath(['form', 'cover'], '', this.state));
-  };
-
   // TODO: extract to helper
   renderInput = (input: InputType) => {
     const { id, label, icon, limit } = input;
@@ -338,40 +324,9 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { isLoading, addressFull, form } = this.state;
-    const { cover } = form;
+    const { isLoading, addressFull } = this.state;
     return (
       <div styleName="container">
-        {!cover ? (
-          <div styleName="coverUploadWrap">
-            <div styleName="uploadButton">
-              <UploadWrapper
-                id="cover-store"
-                onUpload={this.handleOnUpload}
-                customUnit
-                buttonHeight="10rem"
-                buttonWidth="100%"
-                buttonIconSize={32}
-                buttonIconType="upload"
-                dataTest="storeCoverUploader"
-              />
-            </div>
-            <div>
-              <div>Upload main photo</div>
-              <div styleName="uploadRec">
-                Strongly recommend to upload:<br />1360px × 350px | .jpg .jpeg
-                .png
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div styleName="cover">
-            <button styleName="trash" onClick={this.handleDeleteCover}>
-              <Icon type="basket" size={28} />
-            </button>
-            <img src={convertSrc(cover, 'medium')} alt="Store cover" />
-          </div>
-        )}
         {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
         {this.renderInput({ id: 'phone', label: 'Phone' })}
         {this.renderInput({
