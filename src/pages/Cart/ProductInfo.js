@@ -45,9 +45,9 @@ const ProductInfo = ({
             <Row>
               <Col size={6} xl={12}>
                 <div styleName="contentBlock">
-                  {attrs.length > 0 && (
-                    <div styleName="product-summary-attributes">
-                      <div styleName="cart-product-title">About product</div>
+                  <div styleName="product-summary-attributes">
+                    <div styleName="cart-product-title">About product</div>
+                    {attrs.length > 0 && (
                       <Row>
                         {attrs.map(attr => (
                           <Col key={`attr-${attr.value}`} size={12} xl={6}>
@@ -55,8 +55,8 @@ const ProductInfo = ({
                           </Col>
                         ))}
                       </Row>
-                    </div>
-                  )}
+                    ) || <div styleName="empty" />}
+                  </div>
                 </div>
               </Col>
               <Col size={6} xlHidden>
