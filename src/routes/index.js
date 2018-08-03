@@ -1,5 +1,7 @@
 // @flow
 
+// just for reinit cd. can remove.
+
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';

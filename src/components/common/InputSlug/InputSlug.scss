@@ -2,6 +2,16 @@
 
 .container {
   position: relative;
+
+  @media (max-width: #{$md - 1px}) {
+    display: flex;
+    align-items: flex-end;
+  }
+  
+  .input {
+    position: relative;
+    width: 100%;
+  }
 }
 
 .light {
@@ -15,6 +25,11 @@
   line-height: 2rem;
   color: $color_white;
 
+  @media (max-width: #{$md - 1px}) {
+    top: auto;
+    bottom: 0.5rem;
+  }
+
   &.green {
     background-color: $color_green;
   }
@@ -25,14 +40,21 @@
 }
 
 .domen {
-  position: absolute;
-  top: 0.5rem;
-  right: -1.5rem;
+  padding-left: 1.5rem;
+
+  @media (min-width: $md) {
+    position: absolute;
+    bottom: 2.75rem;
+    right: -1.5rem;
+    padding-left: 0;
+  }
 
   & > span {
-    position: absolute;
-    top: 0;
-    left: 0;
+    @media (min-width: $md) {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
     color: $color_blue;
     white-space: nowrap;
   }
@@ -40,9 +62,11 @@
 
 .hint {
   position: absolute;
-  bottom: -3rem;
+  //bottom: -2rem;
+  margin-top: 0.5rem;
   font-size: 10px;
   color: $color_green;
+  line-height: 1.5rem;
 
   &.green {
     color: $color_green;
