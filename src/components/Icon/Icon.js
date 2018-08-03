@@ -53,6 +53,9 @@ import Move from 'components/Icon/svg/move.svg';
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
 import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
 import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
+//
+import Status from 'components/Icon/svg/status.svg';
+import Calendar from 'components/Icon/svg/calendar.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -71,7 +74,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 28 | 32 | 40 | 48 | 56 | 80 | 120,
+  size: 8 | 16 | 20 | 24 | 28 | 32 | 36 | 40 | 48 | 56 | 80 | 120,
   inline: ?boolean,
 };
 
@@ -129,6 +132,8 @@ const iconsMap = {
   move: <Move />,
   emptyCart: <EmptyCart />,
   searchNoResults: <SearchNoResults />,
+  status: <Status />,
+  calendar: <Calendar />,
 
   // For product
   mainFoto: <MainFoto />,

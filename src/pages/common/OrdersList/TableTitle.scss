@@ -28,7 +28,7 @@
 
 .poundSign {
   display: inline-block;
-  @media (min-width: $sm) {
+  @media (min-width: $md) {
     display: none;
   }
 }

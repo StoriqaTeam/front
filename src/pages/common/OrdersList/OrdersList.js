@@ -20,7 +20,8 @@ type PropsType = {
   linkFactory: (item: TableItemType) => string,
   onSearchTermFilterChanged: string => void,
   onOrderStatusFilterChanged: (?string) => void,
-  onOrderDateFilterChanged: string => void,
+  onOrderFromDateFilterChanged: string => void,
+  onOrderToDateFilterChanged: string => void,
 };
 
 class OrdersList extends PureComponent<PropsType> {
@@ -32,8 +33,12 @@ class OrdersList extends PureComponent<PropsType> {
     this.props.onOrderStatusFilterChanged(value);
   };
 
-  handleOrderDateFilterChanged = (value: string) => {
-    this.props.onOrderDateFilterChanged(value);
+  handleOrderFromDateFilterChanged = (value: string) => {
+    this.props.onOrderFromDateFilterChanged(value);
+  };
+
+  handleOrderToDateFilterChanged = (value: string) => {
+    this.props.onOrderToDateFilterChanged(value);
   };
 
   render() {
@@ -42,7 +47,8 @@ class OrdersList extends PureComponent<PropsType> {
         <Header
           onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
           onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
-          onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
+          onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}
+          onOrderToDateFilterChanged={this.handleOrderToDateFilterChanged}
         />
         <TableTitle />
         <Table items={this.props.orders} linkFactory={this.props.linkFactory} />
