@@ -3,7 +3,7 @@
 .container {
   background-color: $color_grey_bg;
   border-top: 0;
-  border: 1px solid rgba(239,239,239,.6);
+  border-bottom: 1px solid $color_grey_trivial;
   margin-bottom: -2rem;
   padding: 0 4rem 4rem;
   //@media (min-width: $md) {

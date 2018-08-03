@@ -2,20 +2,36 @@
 
 .container {
   background-color: $color_white;
-  margin: 2rem -4rem -4rem;
+  border-left: 1px solid $color_grey_trivial;
+  border-right: 1px solid $color_grey_trivial;
+  margin: 0 -4rem -4rem;
   overflow: hidden;
-  padding: 4rem 0 2rem;
   @media (min-width: $md) {
-    // margin: 2rem -4rem 0;
-    // padding: 4rem 4rem 2rem;
+    margin: 0 -4rem -4rem;
     overflow: initial;
   }
 }
 
+.separator {
+  background: $color_grey_bg;
+  border-bottom: 1px solid $color_grey_trivial;
+  border-top: 1px solid $color_grey_trivial;
+  height: 2.875rem;
+  margin: 0 -2rem;
+  @media (min-width: $md) {
+    margin: 0 -4rem;
+  }
+}
+
 .title {
-  margin-bottom: 4rem;
   font-size: 14px;
-  line-height: 18px;
-  text-transform: uppercase;
   letter-spacing: 1.2px;
+  line-height: 18px;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  padding: 0 4rem;
+  text-transform: uppercase;
+  @media (min-width: $md) {
+    margin-top: 4rem;
+  }
 }
