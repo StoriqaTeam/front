@@ -47,9 +47,8 @@ class Characteristics extends PureComponent<PropsType> {
         </div>
         <div styleName="items">
           {attributes.map(item => (
-            <Col size={12} sm={12} md={6} lg={4} xl={4} noGutter>
+            <Col key={item.id} size={12} sm={12} md={6} lg={4} xl={4}>
               <CharacteristicItem
-                key={item.id}
                 attribute={item}
                 onSelect={this.handleItemChange}
                 value={head(
