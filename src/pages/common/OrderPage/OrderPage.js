@@ -233,7 +233,8 @@ class OrderPage extends PureComponent<PropsType> {
               {this.props.isPaymentInfoCanBeShown &&
                 (orderFromProps.state === 'NEW' ||
                   orderFromProps.state === 'PAYMENT_AWAITED' ||
-                  orderFromProps.state === 'TRANSACTION_PENDING') && (
+                  orderFromProps.state === 'TRANSACTION_PENDING' ||
+                  orderFromProps.state === 'AMOUNT_EXPIRED') && (
                   <div styleName="paymentButtonWrapper">
                     <Button
                       big
