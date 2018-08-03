@@ -110,3 +110,52 @@
   }
 }
 
+.endingWrapper {
+  padding: 3rem 2rem;
+  width: 35.75rem;
+
+  @media (min-width: $md) {
+    padding: 12rem 14.875rem;
+    width: 82rem;
+  }
+
+  .endingContent{ 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .title {
+      font-family: $font_light;
+      font-size: 3rem;
+      line-height: 3rem;
+      text-align: center;
+
+      @media (min-width: $md) {
+        font-size: 4.5rem;
+        line-height: 4.5rem;
+      }
+    }
+  }
+
+  .buttonsContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    flex-wrap: wrap-reverse;
+    margin-top: 6rem;
+
+    @media (min-width: $md) {
+      flex-direction: row;
+    }
+
+    .secondButton {
+      margin-bottom: 2rem;
+
+      @media (min-width: $md) {
+        margin-bottom: 0;
+        margin-left: 2rem;
+      }
+    }
+  }
+}

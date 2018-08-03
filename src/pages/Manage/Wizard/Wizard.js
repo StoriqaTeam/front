@@ -846,29 +846,31 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           showModal={showConfirm}
           onClose={() => this.setState({ showConfirm: false })}
         >
-          <div styleName="modalContent">
-            <div styleName="modalTitle">
-              Do you really want to leave this page?
-            </div>
-            <div styleName="modalButtonsContainer">
-              <div styleName="modalOkButton">
+          <div styleName="endingWrapper">
+            <div styleName="endingContent">
+              <div styleName="title">
+                Do you really want to leave this page?
+              </div>
+              <div styleName="buttonsContainer">
                 <Button
-                  onClick={this.handleEndingWizard}
-                  dataTest="closeWizard"
-                  white
+                  onClick={() => this.setState({ showConfirm: false })}
+                  dataTest="continueWizard"
                   wireframe
                   big
                 >
-                  <span>Ok</span>
+                  <span>Cancel</span>
                 </Button>
+                <div styleName="secondButton">
+                  <Button
+                    onClick={this.handleEndingWizard}
+                    dataTest="closeWizard"
+                    big
+                    pink
+                  >
+                    <span>Yes, delete, please</span>
+                  </Button>
+                </div>
               </div>
-              <Button
-                onClick={() => this.setState({ showConfirm: false })}
-                dataTest="continueWizard"
-                big
-              >
-                <span>Cancel</span>
-              </Button>
             </div>
           </div>
         </Modal>

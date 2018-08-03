@@ -321,43 +321,49 @@ class ThirdForm extends PureComponent<PropsType> {
                       <Container correct>
                         <Row>
                           <Col size={12} md={6}>
-                            <Input
-                              id="price"
-                              value={data.product.price || ''}
-                              label={
-                                <span>
-                                  Price <span styleName="red">*</span>
-                                </span>
-                              }
-                              onChange={this.handleChangeProductState}
-                              fullWidth
-                              type="number"
-                              postfix="STQ"
-                            />
+                            <div styleName="formItem">
+                              <Input
+                                id="price"
+                                value={data.product.price || ''}
+                                label={
+                                  <span>
+                                    Price <span styleName="red">*</span>
+                                  </span>
+                                }
+                                onChange={this.handleChangeProductState}
+                                fullWidth
+                                type="number"
+                                postfix="STQ"
+                              />
+                            </div>
                           </Col>
                           <Col size={12} md={6}>
-                            <Input
-                              id="vendorCode"
-                              value={data.product.vendorCode || ''}
-                              label={
-                                <span>
-                                  Vendor code <span styleName="red">*</span>
-                                </span>
-                              }
-                              onChange={this.handleChangeProductState}
-                              fullWidth
-                            />
+                            <div styleName="formItem">
+                              <Input
+                                id="vendorCode"
+                                value={data.product.vendorCode || ''}
+                                label={
+                                  <span>
+                                    Vendor code <span styleName="red">*</span>
+                                  </span>
+                                }
+                                onChange={this.handleChangeProductState}
+                                fullWidth
+                              />
+                            </div>
                           </Col>
                           <Col size={12} md={6}>
-                            <Input
-                              id="cashback"
-                              value={data.product.cashback || ''}
-                              label="Cashback"
-                              onChange={this.handleChangeProductState}
-                              fullWidth
-                              type="number"
-                              postfix="%"
-                            />
+                            <div styleName="formItem">
+                              <Input
+                                id="cashback"
+                                value={data.product.cashback || ''}
+                                label="Cashback"
+                                onChange={this.handleChangeProductState}
+                                fullWidth
+                                type="number"
+                                postfix="%"
+                              />
+                            </div>
                           </Col>
                         </Row>
                       </Container>
