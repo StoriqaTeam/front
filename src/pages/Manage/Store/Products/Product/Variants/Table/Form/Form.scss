@@ -5,14 +5,37 @@
   border-top: 0;
   border-bottom: 1px solid $color_grey_trivial;
   margin-bottom: -2rem;
-  padding: 0 4rem 4rem;
-  //@media (min-width: $md) {
-  //  padding: 0 4rem 4rem;
-  //}
+  padding: 2rem 4rem 4rem;
 }
 
 .variants {
   position: relative;
+}
+
+.inputWithIcon {
+  align-items: baseline;
+  display: flex;
+}
+
+.inputWidth {
+  width: 23.875rem;
+  margin-right: 2rem;
+}
+
+.priceIcon {
+  color: $color_grey;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;
+  top: 0.5rem;
+  transition: $transition_all_ease;
+}
+
+.title {
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  line-height: 18px;
+  text-transform: uppercase;
 }
 
 .variantItem {
@@ -35,7 +58,7 @@
 
 .arrowExpand {
   position: absolute;
-  top: 3rem;
+  top: -1.5rem;
   right: -2rem;
   width: 6rem;
   height: 6rem;
@@ -44,50 +67,15 @@
 
 .variant {
   display: flex;
-  margin: 0 -4rem;
-  padding: 4rem;
-}
-
-.input {
-  border: 0;
-  border-bottom: 1px solid $color_grey_minor;
-  font-family: Roboto;
-  font-size: 14px;
-  color: $color_grey;
-  text-align: right;
-  height: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
 }
 
 .inputPostfix {
+  color: $color_grey_minor;
   font-family: Roboto;
-  font-size: 14px;
-  color: $color_grey;
-  margin-left: 5px;
+  font-size: 12px;
 }
-
-.cashbackInput {
-  display: inline-block;
-  width: 2.5rem;
-}
-
-.vendorCodeInput {
-  display: inline-block;
-  width: 15rem;
-}
-
-.priceInput {
-  display: inline-block;
-  width: 12rem;
-}
-
-.tdCheckbox {width: 5%;}
-.tdArticle {width: 20%;}
-.tdCashback {width: 15%;}
-.tdCharacteristics {width: 17%;}
-.tdPrice {width: 20%;}
-.tdCount {width: 15%;}
-.tdBasket {width: 4%; justify-content: flex-end;}
-.tdDropdawn {width: 4%; justify-content: flex-end;}
 
 .buttons {
   display: flex;

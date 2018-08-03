@@ -8,6 +8,8 @@ import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
+import { Input } from 'components/common/Input';
+import { Row, Col } from 'layout';
 
 import {
   CreateProductWithAttributesMutation,
@@ -392,37 +394,41 @@ class Form extends Component<PropsType, StateType> {
     const { vendorCode, price, cashback } = this.state;
     return (
       <div styleName="variant">
-        <div styleName="variantItem tdCheckbox" />
-        <div styleName="variantItem tdArticle">
-          <input
-            styleName="input vendorCodeInput"
-            type="text"
-            onChange={this.handleVendorCodeChange}
-            value={vendorCode || ''}
-          />
+        <div styleName="inputWidth">
+          <div styleName="inputWidth">
+            <Input
+              fullWidth
+              label="VendorCode"
+              value={vendorCode || ''}
+              onChange={this.handleVendorCodeChange}
+            />
+          </div>
         </div>
-        <div styleName="variantItem tdPrice">
-          <input
-            styleName="input priceInput"
-            type="text"
-            onChange={this.handlePriceChange}
-            value={price || ''}
-          />
-          <span styleName="inputPostfix">STQ</span>
+        <div styleName="inputWidth">
+          <div styleName="inputWidth">
+            <div styleName="inputWithIcon">
+              <Input
+                fullWidth
+                label="Price"
+                onChange={this.handlePriceChange}
+                value={price || ''}
+              />
+              <span styleName="priceIcon">STQ</span>
+            </div>
+          </div>
         </div>
-        <div styleName="variantItem tdCashback">
-          <input
-            styleName="input cashbackInput"
-            type="text"
-            onChange={this.handleCashbackChange}
-            value={cashback != null ? cashback : ''}
-          />
-          <span styleName="inputPostfix">%</span>
+        <div styleName="inputWidth">
+          <div styleName="inputWidth">
+            <Input
+              fullWidth
+              label="Cashback"
+              onChange={this.handleCashbackChange}
+              value={cashback != null ? cashback : ''}
+            />
+            <span styleName="inputPostfix">Percent</span>
+          </div>
         </div>
-        <div styleName="variantItem tdCharacteristics" />
-        <div styleName="variantItem tdCount" />
-        <div styleName="variantItem tdBasket" />
-        <div styleName="variantItem tdDropdawn">
+        <div styleName="inputWidth">
           {variant && (
             <button
               styleName="arrowExpand"
@@ -441,6 +447,9 @@ class Form extends Component<PropsType, StateType> {
     const { photos = [], mainPhoto } = this.state;
     return (
       <div styleName="container">
+        <div styleName="title">
+          <strong>General</strong>
+        </div>
         <div styleName="variants">{this.renderVariant()}</div>
         <Photos
           photos={mainPhoto ? append(mainPhoto, photos) : photos}
