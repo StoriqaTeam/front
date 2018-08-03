@@ -3,7 +3,4 @@
 .container {
   padding: 0;
   background-color: $color_white;
-  @media (min-width: $md) {
-    padding: 2rem;
-  }
 }

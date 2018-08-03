@@ -1,0 +1,12 @@
+@import '../../../../../../../styles/variables';
+
+.table {
+  overflow-x: scroll;
+}
+
+.tableWrapper {
+  width: 102rem;
+  @media (min-width: $lg) {
+    width: initial;
+  }
+}
