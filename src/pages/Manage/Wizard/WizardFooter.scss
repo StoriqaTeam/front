@@ -1,24 +1,51 @@
 @import "../../../styles/variables";
 
 .footerContainer {
-  height: 8.875rem;
   width: 100%;
-  border-top: 2px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 2rem 1rem;
 
-  .backContainer {
-    display: flex;
-    align-items: center;
-    .footerText {
-      font-family: $font_regular;
-      font-size: 1.75rem;
-      color: $color_grey;
-    }
+  @media (min-width: $md) {
+    border-top: 2px solid $color_grey_trivial;
   }
+}
 
+.backContainer {
+  display: flex;
+  align-items: center;
+}
+
+.footerTextContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.footerText {
+  font-family: $font_regular;
+  font-size: 1.75rem;
+  color: $color_grey;
+}
+
+.nextButtonContainer {
+  margin: 4rem 0 2rem;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  @media (min-width: $md) {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0 0;
+  }
+}
+
+.leftButtonContainer {
+  display: flex;
+  flex: 1;
 }
 
 .leftButton {
@@ -27,7 +54,6 @@
   align-items: center;
   color: $color_blue;
   padding: 1rem 1rem 1rem 0;
-  margin-right: 6.5rem;
   cursor: pointer;
 
   span {

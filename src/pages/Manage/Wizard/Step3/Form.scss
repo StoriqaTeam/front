@@ -1,34 +1,14 @@
 @import "../../../../styles/variables";
 
 .wrapper {
-  display: flex;
-  justify-content: center;
-  width: 170rem;
-  background-color: $color_white;
-  padding: 22.625rem 0 14rem 0;
-  border: 1px solid $color_grey_trivial;
+  width: 100%;
+  max-width: 81.75rem;
 
   .formWrapper {
-    width: 82rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    .headerTitle {
-      font-family: $font_light;
-      font-size: 4.5rem;
-      margin-bottom: 2.7rem;
-      text-align: center;
-    }
-
-    .headerDescription {
-      width: 54rem;
-      font-family: $font_regular;
-      line-height: 2.7rem;
-      color: $color_grey_minor;
-      text-align: center;
-      margin-bottom: 6.5rem;
-    }
+    margin: 0 -1rem;
 
     .form {
       width: 100%;
@@ -36,27 +16,35 @@
 
       .section {
         margin-bottom: 6rem;
+        &.correctMargin {
+          margin-bottom: 4rem;
+        }
 
         .uploadDescriptionContainer {
+
           .description {
             font-size: 1.75rem;
-            color: $color_grey_minor;
+            color: #A7A7A7;
             margin: 2rem 0;
           }
-          .iconsContainer {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            .iconBlock {
-              width: 10rem;
+          .iconsWrapper {
+            overflow: auto;
+            .iconsContainer {
+              min-width: 70rem;
               display: flex;
-              flex-direction: column;
-              align-items: center;
-              .iconDescription {
-                font-size: 1.5rem;
-                color: $color_grey_minor;
-                line-height: 1.17;
-                text-align: center;
+              flex-direction: row;
+              justify-content: space-between;
+              .iconBlock {
+                width: 10rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .iconDescription {
+                  font-size: 1.5rem;
+                  color: $color_grey_minor;
+                  line-height: 1.17;
+                  text-align: center;
+                }
               }
             }
           }
@@ -64,10 +52,11 @@
 
         .sectionName {
           font-family: $font_medium;
+          font-size: 1.75rem;
           text-transform: uppercase;
           letter-spacing: 1.2px;
           color: $color_grey;
-          margin-bottom: 3rem;
+          margin-bottom: 1.75rem;
         }
 
         .formItem {
@@ -157,8 +146,6 @@
               background-color: $color_white;
               img {
                 width: 100%;
-                // width: 10rem;
-                // height: 10rem;
               }
             }
           }
@@ -177,12 +164,72 @@
     margin-left: -1rem;
     margin-right: -1rem;
   }
+}
 
-  .buttons {
-    display: flex;
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headerTitle {
+  font-family: $font_light;
+  font-size: 3rem;
+  margin-bottom: 2.7rem;
+  text-align: center;
+  @media (min-width: $md) {
+    font-size: 4.5rem;
   }
+}
 
-  .cancelButton {
+.headerDescription {
+  font-family: $font_regular;
+  font-size: 1.75rem;
+  line-height: 2.2rem;
+  color: $color_grey_minor;
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 29.75rem;
+  @media (min-width: $md) {
+    font-size: 2rem;
+    margin-bottom: 6.5rem;
+    line-height: 2.7rem;
+    max-width: 54rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+  @media (min-width: $md) {
+    flex-direction: row;
+  }
+}
+
+.cancelButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  color: $color_blue;
+  cursor: pointer;
+  @media (min-width: $md) {
+    margin-top: 0;
     margin-left: 2rem;
   }
+}
+
+.buttonContainer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  @media (min-width: $md) {
+    flex: none;
+  }
+}
+
+.red {
+  color: $color_red;
 }

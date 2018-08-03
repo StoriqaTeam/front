@@ -84,6 +84,7 @@ type PropsType = {
 type StateType = {
   showConfirm: boolean,
   step: number,
+  editingProduct: boolean,
   baseProduct: BaseProductNodeType,
   isValid: boolean,
   validationErrors: ?{
@@ -130,6 +131,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     this.state = {
       showConfirm: false,
       step: 1,
+      editingProduct: false,
       ...initialProductState,
       isValid: true,
       validationErrors: null,
@@ -137,17 +139,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    // $FlowIgnore
-    const completed = pathOr(
-      null,
-      ['me', 'wizardStore', 'completed'],
-      this.props,
-    );
-    // $FlowIgnore
-    const storeId = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
-    if (completed && storeId) {
-      this.props.router.push(`/manage/store/${storeId}`);
-    }
     this.createWizard();
   }
 
@@ -217,7 +208,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          // console.log('>>> update wizard mutation onComplete: ', !!relayErrors);
           errorsHandler(
             relayErrors,
             this.props.showAlert,
@@ -230,7 +220,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
-        // console.log('>>> update wizard mutation onError: ');
         errorsHandler(
           relayErrors,
           this.props.showAlert,
@@ -442,7 +431,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     this.setState({ showConfirm: false }, () => {
-      this.props.router.push(`/manage/store/${storeId}`);
+      this.props.router.push(`/manage/store/${storeId}/products`);
       DeleteWizardMutation.commit({
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -508,6 +497,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   handleChangeForm = data => {
     this.handleOnSaveWizard(data);
+  };
+
+  handleOnChangeEditingProduct = (value: boolean) => {
+    this.setState({ editingProduct: value });
   };
 
   // Product handlers
@@ -810,53 +803,33 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     switch (step) {
       case 1:
         return (
-          <div styleName="formWrapper firstForm">
-            <div styleName="headerTitle">Give your store a name</div>
-            <div styleName="headerDescription">
-              Make a bright name for your store to attend your customers and
-              encrease your sales
-            </div>
-            <Step1
-              initialData={wizardStore}
-              onChange={this.handleChangeForm}
-              errors={this.state.validationErrors}
-            />
-          </div>
+          <Step1
+            initialData={wizardStore}
+            onChange={this.handleChangeForm}
+            errors={this.state.validationErrors}
+          />
         );
       case 2:
         return (
-          <div styleName="formWrapper secondForm">
-            <div styleName="headerTitle">Set up store</div>
-            <div styleName="headerDescription">
-              Define a few settings that will make your sells effective and
-              comfortable.
-            </div>
-            <Step2
-              initialData={wizardStore}
-              languages={this.props.languages}
-              onChange={this.handleChangeForm}
-            />
-          </div>
+          <Step2
+            initialData={wizardStore}
+            languages={this.props.languages}
+            onChange={this.handleChangeForm}
+          />
         );
       case 3:
         return (
-          <div styleName="formWrapper thirdForm">
-            <div styleName="headerTitle">Fill your store with goods</div>
-            <div styleName="headerDescription">
-              Choose what you gonna sale in your marketplace and add it with
-              ease
-            </div>
-            <Step3
-              formStateData={this.state.baseProduct}
-              products={baseProducts ? baseProducts.edges : []}
-              onUpload={this.handleOnUploadPhoto}
-              onChange={this.handleOnChangeProductForm}
-              onClearProductState={this.handleOnClearProductState}
-              onSave={this.handleOnSaveProduct}
-              onDelete={this.handleOnDeleteProduct}
-              errors={this.state.validationErrors}
-            />
-          </div>
+          <Step3
+            formStateData={this.state.baseProduct}
+            products={baseProducts ? baseProducts.edges : []}
+            onUpload={this.handleOnUploadPhoto}
+            onChange={this.handleOnChangeProductForm}
+            onClearProductState={this.handleOnClearProductState}
+            onSave={this.handleOnSaveProduct}
+            onDelete={this.handleOnDeleteProduct}
+            errors={this.state.validationErrors}
+            onChangeEditingProduct={this.handleOnChangeEditingProduct}
+          />
         );
       default:
         break;
@@ -866,7 +839,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { step, showConfirm, isValid } = this.state;
+    const { step, showConfirm, isValid, editingProduct } = this.state;
     const { wizardStore } = me;
     // $FlowIgnoreMe
     const baseProducts = pathOr(
@@ -926,14 +899,16 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           />
         </div>
         <div styleName="contentWrapper">{this.renderForm()}</div>
-        <div styleName="footerWrapper">
-          <WizardFooter
-            currentStep={step}
-            onChangeStep={this.handleOnChangeStep}
-            onSaveStep={this.handleOnSaveStep}
-            isReadyToNext={isReadyToNext()}
-          />
-        </div>
+        {!editingProduct && (
+          <div styleName="footerWrapper">
+            <WizardFooter
+              currentStep={step}
+              onChangeStep={this.handleOnChangeStep}
+              onSaveStep={this.handleOnSaveStep}
+              isReadyToNext={isReadyToNext()}
+            />
+          </div>
+        )}
         <Modal
           showModal={showConfirm}
           onClose={() => this.setState({ showConfirm: false })}
@@ -974,7 +949,7 @@ WizardWrapper.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(Page(withShowAlert(WizardWrapper))),
+  withRouter(Page(withShowAlert(WizardWrapper), true, true)),
   graphql`
     fragment Wizard_me on User {
       id

@@ -1,8 +1,13 @@
 @import "../../../styles/variables";
 
 .container {
-  padding-left: 1.625rem;
-
+  padding-bottom: 3rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 1rem;
+  @media (min-width: $md) {
+    padding-right: 0;
+  }
 
   & h2 {
     color: $color_black;
@@ -29,4 +34,8 @@
     max-width: 61.75rem;
     text-align: left;
   }
+}
+
+.rating {
+  margin-bottom: 2.375rem;
 }

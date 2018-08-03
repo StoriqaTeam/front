@@ -88,6 +88,7 @@ const iconsMap = {
   cats: <Cats />,
   chat: <Chat />,
   closeArrow: <CloseArrow />,
+  //
   controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,

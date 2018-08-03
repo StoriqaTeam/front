@@ -3,6 +3,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  max-width: 41rem;
   height: 100%;
 }
 
@@ -15,10 +16,6 @@
 
 .formItem + .formItem {
   margin-top: 6rem;
-}
-
-.maxWidthInput {
-  max-width: 41rem;
 }
 
 .label {
@@ -40,5 +37,5 @@
 }
 
 .address {
-  width: 41rem;
+  max-width: 41rem;
 }

@@ -20,10 +20,6 @@
   letter-spacing: 1px;
 }
 
-.addButton {
-  float: right;
-}
-
 .headerRowWrap, .itemRowWrap {
   display: flex;
   margin: 0 -4rem;
@@ -125,4 +121,16 @@
   top: -2rem;
   right: 1rem;
   width: 30rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    top: 8rem;
+  }
+
+  @media (max-width: #{$md - 1px}) {
+    top: 3rem;
+  }
+}
+
+.emptyProductsBlock {
+  line-height: 11rem;
 }

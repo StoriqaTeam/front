@@ -9,7 +9,6 @@
   min-width: 12rem;
   padding: 0 1rem;
   border-radius: 0.5rem;
-  //line-height: 4rem;
   text-align: center;
   cursor: pointer;
   color: $color_white;
@@ -22,6 +21,15 @@
   &:hover:not([disabled]) {
     background-color: $color_blue_hover;
     border: 1px solid $color_blue_hover;
+  }
+
+  &.pink {
+    border: 1px solid $color_pink;
+    background-color: $color_pink;
+    &:hover {
+      border: 1px solid $color_pink;
+      background-color: $color_pink;
+    }
   }
 }
 
@@ -107,7 +115,6 @@
 .wireframe {
   background: transparent;
   font-family: $font_regular;
-  font-size:  14px;
   border: $color_blue 1px solid;
   color: $color_blue;
 
@@ -134,6 +141,10 @@
       border: 1px solid $color_pink;
     }
   }
+}
+
+.fullWidth {
+  width: 100%;
 }
 
 .spinner {

@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { isEmpty } from 'ramda';
 import { Icon } from 'components/Icon';
 
 import './MobileUpload.scss';
@@ -10,9 +9,10 @@ type PropsType = {
   onUpload: (e: any) => void,
   onDelete: (e: any) => void,
   id: string,
-  avatar: ?string,
+  img: ?string,
   dataTest: string,
   disabled: ?boolean,
+  iconType: string,
 };
 
 const MobileUpload = ({
@@ -21,12 +21,13 @@ const MobileUpload = ({
   id,
   onUpload,
   onDelete,
-  avatar,
+  img,
+  iconType,
 }: PropsType) => (
   <div styleName="container">
-    {isEmpty(avatar) ? (
+    {!img ? (
       <span styleName="imageArea">
-        <Icon type="user" />
+        <Icon type={iconType} size={28} />
       </span>
     ) : (
       <figure styleName="image">
@@ -39,7 +40,7 @@ const MobileUpload = ({
         >
           <Icon type="basket" size={24} />
         </span>
-        <img src={avatar} alt="" />
+        <img src={img} alt="" />
       </figure>
     )}
     <label htmlFor={id} styleName="upload" data-test={dataTest}>
