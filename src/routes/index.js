@@ -472,6 +472,7 @@ const routes = (
           </Route>
         </Route>
       </Route>
+
       <Route
         path="/registration"
         Component={Authorization}
@@ -485,12 +486,14 @@ const routes = (
           return <Component isSignUp alone {...props} />;
         }}
       />
+
       <Route
         path="/login"
         Component={Authorization}
         render={({ Component, props }) => <Component alone {...props} />}
       />
       <Route path="/logout" Component={Logout} />
+
       <Route
         path="/oauth_callback/fb"
         Component={OAuthCallback}
@@ -498,6 +501,7 @@ const routes = (
           <Component provider="FACEBOOK" {...props} />
         )}
       />
+
       <Route
         path="/oauth_callback/google"
         Component={OAuthCallback}
@@ -505,7 +509,9 @@ const routes = (
           <Component provider="GOOGLE" {...props} />
         )}
       />
+
       <Route path="/verify_email/:token" Component={VerifyEmail} />
+
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
       <Route path="/profile">
         <Route
@@ -540,7 +546,7 @@ const routes = (
           `}
           render={({ props, Component }) => {
             if (props) {
-              if (props && !props.me) {
+              if (!props.me) {
                 const {
                   location: { pathname },
                 } = props;
