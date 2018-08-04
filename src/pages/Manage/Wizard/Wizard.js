@@ -3,7 +3,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { assocPath, path, pick, pathOr, omit, where, complement } from 'ramda';
+import {
+  assocPath,
+  path,
+  pick,
+  pathOr,
+  omit,
+  where,
+  complement,
+  head,
+  isEmpty,
+} from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
@@ -23,9 +33,13 @@ import {
   DeactivateBaseProductMutation,
   DeleteWizardMutation,
   CreateWarehouseMutation,
+  SetProductQuantityInWarehouseMutation,
 } from 'relay/mutations';
 import { errorsHandler, log, fromRelayError, uploadFile } from 'utils';
+
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { CreateBaseProductMutationResponseType } from 'relay/mutations/CreateBaseProductMutation';
+import type { CreateProductWithAttributesMutationResponseType } from 'relay/mutations/CreateProductWithAttributesMutation';
 
 import { transformTranslated } from './utils';
 import WizardHeader from './WizardHeader';
@@ -504,7 +518,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   // Product handlers
-  createBaseProduct = () => {
+  createBaseProduct = (callback: () => void) => {
     const { baseProduct } = this.state;
     const preparedData = transformTranslated(
       'EN',
@@ -517,96 +531,105 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['me', 'wizardStore', 'store', 'id'],
       this.props,
     );
-    CreateBaseProductMutation.commit({
-      ...preparedData,
-      parentID,
-      environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
+
+    CreateBaseProductMutation.promise(
+      {
+        ...preparedData,
+        parentID,
+      },
+      this.context.environment,
+    )
+      .then(
+        (
+          createBaseProductMutationResponse: CreateBaseProductMutationResponseType,
+        ) => {
+          // $FlowIgnoreMe
+          const baseProductId = pathOr(
+            null,
+            ['createBaseProduct', 'rawId'],
+            createBaseProductMutationResponse,
+          );
+          // $FlowIgnoreMe
+          const baseProductID = pathOr(
+            null,
+            ['createBaseProduct', 'id'],
+            createBaseProductMutationResponse,
+          );
+          if (!baseProductId || !baseProductID) {
+            throw new Error("Can't create variant without base product id");
+          }
+          this.clearValidationErrors();
+          // create variant after create base product
+          const prepareDataForProduct = {
+            product: {
+              ...omit(['id', 'quantity'], baseProduct.product),
+              cashback: (baseProduct.product.cashback || 0) / 100,
+              baseProductId,
+            },
+            attributes: baseProduct.attributes,
+          };
+
+          return CreateProductWithAttributesMutation.promise(
+            {
+              input: {
+                clientMutationId: '',
+                ...prepareDataForProduct,
+              },
+              parentID: baseProductID,
+            },
+            this.context.environment,
+          );
+        },
+      )
+      .then((response: CreateProductWithAttributesMutationResponseType) => {
+        log.debug({ response });
+        // $FlowIgnoreMe
+        const warehouseId = pathOr(
+          null,
+          ['createProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
+          response,
+        );
+        // $FlowIgnoreMe
+        const productId = pathOr(null, ['createProduct', 'rawId'], response);
+
+        return SetProductQuantityInWarehouseMutation.promise(
+          {
+            input: {
+              clientMutationId: '',
+              warehouseId,
+              productId,
+              quantity: this.state.baseProduct.product.quantity,
+            },
+          },
+          this.context.environment,
+        );
+      })
+      .then(() => {
+        this.clearValidationErrors();
+        this.handleOnClearProductState();
+        callback();
+      })
+      .catch((errors: Array<any>) => {
         const relayErrors = fromRelayError({ source: { errors } });
-        if (relayErrors) {
+        if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
             relayErrors,
             this.props.showAlert,
             this.handleWizardError,
           );
-          return;
-        }
-        const baseProductId = pathOr(
-          null,
-          ['createBaseProduct', 'rawId'],
-          response,
-        );
-        const baseProductID = pathOr(
-          null,
-          ['createBaseProduct', 'id'],
-          response,
-        );
-        if (!baseProductId || !baseProductID) {
+        } else {
           this.props.showAlert({
             type: 'danger',
-            text: "Error: Can't create variant without base product id",
+            // $FlowIgnoreMe
+            text: `Error: ${pathOr(
+              'Unknown error',
+              ['message'],
+              head(errors),
+            )}`,
             link: { text: 'Close.' },
           });
-          return;
         }
-        this.clearValidationErrors();
-        // create variant after create base product
-        const prepareDataForProduct = {
-          product: {
-            ...omit(['id'], baseProduct.product),
-            cashback: (baseProduct.product.cashback || 0) / 100,
-            baseProductId,
-          },
-          attributes: baseProduct.attributes,
-        };
-        CreateProductWithAttributesMutation.commit({
-          input: {
-            clientMutationId: '',
-            ...prepareDataForProduct,
-          },
-          parentID: baseProductID,
-          environment: this.context.environment,
-          onCompleted: (
-            productResponse: ?Object,
-            productErrors: ?Array<any>,
-          ) => {
-            log.debug({ productResponse, productErrors });
-            const productRelayErrors = fromRelayError({
-              source: { errors: productErrors },
-            });
-            if (productRelayErrors) {
-              errorsHandler(
-                productRelayErrors,
-                this.props.showAlert,
-                this.handleWizardError,
-              );
-              return;
-            }
-            this.clearValidationErrors();
-            this.handleOnClearProductState();
-          },
-          onError: (error: Error) => {
-            log.debug({ error });
-            const productRelayErrors = fromRelayError(error);
-            errorsHandler(
-              productRelayErrors,
-              this.props.showAlert,
-              this.handleWizardError,
-            );
-          },
-        });
-      },
-      onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        errorsHandler(
-          relayErrors,
-          this.props.showAlert,
-          this.handleWizardError,
-        );
-      },
-    });
+      });
   };
 
   updateBaseProduct = () => {
@@ -781,12 +804,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
-  handleOnSaveProduct = () => {
+  handleOnSaveProduct = (callback: () => void) => {
     const { baseProduct } = this.state;
     if (baseProduct.id) {
       this.updateBaseProduct();
     } else {
-      this.createBaseProduct();
+      this.createBaseProduct(callback);
     }
   };
 

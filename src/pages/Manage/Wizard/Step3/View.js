@@ -52,7 +52,7 @@ type PropsType = {
   onUpload: (type: string, e: any) => Promise<*>,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
-  onSave: () => void,
+  onSave: (callback: () => void) => void,
   onClearProductState: () => void,
   formStateData: BaseProductNodeType,
   onChangeEditingProduct: (val: boolean) => void,

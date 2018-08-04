@@ -34,7 +34,7 @@ type PropsType = {
   }) => void,
   data: BaseProductNodeType,
   onUpload: (type: string, e: any) => Promise<*>,
-  onSave: () => void,
+  onSave: (callback: () => void) => void,
   onClose: () => void,
 };
 
@@ -394,8 +394,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     <div styleName="buttonContainer">
                       <Button
                         onClick={() => {
-                          onSave();
-                          onClose();
+                          onSave(onClose);
                         }}
                         dataTest="wizardSaveProductButton"
                         big
