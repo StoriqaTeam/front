@@ -21,7 +21,12 @@ import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Select } from 'components/common/Select';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
+import { InputSlug } from 'components/common/InputSlug';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
+import { UploadWrapper } from 'components/Upload';
+import { Icon } from 'components/Icon';
+
+import { uploadFile, convertSrc } from 'utils';
 
 import './Form.scss';
 
@@ -32,6 +37,7 @@ type StateType = {
     longDescription: string,
     shortDescription: string,
     slug: string,
+    cover: string,
     slogan: string,
   },
   formErrors: {
@@ -39,6 +45,7 @@ type StateType = {
   },
   langItems: ?Array<{ id: string, label: string }>,
   optionLanguage: string,
+  realSlug: ?string,
 };
 
 type PropsType = {
@@ -50,6 +57,7 @@ type PropsType = {
     defaultLanguage: ?string,
     slug: ?string,
     slogan: ?string,
+    cover: ?string,
   },
   serverValidationErrors: {
     [string]: ?any,
@@ -85,11 +93,13 @@ class Form extends Component<PropsType, StateType> {
           shortDescription: pathOr('', ['shortDescription', 0, 'text'], store),
           defaultLanguage: store.defaultLanguage || 'EN',
           slug: store.slug || '',
+          cover: store.cover || '',
           slogan: store.slogan || '',
         },
         langItems: null,
         optionLanguage: 'EN',
         formErrors: {},
+        realSlug: store.slug,
       };
     }
   }
@@ -101,11 +111,13 @@ class Form extends Component<PropsType, StateType> {
       shortDescription: '',
       defaultLanguage: 'EN',
       slug: '',
+      cover: '',
       slogan: '',
     },
     langItems: null,
     optionLanguage: 'EN',
     formErrors: {},
+    realSlug: null,
   };
 
   componentWillMount() {
@@ -175,6 +187,7 @@ class Form extends Component<PropsType, StateType> {
         longDescription,
         shortDescription,
         slug,
+        cover,
         slogan,
       },
     } = this.state;
@@ -211,6 +224,7 @@ class Form extends Component<PropsType, StateType> {
         name,
         longDescription,
         shortDescription,
+        cover,
         slug,
       },
     );
@@ -228,10 +242,33 @@ class Form extends Component<PropsType, StateType> {
         longDescription,
         shortDescription,
         slug,
+        cover,
         slogan,
       },
       optionLanguage,
     });
+  };
+
+  handleOnUpload = async (e: any) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    this.setState(assocPath(['form', 'cover'], result.url, this.state));
+  };
+
+  handleDeleteCover = () => {
+    this.setState(assocPath(['form', 'cover'], '', this.state));
+  };
+
+  writeSlug = (slugValue: string) => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'slug'], slugValue, prevState),
+    );
+  };
+
+  resetSlugErrors = () => {
+    this.setState({ formErrors: omit(['slug'], this.state.formErrors) });
   };
 
   // TODO: extract to helper
@@ -275,9 +312,11 @@ class Form extends Component<PropsType, StateType> {
   render() {
     const {
       langItems,
-      form: { defaultLanguage },
+      form: { defaultLanguage, cover },
+      formErrors,
     } = this.state;
     const { isLoading } = this.props;
+    const { realSlug } = this.state;
     const defaultLanguageValue = find(
       propEq('id', toLower(defaultLanguage || '')),
       langItems || [],
@@ -286,6 +325,36 @@ class Form extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="form">
+          {!cover ? (
+            <div styleName="coverUploadWrap">
+              <div styleName="uploadButton">
+                <UploadWrapper
+                  id="cover-store"
+                  onUpload={this.handleOnUpload}
+                  customUnit
+                  buttonHeight="10rem"
+                  buttonWidth="100%"
+                  buttonIconSize={32}
+                  buttonIconType="upload"
+                  dataTest="storeCoverUploader"
+                />
+              </div>
+              <div>
+                <div>Upload main photo</div>
+                <div styleName="uploadRec">
+                  Strongly recommend to upload:<br />1360px × 350px | .jpg .jpeg
+                  .png
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div styleName="cover">
+              <button styleName="trash" onClick={this.handleDeleteCover}>
+                <Icon type="basket" size={28} />
+              </button>
+              <img src={convertSrc(cover, 'medium')} alt="Store cover" />
+            </div>
+          )}
           {this.renderInput({
             id: 'name',
             label: 'Store name',
@@ -308,11 +377,15 @@ class Form extends Component<PropsType, StateType> {
             label: 'Slogan',
             limit: 50,
           })}
-          {this.renderInput({
-            id: 'slug',
-            label: 'Slug',
-            limit: 50,
-          })}
+          <div styleName="formItem maxWidthInput">
+            <InputSlug
+              errors={formErrors.slug}
+              slug={this.state.form.slug}
+              onChange={this.writeSlug}
+              realSlug={realSlug}
+              resetErrors={this.resetSlugErrors}
+            />
+          </div>
           {this.renderTextarea({
             id: 'shortDescription',
             label: 'Short description',

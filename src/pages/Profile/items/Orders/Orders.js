@@ -34,7 +34,8 @@ type PropsType = {
 type StateType = {
   currentPage: number,
   searchTerm: ?string,
-  orderDate: ?string,
+  orderFromDate: ?string,
+  orderToDate: ?string,
   orderStatus: ?string,
 };
 
@@ -42,7 +43,8 @@ class Orders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
     searchTerm: null,
-    orderDate: null,
+    orderFromDate: null,
+    orderToDate: null,
     orderStatus: null,
   };
 
@@ -60,12 +62,9 @@ class Orders extends Component<PropsType, StateType> {
             ? null
             : parseInt(this.state.searchTerm, 10),
           createdFrom:
-            this.state.orderDate && moment(this.state.orderDate).utc(),
+            this.state.orderFromDate && moment(this.state.orderFromDate).utc(),
           createdTo:
-            this.state.orderDate &&
-            moment(this.state.orderDate)
-              .utc()
-              .add(1, 'd'),
+            this.state.orderToDate && moment(this.state.orderToDate).utc(),
           orderStatus: this.state.orderStatus,
         },
       },
@@ -115,8 +114,14 @@ class Orders extends Component<PropsType, StateType> {
     });
   };
 
-  handleOrderDateFilterChanged = (value: string) => {
-    this.setState({ orderDate: value }, () => {
+  handleOrderFromDateFilterChanged = (value: string) => {
+    this.setState({ orderFromDate: `${value}T00:00:00+00:00` }, () => {
+      this.loadPage(this.state.currentPage);
+    });
+  };
+
+  handleOrderToDateFilterChanged = (value: string) => {
+    this.setState({ orderToDate: `${value}T23:59:59+00:00` }, () => {
       this.loadPage(this.state.currentPage);
     });
   };
@@ -149,7 +154,8 @@ class Orders extends Component<PropsType, StateType> {
           linkFactory={item => `/profile/orders/${item.number}`}
           onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
           onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
-          onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
+          onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}
+          onOrderToDateFilterChanged={this.handleOrderToDateFilterChanged}
         />
       </div>
     );

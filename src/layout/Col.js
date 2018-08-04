@@ -70,7 +70,7 @@ class Col extends PureComponent<PropsTypes> {
           [`d-sm-none d-md-flex`]: mdHiddenOnly,
           [`d-lg-none d-xl-flex`]: lgHiddenOnly,
           [`d-sm-none`]: smHidden,
-          [`d-md-flex`]: mdHidden,
+          [`d-md-none`]: mdHidden,
           [`d-lg-none`]: lgHidden,
           [`d-xl-none`]: xlHiddenOnly || xlHidden,
           [`d-flex`]: visible,
