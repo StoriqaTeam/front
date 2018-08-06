@@ -28,6 +28,7 @@ const ProductInfo = ({
   onQuantityChange,
   onChangeComment,
   comment,
+  isOpen,
 }: PropsType) => {
   const attrs = map(attr => ({
     title: head(attr.attribute.name).text,
@@ -35,7 +36,7 @@ const ProductInfo = ({
   }))(product.attributes);
   return (
     <ShowMore
-      initialState
+      isOpen={isOpen}
       height={400}
       dataTest={`cart-product-${product.rawId}-showMore`}
     >
@@ -47,7 +48,7 @@ const ProductInfo = ({
                 <div styleName="contentBlock">
                   <div styleName="product-summary-attributes">
                     <div styleName="cart-product-title">About product</div>
-                    {attrs.length > 0 && (
+                    {(attrs.length > 0 && (
                       <Row>
                         {attrs.map(attr => (
                           <Col key={`attr-${attr.value}`} size={12} xl={6}>
@@ -55,7 +56,7 @@ const ProductInfo = ({
                           </Col>
                         ))}
                       </Row>
-                    ) || <div styleName="empty" />}
+                    )) || <div styleName="empty" />}
                   </div>
                 </div>
               </Col>
