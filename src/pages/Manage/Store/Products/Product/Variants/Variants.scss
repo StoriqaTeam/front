@@ -5,7 +5,7 @@
   border-left: 1px solid $color_grey_trivial;
   border-right: 1px solid $color_grey_trivial;
   margin: 0 -4rem -4rem;
-  overflow: hidden;
+  overflow-x: hidden;
   @media (min-width: $md) {
     margin: 0 -4rem -4rem;
   }

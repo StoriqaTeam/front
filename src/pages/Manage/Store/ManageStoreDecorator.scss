@@ -33,13 +33,13 @@
   margin-left: -2rem;
   margin-right: -2rem;
   margin-top: 0;
+  overflow-x: hidden;
   padding: 2rem;
-  overflow: hidden;
   @media (min-width: $md) {
-    padding: 4rem;
     margin-left: 0;
     margin-right: 0;
     margin-top: 2rem;
+    padding: 4rem;
   }
 }
 
