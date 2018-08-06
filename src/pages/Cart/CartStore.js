@@ -21,12 +21,13 @@ type PropsType = {
   unselectable: ?boolean,
   // eslint-disable-next-line
   store: CartStore_store,
+  isOpenInfo: ?boolean,
 };
 
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store, onlySelected, unselectable } = this.props;
+    const { store, onlySelected, unselectable, isOpenInfo } = this.props;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -46,6 +47,7 @@ class CartStore extends PureComponent<PropsType> {
                     product={product}
                     onlySelected={onlySelected}
                     unselectable={unselectable}
+                    isOpenInfo={isOpenInfo}
                   />
                   <div styleName="devider" />
                 </div>
