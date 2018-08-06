@@ -9,7 +9,6 @@ import { Icon } from 'components/Icon';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Input } from 'components/common/Input';
-import { Row, Col } from 'layout';
 
 import {
   CreateProductWithAttributesMutation,
