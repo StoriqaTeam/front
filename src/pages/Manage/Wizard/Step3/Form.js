@@ -283,7 +283,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     <ProductsUploader
                       onRemove={this.handleRemoveAddtionalPhoto}
                       onUpload={onUpload}
-                      additionalPhotos={data.product.additionalPhotos}
+                      additionalPhotos={data.product.additionalPhotos || []}
                     />
                     <div styleName="uploadDescriptionContainer">
                       <div styleName="description">
@@ -376,7 +376,7 @@ class ThirdForm extends PureComponent<PropsType> {
                               id="quantity"
                               value={
                                 data.product.quantity == null
-                                  ? ''
+                                  ? '0'
                                   : `${data.product.quantity}`
                               }
                               label="Quantity"

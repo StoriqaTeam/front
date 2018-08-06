@@ -8,6 +8,11 @@ import type {
   UpdateProductMutationResponse,
 } from './__generated__/UpdateProductMutation.graphql';
 
+export type {
+  UpdateProductMutationVariables as UpdateProductMutationVariablesType,
+  UpdateProductMutationResponse as UpdateProductMutationResponseType,
+};
+
 const mutation = graphql`
   mutation UpdateProductMutation($input: UpdateProductWithAttributesInput!) {
     updateProduct(input: $input) {
@@ -19,6 +24,16 @@ const mutation = graphql`
       vendorCode
       cashback
       price
+      quantity
+      baseProduct {
+        id
+        store {
+          id
+          warehouses {
+            id
+          }
+        }
+      }
       attributes {
         attrId
         value
@@ -64,4 +79,32 @@ const commit = (params: MutationParamsType) =>
     onError: params.onError,
   });
 
-export default { commit };
+const promise = (
+  input: UpdateProductMutationVariables,
+  environment: Environment,
+): Promise<UpdateProductMutationResponse> =>
+  new Promise((resolve, reject) => {
+    commit({
+      ...input,
+      environment,
+      onCompleted: (
+        response: ?UpdateProductMutationResponse,
+        errors: ?Array<Error>,
+      ) => {
+        if (response) {
+          resolve(response);
+        } else if (errors) {
+          reject(errors);
+        } else {
+          // eslint-disable-next-line
+          reject([new Error('Unknown error')]);
+        }
+      },
+      onError: (error: Error) => {
+        // eslint-disable-next-line
+        reject([error]);
+      },
+    });
+  });
+
+export default { commit, promise };
