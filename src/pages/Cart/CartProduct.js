@@ -32,6 +32,7 @@ type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   // eslint-disable-next-line
   ...CartProduct_product,
+  isOpenInfo: ?boolean,
 };
 
 type StateType = {
@@ -170,7 +171,7 @@ class CartProduct extends Component<PropsType, StateType> {
   }, 250);
 
   render() {
-    const { product, unselectable } = this.props;
+    const { product, unselectable, isOpenInfo } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -242,6 +243,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       onQuantityChange={this.handleQuantityChange}
                       onChangeComment={this.handleOnChangeComment}
                       comment={this.state.comment}
+                      isOpen={isOpenInfo}
                     />
                   </div>
                 </Col>
