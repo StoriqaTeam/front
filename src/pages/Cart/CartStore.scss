@@ -23,6 +23,18 @@
 
 .store-info {
   display: flex;
+  flex: 0 0 50%;
+  max-width: 50%; 
+
+  @media (min-width: $sm) {
+    flex: 0 0 63%;
+    max-width: 63%; 
+  }
+
+  @media (min-width: $xl) {
+    flex: 0 0 75%;
+    max-width: 75%; 
+  }
 
   & img {
     display: block;
@@ -48,18 +60,9 @@
   margin-right: -15px;
 }
 
-.store {
-  // width: 66%;
-}
-
 .storeTotalWrapper {
   display: flex;
-  justify-content: flex-end;
-}
-
-.store-total {
-  // width: 34%;
-  // padding-left: 4rem;
+  padding: 0 1rem;
 }
 
 .store-name {

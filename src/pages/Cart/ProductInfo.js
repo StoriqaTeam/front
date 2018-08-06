@@ -101,7 +101,8 @@ const ProductInfo = ({
                               items={[{ id: 1, label: 'Everywhere' }]}
                               activeItem={{ id: 1, label: 'Everywhere' }}
                               forForm
-                              containerStyle={{ width: '24rem' }}
+                              fullWidth
+                              // containerStyle={{ width: '24rem' }}
                             />
                           }
                         />
@@ -123,12 +124,13 @@ const ProductInfo = ({
                       </Col>
                     </Row>
                     <div styleName="comment">
-                      <div styleName="title">Customer comment</div>
+                      {/* <div styleName="title"></div> */}
                       <Input
                         fullWidth
                         id="customerComment"
                         onChange={onChangeComment}
                         value={comment}
+                        label="Customer comment"
                       />
                     </div>
                   </div>
