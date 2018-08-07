@@ -26,6 +26,7 @@ type PropsType = {
   productDescription: string,
   productTitle: string,
   widgets: Array<WidgetType>,
+  unselectedAttr: ?Array<string>,
 };
 
 class ProductDetails extends Component<PropsType, {}> {
@@ -35,6 +36,7 @@ class ProductDetails extends Component<PropsType, {}> {
   };
 
   generateWidget = (widget: WidgetType, index: number): Node => {
+    const { unselectedAttr } = this.props;
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
@@ -44,6 +46,10 @@ class ProductDetails extends Component<PropsType, {}> {
             title={widget.title}
             options={widget.options}
             onClick={selected => this.handleWidgetClick(selected)}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -54,6 +60,10 @@ class ProductDetails extends Component<PropsType, {}> {
             title={widget.title || ''}
             options={widget.options}
             onSelect={selected => this.handleWidgetClick(selected)}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -66,6 +76,10 @@ class ProductDetails extends Component<PropsType, {}> {
             srcProp="image"
             options={widget.options}
             onClick={selected => this.handleWidgetClick(selected)}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;

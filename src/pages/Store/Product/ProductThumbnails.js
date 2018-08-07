@@ -18,6 +18,7 @@ type PropsType = {
   options: Array<WidgetOptionType>,
   row?: boolean,
   onClick: Function,
+  isOnSelected: boolean,
 };
 
 type StateType = {
@@ -58,7 +59,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     );
   };
   render() {
-    const { options, row, title } = this.props;
+    const { options, row, title, isOnSelected } = this.props;
     const { selected } = this.state;
     const mapOptions = (option, index) => (
       <button
@@ -88,7 +89,11 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           'scroll-y': !row,
         })}
       >
-        {!isEmpty(title) ? <h4>{title}</h4> : null}
+        {!isEmpty(title) ? (
+          <div id={title} styleName={classNames('title', { isOnSelected })}>
+            <strong>{title}</strong>
+          </div>
+        ) : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {isNil(options) ? null : sortByProp('label')(options).map(mapOptions)}
         </div>
