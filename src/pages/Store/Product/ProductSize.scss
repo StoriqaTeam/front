@@ -4,7 +4,7 @@
   display: inline-block;
 }
 
-h4 {
+.title {
   color: $color_grey;
   font-size: 1.75rem;
   font-stretch: normal;
@@ -17,6 +17,10 @@ h4 {
   text-align: left;
   text-transform: uppercase;
   width: 9.75rem;
+
+  &.isOnSelected {
+    color: $color_red;
+  }
 }
 
 .sizes {

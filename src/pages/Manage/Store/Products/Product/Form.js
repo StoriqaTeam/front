@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { assocPath, prop, propOr, isEmpty, omit } from 'ramda';
 import { validate } from '@storiqa/shared';
+import classNames from 'classnames';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Button } from 'components/common/Button';
@@ -28,6 +29,7 @@ type BaseProductType = {
   category: {
     rawId: number,
   },
+  status: string,
 };
 
 type PropsType = {
@@ -157,6 +159,7 @@ class Form extends Component<PropsType, StateType> {
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
+        fullWidth
       />
     );
   };
@@ -170,17 +173,29 @@ class Form extends Component<PropsType, StateType> {
         label={label}
         onChange={this.handleTextareaChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
+        fullWidth
       />
     );
   };
 
   render() {
     const { isLoading, baseProduct } = this.props;
+    const status = baseProduct ? baseProduct.status : 'Draft';
     return (
       <div styleName="container">
+        <div
+          styleName={classNames('status', {
+            draft: status === 'DRAFT',
+            moderation: status === 'MODERATION',
+            decline: status === 'DECLINE',
+            published: status === 'PUBLISHED',
+          })}
+        >
+          {status}
+        </div>
         <div styleName="form">
           <div styleName="title">
-            <strong>General characteristics</strong>
+            <strong>General settings</strong>
           </div>
           <div styleName="formItem">
             {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
@@ -192,19 +207,19 @@ class Form extends Component<PropsType, StateType> {
               limit: 50,
             })}
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem textArea">
             {this.renderTextarea({
               id: 'seoDescription',
               label: 'SEO description',
             })}
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem textArea">
             {this.renderTextarea({
               id: 'shortDescription',
               label: 'Short description',
             })}
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem textArea">
             {this.renderTextarea({
               id: 'longDescription',
               label: 'Long description',
@@ -224,7 +239,7 @@ class Form extends Component<PropsType, StateType> {
               }}
             />
           </div>
-          <div styleName="formItem">
+          <div styleName="formItem button">
             <Button
               big
               onClick={this.handleSave}

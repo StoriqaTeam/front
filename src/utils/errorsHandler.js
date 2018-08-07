@@ -2,8 +2,6 @@
 
 import { keys, isEmpty, pathOr } from 'ramda';
 
-import { log } from 'utils';
-
 import type { ProcessedErrorType } from 'utils/fromRelayError';
 
 import type { AlertType } from 'components/Alerts/Alert';
@@ -26,7 +24,6 @@ export const errorsHandler = (
     [string]: Array<string>,
   }) => void,
 ) => {
-  log.debug({ relayErrors });
   const handleDefaultEvent = (code: string) => {
     // $FlowIgnoreMe
     const status = pathOr(null, [code, 'status'], relayErrors);

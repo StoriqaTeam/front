@@ -3,6 +3,11 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment, ConnectionHandler } from 'relay-runtime';
 
+import type {
+  CreateBaseProductMutationVariables as CreateBaseProductMutationVariablesType,
+  CreateBaseProductMutationResponse as CreateBaseProductMutationResponseType,
+} from './__generated__/CreateBaseProductMutation.graphql';
+
 const mutation = graphql`
   mutation CreateBaseProductMutation($input: CreateBaseProductInput!) {
     createBaseProduct(input: $input) {
@@ -98,7 +103,10 @@ type MutationParamsType = {
   categoryId: number,
   parentID: string,
   environment: Environment,
-  onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
+  onCompleted: ?(
+    response: ?CreateBaseProductMutationResponseType,
+    errors: ?Array<Error>,
+  ) => void,
   onError: ?(error: Error) => void,
 };
 
@@ -138,4 +146,48 @@ const commit = (params: MutationParamsType) =>
     },
   });
 
-export default { commit };
+const promise = (
+  input: {
+    name: Array<{ lang: string, text: string }>,
+    storeId: number,
+    shortDescription: Array<{ lang: string, text: string }>,
+    longDescription: Array<{ lang: string, text: string }>,
+    seoTitle: Array<{ lang: string, text: string }>,
+    seoDescription: Array<{ lang: string, text: string }>,
+    currencyId: number,
+    categoryId: number,
+    parentID: string,
+  },
+  environment: Environment,
+): Promise<CreateBaseProductMutationResponseType> =>
+  new Promise((resolve, reject) => {
+    commit({
+      ...input,
+      environment,
+      onCompleted: (
+        response: ?CreateBaseProductMutationResponseType,
+        errors: ?Array<Error>,
+      ) => {
+        if (response) {
+          resolve(response);
+        } else if (errors) {
+          reject(errors);
+        } else {
+          // eslint-disable-next-line
+          reject([new Error('Unknown error')]);
+        }
+      },
+      onError: (error: Error) => {
+        // eslint-disable-next-line
+        reject([error]);
+      },
+    });
+  });
+
+export type {
+  CreateBaseProductMutationVariablesType,
+  CreateBaseProductMutationResponseType,
+  MutationParamsType as CreateBaseProductMutationParamsType,
+};
+
+export default { commit, promise };

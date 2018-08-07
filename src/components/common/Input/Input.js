@@ -36,10 +36,11 @@ type StateType = {
 
 class Input extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    if (Boolean(nextProps.value) !== prevState.labelFloat) {
+    const value = `${nextProps.value}`;
+    if (Boolean(value) !== prevState.labelFloat) {
       return {
         ...prevState,
-        labelFloat: prevState.isFocus ? true : Boolean(nextProps.value),
+        labelFloat: prevState.isFocus ? true : Boolean(value),
       };
     }
 

@@ -51,8 +51,15 @@ class TableRow extends PureComponent<PropsType> {
             <span styleName="date">{rowItem.date}</span>
             <span styleName="dateFormatted">{formatDate(rowItem.date)}</span>
           </Col>
-          <Col lg={2} xl={1} xlVisible>
-            <span styleName="link">{rowItem.shop.title}</span>
+          <Col lg={2} xl={2} xlVisible>
+            <span styleName="link">
+              <Link
+                to={`/store/${rowItem.shop.id}`}
+                onClick={(e: any) => e.stopPropagation()}
+              >
+                {rowItem.shop.title}
+              </Link>
+            </span>
           </Col>
           <Col lg={2} xl={1} xlVisible>
             {rowItem.delivery}
@@ -82,7 +89,7 @@ class TableRow extends PureComponent<PropsType> {
               {rowItem.payment}
             </div>
           </Col>
-          <Col lg={2} xl={2} lgVisible>
+          <Col lg={2} xl={1} lgVisible>
             {getStatusStringFromEnum(rowItem.status)}
           </Col>
           <div styleName="border" />

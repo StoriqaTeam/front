@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { isNil } from 'ramda';
+import classNames from 'classnames';
 
 import { Select } from 'components/common/Select';
 
@@ -17,6 +18,7 @@ type PropsType = {
   title: string,
   options: Array<MaterialType>,
   onSelect: Function,
+  isOnSelected: boolean,
 };
 
 type StateType = {
@@ -42,15 +44,17 @@ class ProductMaterial extends Component<PropsType, StateType> {
     );
   };
   render() {
-    const { title, options } = this.props;
+    const { title, options, isOnSelected } = this.props;
     const { selected } = this.state;
     return (
       <div styleName="container">
-        <h4>{title}</h4>
+        <div id={title} styleName={classNames('title', { isOnSelected })}>
+          <strong>{title}</strong>
+        </div>
         {isNil(options) ? null : (
           <Select
             forForm
-            activeItem={selected || sortByProp('label')(options)[0]}
+            activeItem={selected ? sortByProp('label')(options)[0] : null}
             items={sortByProp('label')(options)}
             onSelect={this.handleSelect}
           />

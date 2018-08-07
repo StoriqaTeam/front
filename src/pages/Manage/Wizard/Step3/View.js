@@ -52,7 +52,7 @@ type PropsType = {
   onUpload: (type: string, e: any) => Promise<*>,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
-  onSave: () => void,
+  onSave: (callback: () => void) => void,
   onClearProductState: () => void,
   formStateData: BaseProductNodeType,
   onChangeEditingProduct: (val: boolean) => void,
@@ -235,7 +235,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                       <div styleName="productContent">
                         <CardProduct item={item} />
                         <ProductLayer
-                          // onDelete={this.handleOnDelete(item.id)}
                           onDelete={this.handleOnShowDelete(item.id)}
                           onEdit={this.handleOnShowForm(item)}
                         />

@@ -409,7 +409,7 @@ class StorageProducts extends Component<PropsType, StateType> {
     const { me } = this.props;
     const { autocompleteItems } = this.state;
     // $FlowIgnoreMe
-    const storageName = pathOr({}, ['warehouse', 'name'], me);
+    const storageName = pathOr('Unnamed', ['warehouse', 'name'], me);
     const products = map(item => {
       const productId = pathOr({}, ['node', 'productId'], item);
       const quantity = pathOr({}, ['node', 'quantity'], item);

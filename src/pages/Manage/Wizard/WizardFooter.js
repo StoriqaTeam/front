@@ -13,11 +13,13 @@ const WizardFooter = ({
   onChangeStep,
   onSaveStep,
   isReadyToNext,
+  isSavingInProgress,
 }: {
   currentStep: number,
   onChangeStep: (newStep: number) => void,
   onSaveStep: (newStep: number) => void,
   isReadyToNext?: boolean,
+  isSavingInProgress: boolean,
 }) => (
   <div styleName="footerContainer">
     <Container correct>
@@ -58,6 +60,7 @@ const WizardFooter = ({
               dataTest="wizardBackButton"
               big
               disabled={!isReadyToNext}
+              isLoading={isSavingInProgress}
             >
               {(currentStep === 3 && <span>Publish my store</span>) || (
                 <span>Next step</span>
