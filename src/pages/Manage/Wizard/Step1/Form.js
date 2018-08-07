@@ -99,7 +99,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
               }
               onChange={this.handleOnChange}
               fullWidth
-              errors={errors && errors.name}
+              errors={errors && errors.store}
             />
           </div>
           <div styleName="formItem">

@@ -105,6 +105,7 @@ type StateType = {
   validationErrors: ?{
     [string]: Array<string>,
   },
+  isSavingInProgress: boolean,
 };
 
 export const initialProductState = {
@@ -150,6 +151,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ...initialProductState,
       isValid: true,
       validationErrors: null,
+      isSavingInProgress: false,
     };
   }
 
@@ -168,11 +170,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
-  handleWizardError = (messages?: { [string]: Array<string> }) =>
+  handleWizardError = (messages?: { [string]: Array<string> }) => {
     this.setState({
       isValid: false,
       validationErrors: messages || null,
     });
+  };
 
   clearValidationErrors = () =>
     this.setState({
@@ -271,7 +274,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     return preparedData;
   };
 
-  createStore = () => {
+  createStore = (callback: (success: boolean) => void) => {
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
       // $FlowIgnoreMe
@@ -281,33 +284,38 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
+        log.debug('CreateStoreMutation.commit', { response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
         if (relayErrors) {
           errorsHandler(
             relayErrors,
             this.props.showAlert,
             this.handleWizardError,
           );
+          callback(false);
           return;
         }
         this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.updateWizard({ storeId });
+        callback(true);
       },
       onError: (error: Error) => {
-        log.debug({ error });
+        log.debug('CreateStoreMutation.commit', { error });
         const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
         errorsHandler(
           relayErrors,
           this.props.showAlert,
           this.handleWizardError,
         );
+        callback(false);
       },
     });
   };
 
-  updateStore = (callback?: () => void) => {
+  updateStore = (callback: (success: boolean) => void) => {
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -328,71 +336,65 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             this.props.showAlert,
             this.handleWizardError,
           );
+          callback(false);
           return;
         }
 
-        if (callback) {
-          // create storage if not exists
-          const addressFull = pathOr(
-            null,
-            ['updateStore', 'addressFull'],
-            response,
-          );
-          // $FlowIgnoreMe
-          const warehouses = pathOr(
-            [null],
-            ['me', 'wizardStore', 'store', 'warehouses'],
-            this.props,
-          );
-          // $FlowIgnoreMe
-          const storeId = pathOr(
-            [null],
-            ['me', 'wizardStore', 'store', 'rawId'],
-            this.props,
-          );
-          if (warehouses && warehouses.length === 0 && addressFull) {
-            CreateWarehouseMutation.commit({
-              input: {
-                clientMutationId: '',
-                storeId,
-                addressFull,
-              },
-              environment: this.context.environment,
-              onCompleted: (responze: ?Object, errorz: ?Array<any>) => {
-                log.debug('CreateWarehouseMutation', { responze });
-                const relayErrorz = fromRelayError({ source: { errorz } });
-                if (relayErrors) {
-                  errorsHandler(
-                    relayErrorz,
-                    this.props.showAlert,
-                    this.handleWizardError,
-                  );
-                  // $FlowIgnoreMe
-                  callback();
-                  return;
-                }
-                this.clearValidationErrors();
-                // $FlowIgnoreMe
-                callback();
-              },
-              onError: (error: Error) => {
-                const relayErrorz = fromRelayError(error);
+        // create storage if not exists
+        const addressFull = pathOr(
+          null,
+          ['updateStore', 'addressFull'],
+          response,
+        );
+        // $FlowIgnoreMe
+        const warehouses = pathOr(
+          [null],
+          ['me', 'wizardStore', 'store', 'warehouses'],
+          this.props,
+        );
+        // $FlowIgnoreMe
+        const storeId = pathOr(
+          [null],
+          ['me', 'wizardStore', 'store', 'rawId'],
+          this.props,
+        );
+        if (warehouses && warehouses.length === 0 && addressFull) {
+          CreateWarehouseMutation.commit({
+            input: {
+              clientMutationId: '',
+              storeId,
+              addressFull,
+            },
+            environment: this.context.environment,
+            onCompleted: (responze: ?Object, errorz: ?Array<any>) => {
+              log.debug('CreateWarehouseMutation', { responze });
+              const relayErrorz = fromRelayError({ source: { errorz } });
+              if (relayErrors) {
                 errorsHandler(
                   relayErrorz,
                   this.props.showAlert,
                   this.handleWizardError,
                 );
+                callback(false);
+                return;
+              }
+              this.clearValidationErrors();
+              callback(true);
+            },
+            onError: (error: Error) => {
+              const relayErrorz = fromRelayError(error);
+              errorsHandler(
+                relayErrorz,
+                this.props.showAlert,
+                this.handleWizardError,
+              );
 
-                // $FlowIgnoreMe
-                callback();
-              },
-            });
-          } else {
-            this.clearValidationErrors();
-            callback();
-          }
+              callback(false);
+            },
+          });
         } else {
           this.clearValidationErrors();
+          callback(true);
         }
       },
       onError: (error: Error) => {
@@ -403,6 +405,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           this.props.showAlert,
           this.handleWizardError,
         );
+        callback(false);
       },
     });
   };
@@ -415,23 +418,31 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const { step } = this.state;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
-    let errors = null;
+    this.setState({ isSavingInProgress: true });
     switch (step) {
       case 1:
         if (storeId) {
-          this.updateStore();
-          this.handleOnChangeStep(changedStep);
+          this.updateStore((success: boolean) => {
+            this.setState({ isSavingInProgress: false });
+            if (success) {
+              this.handleOnChangeStep(changedStep);
+            }
+          });
           break;
         }
-        // eslint
-        errors = this.createStore();
-        if (!errors) {
-          this.handleOnChangeStep(changedStep);
-        }
+        this.createStore((success: boolean) => {
+          this.setState({ isSavingInProgress: false });
+          if (success) {
+            this.handleOnChangeStep(changedStep);
+          }
+        });
         break;
       case 2:
-        this.updateStore(() => {
-          this.handleOnChangeStep(changedStep);
+        this.updateStore((success: boolean) => {
+          this.setState({ isSavingInProgress: false });
+          if (success) {
+            this.handleOnChangeStep(changedStep);
+          }
         });
         break;
       case 3:
@@ -876,7 +887,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { step, showConfirm, isValid, editingProduct } = this.state;
+    const {
+      step,
+      showConfirm,
+      isValid,
+      editingProduct,
+      isSavingInProgress,
+    } = this.state;
     const { wizardStore } = me;
     // $FlowIgnoreMe
     const baseProducts = pathOr(
@@ -943,6 +960,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               onChangeStep={this.handleOnChangeStep}
               onSaveStep={this.handleOnSaveStep}
               isReadyToNext={isReadyToNext()}
+              isSavingInProgress={isSavingInProgress}
             />
           </div>
         )}
