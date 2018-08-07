@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import { isEmpty } from 'utils';
 
-import { ProductThumbnails, ImageDetail } from './index';
+import { ProductThumbnails } from './index';
 
 import './ProductImage.scss';
 
@@ -92,7 +92,6 @@ class ProductImage extends Component<PropsType, StateType> {
               }}
             />
           </figure>
-          <ImageDetail />
         </div>
       </div>
     );
