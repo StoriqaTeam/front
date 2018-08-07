@@ -191,6 +191,7 @@ export default createFragmentContainer(
       baseProduct(id: $productID) {
         id
         rawId
+        status
         products(first: 100) @connection(key: "Wizard_products") {
           edges {
             node {
