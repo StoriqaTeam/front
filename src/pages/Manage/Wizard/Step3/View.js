@@ -235,7 +235,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                       <div styleName="productContent">
                         <CardProduct item={item} />
                         <ProductLayer
-                          // onDelete={this.handleOnDelete(item.id)}
                           onDelete={this.handleOnShowDelete(item.id)}
                           onEdit={this.handleOnShowForm(item)}
                         />

@@ -91,7 +91,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
           <div styleName="formItem">
             <Input
               id="name"
-              value={name}
+              value={name || ''}
               label={
                 <span>
                   Store name <span styleName="red">*</span>
@@ -105,7 +105,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
           <div styleName="formItem">
             <Input
               id="slug"
-              value={slug}
+              value={slug || ''}
               label={
                 <span>
                   Slug <span styleName="red">*</span>
@@ -119,7 +119,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
           <div>
             <Textarea
               id="shortDescription"
-              value={shortDescription}
+              value={shortDescription || ''}
               label={
                 <span>
                   Short description <span styleName="red">*</span>
