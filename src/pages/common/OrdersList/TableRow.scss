@@ -48,9 +48,6 @@
 
 .link {
   color: $color_blue !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 
   a[href] {
     color: $color_blue !important;
