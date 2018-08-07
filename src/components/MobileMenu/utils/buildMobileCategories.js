@@ -25,6 +25,7 @@ function build({
 
 const buildMobileCategories = (
   categories: CategoryType,
-): Array<TransformedCategoryType> => map(build, categories.children);
+): Array<TransformedCategoryType> =>
+  map(build, categories ? categories.children : []);
 
 export default buildMobileCategories;

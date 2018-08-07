@@ -16,6 +16,13 @@ const mutation = graphql`
     createProduct(input: $input) {
       id
       rawId
+      baseProduct {
+        store {
+          warehouses {
+            id
+          }
+        }
+      }
       stocks {
         id
         productId
@@ -110,4 +117,40 @@ const commit = (params: MutationParamsType) =>
     },
   });
 
-export default { commit };
+const promise = (
+  input: {
+    ...CreateProductWithAttributesMutationVariables,
+    parentID: string,
+  },
+  environment: Environment,
+): Promise<CreateProductWithAttributesMutationResponse> =>
+  new Promise((resolve, reject) => {
+    commit({
+      ...input,
+      environment,
+      onCompleted: (
+        response: ?CreateProductWithAttributesMutationResponse,
+        errors: ?Array<Error>,
+      ) => {
+        log.debug('CreateProductWithAttributesMutation', { response, errors });
+        if (errors) {
+          reject(errors);
+        } else if (response) {
+          resolve(response);
+        } else {
+          // eslint-disable-next-line
+          reject([new Error('Unknown error')]);
+        }
+      },
+      onError: (error: Error) => {
+        // eslint-disable-next-line
+        reject([error]);
+      },
+    });
+  });
+
+export type {
+  CreateProductWithAttributesMutationResponse as CreateProductWithAttributesMutationResponseType,
+};
+
+export default { commit, promise };
