@@ -21,12 +21,6 @@ type StateType = {
 };
 
 class ProductImage extends Component<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -64,35 +58,33 @@ class ProductImage extends Component<PropsType, StateType> {
             />
           ) : null}
         </div>
-        <div styleName="image">
-          <figure styleName="bigImage">
-            {discount > 0 ? (
-              <span styleName="discount">
-                Price <br /> Off <br />
-                <span
-                  style={{
-                    fontSize: 16,
-                  }}
-                >
-                  {`- ${Math.round(discount * 100)} %`}
-                </span>
+        <figure styleName="image">
+          {discount > 0 ? (
+            <span styleName="discount">
+              Price <br /> Off <br />
+              <span
+                style={{
+                  fontSize: 16,
+                }}
+              >
+                {`- ${Math.round(discount * 100)} %`}
               </span>
-            ) : null}
-            <div
-              role="img"
-              style={{
-                backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : mainImage
-                })`,
-                backgroundSize: 'contain',
-                width: '100%',
-                height: '100%',
-                backgroundPosition: 'center top',
-                backgroundRepeat: 'no-repeat',
-              }}
-            />
-          </figure>
-        </div>
+            </span>
+          ) : null}
+          <div
+            role="img"
+            style={{
+              backgroundImage: `url(${
+                !isEmpty(selected) ? selected : mainImage
+              })`,
+              backgroundSize: 'contain',
+              backgroundPosition: 'center top',
+              backgroundRepeat: 'no-repeat',
+              height: '100%',
+              width: '100%',
+            }}
+          />
+        </figure>
       </div>
     );
   }

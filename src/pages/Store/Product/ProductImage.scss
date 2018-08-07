@@ -2,9 +2,16 @@
 
 .container {
   align-items: flex-start;
-  // border-right: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
+  //position: relative;
+  //width: 100%;
+  //
+  //&:after {
+  //  content: "";
+  //  display: block;
+  //  padding-top: 100%;
+  //}
 }
 
 .expand {
@@ -18,43 +25,29 @@
 }
 
 .image {
-  align-items: center;
-  display: flex;
-  flex-flow: column;
-  width: 100%;
-}
-
-.bigImage {
-  height: 41.875rem;
   position: relative;
-  width: inherit;
+  width: 100%;
 
-  & > img {
+  &:after {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+
+  div[role="img"] {
+    position: absolute;
     height: 100%;
-    object-fit: contain;
-    width: 100%;
-  }
-
-  @media (min-width: $sm) {
-    height: 41.875rem;
-  }
-  @media (min-width: $md) {
-    // height: 41.875rem;
-    height: 97.125rem;
-  }
-  @media (min-width: $lg) {
-    height: 61.625rem;
-  }
-  @media (min-width: $xl) {
-    height: 69.875rem;
+    top: 0;
+    right: 0;
+    width: calc(100% - 14rem);
   }
 }
 
 
 .thumbnailsWrapper {
-  max-width: 12rem;
-  margin: 2rem;
   display: none;
+  margin: 2rem;
+  max-width: 12rem;
   @media (min-width: $lg) {
     display: block;
   }
