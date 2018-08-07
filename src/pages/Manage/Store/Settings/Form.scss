@@ -7,7 +7,6 @@
 }
 
 .form {
-  margin-top: 2rem;
   background-color: $color_white;
   flex: 1 0 auto;
 }
@@ -77,6 +76,16 @@
       svg {
         fill: $color_grey_minor;
       }
+    }
+  }
+}
+
+.saveButton {
+  margin-top: 2rem;
+  button {
+    width: 100%;
+    @media (min-width: $md) {
+      width: 22.5rem;
     }
   }
 }

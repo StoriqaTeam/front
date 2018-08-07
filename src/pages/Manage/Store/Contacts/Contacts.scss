@@ -39,3 +39,12 @@
 .address {
   max-width: 41rem;
 }
+
+.saveButton {
+  button {
+    width: 100%;
+    @media (min-width: $md) {
+      width: 22.5rem;
+    }
+  }
+}

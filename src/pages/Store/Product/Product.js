@@ -153,11 +153,12 @@ class Product extends Component<PropsType, StateType> {
       const variants = path(pathToAll, this.props);
       const productVariant = getVariantFromSelection(selection)(variants);
       const widgets = differentiateWidgets(selection)(variants);
-      this.setState({
+      this.setState((prevState: StateType) => ({
         widgets,
         productVariant,
-        unselectedAttr: isNoSelected(widgets),
-      });
+        unselectedAttr:
+          prevState.unselectedAttr === null ? null : isNoSelected(widgets),
+      }));
     }
   };
 
