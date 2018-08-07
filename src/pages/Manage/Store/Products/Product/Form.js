@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { assocPath, prop, propOr, isEmpty, omit } from 'ramda';
 import { validate } from '@storiqa/shared';
+import classNames from 'classnames';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Button } from 'components/common/Button';
@@ -28,6 +29,7 @@ type BaseProductType = {
   category: {
     rawId: number,
   },
+  status: string,
 };
 
 type PropsType = {
@@ -178,11 +180,22 @@ class Form extends Component<PropsType, StateType> {
 
   render() {
     const { isLoading, baseProduct } = this.props;
+    const status = baseProduct ? baseProduct.status : 'Draft';
     return (
       <div styleName="container">
+        <div
+          styleName={classNames('status', {
+            draft: status === 'DRAFT',
+            moderation: status === 'MODERATION',
+            decline: status === 'DECLINE',
+            published: status === 'PUBLISHED',
+          })}
+        >
+          {status}
+        </div>
         <div styleName="form">
           <div styleName="title">
-            <strong>General characteristics</strong>
+            <strong>General settings</strong>
           </div>
           <div styleName="formItem">
             {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
