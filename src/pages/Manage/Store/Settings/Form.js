@@ -352,7 +352,9 @@ class Form extends Component<PropsType, StateType> {
               <button styleName="trash" onClick={this.handleDeleteCover}>
                 <Icon type="basket" size={28} />
               </button>
-              <img src={convertSrc(cover, 'medium')} alt="Store cover" />
+              <div styleName="image">
+                <img src={convertSrc(cover, 'medium')} alt="Store cover" />
+              </div>
             </div>
           )}
           {this.renderInput({
