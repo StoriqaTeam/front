@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { addIndex, map } from 'ramda';
 
-import { Col } from 'layout';
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
-import { Button } from 'components/common/Button';
+// import { Button } from 'components/common/Button';
+import { Icon } from 'components/Icon';
 import { BirthdateSelect } from 'components/common/BirthdateSelect';
 
 import {
@@ -20,20 +20,24 @@ import './Header.scss';
 type PropsType = {
   onSearchTermFilterChanged: string => void,
   onOrderStatusFilterChanged: (?string) => void,
-  onOrderDateFilterChanged: string => void,
+  // onOrderDateFilterChanged: string => void,
+  onOrderFromDateFilterChanged: string => void,
+  onOrderToDateFilterChanged: string => void,
 };
 
 type StateType = {
   searchTerm: ?string,
   orderStatus: ?{ id: string, label: string },
-  orderDate: ?string,
+  orderFromDate: ?string,
+  orderToDate: ?string,
 };
 
 class Header extends Component<PropsType, StateType> {
   state: StateType = {
     searchTerm: null,
     orderStatus: null,
-    orderDate: null,
+    orderFromDate: null,
+    orderToDate: null,
   };
 
   handleSearchTermChange = (e: {
@@ -63,10 +67,15 @@ class Header extends Component<PropsType, StateType> {
     }
   };
 
-  // eslint-disable-next-line
-  handleOrderDateChange = (value: string) => {
-    this.setState({ orderDate: value }, () =>
-      this.props.onOrderDateFilterChanged(value),
+  handleOrderFromDateChange = (value: string) => {
+    this.setState({ orderFromDate: value }, () =>
+      this.props.onOrderFromDateFilterChanged(value),
+    );
+  };
+
+  handleOrderToDateChange = (value: string) => {
+    this.setState({ orderToDate: value }, () =>
+      this.props.onOrderToDateFilterChanged(value),
     );
   };
 
@@ -82,52 +91,54 @@ class Header extends Component<PropsType, StateType> {
 
     return (
       <header styleName="container">
-        <Col size={12} sm={6} md={4} lg={3} xl={3}>
+        <div styleName="searchInput">
           <Input
             id="searchTermInput"
             label="Search order"
             onChange={this.handleSearchTermChange}
             value={this.state.searchTerm || ''}
-            limit={100}
             fullWidth
             search
           />
-        </Col>
-        <Col size={12} sm={6} md={4} lg={3} xl={3} lgVisible>
-          <div styleName="orderSelect">
-            <Select
-              items={orderStatusesItems}
-              activeItem={this.state.orderStatus || undefined}
-              dataTest="OrderStatusSelect"
-              forForm
-              onSelect={this.handleOrderStatusChange}
-              containerStyle={{
-                marginBottom: '1px',
-                marginLeft: '3rem',
-                // width: '26.25rem',
-              }}
-              label="Order status"
-              withEmpty
-              fullWidth
-            />
+        </div>
+        <div styleName="orderSelect">
+          <div styleName="icon">
+            <Icon type="status" size={32} />
           </div>
-        </Col>
-        <Col md={3} lg={3} xl={3} lgVisible>
-          <div styleName="birthdateSelect">
-            <BirthdateSelect
-              label="Order date"
-              handleBirthdateSelect={this.handleOrderDateChange}
-              birthdate={this.state.orderDate}
-            />
+          <Select
+            items={orderStatusesItems}
+            activeItem={this.state.orderStatus || undefined}
+            dataTest="OrderStatusSelect"
+            forForm
+            onSelect={this.handleOrderStatusChange}
+            label="Order status"
+            withEmpty
+            fullWidth
+          />
+        </div>
+        <div styleName="dateRange">
+          <div styleName="icon">
+            <Icon type="calendar" size={32} />
           </div>
-        </Col>
-        <Col size={12} sm={6} md={8} lg={3} xl={3}>
-          <div styleName="buttonWrapper">
-            <Button wireframe big>
-              Open ticket
-            </Button>
+          <div styleName="calendars">
+            <div styleName="item">
+              <BirthdateSelect
+                brief
+                label="From"
+                handleBirthdateSelect={this.handleOrderFromDateChange}
+                birthdate={this.state.orderFromDate}
+              />
+            </div>
+            <div styleName="item">
+              <BirthdateSelect
+                brief
+                label="To"
+                handleBirthdateSelect={this.handleOrderToDateChange}
+                birthdate={this.state.orderToDate}
+              />
+            </div>
           </div>
-        </Col>
+        </div>
       </header>
     );
   }

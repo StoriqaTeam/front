@@ -9,6 +9,8 @@ import Row from './Row';
 import Form from './Form/Form';
 import Header from './Header';
 
+import './Table.scss';
+
 type PropsType = {
   category: {},
   variants: Array<{ rawId: number }>,
@@ -83,8 +85,14 @@ class Table extends Component<PropsType, StateType> {
   render() {
     return (
       <div>
-        <Header onSelectAllClick={this.handleSelectAll} />
-        {this.renderRows()}
+        <div style={{ overflow: 'hidden' }}>
+          <div styleName="table">
+            <div styleName="tableWrapper">
+              <Header onSelectAllClick={this.handleSelectAll} />
+              {this.renderRows()}
+            </div>
+          </div>
+        </div>
         {!this.state.expandedItemId && (
           <Form
             category={this.props.category}

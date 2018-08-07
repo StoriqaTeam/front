@@ -256,7 +256,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                 <div styleName="buttonsContainer">
                   <Button
                     onClick={this.handleOnCloseDelete}
-                    dataTest="wizardBackButton"
+                    dataTest="wizardDeleteProductCancelButton"
                     wireframe
                     big
                   >
@@ -265,7 +265,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <div styleName="deleteButton">
                     <Button
                       onClick={this.handleOnDelete(deleteId)}
-                      dataTest="wizardBackButton"
+                      dataTest="wizardDeleteProductButton"
                       big
                       pink
                     >

@@ -109,6 +109,7 @@ class Cart extends Component<PropsType, StateType> {
                               key={store.__id}
                               store={store}
                               totals={this.totalsForStore(store.__id)}
+                              isOpenInfo
                             />
                           ))}
                         </div>

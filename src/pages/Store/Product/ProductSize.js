@@ -14,6 +14,7 @@ type PropsType = {
   title: string,
   options: Array<WidgetOptionType>,
   onClick: WidgetOptionType => WidgetOptionType,
+  isOnSelected: boolean,
 };
 
 class ProductSize extends Component<PropsType, {}> {
@@ -26,13 +27,16 @@ class ProductSize extends Component<PropsType, {}> {
   handleClick = (index: number, selected: WidgetOptionType): void => {
     const { onClick } = this.props;
     onClick({ ...selected, state: 'selected' });
+    //
   };
   render() {
-    const { title, options } = this.props;
+    const { title, options, isOnSelected } = this.props;
     const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
-        <h4>{title}</h4>
+        <div id={title} styleName={classNames('title', { isOnSelected })}>
+          <strong>{title}</strong>
+        </div>
         <div styleName="sizes">
           {mapIndexed((option, index, arr) => {
             const available = arr.every(propEq('state', 'available'));
