@@ -3,7 +3,8 @@
 import React, { Component, Fragment } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, isNil } from 'ramda';
+import { path, isNil, head } from 'ramda';
+import smoothscroll from 'libs/smoothscroll';
 
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -20,7 +21,8 @@ import {
   makeWidgets,
   differentiateWidgets,
   getVariantFromSelection,
-  isSelected,
+  isNoSelected,
+  sortByProp,
 } from './utils';
 
 import {
@@ -53,6 +55,7 @@ type PropsType = {
 type StateType = {
   widgets: Array<WidgetType>,
   productVariant: ProductVariantType,
+  unselectedAttr: ?Array<string>,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -73,38 +76,41 @@ class Product extends Component<PropsType, StateType> {
       const madeWidgets = makeWidgets([])(all);
       const productVariant = getVariantFromSelection([])(all);
       return {
+        ...prevState,
         widgets: madeWidgets,
         productVariant,
       };
     }
     return prevState;
   }
-  state: StateType = {
-    widgets: [],
-    productVariant: {
-      id: '',
-      rawId: 0,
-      description: '',
-      photoMain: '',
-      additionalPhotos: null,
-      price: 0,
-      cashback: null,
-      discount: null,
-      lastPrice: null,
-    },
-  };
-  componentDidMount() {
-    if (process.env.BROWSER) {
-      setTimeout(() => {
-        // HACK because 'window.scrollTo(0, 0)' doesn't work
-        // $FlowFixMe
-        document.getElementById('root').scrollTop = 0;
-      }, 0);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      widgets: [],
+      productVariant: {
+        id: '',
+        rawId: 0,
+        description: '',
+        photoMain: '',
+        additionalPhotos: null,
+        price: 0,
+        cashback: null,
+        discount: null,
+        lastPrice: null,
+      },
+      unselectedAttr: null,
+    };
   }
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
   handleAddToCart(id: number): void {
     const { widgets } = this.state;
-    if ((id && isSelected(widgets)) || (id && widgets.length === 0)) {
+    const unselectedAttr = isNoSelected(sortByProp('id')(widgets));
+    // return;
+    if ((id && !unselectedAttr) || (id && widgets.length === 0)) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -135,31 +141,26 @@ class Product extends Component<PropsType, StateType> {
         },
       });
     } else {
-      const message = !isSelected(widgets)
-        ? 'You must select an attribute'
-        : 'Something went wrong :(';
-      this.props.showAlert({
-        type: 'danger',
-        text: message,
-        link: { text: 'Close.' },
-      });
-      const errorMessage = !isSelected(widgets)
-        ? 'Unable to add an item without selected attribute'
-        : 'Unable to add an item without productId';
-      log.error(errorMessage);
+      this.setState({ unselectedAttr });
+      smoothscroll.scrollTo(head(unselectedAttr));
     }
   }
-  handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
-    const selection = [{ id, value: label, state, variantIds }];
-    const pathToAll = ['baseProduct', 'variants', 'all'];
-    const variants = path(pathToAll, this.props);
-    const productVariant = getVariantFromSelection(selection)(variants);
-    const widgets = differentiateWidgets(selection)(variants);
-    this.setState({
-      widgets,
-      productVariant,
-    });
+  handleWidget = (props: WidgetOptionType): void => {
+    if (props) {
+      const { id, label, state, variantIds } = props;
+      const selection = [{ id, value: label, state, variantIds }];
+      const pathToAll = ['baseProduct', 'variants', 'all'];
+      const variants = path(pathToAll, this.props);
+      const productVariant = getVariantFromSelection(selection)(variants);
+      const widgets = differentiateWidgets(selection)(variants);
+      this.setState({
+        widgets,
+        productVariant,
+        unselectedAttr: isNoSelected(widgets),
+      });
+    }
   };
+
   makeTabs = (longDescription: Array<TranslationType>) => {
     const tabs: Array<TabType> = [
       {
@@ -186,6 +187,7 @@ class Product extends Component<PropsType, StateType> {
     );
   };
   render() {
+    const { unselectedAttr } = this.state;
     if (isNil(this.props.baseProduct)) {
       return <div styleName="productNotFound">Product Not Found</div>;
     }
@@ -216,22 +218,30 @@ class Product extends Component<PropsType, StateType> {
                     productDescription={description}
                     widgets={widgets}
                     onWidgetClick={this.handleWidget}
+                    unselectedAttr={unselectedAttr}
                   >
                     <div styleName="buttons-container">
-                      <Button disabled big>
-                        Buy now
-                      </Button>
-                      <Button
-                        id="productAddToCart"
-                        wireframe
-                        big
-                        onClick={() =>
-                          this.handleAddToCart(productVariant.rawId)
-                        }
-                        dataTest="product-addToCart"
-                      >
-                        Add to cart
-                      </Button>
+                      <div styleName="buttons">
+                        <Button disabled big>
+                          Buy now
+                        </Button>
+                        <Button
+                          id="productAddToCart"
+                          wireframe
+                          big
+                          onClick={() =>
+                            this.handleAddToCart(productVariant.rawId)
+                          }
+                          dataTest="product-addToCart"
+                        >
+                          Add to cart
+                        </Button>
+                      </div>
+                      {unselectedAttr && (
+                        <div styleName="message">
+                          You must select an attribute
+                        </div>
+                      )}
                     </div>
                     <div styleName="line" />
                     <ProductStore />

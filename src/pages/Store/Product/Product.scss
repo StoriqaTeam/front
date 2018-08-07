@@ -25,16 +25,29 @@
 }
 
 .buttons-container {
-  display: flex;
+  position: relative;
   margin-top: 3rem;
-  button {
-    width: 30rem;
-  }
-  button + button {
-    margin-left: 2rem;
-    @media (min-width: $md) {
-      margin-left: 1rem;
+
+  .buttons {
+    display: flex;
+
+    button {
+      width: 30rem;
     }
+
+    button + button {
+      margin-left: 2rem;
+      @media (min-width: $md) {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  .message {
+    position: absolute;
+    bottom: -3.25rem;
+    color: $color_red;
+    font-size: 12px;
   }
 }
 
