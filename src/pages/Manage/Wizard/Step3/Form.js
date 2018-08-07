@@ -11,6 +11,7 @@ import { Button } from 'components/common/Button';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
+import { Select } from 'components/common/Select';
 
 import AttributesForm from './AttributesForm';
 import ProductsUploader from './ProductsUploader';
@@ -336,7 +337,17 @@ class ThirdForm extends PureComponent<PropsType> {
                               onChange={this.handleChangeProductState}
                               fullWidth
                               type="number"
-                              postfix="STQ"
+                            />
+                          </Col>
+                          <Col size={12} md={6}>
+                            <Select
+                              items={[{ id: '1', label: 'STQ' }]}
+                              activeItem={{ id: '1', label: 'STQ' }}
+                              label="Currency"
+                              forForm
+                              containerStyle={{
+                                marginTop: '3rem',
+                              }}
                             />
                           </Col>
                           <Col size={12} md={6}>
