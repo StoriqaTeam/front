@@ -20,21 +20,32 @@
 
 }
 
-.thumbnails {
-  display: flex;
+.thumbnailContainer {
+  height: 10rem;
+  position: relative;
+  width: 10rem;
+
+  //&:after {
+  //  content: "";
+  //  display: block;
+  //  padding-bottom: 100%;
+  //}
 
   img[src] {
     border-radius: 0.5rem;
-    height: 10rem;
+    height: 100%;
     // https://css-tricks.com/almanac/properties/o/object-fit/
     object-fit: cover;
-    width: 10rem;
+    width: 100%;
   }
 
   .clicked {
     border: 0.25rem solid $color_blue;
   }
+}
 
+.thumbnails {
+  display: flex;
 }
 
 h4 {
