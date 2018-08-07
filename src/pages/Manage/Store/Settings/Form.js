@@ -395,13 +395,15 @@ class Form extends Component<PropsType, StateType> {
             label: 'Long description',
           })}
           <div styleName="formItem">
-            <SpinnerButton
-              onClick={this.handleSave}
-              isLoading={isLoading}
-              dataTest="saveButton"
-            >
-              Save
-            </SpinnerButton>
+            <div styleName="saveButton">
+              <SpinnerButton
+                onClick={this.handleSave}
+                isLoading={isLoading}
+                dataTest="saveButton"
+              >
+                Save
+              </SpinnerButton>
+            </div>
           </div>
         </div>
       </div>
