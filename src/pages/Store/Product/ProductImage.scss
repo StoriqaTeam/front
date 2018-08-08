@@ -4,14 +4,6 @@
   align-items: flex-start;
   display: flex;
   justify-content: space-between;
-  //position: relative;
-  //width: 100%;
-  //
-  //&:after {
-  //  content: "";
-  //  display: block;
-  //  padding-top: 100%;
-  //}
 }
 
 .expand {
@@ -25,6 +17,7 @@
 }
 
 .image {
+  overflow: hidden;
   position: relative;
   width: 100%;
 
@@ -43,6 +36,13 @@
   }
 }
 
+.imageBlur {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
 
 .thumbnailsWrapper {
   display: none;
@@ -59,23 +59,4 @@
   @media (min-width: $lg) {
     display: block;
   }
-}
-
-.discount {
-  background-color: $color_pink;
-  border-bottom: 1px solid $color_white;
-  border-left: 1px solid $color_white;
-  border-radius: 0 0 0.5rem 0.5rem;
-  border-right: 1px solid $color_white;
-  border-top: 0 solid transparent;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  height: 9.375rem;
-  padding-top: 1px;
-  position: absolute;
-  right: 9.375rem;
-  text-align: center;
-  top: 0;
-  width: 8rem;
 }
