@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .wrapper {
   position: relative;
@@ -6,7 +6,7 @@
 
 .menuContainer {
   position: absolute;
-  z-index: 1;
+  z-index: 9999;
   top: 4.5rem;
   left: 0;
   padding: 2rem;
@@ -39,11 +39,14 @@
 
 .breadcrumbs {
   display: inline-block;
-  min-width: 41rem;
+  min-width: 28rem;
   color: $color_blue;
   font-size: 1.75rem;
   cursor: pointer;
   border-bottom: 1px dashed $color_blue;
+  @media (min-width: $md) {
+    min-width: 41rem;
+  }
 }
 
 .levelWrapper {

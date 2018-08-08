@@ -28,7 +28,7 @@ const TableTitle = () => (
         <Icon type="sortArrows" />
       </span>
     </Col>
-    <Col lg={2} xl={1} xlVisible>
+    <Col lg={2} xl={2} xlVisible>
       <span styleName="title">
         Shop
         <Icon type="sortArrows" />
@@ -58,7 +58,7 @@ const TableTitle = () => (
         <Icon type="sortArrows" />
       </span>
     </Col>
-    <Col md={1} lg={2} xl={2} lgVisible>
+    <Col md={1} lg={2} xl={1} lgVisible>
       <span styleName="title">
         Status
         <Icon type="sortArrows" />

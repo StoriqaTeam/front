@@ -3,6 +3,18 @@
 
 .container {
   position: relative;
+  background: $color_white;
+  margin-left: -2rem;
+  margin-right: -2rem;
+  padding: 0 2rem;
+  margin-bottom: -1rem;
+  @media (min-width: $md) {
+    background: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    margin-bottom: 0;
+  }
 }
 
 .offscreen {

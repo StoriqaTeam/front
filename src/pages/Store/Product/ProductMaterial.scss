@@ -4,7 +4,8 @@
   margin-top: 3.625rem;
 }
 
-h4 {
+.title {
+  position: relative;
   color: $color_grey;
   font-size: 14px;
   font-stretch: normal;
@@ -16,4 +17,8 @@ h4 {
   text-align: left;
   text-transform: uppercase;
   width: 12.125rem;
+
+  &.isOnSelected {
+    color: $color_red;
+  }
 }

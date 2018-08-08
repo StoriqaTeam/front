@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, pathOr } from 'ramda';
 
@@ -76,19 +76,22 @@ class Variants extends PureComponent<PropsType> {
 
   render() {
     return (
-      <div styleName="container">
-        <div styleName="title">
-          <strong>Variants</strong>
+      <Fragment>
+        <div styleName="separator" />
+        <div styleName="container">
+          <div styleName="title">
+            <strong>Variants</strong>
+          </div>
+          <Table
+            category={this.props.category}
+            variants={this.props.variants}
+            productRawId={this.props.productRawId}
+            productId={this.props.productId}
+            storeID={this.props.storeID}
+            handleDeleteVariant={this.handleDeleteVariant}
+          />
         </div>
-        <Table
-          category={this.props.category}
-          variants={this.props.variants}
-          productRawId={this.props.productRawId}
-          productId={this.props.productId}
-          storeID={this.props.storeID}
-          handleDeleteVariant={this.handleDeleteVariant}
-        />
-      </div>
+      </Fragment>
     );
   }
 }

@@ -26,6 +26,7 @@
   &.pink {
     border: 1px solid $color_pink;
     background-color: $color_pink;
+
     &:hover {
       border: 1px solid $color_pink;
       background-color: $color_pink;
@@ -134,6 +135,7 @@
   &.pink {
     border: 1px solid $color_pink;
     color: $color_pink;
+    background-color: transparent;
 
     &:hover {
       background: $color_pink;

@@ -11,6 +11,7 @@ import { Button } from 'components/common/Button';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
+import { Select } from 'components/common/Select';
 
 import AttributesForm from './AttributesForm';
 import ProductsUploader from './ProductsUploader';
@@ -34,7 +35,7 @@ type PropsType = {
   }) => void,
   data: BaseProductNodeType,
   onUpload: (type: string, e: any) => Promise<*>,
-  onSave: () => void,
+  onSave: (callback: () => void) => void,
   onClose: () => void,
 };
 
@@ -283,7 +284,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     <ProductsUploader
                       onRemove={this.handleRemoveAddtionalPhoto}
                       onUpload={onUpload}
-                      additionalPhotos={data.product.additionalPhotos}
+                      additionalPhotos={data.product.additionalPhotos || []}
                     />
                     <div styleName="uploadDescriptionContainer">
                       <div styleName="description">
@@ -324,7 +325,11 @@ class ThirdForm extends PureComponent<PropsType> {
                             <div styleName="formItem">
                               <Input
                                 id="price"
-                                value={data.product.price || ''}
+                                value={
+                                  data.product.price == null
+                                    ? ''
+                                    : `${data.product.price}`
+                                }
                                 label={
                                   <span>
                                     Price <span styleName="red">*</span>
@@ -333,7 +338,19 @@ class ThirdForm extends PureComponent<PropsType> {
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
-                                postfix="STQ"
+                              />
+                            </div>
+                          </Col>
+                          <Col size={12} md={6}>
+                            <div styleName="formItem">
+                              <Select
+                                items={[{ id: '1', label: 'STQ' }]}
+                                activeItem={{ id: '1', label: 'STQ' }}
+                                label="Currency"
+                                forForm
+                                containerStyle={{
+                                  marginTop: '3rem',
+                                }}
                               />
                             </div>
                           </Col>
@@ -341,7 +358,11 @@ class ThirdForm extends PureComponent<PropsType> {
                             <div styleName="formItem">
                               <Input
                                 id="vendorCode"
-                                value={data.product.vendorCode || ''}
+                                value={
+                                  data.product.vendorCode == null
+                                    ? ''
+                                    : `${data.product.vendorCode}`
+                                }
                                 label={
                                   <span>
                                     Vendor code <span styleName="red">*</span>
@@ -356,12 +377,32 @@ class ThirdForm extends PureComponent<PropsType> {
                             <div styleName="formItem">
                               <Input
                                 id="cashback"
-                                value={data.product.cashback || ''}
+                                value={
+                                  data.product.cashback == null
+                                    ? ''
+                                    : `${data.product.cashback}`
+                                }
                                 label="Cashback"
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
                                 postfix="%"
+                              />
+                            </div>
+                          </Col>
+                          <Col size={12} md={6}>
+                            <div styleName="formItem">
+                              <Input
+                                id="quantity"
+                                value={
+                                  data.product.quantity == null
+                                    ? '0'
+                                    : `${data.product.quantity}`
+                                }
+                                label="Quantity"
+                                onChange={this.handleChangeProductState}
+                                fullWidth
+                                type="number"
                               />
                             </div>
                           </Col>
@@ -374,8 +415,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     <div styleName="buttonContainer">
                       <Button
                         onClick={() => {
-                          onSave();
-                          onClose();
+                          onSave(onClose);
                         }}
                         dataTest="wizardSaveProductButton"
                         big

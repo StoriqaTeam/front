@@ -52,6 +52,7 @@ class Select extends Component<PropsType, StateType> {
     onClick: () => {},
     isMobile: false,
   };
+
   constructor(props: PropsType) {
     super(props);
     this.state = {
