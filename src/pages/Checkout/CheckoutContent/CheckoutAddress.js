@@ -106,48 +106,50 @@ class CheckoutContent extends React.Component<PropsType> {
     return (
       <Container correct>
         <Row>
-          <Col size={9} xl={6}>
+          <Col size={12} xl={6}>
             <div styleName="addressWrapper">
-              <div styleName="title">Delivery info</div>
-              <div styleName="receiverContainer">
-                <Input
-                  fullWidth
-                  id="receiverName"
-                  label="Receiver name"
-                  onChange={this.handleChangeReceiver}
-                  value={orderInput.receiverName}
-                  limit={50}
-                />
-              </div>
-              <div styleName="selectAddressContainer">
-                <RadioButton
-                  id="existingAddressCheckbox"
-                  label="choose your address"
-                  isChecked={isAddressSelect}
-                  onChange={onChangeAddressType}
-                />
-                {isAddressSelect && (
-                  <div styleName="selectWrapper">
-                    Address
-                    <div>
-                      <Select
-                        items={items}
-                        activeItem={
-                          addressValue && {
-                            id: addressValue,
-                            label: addressValue,
-                          }
-                        }
-                        onSelect={this.handleOnSelectAddress}
-                        forForm
-                        containerStyle={{ width: '26rem' }}
-                        dataTest="selectExistingAddress"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
               <Row>
+                <Col size={12}>
+                  <div styleName="title">Delivery info</div>
+                  <div styleName="receiverContainer">
+                    <Input
+                      fullWidth
+                      id="receiverName"
+                      label="Receiver name"
+                      onChange={this.handleChangeReceiver}
+                      value={orderInput.receiverName}
+                      limit={50}
+                    />
+                  </div>
+                  <div styleName="selectAddressContainer">
+                    <RadioButton
+                      id="existingAddressCheckbox"
+                      label="choose your address"
+                      isChecked={isAddressSelect}
+                      onChange={onChangeAddressType}
+                    />
+                    {isAddressSelect && (
+                      <div styleName="selectWrapper">
+                        Address
+                        <div>
+                          <Select
+                            items={items}
+                            activeItem={
+                              addressValue && {
+                                id: addressValue,
+                                label: addressValue,
+                              }
+                            }
+                            onSelect={this.handleOnSelectAddress}
+                            forForm
+                            containerStyle={{ width: '26rem' }}
+                            dataTest="selectExistingAddress"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </Col>
                 <Col size={12} xlHidden>
                   {orderInput.addressFull.value && (
                     <AddressInfo
@@ -160,34 +162,36 @@ class CheckoutContent extends React.Component<PropsType> {
                     />
                   )}
                 </Col>
-              </Row>
-              <div styleName="newAddressForm">
-                <RadioButton
-                  id="newAddressCheckbox"
-                  label="Or fill fields below and save as address"
-                  isChecked={isNewAddress}
-                  onChange={onChangeAddressType}
-                />
-                {isNewAddress && (
-                  <div styleName="formWrapper">
-                    <AddressForm
-                      isOpen
-                      onChangeData={this.handleChangeData}
-                      country={addressFull ? addressFull.country : null}
-                      address={addressFull ? addressFull.value : null}
-                      addressFull={addressFull}
+                <Col size={12} sm={9} md={8} xl={12}>
+                  <div>
+                    <RadioButton
+                      id="newAddressCheckbox"
+                      label="Or fill fields below and save as address"
+                      isChecked={isNewAddress}
+                      onChange={onChangeAddressType}
                     />
-                    <div styleName="saveAddressWrapper">
-                      <Checkbox
-                        id="saveAddressCheckbox"
-                        label="Save as a new address"
-                        isChecked={saveAsNewAddress}
-                        onChange={onChangeSaveCheckbox}
-                      />
-                    </div>
+                    {isNewAddress && (
+                      <div styleName="formWrapper">
+                        <AddressForm
+                          isOpen
+                          onChangeData={this.handleChangeData}
+                          country={addressFull ? addressFull.country : null}
+                          address={addressFull ? addressFull.value : null}
+                          addressFull={addressFull}
+                        />
+                        <div styleName="saveAddressWrapper">
+                          <Checkbox
+                            id="saveAddressCheckbox"
+                            label="Save as a new address"
+                            isChecked={saveAsNewAddress}
+                            onChange={onChangeSaveCheckbox}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </Col>
+              </Row>
             </div>
           </Col>
           <Col size={6} xlVisibleOnly>

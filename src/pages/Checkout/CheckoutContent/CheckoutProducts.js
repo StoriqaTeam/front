@@ -17,7 +17,7 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
-        <div styleName="title">Submit</div>
+        <div styleName="title">Summary</div>
         <div styleName="infoContainer">
           <Row>
             <Col size={3}>

@@ -25,10 +25,14 @@ type PropsType = {
 
 const AddressInfo = ({ receiverName, addressFull, email }: PropsType) => (
   <div styleName="infoContent">
-    <div>
-      {addressFull.country}, {addressFull.locality}
+    <div styleName="wrapper">
+      <div styleName="label">Delivery address</div>
+      <div styleName="address">
+        {addressFull.country}, {addressFull.locality}
+      </div>
+      <div>{addressFull.value}</div>
     </div>
-    <div>{addressFull.value}</div>
+    <div styleName="label">Name</div>
     <div styleName="name">{receiverName}</div>
     <div styleName="email">{email}</div>
   </div>

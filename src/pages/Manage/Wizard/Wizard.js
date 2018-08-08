@@ -865,9 +865,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
                     onClick={this.handleEndingWizard}
                     dataTest="closeWizard"
                     big
-                    pink
                   >
-                    <span>Yes, delete, please</span>
+                    <span>Publish my store</span>
                   </Button>
                 </div>
               </div>

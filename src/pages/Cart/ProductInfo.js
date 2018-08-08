@@ -102,7 +102,6 @@ const ProductInfo = ({
                               activeItem={{ id: 1, label: 'Everywhere' }}
                               forForm
                               fullWidth
-                              // containerStyle={{ width: '24rem' }}
                             />
                           }
                         />
