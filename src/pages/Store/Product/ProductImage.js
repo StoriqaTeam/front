@@ -96,7 +96,7 @@ class ProductImage extends Component<PropsType, StateType> {
               style={{
                 backgroundImage: `url(${
                   !isEmpty(selected) ? selected : mainImage
-                  })`,
+                })`,
                 backgroundSize: 'contain',
                 backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
                 backgroundRepeat: 'no-repeat',

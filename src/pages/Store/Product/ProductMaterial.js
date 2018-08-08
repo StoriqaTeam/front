@@ -52,12 +52,15 @@ class ProductMaterial extends Component<PropsType, StateType> {
           <strong>{title}</strong>
         </div>
         {isNil(options) ? null : (
-          <Select
-            forForm
-            activeItem={selected ? sortByProp('label')(options)[0] : null}
-            items={sortByProp('label')(options)}
-            onSelect={this.handleSelect}
-          />
+          <div styleName="select">
+            <Select
+              forForm
+              activeItem={selected ? sortByProp('label')(options)[0] : null}
+              items={sortByProp('label')(options)}
+              onSelect={this.handleSelect}
+              fullWidth
+            />
+          </div>
         )}
       </div>
     );
