@@ -100,10 +100,13 @@
 }
 
 .rightsBlock {
-  padding: 2rem;
+  padding: 2rem 0;
   font-size: 13px;
   color: $color_grey_minor;
   text-align: center;
+  @media (min-width: $md) {
+    padding: 2rem;
+  }
 }
 
 .footerTop {

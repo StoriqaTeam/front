@@ -15,15 +15,27 @@ class InfoBlock extends Component {
       },
       {
         id: '1',
+        type: 'pinterestGray',
+        size: 32,
+        href: 'https://www.pinterest.com/storiqa',
+      },
+      {
+        id: '2',
         type: 'twitterGray',
         size: 32,
         href: 'https://twitter.com/storiqa',
       },
       {
-        id: '2',
+        id: '3',
         type: 'instagramGray',
         size: 32,
         href: 'https://www.instagram.com/storiqa',
+      },
+      {
+        id: '4',
+        type: 'vkGray',
+        size: 32,
+        href: 'https://vk.com/storiqa',
       },
     ],
     links: [
@@ -53,19 +65,23 @@ class InfoBlock extends Component {
     const { social, links } = this.state;
     return (
       <div styleName="container">
-        <div styleName="address">
-          Unit 617, 6/F, 131-132 Connaught Road West, Hong Kong
-        </div>
-        <a href="mailto:support@storiqa.com" styleName="email">
-          support@storiqa.com
-        </a>
-        <div styleName="aboutNavBlock">
+        <p styleName="address">
+          Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287{' '}
+          <span>
+            <a href="mailto:support@storiqa.com" styleName="email">
+              support@storiqa.com
+            </a>
+          </span>
+        </p>
+        <ul styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
-            <div key={id} styleName="aboutNavItem">
-              <a href={href}>{name}</a>
-            </div>
+            <li key={id} styleName="aboutNavItem">
+              <a styleName="link" href={href}>
+                {name}
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
         <div styleName="icons">
           {social.map(({ id, href, size, type }) => (
             <a key={id} href={href} target="_blank" rel="noopener noreferrer">
