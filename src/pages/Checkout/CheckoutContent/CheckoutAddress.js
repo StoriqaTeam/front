@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { pathOr } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { RadioButton } from 'components/common/RadioButton';
@@ -30,9 +29,36 @@ type PropsType = {
   saveAsNewAddress: boolean,
 };
 
-class CheckoutContent extends React.Component<PropsType> {
+type StateType = {
+  addresses: Array<{ id: string, label: string }>,
+  selectedAddress: ?{
+    id: string,
+    label: string,
+  },
+};
+
+class CheckoutContent extends React.Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    if (
+      nextProps.deliveryAddresses &&
+      nextProps.deliveryAddresses.length !== prevState.addresses.length
+    ) {
+      return {
+        ...prevState,
+        addresses: addressesToSelect(nextProps.deliveryAddresses),
+      };
+    }
+    return prevState;
+  }
+
+  state = {
+    addresses: [],
+    selectedAddress: null,
+  };
+
   handleOnSelectAddress = (item: any) => {
     const { onChangeOrderInput, orderInput, deliveryAddresses } = this.props;
+    this.setState({ selectedAddress: item });
     const addressFull = getAddressFullByValue(deliveryAddresses, item.label);
     onChangeOrderInput({
       ...orderInput,
@@ -48,38 +74,18 @@ class CheckoutContent extends React.Component<PropsType> {
     });
   };
 
-  handleOnCheckExistingAddress = () => {
-    // $FlowIgnore
-    this.setState(({ isCheckedExistingAddress }) => ({
-      isCheckedExistingAddress: !isCheckedExistingAddress,
-    }));
-  };
-
-  handleOnCheckNewAddress = () => {
-    // $FlowIgnore
-    this.setState(({ isCheckedNewAddress }) => ({
-      isCheckedNewAddress: !isCheckedNewAddress,
-    }));
-  };
-
-  handleInputChange = (id: string) => (e: any) => {
-    const { onChangeOrderInput, orderInput } = this.props;
-    const { value } = e.target;
-    onChangeOrderInput({
-      ...orderInput,
-      addressFull: {
-        ...orderInput.addressFull,
-        [id]: value,
-      },
-    });
-  };
-
   handleChangeData = (addressFullData: AddressFullType): void => {
     const { onChangeOrderInput, orderInput } = this.props;
     onChangeOrderInput({
       ...orderInput,
       addressFull: addressFullData,
     });
+  };
+
+  handleOnChangeAddressType = () => {
+    const { onChangeAddressType } = this.props;
+    this.setState({ selectedAddress: null });
+    onChangeAddressType();
   };
 
   render() {
@@ -89,20 +95,13 @@ class CheckoutContent extends React.Component<PropsType> {
       isNewAddress,
       saveAsNewAddress,
       orderInput,
-      onChangeAddressType,
       onChangeSaveCheckbox,
-      deliveryAddresses,
     } = this.props;
 
     const { addressFull } = orderInput;
 
-    // $FlowIgnore
-    const addressValue = pathOr(
-      null,
-      ['orderInput', 'addressFull', 'value'],
-      this.props,
-    );
-    const items = addressesToSelect(deliveryAddresses);
+    const { addresses: items, selectedAddress } = this.state;
+
     return (
       <Container correct>
         <Row>
@@ -126,7 +125,7 @@ class CheckoutContent extends React.Component<PropsType> {
                       id="existingAddressCheckbox"
                       label="choose your address"
                       isChecked={isAddressSelect}
-                      onChange={onChangeAddressType}
+                      onChange={this.handleOnChangeAddressType}
                     />
                     {isAddressSelect && (
                       <div styleName="selectWrapper">
@@ -134,12 +133,7 @@ class CheckoutContent extends React.Component<PropsType> {
                         <div>
                           <Select
                             items={items}
-                            activeItem={
-                              addressValue && {
-                                id: addressValue,
-                                label: addressValue,
-                              }
-                            }
+                            activeItem={selectedAddress}
                             onSelect={this.handleOnSelectAddress}
                             forForm
                             containerStyle={{ width: '26rem' }}
@@ -168,7 +162,7 @@ class CheckoutContent extends React.Component<PropsType> {
                       id="newAddressCheckbox"
                       label="Or fill fields below and save as address"
                       isChecked={isNewAddress}
-                      onChange={onChangeAddressType}
+                      onChange={this.handleOnChangeAddressType}
                     />
                     {isNewAddress && (
                       <div styleName="formWrapper">

@@ -58,6 +58,19 @@ type StateType = {
   invoiceId: ?string,
 };
 
+const emptyAddress = {
+  value: '',
+  country: '',
+  administrativeAreaLevel1: '',
+  administrativeAreaLevel2: '',
+  locality: '',
+  political: '',
+  postalCode: '',
+  route: '',
+  streetNumber: '',
+  placeId: '',
+};
+
 /* eslint-disable react/no-array-index-key */
 class Checkout extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -69,18 +82,7 @@ class Checkout extends Component<PropsType, StateType> {
       isNewAddress: false,
       saveAsNewAddress: true,
       orderInput: {
-        addressFull: {
-          value: '',
-          country: '',
-          administrativeAreaLevel1: '',
-          administrativeAreaLevel2: '',
-          locality: '',
-          political: '',
-          postalCode: '',
-          route: '',
-          streetNumber: '',
-          placeId: '',
-        },
+        addressFull: emptyAddress,
         receiverName:
           (props.me && `${props.me.firstName} ${props.me.lastName}`) || '',
       },
@@ -160,6 +162,10 @@ class Checkout extends Component<PropsType, StateType> {
     this.setState(prevState => ({
       isAddressSelect: !prevState.isAddressSelect,
       isNewAddress: !prevState.isNewAddress,
+      orderInput: {
+        ...prevState.orderInput,
+        addressFull: emptyAddress,
+      },
     }));
   };
 

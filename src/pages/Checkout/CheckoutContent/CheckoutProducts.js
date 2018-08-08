@@ -42,13 +42,16 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
             </Col>
             <Col size={12}>
               {orderInput.addressFull.value && (
-                <AddressInfo
-                  addressFull={orderInput.addressFull}
-                  receiverName={
-                    orderInput.receiverName || `${me.firstName} ${me.lastName}`
-                  }
-                  email={me.email}
-                />
+                <div styleName="addressInfoWrapper">
+                  <AddressInfo
+                    addressFull={orderInput.addressFull}
+                    receiverName={
+                      orderInput.receiverName ||
+                      `${me.firstName} ${me.lastName}`
+                    }
+                    email={me.email}
+                  />
+                </div>
               )}
             </Col>
             <Col size={12} smHidden>
