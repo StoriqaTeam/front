@@ -83,14 +83,10 @@ class ProductImage extends Component<PropsType, StateType> {
         </div>
         <figure styleName="image">
           {!isSquared ? (
-            <div
+            <img
+              src={selected || mainImage}
+              alt=""
               styleName="imageBlur"
-              style={{
-                backgroundImage: `url(${selected || mainImage})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                filter: 'blur(10px)',
-              }}
             />
           ) : null}
           {discount > 0 ? <ProductDiscount discount={discount} /> : null}
