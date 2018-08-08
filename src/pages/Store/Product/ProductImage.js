@@ -67,43 +67,45 @@ class ProductImage extends Component<PropsType, StateType> {
     const { selected, isSquared } = this.state;
     return (
       <div styleName="container">
-        <div
-          styleName={
-            !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
-          }
-        >
-          {!isEmpty(thumbnails) ? (
-            <ProductThumbnails
-              isFirstSelected
-              isReset={isEmpty(selected)}
-              onClick={this.handleClick}
-              options={thumbnails}
-            />
-          ) : null}
-        </div>
-        <figure styleName="image">
-          {!isSquared ? (
-            <img
-              src={selected || mainImage}
-              alt=""
-              styleName="imageBlur"
-            />
-          ) : null}
-          {discount > 0 ? <ProductDiscount discount={discount} /> : null}
+        <div styleName="thumbnails">
           <div
-            role="img"
-            style={{
-              backgroundImage: `url(${
-                !isEmpty(selected) ? selected : mainImage
-              })`,
-              backgroundSize: 'contain',
-              backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
-              backgroundRepeat: 'no-repeat',
-              height: '100%',
-              width: '100%',
-            }}
-          />
-        </figure>
+            styleName={
+              !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
+            }
+          >
+            {!isEmpty(thumbnails) ? (
+              <div styleName="thumbnailsContent">
+                <ProductThumbnails
+                  isFirstSelected
+                  isReset={isEmpty(selected)}
+                  onClick={this.handleClick}
+                  options={thumbnails}
+                />
+              </div>
+            ) : null}
+          </div>
+        </div>
+        <div styleName="imageWrapper">
+          <figure styleName="image">
+            {!isSquared ? (
+              <img src={selected || mainImage} alt="" styleName="imageBlur" />
+            ) : null}
+            {discount > 0 ? <ProductDiscount discount={discount} /> : null}
+            <div
+              role="img"
+              style={{
+                backgroundImage: `url(${
+                  !isEmpty(selected) ? selected : mainImage
+                  })`,
+                backgroundSize: 'contain',
+                backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
+                backgroundRepeat: 'no-repeat',
+                height: '100%',
+                width: '100%',
+              }}
+            />
+          </figure>
+        </div>
       </div>
     );
   }

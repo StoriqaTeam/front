@@ -4,6 +4,14 @@
   align-items: flex-start;
   display: flex;
   justify-content: space-between;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
 }
 
 .expand {
@@ -16,23 +24,24 @@
   }
 }
 
-.image {
+.imageWrapper {
   overflow: hidden;
-  position: relative;
   width: 100%;
-
-  &:after {
-    content: "";
-    display: block;
-    padding-top: 100%;
+  @media (min-width: $md) {
+    width: calc(100% - 14rem);
   }
+}
+
+.image {
+  padding-top: 100%;
+  position: relative;
 
   div[role="img"] {
-    position: absolute;
     height: 100%;
-    top: 0;
+    position: absolute;
     right: 0;
-    width: calc(100% - 14rem);
+    top: 0;
+    width: 100%;
   }
 }
 
@@ -46,13 +55,36 @@
   width: 100%;
 }
 
-.thumbnailsWrapper {
+.thumbnails {
   display: none;
-  margin: 2rem;
-  max-width: 12rem;
-  @media (min-width: $lg) {
+  width: 14rem;
+  @media (min-width: $md) {
     display: block;
   }
+}
+
+.thumbnailsContent {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  height: calc(99.375rem - 1rem);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+
+  @media (min-width: $lg) {
+    height: calc(69.875rem - 1rem);
+  }
+
+}
+
+.thumbnailsWrapper {
+  margin: 2rem;
+  width: 12rem;
+  padding-top: 100%;
+  position: relative;
+  //
 }
 
 .noThumbnailsWrapper {
