@@ -123,7 +123,6 @@ const ProductInfo = ({
                       </Col>
                     </Row>
                     <div styleName="comment">
-                      {/* <div styleName="title"></div> */}
                       <Input
                         fullWidth
                         id="customerComment"

@@ -14,8 +14,8 @@ export const addressesToSelect = (deliveryAddresses: any) => {
     id: `${i.value}-${index}`,
     label: i.value,
   }));
-  // $FlowIgnore
   return uniq(
+    // $FlowIgnore
     sortFunc(resultPred(filterPred(addressListPred(deliveryAddresses)))),
   );
 };

@@ -27,7 +27,7 @@ const AddressInfo = ({ receiverName, addressFull, email }: PropsType) => (
   <div styleName="infoContent">
     <div styleName="wrapper">
       <div styleName="label">Delivery address</div>
-      <div styleName="address">
+      <div>
         {addressFull.country}, {addressFull.locality}
       </div>
       <div>{addressFull.value}</div>
