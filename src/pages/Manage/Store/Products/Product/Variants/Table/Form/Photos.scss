@@ -11,6 +11,10 @@
   margin-right: 2rem;
   margin-bottom: 2rem;
   vertical-align: bottom;
+
+  svg {
+    fill: $color_grey_light;
+  }
 }
 
 .title {

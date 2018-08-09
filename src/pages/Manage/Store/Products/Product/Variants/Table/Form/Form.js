@@ -2,19 +2,15 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { find, append, head, pathOr, map, isEmpty } from 'ramda';
+import { find, append, head, pathOr, map, isEmpty, omit } from 'ramda';
+import { validate } from '@storiqa/shared';
 
 import { Button } from 'components/common/Button';
-import { Icon } from 'components/Icon';
 import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Input } from 'components/common/Input';
 
-import {
-  CreateProductWithAttributesMutation,
-  UpdateProductMutation,
-} from 'relay/mutations';
-import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
+import { CreateProductWithAttributesMutation } from 'relay/mutations';
 import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -32,13 +28,19 @@ type AttributeValueType = {
 };
 
 type StateType = {
-  productRawId: ?string,
-  vendorCode?: string,
-  price?: number,
+  vendorCode: ?string,
+  price: ?number,
   cashback?: ?number,
+  discount?: ?number,
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues?: Array<AttributeValueType>,
+  formErrors: ?{
+    vendorCode?: Array<string>,
+    price?: Array<string>,
+    attributes?: Array<string>,
+  },
+  isLoading: boolean,
 };
 
 type PropsType = {
@@ -54,8 +56,9 @@ type PropsType = {
     id: string,
     productRawId: string,
     vendorCode: string,
-    price?: number,
+    price: number,
     cashback?: ?number,
+    discount?: ?number,
     photoMain?: ?string,
     additionalPhotos?: Array<string>,
     stocks: {
@@ -72,7 +75,13 @@ type PropsType = {
     },
   },
   onExpandClick: (id: string) => void,
-  handleCollapseVariant: () => void,
+  handleSaveBaseProductWithVariant: ({
+    variantData: StateType,
+    isCanCreate: boolean,
+  }) => void,
+  isLoading: boolean,
+  isNewVariant: boolean,
+  toggleNewVariantParam: (value: boolean) => void,
 };
 
 type ValueForAttributeInputType = {
@@ -87,17 +96,22 @@ class Form extends Component<PropsType, StateType> {
     if (!product) {
       this.state = {
         attributeValues: this.resetAttrValues(),
-        productRawId: null,
+        vendorCode: null,
+        price: null,
+        formErrors: undefined,
+        isLoading: false,
       };
     } else {
       this.state = {
-        productRawId: product.id,
         vendorCode: product.vendorCode,
         price: product.price,
         cashback: Math.round((product.cashback || 0) * 100),
+        discount: Math.round((product.discount || 0) * 100),
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
         attributeValues: this.resetAttrValues(),
+        formErrors: undefined,
+        isLoading: false,
       };
     }
   }
@@ -106,90 +120,40 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ attributeValues: values });
   };
 
-  handleUpdate = () => {
-    const { environment } = this.context;
-    const variant = this.state;
-    if (!variant.productRawId) {
-      this.props.showAlert({
-        type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
-      });
-      return;
-    }
-    const params: UpdateProductMutationType = {
-      input: {
-        clientMutationId: '',
-        id: variant.productRawId,
-        product: {
-          price: variant.price,
-          vendorCode: variant.vendorCode,
-          photoMain: variant.mainPhoto,
-          additionalPhotos: variant.photos,
-          cashback: variant.cashback ? variant.cashback / 100 : null,
-        },
-        attributes: variant.attributeValues,
+  validate = () => {
+    const { errors } = validate(
+      {
+        vendorCode: [[val => !isEmpty(val || ''), 'Vendor code is required']],
+        price: [[val => !isEmpty(val || ''), 'Price is required']],
       },
-      environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Product update!',
-          link: { text: '' },
-        });
-        this.props.handleCollapseVariant();
-      },
-      onError: (error: Error) => {
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    };
-    UpdateProductMutation.commit(params);
+      this.state,
+    );
+    return errors;
   };
 
-  handleCreate = () => {
+  handleSaveProduct = () => {
+    const { handleSaveBaseProductWithVariant, variant } = this.props;
+
+    const variantData = {
+      ...this.state,
+      variantId: variant ? variant.id : null,
+    };
+    const formErrors = this.validate();
+    if (formErrors) {
+      this.setState({ formErrors });
+      handleSaveBaseProductWithVariant({ variantData, isCanCreate: false });
+      return;
+    }
+
+    handleSaveBaseProductWithVariant({ variantData, isCanCreate: true });
+  };
+
+  handleCreateVariant = () => {
+    const formErrors = this.validate();
+    if (formErrors) {
+      this.setState({ formErrors });
+      return;
+    }
     const { environment } = this.context;
     const {
       price,
@@ -197,16 +161,18 @@ class Form extends Component<PropsType, StateType> {
       mainPhoto,
       photos,
       cashback,
+      discount,
       attributeValues,
     } = this.state;
     if (!price || !vendorCode) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong.',
+        text: 'Something going wrong :(',
         link: { text: 'Close.' },
       });
       return;
     }
+    this.setState({ isLoading: true });
     const params: CreateProductWithAttributesMutationType = {
       input: {
         clientMutationId: '',
@@ -217,12 +183,15 @@ class Form extends Component<PropsType, StateType> {
           photoMain: mainPhoto,
           additionalPhotos: photos,
           cashback: cashback ? cashback / 100 : null,
+          discount: discount ? discount / 100 : null,
         },
         attributes: attributeValues || [],
       },
       parentID: this.props.productId,
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
+        // this.setState(() => ({ isLoading: false }));
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
@@ -231,11 +200,7 @@ class Form extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
-          });
+          this.setState({ formErrors: validationErrors });
           return;
         }
 
@@ -266,18 +231,10 @@ class Form extends Component<PropsType, StateType> {
           text: 'Variant created!',
           link: { text: '' },
         });
-        this.setState({
-          attributeValues: this.resetAttrValues(),
-          productRawId: null,
-          vendorCode: '',
-          price: 0,
-          cashback: null,
-          mainPhoto: null,
-          photos: [],
-        });
-        // this.props.handleCollapseVariant();
+        this.props.toggleNewVariantParam(false);
       },
       onError: (error: Error) => {
+        this.setState({ isLoading: false });
         log.error(error);
         this.props.showAlert({
           type: 'danger',
@@ -301,39 +258,36 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleVendorCodeChange = (e: any) => {
-    this.setState({ vendorCode: e.target.value });
+    this.setState({
+      vendorCode: e.target.value,
+      // $FlowIgnore
+      formErrors: omit(['vendorCode'], this.state.formErrors),
+    });
   };
 
   handlePriceChange = (e: any) => {
+    const resetErrorObj = {
+      // $FlowIgnore
+      formErrors: omit(['price'], this.state.formErrors),
+    };
     const {
       target: { value },
     } = e;
-    if (value === '') {
-      this.setState({ price: 0 });
-      return;
-    } else if (Number.isNaN(parseFloat(value))) {
+    const regexp = /(^[0-9]*[.,]?[0-9]*$)/;
+    if (regexp.test(value)) {
+      this.setState({ price: value, ...resetErrorObj });
       return;
     }
-    this.setState({ price: parseFloat(value) });
+    if (value === '') {
+      this.setState({ price: 0, ...resetErrorObj });
+    }
   };
 
-  handleCashbackChange = (e: any) => {
-    const {
-      target: { value },
-    } = e;
-    if (value === '') {
-      this.setState({ cashback: null });
-      return;
-    } else if (value === 0) {
-      this.setState({ cashback: 0 });
-      return;
-    } else if (value > 100) {
-      this.setState({ cashback: 99 });
-      return;
-    } else if (Number.isNaN(parseFloat(value))) {
-      return;
-    }
-    this.setState({ cashback: parseFloat(value) });
+  handlePriceBlur = () => {
+    const price = `${this.state.price || ''}`;
+    this.setState({
+      price: Number(price.replace(/,/, '.').replace(/\.$/, '')),
+    });
   };
 
   handleAddPhoto = (url: string) => {
@@ -388,18 +342,41 @@ class Form extends Component<PropsType, StateType> {
     };
   };
 
+  handlePercentChange = (id: string) => (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    if (value === '') {
+      this.setState({ [id]: null });
+      return;
+    } else if (value === 0) {
+      this.setState({ [id]: 0 });
+      return;
+    } else if (value > 100) {
+      this.setState({ [id]: 99 });
+      return;
+    } else if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+    this.setState({ [id]: parseFloat(value) });
+  };
+
   renderVariant = () => {
-    const { variant } = this.props;
-    const { vendorCode, price, cashback } = this.state;
+    const { vendorCode, price, cashback, discount, formErrors } = this.state;
     return (
       <div styleName="variant">
         <div styleName="inputWidth">
           <div styleName="inputWidth">
             <Input
               fullWidth
-              label="VendorCode"
+              label={
+                <span>
+                  VendorCode <span styleName="asterisk">*</span>
+                </span>
+              }
               value={vendorCode || ''}
               onChange={this.handleVendorCodeChange}
+              errors={formErrors && formErrors.vendorCode}
             />
           </div>
         </div>
@@ -408,9 +385,15 @@ class Form extends Component<PropsType, StateType> {
             <div styleName="inputWithIcon">
               <Input
                 fullWidth
-                label="Price"
+                label={
+                  <span>
+                    Price <span styleName="asterisk">*</span>
+                  </span>
+                }
                 onChange={this.handlePriceChange}
+                onBlur={this.handlePriceBlur}
                 value={price || ''}
+                errors={formErrors && formErrors.price}
               />
               <span styleName="priceIcon">STQ</span>
             </div>
@@ -421,29 +404,41 @@ class Form extends Component<PropsType, StateType> {
             <Input
               fullWidth
               label="Cashback"
-              onChange={this.handleCashbackChange}
-              value={cashback != null ? cashback : ''}
+              onChange={this.handlePercentChange('cashback')}
+              value={cashback || ''}
             />
             <span styleName="inputPostfix">Percent</span>
           </div>
         </div>
         <div styleName="inputWidth">
-          {variant && (
-            <button
-              styleName="arrowExpand"
-              onClick={this.toggleDropdownVariant}
-            >
-              <Icon inline type="arrowExpand" />
-            </button>
-          )}
+          <div styleName="inputWidth">
+            <Input
+              fullWidth
+              label="Diskount"
+              onChange={this.handlePercentChange('discount')}
+              value={discount || ''}
+            />
+            <span styleName="inputPostfix">Percent</span>
+          </div>
         </div>
       </div>
     );
   };
 
   render() {
-    const { category, variant } = this.props;
-    const { photos = [], mainPhoto } = this.state;
+    const {
+      category,
+      variant,
+      isLoading,
+      isNewVariant,
+      toggleNewVariantParam,
+    } = this.props;
+    const {
+      photos = [],
+      mainPhoto,
+      formErrors,
+      isLoading: isLoadingLocal,
+    } = this.state;
     return (
       <div styleName="container">
         <div styleName="title">
@@ -458,23 +453,30 @@ class Form extends Component<PropsType, StateType> {
           category={category}
           values={this.state.attributeValues || []}
           onChange={this.onChangeValues}
+          errors={(formErrors && formErrors.attributes) || null}
         />
         {variant &&
           variant.stocks &&
           !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
         <div styleName="buttons">
-          <Button
-            big
-            type="button"
-            onClick={variant ? this.handleUpdate : this.handleCreate}
-            dataTest="variantsProductSaveButton"
-          >
-            Save
-          </Button>
-          {variant && (
+          <div styleName="saveButton">
+            <Button
+              isLoading={isLoading || isLoadingLocal}
+              big
+              fullWidth
+              type="button"
+              onClick={
+                isNewVariant ? this.handleCreateVariant : this.handleSaveProduct
+              }
+              dataTest="variantsProductSaveButton"
+            >
+              Save
+            </Button>
+          </div>
+          {isNewVariant && (
             <button
               styleName="cancelButton"
-              onClick={this.props.handleCollapseVariant}
+              onClick={() => toggleNewVariantParam(false)}
               data-test="cancelEditVariantButton"
             >
               Cancel

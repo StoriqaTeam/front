@@ -1,11 +1,12 @@
 @import '../../../../../../../../styles/variables';
 
 .container {
+  //position: relative;
   background-color: $color_grey_bg;
   border-top: 0;
   border-bottom: 1px solid $color_grey_trivial;
-  margin-bottom: -2rem;
-  padding: 2rem 4rem 4rem;
+  //margin-bottom: -2rem;
+  padding: 4rem;
 }
 
 .variants {
@@ -32,6 +33,7 @@
 }
 
 .title {
+  margin-bottom: 1rem;
   font-size: 14px;
   letter-spacing: 1.2px;
   line-height: 18px;
@@ -56,15 +58,6 @@
   margin-left: 1.5rem;
 }
 
-.arrowExpand {
-  position: absolute;
-  top: -1.5rem;
-  right: -2rem;
-  width: 6rem;
-  height: 6rem;
-  transform: rotate(180deg);
-}
-
 .variant {
   display: flex;
   flex-wrap: wrap;
@@ -73,13 +66,25 @@
 
 .inputPostfix {
   color: $color_grey_minor;
-  font-family: Roboto;
   font-size: 12px;
 }
 
 .buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   display: flex;
   align-items: center;
+
+  @media (max-width: #{$md - 1px}) {
+    bottom: 1rem;
+    left: 5rem;
+  }
+
+  .saveButton {
+    width: 22.5rem;
+    max-height: 5rem;
+  }
 }
 
 .cancelButton {
@@ -92,4 +97,8 @@
   &:hover {
     color: $color_blue_hover;
   }
+}
+
+.asterisk {
+  color: $color_red;
 }
