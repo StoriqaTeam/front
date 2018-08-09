@@ -373,54 +373,48 @@ class SearchSidebar extends Component<PropsType, StateType> {
             <Icon type="cross" size={24} />
           </span>
         </header>
-        <div>
-          {this.renderParentLink()}
-          {accordionItems && (
-            <Accordion
-              items={accordionItems}
-              onClick={this.handleOnChangeCategory}
-              activeId={categoryId ? parseInt(categoryId, 10) : null}
-            />
-          )}
-          <div styleName="blockTitle">Price (STQ)</div>
-          <RangerSlider
-            minValue={minValue}
-            maxValue={maxValue}
-            min={0}
-            max={maxValue}
-            step={0.01}
-            value={valueRange}
-            value2={valueRange2}
-            onChange={value => this.handleOnRangeChange(value, 'volume')}
-            onChange2={value => this.handleOnRangeChange(value, 'volume2')}
-            onChangeComplete={this.handleOnCompleteRange}
+        {this.renderParentLink()}
+        {accordionItems && (
+          <Accordion
+            items={accordionItems}
+            onClick={this.handleOnChangeCategory}
+            activeId={categoryId ? parseInt(categoryId, 10) : null}
           />
-          {attrFilters &&
-            sort(
-              (a, b) => a.attribute.rawId - b.attribute.rawId,
-              attrFilters,
-            ).map(attrFilter => {
-              const initialAttr = find(
-                whereEq({ id: attrFilter.attribute.rawId }),
-                // $FlowIgnoreMe
-                initialAttributes,
-              );
-              const initialValues = pathOr(
-                [],
-                ['equal', 'values'],
-                initialAttr,
-              );
-              return (
-                <div key={attrFilter.attribute.id} styleName="attrBlock">
-                  <AttributeControl
-                    attrFilter={attrFilter}
-                    initialValues={initialValues}
-                    onChange={this.handleOnChangeAttribute(attrFilter)}
-                  />
-                </div>
-              );
-            })}
-        </div>
+        )}
+        <div styleName="blockTitle">Price (STQ)</div>
+        <RangerSlider
+          minValue={minValue}
+          maxValue={maxValue}
+          min={0}
+          max={maxValue}
+          step={0.01}
+          value={valueRange}
+          value2={valueRange2}
+          onChange={value => this.handleOnRangeChange(value, 'volume')}
+          onChange2={value => this.handleOnRangeChange(value, 'volume2')}
+          onChangeComplete={this.handleOnCompleteRange}
+        />
+        {attrFilters &&
+          sort(
+            (a, b) => a.attribute.rawId - b.attribute.rawId,
+            attrFilters,
+          ).map(attrFilter => {
+            const initialAttr = find(
+              whereEq({ id: attrFilter.attribute.rawId }),
+              // $FlowIgnoreMe
+              initialAttributes,
+            );
+            const initialValues = pathOr([], ['equal', 'values'], initialAttr);
+            return (
+              <div key={attrFilter.attribute.id} styleName="attrBlock">
+                <AttributeControl
+                  attrFilter={attrFilter}
+                  initialValues={initialValues}
+                  onChange={this.handleOnChangeAttribute(attrFilter)}
+                />
+              </div>
+            );
+          })}
       </aside>
     );
   }
