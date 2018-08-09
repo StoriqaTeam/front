@@ -1,6 +1,14 @@
 @import "../../../styles/variables";
 
-.ProductDetails {
+.container {
+  margin: 0;
+  overflow: hidden;
+  @media (min-width: $lg) {
+    margin: 0 2rem;
+  }
+}
+
+.productContent {
   background-color: $color_white;
   border: 1px solid $color_grey_trivial;
   margin: 0 0 4rem;
