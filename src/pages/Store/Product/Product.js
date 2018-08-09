@@ -1,9 +1,9 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, isNil, head } from 'ramda';
+import { path, isNil, head, has } from 'ramda';
 import smoothscroll from 'libs/smoothscroll';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -211,10 +211,12 @@ class Product extends Component<PropsType, StateType> {
         {({ categories }) => (
           <ProductContext.Provider value={{ store, productVariant, rating }}>
             <div styleName="container">
-              <ProductBreadcrumbs
-                categories={categories.children}
-                categoryId={categoryId}
-              />
+              {has('children')(categories) && !isNil(categories.children) ? (
+                <ProductBreadcrumbs
+                  categories={categories.children}
+                  categoryId={categoryId}
+                />
+              ) : null}
               <div styleName="productContent">
                 <Row>
                   <Col sm={12} md={12} lg={6} xl={6}>
