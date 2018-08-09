@@ -6,7 +6,7 @@ import './ProductQuantity.scss';
 
 const ProductQuantity = () => (
   <div styleName="container">
-    <h4>Amount</h4>
+    <h4 styleName="title">Amount</h4>
     <div styleName="counter">
       <Stepper value={0} min={0} max={9999} onChange={() => {}} />
       <p styleName="stock">Remaining stock:</p>
