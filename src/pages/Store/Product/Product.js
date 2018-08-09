@@ -24,6 +24,7 @@ import {
 } from './utils';
 
 import {
+  ImageDetail,
   ProductContext,
   ProductDetails,
   ProductImage,
@@ -258,6 +259,7 @@ class Product extends Component<PropsType, StateType> {
                     productVariant.additionalPhotos || [],
                   )}
                 />
+                <ImageDetail />
                 {process.env.BROWSER ? (
                   <SocialShare noBorderX big {...productVariant} />
                 ) : null}

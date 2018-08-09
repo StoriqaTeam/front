@@ -62,6 +62,7 @@ class ProductMaterial extends Component<PropsType, StateType> {
               ),
             )}
             onSelect={this.handleSelect}
+            fullWidth
           />
         )}
       </div>

@@ -1,16 +1,24 @@
 // @flow
 
-import { map, find } from 'ramda';
+import { map, find, addIndex, sortBy, uniq, filter, prop } from 'ramda';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 
-export const addressesToSelect = (deliveryAddresses: any) =>
-  map(i => {
-    if (!i.address || !i.address.value) {
-      return null;
-    }
-    return { id: i.address.value, label: i.address.value };
-  }, deliveryAddresses);
+export const addressesToSelect = (deliveryAddresses: any) => {
+  const sortFunc = sortBy(prop('value'));
+  const filterPred = filter(i => !!i.value);
+  const addressListPred = map(i => i.address);
+  const indexedMap = addIndex(map);
+  // $FlowIgnore
+  const resultPred = indexedMap((i, index) => ({
+    id: `${i.value}-${index}`,
+    label: i.value,
+  }));
+  return uniq(
+    // $FlowIgnore
+    sortFunc(resultPred(filterPred(addressListPred(deliveryAddresses)))),
+  );
+};
 
 export const getAddressFullByValue = (deliveryAddresses: any, value: any) => {
   const addressValue = find(

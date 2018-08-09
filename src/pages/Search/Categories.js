@@ -48,10 +48,10 @@ class Categories extends PureComponent<PropsType, StateType> {
           />
         </SearchMobileMenu>
         <Container>
-          <Row>
-            <Col sm={1} md={1} lg={2} xl={2} lgVisible>
+          <Row noWrap>
+            <div styleName="sidebarWrapper">
               <SearchSidebar isOpen search={search} />
-            </Col>
+            </div>
             <Col sm={12} md={12} lg={10} xl={10}>
               <SearchContent
                 onFilterMenu={this.handleOpen}

@@ -3,14 +3,26 @@
 .container {
   border-top: solid 1px $color_grey_trivial;
   border-bottom: solid 1px $color_grey_trivial;
-  padding: 3.5rem 4rem;
+  margin: 0 -2rem;
+  padding: 3.5rem 2rem;
   text-align: center;
+  @media (min-width: $md) {
+    margin: 0;
+    padding: 3.5rem 4rem;
+  }
 }
 
 .address, .email {
   color: rgba(80, 80, 80, .43);
   font-size: 13px;
-  line-height: 1.25rem;
+  line-height: 21px;
+}
+
+.address {
+  padding: 0 2rem;
+  @media (min-width: $md) {
+    padding: 0;
+  }
 }
 
 .email:hover {
@@ -28,6 +40,11 @@
 
   &:not(:last-child) {
     border-right: 1px solid $color_grey;
+  }
+
+  .link {
+    color: $color_grey;
+    font-size: 14px;
   }
 
 }
