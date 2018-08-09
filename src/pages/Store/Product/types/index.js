@@ -1,17 +1,104 @@
 // @flow
 
-export type { AttributeMetaFieldType } from './AttributeMetaFieldType';
-export type { AttributeType } from './AttributeType';
-export type { AttributeValueType } from './AttributeValueType';
-export type { GroupedWidgetsType } from './GroupedWidgetsType';
-export type { IdType } from './IdType';
-export type { StoreType } from './StoreType';
-export type { ProductType } from './ProductType';
-export type { ProductVariantType } from './ProductVariantType';
-export type { TabType } from './TabType';
-export type { TranslationType } from './TranslationType';
-export type { SelectionType } from './SelectionType';
-export type { UIType } from './UIType';
-export type { VariantType } from './VariantType';
-export type { WidgetOptionType } from './WidgetOptionType';
-export type { WidgetType } from './WidgetType';
+import * as React from 'react';
+
+export type TranslationType = {
+  lang: string,
+  text: string,
+};
+
+export type VarianAttributeType = {
+  attribute: {
+    id: string,
+    rawId?: string,
+    name: Array<TranslationType>,
+    metaField: {
+      values?: Array<string>,
+      uiElement: 'COMBOBOX' | 'RADIOBUTTON' | 'CHECKBOX' | 'COLOR_PICKER',
+    },
+  },
+  value: string,
+  metaField: string,
+};
+
+export type VariantType = {
+  id: string,
+  rawId?: number,
+  price: number,
+  cashback: number | null,
+  discount: number | null,
+  photoMain: string | null,
+  additionalPhotos: Array<string> | null,
+  description: string,
+  attributes: Array<VarianAttributeType>,
+};
+
+export type WidgetOptionType = {
+  label: string,
+  image: string,
+};
+
+export type WidgetType = {
+  id: string,
+  title: string,
+  uiElement: string,
+  options: Array<{
+    label: string,
+    image: ?string,
+  }>,
+};
+
+export type GroupedWidgetsType = {
+  [string]: Array<WidgetType>,
+};
+
+export type IdType = {
+  id: string,
+  rawId?: number,
+};
+
+export type StoreType = {
+  rawId: number,
+  name: Array<TranslationType>,
+  rating: number,
+  productsCount: string,
+  logo: ?string,
+};
+
+export type ProductType = {
+  id: string,
+  rawId: number,
+  name: Array<TranslationType>,
+  shortDescription: Array<TranslationType>,
+  longDescription: Array<TranslationType>,
+  store: StoreType,
+  variants: {
+    all: Array<VariantType>,
+  },
+  rating: number,
+};
+
+export type ProductVariantType = {
+  id: string,
+  rawId: number,
+  photoMain: ?string,
+  additionalPhotos: ?Array<string>,
+  price: number,
+  cashback: ?number,
+  discount: ?number,
+  lastPrice: ?number,
+  description: string,
+};
+
+export type SelectionType = {
+  id: string,
+  state: 'selected' | 'available' | 'disabled',
+  variantIds: Array<string>,
+  value: 'string',
+};
+
+export type TabType = {
+  id: string,
+  label: string,
+  content: React.Node | React.Component<any, any> | string,
+};

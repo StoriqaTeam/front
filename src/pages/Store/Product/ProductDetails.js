@@ -1,11 +1,12 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import type { Node } from 'react';
+import { propOr, prop } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
 
-import type { WidgetType, WidgetOptionType } from './types';
+import type { WidgetType } from './types';
 
 import {
   ProductContext,
@@ -26,30 +27,30 @@ type PropsType = {
   productDescription: string,
   productTitle: string,
   widgets: Array<WidgetType>,
-  unselectedAttr: ?Array<string>,
+  selectedAttributes: { [string]: string },
+  availableAttributes: {
+    [string]: Array<string>,
+  },
 };
 
-class ProductDetails extends Component<PropsType, {}> {
-  handleWidgetClick = (selected: WidgetOptionType): void => {
-    const { onWidgetClick } = this.props;
-    onWidgetClick(selected);
-  };
-
+class ProductDetails extends PureComponent<PropsType> {
   generateWidget = (widget: WidgetType, index: number): Node => {
-    const { unselectedAttr } = this.props;
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
         WidgetComponent = (
           <ProductSize
             key={index}
+            id={widget.id}
             title={widget.title}
             options={widget.options}
-            onClick={selected => this.handleWidgetClick(selected)}
-            isOnSelected={
-              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
-              false
-            }
+            onClick={this.props.onWidgetClick}
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
           />
         );
         break;
@@ -57,13 +58,16 @@ class ProductDetails extends Component<PropsType, {}> {
         WidgetComponent = (
           <ProductMaterial
             key={index}
+            id={widget.id}
             title={widget.title || ''}
             options={widget.options}
-            onSelect={selected => this.handleWidgetClick(selected)}
-            isOnSelected={
-              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
-              false
-            }
+            onSelect={this.props.onWidgetClick}
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
           />
         );
         break;
@@ -71,15 +75,23 @@ class ProductDetails extends Component<PropsType, {}> {
         WidgetComponent = (
           <ProductThumbnails
             key={index}
+            id={widget.id}
             title={widget.title}
             row
             srcProp="image"
             options={widget.options}
-            onClick={selected => this.handleWidgetClick(selected)}
-            isOnSelected={
-              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
-              false
+            onClick={(option: { label: string }) =>
+              this.props.onWidgetClick({
+                attributeId: widget.id,
+                attributeValue: option.label,
+              })
             }
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
           />
         );
         break;

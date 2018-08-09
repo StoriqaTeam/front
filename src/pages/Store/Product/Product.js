@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, isNil, head } from 'ramda';
+import { isNil, head, ifElse, assoc, dissoc, propEq } from 'ramda';
 import smoothscroll from 'libs/smoothscroll';
 
 import { Button } from 'components/common/Button';
@@ -19,10 +19,11 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import {
   makeWidgets,
-  differentiateWidgets,
   getVariantFromSelection,
   isNoSelected,
   sortByProp,
+  filterVariantsByAttributes,
+  attributesFromVariants,
 } from './utils';
 
 import {
@@ -32,12 +33,10 @@ import {
   ProductStore,
   Tab,
   Tabs,
-  // TabRow,
 } from './index';
 
 import type {
   ProductType,
-  WidgetOptionType,
   ProductVariantType,
   WidgetType,
   TabType,
@@ -45,7 +44,6 @@ import type {
 } from './types';
 
 import './Product.scss';
-// import mockData from './mockData.json';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -56,13 +54,19 @@ type StateType = {
   widgets: Array<WidgetType>,
   productVariant: ProductVariantType,
   unselectedAttr: ?Array<string>,
+  selectedAttributes: {
+    [string]: string,
+  },
+  availableAttributes: {
+    [string]: Array<string>,
+  },
 };
 
 class Product extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
-  ): StateType | null {
+  ): ?StateType {
     if (isNil(nextProps.baseProduct)) {
       return null;
     }
@@ -73,12 +77,11 @@ class Product extends Component<PropsType, StateType> {
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const madeWidgets = makeWidgets([])(all);
-      const productVariant = getVariantFromSelection([])(all);
       return {
         ...prevState,
-        widgets: madeWidgets,
-        productVariant,
+        widgets: makeWidgets(all),
+        productVariant: getVariantFromSelection([])(all),
+        availableAttributes: attributesFromVariants(all),
       };
     }
     return prevState;
@@ -99,6 +102,8 @@ class Product extends Component<PropsType, StateType> {
         lastPrice: null,
       },
       unselectedAttr: null,
+      selectedAttributes: {},
+      availableAttributes: {},
     };
   }
 
@@ -145,21 +150,33 @@ class Product extends Component<PropsType, StateType> {
       smoothscroll.scrollTo(head(unselectedAttr));
     }
   }
-  handleWidget = (props: WidgetOptionType): void => {
-    if (props) {
-      const { id, label, state, variantIds } = props;
-      const selection = [{ id, value: label, state, variantIds }];
-      const pathToAll = ['baseProduct', 'variants', 'all'];
-      const variants = path(pathToAll, this.props);
-      const productVariant = getVariantFromSelection(selection)(variants);
-      const widgets = differentiateWidgets(selection)(variants);
-      this.setState((prevState: StateType) => ({
-        widgets,
-        productVariant,
-        unselectedAttr:
-          prevState.unselectedAttr === null ? null : isNoSelected(widgets),
-      }));
-    }
+
+  handleWidget = (item: {
+    attributeId: string,
+    attributeValue: string,
+  }): void => {
+    const { selectedAttributes: prevAttrs } = this.state;
+    const selectedAttributes = ifElse(
+      propEq(item.attributeId, item.attributeValue),
+      dissoc(item.attributeId),
+      assoc(item.attributeId, item.attributeValue),
+    )(prevAttrs);
+
+    const {
+      baseProduct: {
+        variants: { all: variants },
+      },
+    } = this.props;
+
+    const matchedVariants = filterVariantsByAttributes(
+      selectedAttributes,
+      variants,
+    );
+
+    this.setState({
+      selectedAttributes,
+      availableAttributes: attributesFromVariants(matchedVariants),
+    });
   };
 
   makeTabs = (longDescription: Array<TranslationType>) => {
@@ -171,11 +188,6 @@ class Product extends Component<PropsType, StateType> {
           <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
         ),
       },
-      /* {
-        id: '1',
-        label: 'Characteristics',
-        content: <TabRow row={mockData.row} />,
-      }, */
     ];
     return (
       <Tabs>
@@ -187,6 +199,7 @@ class Product extends Component<PropsType, StateType> {
       </Tabs>
     );
   };
+
   render() {
     const { unselectedAttr } = this.state;
     if (isNil(this.props.baseProduct)) {
@@ -195,7 +208,12 @@ class Product extends Component<PropsType, StateType> {
     const {
       baseProduct: { name, shortDescription, longDescription, rating, store },
     } = this.props;
-    const { widgets, productVariant } = this.state;
+    const {
+      widgets,
+      productVariant,
+      selectedAttributes,
+      availableAttributes,
+    } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
       <ProductContext.Provider value={{ store, productVariant, rating }}>
@@ -218,6 +236,8 @@ class Product extends Component<PropsType, StateType> {
                     productTitle={extractText(name)}
                     productDescription={description}
                     widgets={widgets}
+                    selectedAttributes={selectedAttributes}
+                    availableAttributes={availableAttributes}
                     onWidgetClick={this.handleWidget}
                     unselectedAttr={unselectedAttr}
                   >
@@ -246,7 +266,6 @@ class Product extends Component<PropsType, StateType> {
                     </div>
                     <div styleName="line" />
                     <ProductStore />
-                    {/* {!loggedIn && <div>Please login to use cart</div>} */}
                   </ProductDetails>
                 </div>
               </Col>
