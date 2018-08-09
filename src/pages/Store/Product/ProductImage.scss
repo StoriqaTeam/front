@@ -2,9 +2,16 @@
 
 .container {
   align-items: flex-start;
-  // border-right: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
 }
 
 .expand {
@@ -17,47 +24,67 @@
   }
 }
 
+.imageWrapper {
+  overflow: hidden;
+  width: 100%;
+  @media (min-width: $md) {
+    width: calc(100% - 14rem);
+  }
+}
+
 .image {
-  align-items: center;
-  display: flex;
-  flex-flow: column;
+  padding-top: 100%;
+  position: relative;
+
+  div[role="img"] {
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.imageBlur {
+  filter: blur(10px);
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
   width: 100%;
 }
 
-.bigImage {
-  height: 41.875rem;
-  position: relative;
-  width: inherit;
-
-  & > img {
-    height: 100%;
-    object-fit: contain;
-    width: 100%;
-  }
-
-  @media (min-width: $sm) {
-    height: 41.875rem;
-  }
+.thumbnails {
+  display: none;
+  width: 14rem;
   @media (min-width: $md) {
-    // height: 41.875rem;
-    height: 97.125rem;
-  }
-  @media (min-width: $lg) {
-    height: 61.625rem;
-  }
-  @media (min-width: $xl) {
-    height: 69.875rem;
+    display: block;
   }
 }
 
+.thumbnailsContent {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  height: calc(99.375rem - 1rem);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+
+  @media (min-width: $lg) {
+    height: calc(69.875rem - 1rem);
+  }
+
+}
 
 .thumbnailsWrapper {
-  max-width: 12rem;
-  margin: 2.375rem 1.80rem 0 2.125rem;
-  display: none;
-  @media (min-width: $lg) {
-    display: block;
-  }
+  margin: 2rem;
+  width: 12rem;
+  padding-top: 100%;
+  position: relative;
+  //
 }
 
 .noThumbnailsWrapper {
@@ -66,23 +93,4 @@
   @media (min-width: $lg) {
     display: block;
   }
-}
-
-.discount {
-  background-color: $color_pink;
-  border-bottom: 1px solid $color_white;
-  border-left: 1px solid $color_white;
-  border-radius: 0 0 0.5rem 0.5rem;
-  border-right: 1px solid $color_white;
-  border-top: 0 solid transparent;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  height: 9.375rem;
-  padding-top: 1px;
-  position: absolute;
-  right: 9.375rem;
-  text-align: center;
-  top: 0;
-  width: 8rem;
 }
