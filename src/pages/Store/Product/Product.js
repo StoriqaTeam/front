@@ -204,11 +204,7 @@ class Product extends Component<PropsType, StateType> {
           <div styleName="ProductDetails">
             <Row>
               <Col sm={12} md={12} lg={6} xl={6}>
-                <ProductImage
-                  discount={productVariant.discount}
-                  mainImage={productVariant.photoMain}
-                  thumbnails={productVariant.additionalPhotos}
-                />
+                <ProductImage {...productVariant} />
                 <ImageDetail />
                 {process.env.BROWSER ? (
                   <SocialShare noBorderX big {...productVariant} />
