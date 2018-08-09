@@ -13,17 +13,16 @@ type PropsType = {
   id: string,
   options: Array<WidgetOptionType>,
   onClick: ({ attributeId: string, attributeValue: string }) => void,
-  isOnSelected: boolean,
   selectedValue: ?string,
   availableValues: Array<string>,
 };
 
 class ProductSize extends PureComponent<PropsType> {
   render() {
-    const { title, options, isOnSelected } = this.props;
+    const { title, options } = this.props;
     return (
       <div styleName="container">
-        <div id={title} styleName={classNames('title', { isOnSelected })}>
+        <div id={title} styleName="title">
           <strong>{title}</strong>
         </div>
         <div styleName="sizes">

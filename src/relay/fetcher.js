@@ -5,7 +5,7 @@ import isTokenExpired from 'utils/token';
 
 import { log } from 'utils';
 
-import routesProductCardQuery from 'pages/Store/Product/__mocks/product_with_attrs';
+// import routesProductCardQuery from 'pages/Store/Product/__mocks/product_with_attrs';
 
 class FetcherBase {
   constructor(url) {
@@ -23,12 +23,12 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
-    if (process.env.NODE_ENV === 'development') {
-      if (operation.operation.name === 'routes_ProductCard_Query') {
-        console.log({ routesProductCardQuery });
-        return { data: routesProductCardQuery };
-      }
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //   if (operation.operation.name === 'routes_ProductCard_Query') {
+    //     console.log({ routesProductCardQuery });
+    //     return { data: routesProductCardQuery };
+    //   }
+    // }
 
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();

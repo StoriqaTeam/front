@@ -53,6 +53,13 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   };
 
   handleClick = (option: WidgetOptionType, index: number): void => {
+    if (
+      this.props.availableValues &&
+      !contains(option.label, this.props.availableValues)
+    ) {
+      return;
+    }
+
     this.setState(
       prevState => {
         if (index === prevState.selected) {
@@ -78,7 +85,9 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       const isSelected = availableValues
         ? option.label === this.props.selectedValue
         : option.state === 'selected';
-      const isDisabled = !contains(option.label, availableValues);
+      const isDisabled = availableValues
+        ? !contains(option.label, availableValues)
+        : option.state === 'disabled';
       return (
         <button
           key={`${option.label || option.id}`}

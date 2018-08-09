@@ -3,8 +3,8 @@
 import React, { Component, Fragment } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { isNil, head, ifElse, assoc, dissoc, propEq } from 'ramda';
-import smoothscroll from 'libs/smoothscroll';
+import { isNil, head, ifElse, assoc, dissoc, propEq, map, prop } from 'ramda';
+// import smoothscroll from 'libs/smoothscroll';
 
 import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -19,9 +19,6 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import {
   makeWidgets,
-  getVariantFromSelection,
-  isNoSelected,
-  sortByProp,
   filterVariantsByAttributes,
   attributesFromVariants,
 } from './utils';
@@ -80,7 +77,8 @@ class Product extends Component<PropsType, StateType> {
       return {
         ...prevState,
         widgets: makeWidgets(all),
-        productVariant: getVariantFromSelection([])(all),
+        // $FlowIgnoreMe
+        productVariant: head(all),
         availableAttributes: attributesFromVariants(all),
       };
     }
@@ -111,56 +109,74 @@ class Product extends Component<PropsType, StateType> {
     window.scrollTo(0, 0);
   }
 
-  handleAddToCart(id: number): void {
-    const { widgets } = this.state;
-    const unselectedAttr = isNoSelected(sortByProp('id')(widgets));
-    // return;
-    if ((id && !unselectedAttr) || (id && widgets.length === 0)) {
-      IncrementInCartMutation.commit({
-        input: { clientMutationId: '', productId: id },
-        environment: this.context.environment,
-        onCompleted: (response, errors) => {
-          log.debug('Success for IncrementInCart mutation');
-          if (response) {
-            log.debug('Response: ', response);
-          }
-          if (errors) {
-            log.debug('Errors: ', errors);
-          }
-          if (!errors && response) {
-            this.props.showAlert({
-              type: 'success',
-              text: 'Product added to cart!',
-              link: { text: '' },
-            });
-          }
-        },
-        onError: error => {
-          log.error('Error in IncrementInCart mutation');
-          log.error(error);
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Unable to add product to cart',
-            link: { text: 'Close.' },
-          });
-        },
-      });
-    } else {
-      this.setState({ unselectedAttr });
-      smoothscroll.scrollTo(head(unselectedAttr));
+  handleAddToCart = () => {
+    const {
+      baseProduct: {
+        variants: { all: variants },
+      },
+    } = this.props;
+
+    const matchedVariants = filterVariantsByAttributes(
+      this.state.selectedAttributes,
+      variants,
+    );
+
+    if (matchedVariants.length > 1) {
+      return;
     }
-  }
+
+    IncrementInCartMutation.commit({
+      // $FlowIgnoreMe
+      input: { clientMutationId: '', productId: prop('rawId', head(variants)) },
+      environment: this.context.environment,
+      onCompleted: (response, errors) => {
+        log.debug('Success for IncrementInCart mutation');
+        if (response) {
+          log.debug('Response: ', response);
+        }
+        if (errors) {
+          log.debug('Errors: ', errors);
+        }
+        if (!errors && response) {
+          this.props.showAlert({
+            type: 'success',
+            text: 'Product added to cart!',
+            link: { text: '' },
+          });
+        }
+      },
+      onError: error => {
+        log.error('Error in IncrementInCart mutation');
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Unable to add product to cart',
+          link: { text: 'Close.' },
+        });
+      },
+    });
+  };
 
   handleWidget = (item: {
     attributeId: string,
     attributeValue: string,
   }): void => {
-    const { selectedAttributes: prevAttrs } = this.state;
+    const {
+      selectedAttributes: prevSelectedAttributes,
+      availableAttributes: prevAvailableAttributes,
+    } = this.state;
+
+    const isUnselect = propEq(
+      item.attributeId,
+      item.attributeValue,
+      prevSelectedAttributes,
+    );
+
     const selectedAttributes = ifElse(
       propEq(item.attributeId, item.attributeValue),
       dissoc(item.attributeId),
       assoc(item.attributeId, item.attributeValue),
-    )(prevAttrs);
+    )(prevSelectedAttributes);
 
     const {
       baseProduct: {
@@ -173,9 +189,19 @@ class Product extends Component<PropsType, StateType> {
       variants,
     );
 
+    const availableAttributes = attributesFromVariants(matchedVariants);
+
     this.setState({
       selectedAttributes,
-      availableAttributes: attributesFromVariants(matchedVariants),
+      availableAttributes: isUnselect
+        ? availableAttributes
+        : assoc(
+            item.attributeId,
+            prop(item.attributeId, prevAvailableAttributes),
+            availableAttributes,
+          ),
+      // $FlowIgnoreMe
+      productVariant: head(matchedVariants),
     });
   };
 
@@ -224,7 +250,13 @@ class Product extends Component<PropsType, StateType> {
                 <ProductImage
                   discount={productVariant.discount}
                   mainImage={productVariant.photoMain}
-                  thumbnails={productVariant.additionalPhotos}
+                  thumbnails={map(
+                    item => ({
+                      label: item,
+                      image: item,
+                    }),
+                    productVariant.additionalPhotos || [],
+                  )}
                 />
                 {process.env.BROWSER ? (
                   <SocialShare noBorderX big {...productVariant} />
@@ -250,9 +282,7 @@ class Product extends Component<PropsType, StateType> {
                           id="productAddToCart"
                           wireframe
                           big
-                          onClick={() =>
-                            this.handleAddToCart(productVariant.rawId)
-                          }
+                          onClick={this.handleAddToCart}
                           dataTest="product-addToCart"
                         >
                           Add to cart
