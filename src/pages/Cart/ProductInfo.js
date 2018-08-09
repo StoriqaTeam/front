@@ -111,7 +111,7 @@ const ProductInfo = ({
                       </Col>
                       <Col size={6}>
                         <CartProductAttribute
-                          title="Return tyoe on return"
+                          title="Return type on return"
                           value="Exchange or funds return"
                         />
                       </Col>
