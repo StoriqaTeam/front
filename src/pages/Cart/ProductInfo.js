@@ -101,7 +101,7 @@ const ProductInfo = ({
                               items={[{ id: 1, label: 'Everywhere' }]}
                               activeItem={{ id: 1, label: 'Everywhere' }}
                               forForm
-                              containerStyle={{ width: '24rem' }}
+                              fullWidth
                             />
                           }
                         />
@@ -111,7 +111,7 @@ const ProductInfo = ({
                       </Col>
                       <Col size={6}>
                         <CartProductAttribute
-                          title="Return tyoe on return"
+                          title="Return type on return"
                           value="Exchange or funds return"
                         />
                       </Col>
@@ -123,12 +123,12 @@ const ProductInfo = ({
                       </Col>
                     </Row>
                     <div styleName="comment">
-                      <div styleName="title">Customer comment</div>
                       <Input
                         fullWidth
                         id="customerComment"
                         onChange={onChangeComment}
                         value={comment}
+                        label="Customer comment"
                       />
                     </div>
                   </div>
