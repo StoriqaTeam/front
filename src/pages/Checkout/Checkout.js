@@ -54,6 +54,7 @@ type StateType = {
   orderInput: {
     addressFull: AddressFullType,
     receiverName: string,
+    receiverPhone: string,
   },
   invoiceId: ?string,
 };
@@ -85,6 +86,7 @@ class Checkout extends Component<PropsType, StateType> {
         addressFull: emptyAddress,
         receiverName:
           (props.me && `${props.me.firstName} ${props.me.lastName}`) || '',
+        receiverPhone: (props.me && props.me.phone) || '',
       },
       invoiceId: null,
     };
@@ -177,10 +179,16 @@ class Checkout extends Component<PropsType, StateType> {
 
   handleCheckout = () => {
     const {
-      orderInput: { addressFull, receiverName },
+      orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
     CreateOrdersMutation.commit({
-      input: { clientMutationId: '', addressFull, receiverName, currencyId: 6 },
+      input: {
+        clientMutationId: '',
+        addressFull,
+        receiverName,
+        receiverPhone,
+        currencyId: 6,
+      },
       environment: this.context.environment,
       onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
         log.debug('Success for DeleteFromCart mutation');
@@ -376,6 +384,7 @@ export default createPaginationContainer(
       email
       firstName
       lastName
+      phone
       deliveryAddresses {
         address {
           value

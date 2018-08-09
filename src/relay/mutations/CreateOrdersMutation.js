@@ -53,6 +53,7 @@ type AddressParamsType = {
 type CreateOrdersMutationVariables = {
   input: {
     receiverName: string,
+    receiverPhone: string,
     addressFull: AddressParamsType,
   },
 };

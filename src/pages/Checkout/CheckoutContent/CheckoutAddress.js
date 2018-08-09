@@ -74,6 +74,18 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
     });
   };
 
+  handleChangePhone = (e: any) => {
+    const { onChangeOrderInput, orderInput } = this.props;
+    const { value } = e.target;
+    if (!/^\+?\d*$/.test(value)) {
+      return;
+    }
+    onChangeOrderInput({
+      ...orderInput,
+      receiverPhone: value,
+    });
+  };
+
   handleChangeData = (addressFullData: AddressFullType): void => {
     const { onChangeOrderInput, orderInput } = this.props;
     onChangeOrderInput({
@@ -117,6 +129,16 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                       label="Receiver name"
                       onChange={this.handleChangeReceiver}
                       value={orderInput.receiverName}
+                      limit={50}
+                    />
+                  </div>
+                  <div styleName="receiverContainer">
+                    <Input
+                      fullWidth
+                      id="receiverPhone"
+                      label="Receiver phone"
+                      onChange={this.handleChangePhone}
+                      value={orderInput.receiverPhone}
                       limit={50}
                     />
                   </div>
