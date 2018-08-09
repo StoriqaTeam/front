@@ -70,7 +70,9 @@ class ProductImage extends Component<PropsType, StateType> {
         <div styleName="thumbnails">
           <div
             styleName={
-              !isEmpty(additionalPhotos) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
+              !isEmpty(additionalPhotos)
+                ? 'thumbnailsWrapper'
+                : 'noThumbnailsWrapper'
             }
           >
             {!isEmpty(additionalPhotos) ? (

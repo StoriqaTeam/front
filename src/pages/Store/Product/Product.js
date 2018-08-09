@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { path, isNil, head } from 'ramda';
 import smoothscroll from 'libs/smoothscroll';
 
-import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
@@ -27,6 +26,7 @@ import {
 
 import {
   ImageDetail,
+  ProductButtons,
   ProductContext,
   ProductDetails,
   ProductImage,
@@ -219,29 +219,12 @@ class Product extends Component<PropsType, StateType> {
                     onWidgetClick={this.handleWidget}
                     unselectedAttr={unselectedAttr}
                   >
-                    <div styleName="buttons-container">
-                      <div styleName="buttons">
-                        <Button disabled big>
-                          Buy now
-                        </Button>
-                        <Button
-                          id="productAddToCart"
-                          wireframe
-                          big
-                          onClick={() =>
-                            this.handleAddToCart(productVariant.rawId)
-                          }
-                          dataTest="product-addToCart"
-                        >
-                          Add to cart
-                        </Button>
-                      </div>
-                      {unselectedAttr && (
-                        <div styleName="message">
-                          You must select an attribute
-                        </div>
-                      )}
-                    </div>
+                    <ProductButtons
+                      onAddToCart={() =>
+                        this.handleAddToCart(productVariant.rawId)
+                      }
+                      unselectedAttr={unselectedAttr}
+                    />
                     <div styleName="line" />
                     <ProductStore />
                     {/* {!loggedIn && <div>Please login to use cart</div>} */}

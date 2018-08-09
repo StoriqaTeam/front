@@ -1,5 +1,6 @@
 export { default as ImageDetail } from './ImageDetail';
 export { default as Product } from './Product';
+export { default as ProductButtons } from './ProductButtons';
 export { default as ProductContext } from './ProductContext';
 export { default as ProductDetails } from './ProductDetails';
 export { default as ProductDiscount } from './ProductDiscount';
