@@ -10,10 +10,7 @@ type PropsType = {
   unselectedAttr: ?Array<string>,
 };
 
-const ProductButtons = ({
-  onAddToCart,
-  unselectedAttr,
-}: PropsType) => (
+const ProductButtons = ({ onAddToCart, unselectedAttr }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
       <Button disabled big>
@@ -30,9 +27,7 @@ const ProductButtons = ({
       </Button>
     </div>
     {unselectedAttr && (
-      <div styleName="message">
-        You must select an attribute
-      </div>
+      <div styleName="message">You must select an attribute</div>
     )}
   </div>
 );
