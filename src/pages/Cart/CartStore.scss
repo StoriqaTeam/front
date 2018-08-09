@@ -49,8 +49,8 @@
 }
 
 .image {
-  width: 5rem;
-  height: 5rem;
+  width: 5.25rem;
+  height: 5.25rem;
 }
 
 .devider {
@@ -66,6 +66,8 @@
 }
 
 .store-name {
+  font-family: $font_regular;
+  color: $color_black;
   margin-bottom: 0.5rem;
 }
 
@@ -87,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5rem;
-  height: 5rem;
+  width: 5.25rem;
+  height: 5.25rem;
   background-color: $color_grey_trivial;
 }
