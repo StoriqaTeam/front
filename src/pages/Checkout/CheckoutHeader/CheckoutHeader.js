@@ -30,7 +30,7 @@ const CheckoutHeader = ({
     <Icon type="arrowRight" />
     <StepLabel
       step={2}
-      text="Submit"
+      text="Summary"
       currentStep={currentStep}
       isReadyToNext={isReadyToNext}
       onChangeStep={onChangeStep}

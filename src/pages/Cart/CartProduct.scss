@@ -11,8 +11,6 @@
   }
 }
 
-
-
 .left-container {
   display: flex;
   align-items: flex-start;
@@ -26,6 +24,8 @@
   width: 100%;
   background-size: cover;
   background-position: center;
+  border-radius: 0.5rem;
+
   &:before{
     content: "";
     display: block;

@@ -13,7 +13,7 @@
     width: 17px;
     height: 17px;
     background-color: $color_white;
-    border: 1px solid $color_blue;
+    border: 1px solid $color_grey_light;
     border-radius: 4px;
 
     .radio {
@@ -27,6 +27,7 @@
 
   &.isChecked {
     .box {
+      border-color: $color_blue;
       .radio {
         background-color: $color_blue;
         border-color: $color_blue;
