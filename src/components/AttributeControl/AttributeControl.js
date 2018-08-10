@@ -57,6 +57,13 @@ type StateType = {
 };
 
 class AttributeControll extends React.Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      ...prevState,
+      value: nextProps.initialValues,
+    };
+  }
+
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -80,22 +87,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
       const valResult = !value.includes(val)
         ? [...value, val]
         : [...filter(v => v !== val, value)];
-      this.setState({
-        ...this.state,
-        value: valResult,
-      });
       onChange(valResult);
     } else if (isMultiSelectable && !value) {
-      this.setState({
-        ...this.state,
-        value: [val],
-      });
       onChange([val]);
     } else {
-      this.setState({
-        ...this.state,
-        value: [val],
-      });
       onChange([val]);
     }
   };
