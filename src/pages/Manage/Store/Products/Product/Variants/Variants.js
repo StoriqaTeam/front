@@ -1,10 +1,13 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, pathOr } from 'ramda';
+import classNames from 'classnames';
 
+import { Button } from 'components/common/Button';
 import { log, fromRelayError } from 'utils';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import { DeactivateProductMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/DeactivateProductMutation';
@@ -14,16 +17,51 @@ import Table from './Table/Table';
 
 import './Variants.scss';
 
+type StateType = {
+  isNewVariant: boolean,
+};
+
 type PropsType = {
   productRawId: number,
   productId: string,
   category: {},
-  variants: Array<{ rawId: number }>,
+  variants: Array<{
+    id: string,
+    rawId: number,
+    vendorCode: string,
+    price: number,
+    cashback: number,
+    discount: number,
+    attributes: Array<{
+      attribute: {
+        name: Array<{ text: string }>,
+      },
+      value: string,
+    }>,
+    stocks: Array<{
+      id: string,
+      productId: number,
+      warehouseId: string,
+      quantity: number,
+      warehouse: {
+        name: string,
+        addressFull: {
+          value: string,
+        },
+      },
+    }>,
+  }>,
   storeID: string,
   showAlert: (input: AddAlertInputType) => void,
+  comeResponse: boolean,
+  resetComeResponse: () => void,
 };
 
-class Variants extends PureComponent<PropsType> {
+class Variants extends Component<PropsType, StateType> {
+  state = {
+    isNewVariant: false,
+  };
+
   handleDeleteVariant = (id: string) => {
     const { environment } = this.context;
     const { productId } = this.props;
@@ -74,21 +112,58 @@ class Variants extends PureComponent<PropsType> {
     DeactivateProductMutation.commit(params);
   };
 
+  toggleNewVariantParam = (value: boolean) => {
+    this.setState({ isNewVariant: value });
+  };
+
   render() {
+    const {
+      category,
+      variants,
+      productRawId,
+      productId,
+      storeID,
+      comeResponse,
+      resetComeResponse,
+    } = this.props;
+    const { isNewVariant } = this.state;
     return (
       <Fragment>
-        <div styleName="separator" />
-        <div styleName="container">
-          <div styleName="title">
-            <strong>Variants</strong>
-          </div>
+        <div
+          styleName={classNames('container', { newVariant: isEmpty(variants) })}
+        >
+          {!isEmpty(variants) && (
+            <div styleName="header">
+              <div styleName="title">
+                <strong>Item variants</strong>
+              </div>
+              {!isNewVariant && (
+                <div styleName="button">
+                  <Button
+                    wireframe
+                    big
+                    onClick={() => {
+                      this.toggleNewVariantParam(true);
+                    }}
+                    dataTest="addVariantButton"
+                  >
+                    Add variant
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
           <Table
-            category={this.props.category}
-            variants={this.props.variants}
-            productRawId={this.props.productRawId}
-            productId={this.props.productId}
-            storeID={this.props.storeID}
+            category={category}
+            variants={variants}
+            productRawId={productRawId}
+            productId={productId}
+            storeID={storeID}
             handleDeleteVariant={this.handleDeleteVariant}
+            comeResponse={comeResponse}
+            resetComeResponse={resetComeResponse}
+            isNewVariant={isNewVariant}
+            toggleNewVariantParam={this.toggleNewVariantParam}
           />
         </div>
       </Fragment>
@@ -101,4 +176,4 @@ Variants.contextTypes = {
   directories: PropTypes.object,
 };
 
-export default Variants;
+export default withShowAlert(Variants);

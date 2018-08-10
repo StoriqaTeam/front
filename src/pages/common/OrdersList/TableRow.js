@@ -15,12 +15,12 @@ export type TableItemType = {
   number: string,
   date: string,
   shop: {
-    id: number,
+    id: ?number,
     title: string,
   },
   delivery: string,
   item: {
-    id: number,
+    id: ?number,
     title: string,
   },
   subtotal: number,
@@ -53,12 +53,16 @@ class TableRow extends PureComponent<PropsType> {
           </Col>
           <Col lg={2} xl={2} xlVisible>
             <span styleName="link">
-              <Link
-                to={`/store/${rowItem.shop.id}`}
-                onClick={(e: any) => e.stopPropagation()}
-              >
-                {rowItem.shop.title}
-              </Link>
+              {rowItem.shop.id ? (
+                <Link
+                  to={`/store/${rowItem.shop.id}`}
+                  onClick={(e: any) => e.stopPropagation()}
+                >
+                  {rowItem.shop.title}
+                </Link>
+              ) : (
+                <span styleName="noLink">{rowItem.shop.title}</span>
+              )}
             </span>
           </Col>
           <Col lg={2} xl={1} xlVisible>
@@ -66,12 +70,20 @@ class TableRow extends PureComponent<PropsType> {
           </Col>
           <Col size={5} sm={4} md={3} lg={2} xl={2}>
             <span styleName="link">
-              <Link
-                to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}
-                onClick={(e: any) => e.stopPropagation()}
-              >
-                {rowItem.item.title}
-              </Link>
+              {rowItem.item.id ? ( // eslint-disable-line
+                rowItem.shop.id ? (
+                  <Link
+                    to={`/store/${rowItem.shop.id}/products/${rowItem.item.id}`}
+                    onClick={(e: any) => e.stopPropagation()}
+                  >
+                    {rowItem.item.title}
+                  </Link>
+                ) : (
+                  <div styleName="noLink">{rowItem.item.title}</div>
+                )
+              ) : (
+                <span styleName="noLink">{rowItem.item.title}</span>
+              )}
             </span>
           </Col>
           <Col md={2} lg={2} xl={1} mdVisible>

@@ -286,59 +286,6 @@ export default (OriginalComponent: any) =>
       );
     };
 
-    // handleSlideOld = (direction: 'prev' | 'next') => {
-    //   const { infinity, autoplaySpeed } = this.props;
-    //   const {
-    //     visibleSlidesAmount,
-    //     slidesOffset,
-    //     totalSlidesAmount,
-    //     num,
-    //     slideWidth,
-    //     isClick,
-    //   } = this.state;
-    //
-    //   if (isClick) {
-    //     return;
-    //   }
-    //
-    //   if (autoplaySpeed) {
-    //     this.activateAutoplayTimer();
-    //   }
-    //
-    //   let newNum = direction === 'next' ? num + 1 : num - 1;
-    //   if (direction === 'next') {
-    //     newNum = newNum === totalSlidesAmount ? 0 : newNum;
-    //   } else {
-    //     newNum = newNum === -1 ? totalSlidesAmount - 1 : newNum;
-    //   }
-    //
-    //   if (
-    //     !infinity &&
-    //     ((direction === 'prev' && newNum === totalSlidesAmount - 1) ||
-    //       (direction === 'next' &&
-    //         newNum + visibleSlidesAmount > totalSlidesAmount))
-    //   ) {
-    //     return;
-    //   }
-    //
-    //   const newSlidesOffset =
-    //     direction === 'next'
-    //       ? slidesOffset - slideWidth
-    //       : slidesOffset + slideWidth;
-    //
-    //   if (infinity) {
-    //     this.swapArray(direction, newNum);
-    //     this.setState({ isClick: true });
-    //   } else {
-    //     this.startAnimation();
-    //     this.setState({
-    //       slidesOffset: newSlidesOffset,
-    //       num: newNum,
-    //     });
-    //     this.startAnimation();
-    //   }
-    // };
-
     handleDot = (dotIdx: number) => {
       const {
         animationSpeed,
@@ -485,9 +432,6 @@ export default (OriginalComponent: any) =>
         newSlidesOffset = -(slideWidth * (totalSlidesAmount - 1));
       }
       if (direction === 'next') {
-        // const firstItem = head(children);
-        // const slicedItems = slice(1, totalSlidesAmount, children);
-        // newChildren = append(firstItem, slicedItems);
         this.cropChildren('next');
         newSlidesOffset = 0;
       }

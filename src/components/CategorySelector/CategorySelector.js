@@ -155,19 +155,21 @@ class CategorySelector extends React.Component<PropsType, StateType> {
         tabIndex="0"
         data-test="categorySelector"
       >
-        {snapshot &&
-          values(snapshot).map(
-            (item, index) =>
-              item ? (
-                <span key={item.rawId}>
-                  {index !== 0 && ' / '}
-                  {getNameText(item.name, lang)}
-                </span>
-              ) : null,
-          )}
-        {snapshot &&
-          isEmpty(filter(item => Boolean(item), values(snapshot))) &&
-          'Choose category'}
+        <div styleName="breadcrumbsContent">
+          {snapshot &&
+            values(snapshot).map(
+              (item, index) =>
+                item ? (
+                  <span key={item.rawId}>
+                    {index !== 0 && ' / '}
+                    {getNameText(item.name, lang)}
+                  </span>
+                ) : null,
+            )}
+          {snapshot &&
+            isEmpty(filter(item => Boolean(item), values(snapshot))) &&
+            'Choose category'}
+        </div>
       </div>
     );
   };
@@ -180,64 +182,66 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     const level2ItemName = level2Item ? getNameText(level2Item.name, lang) : '';
 
     return (
-      <div styleName="wrapper">
-        <div styleName="label">Category</div>
-        <div
-          styleName="breadcrumbsWrapper"
-          ref={node => {
-            this.button = node;
-          }}
-        >
-          {this.renderPath()}
-        </div>
-        <div
-          styleName={classNames('items', {
-            hidden: !isShow,
-          })}
-        >
+      <div styleName="container">
+        <div styleName="wrapper">
+          <div styleName="label">Category</div>
           <div
-            styleName="menuContainer"
+            styleName="breadcrumbsWrapper"
             ref={node => {
-              this.categoryWrapp = node;
+              this.button = node;
             }}
           >
-            <div styleName="levelWrapper">
-              <div styleName="level">
-                <Fragment>
-                  <div styleName="levelLabel">Categories</div>
-                  <LevelList
-                    items={categories.children}
-                    lang={lang}
-                    onClick={this.handleOnChoose}
-                    selectedItem={level1Item}
-                  />
-                </Fragment>
-              </div>
-              <div styleName="level">
-                {level1Item && (
+            {this.renderPath()}
+          </div>
+          <div
+            styleName={classNames('items', {
+              hidden: !isShow,
+            })}
+          >
+            <div
+              styleName="menuContainer"
+              ref={node => {
+                this.categoryWrapp = node;
+              }}
+            >
+              <div styleName="levelWrapper">
+                <div styleName="level">
                   <Fragment>
-                    <div styleName="levelLabel">{level1ItemName}</div>
+                    <div styleName="levelLabel">Categories</div>
                     <LevelList
-                      items={level1Item.children}
+                      items={categories.children}
                       lang={lang}
                       onClick={this.handleOnChoose}
-                      selectedItem={level2Item}
+                      selectedItem={level1Item}
                     />
                   </Fragment>
-                )}
-              </div>
-              <div styleName="level">
-                {level2Item && (
-                  <Fragment>
-                    <div styleName="levelLabel">{level2ItemName}</div>
-                    <LevelList
-                      items={level2Item.children}
-                      lang={lang}
-                      onClick={this.handleOnChoose}
-                      selectedItem={level3Item}
-                    />
-                  </Fragment>
-                )}
+                </div>
+                <div styleName="level">
+                  {level1Item && (
+                    <Fragment>
+                      <div styleName="levelLabel">{level1ItemName}</div>
+                      <LevelList
+                        items={level1Item.children}
+                        lang={lang}
+                        onClick={this.handleOnChoose}
+                        selectedItem={level2Item}
+                      />
+                    </Fragment>
+                  )}
+                </div>
+                <div styleName="level">
+                  {level2Item && (
+                    <Fragment>
+                      <div styleName="levelLabel">{level2ItemName}</div>
+                      <LevelList
+                        items={level2Item.children}
+                        lang={lang}
+                        onClick={this.handleOnChoose}
+                        selectedItem={level3Item}
+                      />
+                    </Fragment>
+                  )}
+                </div>
               </div>
             </div>
           </div>

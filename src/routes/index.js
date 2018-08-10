@@ -71,6 +71,7 @@ const routes = (
               text
             }
             children {
+              id
               rawId
               parentId
               level
@@ -79,6 +80,7 @@ const routes = (
                 text
               }
               children {
+                id
                 rawId
                 parentId
                 level
@@ -87,6 +89,7 @@ const routes = (
                   text
                 }
                 children {
+                  id
                   rawId
                   parentId
                   level
