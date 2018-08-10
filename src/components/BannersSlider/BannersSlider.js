@@ -15,10 +15,11 @@ const BannersSlider = (props: PropsTypes) => (
       dots
       infinity
       animationSpeed={500}
-      autoplaySpeed={4000}
+      autoplaySpeed={10000}
       type="banners"
       items={props.items}
       slidesToShow={1}
+      fade
     />
   </div>
 );

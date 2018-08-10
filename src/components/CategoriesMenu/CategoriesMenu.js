@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { find, propEq } from 'ramda';
+import { find, propEq, head } from 'ramda';
 import { Link, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
@@ -53,7 +53,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
   onMouseOutTimer: TimeoutID;
   onMouseMoveTimer: TimeoutID;
 
-  onMouseOver = e => {
+  onMouseOver = (e, childRawId) => {
     const { id } = e.currentTarget;
     const { active } = this.state;
     if (this.onMouseOutTimer) {
@@ -64,8 +64,11 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     }
     if (active !== id) {
       this.onMouseOverTimer = setTimeout(() => {
-        this.setState(() => ({ active: id }));
-      }, 300);
+        this.setState(() => ({
+          active: id,
+          activeMid: `${childRawId}`,
+        }));
+      }, 500);
     }
   };
 
@@ -142,7 +145,10 @@ class CategoriesMenu extends Component<PropsType, StateType> {
       let onMouseOver = null;
       let onMouseOut = null;
       if (isRoot) {
-        ({ onMouseOver, onMouseOut } = this);
+        onMouseOver = (e: any) => {
+          this.onMouseOver(e, head(categoryChildren).rawId);
+        };
+        ({ onMouseOut } = this);
       } else if (categoryChildren) {
         onMouseOver = this.onMouseOverMid;
         onMouseOut = this.onMouseOutMid;
