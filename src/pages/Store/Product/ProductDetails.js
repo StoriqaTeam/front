@@ -98,11 +98,7 @@ class ProductDetails extends Component<PropsType, {}> {
             <div styleName="rating">
               <Rating value={rating} />
             </div>
-            <ProductPrice
-              price={productVariant.price}
-              lastPrice={productVariant.lastPrice}
-              cashback={productVariant.cashback}
-            />
+            <ProductPrice {...productVariant} />
             <p>{productDescription}</p>
             {sortByProp('id')(widgets).map(this.generateWidget)}
             <ProductQuantity />
