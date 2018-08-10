@@ -54,35 +54,43 @@ type StateType = {
   orderInput: {
     addressFull: AddressFullType,
     receiverName: string,
+    receiverPhone: string,
   },
   invoiceId: ?string,
 };
 
+const emptyAddress = {
+  value: '',
+  country: '',
+  administrativeAreaLevel1: '',
+  administrativeAreaLevel2: '',
+  locality: '',
+  political: '',
+  postalCode: '',
+  route: '',
+  streetNumber: '',
+  placeId: '',
+};
+
 /* eslint-disable react/no-array-index-key */
 class Checkout extends Component<PropsType, StateType> {
-  state = {
-    storesRef: null,
-    step: 1,
-    isAddressSelect: true,
-    isNewAddress: false,
-    saveAsNewAddress: true,
-    orderInput: {
-      addressFull: {
-        value: '',
-        country: '',
-        administrativeAreaLevel1: '',
-        administrativeAreaLevel2: '',
-        locality: '',
-        political: '',
-        postalCode: '',
-        route: '',
-        streetNumber: '',
-        placeId: '',
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      storesRef: null,
+      step: 1,
+      isAddressSelect: true,
+      isNewAddress: false,
+      saveAsNewAddress: true,
+      orderInput: {
+        addressFull: emptyAddress,
+        receiverName:
+          (props.me && `${props.me.firstName} ${props.me.lastName}`) || '',
+        receiverPhone: (props.me && props.me.phone) || '',
       },
-      receiverName: '',
-    },
-    invoiceId: null,
-  };
+      invoiceId: null,
+    };
+  }
 
   setStoresRef(ref) {
     if (ref && !this.state.storesRef) {
@@ -156,6 +164,10 @@ class Checkout extends Component<PropsType, StateType> {
     this.setState(prevState => ({
       isAddressSelect: !prevState.isAddressSelect,
       isNewAddress: !prevState.isNewAddress,
+      orderInput: {
+        ...prevState.orderInput,
+        addressFull: emptyAddress,
+      },
     }));
   };
 
@@ -167,10 +179,16 @@ class Checkout extends Component<PropsType, StateType> {
 
   handleCheckout = () => {
     const {
-      orderInput: { addressFull, receiverName },
+      orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
     CreateOrdersMutation.commit({
-      input: { clientMutationId: '', addressFull, receiverName, currencyId: 6 },
+      input: {
+        clientMutationId: '',
+        addressFull,
+        receiverName,
+        receiverPhone,
+        currencyId: 6,
+      },
       environment: this.context.environment,
       onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
         log.debug('Success for DeleteFromCart mutation');
@@ -366,6 +384,7 @@ export default createPaginationContainer(
       email
       firstName
       lastName
+      phone
       deliveryAddresses {
         address {
           value

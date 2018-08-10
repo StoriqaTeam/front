@@ -66,7 +66,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
         key={`${option.label || option.id}`}
         onClick={() => this.handleClick(option, index)}
       >
-        <figure>
+        <figure styleName="thumbnailContainer">
           <img
             styleName={classNames(
               {
