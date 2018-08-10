@@ -27,7 +27,8 @@ $font_italic: 'Roboto_Italic', 'Helvetica Neue Italic', Helvetica, Arial, sans-s
 $font_medium: 'Roboto_Medium', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
 
 // Shadows
-$shadow_1: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, .1);
+$shadow_1: 0 0.15rem 0.5rem 0 rgba(0, 0, 0, .05);
+$shadow_1_hover: 0 0.3rem 1.7rem 0 rgba(0, 0, 0, .1);
 $shadow_2: 0 0.5rem 1rem 0 rgba(0, 0, 0, .25);
 $shadow_3: 0 0 10px rgba(0, 0, 0, .5);
 
