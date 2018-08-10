@@ -1,14 +1,13 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, isNil, head } from 'ramda';
+import { path, isNil, head, has } from 'ramda';
 import smoothscroll from 'libs/smoothscroll';
 
-import { Button } from 'components/common/Button';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Page } from 'components/App';
+import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
@@ -27,6 +26,8 @@ import {
 
 import {
   ImageDetail,
+  ProductBreadcrumbs,
+  ProductButtons,
   ProductContext,
   ProductDetails,
   ProductImage,
@@ -194,69 +195,65 @@ class Product extends Component<PropsType, StateType> {
       return <div styleName="productNotFound">Product Not Found</div>;
     }
     const {
-      baseProduct: { name, shortDescription, longDescription, rating, store },
+      baseProduct: {
+        name,
+        categoryId,
+        shortDescription,
+        longDescription,
+        rating,
+        store,
+      },
     } = this.props;
     const { widgets, productVariant } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
-      <ProductContext.Provider value={{ store, productVariant, rating }}>
-        <Fragment>
-          <div styleName="ProductDetails">
-            <Row>
-              <Col sm={12} md={12} lg={6} xl={6}>
-                <ProductImage
-                  discount={productVariant.discount}
-                  mainImage={productVariant.photoMain}
-                  thumbnails={productVariant.additionalPhotos}
+      <AppContext.Consumer>
+        {({ categories }) => (
+          <ProductContext.Provider value={{ store, productVariant, rating }}>
+            <div styleName="container">
+              {has('children')(categories) && !isNil(categories.children) ? (
+                <ProductBreadcrumbs
+                  categories={categories.children}
+                  categoryId={categoryId}
                 />
-                <ImageDetail />
-                {process.env.BROWSER ? (
-                  <SocialShare noBorderX big {...productVariant} />
-                ) : null}
-              </Col>
-              <Col sm={12} md={12} lg={6} xl={6}>
-                <div styleName="detailsWrapper">
-                  <ProductDetails
-                    productTitle={extractText(name)}
-                    productDescription={description}
-                    widgets={widgets}
-                    onWidgetClick={this.handleWidget}
-                    unselectedAttr={unselectedAttr}
-                  >
-                    <div styleName="buttons-container">
-                      <div styleName="buttons">
-                        <Button disabled big>
-                          Buy now
-                        </Button>
-                        <Button
-                          id="productAddToCart"
-                          wireframe
-                          big
-                          onClick={() =>
+              ) : null}
+              <div styleName="productContent">
+                <Row>
+                  <Col sm={12} md={12} lg={6} xl={6}>
+                    <ProductImage {...productVariant} />
+                    <ImageDetail />
+                    {process.env.BROWSER ? (
+                      <SocialShare noBorderX big {...productVariant} />
+                    ) : null}
+                  </Col>
+                  <Col sm={12} md={12} lg={6} xl={6}>
+                    <div styleName="detailsWrapper">
+                      <ProductDetails
+                        productTitle={extractText(name)}
+                        productDescription={description}
+                        widgets={widgets}
+                        onWidgetClick={this.handleWidget}
+                        unselectedAttr={unselectedAttr}
+                      >
+                        <ProductButtons
+                          onAddToCart={() =>
                             this.handleAddToCart(productVariant.rawId)
                           }
-                          dataTest="product-addToCart"
-                        >
-                          Add to cart
-                        </Button>
-                      </div>
-                      {unselectedAttr && (
-                        <div styleName="message">
-                          You must select an attribute
-                        </div>
-                      )}
+                          unselectedAttr={unselectedAttr}
+                        />
+                        <div styleName="line" />
+                        <ProductStore />
+                        {/* {!loggedIn && <div>Please login to use cart</div>} */}
+                      </ProductDetails>
                     </div>
-                    <div styleName="line" />
-                    <ProductStore />
-                    {/* {!loggedIn && <div>Please login to use cart</div>} */}
-                  </ProductDetails>
-                </div>
-              </Col>
-            </Row>
-          </div>
-          {this.makeTabs(longDescription)}
-        </Fragment>
-      </ProductContext.Provider>
+                  </Col>
+                </Row>
+              </div>
+              {this.makeTabs(longDescription)}
+            </div>
+          </ProductContext.Provider>
+        )}
+      </AppContext.Consumer>
     );
   }
 }
@@ -266,6 +263,7 @@ export default createFragmentContainer(
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
+      categoryId
       name {
         text
         lang

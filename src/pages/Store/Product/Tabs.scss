@@ -2,11 +2,13 @@
 
 .container {
   background-color: $color_white;
+  border: 1px solid $color_grey_trivial;
   display: none;
+  margin-bottom: 4rem;
   overflow: hidden;
   padding: 3.25rem 3rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: $lg) {
     display: block;
   }
 }
