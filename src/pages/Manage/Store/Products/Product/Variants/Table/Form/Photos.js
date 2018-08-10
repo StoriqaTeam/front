@@ -3,18 +3,30 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+import { Icon } from 'components/Icon';
 import { UploadWrapper } from 'components/Upload';
 import { uploadFile, convertSrc } from 'utils';
 
 import './Photos.scss';
 
 type PropsType = {
-  onAddPhoto: Function,
+  onAddMainPhoto: (url: string) => void,
+  onAddPhoto: (url: string) => void,
+  onRemovePhoto: (url: string) => void,
+  mainPhoto: ?string,
   photos: ?Array<string>,
 };
 
 class Photos extends PureComponent<PropsType> {
-  handleOnUpload = async (e: any) => {
+  handleOnUploadMainPhoto = async (e: any) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const result = await uploadFile(file);
+    if (!result.url) return;
+    this.props.onAddMainPhoto(result.url);
+  };
+
+  handleOnUploadPhoto = async (e: any) => {
     e.preventDefault();
     const file = e.target.files[0];
     const result = await uploadFile(file);
@@ -23,35 +35,82 @@ class Photos extends PureComponent<PropsType> {
   };
 
   render() {
-    const { photos: items } = this.props;
+    const { mainPhoto, photos: items, onRemovePhoto } = this.props;
     return (
       <div styleName="container">
-        <div styleName="title">
-          <strong>Product photos</strong>
-        </div>
-        <div styleName="upload">
-          <UploadWrapper
-            id="foods_foto"
-            onUpload={this.handleOnUpload}
-            buttonHeight={10}
-            buttonWidth={10}
-            buttonIconType="camera"
-            buttonLabel="Add photo"
-            dataTest="productPhotosUploader"
-          />
-        </div>
-        {items &&
-          items.length > 0 && (
-            <Fragment>
-              {items.map(item => (
-                <div key={item} styleName="item">
-                  <div styleName="itemWrap">
-                    <img src={convertSrc(item, 'small')} alt="img" />
-                  </div>
-                </div>
-              ))}
-            </Fragment>
+        <div styleName="mainPhoto">
+          <div styleName="title">
+            <strong>Main photo</strong>
+          </div>
+          <div styleName="upload">
+            <UploadWrapper
+              id="main-photo"
+              onUpload={this.handleOnUploadMainPhoto}
+              buttonHeight={10}
+              buttonWidth={10}
+              buttonIconType="camera"
+              buttonLabel="Add photo"
+              dataTest="productPhotosUploader"
+            />
+          </div>
+          {mainPhoto && (
+            <div styleName="item mainPhotoItem">
+              <div styleName="itemWrap">
+                <img src={convertSrc(mainPhoto, 'small')} alt="img" />
+              </div>
+              <div
+                styleName="remove"
+                onClick={() => {
+                  onRemovePhoto(mainPhoto);
+                }}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                <Icon type="basket" size={32} />
+              </div>
+            </div>
           )}
+        </div>
+        <div styleName="additionalPhotos">
+          <div styleName="title">
+            <strong>Product photos</strong>
+          </div>
+          <div styleName="upload">
+            <UploadWrapper
+              id="additional-photos"
+              onUpload={this.handleOnUploadPhoto}
+              buttonHeight={10}
+              buttonWidth={10}
+              buttonIconType="camera"
+              buttonLabel="Add photo"
+              dataTest="productPhotosUploader"
+            />
+          </div>
+          {items &&
+            items.length > 0 && (
+              <Fragment>
+                {items.map(item => (
+                  <div key={item} styleName="item">
+                    <div styleName="itemWrap">
+                      <img src={convertSrc(item, 'small')} alt="img" />
+                    </div>
+                    <div
+                      styleName="remove"
+                      onClick={() => {
+                        onRemovePhoto(item);
+                      }}
+                      onKeyDown={() => {}}
+                      role="button"
+                      tabIndex="0"
+                    >
+                      <Icon type="basket" size={32} />
+                    </div>
+                  </div>
+                ))}
+              </Fragment>
+            )}
+        </div>
       </div>
     );
   }

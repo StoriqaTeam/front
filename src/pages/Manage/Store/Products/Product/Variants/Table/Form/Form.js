@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { find, append, head, pathOr, map, isEmpty, omit } from 'ramda';
+import { find, append, head, pathOr, map, isEmpty, omit, reject } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { Button } from 'components/common/Button';
@@ -290,14 +290,24 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
+  handleAddMainPhoto = (url: string) => {
+    this.setState({ mainPhoto: url });
+  };
+
   handleAddPhoto = (url: string) => {
-    if (!this.state.mainPhoto) {
-      this.setState({ mainPhoto: url });
-    } else {
-      this.setState((prevState: StateType) => ({
-        photos: append(url, prevState.photos || []),
-      }));
+    this.setState((prevState: StateType) => ({
+      photos: append(url, prevState.photos || []),
+    }));
+  };
+
+  handleRemovePhoto = (url: string) => {
+    const { mainPhoto, photos } = this.state;
+    if (url === mainPhoto) {
+      this.setState({ mainPhoto: null });
+      return;
     }
+    // $FlowIgnoreMe
+    this.setState({ photos: reject(n => url === n, photos) });
   };
 
   toggleDropdownVariant = () => {
@@ -446,8 +456,11 @@ class Form extends Component<PropsType, StateType> {
         </div>
         <div styleName="variants">{this.renderVariant()}</div>
         <Photos
-          photos={mainPhoto ? append(mainPhoto, photos) : photos}
+          photos={photos}
+          mainPhoto={mainPhoto}
+          onAddMainPhoto={this.handleAddMainPhoto}
           onAddPhoto={this.handleAddPhoto}
+          onRemovePhoto={this.handleRemovePhoto}
         />
         <Characteristics
           category={category}
@@ -477,7 +490,7 @@ class Form extends Component<PropsType, StateType> {
             <button
               styleName="cancelButton"
               onClick={() => toggleNewVariantParam(false)}
-              data-test="cancelEditVariantButton"
+              data-test="cancelNewVariantButton"
             >
               Cancel
             </button>

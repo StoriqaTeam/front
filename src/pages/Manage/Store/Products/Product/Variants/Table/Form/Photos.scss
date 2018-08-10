@@ -4,6 +4,14 @@
   margin-bottom: 2rem;
 }
 
+.mainPhoto {
+
+}
+
+.additionalPhotos {
+  margin-top: 3rem;
+}
+
 .upload {
   display: inline-block;
   width: 10rem;
@@ -31,6 +39,7 @@
 }
 
 .item {
+  position: relative;
   display: inline-block;
   width: 10rem;
   height: 10rem;
@@ -38,21 +47,47 @@
   margin-bottom: 2rem;
   text-align: center;
   vertical-align: bottom;
+  border-radius: 0.5rem;
   overflow: hidden;
+
+  &.mainPhotoItem {
+    left: -12rem;
+  }
 }
 
 .itemWrap {
-  display: flex;
-  justify-content: center;
-  height: 10rem;
-
   & > img {
-    height: 100%;
+    height: 10rem;
+    width: 10rem;
+    object-fit: cover;
   }
 }
 
 .labelSmall {
-  font-family: Roboto;
   color: $color_grey_minor;
   font-size: 12px;
+}
+
+.remove {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  background-color: rgba(239,239,239,.9);
+  transition: $transition_all_ease;
+  cursor: pointer;
+
+  svg {
+    fill: $color_grey_minor;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
 }
