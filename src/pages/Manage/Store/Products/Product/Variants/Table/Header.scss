@@ -2,9 +2,11 @@
 
 .header {
   display: flex;
+  width: 138rem;
   margin: 0;
   padding: 0 4rem 2rem;
   border-bottom: 1px solid $color_grey_trivial;
+  background-color: $color_white;
 }
 
 .headerItem {
@@ -25,7 +27,7 @@
 
 .deleteButton {
   & svg {
-    fill: $color_grey_light;
+    fill: $color_grey_minor;
     transition: $transition_all_ease;
   }
 
@@ -33,10 +35,11 @@
 }
 
 .tdCheckbox {width: 5%;}
-.tdArticle {width: 20%;}
-.tdPrice {width: 20%;}
-.tdCashback {width: 15%;}
-.tdCharacteristics {width: 17%;}
-.tdCount {width: 15%;}
+.tdArticle {width: 17%;}
+.tdCashback {width: 10%;}
+.tdDiscount {width: 10%;}
+.tdCharacteristics {width: 18%;}
+.tdPrice {width: 15%;}
+.tdCount {width: 17%;}
 .tdBasket {width: 4%; justify-content: flex-end;}
 .tdDropdawn {width: 4%; justify-content: flex-end;}
