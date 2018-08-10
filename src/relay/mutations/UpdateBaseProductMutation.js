@@ -39,7 +39,7 @@ const mutation = graphql`
       }
       storeId
       currencyId
-      products(first: 1) @connection(key: "Wizard_products") {
+      products(first: null) @connection(key: "Wizard_products") {
         edges {
           node {
             id

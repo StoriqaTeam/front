@@ -100,24 +100,24 @@ class ProductDetails extends PureComponent<PropsType> {
     }
     return WidgetComponent;
   };
+
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
       <ProductContext.Consumer>
         {({ productVariant, rating }) => (
           <div styleName="container">
+            {console.log('---productVariant', productVariant)}
             <h2>{productTitle}</h2>
             <div styleName="rating">
               <Rating value={rating} />
             </div>
-            <ProductPrice
-              price={productVariant.price}
-              lastPrice={productVariant.lastPrice}
-              cashback={productVariant.cashback}
-            />
+            <ProductPrice {...productVariant} />
             <p>{productDescription}</p>
-            {sortByProp('id')(widgets).map(this.generateWidget)}
-            <ProductQuantity />
+            <div styleName="widgets">
+              {sortByProp('id')(widgets).map(this.generateWidget)}
+            </div>
+            <ProductQuantity quantity={productVariant.quantity} />
             {children}
           </div>
         )}

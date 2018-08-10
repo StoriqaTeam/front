@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { isEmpty, isNil, contains } from 'ramda';
 import classNames from 'classnames';
 
+import { Icon } from 'components/Icon';
+
 import './ProductThumbnails.scss';
 
 import { sortByProp } from './utils';
@@ -81,6 +83,8 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     const { options, row, title, isOnSelected, availableValues } = this.props;
     const { selected } = this.state;
 
+    console.log('---options', options);
+
     const mapOptions = (option, index) => {
       const isSelected = availableValues
         ? option.label === this.props.selectedValue
@@ -93,16 +97,26 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           key={`${option.label || option.id}`}
           onClick={() => this.handleClick(option, index)}
         >
-          <figure styleName="thumbnailContainer">
-            <img
-              styleName={classNames({
+          {option.image ?
+            <figure styleName="thumbnailContainer">
+              <img
+                styleName={classNames({
+                  clicked: isSelected || selected === index,
+                  disabled: isDisabled,
+                })}
+                src={option.image}
+                alt={option.alt || 'image alt'}
+              />
+            </figure> :
+            <div
+              styleName={classNames('emptyImg', {
                 clicked: isSelected || selected === index,
                 disabled: isDisabled,
               })}
-              src={option.image}
-              alt={option.alt || 'image alt'}
-            />
-          </figure>
+            >
+              <Icon type="camera" size="40" />
+            </div>
+          }
         </button>
       );
     };

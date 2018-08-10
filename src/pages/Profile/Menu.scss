@@ -28,17 +28,17 @@
     top: -1rem;
     transition: $transition_all_ease;
 
+    svg {
+      transition: $transition_all_ease;
+      fill: $color_grey_minor;
+    }
+
     &:hover {
       border: 1px solid $color_grey_minor;
 
       svg {
-        fill: $color_grey_minor;
+        fill: $color_grey;
       }
-    }
-
-    svg {
-      transition: $transition_all_ease;
-      fill: $color_grey_light;
     }
   }
 

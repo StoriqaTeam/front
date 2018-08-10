@@ -29,7 +29,7 @@ const LevelList = ({ items, onClick, lang, selectedItem }: LevelListType) => (
   <div>
     {items &&
       items.map(item => (
-        <div key={item.rawId}>
+        <div key={item.rawId} styleName="itemWrap">
           <div
             onClick={onClick(item)}
             onKeyDown={() => {}}

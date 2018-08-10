@@ -1,13 +1,14 @@
 @import "../../../../../../styles/variables";
 
 .container {
+  position: relative;
+  margin-top: 2rem;
   background-color: $color_white;
-  border-left: 1px solid $color_grey_trivial;
-  border-right: 1px solid $color_grey_trivial;
-  margin: 0 -4rem -4rem;
-  overflow: hidden;
-  @media (min-width: $md) {
-    margin: 0 -4rem -4rem;
+  //overflow: hidden;
+  z-index: 1;
+
+  &.newVariant {
+    margin-top: 0;
   }
 }
 
@@ -16,21 +17,30 @@
   border-bottom: 1px solid $color_grey_trivial;
   border-top: 1px solid $color_grey_trivial;
   height: 2.875rem;
-  margin: 0 -2rem;
+  margin: 3rem -2rem 0;
+
   @media (min-width: $md) {
-    margin: 0 -4rem;
+    margin: 3rem -4rem 0;
   }
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 4rem;
+}
+
 .title {
+  min-height: 5rem;
   font-size: 14px;
   letter-spacing: 1.2px;
   line-height: 18px;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
-  padding: 0 4rem;
+  //margin-top: 4rem;
+  // padding: 4rem;
+  //background-color: $color_white;
   text-transform: uppercase;
-  @media (min-width: $md) {
-    margin-top: 4rem;
-  }
+}
+
+.button {
+  //width: 22.5rem;
 }

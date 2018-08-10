@@ -4,8 +4,8 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { addressToString, getNameText } from 'utils';
 
-import ImageLoader from 'libs/react-image-loader';
-import BannerLoading from 'components/Banner/BannerLoading';
+// import ImageLoader from 'libs/react-image-loader';
+// import BannerLoading from 'components/Banner/BannerLoading';
 
 import type { About_shop as AboutShopType } from './__generated__/About_shop.graphql';
 
@@ -54,7 +54,7 @@ class About extends PureComponent<PropsType> {
               </div>
             )}
           </div>
-          <div styleName="right">
+          {/* <div styleName="right">
             <div styleName="banners">
               <div styleName="banner">
                 <ImageLoader
@@ -69,7 +69,7 @@ class About extends PureComponent<PropsType> {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );

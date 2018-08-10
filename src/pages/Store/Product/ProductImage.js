@@ -1,22 +1,22 @@
 // @flow
 
 import React, { Component } from 'react';
-import { equals } from 'ramda';
+import { equals, prepend } from 'ramda';
 
 import { isEmpty } from 'utils';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
-import { getImageMeta } from './utils';
+import { getImageMeta, makeAdditionalPhotos } from './utils';
 
 import './ProductImage.scss';
 
 import type { WidgetOptionType } from './types';
 
 type PropsType = {
-  mainImage: string,
+  photoMain: string,
   discount: number,
-  thumbnails: Array<WidgetOptionType>,
+  additionalPhotos: Array<WidgetOptionType>,
 };
 
 type StateType = {
@@ -44,8 +44,8 @@ class ProductImage extends Component<PropsType, StateType> {
   };
 
   componentDidMount() {
-    const { mainImage } = this.props;
-    this.setImage(mainImage);
+    const { photoMain } = this.props;
+    this.setImage(photoMain);
   }
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
     const { selected } = prevState;
@@ -63,23 +63,25 @@ class ProductImage extends Component<PropsType, StateType> {
     });
   };
   render() {
-    const { mainImage, thumbnails, discount } = this.props;
+    const { photoMain, additionalPhotos, discount } = this.props;
     const { selected, isSquared } = this.state;
     return (
       <div styleName="container">
         <div styleName="thumbnails">
           <div
             styleName={
-              !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
+              !isEmpty(additionalPhotos)
+                ? 'thumbnailsWrapper'
+                : 'noThumbnailsWrapper'
             }
           >
-            {!isEmpty(thumbnails) ? (
+            {!isEmpty(additionalPhotos) ? (
               <div styleName="thumbnailsContent">
                 <ProductThumbnails
                   isFirstSelected
                   isReset={isEmpty(selected)}
                   onClick={this.handleClick}
-                  options={thumbnails}
+                  options={makeAdditionalPhotos(prepend(photoMain, additionalPhotos))}
                 />
               </div>
             ) : null}
@@ -88,14 +90,14 @@ class ProductImage extends Component<PropsType, StateType> {
         <div styleName="imageWrapper">
           <figure styleName="image">
             {!isSquared ? (
-              <img src={selected || mainImage} alt="" styleName="imageBlur" />
+              <img src={selected || photoMain} alt="" styleName="imageBlur" />
             ) : null}
             {discount > 0 ? <ProductDiscount discount={discount} /> : null}
             <div
               role="img"
               style={{
                 backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : mainImage
+                  !isEmpty(selected) ? selected : photoMain
                 })`,
                 backgroundSize: 'contain',
                 backgroundPosition: `${isSquared ? 'center top' : 'center'}`,

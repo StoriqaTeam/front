@@ -45,6 +45,7 @@
 .storeName {
   color: $color_grey;
   margin: 0.5rem 0 0 0;
+  font-size: 16px;
   text-transform: capitalize;
   white-space: nowrap;
 }
@@ -68,10 +69,10 @@
 }
 
 .iconInfo {
-  margin-top: 1rem;
-  display: flex;
   align-items: center;
+  display: flex;
   flex-direction: column;
+  margin-top: 1rem;
   padding: 3.2125rem 4rem;
   @media (min-width: $md) {
     flex-direction: row;
@@ -80,6 +81,7 @@
 }
 
 .iconInfoText {
+  color: $color_grey_minor;
   font-size: 16px;
   margin-left: 0;
   position: relative;

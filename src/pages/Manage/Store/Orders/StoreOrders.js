@@ -78,13 +78,15 @@ class StoreOrders extends Component<PropsType, StateType> {
       number: `${order.slug}`,
       date: this.compileDateString(order.createdAt),
       shop: {
-        id: order.store.rawId,
-        title: order.store.name[0].text,
+        id: order.store ? order.store.rawId : null,
+        title: order.store ? order.store.name[0].text : 'The store was deleted',
       },
       delivery: order.deliveryCompany,
       item: {
-        id: order.product.baseProduct.rawId,
-        title: order.product.baseProduct.name[0].text,
+        id: order.product ? order.product.baseProduct.rawId : null,
+        title: order.product
+          ? order.product.baseProduct.name[0].text
+          : 'The product was deleted',
       },
       price: order.price,
       payment: order.paymentStatus ? 'Paid' : 'Not paid',
