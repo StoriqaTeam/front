@@ -94,7 +94,7 @@ class OrderPage extends PureComponent<PropsType> {
         }`,
         storeId: order.storeId,
         // $FlowIgnoreMe
-        name: pathOr('', ['name', 0, 'text'], order.product.baseProduct),
+        name: pathOr(null, ['baseProduct', 'name', 0, 'text'], order.product),
         photoUrl: order.product && order.product.photoMain,
         category: {
           // $FlowIgnoreMe
@@ -257,7 +257,11 @@ class OrderPage extends PureComponent<PropsType> {
               </Button>
             </div>
           </div>
-          <ProductBlock product={order.product} />
+          {order.product.name ? (
+            <ProductBlock product={order.product} />
+          ) : (
+            <div styleName="noProduct">The product was deleted</div>
+          )}
           <div styleName="infoBlock">
             <div styleName="infoBlockItem">
               <Row>
