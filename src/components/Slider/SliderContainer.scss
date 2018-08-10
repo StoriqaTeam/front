@@ -18,6 +18,23 @@
   vertical-align: bottom;
 }
 
+.fadeItem {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transition: $transition_all_ease_out_quad_10;
+
+  & + .fadeItem {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+  }
+}
+
+.activeSlide {
+  opacity: 1;
+}
+
 .dots {
   position: absolute;
   bottom: 2rem;

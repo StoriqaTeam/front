@@ -33,6 +33,7 @@ $shadow_3: 0 0 10px rgba(0, 0, 0, .5);
 
 // Transition
 $transition_all_ease: all .3s ease;
+$transition_all_ease_out_quad_10: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $transition_all_cb: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 
 // Overlays
