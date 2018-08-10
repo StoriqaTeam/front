@@ -36,7 +36,7 @@ type StateType = {
 
 class Input extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const value = `${nextProps.value}`;
+    const value = nextProps.value == null ? '' : `${nextProps.value}`;
     if (Boolean(value) !== prevState.labelFloat) {
       return {
         ...prevState,

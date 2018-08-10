@@ -2,17 +2,24 @@
 
 .container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 2rem;
+  //display: flex;
+  //flex-direction: column;
+  //background-color: $color_grey_bg;
+  //margin-bottom: 2rem;
 
   @media (min-width: $md) {
-    margin-bottom: 4rem;
+    //margin-bottom: 4rem;
   }
+}
+
+.wrap {
+  margin: -4rem;
+  background-color: $color_grey_bg;
 }
 
 .form {
   background-color: $color_white;
+  padding: 4rem;
   height: 100%;
 }
 
@@ -30,19 +37,20 @@
   &.textArea {
     max-width: 96rem;
   }
-
-  &.button {
-    button {
-      width: 100%;
-      @media (min-width: $md) {
-        width: initial;
-      }
-    }
-  }
 }
 
 .formItem + .formItem {
   margin-top: 6rem;
+}
+
+.button {
+  position: relative;
+  width: 22.5rem;
+  margin-top: 4rem;
+
+  @media (max-width: #{$md - 1px}) {
+    margin: 3rem 0 1rem 5rem;
+  }
 }
 
 .label {
@@ -54,24 +62,28 @@
   white-space: nowrap;
 }
 
+.categorySelector {
+  margin-top: 7rem;
+}
+
 .status {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 4rem;
+  right: 4rem;
   height: 3rem;
   line-height: 3rem;
   font-size: 12px;
-  border-radius: 0.25rem;
-  padding: 0 1rem;
+  border-radius: 0.5rem;
+  padding: 0 2rem;
   text-transform: lowercase;
   color: $color_white;
 
-  @media (max-width: #{$sm - 1px}) {
-    position: relative;
-    display: inline-block;
-    width: fit-content;
-    margin-bottom: 3rem;
-  }
+  //@media (max-width: #{$sm - 1px}) {
+  //  position: relative;
+  //  display: inline-block;
+  //  width: fit-content;
+  //  margin-bottom: 3rem;
+  //}
 
   &:first-letter {
     text-transform: uppercase;
@@ -81,4 +93,8 @@
   &.moderation {background-color: $color_yellow;}
   &.decline {background-color: $color_red;}
   &.published {background-color: $color_green;}
+}
+
+.asterisk {
+  color: $color_red;
 }
