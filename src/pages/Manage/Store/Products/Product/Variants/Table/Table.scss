@@ -1,12 +1,35 @@
 @import '../../../../../../../styles/variables';
 
-.table {
-  overflow-x: scroll;
+.container {
+  background-color: $color_grey_bg;
+  overflow: auto;
+}
+
+.table, .emptyForm {
+  border-left: 1px solid $color_grey_trivial;
+  border-right: 1px solid $color_grey_trivial;
+  background-color: $color_white;
+  //overflow-x: scroll;
 }
 
 .tableWrapper {
   width: 102rem;
+
   @media (min-width: $lg) {
     width: initial;
   }
+}
+
+.button {
+  width: 22.5rem;
+  margin-top: 4rem;
+}
+
+.hiddenButton {
+  margin-bottom: -9rem;
+  padding-bottom: 9rem;
+}
+
+.newVariant {
+  padding-bottom: 9rem;
 }

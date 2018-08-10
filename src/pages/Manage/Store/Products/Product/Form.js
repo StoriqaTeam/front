@@ -1,7 +1,16 @@
 // @flow
 
 import React, { Component } from 'react';
-import { assocPath, prop, propOr, isEmpty, omit } from 'ramda';
+import {
+  assocPath,
+  prop,
+  propOr,
+  isEmpty,
+  omit,
+  whereEq,
+  pathOr,
+  map,
+} from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 
@@ -11,9 +20,29 @@ import { CategorySelector } from 'components/CategorySelector';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
-import { getNameText } from 'utils';
+import { getNameText, findCategory } from 'utils';
+
+import { ProductFormContext } from './index';
+
+import Variants from './Variants/Variants';
 
 import './Product.scss';
+
+type AttributeValueType = {
+  attrId: number,
+  value: string,
+  metaField?: ?string,
+};
+
+type VariantType = ?{
+  productRawId: ?string,
+  vendorCode?: string,
+  price?: number,
+  cashback?: ?number,
+  mainPhoto?: ?string,
+  photos?: Array<string>,
+  attributeValues?: Array<AttributeValueType>,
+};
 
 type LangTextType = Array<{
   lang: string,
@@ -21,13 +50,17 @@ type LangTextType = Array<{
 }>;
 
 type BaseProductType = {
+  id: string,
+  rawId: number,
   name: LangTextType,
   shortDescription: LangTextType,
   longDescription: LangTextType,
   seoTitle: LangTextType,
   seoDescription: LangTextType,
-  category: {
+  category: ?{
+    id: string,
     rawId: number,
+    getAttributes: ?Array<*>,
   },
   status: string,
 };
@@ -38,6 +71,8 @@ type PropsType = {
   validationErrors: ?{},
   categories: Array<{}>,
   isLoading: boolean,
+  comeResponse: boolean,
+  resetComeResponse: () => void,
 };
 
 type StateType = {
@@ -51,6 +86,11 @@ type StateType = {
   },
   formErrors: {
     [string]: Array<string>,
+  },
+  category: ?{
+    id: string,
+    rawId: number,
+    getAttributes: ?Array<*>,
   },
 };
 
@@ -69,7 +109,7 @@ class Form extends Component<PropsType, StateType> {
         seoTitle: getNameText(baseProduct.seoTitle || [], 'EN') || '',
         seoDescription:
           getNameText(baseProduct.seoDescription || [], 'EN') || '',
-        categoryId: baseProduct.category.rawId,
+        categoryId: baseProduct.category ? baseProduct.category.rawId : null,
       };
     } else {
       form = {
@@ -84,6 +124,7 @@ class Form extends Component<PropsType, StateType> {
     this.state = {
       form,
       formErrors: {},
+      category: null,
     };
   }
 
@@ -121,14 +162,20 @@ class Form extends Component<PropsType, StateType> {
     return errors;
   };
 
-  handleSave = (): ?{} => {
+  handleSave = (props: { variantData: VariantType, isCanCreate: boolean }) => {
+    const { variantData, isCanCreate } = props;
     this.setState({ formErrors: {} });
     const preValidationErrors = this.validate();
     if (preValidationErrors) {
-      this.setState({ formErrors: preValidationErrors });
+      this.setState({
+        formErrors: preValidationErrors,
+      });
       return;
     }
-    this.props.onSave({ ...this.state.form });
+    if (!isCanCreate) {
+      return;
+    }
+    this.props.onSave({ ...this.state.form }, variantData);
   };
 
   handleInputChange = (id: string) => (e: any) => {
@@ -149,13 +196,65 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  renderInput = (props: { id: string, label: string, limit: number }) => {
-    const { id, label, limit } = props;
+  handleSelectedCategory = (categoryId: number) => {
+    const { categories } = this.props;
+    const category = findCategory(
+      whereEq({ rawId: parseInt(categoryId, 10) }),
+      categories,
+    );
+    this.setState({
+      form: {
+        ...this.state.form,
+        categoryId,
+      },
+      category: {
+        id: category.id,
+        rawId: category.rawId,
+        getAttributes: category.getAttributes,
+      },
+    });
+  };
+
+  renderTextarea = (props: {
+    id: string,
+    label: string,
+    required?: boolean,
+  }) => {
+    const { id, label, required } = props;
+    const requiredLabel = (
+      <span>
+        {label} <span styleName="asterisk">*</span>
+      </span>
+    );
+    return (
+      <Textarea
+        id={id}
+        value={prop(id, this.state.form) || ''}
+        label={required ? requiredLabel : label}
+        onChange={this.handleTextareaChange(id)}
+        errors={propOr(null, id, this.state.formErrors)}
+        fullWidth
+      />
+    );
+  };
+
+  renderInput = (props: {
+    id: string,
+    label: string,
+    limit: number,
+    required?: boolean,
+  }) => {
+    const { id, label, limit, required } = props;
+    const requiredLabel = (
+      <span>
+        {label} <span styleName="asterisk">*</span>
+      </span>
+    );
     return (
       <Input
         id={id}
         value={prop(id, this.state.form) || ''}
-        label={label}
+        label={required ? requiredLabel : label}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
@@ -164,93 +263,126 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  renderTextarea = (props: { id: string, label: string }) => {
-    const { id, label } = props;
-    return (
-      <Textarea
-        id={id}
-        value={prop(id, this.state.form) || ''}
-        label={label}
-        onChange={this.handleTextareaChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
-        fullWidth
-      />
-    );
-  };
-
   render() {
-    const { isLoading, baseProduct } = this.props;
+    const {
+      isLoading,
+      baseProduct,
+      comeResponse,
+      resetComeResponse,
+    } = this.props;
+    const { category } = this.state;
     const status = baseProduct ? baseProduct.status : 'Draft';
+    // $FlowIgnore
+    const variants = pathOr([], ['products', 'edges'], baseProduct);
+    const filteredVariants = map(item => item.node, variants);
+    // $FlowIgnore
+    const storeID = pathOr(null, ['store', 'id'], baseProduct);
     return (
-      <div styleName="container">
-        <div
-          styleName={classNames('status', {
-            draft: status === 'DRAFT',
-            moderation: status === 'MODERATION',
-            decline: status === 'DECLINE',
-            published: status === 'PUBLISHED',
-          })}
-        >
-          {status}
-        </div>
-        <div styleName="form">
-          <div styleName="title">
-            <strong>General settings</strong>
-          </div>
-          <div styleName="formItem">
-            {this.renderInput({ id: 'name', label: 'Product name', limit: 50 })}
-          </div>
-          <div styleName="formItem">
-            {this.renderInput({
-              id: 'seoTitle',
-              label: 'SEO title',
-              limit: 50,
-            })}
-          </div>
-          <div styleName="formItem textArea">
-            {this.renderTextarea({
-              id: 'seoDescription',
-              label: 'SEO description',
-            })}
-          </div>
-          <div styleName="formItem textArea">
-            {this.renderTextarea({
-              id: 'shortDescription',
-              label: 'Short description',
-            })}
-          </div>
-          <div styleName="formItem textArea">
-            {this.renderTextarea({
-              id: 'longDescription',
-              label: 'Long description',
-            })}
-          </div>
-          <div styleName="formItem">
-            <CategorySelector
-              categories={this.props.categories}
-              category={baseProduct && baseProduct.category}
-              onSelect={itemId => {
-                this.setState({
-                  form: {
-                    ...this.state.form,
-                    categoryId: itemId,
-                  },
-                });
-              }}
-            />
-          </div>
-          <div styleName="formItem button">
-            <Button
-              big
-              onClick={this.handleSave}
-              isLoading={isLoading}
-              dataTest="saveProductButton"
+      <ProductFormContext.Provider
+        value={{
+          isLoading,
+          handleSaveBaseProductWithVariant: this.handleSave,
+        }}
+      >
+        <div styleName="container">
+          {baseProduct && (
+            <div
+              styleName={classNames('status', {
+                draft: status === 'DRAFT',
+                moderation: status === 'MODERATION',
+                decline: status === 'DECLINE',
+                published: status === 'PUBLISHED',
+              })}
             >
-              Save
-            </Button>
+              {status}
+            </div>
+          )}
+          <div styleName="form">
+            <div styleName="title">
+              <strong>General settings</strong>
+            </div>
+            <div styleName="formItem">
+              {this.renderInput({
+                id: 'name',
+                label: 'Product name',
+                limit: 50,
+                required: true,
+              })}
+            </div>
+            <div styleName="formItem">
+              {this.renderInput({
+                id: 'seoTitle',
+                label: 'SEO title',
+                limit: 50,
+              })}
+            </div>
+            <div styleName="formItem textArea">
+              {this.renderTextarea({
+                id: 'seoDescription',
+                label: 'SEO description',
+              })}
+            </div>
+            <div styleName="formItem textArea">
+              {this.renderTextarea({
+                id: 'shortDescription',
+                label: 'Short description',
+                required: true,
+              })}
+            </div>
+            <div styleName="formItem textArea">
+              {this.renderTextarea({
+                id: 'longDescription',
+                label: 'Long description',
+                required: true,
+              })}
+            </div>
+            <div styleName="categorySelector">
+              <CategorySelector
+                categories={this.props.categories}
+                category={baseProduct && baseProduct.category}
+                onSelect={itemId => {
+                  this.handleSelectedCategory(itemId);
+                }}
+              />
+            </div>
           </div>
+          {category &&
+            !baseProduct && (
+              <Variants
+                variants={[]}
+                category={category}
+                comeResponse={comeResponse}
+                resetComeResponse={resetComeResponse}
+              />
+            )}
+
+          {baseProduct && (
+            <Variants
+              productRawId={baseProduct.rawId}
+              productId={baseProduct.id}
+              category={baseProduct.category}
+              variants={filteredVariants}
+              storeID={storeID}
+              comeResponse={comeResponse}
+              resetComeResponse={resetComeResponse}
+            />
+          )}
+          {baseProduct && (
+            <div styleName="button">
+              <Button
+                big
+                fullWidth
+                onClick={() => {
+                  this.handleSave({ variantData: null, isCanCreate: true });
+                }}
+                dataTest="saveProductButton"
+              >
+                Save
+              </Button>
+            </div>
+          )}
         </div>
-      </div>
+      </ProductFormContext.Provider>
     );
   }
 }
