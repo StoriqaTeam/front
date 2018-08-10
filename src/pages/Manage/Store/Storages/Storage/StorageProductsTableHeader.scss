@@ -1,0 +1,72 @@
+@import "../../../../../styles/variables";
+
+.headerRowWrap {
+  align-items: center;
+  border-bottom: 1px solid $color_grey_trivial;
+  display: none;
+  margin: 0 -4rem;
+  padding: 2rem 4rem;
+
+  & .tdWrap > span {
+    margin-right: 0.5rem;
+  }
+
+  @media (min-width: $md) {
+    display: flex;
+  }
+}
+
+.name {
+  padding-left: 3rem;
+}
+
+.headerRowWrap {
+  .td {
+    color: $color_grey_minor;
+  }
+}
+
+.colColor {
+  color: $color_grey_minor;
+ // padding-left: 3rem;
+}
+
+.td {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 2.5rem;
+  color: $color_grey;
+}
+
+.tdCheckbox {
+  display: none;
+  width: 5%;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+.tdFoto {
+  margin-right: 2rem;
+  width: 9%;
+}
+.tdName {width: 21%;}
+.tdCategory {width: 18%;}
+.tdPrice {width: 10%;}
+.tdCashback {width: 10%;}
+.tdCharacteristics {width: 24%;}
+.tdDelete {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.deleteButton, .editButton {
+  & svg {
+    fill: $color_grey_minor;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {
+    fill: $color_grey;
+  }
+}
