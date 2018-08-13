@@ -14,6 +14,7 @@ type PropsType = {
   buttonLabel: string,
   buttonHeight: number | string,
   buttonWidth: number | string,
+  fullWidth: ?boolean,
   buttonIconType: ?string,
   overPicture: ?string,
   noIndents: ?boolean,
@@ -22,6 +23,7 @@ type PropsType = {
   buttonIconSize: ?number,
   disabled: ?boolean,
   customUnit?: boolean,
+  square?: boolean,
 };
 
 // TODO: refactor for avoid use style props
@@ -32,6 +34,7 @@ const UploadWrapper = ({
   onUpload,
   buttonHeight,
   buttonWidth,
+  fullWidth,
   buttonIconType,
   overPicture,
   noIndents,
@@ -40,15 +43,16 @@ const UploadWrapper = ({
   buttonIconSize,
   disabled,
   customUnit,
+  square,
 }: PropsType) => (
-  <div styleName="wrapper">
+  <div styleName={classNames('wrapper', { square })}>
     <div styleName={classNames('uploadContainer', { noIndents })}>
       <label
         htmlFor={id}
-        styleName="uploadButton"
+        styleName={classNames('uploadButton', { fullWidth })}
         style={{
           height: `${buttonHeight}${customUnit ? '' : 'rem'}`,
-          width: `${buttonWidth}${customUnit ? '' : 'rem'}`,
+          width: !fullWidth && `${buttonWidth}${customUnit ? '' : 'rem'}`,
         }}
         data-test={dataTest}
       >
@@ -64,6 +68,19 @@ const UploadWrapper = ({
             styleName="overPictureWrap"
             style={{ height: `${buttonHeight}rem`, width: `${buttonWidth}rem` }}
           >
+            {overPicture && (
+              <span styleName="overlay">
+                <span
+                  onClick={() => {}}
+                  onKeyPress={() => {}}
+                  role="button"
+                  styleName="delete"
+                  tabIndex="-1"
+                >
+                  <Icon type="basket" size={24} />
+                </span>
+              </span>
+            )}
             <img styleName="overPicture" src={overPicture} alt="img" />
           </div>
         )}
@@ -85,6 +102,7 @@ const UploadWrapper = ({
 
 UploadWrapper.defaultProps = {
   customUnit: false,
+  square: false,
 };
 
 export default UploadWrapper;

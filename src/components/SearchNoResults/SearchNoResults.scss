@@ -1,0 +1,27 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 88.25rem;
+
+  @media (max-width: #{$md - 1px}) {
+    min-height: 44rem;
+  }
+}
+
+.text {
+  max-width: 57rem;
+  margin-top: 6rem;
+  padding: 0 1rem;
+  line-height: 3rem;
+  text-align: center;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-top: 3rem;
+  }
+}

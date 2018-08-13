@@ -55,6 +55,7 @@ type StateType = {
     facebookUrl: ?string,
     instagramUrl: ?string,
     twitterUrl: ?string,
+    cover: ?string,
   },
   addressFull: addressFullType,
   formErrors: {
@@ -72,6 +73,7 @@ class Contacts extends Component<PropsType, StateType> {
       facebookUrl: '',
       instagramUrl: '',
       twitterUrl: '',
+      cover: '',
     },
     addressFull: {
       value: '',
@@ -94,7 +96,14 @@ class Contacts extends Component<PropsType, StateType> {
     const store = pathOr({}, ['myStore'], this.props.me);
     this.setState({
       form: pick(
-        ['email', 'phone', 'facebookUrl', 'instagramUrl', 'twitterUrl'],
+        [
+          'email',
+          'phone',
+          'facebookUrl',
+          'instagramUrl',
+          'twitterUrl',
+          'cover',
+        ],
         store,
       ),
       addressFull: store.addressFull,
@@ -196,7 +205,7 @@ class Contacts extends Component<PropsType, StateType> {
     const {
       logoUrl,
       // param 'country' enter for 'this.handleUpdateForm'
-      form: { email, phone, facebookUrl, twitterUrl, instagramUrl },
+      form: { email, phone, facebookUrl, twitterUrl, instagramUrl, cover },
       addressFull,
     } = this.state;
 
@@ -213,6 +222,7 @@ class Contacts extends Component<PropsType, StateType> {
         twitterUrl,
         instagramUrl,
         addressFull,
+        cover,
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -345,9 +355,11 @@ class Contacts extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="formItem">
-          <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
-            Save
-          </SpinnerButton>
+          <div styleName="saveButton">
+            <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
+              Save
+            </SpinnerButton>
+          </div>
         </div>
       </div>
     );
@@ -360,7 +372,7 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
+  withShowAlert(Page(ManageStore(Contacts, 'Contacts'), true)),
   graphql`
     fragment Contacts_me on User {
       myStore {
@@ -371,6 +383,7 @@ export default createFragmentContainer(
           text
         }
         logo
+        cover
         email
         phone
         facebookUrl

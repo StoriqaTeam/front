@@ -1,62 +1,64 @@
 // @flow
 
-import React, { Component } from 'react';
-import { map, addIndex, propEq } from 'ramda';
+import React, { PureComponent } from 'react';
+import { map, sortBy, prop, contains } from 'ramda';
 import classNames from 'classnames';
 
 import './ProductSize.scss';
 
 import type { WidgetOptionType } from './types';
 
-import { sortByProp } from './utils';
-
 type PropsType = {
   title: string,
+  id: string,
   options: Array<WidgetOptionType>,
-  onClick: WidgetOptionType => WidgetOptionType,
+  onClick: ({ attributeId: string, attributeValue: string }) => void,
+  selectedValue: ?string,
+  isOnSelected: boolean,
+  availableValues: Array<string>,
 };
 
-class ProductSize extends Component<PropsType, {}> {
-  /**
-   * Highlights size's border when clicked
-   * @param {number} index
-   * @param {WidgetOptionType} selected
-   * @return {void}
-   */
-  handleClick = (index: number, selected: WidgetOptionType): void => {
-    const { onClick } = this.props;
-    onClick({ ...selected, state: 'selected' });
-  };
+class ProductSize extends PureComponent<PropsType> {
   render() {
-    const { title, options } = this.props;
-    const mapIndexed = addIndex(map);
+    const { title, options, isOnSelected } = this.props;
     return (
       <div styleName="container">
-        <h4>{title}</h4>
+        <div id={title} styleName={classNames('title', { isOnSelected })}>
+          <strong>{title}</strong>
+        </div>
         <div styleName="sizes">
-          {mapIndexed((option, index, arr) => {
-            const available = arr.every(propEq('state', 'available'));
-            const separator = () =>
-              !option.state === 'disabled' && option.state === 'available';
+          {map(option => {
+            const available = contains(
+              option.label,
+              this.props.availableValues,
+            );
+            const separator = () => available;
             return (
               <button
                 key={`${option.label}`}
-                onClick={() => this.handleClick(index, option)}
+                onClick={() => {
+                  if (available) {
+                    this.props.onClick({
+                      attributeId: this.props.id,
+                      attributeValue: option.label,
+                    });
+                  }
+                }}
                 styleName={`size ${
-                  option.state === 'selected' ? 'clicked' : ''
-                } ${option.state === 'disabled' ? 'disabled' : ''}`}
+                  option.label === this.props.selectedValue ? 'clicked' : ''
+                } ${!available ? 'disabled' : ''}`}
               >
                 {option.label}
                 {!available || separator() ? (
                   <span
                     styleName={classNames('separator', {
-                      highlighted: option.state === 'selected',
+                      highlighted: option.label === this.props.selectedValue,
                     })}
                   />
                 ) : null}
               </button>
             );
-          }, sortByProp('label')(options))}
+          }, sortBy(prop('label'), options))}
         </div>
       </div>
     );

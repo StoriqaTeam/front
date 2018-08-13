@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { addIndex, map } from 'ramda';
 
+import { StringLoadMore } from 'components/StringLoadMore';
 import { timeFromTimestamp, shortDateFromTimestamp } from 'utils/formatDate';
 
 import './StatusList.scss';
@@ -28,7 +29,6 @@ class StatusList extends PureComponent<PropsType> {
       <span styleName="headerManager">User</span>
       <span styleName="headerStatus">Status</span>
       <span styleName="headerAdditionalInfo">Additional info</span>
-      <div styleName="border" />
     </div>
   );
 
@@ -42,8 +42,13 @@ class StatusList extends PureComponent<PropsType> {
           </div>
           <div styleName="rowManager">{item.manager}</div>
           <div styleName="rowStatus">{item.status}</div>
-          <div styleName="rowAdditionalInfo">{item.additionalInfo || '--'}</div>
-          <div styleName="borderRow" />
+          <div styleName="rowAdditionalInfo">
+            {item.additionalInfo ? (
+              <StringLoadMore text={item.additionalInfo} />
+            ) : (
+              '—'
+            )}
+          </div>
         </div>
       ),
       items,
@@ -54,7 +59,9 @@ class StatusList extends PureComponent<PropsType> {
     const { items } = this.props;
     return (
       <div styleName="container">
-        <div styleName="title">STATUS HISTORY</div>
+        <div styleName="title">
+          <strong>Status history</strong>
+        </div>
         {this.renderTitle()}
         {this.renderRows(items)}
       </div>

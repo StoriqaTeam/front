@@ -1,6 +1,7 @@
 @import "../../../../styles/variables";
 
 .container {
+  position: relative;
   align-items: center;
   border-bottom: 1px solid $color_grey_trivial;
   cursor: pointer;
@@ -9,10 +10,28 @@
   margin: 0 -4rem;
   min-height: 11.75rem;
   padding: 1rem 3rem;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 2px;
+    background-color: transparent;
+    transition: $transition_all_ease;
+  }
+
+  &:hover {
+    &:before {
+      background-color: $color_blue_hover;
+    }
+  }
 }
 
 .storageName {
-  align-items: baseline;
+  align-items: center;
   display: flex;
   justify-content: flex-start;
 }
@@ -35,7 +54,7 @@
 
 .deleteButton, .editButton {
   & svg {
-    fill: $color_grey_light;
+    fill: $color_grey_minor;
     transition: $transition_all_ease;
   }
 

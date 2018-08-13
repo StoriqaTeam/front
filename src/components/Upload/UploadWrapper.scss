@@ -6,9 +6,25 @@
   width: 100%;
 }
 
+.square {
+  position: relative;
+  padding-top: 100%;
+
+  .uploadContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .childrenConainer {
+    display: none;
+  }
+}
+
 .uploadContainer {
   width: 100%;
-
   &.noIndents {
     padding-bottom: 0;
     margin-right: 0;
@@ -56,14 +72,41 @@
   display: flex;
   justify-content: center;
   overflow: hidden;
-
+  //&:hover > .overlay {
+  //  display: block;
+  //}
   & > img {
     display: inline-block;
     height: 100%;
     vertical-align: bottom;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.delete {
+  background: $color_white;
+  border-radius: 50%;
+  border: 1px solid $color_grey_minor;
+  svg {
+    fill: $color_grey_minor;
   }
 }
 
 .overPicture {
   //
+}
+
+.overlay {
+  background: $overlay_black;
+  display: none;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.fullWidth {
+  width: 100%;
 }

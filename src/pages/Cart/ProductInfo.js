@@ -28,6 +28,7 @@ const ProductInfo = ({
   onQuantityChange,
   onChangeComment,
   comment,
+  isOpen,
 }: PropsType) => {
   const attrs = map(attr => ({
     title: head(attr.attribute.name).text,
@@ -35,7 +36,7 @@ const ProductInfo = ({
   }))(product.attributes);
   return (
     <ShowMore
-      initialState
+      isOpen={isOpen}
       height={400}
       dataTest={`cart-product-${product.rawId}-showMore`}
     >
@@ -45,9 +46,9 @@ const ProductInfo = ({
             <Row>
               <Col size={6} xl={12}>
                 <div styleName="contentBlock">
-                  {attrs.length > 0 && (
-                    <div styleName="product-summary-attributes">
-                      <div styleName="cart-product-title">About product</div>
+                  <div styleName="product-summary-attributes">
+                    <div styleName="cart-product-title">About product</div>
+                    {(attrs.length > 0 && (
                       <Row>
                         {attrs.map(attr => (
                           <Col key={`attr-${attr.value}`} size={12} xl={6}>
@@ -55,8 +56,8 @@ const ProductInfo = ({
                           </Col>
                         ))}
                       </Row>
-                    </div>
-                  )}
+                    )) || <div styleName="empty" />}
+                  </div>
                 </div>
               </Col>
               <Col size={6} xlHidden>
@@ -100,7 +101,7 @@ const ProductInfo = ({
                               items={[{ id: 1, label: 'Everywhere' }]}
                               activeItem={{ id: 1, label: 'Everywhere' }}
                               forForm
-                              containerStyle={{ width: '24rem' }}
+                              fullWidth
                             />
                           }
                         />
@@ -110,7 +111,7 @@ const ProductInfo = ({
                       </Col>
                       <Col size={6}>
                         <CartProductAttribute
-                          title="Return tyoe on return"
+                          title="Return type on return"
                           value="Exchange or funds return"
                         />
                       </Col>
@@ -122,12 +123,12 @@ const ProductInfo = ({
                       </Col>
                     </Row>
                     <div styleName="comment">
-                      <div styleName="title">Customer comment</div>
                       <Input
                         fullWidth
                         id="customerComment"
                         onChange={onChangeComment}
                         value={comment}
+                        label="Customer comment"
                       />
                     </div>
                   </div>

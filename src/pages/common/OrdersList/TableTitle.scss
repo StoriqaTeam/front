@@ -28,7 +28,7 @@
 
 .poundSign {
   display: inline-block;
-  @media (min-width: $sm) {
+  @media (min-width: $md) {
     display: none;
   }
 }
@@ -38,6 +38,19 @@
   height: 0.125rem;
   position: absolute;
   bottom: -2rem;
-  left: -4rem;
-  right: -4rem;
+  left: -2rem;
+  right: -2rem;
+  @media (min-width: $md) {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+  @media (min-width: $xl) {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
 }

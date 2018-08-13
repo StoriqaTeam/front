@@ -41,4 +41,32 @@ const commit = (params: MutationParamsType) =>
     onError: params.onError,
   });
 
-export default { commit };
+const promise = (
+  input: SetProductQuantityInWarehouseMutationVariables,
+  environment: Environment,
+): Promise<SetProductQuantityInWarehouseMutationResponse> =>
+  new Promise((resolve, reject) => {
+    commit({
+      ...input,
+      environment,
+      onCompleted: (
+        response: ?SetProductQuantityInWarehouseMutationResponse,
+        errors: ?Array<Error>,
+      ) => {
+        if (errors) {
+          reject(errors);
+        } else if (response) {
+          resolve(response);
+        } else {
+          // eslint-disable-next-line
+          reject([new Error('Unknown error')]);
+        }
+      },
+      onError: (error: Error) => {
+        // eslint-disable-next-line
+        reject([error]);
+      },
+    });
+  });
+
+export default { commit, promise };

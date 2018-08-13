@@ -37,7 +37,7 @@ const menuItems = [
   { id: 'personal-data', title: 'Personal data' },
   { id: 'shipping-addresses', title: 'Shipping addresses' },
   { id: 'security', title: 'Security' },
-  { id: 'orders', title: 'My orders' },
+  { id: 'orders', title: 'Orders' },
   { id: 'kyc', title: 'KYC' },
 ];
 
@@ -75,7 +75,7 @@ class Profile extends Component<PropsType, StateType> {
           <div styleName="container">
             <Container>
               <Row>
-                <Col sm={3} md={3} lg={2} xl={2}>
+                <Col md={3} lg={2} xl={2}>
                   <Menu
                     environment={environment}
                     activeItem={activeItem}
@@ -87,10 +87,10 @@ class Profile extends Component<PropsType, StateType> {
                     provider={me.provider || null}
                   />
                 </Col>
-                <Col sm={9} md={9} lg={10} xl={10}>
+                <Col md={9} lg={10} xl={10}>
                   <div styleName="content">
                     <div styleName="header">
-                      <span styleName="title">Profile</span>
+                      <span styleName="title">{subtitle}</span>
                     </div>
                     <div styleName="form">
                       {this.renderProfileItem(subtitle)}

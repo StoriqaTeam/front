@@ -22,12 +22,27 @@
 
 .buttons {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   @media(min-width: $md) {
     justify-content: initial;
+    flex-direction: row;
   }
 
   & .cancelButton {
-    margin-left: 3rem;
+    margin-left: 0;
+    margin-top: 2rem;
+    @media(min-width: $md) {
+      margin-left: 3rem;
+      margin-top: 0;
+    }
+    font-size: 16px;
+    color: $color_blue;
+    cursor: pointer;
+    transition: $transition_all_ease;
+
+    &:hover {
+      color: $color_blue_hover;
+    }
   }
 }

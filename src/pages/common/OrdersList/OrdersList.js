@@ -10,6 +10,8 @@ import Header from './Header';
 import TableTitle from './TableTitle';
 import Table from './Table';
 
+import './OrdersList.scss';
+
 type PropsType = {
   orders: Array<TableItemType>,
   currentPage: number,
@@ -18,7 +20,8 @@ type PropsType = {
   linkFactory: (item: TableItemType) => string,
   onSearchTermFilterChanged: string => void,
   onOrderStatusFilterChanged: (?string) => void,
-  onOrderDateFilterChanged: string => void,
+  onOrderFromDateFilterChanged: string => void,
+  onOrderToDateFilterChanged: string => void,
 };
 
 class OrdersList extends PureComponent<PropsType> {
@@ -30,17 +33,22 @@ class OrdersList extends PureComponent<PropsType> {
     this.props.onOrderStatusFilterChanged(value);
   };
 
-  handleOrderDateFilterChanged = (value: string) => {
-    this.props.onOrderDateFilterChanged(value);
+  handleOrderFromDateFilterChanged = (value: string) => {
+    this.props.onOrderFromDateFilterChanged(value);
+  };
+
+  handleOrderToDateFilterChanged = (value: string) => {
+    this.props.onOrderToDateFilterChanged(value);
   };
 
   render() {
     return (
-      <div>
+      <div styleName="container">
         <Header
           onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
           onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
-          onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
+          onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}
+          onOrderToDateFilterChanged={this.handleOrderToDateFilterChanged}
         />
         <TableTitle />
         <Table items={this.props.orders} linkFactory={this.props.linkFactory} />

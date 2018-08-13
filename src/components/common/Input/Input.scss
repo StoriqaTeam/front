@@ -15,7 +15,8 @@
   width: 100%;
 
   input {
-    width: 100%!important;
+    width: 100% !important;
+    min-width: auto !important;
   }
 }
 
@@ -122,7 +123,7 @@
 }
 
 .isIcon input {
-  min-width: 27rem;
+  min-width: 24rem;
 }
 
 .isIcon input {

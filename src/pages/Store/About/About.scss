@@ -1,0 +1,82 @@
+@import "../../../styles/variables";
+
+.container {
+  margin-top: 2rem;
+  padding: 3.5rem 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.body {
+  display: flex;
+
+  @media (max-width: $md) {
+    display: block;
+  }
+}
+
+.left {
+  width: 100%;
+}
+
+.right {
+  min-width: 42rem;
+  padding-left: 2rem;
+
+  @media (max-width: $md) {
+    min-width: auto;
+    margin-top: 4rem;
+    padding-left: 0;
+  }
+}
+
+.title {
+  font-size: 3rem;
+}
+
+.item {
+  margin-top: 2.5rem;
+
+  & + .item {
+    margin-top: 3rem;
+  }
+}
+
+.subtitle {
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.description {
+  & > hr {
+    display: block;
+    margin-bottom: 2rem;
+    border: 0;
+  }
+}
+
+.banners {
+  margin-top: 3rem;
+
+  @media (max-width: $md) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  & img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.banner {
+  width: 40rem;
+  height: 49rem;
+
+  & + .banner {
+    margin-top: 2.5rem;
+  }
+}

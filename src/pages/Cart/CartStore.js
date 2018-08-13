@@ -21,12 +21,13 @@ type PropsType = {
   unselectable: ?boolean,
   // eslint-disable-next-line
   store: CartStore_store,
+  isOpenInfo: ?boolean,
 };
 
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store, onlySelected, unselectable } = this.props;
+    const { store, onlySelected, unselectable, isOpenInfo } = this.props;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -46,6 +47,7 @@ class CartStore extends PureComponent<PropsType> {
                     product={product}
                     onlySelected={onlySelected}
                     unselectable={unselectable}
+                    isOpenInfo={isOpenInfo}
                   />
                   <div styleName="devider" />
                 </div>
@@ -54,37 +56,33 @@ class CartStore extends PureComponent<PropsType> {
                 <div>
                   <Container correct>
                     <Row>
-                      <Col size={6}>
-                        <div styleName="store-info">
-                          {store.logo ? (
-                            <img
-                              src={store.logo}
-                              alt="store_picture"
-                              styleName="image"
-                            />
-                          ) : (
-                            <div styleName="noLogo">
-                              <Icon type="camera" size={28} />
-                            </div>
-                          )}
-                          <div styleName="store-description">
-                            <div styleName="store-name">
-                              {getNameText(store.name, 'EN')}
-                            </div>
-                            <Rating value={store.rating} />
+                      <div styleName="store-info">
+                        {store.logo ? (
+                          <img
+                            src={store.logo}
+                            alt="store_picture"
+                            styleName="image"
+                          />
+                        ) : (
+                          <div styleName="noLogo">
+                            <Icon type="camera" size={28} />
+                          </div>
+                        )}
+                        <div styleName="store-description">
+                          <div styleName="store-name">
+                            {getNameText(store.name, 'EN')}
+                          </div>
+                          <Rating value={store.rating} />
+                        </div>
+                      </div>
+                      <div styleName="storeTotalWrapper">
+                        <div>
+                          <div styleName="label">Subtotal</div>
+                          <div styleName="value">
+                            {formatPrice(store.productsCost || 0)} STQ
                           </div>
                         </div>
-                      </Col>
-                      <Col size={6}>
-                        <div styleName="storeTotalWrapper">
-                          <div>
-                            <div styleName="label">Subtotal</div>
-                            <div styleName="value">
-                              {formatPrice(store.productsCost || 0)} STQ
-                            </div>
-                          </div>
-                        </div>
-                      </Col>
+                      </div>
                     </Row>
                   </Container>
                 </div>

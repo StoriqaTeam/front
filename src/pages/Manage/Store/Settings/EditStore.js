@@ -44,6 +44,7 @@ class EditStore extends Component<PropsType, StateType> {
       shortDescription,
       defaultLanguage,
       slug,
+      cover,
       slogan,
     } = form;
     this.setState(() => ({ isLoading: true }));
@@ -59,6 +60,7 @@ class EditStore extends Component<PropsType, StateType> {
         longDescription: [{ lang: optionLanguage, text: longDescription }],
         shortDescription: [{ lang: optionLanguage, text: shortDescription }],
         slug,
+        cover,
         slogan,
         logo: logoUrl,
         addressFull: {},
@@ -134,7 +136,7 @@ class EditStore extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(withShowAlert(ManageStore(EditStore, 'Settings'))),
+  Page(withShowAlert(ManageStore(EditStore, 'Settings')), true),
   graphql`
     fragment EditStore_me on User {
       myStore {
@@ -145,6 +147,7 @@ export default createFragmentContainer(
           text
         }
         logo
+        cover
         slogan
         defaultLanguage
         slug

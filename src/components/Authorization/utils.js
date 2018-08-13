@@ -1,3 +1,6 @@
+import moment from 'moment';
+import Cookies from 'universal-cookie';
+
 /**
  * @desc Detects whether or not CAPS LOCK is on.
  * @link http://jsfiddle.net/Mottie/a6nhqvv0/
@@ -141,10 +144,34 @@ const googleLoginString = () => {
   return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
 };
 
+// set in cookies path for redirect after login via oauth provider
+const cookiesPathForRedirectAfterLogin = 'REDIRECT_AFTER_LOGIN';
+const setPathForRedirectAfterLogin = (path: string) => {
+  const cookies = new Cookies();
+  cookies.set(cookiesPathForRedirectAfterLogin, path, {
+    path: '/',
+    expires: moment()
+      .utc()
+      .add(3, 'm')
+      .toDate(),
+  });
+};
+const clearPathForRedirectAfterLogin = () => {
+  const cookies = new Cookies();
+  cookies.remove(cookiesPathForRedirectAfterLogin);
+};
+const getPathForRedirectAfterLogin = (): ?string => {
+  const cookies = new Cookies();
+  return cookies.get(cookiesPathForRedirectAfterLogin);
+};
+
 export default {
   validateField,
   isCapsLockOn,
   setErrorMessage,
   facebookLoginString,
   googleLoginString,
+  setPathForRedirectAfterLogin,
+  clearPathForRedirectAfterLogin,
+  getPathForRedirectAfterLogin,
 };

@@ -17,6 +17,8 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/CreateUserMutation';
 
+import { setPathForRedirectAfterLogin } from './utils';
+
 import './Authorization.scss';
 
 type PropsType = {
@@ -64,6 +66,19 @@ class Authorization extends Component<PropsType, StateType> {
     this.setState({ isSignUp: this.props.isSignUp });
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
+    }
+  }
+
+  componentDidMount() {
+    const {
+      match: {
+        location: {
+          query: { from },
+        },
+      },
+    } = this.props;
+    if (from && from !== '') {
+      setPathForRedirectAfterLogin(from);
     }
   }
 

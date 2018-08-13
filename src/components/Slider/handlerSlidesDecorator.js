@@ -19,6 +19,8 @@ type PropsType = {
   infinity: ?boolean,
   autoplaySpeed: ?number,
   animationSpeed: number,
+  fade?: boolean,
+  getValueDotIdx: (dotIdx: number) => void,
 };
 
 type StateType = {
@@ -193,7 +195,7 @@ export default (OriginalComponent: any) =>
 
       if (responsive) {
         responsive.forEach(i => {
-          if (sliderWrapperWidth < i.breakpoint) {
+          if (window.innerWidth < i.breakpoint) {
             visibleSlidesAmount = i.slidesToShow;
           }
         });
@@ -284,63 +286,14 @@ export default (OriginalComponent: any) =>
       );
     };
 
-    handleSlideOld = (direction: 'prev' | 'next') => {
-      const { infinity, autoplaySpeed } = this.props;
-      const {
-        visibleSlidesAmount,
-        slidesOffset,
-        totalSlidesAmount,
-        num,
-        slideWidth,
-        isClick,
-      } = this.state;
-
-      if (isClick) {
-        return;
-      }
-
-      if (autoplaySpeed) {
-        this.activateAutoplayTimer();
-      }
-
-      let newNum = direction === 'next' ? num + 1 : num - 1;
-      if (direction === 'next') {
-        newNum = newNum === totalSlidesAmount ? 0 : newNum;
-      } else {
-        newNum = newNum === -1 ? totalSlidesAmount - 1 : newNum;
-      }
-
-      if (
-        !infinity &&
-        ((direction === 'prev' && newNum === totalSlidesAmount - 1) ||
-          (direction === 'next' &&
-            newNum + visibleSlidesAmount > totalSlidesAmount))
-      ) {
-        return;
-      }
-
-      const newSlidesOffset =
-        direction === 'next'
-          ? slidesOffset - slideWidth
-          : slidesOffset + slideWidth;
-
-      if (infinity) {
-        this.swapArray(direction, newNum);
-        this.setState({ isClick: true });
-      } else {
-        this.startAnimation();
-        this.setState({
-          slidesOffset: newSlidesOffset,
-          num: newNum,
-        });
-        this.startAnimation();
-      }
-    };
-
     handleDot = (dotIdx: number) => {
-      const { animationSpeed, autoplaySpeed } = this.props;
+      const {
+        animationSpeed,
+        autoplaySpeed,
+        fade,
+        getValueDotIdx,
+      } = this.props;
       const { num, slidesOffset, isTransition, slideWidth } = this.state;
-
       if (isTransition) {
         return;
       }
@@ -357,6 +310,11 @@ export default (OriginalComponent: any) =>
       }
       if (!direction) return;
 
+      if (fade) {
+        getValueDotIdx(dotIdx);
+        this.setState({ num: dotIdx });
+        return;
+      }
       const count = direction === 'prev' ? num - dotIdx : dotIdx - num;
 
       this.setState({
@@ -474,9 +432,6 @@ export default (OriginalComponent: any) =>
         newSlidesOffset = -(slideWidth * (totalSlidesAmount - 1));
       }
       if (direction === 'next') {
-        // const firstItem = head(children);
-        // const slicedItems = slice(1, totalSlidesAmount, children);
-        // newChildren = append(firstItem, slicedItems);
         this.cropChildren('next');
         newSlidesOffset = 0;
       }

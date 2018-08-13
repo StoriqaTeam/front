@@ -3,40 +3,41 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { path, isNil } from 'ramda';
-import { Button } from 'components/common/Button';
+import { isNil, head, ifElse, assoc, dissoc, propEq, has, prop } from 'ramda';
+import smoothscroll from 'libs/smoothscroll';
+
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Page } from 'components/App';
+import { AppContext, Page } from 'components/App';
+import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
-import { Rating } from 'components/common/Rating';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import {
   makeWidgets,
-  differentiateWidgets,
-  getVariantFromSelection,
-  isSelected,
+  filterVariantsByAttributes,
+  attributesFromVariants,
+  sortByProp,
+  isNoSelected,
 } from './utils';
 
 import {
+  ImageDetail,
+  ProductBreadcrumbs,
+  ProductButtons,
   ProductContext,
   ProductDetails,
   ProductImage,
-  ProductPrice,
-  ProductShare,
   ProductStore,
   Tab,
   Tabs,
-  // TabRow,
 } from './index';
 
 import type {
   ProductType,
-  WidgetOptionType,
   ProductVariantType,
   WidgetType,
   TabType,
@@ -44,7 +45,6 @@ import type {
 } from './types';
 
 import './Product.scss';
-// import mockData from './mockData.json';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -54,13 +54,20 @@ type PropsType = {
 type StateType = {
   widgets: Array<WidgetType>,
   productVariant: ProductVariantType,
+  unselectedAttr: ?Array<string>,
+  selectedAttributes: {
+    [string]: string,
+  },
+  availableAttributes: {
+    [string]: Array<string>,
+  },
 };
 
 class Product extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
-  ): StateType | null {
+  ): ?StateType {
     if (isNil(nextProps.baseProduct)) {
       return null;
     }
@@ -71,41 +78,49 @@ class Product extends Component<PropsType, StateType> {
     } = nextProps;
     const { widgets } = prevState;
     if (isEmpty(widgets)) {
-      const madeWidgets = makeWidgets([])(all);
-      const productVariant = getVariantFromSelection([])(all);
       return {
-        widgets: madeWidgets,
-        productVariant,
+        ...prevState,
+        widgets: makeWidgets(all),
+        // $FlowIgnoreMe
+        productVariant: head(all),
+        availableAttributes: attributesFromVariants(all),
       };
     }
     return prevState;
   }
-  state: StateType = {
-    widgets: [],
-    productVariant: {
-      id: '',
-      rawId: 0,
-      description: '',
-      photoMain: '',
-      additionalPhotos: null,
-      price: 0,
-      cashback: null,
-      discount: null,
-      lastPrice: null,
-    },
-  };
-  componentDidMount() {
-    if (process.env.BROWSER) {
-      setTimeout(() => {
-        // HACK because 'window.scrollTo(0, 0)' doesn't work
-        // $FlowFixMe
-        document.getElementById('root').scrollTop = 0;
-      }, 0);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      widgets: [],
+      productVariant: {
+        id: '',
+        rawId: 0,
+        description: '',
+        photoMain: '',
+        additionalPhotos: null,
+        price: 0,
+        cashback: null,
+        discount: null,
+      },
+      unselectedAttr: null,
+      selectedAttributes: {},
+      availableAttributes: {},
+    };
   }
-  handleAddToCart(id: number): void {
-    const { widgets } = this.state;
-    if ((id && isSelected(widgets)) || (id && widgets.length === 0)) {
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
+  handleAddToCart = (id: number) => {
+    this.setState({ unselectedAttr: null });
+    const { widgets, selectedAttributes } = this.state;
+    const unselectedAttr = isNoSelected(
+      sortByProp('id')(widgets),
+      selectedAttributes,
+    );
+
+    if (isEmpty(widgets) || !unselectedAttr) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -136,31 +151,59 @@ class Product extends Component<PropsType, StateType> {
         },
       });
     } else {
-      const message = !isSelected(widgets)
-        ? 'You must select an attribute'
-        : 'Something went wrong :(';
-      this.props.showAlert({
-        type: 'danger',
-        text: message,
-        link: { text: 'Close.' },
-      });
-      const errorMessage = !isSelected(widgets)
-        ? 'Unable to add an item without selected attribute'
-        : 'Unable to add an item without productId';
-      log.error(errorMessage);
+      this.setState({ unselectedAttr });
+      smoothscroll.scrollTo(head(unselectedAttr));
     }
-  }
-  handleWidget = ({ id, label, state, variantIds }: WidgetOptionType): void => {
-    const selection = [{ id, value: label, state, variantIds }];
-    const pathToAll = ['baseProduct', 'variants', 'all'];
-    const variants = path(pathToAll, this.props);
-    const productVariant = getVariantFromSelection(selection)(variants);
-    const widgets = differentiateWidgets(selection)(variants);
+  };
+
+  handleWidget = (item: {
+    attributeId: string,
+    attributeValue: string,
+  }): void => {
+    const {
+      selectedAttributes: prevSelectedAttributes,
+      availableAttributes: prevAvailableAttributes,
+    } = this.state;
+
+    const isUnselect = propEq(
+      item.attributeId,
+      item.attributeValue,
+      prevSelectedAttributes,
+    );
+
+    const selectedAttributes = ifElse(
+      propEq(item.attributeId, item.attributeValue),
+      dissoc(item.attributeId),
+      assoc(item.attributeId, item.attributeValue),
+    )(prevSelectedAttributes);
+
+    const {
+      baseProduct: {
+        variants: { all: variants },
+      },
+    } = this.props;
+
+    const matchedVariants = filterVariantsByAttributes(
+      selectedAttributes,
+      variants,
+    );
+
+    const availableAttributes = attributesFromVariants(matchedVariants);
+
     this.setState({
-      widgets,
-      productVariant,
+      selectedAttributes,
+      availableAttributes: isUnselect
+        ? availableAttributes
+        : assoc(
+            item.attributeId,
+            prop(item.attributeId, prevAvailableAttributes),
+            availableAttributes,
+          ),
+      // $FlowIgnoreMe
+      productVariant: head(matchedVariants),
     });
   };
+
   makeTabs = (longDescription: Array<TranslationType>) => {
     const tabs: Array<TabType> = [
       {
@@ -170,11 +213,6 @@ class Product extends Component<PropsType, StateType> {
           <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
         ),
       },
-      /* {
-        id: '1',
-        label: 'Characteristics',
-        content: <TabRow row={mockData.row} />,
-      }, */
     ];
     return (
       <Tabs>
@@ -186,71 +224,82 @@ class Product extends Component<PropsType, StateType> {
       </Tabs>
     );
   };
+
   render() {
-    if (isNil(this.props.baseProduct)) {
-      return (
-        <div styleName="productNotFound">
-          <h1>Product Not Found</h1>
-        </div>
-      );
+    const { baseProduct } = this.props;
+    const { unselectedAttr } = this.state;
+    if (isNil(baseProduct)) {
+      return <div styleName="productNotFound">Product Not Found</div>;
+    }
+    if (isNil(baseProduct.store)) {
+      return <div styleName="productNotFound">Store Not Found</div>;
     }
     const {
-      baseProduct: { name, shortDescription, longDescription, rating },
+      baseProduct: {
+        name,
+        categoryId,
+        shortDescription,
+        longDescription,
+        rating,
+        store,
+      },
     } = this.props;
-    const { widgets, productVariant } = this.state;
+    const {
+      widgets,
+      productVariant,
+      selectedAttributes,
+      availableAttributes,
+    } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
-      <ProductContext.Provider value={this.props.baseProduct}>
-        <div styleName="ProductDetails">
-          <Row>
-            <Col sm={12} md={5} lg={5} xl={5}>
-              <ProductImage
-                discount={productVariant.discount}
-                mainImage={productVariant.photoMain}
-                thumbnails={productVariant.additionalPhotos}
-              />
-              {process.env.BROWSER ? (
-                <ProductShare {...productVariant} />
-              ) : null}
-            </Col>
-            <Col sm={12} md={6} lg={6} xl={6}>
-              <ProductDetails
-                productTitle={extractText(name)}
-                productDescription={description}
-                widgets={widgets}
-                onWidgetClick={this.handleWidget}
-              >
-                <div styleName="rating">
-                  <Rating value={rating} />
-                </div>
-                <ProductPrice
-                  price={productVariant.price}
-                  lastPrice={productVariant.lastPrice}
-                  cashback={productVariant.cashback}
+      <AppContext.Consumer>
+        {({ categories }) => (
+          <ProductContext.Provider value={{ store, productVariant, rating }}>
+            <div styleName="container">
+              {has('children')(categories) && !isNil(categories.children) ? (
+                <ProductBreadcrumbs
+                  categories={categories.children}
+                  categoryId={categoryId}
                 />
-              </ProductDetails>
-              <div styleName="buttons-container">
-                <Button disabled big>
-                  Buy now
-                </Button>
-                <Button
-                  id="productAddToCart"
-                  wireframe
-                  big
-                  onClick={() => this.handleAddToCart(productVariant.rawId)}
-                  dataTest="product-addToCart"
-                >
-                  Add to cart
-                </Button>
+              ) : null}
+              <div styleName="productContent">
+                <Row>
+                  <Col sm={12} md={12} lg={6} xl={6}>
+                    <ProductImage {...productVariant} />
+                    <ImageDetail />
+                    {process.env.BROWSER ? (
+                      <SocialShare noBorderX big {...productVariant} />
+                    ) : null}
+                  </Col>
+                  <Col sm={12} md={12} lg={6} xl={6}>
+                    <div styleName="detailsWrapper">
+                      <ProductDetails
+                        productTitle={extractText(name)}
+                        productDescription={description}
+                        widgets={widgets}
+                        selectedAttributes={selectedAttributes}
+                        availableAttributes={availableAttributes}
+                        onWidgetClick={this.handleWidget}
+                        unselectedAttr={unselectedAttr}
+                      >
+                        <ProductButtons
+                          onAddToCart={() =>
+                            this.handleAddToCart(productVariant.rawId)
+                          }
+                          unselectedAttr={unselectedAttr}
+                        />
+                        <div styleName="line" />
+                        <ProductStore />
+                      </ProductDetails>
+                    </div>
+                  </Col>
+                </Row>
               </div>
-              <div styleName="line" />
-              <ProductStore />
-              {/* {!loggedIn && <div>Please login to use cart</div>} */}
-            </Col>
-          </Row>
-          {this.makeTabs(longDescription)}
-        </div>
-      </ProductContext.Provider>
+              {this.makeTabs(longDescription)}
+            </div>
+          </ProductContext.Provider>
+        )}
+      </AppContext.Consumer>
     );
   }
 }
@@ -260,6 +309,7 @@ export default createFragmentContainer(
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
+      categoryId
       name {
         text
         lang
@@ -273,6 +323,7 @@ export default createFragmentContainer(
         lang
       }
       store {
+        rawId
         name {
           lang
           text
@@ -291,6 +342,7 @@ export default createFragmentContainer(
           price
           cashback
           discount
+          quantity
           attributes {
             value
             metaField

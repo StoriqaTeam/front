@@ -52,6 +52,10 @@ class Storages extends PureComponent<PropsType> {
     }
   };
 
+  handleCheckboxClick = (id: string | number) => {
+    log.info('id', id);
+  };
+
   handleDelete = (id: string, e: any) => {
     e.stopPropagation();
     const { environment } = this.props;
@@ -101,10 +105,6 @@ class Storages extends PureComponent<PropsType> {
     DeleteWarehouseMutation.commit(params);
   };
 
-  // storagesRefetch = () => {
-  //   this.props.relay.loadMore(8);
-  // };
-
   render() {
     const { me } = this.props;
     // $FlowIgnoreMe
@@ -139,6 +139,7 @@ class Storages extends PureComponent<PropsType> {
                     {...item}
                     onEdit={this.handleEdit}
                     onDelete={this.handleDelete}
+                    handleCheckboxClick={this.handleCheckboxClick}
                   />
                 ),
                 storages,
@@ -156,7 +157,7 @@ Storages.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(withRouter(Page(ManageStore(Storages, 'Storages'), true))),
+  Page(withShowAlert(withRouter(ManageStore(Storages, 'Storages'))), true),
   graphql`
     fragment Storages_me on User {
       myStore {

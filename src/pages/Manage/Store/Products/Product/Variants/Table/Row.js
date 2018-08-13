@@ -2,9 +2,12 @@
 
 import React, { PureComponent } from 'react';
 import { pathOr, map, addIndex, isEmpty, filter } from 'ramda';
+import classNames from 'classnames';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
+
+import { log } from 'utils';
 
 import './Row.scss';
 
@@ -15,6 +18,7 @@ type PropsType = {
     vendorCode: string,
     price: number,
     cashback: number,
+    discount: number,
     attributes: Array<{
       attribute: {
         name: Array<{ text: string }>,
@@ -36,26 +40,32 @@ type PropsType = {
   },
   onExpandClick: (id: number) => void,
   handleDeleteVariant: (id: string) => void,
+  isOpen: boolean,
+  notRemove: boolean,
 };
 
 class Row extends PureComponent<PropsType> {
-  handleCheckboxClick = () => {
-    // this.setState(prevState => ({ checked: !prevState.checked }));
+  handleCheckboxClick = (id: string | number) => {
+    log.info('id', id);
   };
 
   handleExpandClick = () => {
     this.props.onExpandClick(this.props.variant.rawId);
   };
 
-  handleDelete = () => {
+  handleDelete = (e: any) => {
+    e.stopPropagation();
     this.props.handleDeleteVariant(this.props.variant.id);
   };
 
   render() {
+    const { isOpen, notRemove } = this.props;
     const {
+      rawId,
       vendorCode,
       price,
-      cashback: cashbackValue,
+      cashback,
+      discount,
       attributes: attrs,
       stocks,
     } = this.props.variant;
@@ -63,28 +73,44 @@ class Row extends PureComponent<PropsType> {
     if (stocks) {
       filteredStocks = filter(item => item.quantity > 0, stocks);
     }
-    const cashback =
-      Math.round(cashbackValue * 100) != null
-        ? Math.round(cashbackValue * 100)
-        : null;
     return (
-      <div styleName="container">
+      <div
+        styleName="container"
+        onClick={this.handleExpandClick}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+        data-test="toggleOpenVariantButton"
+      >
         <div styleName="variant">
-          <div styleName="variantItem tdCheckbox">
-            <Checkbox id="id-variant" onChange={this.handleCheckboxClick} />
+          <div styleName="td tdCheckbox">
+            <Checkbox id={rawId} onChange={this.handleCheckboxClick} />
           </div>
-          <div styleName="variantItem tdArticle">
+          <div styleName="td tdArticle">
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
           </div>
-          <div styleName="variantItem tdPrice">
+          <div styleName="td tdPrice">
             <span styleName="text priceText">{`${price} STQ`}</span>
           </div>
-          <div styleName="variantItem tdCashback">
+          <div styleName="td tdCashback">
             <span styleName="text cashbackText">
-              <strong>{cashback}</strong>%
+              <strong>
+                {Math.round(cashback * 100) != null
+                  ? Math.round(cashback * 100)
+                  : null}
+              </strong>%
             </span>
           </div>
-          <div styleName="variantItem tdCharacteristics">
+          <div styleName="td tdDiscount">
+            <span styleName="text discountText">
+              <strong>
+                {Math.round(discount * 100) != null
+                  ? Math.round(discount * 100)
+                  : null}
+              </strong>%
+            </span>
+          </div>
+          <div styleName="td tdCharacteristics">
             <div styleName="characteristicItem">
               <div styleName="characteristicLabels">
                 {map(item => {
@@ -111,7 +137,7 @@ class Row extends PureComponent<PropsType> {
               </div>
             </div>
           </div>
-          <div styleName="variantItem tdCount">
+          <div styleName="td tdCount">
             <div styleName="storagesItem">
               <div styleName="storagesLabels">
                 {addIndex(map)((item, idx) => {
@@ -150,23 +176,21 @@ class Row extends PureComponent<PropsType> {
               </div>
             </div>
           </div>
-          <div styleName="variantItem tdBasket">
-            <button
-              styleName="deleteButton"
-              onClick={this.handleDelete}
-              data-test="deleteVariantButton"
-            >
-              <Icon type="basket" size="32" />
-            </button>
+          <div styleName="td tdBasket">
+            {!notRemove && (
+              <button
+                styleName="deleteButton"
+                onClick={this.handleDelete}
+                data-test="deleteVariantButton"
+              >
+                <Icon type="basket" size="32" />
+              </button>
+            )}
           </div>
-          <div styleName="variantItem tdDropdawn">
-            <button
-              styleName="arrowExpand"
-              onClick={this.handleExpandClick}
-              data-test="toggleOpenVariantButton"
-            >
+          <div styleName={classNames('td tdDropdawn', { isOpen })}>
+            <div styleName="arrowExpand">
               <Icon inline type="arrowExpand" />
-            </button>
+            </div>
           </div>
         </div>
       </div>

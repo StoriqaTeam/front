@@ -12,6 +12,7 @@ type PropsTypes = {
   reverseMd: ?boolean,
   reverseLg: ?boolean,
   reverseXl: ?boolean,
+  noWrap: ?boolean,
 };
 
 const Row = ({
@@ -21,6 +22,7 @@ const Row = ({
   reverseMd,
   reverseLg,
   reverseXl,
+  noWrap,
 }: PropsTypes) => (
   <div
     styleName={classNames('container', {
@@ -29,6 +31,8 @@ const Row = ({
       reverseMd,
       reverseLg,
       reverseXl,
+      //
+      noWrap,
     })}
   >
     {children}

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Input } from 'components/common/Input';
-import { SpinnerButton } from 'components/common/SpinnerButton';
+import { Button } from 'components/common/Button';
 import { Modal } from 'components/Modal';
 import { CancelOrderMutation, SendOrderMutation } from 'relay/mutations';
 
@@ -151,36 +151,32 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               />
             </div>
             <div styleName="sendOrderButtonWrapper">
-              <SpinnerButton
-                big
-                isLoading={isSendInProgress}
-                onClick={this.sendOrder}
-              >
+              <Button big isLoading={isSendInProgress} onClick={this.sendOrder}>
                 Send order
-              </SpinnerButton>
+              </Button>
             </div>
           </div>
         </Modal>
         {this.props.isAbleToSend && (
           <div styleName="sendButtonWrapper">
-            <SpinnerButton
+            <Button
               big
               onClick={() => this.setState({ isSendOrderModalShown: true })}
             >
               Send now
-            </SpinnerButton>
+            </Button>
           </div>
         )}
         {this.props.isAbleToCancel && (
           <div styleName="cancelButtonWrapper">
-            <SpinnerButton
-              white
+            <Button
+              wireframe
               big
               isLoading={isCancelInProgress}
               onClick={this.cancelOrder}
             >
               Cancel order
-            </SpinnerButton>
+            </Button>
           </div>
         )}
       </div>

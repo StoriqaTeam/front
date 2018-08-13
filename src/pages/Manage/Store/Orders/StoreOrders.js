@@ -26,7 +26,8 @@ type PropsType = {
 type StateType = {
   currentPage: number,
   searchTerm: ?string,
-  orderDate: ?string,
+  orderFromDate: ?string,
+  orderToDate: ?string,
   orderStatus: ?string,
 };
 
@@ -34,7 +35,8 @@ class StoreOrders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
     searchTerm: null,
-    orderDate: null,
+    orderFromDate: null,
+    orderToDate: null,
     orderStatus: null,
   };
 
@@ -52,12 +54,15 @@ class StoreOrders extends Component<PropsType, StateType> {
             ? null
             : parseInt(this.state.searchTerm, 10),
           createdFrom:
-            this.state.orderDate && moment(this.state.orderDate).utc(),
-          createdTo:
-            this.state.orderDate &&
-            moment(this.state.orderDate)
+            this.state.orderFromDate &&
+            moment(this.state.orderFromDate)
               .utc()
-              .add(1, 'd'),
+              .format(),
+          createdTo:
+            this.state.orderToDate &&
+            moment(this.state.orderToDate)
+              .utc()
+              .format(),
           orderStatus: this.state.orderStatus,
         },
       },
@@ -73,13 +78,15 @@ class StoreOrders extends Component<PropsType, StateType> {
       number: `${order.slug}`,
       date: this.compileDateString(order.createdAt),
       shop: {
-        id: order.store.rawId,
-        title: order.store.name[0].text,
+        id: order.store ? order.store.rawId : null,
+        title: order.store ? order.store.name[0].text : 'The store was deleted',
       },
       delivery: order.deliveryCompany,
       item: {
-        id: order.product.baseProduct.rawId,
-        title: order.product.baseProduct.name[0].text,
+        id: order.product ? order.product.baseProduct.rawId : null,
+        title: order.product
+          ? order.product.baseProduct.name[0].text
+          : 'The product was deleted',
       },
       price: order.price,
       payment: order.paymentStatus ? 'Paid' : 'Not paid',
@@ -107,8 +114,14 @@ class StoreOrders extends Component<PropsType, StateType> {
     });
   };
 
-  handleOrderDateFilterChanged = (value: string) => {
-    this.setState({ orderDate: value }, () => {
+  handleOrderFromDateFilterChanged = (value: string) => {
+    this.setState({ orderFromDate: `${value}T00:00:00+00:00` }, () => {
+      this.loadPage(this.state.currentPage);
+    });
+  };
+
+  handleOrderToDateFilterChanged = (value: string) => {
+    this.setState({ orderToDate: `${value}T23:59:59+00:00` }, () => {
       this.loadPage(this.state.currentPage);
     });
   };
@@ -146,14 +159,15 @@ class StoreOrders extends Component<PropsType, StateType> {
         linkFactory={item => `/manage/store/${storeId}/orders/${item.number}`}
         onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
         onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
-        onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
+        onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}
+        onOrderToDateFilterChanged={this.handleOrderToDateFilterChanged}
       />
     );
   }
 }
 
 export default createRefetchContainer(
-  Page(ManageStore(StoreOrders, 'Orders')),
+  Page(ManageStore(StoreOrders, 'Orders'), true),
   graphql`
     fragment StoreOrders_me on User
       @argumentDefinitions(

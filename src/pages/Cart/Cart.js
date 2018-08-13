@@ -85,53 +85,56 @@ class Cart extends Component<PropsType, StateType> {
     } = this.props;
     const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
-      <Container withoutGrow>
-        <Row withoutGrow>
-          <Col size={12}>
-            <div styleName="header">My cart</div>
-            <div ref={ref => this.setStoresRef(ref)}>
-              <Row withoutGrow>
-                {emptyCart ? (
-                  <Col size={12}>
-                    <div styleName="wrapper">
-                      <div styleName="storeContainer">
-                        <CartEmpty />
+      <div styleName="container">
+        <Container withoutGrow>
+          <Row withoutGrow>
+            <Col size={12}>
+              <div styleName="header">My cart</div>
+              <div ref={ref => this.setStoresRef(ref)}>
+                <Row withoutGrow>
+                  {emptyCart ? (
+                    <Col size={12}>
+                      <div styleName="wrapper">
+                        <div styleName="storeContainer">
+                          <CartEmpty />
+                        </div>
                       </div>
-                    </div>
-                  </Col>
-                ) : (
-                  <Col size={12} md={8} lg={9}>
-                    <div styleName="wrapper">
-                      <div styleName="storeContainer">
-                        {stores.map(store => (
-                          <CartStore
-                            key={store.__id}
-                            store={store}
-                            totals={this.totalsForStore(store.__id)}
-                          />
-                        ))}
+                    </Col>
+                  ) : (
+                    <Col size={12} lg={8} xl={9}>
+                      <div styleName="wrapper">
+                        <div styleName="storeContainer">
+                          {stores.map(store => (
+                            <CartStore
+                              key={store.__id}
+                              store={store}
+                              totals={this.totalsForStore(store.__id)}
+                              isOpenInfo
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </Col>
-                )}
-                <Col size={12} md={4} lg={3}>
-                  {!emptyCart && (
-                    <div styleName="sidebarWrapper">
-                      <StickyBar>
-                        <CheckoutSidebar
-                          buttonText="Checkout"
-                          onClick={this.handleToCheckout}
-                          isReadyToClick={totalCount > 0}
-                        />
-                      </StickyBar>
-                    </div>
+                    </Col>
                   )}
-                </Col>
-              </Row>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+                  <Col size={12} lg={4} xl={3}>
+                    {!emptyCart && (
+                      <div styleName="sidebarWrapper">
+                        <StickyBar>
+                          <CheckoutSidebar
+                            buttonText="Checkout"
+                            onClick={this.handleToCheckout}
+                            isReadyToClick={totalCount > 0}
+                          />
+                        </StickyBar>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }

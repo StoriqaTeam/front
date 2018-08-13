@@ -63,6 +63,27 @@ class SearchSidebar extends Component<PropsType, StateType> {
     nextProps: PropsType,
     prevState: StateType,
   ): ?StateType {
+    // minValue of ranger from back (permanent for each category)
+    // $FlowIgnoreMe
+    const minValue = pathOr(
+      0,
+      ['findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'minValue'],
+      nextProps.search,
+    );
+    // minValue of ranger from url
+    // $FlowIgnoreMe
+    const minValueFromUrl = pathOr(
+      0,
+      ['match', 'location', 'query', 'minValue'],
+      nextProps,
+    );
+    const minValueFromUrlInt = parseInt(minValueFromUrl, 10);
+    // get initial minValue ranger from url if we can
+    const volume =
+      minValueFromUrlInt && minValueFromUrlInt > minValue
+        ? minValueFromUrlInt
+        : minValue;
+
     // maxValue of ranger from back (permanent for each category)
     // $FlowIgnoreMe
     const maxValue = pathOr(
@@ -85,6 +106,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
         : maxValue;
     return {
       ...prevState,
+      volume,
       volume2,
     };
   }
@@ -157,28 +179,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
   handleOnChangeCategory = (item): void => {
     const { router } = this.props;
     const { volume, volume2 } = this.state;
-    const name = pathOr(
-      '',
-      ['match', 'location', 'query', 'search'],
-      this.props,
-    );
-    router.push(
-      `/categories?search=${name}&category=${
-        item.id
-      }&minValue=${volume}&maxValue=${volume2}`,
-    );
-  };
-
-  handleOnRangeChange = (value: number, fieldName: string): void => {
-    this.setState({
-      [fieldName]: value,
-    });
-  };
-
-  handleOnChangeCategory = (item): void => {
-    const { router } = this.props;
-    const { volume, volume2 } = this.state;
-    // $FlowIgnoreMe
+    // $FlowIgnore
     const name = pathOr(
       '',
       ['match', 'location', 'query', 'search'],
@@ -341,6 +342,19 @@ class SearchSidebar extends Component<PropsType, StateType> {
       initialSearchInput,
     );
     const maxValue = (priceRange && priceRange.maxValue) || 0;
+    const minValue = (priceRange && priceRange.minValue) || 0;
+    let valueRange;
+    let valueRange2;
+    if (volume > volume2) {
+      valueRange = volume2 - 1;
+    } else {
+      valueRange = volume;
+    }
+    if (volume2 < volume) {
+      valueRange2 = volume + 1;
+    } else {
+      valueRange2 = volume2;
+    }
     return (
       <aside
         styleName={classNames('container', {
@@ -359,52 +373,48 @@ class SearchSidebar extends Component<PropsType, StateType> {
             <Icon type="cross" size={24} />
           </span>
         </header>
-        <div>
-          {this.renderParentLink()}
-          {accordionItems && (
-            <Accordion
-              items={accordionItems}
-              onClick={this.handleOnChangeCategory}
-              activeId={categoryId ? parseInt(categoryId, 10) : null}
-            />
-          )}
-          <div styleName="blockTitle">Price (STQ)</div>
-          <RangerSlider
-            min={0}
-            max={maxValue}
-            step={0.01}
-            value={volume > maxValue ? 0 : volume}
-            value2={volume2 > maxValue ? maxValue : volume2}
-            onChange={value => this.handleOnRangeChange(value, 'volume')}
-            onChange2={value => this.handleOnRangeChange(value, 'volume2')}
-            onChangeComplete={this.handleOnCompleteRange}
+        {this.renderParentLink()}
+        {accordionItems && (
+          <Accordion
+            items={accordionItems}
+            onClick={this.handleOnChangeCategory}
+            activeId={categoryId ? parseInt(categoryId, 10) : null}
           />
-          {attrFilters &&
-            sort(
-              (a, b) => a.attribute.rawId - b.attribute.rawId,
-              attrFilters,
-            ).map(attrFilter => {
-              const initialAttr = find(
-                whereEq({ id: attrFilter.attribute.rawId }),
-                // $FlowIgnoreMe
-                initialAttributes,
-              );
-              const initialValues = pathOr(
-                [],
-                ['equal', 'values'],
-                initialAttr,
-              );
-              return (
-                <div key={attrFilter.attribute.id} styleName="attrBlock">
-                  <AttributeControl
-                    attrFilter={attrFilter}
-                    initialValues={initialValues}
-                    onChange={this.handleOnChangeAttribute(attrFilter)}
-                  />
-                </div>
-              );
-            })}
-        </div>
+        )}
+        <div styleName="blockTitle">Price (STQ)</div>
+        <RangerSlider
+          minValue={minValue}
+          maxValue={maxValue}
+          min={0}
+          max={maxValue}
+          step={0.01}
+          value={valueRange}
+          value2={valueRange2}
+          onChange={value => this.handleOnRangeChange(value, 'volume')}
+          onChange2={value => this.handleOnRangeChange(value, 'volume2')}
+          onChangeComplete={this.handleOnCompleteRange}
+        />
+        {attrFilters &&
+          sort(
+            (a, b) => a.attribute.rawId - b.attribute.rawId,
+            attrFilters,
+          ).map(attrFilter => {
+            const initialAttr = find(
+              whereEq({ id: attrFilter.attribute.rawId }),
+              // $FlowIgnoreMe
+              initialAttributes,
+            );
+            const initialValues = pathOr([], ['equal', 'values'], initialAttr);
+            return (
+              <div key={attrFilter.attribute.id} styleName="attrBlock">
+                <AttributeControl
+                  attrFilter={attrFilter}
+                  initialValues={initialValues}
+                  onChange={this.handleOnChangeAttribute(attrFilter)}
+                />
+              </div>
+            );
+          })}
       </aside>
     );
   }

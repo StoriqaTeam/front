@@ -1,11 +1,14 @@
 export { default as ImageDetail } from './ImageDetail';
 export { default as Product } from './Product';
+export { default as ProductBreadcrumbs } from './ProductBreadcrumbs';
+export { default as ProductButtons } from './ProductButtons';
 export { default as ProductContext } from './ProductContext';
 export { default as ProductDetails } from './ProductDetails';
-export { default as ProductPrice } from './ProductPrice';
+export { default as ProductDiscount } from './ProductDiscount';
 export { default as ProductImage } from './ProductImage';
 export { default as ProductMaterial } from './ProductMaterial';
-export { default as ProductShare } from './ProductShare';
+export { default as ProductPrice } from './ProductPrice';
+export { default as ProductQuantity } from './ProductQuantity';
 export { default as ProductSize } from './ProductSize';
 export { default as ProductStore } from './ProductStore';
 export { default as ProductThumbnails } from './ProductThumbnails';

@@ -1,5 +1,7 @@
 // @flow
 
+// just for reinit cd. can remove.
+
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
@@ -33,6 +35,8 @@ import VerifyEmail from 'pages/VerifyEmail';
 import Logout from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
+import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
+import { StartSelling } from 'pages/StartSelling';
 
 const routes = (
   <Route>
@@ -67,6 +71,7 @@ const routes = (
               text
             }
             children {
+              id
               rawId
               parentId
               level
@@ -75,6 +80,7 @@ const routes = (
                 text
               }
               children {
+                id
                 rawId
                 parentId
                 level
@@ -83,6 +89,7 @@ const routes = (
                   text
                 }
                 children {
+                  id
                   rawId
                   parentId
                   level
@@ -125,6 +132,7 @@ const routes = (
       }}
     >
       <Route Component={Start} />
+      <Route path="/404" Component={Error404} />
 
       <Route
         path="/cart"
@@ -212,7 +220,9 @@ const routes = (
           })}
         />
       </Route>
-      {/* TODO: вынести в HOC ли придумать что-то */}
+
+      <Route path="start-selling" Component={StartSelling} />
+
       <Route
         path="/manage"
         query={graphql`
@@ -236,17 +246,41 @@ const routes = (
       >
         <Route
           path="/wizard"
-          Component={Wizard}
           query={graphql`
             query routes_Wizard_Query {
               languages {
                 isoCode
               }
               me {
+                id
+                wizardStore {
+                  id
+                  completed
+                  storeId
+                }
                 ...Wizard_me
               }
             }
           `}
+          Component={Wizard}
+          render={({ props, Component }) => {
+            if (props) {
+              if (!props.me) {
+                throw new RedirectException(`/login?from=/start-selling`);
+              } else if (
+                props.me.wizardStore &&
+                props.me.wizardStore.completed
+              ) {
+                throw new RedirectException(
+                  `/manage/store/${props.me.wizardStore.storeId}/products`,
+                );
+              } else {
+                return <Component {...props} />;
+              }
+            } else {
+              return null;
+            }
+          }}
         />
         <Route path="/store">
           <Route
@@ -265,7 +299,9 @@ const routes = (
             render={({ props, Component }) => {
               const myStoreId = pathOr(null, ['me', 'myStore', 'rawId'], props);
               if (myStoreId) {
-                throw new RedirectException(`/manage/store/${myStoreId}`);
+                throw new RedirectException(
+                  `/manage/store/${myStoreId}/products`,
+                );
               } else {
                 return <Component {...props} />;
               }
@@ -302,10 +338,11 @@ const routes = (
             <Route
               Component={EditStore}
               query={graphql`
-                query routes_Store_Query {
+                query routes_ManageStore_Query {
                   me {
                     ...EditStore_me
                   }
+                  ...InputSlug_storeSlugExists
                 }
               `}
             />
@@ -438,6 +475,7 @@ const routes = (
           </Route>
         </Route>
       </Route>
+
       <Route
         path="/registration"
         Component={Authorization}
@@ -451,12 +489,14 @@ const routes = (
           return <Component isSignUp alone {...props} />;
         }}
       />
+
       <Route
         path="/login"
         Component={Authorization}
         render={({ Component, props }) => <Component alone {...props} />}
       />
       <Route path="/logout" Component={Logout} />
+
       <Route
         path="/oauth_callback/fb"
         Component={OAuthCallback}
@@ -464,6 +504,7 @@ const routes = (
           <Component provider="FACEBOOK" {...props} />
         )}
       />
+
       <Route
         path="/oauth_callback/google"
         Component={OAuthCallback}
@@ -471,7 +512,9 @@ const routes = (
           <Component provider="GOOGLE" {...props} />
         )}
       />
+
       <Route path="/verify_email/:token" Component={VerifyEmail} />
+
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
       <Route path="/profile">
         <Route
@@ -506,7 +549,7 @@ const routes = (
           `}
           render={({ props, Component }) => {
             if (props) {
-              if (props && !props.me) {
+              if (!props.me) {
                 const {
                   location: { pathname },
                 } = props;
@@ -529,6 +572,56 @@ const routes = (
             }
           }}
           prepareVariables={() => {}}
+        />
+      </Route>
+      <Route
+        path="/store/:storeId"
+        Component={Store}
+        query={graphql`
+          query routes_Store_Query($storeId: Int!) {
+            store(id: $storeId) {
+              id
+              rawId
+              logo
+              cover
+              name {
+                lang
+                text
+              }
+              rating
+              ...StoreItems_shop @arguments(storeId: $storeId)
+              ...About_shop
+              ...Showcase_shop
+            }
+          }
+        `}
+        render={({ props, Component }) => {
+          if (props) {
+            return <Component {...props} />;
+          }
+          return undefined;
+        }}
+        prepareVariables={(_, { params }) => ({
+          storeId: parseInt(params.storeId, 10),
+        })}
+      >
+        <Route
+          Component={Showcase}
+          render={({ props, Component }) => <Component {...props} key="shop" />}
+        />
+        <Route
+          path="/about"
+          Component={StoreAbout}
+          render={({ props, Component }) => (
+            <Component {...props} key="about" />
+          )}
+        />
+        <Route
+          path="/items"
+          Component={StoreItems}
+          render={({ props, Component }) => (
+            <Component {...props} key="items" />
+          )}
         />
       </Route>
     </Route>

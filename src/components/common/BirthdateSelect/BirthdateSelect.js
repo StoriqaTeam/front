@@ -10,6 +10,7 @@ import './BirthdateSelect.scss';
 type ItemType = { id: string, label: string };
 
 type PropsType = {
+  brief?: boolean,
   label: ?string,
   handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
@@ -81,11 +82,27 @@ class BirthdateSelect extends Component<PropsType, StateType> {
       'November',
       'December',
     ];
+    const briefMonthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     const items = [...Array.from(Array(count).keys(), x => start + x)];
     return map(
       item => ({
         id: `${item}`.length === 1 ? `0${item}` : `${item}`,
-        label: monthNames[item - 1],
+        label: this.props.brief
+          ? briefMonthNames[item - 1]
+          : monthNames[item - 1],
       }),
       items,
     );

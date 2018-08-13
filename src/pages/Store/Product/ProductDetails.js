@@ -1,39 +1,62 @@
 // @flow
 
-import * as React from 'react';
+import React, { PureComponent } from 'react';
+import type { Node } from 'react';
+import { propOr, prop } from 'ramda';
 
-import type { WidgetType, WidgetOptionType } from './types';
+import { Rating } from 'components/common/Rating';
 
-import { ProductSize, ProductMaterial, ProductThumbnails } from './index';
+import type { WidgetType } from './types';
+
+import {
+  ProductContext,
+  ProductMaterial,
+  ProductPrice,
+  ProductQuantity,
+  ProductSize,
+  ProductThumbnails,
+} from './index';
 
 import { sortByProp } from './utils';
 
 import './ProductDetails.scss';
 
 type PropsType = {
-  widgets: Array<WidgetType>,
-  productTitle: string,
-  productDescription: string,
+  children: Node,
   onWidgetClick: Function,
-  children: React.Node,
+  productDescription: string,
+  productTitle: string,
+  widgets: Array<WidgetType>,
+  selectedAttributes: { [string]: string },
+  availableAttributes: {
+    [string]: Array<string>,
+  },
+  unselectedAttr: Array<string>,
 };
 
-class ProductDetails extends React.Component<PropsType, {}> {
-  handleWidgetClick = (selected: WidgetOptionType): void => {
-    const { onWidgetClick } = this.props;
-    onWidgetClick(selected);
-  };
-
-  generateWidget = (widget: WidgetType, index: number): React.Node => {
+class ProductDetails extends PureComponent<PropsType> {
+  generateWidget = (widget: WidgetType, index: number): Node => {
+    const { unselectedAttr } = this.props;
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
         WidgetComponent = (
           <ProductSize
             key={index}
+            id={widget.id}
             title={widget.title}
             options={widget.options}
-            onClick={selected => this.handleWidgetClick(selected)}
+            onClick={this.props.onWidgetClick}
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -41,9 +64,20 @@ class ProductDetails extends React.Component<PropsType, {}> {
         WidgetComponent = (
           <ProductMaterial
             key={index}
+            id={widget.id}
             title={widget.title || ''}
             options={widget.options}
-            onSelect={selected => this.handleWidgetClick(selected)}
+            onSelect={this.props.onWidgetClick}
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -51,11 +85,27 @@ class ProductDetails extends React.Component<PropsType, {}> {
         WidgetComponent = (
           <ProductThumbnails
             key={index}
+            id={widget.id}
             title={widget.title}
             row
             srcProp="image"
             options={widget.options}
-            onClick={selected => this.handleWidgetClick(selected)}
+            onClick={(option: { label: string }) =>
+              this.props.onWidgetClick({
+                attributeId: widget.id,
+                attributeValue: option.label,
+              })
+            }
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -64,15 +114,27 @@ class ProductDetails extends React.Component<PropsType, {}> {
     }
     return WidgetComponent;
   };
+
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
-      <div styleName="container">
-        <h2>{productTitle}</h2>
-        {children}
-        <p>{productDescription}</p>
-        {sortByProp('id')(widgets).map(this.generateWidget)}
-      </div>
+      <ProductContext.Consumer>
+        {({ productVariant, rating }) => (
+          <div styleName="container">
+            <h2>{productTitle}</h2>
+            <div styleName="rating">
+              <Rating value={rating} />
+            </div>
+            <ProductPrice {...productVariant} />
+            <p>{productDescription}</p>
+            <div styleName="widgets">
+              {sortByProp('id')(widgets).map(this.generateWidget)}
+            </div>
+            <ProductQuantity quantity={productVariant.quantity} />
+            {children}
+          </div>
+        )}
+      </ProductContext.Consumer>
     );
   }
 }

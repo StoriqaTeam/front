@@ -1,8 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { isEmpty, isNil } from 'ramda';
+import { isEmpty, isNil, contains } from 'ramda';
 import classNames from 'classnames';
+
+import { Icon } from 'components/Icon';
 
 import './ProductThumbnails.scss';
 
@@ -18,10 +20,13 @@ type PropsType = {
   options: Array<WidgetOptionType>,
   row?: boolean,
   onClick: Function,
+  isOnSelected: boolean,
+  availableValues?: Array<string>,
+  selectedValue: ?string,
 };
 
 type StateType = {
-  selected: null | number,
+  selected: ?number,
 };
 
 class ProductThumbnails extends Component<PropsType, StateType> {
@@ -37,50 +42,84 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     }
     return prevState;
   }
+
   static defaultProps = {
     title: '',
     row: false,
     isReset: false,
     isFirstSelected: false,
   };
+
   state = {
     selected: null,
   };
+
   handleClick = (option: WidgetOptionType, index: number): void => {
-    const { onClick } = this.props;
+    if (
+      this.props.availableValues &&
+      !contains(option.label, this.props.availableValues)
+    ) {
+      return;
+    }
+
     this.setState(
-      {
-        selected: index,
+      prevState => {
+        if (index === prevState.selected) {
+          return {
+            selected: null,
+          };
+        }
+        return {
+          selected: index,
+        };
       },
       () => {
-        onClick(option);
+        this.props.onClick(option);
       },
     );
   };
+
   render() {
-    const { options, row, title } = this.props;
+    const { options, row, title, isOnSelected, availableValues } = this.props;
     const { selected } = this.state;
-    const mapOptions = (option, index) => (
-      <button
-        key={`${option.label || option.id}`}
-        onClick={() => this.handleClick(option, index)}
-      >
-        <figure>
-          <img
-            styleName={classNames(
-              {
-                clicked: option.state === 'selected' || selected === index,
-              },
-              {
-                disabled: option.state === 'disabled',
-              },
-            )}
-            src={option.image}
-            alt={option.alt || 'image alt'}
-          />
-        </figure>
-      </button>
-    );
+
+    const mapOptions = (option, index) => {
+      const isSelected = availableValues
+        ? option.label === this.props.selectedValue
+        : option.state === 'selected';
+      const isDisabled = availableValues
+        ? !contains(option.label, availableValues)
+        : option.state === 'disabled';
+      return (
+        <button
+          key={`${option.label || option.id}`}
+          onClick={() => this.handleClick(option, index)}
+        >
+          {option.image ? (
+            <figure styleName="thumbnailContainer">
+              <img
+                styleName={classNames({
+                  clicked: isSelected || selected === index,
+                  disabled: isDisabled,
+                })}
+                src={option.image}
+                alt={option.alt || 'image alt'}
+              />
+            </figure>
+          ) : (
+            <div
+              styleName={classNames('emptyImg', {
+                clicked: isSelected || selected === index,
+                disabled: isDisabled,
+              })}
+            >
+              <Icon type="camera" size="40" />
+            </div>
+          )}
+        </button>
+      );
+    };
+
     return (
       <div
         styleName={classNames('container', {
@@ -88,7 +127,11 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           'scroll-y': !row,
         })}
       >
-        {!isEmpty(title) ? <h4>{title}</h4> : null}
+        {!isEmpty(title) ? (
+          <div id={title} styleName={classNames('title', { isOnSelected })}>
+            <strong>{title}</strong>
+          </div>
+        ) : null}
         <div styleName={`thumbnails ${row ? 'row' : 'column'}`}>
           {isNil(options) ? null : sortByProp('label')(options).map(mapOptions)}
         </div>

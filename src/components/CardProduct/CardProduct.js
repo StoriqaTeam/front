@@ -84,27 +84,26 @@ class CardProduct extends PureComponent<PropsTypes> {
             <div styleName="icon">{false && <Icon type="qa" size="20" />}</div>
             <div>
               <Rating value={rating} />
-              {name && (
-                <div styleName="title">
-                  <strong>{getNameText(name, lang)}</strong>
-                </div>
-              )}
+              {name && <div styleName="title">{getNameText(name, lang)}</div>}
             </div>
-            {Boolean(discount) && (
-              <div styleName="undiscountedPrice">{formatPrice(price)} STQ</div>
-            )}
+            <div styleName="undiscountedPrice">
+              {Boolean(discount) && <span>{formatPrice(price)} STQ</span>}
+            </div>
             <div styleName="price">
               {discountedPrice && (
                 <div styleName="actualPrice">
-                  <strong>{formatPrice(discountedPrice)} STQ</strong>
+                  {formatPrice(discountedPrice)} STQ
                 </div>
               )}
-              <div
-                styleName={classNames('cashback', {
-                  noneCashback: !cashbackValue,
-                })}
-              >
-                <b>{`Cashback  ${cashbackValue || 0}%`}</b>
+              <div styleName="cashbackWrapper">
+                <div
+                  styleName={classNames('cashback', {
+                    noneCashback: !cashbackValue,
+                  })}
+                >
+                  <b>Cashback</b>
+                  <b styleName="value">{`${cashbackValue || 0}%`}</b>
+                </div>
               </div>
             </div>
           </div>

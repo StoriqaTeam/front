@@ -1,33 +1,23 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, map } from 'ramda';
+import { pathOr, isEmpty, map, addIndex } from 'ramda';
 import { graphql, createRefetchContainer } from 'react-relay';
 
 import { Paginator } from 'components/common/Paginator';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
-import { Button } from 'components/common/Button';
-import { Input } from 'components/common/Input';
 import { Autocomplete } from 'components/common/Autocomplete';
-import { Checkbox } from 'components/common/Checkbox';
-import { Icon } from 'components/Icon';
-import BannerLoading from 'components/Banner/BannerLoading';
-import {
-  log,
-  fromRelayError,
-  getNameText,
-  convertSrc,
-  formatPrice,
-} from 'utils';
-import ImageLoader from 'libs/react-image-loader';
+import { log, fromRelayError, getNameText } from 'utils';
 
 import { SetProductQuantityInWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/SetProductQuantityInWarehouseMutation';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { StorageProducts_me as StorageProductsMeType } from './__generated__/StorageProducts_me.graphql';
+
+import { StorageProductsTableHeader, StorageProductsTableRow } from './index';
 
 import './StorageProducts.scss';
 
@@ -42,63 +32,23 @@ type PropsType = {
 };
 
 type StateType = {
-  storageFocusId: ?number,
-  storageFocusCurrentValue: ?string,
-  storageFocusValue: ?string,
   currentPage: number,
   autocompleteValue: string,
   searchTermValue: string,
-  autocompleteItems: Array<string>,
+  autocompleteItems: Array<{ id: string, label: string }>,
 };
 
 class StorageProducts extends Component<PropsType, StateType> {
   state = {
-    storageFocusId: null,
-    storageFocusCurrentValue: null,
-    storageFocusValue: null,
     currentPage: 1,
     autocompleteValue: '',
     searchTermValue: '',
     autocompleteItems: [],
   };
-
-  handleFocus = (e: any, quantity: number) => {
-    const { id, value } = e.target;
-    this.setState({
-      storageFocusId: id,
-      storageFocusCurrentValue: `${quantity}`,
-      storageFocusValue: value,
-    });
-  };
-
-  handleBlur = () => {
-    const { storageFocusCurrentValue, storageFocusValue } = this.state;
-    if (storageFocusValue === storageFocusCurrentValue) {
-      this.setState({
-        storageFocusId: null,
-      });
-    }
-  };
-
-  handleChange = (e: any) => {
-    const { value } = e.target;
-
-    if (value >= 0 && value !== '') {
-      this.setState({
-        storageFocusValue: value.replace(/^0+/, ''),
-      });
-    }
-    if (value === '' || /^0+$/.test(value)) {
-      this.setState({
-        storageFocusValue: '0',
-      });
-    }
-  };
-
-  handleSave = (productId: number) => {
+  handleSave = (productId: number, quantity: number): void => {
     // $FlowIgnoreMe
     const warehouseId = pathOr(null, ['me', 'warehouse', 'id'], this.props);
-    const { storageFocusValue: quantity } = this.state;
+    // const { storageFocusValue: quantity } = this.state;
     const { environment } = this.context;
     const params: MutationParamsType = {
       input: {
@@ -128,11 +78,9 @@ class StorageProducts extends Component<PropsType, StateType> {
             text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
+          // eslint-disable-next-line
           return;
         }
-        this.setState({
-          storageFocusId: null,
-        });
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -200,9 +148,11 @@ class StorageProducts extends Component<PropsType, StateType> {
           ['warehouse', 'autoCompleteProductName', 'edges'],
           me,
         );
-        const filteredItems = map(item => item.node, items);
         this.setState({
-          autocompleteItems: filteredItems,
+          autocompleteItems: addIndex(map)(
+            (item, idx) => ({ id: `${idx}`, label: item.node }),
+            items,
+          ),
         });
       },
       { force: true },
@@ -236,174 +186,11 @@ class StorageProducts extends Component<PropsType, StateType> {
     );
   };
 
-  renderHeaderRow = () => (
-    <div styleName="headerRowWrap">
-      <div styleName="td tdCheckbox">
-        <Checkbox id="header" onChange={() => {}} />
-      </div>
-      <div styleName="td tdFoto" />
-      <div styleName="td tdName">
-        <div>
-          <span>Name</span>
-          <Icon inline type="sortArrows" />
-        </div>
-      </div>
-      <div styleName="td tdCategory">
-        <div>
-          <span>Category</span>
-          <Icon inline type="sortArrows" />
-        </div>
-      </div>
-      <div styleName="td tdPrice">
-        <div>
-          <span>Price</span>
-          <Icon inline type="sortArrows" />
-        </div>
-      </div>
-      <div styleName="td tdCharacteristics">
-        <span>Characteristics</span>
-        <Icon inline type="sortArrows" />
-      </div>
-      <div styleName="td tdQuantity">
-        <span>Quantity</span>
-        <Icon inline type="sortArrows" />
-      </div>
-      <div styleName="td tdMove">
-        <button styleName="moveButton">
-          <Icon type="move" size="24" />
-        </button>
-      </div>
-    </div>
-  );
-
-  renderRows = (item: {
-    id: string,
-    productId: number,
-    quantity: number,
-    photoMain: ?string,
-    name: string,
-    categoryName: string,
-    price: string,
-    attributes: Array<{
-      attrId: number,
-      attributeName: string,
-      value: string,
-    }>,
-  }) => {
-    const {
-      productId,
-      quantity,
-      photoMain,
-      name,
-      categoryName,
-      price,
-      attributes,
-    } = item;
-    const { storageFocusId, storageFocusValue } = this.state;
-    const thisProduct = `${productId}` === storageFocusId;
-    return (
-      <div key={productId} styleName="itemRowWrap">
-        <div styleName="td tdCheckbox">
-          <Checkbox id={`product-${productId}`} onChange={() => {}} />
-        </div>
-        <div styleName="td tdFoto">
-          <div styleName="foto">
-            {!photoMain ? (
-              <Icon type="camera" size="40" />
-            ) : (
-              <ImageLoader
-                fit
-                src={convertSrc(photoMain, 'small')}
-                loader={<BannerLoading />}
-              />
-            )}
-          </div>
-        </div>
-        <div styleName="td tdName">
-          <div>
-            <span>{name}</span>
-          </div>
-        </div>
-        <div styleName="td tdCategory">
-          <div>
-            <span>{categoryName}</span>
-          </div>
-        </div>
-        <div styleName="td tdPrice">
-          <div>{price && <span>{`${formatPrice(price)} STQ`}</span>}</div>
-        </div>
-        <div styleName="td tdCharacteristics">
-          {!isEmpty(attributes) && (
-            <div>
-              <div styleName="characteristicItem">
-                <div styleName="characteristicLabels">
-                  {map(
-                    attributeItem => (
-                      <div key={attributeItem.attrId}>
-                        {`${attributeItem.attributeName}: `}
-                      </div>
-                    ),
-                    attributes,
-                  )}
-                </div>
-                <div styleName="characteristicValues">
-                  {map(
-                    attributeItem => (
-                      <div key={attributeItem.attrId}>
-                        {attributeItem.value}
-                      </div>
-                    ),
-                    attributes,
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <div styleName="td tdQuantity">
-          <div styleName="quantityInput">
-            <Input
-              id={productId}
-              type="number"
-              inline
-              fullWidth
-              value={thisProduct ? storageFocusValue : `${quantity}`}
-              onFocus={(e: any) => {
-                this.handleFocus(e, quantity);
-              }}
-              onBlur={this.handleBlur}
-              onChange={this.handleChange}
-            />
-          </div>
-          {thisProduct && (
-            <div>
-              <Button
-                small
-                disabled={thisProduct && storageFocusValue === `${quantity}`}
-                onClick={() => {
-                  this.handleSave(productId);
-                }}
-                dataTest="saveQuantityButton"
-              >
-                Save
-              </Button>
-            </div>
-          )}
-        </div>
-        <div styleName="td tdMove">
-          <button styleName="moveButton" onClick={() => {}}>
-            <Icon type="move" size="24" />
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   render() {
     const { me } = this.props;
-    const { autocompleteItems, autocompleteValue } = this.state;
+    const { autocompleteItems } = this.state;
     // $FlowIgnoreMe
-    const storageName = pathOr({}, ['warehouse', 'name'], me);
+    const storageName = pathOr('Unnamed', ['warehouse', 'name'], me);
     const products = map(item => {
       const productId = pathOr({}, ['node', 'productId'], item);
       const quantity = pathOr({}, ['node', 'quantity'], item);
@@ -458,7 +245,6 @@ class StorageProducts extends Component<PropsType, StateType> {
         <div styleName="searchInput">
           <Autocomplete
             autocompleteItems={autocompleteItems}
-            autocompleteValue={autocompleteValue}
             onChange={this.handleOnChangeAutocomplete}
             onSet={this.handleOnSetAutocomplete}
             label="Search item"
@@ -466,20 +252,26 @@ class StorageProducts extends Component<PropsType, StateType> {
             fullWidth
           />
         </div>
-        <div styleName="addButton">
-          <Button wireframe big onClick={() => {}}>
-            Add item
-          </Button>
-        </div>
         <div styleName="subtitle">
           <strong>{storageName}</strong>
         </div>
-        <div>
-          <div>{this.renderHeaderRow()}</div>
-          {!isEmpty(products) && (
-            <div>{map(item => this.renderRows(item), products)}</div>
-          )}
-        </div>
+        <StorageProductsTableHeader />
+        {!isEmpty(products) ? (
+          <Fragment>
+            {map(
+              item => (
+                <StorageProductsTableRow
+                  key={item.productId}
+                  onSave={this.handleSave}
+                  item={item}
+                />
+              ),
+              products,
+            )}
+          </Fragment>
+        ) : (
+          <div styleName="emptyProductsBlock">No products</div>
+        )}
         <Paginator
           pagesCount={pagesCount}
           currentPage={currentPage}
@@ -496,7 +288,7 @@ StorageProducts.contextTypes = {
 
 export default createRefetchContainer(
   withShowAlert(
-    Page(ManageStore(StorageProducts, 'Storages', 'Storage products')),
+    Page(ManageStore(StorageProducts, 'Storages', 'Storage products'), true),
   ),
   graphql`
     fragment StorageProducts_me on User
@@ -510,7 +302,7 @@ export default createRefetchContainer(
       warehouse(slug: $storageSlug) {
         id
         name
-        autoCompleteProductName(name: $autocompleteValue) {
+        autoCompleteProductName(first: 8, name: $autocompleteValue) {
           edges {
             node
           }

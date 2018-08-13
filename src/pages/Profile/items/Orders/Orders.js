@@ -10,6 +10,8 @@ import { shortDateFromTimestamp, timeFromTimestamp } from 'utils/formatDate';
 
 import type { TableItemType } from 'pages/common/OrdersList/TableRow';
 
+import '../../Profile.scss';
+
 const itemsPerPage = 10;
 
 type PropsType = {
@@ -32,7 +34,8 @@ type PropsType = {
 type StateType = {
   currentPage: number,
   searchTerm: ?string,
-  orderDate: ?string,
+  orderFromDate: ?string,
+  orderToDate: ?string,
   orderStatus: ?string,
 };
 
@@ -40,7 +43,8 @@ class Orders extends Component<PropsType, StateType> {
   state: StateType = {
     currentPage: 1,
     searchTerm: null,
-    orderDate: null,
+    orderFromDate: null,
+    orderToDate: null,
     orderStatus: null,
   };
 
@@ -58,12 +62,9 @@ class Orders extends Component<PropsType, StateType> {
             ? null
             : parseInt(this.state.searchTerm, 10),
           createdFrom:
-            this.state.orderDate && moment(this.state.orderDate).utc(),
+            this.state.orderFromDate && moment(this.state.orderFromDate).utc(),
           createdTo:
-            this.state.orderDate &&
-            moment(this.state.orderDate)
-              .utc()
-              .add(1, 'd'),
+            this.state.orderToDate && moment(this.state.orderToDate).utc(),
           orderStatus: this.state.orderStatus,
         },
       },
@@ -79,13 +80,15 @@ class Orders extends Component<PropsType, StateType> {
       number: `${order.slug}`,
       date: this.compileDateString(order.createdAt),
       shop: {
-        id: order.store.rawId,
-        title: order.store.name[0].text,
+        id: order.store ? order.store.rawId : null,
+        title: order.store ? order.store.name[0].text : 'The store was deleted',
       },
       delivery: order.deliveryCompany,
       item: {
-        id: order.product.baseProduct.rawId,
-        title: order.product.baseProduct.name[0].text,
+        id: order.product ? order.product.baseProduct.rawId : null,
+        title: order.product
+          ? order.product.baseProduct.name[0].text
+          : 'The product was deleted',
       },
       price: order.price,
       payment: order.paymentStatus ? 'Paid' : 'Not paid',
@@ -113,8 +116,14 @@ class Orders extends Component<PropsType, StateType> {
     });
   };
 
-  handleOrderDateFilterChanged = (value: string) => {
-    this.setState({ orderDate: value }, () => {
+  handleOrderFromDateFilterChanged = (value: string) => {
+    this.setState({ orderFromDate: `${value}T00:00:00+00:00` }, () => {
+      this.loadPage(this.state.currentPage);
+    });
+  };
+
+  handleOrderToDateFilterChanged = (value: string) => {
+    this.setState({ orderToDate: `${value}T23:59:59+00:00` }, () => {
       this.loadPage(this.state.currentPage);
     });
   };
@@ -138,16 +147,19 @@ class Orders extends Component<PropsType, StateType> {
       this.props,
     );
     return (
-      <OrdersList
-        orders={orderDTOs}
-        pagesCount={pagesCount}
-        currentPage={currentPage}
-        onPageSelect={this.loadPage}
-        linkFactory={item => `/profile/orders/${item.number}`}
-        onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
-        onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
-        onOrderDateFilterChanged={this.handleOrderDateFilterChanged}
-      />
+      <div styleName="ordersList">
+        <OrdersList
+          orders={orderDTOs}
+          pagesCount={pagesCount}
+          currentPage={currentPage}
+          onPageSelect={this.loadPage}
+          linkFactory={item => `/profile/orders/${item.number}`}
+          onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
+          onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
+          onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}
+          onOrderToDateFilterChanged={this.handleOrderToDateFilterChanged}
+        />
+      </div>
     );
   }
 }

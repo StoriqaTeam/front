@@ -255,50 +255,52 @@ class PersonalData extends Component<PropsType, StateType> {
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
       <div styleName="personalData">
-        <div styleName="subtitle">
-          <strong>{subtitle}</strong>
-        </div>
-        {this.renderInput({
-          id: 'firstName',
-          label: 'First name',
-          limit: 50,
-        })}
-        {this.renderInput({
-          id: 'lastName',
-          label: 'Last name',
-          limit: 50,
-        })}
-        <div styleName="formItem">
-          <Select
-            forForm
-            label="Gender"
-            activeItem={genderValue}
-            items={genderItems}
-            onSelect={this.handleGenderSelect}
-            dataTest="profileGenderSelect"
-            fullWidth
-          />
-        </div>
-        <div styleName="formItem">
-          <BirthdateSelect
-            label="Birthdate"
-            birthdate={data.birthdate}
-            handleBirthdateSelect={this.handleBirthdateSelect}
-            errors={propOr(null, 'birthdate', formErrors)}
-          />
-        </div>
-        {this.renderInput({
-          id: 'phone',
-          label: 'Phone',
-        })}
-        <div styleName="formItem">
-          <SpinnerButton
-            onClick={this.handleSave}
-            isLoading={isLoading}
-            dataTest="saveButton"
-          >
-            Save
-          </SpinnerButton>
+        <div styleName="personalDataWrap">
+          <div styleName="subtitle">
+            <strong>Personal data settings</strong>
+          </div>
+          {this.renderInput({
+            id: 'firstName',
+            label: 'First name',
+            limit: 50,
+          })}
+          {this.renderInput({
+            id: 'lastName',
+            label: 'Last name',
+            limit: 50,
+          })}
+          <div styleName="formItem">
+            <Select
+              forForm
+              label="Gender"
+              activeItem={genderValue}
+              items={genderItems}
+              onSelect={this.handleGenderSelect}
+              dataTest="profileGenderSelect"
+              fullWidth
+            />
+          </div>
+          <div styleName="formItem">
+            <BirthdateSelect
+              label="Birthdate"
+              birthdate={data.birthdate}
+              handleBirthdateSelect={this.handleBirthdateSelect}
+              errors={propOr(null, 'birthdate', formErrors)}
+            />
+          </div>
+          {this.renderInput({
+            id: 'phone',
+            label: 'Phone',
+          })}
+          <div styleName="formItem">
+            <SpinnerButton
+              onClick={this.handleSave}
+              isLoading={isLoading}
+              dataTest="saveButton"
+            >
+              Save
+            </SpinnerButton>
+          </div>
         </div>
       </div>
     );

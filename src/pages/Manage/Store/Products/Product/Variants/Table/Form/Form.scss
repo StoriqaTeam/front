@@ -1,19 +1,45 @@
 @import '../../../../../../../../styles/variables';
 
 .container {
-  margin: 0 -4rem;
-  padding: 0 4rem 4rem;
-  border: 1px solid rgba(239,239,239,.6);
-  border-top: 0;
   background-color: $color_grey_bg;
+  border: 1px solid $color_grey_trivial;
+  margin: -1px 0;
+  padding: 4rem;
 }
 
 .variants {
   position: relative;
 }
 
+.inputWithIcon {
+  align-items: baseline;
+  display: flex;
+}
+
+.inputWidth {
+  width: 23.875rem;
+  margin-right: 2rem;
+}
+
+.priceIcon {
+  color: $color_grey;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;
+  top: 0.5rem;
+  transition: $transition_all_ease;
+}
+
+.title {
+  margin-bottom: 1rem;
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
 .variantItem {
-  // font-size: 12px;
+
 }
 
 .storagesItem {
@@ -30,59 +56,47 @@
   margin-left: 1.5rem;
 }
 
-
-.arrowExpand {
-  position: absolute;
-  top: 3rem;
-  right: -2rem;
-  width: 6rem;
-  height: 6rem;
-  transform: rotate(180deg);
-}
-
 .variant {
   display: flex;
-  margin: 0 -4rem;
-  padding: 4rem;
-}
-
-.input {
-  border: 0;
-  border-bottom: 1px solid $color_grey_minor;
-  font-family: Roboto;
-  font-size: 14px;
-  color: $color_grey;
-  text-align: right;
-  height: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
 }
 
 .inputPostfix {
-  font-family: Roboto;
-  font-size: 14px;
-  color: $color_grey;
-  margin-left: 5px;
+  color: $color_grey_minor;
+  font-size: 12px;
 }
 
-.cashbackInput {
-  display: inline-block;
-  width: 2.5rem;
+.buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: #{$md - 1px}) {
+    bottom: 1rem;
+    left: 5rem;
+  }
+
+  .saveButton {
+    width: 22.5rem;
+    max-height: 5rem;
+  }
 }
 
-.vendorCodeInput {
-  display: inline-block;
-  width: 15rem;
+.cancelButton {
+  margin-left: 3rem;
+  font-size: 16px;
+  color: $color_blue;
+  cursor: pointer;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue_hover;
+  }
 }
 
-.priceInput {
-  display: inline-block;
-  width: 12rem;
+.asterisk {
+  color: $color_red;
 }
-
-.tdCheckbox {width: 5%;}
-.tdCashback {width: 15%;}
-.tdCharacteristics {width: 15%;}
-.tdDropdawn {width: 5%;}
-.tdArticle {width: 20%;}
-.tdPrice {width: 20%;}
-.tdCount {width: 15%;}
-.tdBasket {width: 5%;}

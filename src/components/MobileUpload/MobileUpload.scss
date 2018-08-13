@@ -4,20 +4,38 @@ $icon-size: 5rem;
 
 .container {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
 }
 
 .image {
-  border-radius: 50%;
+  position: relative;
   height: $icon-size;
   width: $icon-size;
+
+  img {
+    border-radius: 50%;
+    height: $icon-size;
+    width: $icon-size;
+  }
+
+  .trash {
+    background: $color_white;
+    border-radius: 50%;
+    border: 1px solid $color_grey_minor;
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+
+    svg {
+      fill: $color_grey_minor;
+    }
+  }
 }
 
 .imageArea {
   align-items: center;
   background-color: $color_grey_trivial;
   border-radius: 0.5rem;
-  cursor: pointer;
   display: flex;
   height: $icon-size;
   justify-content: center;
@@ -32,6 +50,7 @@ $icon-size: 5rem;
   display: flex;
   height: 5rem;
   justify-content: center;
-  width: 80%;
-  // background-color: $color_grey_trivial;
+  margin-left: 2rem;
+  flex: 1 0;
+  cursor: pointer;
 }

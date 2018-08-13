@@ -8,14 +8,36 @@ import { pathOr, isEmpty, path } from 'ramda';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
-import { CreateBaseProductMutation } from 'relay/mutations';
+import {
+  CreateBaseProductMutation,
+  CreateProductWithAttributesMutation,
+} from 'relay/mutations';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
 
 import Form from './Form';
+
+import './Product.scss';
+
+type AttributeValueType = {
+  attrId: number,
+  value: string,
+  metaField?: ?string,
+};
+
+type VariantType = {
+  productRawId: ?string,
+  vendorCode: string,
+  price: number,
+  cashback?: ?number,
+  mainPhoto?: ?string,
+  photos?: Array<string>,
+  attributeValues: Array<AttributeValueType>,
+};
 
 type FormType = {
   name: string,
@@ -51,10 +73,8 @@ class NewProduct extends Component<PropsType, StateType> {
     isLoading: false,
   };
 
-  handleSave = (form: FormType) => {
-    if (!form) {
-      return;
-    }
+  handleSave = (form: FormType, variantData: VariantType) => {
+    this.setState({ formErrors: {} });
     const { me } = this.props;
     const {
       name,
@@ -66,6 +86,7 @@ class NewProduct extends Component<PropsType, StateType> {
     } = form;
     const storeID = path(['myStore', 'id'], me);
     this.setState(() => ({ isLoading: true }));
+
     CreateBaseProductMutation.commit({
       parentID: storeID,
       name: [{ lang: 'EN', text: name }],
@@ -84,14 +105,16 @@ class NewProduct extends Component<PropsType, StateType> {
           : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState(() => ({ isLoading: false }));
-
         log.debug({ response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
 
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.setState({ formErrors: validationErrors });
+          return;
+        }
         log.debug({ validationErrors });
 
         // $FlowIgnoreMe
@@ -99,14 +122,16 @@ class NewProduct extends Component<PropsType, StateType> {
         if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
-        } else if (status) {
+        }
+        if (status) {
           this.props.showAlert({
             type: 'danger',
             text: `Error: "${status}"`,
             link: { text: 'Close.' },
           });
           return;
-        } else if (errors) {
+        }
+        if (errors) {
           this.props.showAlert({
             type: 'danger',
             text: 'Something going wrong :(',
@@ -115,24 +140,31 @@ class NewProduct extends Component<PropsType, StateType> {
           return;
         }
 
-        const { storeId } = this.props.match.params;
-        const productId = pathOr(-1, ['createBaseProduct', 'rawId'], response);
-        if (productId) {
-          this.props.router.push(
-            `/manage/store/${storeId}/products/${parseInt(productId, 10)}`,
-          );
-          this.props.showAlert({
-            type: 'success',
-            text: 'Product created!',
-            link: { text: '' },
+        const baseProductId = pathOr(
+          null,
+          ['createBaseProduct', 'id'],
+          response,
+        );
+        const baseProductRawId = pathOr(
+          null,
+          ['createBaseProduct', 'rawId'],
+          response,
+        );
+        if (baseProductId && baseProductRawId) {
+          this.handleCreateVariant({
+            // $FlowIgnore
+            baseProductId,
+            // $FlowIgnore
+            baseProductRawId,
+            variantData,
           });
         }
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
@@ -148,17 +180,111 @@ class NewProduct extends Component<PropsType, StateType> {
     });
   };
 
+  handleCreateVariant = (props: {
+    baseProductId: string,
+    baseProductRawId: number,
+    variantData: VariantType,
+  }) => {
+    const { storeId } = this.props.match.params;
+    const { baseProductId, baseProductRawId, variantData } = props;
+    const {
+      price,
+      vendorCode,
+      mainPhoto: photoMain,
+      photos: additionalPhotos,
+      cashback,
+      attributeValues: attributes,
+    } = variantData;
+    const params: CreateProductWithAttributesMutationType = {
+      input: {
+        clientMutationId: '',
+        product: {
+          baseProductId: baseProductRawId,
+          price,
+          vendorCode,
+          photoMain,
+          additionalPhotos,
+          cashback: cashback ? cashback / 100 : null,
+        },
+        attributes,
+      },
+      parentID: baseProductId,
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState(() => ({ isLoading: false }));
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Validation Error!',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.router.push(
+          `/manage/store/${storeId}/products/${parseInt(baseProductRawId, 10)}`,
+        );
+        this.props.showAlert({
+          type: 'success',
+          text: 'Product created!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    };
+    CreateProductWithAttributesMutation.commit(params);
+  };
+
   render() {
     const { isLoading } = this.state;
 
     return (
-      <Form
-        onSave={this.handleSave}
-        validationErrors={this.state.formErrors}
-        categories={this.context.directories.categories}
-        baseProduct={null}
-        isLoading={isLoading}
-      />
+      <div styleName="wrap">
+        <Form
+          onSave={this.handleSave}
+          validationErrors={this.state.formErrors}
+          categories={this.context.directories.categories}
+          baseProduct={null}
+          isLoading={isLoading}
+        />
+      </div>
     );
   }
 }
@@ -169,7 +295,7 @@ NewProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(withShowAlert(Page(ManageStore(NewProduct, 'Goods')))),
+  withRouter(withShowAlert(Page(ManageStore(NewProduct, 'Goods'), true))),
   graphql`
     fragment NewProduct_me on User {
       myStore {

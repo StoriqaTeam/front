@@ -4,6 +4,8 @@ import { Icon } from 'components/Icon';
 import { Checkbox } from 'components/common/Checkbox';
 import { Col } from 'layout';
 
+import { addressToString } from 'utils';
+
 import './StoragesRow.scss';
 
 type AddressFullType = {
@@ -21,6 +23,7 @@ type AddressFullType = {
 type PropsType = {
   onEdit: () => void,
   onDelete: () => void,
+  handleCheckboxClick: (id: string | number) => void,
   id: string,
   name: string,
   slug: string,
@@ -30,6 +33,7 @@ type PropsType = {
 const StoragesRow = ({
   onEdit,
   onDelete,
+  handleCheckboxClick,
   id,
   name,
   slug,
@@ -48,25 +52,15 @@ const StoragesRow = ({
   >
     <Col size={12} sm={12} md={5} lg={3} xl={3}>
       <div styleName="storageName">
-        <span
-          onClick={(e: any) => {
-            onEdit(null, false, e);
-          }}
-          styleName="checkBox"
-          onKeyDown={() => {}}
-          role="button"
-          tabIndex="0"
-        >
-          <Checkbox id={`storage-${id}`} onChange={() => {}} />
+        <span styleName="checkBox">
+          <Checkbox id={`storage-${id}`} onChange={handleCheckboxClick} />
         </span>
-        <div>{name}</div>
+        <div>{name || `Storage ${slug}`}</div>
       </div>
     </Col>
     <Col size={12} sm={12} md={4} lg={8} xl={8}>
       <address styleName="address">
-        <span>{`${addressFull.country}`}</span>
-        {addressFull.locality && <span>{`, ${addressFull.locality}`}</span>}
-        {addressFull.value && <span>{`, ${addressFull.value}`}</span>}
+        <span>{addressToString(addressFull) || 'Address not specified'}</span>
       </address>
     </Col>
     <Col size={12} sm={6} md={3} lg={1} xl={1} mdVisible>

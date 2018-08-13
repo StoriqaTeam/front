@@ -2,27 +2,38 @@
 
 .container {
   position: relative;
-  margin: 0 -4rem;
+  width: 138rem;
+  margin: 0;
   padding: 0 4rem;
   border-bottom: 1px solid $color_grey_trivial;
-}
+  cursor: pointer;
+  background-color: $color_white;
 
-.variantItem {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 2px;
+    background-color: transparent;
+    transition: $transition_all_ease;
+  }
+
+  &:hover {
+    &:before {
+      background-color: $color_blue_hover;
+    }
+  }
 }
 
 .arrowExpand {
-  position: absolute;
-  right: 2rem;
-  width: 6rem;
-  height: 6rem;
+  //
 }
 
 .variant {
   display: flex;
-  // height: 9.75rem;
   padding: 1.75rem 0;
 }
 
@@ -44,6 +55,11 @@
 }
 
 .cashbackText {
+  display: inline-block;
+  width: 2.5rem;
+}
+
+.discountText {
   display: inline-block;
   width: 2.5rem;
 }
@@ -102,18 +118,33 @@
 
 .deleteButton {
   & svg {
-    fill: $color_grey_light;
+    fill: $color_grey_minor;
     transition: $transition_all_ease;
   }
 
   &:hover svg {fill: $color_grey;}
 }
 
+.td {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+
+  svg {transition: $transition_all_ease;}
+
+  &.isOpen {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}
+
 .tdCheckbox {width: 5%;}
-.tdCashback {width: 15%;}
-.tdCharacteristics {width: 15%;}
-.tdArticle {width: 20%;}
-.tdPrice {width: 20%;}
-.tdCount {width: 15%; align-items: flex-start; padding-right: 4rem;}
-.tdBasket {width: 5%;}
-.tdDropdawn {width: 5%;}
+.tdArticle {width: 17%;}
+.tdCashback {width: 10%;}
+.tdDiscount {width: 10%;}
+.tdCharacteristics {width: 18%;}
+.tdPrice {width: 15%;}
+.tdCount {width: 17%; align-items: flex-start; padding-right: 4rem;}
+.tdBasket {width: 4%; justify-content: flex-end;}
+.tdDropdawn {width: 4%; justify-content: flex-end;}

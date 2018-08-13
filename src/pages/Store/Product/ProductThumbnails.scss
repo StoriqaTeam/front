@@ -1,15 +1,14 @@
 @import "../../../styles/variables";
 
 .container {
-
   &::-webkit-scrollbar {
     display: none;
   }
 
   &.scroll-y {
-    height: calc(69.875rem - 2.375rem);
-    overflow-x: hidden;
-    overflow-y: scroll;
+    //height: calc(69.875rem - 2.375rem);
+    //overflow-x: hidden;
+    //overflow-y: scroll;
   }
 
   &.scroll-x {
@@ -20,37 +19,43 @@
 
 }
 
-.thumbnails {
-  display: flex;
+.thumbnailContainer {
+  height: 10rem;
+  position: relative;
+  width: 10rem;
+
+  //&:after {
+  //  content: "";
+  //  display: block;
+  //  padding-bottom: 100%;
+  //}
 
   img[src] {
     border-radius: 0.5rem;
-    height: 10rem;
+    height: 100%;
     // https://css-tricks.com/almanac/properties/o/object-fit/
     object-fit: cover;
-    width: 10rem;
+    width: 100%;
   }
 
   .clicked {
     border: 0.25rem solid $color_blue;
   }
-
 }
 
-h4 {
-  color: $color_grey;
-  width: 7.75rem;
-  height: 2.375rem;
+.thumbnails {
+  display: flex;
+}
+
+.title {
+  margin: 4rem 0 3rem;
   font-size: 14px;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
   letter-spacing: 1.2px;
-  margin-bottom: 2.25rem;
-  margin-top: 3.5rem;
-  text-align: left;
   text-transform: uppercase;
+
+  &.isOnSelected {
+    color: $color_red;
+  }
 }
 
 .column {
@@ -69,5 +74,21 @@ h4 {
 
 .disabled {
   opacity: 0.3;
+  cursor: default;
+}
+
+.emptyImg {
+  position: relative;
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color_grey_trivial;
+  border-radius: 0.5rem;
+
+  &.clicked {
+    border: 0.25rem solid $color_blue;
+  }
 }
 

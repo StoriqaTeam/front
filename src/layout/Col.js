@@ -7,6 +7,7 @@ import './Col.scss';
 
 type PropsTypes = {
   children: any,
+  noGutter: boolean, // no padding
   size?: number, // Size layout column: < 576
   sm?: number | 'auto', // Size layout column: >= 576
   md?: number | 'auto', // Size layout column: >= 768
@@ -35,6 +36,7 @@ type PropsTypes = {
 class Col extends PureComponent<PropsTypes> {
   render() {
     const {
+      noGutter,
       size,
       sm,
       md,
@@ -62,12 +64,13 @@ class Col extends PureComponent<PropsTypes> {
     return (
       <div
         styleName={classNames('col', {
+          noGutter,
           [`d-none`]: hidden,
           [`d-sm-none d-md-block`]: smHiddenOnly,
           [`d-sm-none d-md-flex`]: mdHiddenOnly,
           [`d-lg-none d-xl-flex`]: lgHiddenOnly,
           [`d-sm-none`]: smHidden,
-          [`d-md-flex`]: mdHidden,
+          [`d-md-none`]: mdHidden,
           [`d-lg-none`]: lgHidden,
           [`d-xl-none`]: xlHiddenOnly || xlHidden,
           [`d-flex`]: visible,

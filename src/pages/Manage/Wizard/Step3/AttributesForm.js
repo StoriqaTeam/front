@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { map, concat, filter, complement, propEq, find } from 'ramda';
+import { Col, Row } from 'layout';
 
 import { CharacteristicItem } from './CharacteristicItem';
 
@@ -53,19 +54,21 @@ class AttributesForm extends PureComponent<PropsType> {
   renderCharacteristics = map((item: AttributeType) => {
     const value = find(propEq('attrId', item.rawId), this.props.values);
     return (
-      <div key={item.id} styleName="itemWrapper">
-        <CharacteristicItem
-          attribute={item}
-          onSelect={this.handleCharectiristicItemChange}
-          value={value}
-        />
-      </div>
+      <Col size={12} md={6} key={item.id}>
+        <div styleName="itemWrapper">
+          <CharacteristicItem
+            attribute={item}
+            onSelect={this.handleCharectiristicItemChange}
+            value={value}
+          />
+        </div>
+      </Col>
     );
   });
 
   render() {
     const { attributes } = this.props;
-    return this.renderCharacteristics(attributes);
+    return <Row>{this.renderCharacteristics(attributes)}</Row>;
   }
 }
 

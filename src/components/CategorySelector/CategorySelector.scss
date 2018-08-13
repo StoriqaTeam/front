@@ -1,19 +1,38 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
+
+.container {
+  position: relative;
+}
 
 .wrapper {
-  position: relative;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .menuContainer {
   position: absolute;
-  z-index: 1;
+  z-index: 9999;
   top: 4.5rem;
   left: 0;
   padding: 2rem;
   border-radius: 0.25rem;
   background-color: $color-white;
   box-shadow: 0 0.35rem 3rem 0 rgba(0, 0, 0, 0.05);
-  width: 77.5rem;
+  width: 80rem;
+  max-width: 100%;
+
+  @media (max-width: #{$lg - 1px}) {
+    width: auto;
+  }
+}
+
+.levelWrapper {
+  display: flex;
+  flex-direction: row;
+
+  @media (max-width: #{$lg - 1px}) {
+    flex-direction: column;
+  }
 }
 
 .label {
@@ -28,31 +47,50 @@
   transform-origin: left top 0;
 }
 
-.levelLabel {
-  font-size: 12px;
-  color: $color_grey_minor;
-}
-
 .breadcrumbsWrapper {
-  display: inline-block;
+  //display: inline-block;
 }
 
 .breadcrumbs {
   display: inline-block;
-  min-width: 41rem;
+  width: 100%;
+  // min-width: 28rem;
   color: $color_blue;
   font-size: 1.75rem;
   cursor: pointer;
   border-bottom: 1px dashed $color_blue;
-}
 
-.levelWrapper {
-  display: flex;
-  flex-direction: row;
+  .breadcrumbsContent {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (min-width: $md) {
+    // min-width: 41rem;
+  }
 }
 
 .level {
   flex: 1;
+
+  & + .level {
+    margin-left: 4rem;
+
+    @media (max-width: #{$lg - 1px}) {
+      margin-left: 0;
+
+      .levelLabel {
+        margin-top: 2rem;
+      }
+    }
+  }
+}
+
+.levelLabel {
+  font-size: 12px;
+  color: $color_grey_minor;
+  white-space: nowrap;
 }
 
 .items {
@@ -63,10 +101,18 @@
   display: none;
 }
 
+.itemWrap {
+  & + .itemWrap {
+    margin-top: 1rem;
+  }
+}
+
 .item {
-  font-size: 1.75rem;
+  font-size: 14px;
+  line-height: 2.5rem;
   color: $color_grey;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .selectedItem {

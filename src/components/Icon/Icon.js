@@ -18,6 +18,7 @@ import CloseArrow from 'components/Icon/svg/closeArrow.svg';
 import Controls from 'components/Icon/svg/controls.svg';
 import Cross from 'components/Icon/svg/cross.svg';
 import CrossWhite from 'components/Icon/svg/crossWhite.svg';
+import Email from 'components/Icon/svg/email.svg';
 import Eye from 'components/Icon/svg/eye.svg';
 import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
 import Facebook from 'components/Icon/svg/facebook.svg';
@@ -26,6 +27,7 @@ import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
 import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import Login from 'components/Icon/svg/login.svg';
 import Logo from 'components/Icon/svg/logo.svg';
 import Logout from 'components/Icon/svg/logout.svg';
 import Magnifier from 'components/Icon/svg/magnifier.svg';
@@ -35,11 +37,13 @@ import Note from 'components/Icon/svg/note.svg';
 import OpenArrow from 'components/Icon/svg/openArrow.svg';
 import Pencil from 'components/Icon/svg/pencil.svg';
 import Person from 'components/Icon/svg/person.svg';
+import Phone from 'components/Icon/svg/phone.svg';
 import PinterestGray from 'components/Icon/svg/pinterest_gray.svg';
 import Plus from 'components/Icon/svg/plus.svg';
 import Prev from 'components/Icon/svg/prev.svg';
 import QA from 'components/Icon/svg/qa.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
+import Share from 'components/Icon/svg/share.svg';
 import Telegram from 'components/Icon/svg/telegram.svg';
 import Twitter from 'components/Icon/svg/twitter.svg';
 import TwitterGray from 'components/Icon/svg/twitter_gray.svg';
@@ -47,7 +51,11 @@ import Upload from 'components/Icon/svg/upload.svg';
 import VkGray from 'components/Icon/svg/vk_gray.svg';
 import Move from 'components/Icon/svg/move.svg';
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
+import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
+import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
 //
+import Status from 'components/Icon/svg/status.svg';
+import Calendar from 'components/Icon/svg/calendar.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -66,7 +74,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 28 | 32 | 40 | 48 | 56 | 80 | 120,
+  size: 8 | 16 | 20 | 24 | 28 | 32 | 36 | 40 | 48 | 56 | 80 | 120,
   inline: ?boolean,
 };
 
@@ -83,9 +91,11 @@ const iconsMap = {
   cats: <Cats />,
   chat: <Chat />,
   closeArrow: <CloseArrow />,
+  //
   controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,
+  email: <Email />,
   eye: <Eye />,
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
@@ -94,6 +104,7 @@ const iconsMap = {
   heart: <Heart />,
   instagram: <Instagram />,
   instagramGray: <InstagramGray />,
+  login: <Login />,
   logo: <Logo />,
   logout: <Logout />,
   magnifier: <Magnifier />,
@@ -103,11 +114,14 @@ const iconsMap = {
   openArrow: <OpenArrow />,
   pencil: <Pencil />,
   person: <Person />,
+  phone: <Phone />,
   pinterestGray: <PinterestGray />,
   plus: <Plus />,
   prev: <Prev />,
   qa: <QA />,
   qualityAssurance: <QualityAssurance />,
+  share: <Share />,
+  verifiedShop: <VerifiedShop />,
   sortArrows: <SortArrows />,
   telegram: <Telegram />,
   twitter: <Twitter />,
@@ -117,6 +131,9 @@ const iconsMap = {
   vkGray: <VkGray />,
   move: <Move />,
   emptyCart: <EmptyCart />,
+  searchNoResults: <SearchNoResults />,
+  status: <Status />,
+  calendar: <Calendar />,
 
   // For product
   mainFoto: <MainFoto />,

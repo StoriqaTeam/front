@@ -3,19 +3,41 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, isEmpty, map } from 'ramda';
+import { pathOr, isEmpty, path } from 'ramda';
 
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
-import { UpdateBaseProductMutation } from 'relay/mutations';
+import {
+  UpdateBaseProductMutation,
+  UpdateProductMutation,
+} from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
 
-import Variants from './Variants/Variants';
 import Form from './Form';
+
+import './Product.scss';
+
+type AttributeValueType = {
+  attrId: number,
+  value: string,
+  metaField?: ?string,
+};
+
+type VariantType = {
+  variantId: string,
+  vendorCode: string,
+  price: number,
+  cashback?: ?number,
+  discount?: ?number,
+  mainPhoto?: ?string,
+  photos?: Array<string>,
+  attributeValues: Array<AttributeValueType>,
+};
 
 type FormType = {
   name: string,
@@ -36,24 +58,20 @@ type StateType = {
     [string]: Array<string>,
   },
   isLoading: boolean,
+  comeResponse: boolean,
 };
 
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
     isLoading: false,
+    comeResponse: false,
   };
 
-  handleSave = (form: FormType) => {
+  handleSave = (form: FormType, variantData: VariantType) => {
     this.setState({ formErrors: {} });
-    if (!form) {
-      return;
-    }
-    const { me } = this.props;
-    let baseProduct = null;
-    if (me && me.baseProduct) {
-      ({ baseProduct } = me);
-    } else {
+    const baseProduct = path(['me', 'baseProduct'], this.props);
+    if (!baseProduct || !baseProduct.id) {
       this.props.showAlert({
         type: 'danger',
         text: 'Something going wrong :(',
@@ -70,38 +88,45 @@ class EditProduct extends Component<PropsType, StateType> {
       longDescription,
     } = form;
     this.setState(() => ({ isLoading: true }));
-    // $FlowIgnoreMe
-    const id = pathOr(null, ['id'], baseProduct);
     UpdateBaseProductMutation.commit({
-      id,
-      name: [{ lang: 'EN', text: name || '' }],
-      shortDescription: [{ lang: 'EN', text: shortDescription || '' }],
-      longDescription: [{ lang: 'EN', text: longDescription || '' }],
+      id: baseProduct.id,
+      name: name ? [{ lang: 'EN', text: name }] : null,
+      shortDescription: shortDescription
+        ? [{ lang: 'EN', text: shortDescription }]
+        : null,
+      longDescription: longDescription
+        ? [{ lang: 'EN', text: longDescription }]
+        : null,
       categoryId,
-      seoTitle: [{ lang: 'EN', text: seoTitle || '' }],
-      seoDescription: [{ lang: 'EN', text: seoDescription || '' }],
+      seoTitle: seoTitle ? [{ lang: 'EN', text: seoTitle }] : null,
+      seoDescription: seoDescription
+        ? [{ lang: 'EN', text: seoDescription }]
+        : null,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
-
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-        this.setState(() => ({ isLoading: false }));
+
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        // $FlowIgnoreMe
-        const status: string = pathOr('', ['100', 'status'], relayErrors);
         if (!isEmpty(validationErrors)) {
           this.setState({ formErrors: validationErrors });
           return;
-        } else if (status) {
+        }
+        log.debug({ validationErrors });
+
+        // $FlowIgnoreMe
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
+        if (status) {
           this.props.showAlert({
             type: 'danger',
             text: `Error: "${status}"`,
             link: { text: 'Close.' },
           });
           return;
-        } else if (errors) {
+        }
+        if (errors) {
           this.props.showAlert({
             type: 'danger',
             text: 'Something going wrong :(',
@@ -109,17 +134,22 @@ class EditProduct extends Component<PropsType, StateType> {
           });
           return;
         }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Saved!',
-          link: { text: '' },
-        });
+        if (variantData) {
+          this.handleUpdateVariant(variantData);
+        } else {
+          this.props.showAlert({
+            type: 'success',
+            text: 'Product update!',
+            link: { text: '' },
+          });
+          this.setState({ comeResponse: true });
+        }
       },
       onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ error });
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
-        this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
@@ -135,38 +165,108 @@ class EditProduct extends Component<PropsType, StateType> {
     });
   };
 
+  handleUpdateVariant = (variantData: VariantType) => {
+    const params: UpdateProductMutationType = {
+      input: {
+        clientMutationId: '',
+        id: variantData.variantId,
+        product: {
+          price: variantData.price,
+          vendorCode: variantData.vendorCode,
+          photoMain: variantData.mainPhoto,
+          additionalPhotos: variantData.photos,
+          cashback: variantData.cashback ? variantData.cashback / 100 : null,
+          discount: variantData.discount ? variantData.discount / 100 : null,
+        },
+        attributes: variantData.attributeValues,
+      },
+      environment: this.context.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState(() => ({ isLoading: false }));
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Validation Error!',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Product update!',
+          link: { text: '' },
+        });
+        this.setState({ comeResponse: true });
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoading: false }));
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    };
+    UpdateProductMutation.commit(params);
+  };
+
+  resetComeResponse = () => {
+    this.setState({ comeResponse: false });
+  };
+
   render() {
     const { me } = this.props;
-    const { isLoading } = this.state;
+    const { isLoading, comeResponse } = this.state;
     let baseProduct = null;
     if (me && me.baseProduct) {
       ({ baseProduct } = me);
     } else {
       return <span>Product not found</span>;
     }
-    // $FlowIgnoreMe
-    const storeID = pathOr(null, ['store', 'id'], baseProduct);
-    // $FlowIgnoreMe
-    const variants = pathOr([], ['baseProduct', 'products', 'edges'], me);
-    const filteredVariants = map(item => item.node, variants);
     return (
       <Fragment>
-        <Form
-          baseProduct={baseProduct}
-          onSave={this.handleSave}
-          validationErrors={this.state.formErrors}
-          categories={this.context.directories.categories}
-          isLoading={isLoading}
-        />
-        <Variants
-          productRawId={baseProduct.rawId}
-          productId={baseProduct.id}
-          // $FlowIgnoreMe
-          category={baseProduct.category}
-          variants={filteredVariants}
-          storeID={storeID}
-          showAlert={this.props.showAlert}
-        />
+        <div styleName="wrap">
+          <Form
+            baseProduct={baseProduct}
+            onSave={this.handleSave}
+            validationErrors={this.state.formErrors}
+            categories={this.context.directories.categories}
+            isLoading={isLoading}
+            comeResponse={comeResponse}
+            resetComeResponse={this.resetComeResponse}
+          />
+        </div>
       </Fragment>
     );
   }
@@ -178,13 +278,14 @@ EditProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(EditProduct, 'Goods'))),
+  withShowAlert(Page(ManageStore(EditProduct, 'Goods'), true)),
   graphql`
     fragment EditProduct_me on User
       @argumentDefinitions(productId: { type: "Int!" }) {
       baseProduct(id: $productID) {
         id
         rawId
+        status
         products(first: 100) @connection(key: "Wizard_products") {
           edges {
             node {

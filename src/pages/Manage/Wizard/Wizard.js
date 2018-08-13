@@ -3,7 +3,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { assocPath, path, pick, pathOr, omit, where, complement } from 'ramda';
+import {
+  assocPath,
+  path,
+  pick,
+  pathOr,
+  omit,
+  where,
+  complement,
+  head,
+  isEmpty,
+} from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
@@ -22,9 +32,15 @@ import {
   UpdateProductMutation,
   DeactivateBaseProductMutation,
   DeleteWizardMutation,
+  CreateWarehouseMutation,
+  SetProductQuantityInWarehouseMutation,
 } from 'relay/mutations';
 import { errorsHandler, log, fromRelayError, uploadFile } from 'utils';
+
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { CreateBaseProductMutationResponseType } from 'relay/mutations/CreateBaseProductMutation';
+import type { CreateProductWithAttributesMutationResponseType } from 'relay/mutations/CreateProductWithAttributesMutation';
+import type { UpdateProductMutationResponseType } from 'relay/mutations/UpdateProductMutation';
 
 import { transformTranslated } from './utils';
 import WizardHeader from './WizardHeader';
@@ -56,6 +72,7 @@ export type BaseProductNodeType = {
     additionalPhotos: Array<string>,
     price: ?number,
     cashback: ?number,
+    quantity: ?number,
   },
   attributes: Array<AttributeInputType>,
 };
@@ -82,11 +99,13 @@ type PropsType = {
 type StateType = {
   showConfirm: boolean,
   step: number,
+  editingProduct: boolean,
   baseProduct: BaseProductNodeType,
   isValid: boolean,
   validationErrors: ?{
     [string]: Array<string>,
   },
+  isSavingInProgress: boolean,
 };
 
 export const initialProductState = {
@@ -103,8 +122,9 @@ export const initialProductState = {
       vendorCode: '',
       photoMain: '',
       additionalPhotos: [],
-      price: null,
-      cashback: null,
+      price: 0,
+      cashback: 5,
+      quantity: 1,
     },
     attributes: [],
   },
@@ -127,24 +147,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     this.state = {
       showConfirm: false,
       step: 1,
+      editingProduct: false,
       ...initialProductState,
       isValid: true,
       validationErrors: null,
+      isSavingInProgress: false,
     };
   }
 
   componentDidMount() {
-    // $FlowIgnore
-    const completed = pathOr(
-      null,
-      ['me', 'wizardStore', 'completed'],
-      this.props,
-    );
-    // $FlowIgnore
-    const storeId = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
-    if (completed && storeId) {
-      this.props.router.push(`/manage/store/${storeId}`);
-    }
     this.createWizard();
   }
 
@@ -159,11 +170,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
-  handleWizardError = (messages?: { [string]: Array<string> }) =>
+  handleWizardError = (messages?: { [string]: Array<string> }) => {
     this.setState({
       isValid: false,
       validationErrors: messages || null,
     });
+  };
 
   clearValidationErrors = () =>
     this.setState({
@@ -204,7 +216,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     addressFull?: { value: any },
   }) => {
     UpdateWizardMutation.commit({
-      ...data,
+      ...omit(['completed'], data),
       defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
@@ -214,7 +226,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          // console.log('>>> update wizard mutation onComplete: ', !!relayErrors);
           errorsHandler(
             relayErrors,
             this.props.showAlert,
@@ -227,7 +238,6 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       onError: (error: Error) => {
         log.debug({ error });
         const relayErrors = fromRelayError(error);
-        // console.log('>>> update wizard mutation onError: ');
         errorsHandler(
           relayErrors,
           this.props.showAlert,
@@ -264,7 +274,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     return preparedData;
   };
 
-  createStore = () => {
+  createStore = (callback: (success: boolean) => void) => {
     const preparedData = this.prepareStoreMutationInput();
     CreateStoreMutation.commit({
       // $FlowIgnoreMe
@@ -274,33 +284,38 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
+        log.debug('CreateStoreMutation.commit', { response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
         if (relayErrors) {
           errorsHandler(
             relayErrors,
             this.props.showAlert,
             this.handleWizardError,
           );
+          callback(false);
           return;
         }
         this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
         this.updateWizard({ storeId });
+        callback(true);
       },
       onError: (error: Error) => {
-        log.debug({ error });
+        log.debug('CreateStoreMutation.commit', { error });
         const relayErrors = fromRelayError(error);
+        log.debug({ relayErrors });
         errorsHandler(
           relayErrors,
           this.props.showAlert,
           this.handleWizardError,
         );
+        callback(false);
       },
     });
   };
 
-  updateStore = () => {
+  updateStore = (callback: (success: boolean) => void) => {
     const preparedData = this.prepareStoreMutationInput();
     if (!preparedData.id) {
       return;
@@ -321,9 +336,66 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             this.props.showAlert,
             this.handleWizardError,
           );
+          callback(false);
           return;
         }
-        this.clearValidationErrors();
+
+        // create storage if not exists
+        const addressFull = pathOr(
+          null,
+          ['updateStore', 'addressFull'],
+          response,
+        );
+        // $FlowIgnoreMe
+        const warehouses = pathOr(
+          null,
+          ['me', 'wizardStore', 'store', 'warehouses'],
+          this.props,
+        );
+        // $FlowIgnoreMe
+        const storeId = pathOr(
+          null,
+          ['me', 'wizardStore', 'store', 'rawId'],
+          this.props,
+        );
+        if ((!warehouses || isEmpty(warehouses)) && addressFull) {
+          CreateWarehouseMutation.commit({
+            input: {
+              clientMutationId: '',
+              storeId,
+              addressFull,
+            },
+            environment: this.context.environment,
+            onCompleted: (responze: ?Object, errorz: ?Array<any>) => {
+              log.debug('CreateWarehouseMutation', { responze });
+              const relayErrorz = fromRelayError({ source: { errorz } });
+              if (relayErrors) {
+                errorsHandler(
+                  relayErrorz,
+                  this.props.showAlert,
+                  this.handleWizardError,
+                );
+                callback(false);
+                return;
+              }
+              this.clearValidationErrors();
+              callback(true);
+            },
+            onError: (error: Error) => {
+              const relayErrorz = fromRelayError(error);
+              errorsHandler(
+                relayErrorz,
+                this.props.showAlert,
+                this.handleWizardError,
+              );
+
+              callback(false);
+            },
+          });
+        } else {
+          this.clearValidationErrors();
+          callback(true);
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -333,6 +405,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           this.props.showAlert,
           this.handleWizardError,
         );
+        callback(false);
       },
     });
   };
@@ -345,23 +418,32 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const { step } = this.state;
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
-    let errors = null;
+    this.setState({ isSavingInProgress: true });
     switch (step) {
       case 1:
         if (storeId) {
-          this.updateStore();
-          this.handleOnChangeStep(changedStep);
+          this.updateStore((success: boolean) => {
+            this.setState({ isSavingInProgress: false });
+            if (success) {
+              this.handleOnChangeStep(changedStep);
+            }
+          });
           break;
         }
-        // eslint
-        errors = this.createStore();
-        if (!errors) {
-          this.handleOnChangeStep(changedStep);
-        }
+        this.createStore((success: boolean) => {
+          this.setState({ isSavingInProgress: false });
+          if (success) {
+            this.handleOnChangeStep(changedStep);
+          }
+        });
         break;
       case 2:
-        this.handleOnChangeStep(changedStep);
-        this.updateStore();
+        this.updateStore((success: boolean) => {
+          this.setState({ isSavingInProgress: false });
+          if (success) {
+            this.handleOnChangeStep(changedStep);
+          }
+        });
         break;
       case 3:
         this.setState({ showConfirm: true });
@@ -375,7 +457,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
     this.setState({ showConfirm: false }, () => {
-      this.props.router.push(`/manage/store/${storeId}`);
+      this.props.router.push(`/manage/store/${storeId}/products`);
       DeleteWizardMutation.commit({
         environment: this.context.environment,
         onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -443,8 +525,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     this.handleOnSaveWizard(data);
   };
 
+  handleOnChangeEditingProduct = (value: boolean) => {
+    this.setState({ editingProduct: value });
+  };
+
   // Product handlers
-  createBaseProduct = () => {
+  createBaseProduct = (callback: () => void) => {
     const { baseProduct } = this.state;
     const preparedData = transformTranslated(
       'EN',
@@ -457,119 +543,122 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['me', 'wizardStore', 'store', 'id'],
       this.props,
     );
-    CreateBaseProductMutation.commit({
-      ...preparedData,
-      parentID,
-      environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
+
+    CreateBaseProductMutation.promise(
+      {
+        ...preparedData,
+        parentID,
+      },
+      this.context.environment,
+    )
+      .then(
+        (
+          createBaseProductMutationResponse: CreateBaseProductMutationResponseType,
+        ) => {
+          // $FlowIgnoreMe
+          const baseProductId = pathOr(
+            null,
+            ['createBaseProduct', 'rawId'],
+            createBaseProductMutationResponse,
+          );
+          // $FlowIgnoreMe
+          const baseProductID = pathOr(
+            null,
+            ['createBaseProduct', 'id'],
+            createBaseProductMutationResponse,
+          );
+          if (!baseProductId || !baseProductID) {
+            throw new Error("Can't create variant without base product id");
+          }
+          this.clearValidationErrors();
+          // create variant after create base product
+          const prepareDataForProduct = {
+            product: {
+              ...omit(['id', 'quantity'], baseProduct.product),
+              cashback: (baseProduct.product.cashback || 0) / 100,
+              baseProductId,
+            },
+            attributes: baseProduct.attributes,
+          };
+
+          return CreateProductWithAttributesMutation.promise(
+            {
+              input: {
+                clientMutationId: '',
+                ...prepareDataForProduct,
+              },
+              parentID: baseProductID,
+            },
+            this.context.environment,
+          );
+        },
+      )
+      .then((response: CreateProductWithAttributesMutationResponseType) => {
+        log.debug({ response });
+        // $FlowIgnoreMe
+        const warehouseId = pathOr(
+          null,
+          ['createProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
+          response,
+        );
+        // $FlowIgnoreMe
+        const productId = pathOr(null, ['createProduct', 'rawId'], response);
+
+        return SetProductQuantityInWarehouseMutation.promise(
+          {
+            input: {
+              clientMutationId: '',
+              warehouseId,
+              productId,
+              quantity: this.state.baseProduct.product.quantity,
+            },
+          },
+          this.context.environment,
+        );
+      })
+      .then(() => {
+        this.clearValidationErrors();
+        this.handleOnClearProductState();
+        callback();
+      })
+      .catch((errors: Array<any>) => {
         const relayErrors = fromRelayError({ source: { errors } });
-        if (relayErrors) {
+        if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
             relayErrors,
             this.props.showAlert,
             this.handleWizardError,
           );
-          return;
-        }
-        const baseProductId = pathOr(
-          null,
-          ['createBaseProduct', 'rawId'],
-          response,
-        );
-        const baseProductID = pathOr(
-          null,
-          ['createBaseProduct', 'id'],
-          response,
-        );
-        if (!baseProductId || !baseProductID) {
+        } else {
           this.props.showAlert({
             type: 'danger',
-            text: "Error: Can't create variant without base product id",
+            // $FlowIgnoreMe
+            text: `Error: ${pathOr(
+              'Unknown error',
+              ['message'],
+              head(errors),
+            )}`,
             link: { text: 'Close.' },
           });
-          return;
         }
-        this.clearValidationErrors();
-        // create variant after create base product
-        const prepareDataForProduct = {
-          product: {
-            ...omit(['id'], baseProduct.product),
-            cashback: (baseProduct.product.cashback || 0) / 100,
-            baseProductId,
-          },
-          attributes: baseProduct.attributes,
-        };
-        CreateProductWithAttributesMutation.commit({
-          input: {
-            clientMutationId: '',
-            ...prepareDataForProduct,
-          },
-          parentID: baseProductID,
-          environment: this.context.environment,
-          onCompleted: (
-            productResponse: ?Object,
-            productErrors: ?Array<any>,
-          ) => {
-            log.debug({ productResponse, productErrors });
-            const productRelayErrors = fromRelayError({
-              source: { errors: productErrors },
-            });
-            if (productRelayErrors) {
-              errorsHandler(
-                productRelayErrors,
-                this.props.showAlert,
-                this.handleWizardError,
-              );
-              return;
-            }
-            this.clearValidationErrors();
-            this.handleOnClearProductState();
-          },
-          onError: (error: Error) => {
-            log.debug({ error });
-            const productRelayErrors = fromRelayError(error);
-            errorsHandler(
-              productRelayErrors,
-              this.props.showAlert,
-              this.handleWizardError,
-            );
-          },
-        });
-      },
-      onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        errorsHandler(
-          relayErrors,
-          this.props.showAlert,
-          this.handleWizardError,
-        );
-      },
-    });
+      });
   };
 
-  updateBaseProduct = () => {
+  updateBaseProduct = (callback: () => void) => {
     const { baseProduct } = this.state;
     const preparedData = transformTranslated(
       'EN',
       ['name', 'shortDescription'],
       omit(['product', 'attributes'], baseProduct),
     );
-    UpdateBaseProductMutation.commit({
-      ...preparedData,
-      environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-        const relayErrors = fromRelayError({ source: { errors } });
-        if (relayErrors) {
-          errorsHandler(
-            relayErrors,
-            this.props.showAlert,
-            this.handleWizardError,
-          );
-          return;
-        }
+
+    UpdateBaseProductMutation.promise(
+      {
+        ...preparedData,
+      },
+      this.context.environment,
+    )
+      .then(() => {
         const prepareDataForProduct = {
           id: baseProduct.product.id,
           product: {
@@ -582,52 +671,71 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           },
           attributes: baseProduct.attributes,
         };
-        UpdateProductMutation.commit({
-          input: {
-            clientMutationId: '',
-            ...prepareDataForProduct,
-          },
-          environment: this.context.environment,
-          onCompleted: (
-            productResponse: ?Object,
-            productErrors: ?Array<any>,
-          ) => {
-            log.debug({ response: productResponse, errors: productErrors });
-            const productRelayErrors = fromRelayError({
-              source: { errors: productErrors },
-            });
-            if (productRelayErrors) {
-              errorsHandler(
-                productRelayErrors,
-                this.props.showAlert,
-                this.handleWizardError,
-              );
-              return;
-            }
-            this.clearValidationErrors();
-            this.handleOnClearProductState();
-          },
-          onError: (error: Error) => {
-            log.debug({ error });
-            const productRelayErrors = fromRelayError(error);
-            errorsHandler(
-              productRelayErrors,
-              this.props.showAlert,
-              this.handleWizardError,
-            );
-          },
+
+        const input = {
+          input: { ...prepareDataForProduct, clientMutationId: '' },
+        };
+        return UpdateProductMutation.promise(input, this.context.environment);
+      })
+      .then(
+        (updateProductMutationResponse: UpdateProductMutationResponseType) => {
+          // $FlowIgnoreMe
+          const warehouseId = pathOr(
+            null,
+            ['updateProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
+            updateProductMutationResponse,
+          );
+          // $FlowIgnoreMe
+          const productId = pathOr(
+            null,
+            ['updateProduct', 'rawId'],
+            updateProductMutationResponse,
+          );
+
+          return SetProductQuantityInWarehouseMutation.promise(
+            {
+              input: {
+                clientMutationId: '',
+                warehouseId,
+                productId,
+                quantity: this.state.baseProduct.product.quantity,
+              },
+            },
+            this.context.environment,
+          );
+        },
+      )
+      .then(() => {
+        this.clearValidationErrors();
+        this.handleOnClearProductState();
+        this.props.showAlert({
+          type: 'success',
+          text: 'Product updated!',
+          link: { text: 'Close.' },
         });
-      },
-      onError: (error: Error) => {
-        log.debug({ error });
-        const relayErrors = fromRelayError(error);
-        errorsHandler(
-          relayErrors,
-          this.props.showAlert,
-          this.handleWizardError,
-        );
-      },
-    });
+        callback();
+      })
+      .catch((errors: Array<any>) => {
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors && !isEmpty(relayErrors)) {
+          errorsHandler(
+            relayErrors,
+            this.props.showAlert,
+            this.handleWizardError,
+          );
+        } else {
+          this.props.showAlert({
+            type: 'danger',
+            // $FlowIgnoreMe
+            text: `Error: ${pathOr(
+              'Unknown error',
+              ['message'],
+              head(errors),
+            )}`,
+            link: { text: 'Close.' },
+          });
+        }
+      });
   };
 
   handleOnClearProductState = () => {
@@ -721,12 +829,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     }
   };
 
-  handleOnSaveProduct = () => {
+  handleOnSaveProduct = (callback: () => void) => {
     const { baseProduct } = this.state;
     if (baseProduct.id) {
-      this.updateBaseProduct();
+      this.updateBaseProduct(callback);
     } else {
-      this.createBaseProduct();
+      this.createBaseProduct(callback);
     }
   };
 
@@ -743,53 +851,33 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     switch (step) {
       case 1:
         return (
-          <div styleName="formWrapper firstForm">
-            <div styleName="headerTitle">Give your store a name</div>
-            <div styleName="headerDescription">
-              Make a bright name for your store to attend your customers and
-              encrease your sales
-            </div>
-            <Step1
-              initialData={wizardStore}
-              onChange={this.handleChangeForm}
-              errors={this.state.validationErrors}
-            />
-          </div>
+          <Step1
+            initialData={wizardStore}
+            onChange={this.handleChangeForm}
+            errors={this.state.validationErrors}
+          />
         );
       case 2:
         return (
-          <div styleName="formWrapper secondForm">
-            <div styleName="headerTitle">Set up store</div>
-            <div styleName="headerDescription">
-              Define a few settings that will make your sells effective and
-              comfortable.
-            </div>
-            <Step2
-              initialData={wizardStore}
-              languages={this.props.languages}
-              onChange={this.handleChangeForm}
-            />
-          </div>
+          <Step2
+            initialData={wizardStore}
+            languages={this.props.languages}
+            onChange={this.handleChangeForm}
+          />
         );
       case 3:
         return (
-          <div styleName="formWrapper thirdForm">
-            <div styleName="headerTitle">Fill your store with goods</div>
-            <div styleName="headerDescription">
-              Choose what you gonna sale in your marketplace and add it with
-              ease
-            </div>
-            <Step3
-              formStateData={this.state.baseProduct}
-              products={baseProducts ? baseProducts.edges : []}
-              onUpload={this.handleOnUploadPhoto}
-              onChange={this.handleOnChangeProductForm}
-              onClearProductState={this.handleOnClearProductState}
-              onSave={this.handleOnSaveProduct}
-              onDelete={this.handleOnDeleteProduct}
-              errors={this.state.validationErrors}
-            />
-          </div>
+          <Step3
+            formStateData={this.state.baseProduct}
+            products={baseProducts ? baseProducts.edges : []}
+            onUpload={this.handleOnUploadPhoto}
+            onChange={this.handleOnChangeProductForm}
+            onClearProductState={this.handleOnClearProductState}
+            onSave={this.handleOnSaveProduct}
+            onDelete={this.handleOnDeleteProduct}
+            errors={this.state.validationErrors}
+            onChangeEditingProduct={this.handleOnChangeEditingProduct}
+          />
         );
       default:
         break;
@@ -799,7 +887,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { step, showConfirm, isValid } = this.state;
+    const {
+      step,
+      showConfirm,
+      isValid,
+      editingProduct,
+      isSavingInProgress,
+    } = this.state;
     const { wizardStore } = me;
     // $FlowIgnoreMe
     const baseProducts = pathOr(
@@ -859,41 +953,45 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           />
         </div>
         <div styleName="contentWrapper">{this.renderForm()}</div>
-        <div styleName="footerWrapper">
-          <WizardFooter
-            currentStep={step}
-            onChangeStep={this.handleOnChangeStep}
-            onSaveStep={this.handleOnSaveStep}
-            isReadyToNext={isReadyToNext()}
-          />
-        </div>
+        {!editingProduct && (
+          <div styleName="footerWrapper">
+            <WizardFooter
+              currentStep={step}
+              onChangeStep={this.handleOnChangeStep}
+              onSaveStep={this.handleOnSaveStep}
+              isReadyToNext={isReadyToNext()}
+              isSavingInProgress={isSavingInProgress}
+            />
+          </div>
+        )}
         <Modal
           showModal={showConfirm}
           onClose={() => this.setState({ showConfirm: false })}
         >
-          <div styleName="modalContent">
-            <div styleName="modalTitle">
-              Do you really want to leave this page?
-            </div>
-            <div styleName="modalButtonsContainer">
-              <div styleName="modalOkButton">
+          <div styleName="endingWrapper">
+            <div styleName="endingContent">
+              <div styleName="title">
+                Do you really want to leave this page?
+              </div>
+              <div styleName="buttonsContainer">
                 <Button
-                  onClick={this.handleEndingWizard}
-                  dataTest="closeWizard"
-                  white
+                  onClick={() => this.setState({ showConfirm: false })}
+                  dataTest="continueWizard"
                   wireframe
                   big
                 >
-                  <span>Ok</span>
+                  <span>Cancel</span>
                 </Button>
+                <div styleName="secondButton">
+                  <Button
+                    onClick={this.handleEndingWizard}
+                    dataTest="closeWizard"
+                    big
+                  >
+                    <span>Publish my store</span>
+                  </Button>
+                </div>
               </div>
-              <Button
-                onClick={() => this.setState({ showConfirm: false })}
-                dataTest="continueWizard"
-                big
-              >
-                <span>Cancel</span>
-              </Button>
             </div>
           </div>
         </Modal>
@@ -907,7 +1005,7 @@ WizardWrapper.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(Page(withShowAlert(WizardWrapper))),
+  withRouter(Page(withShowAlert(WizardWrapper), true, true)),
   graphql`
     fragment Wizard_me on User {
       id
@@ -938,6 +1036,9 @@ export default createFragmentContainer(
         store {
           id
           rawId
+          warehouses {
+            id
+          }
           baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
             edges {
               node {
@@ -964,6 +1065,7 @@ export default createFragmentContainer(
                       rawId
                       price
                       discount
+                      quantity
                       photoMain
                       additionalPhotos
                       vendorCode

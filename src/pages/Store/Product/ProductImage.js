@@ -1,98 +1,111 @@
 // @flow
 
 import React, { Component } from 'react';
+import { equals, prepend } from 'ramda';
 
 import { isEmpty } from 'utils';
 
-import { ProductThumbnails, ImageDetail } from './index';
+import { ProductThumbnails, ProductDiscount } from './index';
+
+import { getImageMeta, makeAdditionalPhotos } from './utils';
 
 import './ProductImage.scss';
 
 import type { WidgetOptionType } from './types';
 
 type PropsType = {
-  mainImage: string,
+  rawId: number,
+  photoMain: string,
   discount: number,
-  thumbnails: Array<WidgetOptionType>,
+  additionalPhotos: Array<string>,
+  isCartAdded: boolean,
 };
 
 type StateType = {
   selected: string,
+  isSquared: boolean,
 };
 
 class ProductImage extends Component<PropsType, StateType> {
-  /**
-   * @static
-   * @param {PropsType} nextProps
-   * @param {StateType} prevState
-   * @return {StateType | null}
-   */
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): StateType | null {
-    const { selected } = prevState;
-    if (!isEmpty(selected)) {
-      return {
-        selected: '',
-      };
-    }
-    return prevState;
-  }
   state = {
     selected: '',
+    isSquared: false,
+  };
+  componentDidMount() {
+    const { photoMain } = this.props;
+    this.setImage(photoMain);
+  }
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    const { rawId } = this.props;
+    const { selected } = prevState;
+    if (selected !== this.state.selected) {
+      this.setImage(selected);
+    }
+    if (rawId !== prevProps.rawId) {
+      this.clearSelected();
+    }
+  }
+  setImage = async (selected: string): Promise<any> => {
+    const { height, width } = await getImageMeta(selected);
+    this.setState({ isSquared: equals(height, width) });
+  };
+  clearSelected = (): void => {
+    this.setState({
+      selected: '',
+    });
   };
   handleClick = ({ image }: WidgetOptionType): void => {
-    this.setState({ selected: image });
+    this.setState({ selected: image }, () => {
+      this.setImage(image);
+    });
   };
   render() {
-    const { mainImage, thumbnails, discount } = this.props;
-    const { selected } = this.state;
+    const { photoMain, additionalPhotos, discount } = this.props;
+    const { selected, isSquared } = this.state;
     return (
       <div styleName="container">
-        <div
-          styleName={
-            !isEmpty(thumbnails) ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
-          }
-        >
-          {!isEmpty(thumbnails) ? (
-            <ProductThumbnails
-              isFirstSelected
-              isReset={isEmpty(selected)}
-              onClick={this.handleClick}
-              options={thumbnails}
-            />
-          ) : null}
-        </div>
-        <div styleName="image">
-          <figure styleName="bigImage">
-            {discount > 0 ? (
-              <span styleName="discount">
-                Price <br /> Off <br />
-                <span
-                  style={{
-                    fontSize: 16,
-                  }}
-                >
-                  {`- ${Math.round(discount * 100)} %`}
-                </span>
-              </span>
+        <div styleName="thumbnails">
+          <div
+            styleName={
+              !isEmpty(additionalPhotos)
+                ? 'thumbnailsWrapper'
+                : 'noThumbnailsWrapper'
+            }
+          >
+            {!isEmpty(additionalPhotos) ? (
+              <div styleName="thumbnailsContent">
+                <ProductThumbnails
+                  isFirstSelected
+                  isReset={isEmpty(selected)}
+                  onClick={this.handleClick}
+                  options={makeAdditionalPhotos(
+                    prepend(photoMain, additionalPhotos || []),
+                  )}
+                />
+              </div>
             ) : null}
+          </div>
+        </div>
+        <div styleName="imageWrapper">
+          <figure styleName="image">
+            {!isSquared ? (
+              <img src={selected || photoMain} alt="" styleName="imageBlur" />
+            ) : null}
+            {discount > 0 ? <ProductDiscount discount={discount} /> : null}
             <div
               role="img"
               style={{
                 backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : mainImage
+                  !isEmpty(selected) ? selected : photoMain
                 })`,
                 backgroundSize: 'contain',
-                width: '100%',
-                height: '100%',
-                backgroundPosition: 'center top',
+                backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
                 backgroundRepeat: 'no-repeat',
+                height: '100%',
+                width: '100%',
               }}
             />
           </figure>
-          <ImageDetail />
         </div>
       </div>
     );

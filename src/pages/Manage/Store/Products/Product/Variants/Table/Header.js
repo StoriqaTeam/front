@@ -9,6 +9,7 @@ import './Header.scss';
 
 type PropsType = {
   onSelectAllClick: () => void,
+  notRemove: boolean,
 };
 
 const Header = (props: PropsType) => (
@@ -18,7 +19,7 @@ const Header = (props: PropsType) => (
     </div>
     <div styleName="headerItem tdArticle">
       <div styleName="headerItemWrap">
-        <span>Article</span>
+        <span>Vendor code</span>
         <Icon inline type="sortArrows" />
       </div>
     </div>
@@ -34,6 +35,12 @@ const Header = (props: PropsType) => (
         <Icon inline type="sortArrows" />
       </div>
     </div>
+    <div styleName="headerItem tdDiscount">
+      <div styleName="headerItemWrap">
+        <span>Discount</span>
+        <Icon inline type="sortArrows" />
+      </div>
+    </div>
     <div styleName="headerItem tdCharacteristics">
       <div styleName="headerItemWrap">
         <span>Characteristics</span>
@@ -42,14 +49,16 @@ const Header = (props: PropsType) => (
     </div>
     <div styleName="headerItem tdCount">
       <div styleName="headerItemWrap">
-        <span>Count</span>
+        <span>Quantity in storage</span>
         <Icon inline type="sortArrows" />
       </div>
     </div>
     <div styleName="headerItem tdBasket">
-      <button styleName="deleteButton">
-        <Icon type="basket" size="32" />
-      </button>
+      {!props.notRemove && (
+        <button styleName="deleteButton">
+          <Icon type="basket" size="32" />
+        </button>
+      )}
     </div>
     <div styleName="headerItem tdDropdawn" />
   </div>
