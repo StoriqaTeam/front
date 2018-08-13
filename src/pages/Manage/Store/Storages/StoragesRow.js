@@ -4,6 +4,8 @@ import { Icon } from 'components/Icon';
 import { Checkbox } from 'components/common/Checkbox';
 import { Col } from 'layout';
 
+import { addressToString } from 'utils';
+
 import './StoragesRow.scss';
 
 type AddressFullType = {
@@ -53,14 +55,12 @@ const StoragesRow = ({
         <span styleName="checkBox">
           <Checkbox id={`storage-${id}`} onChange={handleCheckboxClick} />
         </span>
-        <div>{name}</div>
+        <div>{name || `Storage ${slug}`}</div>
       </div>
     </Col>
     <Col size={12} sm={12} md={4} lg={8} xl={8}>
       <address styleName="address">
-        <span>{`${addressFull.country}`}</span>
-        {addressFull.locality && <span>{`, ${addressFull.locality}`}</span>}
-        {addressFull.value && <span>{`, ${addressFull.value}`}</span>}
+        <span>{addressToString(addressFull) || 'Address not specified'}</span>
       </address>
     </Col>
     <Col size={12} sm={6} md={3} lg={1} xl={1} mdVisible>
