@@ -348,17 +348,17 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         );
         // $FlowIgnoreMe
         const warehouses = pathOr(
-          [null],
+          null,
           ['me', 'wizardStore', 'store', 'warehouses'],
           this.props,
         );
         // $FlowIgnoreMe
         const storeId = pathOr(
-          [null],
+          null,
           ['me', 'wizardStore', 'store', 'rawId'],
           this.props,
         );
-        if (warehouses && warehouses.length === 0 && addressFull) {
+        if ((!warehouses || isEmpty(warehouses)) && addressFull) {
           CreateWarehouseMutation.commit({
             input: {
               clientMutationId: '',
