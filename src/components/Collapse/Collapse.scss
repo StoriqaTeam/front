@@ -28,8 +28,14 @@
 .item {
   color: $color_grey;
   font-size: 14px;
-  height: 4.375rem;
+  min-height: 4.375rem;
   line-height: 4.375rem;
+}
+
+.itemTitle {
+  color: $color_grey;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 .icon {
