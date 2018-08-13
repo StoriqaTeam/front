@@ -83,8 +83,6 @@ class ProductThumbnails extends Component<PropsType, StateType> {
     const { options, row, title, isOnSelected, availableValues } = this.props;
     const { selected } = this.state;
 
-    console.log('---options', options);
-
     const mapOptions = (option, index) => {
       const isSelected = availableValues
         ? option.label === this.props.selectedValue
@@ -97,7 +95,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           key={`${option.label || option.id}`}
           onClick={() => this.handleClick(option, index)}
         >
-          {option.image ?
+          {option.image ? (
             <figure styleName="thumbnailContainer">
               <img
                 styleName={classNames({
@@ -107,7 +105,8 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 src={option.image}
                 alt={option.alt || 'image alt'}
               />
-            </figure> :
+            </figure>
+          ) : (
             <div
               styleName={classNames('emptyImg', {
                 clicked: isSelected || selected === index,
@@ -116,7 +115,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <Icon type="camera" size="40" />
             </div>
-          }
+          )}
         </button>
       );
     };

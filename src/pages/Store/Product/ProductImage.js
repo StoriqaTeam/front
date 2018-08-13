@@ -16,7 +16,7 @@ import type { WidgetOptionType } from './types';
 type PropsType = {
   photoMain: string,
   discount: number,
-  additionalPhotos: Array<WidgetOptionType>,
+  additionalPhotos: Array<string>,
 };
 
 type StateType = {
@@ -81,7 +81,9 @@ class ProductImage extends Component<PropsType, StateType> {
                   isFirstSelected
                   isReset={isEmpty(selected)}
                   onClick={this.handleClick}
-                  options={makeAdditionalPhotos(prepend(photoMain, additionalPhotos))}
+                  options={makeAdditionalPhotos(
+                    prepend(photoMain, additionalPhotos || []),
+                  )}
                 />
               </div>
             ) : null}

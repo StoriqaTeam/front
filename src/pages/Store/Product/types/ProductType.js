@@ -15,4 +15,3 @@ export type ProductType = {
   },
   rating: number,
 };
-

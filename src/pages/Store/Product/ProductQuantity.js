@@ -6,7 +6,7 @@ import './ProductQuantity.scss';
 
 type PropsType = {
   quantity: number,
-}
+};
 
 const ProductQuantity = (props: PropsType) => (
   <div styleName="container">

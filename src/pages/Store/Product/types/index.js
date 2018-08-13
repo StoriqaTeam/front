@@ -76,6 +76,7 @@ export type ProductType = {
     all: Array<VariantType>,
   },
   rating: number,
+  categoryId: number,
 };
 
 export type ProductVariantType = {
@@ -86,7 +87,6 @@ export type ProductVariantType = {
   price: number,
   cashback: ?number,
   discount: ?number,
-  lastPrice: ?number,
   description: string,
 };
 

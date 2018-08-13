@@ -4,11 +4,9 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { isNil, head, ifElse, assoc, dissoc, propEq, has, prop } from 'ramda';
-// import smoothscroll from 'libs/smoothscroll';
-
+import smoothscroll from 'libs/smoothscroll';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Button } from 'components/common/Button';
 import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
@@ -22,6 +20,8 @@ import {
   makeWidgets,
   filterVariantsByAttributes,
   attributesFromVariants,
+  sortByProp,
+  isNoSelected,
 } from './utils';
 
 import {
@@ -101,7 +101,6 @@ class Product extends Component<PropsType, StateType> {
         price: 0,
         cashback: null,
         discount: null,
-        lastPrice: null,
       },
       unselectedAttr: null,
       selectedAttributes: {},
@@ -114,9 +113,14 @@ class Product extends Component<PropsType, StateType> {
   }
 
   handleAddToCart = (id: number) => {
-    // const { widgets } = this.state;
-    // const unselectedAttr = isNoSelected(sortByProp('id')(widgets));
-    if (true) {
+    this.setState({ unselectedAttr: null });
+    const { widgets, selectedAttributes } = this.state;
+    const unselectedAttr = isNoSelected(
+      sortByProp('id')(widgets),
+      selectedAttributes,
+    );
+
+    if (isEmpty(widgets) || !unselectedAttr) {
       IncrementInCartMutation.commit({
         input: { clientMutationId: '', productId: id },
         environment: this.context.environment,
@@ -147,16 +151,15 @@ class Product extends Component<PropsType, StateType> {
         },
       });
     } else {
-      // this.setState({ unselectedAttr });
-      // smoothscroll.scrollTo(head(unselectedAttr));
+      this.setState({ unselectedAttr });
+      smoothscroll.scrollTo(head(unselectedAttr));
     }
-  }
+  };
 
   handleWidget = (item: {
     attributeId: string,
     attributeValue: string,
   }): void => {
-    console.log('---item', item);
     const {
       selectedAttributes: prevSelectedAttributes,
       availableAttributes: prevAvailableAttributes,
@@ -223,7 +226,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { baseProduct } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {
@@ -286,11 +288,6 @@ class Product extends Component<PropsType, StateType> {
                           }
                           unselectedAttr={unselectedAttr}
                         />
-                        {unselectedAttr && (
-                          <div styleName="message">
-                            You must select an attribute
-                          </div>
-                        )}
                         <div styleName="line" />
                         <ProductStore />
                       </ProductDetails>

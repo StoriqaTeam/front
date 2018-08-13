@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import {isNil, pathOr} from 'ramda';
+import { pathOr } from 'ramda';
 
 import {
   AppContext,
@@ -13,7 +13,6 @@ import {
 } from 'components/App';
 
 import './Page.scss';
-import {extractText} from "../../pages/Store/Product/utils";
 
 type PropsType = {
   me: ?{},

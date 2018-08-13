@@ -41,16 +41,16 @@ const ProductStore = () => (
             </div>
             <div styleName="iconsWrapper">
               <div styleName="iconInfo">
-              <span styleName="icon">
-                <ChatIcon />
-              </span>
+                <span styleName="icon">
+                  <ChatIcon />
+                </span>
                 <small styleName="iconInfoText">Contact seller</small>
               </div>
               <span styleName="separator" />
               <div styleName="iconInfo">
-              <span styleName="icon">
-                <HeartIcon />
-              </span>
+                <span styleName="icon">
+                  <HeartIcon />
+                </span>
                 <small styleName="iconInfoText">To Favorites</small>
               </div>
             </div>

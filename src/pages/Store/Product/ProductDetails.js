@@ -31,10 +31,12 @@ type PropsType = {
   availableAttributes: {
     [string]: Array<string>,
   },
+  unselectedAttr: Array<string>,
 };
 
 class ProductDetails extends PureComponent<PropsType> {
   generateWidget = (widget: WidgetType, index: number): Node => {
+    const { unselectedAttr } = this.props;
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
@@ -51,6 +53,10 @@ class ProductDetails extends PureComponent<PropsType> {
               widget.id,
               this.props.availableAttributes,
             )}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -68,6 +74,10 @@ class ProductDetails extends PureComponent<PropsType> {
               widget.id,
               this.props.availableAttributes,
             )}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -92,6 +102,10 @@ class ProductDetails extends PureComponent<PropsType> {
               widget.id,
               this.props.availableAttributes,
             )}
+            isOnSelected={
+              (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
+              false
+            }
           />
         );
         break;
@@ -107,7 +121,6 @@ class ProductDetails extends PureComponent<PropsType> {
       <ProductContext.Consumer>
         {({ productVariant, rating }) => (
           <div styleName="container">
-            {console.log('---productVariant', productVariant)}
             <h2>{productTitle}</h2>
             <div styleName="rating">
               <Rating value={rating} />
