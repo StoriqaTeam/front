@@ -1,16 +1,15 @@
-import { propEq, map, find, filter, isEmpty } from 'ramda';
+import { map, filter, isEmpty, has } from 'ramda';
 
 import type { WidgetType } from '../types';
 
-const isNoSelected = (widgets: Array<WidgetType>): boolean => {
-  const noSelectedArr = filter(
-    item => item,
-    map(item => {
-      const { title, options } = item;
-      return !find(propEq('state', 'selected'))(options) ? title : false;
-    }, widgets),
+const isNoSelected = (
+  widgets: Array<WidgetType>,
+  selectedAttributes: ?{ [string]: string },
+) => {
+  const noSelectedArr = map(
+    item => item.title,
+    filter(item => !has(item.id)(selectedAttributes), widgets),
   );
-
   return isEmpty(noSelectedArr) ? null : noSelectedArr;
 };
 

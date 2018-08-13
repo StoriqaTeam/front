@@ -1,13 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import { equals } from 'ramda';
+import { equals, prepend } from 'ramda';
 
 import { isEmpty } from 'utils';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
-import { getImageMeta } from './utils';
+import { getImageMeta, makeAdditionalPhotos } from './utils';
 
 import './ProductImage.scss';
 
@@ -16,7 +16,7 @@ import type { WidgetOptionType } from './types';
 type PropsType = {
   photoMain: string,
   discount: number,
-  additionalPhotos: Array<WidgetOptionType>,
+  additionalPhotos: Array<string>,
 };
 
 type StateType = {
@@ -81,7 +81,9 @@ class ProductImage extends Component<PropsType, StateType> {
                   isFirstSelected
                   isReset={isEmpty(selected)}
                   onClick={this.handleClick}
-                  options={additionalPhotos}
+                  options={makeAdditionalPhotos(
+                    prepend(photoMain, additionalPhotos || []),
+                  )}
                 />
               </div>
             ) : null}
