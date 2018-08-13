@@ -1,0 +1,61 @@
+@import '../../../styles/variables';
+
+.container {
+  position: relative;
+  cursor: pointer;
+
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    margin-top: 0.5rem;
+    width: 17px;
+    height: 17px;
+    background-color: $color_white;
+    border: 1px solid $color_grey_light;
+    border-radius: 4px;
+
+    &:hover {
+      border-color: $color_blue;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 1rem;
+      left: 0.625rem;
+      width: 0.75rem;
+      height: 0.5rem;
+      border: 0.25rem solid;
+      border-color: $color_blue;
+      border-top: none;
+      border-right: none;
+      background-color: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+  }
+
+  &.isChecked {
+    .box {
+      border-color: $color_blue;
+      background-color: $color_blue;
+      &:before {
+        border: 1px solid $color_blue;
+        background-color: $color_blue;
+      }
+      &:after {
+        opacity: 1;
+        border-color: $color_white;
+      }
+    }
+  }
+}
+
+.labelText {
+  position: relative;
+  color: $color_grey;
+  font-size: 1.75rem;
+  margin-left: 3rem;
+}

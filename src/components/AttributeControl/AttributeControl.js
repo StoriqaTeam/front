@@ -14,7 +14,7 @@ import {
 } from 'ramda';
 
 import { getNameText } from 'utils';
-import { Checkbox } from 'components/common/Checkbox';
+import { CheckboxButton } from 'components/common/CheckboxButton';
 import { ColorPicker } from 'components/ColorPicker';
 import { Select } from 'components/common/Select';
 
@@ -114,11 +114,12 @@ class AttributeControll extends React.Component<PropsType, StateType> {
           mapIndexed(
             (v, index) => (
               <div key={`${v}-${index}`} styleName="valueItem">
-                <Checkbox
+                <CheckboxButton
                   id={v}
                   label={v}
                   isChecked={value && value.includes(v)}
                   onChange={this.handleOnChange}
+                  // onChange={console.log}
                 />
               </div>
             ),
