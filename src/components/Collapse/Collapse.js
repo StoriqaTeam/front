@@ -8,13 +8,22 @@ import { Icon } from 'components/Icon';
 
 import './Collapse.scss';
 
+type ItemType = {
+  id: string,
+  title: string,
+  link?: string,
+  links?: Array<{ id: string, name: string }>,
+};
+
 type PropsType = {
-  items: Array<{ id: string, title: string, link?: string }>,
+  items: Array<ItemType>,
   onSelected: (item: { id: string, title: string }) => void,
   isDisabled: boolean,
   // eslint-disable-next-line
   selected: string,
   transparent: boolean,
+  grouped?: boolean,
+  menuTitle?: string,
 };
 
 type StateType = {
@@ -26,8 +35,10 @@ type StateType = {
 class Collapse extends Component<PropsType, StateType> {
   static defaultProps = {
     isDisabled: false,
+    menuTitle: '',
     selected: '',
     transparent: false,
+    grouped: false,
   };
   static getDerivedStateFromProps(
     nextProps: PropsType,
@@ -69,9 +80,36 @@ class Collapse extends Component<PropsType, StateType> {
       },
     );
   };
+  renderGroupedItems = (items: Array<ItemType>) => (
+    <ul>
+      {items.map((item, idx) => (
+        <li
+          key={item.id}
+          onClick={() => this.handleSelected(item, idx)}
+          onKeyPress={() => {}}
+          role="none"
+          styleName="item"
+        >
+          <span styleName="itemTitle">{item.title}</span>
+          <ul>
+            {/* $FlowIgnoreMe */}
+            {item.links.map(link => <li key={link.id}>{link.name}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  );
+  renderTitle = (): string => {
+    const { menuTitle, items } = this.props;
+    const { title, index } = this.state;
+    if (!isNil(menuTitle) && !isEmpty(menuTitle)) {
+      return menuTitle;
+    }
+    return isNil(title) ? items[index].title : title;
+  };
   render() {
-    const { items, transparent } = this.props;
-    const { isOpen, index, title } = this.state;
+    const { items, transparent, grouped } = this.props;
+    const { isOpen, index } = this.state;
     return (
       <div styleName={classNames('container', { transparent })}>
         <header
@@ -80,7 +118,7 @@ class Collapse extends Component<PropsType, StateType> {
           onClick={this.handleClick}
           styleName="header"
         >
-          <span>{isNil(title) ? items[index].title : title}</span>
+          <span>{this.renderTitle()}</span>
           <span styleName={classNames('icon', { rotate: isOpen })}>
             <Icon type="arrowExpand" />
           </span>
@@ -91,19 +129,23 @@ class Collapse extends Component<PropsType, StateType> {
           })}
         >
           <h3 styleName="offscreen">Collapsable menu</h3>
-          <ul>
-            {remove(index, 1, items).map((item, idx) => (
-              <li
-                key={item.id}
-                onClick={() => this.handleSelected(item, idx)}
-                onKeyPress={() => {}}
-                role="none"
-                styleName="item"
-              >
-                {item.title}
-              </li>
-            ))}
-          </ul>
+          {grouped ? (
+            this.renderGroupedItems(items)
+          ) : (
+            <ul>
+              {remove(index, 1, items).map((item, idx) => (
+                <li
+                  key={item.id}
+                  onClick={() => this.handleSelected(item, idx)}
+                  onKeyPress={() => {}}
+                  role="none"
+                  styleName="item"
+                >
+                  {item.title}
+                </li>
+              ))}
+            </ul>
+          )}
         </nav>
       </div>
     );
