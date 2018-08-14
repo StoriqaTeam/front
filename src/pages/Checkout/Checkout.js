@@ -232,10 +232,10 @@ class Checkout extends Component<PropsType, StateType> {
   checkReadyToCheckout = () => {
     const {
       orderInput: {
-        addressFull: { value, country, postalCode },
+        addressFull: { country, postalCode },
       },
     } = this.state;
-    if (!value || !country || !postalCode) {
+    if (!country || !postalCode) {
       return false;
     }
     return true;

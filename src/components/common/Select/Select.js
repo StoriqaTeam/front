@@ -2,7 +2,18 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { find, propEq, prepend } from 'ramda';
+import {
+  find,
+  propEq,
+  prepend,
+  findIndex,
+  length,
+  filter,
+  toLower,
+  head,
+  isEmpty,
+} from 'ramda';
+import debounce from 'lodash.debounce';
 
 import { Icon } from 'components/Icon';
 
@@ -15,15 +26,16 @@ type SelectType = {
 
 type StateType = {
   isExpanded: boolean,
-  items: Array<{ id: string, label: string }>,
+  items: Array<SelectType>,
+  searchValue: string,
 };
 
 type PropsType = {
   transparent: ?boolean,
-  items: Array<{ id: string, label: string }>,
-  onSelect?: (item: ?SelectType) => void,
+  items: Array<SelectType>,
+  onSelect: (item: ?SelectType) => void,
   label: ?string,
-  activeItem: ?{ id: string, label: string },
+  activeItem: ?SelectType,
   forForm: ?boolean,
   forSearch: ?boolean,
   forAutocomlete: ?boolean,
@@ -38,6 +50,9 @@ type PropsType = {
   onClick: () => void,
   isMobile: boolean,
 };
+
+const maxItemsCount = 5;
+const itemHeight = 24;
 
 class Select extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
@@ -58,23 +73,114 @@ class Select extends Component<PropsType, StateType> {
     this.state = {
       isExpanded: false,
       items: props.items,
+      searchValue: '',
     };
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
-      window.addEventListener('keydown', this.handleToggleExpand);
+      window.addEventListener('keydown', this.handleKeydown);
+    }
+    this.resetSearchValue = debounce(this.resetSearchValue, 1000);
+  }
+
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    const { isExpanded } = this.state;
+    if (
+      prevState.isExpanded !== isExpanded &&
+      isExpanded &&
+      prevProps.activeItem
+    ) {
+      this.handleAutoScroll(this.getIndexFromItems(prevProps.activeItem));
     }
   }
 
   componentWillUnmount() {
     if (process.env.BROWSER) {
       window.removeEventListener('click', this.handleToggleExpand);
-      window.removeEventListener('keydown', this.handleToggleExpand);
+      window.removeEventListener('keydown', this.handleKeydown);
     }
   }
+
+  getIndexFromItems = (item: ?SelectType) =>
+    item ? findIndex(propEq('id', item.id))(this.props.items) : -1;
 
   button: any;
   itemsWrap: any;
   items: any;
+
+  handleKeydown = (e: any): void => {
+    if (this.state.isExpanded) {
+      e.preventDefault();
+      const { items, activeItem } = this.props;
+      if (e.keyCode === 40 || e.keyCode === 38) {
+        const activeItemIdx = this.getIndexFromItems(activeItem);
+
+        if (e.keyCode === 40) {
+          // click down
+          const newActiveItemIdx =
+            activeItemIdx === length(items) - 1 ? 0 : activeItemIdx + 1;
+          this.handleAutoScroll(newActiveItemIdx, 'smooth');
+        }
+
+        if (e.keyCode === 38) {
+          // click up
+          const newActiveItemIdx =
+            activeItemIdx === 0 ? length(items) - 1 : activeItemIdx - 1;
+          this.handleAutoScroll(newActiveItemIdx, 'smooth');
+        }
+      }
+
+      if (this.state.isExpanded) {
+        this.setState(
+          (prevState: StateType) => ({
+            searchValue: `${prevState.searchValue}${e.key}`,
+          }),
+          this.handleKeyActiveItem,
+        );
+        this.resetSearchValue();
+      }
+
+      if (e.keyCode === 27 || e.keyCode === 13) {
+        this.setState({ isExpanded: false });
+      }
+    }
+  };
+
+  handleKeyActiveItem = () => {
+    const { items } = this.props;
+    const { searchValue } = this.state;
+    const filteredItems = filter(
+      item => new RegExp(`^${searchValue}`).test(toLower(item.label)),
+      items,
+    );
+    if (!isEmpty(filteredItems)) {
+      this.handleAutoScroll(this.getIndexFromItems(head(filteredItems)));
+    }
+  };
+
+  resetSearchValue = () => {
+    this.setState({ searchValue: '' });
+  };
+
+  handleAutoScroll = (idx: number, behavior: ?string) => {
+    const { items, onSelect } = this.props;
+    const visibleHeight = itemHeight * maxItemsCount;
+    const itemsWrapScroll = this.itemsWrap.scrollTop;
+
+    // new item is not included above
+    if ((idx - 1) * itemHeight < itemsWrapScroll) {
+      this.itemsWrap.scroll({ top: idx * itemHeight, behavior });
+    }
+
+    // new item is not included below
+    if ((idx + 1) * itemHeight > itemsWrapScroll + visibleHeight) {
+      this.itemsWrap.scroll({
+        top: (idx + 1) * itemHeight - visibleHeight,
+        behavior,
+      });
+    }
+
+    onSelect(items[idx]);
+  };
 
   handleToggleExpand = (e: any): void => {
     const { onClick } = this.props;
@@ -83,11 +189,16 @@ class Select extends Component<PropsType, StateType> {
     const isItems = this.items && this.items.contains(e.target);
 
     if (isButtonClick && !isItems && !isItemsWrap) {
-      this.setState({ isExpanded: !this.state.isExpanded }, onClick);
+      this.setState(
+        (prevState: StateType) => ({
+          isExpanded: !prevState.isExpanded,
+        }),
+        onClick,
+      );
       return;
     }
 
-    if (e.keyCode === 27 || (!isButtonClick && !isItems) || isItemsWrap) {
+    if ((!isButtonClick && !isItems) || isItemsWrap) {
       this.setState({ isExpanded: false });
     }
   };
@@ -165,6 +276,7 @@ class Select extends Component<PropsType, StateType> {
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
+              style={{ maxHeight: `${maxItemsCount * itemHeight / 8}rem` }}
             >
               {items.map(item => {
                 const { id } = item;

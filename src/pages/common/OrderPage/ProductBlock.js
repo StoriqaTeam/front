@@ -53,7 +53,7 @@ class ProductBlock extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="photoWrapper">
-          {!product.photoUrl ? (
+          {product.photoUrl ? (
             <img src={product.photoUrl} alt="" styleName="photo" />
           ) : (
             <div styleName="emptyLogo">

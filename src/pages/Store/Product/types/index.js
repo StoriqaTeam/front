@@ -88,6 +88,7 @@ export type ProductVariantType = {
   cashback: ?number,
   discount: ?number,
   description: string,
+  quantity: number,
 };
 
 export type SelectionType = {
