@@ -57,7 +57,7 @@ type StateType = {
 };
 
 class AttributeControll extends React.Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     return {
       ...prevState,
       value: nextProps.initialValues,

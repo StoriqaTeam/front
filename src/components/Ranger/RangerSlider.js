@@ -113,6 +113,8 @@ class RangerSlider extends React.Component<PropsType, StateType> {
   handle2: any;
   labels: any;
   tooltip: any;
+  firstInput: any;
+  secondInput: any;
 
   handleUpdate = () => {
     if (!this.slider) {
@@ -202,7 +204,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
     };
   };
 
-  handleChangeTypedValue = (e: any, name) => {
+  handleChangeTypedValue = (e: any, name: string) => {
     const { value } = e.target;
     this.setState({ [name]: value });
   };
