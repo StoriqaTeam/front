@@ -101,6 +101,7 @@ class Product extends Component<PropsType, StateType> {
         price: 0,
         cashback: null,
         discount: null,
+        quantity: 0,
       },
       unselectedAttr: null,
       selectedAttributes: {},
@@ -287,6 +288,7 @@ class Product extends Component<PropsType, StateType> {
                             this.handleAddToCart(productVariant.rawId)
                           }
                           unselectedAttr={unselectedAttr}
+                          quantity={productVariant.quantity}
                         />
                         <div styleName="line" />
                         <ProductStore />
