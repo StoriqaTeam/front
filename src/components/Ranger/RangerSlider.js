@@ -1,7 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
-import type { Node } from 'react';
+import React from 'react';
 import cx from 'classnames';
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -27,8 +26,6 @@ const constants = {
 };
 
 type PropsType = {
-  minValue: number,
-  maxValue: number,
   min: number,
   max: number,
   step: number,
@@ -45,12 +42,19 @@ type PropsType = {
 type StateType = {
   limit: number,
   grab: number,
-  minValue: number,
-  maxValue: number,
-  focusInput: ?string,
+  typedValue: number,
+  typedValue2: number,
 };
 
-class RangerSlider extends Component<PropsType, StateType> {
+class RangerSlider extends React.Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    return {
+      ...prevState,
+      typedValue: nextProps.value,
+      typedValue2: nextProps.value2,
+    };
+  }
+
   static defaultProps = {
     min: 0,
     max: 100,
@@ -60,41 +64,20 @@ class RangerSlider extends Component<PropsType, StateType> {
     orientation: 'horizontal',
   };
 
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    if (nextProps.value !== prevState.minValue) {
-      return { ...prevState, minValue: nextProps.value };
-    }
-    if (nextProps.value2 !== prevState.maxValue) {
-      return { ...prevState, maxValue: nextProps.value2 };
-    }
-    return null;
-  }
-
   constructor(props: PropsType, context: any) {
     super(props, context);
     this.state = {
       limit: 0,
       grab: 0,
-      minValue: props.value,
-      maxValue: props.value2,
-      focusInput: null,
+      typedValue: props.value,
+      typedValue2: props.value2,
     };
-
-    if (process.env.BROWSER) {
-      document.addEventListener('keydown', this.handleKeydown);
-    }
   }
 
   componentDidMount() {
     this.handleUpdate();
     const resizeObserver = new ResizeObserver(this.handleUpdate);
     resizeObserver.observe(this.slider);
-  }
-
-  componentWillUnmount() {
-    if (process.env.BROWSER) {
-      document.removeEventListener('keydown', this.handleKeydown);
-    }
   }
 
   getPositionFromValue = (value: number) => {
@@ -129,26 +112,7 @@ class RangerSlider extends Component<PropsType, StateType> {
   handle: any;
   handle2: any;
   labels: any;
-  input: Node;
-  input2: Node;
-
-  handleKeydown = (e: any): void => {
-    const { onChange, onChange2 } = this.props;
-    const { focusInput, minValue, maxValue } = this.state;
-    if (e.keyCode === 13 && focusInput) {
-      if (focusInput === 'min') {
-        onChange(minValue);
-        // $FlowIgnore
-        this.input.blur();
-        return;
-      }
-      if (focusInput === 'max') {
-        onChange2(maxValue);
-        // $FlowIgnore
-        this.input2.blur();
-      }
-    }
-  };
+  tooltip: any;
 
   handleUpdate = () => {
     if (!this.slider) {
@@ -238,45 +202,42 @@ class RangerSlider extends Component<PropsType, StateType> {
     };
   };
 
-  handleInputChange = (type: string, e: any) => {
+  handleChangeTypedValue = (e: any, name) => {
     const { value } = e.target;
-    if (type === 'min') {
-      this.setState({ minValue: value });
-    }
-    if (type === 'max') {
-      this.setState({ maxValue: value });
-    }
+    this.setState({ [name]: value });
   };
 
-  handleInputFocus = (type: string) => {
-    this.setState({ focusInput: type });
+  handleOnBlur = () => {
+    const { onChangeComplete } = this.props;
+    const { typedValue, typedValue2 } = this.state;
+    onChangeComplete(typedValue, typedValue2);
   };
 
-  handleInputBlur = (type: string) => {
-    const {
-      onChange,
-      onChange2,
-      onChangeComplete,
-      minValue: minValueFromProps,
-      maxValue: maxValueFromProps,
-    } = this.props;
-    const { minValue, maxValue } = this.state;
-    if (type === 'min') {
-      onChange(minValue);
+  handleOnKeyDown = (inputName: string) => (e: any) => {
+    const { onChangeComplete } = this.props;
+    const { typedValue, typedValue2 } = this.state;
+    if (e.keyCode === 13) {
+      if (inputName === 'first') {
+        this.firstInput.blur();
+        this.secondInput.focus();
+        onChangeComplete(typedValue, typedValue2);
+      } else {
+        this.secondInput.blur();
+        onChangeComplete(typedValue, typedValue2);
+      }
     }
-    if (type === 'max') {
-      onChange2(maxValue);
+    if (e.keyCode === 9) {
+      if (inputName === 'first') {
+        onChangeComplete(typedValue, typedValue2);
+      } else {
+        onChangeComplete(typedValue, typedValue2);
+      }
     }
-    onChangeComplete(
-      minValue < minValueFromProps ? minValueFromProps : minValue,
-      maxValue > maxValueFromProps ? maxValueFromProps : maxValue,
-    );
-    this.setState({ focusInput: null });
   };
 
   render() {
     const { value, value2, orientation, className, min, max } = this.props;
-    const { minValue, maxValue } = this.state;
+    const { typedValue, typedValue2 } = this.state;
     const { direction } = constants.orientation[orientation];
     const position = this.getPositionFromValue(value);
     const position2 = this.getPositionFromValue(value2);
@@ -341,44 +302,30 @@ class RangerSlider extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="valuesContainer">
-          <div styleName="leftValue">
+          <div styleName="leftValue value">
             <Input
-              inputRef={(el: Node) => {
-                this.input = el;
-              }}
-              id="min-value"
-              type="number"
-              value={`${minValue}`}
-              onChange={(e: any) => {
-                this.handleInputChange('min', e);
-              }}
-              onBlur={() => {
-                this.handleInputBlur('min');
-              }}
-              onFocus={() => {
-                this.handleInputFocus('min');
-              }}
               fullWidth
+              id="leftNumer"
+              inputRef={node => {
+                this.firstInput = node;
+              }}
+              onChange={e => this.handleChangeTypedValue(e, 'typedValue')}
+              onBlur={this.handleOnBlur}
+              onKeyDown={this.handleOnKeyDown('first')}
+              value={typedValue}
             />
           </div>
-          <div styleName="rightValue">
+          <div styleName="rightValue value">
             <Input
-              inputRef={(el: Node) => {
-                this.input2 = el;
-              }}
-              id="max-value"
-              type="number"
-              value={`${maxValue}`}
-              onChange={(e: any) => {
-                this.handleInputChange('max', e);
-              }}
-              onBlur={() => {
-                this.handleInputBlur('max');
-              }}
-              onFocus={() => {
-                this.handleInputFocus('max');
-              }}
               fullWidth
+              id="rightNumer"
+              inputRef={node => {
+                this.secondInput = node;
+              }}
+              onChange={e => this.handleChangeTypedValue(e, 'typedValue2')}
+              onBlur={this.handleOnBlur}
+              onKeyDown={this.handleOnKeyDown('second')}
+              value={typedValue2}
             />
           </div>
         </div>

@@ -64,7 +64,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: -3.5rem;
+  margin-top: -2.5rem;
 
   input {
     text-align: center;
@@ -77,4 +77,15 @@
 
 .rightValue {
   margin-left: 1rem;
+}
+
+.value {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  border-radius: 3px;
+  font-size: 1.75rem;
+  color: $color_grey;
 }

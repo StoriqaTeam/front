@@ -101,6 +101,7 @@ class Input extends Component<PropsType, StateType> {
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        onKeyDown={this.props.onKeyDown}
         data-test={id}
       />
     );
