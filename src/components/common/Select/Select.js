@@ -1,9 +1,19 @@
 // @flow
 
 import React, { Component } from 'react';
-import type { Node } from 'react';
 import classNames from 'classnames';
-import { find, propEq, prepend, findIndex, length } from 'ramda';
+import {
+  find,
+  propEq,
+  prepend,
+  findIndex,
+  length,
+  filter,
+  toLower,
+  head,
+  isEmpty,
+} from 'ramda';
+import debounce from 'lodash.debounce';
 
 import { Icon } from 'components/Icon';
 
@@ -16,16 +26,16 @@ type SelectType = {
 
 type StateType = {
   isExpanded: boolean,
-  items: Array<{ id: string, label: string }>,
-  isSelectUse: ?Node,
+  items: Array<SelectType>,
+  searchValue: string,
 };
 
 type PropsType = {
   transparent: ?boolean,
-  items: Array<{ id: string, label: string }>,
+  items: Array<SelectType>,
   onSelect: (item: ?SelectType) => void,
   label: ?string,
-  activeItem: ?{ id: string, label: string },
+  activeItem: ?SelectType,
   forForm: ?boolean,
   forSearch: ?boolean,
   forAutocomlete: ?boolean,
@@ -63,133 +73,109 @@ class Select extends Component<PropsType, StateType> {
     this.state = {
       isExpanded: false,
       items: props.items,
-      isSelectUse: null,
+      searchValue: '',
     };
     if (process.env.BROWSER) {
       window.addEventListener('click', this.handleToggleExpand);
-      window.addEventListener('keydown', this.handleToggleExpand);
+      window.addEventListener('keydown', this.handleKeydown);
     }
-  }
-
-  componentDidMount() {
-    if (process.env.BROWSER) {
-      document.addEventListener('keydown', this.handleKeydown);
-    }
+    this.resetSearchValue = debounce(this.resetSearchValue, 1000);
   }
 
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
     const { isExpanded } = this.state;
     if (prevState.isExpanded !== isExpanded && isExpanded) {
-      this.handleAutoScroll();
+      this.handleAutoScroll(this.getIndexFromItems(prevProps.activeItem));
     }
   }
 
   componentWillUnmount() {
     if (process.env.BROWSER) {
       window.removeEventListener('click', this.handleToggleExpand);
-      window.removeEventListener('keydown', this.handleToggleExpand);
+      window.removeEventListener('keydown', this.handleKeydown);
     }
   }
+
+  getIndexFromItems = (item: ?SelectType) =>
+    item ? findIndex(propEq('id', item.id))(this.props.items) : -1;
 
   button: any;
   itemsWrap: any;
   items: any;
 
   handleKeydown = (e: any): void => {
-    if (this.state.isSelectUse && (e.keyCode === 40 || e.keyCode === 38)) {
+    if (this.state.isExpanded) {
       e.preventDefault();
-      this.setState({ isExpanded: true });
+      const { items, activeItem } = this.props;
+      if (e.keyCode === 40 || e.keyCode === 38) {
+        const activeItemIdx = this.getIndexFromItems(activeItem);
 
-      if (e.keyCode === 40) {
-        this.handleAutoScroll('down');
+        if (e.keyCode === 40) {
+          // click down
+          const newActiveItemIdx =
+            activeItemIdx === length(items) - 1 ? 0 : activeItemIdx + 1;
+          this.handleAutoScroll(newActiveItemIdx, 'smooth');
+        }
+
+        if (e.keyCode === 38) {
+          // click up
+          const newActiveItemIdx =
+            activeItemIdx === 0 ? length(items) - 1 : activeItemIdx - 1;
+          this.handleAutoScroll(newActiveItemIdx, 'smooth');
+        }
       }
 
-      if (e.keyCode === 38) {
-        this.handleAutoScroll('up');
+      if (this.state.isExpanded) {
+        this.setState(
+          (prevState: StateType) => ({
+            searchValue: `${prevState.searchValue}${e.key}`,
+          }),
+          this.handleKeyActiveItem,
+        );
+        this.resetSearchValue();
+      }
+
+      if (e.keyCode === 27 || e.keyCode === 13) {
+        this.setState({ isExpanded: false });
       }
     }
   };
 
-  handleAutoScroll = (duration?: string) => {
-    const { items, activeItem, onSelect } = this.props;
-    const itemsHeight = itemHeight * length(items);
+  handleKeyActiveItem = () => {
+    const { items } = this.props;
+    const { searchValue } = this.state;
+    const filteredItems = filter(
+      item => new RegExp(`^${searchValue}`).test(toLower(item.label)),
+      items,
+    );
+    if (!isEmpty(filteredItems)) {
+      this.handleAutoScroll(this.getIndexFromItems(head(filteredItems)));
+    }
+  };
+
+  resetSearchValue = () => {
+    this.setState({ searchValue: '' });
+  };
+
+  handleAutoScroll = (idx: number, behavior: ?string) => {
+    const { items, onSelect } = this.props;
     const visibleHeight = itemHeight * maxItemsCount;
     const itemsWrapScroll = this.itemsWrap.scrollTop;
-    const activeItemIdx = activeItem
-      ? findIndex(propEq('id', activeItem.id))(items)
-      : -1;
 
-    if (duration === 'down') {
-      // new item is not included below
-      if (
-        activeItemIdx !== length(items) - 1 &&
-        (activeItemIdx + 2) * itemHeight > itemsWrapScroll + visibleHeight
-      ) {
-        this.itemsWrap.scroll({
-          top: (activeItemIdx + 2 - maxItemsCount) * itemHeight,
-          behavior: 'smooth',
-        });
-      }
-      // new item is not included above
-      if ((activeItemIdx + 1) * itemHeight <= itemsWrapScroll) {
-        this.itemsWrap.scroll({
-          top: (activeItemIdx + 1) * itemHeight,
-          behavior: 'smooth',
-        });
-      }
-      // new item is first
-      if (activeItemIdx === length(items) - 1 && itemsWrapScroll > 0) {
-        this.itemsWrap.scroll({ top: 0, behavior: 'smooth' });
-      }
-      onSelect(
-        activeItemIdx === length(items) - 1
-          ? items[0]
-          : items[activeItemIdx + 1],
-      );
+    // new item is not included above
+    if ((idx - 1) * itemHeight < itemsWrapScroll) {
+      this.itemsWrap.scroll({ top: idx * itemHeight, behavior });
     }
 
-    if (duration === 'up') {
-      // new item is not included above
-      if (
-        activeItemIdx !== 0 &&
-        (activeItemIdx - 1) * itemHeight < itemsWrapScroll
-      ) {
-        this.itemsWrap.scroll({
-          top: (activeItemIdx - 1) * itemHeight,
-          behavior: 'smooth',
-        });
-      }
-      // new item is not included below
-      if (activeItemIdx * itemHeight > itemsWrapScroll + visibleHeight) {
-        this.itemsWrap.scroll({
-          top: activeItemIdx * itemHeight - visibleHeight,
-          behavior: 'smooth',
-        });
-      }
-      // new item is last
-      if (
-        activeItemIdx === 0 &&
-        visibleHeight + itemsWrapScroll < itemsHeight
-      ) {
-        this.itemsWrap.scroll({
-          top: itemsHeight - visibleHeight,
-          behavior: 'smooth',
-        });
-      }
-      onSelect(
-        activeItemIdx === 0
-          ? items[length(items) - 1]
-          : items[activeItemIdx - 1],
-      );
+    // new item is not included below
+    if ((idx + 1) * itemHeight > itemsWrapScroll + visibleHeight) {
+      this.itemsWrap.scroll({
+        top: (idx + 1) * itemHeight - visibleHeight,
+        behavior,
+      });
     }
 
-    if (!duration) {
-      if ((activeItemIdx + 1) * itemHeight > visibleHeight) {
-        this.itemsWrap.scroll({
-          top: (activeItemIdx + 1) * itemHeight - visibleHeight,
-        });
-      }
-    }
+    onSelect(items[idx]);
   };
 
   handleToggleExpand = (e: any): void => {
@@ -198,23 +184,18 @@ class Select extends Component<PropsType, StateType> {
     const isItemsWrap = this.itemsWrap && this.itemsWrap.contains(e.target);
     const isItems = this.items && this.items.contains(e.target);
 
-    if (e.keyCode === 40 || e.keyCode === 38) {
-      return;
-    }
-
     if (isButtonClick && !isItems && !isItemsWrap) {
       this.setState(
         (prevState: StateType) => ({
           isExpanded: !prevState.isExpanded,
-          isSelectUse: prevState.isExpanded ? null : this.button,
         }),
         onClick,
       );
       return;
     }
 
-    if (e.keyCode === 27 || (!isButtonClick && !isItems) || isItemsWrap) {
-      this.setState({ isExpanded: false, isSelectUse: null });
+    if ((!isButtonClick && !isItems) || isItemsWrap) {
+      this.setState({ isExpanded: false });
     }
   };
 
