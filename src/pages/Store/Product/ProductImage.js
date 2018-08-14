@@ -1,22 +1,24 @@
 // @flow
 
 import React, { Component } from 'react';
-import { equals } from 'ramda';
+import { equals, prepend } from 'ramda';
 
 import { isEmpty } from 'utils';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
-import { getImageMeta } from './utils';
+import { getImageMeta, makeAdditionalPhotos } from './utils';
 
 import './ProductImage.scss';
 
 import type { WidgetOptionType } from './types';
 
 type PropsType = {
+  rawId: number,
   photoMain: string,
   discount: number,
-  additionalPhotos: Array<WidgetOptionType>,
+  additionalPhotos: Array<string>,
+  isCartAdded: boolean,
 };
 
 type StateType = {
@@ -25,37 +27,32 @@ type StateType = {
 };
 
 class ProductImage extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): StateType | null {
-    const { selected } = prevState;
-    if (!isEmpty(selected)) {
-      return {
-        ...prevState,
-        selected: '',
-      };
-    }
-    return null;
-  }
   state = {
     selected: '',
     isSquared: false,
   };
-
   componentDidMount() {
     const { photoMain } = this.props;
     this.setImage(photoMain);
   }
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    const { rawId } = this.props;
     const { selected } = prevState;
     if (selected !== this.state.selected) {
       this.setImage(selected);
+    }
+    if (rawId !== prevProps.rawId) {
+      this.clearSelected();
     }
   }
   setImage = async (selected: string): Promise<any> => {
     const { height, width } = await getImageMeta(selected);
     this.setState({ isSquared: equals(height, width) });
+  };
+  clearSelected = (): void => {
+    this.setState({
+      selected: '',
+    });
   };
   handleClick = ({ image }: WidgetOptionType): void => {
     this.setState({ selected: image }, () => {
@@ -81,7 +78,9 @@ class ProductImage extends Component<PropsType, StateType> {
                   isFirstSelected
                   isReset={isEmpty(selected)}
                   onClick={this.handleClick}
-                  options={additionalPhotos}
+                  options={makeAdditionalPhotos(
+                    prepend(photoMain, additionalPhotos || []),
+                  )}
                 />
               </div>
             ) : null}

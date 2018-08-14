@@ -25,6 +25,8 @@ type PropsTypes = {
   handleDot: Function,
   num: number,
   seeAllUrl: ?string,
+  fade?: boolean,
+  dotIdx?: boolean,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -43,6 +45,8 @@ class SliderContainer extends Component<PropsTypes> {
       animationSpeed,
       dots,
       seeAllUrl,
+      fade,
+      dotIdx,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
@@ -63,15 +67,19 @@ class SliderContainer extends Component<PropsTypes> {
           styleName="wrapper"
           style={{
             left: slidesOffset || '',
-            transition: isTransition
-              ? `left ${animationSpeedSec}s ease-out`
-              : '',
-            animationDelay: '.2s',
+            transition:
+              isTransition && !fade
+                ? `left ${animationSpeedSec}s ease-out`
+                : '',
+            animationDelay: fade ? '' : '.2s',
           }}
         >
           {Children.map(this.props.children, child => (
             <div
-              styleName="item"
+              styleName={classNames('item', {
+                fadeItem: fade,
+                activeSlide: dotIdx === child.key - 1,
+              })}
               style={{
                 width: `${slideWidth}%`,
               }}

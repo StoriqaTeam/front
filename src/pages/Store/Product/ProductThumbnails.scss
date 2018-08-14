@@ -1,7 +1,6 @@
 @import "../../../styles/variables";
 
 .container {
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -49,18 +48,9 @@
 }
 
 .title {
-  color: $color_grey;
-  width: 7.75rem;
-  height: 2.375rem;
+  margin: 4rem 0 3rem;
   font-size: 14px;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
   letter-spacing: 1.2px;
-  margin-bottom: 2.25rem;
-  margin-top: 3.5rem;
-  text-align: left;
   text-transform: uppercase;
 
   &.isOnSelected {
@@ -84,5 +74,21 @@
 
 .disabled {
   opacity: 0.3;
+  cursor: default;
+}
+
+.emptyImg {
+  position: relative;
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color_grey_trivial;
+  border-radius: 0.5rem;
+
+  &.clicked {
+    border: 0.25rem solid $color_blue;
+  }
 }
 

@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 
 import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
+import { Collapse } from 'components/Collapse';
 import { Button } from 'components/common/Button';
 
 import './FooterResponsive.scss';
@@ -11,76 +12,80 @@ import './FooterResponsive.scss';
 import { InfoBlock } from './index';
 
 type FooterCol = {
+  id: string,
   title: string,
-  links: Array<{ id: string, linkName: string }>,
+  links: Array<{ id: string, name: string }>,
 };
 
 type StateType = {
-  market: FooterCol,
-  sections: FooterCol,
-  services: FooterCol,
+  columns: Array<FooterCol>,
 };
 
 class FooterResponsive extends PureComponent<{}, StateType> {
   state = {
-    market: {
-      title: 'Storiqa market',
-      links: [
-        {
-          id: '0',
-          linkName: 'Sale',
-        },
-        {
-          id: '1',
-          linkName: 'Recommended',
-        },
-        {
-          id: '2',
-          linkName: 'Popular',
-        },
-        {
-          id: '3',
-          linkName: 'Reviews',
-        },
-      ],
-    },
-    sections: {
-      title: 'Sections',
-      links: [
-        {
-          id: '0',
-          linkName: 'Showcase',
-        },
-        {
-          id: '1',
-          linkName: 'Goods',
-        },
-        {
-          id: '2',
-          linkName: 'Shop',
-        },
-        {
-          id: '3',
-          linkName: 'Storiqa Community',
-        },
-      ],
-    },
-    services: {
-      title: 'Services',
-      links: [
-        {
-          id: '0',
-          linkName: 'Quality Assurance',
-        },
-        {
-          id: '1',
-          linkName: 'Storiqa wallet',
-        },
-      ],
-    },
+    columns: [
+      {
+        id: 'Storiqa market',
+        title: 'Storiqa market',
+        links: [
+          {
+            id: '0',
+            name: 'Sale',
+          },
+          {
+            id: '1',
+            name: 'Recommended',
+          },
+          {
+            id: '2',
+            name: 'Popular',
+          },
+          {
+            id: '3',
+            name: 'Reviews',
+          },
+        ],
+      },
+      {
+        id: 'Sections',
+        title: 'Sections',
+        links: [
+          {
+            id: '0',
+            name: 'Showcase',
+          },
+          {
+            id: '1',
+            name: 'Goods',
+          },
+          {
+            id: '2',
+            name: 'Shop',
+          },
+          {
+            id: '3',
+            name: 'Storiqa Community',
+          },
+        ],
+      },
+      {
+        id: 'Services',
+        title: 'Services',
+        links: [
+          {
+            id: '0',
+            name: 'Quality Assurance',
+          },
+          {
+            id: '1',
+            name: 'Storiqa wallet',
+          },
+        ],
+      },
+    ],
   };
   render() {
-    const { market, sections, services } = this.state;
+    const { columns } = this.state;
     const FooterLogo = () => (
       <Col lg={9} xl={9}>
         <div styleName="footerLogo">
@@ -99,10 +104,10 @@ class FooterResponsive extends PureComponent<{}, StateType> {
             <h3>{title}</h3>
           </header>
           <ul>
-            {links.map(({ id, linkName }) => (
+            {links.map(({ id, name }) => (
               <li key={id}>
                 <a href="/" styleName="navItem">
-                  {linkName}
+                  {name}
                 </a>
               </li>
             ))}
@@ -137,12 +142,20 @@ class FooterResponsive extends PureComponent<{}, StateType> {
                   </Row>
                 </div>
               </Col>
-              <Col md={12} lg={8} xl={6}>
+              <Col md={12} lg={8} xl={6} mdVisible>
                 <Row>
-                  <FooterColumn {...market} />
-                  <FooterColumn {...sections} />
-                  <FooterColumn {...services} />
+                  {columns.map(column => (
+                    <FooterColumn key={column.id} {...column} />
+                  ))}
                 </Row>
+              </Col>
+              <Col size={12} sm={12} md={12} mdHidden>
+                <Collapse
+                  grouped
+                  menuTitle="Menu"
+                  items={columns}
+                  onSelected={() => {}}
+                />
               </Col>
               <Col md={12} lg={12} xl={2}>
                 <StartSellingButton />

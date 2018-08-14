@@ -4,13 +4,19 @@ import Stepper from 'components/Stepper';
 
 import './ProductQuantity.scss';
 
-const ProductQuantity = () => (
+type PropsType = {
+  quantity: number,
+};
+
+const ProductQuantity = (props: PropsType) => (
   <div styleName="container">
-    <h4 styleName="title">Amount</h4>
+    <div styleName="title">
+      <strong>Amount</strong>
+    </div>
     <div styleName="counter">
-      <Stepper value={0} min={0} max={9999} onChange={() => {}} />
+      <Stepper value={0} min={0} max={props.quantity} onChange={() => {}} />
       <p styleName="stock">Remaining stock:</p>
-      <span styleName="inStock">In stock (0)</span>
+      <span styleName="inStock">{`In stock (${props.quantity})`}</span>
     </div>
   </div>
 );

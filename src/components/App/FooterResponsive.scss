@@ -114,7 +114,12 @@
 }
 
 .startSellingButton {
+  margin-top: 2rem;
   align-items: center;
+
+  @media (min-width: $md) {
+    margin-top: 0;
+  }
 }
 
 @media (min-width: $xl) {

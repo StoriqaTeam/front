@@ -1,12 +1,16 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { SliderContainer } from 'components/Slider';
 import { CardProduct } from 'components/CardProduct';
 import { Banner } from 'components/Banner';
 
 import './Slider.scss';
+
+type StateTypes = {
+  dotIdx: number,
+};
 
 type PropsTypes = {
   items: Array<{
@@ -17,15 +21,31 @@ type PropsTypes = {
   slidesToShow: ?number,
   seeAllUrl: ?string,
   autoplaySpeed?: number,
+  fade?: boolean,
 };
 
-class Slider extends PureComponent<PropsTypes> {
+class Slider extends Component<PropsTypes, StateTypes> {
+  state = {
+    dotIdx: 0,
+  };
+
+  getValueDotIdx = (dotIdx: number) => {
+    this.setState({ dotIdx });
+  };
+
   render() {
-    const { type } = this.props;
+    const { items, type, fade } = this.props;
+    const { dotIdx } = this.state;
+    const fadeData = fade
+      ? {
+          getValueDotIdx: this.getValueDotIdx,
+          dotIdx,
+        }
+      : {};
     return (
       <div styleName="container">
-        <SliderContainer {...this.props}>
-          {this.props.items.map(item => (
+        <SliderContainer {...this.props} {...fadeData}>
+          {items.map(item => (
             <Fragment key={item.rawId || item.id}>
               {type === 'products' && <CardProduct item={item} />}
               {type === 'banners' && <Banner item={item} />}

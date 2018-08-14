@@ -1,11 +1,12 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import type { Node } from 'react';
+import { propOr, prop } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
 
-import type { WidgetType, WidgetOptionType } from './types';
+import type { WidgetType } from './types';
 
 import {
   ProductContext,
@@ -26,15 +27,14 @@ type PropsType = {
   productDescription: string,
   productTitle: string,
   widgets: Array<WidgetType>,
-  unselectedAttr: ?Array<string>,
+  selectedAttributes: { [string]: string },
+  availableAttributes: {
+    [string]: Array<string>,
+  },
+  unselectedAttr: Array<string>,
 };
 
-class ProductDetails extends Component<PropsType, {}> {
-  handleWidgetClick = (selected: WidgetOptionType): void => {
-    const { onWidgetClick } = this.props;
-    onWidgetClick(selected);
-  };
-
+class ProductDetails extends PureComponent<PropsType> {
   generateWidget = (widget: WidgetType, index: number): Node => {
     const { unselectedAttr } = this.props;
     let WidgetComponent;
@@ -43,9 +43,16 @@ class ProductDetails extends Component<PropsType, {}> {
         WidgetComponent = (
           <ProductSize
             key={index}
+            id={widget.id}
             title={widget.title}
             options={widget.options}
-            onClick={selected => this.handleWidgetClick(selected)}
+            onClick={this.props.onWidgetClick}
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
             isOnSelected={
               (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
               false
@@ -57,9 +64,16 @@ class ProductDetails extends Component<PropsType, {}> {
         WidgetComponent = (
           <ProductMaterial
             key={index}
+            id={widget.id}
             title={widget.title || ''}
             options={widget.options}
-            onSelect={selected => this.handleWidgetClick(selected)}
+            onSelect={this.props.onWidgetClick}
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
             isOnSelected={
               (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
               false
@@ -71,11 +85,23 @@ class ProductDetails extends Component<PropsType, {}> {
         WidgetComponent = (
           <ProductThumbnails
             key={index}
+            id={widget.id}
             title={widget.title}
             row
             srcProp="image"
             options={widget.options}
-            onClick={selected => this.handleWidgetClick(selected)}
+            onClick={(option: { label: string }) =>
+              this.props.onWidgetClick({
+                attributeId: widget.id,
+                attributeValue: option.label,
+              })
+            }
+            selectedValue={prop(widget.id, this.props.selectedAttributes)}
+            availableValues={propOr(
+              [],
+              widget.id,
+              this.props.availableAttributes,
+            )}
             isOnSelected={
               (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
               false
@@ -88,6 +114,7 @@ class ProductDetails extends Component<PropsType, {}> {
     }
     return WidgetComponent;
   };
+
   render() {
     const { productTitle, productDescription, widgets, children } = this.props;
     return (
@@ -100,8 +127,10 @@ class ProductDetails extends Component<PropsType, {}> {
             </div>
             <ProductPrice {...productVariant} />
             <p>{productDescription}</p>
-            {sortByProp('id')(widgets).map(this.generateWidget)}
-            <ProductQuantity />
+            <div styleName="widgets">
+              {sortByProp('id')(widgets).map(this.generateWidget)}
+            </div>
+            <ProductQuantity quantity={productVariant.quantity} />
             {children}
           </div>
         )}
