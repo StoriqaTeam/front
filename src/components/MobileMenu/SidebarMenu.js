@@ -81,7 +81,7 @@ class SidebarMenu extends Component<PropsType, StateType> {
                     <span styleName="activeBorder" />
                   ) : null}
                   <span>
-                    {isSecondary ? null : <Icon type="qualityAssurance" />}
+                    {isSecondary ? null : null}
                     <Link
                       styleName="linkName"
                       to={{

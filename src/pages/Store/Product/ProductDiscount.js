@@ -10,7 +10,9 @@ type PropType = {
 
 const ProductDiscount = ({ discount }: PropType) => (
   <span styleName="container">
-    Price <br /> Off <br />
+    <span styleName="price">
+      Price <br /> Off <br />
+    </span>
     <span
       style={{
         fontSize: 16,
