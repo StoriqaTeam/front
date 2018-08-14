@@ -11,7 +11,9 @@ import { AddressForm } from 'components/AddressAutocomplete';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 
-import { getAddressFullByValue, addressesToSelect } from '../utils';
+import { addressToString } from 'utils';
+
+import { addressesToSelect } from '../utils';
 
 import AddressInfo from './AddressInfo';
 
@@ -59,7 +61,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
   handleOnSelectAddress = (item: any) => {
     const { onChangeOrderInput, orderInput, deliveryAddresses } = this.props;
     this.setState({ selectedAddress: item });
-    const addressFull = getAddressFullByValue(deliveryAddresses, item.label);
+    const addressFull = deliveryAddresses[item.id].address;
     onChangeOrderInput({
       ...orderInput,
       addressFull,
@@ -151,9 +153,9 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                     />
                     {isAddressSelect && (
                       <div styleName="selectWrapper">
-                        Address
                         <div>
                           <Select
+                            label="Address"
                             items={items}
                             activeItem={selectedAddress}
                             onSelect={this.handleOnSelectAddress}
@@ -211,7 +213,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
             </div>
           </Col>
           <Col size={6} xlVisibleOnly>
-            {orderInput.addressFull.value && (
+            {addressToString(orderInput.addressFull) && (
               <div styleName="addressInfoContainer">
                 <AddressInfo
                   addressFull={orderInput.addressFull}
