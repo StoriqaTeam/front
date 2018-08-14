@@ -50,8 +50,11 @@
   transition: $transition_all_ease;
 
   & .icon {
-    margin-left: 1rem;
+    margin-left: 0;
     transition: $transition_all_ease;
+    @media (min-width: $lg) {
+      margin-left: 1rem;
+    }
   }
 
   &.isContentOpen {
