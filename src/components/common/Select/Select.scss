@@ -241,15 +241,8 @@
 
 .itemsWrap {
   position: relative;
-  max-height: 10rem;
   overflow-y: auto;
   padding-right: 2rem;
-}
-
-.forForm .itemsWrap,
-.forSearch .itemsWrap,
-.isBirthdate .itemsWrap {
-  max-height: 15rem;
 }
 
 .item {
@@ -276,6 +269,7 @@
 
 .isItem .item {
   line-height: 3rem;
+  transition: $transition_all_ease;
 }
 
 .forAutocomlete .item {
