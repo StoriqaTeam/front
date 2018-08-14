@@ -213,7 +213,11 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="rootItem rootButtonItem">
-          <Link styleName="button" to="/categories?search=" data-test="allCategoriesLink">
+          <Link
+            styleName="button"
+            to="/categories?search="
+            data-test="allCategoriesLink"
+          >
             <Icon inline type="cats" size="24" />
             <span styleName="buttonText">All</span>
           </Link>
