@@ -84,7 +84,11 @@ class Select extends Component<PropsType, StateType> {
 
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
     const { isExpanded } = this.state;
-    if (prevState.isExpanded !== isExpanded && isExpanded && prevProps.activeItem) {
+    if (
+      prevState.isExpanded !== isExpanded &&
+      isExpanded &&
+      prevProps.activeItem
+    ) {
       this.handleAutoScroll(this.getIndexFromItems(prevProps.activeItem));
     }
   }
