@@ -18,15 +18,15 @@ import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 import './Menu.scss';
 
 type PropsType = {
-  router: routerShape,
-  menuItems: Array<{ id: string, title: string }>,
   activeItem: string,
-  firstName: string,
-  lastName: string,
   avatar: ?string,
-  id: string,
-  provider: ?string,
   environment: Environment,
+  firstName: string,
+  id: string,
+  lastName: string,
+  menuItems: Array<{ id: string, title: string }>,
+  provider: ?string,
+  router: routerShape,
 };
 
 class Menu extends PureComponent<PropsType> {
@@ -79,10 +79,10 @@ class Menu extends PureComponent<PropsType> {
   render() {
     const {
       activeItem,
-      menuItems,
+      avatar,
       firstName,
       lastName,
-      avatar,
+      menuItems,
       provider,
     } = this.props;
     return (
