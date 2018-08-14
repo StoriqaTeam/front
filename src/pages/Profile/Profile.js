@@ -1,8 +1,8 @@
 // @flow
 
-import React, { Component, cloneElement } from 'react';
+import React, { PureComponent, cloneElement } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, find, propEq } from 'ramda';
+import { pathOr, find, propEq, reject } from 'ramda';
 
 import { AppContext, Page } from 'components/App';
 import {
@@ -33,14 +33,6 @@ type StateType = {
   },
 };
 
-const menuItems = [
-  { id: 'personal-data', title: 'Personal data' },
-  { id: 'shipping-addresses', title: 'Shipping addresses' },
-  { id: 'security', title: 'Security' },
-  { id: 'orders', title: 'Orders' },
-  { id: 'kyc', title: 'KYC' },
-];
-
 const profileMenuMap = {
   'personal-data': <PersonalData />,
   'shipping-addresses': <ShippingAddresses />,
@@ -50,7 +42,23 @@ const profileMenuMap = {
   kyc: <KYC />,
 };
 
-class Profile extends Component<PropsType, StateType> {
+class Profile extends PureComponent<PropsType, StateType> {
+  checkMenuItems = (): Array<{ id: string, title: string }> => {
+    const menuItems = [
+      { id: 'personal-data', title: 'Personal data' },
+      { id: 'shipping-addresses', title: 'Shipping addresses' },
+      { id: 'security', title: 'Security' },
+      { id: 'orders', title: 'Orders' },
+      // { id: 'kyc', title: 'KYC' },
+    ];
+    const {
+      me: { provider },
+    } = this.props;
+    if (provider === 'FACEBOOK' || provider === 'GOOGLE') {
+      return reject(item => item.id === 'security', menuItems);
+    }
+    return menuItems;
+  };
   renderProfileItem = subtitle => {
     const { activeItem, me, isOrder } = this.props;
     // $FlowIgnoreMe
@@ -64,11 +72,13 @@ class Profile extends Component<PropsType, StateType> {
       subtitle,
     });
   };
-
   render() {
     const { activeItem, me } = this.props;
     // $FlowIgnoreMe
-    const { title: subtitle } = find(propEq('id', activeItem), menuItems);
+    const { title: subtitle } = find(
+      propEq('id', activeItem),
+      this.checkMenuItems(),
+    );
     return (
       <AppContext.Consumer>
         {({ environment }) => (
@@ -77,13 +87,13 @@ class Profile extends Component<PropsType, StateType> {
               <Row>
                 <Col md={3} lg={2} xl={2}>
                   <Menu
-                    environment={environment}
                     activeItem={activeItem}
                     avatar={me.avatar}
+                    environment={environment}
                     firstName={me.firstName || ''}
                     id={me.id}
                     lastName={me.lastName || ''}
-                    menuItems={menuItems}
+                    menuItems={this.checkMenuItems()}
                     provider={me.provider || null}
                   />
                 </Col>
