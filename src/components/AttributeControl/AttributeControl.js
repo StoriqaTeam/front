@@ -14,7 +14,7 @@ import {
 } from 'ramda';
 
 import { getNameText } from 'utils';
-import { CheckboxButton } from 'components/common/CheckboxButton';
+import { Checkbox } from 'components/common/Checkbox';
 import { ColorPicker } from 'components/ColorPicker';
 import { Select } from 'components/common/Select';
 
@@ -71,7 +71,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     };
   }
 
-  handleOnChange = (val: string) => {
+  handleOnChange = (receivedVal: string) => {
     const { onChange, attrFilter } = this.props;
     const { value } = this.state;
     const uiElement = pathOr(
@@ -83,6 +83,8 @@ class AttributeControll extends React.Component<PropsType, StateType> {
 
     const isMultiSelectable =
       uiElement === 'CHECKBOX' || uiElement === 'COLOR_PICKER';
+    const splitedVal = receivedVal.split('-');
+    const val = splitedVal.length > 1 ? splitedVal[1] : splitedVal[0];
     if (isMultiSelectable && value) {
       const valResult = !value.includes(val)
         ? [...value, val]
@@ -114,8 +116,8 @@ class AttributeControll extends React.Component<PropsType, StateType> {
           mapIndexed(
             (v, index) => (
               <div key={`${v}-${index}`} styleName="valueItem">
-                <CheckboxButton
-                  id={v}
+                <Checkbox
+                  id={`CHECKBOX-${v}`}
                   label={v}
                   isChecked={value && value.includes(v)}
                   onChange={this.handleOnChange}
