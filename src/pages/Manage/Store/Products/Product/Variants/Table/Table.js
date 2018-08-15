@@ -35,7 +35,8 @@ type PropsType = {
       warehouseId: string,
       quantity: number,
       warehouse: {
-        name: string,
+        name: ?string,
+        slug: string,
         addressFull: {
           value: string,
         },

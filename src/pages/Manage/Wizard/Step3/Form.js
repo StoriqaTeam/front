@@ -351,6 +351,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 containerStyle={{
                                   marginTop: '3rem',
                                 }}
+                                onSelect={() => {}}
                               />
                             </div>
                           </Col>
