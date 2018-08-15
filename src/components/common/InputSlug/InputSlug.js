@@ -81,7 +81,9 @@ class InputSlug extends Component<PropsType, StateType> {
 
   handleChange = (e: any) => {
     const { slug, resetErrors } = this.props;
-    resetErrors();
+    if (resetErrors) {
+      resetErrors();
+    }
     const { value } = e.target;
     const correctValue = value
       .toString()

@@ -214,9 +214,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   updateWizard = (data: {
     defaultLanguage?: string,
     addressFull?: { value: any },
+    slug: ?string,
   }) => {
     UpdateWizardMutation.commit({
-      ...omit(['completed'], data),
+      ...omit(['completed', 'slug'], data),
+      slug: data.slug || null,
       defaultLanguage: data.defaultLanguage ? data.defaultLanguage : 'EN',
       addressFull: data.addressFull ? data.addressFull : {},
       environment: this.context.environment,
@@ -298,7 +300,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         }
         this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        this.updateWizard({ storeId });
+        this.updateWizard({ storeId, slug: null });
         callback(true);
       },
       onError: (error: Error) => {

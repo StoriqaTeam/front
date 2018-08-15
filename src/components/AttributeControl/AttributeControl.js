@@ -11,6 +11,7 @@ import {
   filter,
   comparator,
   lt,
+  isEmpty,
 } from 'ramda';
 
 import { getNameText } from 'utils';
@@ -57,6 +58,13 @@ type StateType = {
 };
 
 class AttributeControll extends React.Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    return {
+      ...prevState,
+      value: nextProps.initialValues,
+    };
+  }
+
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -64,7 +72,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     };
   }
 
-  handleOnChange = (val: string) => {
+  handleOnChange = (receivedVal: string) => {
     const { onChange, attrFilter } = this.props;
     const { value } = this.state;
     const uiElement = pathOr(
@@ -76,26 +84,16 @@ class AttributeControll extends React.Component<PropsType, StateType> {
 
     const isMultiSelectable =
       uiElement === 'CHECKBOX' || uiElement === 'COLOR_PICKER';
+    const splitedVal = receivedVal.split('-');
+    const val = splitedVal.length > 1 ? splitedVal[1] : splitedVal[0];
     if (isMultiSelectable && value) {
       const valResult = !value.includes(val)
         ? [...value, val]
         : [...filter(v => v !== val, value)];
-      this.setState({
-        ...this.state,
-        value: valResult,
-      });
       onChange(valResult);
     } else if (isMultiSelectable && !value) {
-      this.setState({
-        ...this.state,
-        value: [val],
-      });
       onChange([val]);
     } else {
-      this.setState({
-        ...this.state,
-        value: [val],
-      });
       onChange([val]);
     }
   };
@@ -120,7 +118,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
             (v, index) => (
               <div key={`${v}-${index}`} styleName="valueItem">
                 <Checkbox
-                  id={v}
+                  id={`CHECKBOX-${v}`}
                   label={v}
                   isChecked={value && value.includes(v)}
                   onChange={this.handleOnChange}
@@ -143,7 +141,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         return values ? (
           <Select
             forForm
-            activeItem={value ? { id: value[0], label: value[0] } : null}
+            activeItem={
+              // $FlowIgnoreMe
+              !isEmpty(value) ? { id: value[0], label: value[0] } : null
+            }
             items={preparedValues}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{

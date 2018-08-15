@@ -424,7 +424,7 @@ class Form extends Component<PropsType, StateType> {
           <div styleName="inputWidth">
             <Input
               fullWidth
-              label="Diskount"
+              label="Discount"
               onChange={this.handlePercentChange('discount')}
               value={discount || ''}
             />
