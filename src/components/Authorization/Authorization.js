@@ -229,15 +229,7 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
-  /**
-   * @desc handles onChange event by setting the validity of the desired input
-   * @param {SyntheticEvent} evt
-   * @param {String} evt.name
-   * @param {any} evt.value
-   * @param {Boolean} evt.validity
-   * @return {void}
-   */
-  handleChange = (data: { name: string, value: any, validity: boolean }) => {
+  handleChange = (data: { name: string, value: any, validity: boolean }): void => {
     const { name, value, validity } = data;
     this.setState({ [name]: value, [`${name}Valid`]: validity }, () =>
       this.validateForm(),
@@ -289,6 +281,10 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
+  handleRecoverPassword = (): void => {
+
+  };
+
   render() {
     const { alone } = this.props;
     const {
@@ -334,6 +330,7 @@ class Authorization extends Component<PropsType, StateType> {
               formValid={formValid}
               handleLoginClick={this.handleLoginClick}
               handleChange={this.handleChange}
+              onRecoverPassword={this.handleRecoverPassword}
             />
           )}
           <div className="separatorBlock">

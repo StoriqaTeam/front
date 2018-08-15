@@ -61,7 +61,7 @@ class SignIn extends Component<PropsType, StateType> {
             validate="email"
           />
         </div>
-        <div styleName="inputBlock">
+        <div styleName="inputBlock userPassword">
           <Input
             label="Password"
             name="password"
@@ -73,6 +73,7 @@ class SignIn extends Component<PropsType, StateType> {
             errors={propOr(null, 'password', errors)}
           />
         </div>
+        <p styleName="forgotPassword">Forgot Password</p>
         {formValid && (
           <div styleName="signInGroup">
             <div styleName="signInButton">
