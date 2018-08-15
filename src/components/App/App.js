@@ -111,7 +111,9 @@ class App extends Component<PropsType, StateType> {
     const { handleLogin } = this;
     const directories = this.makeDirectories();
     return (
-      <AppContext.Provider value={{ categories, environment, directories, handleLogin }}>
+      <AppContext.Provider
+        value={{ categories, environment, directories, handleLogin }}
+      >
         <Fragment>
           <AlertsContainer alerts={this.state.alerts} />
           <AlertContextProvider

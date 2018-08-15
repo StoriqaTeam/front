@@ -49,23 +49,23 @@ type StateType = {
 };
 
 class AuthorizationForm extends Component<PropsType, StateType> {
-  state: StateType = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    emailValid: false,
-    firstNameValid: false,
-    lastNameValid: false,
-    password: '',
-    passwordValid: false,
-    formValid: false,
-    isLoading: false,
-    errors: null,
-    isSignUp: false,
-  };
-
-  componentWillMount() {
-    this.setState({ isSignUp: this.props.isSignUp });
+  constructor(props) {
+    super(props);
+    // this.setState({ isSignUp: this.props.isSignUp });
+    this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      emailValid: false,
+      firstNameValid: false,
+      lastNameValid: false,
+      password: '',
+      passwordValid: false,
+      formValid: false,
+      isLoading: false,
+      errors: null,
+      isSignUp: this.props.isSignUp,
+    };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
     }
