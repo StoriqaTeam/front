@@ -5,6 +5,6 @@ export { default as AuthorizationSocial } from './AuthorizationSocial';
 export { default as SignUp } from './SignUp';
 export { default as SignIn } from './SignIn';
 export { default as OAuthCallback } from './OAuthCallback';
-export { default as Header } from './Header';
+export { default as AuthorizationHeader } from './AuthorizationHeader';
 export { default as Input } from './Input';
 export { default as Separator } from './Separator';

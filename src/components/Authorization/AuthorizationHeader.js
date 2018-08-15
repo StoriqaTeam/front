@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'found';
 
-import './Header.scss';
+import './AuthorizationHeader.scss';
 
 type PropTypes = {
   isSignUp: ?boolean,
@@ -11,7 +11,7 @@ type PropTypes = {
   handleToggle: Function,
 };
 
-const Header = (props: PropTypes) => {
+const AuthorizationHeader = (props: PropTypes) => {
   const { isSignUp, alone, handleToggle } = props;
   const linkText = isSignUp ? 'Sign In' : 'Sign Up';
   return (
@@ -44,4 +44,4 @@ const Header = (props: PropTypes) => {
   );
 };
 
-export default Header;
+export default AuthorizationHeader;

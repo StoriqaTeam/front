@@ -7,15 +7,19 @@ import Cookies from 'universal-cookie';
 import type { Environment } from 'relay-runtime';
 
 import { Spinner } from 'components/common/Spinner';
-import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
+import {
+  SignUp,
+  SignIn,
+  AuthorizationHeader,
+  Separator,
+  AuthorizationSocial,
+} from 'components/Authorization';
 import { log, fromRelayError, errorsHandler } from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/CreateUserMutation';
-
-import { AuthorizationSocial } from './index';
 
 import { setPathForRedirectAfterLogin } from './utils';
 
@@ -310,7 +314,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
               <Spinner />
             </div>
           )}
-          <Header
+          <AuthorizationHeader
             isSignUp={isSignUp}
             alone={alone}
             handleToggle={this.handleToggle}
