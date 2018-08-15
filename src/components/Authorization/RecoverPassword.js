@@ -13,7 +13,6 @@ type PropsType = {
   onBlur: () => any,
 };
 
-
 class SignIn extends Component<PropsType, {}> {
   handleClick = () => {};
   render() {
@@ -25,11 +24,7 @@ class SignIn extends Component<PropsType, {}> {
       onChange,
       onBlur,
     } = this.props;
-    return (
-      <div>
-        Recover
-      </div>
-    );
+    return <div>Recover</div>;
   }
 }
 

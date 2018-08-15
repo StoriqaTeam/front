@@ -15,9 +15,9 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  handleLoginClick: Function,
-  handleChange: Function,
-  handleBlur: Function,
+  onLoginClick: Function,
+  onChange: Function,
+  onBlur: Function,
 };
 
 type StateType = {
@@ -39,9 +39,9 @@ class SignIn extends Component<PropsType, StateType> {
       password,
       errors,
       formValid,
-      handleLoginClick,
-      handleChange,
-      handleBlur,
+      onLoginClick,
+      onChange,
+      onBlur,
     } = this.props;
     const { autocomplete } = this.state;
 
@@ -54,10 +54,10 @@ class SignIn extends Component<PropsType, StateType> {
             name="email"
             type="text"
             model={email}
-            onChange={handleChange}
+            onChange={onChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'email', errors)}
-            onBlur={handleBlur}
+            onBlur={onBlur}
             validate="email"
           />
         </div>
@@ -68,7 +68,7 @@ class SignIn extends Component<PropsType, StateType> {
             type="password"
             model={password}
             validate="password"
-            onChange={handleChange}
+            onChange={onChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'password', errors)}
           />
@@ -78,7 +78,7 @@ class SignIn extends Component<PropsType, StateType> {
           <div styleName="signInGroup">
             <div styleName="signInButton">
               <Button
-                onClick={handleLoginClick}
+                onClick={onLoginClick}
                 type="button"
                 dataTest="signInButton"
               >
