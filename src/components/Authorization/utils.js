@@ -1,5 +1,6 @@
 import moment from 'moment';
-import Cookies from 'universal-cookie';
+
+import { setCookie, removeCookie, getCookie } from 'utils';
 
 /**
  * @desc Detects whether or not CAPS LOCK is on.
@@ -147,22 +148,20 @@ const googleLoginString = () => {
 // set in cookies path for redirect after login via oauth provider
 const cookiesPathForRedirectAfterLogin = 'REDIRECT_AFTER_LOGIN';
 const setPathForRedirectAfterLogin = (path: string) => {
-  const cookies = new Cookies();
-  cookies.set(cookiesPathForRedirectAfterLogin, path, {
-    path: '/',
-    expires: moment()
+  setCookie(
+    cookiesPathForRedirectAfterLogin,
+    path,
+    moment()
       .utc()
       .add(3, 'm')
       .toDate(),
-  });
+  );
 };
 const clearPathForRedirectAfterLogin = () => {
-  const cookies = new Cookies();
-  cookies.remove(cookiesPathForRedirectAfterLogin);
+  removeCookie(cookiesPathForRedirectAfterLogin);
 };
 const getPathForRedirectAfterLogin = (): ?string => {
-  const cookies = new Cookies();
-  return cookies.get(cookiesPathForRedirectAfterLogin);
+  getCookie(cookiesPathForRedirectAfterLogin);
 };
 
 export default {

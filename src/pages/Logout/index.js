@@ -2,9 +2,10 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'universal-cookie';
 import { routerShape, withRouter } from 'found';
 import { pathOr } from 'ramda';
+
+import { removeCookie } from 'utils';
 
 import Logo from 'components/Icon/svg/logo.svg';
 
@@ -19,8 +20,7 @@ class Logout extends PureComponent<PropsType> {
     if (!process.env.BROWSER) {
       return;
     }
-    const cookies = new Cookies();
-    cookies.remove('__jwt');
+    removeCookie('__jwt');
 
     const store = this.context.environment.getStore();
     const meId = pathOr(

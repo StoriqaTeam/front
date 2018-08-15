@@ -4,13 +4,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape } from 'found';
-import Cookies from 'universal-cookie';
 
 import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
 import { Spinner } from 'components/common/Spinner';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
-import { log, socialStrings, fromRelayError, errorsHandler } from 'utils';
+import {
+  log,
+  socialStrings,
+  fromRelayError,
+  errorsHandler,
+  setCookie,
+} from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -175,18 +180,11 @@ class Authorization extends Component<PropsType, StateType> {
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
-          const cookies = new Cookies();
           const today = new Date();
           const expirationDate = new Date();
           expirationDate.setDate(today.getDate() + 1);
-          cookies.set(
-            '__jwt',
-            { value: jwt },
-            {
-              path: '/',
-              expires: expirationDate,
-            },
-          );
+          // $FlowIgnore
+          setCookie('__jwt', jwt, expirationDate);
           if (this.context.handleLogin) {
             this.context.handleLogin();
             if (alone) {
