@@ -11,6 +11,7 @@ import {
   filter,
   comparator,
   lt,
+  isEmpty,
 } from 'ramda';
 
 import { getNameText } from 'utils';
@@ -141,7 +142,9 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         return values ? (
           <Select
             forForm
-            activeItem={value ? { id: value[0], label: value[0] } : null}
+            activeItem={
+              !isEmpty(value) ? { id: value[0], label: value[0] } : null
+            }
             items={preparedValues}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
