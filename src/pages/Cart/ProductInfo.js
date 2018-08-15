@@ -102,6 +102,7 @@ const ProductInfo = ({
                               activeItem={{ id: 1, label: 'Everywhere' }}
                               forForm
                               fullWidth
+                              onSelect={() => {}}
                             />
                           }
                         />

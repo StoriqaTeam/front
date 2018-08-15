@@ -146,7 +146,13 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               !isEmpty(value) ? { id: value[0], label: value[0] } : null
             }
             items={preparedValues}
-            onSelect={item => this.handleOnChange(item.id)}
+            onSelect={item => {
+              if (item) {
+                this.handleOnChange(item.id);
+              } else {
+                this.setState({ value: [] });
+              }
+            }}
             containerStyle={{
               width: '100%',
               height: '3rem',
