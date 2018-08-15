@@ -308,6 +308,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
             <Input
               fullWidth
               id="leftNumer"
+              type="number"
               inputRef={node => {
                 this.firstInput = node;
               }}
@@ -320,6 +321,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
           <div styleName="rightValue value">
             <Input
               fullWidth
+              type="number"
               id="rightNumer"
               inputRef={node => {
                 this.secondInput = node;
