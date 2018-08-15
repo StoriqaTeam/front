@@ -11,6 +11,7 @@ import {
   filter,
   comparator,
   lt,
+  isEmpty,
 } from 'ramda';
 
 import { getNameText } from 'utils';
@@ -121,7 +122,6 @@ class AttributeControll extends React.Component<PropsType, StateType> {
                   label={v}
                   isChecked={value && value.includes(v)}
                   onChange={this.handleOnChange}
-                  // onChange={console.log}
                 />
               </div>
             ),
@@ -141,7 +141,10 @@ class AttributeControll extends React.Component<PropsType, StateType> {
         return values ? (
           <Select
             forForm
-            activeItem={value ? { id: value[0], label: value[0] } : null}
+            activeItem={
+              // $FlowIgnoreMe
+              !isEmpty(value) ? { id: value[0], label: value[0] } : null
+            }
             items={preparedValues}
             onSelect={item => this.handleOnChange(item.id)}
             containerStyle={{
