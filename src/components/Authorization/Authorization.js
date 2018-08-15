@@ -1,20 +1,25 @@
 // @flow
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+
+import { AppContext } from 'components/App';
 
 import { AuthorizationForm } from './index';
 
 class Authorization extends Component<{}> {
   handleClick = () => {};
   render() {
-    return <AuthorizationForm />;
+    return (
+      <AppContext.Consumer>
+        {({ environment, handleLogin }) => (
+          <AuthorizationForm
+            environment={environment}
+            handleLogin={handleLogin}
+          />
+        )}
+      </AppContext.Consumer>
+    );
   }
 }
-
-Authorization.contextTypes = {
-  environment: PropTypes.object.isRequired,
-  handleLogin: PropTypes.func,
-};
 
 export default Authorization;

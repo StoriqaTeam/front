@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape } from 'found';
 import Cookies from 'universal-cookie';
+import type { Environment } from 'relay-runtime';
 
 import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
@@ -22,6 +22,8 @@ import { setPathForRedirectAfterLogin } from './utils';
 import './AuthorizationForm.scss';
 
 type PropsType = {
+  environment: Environment,
+  handleLogin: () => void,
   isSignUp: ?boolean,
   alone: ?boolean,
   match: matchShape,
@@ -109,7 +111,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const params: MutationParamsType = {
       input,
-      environment: this.context.environment,
+      environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
@@ -169,7 +171,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
     GetJWTByEmailMutation.commit({
       email,
       password,
-      environment: this.context.environment,
+      environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });
         log.debug({ response, errors });
@@ -187,8 +189,8 @@ class AuthorizationForm extends Component<PropsType, StateType> {
               expires: expirationDate,
             },
           );
-          if (this.context.handleLogin) {
-            this.context.handleLogin();
+          if (this.props.handleLogin) {
+            this.props.handleLogin();
             if (alone) {
               if (from && from !== '') {
                 window.location.replace(from);
@@ -363,10 +365,5 @@ class AuthorizationForm extends Component<PropsType, StateType> {
     );
   }
 }
-
-AuthorizationForm.contextTypes = {
-  environment: PropTypes.object.isRequired,
-  handleLogin: PropTypes.func,
-};
 
 export default withShowAlert(withRouter(AuthorizationForm));
