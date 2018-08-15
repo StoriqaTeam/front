@@ -94,9 +94,7 @@ class EditProduct extends Component<PropsType, StateType> {
       shortDescription: shortDescription
         ? [{ lang: 'EN', text: shortDescription }]
         : null,
-      longDescription: longDescription
-        ? [{ lang: 'EN', text: longDescription }]
-        : null,
+      longDescription: [{ lang: 'EN', text: longDescription }],
       categoryId,
       seoTitle: seoTitle ? [{ lang: 'EN', text: seoTitle }] : null,
       seoDescription: seoDescription
@@ -104,6 +102,7 @@ class EditProduct extends Component<PropsType, StateType> {
         : null,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState(() => ({ isLoading: false }));
         log.debug({ response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
@@ -295,6 +294,7 @@ export default createFragmentContainer(
                 warehouseId
                 warehouse {
                   name
+                  slug
                   addressFull {
                     country
                     administrativeAreaLevel1

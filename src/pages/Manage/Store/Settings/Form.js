@@ -13,6 +13,7 @@ import {
   propOr,
   toLower,
   toUpper,
+  filter,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 
@@ -129,7 +130,7 @@ class Form extends Component<PropsType, StateType> {
         id: item.isoCode,
         label: languagesDic[item.isoCode],
       }),
-      languages,
+      filter(item => item.isoCode === 'en', languages),
     );
     this.setState({ langItems });
   }
