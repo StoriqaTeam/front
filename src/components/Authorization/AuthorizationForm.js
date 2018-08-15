@@ -6,16 +6,16 @@ import { withRouter, matchShape } from 'found';
 import Cookies from 'universal-cookie';
 import type { Environment } from 'relay-runtime';
 
-import { Icon } from 'components/Icon';
-import { Button } from 'components/common/Button';
 import { Spinner } from 'components/common/Spinner';
 import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
-import { log, socialStrings, fromRelayError, errorsHandler } from 'utils';
+import { log, fromRelayError, errorsHandler } from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/CreateUserMutation';
+
+import { AuthorizationSocial } from './index';
 
 import { setPathForRedirectAfterLogin } from './utils';
 
@@ -340,26 +340,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
           <div className="separatorBlock">
             <Separator text="or" />
           </div>
-          <div styleName="firstButtonBlock">
-            <Button
-              iconic
-              href={socialStrings.facebookLoginString()}
-              dataTest="authFacebookButton"
-            >
-              <Icon type="facebook" />
-              <span>Sign in with Facebook</span>
-            </Button>
-          </div>
-          <div>
-            <Button
-              iconic
-              href={socialStrings.googleLoginString()}
-              dataTest="authGoogleButton"
-            >
-              <Icon type="google" />
-              <span>Sign In with Google</span>
-            </Button>
-          </div>
+          <AuthorizationSocial />
         </div>
       </div>
     );
