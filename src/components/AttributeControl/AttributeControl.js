@@ -122,7 +122,6 @@ class AttributeControll extends React.Component<PropsType, StateType> {
                   label={v}
                   isChecked={value && value.includes(v)}
                   onChange={this.handleOnChange}
-                  // onChange={console.log}
                 />
               </div>
             ),
@@ -143,6 +142,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
           <Select
             forForm
             activeItem={
+              // $FlowIgnoreMe
               !isEmpty(value) ? { id: value[0], label: value[0] } : null
             }
             items={preparedValues}
