@@ -335,6 +335,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                     Price <span styleName="red">*</span>
                                   </span>
                                 }
+                                min="0"
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
@@ -387,6 +388,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
+                                min="0"
                                 postfix="%"
                               />
                             </div>
@@ -404,6 +406,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
+                                min="0"
                               />
                             </div>
                           </Col>

@@ -17,6 +17,7 @@ type PropsType = {
   onFocus: (e: any) => void,
   onKeyDown: () => void,
   onClick: () => void,
+  min: ?string,
   icon: ?string,
   isUrl: ?boolean,
   inputRef: ?(e: any) => void,
@@ -78,7 +79,15 @@ class Input extends Component<PropsType, StateType> {
   };
 
   renderInput() {
-    const { onChange, inputRef, isAutocomplete, id, value, type } = this.props;
+    const {
+      onChange,
+      inputRef,
+      isAutocomplete,
+      id,
+      value,
+      type,
+      min,
+    } = this.props;
     return isAutocomplete ? (
       <input
         type="text"
@@ -98,6 +107,7 @@ class Input extends Component<PropsType, StateType> {
         name={id}
         type={type || 'text'}
         value={value || ''}
+        min={min || ''}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}

@@ -312,6 +312,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
               inputRef={node => {
                 this.firstInput = node;
               }}
+              min="0"
               onChange={e => this.handleChangeTypedValue(e, 'typedValue')}
               onBlur={this.handleOnBlur}
               onKeyDown={this.handleOnKeyDown('first')}
@@ -326,6 +327,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
               inputRef={node => {
                 this.secondInput = node;
               }}
+              min="0"
               onChange={e => this.handleChangeTypedValue(e, 'typedValue2')}
               onBlur={this.handleOnBlur}
               onKeyDown={this.handleOnKeyDown('second')}
