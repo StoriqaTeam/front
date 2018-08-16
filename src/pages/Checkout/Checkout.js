@@ -231,11 +231,15 @@ class Checkout extends Component<PropsType, StateType> {
 
   checkReadyToCheckout = () => {
     const {
+      step,
       orderInput: {
         addressFull: { country, postalCode },
       },
     } = this.state;
-    if (!country || !postalCode) {
+    const {
+      cart: { totalCount },
+    } = this.props;
+    if (!country || !postalCode || (totalCount === 0 && step === 2)) {
       return false;
     }
     return true;
@@ -256,16 +260,13 @@ class Checkout extends Component<PropsType, StateType> {
       saveAsNewAddress,
       orderInput,
     } = this.state;
-    const {
-      cart: { totalCount },
-    } = this.props;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
       // $FlowIgnore
     )(this.props);
 
-    const emptyCart = totalCount === 0;
+    const emptyCart = stores.length === 0;
     return (
       <div styleName="mainContainer">
         <Container withoutGrow>
