@@ -448,6 +448,7 @@ class Form extends Component<PropsType, StateType> {
       mainPhoto,
       formErrors,
       isLoading: isLoadingLocal,
+      attributeValues,
     } = this.state;
     return (
       <div styleName="container">
@@ -462,12 +463,15 @@ class Form extends Component<PropsType, StateType> {
           onAddPhoto={this.handleAddPhoto}
           onRemovePhoto={this.handleRemovePhoto}
         />
-        <Characteristics
-          category={category}
-          values={this.state.attributeValues || []}
-          onChange={this.onChangeValues}
-          errors={(formErrors && formErrors.attributes) || null}
-        />
+        {attributeValues &&
+          !isEmpty(attributeValues) && (
+            <Characteristics
+              category={category}
+              values={this.state.attributeValues || []}
+              onChange={this.onChangeValues}
+              errors={(formErrors && formErrors.attributes) || null}
+            />
+          )}
         {variant &&
           variant.stocks &&
           !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
