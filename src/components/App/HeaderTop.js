@@ -1,10 +1,12 @@
+// @flow
+
 import React, { Component } from 'react';
 
 import { Select } from 'components/common/Select';
 
 import './HeaderTop.scss';
 
-class HeaderTop extends Component {
+class HeaderTop extends Component<{}> {
   handleSelect = () => {};
   render() {
     return (

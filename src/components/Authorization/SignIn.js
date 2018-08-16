@@ -6,7 +6,7 @@ import { propOr } from 'ramda';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
-import './AuthorizationForm.scss';
+import './Authorization.scss';
 
 type PropsType = {
   email: string,

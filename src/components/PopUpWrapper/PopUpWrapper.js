@@ -10,16 +10,17 @@ import './PopUpWrapper.scss';
 type PropsType = {
   title: string,
   render: () => Node,
+  onClose: () => any,
 };
 
 class PopUpWrapper extends Component<PropsType> {
   click = () => {};
   render() {
-    const { title } = this.props;
+    const { title, onClose } = this.props;
     const closeButton = (
       <div
         styleName="close"
-        onClick={() => {}}
+        onClick={onClose}
         onKeyDown={() => {}}
         role="button"
         tabIndex="0"

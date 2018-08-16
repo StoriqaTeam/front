@@ -23,6 +23,7 @@ import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
 import { HeaderBottom, HeaderTop, MobileSearchMenu } from './index';
 
 import './HeaderResponsive.scss';
+import { AuthorizationForm } from '../Authorization';
 
 const TOTAL_FRAGMENT = graphql`
   fragment HeaderResponsiveTotalLocalFragment on Cart {
@@ -231,7 +232,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     );
     return (
       <AppContext.Consumer>
-        {({ directories }) => (
+        {({ directories, environment, handleLogin }) => (
           <header
             styleName={classNames('container', {
               expanded: isMobileCategoriesOpen,
@@ -276,8 +277,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             </Container>
             <Modal
               showModal={showModal}
+              onClose={this.handleCloseModal}
               render={() => (
                 <Authorization
+                  environment={environment}
+                  handleLogin={handleLogin}
                   isSignUp={isSignUp}
                   onCloseModal={this.handleCloseModal}
                 />
