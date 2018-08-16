@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
@@ -14,6 +14,7 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
+  onBack: () => any,
   onClick: () => any,
   onChange: () => any,
   onBlur: () => any,
@@ -29,14 +30,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
   };
   handleClick = () => {};
   render() {
-    const {
-      email,
-      errors,
-      formValid,
-      onClick,
-      onChange,
-      onBlur,
-    } = this.props;
+    const { email, errors, formValid, onClick, onChange, onBlur, onBack } = this.props;
     const { autocomplete } = this.state;
     return (
       <div styleName="signIn">
@@ -55,13 +49,10 @@ class RecoverPassword extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="recoverPasswordButtons">
-          <Button wireframe big>
+          <Button wireframe big onClick={onBack}>
             Back
           </Button>
-          <Button
-            onClick={onClick}
-            big
-          >
+          <Button onClick={onClick} big disabled={!formValid}>
             Send Email
           </Button>
         </div>

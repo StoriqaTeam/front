@@ -18,7 +18,7 @@ import {
   RecoverPassword,
 } from 'components/Authorization';
 import { log, fromRelayError, errorsHandler } from 'utils';
-import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
+import { CreateUserMutation, GetJWTByEmailMutation, RequestPasswordResetMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -274,6 +274,7 @@ class Authorization extends Component<PropsType, StateType> {
       emailValid,
       passwordValid,
       isSignUp,
+      isRecoverPassword,
     } = this.state;
 
     if (isSignUp) {
@@ -281,8 +282,11 @@ class Authorization extends Component<PropsType, StateType> {
         formValid:
           firstNameValid && lastNameValid && emailValid && passwordValid,
       });
-    } else {
+    } else if (isSignUp === false && isRecoverPassword === false) {
       this.setState({ formValid: emailValid && passwordValid });
+    }
+    if (isRecoverPassword) {
+      this.setState({ formValid: emailValid });
     }
   };
 
@@ -310,11 +314,27 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
+  recoverPassword = () => {
+    const { email } = this.state;
+    /* RequestPasswordResetMutation.commit({
+      email,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {},
+      onError: (error: Error) => {},
+    }) */
+  };
+
   handleRecoverPassword = (): void => {
-    const { isRecoverPassword } = this.state;
     this.setState({
       modalTitle: 'Forgot Password',
-      isRecoverPassword: !isRecoverPassword,
+      isRecoverPassword: true,
+    });
+  };
+
+  handleBack = () => {
+    this.setState({
+      modalTitle: headerTabsItems[1].name,
+      isSignUp: false,
+      isRecoverPassword: false,
     });
   };
 
@@ -353,17 +373,14 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   renderRecoverPassword = (): Node => {
-    const {
-      email,
-      formValid,
-      errors,
-    } = this.state;
+    const { email, formValid, errors } = this.state;
     return (
       <RecoverPassword
         email={email}
         errors={errors}
         formValid={formValid}
-        onClick={() => {}}
+        onBack={this.handleBack}
+        onClick={this.recoverPassword}
         onChange={this.handleChange}
         onRecoverPassword={this.handleRecoverPassword}
       />
@@ -401,7 +418,9 @@ class Authorization extends Component<PropsType, StateType> {
                   tabs={headerTabs}
                 />
               )}
-              {isRecoverPassword ? this.renderRecoverPassword() : this.renderRegistration()}
+              {isRecoverPassword
+                ? this.renderRecoverPassword()
+                : this.renderRegistration()}
               {isRecoverPassword ? null : (
                 <Fragment>
                   <div className="separatorBlock">
