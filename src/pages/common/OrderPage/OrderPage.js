@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import {
   pathOr,
   filter,
@@ -219,17 +218,6 @@ class OrderPage extends PureComponent<PropsType> {
                   <div styleName="statusTitle">Status</div>
                   <div styleName="statusInfo">
                     {getStatusStringFromEnum(order.status)}
-                  </div>
-                </div>
-                <div styleName="statusItem">
-                  <div styleName="statusTitle">Payment status</div>
-                  <div
-                    styleName={classNames('statusInfo', {
-                      paid: order.paymentStatus === 'Paid',
-                      unpaid: order.paymentStatus !== 'Paid',
-                    })}
-                  >
-                    {order.paymentStatus}
                   </div>
                 </div>
               </div>

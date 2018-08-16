@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import { withRouter, routerShape, Link } from 'found';
 
 import { Col } from 'layout';
@@ -46,7 +45,7 @@ class TableRow extends PureComponent<PropsType> {
           <Col size={2} sm={4} md={3} lg={2} xl={1}>
             {rowItem.number}
           </Col>
-          <Col size={5} sm={4} md={3} lg={2} xl={1}>
+          <Col size={5} sm={4} md={3} lg={3} xl={1}>
             <span styleName="date">
               {stringFromTimestamp({
                 timestamp: rowItem.date,
@@ -100,17 +99,7 @@ class TableRow extends PureComponent<PropsType> {
               {rowItem.subtotal} <b>STQ</b>
             </span>
           </Col>
-          <Col lg={2} xl={1} lgVisible>
-            <div
-              styleName={classNames({
-                paid: rowItem.payment === 'Paid',
-                unpaid: rowItem.payment !== 'Paid',
-              })}
-            >
-              {rowItem.payment}
-            </div>
-          </Col>
-          <Col lg={2} xl={1} lgVisible>
+          <Col md={2} lg={3} xl={2} lgVisible>
             {getStatusStringFromEnum(rowItem.status)}
           </Col>
           <div styleName="border" />
