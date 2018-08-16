@@ -12,7 +12,7 @@
   background-color: $color_white;
   border-radius: 0.5rem;
   position: relative;
-  width: 100%;
+  width: calc(30rem);
   @media (min-width: $md) {
     width: 42rem;
   }

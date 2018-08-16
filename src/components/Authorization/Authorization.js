@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape } from 'found';
 import Cookies from 'universal-cookie';
@@ -305,16 +306,46 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleRecoverPassword = (): void => {};
 
-  render() {
-    const { alone, onCloseModal } = this.props;
+  renderRegistration = (): Node => {
     const {
       email,
       firstName,
       lastName,
       password,
       formValid,
-      isLoading,
       errors,
+      isSignUp,
+    } = this.state;
+    return (
+      isSignUp ? (
+        <SignUp
+          email={email}
+          firstName={firstName}
+          lastName={lastName}
+          password={password}
+          errors={errors}
+          formValid={formValid}
+          handleRegistrationClick={this.handleRegistrationClick}
+          handleChange={this.handleChange}
+        />
+      ) : (
+        <SignIn
+          email={email}
+          password={password}
+          errors={errors}
+          formValid={formValid}
+          onLoginClick={this.handleLoginClick}
+          onChange={this.handleChange}
+          onRecoverPassword={this.handleRecoverPassword}
+        />
+      )
+    )
+  };
+
+  render() {
+    const { alone, onCloseModal } = this.props;
+    const {
+      isLoading,
       isSignUp,
       headerTabs,
       modalTitle,
@@ -337,28 +368,7 @@ class Authorization extends Component<PropsType, StateType> {
                 alone={alone}
                 onClick={this.handleClick}
               />
-              {isSignUp ? (
-                <SignUp
-                  email={email}
-                  firstName={firstName}
-                  lastName={lastName}
-                  password={password}
-                  errors={errors}
-                  formValid={formValid}
-                  handleRegistrationClick={this.handleRegistrationClick}
-                  handleChange={this.handleChange}
-                />
-              ) : (
-                <SignIn
-                  email={email}
-                  password={password}
-                  errors={errors}
-                  formValid={formValid}
-                  onLoginClick={this.handleLoginClick}
-                  onChange={this.handleChange}
-                  onRecoverPassword={this.handleRecoverPassword}
-                />
-              )}
+              {this.renderRegistration()}
               <div className="separatorBlock">
                 <Separator text="or" />
               </div>
