@@ -7,7 +7,7 @@ import { isEmpty, map, pathOr } from 'ramda';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
-import { log, fromRelayError } from 'utils';
+import { log, fromRelayError, addressToString } from 'utils';
 
 import { SetProductQuantityInWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/SetProductQuantityInWarehouseMutation';
@@ -15,17 +15,18 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './Warehouses.scss';
 
-type AddressFullType = {
+type AddressFullType = {|
+  value: ?string,
+  country: ?string,
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
-  country: string,
   locality: ?string,
   political: ?string,
-  postalCode: string,
+  postalCode: ?string,
   route: ?string,
   streetNumber: ?string,
-  value: ?string,
-};
+  placeId: ?string,
+|};
 
 type PropsType = {
   stocks: Array<{
@@ -150,20 +151,18 @@ class Warehouses extends Component<PropsType, StateType> {
             const { addressFull } = item.warehouse;
             // $FlowIgnoreMe
             const warehouseName = pathOr(null, ['warehouse', 'name'], item);
+            // $FlowIgnoreMe
+            const warehouseSlug = pathOr(null, ['warehouse', 'slug'], item);
             return (
               <div key={item.id} styleName="item">
                 <div styleName="td tdName">
-                  <strong styleName="name">{warehouseName || ''}</strong>
+                  <strong styleName="name">
+                    {warehouseName || `Storage ${warehouseSlug}`}
+                  </strong>
                 </div>
                 <div styleName="td tdAddress">
                   <div styleName="address">
-                    <span>{`${addressFull.country}`}</span>
-                    {addressFull.locality && (
-                      <span>{`, ${addressFull.locality}`}</span>
-                    )}
-                    {addressFull.value && (
-                      <span>{`, ${addressFull.value}`}</span>
-                    )}
+                    {addressToString(addressFull) || 'No address'}
                   </div>
                 </div>
                 <div styleName="td tdQuantity">
