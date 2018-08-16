@@ -1,5 +1,6 @@
 // 2018-06-28T09:55:53.978259
 
+import moment from 'moment';
 import {
     stringFromTimestamp,
     timeFromTimestamp,
@@ -7,11 +8,12 @@ import {
     fullDateFromTimestamp,
  } from 'utils/formatDate';
 
-const timestamp = '2018-06-28T09:55:53.978259';
+const timestamp = '2018-06-28T11:55:53.978259';
+const utcHoursOffset = moment().utcOffset()/60;
 
 describe('Dates formatter', () => {
   it('should convert timestamp to default format if no format', () => {
-    expect(stringFromTimestamp({timestamp:  timestamp})).toEqual('28-06-2018 09:55');
+    expect(stringFromTimestamp({timestamp:  timestamp})).toEqual(`28-06-2018 ${11 + utcHoursOffset}:55`);
   })
 
   it('should convert timestamp to presented format', () => {
@@ -19,7 +21,7 @@ describe('Dates formatter', () => {
   })
 
   it('should correct extract time from timestamp', () => {
-    expect(timeFromTimestamp(timestamp)).toEqual('09:55');
+    expect(timeFromTimestamp(timestamp)).toEqual(`${11 + utcHoursOffset}:55`);
   })
 
   it('should correct format to short date from timestamp', () => {

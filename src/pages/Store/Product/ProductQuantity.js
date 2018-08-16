@@ -15,7 +15,12 @@ const ProductQuantity = (props: PropsType) => (
       <strong>Amount</strong>
     </div>
     <div styleName="counter">
-      <Stepper value={0} min={0} max={props.quantity} onChange={() => {}} />
+      <Stepper
+        value={props.quantity === 0 ? 0 : 1}
+        min={0}
+        max={props.quantity}
+        onChange={() => {}}
+      />
       <p styleName="stock">Remaining stock:</p>
       <span
         styleName={classNames('inStock', {
