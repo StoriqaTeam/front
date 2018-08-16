@@ -16,7 +16,7 @@ type PropsType = {
 class AuthorizationHeader extends Component<PropsType, {}> {
   handleClick = (name: string, selected: number) => {
     const { onClick } = this.props;
-    onClick(name, selected)
+    onClick(name, selected);
   };
   render() {
     const { tabs, selected } = this.props;

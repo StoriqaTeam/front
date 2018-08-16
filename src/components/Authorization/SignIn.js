@@ -15,9 +15,10 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  onLoginClick: Function,
-  onChange: Function,
-  onBlur: Function,
+  onLoginClick: () => void,
+  onChange: () => void,
+  onBlur: () => void,
+  onRecoverPassword: () => void,
 };
 
 type StateType = {
@@ -42,6 +43,7 @@ class SignIn extends Component<PropsType, StateType> {
       onLoginClick,
       onChange,
       onBlur,
+      onRecoverPassword,
     } = this.props;
     const { autocomplete } = this.state;
 
@@ -73,7 +75,15 @@ class SignIn extends Component<PropsType, StateType> {
             errors={propOr(null, 'password', errors)}
           />
         </div>
-        <p styleName="forgotPassword">Forgot Password</p>
+        <div
+          onClick={onRecoverPassword}
+          onKeyPress={() => {}}
+          role="button"
+          styleName="forgotPassword"
+          tabIndex="-1"
+        >
+          Forgot Password
+        </div>
         {formValid && (
           <div styleName="signInGroup">
             <div styleName="signInButton">

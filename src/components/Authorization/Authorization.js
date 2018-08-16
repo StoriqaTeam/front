@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape } from 'found';
@@ -15,6 +15,7 @@ import {
   AuthorizationHeader,
   Separator,
   AuthorizationSocial,
+  RecoverPassword,
 } from 'components/Authorization';
 import { log, fromRelayError, errorsHandler } from 'utils';
 import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
@@ -38,21 +39,22 @@ type PropsType = {
 };
 
 type StateType = {
-  firstName: string,
-  lastName: string,
   email: string,
   emailValid: boolean,
-  firstNameValid: boolean,
-  lastNameValid: boolean,
-  password: string,
-  passwordValid: boolean,
-  formValid: boolean,
   errors: ?{
     [code: string]: Array<string>,
   },
-  isLoading: boolean,
-  isSignUp: ?boolean,
+  firstName: string,
+  firstNameValid: boolean,
+  formValid: boolean,
+  lastName: string,
+  lastNameValid: boolean,
+  password: string,
+  passwordValid: boolean,
   headerTabs: Array<{ id: string, name: string }>,
+  isLoading: boolean,
+  isRecoverPassword: boolean,
+  isSignUp: ?boolean,
   modalTitle: string,
   selected: number,
 };
@@ -72,20 +74,21 @@ class Authorization extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
       email: '',
       emailValid: false,
+      errors: null,
+      firstName: '',
       firstNameValid: false,
+      formValid: false,
+      headerTabs: headerTabsItems,
+      isLoading: false,
+      isRecoverPassword: false,
+      isSignUp: this.props.isSignUp,
+      lastName: '',
       lastNameValid: false,
+      modalTitle: headerTabsItems[this.props.isSignUp ? 0 : 1].name,
       password: '',
       passwordValid: false,
-      formValid: false,
-      isLoading: false,
-      errors: null,
-      isSignUp: this.props.isSignUp,
-      headerTabs: headerTabsItems,
-      modalTitle: headerTabsItems[this.props.isSignUp ? 0 : 1].name,
       selected: this.props.isSignUp ? 0 : 1,
     };
     if (process.env.BROWSER) {
@@ -307,7 +310,13 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
-  handleRecoverPassword = (): void => {};
+  handleRecoverPassword = (): void => {
+    const { isRecoverPassword } = this.state;
+    this.setState({
+      modalTitle: 'Forgot Password',
+      isRecoverPassword: !isRecoverPassword,
+    });
+  };
 
   renderRegistration = (): Node => {
     const {
@@ -343,9 +352,34 @@ class Authorization extends Component<PropsType, StateType> {
     );
   };
 
+  renderRecoverPassword = (): Node => {
+    const {
+      email,
+      formValid,
+      errors,
+    } = this.state;
+    return (
+      <RecoverPassword
+        email={email}
+        errors={errors}
+        formValid={formValid}
+        onClick={() => {}}
+        onChange={this.handleChange}
+        onRecoverPassword={this.handleRecoverPassword}
+      />
+    );
+  };
+
   render() {
     const { alone, onCloseModal } = this.props;
-    const { isLoading, isSignUp, headerTabs, modalTitle, selected } = this.state;
+    const {
+      isLoading,
+      isSignUp,
+      headerTabs,
+      modalTitle,
+      selected,
+      isRecoverPassword,
+    } = this.state;
     return (
       <PopUpWrapper
         title={modalTitle}
@@ -358,18 +392,24 @@ class Authorization extends Component<PropsType, StateType> {
                   <Spinner />
                 </div>
               )}
-              <AuthorizationHeader
-                alone={alone}
-                isSignUp={isSignUp}
-                onClick={this.handleClick}
-                selected={selected}
-                tabs={headerTabs}
-              />
-              {this.renderRegistration()}
-              <div className="separatorBlock">
-                <Separator text="or" />
-              </div>
-              <AuthorizationSocial />
+              {isRecoverPassword ? null : (
+                <AuthorizationHeader
+                  alone={alone}
+                  isSignUp={isSignUp}
+                  onClick={this.handleClick}
+                  selected={selected}
+                  tabs={headerTabs}
+                />
+              )}
+              {isRecoverPassword ? this.renderRecoverPassword() : this.renderRegistration()}
+              {isRecoverPassword ? null : (
+                <Fragment>
+                  <div className="separatorBlock">
+                    <Separator text="or" />
+                  </div>
+                  <AuthorizationSocial />
+                </Fragment>
+              )}
             </div>
           </div>
         )}
