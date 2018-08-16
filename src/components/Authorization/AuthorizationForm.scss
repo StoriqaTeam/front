@@ -9,12 +9,13 @@
 }
 
 .wrap {
-  position: relative;
-  width: 42rem;
-  padding: 2rem 4rem 4rem;
-  border-radius: 0.5rem;
-  box-shadow: $shadow_2;
   background-color: $color_white;
+  border-radius: 0.5rem;
+  position: relative;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 42rem;
+  }
 }
 
 .signUp {
@@ -22,9 +23,9 @@
 }
 
 .signUpGroup {
-  margin: 4rem 0 2rem;
   align-items: flex-start;
   display: flex;
+  margin: 4rem 0 2rem;
   justify-content: space-between;
 }
 

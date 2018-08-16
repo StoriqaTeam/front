@@ -309,7 +309,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
     return (
       <PopUpWrapper
         title="Form bra"
-        render={() => (
+        render={({ click }) => (
           <div styleName="container">
             <div styleName="wrap">
               {isLoading && (

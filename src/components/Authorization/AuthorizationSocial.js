@@ -11,12 +11,14 @@ import './AuthorizationSocial.scss';
 
 const buttons = [
   {
+    id: '0',
     href: socialStrings.facebookLoginString(),
     iconType: 'facebook',
     dataTest: 'authFacebookButton',
     message: 'Sign in with Facebook',
   },
   {
+    id: '1',
     href: socialStrings.googleLoginString(),
     iconType: 'google',
     dataTest: 'authGoogleButton',
@@ -26,8 +28,8 @@ const buttons = [
 
 const AuthorizationSocial = () => (
   <div styleName="container">
-    {buttons.map(({ href, dataTest, iconType, message }) => (
-      <Button iconic href={href} dataTest={dataTest}>
+    {buttons.map(({ id, href, dataTest, iconType, message }) => (
+      <Button iconic key={id} href={href} dataTest={dataTest}>
         <Icon type={iconType} />
         <span>{message}</span>
       </Button>

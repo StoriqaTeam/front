@@ -1,11 +1,28 @@
 @import "../../styles/variables.scss";
 
 .container {
+  padding: 4rem 3.5rem;
   background: $color_white;
+  max-width: 37.5rem;
+  @media (min-width: $md) {
+    max-width: 64.75rem;
+    padding: 9rem;
+  }
 }
 
 .title {
-  font-family: $font_circe_regular;
+  font-family: $font_light;
   font-size: 34px;
+  margin-bottom: 4rem;
   text-align: center;
+  @media (min-width: $md) {
+    margin-bottom: 7.75rem;
+  }
+}
+
+.close {
+  cursor: pointer;
+  position: absolute;
+  right: 2.5rem;
+  top: 3.5rem;
 }

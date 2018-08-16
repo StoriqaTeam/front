@@ -3,21 +3,35 @@
 import React, { Component } from 'react';
 import type { Node } from 'react';
 
+import { Icon } from 'components/Icon';
+
 import './PopUpWrapper.scss';
 
 type PropsType = {
   title: string,
-  render: () => Node,
+  render: ({ click: () => any }) => Node,
 };
 
 class PopUpWrapper extends Component<PropsType> {
-  handleClick = () => {};
+  click = () => {};
   render() {
     const { title } = this.props;
+    const closeButton = (
+      <div
+        styleName="close"
+        onClick={() => {}}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+      >
+        <Icon type="cross" />
+      </div>
+    );
     return (
       <aside styleName="container">
-        <h2 styleName="title"><strong>{title}</strong></h2>
-        <div>{this.props.render()}</div>
+        {closeButton}
+        <h2 styleName="title">{title}</h2>
+        {this.props.render({ click: this.click })}
       </aside>
     );
   }

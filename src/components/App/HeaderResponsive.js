@@ -274,12 +274,15 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                   />
                 )}
             </Container>
-            <Modal showModal={showModal} onClose={this.handleCloseModal}>
-              <Authorization
-                isSignUp={isSignUp}
-                onCloseModal={this.handleCloseModal}
-              />
-            </Modal>
+            <Modal
+              showModal={showModal}
+              render={() => (
+                <Authorization
+                  isSignUp={isSignUp}
+                  onCloseModal={this.handleCloseModal}
+                />
+              )}
+            />
             {isMobileCategoriesOpen ? (
               <MobileListItems
                 onClick={this.handleMobileCategories}
