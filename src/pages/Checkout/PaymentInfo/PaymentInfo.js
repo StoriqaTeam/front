@@ -44,6 +44,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   componentDidMount() {
+    console.log('>>> Payment info component did mount');
     this.unmounted = false;
     this.updateCountdown();
     this.refetchInvoice();
@@ -169,7 +170,23 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     // $FlowIgnoreMe;
     const invoice = pathOr(null, ['me', 'invoice'], this.props);
     if (!invoice) {
-      return null;
+      return (
+        <div styleName="container">
+          <div>
+            <div styleName="title">Error</div>
+            <div styleName="description">Your payment was failed :(</div>
+          </div>
+          <div styleName="separator" />
+          <div styleName="links">
+            <div>
+              You can pay with <span>Storiqa Wallet</span>
+            </div>
+            <div>
+              Don’t you have one yet? <span>Download</span>
+            </div>
+          </div>
+        </div>
+      );
     }
 
     const { wallet, amount, transactions } = invoice;
