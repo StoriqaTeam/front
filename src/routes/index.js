@@ -39,7 +39,6 @@ import { StartSelling } from 'pages/StartSelling';
 
 const routes = (
   <Route>
-    <Route path="/error" Component={Error} />
     <Route
       path="/"
       Component={App}
@@ -130,6 +129,7 @@ const routes = (
         return <Component {...props} />;
       }}
     >
+      <Route path="/error" Component={Error} />
       <Route Component={Start} />
       <Route path="/404" Component={Error404} />
 

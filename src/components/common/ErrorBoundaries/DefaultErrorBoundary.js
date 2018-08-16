@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import { routerShape, withRouter } from 'found';
 
+import { Error } from 'pages/Errors';
+
 type PropsType = {
   router: routerShape,
 };
@@ -12,7 +14,7 @@ class DefaultErrorBoundary extends PureComponent<PropsType> {
     this.props.router.push('/error');
   }
   render() {
-    return <div>test</div>;
+    return <Error />;
   }
 }
 
