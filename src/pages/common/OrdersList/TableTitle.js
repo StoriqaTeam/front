@@ -22,7 +22,7 @@ const TableTitle = () => (
         </span>
       </span>
     </Col>
-    <Col size={5} sm={4} md={3} lg={2} xl={1}>
+    <Col size={5} sm={4} md={3} lg={3} xl={1}>
       <span styleName="title">
         Date
         <Icon type="sortArrows" />
@@ -52,13 +52,7 @@ const TableTitle = () => (
         <Icon type="sortArrows" />
       </span>
     </Col>
-    <Col md={1} lg={2} xl={1} lgVisible>
-      <span styleName="title">
-        Payment
-        <Icon type="sortArrows" />
-      </span>
-    </Col>
-    <Col md={1} lg={2} xl={1} lgVisible>
+    <Col md={2} lg={3} xl={2} lgVisible>
       <span styleName="title">
         Status
         <Icon type="sortArrows" />
