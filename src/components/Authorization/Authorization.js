@@ -306,7 +306,7 @@ class Authorization extends Component<PropsType, StateType> {
   handleRecoverPassword = (): void => {};
 
   render() {
-    const { alone } = this.props;
+    const { alone, onCloseModal } = this.props;
     const {
       email,
       firstName,
@@ -322,7 +322,7 @@ class Authorization extends Component<PropsType, StateType> {
     return (
       <PopUpWrapper
         title={modalTitle}
-        onClose={() => {}}
+        onClose={onCloseModal}
         render={() => (
           <div styleName="container">
             <div styleName="wrap">

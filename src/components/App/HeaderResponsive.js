@@ -23,7 +23,6 @@ import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
 import { HeaderBottom, HeaderTop, MobileSearchMenu } from './index';
 
 import './HeaderResponsive.scss';
-import { AuthorizationForm } from '../Authorization';
 
 const TOTAL_FRAGMENT = graphql`
   fragment HeaderResponsiveTotalLocalFragment on Cart {

@@ -72,6 +72,16 @@ class Modal extends Component<PropsTypes, StateTypes> {
     }
   };
 
+  handleClick = (e: any): void => {
+    const { onClose } = this.props;
+    const {
+      target: { id },
+    } = e;
+    if (id === 'overlay') {
+      onClose();
+    }
+  };
+
   render() {
     if (!this.state.showModal) return null;
     const closeButton = (
@@ -88,7 +98,14 @@ class Modal extends Component<PropsTypes, StateTypes> {
     return (
       <Portal>
         <div styleName="container">
-          <div styleName="wrap">
+          <div
+            id="overlay"
+            onClick={this.handleClick}
+            onKeyDown={() => {}}
+            role="button"
+            styleName="wrap"
+            tabIndex="0"
+          >
             <div styleName="inner">
               {isNil(this.props.render) ? (
                 <Fragment>

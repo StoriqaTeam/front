@@ -6,8 +6,8 @@ import classNames from 'classnames';
 import './AuthorizationHeader.scss';
 
 type PropsType = {
-  isSignUp: ?boolean,
-  alone: ?boolean,
+  // isSignUp: ?boolean,
+  // alone: ?boolean,
   onClick: Function,
   tabs: Array<{ id: string, name: string }>,
 };
