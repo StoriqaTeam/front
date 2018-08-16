@@ -1,3 +1,6 @@
+/*
+ * Roboto
+ */
 @font-face {
   font-family: 'Roboto';
   src: url('./styles/fonts/Roboto/Roboto-Regular.ttf');
@@ -30,5 +33,50 @@
   font-family: 'Roboto_Medium';
   src: url('./styles/fonts/Roboto/Roboto-Medium.ttf');
   font-style: normal;
+  font-weight: normal;
+}
+
+/*
+ * Circe
+ */
+@font-face {
+  font-family: 'Circe_Bold';
+  src: url('./styles/fonts/Circe/Circe-Bold.ttf');
+  font-style: normal;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Circe_ExtraBold';
+  src: url('./styles/fonts/Circe/Circe-ExtraBold.ttf');
+  font-style: normal;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Circe_ExtraLight';
+  src: url('./styles/fonts/Circe/Circe-ExtraLight.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Circe_Light';
+  src: url('./styles/fonts/Circe/Circe-Light.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Circe_Regular';
+  src: url('./styles/fonts/Circe/Circe-Regular.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Circe_Thin';
+  src: url('./styles/fonts/Circe/Circe-Thin.ttf');
+  font-style: italic;
   font-weight: normal;
 }

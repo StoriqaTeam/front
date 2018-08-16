@@ -22,9 +22,16 @@ $color_opacity_white: rgba(255, 255, 255, 0.95);
 // Fonts
 $font_regular: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $font_light: 'Roboto_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
-$font_bold: 'Roboto_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
+$font_bold: 'Roboto_Bold', '' 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
 $font_italic: 'Roboto_Italic', 'Helvetica Neue Italic', Helvetica, Arial, sans-serif;
 $font_medium: 'Roboto_Medium', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+
+$font_circe_bold: 'Circe_Bold';
+$font_circe_extra_bold: 'Circe_ExtraBold';
+$font_circe_extra_light: 'Circe_ExtraLight';
+$font_circe_light: 'Circe_Light';
+$font_circe_regular: 'Circe_Regular';
+$font_circe_thin: 'Circe_Thin';
 
 // Shadows
 $shadow_1: 0 0.15rem 0.5rem 0 rgba(0, 0, 0, .05);

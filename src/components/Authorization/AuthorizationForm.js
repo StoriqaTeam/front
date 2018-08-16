@@ -6,6 +6,7 @@ import { withRouter, matchShape } from 'found';
 import Cookies from 'universal-cookie';
 import type { Environment } from 'relay-runtime';
 
+import { PopUpWrapper } from 'components/PopUpWrapper';
 import { Spinner } from 'components/common/Spinner';
 import {
   SignUp,
@@ -55,7 +56,6 @@ type StateType = {
 class AuthorizationForm extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
-    // this.setState({ isSignUp: this.props.isSignUp });
     this.state = {
       firstName: '',
       lastName: '',
@@ -307,46 +307,51 @@ class AuthorizationForm extends Component<PropsType, StateType> {
     } = this.state;
 
     return (
-      <div styleName="container">
-        <div styleName="wrap">
-          {isLoading && (
-            <div styleName="spinner">
-              <Spinner />
+      <PopUpWrapper
+        title="Form bra"
+        render={() => (
+          <div styleName="container">
+            <div styleName="wrap">
+              {isLoading && (
+                <div styleName="spinner">
+                  <Spinner />
+                </div>
+              )}
+              <AuthorizationHeader
+                isSignUp={isSignUp}
+                alone={alone}
+                handleToggle={this.handleToggle}
+              />
+              {isSignUp ? (
+                <SignUp
+                  email={email}
+                  firstName={firstName}
+                  lastName={lastName}
+                  password={password}
+                  errors={errors}
+                  formValid={formValid}
+                  handleRegistrationClick={this.handleRegistrationClick}
+                  handleChange={this.handleChange}
+                />
+              ) : (
+                <SignIn
+                  email={email}
+                  password={password}
+                  errors={errors}
+                  formValid={formValid}
+                  onLoginClick={this.handleLoginClick}
+                  onChange={this.handleChange}
+                  onRecoverPassword={this.handleRecoverPassword}
+                />
+              )}
+              <div className="separatorBlock">
+                <Separator text="or" />
+              </div>
+              <AuthorizationSocial />
             </div>
-          )}
-          <AuthorizationHeader
-            isSignUp={isSignUp}
-            alone={alone}
-            handleToggle={this.handleToggle}
-          />
-          {isSignUp ? (
-            <SignUp
-              email={email}
-              firstName={firstName}
-              lastName={lastName}
-              password={password}
-              errors={errors}
-              formValid={formValid}
-              handleRegistrationClick={this.handleRegistrationClick}
-              handleChange={this.handleChange}
-            />
-          ) : (
-            <SignIn
-              email={email}
-              password={password}
-              errors={errors}
-              formValid={formValid}
-              onLoginClick={this.handleLoginClick}
-              onChange={this.handleChange}
-              onRecoverPassword={this.handleRecoverPassword}
-            />
-          )}
-          <div className="separatorBlock">
-            <Separator text="or" />
           </div>
-          <AuthorizationSocial />
-        </div>
-      </div>
+        )}
+      />
     );
   }
 }

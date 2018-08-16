@@ -1,0 +1,11 @@
+@import "../../styles/variables.scss";
+
+.container {
+  background: $color_white;
+}
+
+.title {
+  font-family: $font_circe_regular;
+  font-size: 34px;
+  text-align: center;
+}
