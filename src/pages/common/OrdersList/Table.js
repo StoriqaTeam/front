@@ -1,11 +1,13 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import { map } from 'ramda';
+import React, { PureComponent, Fragment } from 'react';
+import { map, isEmpty } from 'ramda';
 
 import TableRow from './TableRow';
 
 import type { TableItemType } from './TableRow';
+
+import './Table.scss';
 
 type PropsType = {
   items: Array<TableItemType>,
@@ -26,7 +28,16 @@ class Table extends PureComponent<PropsType> {
     );
 
   render() {
-    return <div>{this.renderItems(this.props.items)}</div>;
+    const { items } = this.props;
+    return (
+      <Fragment>
+        {items && !isEmpty(items) ? (
+          <div>{this.renderItems(items)}</div>
+        ) : (
+          <div styleName="noOrders">No orders</div>
+        )}
+      </Fragment>
+    );
   }
 }
 
