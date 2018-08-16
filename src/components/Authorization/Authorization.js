@@ -54,6 +54,7 @@ type StateType = {
   isSignUp: ?boolean,
   headerTabs: Array<{ id: string, name: string }>,
   modalTitle: string,
+  selected: number,
 };
 
 const headerTabsItems = [
@@ -84,7 +85,8 @@ class Authorization extends Component<PropsType, StateType> {
       errors: null,
       isSignUp: this.props.isSignUp,
       headerTabs: headerTabsItems,
-      modalTitle: headerTabsItems[0].name,
+      modalTitle: headerTabsItems[this.props.isSignUp ? 0 : 1].name,
+      selected: this.props.isSignUp ? 0 : 1,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -281,7 +283,7 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
-  handleClick = modalTitle => {
+  handleClick = (modalTitle, selected) => {
     this.setState({
       isSignUp: !this.state.isSignUp,
       email: '',
@@ -290,6 +292,7 @@ class Authorization extends Component<PropsType, StateType> {
       password: '',
       errors: null,
       modalTitle,
+      selected,
     });
   };
 
@@ -316,40 +319,33 @@ class Authorization extends Component<PropsType, StateType> {
       errors,
       isSignUp,
     } = this.state;
-    return (
-      isSignUp ? (
-        <SignUp
-          email={email}
-          firstName={firstName}
-          lastName={lastName}
-          password={password}
-          errors={errors}
-          formValid={formValid}
-          handleRegistrationClick={this.handleRegistrationClick}
-          handleChange={this.handleChange}
-        />
-      ) : (
-        <SignIn
-          email={email}
-          password={password}
-          errors={errors}
-          formValid={formValid}
-          onLoginClick={this.handleLoginClick}
-          onChange={this.handleChange}
-          onRecoverPassword={this.handleRecoverPassword}
-        />
-      )
-    )
+    return isSignUp ? (
+      <SignUp
+        email={email}
+        firstName={firstName}
+        lastName={lastName}
+        password={password}
+        errors={errors}
+        formValid={formValid}
+        onRegistrationClick={this.handleRegistrationClick}
+        onChange={this.handleChange}
+      />
+    ) : (
+      <SignIn
+        email={email}
+        password={password}
+        errors={errors}
+        formValid={formValid}
+        onLoginClick={this.handleLoginClick}
+        onChange={this.handleChange}
+        onRecoverPassword={this.handleRecoverPassword}
+      />
+    );
   };
 
   render() {
     const { alone, onCloseModal } = this.props;
-    const {
-      isLoading,
-      isSignUp,
-      headerTabs,
-      modalTitle,
-    } = this.state;
+    const { isLoading, isSignUp, headerTabs, modalTitle, selected } = this.state;
     return (
       <PopUpWrapper
         title={modalTitle}
@@ -363,10 +359,11 @@ class Authorization extends Component<PropsType, StateType> {
                 </div>
               )}
               <AuthorizationHeader
-                tabs={headerTabs}
-                isSignUp={isSignUp}
                 alone={alone}
+                isSignUp={isSignUp}
                 onClick={this.handleClick}
+                selected={selected}
+                tabs={headerTabs}
               />
               {this.renderRegistration()}
               <div className="separatorBlock">

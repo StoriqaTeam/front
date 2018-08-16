@@ -8,25 +8,18 @@ import './AuthorizationHeader.scss';
 type PropsType = {
   // isSignUp: ?boolean,
   // alone: ?boolean,
+  selected: number,
   onClick: Function,
   tabs: Array<{ id: string, name: string }>,
 };
 
-type StateType = {
-  selected: number,
-};
-
-class AuthorizationHeader extends Component<PropsType, StateType> {
-  state = {
-    selected: 0,
-  };
+class AuthorizationHeader extends Component<PropsType, {}> {
   handleClick = (name: string, selected: number) => {
     const { onClick } = this.props;
-    this.setState({ selected }, onClick(name));
+    onClick(name, selected)
   };
   render() {
-    const { tabs } = this.props;
-    const { selected } = this.state;
+    const { tabs, selected } = this.props;
     return (
       <div styleName="container">
         <nav styleName="tabsContainer">
