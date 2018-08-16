@@ -5,9 +5,8 @@ import classNames from 'classnames';
 import { withRouter, routerShape, Link } from 'found';
 
 import { Col } from 'layout';
+import { stringFromTimestamp } from 'utils/formatDate';
 import { getStatusStringFromEnum } from '../OrderPage/utils';
-
-import { formatDate } from './OrdersListUtils';
 
 import './TableRow.scss';
 
@@ -48,8 +47,18 @@ class TableRow extends PureComponent<PropsType> {
             {rowItem.number}
           </Col>
           <Col size={5} sm={4} md={3} lg={2} xl={1}>
-            <span styleName="date">{rowItem.date}</span>
-            <span styleName="dateFormatted">{formatDate(rowItem.date)}</span>
+            <span styleName="date">
+              {stringFromTimestamp({
+                timestamp: rowItem.date,
+                format: 'DD MMM YYYY HH:mm',
+              })}
+            </span>
+            <span styleName="dateFormatted">
+              {stringFromTimestamp({
+                timestamp: rowItem.date,
+                format: 'DD.MM.YY',
+              })}
+            </span>
           </Col>
           <Col lg={2} xl={2} xlVisible>
             <span styleName="link">

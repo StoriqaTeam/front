@@ -11,7 +11,7 @@ const timestamp = '2018-06-28T09:55:53.978259';
 
 describe('Dates formatter', () => {
   it('should convert timestamp to default format if no format', () => {
-    expect(stringFromTimestamp({timestamp:  timestamp})).toEqual('28-06-2018 09:55');
+    expect(stringFromTimestamp({timestamp:  timestamp})).toEqual('28-06-2018 12:55');
   })
 
   it('should convert timestamp to presented format', () => {
@@ -19,7 +19,7 @@ describe('Dates formatter', () => {
   })
 
   it('should correct extract time from timestamp', () => {
-    expect(timeFromTimestamp(timestamp)).toEqual('09:55');
+    expect(timeFromTimestamp(timestamp)).toEqual('12:55');
   })
 
   it('should correct format to short date from timestamp', () => {

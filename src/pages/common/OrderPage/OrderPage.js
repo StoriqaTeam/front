@@ -21,6 +21,7 @@ import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
 import {
+  stringFromTimestamp,
   timeFromTimestamp,
   fullDateFromTimestamp,
   shortDateFromTimestamp,
@@ -51,7 +52,7 @@ type PropsType = {
 type OrderDTOType = {
   number: string,
   product: ProductDTOType,
-  customerName: string,
+  customerPhone: ?string,
   date: string,
   delivery: string,
   trackId: string,
@@ -84,6 +85,7 @@ class OrderPage extends PureComponent<PropsType> {
         ? join(' ', filter(item => Boolean(item), values(customerDTO)))
         : '—';
     const customerAddress = addressToString(order.addressFull) || '—';
+    const customerPhone = customer.phone || null;
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -123,6 +125,7 @@ class OrderPage extends PureComponent<PropsType> {
       },
       customerName,
       customerAddress,
+      customerPhone,
       date: order.createdAt,
       delivery: order.deliveryCompany || '—',
       trackId: order.trackId || '—',
@@ -269,7 +272,12 @@ class OrderPage extends PureComponent<PropsType> {
                   <TextWithLabel label="Customer" text={order.customerName} />
                 </Col>
                 <Col size={12} lg={7}>
-                  <TextWithLabel label="Address" text={order.customerAddress} />
+                  <TextWithLabel
+                    label="Contacts"
+                    text={`${order.customerAddress}${
+                      order.customerPhone ? `, ${order.customerPhone}` : ''
+                    }`}
+                  />
                 </Col>
               </Row>
             </div>
@@ -278,13 +286,19 @@ class OrderPage extends PureComponent<PropsType> {
                 <Col size={12} lg={5}>
                   <TextWithLabel
                     label="Date"
-                    text={this.getDateFromTimestamp(order.date)}
+                    text={stringFromTimestamp({
+                      timestamp: order.date,
+                      format: 'DD MMMM YYYY',
+                    })}
                   />
                 </Col>
                 <Col size={12} lg={7}>
                   <TextWithLabel
                     label="Time"
-                    text={this.getTimeFromTimestamp(order.date)}
+                    text={stringFromTimestamp({
+                      timestamp: order.date,
+                      format: 'HH:mm',
+                    })}
                   />
                 </Col>
               </Row>

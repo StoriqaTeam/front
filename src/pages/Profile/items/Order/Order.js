@@ -51,6 +51,7 @@ export default createRefetchContainer(
         customer {
           firstName
           lastName
+          phone
         }
         product {
           baseProduct {

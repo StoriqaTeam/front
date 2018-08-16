@@ -83,6 +83,7 @@ export default createRefetchContainer(
           customer {
             firstName
             lastName
+            phone
           }
           receiverName
           addressFull {

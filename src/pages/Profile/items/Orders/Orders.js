@@ -6,7 +6,6 @@ import { pathOr, map, isEmpty } from 'ramda';
 import moment from 'moment';
 
 import { OrdersList } from 'pages/common/OrdersList';
-import { shortDateFromTimestamp, timeFromTimestamp } from 'utils/formatDate';
 
 import type { TableItemType } from 'pages/common/OrdersList/TableRow';
 
@@ -78,7 +77,7 @@ class Orders extends Component<PropsType, StateType> {
   orderToDTO = (order: { [string]: any }): TableItemType => {
     const result: TableItemType = {
       number: `${order.slug}`,
-      date: this.compileDateString(order.createdAt),
+      date: order.createdAt,
       shop: {
         id: order.store ? order.store.rawId : null,
         title: order.store ? order.store.name[0].text : 'The store was deleted',
@@ -96,12 +95,6 @@ class Orders extends Component<PropsType, StateType> {
       subtotal: order.subtotal,
     };
     return result;
-  };
-
-  compileDateString = (timestamp: string): string => {
-    const shortDate = shortDateFromTimestamp(timestamp);
-    const time = timeFromTimestamp(timestamp);
-    return `${shortDate}\n${time}`;
   };
 
   handleSearchTermFilterChanged = (value: string) => {
