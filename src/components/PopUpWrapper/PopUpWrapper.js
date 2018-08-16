@@ -9,7 +9,7 @@ import './PopUpWrapper.scss';
 
 type PropsType = {
   title: string,
-  render: ({ click: () => any }) => Node,
+  render: () => Node,
 };
 
 class PopUpWrapper extends Component<PropsType> {
@@ -31,7 +31,7 @@ class PopUpWrapper extends Component<PropsType> {
       <aside styleName="container">
         {closeButton}
         <h2 styleName="title">{title}</h2>
-        {this.props.render({ click: this.click })}
+        {this.props.render()}
       </aside>
     );
   }

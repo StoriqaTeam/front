@@ -1,6 +1,12 @@
+@import "../../styles/variables.scss";
+
 .container {
   display: block;
-  margin-bottom: 32px;
+  margin: 0 -3.5rem 6rem -3.5rem;
+
+  @media (min-width: $md) {
+    margin: 0 -9rem 6rem -9rem;
+  }
 }
 
 .container:after {
@@ -21,4 +27,33 @@
   float: right;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.tabsContainer {
+  border-bottom: 2px solid $color_grey_trivial;
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 3.5rem;
+  li:first-child {
+    margin-right: 2.75rem;
+  }
+  @media (min-width: $md) {
+    padding: 0 9rem;
+  }
+}
+
+.tab {
+  border-bottom: 2px solid transparent;
+  color: $color_grey_minor;
+  cursor: pointer;
+  font-size: 14px;
+  padding-bottom: calc(2rem + 2px);
+  text-transform: uppercase;
+  &.clicked {
+    color: $color_blue;
+    border-bottom: 2px solid $color_blue;
+  }
 }

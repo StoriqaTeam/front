@@ -51,7 +51,20 @@ type StateType = {
   },
   isLoading: boolean,
   isSignUp: ?boolean,
+  headerTabs: Array<{ id: string, name: string }>,
+  modalTitle: string,
 };
+
+const headerTabs = [
+  {
+    id: '0',
+    name: 'Sign Up',
+  },
+  {
+    id: '1',
+    name: 'Sign In',
+  },
+];
 
 class AuthorizationForm extends Component<PropsType, StateType> {
   constructor(props) {
@@ -69,6 +82,8 @@ class AuthorizationForm extends Component<PropsType, StateType> {
       isLoading: false,
       errors: null,
       isSignUp: this.props.isSignUp,
+      headerTabs,
+      modalTitle: headerTabs[0].name,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -269,7 +284,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
     }
   };
 
-  handleToggle = () => {
+  handleClick = modalTitle => {
     this.setState({
       isSignUp: !this.state.isSignUp,
       email: '',
@@ -277,6 +292,7 @@ class AuthorizationForm extends Component<PropsType, StateType> {
       lastName: '',
       password: '',
       errors: null,
+      modalTitle,
     });
   };
 
@@ -304,12 +320,13 @@ class AuthorizationForm extends Component<PropsType, StateType> {
       isLoading,
       errors,
       isSignUp,
+      headerTabs,
+      modalTitle,
     } = this.state;
-
     return (
       <PopUpWrapper
-        title="Form bra"
-        render={({ click }) => (
+        title={modalTitle}
+        render={() => (
           <div styleName="container">
             <div styleName="wrap">
               {isLoading && (
@@ -318,9 +335,10 @@ class AuthorizationForm extends Component<PropsType, StateType> {
                 </div>
               )}
               <AuthorizationHeader
+                tabs={headerTabs}
                 isSignUp={isSignUp}
                 alone={alone}
-                handleToggle={this.handleToggle}
+                onClick={this.handleClick}
               />
               {isSignUp ? (
                 <SignUp
