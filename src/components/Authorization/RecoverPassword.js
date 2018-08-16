@@ -30,7 +30,15 @@ class RecoverPassword extends Component<PropsType, StateType> {
   };
   handleClick = () => {};
   render() {
-    const { email, errors, formValid, onClick, onChange, onBlur, onBack } = this.props;
+    const {
+      email,
+      errors,
+      formValid,
+      onClick,
+      onChange,
+      onBlur,
+      onBack,
+    } = this.props;
     const { autocomplete } = this.state;
     return (
       <div styleName="signIn">
