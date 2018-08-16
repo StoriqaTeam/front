@@ -44,7 +44,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   componentDidMount() {
-    console.log('>>> Payment info component did mount');
     this.unmounted = false;
     this.updateCountdown();
     this.refetchInvoice();
