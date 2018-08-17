@@ -77,7 +77,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ['match', 'location', 'query', 'minValue'],
       nextProps,
     );
-    const minValueFromUrlInt = parseInt(minValueFromUrl, 10);
+    const minValueFromUrlInt = parseFloat(minValueFromUrl);
     // get initial minValue ranger from url if we can
     const volume =
       minValueFromUrlInt && minValueFromUrlInt > minValue
@@ -98,7 +98,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ['match', 'location', 'query', 'maxValue'],
       nextProps,
     );
-    const maxValueFromUrlInt = parseInt(maxValueFromUrl, 10);
+    const maxValueFromUrlInt = parseFloat(maxValueFromUrl);
     // get initial maxValue ranger from url if we can
     const volume2 =
       maxValueFromUrlInt && maxValueFromUrlInt < maxValue
@@ -320,6 +320,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     if (!parentObj) return linkComponent();
     return linkComponent(parentObj);
   };
+
   render() {
     const { onClose, isOpen } = this.props;
     const { volume, volume2 } = this.state;
