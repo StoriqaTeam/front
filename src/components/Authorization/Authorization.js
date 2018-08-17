@@ -352,7 +352,6 @@ class Authorization extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
-        console.log('relayErrors', relayErrors);
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
@@ -377,6 +376,8 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleBack = () => {
     this.setState({
+      email: '',
+      errors: null,
       modalTitle: headerTabsItems[1].name,
       isSignUp: false,
       isRecoverPassword: false,
