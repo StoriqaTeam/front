@@ -351,20 +351,21 @@ class Checkout extends Component<PropsType, StateType> {
                         )}
                     </Col>
                   )}
-                  {!emptyCart && (
-                    <Col size={12} lg={4} xl={3}>
-                      <StickyBar>
-                        <CheckoutSidebar
-                          buttonText={step === 1 ? 'Next' : 'Checkout'}
-                          onClick={
-                            (step === 1 && this.handleChangeStep(2)) ||
-                            this.handleCheckout
-                          }
-                          isReadyToClick={this.checkReadyToCheckout()}
-                        />
-                      </StickyBar>
-                    </Col>
-                  )}
+                  {!emptyCart &&
+                    step !== 3 && (
+                      <Col size={12} lg={4} xl={3}>
+                        <StickyBar>
+                          <CheckoutSidebar
+                            buttonText={step === 1 ? 'Next' : 'Checkout'}
+                            onClick={
+                              (step === 1 && this.handleChangeStep(2)) ||
+                              this.handleCheckout
+                            }
+                            isReadyToClick={this.checkReadyToCheckout()}
+                          />
+                        </StickyBar>
+                      </Col>
+                    )}
                 </Row>
               </div>
             </Col>

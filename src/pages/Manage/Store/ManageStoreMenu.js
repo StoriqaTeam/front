@@ -36,6 +36,7 @@ type MenuItemType = {
   title: string,
   link: string,
   disabled: boolean,
+  dataTest: string,
 };
 
 type PropsType = {
@@ -298,6 +299,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
+                data-test={item.dataTest}
               >
                 {item.title}
               </div>
