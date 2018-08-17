@@ -203,7 +203,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const { searchValue, withoutCategories } = this.props;
+    const { searchValue, withoutCategories, currentLocale, changeLocale } = this.props;
     const {
       showModal,
       isSignUp,
@@ -262,8 +262,8 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               <BurgerMenu />
               <HeaderTop
                 user={userData}
-                currentLocale={this.props.currentLocale}
-                changeLocale={this.props.changeLocale}
+                currentLocale={currentLocale}
+                changeLocale={changeLocale}
               />
               <HeaderBottom
                 userData={userData}
