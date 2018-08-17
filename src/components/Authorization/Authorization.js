@@ -331,17 +331,17 @@ class Authorization extends Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, messages =>
+          errorsHandler(relayErrors, this.props.showAlert, () =>
             this.setState({
               isLoading: false,
-              errors: messages || null,
+              errors: { email: ['Email Not Found'] },
             }),
           );
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Please confirm check your email',
+          text: 'Please verify your email',
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
@@ -352,13 +352,14 @@ class Authorization extends Component<PropsType, StateType> {
       },
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
+        console.log('relayErrors', relayErrors);
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, messages =>
+          errorsHandler(relayErrors, this.props.showAlert, () =>
             this.setState({
               isLoading: false,
-              errors: messages || null,
+              errors: { email: ['Email Not Found'] },
             }),
           );
         }

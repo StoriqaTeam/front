@@ -10,11 +10,13 @@ import './Login.scss';
 
 type PropsType = {
   router: routerShape,
-}
+};
 
 class Login extends Component<PropsType> {
   handleCloseModal = () => {
-    const { router: { push } } = this.props;
+    const {
+      router: { push },
+    } = this.props;
     push('/');
   };
   render() {
