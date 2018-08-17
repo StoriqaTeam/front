@@ -56,7 +56,7 @@ const HEADER_FRAGMENT = graphql`
 type PropsType = {
   searchValue: string,
   currentLocale: string,
-  changeLocale: (lang: string) => void,
+  setLang: (lang: string) => void,
 };
 
 type StateType = {
@@ -162,7 +162,7 @@ class Header extends Component<PropsType, StateType> {
 
   handleChangeLocale = (item: { id: string, label: string }) => {
     if (item && item.id) {
-      this.props.changeLocale(item.id);
+      this.props.setLang(item.id);
     }
   };
 

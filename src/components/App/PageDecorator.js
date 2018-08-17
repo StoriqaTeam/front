@@ -61,7 +61,7 @@ export default (
       setCookie('locale', 'en');
     }
 
-    changeLocale = (lang: string) => {
+    setLang = (lang: string) => {
       setCookie('locale', lang);
       this.setState({ currentLocale: lang });
     };
@@ -73,7 +73,7 @@ export default (
           {({ environment }) => (
             <LangContext.Provider
               value={{
-                changeLocale: this.changeLocale,
+                setLang: this.setLang,
                 currentLocale,
               }}
             >
@@ -91,7 +91,7 @@ export default (
                         )}
                         withoutCategories={withoutCategories}
                         currentLocale={currentLocale}
-                        changeLocale={this.changeLocale}
+                        setLang={this.setLang}
                       />
                     ) : (
                       <Header
@@ -102,7 +102,7 @@ export default (
                           this.props,
                         )}
                         currentLocale={currentLocale}
-                        changeLocale={this.changeLocale}
+                        setLang={this.setLang}
                       />
                     )}
                     <Main>

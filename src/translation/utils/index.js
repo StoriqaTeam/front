@@ -22,7 +22,7 @@ const translateKey = (path: any, obj: any) =>
 
 const createHTMLMarkup = (html: string) => ({ __html: html });
 
-export const translate = (
+export const t = (
   key: string,
   placeholders?: { [string]: string },
   isHTML?: boolean,
@@ -47,4 +47,9 @@ export const translate = (
         null,
       )
     : finalResult;
+};
+
+export const getCurrentLang = () => {
+  const cookieLocale = pathOr('en', ['value'], getCookie('locale'));
+  return cookieLocale;
 };

@@ -48,7 +48,7 @@ type PropsType = {
   environment: Environment,
   withoutCategories: ?boolean,
   currentLocale: string,
-  changeLocale: (lang: string) => void,
+  setLang: (lang: string) => void,
 };
 
 type StateType = {
@@ -207,7 +207,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       searchValue,
       withoutCategories,
       currentLocale,
-      changeLocale,
+      setLang,
     } = this.props;
     const {
       showModal,
@@ -268,7 +268,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               <HeaderTop
                 user={userData}
                 currentLocale={currentLocale}
-                changeLocale={changeLocale}
+                setLang={setLang}
               />
               <HeaderBottom
                 userData={userData}

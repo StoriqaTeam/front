@@ -5,20 +5,20 @@ import { find, propEq } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
-import { translate } from 'translation/utils/translate';
+import { t } from 'translation/utils';
 import languages from 'translation/languages.json';
 
 import './HeaderTop.scss';
 
 type PropsType = {
   currentLocale: string,
-  changeLocale: (lang: string) => void,
+  setLang: (lang: string) => void,
 };
 
 class HeaderTop extends Component<PropsType> {
   handleChangeLocale = (item: { id: string, label: string }) => {
     if (item && item.id) {
-      this.props.changeLocale(item.id);
+      this.props.setLang(item.id);
     }
   };
 
@@ -44,10 +44,10 @@ class HeaderTop extends Component<PropsType> {
           />
         </div>
         <div>
-          <a href="_">{translate('header.help')}</a>
+          <a href="_">{t('header.help')}</a>
         </div>
         <div>
-          <a href="/start-selling">{translate('header.sell_on_storiqa')}</a>
+          <a href="/start-selling">{t('header.sell_on_storiqa')}</a>
         </div>
       </div>
     );
