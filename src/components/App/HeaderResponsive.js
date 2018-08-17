@@ -203,7 +203,12 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const { searchValue, withoutCategories, currentLocale, changeLocale } = this.props;
+    const {
+      searchValue,
+      withoutCategories,
+      currentLocale,
+      changeLocale,
+    } = this.props;
     const {
       showModal,
       isSignUp,
