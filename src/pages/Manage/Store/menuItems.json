@@ -3,30 +3,35 @@
     "id": "orders",
     "title": "Orders",
     "link": "/orders",
-    "disabled": false
+    "disabled": false,
+    "dataTest": "store-menu-orders"
   },
   {
     "id": "goods",
     "title": "Goods",
     "link": "/products",
-    "disabled": false
+    "disabled": false,
+    "dataTest": "store-menu-goods"
   },
   {
     "id": "storages",
     "title": "Storages",
     "link": "/storages",
-    "disabled": false
+    "disabled": false,
+    "dataTest": "store-menu-storages"
   },
   {
     "id": "settings",
     "title": "Settings",
     "link": "/",
-    "disabled": false
+    "disabled": false,
+    "dataTest": "store-menu-settings"
   },
   {
     "id": "contacts",
     "title": "Contacts",
     "link": "/contacts",
-    "disabled": false
+    "disabled": false,
+    "dataTest": "store-menu-contacts"
   }
 ]
