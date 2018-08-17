@@ -64,7 +64,11 @@ const ProfileMenu = ({
       >
         Profile settings
       </Link>
-      <Link to={getStoreLink(myStoreId)} styleName="item">
+      <Link
+        to={getStoreLink(myStoreId)}
+        styleName="item"
+        data-test="header-user-menu-myShops"
+      >
         <span>{myStoreId ? 'My shop' : 'Start selling'}</span>
       </Link>
     </div>
