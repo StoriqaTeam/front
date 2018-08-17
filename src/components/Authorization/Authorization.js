@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
-import { withRouter, matchShape } from 'found';
+import { withRouter, matchShape, routerShape } from 'found';
 import Cookies from 'universal-cookie';
 import type { Environment } from 'relay-runtime';
 
@@ -16,6 +16,7 @@ import {
   Separator,
   AuthorizationSocial,
   RecoverPassword,
+  ResetPassword,
 } from 'components/Authorization';
 import { log, fromRelayError, errorsHandler } from 'utils';
 import {
@@ -40,6 +41,8 @@ type PropsType = {
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
   onCloseModal?: () => void,
+  isResetPassword?: boolean,
+  router: routerShape,
 };
 
 type StateType = {
@@ -75,6 +78,9 @@ const headerTabsItems = [
 ];
 
 class Authorization extends Component<PropsType, StateType> {
+  static defaultProps = {
+    isResetPassword: false,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -90,7 +96,7 @@ class Authorization extends Component<PropsType, StateType> {
       isSignUp: this.props.isSignUp,
       lastName: '',
       lastNameValid: false,
-      modalTitle: headerTabsItems[this.props.isSignUp ? 0 : 1].name,
+      modalTitle: this.setModalTitle(),
       password: '',
       passwordValid: false,
       selected: this.props.isSignUp ? 0 : 1,
@@ -118,6 +124,14 @@ class Authorization extends Component<PropsType, StateType> {
       document.removeEventListener('keydown', this.handleKeydown);
     }
   }
+
+  setModalTitle = () => {
+    const { isSignUp, isResetPassword } = this.props;
+    if (isResetPassword) {
+      return 'Reset Password';
+    }
+    return headerTabsItems[isSignUp ? 0 : 1].name;
+  };
 
   handleAlertOnClick = () => {
     if (this.props.alone) {
@@ -272,6 +286,7 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   validateForm = () => {
+    const { isResetPassword } = this.props;
     const {
       firstNameValid,
       lastNameValid,
@@ -291,6 +306,9 @@ class Authorization extends Component<PropsType, StateType> {
     }
     if (isRecoverPassword) {
       this.setState({ formValid: emailValid });
+    }
+    if (isResetPassword) {
+      this.setState({ formValid: passwordValid });
     }
   };
 
@@ -375,6 +393,10 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   handleBack = () => {
+    const { isResetPassword, router: { push }, } = this.props;
+    if (isResetPassword) {
+      push('/');
+    }
     this.setState({
       email: '',
       errors: null,
@@ -382,6 +404,35 @@ class Authorization extends Component<PropsType, StateType> {
       isSignUp: false,
       isRecoverPassword: false,
     });
+  };
+
+  passwordRecovery = (): Node => {
+    const { isResetPassword } = this.props;
+    const { password, email, formValid, errors } = this.state;
+    if (isResetPassword) {
+      return (
+        <ResetPassword
+          password={password}
+          errors={errors}
+          formValid={formValid}
+          onBack={this.handleBack}
+          onClick={this.recoverPassword}
+          onChange={this.handleChange}
+          onRecoverPassword={this.handleRecoverPassword}
+        />
+      )
+    }
+    return (
+      <RecoverPassword
+        email={email}
+        errors={errors}
+        formValid={formValid}
+        onBack={this.handleBack}
+        onClick={this.recoverPassword}
+        onChange={this.handleChange}
+        onRecoverPassword={this.handleRecoverPassword}
+      />
+    );
   };
 
   renderRegistration = (): Node => {
@@ -418,23 +469,8 @@ class Authorization extends Component<PropsType, StateType> {
     );
   };
 
-  renderRecoverPassword = (): Node => {
-    const { email, formValid, errors } = this.state;
-    return (
-      <RecoverPassword
-        email={email}
-        errors={errors}
-        formValid={formValid}
-        onBack={this.handleBack}
-        onClick={this.recoverPassword}
-        onChange={this.handleChange}
-        onRecoverPassword={this.handleRecoverPassword}
-      />
-    );
-  };
-
   render() {
-    const { alone, onCloseModal } = this.props;
+    const { alone, onCloseModal, isResetPassword } = this.props;
     const {
       isLoading,
       isSignUp,
@@ -455,7 +491,7 @@ class Authorization extends Component<PropsType, StateType> {
                   <Spinner />
                 </div>
               )}
-              {isRecoverPassword ? null : (
+              {(isRecoverPassword || isResetPassword) ? null : (
                 <AuthorizationHeader
                   alone={alone}
                   isSignUp={isSignUp}
@@ -464,10 +500,10 @@ class Authorization extends Component<PropsType, StateType> {
                   tabs={headerTabs}
                 />
               )}
-              {isRecoverPassword
-                ? this.renderRecoverPassword()
+              {(isRecoverPassword || isResetPassword)
+                ? this.passwordRecovery()
                 : this.renderRegistration()}
-              {isRecoverPassword ? null : (
+              {(isRecoverPassword || isResetPassword) ? null : (
                 <Fragment>
                   <div className="separatorBlock">
                     <Separator text="or" />
