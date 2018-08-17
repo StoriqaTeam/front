@@ -6,7 +6,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, map } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
-import { Page } from 'components/App';
+import { Page, LangContext } from 'components/App';
 import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
@@ -41,34 +41,38 @@ class Start extends PureComponent<PropsTypes> {
     const discountProducts = map(item => item.node, mostDiscountProducts);
     const viewedProducts = map(item => item.node, mostViewedProducts);
     return (
-      <div styleName="container">
-        <div styleName="item bannerSliderItem">
-          <BannersSlider items={bannersSlider} />
-        </div>
-        <div styleName="item goodSliderItem">
-          {viewedProducts &&
-            viewedProducts.length > 0 && (
-              <GoodsSlider
-                items={viewedProducts}
-                title="Most Popular"
-                seeAllUrl="/categories?search=&sortBy=VIEWS"
-              />
-            )}
-        </div>
-        <div styleName="item goodSliderItem">
-          {discountProducts &&
-            discountProducts.length > 0 && (
-              <GoodsSlider
-                items={discountProducts}
-                title="Sale"
-                seeAllUrl="/categories?search=&sortBy=DISCOUNT"
-              />
-            )}
-        </div>
-        <div styleName="item bannersItem">
-          <BannersRow items={bannersRow} count={2} />
-        </div>
-      </div>
+      <LangContext.Consumer>
+        {() => (
+          <div styleName="container">
+            <div styleName="item bannerSliderItem">
+              <BannersSlider items={bannersSlider} />
+            </div>
+            <div styleName="item goodSliderItem">
+              {viewedProducts &&
+                viewedProducts.length > 0 && (
+                  <GoodsSlider
+                    items={viewedProducts}
+                    title="Most Popular"
+                    seeAllUrl="/categories?search=&sortBy=VIEWS"
+                  />
+                )}
+            </div>
+            <div styleName="item goodSliderItem">
+              {discountProducts &&
+                discountProducts.length > 0 && (
+                  <GoodsSlider
+                    items={discountProducts}
+                    title="Sale"
+                    seeAllUrl="/categories?search=&sortBy=DISCOUNT"
+                  />
+                )}
+            </div>
+            <div styleName="item bannersItem">
+              <BannersRow items={bannersRow} count={2} />
+            </div>
+          </div>
+        )}
+      </LangContext.Consumer>
     );
   }
 }

@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
+import { setCookie } from 'utils';
 
 import {
   AppContext,
@@ -10,9 +11,14 @@ import {
   Main,
   Footer,
   FooterResponsive,
+  LangContext,
 } from 'components/App';
 
 import './Page.scss';
+
+type StateType = {
+  currentLocale: string,
+};
 
 type PropsType = {
   me: ?{},
@@ -23,38 +29,90 @@ export default (
   responsive: ?boolean,
   withoutCategories: ?boolean,
 ) =>
-  class Page extends PureComponent<PropsType> {
+  class Page extends PureComponent<PropsType, StateType> {
+    constructor(props: PropsType) {
+      super(props);
+
+      /**
+     * @desc Uncomment later!
+
+    const cookieLocale = pathOr(null, ['value'], getCookie('locale'));
+    if (cookieLocale) {
+      // $FlowIgnore
+      this.state = { currentLocale: cookieLocale };
+    } else if (process.env.BROWSER) {
+      const browserLang = window.navigator ? (window.navigator.language ||
+        window.navigator.systemLanguage ||
+        window.navigator.userLanguage) : null;
+      const browserLocale = browserLang ? browserLang.substr(0, 2).toLowerCase() : 'en';
+      this.state = { currentLocale: browserLocale };
+      setCookie('locale', browserLocale);
+    } else {
+      this.state = { currentLocale: 'en' };
+      setCookie('locale', 'en');
+    }
+
+     */
+
+      /**
+       * @desc And this is to remove!
+       */
+      this.state = { currentLocale: 'en' };
+      setCookie('locale', 'en');
+    }
+
+    changeLocale = (lang: string) => {
+      setCookie('locale', lang);
+      this.setState({ currentLocale: lang });
+    };
+
     render() {
+      const { currentLocale } = this.state;
       return (
         <AppContext.Consumer>
           {({ environment }) => (
-            <div styleName="container">
-              {responsive ? (
-                <HeaderResponsive
-                  environment={environment}
-                  user={this.props.me}
-                  searchValue={pathOr(
-                    '',
-                    ['match', 'location', 'query', 'search'],
-                    this.props,
-                  )}
-                  withoutCategories={withoutCategories}
-                />
-              ) : (
-                <Header
-                  user={this.props.me}
-                  searchValue={pathOr(
-                    '',
-                    ['match', 'location', 'query', 'search'],
-                    this.props,
-                  )}
-                />
-              )}
-              <Main>
-                <OriginalComponent {...this.props} />
-              </Main>
-              {responsive ? <FooterResponsive /> : <Footer />}
-            </div>
+            <LangContext.Provider
+              value={{
+                changeLocale: this.changeLocale,
+                currentLocale,
+              }}
+            >
+              <LangContext.Consumer>
+                {() => (
+                  <div styleName="container">
+                    {responsive ? (
+                      <HeaderResponsive
+                        environment={environment}
+                        user={this.props.me}
+                        searchValue={pathOr(
+                          '',
+                          ['match', 'location', 'query', 'search'],
+                          this.props,
+                        )}
+                        withoutCategories={withoutCategories}
+                        currentLocale={currentLocale}
+                        changeLocale={this.changeLocale}
+                      />
+                    ) : (
+                      <Header
+                        user={this.props.me}
+                        searchValue={pathOr(
+                          '',
+                          ['match', 'location', 'query', 'search'],
+                          this.props,
+                        )}
+                        currentLocale={currentLocale}
+                        changeLocale={this.changeLocale}
+                      />
+                    )}
+                    <Main>
+                      <OriginalComponent {...this.props} />
+                    </Main>
+                    {responsive ? <FooterResponsive /> : <Footer />}
+                  </div>
+                )}
+              </LangContext.Consumer>
+            </LangContext.Provider>
           )}
         </AppContext.Consumer>
       );

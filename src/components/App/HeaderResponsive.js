@@ -47,6 +47,8 @@ type PropsType = {
   searchValue: string,
   environment: Environment,
   withoutCategories: ?boolean,
+  currentLocale: string,
+  changeLocale: (lang: string) => void,
 };
 
 type StateType = {
@@ -258,7 +260,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             />
             <Container>
               <BurgerMenu />
-              <HeaderTop user={userData} />
+              <HeaderTop
+                user={userData}
+                currentLocale={this.props.currentLocale}
+                changeLocale={this.props.changeLocale}
+              />
               <HeaderBottom
                 userData={userData}
                 searchCategories={searchCategories}

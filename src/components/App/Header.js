@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { graphql } from 'react-relay';
 import PropTypes from 'prop-types';
 import { Link } from 'found';
-import { pathOr } from 'ramda';
+import { find, pathOr, propEq } from 'ramda';
 
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
@@ -18,6 +18,21 @@ import { setWindowTag } from 'utils';
 import { Container, Row, Col } from 'layout';
 
 import './Header.scss';
+
+const languages = [
+  {
+    id: 'en',
+    label: 'ENG',
+  },
+  {
+    id: 'ru',
+    label: 'RUS',
+  },
+  {
+    id: 'ja',
+    label: 'JAP',
+  },
+];
 
 const TOTAL_FRAGMENT = graphql`
   fragment HeaderTotalLocalFragment on Cart {
@@ -40,6 +55,8 @@ const HEADER_FRAGMENT = graphql`
 
 type PropsType = {
   searchValue: string,
+  currentLocale: string,
+  changeLocale: (lang: string) => void,
 };
 
 type StateType = {
@@ -143,12 +160,19 @@ class Header extends Component<PropsType, StateType> {
     this.setState({ showModal: false });
   };
 
+  handleChangeLocale = (item: { id: string, label: string }) => {
+    if (item && item.id) {
+      this.props.changeLocale(item.id);
+    }
+  };
+
   dispose: () => void;
   disposeUser: () => void;
 
   render() {
-    const { searchValue } = this.props;
+    const { searchValue, currentLocale } = this.props;
     const { showModal, isSignUp, userData, totalCount } = this.state;
+    const activeLocaleItem = find(propEq('id', currentLocale))(languages);
     return (
       <header styleName="container">
         <Container>
@@ -165,9 +189,9 @@ class Header extends Component<PropsType, StateType> {
                 </div>
                 <div styleName="item">
                   <Select
-                    activeItem={{ id: '1', label: 'ENG' }}
-                    items={[{ id: '1', label: 'ENG' }]}
-                    onSelect={() => {}}
+                    activeItem={activeLocaleItem}
+                    items={languages}
+                    onSelect={this.handleChangeLocale}
                     dataTest="headerLanguagesSelect"
                   />
                 </div>

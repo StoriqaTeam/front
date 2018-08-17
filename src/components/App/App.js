@@ -110,7 +110,13 @@ class App extends Component<PropsType, StateType> {
     } = this.props;
     const directories = this.makeDirectories();
     return (
-      <AppContext.Provider value={{ categories, environment, directories }}>
+      <AppContext.Provider
+        value={{
+          categories,
+          environment,
+          directories,
+        }}
+      >
         <Fragment>
           <AlertsContainer alerts={this.state.alerts} />
           <AlertContextProvider
