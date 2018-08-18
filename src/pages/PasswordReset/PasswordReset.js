@@ -36,7 +36,7 @@ class PasswordReset extends Component<PropsType> {
           </div>
         )}
       </AppContext.Consumer>
-    )
+    );
   }
 }
 

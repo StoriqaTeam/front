@@ -66,3 +66,6 @@ export {
 export {
   default as RequestPasswordResetMutation,
 } from './RequestPasswordResetMutation';
+export {
+  default as ApplyPasswordResetMutation,
+} from './ApplyPasswordResetMutation';

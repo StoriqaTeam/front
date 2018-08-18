@@ -23,6 +23,7 @@ import {
   CreateUserMutation,
   GetJWTByEmailMutation,
   RequestPasswordResetMutation,
+  ApplyPasswordResetMutation,
 } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -385,6 +386,60 @@ class Authorization extends Component<PropsType, StateType> {
     RequestPasswordResetMutation.commit(params);
   };
 
+  resetPassword = () => {
+    const {
+      environment,
+      match: {
+        params: { token },
+      },
+    } = this.props;
+    const { password } = this.state;
+    const params = {
+      input: { clientMutationId: '', password, token },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState({ isLoading: false });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, () =>
+            this.setState({
+              isLoading: false,
+              errors: { email: ['Reset shit'] },
+            }),
+          );
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Please verify your email',
+          link: { text: '' },
+          onClick: this.handleAlertOnClick,
+        });
+        const { onCloseModal } = this.props;
+        if (onCloseModal) {
+          onCloseModal();
+        }
+      },
+      onError: (error: Error) => {
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, () =>
+            this.setState({
+              isLoading: false,
+              errors: { email: ['Email Not Found'] },
+            }),
+          );
+        }
+      },
+    };
+    ApplyPasswordResetMutation.commit(params);
+  };
+
   handleRecoverPassword = (): void => {
     this.setState({
       modalTitle: 'Forgot Password',
@@ -393,7 +448,10 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   handleBack = () => {
-    const { isResetPassword, router: { push }, } = this.props;
+    const {
+      isResetPassword,
+      router: { push },
+    } = this.props;
     if (isResetPassword) {
       push('/');
     }
@@ -416,11 +474,10 @@ class Authorization extends Component<PropsType, StateType> {
           errors={errors}
           formValid={formValid}
           onBack={this.handleBack}
-          onClick={this.recoverPassword}
+          onClick={this.resetPassword}
           onChange={this.handleChange}
-          onRecoverPassword={this.handleRecoverPassword}
         />
-      )
+      );
     }
     return (
       <RecoverPassword
@@ -430,7 +487,6 @@ class Authorization extends Component<PropsType, StateType> {
         onBack={this.handleBack}
         onClick={this.recoverPassword}
         onChange={this.handleChange}
-        onRecoverPassword={this.handleRecoverPassword}
       />
     );
   };
@@ -491,7 +547,7 @@ class Authorization extends Component<PropsType, StateType> {
                   <Spinner />
                 </div>
               )}
-              {(isRecoverPassword || isResetPassword) ? null : (
+              {isRecoverPassword || isResetPassword ? null : (
                 <AuthorizationHeader
                   alone={alone}
                   isSignUp={isSignUp}
@@ -500,10 +556,10 @@ class Authorization extends Component<PropsType, StateType> {
                   tabs={headerTabs}
                 />
               )}
-              {(isRecoverPassword || isResetPassword)
+              {isRecoverPassword || isResetPassword
                 ? this.passwordRecovery()
                 : this.renderRegistration()}
-              {(isRecoverPassword || isResetPassword) ? null : (
+              {isRecoverPassword || isResetPassword ? null : (
                 <Fragment>
                   <div className="separatorBlock">
                     <Separator text="or" />

@@ -500,7 +500,7 @@ const routes = (
 
       <Route path="/logout" Component={Logout} />
 
-      <Route path="/password_reset" Component={PasswordReset} />
+      <Route path="/password_reset/:token" Component={PasswordReset} />
 
       <Route
         path="/oauth_callback/fb"
