@@ -10,12 +10,12 @@ import './Authorization.scss';
 
 type PropsType = {
   password: string,
-  passwordNew: string,
+  passwordRepeat: string,
   errors: {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  onRepeatPassword: () => any,
+  onPasswordRepeat: () => any,
   onClick: () => any,
   onChange: () => any,
 };
@@ -32,12 +32,12 @@ class ResetPassword extends Component<PropsType, StateType> {
   render() {
     const {
       password,
-      passwordNew,
+      passwordRepeat,
       errors,
       formValid,
       onClick,
       onChange,
-      onRepeatPassword,
+      onPasswordRepeat,
     } = this.props;
     const { autocomplete } = this.state;
     return (
@@ -57,13 +57,13 @@ class ResetPassword extends Component<PropsType, StateType> {
         <div styleName="inputBlock">
           <Input
             label="New Password again"
-            name="newpassword"
+            name="passwordRepeat"
             type="password"
-            model={passwordNew}
+            model={passwordRepeat}
             validate="password"
-            onChange={onRepeatPassword}
+            onChange={onPasswordRepeat}
             autocomplete={autocomplete}
-            errors={propOr(null, 'password', errors)}
+            errors={password === passwordRepeat ? null : ['Not Match']}
           />
         </div>
         <div styleName="recoverPasswordButtons">

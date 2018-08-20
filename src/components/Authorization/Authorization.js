@@ -59,6 +59,8 @@ type StateType = {
   lastNameValid: boolean,
   password: string,
   passwordValid: boolean,
+  passwordRepeat: string,
+  passwordRepeatValid: boolean,
   headerTabs: Array<{ id: string, name: string }>,
   isLoading: boolean,
   isRecoverPassword: boolean,
@@ -100,6 +102,8 @@ class Authorization extends Component<PropsType, StateType> {
       modalTitle: this.setModalTitle(),
       password: '',
       passwordValid: false,
+      passwordRepeat: '',
+      passwordRepeatValid: false,
       selected: this.props.isSignUp ? 0 : 1,
     };
     if (process.env.BROWSER) {
@@ -295,6 +299,8 @@ class Authorization extends Component<PropsType, StateType> {
       passwordValid,
       isSignUp,
       isRecoverPassword,
+      password,
+      passwordRepeat,
     } = this.state;
 
     if (isSignUp) {
@@ -309,7 +315,9 @@ class Authorization extends Component<PropsType, StateType> {
       this.setState({ formValid: emailValid });
     }
     if (isResetPassword) {
-      this.setState({ formValid: passwordValid });
+      this.setState({
+        formValid: passwordValid && (password === passwordRepeat)
+      });
     }
   };
 
@@ -466,16 +474,18 @@ class Authorization extends Component<PropsType, StateType> {
 
   passwordRecovery = (): Node => {
     const { isResetPassword } = this.props;
-    const { password, email, formValid, errors } = this.state;
+    const { password, passwordRepeat, email, formValid, errors } = this.state;
     if (isResetPassword) {
       return (
         <ResetPassword
           password={password}
+          passwordRepeat={passwordRepeat}
           errors={errors}
           formValid={formValid}
           onBack={this.handleBack}
           onClick={this.resetPassword}
           onChange={this.handleChange}
+          onPasswordRepeat={this.handleChange}
         />
       );
     }

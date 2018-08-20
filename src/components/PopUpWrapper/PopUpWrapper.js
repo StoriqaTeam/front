@@ -37,13 +37,16 @@ class PopUpWrapper extends Component<PropsType> {
     return (
       <aside styleName="container">
         {isNil(onClose) ? null : closeButton}
-        <h2 styleName={classNames('title', {
-          hasDescription: !isEmpty(description),
-        })}
+        <h2
+          styleName={classNames('title', {
+            hasDescription: !isEmpty(description),
+          })}
         >
           {title}
         </h2>
-        {isEmpty(description) ? null : <p styleName="description">{description}</p>}
+        {isEmpty(description) ? null : (
+          <p styleName="description">{description}</p>
+        )}
         {this.props.render()}
       </aside>
     );
