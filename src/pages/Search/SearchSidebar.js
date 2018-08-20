@@ -178,18 +178,13 @@ class SearchSidebar extends Component<PropsType, StateType> {
 
   handleOnChangeCategory = (item): void => {
     const { router } = this.props;
-    const { volume, volume2 } = this.state;
     // $FlowIgnore
     const name = pathOr(
       '',
       ['match', 'location', 'query', 'search'],
       this.props,
     );
-    router.push(
-      `/categories?search=${name}&category=${
-        item.id
-      }&minValue=${volume}&maxValue=${volume2}`,
-    );
+    router.push(`/categories?search=${name}&category=${item.id}`);
   };
 
   handleOnRangeChange = (value: number, fieldName: string): void => {
