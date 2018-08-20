@@ -60,7 +60,6 @@ type StateType = {
   password: string,
   passwordValid: boolean,
   passwordRepeat: string,
-  passwordRepeatValid: boolean,
   headerTabs: Array<{ id: string, name: string }>,
   isLoading: boolean,
   isRecoverPassword: boolean,
@@ -103,7 +102,6 @@ class Authorization extends Component<PropsType, StateType> {
       password: '',
       passwordValid: false,
       passwordRepeat: '',
-      passwordRepeatValid: false,
       selected: this.props.isSignUp ? 0 : 1,
     };
     if (process.env.BROWSER) {
@@ -316,7 +314,7 @@ class Authorization extends Component<PropsType, StateType> {
     }
     if (isResetPassword) {
       this.setState({
-        formValid: passwordValid && (password === passwordRepeat)
+        formValid: passwordValid && password === passwordRepeat,
       });
     }
   };
