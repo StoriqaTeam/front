@@ -44,6 +44,7 @@ type PropsType = {
   onCloseModal?: () => void,
   isResetPassword?: boolean,
   router: routerShape,
+  isLogin: boolean,
 };
 
 type StateType = {
@@ -82,6 +83,7 @@ const headerTabsItems = [
 class Authorization extends Component<PropsType, StateType> {
   static defaultProps = {
     isResetPassword: false,
+    isLogin: false,
   };
   constructor(props) {
     super(props);
@@ -356,10 +358,10 @@ class Authorization extends Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, () =>
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
             this.setState({
               isLoading: false,
-              errors: { email: ['Email Not Found'] },
+              errors: messages || null,
             }),
           );
           return;
@@ -398,6 +400,7 @@ class Authorization extends Component<PropsType, StateType> {
       match: {
         params: { token },
       },
+      router: { push },
     } = this.props;
     const { password } = this.state;
     const params = {
@@ -413,21 +416,18 @@ class Authorization extends Component<PropsType, StateType> {
           errorsHandler(relayErrors, this.props.showAlert, () =>
             this.setState({
               isLoading: false,
-              errors: { email: ['Reset shit'] },
+              errors: { email: ['Password Reset Successfully'] },
             }),
           );
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Please verify your email',
+          text: 'Password Reset Successfully',
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
-        const { onCloseModal } = this.props;
-        if (onCloseModal) {
-          onCloseModal();
-        }
+        push('/login');
       },
       onError: (error: Error) => {
         const relayErrors = fromRelayError(error);
@@ -534,8 +534,8 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { alone, onCloseModal, isResetPassword } = this.props;
-    const text = 'Please wait until payment data will be uploaded';
+    const { alone, onCloseModal, isResetPassword, isLogin } = this.props;
+    const text = 'Please Type new password';
     const description = isResetPassword ? text : '';
     const {
       isLoading,
@@ -560,6 +560,7 @@ class Authorization extends Component<PropsType, StateType> {
               )}
               {isRecoverPassword || isResetPassword ? null : (
                 <AuthorizationHeader
+                  fullWidth={isLogin}
                   alone={alone}
                   isSignUp={isSignUp}
                   onClick={this.handleClick}

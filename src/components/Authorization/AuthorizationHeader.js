@@ -11,19 +11,23 @@ type PropsType = {
   selected: number,
   onClick: Function,
   tabs: Array<{ id: string, name: string }>,
+  fullWidth?: boolean,
 };
 
 class AuthorizationHeader extends Component<PropsType, {}> {
+  static defaultProps = {
+    fullWidth: false,
+  };
   handleClick = (name: string, selected: number) => {
     const { onClick } = this.props;
     onClick(name, selected);
   };
   render() {
-    const { tabs, selected } = this.props;
+    const { tabs, selected, fullWidth } = this.props;
     return (
-      <div styleName="container">
+      <div styleName={classNames('container', { fullWidth })}>
         <nav styleName="tabsContainer">
-          <ul styleName="tabs">
+          <ul styleName={classNames('tabs', { fullWidth })}>
             {tabs.map(({ id, name }, index) => (
               /* eslint-disable */
               <li

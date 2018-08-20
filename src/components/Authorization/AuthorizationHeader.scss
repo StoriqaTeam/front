@@ -1,11 +1,21 @@
 @import "../../styles/variables.scss";
 
+$marginWidth: 9rem;
+$marginFullWidth: 9999rem;
+
 .container {
   display: block;
   margin: 0 -3.5rem 6rem -3.5rem;
 
   @media (min-width: $md) {
-    margin: 0 -9rem 6rem -9rem;
+    margin: 0 #{-$marginWidth} 6rem #{-$marginWidth};
+  }
+
+  &.fullWidth {
+    margin: 0 -3.5rem 6rem -3.5rem;
+    @media (min-width: $md) {
+      margin: 0 #{-$marginFullWidth} 6rem #{-$marginFullWidth};
+    }
   }
 }
 
@@ -41,7 +51,13 @@
     margin-right: 4rem;
   }
   @media (min-width: $md) {
-    padding: 0 9rem;
+    padding: 0 $marginWidth;
+  }
+  &.fullWidth {
+   // padding: 0 $marginFullWidth;
+    @media (min-width: $md) {
+      padding: 0 $marginFullWidth;
+    }
   }
 }
 

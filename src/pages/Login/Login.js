@@ -1,41 +1,26 @@
 // @flow
 
-import React, { Component } from 'react';
-import { routerShape, withRouter } from 'found';
+import React from 'react';
 
-import { AppContext } from 'components/App';
+import { AppContext, Page } from 'components/App';
 import { Authorization } from 'components/Authorization';
 
 import './Login.scss';
 
-type PropsType = {
-  router: routerShape,
-};
+const Login = () => (
+  <AppContext.Consumer>
+    {({ environment, handleLogin }) => (
+      <div styleName="container">
+        <div styleName="wrapper">
+          <Authorization
+            isLogin
+            environment={environment}
+            handleLogin={handleLogin}
+          />
+        </div>
+      </div>
+    )}
+  </AppContext.Consumer>
+);
 
-class Login extends Component<PropsType> {
-  handleCloseModal = () => {
-    const {
-      router: { push },
-    } = this.props;
-    push('/');
-  };
-  render() {
-    return (
-      <AppContext.Consumer>
-        {({ environment, handleLogin }) => (
-          <div styleName="container">
-            <div styleName="wrapper">
-              <Authorization
-                environment={environment}
-                handleLogin={handleLogin}
-                onCloseModal={this.handleCloseModal}
-              />
-            </div>
-          </div>
-        )}
-      </AppContext.Consumer>
-    );
-  }
-}
-
-export default withRouter(Login);
+export default Page(Login, true);
