@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import { routerShape, withRouter } from 'found';
 
-import { AppContext } from 'components/App';
+import { AppContext, Page } from 'components/App';
 import { Authorization } from 'components/Authorization';
 
 import './PasswordReset.scss';
@@ -30,7 +30,6 @@ class PasswordReset extends Component<PropsType> {
                 isResetPassword
                 environment={environment}
                 handleLogin={handleLogin}
-                onCloseModal={this.handleCloseModal}
               />
             </div>
           </div>
@@ -40,4 +39,4 @@ class PasswordReset extends Component<PropsType> {
   }
 }
 
-export default withRouter(PasswordReset);
+export default Page(withRouter(PasswordReset), true);

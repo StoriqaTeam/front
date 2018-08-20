@@ -527,6 +527,8 @@ class Authorization extends Component<PropsType, StateType> {
 
   render() {
     const { alone, onCloseModal, isResetPassword } = this.props;
+    const text = 'Please wait until payment data will be uploaded';
+    const description = isResetPassword ? text : '';
     const {
       isLoading,
       isSignUp,
@@ -538,6 +540,7 @@ class Authorization extends Component<PropsType, StateType> {
     return (
       <PopUpWrapper
         title={modalTitle}
+        description={description}
         onClose={onCloseModal}
         render={() => (
           <div styleName="container">

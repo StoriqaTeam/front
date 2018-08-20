@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 import type { Node } from 'react';
-import { isEmpty } from 'ramda';
+import { isEmpty, isNil } from 'ramda';
+import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 
@@ -12,7 +13,7 @@ type PropsType = {
   title: string,
   description: string,
   render: () => Node,
-  onClose: () => any,
+  onClose?: () => any,
 };
 
 class PopUpWrapper extends Component<PropsType> {
@@ -35,9 +36,14 @@ class PopUpWrapper extends Component<PropsType> {
     );
     return (
       <aside styleName="container">
-        {closeButton}
-        <h2 styleName="title">{title}</h2>
-        {isEmpty(description) ? null : <p>{description}</p>}
+        {isNil(onClose) ? null : closeButton}
+        <h2 styleName={classNames('title', {
+          hasDescription: !isEmpty(description),
+        })}
+        >
+          {title}
+        </h2>
+        {isEmpty(description) ? null : <p styleName="description">{description}</p>}
         {this.props.render()}
       </aside>
     );
