@@ -126,15 +126,15 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
-  setModalTitle = () => {
+  setModalTitle = (): string => {
     const { isSignUp, isResetPassword } = this.props;
     if (isResetPassword) {
-      return 'Reset Password';
+      return 'Recover Password';
     }
     return headerTabsItems[isSignUp ? 0 : 1].name;
   };
 
-  handleAlertOnClick = () => {
+  handleAlertOnClick = (): void => {
     if (this.props.alone) {
       window.location = '/';
     }
@@ -442,7 +442,7 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleRecoverPassword = (): void => {
     this.setState({
-      modalTitle: 'Forgot Password',
+      modalTitle: 'Reset Password',
       isRecoverPassword: true,
     });
   };
