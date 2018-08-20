@@ -113,7 +113,6 @@ export class ClientFetcher extends FetcherBase {
     if (this.payloads.length) {
       return this.payloads.shift();
     }
-
     return super.fetch(...args);
   }
 }
