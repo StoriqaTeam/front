@@ -1,17 +1,17 @@
 // @flow
 
 import React, { Component } from 'react';
-import { find, propEq } from 'ramda';
+import { find, propEq, pathOr } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
+import { getCookie } from 'utils';
 import { t } from 'translation/utils';
 import languages from 'translation/languages.json';
 
 import './HeaderTop.scss';
 
 type PropsType = {
-  currentLocale: string,
   setLang: (lang: string) => void,
 };
 
@@ -23,7 +23,7 @@ class HeaderTop extends Component<PropsType> {
   };
 
   render() {
-    const { currentLocale } = this.props;
+    const currentLocale = pathOr('en', ['value'], getCookie('locale'));
     const activeLocaleItem = find(propEq('id', currentLocale))(languages);
     return (
       <div styleName="container">

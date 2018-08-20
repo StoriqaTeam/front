@@ -47,7 +47,6 @@ type PropsType = {
   searchValue: string,
   environment: Environment,
   withoutCategories: ?boolean,
-  currentLocale: string,
   setLang: (lang: string) => void,
 };
 
@@ -203,12 +202,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const {
-      searchValue,
-      withoutCategories,
-      currentLocale,
-      setLang,
-    } = this.props;
+    const { searchValue, withoutCategories, setLang } = this.props;
     const {
       showModal,
       isSignUp,
@@ -265,11 +259,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             />
             <Container>
               <BurgerMenu />
-              <HeaderTop
-                user={userData}
-                currentLocale={currentLocale}
-                setLang={setLang}
-              />
+              <HeaderTop user={userData} setLang={setLang} />
               <HeaderBottom
                 userData={userData}
                 searchCategories={searchCategories}

@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
-import { setCookie } from 'utils';
+import { setCookie, getCookie } from 'utils';
 
 import {
   AppContext,
@@ -16,10 +16,6 @@ import {
 
 import './Page.scss';
 
-type StateType = {
-  currentLocale: string,
-};
-
 type PropsType = {
   me: ?{},
 };
@@ -29,7 +25,7 @@ export default (
   responsive: ?boolean,
   withoutCategories: ?boolean,
 ) =>
-  class Page extends PureComponent<PropsType, StateType> {
+  class Page extends PureComponent<PropsType> {
     constructor(props: PropsType) {
       super(props);
 
@@ -37,44 +33,40 @@ export default (
      * @desc Uncomment later!
 
     const cookieLocale = pathOr(null, ['value'], getCookie('locale'));
-    if (cookieLocale) {
-      // $FlowIgnore
-      this.state = { currentLocale: cookieLocale };
-    } else if (process.env.BROWSER) {
-      const browserLang = window.navigator ? (window.navigator.language ||
-        window.navigator.systemLanguage ||
-        window.navigator.userLanguage) : null;
-      const browserLocale = browserLang ? browserLang.substr(0, 2).toLowerCase() : 'en';
-      this.state = { currentLocale: browserLocale };
-      setCookie('locale', browserLocale);
-    } else {
-      this.state = { currentLocale: 'en' };
-      setCookie('locale', 'en');
+    if (!cookieLocale) {
+      if (process.env.BROWSER) {
+        const browserLang = window.navigator ? (window.navigator.language ||
+          window.navigator.systemLanguage ||
+          window.navigator.userLanguage) : null;
+        const browserLocale = browserLang ? browserLang.substr(0, 2).toLowerCase() : 'en';
+        setCookie('locale', browserLocale);
+      } else {
+        setCookie('locale', 'en');
+      }
     }
-
      */
 
       /**
        * @desc And this is to remove!
        */
-      this.state = { currentLocale: 'en' };
       setCookie('locale', 'en');
     }
 
     setLang = (lang: string) => {
-      setCookie('locale', lang);
-      this.setState({ currentLocale: lang });
+      const locale = getCookie('locale');
+      if (locale && locale.value !== lang && process.env.BROWSER) {
+        setCookie('locale', lang);
+        window.location.reload();
+      }
     };
 
     render() {
-      const { currentLocale } = this.state;
       return (
         <AppContext.Consumer>
           {({ environment }) => (
             <LangContext.Provider
               value={{
                 setLang: this.setLang,
-                currentLocale,
               }}
             >
               <LangContext.Consumer>
@@ -90,7 +82,6 @@ export default (
                           this.props,
                         )}
                         withoutCategories={withoutCategories}
-                        currentLocale={currentLocale}
                         setLang={this.setLang}
                       />
                     ) : (
@@ -101,7 +92,6 @@ export default (
                           ['match', 'location', 'query', 'search'],
                           this.props,
                         )}
-                        currentLocale={currentLocale}
                         setLang={this.setLang}
                       />
                     )}
