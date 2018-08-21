@@ -169,6 +169,7 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
               }}
               onBlur={this.handleBlur}
               onChange={this.handleChange}
+              dataTest="storagesVariantQuantitiInput"
             />
             {thisProduct && (
               <Button
