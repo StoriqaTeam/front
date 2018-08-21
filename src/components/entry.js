@@ -15,7 +15,7 @@ let returnFunc = () => {}; // eslint-disable-line
 
 if (process.env.BROWSER) {
   if (
-    process.env.NODE_ENV !== 'production' &&
+    process.env.NODE_ENV === 'production' &&
     process.env.REACT_APP_RAVEN_CONFIG_URL_SPA
   ) {
     /* eslint-disable */
