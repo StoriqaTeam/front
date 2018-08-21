@@ -80,7 +80,8 @@ const parseAttrFiltersFromUrl = pipe(
 
 const assocInt = (arr, getterValue) => obj => {
   const value = getterValue(obj);
-  return assocPath(arr, value ? parseInt(getterValue(obj), 10) : null)(obj);
+  const res = assocPath(arr, value ? parseFloat(getterValue(obj)) : null)(obj);
+  return res;
 };
 
 const assocStr = (arr, getterValue) => obj =>
