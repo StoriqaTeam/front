@@ -496,6 +496,8 @@ class Authorization extends Component<PropsType, StateType> {
     this.setState({
       modalTitle: 'Reset Password',
       isRecoverPassword: true,
+      email: '',
+      password: '',
     });
   };
 
