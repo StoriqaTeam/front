@@ -29,6 +29,8 @@ type PropsType = {
   autocomplete: ?boolean,
   errors: ?Array<string>,
   thisFocus: ?boolean,
+  showResendEmail: ?boolean,
+  onResendEmail: () => any,
 };
 
 type StateType = {
@@ -51,6 +53,7 @@ type StateType = {
 class Input extends PureComponent<PropsType, StateType> {
   static defaultProps = {
     onChange: () => {},
+    onResendEmail: () => {},
     label: '',
     placeholder: '',
     type: 'text',
@@ -233,6 +236,8 @@ class Input extends PureComponent<PropsType, StateType> {
       type,
       detectCapsLock,
       errors,
+      showResendEmail,
+      onResendEmail,
     } = this.props;
 
     const {
@@ -287,6 +292,7 @@ class Input extends PureComponent<PropsType, StateType> {
         {formError &&
           !isFocus &&
           !isFocusShow && <span styleName="message">{formError}</span>}
+
         {detectCapsLock && isCapsLockOn && <CapsLockMessage />}
         {showPasswordButton && (
           <div
@@ -312,6 +318,17 @@ class Input extends PureComponent<PropsType, StateType> {
                   {item}
                 </div>
               ))}
+              {showResendEmail ? (
+                <span
+                  tabIndex="-1"
+                  onKeyPress={() => {}}
+                  styleName="resendEmail"
+                  role="button"
+                  onClick={onResendEmail}
+                >
+                  Resend verification Email
+                </span>
+              ) : null}
             </div>
           )}
       </span>

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { propOr } from 'ramda';
+import { any, propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
@@ -19,6 +19,7 @@ type PropsType = {
   onChange: () => void,
   onBlur: () => void,
   onRecoverPassword: () => void,
+  onResendEmail: () => void,
 };
 
 type StateType = {
@@ -44,6 +45,7 @@ class SignIn extends Component<PropsType, StateType> {
       onChange,
       onBlur,
       onRecoverPassword,
+      onResendEmail,
     } = this.props;
     const { autocomplete } = this.state;
 
@@ -59,7 +61,12 @@ class SignIn extends Component<PropsType, StateType> {
             onChange={onChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'email', errors)}
+            showResendEmail={any(
+              i => i === 'Email not verified',
+              propOr('', 'email', errors),
+            )}
             onBlur={onBlur}
+            onResendEmail={onResendEmail}
             validate="email"
           />
         </div>

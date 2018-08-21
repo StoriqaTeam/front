@@ -69,3 +69,6 @@ export {
 export {
   default as ApplyPasswordResetMutation,
 } from './ApplyPasswordResetMutation';
+export {
+  default as ResendEmailVerificationLinkMutation,
+} from './ResendEmailVerificationLinkMutation';

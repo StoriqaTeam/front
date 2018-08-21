@@ -24,6 +24,7 @@ import {
   GetJWTByEmailMutation,
   RequestPasswordResetMutation,
   ApplyPasswordResetMutation,
+  ResendEmailVerificationLinkMutation,
 } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -104,7 +105,7 @@ class Authorization extends Component<PropsType, StateType> {
       password: '',
       passwordValid: false,
       passwordRepeat: '',
-      selected: this.props.isSignUp ? 0 : 1,
+      selected: this.props.isSignUp && !this.props.isLogin ? 0 : 1,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -413,10 +414,10 @@ class Authorization extends Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, () =>
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
             this.setState({
               isLoading: false,
-              errors: { email: ['Password Reset Successfully'] },
+              errors: messages || null,
             }),
           );
           return;
@@ -444,6 +445,51 @@ class Authorization extends Component<PropsType, StateType> {
       },
     };
     ApplyPasswordResetMutation.commit(params);
+  };
+
+  handleResendEmail = (): void => {
+    const { environment } = this.props;
+    const { email } = this.state;
+    const params = {
+      input: { clientMutationId: '', email },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState({ isLoading: false });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Verification Email Sent Successfully',
+          link: { text: '' },
+          onClick: this.handleAlertOnClick,
+        });
+      },
+      onError: (error: Error) => {
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+        }
+      },
+    };
+    ResendEmailVerificationLinkMutation.commit(params);
   };
 
   handleRecoverPassword = (): void => {
@@ -529,6 +575,7 @@ class Authorization extends Component<PropsType, StateType> {
         onLoginClick={this.handleLoginClick}
         onChange={this.handleChange}
         onRecoverPassword={this.handleRecoverPassword}
+        onResendEmail={this.handleResendEmail}
       />
     );
   };
