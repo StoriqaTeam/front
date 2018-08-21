@@ -24,3 +24,4 @@ export { default as formatPrice } from './formatPrice';
 export { default as setWindowTag } from './tagManager';
 export { default as convertSrc } from './convertSrc';
 export { default as addressToString } from './addressToString';
+export { setCookie, removeCookie, getCookie } from './cookiesOp';

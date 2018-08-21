@@ -31,7 +31,8 @@ type PropsType = {
       warehouseId: string,
       quantity: number,
       warehouse: {
-        name: string,
+        name: ?string,
+        slug: string,
         addressFull: {
           value: string,
         },
@@ -143,11 +144,14 @@ class Row extends PureComponent<PropsType> {
                 {addIndex(map)((item, idx) => {
                   // $FlowIgnoreMe
                   const warehouseName = pathOr('', ['warehouse', 'name'], item);
+                  // $FlowIgnoreMe
+                  const warehouseSlug = pathOr('', ['warehouse', 'slug'], item);
                   return idx >= 2 ? (
                     false
                   ) : (
                     <div key={item.id} styleName="warehouseName">
-                      {warehouseName}
+                      {// $FlowIgnoreMe
+                      warehouseName || `Storage ${warehouseSlug}`}
                     </div>
                   );
                 }, filteredStocks)}

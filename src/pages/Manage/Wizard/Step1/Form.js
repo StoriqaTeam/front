@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
+import { InputSlug } from 'components/common/InputSlug';
 
 import FormWrapper from '../FormWrapper';
 
@@ -78,9 +79,20 @@ class FirstForm extends React.Component<PropsType, StateType> {
     });
   };
 
+  handleOnChangeSlug = (slugValue: string) => {
+    const { onChange } = this.props;
+    this.setState({ slug: slugValue }, () => {
+      // $FlowIgnoreMe
+      onChange({ ...this.state });
+    });
+  };
+
   render() {
-    const { name, slug, shortDescription } = this.state;
-    const { errors } = this.props;
+    const { name, shortDescription } = this.state;
+    const {
+      errors,
+      initialData: { slug },
+    } = this.props;
     return (
       <FormWrapper
         firstForm
@@ -103,17 +115,10 @@ class FirstForm extends React.Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <Input
-              id="slug"
-              value={slug || ''}
-              label={
-                <span>
-                  Slug <span styleName="red">*</span>
-                </span>
-              }
-              onChange={this.handleOnChange}
-              fullWidth
-              errors={errors && errors.slug}
+            <InputSlug
+              realSlug="an"
+              slug={slug || ''}
+              onChange={this.handleOnChangeSlug}
             />
           </div>
           <div>

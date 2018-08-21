@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
 import isTokenExpired from 'utils/token';
 
-import { log } from 'utils';
+import { log, removeCookie, getCookie } from 'utils';
 
 // import routesProductCardQuery from 'pages/Store/Product/__mocks/product_with_attrs';
 
@@ -96,12 +96,11 @@ export class ClientFetcher extends FetcherBase {
 
   // eslint-disable-next-line
   getJWTFromCookies() {
-    const cookies = new Cookies();
-    const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
+    const jwt = pathOr(null, ['value'], getCookie('__jwt'));
     if (isTokenExpired(jwt)) {
-      cookies.remove('__jwt');
+      removeCookie('__jwt');
     }
-    return pathOr(null, ['value'], cookies.get('__jwt'));
+    return pathOr(null, ['value'], getCookie('__jwt'));
   }
 
   // eslint-disable-next-line
@@ -114,7 +113,6 @@ export class ClientFetcher extends FetcherBase {
     if (this.payloads.length) {
       return this.payloads.shift();
     }
-
     return super.fetch(...args);
   }
 }

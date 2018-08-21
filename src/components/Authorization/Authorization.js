@@ -4,7 +4,6 @@ import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape, routerShape } from 'found';
-import Cookies from 'universal-cookie';
 import type { Environment } from 'relay-runtime';
 
 import { PopUpWrapper } from 'components/PopUpWrapper';
@@ -18,7 +17,12 @@ import {
   RecoverPassword,
   ResetPassword,
 } from 'components/Authorization';
-import { log, fromRelayError, errorsHandler } from 'utils';
+import {
+  log,
+  fromRelayError,
+  errorsHandler,
+  setCookie,
+} from 'utils';
 import {
   CreateUserMutation,
   GetJWTByEmailMutation,
@@ -226,18 +230,11 @@ class Authorization extends Component<PropsType, StateType> {
         log.debug({ response, errors });
         const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
         if (jwt) {
-          const cookies = new Cookies();
           const today = new Date();
           const expirationDate = new Date();
           expirationDate.setDate(today.getDate() + 1);
-          cookies.set(
-            '__jwt',
-            { value: jwt },
-            {
-              path: '/',
-              expires: expirationDate,
-            },
-          );
+          // $FlowIgnore
+          setCookie('__jwt', jwt, expirationDate);
           if (this.props.handleLogin) {
             this.props.handleLogin();
             if (alone) {

@@ -14,12 +14,7 @@ class HeaderTop extends Component<{}> {
         <div styleName="item">
           <Select
             activeItem={{ id: '3', label: 'STQ' }}
-            items={[
-              { id: '1', label: 'BTC' },
-              { id: '2', label: 'ETH' },
-              { id: '3', label: 'STQ' },
-              { id: '4', label: 'EOS' },
-            ]}
+            items={[{ id: '3', label: 'STQ' }]}
             onSelect={this.handleSelect}
             dataTest="headerСurrenciesSelect"
           />
@@ -27,11 +22,7 @@ class HeaderTop extends Component<{}> {
         <div styleName="item">
           <Select
             activeItem={{ id: '1', label: 'ENG' }}
-            items={[
-              { id: '1', label: 'ENG' },
-              { id: '2', label: 'CHN' },
-              { id: '3', label: 'RUS' },
-            ]}
+            items={[{ id: '1', label: 'ENG' }]}
             onSelect={() => {}}
             dataTest="headerLanguagesSelect"
           />

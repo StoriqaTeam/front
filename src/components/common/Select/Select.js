@@ -112,6 +112,7 @@ class Select extends Component<PropsType, StateType> {
       e.preventDefault();
       const { items, activeItem } = this.props;
       if (e.keyCode === 40 || e.keyCode === 38) {
+        const { onSelect } = this.props;
         const activeItemIdx = this.getIndexFromItems(activeItem);
 
         if (e.keyCode === 40) {
@@ -119,6 +120,7 @@ class Select extends Component<PropsType, StateType> {
           const newActiveItemIdx =
             activeItemIdx === length(items) - 1 ? 0 : activeItemIdx + 1;
           this.handleAutoScroll(newActiveItemIdx, 'smooth');
+          onSelect(items[newActiveItemIdx]);
         }
 
         if (e.keyCode === 38) {
@@ -126,6 +128,7 @@ class Select extends Component<PropsType, StateType> {
           const newActiveItemIdx =
             activeItemIdx === 0 ? length(items) - 1 : activeItemIdx - 1;
           this.handleAutoScroll(newActiveItemIdx, 'smooth');
+          onSelect(items[newActiveItemIdx]);
         }
       }
 
@@ -146,14 +149,16 @@ class Select extends Component<PropsType, StateType> {
   };
 
   handleKeyActiveItem = () => {
-    const { items } = this.props;
+    const { items, onSelect } = this.props;
     const { searchValue } = this.state;
     const filteredItems = filter(
       item => new RegExp(`^${searchValue}`).test(toLower(item.label)),
       items,
     );
     if (!isEmpty(filteredItems)) {
-      this.handleAutoScroll(this.getIndexFromItems(head(filteredItems)));
+      const idx = this.getIndexFromItems(head(filteredItems));
+      this.handleAutoScroll(idx);
+      onSelect(items[idx]);
     }
   };
 
@@ -162,7 +167,6 @@ class Select extends Component<PropsType, StateType> {
   };
 
   handleAutoScroll = (idx: number, behavior: ?string) => {
-    const { items, onSelect } = this.props;
     const visibleHeight = itemHeight * maxItemsCount;
     const itemsWrapScroll = this.itemsWrap.scrollTop;
 
@@ -178,8 +182,6 @@ class Select extends Component<PropsType, StateType> {
         behavior,
       });
     }
-
-    onSelect(items[idx]);
   };
 
   handleToggleExpand = (e: any): void => {

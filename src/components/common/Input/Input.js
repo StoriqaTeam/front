@@ -17,6 +17,7 @@ type PropsType = {
   onFocus: (e: any) => void,
   onKeyDown: () => void,
   onClick: () => void,
+  min: ?string,
   icon: ?string,
   isUrl: ?boolean,
   inputRef: ?(e: any) => void,
@@ -25,6 +26,7 @@ type PropsType = {
   type?: string,
   fullWidth?: boolean,
   postfix: ?string,
+  dataTest: ?string,
   inline: ?boolean,
   search?: boolean,
 };
@@ -78,7 +80,16 @@ class Input extends Component<PropsType, StateType> {
   };
 
   renderInput() {
-    const { onChange, inputRef, isAutocomplete, id, value, type } = this.props;
+    const {
+      onChange,
+      inputRef,
+      isAutocomplete,
+      id,
+      value,
+      type,
+      min,
+      dataTest,
+    } = this.props;
     return isAutocomplete ? (
       <input
         type="text"
@@ -89,7 +100,7 @@ class Input extends Component<PropsType, StateType> {
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
         onClick={this.props.onClick}
-        data-test={id}
+        data-test={dataTest || id}
       />
     ) : (
       <input
@@ -98,10 +109,12 @@ class Input extends Component<PropsType, StateType> {
         name={id}
         type={type || 'text'}
         value={value || ''}
+        min={min || ''}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
-        data-test={id}
+        onKeyDown={this.props.onKeyDown}
+        data-test={dataTest || id}
       />
     );
   }

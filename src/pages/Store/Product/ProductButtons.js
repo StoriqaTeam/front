@@ -8,9 +8,14 @@ import './ProductButtons.scss';
 type PropsType = {
   onAddToCart: () => any,
   unselectedAttr: ?Array<string>,
+  quantity: number,
 };
 
-const ProductButtons = ({ onAddToCart, unselectedAttr }: PropsType) => (
+const ProductButtons = ({
+  onAddToCart,
+  unselectedAttr,
+  quantity,
+}: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
       <Button disabled big>
@@ -20,6 +25,7 @@ const ProductButtons = ({ onAddToCart, unselectedAttr }: PropsType) => (
         id="productAddToCart"
         wireframe
         big
+        disabled={!quantity}
         onClick={onAddToCart}
         dataTest="product-addToCart"
       >

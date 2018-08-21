@@ -3,11 +3,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { fromPairs, map, pathOr, prop, pipe, replace, split } from 'ramda';
-import Cookies from 'universal-cookie';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
-import { log, errorsHandler, fromRelayError } from 'utils';
+import { log, errorsHandler, fromRelayError, setCookie } from 'utils';
 import { GetJWTByProviderMutation } from 'relay/mutations';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
@@ -59,18 +58,10 @@ class OAuthCallback extends PureComponent<PropsType> {
           }
           const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
           if (jwt) {
-            const cookies = new Cookies();
             const today = new Date();
             const expirationDate = new Date();
             expirationDate.setDate(today.getDate() + 1);
-            cookies.set(
-              '__jwt',
-              { value: jwt },
-              {
-                path: '/',
-                expires: expirationDate,
-              },
-            );
+            setCookie('__jwt', jwt, expirationDate);
 
             const redirectPath = getPathForRedirectAfterLogin();
             if (redirectPath) {

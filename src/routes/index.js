@@ -5,10 +5,9 @@
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import Cookies from 'universal-cookie';
 import { find, pathEq, pathOr, last } from 'ramda';
 
-import { log } from 'utils';
+import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
@@ -42,7 +41,6 @@ import { PasswordReset } from 'pages/PasswordReset';
 
 const routes = (
   <Route>
-    <Route path="/error" Component={Error} />
     <Route
       path="/"
       Component={App}
@@ -133,6 +131,7 @@ const routes = (
         return <Component {...props} />;
       }}
     >
+      <Route path="/error" Component={Error} />
       <Route Component={Start} />
       <Route path="/404" Component={Error404} />
 
@@ -153,9 +152,11 @@ const routes = (
         Component={Checkout}
         render={({ props, Component }) => {
           if (props && !props.me) {
-            const cookies = new Cookies();
-            cookies.remove('__jwt');
-            throw new RedirectException(`/login?from=/checkout`);
+            const {
+              location: { pathname },
+            } = props;
+            removeCookie('__jwt');
+            throw new RedirectException(`/login?from=${pathname}`);
           } else if (!props) {
             return null;
           } else {
@@ -239,8 +240,7 @@ const routes = (
             const {
               location: { pathname },
             } = props;
-            const cookies = new Cookies();
-            cookies.remove('__jwt');
+            removeCookie('__jwt');
             throw new RedirectException(`/login?from=${pathname}`);
           }
         }}
@@ -558,8 +558,7 @@ const routes = (
                 const {
                   location: { pathname },
                 } = props;
-                const cookies = new Cookies();
-                cookies.remove('__jwt');
+                removeCookie('__jwt');
                 throw new RedirectException(`/login?from=${pathname}`);
               } else {
                 const isOrder = pathOr(null, ['params', 'orderId'], props);

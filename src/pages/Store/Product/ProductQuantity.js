@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import Stepper from 'components/Stepper';
 
@@ -14,9 +15,20 @@ const ProductQuantity = (props: PropsType) => (
       <strong>Amount</strong>
     </div>
     <div styleName="counter">
-      <Stepper value={0} min={0} max={props.quantity} onChange={() => {}} />
+      <Stepper
+        value={props.quantity === 0 ? 0 : 1}
+        min={0}
+        max={props.quantity}
+        onChange={() => {}}
+      />
       <p styleName="stock">Remaining stock:</p>
-      <span styleName="inStock">{`In stock (${props.quantity})`}</span>
+      <span
+        styleName={classNames('inStock', {
+          zeroQuantity: props.quantity === 0,
+        })}
+      >
+        {`In stock (${props.quantity})`}
+      </span>
     </div>
   </div>
 );

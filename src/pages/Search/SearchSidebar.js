@@ -77,7 +77,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ['match', 'location', 'query', 'minValue'],
       nextProps,
     );
-    const minValueFromUrlInt = parseInt(minValueFromUrl, 10);
+    const minValueFromUrlInt = parseFloat(minValueFromUrl);
     // get initial minValue ranger from url if we can
     const volume =
       minValueFromUrlInt && minValueFromUrlInt > minValue
@@ -98,7 +98,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ['match', 'location', 'query', 'maxValue'],
       nextProps,
     );
-    const maxValueFromUrlInt = parseInt(maxValueFromUrl, 10);
+    const maxValueFromUrlInt = parseFloat(maxValueFromUrl);
     // get initial maxValue ranger from url if we can
     const volume2 =
       maxValueFromUrlInt && maxValueFromUrlInt < maxValue
@@ -178,18 +178,13 @@ class SearchSidebar extends Component<PropsType, StateType> {
 
   handleOnChangeCategory = (item): void => {
     const { router } = this.props;
-    const { volume, volume2 } = this.state;
     // $FlowIgnore
     const name = pathOr(
       '',
       ['match', 'location', 'query', 'search'],
       this.props,
     );
-    router.push(
-      `/categories?search=${name}&category=${
-        item.id
-      }&minValue=${volume}&maxValue=${volume2}`,
-    );
+    router.push(`/categories?search=${name}&category=${item.id}`);
   };
 
   handleOnRangeChange = (value: number, fieldName: string): void => {
@@ -320,6 +315,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     if (!parentObj) return linkComponent();
     return linkComponent(parentObj);
   };
+
   render() {
     const { onClose, isOpen } = this.props;
     const { volume, volume2 } = this.state;
@@ -342,16 +338,15 @@ class SearchSidebar extends Component<PropsType, StateType> {
       initialSearchInput,
     );
     const maxValue = (priceRange && priceRange.maxValue) || 0;
-    const minValue = (priceRange && priceRange.minValue) || 0;
     let valueRange;
     let valueRange2;
     if (volume > volume2) {
-      valueRange = volume2 - 1;
+      valueRange = 0;
     } else {
       valueRange = volume;
     }
     if (volume2 < volume) {
-      valueRange2 = volume + 1;
+      valueRange2 = maxValue;
     } else {
       valueRange2 = volume2;
     }
@@ -383,8 +378,6 @@ class SearchSidebar extends Component<PropsType, StateType> {
         )}
         <div styleName="blockTitle">Price (STQ)</div>
         <RangerSlider
-          minValue={minValue}
-          maxValue={maxValue}
           min={0}
           max={maxValue}
           step={0.01}
