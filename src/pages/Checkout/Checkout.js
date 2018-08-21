@@ -57,6 +57,7 @@ type StateType = {
     receiverPhone: string,
   },
   invoiceId: ?string,
+  checkoutInProcess: boolean,
 };
 
 const emptyAddress = {
@@ -89,6 +90,7 @@ class Checkout extends Component<PropsType, StateType> {
         receiverPhone: (props.me && props.me.phone) || '',
       },
       invoiceId: null,
+      checkoutInProcess: false,
     };
   }
 
@@ -181,51 +183,59 @@ class Checkout extends Component<PropsType, StateType> {
     const {
       orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
-    CreateOrdersMutation.commit({
-      input: {
-        clientMutationId: '',
-        addressFull,
-        receiverName,
-        receiverPhone,
-        currencyId: 6,
-      },
-      environment: this.context.environment,
-      onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
-        log.debug('Success for DeleteFromCart mutation');
-        if (response && response.createOrders) {
-          log.debug('Response: ', response);
-          this.props.showAlert({
-            type: 'success',
-            text: 'Orders successfully created',
-            link: { text: 'Close.' },
-          });
-          this.setState({ invoiceId: response.createOrders.invoice.id });
-          this.handleChangeStep(3)();
-        } else if (!errors) {
+    this.setState({ checkoutInProcess: true }, () => {
+      CreateOrdersMutation.commit({
+        input: {
+          clientMutationId: '',
+          addressFull,
+          receiverName,
+          receiverPhone,
+          currencyId: 6,
+        },
+        environment: this.context.environment,
+        onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
+          log.debug('Success for DeleteFromCart mutation');
+          if (response && response.createOrders) {
+            log.debug('Response: ', response);
+            this.props.showAlert({
+              type: 'success',
+              text: 'Orders successfully created',
+              link: { text: 'Close.' },
+            });
+            this.setState({
+              invoiceId: response.createOrders.invoice.id,
+              checkoutInProcess: false,
+            });
+            this.handleChangeStep(3)();
+          } else if (!errors) {
+            this.props.showAlert({
+              type: 'danger',
+              text: 'Error :(',
+              link: { text: 'Close.' },
+            });
+            this.setState({ checkoutInProcess: false });
+          } else {
+            log.debug('Errors: ', errors);
+            this.props.showAlert({
+              type: 'danger',
+              text: 'Error :(',
+              link: { text: 'Close.' },
+            });
+            this.setState({ checkoutInProcess: false });
+          }
+        },
+        onError: error => {
+          log.error('Error in DeleteFromCart mutation');
+          log.error(error);
           this.props.showAlert({
             type: 'danger',
-            text: 'Error :(',
+            text: 'Something went wrong :(',
             link: { text: 'Close.' },
           });
-        } else {
-          log.debug('Errors: ', errors);
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Error :(',
-            link: { text: 'Close.' },
-          });
-        }
-      },
-      onError: error => {
-        log.error('Error in DeleteFromCart mutation');
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something went wrong :(',
-          link: { text: 'Close.' },
-        });
-        this.props.router.push('/checkout');
-      },
+          this.setState({ checkoutInProcess: false });
+          this.props.router.push('/checkout');
+        },
+      });
     });
   };
 
@@ -367,6 +377,7 @@ class Checkout extends Component<PropsType, StateType> {
                               this.handleCheckout
                             }
                             isReadyToClick={this.checkReadyToCheckout()}
+                            checkoutInProcess={this.state.checkoutInProcess}
                           />
                         </StickyBar>
                       </Col>
