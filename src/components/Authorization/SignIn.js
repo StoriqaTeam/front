@@ -48,7 +48,11 @@ class SignIn extends Component<PropsType, StateType> {
       onResendEmail,
     } = this.props;
     const { autocomplete } = this.state;
-
+    // $FlowIgnoreMe
+    const showResendEmail = any(
+      i => i === 'Email not verified',
+      propOr('', 'email', errors),
+    );
     return (
       <div styleName="signIn">
         <div styleName="inputBlock">
@@ -61,10 +65,7 @@ class SignIn extends Component<PropsType, StateType> {
             onChange={onChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'email', errors)}
-            showResendEmail={any(
-              i => i === 'Email not verified',
-              propOr('', 'email', errors),
-            )}
+            showResendEmail={showResendEmail}
             onBlur={onBlur}
             onResendEmail={onResendEmail}
             validate="email"

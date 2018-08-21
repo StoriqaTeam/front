@@ -17,12 +17,7 @@ import {
   RecoverPassword,
   ResetPassword,
 } from 'components/Authorization';
-import {
-  log,
-  fromRelayError,
-  errorsHandler,
-  setCookie,
-} from 'utils';
+import { log, fromRelayError, errorsHandler, setCookie } from 'utils';
 import {
   CreateUserMutation,
   GetJWTByEmailMutation,
