@@ -14,6 +14,16 @@ import '../index.scss';
 let returnFunc = () => {}; // eslint-disable-line
 
 if (process.env.BROWSER) {
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.REACT_APP_RAVEN_CONFIG_URL_SPA
+  ) {
+    /* eslint-disable */
+    // $FlowIgnoreMe
+    Raven.config(process.env.REACT_APP_RAVEN_CONFIG_URL_SPA).install();
+    /* eslint-enable */
+  }
+
   const store = createReduxStore(
     new BrowserProtocol(),
     window.__PRELOADED_STATE__ || {}, // eslint-disable-line
