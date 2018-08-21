@@ -234,11 +234,16 @@ class Checkout extends Component<PropsType, StateType> {
       step,
       orderInput: {
         addressFull: { country, postalCode },
+        receiverName,
+        receiverPhone,
       },
     } = this.state;
     const {
       cart: { totalCount },
     } = this.props;
+    if (step === 1 && (!receiverName || !receiverPhone)) {
+      return false;
+    }
     if (!country || !postalCode || (totalCount === 0 && step === 2)) {
       return false;
     }
