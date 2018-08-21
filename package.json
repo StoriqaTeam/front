@@ -19,6 +19,7 @@
     "prop-types": "15.6.0",
     "qrcode.react": "0.8.0",
     "ramda": "0.25.0",
+    "raven": "^2.6.3",
     "react": "16.3.0",
     "react-autocomplete": "1.8.1",
     "react-autosize-textarea": "3.0.2",
