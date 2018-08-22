@@ -7,6 +7,9 @@ import { getCookie } from 'utils';
 
 import locale from 'translation/locales';
 
+import type { LocaleMessagesType } from 'translation/types/LocaleMessagesType';
+import type { LanguagesType } from 'translation/types/LanguagesType';
+
 const supplant = (s: string, d: {}) => {
   let ss = s;
   Object.keys(d).forEach(p => {
@@ -17,24 +20,32 @@ const supplant = (s: string, d: {}) => {
   return ss;
 };
 
-const translateKey = (path: any, obj: any) =>
-  path.split('.').reduce((prev, curr) => prev[curr], obj);
+const translateKey = (path: string, value: string, obj: LocaleMessagesType) =>
+  obj[path][value];
 
 const createHTMLMarkup = (html: string) => ({ __html: html });
 
-export const t = (
-  key: string,
-  placeholders?: { [string]: string },
+export const t = (props: {
+  path: string,
+  value: string,
+  placeholders?: {
+    [string]: string,
+  },
   isHTML?: boolean,
-  options?: { tagName: string },
-) => {
-  const localeValue = pathOr('en', ['value'], getCookie('locale'));
+  tagName?: string,
+}) => {
+  const { path, value, placeholders, isHTML, tagName } = props;
+  // $FlowIgnore
+  const localeValue: LanguagesType = pathOr(
+    'en',
+    ['value'],
+    getCookie('locale'),
+  );
   const result = translateKey(
-    key,
-    // $FlowIgnore
+    path,
+    value,
     locale[localeValue]['messages'], // eslint-disable-line
   );
-  const tagName = options ? options.tagName : 'span';
   if (typeof placeholders === 'undefined') {
     return result;
   }
@@ -42,7 +53,7 @@ export const t = (
   return isHTML
     ? // eslint-disable-next-line
       React.createElement(
-        tagName,
+        tagName || 'span',
         { dangerouslySetInnerHTML: createHTMLMarkup(finalResult) },
         null,
       )

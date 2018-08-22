@@ -44,10 +44,12 @@ class HeaderTop extends Component<PropsType> {
           />
         </div>
         <div>
-          <a href="_">{t('header.help')}</a>
+          <a href="_">{t({ path: 'header', value: 'help' })}</a>
         </div>
         <div>
-          <a href="/start-selling">{t('header.sell_on_storiqa')}</a>
+          <a href="/start-selling">
+            {t({ path: 'header', value: 'sell_on_storiqa' })}
+          </a>
         </div>
       </div>
     );

@@ -30,10 +30,10 @@ export default (
       super(props);
 
       /**
-     * @desc Uncomment later!
+       * @desc Uncomment later!
 
-    const cookieLocale = pathOr(null, ['value'], getCookie('locale'));
-    if (!cookieLocale) {
+       const cookieLocale = pathOr(null, ['value'], getCookie('locale'));
+       if (!cookieLocale) {
       if (process.env.BROWSER) {
         const browserLang = window.navigator ? (window.navigator.language ||
           window.navigator.systemLanguage ||
@@ -44,7 +44,7 @@ export default (
         setCookie('locale', 'en');
       }
     }
-     */
+       */
 
       /**
        * @desc And this is to remove!
