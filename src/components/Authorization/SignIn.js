@@ -84,14 +84,15 @@ class SignIn extends Component<PropsType, StateType> {
             errors={propOr(null, 'password', errors)}
           />
         </div>
-        <div
-          onClick={onRecoverPassword}
-          onKeyPress={() => {}}
-          role="button"
-          styleName="forgotPassword"
-          tabIndex="-1"
-        >
-          Forgot Password
+        <div styleName="forgotPassword">
+          <span
+            onClick={onRecoverPassword}
+            onKeyPress={() => {}}
+            role="button"
+            tabIndex="-1"
+          >
+            Forgot Password
+          </span>
         </div>
         {formValid && (
           <div styleName="signInGroup">
