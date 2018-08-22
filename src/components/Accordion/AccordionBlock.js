@@ -74,7 +74,9 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
           role="button"
           tabIndex="0"
         >
-          <div styleName="parentTitle">{tree.name}</div>
+          <div styleName="parentTitle" data-test="categoryLevelTwoButton">
+            {tree.name}
+          </div>
           {isExpanded && <Icon type="minus" size={16} />}
           {!isExpanded && <Icon type="plus" size={16} />}
         </div>
@@ -92,6 +94,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
                     onKeyDown={() => {}}
                     role="button"
                     tabIndex="0"
+                    data-test="categoryLevelThreeButton"
                   >
                     {child.name}
                   </div>

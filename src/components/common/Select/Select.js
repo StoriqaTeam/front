@@ -289,7 +289,7 @@ class Select extends Component<PropsType, StateType> {
                     styleName={classNames('item', {
                       active: activeItem && activeItem.id === id,
                     })}
-                    data-test={`${dataTest}_items`}
+                    data-test={`${dataTest}_item`}
                   >
                     {item.label}
                   </div>
