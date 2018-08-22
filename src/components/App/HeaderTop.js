@@ -6,7 +6,8 @@ import { find, propEq, pathOr } from 'ramda';
 import { Select } from 'components/common/Select';
 
 import { getCookie } from 'utils';
-import { t } from 'translation/utils';
+import { t, getLocale } from 'translation/utils';
+
 import languages from 'translation/languages.json';
 
 import './HeaderTop.scss';
@@ -44,12 +45,10 @@ class HeaderTop extends Component<PropsType> {
           />
         </div>
         <div>
-          <a href="_">{t({ path: 'header', value: 'help' })}</a>
+          <a href="_">{t(getLocale().header.help)}</a>
         </div>
         <div>
-          <a href="/start-selling">
-            {t({ path: 'header', value: 'sell_on_storiqa' })}
-          </a>
+          <a href="/start-selling">{t(getLocale().header.sell_on_storiqa)}</a>
         </div>
       </div>
     );

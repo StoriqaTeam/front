@@ -7,9 +7,6 @@ import { getCookie } from 'utils';
 
 import locale from 'translation/locales';
 
-import type { LocaleMessagesType } from 'translation/types/LocaleMessagesType';
-import type { LanguagesType } from 'translation/types/LanguagesType';
-
 const supplant = (s: string, d: {}) => {
   let ss = s;
   Object.keys(d).forEach(p => {
@@ -20,47 +17,36 @@ const supplant = (s: string, d: {}) => {
   return ss;
 };
 
-const translateKey = (path: string, value: string, obj: LocaleMessagesType) =>
-  obj[path][value];
-
 const createHTMLMarkup = (html: string) => ({ __html: html });
 
-export const t = (props: {
-  path: string,
-  value: string,
-  placeholders?: {
-    [string]: string,
+export const t = (
+  key: string,
+  props?: {
+    placeholders?: { [string]: string },
+    isHTML?: boolean,
+    tagName?: string,
   },
-  isHTML?: boolean,
-  tagName?: string,
-}) => {
-  const { path, value, placeholders, isHTML, tagName } = props;
-  // $FlowIgnore
-  const localeValue: LanguagesType = pathOr(
-    'en',
-    ['value'],
-    getCookie('locale'),
-  );
-  const result = translateKey(
-    path,
-    value,
-    locale[localeValue]['messages'], // eslint-disable-line
-  );
-  if (typeof placeholders === 'undefined') {
-    return result;
+) => {
+  if (props) {
+    const { placeholders, isHTML, tagName } = props;
+    const finalResult = placeholders ? supplant(key, placeholders) : key;
+    return isHTML
+      ? // eslint-disable-next-line
+        React.createElement(
+          tagName || 'span',
+          { dangerouslySetInnerHTML: createHTMLMarkup(finalResult) },
+          null,
+        )
+      : finalResult;
   }
-  const finalResult = supplant(result, placeholders);
-  return isHTML
-    ? // eslint-disable-next-line
-      React.createElement(
-        tagName || 'span',
-        { dangerouslySetInnerHTML: createHTMLMarkup(finalResult) },
-        null,
-      )
-    : finalResult;
+  return key;
 };
 
-export const getCurrentLang = () => {
-  const cookieLocale = pathOr('en', ['value'], getCookie('locale'));
-  return cookieLocale;
+export const getLocale = () => {
+  const localeValue = pathOr('en', ['value'], getCookie('locale'));
+  // $FlowIgnore
+  return locale[localeValue].messages;
 };
+
+export const getCurrentLang = () =>
+  pathOr('en', ['value'], getCookie('locale'));
