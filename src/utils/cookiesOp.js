@@ -4,12 +4,12 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-export const setCookie = (name: string, value: ?string, expires: any) => {
+export const setCookie = (name: string, value: any, expires: any) => {
   let options = { path: '/' };
   if (expires) {
     options = { ...options, expires };
   }
-  cookies.set(name, { value }, { ...options });
+  cookies.set(name, value, { ...options });
 };
 
 export const removeCookie = (name: string) => {
