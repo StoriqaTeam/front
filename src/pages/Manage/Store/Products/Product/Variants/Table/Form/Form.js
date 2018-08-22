@@ -387,6 +387,7 @@ class Form extends Component<PropsType, StateType> {
               value={vendorCode || ''}
               onChange={this.handleVendorCodeChange}
               errors={formErrors && formErrors.vendorCode}
+              dataTest="variantVendorcodeInput"
             />
           </div>
         </div>
@@ -404,6 +405,7 @@ class Form extends Component<PropsType, StateType> {
                 onBlur={this.handlePriceBlur}
                 value={price || ''}
                 errors={formErrors && formErrors.price}
+                dataTest="variantPriceInput"
               />
               <span styleName="priceIcon">STQ</span>
             </div>
@@ -416,6 +418,7 @@ class Form extends Component<PropsType, StateType> {
               label="Cashback"
               onChange={this.handlePercentChange('cashback')}
               value={cashback || ''}
+              dataTest="variantCashbackInput"
             />
             <span styleName="inputPostfix">Percent</span>
           </div>
@@ -427,6 +430,7 @@ class Form extends Component<PropsType, StateType> {
               label="Discount"
               onChange={this.handlePercentChange('discount')}
               value={discount || ''}
+              dataTest="variantDiscountInput"
             />
             <span styleName="inputPostfix">Percent</span>
           </div>
