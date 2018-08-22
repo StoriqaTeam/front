@@ -353,10 +353,10 @@ class Authorization extends Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, messages =>
+          errorsHandler(relayErrors, this.props.showAlert, () =>
             this.setState({
               isLoading: false,
-              errors: messages || null,
+              errors:{ email: ['Email Not Found'] },
             }),
           );
           return;
