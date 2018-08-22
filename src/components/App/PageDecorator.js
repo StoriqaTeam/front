@@ -11,7 +11,6 @@ import {
   Main,
   Footer,
   FooterResponsive,
-  LangContext,
 } from 'components/App';
 
 import './Page.scss';
@@ -64,45 +63,35 @@ export default (
       return (
         <AppContext.Consumer>
           {({ environment }) => (
-            <LangContext.Provider
-              value={{
-                setLang: this.setLang,
-              }}
-            >
-              <LangContext.Consumer>
-                {() => (
-                  <div styleName="container">
-                    {responsive ? (
-                      <HeaderResponsive
-                        environment={environment}
-                        user={this.props.me}
-                        searchValue={pathOr(
-                          '',
-                          ['match', 'location', 'query', 'search'],
-                          this.props,
-                        )}
-                        withoutCategories={withoutCategories}
-                        setLang={this.setLang}
-                      />
-                    ) : (
-                      <Header
-                        user={this.props.me}
-                        searchValue={pathOr(
-                          '',
-                          ['match', 'location', 'query', 'search'],
-                          this.props,
-                        )}
-                        setLang={this.setLang}
-                      />
-                    )}
-                    <Main>
-                      <OriginalComponent {...this.props} />
-                    </Main>
-                    {responsive ? <FooterResponsive /> : <Footer />}
-                  </div>
-                )}
-              </LangContext.Consumer>
-            </LangContext.Provider>
+            <div styleName="container">
+              {responsive ? (
+                <HeaderResponsive
+                  environment={environment}
+                  user={this.props.me}
+                  searchValue={pathOr(
+                    '',
+                    ['match', 'location', 'query', 'search'],
+                    this.props,
+                  )}
+                  withoutCategories={withoutCategories}
+                  setLang={this.setLang}
+                />
+              ) : (
+                <Header
+                  user={this.props.me}
+                  searchValue={pathOr(
+                    '',
+                    ['match', 'location', 'query', 'search'],
+                    this.props,
+                  )}
+                  setLang={this.setLang}
+                />
+              )}
+              <Main>
+                <OriginalComponent {...this.props} />
+              </Main>
+              {responsive ? <FooterResponsive /> : <Footer />}
+            </div>
           )}
         </AppContext.Consumer>
       );

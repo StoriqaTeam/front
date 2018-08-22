@@ -1,6 +1,5 @@
 export { default as App } from './App';
 export { default as AppContext } from './AppContext';
-export { default as LangContext } from './LangContext';
 export { default as AuthButtons } from './AuthButtons';
 export { default as Footer } from './Footer';
 export { default as FooterResponsive } from './FooterResponsive';
