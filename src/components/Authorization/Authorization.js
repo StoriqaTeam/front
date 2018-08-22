@@ -492,6 +492,7 @@ class Authorization extends Component<PropsType, StateType> {
       isRecoverPassword: true,
       email: '',
       password: '',
+      errors: null,
     });
   };
 
