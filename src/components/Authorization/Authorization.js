@@ -284,7 +284,7 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   validateForm = () => {
-    const { isResetPassword } = this.props;
+    const { isResetPassword, isLogin } = this.props;
     const {
       firstNameValid,
       lastNameValid,
@@ -295,13 +295,12 @@ class Authorization extends Component<PropsType, StateType> {
       password,
       passwordRepeat,
     } = this.state;
-
     if (isSignUp) {
       this.setState({
         formValid:
           firstNameValid && lastNameValid && emailValid && passwordValid,
       });
-    } else if (isSignUp === false && isRecoverPassword === false) {
+    } else if ((isSignUp === false && isRecoverPassword === false) || isLogin) {
       this.setState({ formValid: emailValid && passwordValid });
     }
     if (isRecoverPassword) {
