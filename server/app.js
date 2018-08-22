@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
 const cookiesMiddleware = require('universal-cookie-express');
+const Raven = require('raven');
 
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -60,6 +61,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Serve static assets
 if (process.env.NODE_ENV === 'production') {
   app.use('/static', express.static('./build/static'));
+  if (process.env.REACT_APP_RAVEN_CONFIG_URL_NODE) {
+    Raven.config(process.env.REACT_APP_RAVEN_CONFIG_URL_NODE).install();
+  }
 } else if (process.env.NODE_ENV === 'development') {
   // Setup logger
   const logger = morgan('combined');

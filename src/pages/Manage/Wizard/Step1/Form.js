@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { pathOr } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
@@ -89,10 +90,11 @@ class FirstForm extends React.Component<PropsType, StateType> {
 
   render() {
     const { name, shortDescription } = this.state;
-    const {
-      errors,
-      initialData: { slug },
-    } = this.props;
+    const { errors } = this.props;
+
+    // $FlowIgnoreMe
+    const slug = pathOr('', ['initialData', 'slug'], this.props);
+
     return (
       <FormWrapper
         firstForm
@@ -117,7 +119,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
           <div styleName="formItem">
             <InputSlug
               realSlug="an"
-              slug={slug || ''}
+              slug={slug}
               onChange={this.handleOnChangeSlug}
             />
           </div>

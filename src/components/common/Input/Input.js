@@ -26,6 +26,7 @@ type PropsType = {
   type?: string,
   fullWidth?: boolean,
   postfix: ?string,
+  dataTest: ?string,
   inline: ?boolean,
   search?: boolean,
 };
@@ -87,6 +88,7 @@ class Input extends Component<PropsType, StateType> {
       value,
       type,
       min,
+      dataTest,
     } = this.props;
     return isAutocomplete ? (
       <input
@@ -98,7 +100,7 @@ class Input extends Component<PropsType, StateType> {
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
         onClick={this.props.onClick}
-        data-test={id}
+        data-test={dataTest || id}
       />
     ) : (
       <input
@@ -112,7 +114,7 @@ class Input extends Component<PropsType, StateType> {
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
-        data-test={id}
+        data-test={dataTest || id}
       />
     );
   }
