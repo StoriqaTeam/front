@@ -31,6 +31,7 @@ type PropsType = {
   thisFocus: ?boolean,
   showResendEmail: ?boolean,
   onResendEmail: () => any,
+  noPasswordHints: boolean,
 };
 
 type StateType = {
@@ -65,6 +66,7 @@ class Input extends PureComponent<PropsType, StateType> {
     detectCapsLock: false,
     isFocus: false,
     isFocusShow: false,
+    noPasswordHints: false,
   };
   state: StateType = {
     labelFloat: null,
@@ -238,6 +240,7 @@ class Input extends PureComponent<PropsType, StateType> {
       errors,
       showResendEmail,
       onResendEmail,
+      noPasswordHints,
     } = this.props;
 
     const {
@@ -309,7 +312,8 @@ class Input extends PureComponent<PropsType, StateType> {
             <Icon type="eye" size="28" />
           </div>
         )}
-        {showHints && <PasswordHints {...passwordQuality} />}
+        {!noPasswordHints &&
+          showHints && <PasswordHints {...passwordQuality} />}
         {errors &&
           errors.length > 0 && (
             <div styleName="errors">

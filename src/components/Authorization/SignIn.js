@@ -73,6 +73,7 @@ class SignIn extends Component<PropsType, StateType> {
         </div>
         <div styleName="inputBlock userPassword">
           <Input
+            noPasswordHints
             label="Password"
             name="password"
             type="password"
