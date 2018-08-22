@@ -15,6 +15,7 @@ type PropsType = {
   onClick: Function,
   isReadyToClick: Function,
   buttonText: string,
+  checkoutInProcess: boolean,
 };
 
 type StateType = {
@@ -101,7 +102,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   scrolling = false;
 
   render() {
-    const { onClick, isReadyToClick, buttonText } = this.props;
+    const {
+      onClick,
+      isReadyToClick,
+      buttonText,
+      checkoutInProcess,
+    } = this.props;
     const { productsCost, deliveryCost, totalCost, totalCount } = this.state;
     return (
       <div>
@@ -154,7 +160,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
           <div styleName="checkout">
             <Button
               id="cartTotalCheckout"
-              disabled={!isReadyToClick}
+              disabled={checkoutInProcess || !isReadyToClick}
+              isLoading={checkoutInProcess}
               big
               onClick={onClick}
               dataTest="checkoutNext"

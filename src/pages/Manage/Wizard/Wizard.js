@@ -211,11 +211,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  updateWizard = (data: {
-    defaultLanguage?: string,
-    addressFull?: { value: any },
-    slug: ?string,
-  }) => {
+  updateWizard = (
+    data: {
+      defaultLanguage?: string,
+      addressFull?: { value: any },
+      slug: ?string,
+    },
+    callback?: (isSuccess: boolean) => void,
+  ) => {
     UpdateWizardMutation.commit({
       ...omit(['completed', 'slug'], data),
       slug: data.slug || null,
@@ -233,9 +236,15 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             this.props.showAlert,
             this.handleWizardError,
           );
+          if (callback) {
+            callback(false);
+          }
           return;
         }
         this.clearValidationErrors();
+        if (callback) {
+          callback(true);
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -245,6 +254,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           this.props.showAlert,
           this.handleWizardError,
         );
+        if (callback) {
+          callback(true);
+        }
       },
     });
   };
@@ -298,10 +310,21 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           callback(false);
           return;
         }
+
+        const createStore = pathOr(null, ['createStore'], response);
+        if (!createStore) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Unknown error',
+            link: { text: 'Close.' },
+          });
+          callback(false);
+          return;
+        }
+
         this.clearValidationErrors();
         const storeId = pathOr(null, ['createStore', 'rawId'], response);
-        this.updateWizard({ storeId, slug: null });
-        callback(true);
+        this.updateWizard({ storeId, slug: null }, callback);
       },
       onError: (error: Error) => {
         log.debug('CreateStoreMutation.commit', { error });
