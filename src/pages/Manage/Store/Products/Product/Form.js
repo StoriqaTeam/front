@@ -22,7 +22,7 @@ import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 import { getNameText, findCategory } from 'utils';
 
-import { ProductFormContext } from './index';
+import { ProductFormContext, LocalShipping } from './index';
 
 import Variants from './Variants/Variants';
 
@@ -367,6 +367,7 @@ class Form extends Component<PropsType, StateType> {
               resetComeResponse={resetComeResponse}
             />
           )}
+          {baseProduct && <LocalShipping />}
           {baseProduct && (
             <div styleName="button">
               <Button
