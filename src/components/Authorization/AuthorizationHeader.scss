@@ -12,10 +12,7 @@ $marginFullWidth: 9999rem;
   }
 
   &.fullWidth {
-    margin: 0 -3.5rem 6rem -3.5rem;
-    @media (min-width: $md) {
-      margin: 0 #{-$marginFullWidth} 6rem #{-$marginFullWidth};
-    }
+    margin: 0 #{-$marginFullWidth} 6rem #{-$marginFullWidth};
   }
 }
 
@@ -54,10 +51,7 @@ $marginFullWidth: 9999rem;
     padding: 0 $marginWidth;
   }
   &.fullWidth {
-   // padding: 0 $marginFullWidth;
-    @media (min-width: $md) {
-      padding: 0 $marginFullWidth;
-    }
+    padding: 0 $marginFullWidth;
   }
 }
 
