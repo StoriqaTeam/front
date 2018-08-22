@@ -211,6 +211,7 @@ class Authorization extends Component<PropsType, StateType> {
       alone,
       match: {
         location: {
+          pathname,
           query: { from },
         },
       },
@@ -238,6 +239,8 @@ class Authorization extends Component<PropsType, StateType> {
               } else {
                 window.location = '/';
               }
+            } else if (pathname === '/login') {
+              window.location = '/';
             } else {
               window.location.reload();
             }
