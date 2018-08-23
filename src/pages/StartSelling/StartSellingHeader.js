@@ -1,4 +1,4 @@
-// flow@ 
+// flow@
 
 import React from 'react';
 import { Link, withRouter, routerShape } from 'found';
@@ -11,11 +11,7 @@ type PropsType = {
   router: routerShape,
 };
 
-const StartSellingHeader = ({
-  router: { 
-    push,
-  },
-}: PropsType) => (
+const StartSellingHeader = ({ router: { push } }: PropsType) => (
   <Container>
     <Row>
       <header styleName="container">
@@ -30,11 +26,8 @@ const StartSellingHeader = ({
       </header>
     </Row>
     <div styleName="background">
-
       <div styleName="imageHeading" />
-      <h2 styleName="title">
-        Millions of shoppers are waiting
-      </h2>
+      <h2 styleName="title">Millions of shoppers are waiting</h2>
       <div styleName="titleSpacer" />
       <p styleName="subtitle">
         Start selling now with Storiqa and see how it’s easy to trade globally

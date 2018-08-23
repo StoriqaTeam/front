@@ -8,7 +8,7 @@
   font-family: $font_regular;
   font-size: 40px;
   color: $color_royal;
-  max-width: 72rem;
+  max-width: 52rem;
   line-height: normal;
   margin-bottom: 8rem;
 }
@@ -17,7 +17,7 @@
   color: $color_royal;
   font-size: 23px;
   line-height: 1.9;
-  max-width: 46rem;
+  max-width: 56rem;
   margin-bottom: 6rem;
 }
 
@@ -29,11 +29,22 @@
   }
 }
 
-.parragraphs {
-  font-size: 23px;
-  line-height: 1.9;
+.items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  margin-bottom: 8rem;
+}
+
+.itemTitle {
+  color: $color_blue;
+  font-size: 32px;
+  margin-bottom: 4rem;
+}
+
+.itemText {
   color: $color_grey_royal;
-  p:first-child {
-    margin-bottom: 6rem;
-  }
+  font-size: 23px;
 }

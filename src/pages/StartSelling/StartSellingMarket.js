@@ -1,4 +1,4 @@
-// @flow 
+// @flow
 
 import React, { Fragment } from 'react';
 
@@ -9,21 +9,26 @@ import computerImage from './img/storiqa-computer-market.png';
 import './StartSellingMarket.scss';
 
 const StartSellingMarket = () => (
-  <Fragment>
-    <h2 styleName="title">
-      STORIQA IS YOUR DOOR TO GLOBAL MARKET
-    </h2>
+  <div styleName="container">
+    <h2 styleName="title">STORIQA IS YOUR DOOR TO GLOBAL MARKET</h2>
     <p styleName="subtitle">
-      Our goal is to guarantee the quality of experience and goods, for both buyers and sellers.
+      Our goal is to guarantee the quality of experience and goods, for both
+      buyers and sellers.
     </p>
     <Row>
       <Col size={12} sm={12} md={6} lg={6} xl={6}>
         <article styleName="parragraphs">
           <p>
-            Storiqa is an online marketplace offering global access with minimal financial borders and global transactional fees. We’re committed to helping our sellers thrive. Our goal is to guarantee the quality of experience and goods, for both buyers and sellers.
+            Storiqa is an online marketplace offering global access with minimal
+            financial borders and global transactional fees. We’re committed to
+            helping our sellers thrive. Our goal is to guarantee the quality of
+            experience and goods, for both buyers and sellers.
           </p>
           <p>
-            Key platform features such as inclusive advertising and promotion, sales analysis, book-keeping and direct customer feedback make Storiqa ideal for entrepreneurs, small-scale manufacturers, family businesses and makers of handmade crafts.
+            Key platform features such as inclusive advertising and promotion,
+            sales analysis, book-keeping and direct customer feedback make
+            Storiqa ideal for entrepreneurs, small-scale manufacturers, family
+            businesses and makers of handmade crafts.
           </p>
         </article>
       </Col>
@@ -33,7 +38,7 @@ const StartSellingMarket = () => (
         </div>
       </Col>
     </Row>
-  </Fragment>
+  </div>
 );
 
 export default StartSellingMarket;
