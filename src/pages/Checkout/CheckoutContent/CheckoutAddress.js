@@ -128,7 +128,11 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                     <Input
                       fullWidth
                       id="receiverName"
-                      label="Receiver name"
+                      label={
+                        <span>
+                          Receiver name <span styleName="red">*</span>
+                        </span>
+                      }
                       onChange={this.handleChangeReceiver}
                       value={orderInput.receiverName}
                       limit={50}
@@ -138,7 +142,11 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                     <Input
                       fullWidth
                       id="receiverPhone"
-                      label="Receiver phone"
+                      label={
+                        <span>
+                          Receiver phone <span styleName="red">*</span>
+                        </span>
+                      }
                       onChange={this.handleChangePhone}
                       value={orderInput.receiverPhone}
                       limit={50}

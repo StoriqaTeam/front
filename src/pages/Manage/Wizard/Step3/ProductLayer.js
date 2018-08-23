@@ -21,7 +21,9 @@ const ProductLayer = ({ onEdit, onDelete }: PropsType) => (
       tabIndex={0}
     >
       <Icon type="note" size={56} />
-      <span styleName="buttonLabel">Edit product</span>
+      <span styleName="buttonLabel" data-test="wizardEditProductButton">
+        Edit product
+      </span>
     </div>
     <div
       styleName="editbutton"
@@ -31,7 +33,9 @@ const ProductLayer = ({ onEdit, onDelete }: PropsType) => (
       tabIndex={0}
     >
       <Icon type="basket" size={56} />
-      <span styleName="buttonLabel">Delete product</span>
+      <span styleName="buttonLabel" data-test="wizardDeleteProductButton">
+        Delete product
+      </span>
     </div>
   </div>
 );
