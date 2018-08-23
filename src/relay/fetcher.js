@@ -22,19 +22,22 @@ class FetcherBase {
     throw new Error('should be implemented in subclasses');
   }
 
-  async fetch(operation, variables) {
-    // if (process.env.NODE_ENV === 'development') {
-    //   if (operation.operation.name === 'routes_ProductCard_Query') {
-    //     console.log({ routesProductCardQuery });
-    //     return { data: routesProductCardQuery };
-    //   }
-    // }
+  // eslint-disable-next-line
+  getCurrencyIdFromCookies() {
+    throw new Error('should be implemented in subclasses');
+  }
 
+  async fetch(operation, variables) {
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
+    const currencyId = this.getCurrencyIdFromCookies();
+
     let headers = { 'Content-Type': 'application/json' };
     if (jwt) {
       headers = assoc('Authorization', `Bearer ${jwt}`, headers);
+    }
+    if (currencyId) {
+      headers = assoc('Currency-Id', parseInt(currencyId, 10), headers);
     }
     const sessionId = this.getSessionIdFromCookies();
     headers = {
@@ -58,11 +61,12 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url, jwt, sessionId) {
+  constructor(url, jwt, sessionId, currencyId) {
     super(url);
 
     this.jwt = jwt;
     this.sessionId = sessionId;
+    this.currencyId = currencyId;
     this.payloads = [];
   }
 
@@ -72,6 +76,10 @@ export class ServerFetcher extends FetcherBase {
 
   getSessionIdFromCookies() {
     return this.sessionId;
+  }
+
+  getCurrencyIdFromCookies() {
+    return this.currencyId;
   }
 
   async fetch(...args) {
@@ -107,6 +115,12 @@ export class ClientFetcher extends FetcherBase {
   getSessionIdFromCookies() {
     const cookies = new Cookies();
     return cookies.get('SESSION_ID');
+  }
+
+  // eslint-disable-next-line
+  getCurrencyIdFromCookies() {
+    const cookies = new Cookies();
+    return cookies.get('CURRENCY_ID');
   }
 
   async fetch(...args) {
