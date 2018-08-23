@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { head, prop, propOr, map, find, whereEq } from 'ramda';
+import moment from 'moment';
 
 import { AppContext } from 'components/App';
 import { Select } from 'components/common/Select';
@@ -23,11 +24,25 @@ class HeaderTop extends PureComponent<PropsType> {
       // try to get stq
       const stq = find(whereEq({ name: 'stq' }), currencies);
       if (stq) {
-        setCookie(currencyIdCookieName, stq.key);
+        setCookie(
+          currencyIdCookieName,
+          stq.key,
+          moment()
+            .utc()
+            .add(7, 'd')
+            .toDate(),
+        );
       } else {
         const firstCurrency = head(currencies);
         if (firstCurrency) {
-          setCookie(currencyIdCookieName, firstCurrency.key);
+          setCookie(
+            currencyIdCookieName,
+            firstCurrency.key,
+            moment()
+              .utc()
+              .add(7, 'd')
+              .toDate(),
+          );
         }
       }
     }
@@ -50,7 +65,14 @@ class HeaderTop extends PureComponent<PropsType> {
   };
 
   handleSelect = (value: any) => {
-    setCookie(currencyIdCookieName, value.id);
+    setCookie(
+      currencyIdCookieName,
+      value.id,
+      moment()
+        .utc()
+        .add(7, 'd')
+        .toDate(),
+    );
     window.location.reload(true);
   };
 
