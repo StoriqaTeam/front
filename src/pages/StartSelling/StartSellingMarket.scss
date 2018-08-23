@@ -1,0 +1,35 @@
+@import '../../styles/variables.scss';
+
+.title {
+  font-family: $font_regular;
+  font-size: 40px;
+  color: $color_royal;
+  max-width: 72rem;
+  line-height: normal;
+  margin-bottom: 8rem;
+}
+
+.subtitle {
+  color: $color_royal;
+  font-size: 23px;
+  line-height: 1.9;
+  max-width: 46rem;
+  margin-bottom: 6rem;
+}
+
+.imageContainer {
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+.parragraphs {
+  font-size: 23px;
+  line-height: 1.9;
+  color: $color_grey_royal;
+  p:first-child {
+    margin-bottom: 6rem;
+  }
+}
