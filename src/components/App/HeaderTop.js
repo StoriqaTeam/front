@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { head, prop, map, find, whereEq } from 'ramda';
+import React, { PureComponent } from 'react';
+import { head, prop, propOr, map, find, whereEq } from 'ramda';
 
 import { AppContext } from 'components/App';
 import { Select } from 'components/common/Select';
@@ -7,7 +7,32 @@ import { getCookie, setCookie } from 'utils';
 
 import './HeaderTop.scss';
 
-class HeaderTop extends Component {
+const currencyIdCookieName = 'CURRENCY_ID';
+
+type PropsType = {
+  // eslint-disable-next-line
+  currencies: Array<Object>,
+};
+
+class HeaderTop extends PureComponent<PropsType> {
+  componentDidMount() {
+    // set STQ (or first currency in array) as selected currency if no currency was set before
+    const currencies = propOr([], 'currencies', this.props);
+    const currentCurrencyId = getCookie(currencyIdCookieName);
+    if (!currentCurrencyId) {
+      // try to get stq
+      const stq = find(whereEq({ name: 'stq' }), currencies);
+      if (stq) {
+        setCookie(currencyIdCookieName, stq.key);
+      } else {
+        const firstCurrency = head(currencies);
+        if (firstCurrency) {
+          setCookie(currencyIdCookieName, firstCurrency.key);
+        }
+      }
+    }
+  }
+
   getCurrenciesItems: Array<{ id: string, label: string }> = map(item => ({
     id: String(prop('key', item)),
     label: prop('name', item),
@@ -25,7 +50,7 @@ class HeaderTop extends Component {
   };
 
   handleSelect = (value: any) => {
-    setCookie('Currency-Id', value.id);
+    setCookie(currencyIdCookieName, value.id);
     window.location.reload(true);
   };
 
@@ -37,8 +62,9 @@ class HeaderTop extends Component {
             <div styleName="item">
               <Select
                 activeItem={
-                  this.getItemById(getCookie('Currency-Id'))(currencies) ||
-                  head(this.getCurrenciesItems(currencies))
+                  this.getItemById(getCookie(currencyIdCookieName))(
+                    currencies,
+                  ) || head(this.getCurrenciesItems(currencies))
                 }
                 items={this.getCurrenciesItems(currencies)}
                 onSelect={this.handleSelect}
