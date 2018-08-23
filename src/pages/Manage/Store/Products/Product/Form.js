@@ -63,6 +63,7 @@ type BaseProductType = {
     getAttributes: ?Array<*>,
   },
   status: string,
+  currencyId: number,
 };
 
 type PropsType = {
@@ -272,6 +273,7 @@ class Form extends Component<PropsType, StateType> {
     } = this.props;
     const { category } = this.state;
     const status = baseProduct ? baseProduct.status : 'Draft';
+    const currencyId = baseProduct ? baseProduct.currencyId : 6;
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
     const filteredVariants = map(item => item.node, variants);
@@ -367,7 +369,7 @@ class Form extends Component<PropsType, StateType> {
               resetComeResponse={resetComeResponse}
             />
           )}
-          {baseProduct && <LocalShipping />}
+          {baseProduct && <LocalShipping currencyId={currencyId} />}
           {baseProduct && (
             <div styleName="button">
               <Button

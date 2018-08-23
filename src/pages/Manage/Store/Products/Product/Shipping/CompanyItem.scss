@@ -1,0 +1,116 @@
+@import "../../../../../../styles/variables";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 2rem 3rem;
+  background-color: $color_grey_bg;
+
+  @media (max-width: #{$lg - 1px}) {
+    align-items: flex-start;
+  }
+}
+
+.td {
+  //padding-right: 2rem;
+}
+
+.logo {
+  flex: 0 0 auto;
+  width: 9rem;
+
+  //@media (max-width: #{$sm - 1px}) {
+  //  display: none;
+  //}
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.rest {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 2rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    display: block;
+  }
+
+  .info {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: #{$md - 1px}) {
+      display: block;
+    }
+
+    .tdName {
+      width: 23rem;
+      font-size: 14px;
+    }
+
+    .tdPrice {
+      display: flex;
+      align-items: center;
+      padding-left: 2rem;
+
+      @media (max-width: #{$md - 1px}) {
+        margin-top: 2rem;
+        padding-left: 0;
+      }
+
+      .amount {
+
+      }
+
+      .currency {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  .controller {
+    flex:0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 20rem;
+
+    @media (max-width: #{$lg - 1px}) {
+      justify-content: flex-start;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      margin-top: 2rem;
+    }
+
+    .editButton {
+      cursor: pointer;
+    }
+
+    .deleteButton {
+      padding-left: 1rem;
+      cursor: pointer;
+
+      svg {
+        fill: $color_grey_minor;
+        transition: $transition_all_ease;
+      }
+
+      &:hover {
+        svg {
+          fill: $color_grey;
+        }
+      }
+    }
+  }
+}
+
+

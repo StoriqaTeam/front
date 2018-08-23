@@ -19,8 +19,8 @@ import { Icon } from 'components/Icon';
 
 import './Select.scss';
 
-type SelectType = {
-  id: string,
+export type SelectType = {
+  id: string | number,
   label: string,
 };
 

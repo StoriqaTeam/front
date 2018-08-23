@@ -21,5 +21,33 @@
 }
 
 .form {
+  position: relative;
   margin-top: 2.5rem;
+}
+
+.hidePlane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: $color_white;
+  opacity: .5;
+  z-index: 5;
+
+  &.hide {
+    position: relative;
+    opacity: 1;
+    z-index: 0;
+  }
+}
+
+.companies {
+
+}
+
+.company {
+  margin-top: 2rem;
+  padding: 3rem;
+  background-color: $color_grey_bg;
 }

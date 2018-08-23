@@ -1,0 +1,14 @@
+@import "../../../styles/variables";
+
+.container {
+  display: flex;
+}
+
+.input {
+  width: 100%;
+}
+
+.select {
+  width: 10rem;
+  margin-left: 2rem;
+}
