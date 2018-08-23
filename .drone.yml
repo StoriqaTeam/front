@@ -23,7 +23,6 @@ pipeline:
     - rm -rf .git && mv -f .git.bak .git
     when:
       event: pull_request
-      branch: [ master, release* ]
   test:
     image: node:9.9
     environment:
@@ -31,14 +30,12 @@ pipeline:
     commands:
     - rm -f yarn.lock || true
     - . ./.env.test
-    - npm config delete _auth
     - yarn -s --no-progress --non-interactive --production=false
     - yarn updateSchema
     - yarn relay
     - yarn ci
     when:
       event: pull_request
-      branch: [ master, release* ]
 
 ###
 # Build and deploy to nightly
@@ -72,7 +69,7 @@ pipeline:
     - docker_username
     - docker_password
     when:
-      event: [ push, tag ]
+      event: push
       branch: master
   static_package4nightly:
     image: plugins/docker
@@ -89,7 +86,7 @@ pipeline:
       event: [ push, tag ]
       branch: master
   deploy2nightly:
-    image: jackthestripper/drone_k8s_rollout:20180610
+    image: jackthestripper/drone_setimage
     object: front
     kind: deployment
     namespace: default
@@ -133,7 +130,6 @@ pipeline:
     when:
       event: deployment
       environment: stable
-      branch: master
   node_package4stable:
     image: plugins/docker
     group: package
@@ -150,7 +146,6 @@ pipeline:
     when:
       event: deployment
       environment: stable
-      branch: master
   static_package4stable:
     image: plugins/docker
     group: package
@@ -163,11 +158,10 @@ pipeline:
     - docker_username
     - docker_password
     when:
-      branch: master
       event: deployment
       environment: stable
   deploy2stable:
-    image: jackthestripper/drone_k8s_rollout:20180610
+    image: jackthestripper/drone_setimage
     object: front
     kind: deployment
     namespace: default
@@ -210,40 +204,33 @@ pipeline:
     - yarn build
     - yarn server:dist:build
     when:
-      event: push
-      branch: release*
+      event: tag
   node_package4stage:
     image: plugins/docker
     group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=stage
-    tags:
-    - stage_${DRONE_BRANCH//\//_}
-    - stage_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    tags: 'stage_${DRONE_TAG}'
     dockerfile: docker/Dockerfile.node
     secrets:
     - docker_username
     - docker_password
     when:
-      event: [ push, tag ]
-      branch: release*
+      event: tag
   static_package4stage:
     image: plugins/docker
     group: package
     repo: storiqateam/stq-static
-    tags:
-    - stage_${DRONE_BRANCH//\//_}
-    - stage_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    tags: 'stage_${DRONE_TAG}'
     dockerfile: docker/Dockerfile.static
     secrets:
     - docker_username
     - docker_password
     when:
-      event: [ push, tag ]
-      branch: release*
+      event: tag
   deploy2stage:
-    image: jackthestripper/drone_k8s_rollout:20180610
+    image: jackthestripper/drone_setimage
     object: front
     kind: deployment
     namespace: default
@@ -254,8 +241,8 @@ pipeline:
     - node
     - static
     img_tags:
-    - stage_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
-    - stage_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    - 'stage_${DRONE_TAG}'
+    - 'stage_${DRONE_TAG}'
     secrets:
     - source: k8s_stage_ca
       target: k8s_ca
@@ -266,8 +253,7 @@ pipeline:
     - source: k8s_stage_addr
       target: k8s_addr
     when:
-      branch: release*
-      event: push
+      event: tag
 
 ###
 # Build and deploy to production
@@ -287,16 +273,13 @@ pipeline:
     when:
       event: deployment
       environment: production
-      branch: release*
   node_package4production:
     image: plugins/docker
     group: package
     repo: storiqateam/stq-node
     environment:
     - TIER=production
-    tags:
-    - prod_${DRONE_BRANCH//\//_}
-    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    tags: 'prod_${DRONE_TAG}'
     dockerfile: docker/Dockerfile.node
     secrets:
     - docker_username
@@ -304,24 +287,20 @@ pipeline:
     when:
       event: deployment
       environment: production
-      branch: release*
   static_package4production:
     image: plugins/docker
     group: package
     repo: storiqateam/stq-static
-    tags:
-    - prod_${DRONE_BRANCH//\//_}
-    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    tags: 'prod_${DRONE_TAG}'
     dockerfile: docker/Dockerfile.static
     secrets:
     - docker_username
     - docker_password
     when:
-      branch: release*
       event: deployment
       environment: production
   deploy2production:
-    image: jackthestripper/drone_k8s_rollout:20180610
+    image: jackthestripper/drone_setimage
     object: front
     kind: deployment
     namespace: default
@@ -332,8 +311,8 @@ pipeline:
     - node
     - static
     img_tags:
-    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
-    - prod_${DRONE_BRANCH//\//_}${DRONE_BUILD_NUMBER}
+    - prod_${DRONE_TAG}
+    - prod_${DRONE_TAG}
     secrets:
     - source: k8s_prod_ca
       target: k8s_ca
@@ -344,7 +323,6 @@ pipeline:
     - source: k8s_prod_addr
       target: k8s_addr
     when:
-      branch: release*
       event: deployment
       environment: production
 
@@ -361,15 +339,39 @@ pipeline:
 #    rebuild: true
 #    when:
 #      branch: [ master, release* ]
-  notify_slack:
+  slack:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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
     channel: release
     icon_url: https://drone.io/favicon.ico
     username: cd.stq.cloud
     template: >
-        Build {{build.number}} for {{repo.name}} branch {{build.branch}} failed.
+      {{#success build.status}}
+        {{repo.name}} has been released to stage.stq.cloud!
+      {{else}}
+        Failed to deploy {{repo.name}} to stage.stq.cloud! More details here {{build.link}}
+      {{/success}}
     when:
-      event: [ push, deployment ]
-      branch: [ master, release ]
-      status: failure
+      event: tag
+      status:
+      - success
+      - failure
+  slack:
+    image: plugins/slack
+    webhook: https://hooks.slack.com/services/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
+    channel: release
+    icon_url: https://drone.io/favicon.ico
+    username: cd.stq.cloud
+    template: >
+      {{#success build.status}}
+        {{repo.name}} has been released to production.stq.cloud!
+      {{else}}
+        Failed to deploy {{repo.name}} to production.stq.cloud! More details here {{build.link}}
+      {{/success}}
+    when:
+      event: deployment
+      environment: production
+      status:
+      - success
+      - failure
+
