@@ -9,10 +9,7 @@ type PropsType = {
   onClick: () => any,
 };
 
-const StartSellingButton = ({
-  text,
-  onClick
-}: PropsType) => (
+const StartSellingButton = ({ text, onClick }: PropsType) => (
   <div
     role="button"
     tabIndex="-1"

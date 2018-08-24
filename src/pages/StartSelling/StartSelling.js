@@ -7,6 +7,7 @@ import { Container, Row, Col } from 'layout';
 
 import {
   StartSellingHeader,
+  StartSellingHeading,
   StartSellingMarket,
   StartSellingForSellers,
   StartSellingTryStoriqa,
@@ -17,23 +18,26 @@ import {
 import './StartSelling.scss';
 
 const StartSelling = () => (
-  <Container>
-    <div styleName="container">
-      <Row>
-        <Col size={1} />
-        <Col size={12} sm={12} md={12} lg={10} xl={10}>
-          <StartSellingHeader />
-          <StartSellingMarket />
-          <StartSellingTryStoriqa />
-          <StartSellingForSellers />
-          <StartSellingPrices />
-          <StartSellingFAQ />
-          <FooterResponsive />
-        </Col>
-        <Col size={1} />
-      </Row>
-    </div>
-  </Container>
+  <div styleName="container">
+    <Container>
+      <StartSellingHeader />
+      <div styleName="wrapper">
+        <Row>
+          <Col size={1} />
+          <Col size={12} sm={12} md={12} lg={10} xl={10}>
+            <StartSellingHeading />
+            <StartSellingMarket />
+            <StartSellingTryStoriqa />
+            <StartSellingForSellers />
+            <StartSellingPrices />
+            <StartSellingFAQ />
+            <FooterResponsive />
+          </Col>
+          <Col size={1} />
+        </Row>
+      </div>
+    </Container>
+  </div>
 );
 
 export default StartSelling;

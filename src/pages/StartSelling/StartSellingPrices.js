@@ -75,26 +75,28 @@ const StartSellingPrices = () => (
       {items.map(({ id, price, title, plan, includes, icon }) => (
         <div styleName="item" key={id}>
           <h4 styleName="itemTitle">
-            {icon && (<img src={icon === 'hit' ? hit : bestChoice} alt="" styleName={icon} />)}
+            {icon && (
+              <img
+                src={icon === 'hit' ? hit : bestChoice}
+                alt=""
+                styleName={icon}
+              />
+            )}
             {title}
           </h4>
           <div styleName="planBadge">
-            <div styleName="number">
-              {plan}
-            </div>
+            <div styleName="number">{plan}</div>
             <div>
-              <div styleName="stq">
-                STQ 
-              </div>
-              <div styleName="price">
-                {price}
-              </div>
+              <div styleName="stq">STQ</div>
+              <div styleName="price">{price}</div>
             </div>
           </div>
           <p styleName="itemSubtitle">per product per day</p>
           <ul>
             {includes.map(name => (
-              <li key={name} styleName="detail">{name}</li>
+              <li key={name} styleName="detail">
+                {name}
+              </li>
             ))}
           </ul>
         </div>

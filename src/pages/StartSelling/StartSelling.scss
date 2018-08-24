@@ -1,6 +1,13 @@
 @import '../../styles/variables.scss';
 
 .container {
+  background: url('./img/storiqa-start-selling-heading.png');
+  background-repeat: no-repeat;
+  background-position: 90rem -30rem;
+  width: 100%;
+}
+
+.wrapper {
   margin: 0 auto;
   max-width: 170rem;
   position: relative;
