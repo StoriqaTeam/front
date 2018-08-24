@@ -5,7 +5,7 @@
 }
 
 .title {
-  font-family: $font_regular;
+  font-family: $font_circe_extra_bold;
   font-size: 40px;
   color: $color_royal;
   max-width: 52rem;
@@ -15,6 +15,7 @@
 }
 
 .subtitle {
+  font-family: $font_circe_regular;
   color: $color_royal;
   font-size: 23px;
   line-height: 1.39;
@@ -48,6 +49,7 @@
 }
 
 .itemTitle {
+  font-family: $font_circe_extra_bold;
   color: $color_royal;
   font-size: 32px;
   margin-bottom: 6.375rem;
@@ -55,28 +57,32 @@
 }
 
 .itemSubtitle {
+  font-family: $font_circe_regular;
   margin-top: 4.375rem;
   margin-bottom: 3.875rem;
   color: $color_grey_royal;
   font-size: 23px;
   max-width: 18rem;
   text-align: center;
-  line-height: normal;
+  line-height: 0.96;
 }
 
 .planBadge {
   display: flex;
   .stq {
+    font-family: $font_circe_extra_bold;
     color: $color_royal;
     font-size: 32px;
     line-height: normal;
     font-weight: 800;
   }
   .price {
+    font-family: $font_circe_regular;
     color: $color_royal;
     font-size: 18px;
   }
   .number {
+    font-family: $font_circe_extra_bold;
     color: $color_blue;
     font-size: 110px;
     line-height: 90px;
@@ -85,6 +91,7 @@
 }
 
 .detail {
+  font-family: $font_circe_regular;
   color: $color_grey_royal;
   line-height: 1.35;
   font-size: 17px;

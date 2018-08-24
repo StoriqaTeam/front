@@ -16,11 +16,11 @@
 }
 
 .title {
-  font-family: $font_regular;
+  font-family: $font_circe_extra_bold;
   font-size: 63px;
   color: $color_blue;
   max-width: 72rem;
-  line-height: normal;
+  line-height: 0.95;
 
   &.royal {
     color: $color_royal;
@@ -37,6 +37,7 @@
 
 .subtitle {
   color: $color_royal;
+  font-family: $font_circe_regular;
   font-size: 23px;
   line-height: 1.39;
   max-width: 46rem;

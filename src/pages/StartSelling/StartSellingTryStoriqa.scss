@@ -5,7 +5,7 @@
 }
 
 .title {
-  font-family: $font_regular;
+  font-family: $font_circe_extra_bold;
   font-size: 40px;
   color: $color_royal;
   max-width: 52rem;
@@ -14,6 +14,7 @@
 }
 
 .subtitle {
+  font-family: $font_circe_regular;
   color: $color_royal;
   font-size: 23px;
   line-height: 1.39;
@@ -40,6 +41,7 @@
 }
 
 .itemTitle {
+  font-family: $font_circe_extra_bold;
   color: $color_blue;
   font-size: 32px;
   margin-bottom: 4rem;
@@ -47,6 +49,7 @@
 }
 
 .itemText {
+  font-family: $font_circe_regular;
   color: $color_grey_royal;
   font-size: 23px;
   line-height: 1.39;
