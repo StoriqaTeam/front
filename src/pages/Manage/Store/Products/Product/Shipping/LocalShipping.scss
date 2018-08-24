@@ -21,24 +21,26 @@
 }
 
 .form {
-  position: relative;
   margin-top: 2.5rem;
 }
 
-.hidePlane {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: $color_white;
-  opacity: .5;
-  z-index: 5;
+.formWrap {
+  position: relative;
+}
 
-  &.hide {
-    position: relative;
-    opacity: 1;
-    z-index: 0;
+.hidePlane {
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: $color_white;
+    opacity: .5;
+    z-index: 5;
   }
 }
 
@@ -50,4 +52,8 @@
   margin-top: 2rem;
   padding: 3rem;
   background-color: $color_grey_bg;
+}
+
+.editableForm {
+  margin-top: 2rem;
 }

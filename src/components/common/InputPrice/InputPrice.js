@@ -10,6 +10,7 @@ import type { SelectType } from 'components/common/Select';
 import CurrencySelect from './CurrencySelect';
 
 import './InputPrice.scss';
+import { head, length } from 'ramda';
 
 type StateType = {
   price: string,
@@ -19,13 +20,22 @@ type PropsType = {
   onChangePrice: (value: number) => void,
   currency: SelectType,
   onChangeCurrency: (item: SelectType) => void,
+  price: number,
 };
 
 class InputPrice extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    const price = `${nextProps.price}`;
+    if (price !== prevState.price) {
+      return { ...prevState, price };
+    }
+    return null;
+  }
+
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      price: '0',
+      price: props.price ? `${props.price}` : '0',
     };
   }
 
@@ -39,7 +49,7 @@ class InputPrice extends Component<PropsType, StateType> {
       this.setState({
         price:
           value
-            .replace(/^[.,]/, '0.')
+            .replace(/^0+/, '0')
             .replace(/^[.,]/, '0.')
             .replace(/^0([1-9])/, '$1')
             .replace(/,/, '.') || '0',

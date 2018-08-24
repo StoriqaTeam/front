@@ -32,6 +32,14 @@ type PropsType = {
 };
 
 class CurrencySelect extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    const { currency } = nextProps;
+    if (JSON.stringify(currency) !== JSON.stringify(prevState.currency)) {
+      return { ...prevState, currency };
+    }
+    return null;
+  }
+
   constructor(props: PropsType) {
     super(props);
     const currencies = filter(

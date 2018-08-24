@@ -2,7 +2,16 @@
 
 import React, { PureComponent } from 'react';
 
-import { head, prepend, find, propEq } from 'ramda';
+import {
+  head,
+  prepend,
+  find,
+  propEq,
+  isEmpty,
+  ifElse,
+  assoc,
+  length,
+} from 'ramda';
 
 import { Select } from 'components/common/Select';
 import { InputPrice } from 'components/common';
@@ -26,7 +35,7 @@ const currenciesFromBack = [
 // type CurrenciesPropsType = Array<{ key: number, name: string, alias: string }>;
 
 type CompanyType = {
-  companyName: string,
+  service: SelectType,
   price: number,
   currencyId: number,
   currencyLabel: string,
@@ -40,34 +49,64 @@ type StateType = {
 };
 
 type PropsType = {
-  onAddCompany: (company: CompanyType) => void,
+  onSaveCompany: (company: CompanyType) => void,
+  onRemoveEditableItem?: () => void,
   // currencies: CurrenciesPropsType,
   currencyId: number,
+  services: Array<SelectType>,
+  company?: {
+    id: string,
+    price: number,
+    currencyId: number,
+    service: SelectType,
+  },
 };
-
-const services = [{ id: 'ups', label: 'Ups' }, { id: 'fedex', label: 'FedEx' }];
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    const { currencyId, company } = props;
     this.state = {
-      price: 0,
-      currency: find(propEq('id', `${props.currencyId}`))(
-        convertCurrenciesForSelect(currenciesFromBack),
+      price: company ? company.price : 0,
+      currency: this.findCurrencyById(
+        company ? company.currencyId : currencyId,
       ),
-      currentService: head(services),
+      currentService: company ? company.service : head(props.services),
       companies: [],
     };
   }
 
-  handleAddCompany = () => {
+  componentDidUpdate(prevProps: PropsType) {
+    const { services } = this.props;
+    if (JSON.stringify(prevProps.services) !== JSON.stringify(services)) {
+      this.updateCurrentService(head(services));
+    }
+  }
+
+  findCurrencyById = (currencyId: number) =>
+    find(propEq('id', `${currencyId}`))(
+      convertCurrenciesForSelect(currenciesFromBack),
+    );
+
+  updateCurrentService = (currentService: SelectType) => {
+    this.setState({ currentService });
+  };
+
+  handleSaveCompany = () => {
+    const { company, currencyId } = this.props;
     const { currentService, price, currency } = this.state;
-    this.props.onAddCompany({
-      companyName: currentService.label,
+    let newCompany = {
+      service: currentService,
       price,
       currencyId: Number(currency.id),
       currencyLabel: currency.label,
-    });
+    };
+    if (company) {
+      newCompany = assoc('id', company.id, newCompany);
+    } else {
+      this.setState({ price: 0, currency: this.findCurrencyById(currencyId) });
+    }
+    this.props.onSaveCompany(newCompany);
   };
 
   handleOnSelectService = (service: SelectType) => {
@@ -83,9 +122,9 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   render() {
+    const { services, company, onRemoveEditableItem } = this.props;
     const { price, currency, currentService, companies } = this.state;
-
-    console.log('---price, currency, companies', price, currency, companies);
+    // console.log('---price, currency, companies', price, currency, companies);
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -108,10 +147,20 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             />
           </div>
         </div>
-        <div styleName="addButton">
-          <Button wireframe big add onClick={this.handleAddCompany}>
-            Add company
+        <div styleName="buttons">
+          <Button
+            wireframe={!company}
+            big
+            add={!company}
+            onClick={this.handleSaveCompany}
+          >
+            {company ? 'Save' : 'Add company'}
           </Button>
+          {company && (
+            <button styleName="cancelButton" onClick={onRemoveEditableItem}>
+              Cancel
+            </button>
+          )}
         </div>
       </div>
     );
