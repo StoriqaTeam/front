@@ -1,0 +1,15 @@
+@import '../../styles/variables.scss';
+
+.container {
+  cursor: pointer;
+  font-size: 28px;
+  width: 100%;
+  height: 65px;
+  border-radius: 10px;
+  background-image: linear-gradient(to left, #ff0084, #4cb1f9 99%), linear-gradient(#4cb1f9, #4cb1f9);
+  color: $color_white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+}

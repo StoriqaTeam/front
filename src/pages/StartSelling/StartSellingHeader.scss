@@ -53,19 +53,10 @@
   margin-bottom: 6rem;
 }
 
-.startSellingButton {
-  cursor: pointer;
-  font-size: 28px;
-  width: 306px;
-  height: 65px;
-  border-radius: 10px;
-  background-image: linear-gradient(to left, #ff0084, #4cb1f9 99%), linear-gradient(#4cb1f9, #4cb1f9);
-  color: $color_white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 800;
+.button  {
+  margin: 0 auto 0 0;
   margin-bottom: 31.75rem;
+  width: 38.25rem;
 }
 
 .logoIcon {

@@ -16,7 +16,7 @@
 .subtitle {
   color: $color_royal;
   font-size: 23px;
-  line-height: 1.9;
+  line-height: 1.39;
   max-width: 56rem;
   margin-bottom: 6rem;
 }
@@ -36,15 +36,18 @@
 
 .item {
   margin-bottom: 8rem;
+  margin-right: 6.625rem;
 }
 
 .itemTitle {
   color: $color_blue;
   font-size: 32px;
   margin-bottom: 4rem;
+  line-height: normal;
 }
 
 .itemText {
   color: $color_grey_royal;
   font-size: 23px;
+  line-height: 1.39;
 }

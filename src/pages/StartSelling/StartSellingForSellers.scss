@@ -10,24 +10,26 @@
   color: $color_royal;
   max-width: 72rem;
   line-height: normal;
-  margin-bottom: 8rem;
+  margin-bottom: 6.625rem;
+  text-transform: uppercase;
 }
 
 .subtitle {
   color: $color_royal;
   font-size: 23px;
-  line-height: 1.9;
+  line-height: 1.39;
   max-width: 46rem;
-  margin-bottom: 6rem;
+  margin-bottom: 8.625rem;
 }
 
 .imageContainer {
   overflow: hidden;
+  padding-top: 5rem;
   img {
     height: 100%;
     margin-left: 14rem;
     object-fit: cover;
-    width: 100%;
+    width: 125%;
   }
 }
 
@@ -42,10 +44,12 @@
 .itemTitle {
   color: $color_blue;
   font-size: 32px;
-  margin-bottom: 4rem;
+  margin-bottom: 3.125rem;
+  line-height: normal;
 }
 
 .itemText {
   color: $color_grey_royal;
   font-size: 23px;
+  line-height: 1.39;
 }

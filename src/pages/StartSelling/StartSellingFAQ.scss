@@ -1,0 +1,51 @@
+@import '../../styles/variables.scss';
+
+.container {
+  margin-bottom: 12.5rem;
+}
+
+.title {
+  font-family: $font_regular;
+  font-size: 40px;
+  color: $color_royal;
+  max-width: 52rem;
+  line-height: normal;
+  margin-bottom: 8rem;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: $color_royal;
+  font-size: 23px;
+  line-height: 1.39;
+  max-width: 56rem;
+  margin-bottom: 6rem;
+}
+
+.faqs {
+  margin-bottom: 20rem; 
+}
+
+.faq {
+  color: $color_royal;
+  font-size: 32px;
+  line-height: 2.81;
+  font-weight: 800;
+  margin-right: 3rem;
+}
+
+.plus {
+  margin-right: 3rem;
+}
+
+.ready {
+  color: $color_blue;
+  font-size: 54px;
+  line-height: 1.11;
+  font-weight: 800;
+}
+
+.button  {
+  margin: 0 auto;
+  width: 46.125rem;
+}

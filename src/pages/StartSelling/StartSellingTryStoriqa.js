@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import { Row, Col } from 'layout';
 
@@ -28,31 +28,35 @@ const items: Array<{ id: string, title: string, text: string }> = [
   {
     id: '3',
     title: 'Payments in cryptocurrency',
-    text: 'Sellers receive payment in the currency of their choosing, including cryptocurrencies like STQ, Bitcoin, Ethereum and others. These eliminate multiple bank transaction charges and long waits to receive payments.'
+    text:
+      'Sellers receive payment in the currency of their choosing, including cryptocurrencies like STQ, Bitcoin, Ethereum and others. These eliminate multiple bank transaction charges and long waits to receive payments.',
   },
   {
     id: '4',
     title: 'Powerful tools',
-    text: 'We offer an efficient, simple, and powerful set of sales tools with a clear interface and thorough follow-up, all to make your goods available globally.'
+    text:
+      'We offer an efficient, simple, and powerful set of sales tools with a clear interface and thorough follow-up, all to make your goods available globally.',
   },
   {
     id: '5',
     title: 'Storiqa fulfillment center',
-    text: 'Bring your product to our center, the rest we will take care yourselves: creating a product cards, preparing promotional and marketing materials, processing orders, supporting sales.'
-  }
+    text:
+      'Bring your product to our center, the rest we will take care yourselves: creating a product cards, preparing promotional and marketing materials, processing orders, supporting sales.',
+  },
 ];
 
 const StartSellingTryStoriqa = () => (
   <div styleName="container">
     <h2 styleName="title">WHY SHOULD YOU TRY STORIQA</h2>
     <p styleName="subtitle">
-      We deliver high quality services and support, including marketing assistance and sales advice.
+      We deliver high quality services and support, including marketing
+      assistance and sales advice.
     </p>
     <Row>
       <div styleName="items">
         {items.map(({ id, title, text }) => (
-          <Col size={12} sm={12} md={12} lg={6} xl={6}>
-            <div styleName="item" key={id}>
+          <Col key={id} size={12} sm={12} md={12} lg={6} xl={6}>
+            <div styleName="item">
               <h4 styleName="itemTitle">{title}</h4>
               <p styleName="itemText">{text}</p>
             </div>

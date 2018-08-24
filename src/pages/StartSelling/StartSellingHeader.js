@@ -5,6 +5,8 @@ import { Link, withRouter, routerShape } from 'found';
 import { Icon } from 'components/Icon';
 import { Container, Row } from 'layout';
 
+import { StartSellingButton } from './index';
+
 import './StartSellingHeader.scss';
 
 type PropsType = {
@@ -32,14 +34,11 @@ const StartSellingHeader = ({ router: { push } }: PropsType) => (
       <p styleName="subtitle">
         Start selling now with Storiqa and see how it’s easy to trade globally
       </p>
-      <div
-        role="button"
-        tabIndex="-1"
-        onKeypress={() => {}}
-        onClick={() => push('/')}
-        styleName="startSellingButton"
-      >
-        Start Selling
+      <div styleName="button">
+        <StartSellingButton
+          onClick={() => push('/manage/wizard')}
+          text="Start Selling"
+        />
       </div>
     </div>
   </Container>
