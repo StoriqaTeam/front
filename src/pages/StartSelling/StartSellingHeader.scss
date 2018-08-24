@@ -1,11 +1,15 @@
 @import '../../styles/variables.scss';
 
 .container {
-  margin: 6.75rem auto;
+  margin: 3rem auto;
   max-width: 170rem;
   padding-bottom: 1.4rem;
   position: relative;
   width: 100%;
+
+  @media (min-width: $md) {
+    margin: 6.75rem auto;
+  }
 }
 
 .logoIcon {

@@ -1,7 +1,10 @@
 @import '../../styles/variables.scss';
 
 .container {
-  margin-bottom: 20.5rem;
+  margin-bottom: 9.75rem;
+  @media (min-width: $md) {
+    margin-bottom: 20.5rem;
+  }
 }
 
 .title {
@@ -37,7 +40,10 @@
 
 .item {
   margin-bottom: 8rem;
-  margin-right: 6.625rem;
+  margin-right: 0;
+  @media (min-width: $md) {
+    margin-right: 6.625rem;
+  }
 }
 
 .itemTitle {

@@ -17,7 +17,7 @@ const StartSellingButton = ({ text, onClick }: PropsType) => (
     onClick={onClick}
     styleName="container"
   >
-    {text}
+    <p styleName="text">{text}</p>
   </div>
 );
 

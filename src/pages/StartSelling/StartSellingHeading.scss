@@ -2,6 +2,10 @@
 
 .container {
   position: relative;
+  margin-bottom: 9.75rem;
+  @media (min-width: $md) {
+    margin-bottom: 17.75rem;
+  }
 }
 
 .imageContainer {
@@ -46,6 +50,10 @@
 
 .button  {
   margin: 0 auto 0 0;
-  margin-bottom: 31.75rem;
-  width: 38.25rem;
+  margin-bottom: 9.75rem;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 38.25rem;
+    margin-bottom: 31.75rem;
+  }
 }

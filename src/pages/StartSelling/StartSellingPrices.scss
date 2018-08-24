@@ -6,12 +6,15 @@
 
 .title {
   font-family: $font_circe_extra_bold;
-  font-size: 40px;
+  font-size: 36PX;
   color: $color_royal;
   max-width: 52rem;
   line-height: normal;
   margin-bottom: 8rem;
   text-transform: uppercase;
+  @media (min-width: $md) {
+    font-size: 40px;
+  }
 }
 
 .subtitle {

@@ -6,12 +6,15 @@
 
 .title {
   font-family: $font_circe_extra_bold;
-  font-size: 40px;
+  font-size: 36px;
   color: $color_royal;
   max-width: 72rem;
   line-height: normal;
   margin-bottom: 6.625rem;
   text-transform: uppercase;
+  @media (min-width: $md) {
+    font-size: 40px;
+  }
 }
 
 .subtitle {
@@ -28,9 +31,12 @@
   padding-top: 5rem;
   img {
     height: 100%;
-    margin-left: 14rem;
+    margin-left: 4rem;
     object-fit: cover;
     width: 125%;
+    @media (min-width: $md) {
+      margin-left: 14rem;
+    }
   }
 }
 

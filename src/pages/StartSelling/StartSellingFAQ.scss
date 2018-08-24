@@ -1,17 +1,23 @@
 @import '../../styles/variables.scss';
 
 .container {
-  margin-bottom: 12.5rem;
+  margin-bottom: 9.75rem;
+  @media (min-width: $md) {
+    margin-bottom: 17.75rem;
+  }
 }
 
 .title {
   font-family: $font_circe_extra_bold;
-  font-size: 40px;
+  font-size: 36px;
   color: $color_royal;
   max-width: 52rem;
   line-height: normal;
   margin-bottom: 8rem;
   text-transform: uppercase;
+  @media (min-width: $md) {
+    font-size: 40px;
+  }
 }
 
 .subtitle {
@@ -30,14 +36,23 @@
 .faq {
   font-family: $font_circe_regular;
   color: $color_royal;
-  font-size: 32px;
-  line-height: 2.81;
+  font-size: 20px;
+  line-height: normal;
   font-weight: 800;
   margin-right: 3rem;
+  margin-bottom: 3rem;
+  @media (min-width: $md) {
+    font-size: 32px;
+    line-height: 2.81;
+    margin-bottom: 0;
+  }
 }
 
 .plus {
-  margin-right: 3rem;
+  margin-right: 2rem;
+  @media (min-width: $md) {
+    margin-right: 3rem;
+  }
 }
 
 .ready {
@@ -50,5 +65,8 @@
 
 .button  {
   margin: 0 auto;
-  width: 46.125rem;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 46.125rem;
+  }
 }

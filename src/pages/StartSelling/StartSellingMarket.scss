@@ -1,7 +1,10 @@
 @import '../../styles/variables.scss';
 
 .container {
-  margin-bottom: 17.75rem;
+  margin-bottom: 9.75rem;
+  @media (min-width: $md) {
+    margin-bottom: 17.75rem;
+  }
 }
 
 .title {
@@ -23,10 +26,17 @@
 }
 
 .imageContainer {
+  margin-top: 6rem;
+  @media (min-width: $md) {
+    margin-top: 0;
+  }
   img {
     height: 100%;
     object-fit: cover;
-    width: 120%;
+    width: 100%;
+    @media (min-width: $md) {
+      width: 120%;
+    }
   }
 }
 
