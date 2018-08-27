@@ -15,7 +15,7 @@ type PropsType = {
     rates: Array<{ currencyCode: string, value: number }>,
   ) => Node,
   dropdownToggle: (isDropdownOpened: boolean) => Element<*>,
-  onDropdownToggleClick: (
+  onDropdownToggleClick?: (
     e: any,
     rates: Array<{ currencyCode: string, value: number }>,
     isDropdownShown: boolean,
@@ -74,18 +74,21 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
                           isDropdownShown: !prevState.isDropdownShown,
                         }),
                         () => {
-                          this.props.onDropdownToggleClick(
-                            e,
-                            values,
-                            this.state.isDropdownShown,
-                          );
+                          if (this.props.onDropdownToggleClick) {
+                            this.props.onDropdownToggleClick(
+                              e,
+                              values,
+                              this.state.isDropdownShown,
+                            );
+                          }
                         },
                       );
                     },
                   },
                 )}
+                {this.state.isDropdownShown &&
+                  this.props.renderDropdown(values)}
               </div>
-              {this.state.isDropdownShown && this.props.renderDropdown(values)}
             </Fragment>
           );
         }}

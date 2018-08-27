@@ -5,8 +5,6 @@ import { Link } from 'found';
 import { head, map } from 'ramda';
 import classNames from 'classnames';
 
-import type { Node } from 'react';
-
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
@@ -44,10 +42,6 @@ type PropsType = {
 };
 
 class CardProduct extends PureComponent<PropsType> {
-  state: StateType = {
-    //
-  };
-
   render() {
     const {
       item: { rawId, storeId, name, products, currencyId, rating },
@@ -124,7 +118,7 @@ class CardProduct extends PureComponent<PropsType> {
                               item.currencyCode
                             }`}
                           >
-                            {`${item.value} ${item.currencyCode}`}
+                            {`${item.value.toFixed(8)} ${item.currencyCode}`}
                           </div>
                         ),
                         rates,
@@ -136,13 +130,6 @@ class CardProduct extends PureComponent<PropsType> {
                       return <button styleName="toggleRatesDropdownClosed" />;
                     }
                     return <button styleName="toggleRatesDropdownOpened" />;
-                  }}
-                  onDropdownToggleClick={(
-                    e: any,
-                    // rates: Array<{ currencyCode: string, value: number }>,
-                    // isDropdownShown: boolean,
-                  ) => {
-                    console.log({ target: e.target });
                   }}
                 />
               )}

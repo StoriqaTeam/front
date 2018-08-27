@@ -104,9 +104,18 @@
 
 .priceDropdownList {
   position: absolute;
-  top: 2.5rem;
-  right: 0;
   background-color: #ffffff;
+  bottom: 0;
+  left: 100%;
+  box-shadow: 0 0.3rem 1.7rem 0 rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  padding-bottom: 0;
+  margin-left: 1rem;
+  border-radius: 0.5rem;
+  color: $color_grey;
+  font-size: 14px;
+  line-height: 1.8;
+  font-family: $font_medium;
 }
 
 .toggleRatesDropdownClosed {
