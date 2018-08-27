@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import type { Node } from 'react';
 
 import { SliderHeader } from 'components/Slider';
+import { Icon } from 'components/Icon';
 
 import handlerSlide from './handlerSlidesDecorator';
 import './SliderContainer.scss';
@@ -27,6 +28,7 @@ type PropsTypes = {
   seeAllUrl: ?string,
   fade?: boolean,
   dotIdx?: boolean,
+  arrows?: boolean,
 };
 
 class SliderContainer extends Component<PropsTypes> {
@@ -47,6 +49,7 @@ class SliderContainer extends Component<PropsTypes> {
       seeAllUrl,
       fade,
       dotIdx,
+      arrows,
     } = this.props;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
@@ -54,6 +57,16 @@ class SliderContainer extends Component<PropsTypes> {
 
     return (
       <div styleName="container">
+        {arrows && (
+          <span styleName="leftArrow">
+            <Icon type="leftArrowSlider" size={28} />
+          </span>
+        )}
+        {arrows && (
+          <span styleName="rightArrow">
+            <Icon type="rightArrowSlider" size={28} />
+          </span>
+        )}
         {type === 'products' && (
           <SliderHeader
             title={title}
@@ -74,13 +87,12 @@ class SliderContainer extends Component<PropsTypes> {
             animationDelay: fade ? '' : '.2s',
           }}
         >
-        
           {Children.map(this.props.children, child => (
             <div
               styleName={classNames('item', {
                 fadeItem: fade,
                 activeSlide: dotIdx === child.key - 1,
-                image: type === 'image',
+                image: (type === 'image'),
               })}
               style={{
                 width: `${slideWidth}%`,

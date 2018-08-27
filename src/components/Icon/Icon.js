@@ -27,6 +27,7 @@ import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
 import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import LeftArrowSlider from 'components/Icon/svg/leftArrowSlider.svg';
 import Login from 'components/Icon/svg/login.svg';
 import Logo from 'components/Icon/svg/logo.svg';
 import Logout from 'components/Icon/svg/logout.svg';
@@ -43,6 +44,7 @@ import Plus from 'components/Icon/svg/plus.svg';
 import Prev from 'components/Icon/svg/prev.svg';
 import QA from 'components/Icon/svg/qa.svg';
 import QualityAssurance from 'components/Icon/svg/quality_assurance.svg';
+import RightArrowSlider from 'components/Icon/svg/rightArrowSlider.svg';
 import Share from 'components/Icon/svg/share.svg';
 import Telegram from 'components/Icon/svg/telegram.svg';
 import Twitter from 'components/Icon/svg/twitter.svg';
@@ -104,6 +106,7 @@ const iconsMap = {
   heart: <Heart />,
   instagram: <Instagram />,
   instagramGray: <InstagramGray />,
+  leftArrowSlider: <LeftArrowSlider />,
   login: <Login />,
   logo: <Logo />,
   logout: <Logout />,
@@ -120,6 +123,7 @@ const iconsMap = {
   prev: <Prev />,
   qa: <QA />,
   qualityAssurance: <QualityAssurance />,
+  rightArrowSlider: <RightArrowSlider />,
   share: <Share />,
   verifiedShop: <VerifiedShop />,
   sortArrows: <SortArrows />,

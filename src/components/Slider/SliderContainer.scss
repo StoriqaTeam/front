@@ -25,6 +25,40 @@
   }
 }
 
+.leftArrow {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  position: absolute;
+  top: calc(50% - 5rem);
+  left: 2rem;
+  width: 5rem;
+  height: 5rem;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    opacity: 0.6;
+  }
+}
+
+.rightArrow {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  position: absolute;
+  top: calc(50% - 5rem);
+  right: 2rem;
+  width: 5rem;
+  height: 5rem;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    opacity: 0.6;
+  }
+}
+
 .fadeItem {
   position: relative;
   z-index: 2;

@@ -121,6 +121,7 @@ class ProductImage extends Component<PropsType, StateType> {
               items={this.imgsToSlider(additionalPhotos)}
               type="image"
               slidesToShow={1}
+              arrows
             />
           ) : null}
         </div>

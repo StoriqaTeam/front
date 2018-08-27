@@ -23,6 +23,7 @@ type PropsTypes = {
   seeAllUrl: ?string,
   autoplaySpeed?: number,
   fade?: boolean,
+  arrows?: boolean,
 };
 
 class Slider extends Component<PropsTypes, StateTypes> {
