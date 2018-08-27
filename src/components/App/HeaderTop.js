@@ -1,32 +1,38 @@
+// @flow
+
 import React, { PureComponent } from 'react';
-import { head, prop, propOr, map, find, whereEq } from 'ramda';
+import { head, prop, propOr, map, find, whereEq, omit } from 'ramda';
 import moment from 'moment';
 
-import { AppContext } from 'components/App';
 import { Select } from 'components/common/Select';
 import { getCookie, setCookie } from 'utils';
 
 import './HeaderTop.scss';
 
-const currencyIdCookieName = 'CURRENCY_ID';
+const currencyCookieName = 'CURRENCY';
 
 type PropsType = {
   // eslint-disable-next-line
   currencies: Array<Object>,
 };
 
+type CurrencyType = {
+  key: number,
+  code: string,
+};
+
 class HeaderTop extends PureComponent<PropsType> {
   componentDidMount() {
     // set STQ (or first currency in array) as selected currency if no currency was set before
     const currencies = propOr([], 'currencies', this.props);
-    const currentCurrencyId = getCookie(currencyIdCookieName);
-    if (!currentCurrencyId) {
+    const currentCurrency: ?CurrencyType = getCookie(currencyCookieName);
+    if (!currentCurrency) {
       // try to get stq
-      const stq = find(whereEq({ name: 'stq' }), currencies);
+      const stq = find(whereEq({ code: 'STQ' }), currencies);
       if (stq) {
         setCookie(
-          currencyIdCookieName,
-          stq.key,
+          currencyCookieName,
+          omit(['name'], stq),
           moment()
             .utc()
             .add(7, 'd')
@@ -36,8 +42,8 @@ class HeaderTop extends PureComponent<PropsType> {
         const firstCurrency = head(currencies);
         if (firstCurrency) {
           setCookie(
-            currencyIdCookieName,
-            firstCurrency.key,
+            currencyCookieName,
+            omit(['name'], firstCurrency),
             moment()
               .utc()
               .add(7, 'd')
@@ -48,68 +54,75 @@ class HeaderTop extends PureComponent<PropsType> {
     }
   }
 
-  getCurrenciesItems: Array<{ id: string, label: string }> = map(item => ({
-    id: String(prop('key', item)),
-    label: prop('name', item),
-  }));
+  getCurrenciesItems = (): Array<{ id: string, label: string }> =>
+    map(
+      item => ({
+        id: prop('code', item),
+        label: prop('code', item),
+      }),
+      this.props.currencies,
+    );
 
-  getItemById = (id: string) => (list: Array<any>) => {
-    const currency = find(whereEq({ key: parseInt(id, 10) }), list);
+  getCurrentCurrencyAsItem = (): ?{ id: string, label: string } => {
+    const currency = getCookie(currencyCookieName);
     if (currency) {
       return {
-        id: String(prop('key', currency)),
-        label: prop('name', currency),
+        id: currency.code,
+        label: currency.code,
       };
     }
-    return null;
+    const firstCurrency = head(this.props.currencies);
+    return (
+      firstCurrency && {
+        id: firstCurrency.code,
+        label: firstCurrency.code,
+      }
+    );
   };
 
-  handleSelect = (value: any) => {
-    setCookie(
-      currencyIdCookieName,
-      value.id,
-      moment()
-        .utc()
-        .add(7, 'd')
-        .toDate(),
-    );
-    window.location.reload(true);
+  handleSelect = (value: { id: string, label: string }) => {
+    const currency = find(whereEq({ code: value.id }), this.props.currencies);
+    if (currency) {
+      setCookie(
+        currencyCookieName,
+        omit(['name'], currency),
+        moment()
+          .utc()
+          .add(7, 'd')
+          .toDate(),
+      );
+      window.location.reload(true);
+    }
   };
 
   render() {
     return (
-      <AppContext.Consumer>
-        {({ directories: { currencies } }) => (
-          <div styleName="container">
-            <div styleName="item">
-              <Select
-                activeItem={
-                  this.getItemById(getCookie(currencyIdCookieName))(
-                    currencies,
-                  ) || head(this.getCurrenciesItems(currencies))
-                }
-                items={this.getCurrenciesItems(currencies)}
-                onSelect={this.handleSelect}
-                dataTest="headerСurrenciesSelect"
-              />
-            </div>
-            <div styleName="item">
-              <Select
-                activeItem={{ id: '1', label: 'ENG' }}
-                items={[{ id: '1', label: 'ENG' }]}
-                onSelect={() => {}}
-                dataTest="headerLanguagesSelect"
-              />
-            </div>
-            <div>
-              <a href="_">Help</a> {/* eslint-disable-line */}
-            </div>
-            <div>
-              <a href="/start-selling">Sell on Storiqa</a>
-            </div>
-          </div>
-        )}
-      </AppContext.Consumer>
+      <div styleName="container">
+        <div styleName="item">
+          <Select
+            activeItem={
+              this.getCurrentCurrencyAsItem() || head(this.getCurrenciesItems())
+            }
+            items={this.getCurrenciesItems()}
+            onSelect={this.handleSelect}
+            dataTest="headerСurrenciesSelect"
+          />
+        </div>
+        <div styleName="item">
+          <Select
+            activeItem={{ id: '1', label: 'ENG' }}
+            items={[{ id: '1', label: 'ENG' }]}
+            onSelect={() => {}}
+            dataTest="headerLanguagesSelect"
+          />
+        </div>
+        <div>
+          <a href="_">Help</a> {/* eslint-disable-line */}
+        </div>
+        <div>
+          <a href="/start-selling">Sell on Storiqa</a>
+        </div>
+      </div>
     );
   }
 }

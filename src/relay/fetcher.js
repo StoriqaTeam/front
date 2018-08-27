@@ -1,11 +1,9 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
+
 import isTokenExpired from 'utils/token';
-
 import { log, removeCookie, getCookie } from 'utils';
-
-// import routesProductCardQuery from 'pages/Store/Product/__mocks/product_with_attrs';
 
 class FetcherBase {
   constructor(url) {
@@ -23,33 +21,32 @@ class FetcherBase {
   }
 
   // eslint-disable-next-line
-  getCurrencyIdFromCookies() {
+  getCurrencyCodeFromCookies() {
     throw new Error('should be implemented in subclasses');
   }
 
   async fetch(operation, variables) {
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
-    const currencyId = this.getCurrencyIdFromCookies();
+    const currencyId = this.getCurrencyCodeFromCookies();
 
     let headers = { 'Content-Type': 'application/json' };
     if (jwt) {
       headers = assoc('Authorization', `Bearer ${jwt}`, headers);
     }
     if (currencyId) {
-      headers = assoc('Currency-Id', parseInt(currencyId, 10), headers);
+      headers = assoc('Currency-Id', currencyId, headers);
     }
     const sessionId = this.getSessionIdFromCookies();
-    headers = {
-      ...headers,
-      'Session-Id': sessionId,
-    };
+    headers = assoc('Session-Id', sessionId, headers);
+
     try {
       const response = await axios({
         method: 'post',
         url: this.url,
         headers,
         data: JSON.stringify({ query: operation.text, variables }),
+        withCredentials: true,
       });
       log.debug('GraphQL response', { response: response.data });
       return response.data;
@@ -61,12 +58,12 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url, jwt, sessionId, currencyId) {
+  constructor(url, jwt, sessionId, currencyCode) {
     super(url);
 
     this.jwt = jwt;
     this.sessionId = sessionId;
-    this.currencyId = currencyId;
+    this.currencyCode = currencyCode;
     this.payloads = [];
   }
 
@@ -78,8 +75,8 @@ export class ServerFetcher extends FetcherBase {
     return this.sessionId;
   }
 
-  getCurrencyIdFromCookies() {
-    return this.currencyId;
+  getCurrencyCodeFromCookies() {
+    return this.currencyCode;
   }
 
   async fetch(...args) {
@@ -118,9 +115,12 @@ export class ClientFetcher extends FetcherBase {
   }
 
   // eslint-disable-next-line
-  getCurrencyIdFromCookies() {
+  getCurrencyCodeFromCookies() {
     const cookies = new Cookies();
-    return cookies.get('CURRENCY_ID');
+    const currency = cookies.get('CURRENCY');
+    if (currency) {
+      return currency.code;
+    }
   }
 
   async fetch(...args) {
