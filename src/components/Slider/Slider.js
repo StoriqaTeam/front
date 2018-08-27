@@ -12,10 +12,11 @@ type StateTypes = {
   dotIdx: number,
 };
 
-type PropsTypes = {
+type PropsTypes = { 
   items: Array<{
     id: ?string,
     rawId: ?string,
+    img: ?string,
   }>,
   type: string,
   slidesToShow: ?number,
@@ -29,7 +30,7 @@ class Slider extends Component<PropsTypes, StateTypes> {
     dotIdx: 0,
   };
 
-  getValueDotIdx = (dotIdx: number) => {
+  getValueDotIdx = (dotIdx: number): void => {
     this.setState({ dotIdx });
   };
 
@@ -49,6 +50,7 @@ class Slider extends Component<PropsTypes, StateTypes> {
             <Fragment key={item.rawId || item.id}>
               {type === 'products' && <CardProduct item={item} />}
               {type === 'banners' && <Banner item={item} />}
+              {type === 'image' && (<img src={item.img} alt="" />)}
             </Fragment>
           ))}
         </SliderContainer>

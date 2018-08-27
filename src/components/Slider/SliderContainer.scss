@@ -16,6 +16,10 @@
   position: relative;
   display: inline-block;
   vertical-align: bottom;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
 }
 
 .fadeItem {

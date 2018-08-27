@@ -27,7 +27,19 @@
 .imageWrapper {
   overflow: hidden;
   width: 100%;
+  display: none;
   @media (min-width: $md) {
+    display: block;
+    width: calc(100% - 14rem);
+  }
+}
+
+.imageSlider {
+  overflow: hidden;
+  width: 100%;
+  display: block;
+  @media (min-width: $md) {
+    display: none;
     width: calc(100% - 14rem);
   }
 }

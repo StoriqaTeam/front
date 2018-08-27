@@ -1,9 +1,11 @@
 // @flow
 
 import React, { Component } from 'react';
-import { equals, prepend } from 'ramda';
+import { equals, prepend, isNil } from 'ramda';
 
 import { isEmpty } from 'utils';
+
+import { Slider } from 'components/Slider';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
@@ -59,6 +61,9 @@ class ProductImage extends Component<PropsType, StateType> {
       this.setImage(image);
     });
   };
+  imgsToSlider = (imgs: Array<string>): Array<{id: string, img: string}> => (
+    imgs.map(img => ({ id: img, img }))
+  )
   render() {
     const { photoMain, additionalPhotos, discount } = this.props;
     const { selected, isSquared } = this.state;
@@ -106,6 +111,20 @@ class ProductImage extends Component<PropsType, StateType> {
               }}
             />
           </figure>
+        </div>
+        <div styleName="imageSlider">
+          {!isNil(additionalPhotos) ? (
+            <Slider
+              dots
+              infinity
+              animationSpeed={500}
+              autoplaySpeed={10000}
+              items={this.imgsToSlider(additionalPhotos)}
+              type="image"
+              slidesToShow={1}
+  
+            /> 
+          ) : null}
         </div>
       </div>
     );
