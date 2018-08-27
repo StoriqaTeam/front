@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, find, whereEq } from 'ramda';
+import { map, find, whereEq, propOr } from 'ramda';
 
 import { AppContext } from 'components/App';
 import { getCookie } from 'utils';
@@ -11,8 +11,15 @@ import type { Node, Element } from 'react';
 type PropsType = {
   price: number,
   renderPrice: ({ price: number, currencyCode: string }) => Node, // refactor currencyCode type with enum
-  renderDropdown: (Array<{ currencyCode: string, value: number }>) => Node, // refactor currencyCode type with
-  dropdownToggle: Element<*>,
+  renderDropdown: (
+    rates: Array<{ currencyCode: string, value: number }>,
+  ) => Node,
+  dropdownToggle: (isDropdownOpened: boolean) => Element<*>,
+  onDropdownToggleClick: (
+    e: any,
+    rates: Array<{ currencyCode: string, value: number }>,
+    isDropdownShown: boolean,
+  ) => void,
 };
 
 type StateType = {
@@ -43,24 +50,40 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
             currencyExchange,
           );
           const values = map(
-            (item: { code: string, rate: number }) => ({
+            (item: { code: string, value: number }) => ({
               currencyCode: item.code,
-              value: this.props.price * item.rate,
+              value: this.props.price * item.value,
             }),
-            currentCurrencyRates,
+            propOr([], 'rates', currentCurrencyRates),
           );
 
           return (
             <Fragment>
               <div>
                 {priceElement}
-                {React.cloneElement(this.props.dropdownToggle, {
-                  onClick: () => {
-                    this.setState(prevState => ({
-                      isDropdownShown: !prevState.isDropdownShown,
-                    }));
+                {React.cloneElement(
+                  this.props.dropdownToggle(this.state.isDropdownShown),
+                  {
+                    onClick: (e: any) => {
+                      e.persist();
+                      e.preventDefault();
+                      e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
+                      this.setState(
+                        prevState => ({
+                          isDropdownShown: !prevState.isDropdownShown,
+                        }),
+                        () => {
+                          this.props.onDropdownToggleClick(
+                            e,
+                            values,
+                            this.state.isDropdownShown,
+                          );
+                        },
+                      );
+                    },
                   },
-                })}
+                )}
               </div>
               {this.state.isDropdownShown && this.props.renderDropdown(values)}
             </Fragment>

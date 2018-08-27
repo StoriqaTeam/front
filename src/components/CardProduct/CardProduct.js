@@ -2,11 +2,14 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head } from 'ramda';
+import { head, map } from 'ramda';
 import classNames from 'classnames';
+
+import type { Node } from 'react';
 
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
+import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { getNameText, formatPrice, convertSrc } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
@@ -22,7 +25,7 @@ type VariantType = {
   rawId: ?number,
 };
 
-type PropsTypes = {
+type PropsType = {
   item: {
     rawId: number,
     storeId: number,
@@ -40,7 +43,11 @@ type PropsTypes = {
   },
 };
 
-class CardProduct extends PureComponent<PropsTypes> {
+class CardProduct extends PureComponent<PropsType> {
+  state: StateType = {
+    //
+  };
+
   render() {
     const {
       item: { rawId, storeId, name, products, currencyId, rating },
@@ -91,9 +98,53 @@ class CardProduct extends PureComponent<PropsTypes> {
             </div>
             <div styleName="price">
               {discountedPrice && (
-                <div styleName="actualPrice">
-                  {formatPrice(discountedPrice)} STQ
-                </div>
+                <MultiCurrencyDropdown
+                  elementStyleName="priceDropdown"
+                  price={discountedPrice}
+                  renderPrice={(priceItem: {
+                    price: number,
+                    currencyCode: string,
+                  }) => (
+                    <div styleName="priceDropdown">
+                      <div styleName="actualPrice">
+                        {`${formatPrice(priceItem.price)} ${
+                          priceItem.currencyCode
+                        }`}
+                      </div>
+                    </div>
+                  )}
+                  renderDropdown={(
+                    rates: Array<{ currencyCode: string, value: number }>,
+                  ) => (
+                    <div styleName="priceDropdownList">
+                      {map(
+                        item => (
+                          <div
+                            key={`priceDropdownItem-${this.props.item.rawId}-${
+                              item.currencyCode
+                            }`}
+                          >
+                            {`${item.value} ${item.currencyCode}`}
+                          </div>
+                        ),
+                        rates,
+                      )}
+                    </div>
+                  )}
+                  dropdownToggle={(isDropdownOpened: boolean) => {
+                    if (isDropdownOpened) {
+                      return <button styleName="toggleRatesDropdownClosed" />;
+                    }
+                    return <button styleName="toggleRatesDropdownOpened" />;
+                  }}
+                  onDropdownToggleClick={(
+                    e: any,
+                    // rates: Array<{ currencyCode: string, value: number }>,
+                    // isDropdownShown: boolean,
+                  ) => {
+                    console.log({ target: e.target });
+                  }}
+                />
               )}
               <div styleName="cashbackWrapper">
                 <div

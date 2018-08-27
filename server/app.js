@@ -116,10 +116,7 @@ app.use(
       });
     }
 
-    if (
-      process.env.NODE_ENV === 'development' &&
-      !req.universalCookies.get('holyshit')
-    ) {
+    if (process.env.NODE_ENV === 'development') {
       req.universalCookies.set('holyshit', 'iamcool', { path: '/' });
     }
 
@@ -197,7 +194,7 @@ app.use(
         element,
       )}</div>
       <div id="global-modal-root"></div>
-      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
+      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;"></div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {
