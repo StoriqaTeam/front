@@ -1,11 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
+import classNames from 'classnames';
 
 import { AppContext } from 'components/App';
 import { Input } from 'components/common';
 
-import type { SelectType } from 'components/common/Select';
+import type { SelectType } from 'types';
 
 import CurrencySelect from './CurrencySelect';
 
@@ -19,14 +20,14 @@ type StateType = {
 type PropsType = {
   onChangePrice: (value: number) => void,
   currency: SelectType,
-  onChangeCurrency: (item: SelectType) => void,
+  onChangeCurrency?: (item: SelectType) => void,
   price: number,
 };
 
 class InputPrice extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const price = `${nextProps.price}`;
-    if (price !== prevState.price) {
+    if (Number(price) !== Number(prevState.price)) {
       return { ...prevState, price };
     }
     return null;
@@ -51,10 +52,17 @@ class InputPrice extends Component<PropsType, StateType> {
           value
             .replace(/^0+/, '0')
             .replace(/^[.,]/, '0.')
-            .replace(/^0([1-9])/, '$1')
+            .replace(/^0([0-9])/, '$1')
             .replace(/,/, '.') || '0',
       });
-      onChangePrice(Number(value.replace(/[.,]$/, '')));
+      onChangePrice(
+        Number(
+          value
+            .replace(/[.,]$/, '')
+            .replace(/^0([0-9])/, '$1')
+            .replace(/(^0\.[0-9])0+$/, '$1'),
+        ),
+      );
       return;
     }
     if (value === '') {
@@ -72,7 +80,11 @@ class InputPrice extends Component<PropsType, StateType> {
       return;
     }
     this.setState({
-      price: value.replace(/\.$/, ''),
+      price: value
+        .replace(/\.$/, '')
+        .replace(/^0([0-9])/, '$1')
+        .replace(/\.0+$/, '')
+        .replace(/(^0\.[0-9])0+$/, '$1'),
     });
   };
 
@@ -92,12 +104,20 @@ class InputPrice extends Component<PropsType, StateType> {
                 value={price}
               />
             </div>
-            <div styleName="select">
-              <CurrencySelect
-                currency={currency}
-                onChangeCurrency={onChangeCurrency}
-                currencies={directories.currencies}
-              />
+            <div
+              styleName={classNames('select', {
+                fixCurrencySelect: !onChangeCurrency,
+              })}
+            >
+              {onChangeCurrency ? (
+                <CurrencySelect
+                  currency={currency}
+                  onChangeCurrency={onChangeCurrency}
+                  currencies={directories.currencies}
+                />
+              ) : (
+                <div styleName="fixCurrency">{currency.label}</div>
+              )}
             </div>
           </div>
         )}

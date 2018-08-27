@@ -9,20 +9,12 @@ import { InputPrice } from 'components/common';
 import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 
-import { convertCurrenciesForSelect, formatPrice } from 'utils';
+import { formatPrice } from 'utils';
 
-import type { SelectType } from 'components/common/Select';
+// import type { SelectType } from 'types';
+import type { CompanyType } from './types';
 
 import './CompanyItem.scss';
-
-type CompanyType = {
-  id: string,
-  img: string,
-  service: SelectType,
-  price: number,
-  currencyId: number,
-  currencyLabel: string,
-};
 
 type StateType = {};
 
@@ -36,6 +28,7 @@ class CompanyItem extends PureComponent<PropsType, StateType> {
   render() {
     console.log('---this.props.company', this.props.company);
     const { company, onRemoveCompany, onSetEditableItem } = this.props;
+    console.log('---company', company);
     return (
       <div styleName="container">
         <div styleName="logo">
@@ -46,7 +39,10 @@ class CompanyItem extends PureComponent<PropsType, StateType> {
             <div styleName="td tdName">{company.service.label}</div>
             <div styleName="td tdPrice">
               <div styleName="amount">{formatPrice(company.price)}</div>
-              <div styleName="currency">{company.currencyLabel}</div>
+              <div styleName="currency">{company.currency.label}</div>
+            </div>
+            <div styleName="td tdCountry">
+              {company.country ? company.country.label : ''}
             </div>
           </div>
           <div styleName="controller">

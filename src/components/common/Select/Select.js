@@ -17,12 +17,9 @@ import debounce from 'lodash.debounce';
 
 import { Icon } from 'components/Icon';
 
-import './Select.scss';
+import type { SelectType } from 'types';
 
-export type SelectType = {
-  id: string | number,
-  label: string,
-};
+import './Select.scss';
 
 type StateType = {
   isExpanded: boolean,

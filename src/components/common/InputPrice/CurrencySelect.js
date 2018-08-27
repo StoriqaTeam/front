@@ -5,7 +5,7 @@ import { map, filter, find, propEq } from 'ramda';
 
 import { Select } from 'components/common';
 
-import type { SelectType } from 'components/common/Select';
+import type { SelectType } from 'types';
 
 // import './CurrencySelect.scss';
 
@@ -63,6 +63,8 @@ class CurrencySelect extends Component<PropsType, StateType> {
 
   render() {
     const { currencies, currency } = this.state;
+    console.log('---currencies', currencies);
+    console.log('---currency', currency);
     return (
       <Select
         forForm

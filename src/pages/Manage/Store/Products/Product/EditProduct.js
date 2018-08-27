@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, isEmpty, path } from 'ramda';
 
-import { Page } from 'components/App';
+import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 import {
@@ -46,6 +46,7 @@ type FormType = {
   shortDescription: string,
   longDescription: string,
   categoryId: ?number,
+  currencyId: number,
 };
 
 type PropsType = {
@@ -86,6 +87,7 @@ class EditProduct extends Component<PropsType, StateType> {
       seoDescription,
       shortDescription,
       longDescription,
+      currencyId,
     } = form;
     this.setState(() => ({ isLoading: true }));
     UpdateBaseProductMutation.commit({
@@ -100,6 +102,7 @@ class EditProduct extends Component<PropsType, StateType> {
       seoDescription: seoDescription
         ? [{ lang: 'EN', text: seoDescription }]
         : null,
+      currencyId,
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState(() => ({ isLoading: false }));
@@ -254,19 +257,22 @@ class EditProduct extends Component<PropsType, StateType> {
       return <span>Product not found</span>;
     }
     return (
-      <Fragment>
-        <div styleName="wrap">
-          <Form
-            baseProduct={baseProduct}
-            onSave={this.handleSave}
-            validationErrors={this.state.formErrors}
-            categories={this.context.directories.categories}
-            isLoading={isLoading}
-            comeResponse={comeResponse}
-            resetComeResponse={this.resetComeResponse}
-          />
-        </div>
-      </Fragment>
+      <AppContext.Consumer>
+        {({ directories }) => (
+          <div styleName="wrap">
+            <Form
+              baseProduct={baseProduct}
+              onSave={this.handleSave}
+              validationErrors={this.state.formErrors}
+              categories={this.context.directories.categories}
+              isLoading={isLoading}
+              comeResponse={comeResponse}
+              resetComeResponse={this.resetComeResponse}
+              currencies={directories.currencies}
+            />
+          </div>
+        )}
+      </AppContext.Consumer>
     );
   }
 }

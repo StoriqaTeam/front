@@ -2,24 +2,14 @@
 
 import React, { PureComponent } from 'react';
 
-import {
-  head,
-  prepend,
-  find,
-  propEq,
-  isEmpty,
-  ifElse,
-  assoc,
-  length,
-} from 'ramda';
+import { head, find, propEq, assoc } from 'ramda';
 
-import { Select } from 'components/common/Select';
-import { InputPrice } from 'components/common';
-import { Button } from 'components/common/Button';
+import { InputPrice, Select, Button } from 'components/common';
 
-import { convertCurrenciesForSelect } from 'utils';
+import { convertCurrenciesForSelect, findCurrencyById } from 'utils';
 
-import type { SelectType } from 'components/common/Select';
+import type { SelectType } from 'types';
+import type { CompanyType } from './types';
 
 import './FixPriceForm.scss';
 
@@ -34,45 +24,42 @@ const currenciesFromBack = [
 
 // type CurrenciesPropsType = Array<{ key: number, name: string, alias: string }>;
 
-type CompanyType = {
-  service: SelectType,
-  price: number,
-  currencyId: number,
-  currencyLabel: string,
-};
-
 type StateType = {
   price: number,
-  currency: SelectType,
-  currentService: SelectType,
+  currency: ?SelectType,
+  service: SelectType,
   companies: Array<*>,
+  country: ?SelectType,
 };
 
 type PropsType = {
   onSaveCompany: (company: CompanyType) => void,
   onRemoveEditableItem?: () => void,
   // currencies: CurrenciesPropsType,
-  currencyId: number,
+  productCurrency: ?SelectType,
   services: Array<SelectType>,
   company?: {
-    id: string,
+    id?: string,
     price: number,
-    currencyId: number,
+    currency: SelectType,
     service: SelectType,
   },
+  inter?: boolean,
+  countries?: Array<SelectType>,
+  country?: SelectType,
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { currencyId, company } = props;
+    const { productCurrency, company, country } = props;
+    console.log('---productCurrency', productCurrency);
     this.state = {
       price: company ? company.price : 0,
-      currency: this.findCurrencyById(
-        company ? company.currencyId : currencyId,
-      ),
-      currentService: company ? company.service : head(props.services),
+      currency: productCurrency,
+      service: company ? company.service : head(props.services),
       companies: [],
+      country: country || null,
     };
   }
 
@@ -88,29 +75,34 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       convertCurrenciesForSelect(currenciesFromBack),
     );
 
-  updateCurrentService = (currentService: SelectType) => {
-    this.setState({ currentService });
+  updateCurrentService = (service: SelectType) => {
+    this.setState({ service });
   };
 
   handleSaveCompany = () => {
-    const { company, currencyId } = this.props;
-    const { currentService, price, currency } = this.state;
+    const { company, productCurrency } = this.props;
+    const { service, price, currency, country } = this.state;
+    console.log('---currency', currency);
     let newCompany = {
-      service: currentService,
+      service,
       price,
-      currencyId: Number(currency.id),
-      currencyLabel: currency.label,
+      currency,
+      country,
     };
     if (company) {
       newCompany = assoc('id', company.id, newCompany);
     } else {
-      this.setState({ price: 0, currency: this.findCurrencyById(currencyId) });
+      this.setState({ price: 0, currency: productCurrency });
     }
     this.props.onSaveCompany(newCompany);
   };
 
   handleOnSelectService = (service: SelectType) => {
-    this.setState({ currentService: service });
+    this.setState({ service });
+  };
+
+  handleOnSelectCountry = (country: SelectType) => {
+    this.setState({ country });
   };
 
   handlePriceChange = (price: number) => {
@@ -122,9 +114,15 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    const { services, company, onRemoveEditableItem } = this.props;
-    const { price, currency, currentService, companies } = this.state;
-    // console.log('---price, currency, companies', price, currency, companies);
+    const {
+      services,
+      company,
+      onRemoveEditableItem,
+      inter,
+      countries,
+    } = this.props;
+    const { price, currency, service, companies, country } = this.state;
+    console.log('---currency', currency);
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -134,10 +132,22 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               fullWidth
               label="Service"
               items={services}
-              activeItem={currentService}
+              activeItem={service}
               onSelect={this.handleOnSelectService}
             />
           </div>
+          {countries && (
+            <div styleName="countriesSelect">
+              <Select
+                forForm
+                fullWidth
+                label="Send to"
+                items={countries}
+                activeItem={country}
+                onSelect={this.handleOnSelectCountry}
+              />
+            </div>
+          )}
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}

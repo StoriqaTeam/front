@@ -46,6 +46,7 @@ type FormType = {
   shortDescription: string,
   longDescription: string,
   categoryId: ?number,
+  currencyId: number,
 };
 
 type PropsType = {
@@ -83,6 +84,7 @@ class NewProduct extends Component<PropsType, StateType> {
       seoDescription,
       shortDescription,
       longDescription,
+      currencyId,
     } = form;
     const storeID = path(['myStore', 'id'], me);
     this.setState(() => ({ isLoading: true }));
@@ -93,7 +95,7 @@ class NewProduct extends Component<PropsType, StateType> {
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: longDescription }],
-      currencyId: 6,
+      currencyId,
       categoryId,
       seoTitle:
         !seoTitle || seoTitle.length === 0

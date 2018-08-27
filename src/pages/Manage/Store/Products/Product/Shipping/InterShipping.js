@@ -2,20 +2,21 @@
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { isEmpty, map, find, propEq } from 'ramda';
+import { isEmpty, map } from 'ramda';
 
-import { InputPrice, Checkbox, RadioButton } from 'components/common';
+import { AppContext } from 'components/App';
+import { RadioButton } from 'components/common/RadioButton';
 
 import { convertCurrenciesForSelect, findSelectedFromList } from 'utils';
 
-import type { CurrenciesType, SelectType } from 'types';
+import type { SelectType } from 'types';
 import type { CompanyType } from './types';
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
 import handlerShipping from './handlerShippingDecorator';
 
-import './LocalShipping.scss';
+import './InterShipping.scss';
 
 const currenciesFromBack = [
   { key: 1, name: 'rouble', code: 'RUB' },
@@ -26,17 +27,52 @@ const currenciesFromBack = [
   { key: 6, name: 'stq', code: 'STQ' },
 ];
 
+const countries = [
+  { id: 'all', label: 'All countries' },
+  { id: 'us', label: 'United States' },
+  { id: 'ru', label: 'Russian Federation' },
+];
+
+const interServices: Array<SelectType> = [
+  {
+    id: 'ups',
+    label: 'Ups',
+    countries: [
+      { id: 'all', label: 'All countries' },
+      { id: 'rw', label: 'Rwanda' },
+      { id: 'sm', label: 'San Marino' },
+      { id: 'gf', label: 'French Guiana' },
+      { id: 'il', label: 'Israel' },
+    ],
+  },
+  {
+    id: 'fedex',
+    label: 'FedEx',
+    countries: [
+      { id: 'all', label: 'All countries' },
+      { id: 'rs', label: 'Serbia' },
+      { id: 'tk', label: 'Tokelau' },
+      { id: 'ye', label: 'Yemen' },
+    ],
+  },
+  {
+    id: 'post',
+    label: 'Post of Russia',
+    countries: [
+      { id: 'all', label: 'All countries' },
+      { id: 'us', label: 'United States' },
+      { id: 'ru', label: 'Russian Federation' },
+    ],
+  },
+];
+
 type StateType = {
-  isCheckedOnlyPickup: boolean,
-  isCheckedPickup: boolean,
+  isCheckedWithout: boolean,
   isCheckedFixPrice: boolean,
-  pickupPrice: number,
   productCurrency: ?SelectType,
-  pickupCurrency: ?SelectType,
 };
 
 type PropsType = {
-  currencies: Array<CompanyType>,
   currencyId: number,
   inter?: boolean,
   companies: Array<CompanyType>,
@@ -49,20 +85,14 @@ type PropsType = {
   onRemoveEditableItem: () => void,
 };
 
-class LocalShipping extends Component<PropsType, StateType> {
+class InterShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { currencies, currencyId } = props;
     this.state = {
-      isCheckedOnlyPickup: false,
-      isCheckedPickup: false,
+      isCheckedWithout: false,
       isCheckedFixPrice: true,
-      pickupPrice: 0,
       productCurrency: findSelectedFromList(
-        convertCurrenciesForSelect(currenciesFromBack),
-        currencyId,
-      ),
-      pickupCurrency: findSelectedFromList(
         convertCurrenciesForSelect(currenciesFromBack),
         currencyId,
       ),
@@ -71,23 +101,9 @@ class LocalShipping extends Component<PropsType, StateType> {
 
   handleOnChangeRadioButton = (id: string) => {
     this.setState({
-      isCheckedOnlyPickup: id === 'localShippingPickup',
-      isCheckedFixPrice: id !== 'localShippingPickup',
+      isCheckedWithout: id === 'interShippingWithout',
+      isCheckedFixPrice: id !== 'interShippingWithout',
     });
-  };
-
-  handleOnTogglePickup = () => {
-    this.setState((prevState: StateType) => ({
-      isCheckedPickup: !prevState.isCheckedPickup,
-    }));
-  };
-
-  handleOnChangePickupPrice = (pickupPrice: number) => {
-    this.setState({ pickupPrice });
-  };
-
-  handleOnChangeCurrency = (pickupCurrency: SelectType) => {
-    this.setState({ pickupCurrency });
   };
 
   render() {
@@ -99,34 +115,28 @@ class LocalShipping extends Component<PropsType, StateType> {
       possibleServices,
       inter,
     } = this.props;
-    const {
-      isCheckedOnlyPickup,
-      isCheckedPickup,
-      isCheckedFixPrice,
-      pickupPrice,
-      pickupCurrency,
-      productCurrency,
-    } = this.state;
-    console.log('---pickupCurrency', pickupCurrency);
+    const { isCheckedWithout, isCheckedFixPrice, productCurrency } = this.state;
+
+    console.log('---productCurrency', productCurrency);
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>Local shipping</strong>
+          <strong>International shipping</strong>
         </div>
-        <div styleName="checkBoxes">
-          <div styleName="checkBox">
+        <div styleName="radioButtons">
+          <div styleName="radioButton">
             <RadioButton
               inline
-              id="localShippingPickup"
-              label="Only pickup"
-              isChecked={isCheckedOnlyPickup}
+              id="interShippingWithout"
+              label="Without international delivery"
+              isChecked={isCheckedWithout}
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
-          <div styleName="checkBox">
+          <div styleName="radioButton">
             <RadioButton
               inline
-              id="localShippingFixPrice"
+              id="interShippingFixPrice"
               label="Fixed, single price for all"
               isChecked={isCheckedFixPrice}
               onChange={this.handleOnChangeRadioButton}
@@ -134,25 +144,6 @@ class LocalShipping extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName={classNames('form', { hidePlane: !isCheckedFixPrice })}>
-          <div styleName="pickup">
-            <div styleName="pickupCheckbox">
-              <Checkbox
-                inline
-                id="localPickupCheckbox"
-                label="Pickup"
-                isChecked={isCheckedPickup}
-                onChange={this.handleOnTogglePickup}
-              />
-            </div>
-            <div styleName="pickupPriceInput">
-              <InputPrice
-                onChangePrice={this.handleOnChangePickupPrice}
-                onChangeCurrency={this.handleOnChangeCurrency}
-                price={pickupPrice}
-                currency={pickupCurrency}
-              />
-            </div>
-          </div>
           <div
             styleName={classNames('formWrap', {
               hidePlane: isEmpty(remainingServices),
@@ -160,6 +151,8 @@ class LocalShipping extends Component<PropsType, StateType> {
           >
             <FixPriceForm
               inter={inter}
+              countries={countries}
+              country={{ id: 'all', label: 'All countries' }}
               productCurrency={productCurrency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
@@ -186,6 +179,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                             price: item.price,
                             currency: item.currency,
                             service: item.service,
+                            country: item.country,
                           }}
                           onSaveCompany={this.props.onSaveCompany}
                           onRemoveEditableItem={this.props.onRemoveEditableItem}
@@ -204,4 +198,4 @@ class LocalShipping extends Component<PropsType, StateType> {
   }
 }
 
-export default handlerShipping(LocalShipping);
+export default handlerShipping(InterShipping, true);

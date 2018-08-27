@@ -12,14 +12,6 @@
   text-transform: uppercase;
 }
 
-.checkBoxes {
-  margin-top: 2.5rem;
-}
-
-.checkBox + .checkBox {
-  margin-top: 0.5rem;
-}
-
 .radioButtons {
   margin-top: 2.5rem;
 }
@@ -29,7 +21,7 @@
 }
 
 .form {
-  margin-top: 1rem;
+  margin-top: 2.5rem;
 }
 
 .formWrap {
@@ -64,20 +56,4 @@
 
 .editableForm {
   margin-top: 2rem;
-}
-
-.pickup {
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 4rem;
-  margin-left: 3rem;
-
-  .pickupCheckbox {
-    position: relative;
-    top: -5px;
-  }
-
-  .pickupPriceInput {
-    margin-left: 2rem;
-  }
 }

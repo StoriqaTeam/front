@@ -28,3 +28,4 @@ export { setCookie, removeCookie, getCookie } from './cookiesOp';
 export {
   default as convertCurrenciesForSelect,
 } from './convertCurrenciesForSelect';
+export { default as findSelectedFromList } from './findSelectedFromList';
