@@ -116,6 +116,13 @@ app.use(
       });
     }
 
+    if (
+      process.env.NODE_ENV === 'development' &&
+      !req.universalCookies.get('holyshit')
+    ) {
+      req.universalCookies.set('holyshit', 'iamcool', { path: '/' });
+    }
+
     const store = createReduxStore(new ServerProtocol(req.url));
     const jwtCookie = req.universalCookies.get('__jwt');
     let jwt = typeof jwtCookie === 'object' && jwtCookie.value;
@@ -129,10 +136,12 @@ app.use(
         ? process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS
         : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
+    const currency = req.universalCookies.get('CURRENCY');
     const fetcher = new ServerFetcher(
       url,
       jwt,
       req.universalCookies.get('SESSION_ID'),
+      currency && currency.code,
     );
 
     store.dispatch(FarceActions.init());

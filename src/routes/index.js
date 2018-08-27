@@ -115,6 +115,13 @@ const routes = (
             }
           }
           orderStatuses
+          currencyExchange {
+            stq {
+              bitcoin
+              etherium
+              dollar
+            }
+          }
         }
       `}
       render={args => {
