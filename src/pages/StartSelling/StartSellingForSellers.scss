@@ -36,9 +36,10 @@
     height: 100%;
     margin-left: 2rem;
     object-fit: cover;
-    width: 125%;
+    width: 80%;
     @media (min-width: $md) {
       margin-left: 0rem;
+      width: 125%;
     }
   }
 }

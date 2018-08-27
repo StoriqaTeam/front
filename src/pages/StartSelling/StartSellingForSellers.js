@@ -32,7 +32,7 @@ const items: Array<{ id: string, title: string, text: string }> = [
 const StartSellingForSellers = () => (
   <div styleName="container">
     <Row>
-      <Col size={12} sm={12} md={12} lg={6} xl={6}>
+      <Col size={12} sm={12} md={6} lg={6} xl={6}>
         <h2 styleName="title">
           Storiqa is a real swiss army knife for SELLERS
         </h2>
@@ -47,7 +47,7 @@ const StartSellingForSellers = () => (
           </div>
         ))}
       </Col>
-      <Col size={12} sm={12} md={12} lg={6} xl={6}>
+      <Col size={12} sm={12} md={6} lg={6} xl={6}>
         <div styleName="imageContainer">
           <img src={forSellersImage} alt="storiqa market" />
         </div>

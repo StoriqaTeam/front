@@ -49,12 +49,24 @@
 .item {
   height: 69rem;
   background: #f7f7f7;
-  margin-bottom: 8rem;
+  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 7rem 0 0 0;
-  width: 39.625rem;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 30.625rem;
+    margin-bottom: 8rem;
+  }
+  @media (min-width: $lg) {
+    width: 33.625rem;
+    margin-bottom: 8rem;
+  }
+  @media (min-width: $xl) {
+    width: 39.625rem;
+    margin-bottom: 8rem;
+  }
 }
 
 .itemTitle {
