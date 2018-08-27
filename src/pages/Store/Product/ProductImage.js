@@ -61,9 +61,8 @@ class ProductImage extends Component<PropsType, StateType> {
       this.setImage(image);
     });
   };
-  imgsToSlider = (imgs: Array<string>): Array<{id: string, img: string}> => (
-    imgs.map(img => ({ id: img, img }))
-  )
+  imgsToSlider = (imgs: Array<string>): Array<{ id: string, img: string }> =>
+    imgs.map(img => ({ id: img, img }));
   render() {
     const { photoMain, additionalPhotos, discount } = this.props;
     const { selected, isSquared } = this.state;
@@ -122,8 +121,7 @@ class ProductImage extends Component<PropsType, StateType> {
               items={this.imgsToSlider(additionalPhotos)}
               type="image"
               slidesToShow={1}
-  
-            /> 
+            />
           ) : null}
         </div>
       </div>

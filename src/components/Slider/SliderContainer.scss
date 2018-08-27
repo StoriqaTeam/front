@@ -20,6 +20,9 @@
     width: 100%;
     object-fit: contain;
   }
+  &.image {
+    vertical-align: middle;
+  }
 }
 
 .fadeItem {

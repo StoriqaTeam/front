@@ -74,11 +74,13 @@ class SliderContainer extends Component<PropsTypes> {
             animationDelay: fade ? '' : '.2s',
           }}
         >
+        
           {Children.map(this.props.children, child => (
             <div
               styleName={classNames('item', {
                 fadeItem: fade,
                 activeSlide: dotIdx === child.key - 1,
+                image: type === 'image',
               })}
               style={{
                 width: `${slideWidth}%`,
