@@ -8,12 +8,15 @@
   font-family: $font_montserrat_extra_bold;
   font-size: 28px;
   color: $color_royal;
-  max-width: 72rem;
+  max-width: 100%;
   line-height: normal;
   margin-bottom: 6.625rem;
   text-transform: uppercase;
   @media (min-width: $md) {
     font-size: 36px;
+  }
+  @media (min-width: $lg) {
+    max-width: 72rem;
   }
 }
 

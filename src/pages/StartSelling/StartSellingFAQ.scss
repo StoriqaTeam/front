@@ -66,10 +66,12 @@
   font-weight: 800;
   margin-bottom: 4rem; 
   text-align: center;
-  @media (min-width: $lg) {
-    margin-bottom: 0; 
+  @media (min-width: $md) {
     font-size: 39px;
-    text-align: left;
+  }
+  @media (min-width: $lg) {
+    margin-bottom: 0;
+    text-align: left; 
   }
 }
 

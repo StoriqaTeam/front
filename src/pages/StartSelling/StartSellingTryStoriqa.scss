@@ -2,7 +2,7 @@
 
 .container {
   margin-bottom: 9.75rem;
-  @media (min-width: $md) {
+  @media (min-width: $lg) {
     margin-bottom: 20.5rem;
   }
 }
@@ -11,11 +11,14 @@
   font-family: $font_montserrat_extra_bold;
   font-size: 28px;
   color: $color_royal;
-  max-width: 52rem;
+  max-width: 100%;
   line-height: normal;
   margin-bottom: 8rem;
   @media (min-width: $md) {
     font-size: 36px;
+  }
+  @media (min-width: $lg) {
+    max-width: 52rem;
   }
 }
 

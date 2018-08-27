@@ -3,7 +3,8 @@
 .container {
   position: relative;
   margin-bottom: 9.75rem;
-  @media (min-width: $md) {
+  width: 100%;
+  @media (min-width: $lg) {
     margin-bottom: 17.75rem;
   }
 }
@@ -23,7 +24,7 @@
   font-family: $font_montserrat_extra_bold;
   font-size: 40px;
   color: $color_blue;
-  max-width: 72rem;
+  max-width: 100%;
   line-height: 1.15;
 
   &.royal {
@@ -32,6 +33,9 @@
   }
   @media (min-width: $md) {
     font-size: 52px;
+  }
+  @media (min-width: $lg) {
+    max-width: 72rem;
   }
 }
 
@@ -55,7 +59,7 @@
   margin: 0 auto 0 0;
   margin-bottom: 9.75rem;
   width: 100%;
-  @media (min-width: $md) {
+  @media (min-width: $lg) {
     width: 38.25rem;
     margin-bottom: 31.75rem;
   }
