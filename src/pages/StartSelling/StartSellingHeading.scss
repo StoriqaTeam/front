@@ -20,15 +20,18 @@
 }
 
 .title {
-  font-family: $font_circe_extra_bold;
-  font-size: 63px;
+  font-family: $font_montserrat_extra_bold;
+  font-size: 40px;
   color: $color_blue;
   max-width: 72rem;
-  line-height: 0.95;
+  line-height: 1.15;
 
   &.royal {
     color: $color_royal;
     margin-bottom: 8rem;
+  }
+  @media (min-width: $md) {
+    font-size: 52px;
   }
 }
 
@@ -41,10 +44,10 @@
 
 .subtitle {
   color: $color_royal;
-  font-family: $font_circe_regular;
-  font-size: 23px;
-  line-height: 1.39;
-  max-width: 46rem;
+  font-family: $font_montserrat_medium;
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 52rem;
   margin-bottom: 6rem;
 }
 

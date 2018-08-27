@@ -8,19 +8,22 @@
 }
 
 .title {
-  font-family: $font_circe_extra_bold;
-  font-size: 40px;
+  font-family: $font_montserrat_extra_bold;
+  font-size: 28px;
   color: $color_royal;
   max-width: 63rem;
   line-height: normal;
   margin-bottom: 5.125rem;
+  @media (min-width: $md) {
+    font-size: 36px;
+  }
 }
 
 .subtitle {
-  font-family: $font_circe_regular;
+  font-family: $font_montserrat_medium;
   color: $color_royal;
-  font-size: 23px;
-  line-height: 1.39;
+  font-size: 20px;
+  line-height: 1.6;
   max-width: 46rem;
   margin-bottom: 6rem;
 }
@@ -41,10 +44,10 @@
 }
 
 .parragraphs {
-  font-family: $font_circe_regular;
-  font-size: 23px;
-  line-height: 1.39;
+  font-family: $font_montserrat_regular;
   color: $color_grey_royal;
+  font-size: 20px;
+  line-height: 1.6;
   p:first-child {
     margin-bottom: 6rem;
   }

@@ -1,27 +1,30 @@
 @import '../../styles/variables.scss';
 
 .container {
-  margin-bottom: 20.5rem;
+  margin-bottom: 10rem; 
+  @media (min-width: $md) {
+    margin-bottom: 20rem; 
+  }
 }
 
 .title {
-  font-family: $font_circe_extra_bold;
-  font-size: 36PX;
+  font-family: $font_montserrat_extra_bold;
+  font-size: 28px;
   color: $color_royal;
   max-width: 52rem;
   line-height: normal;
   margin-bottom: 8rem;
   text-transform: uppercase;
   @media (min-width: $md) {
-    font-size: 40px;
+    font-size: 36px;
   }
 }
 
 .subtitle {
-  font-family: $font_circe_regular;
+  font-family: $font_montserrat_medium;
   color: $color_royal;
-  font-size: 23px;
-  line-height: 1.39;
+  font-size: 20px;
+  line-height: 1.6;
   max-width: 56rem;
   margin-bottom: 6rem;
 }
@@ -41,7 +44,7 @@
 }
 
 .item {
-  height: 74rem;
+  height: 69rem;
   background: #f7f7f7;
   margin-bottom: 8rem;
   display: flex;
@@ -52,52 +55,53 @@
 }
 
 .itemTitle {
-  font-family: $font_circe_extra_bold;
+  font-family: $font_montserrat_extra_bold;
   color: $color_royal;
-  font-size: 32px;
+  font-size: 24px;
   margin-bottom: 6.375rem;
   position: relative;
 }
 
 .itemSubtitle {
-  font-family: $font_circe_regular;
+  font-family: $font_montserrat_regular;
   margin-top: 4.375rem;
   margin-bottom: 3.875rem;
   color: $color_grey_royal;
-  font-size: 23px;
-  max-width: 18rem;
+  font-size: 14px;
+  max-width: 16rem;
   text-align: center;
-  line-height: 0.96;
+  line-height: 1.29;
+  text-transform: uppercase;
 }
 
 .planBadge {
   display: flex;
   .stq {
-    font-family: $font_circe_extra_bold;
+    font-family: $font_montserrat_extra_bold;
     color: $color_royal;
-    font-size: 32px;
+    font-size: 28px;
     line-height: normal;
     font-weight: 800;
   }
   .price {
-    font-family: $font_circe_regular;
+    font-family: $font_montserrat_regular;
     color: $color_royal;
     font-size: 18px;
   }
   .number {
-    font-family: $font_circe_extra_bold;
+    font-family: $font_montserrat_extra_bold;
     color: $color_blue;
-    font-size: 110px;
-    line-height: 90px;
+    font-size: 84px;
+    line-height: 74px;
     font-weight: 800;
   }
 }
 
 .detail {
-  font-family: $font_circe_regular;
+  font-family: $font_montserrat_regular;
   color: $color_grey_royal;
-  line-height: 1.35;
-  font-size: 17px;
+  line-height: 1.64;
+  font-size: 14px;
 }
 
 .hit {

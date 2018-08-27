@@ -5,23 +5,23 @@
 }
 
 .title {
-  font-family: $font_circe_extra_bold;
-  font-size: 36px;
+  font-family: $font_montserrat_extra_bold;
+  font-size: 28px;
   color: $color_royal;
   max-width: 72rem;
   line-height: normal;
   margin-bottom: 6.625rem;
   text-transform: uppercase;
   @media (min-width: $md) {
-    font-size: 40px;
+    font-size: 36px;
   }
 }
 
 .subtitle {
-  font-family: $font_circe_regular;
+  font-family: $font_montserrat_medium;
   color: $color_royal;
-  font-size: 23px;
-  line-height: 1.39;
+  font-size: 20px;
+  line-height: 1.6;
   max-width: 46rem;
   margin-bottom: 8.625rem;
 }
@@ -31,11 +31,11 @@
   padding-top: 5rem;
   img {
     height: 100%;
-    margin-left: 4rem;
+    margin-left: 2rem;
     object-fit: cover;
     width: 125%;
     @media (min-width: $md) {
-      margin-left: 14rem;
+      margin-left: 0rem;
     }
   }
 }
@@ -49,16 +49,16 @@
 }
 
 .itemTitle {
-  font-family: $font_circe_extra_bold;
+  font-family: $font_montserrat_extra_bold;
   color: $color_blue;
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: 3.125rem;
   line-height: normal;
 }
 
 .itemText {
-  font-family: $font_circe_regular;
+  font-family: $font_montserrat_regular;
   color: $color_grey_royal;
-  font-size: 23px;
-  line-height: 1.39;
+  font-size: 20px;
+  line-height: 1.6;
 }
