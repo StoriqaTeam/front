@@ -114,13 +114,9 @@ class ProductImage extends Component<PropsType, StateType> {
         <div styleName="imageSlider">
           {!isNil(additionalPhotos) ? (
             <Slider
-              dots
-              infinity
               animationSpeed={500}
-              autoplaySpeed={10000}
               items={this.imgsToSlider(additionalPhotos)}
-              type="image"
-              slidesToShow={1}
+              type="products"
               arrows
             />
           ) : null}

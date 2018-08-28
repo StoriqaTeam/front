@@ -58,12 +58,24 @@ class SliderContainer extends Component<PropsTypes> {
     return (
       <div styleName="container">
         {arrows && (
-          <span styleName="leftArrow">
+          <span
+            styleName="arrow left"
+            onClick={() => handleSlide('prev')}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="-1"
+          >
             <Icon type="leftArrowSlider" size={28} />
           </span>
         )}
         {arrows && (
-          <span styleName="rightArrow">
+          <span
+            styleName="arrow right"
+            onClick={() => handleSlide('next')}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="-1"
+          >
             <Icon type="rightArrowSlider" size={28} />
           </span>
         )}
@@ -92,7 +104,7 @@ class SliderContainer extends Component<PropsTypes> {
               styleName={classNames('item', {
                 fadeItem: fade,
                 activeSlide: dotIdx === child.key - 1,
-                image: (type === 'image'),
+                image: type === 'image',
               })}
               style={{
                 width: `${slideWidth}%`,
