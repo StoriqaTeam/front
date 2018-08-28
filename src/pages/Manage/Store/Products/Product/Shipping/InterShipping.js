@@ -79,10 +79,14 @@ type PropsType = {
   editableItemId: ?string,
   remainingServices: Array<SelectType>,
   possibleServices: Array<SelectType>,
+  remainingCountries: Array<SelectType>,
+  possibleCountries: Array<SelectType>,
   onSaveCompany: (company: CompanyType) => void,
   onRemoveCompany: (id: string) => void,
   onSetEditableItem: (id: string) => void,
   onRemoveEditableItem: () => void,
+  redistributeCountries: (item: SelectType) => void,
+  interServices: any,
 };
 
 class InterShipping extends Component<PropsType, StateType> {
@@ -113,7 +117,10 @@ class InterShipping extends Component<PropsType, StateType> {
       editableItemId,
       remainingServices,
       possibleServices,
+      remainingCountries,
       inter,
+      redistributeCountries,
+      interServices,
     } = this.props;
     const { isCheckedWithout, isCheckedFixPrice, productCurrency } = this.state;
 
@@ -151,11 +158,13 @@ class InterShipping extends Component<PropsType, StateType> {
           >
             <FixPriceForm
               inter={inter}
-              countries={countries}
+              interServices={interServices}
+              countries={remainingCountries}
               country={{ id: 'all', label: 'All countries' }}
               productCurrency={productCurrency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
+              redistributeCountries={redistributeCountries}
             />
           </div>
           {!isEmpty(companies) && (
@@ -172,8 +181,11 @@ class InterShipping extends Component<PropsType, StateType> {
                       <div styleName="editableForm">
                         <FixPriceForm
                           inter={inter}
+                          interServices={interServices}
                           services={possibleServices}
                           productCurrency={item.currency}
+                          countries={remainingCountries}
+                          country={{ id: 'all', label: 'All countries' }}
                           company={{
                             id: item.id,
                             price: item.price,
@@ -183,6 +195,7 @@ class InterShipping extends Component<PropsType, StateType> {
                           }}
                           onSaveCompany={this.props.onSaveCompany}
                           onRemoveEditableItem={this.props.onRemoveEditableItem}
+                          redistributeCountries={redistributeCountries}
                         />
                       </div>
                     )}

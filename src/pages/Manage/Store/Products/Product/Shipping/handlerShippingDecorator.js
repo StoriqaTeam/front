@@ -80,10 +80,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
     constructor(props: PropsType) {
       super(props);
-      const servicess = map(
-        item => ({ id: item.id, label: item.label }),
-        interServices,
-      );
+      const servicess = map(item => item, interServices);
       this.state = {
         companies: [],
         editableItemId: null,
@@ -91,6 +88,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
         possibleServices: inter ? servicess : services,
         remainingCountries: countries,
         possibleCountries: countries,
+        interServices,
       };
     }
 
@@ -180,7 +178,15 @@ export default (OriginalComponent: any, inter?: boolean) =>
     differenceServices = (companies: Array<CompanyType>) =>
       difference(services, map(item => item.service, companies));
 
+    redistributeCountries = (service: SelectType) => {
+      // console.log('---service', service);
+      const selectedService = find(propEq('id', service.id))(interServices);
+      // console.log('---selectedService', selectedService);
+      this.setState({ remainingCountries: selectedService.countries });
+    };
+
     render() {
+      console.log('---this.state.companies', this.state.companies);
       return (
         <OriginalComponent
           {...this.props}
@@ -190,6 +196,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
           onRemoveCompany={this.onRemoveCompany}
           onSetEditableItem={this.onSetEditableItem}
           onRemoveEditableItem={this.onRemoveEditableItem}
+          redistributeCountries={this.redistributeCountries}
         >
           {this.props.children}
         </OriginalComponent>

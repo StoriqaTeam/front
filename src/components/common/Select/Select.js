@@ -54,6 +54,7 @@ const itemHeight = 24;
 class Select extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const { items, withEmpty } = nextProps;
+    console.log('---items', items);
     return {
       ...prevState,
       items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
