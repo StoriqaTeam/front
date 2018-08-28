@@ -50,6 +50,24 @@
   }
 }
 
+.counter {
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 3rem;
+  left: 2rem;
+  position: absolute;
+  z-index: 10;
+  width: 6rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.counterText {
+  color: $color_white;
+}
+
 .fadeItem {
   position: relative;
   z-index: 2;

@@ -29,9 +29,32 @@ type PropsTypes = {
   fade?: boolean,
   dotIdx?: boolean,
   arrows?: boolean,
+  counter?: boolean,
 };
 
-class SliderContainer extends Component<PropsTypes> {
+type StateType = {
+  current: number,
+};
+
+class SliderContainer extends Component<PropsTypes, StateType> {
+  state = {
+    current: 1,
+  };
+  handleClick = (direction: string): void => {
+    const { handleSlide } = this.props;
+    let { current } = this.state;
+    // $FlowIgnoreMe
+    const itemsLength = this.props.children.length;
+    handleSlide(direction);
+    if (direction === 'prev') {
+      current = current === 1 ? itemsLength : (current -= 1);
+      this.setState({ current });
+    }
+    if (direction === 'next') {
+      current = current === itemsLength ? 1 : (current += 1);
+      this.setState({ current });
+    }
+  };
   render() {
     const {
       type,
@@ -50,17 +73,20 @@ class SliderContainer extends Component<PropsTypes> {
       fade,
       dotIdx,
       arrows,
+      counter,
     } = this.props;
+    const { current } = this.state;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
     const animationSpeedSec = animationSpeed ? animationSpeed / 1000 : 0.5;
-
+    // $FlowIgnoreMe
+    const itemsLength = this.props.children.length;
     return (
       <div styleName="container">
         {arrows && (
           <span
             styleName="arrow left"
-            onClick={() => handleSlide('prev')}
+            onClick={() => this.handleClick('prev')}
             onKeyDown={() => {}}
             role="button"
             tabIndex="-1"
@@ -71,13 +97,18 @@ class SliderContainer extends Component<PropsTypes> {
         {arrows && (
           <span
             styleName="arrow right"
-            onClick={() => handleSlide('next')}
+            onClick={() => this.handleClick('next')}
             onKeyDown={() => {}}
             role="button"
             tabIndex="-1"
           >
             <Icon type="rightArrowSlider" size={28} />
           </span>
+        )}
+        {counter && (
+          <div styleName="counter">
+            <div styleName="counterText">{`${current}/${itemsLength}`}</div>
+          </div>
         )}
         {type === 'products' && (
           <SliderHeader
