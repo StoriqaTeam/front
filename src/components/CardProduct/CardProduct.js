@@ -125,7 +125,7 @@ class CardProduct extends PureComponent<PropsType> {
                       )}
                     </div>
                   )}
-                  dropdownToggle={(isDropdownOpened: boolean) => {
+                  renderDropdownToggle={(isDropdownOpened: boolean) => {
                     if (isDropdownOpened) {
                       return <button styleName="toggleRatesDropdownClosed" />;
                     }

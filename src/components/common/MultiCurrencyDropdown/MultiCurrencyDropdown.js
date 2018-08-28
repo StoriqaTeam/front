@@ -14,7 +14,7 @@ type PropsType = {
   renderDropdown: (
     rates: Array<{ currencyCode: string, value: number }>,
   ) => Node,
-  dropdownToggle: (isDropdownOpened: boolean) => Element<*>,
+  renderDropdownToggle: (isDropdownOpened: boolean) => Element<*>,
   onDropdownToggleClick?: (
     e: any,
     rates: Array<{ currencyCode: string, value: number }>,
@@ -62,7 +62,7 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
               <div>
                 {priceElement}
                 {React.cloneElement(
-                  this.props.dropdownToggle(this.state.isDropdownShown),
+                  this.props.renderDropdownToggle(this.state.isDropdownShown),
                   {
                     onClick: (e: any) => {
                       e.persist();
