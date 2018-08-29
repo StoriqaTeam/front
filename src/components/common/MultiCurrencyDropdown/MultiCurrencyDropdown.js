@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, find, whereEq, propOr, equals } from 'ramda';
+import { map, find, whereEq, propOr } from 'ramda';
 
 import { AppContext } from 'components/App';
 import { getCookie } from 'utils';
