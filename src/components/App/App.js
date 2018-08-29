@@ -65,56 +65,17 @@ class App extends Component<PropsType, StateType> {
   makeDirectories = (): DirectoriesType => {
     const {
       languages,
-      // currencies,
+      currencies,
       categories,
       orderStatuses,
-      // currencyExchange,
+      currencyExchange,
     } = this.props;
     return {
       categories,
-      currencies: [
-        {
-          key: 1,
-          name: 'stq',
-          code: 'STQ',
-        },
-        {
-          key: 2,
-          name: 'bitcoin',
-          code: 'BTC',
-        },
-        {
-          key: 3,
-          name: 'ethereum',
-          code: 'ETH',
-        },
-        {
-          key: 4,
-          name: 'dollar',
-          code: 'USD',
-        },
-      ],
       languages,
       orderStatuses,
-      currencyExchange: [
-        {
-          code: 'STQ',
-          rates: [
-            {
-              code: 'BTC',
-              value: 0.000000274,
-            },
-            {
-              code: 'ETH',
-              value: 0.00000646,
-            },
-            {
-              code: 'USD',
-              value: 0.0017706,
-            },
-          ],
-        },
-      ],
+      currencies,
+      currencyExchange,
     };
   };
 
@@ -177,8 +138,6 @@ App.childContextTypes = {
   environment: PropTypes.object.isRequired,
   handleLogin: PropTypes.func,
   showAlert: PropTypes.func,
-  // TODO: create HOC that extract directories from context to props
-  // withDirectories(directoriesNames: Array<string> = [])(Component)
   directories: PropTypes.object,
   currentUser: currentUserShape,
 };

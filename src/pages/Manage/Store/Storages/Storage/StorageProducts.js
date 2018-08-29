@@ -332,7 +332,7 @@ export default createRefetchContainer(
                 rawId
                 price
                 photoMain
-                currencyId
+                currency
                 attributes {
                   attrId
                   attribute {

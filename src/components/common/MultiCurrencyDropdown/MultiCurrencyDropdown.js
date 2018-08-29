@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, find, whereEq, propOr } from 'ramda';
+import { map, find, whereEq, propOr, equals } from 'ramda';
 
 import { AppContext } from 'components/App';
 import { getCookie } from 'utils';
@@ -42,17 +42,17 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
 
           const priceElement = this.props.renderPrice({
             price: this.props.price,
-            currencyCode: currentCurrency.code,
+            currencyCode: currentCurrency,
           });
 
           const currentCurrencyRates = find(
-            whereEq({ code: currentCurrency.code }),
+            whereEq({ code: currentCurrency }),
             currencyExchange,
           );
           const values = map(
             (item: { code: string, value: number }) => ({
               currencyCode: item.code,
-              value: this.props.price * item.value,
+              value: this.props.price / item.value,
             }),
             propOr([], 'rates', currentCurrencyRates),
           );

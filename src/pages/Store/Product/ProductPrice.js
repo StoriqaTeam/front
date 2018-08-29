@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { map, addIndex } from 'ramda';
 
 import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
-import { formatPrice } from 'utils';
+import { formatPrice, currentCurrency } from 'utils';
 
 import './ProductPrice.scss';
 
@@ -45,11 +45,12 @@ const ProductPrice = ({
         ) => (
           <div styleName="priceDropdownList">
             {indexedMap(
-              (item, idx) => (
-                <div key={`priceDropdownItem-${idx}-${item.currencyCode}`}>
-                  {`${item.value.toFixed(8)} ${item.currencyCode}`}
-                </div>
-              ),
+              (item, idx) =>
+                item.currencyCode !== currentCurrency() && (
+                  <div key={`priceDropdownItem-${idx}-${item.currencyCode}`}>
+                    {`${formatPrice(item.value)} ${item.currencyCode}`}
+                  </div>
+                ),
               rates,
             )}
           </div>
@@ -70,7 +71,7 @@ const ProductPrice = ({
 );
 
 ProductPrice.defaultProps = {
-  currency: 'STQ',
+  currency: currentCurrency() || 'STQ',
   buttonText: 'Cashback',
 };
 

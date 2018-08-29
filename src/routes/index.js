@@ -59,10 +59,7 @@ const routes = (
           languages {
             isoCode
           }
-          currencies {
-            key
-            name
-          }
+          currencies
           categories {
             name {
               lang
@@ -116,10 +113,10 @@ const routes = (
           }
           orderStatuses
           currencyExchange {
-            stq {
-              bitcoin
-              etherium
-              dollar
+            code
+            rates {
+              code
+              value
             }
           }
         }

@@ -28,17 +28,19 @@ class FetcherBase {
   async fetch(operation, variables) {
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
-    const currencyId = this.getCurrencyCodeFromCookies();
+    const currency = this.getCurrencyCodeFromCookies();
 
     let headers = { 'Content-Type': 'application/json' };
     if (jwt) {
       headers = assoc('Authorization', `Bearer ${jwt}`, headers);
     }
-    if (currencyId) {
-      headers = assoc('Currency-Id', currencyId, headers);
-    }
+
+    headers = assoc('Currency', currency || 'STQ', headers);
+
     const sessionId = this.getSessionIdFromCookies();
     headers = assoc('Session-Id', sessionId, headers);
+
+    log.debug('\nRequest headers:\n', { headers }, '\n');
 
     try {
       const response = await axios({
@@ -52,7 +54,7 @@ class FetcherBase {
       return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
-      return {};
+      return { data: null, errors: ['No data returned from gateway'] };
     }
   }
 }
@@ -118,9 +120,7 @@ export class ClientFetcher extends FetcherBase {
   getCurrencyCodeFromCookies() {
     const cookies = new Cookies();
     const currency = cookies.get('CURRENCY');
-    if (currency) {
-      return currency.code;
-    }
+    return currency || 'STQ';
   }
 
   async fetch(...args) {

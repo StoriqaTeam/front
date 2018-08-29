@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, prop, propOr, map, find, whereEq, omit } from 'ramda';
+import { head, propOr, map, find, equals } from 'ramda';
 import moment from 'moment';
 
 import { Select } from 'components/common/Select';
@@ -13,7 +13,7 @@ const currencyCookieName = 'CURRENCY';
 
 type PropsType = {
   // eslint-disable-next-line
-  currencies: Array<Object>,
+  currencies: Array<string>,
 };
 
 type CurrencyType = {
@@ -28,11 +28,11 @@ class HeaderTop extends PureComponent<PropsType> {
     const currentCurrency: ?CurrencyType = getCookie(currencyCookieName);
     if (!currentCurrency) {
       // try to get stq
-      const stq = find(whereEq({ code: 'STQ' }), currencies);
+      const stq = find(equals('STQ'), currencies);
       if (stq) {
         setCookie(
           currencyCookieName,
-          omit(['name'], stq),
+          stq,
           moment()
             .utc()
             .add(7, 'd')
@@ -43,7 +43,7 @@ class HeaderTop extends PureComponent<PropsType> {
         if (firstCurrency) {
           setCookie(
             currencyCookieName,
-            omit(['name'], firstCurrency),
+            firstCurrency,
             moment()
               .utc()
               .add(7, 'd')
@@ -57,8 +57,8 @@ class HeaderTop extends PureComponent<PropsType> {
   getCurrenciesItems = (): Array<{ id: string, label: string }> =>
     map(
       item => ({
-        id: prop('code', item),
-        label: prop('code', item),
+        id: item,
+        label: item,
       }),
       this.props.currencies,
     );
@@ -67,25 +67,27 @@ class HeaderTop extends PureComponent<PropsType> {
     const currency = getCookie(currencyCookieName);
     if (currency) {
       return {
-        id: currency.code,
-        label: currency.code,
+        id: currency,
+        label: currency,
       };
     }
-    const firstCurrency = head(this.props.currencies);
-    return (
-      firstCurrency && {
-        id: firstCurrency.code,
-        label: firstCurrency.code,
-      }
-    );
+    const firstCurrency: ?string = head(this.props.currencies);
+
+    if (firstCurrency) {
+      return {
+        id: firstCurrency,
+        label: firstCurrency,
+      };
+    }
+    return null;
   };
 
   handleSelect = (value: { id: string, label: string }) => {
-    const currency = find(whereEq({ code: value.id }), this.props.currencies);
+    const currency = find(equals(value.id), this.props.currencies);
     if (currency) {
       setCookie(
         currencyCookieName,
-        omit(['name'], currency),
+        currency,
         moment()
           .utc()
           .add(7, 'd')

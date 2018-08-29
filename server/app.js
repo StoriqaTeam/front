@@ -138,7 +138,7 @@ app.use(
       url,
       jwt,
       req.universalCookies.get('SESSION_ID'),
-      currency && currency.code,
+      currency,
     );
 
     store.dispatch(FarceActions.init());

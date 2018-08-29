@@ -54,7 +54,7 @@ const mutation = graphql`
                 rawId
               }
               storeId
-              currencyId
+              currency
               products(first: 1) @connection(key: "Wizard_products") {
                 edges {
                   node {
@@ -123,7 +123,6 @@ type MutationParamsType = {
 };
 
 const commit = (params: MutationParamsType) => {
-  log.info('!!! UpdateWizardMutation params: ', params);
   return commitMutation(params.environment, {
     mutation,
     variables: {

@@ -9,7 +9,7 @@ import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice, convertSrc } from 'utils';
+import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
 import './CardProduct.scss';
@@ -27,7 +27,7 @@ type PropsType = {
   item: {
     rawId: number,
     storeId: number,
-    currencyId: number,
+    currency: string,
     name: Array<{
       lang: string,
       text: string,
@@ -44,7 +44,7 @@ type PropsType = {
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: { rawId, storeId, name, products, currencyId, rating },
+      item: { rawId, storeId, name, products, currency, rating },
     } = this.props;
     let discount = null;
     let photoMain = null;
@@ -55,7 +55,7 @@ class CardProduct extends PureComponent<PropsType> {
       ({ discount, photoMain, cashback, price } = product.node);
     }
 
-    if (!storeId || !rawId || !currencyId || !price) return null;
+    if (!storeId || !rawId || !currency || !price) return null;
 
     const lang = 'EN';
     const productLink = `/store/${storeId}/products/${rawId}`;
@@ -88,7 +88,11 @@ class CardProduct extends PureComponent<PropsType> {
               {name && <div styleName="title">{getNameText(name, lang)}</div>}
             </div>
             <div styleName="undiscountedPrice">
-              {Boolean(discount) && <span>{formatPrice(price)} STQ</span>}
+              {Boolean(discount) && (
+                <span>
+                  {formatPrice(price)} {currentCurrency()}
+                </span>
+              )}
             </div>
             <div styleName="price">
               {discountedPrice && (
@@ -112,15 +116,18 @@ class CardProduct extends PureComponent<PropsType> {
                   ) => (
                     <div styleName="priceDropdownList">
                       {map(
-                        item => (
-                          <div
-                            key={`priceDropdownItem-${this.props.item.rawId}-${
-                              item.currencyCode
-                            }`}
-                          >
-                            {`${item.value.toFixed(8)} ${item.currencyCode}`}
-                          </div>
-                        ),
+                        item =>
+                          item.currencyCode !== currentCurrency() && (
+                            <div
+                              key={`priceDropdownItem-${
+                                this.props.item.rawId
+                              }-${item.currencyCode}`}
+                            >
+                              {`${formatPrice(item.value)} ${
+                                item.currencyCode
+                              }`}
+                            </div>
+                          ),
                         rates,
                       )}
                     </div>
