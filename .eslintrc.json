@@ -2,25 +2,56 @@
   "parser": "babel-eslint",
   "extends": [
     "react-app",
+    "prettier/react",
     "airbnb",
     "prettier"
   ],
   "rules": {
-    "arrow-parens": ["error", "as-needed"],
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
     "no-console": "error",
-    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
     "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
-    "jsx-a11y/label-has-for": [ 2, {
-      "components": [ "Label" ],
-      "required": {
-        "every": ["id" ]
-      },
-      "allowChildren": true
-    }],
+    "jsx-a11y/anchor-is-valid": [
+      "warn",
+      {
+        "aspects": [
+          "invalidHref"
+        ]
+      }
+    ],
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": [
+          "Label"
+        ],
+        "required": {
+          "every": [
+            "id"
+          ]
+        },
+        "allowChildren": true
+      }
+    ],
     "import/no-extraneous-dependencies": [
       "error",
-      {"devDependencies": ["**/*.test.js", "**/*.stories.js"]}
+      {
+        "devDependencies": [
+          "**/*.test.js",
+          "**/*.stories.js"
+        ]
+      }
     ],
     "import/prefer-default-export": 0
   },
@@ -28,7 +59,9 @@
     "import/resolver": {
       "babel-module": {},
       "node": {
-        "paths": ["src"]
+        "paths": [
+          "src"
+        ]
       }
     }
   }
