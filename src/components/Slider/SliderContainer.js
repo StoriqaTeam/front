@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import type { Node } from 'react';
 
 import { SliderHeader } from 'components/Slider';
-import { Icon } from 'components/Icon';
 
 import handlerSlide from './handlerSlidesDecorator';
 
@@ -51,12 +50,11 @@ class SliderContainer extends Component<PropsTypes, StateType> {
     handleSlide(direction);
     if (direction === 'prev') {
       current = current === 1 ? itemsLength : (current -= 1);
-      this.setState({ current });
     }
     if (direction === 'next') {
       current = current === itemsLength ? 1 : (current += 1);
-      this.setState({ current });
     }
+    this.setState({ current });
   };
   render() {
     const {

@@ -38,6 +38,8 @@
   overflow: hidden;
   width: 100%;
   display: block;
+  height: 0;
+  padding-bottom: 56.25%;
   @media (min-width: $md) {
     display: none;
     width: calc(100% - 14rem);
