@@ -59,10 +59,7 @@ const routes = (
           languages {
             isoCode
           }
-          currencies {
-            key
-            name
-          }
+          currencies
           categories {
             name {
               lang
@@ -115,6 +112,13 @@ const routes = (
             }
           }
           orderStatuses
+          currencyExchange {
+            code
+            rates {
+              code
+              value
+            }
+          }
         }
       `}
       render={args => {

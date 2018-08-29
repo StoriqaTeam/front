@@ -23,7 +23,7 @@ type ProductNodeType = {
   id: string,
   rawId: number,
   storeId: number,
-  currencyId: number,
+  currency: string,
   category: { id: string, rawId: number },
   name: Array<{
     lang: string,

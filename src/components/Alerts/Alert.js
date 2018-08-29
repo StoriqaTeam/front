@@ -63,6 +63,7 @@ class Alert extends Component<AlertPropsType, StateType> {
         <div styleName="titleContainer">
           <div styleName="title">{title}</div>
           <button
+            name="alertCloseButton"
             onClick={() => {
               this.props.onClose(createdAtTimestamp);
               if (onClick) {
