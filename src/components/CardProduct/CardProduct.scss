@@ -105,8 +105,6 @@
 .priceDropdownList {
   position: absolute;
   background-color: #ffffff;
-  bottom: 0;
-  left: 100%;
   box-shadow: 0 0.3rem 1.7rem 0 rgba(0, 0, 0, 0.1);
   padding: 1rem;
   padding-bottom: 0;
@@ -119,6 +117,16 @@
   white-space: nowrap;
   text-align: right;
   z-index: 9999;
+
+  @media (max-width: $xl - 1px) {
+    bottom: 110%;
+    right: 50%;
+  }
+
+  @media (min-width: $xl) {
+    bottom: 0;
+    left: 100%;
+  }
 }
 
 .toggleRatesDropdownClosed {
@@ -126,6 +134,7 @@
   width: 18px;
   background: url('./img/dropdown_toggle_opened.svg');
   margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .toggleRatesDropdownOpened {
@@ -133,6 +142,7 @@
   width: 18px;
   background: url('./img/dropdown_toggle_closed.svg');
   margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .price {
