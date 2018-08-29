@@ -8,6 +8,9 @@ import { SliderHeader } from 'components/Slider';
 import { Icon } from 'components/Icon';
 
 import handlerSlide from './handlerSlidesDecorator';
+
+import { SliderArrows } from './index';
+
 import './SliderContainer.scss';
 
 type PropsTypes = {
@@ -83,28 +86,8 @@ class SliderContainer extends Component<PropsTypes, StateType> {
     const itemsLength = this.props.children.length;
     return (
       <div styleName="container">
-        {arrows && (
-          <span
-            styleName="arrow left"
-            onClick={() => this.handleClick('prev')}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="-1"
-          >
-            <Icon type="leftArrowSlider" size={28} />
-          </span>
-        )}
-        {arrows && (
-          <span
-            styleName="arrow right"
-            onClick={() => this.handleClick('next')}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="-1"
-          >
-            <Icon type="rightArrowSlider" size={28} />
-          </span>
-        )}
+        {arrows &&
+          itemsLength > 1 && <SliderArrows onClick={this.handleClick} />}
         {counter && (
           <div styleName="counter">
             <div styleName="counterText">{`${current}/${itemsLength}`}</div>
