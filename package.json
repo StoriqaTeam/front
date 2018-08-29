@@ -38,7 +38,8 @@
     "smoothscroll-polyfill": "0.4.3",
     "universal-cookie": "2.2.0",
     "universal-cookie-express": "2.1.2",
-    "webpack-isomorphic-tools": "3.0.5"
+    "webpack-isomorphic-tools": "3.0.5",
+    "xss": "1.0.3"
   },
   "devDependencies": {
     "@storybook/addon-actions": "3.3.9",
