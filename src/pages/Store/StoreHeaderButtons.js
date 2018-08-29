@@ -9,7 +9,7 @@ import './StoreHeaderButtons.scss';
 
 const StoreHeaderButtons = () => (
   <div styleName="container">
-    <Button big>
+    <Button disabled big>
       <span styleName="buttonText">
         <span styleName="buttonIcon email">
           <Icon type="email" size={20} />
@@ -17,7 +17,7 @@ const StoreHeaderButtons = () => (
         Message <span styleName="message">to seller</span>
       </span>
     </Button>
-    <Button big wireframe onClick={() => {}}>
+    <Button disabled big wireframe onClick={() => {}}>
       <span styleName="buttonText">
         <span styleName="buttonIcon phone">
           <Icon type="phone" size={20} />
