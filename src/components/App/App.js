@@ -109,7 +109,6 @@ class App extends Component<PropsType, StateType> {
       relay: { environment },
     } = this.props;
     const directories = this.makeDirectories();
-    console.log('---directories', directories);
     return (
       <AppContext.Provider value={{ categories, environment, directories }}>
         <Fragment>

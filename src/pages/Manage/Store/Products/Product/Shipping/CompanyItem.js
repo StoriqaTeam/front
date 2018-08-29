@@ -26,9 +26,7 @@ type PropsType = {
 
 class CompanyItem extends PureComponent<PropsType, StateType> {
   render() {
-    console.log('---this.props.company', this.props.company);
     const { company, onRemoveCompany, onSetEditableItem } = this.props;
-    console.log('---company', company);
     return (
       <div styleName="container">
         <div styleName="logo">

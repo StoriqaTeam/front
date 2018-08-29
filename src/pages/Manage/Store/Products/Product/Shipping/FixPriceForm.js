@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 
-import { head, find, propEq, assoc } from 'ramda';
+import { head, find, propEq, assoc, prepend, length } from 'ramda';
 
 import { InputPrice, Select, Button } from 'components/common';
 
@@ -19,8 +19,8 @@ type StateType = {
   price: number,
   currency: ?SelectType,
   service: SelectType,
-  companies: Array<*>,
-  country: ?SelectType,
+  countries?: any,
+  country?: ?SelectType,
 };
 
 type PropsType = {
@@ -36,24 +36,56 @@ type PropsType = {
     service: SelectType,
   },
   inter?: boolean,
-  countries?: Array<SelectType>,
-  country?: SelectType,
   redistributeCountries: (item: SelectType) => void,
-  interServices: any,
+  servicesWithCountries: any,
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
+  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+  //   console.log('---prevState', prevState);
+  //   console.log('---nextProps', nextProps);
+  //   const { servicesWithCountries } = nextProps;
+  //   if (servicesWithCountries) {
+  //     const { countries, service } = prevState;
+  //     const serviceWithCountries = find(propEq('id', service.id))(servicesWithCountries);
+  //     if (
+  //       serviceWithCountries &&
+  //       (JSON.stringify(length(serviceWithCountries.countries)) !== JSON.stringify(length(countries)))
+  //     ) {
+  //       return {
+  //         ...prevState,
+  //         countries: serviceWithCountries.countries,
+  //         country: head(serviceWithCountries.countries),
+  //       };
+  //     }
+  //   }
+  //   return null;
+  // }
+
   constructor(props: PropsType) {
     super(props);
-    const { productCurrency, company, country, interServices } = props;
-    console.log('---interServices', interServices);
-    this.state = {
+    const { productCurrency, company, servicesWithCountries } = props;
+    console.log('---servicesWithCountries', servicesWithCountries);
+    const service = company ? company.service : head(props.services);
+
+    let stateData = {
       price: company ? company.price : 0,
       currency: productCurrency,
-      service: company ? company.service : head(props.services),
-      companies: [],
-      country: country || null,
+      service,
     };
+    if (servicesWithCountries) {
+      const serviceWithCountries = find(propEq('id', service.id))(
+        servicesWithCountries,
+      );
+      const { countries } = serviceWithCountries;
+      const country = head(countries);
+      stateData = {
+        ...stateData,
+        countries,
+        country,
+      };
+    }
+    this.state = stateData;
   }
 
   componentDidUpdate(prevProps: PropsType) {
@@ -63,14 +95,25 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     }
   }
 
+  // getCountriesData = (services, ) => {
+  //
+  // };
+
   updateCurrentService = (service: SelectType) => {
-    this.setState({ service });
+    // const { servicesWithCountries } = this.props;
+    // const serviceWithCountries = find(propEq('id', service.id))(servicesWithCountries);
+    // const { countries } = serviceWithCountries;
+    // const country = head(countries);
+    this.setState({
+      service,
+      // countries,
+      // country,
+    });
   };
 
   handleSaveCompany = () => {
     const { company, productCurrency } = this.props;
     const { service, price, currency, country } = this.state;
-    console.log('---currency', currency);
     let newCompany = {
       service,
       price,
@@ -104,15 +147,16 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   render() {
+    const { services, company, onRemoveEditableItem, inter } = this.props;
     const {
-      services,
-      company,
-      onRemoveEditableItem,
-      inter,
+      price,
+      currency,
+      service,
+      companies,
+      country,
       countries,
-    } = this.props;
-    const { price, currency, service, companies, country } = this.state;
-    console.log('---services', services);
+    } = this.state;
+    console.log('---countries', countries);
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -126,18 +170,19 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               onSelect={this.handleOnSelectService}
             />
           </div>
-          {countries && (
-            <div styleName="countriesSelect">
-              <Select
-                forForm
-                fullWidth
-                label="Send to"
-                items={service.countries}
-                activeItem={country}
-                onSelect={this.handleOnSelectCountry}
-              />
-            </div>
-          )}
+          {countries &&
+            inter && (
+              <div styleName="countriesSelect">
+                <Select
+                  forForm
+                  fullWidth
+                  label="Send to"
+                  items={countries}
+                  activeItem={country}
+                  onSelect={this.handleOnSelectCountry}
+                />
+              </div>
+            )}
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}

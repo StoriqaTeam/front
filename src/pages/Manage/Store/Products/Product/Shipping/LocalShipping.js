@@ -107,7 +107,6 @@ class LocalShipping extends Component<PropsType, StateType> {
       pickupCurrency,
       productCurrency,
     } = this.state;
-    console.log('---pickupCurrency', pickupCurrency);
     return (
       <div styleName="container">
         <div styleName="title">

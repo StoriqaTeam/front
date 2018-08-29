@@ -63,8 +63,6 @@ class CurrencySelect extends Component<PropsType, StateType> {
 
   render() {
     const { currencies, currency } = this.state;
-    console.log('---currencies', currencies);
-    console.log('---currency', currency);
     return (
       <Select
         forForm

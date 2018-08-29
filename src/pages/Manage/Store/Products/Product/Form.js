@@ -304,7 +304,6 @@ class Form extends Component<PropsType, StateType> {
       resetComeResponse,
     } = this.props;
     const { category, currencies, currency } = this.state;
-    console.log('---currencies, currency', currencies, currency);
     const status = baseProduct ? baseProduct.status : 'Draft';
     const currencyId = baseProduct ? baseProduct.currencyId : 6;
     // $FlowIgnore

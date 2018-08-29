@@ -78,8 +78,8 @@ type PropsType = {
   companies: Array<CompanyType>,
   editableItemId: ?string,
   remainingServices: Array<SelectType>,
-  possibleServices: Array<SelectType>,
   remainingCountries: Array<SelectType>,
+  possibleServices: Array<SelectType>,
   possibleCountries: Array<SelectType>,
   onSaveCompany: (company: CompanyType) => void,
   onRemoveCompany: (id: string) => void,
@@ -121,10 +121,11 @@ class InterShipping extends Component<PropsType, StateType> {
       inter,
       redistributeCountries,
       interServices,
+      countries,
+      servicesWithCountries,
     } = this.props;
     const { isCheckedWithout, isCheckedFixPrice, productCurrency } = this.state;
 
-    console.log('---productCurrency', productCurrency);
     return (
       <div styleName="container">
         <div styleName="title">
@@ -158,9 +159,7 @@ class InterShipping extends Component<PropsType, StateType> {
           >
             <FixPriceForm
               inter={inter}
-              interServices={interServices}
-              countries={remainingCountries}
-              country={{ id: 'all', label: 'All countries' }}
+              servicesWithCountries={servicesWithCountries}
               productCurrency={productCurrency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
@@ -181,11 +180,9 @@ class InterShipping extends Component<PropsType, StateType> {
                       <div styleName="editableForm">
                         <FixPriceForm
                           inter={inter}
-                          interServices={interServices}
                           services={possibleServices}
                           productCurrency={item.currency}
-                          countries={remainingCountries}
-                          country={{ id: 'all', label: 'All countries' }}
+                          servicesWithCountries={servicesWithCountries}
                           company={{
                             id: item.id,
                             price: item.price,
