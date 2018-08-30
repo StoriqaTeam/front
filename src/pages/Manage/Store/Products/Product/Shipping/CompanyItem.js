@@ -58,7 +58,7 @@ class CompanyItem extends PureComponent<PropsType, StateType> {
             <div styleName="deleteButton">
               <span
                 onClick={() => {
-                  onRemoveCompany(company.id);
+                  onRemoveCompany(company);
                 }}
                 onKeyDown={() => {}}
                 role="button"

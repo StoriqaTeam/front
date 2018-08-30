@@ -17,6 +17,8 @@ import {
   find,
   isEmpty,
   dissoc,
+  mergeDeepLeft,
+  contains,
 } from 'ramda';
 
 import type { SelectType } from 'types';
@@ -31,6 +33,7 @@ type StateType = {
   remainingCountries: Array<SelectType>,
   possibleCountries: Array<SelectType>,
   editableItemId: ?string,
+  servicesWithCountries: Array<SelectType>,
 };
 
 const services: Array<SelectType> = [
@@ -45,29 +48,29 @@ const servicesWithCountries: Array<SelectType> = [
     label: 'Ups',
     countries: [
       { id: 'all', label: 'All countries' },
-      { id: 'us', label: 'United States' },
-      { id: 'ru', label: 'Russian Federation' },
+      // { id: 'us', label: 'United States' },
+      // { id: 'ru', label: 'Russian Federation' },
     ],
   },
   {
     id: 'fedex',
     label: 'FedEx',
     countries: [
-      { id: 'all', label: 'All countries' },
+      // { id: 'all', label: 'All countries' },
       { id: 'rs', label: 'Serbia' },
-      { id: 'tk', label: 'Tokelau' },
-      { id: 'ye', label: 'Yemen' },
+      // { id: 'tk', label: 'Tokelau' },
+      // { id: 'ye', label: 'Yemen' },
     ],
   },
   {
     id: 'post',
     label: 'Post of Russia',
     countries: [
-      { id: 'all', label: 'All countries' },
+      // { id: 'all', label: 'All countries' },
       { id: 'rw', label: 'Rwanda' },
       { id: 'sm', label: 'San Marino' },
       { id: 'gf', label: 'French Guiana' },
-      { id: 'il', label: 'Israel' },
+      // { id: 'il', label: 'Israel' },
     ],
   },
 ];
@@ -135,7 +138,9 @@ export default (OriginalComponent: any, inter?: boolean) =>
         this.setState((prevState: StateType) => {
           const newCompany = {
             ...company,
-            id: `${length(prevState.companies)}`,
+            id: `${company.service.id}${
+              company.country ? company.country.id : ''
+            }`,
             img,
           };
           const newCompanies = prepend(newCompany, prevState.companies);
@@ -155,15 +160,20 @@ export default (OriginalComponent: any, inter?: boolean) =>
       }
     };
 
-    onRemoveCompany = (id: string) => {
+    onRemoveCompany = (company: any) => {
       this.setState((prevState: StateType) => {
         const newCompanies = filter(
-          item => id !== item.id,
+          item => company.id !== item.id,
           prevState.companies,
         );
+        if (inter) {
+          this.redistributeCountriesRemove(company);
+        }
         return {
           companies: newCompanies,
-          remainingServices: this.differenceServices(newCompanies),
+          remainingServices: inter
+            ? prevState.remainingServices
+            : this.differenceServices(newCompanies),
           editableItemId: null,
         };
       });
@@ -200,20 +210,14 @@ export default (OriginalComponent: any, inter?: boolean) =>
         item => !isEmpty(item.countries),
         map(item => {
           if (item.id === company.service.id) {
-            // console.log('---item', item);
             const countries = filter(
               item => item.id !== company.country.id,
               item.countries,
             );
-            console.log('---countries', countries);
             return { ...item, countries };
           }
           return item;
         }, services),
-      );
-      console.log(
-        '---services',
-        map(item => dissoc('countries', item), newServices),
       );
       this.setState({
         servicesWithCountries: newServices,
@@ -221,11 +225,91 @@ export default (OriginalComponent: any, inter?: boolean) =>
       });
     };
 
-    render() {
-      console.log(
-        '---STATE servicesWithCountries',
-        this.state.servicesWithCountries,
+    redistributeCountriesRemove = (company: any) => {
+      console.log('---company', company);
+      const servicesFromState = this.state.servicesWithCountries;
+      const serviceFromState = find(propEq('id', company.service.id))(
+        servicesFromState,
       );
+      const serviceFromBack = find(propEq('id', company.service.id))(
+        servicesWithCountries,
+      );
+
+      if (serviceFromState) {
+        const newCountries = prepend(
+          company.country,
+          serviceFromState.countries,
+        );
+        const newCountriesSort = serviceFromBack.countries;
+        const countriesReady = filter(
+          item => contains(item, newCountries),
+          newCountriesSort,
+        );
+        // console.log('---countriesReady', countriesReady);
+        this.setState(() => {
+          const newServices = map(item => {
+            if (item.id === company.service.id) {
+              return { ...item, countries: countriesReady };
+            }
+            return item;
+          }, servicesFromState);
+          return {
+            servicesWithCountries: newServices,
+          };
+        });
+      } else {
+        const newServices = prepend(
+          { ...serviceFromBack, countries: [company.country] },
+          servicesFromState,
+        );
+        console.log('---newServices', newServices);
+        // this.setState({
+        //   servicesWithCountries:
+        // });
+      }
+
+      // const servicesWithCountriess = servicesWithCountries;
+      // console.log('---servicesWithCountries', servicesWithCountries);
+      // console.log('---serviceId, countryId', serviceId, countryId);
+      // if (find(propEq('id', serviceId))(services)) {
+      //   // добавить страну
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //   // const newServices = map(item => {
+      //   //   const serviceFromBacks = find(propEq('id', serviceId))(servicesWithCountries);
+      //   //   const serviceFromState = find(propEq('id', serviceId))(servicesFromState);
+      //   //   console.log('---serviceFromBacks', serviceFromBacks);
+      //   //   const countriesFromState = serviceFromBacks.countries; // взять страны удаленного сервиса из исходного массива
+      //   //   if (item.id === serviceId) {
+      //   //     return { ...item, countries: countriesFromBack };
+      //   //   }
+      //   //   return item;
+      //   // }, servicesWithCountries);
+      //   // console.log('---newServices', newServices);
+      //   // this.setState({ servicesWithCountries: newServices });
+      // } else {
+      //   //
+      // }
+      // this.setState({
+      //   servicesWithCountries: newServices,
+      //   remainingServices: map(item => dissoc('countries', item), newServices),
+      // });
+    };
+
+    render() {
+      console.log('---this.state.companies', this.state.companies);
       return (
         <OriginalComponent
           {...this.props}

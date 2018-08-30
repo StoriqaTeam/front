@@ -41,26 +41,29 @@ type PropsType = {
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
-  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-  //   console.log('---prevState', prevState);
-  //   console.log('---nextProps', nextProps);
-  //   const { servicesWithCountries } = nextProps;
-  //   if (servicesWithCountries) {
-  //     const { countries, service } = prevState;
-  //     const serviceWithCountries = find(propEq('id', service.id))(servicesWithCountries);
-  //     if (
-  //       serviceWithCountries &&
-  //       (JSON.stringify(length(serviceWithCountries.countries)) !== JSON.stringify(length(countries)))
-  //     ) {
-  //       return {
-  //         ...prevState,
-  //         countries: serviceWithCountries.countries,
-  //         country: head(serviceWithCountries.countries),
-  //       };
-  //     }
-  //   }
-  //   return null;
-  // }
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    console.log('---prevState', prevState);
+    console.log('---nextProps', nextProps);
+    const { servicesWithCountries } = nextProps;
+    if (servicesWithCountries) {
+      const { countries, service } = prevState;
+      const serviceWithCountries = find(propEq('id', service.id))(
+        servicesWithCountries,
+      );
+      if (
+        serviceWithCountries &&
+        JSON.stringify(length(serviceWithCountries.countries)) !==
+          JSON.stringify(length(countries))
+      ) {
+        return {
+          ...prevState,
+          countries: serviceWithCountries.countries,
+          country: head(serviceWithCountries.countries),
+        };
+      }
+    }
+    return null;
+  }
 
   constructor(props: PropsType) {
     super(props);
@@ -100,15 +103,25 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   // };
 
   updateCurrentService = (service: SelectType) => {
-    // const { servicesWithCountries } = this.props;
-    // const serviceWithCountries = find(propEq('id', service.id))(servicesWithCountries);
-    // const { countries } = serviceWithCountries;
-    // const country = head(countries);
-    this.setState({
+    const { servicesWithCountries } = this.props;
+    let stateData = {
       service,
-      // countries,
-      // country,
-    });
+      countries: [],
+      country: null,
+    };
+    if (service && servicesWithCountries) {
+      const serviceWithCountries = find(propEq('id', service.id))(
+        servicesWithCountries,
+      );
+      const { countries } = serviceWithCountries;
+      const country = head(countries);
+      stateData = {
+        ...stateData,
+        countries,
+        country,
+      };
+    }
+    this.setState(stateData);
   };
 
   handleSaveCompany = () => {
@@ -156,7 +169,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       country,
       countries,
     } = this.state;
-    console.log('---countries', countries);
+    console.log('---service', service);
     return (
       <div styleName="container">
         <div styleName="selects">
