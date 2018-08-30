@@ -1,0 +1,68 @@
+@import '../../styles/variables.scss';
+
+.container {
+  margin-bottom: 9.75rem;
+  @media (min-width: $lg) {
+    margin-bottom: 20.5rem;
+  }
+}
+
+.title {
+  font-family: $font_montserrat_extra_bold;
+  font-size: 28px;
+  color: $color_royal;
+  max-width: 100%;
+  line-height: normal;
+  margin-bottom: 8rem;
+  @media (min-width: $md) {
+    font-size: 36px;
+  }
+  @media (min-width: $lg) {
+    max-width: 52rem;
+  }
+}
+
+.subtitle {
+  font-family: $font_montserrat_medium;
+  color: $color_royal;
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 56rem;
+  margin-bottom: 6rem;
+}
+
+.imageContainer {
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  margin-bottom: 8rem;
+  margin-right: 0;
+  @media (min-width: $md) {
+    margin-right: 6.625rem;
+  }
+}
+
+.itemTitle {
+  font-family: $font_montserrat_extra_bold;
+  color: $color_blue;
+  font-size: 28px;
+  margin-bottom: 4rem;
+  line-height: normal;
+}
+
+.itemText {
+  font-family: $font_montserrat_regular;
+  color: $color_grey_royal;
+  font-size: 20px;
+  line-height: 1.6;
+}
