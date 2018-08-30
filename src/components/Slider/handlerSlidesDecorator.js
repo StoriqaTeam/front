@@ -21,6 +21,7 @@ type PropsType = {
   animationSpeed: number,
   fade?: boolean,
   getValueDotIdx: (dotIdx: number) => void,
+  type: string,
 };
 
 type StateType = {
@@ -186,7 +187,13 @@ export default (OriginalComponent: any) =>
     };
 
     sliderPropsCalc = (children: Array<{}>) => {
-      const { infinity, slidesToShow, responsive, autoplaySpeed } = this.props;
+      const {
+        infinity,
+        slidesToShow,
+        responsive,
+        autoplaySpeed,
+        type,
+      } = this.props;
       const { previewLength } = this.state;
       const totalSlidesAmount = children.length;
       const sliderWrapperWidth = this.originalComponentElement.getBoundingClientRect()
@@ -216,12 +223,16 @@ export default (OriginalComponent: any) =>
         totalSlidesAmount,
         slideWidth,
         slidesOffset:
-          slidesToShow === 1 || totalSlidesAmount <= slidesToShow + 1
+          (slidesToShow === 1 && type === 'banners') ||
+          totalSlidesAmount <= slidesToShow + 1
             ? 0
             : -previewLength * slideWidth,
       });
 
-      if (slidesToShow === 1 || totalSlidesAmount <= slidesToShow + 1) {
+      if (
+        (slidesToShow === 1 && type === 'banners') ||
+        totalSlidesAmount <= slidesToShow + 1
+      ) {
         this.setState({ children, num: 0 });
       } else {
         this.setState(
