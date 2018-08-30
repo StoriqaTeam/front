@@ -11074,7 +11074,7 @@ xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
 
-xss@^1.0.3:
+xss@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/xss/-/xss-1.0.3.tgz#d04bd2558fd6c29c46113824d5e8b2a910054e23"
   dependencies:
