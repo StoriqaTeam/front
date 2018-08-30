@@ -48,7 +48,7 @@ class FetcherBase {
         url: this.url,
         headers,
         data: JSON.stringify({ query: operation.text, variables }),
-        // withCredentials: true, // TODO: remove after fix
+        withCredentials: true,
       });
       log.debug('GraphQL response', { response: response.data });
       return response.data;

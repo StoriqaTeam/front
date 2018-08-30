@@ -118,10 +118,7 @@ app.use(
     }
 
     if (process.env.NODE_ENV === 'development') {
-      req.universalCookies.set('holyshit', 'iamcool', { path: '/', expires: moment()
-            .utc()
-            .add(7, 'd')
-            .toDate() });
+      req.universalCookies.set('holyshit', 'iamcool', { path: '/' });
     }
 
     const store = createReduxStore(new ServerProtocol(req.url));
