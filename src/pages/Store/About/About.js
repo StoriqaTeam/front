@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
+import xss from 'xss';
 import { addressToString, getNameText } from 'utils';
 
 // import ImageLoader from 'libs/react-image-loader';
@@ -49,7 +50,11 @@ class About extends PureComponent<PropsType> {
                 <div styleName="subtitle">Description</div>
                 <div
                   styleName="description"
-                  dangerouslySetInnerHTML={{ __html: modifLongDescription }} // eslint-disable-line
+                  /* eslint-disable */
+                  dangerouslySetInnerHTML={{
+                    /* eslint-enable */
+                    __html: xss(modifLongDescription),
+                  }}
                 />
               </div>
             )}

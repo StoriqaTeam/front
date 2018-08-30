@@ -71,3 +71,11 @@
 .message {
 
 }
+
+.longDescription {
+  & hr {
+    display: block;
+    margin-bottom: 2rem;
+    border: 0;
+  }
+}
