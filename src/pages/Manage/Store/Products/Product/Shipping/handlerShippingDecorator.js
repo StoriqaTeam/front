@@ -236,7 +236,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
       );
 
       if (serviceFromState) {
-        const newCountries = prepend(
+        const newCountries = append(
           company.country,
           serviceFromState.countries,
         );
@@ -255,14 +255,25 @@ export default (OriginalComponent: any, inter?: boolean) =>
           }, servicesFromState);
           return {
             servicesWithCountries: newServices,
+            remainingServices: map(
+              item => dissoc('countries', item),
+              newServices,
+            ),
           };
         });
       } else {
-        const newServices = prepend(
+        const newServicesState = append(
           { ...serviceFromBack, countries: [company.country] },
           servicesFromState,
         );
-        console.log('---newServices', newServices);
+        console.log('---newServicesState', newServicesState);
+        const newServicesSort = filter(item => {
+          return contains(
+            item.id,
+            map(service => service.id, newServicesState),
+          );
+        }, servicesWithCountries);
+        console.log('---newServicesSort', newServicesSort);
         // this.setState({
         //   servicesWithCountries:
         // });
