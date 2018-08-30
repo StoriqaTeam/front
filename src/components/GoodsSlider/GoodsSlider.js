@@ -16,7 +16,7 @@ type ProductType = {
     lang: string,
     text: string,
   }>,
-  currencyId: number,
+  currency: string,
   variants: {
     first: {
       rawId: number,

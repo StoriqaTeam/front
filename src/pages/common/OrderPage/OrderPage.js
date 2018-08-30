@@ -30,7 +30,7 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import { addressToString, formatPrice } from 'utils';
+import { addressToString, formatPrice, getNameText } from 'utils';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -85,6 +85,13 @@ class OrderPage extends PureComponent<PropsType> {
         : '—';
     const customerAddress = addressToString(order.addressFull) || '—';
     const customerPhone = customer.phone || null;
+    const attributes = map(
+      item => ({
+        name: getNameText(pathOr([], ['attribute', 'name'], item), 'EN') || '',
+        value: item.value,
+      }),
+      pathOr([], ['product', 'attributes'], order),
+    );
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -120,7 +127,8 @@ class OrderPage extends PureComponent<PropsType> {
           ),
         },
         price: order.product ? order.product.price : -1,
-        attributes: [],
+        // $FlowIgnore
+        attributes,
       },
       customerName,
       customerAddress,

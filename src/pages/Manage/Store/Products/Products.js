@@ -211,7 +211,7 @@ export default createPaginationContainer(
                 }
               }
               storeId
-              currencyId
+              currency
               products(first: 1) {
                 edges {
                   node {
