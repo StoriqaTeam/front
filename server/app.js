@@ -134,7 +134,7 @@ app.use(
         ? process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS
         : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
-    const currency = req.universalCookies.get('CURRENCY');
+    const currency = req.universalCookies.get('CURRENCY') || 'STQ';
     const fetcher = new ServerFetcher(
       url,
       jwt,
