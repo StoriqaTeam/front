@@ -22,7 +22,7 @@ type CurrencyType = {
 };
 
 class HeaderTop extends PureComponent<PropsType> {
-  componentDidMount() {
+  componentWillMount() {
     // set STQ (or first currency in array) as selected currency if no currency was set before
     const currencies = propOr([], 'currencies', this.props);
     const currentCurrency: ?CurrencyType = getCookie(currencyCookieName);
