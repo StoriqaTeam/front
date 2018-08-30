@@ -7,7 +7,7 @@ import { filter, whereEq } from 'ramda';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
-import { formatPrice, getNameText } from 'utils';
+import { formatPrice, getNameText, currentCurrency } from 'utils';
 
 import CartProduct from './CartProduct';
 
@@ -79,7 +79,8 @@ class CartStore extends PureComponent<PropsType> {
                         <div>
                           <div styleName="label">Subtotal</div>
                           <div styleName="value">
-                            {formatPrice(store.productsCost || 0)} STQ
+                            {formatPrice(store.productsCost || 0)}{' '}
+                            {currentCurrency()}
                           </div>
                         </div>
                       </div>

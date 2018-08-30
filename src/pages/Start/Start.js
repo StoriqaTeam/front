@@ -96,7 +96,7 @@ export default createFragmentContainer(
               lang
               text
             }
-            currencyId
+            currency
             products(first: 1) {
               edges {
                 node {
@@ -125,7 +125,7 @@ export default createFragmentContainer(
               lang
               text
             }
-            currencyId
+            currency
             products(first: 1) {
               edges {
                 node {

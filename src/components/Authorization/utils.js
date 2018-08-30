@@ -160,9 +160,8 @@ const setPathForRedirectAfterLogin = (path: string) => {
 const clearPathForRedirectAfterLogin = () => {
   removeCookie(cookiesPathForRedirectAfterLogin);
 };
-const getPathForRedirectAfterLogin = (): ?string => {
+const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
-};
 
 export default {
   validateField,

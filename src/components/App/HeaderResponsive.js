@@ -258,7 +258,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             />
             <Container>
               <BurgerMenu />
-              <HeaderTop user={userData} />
+              <HeaderTop user={userData} currencies={directories.currencies} />
               <HeaderBottom
                 userData={userData}
                 searchCategories={searchCategories}

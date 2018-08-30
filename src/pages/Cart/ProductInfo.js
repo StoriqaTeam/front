@@ -6,7 +6,7 @@ import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
-import { formatPrice } from 'utils';
+import { formatPrice, currentCurrency } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -78,11 +78,13 @@ const ProductInfo = ({
                     title="Subtotal"
                     value={`${formatPrice(
                       product.quantity * product.price || 0,
-                    )} STQ`}
+                    )} ${currentCurrency()}`}
                   />
                   <CartProductAttribute
                     title="Delivery"
-                    value={`${formatPrice(product.deliveryCost || 0)} STQ`}
+                    value={`${formatPrice(
+                      product.deliveryCost || 0,
+                    )} ${currentCurrency()}`}
                   />
                 </div>
               </Col>
@@ -155,11 +157,13 @@ const ProductInfo = ({
                 title="Subtotal"
                 value={`${formatPrice(
                   product.quantity * product.price || 0,
-                )} STQ`}
+                )} ${currentCurrency()}`}
               />
               <CartProductAttribute
                 title="Delivery"
-                value={`${formatPrice(product.deliveryCost || 0)} STQ`}
+                value={`${formatPrice(
+                  product.deliveryCost || 0,
+                )} ${currentCurrency()}`}
               />
             </div>
           </Col>

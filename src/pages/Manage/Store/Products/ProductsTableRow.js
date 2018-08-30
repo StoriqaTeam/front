@@ -17,7 +17,7 @@ type PropsType = {
     id: string,
     rawId: number,
     categoryName: string,
-    currencyId: number,
+    currency: string,
     name: string,
     product: {
       cashback: ?number,
