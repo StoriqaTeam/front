@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
+import xss from 'xss';
 import { isNil, head, ifElse, assoc, dissoc, propEq, has, prop } from 'ramda';
 import smoothscroll from 'libs/smoothscroll';
 
@@ -206,12 +207,20 @@ class Product extends Component<PropsType, StateType> {
   };
 
   makeTabs = (longDescription: Array<TranslationType>) => {
+    const modifLongDescription = extractText(
+      longDescription,
+      'EN',
+      'No Long Description',
+    ).replace(/\n/g, '<hr />');
     const tabs: Array<TabType> = [
       {
         id: '0',
         label: 'Description',
         content: (
-          <div>{extractText(longDescription, 'EN', 'No Long Description')}</div>
+          <div
+            styleName="longDescription"
+            dangerouslySetInnerHTML={{ __html: xss(modifLongDescription) }} // eslint-disable-line
+          />
         ),
       },
     ];
