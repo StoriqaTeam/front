@@ -47,7 +47,7 @@ class CompanyItem extends PureComponent<PropsType, StateType> {
             <strong
               styleName="editButton"
               onClick={() => {
-                onSetEditableItem(company.id);
+                onSetEditableItem(company);
               }}
               onKeyDown={() => {}}
               role="button"

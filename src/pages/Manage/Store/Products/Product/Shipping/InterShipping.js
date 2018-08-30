@@ -85,7 +85,6 @@ type PropsType = {
   onRemoveCompany: (id: string) => void,
   onSetEditableItem: (id: string) => void,
   onRemoveEditableItem: () => void,
-  redistributeCountries: (item: SelectType) => void,
   interServices: any,
 };
 
@@ -119,10 +118,11 @@ class InterShipping extends Component<PropsType, StateType> {
       possibleServices,
       remainingCountries,
       inter,
-      redistributeCountries,
       interServices,
       countries,
       servicesWithCountries,
+      possibleCountries,
+      possibleServicesWithCountries,
     } = this.props;
     const { isCheckedWithout, isCheckedFixPrice, productCurrency } = this.state;
 
@@ -163,7 +163,6 @@ class InterShipping extends Component<PropsType, StateType> {
               productCurrency={productCurrency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
-              redistributeCountries={redistributeCountries}
             />
           </div>
           {!isEmpty(companies) && (
@@ -181,8 +180,9 @@ class InterShipping extends Component<PropsType, StateType> {
                         <FixPriceForm
                           inter={inter}
                           services={possibleServices}
+                          possibleCountries={possibleCountries}
                           productCurrency={item.currency}
-                          servicesWithCountries={servicesWithCountries}
+                          servicesWithCountries={possibleServicesWithCountries}
                           company={{
                             id: item.id,
                             price: item.price,
@@ -192,7 +192,6 @@ class InterShipping extends Component<PropsType, StateType> {
                           }}
                           onSaveCompany={this.props.onSaveCompany}
                           onRemoveEditableItem={this.props.onRemoveEditableItem}
-                          redistributeCountries={redistributeCountries}
                         />
                       </div>
                     )}

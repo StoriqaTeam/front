@@ -19,6 +19,8 @@ import {
   dissoc,
   mergeDeepLeft,
   contains,
+  mergeAll,
+  dropRepeats,
 } from 'ramda';
 
 import type { SelectType } from 'types';
@@ -58,7 +60,7 @@ const servicesWithCountries: Array<SelectType> = [
     countries: [
       // { id: 'all', label: 'All countries' },
       { id: 'rs', label: 'Serbia' },
-      // { id: 'tk', label: 'Tokelau' },
+      { id: 'tk', label: 'Tokelau' },
       // { id: 'ye', label: 'Yemen' },
     ],
   },
@@ -95,14 +97,14 @@ export default (OriginalComponent: any, inter?: boolean) =>
         remainingServices: inter ? servicess : services,
         possibleServices: inter ? servicess : services,
         remainingCountries: countries,
-        possibleCountries: countries,
+        possibleCountries: [],
         countries,
         servicesWithCountries,
+        editableCompany: null,
       };
     }
 
     onSaveCompany = (company: CompanyType) => {
-      // console.log('---company', company);
       let img = '';
       switch (company.service.id) {
         case 'ups':
@@ -128,9 +130,14 @@ export default (OriginalComponent: any, inter?: boolean) =>
             }
             return { ...item };
           }, prevState.companies);
+          if (inter) {
+            this.redistributeServices(company);
+          }
           return {
             companies: newCompanies,
-            remainingServices: this.differenceServices(newCompanies),
+            remainingServices: inter
+              ? prevState.remainingServices
+              : this.differenceServices(newCompanies),
             editableItemId: null,
           };
         });
@@ -147,7 +154,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
           // const remainingServices = this.differenceServices(newCompanies);
           // console.log('---remainingServices', remainingServices);
           if (inter) {
-            this.redistributeCountries(company);
+            this.redistributeServices(company);
           }
           return {
             companies: newCompanies,
@@ -167,7 +174,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
           prevState.companies,
         );
         if (inter) {
-          this.redistributeCountriesRemove(company);
+          this.redistributeServicesRemove(company);
         }
         return {
           companies: newCompanies,
@@ -179,18 +186,29 @@ export default (OriginalComponent: any, inter?: boolean) =>
       });
     };
 
-    onSetEditableItem = (id: string) => {
+    onSetEditableItem = (company: any) => {
       this.setState((prevState: StateType) => {
-        const { companies } = prevState;
-        const thisCompany = find(propEq('id', id))(companies);
-        const differenceArr = difference(
-          services,
-          map(item => item.service, companies),
-        );
+        const { remainingServices } = prevState;
+        // console.log('---remainingServices', remainingServices);
+        // const { companies } = prevState;
+        // // console.log('---companies', companies);
+        // const thisCompany = find(propEq('id', company.id))(companies);
+        // const differenceArr = difference(
+        //   services,
+        //   map(item => item.service, companies),
+        // );
+        if (inter) {
+          this.redistributeCountries(company);
+        }
+        // console.log('---possibleServices', dropRepeats(prepend(company.service, remainingServices)));
         return {
-          editableItemId: id,
+          editableCompany: company,
+          editableItemId: company.id,
           // $FlowIgnore
-          possibleServices: prepend(thisCompany.service, differenceArr),
+          possibleServices: prepend(
+            company.service,
+            filter(item => company.service.id !== item.id, remainingServices),
+          ),
         };
       });
     };
@@ -203,9 +221,72 @@ export default (OriginalComponent: any, inter?: boolean) =>
       difference(services, map(item => item.service, companies));
 
     redistributeCountries = (company: any) => {
-      // console.log('---company', company);
+      const { companies, servicesWithCountries: servicesState } = this.state;
+      const serviceFromBack = find(propEq('id', company.service.id))(
+        servicesWithCountries,
+      );
+      const usedCountries = map(
+        item => item.country,
+        filter(
+          item =>
+            company.service.id === item.service.id &&
+            company.country.id !== item.country.id,
+          companies,
+        ),
+      );
+      const possibleCountries = difference(
+        serviceFromBack.countries,
+        usedCountries,
+      );
+
+      let newServices;
+
+      if (find(propEq('id', company.service.id))(servicesState)) {
+        newServices = map(item => {
+          if (item.id === company.service.id) {
+            return {
+              ...item,
+              countries: prepend(company.country, item.countries),
+            };
+          }
+          return item;
+        }, servicesState);
+      } else {
+        newServices = prepend(
+          { ...company.service, countries: [company.country] },
+          servicesState,
+        );
+      }
+
+      this.setState({
+        // possibleCountries,
+        possibleServicesWithCountries: newServices,
+      });
+    };
+
+    redistributeServices = (company: any) => {
       const services = this.state.servicesWithCountries;
-      // console.log('---services', services);
+      console.log('---services', services);
+      if (company.id) {
+        console.log('---company', company);
+        const { editableCompany } = this.state;
+        console.log('---editableCompany', editableCompany);
+
+        const newServices = this.addCompany(company);
+      } else {
+        const newServices = this.addCompany(company);
+        this.setState({
+          servicesWithCountries: newServices,
+          remainingServices: map(
+            item => dissoc('countries', item),
+            newServices,
+          ),
+        });
+      }
+    };
+
+    addCompany = (company: any) => {
+      const services = this.state.servicesWithCountries;
       const newServices = filter(
         item => !isEmpty(item.countries),
         map(item => {
@@ -219,14 +300,10 @@ export default (OriginalComponent: any, inter?: boolean) =>
           return item;
         }, services),
       );
-      this.setState({
-        servicesWithCountries: newServices,
-        remainingServices: map(item => dissoc('countries', item), newServices),
-      });
+      return newServices;
     };
 
-    redistributeCountriesRemove = (company: any) => {
-      console.log('---company', company);
+    redistributeServicesRemove = (company: any) => {
       const servicesFromState = this.state.servicesWithCountries;
       const serviceFromState = find(propEq('id', company.service.id))(
         servicesFromState,
@@ -245,7 +322,6 @@ export default (OriginalComponent: any, inter?: boolean) =>
           item => contains(item, newCountries),
           newCountriesSort,
         );
-        // console.log('---countriesReady', countriesReady);
         this.setState(() => {
           const newServices = map(item => {
             if (item.id === company.service.id) {
@@ -266,57 +342,28 @@ export default (OriginalComponent: any, inter?: boolean) =>
           { ...serviceFromBack, countries: [company.country] },
           servicesFromState,
         );
-        console.log('---newServicesState', newServicesState);
-        const newServicesSort = filter(item => {
-          return contains(
-            item.id,
-            map(service => service.id, newServicesState),
-          );
-        }, servicesWithCountries);
-        console.log('---newServicesSort', newServicesSort);
-        // this.setState({
-        //   servicesWithCountries:
-        // });
+        const newServicesSort = map(
+          item => {
+            const serviceInState = find(propEq('id', item.id))(
+              newServicesState,
+            );
+            return { ...item, countries: serviceInState.countries };
+          },
+          filter(item => {
+            return contains(
+              item.id,
+              map(service => service.id, newServicesState),
+            );
+          }, servicesWithCountries),
+        );
+        this.setState({
+          servicesWithCountries: newServicesSort,
+          remainingServices: map(
+            item => dissoc('countries', item),
+            newServicesSort,
+          ),
+        });
       }
-
-      // const servicesWithCountriess = servicesWithCountries;
-      // console.log('---servicesWithCountries', servicesWithCountries);
-      // console.log('---serviceId, countryId', serviceId, countryId);
-      // if (find(propEq('id', serviceId))(services)) {
-      //   // добавить страну
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //   // const newServices = map(item => {
-      //   //   const serviceFromBacks = find(propEq('id', serviceId))(servicesWithCountries);
-      //   //   const serviceFromState = find(propEq('id', serviceId))(servicesFromState);
-      //   //   console.log('---serviceFromBacks', serviceFromBacks);
-      //   //   const countriesFromState = serviceFromBacks.countries; // взять страны удаленного сервиса из исходного массива
-      //   //   if (item.id === serviceId) {
-      //   //     return { ...item, countries: countriesFromBack };
-      //   //   }
-      //   //   return item;
-      //   // }, servicesWithCountries);
-      //   // console.log('---newServices', newServices);
-      //   // this.setState({ servicesWithCountries: newServices });
-      // } else {
-      //   //
-      // }
-      // this.setState({
-      //   servicesWithCountries: newServices,
-      //   remainingServices: map(item => dissoc('countries', item), newServices),
-      // });
     };
 
     render() {
@@ -330,7 +377,6 @@ export default (OriginalComponent: any, inter?: boolean) =>
           onRemoveCompany={this.onRemoveCompany}
           onSetEditableItem={this.onSetEditableItem}
           onRemoveEditableItem={this.onRemoveEditableItem}
-          redistributeCountries={this.redistributeCountries}
         >
           {this.props.children}
         </OriginalComponent>

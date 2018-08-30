@@ -36,29 +36,32 @@ type PropsType = {
     service: SelectType,
   },
   inter?: boolean,
-  redistributeCountries: (item: SelectType) => void,
   servicesWithCountries: any,
+  possibleCountries: any,
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     console.log('---prevState', prevState);
     console.log('---nextProps', nextProps);
-    const { servicesWithCountries } = nextProps;
-    if (servicesWithCountries) {
-      const { countries, service } = prevState;
+    const { servicesWithCountries, company } = nextProps;
+    const { countries, service } = prevState;
+
+    if (servicesWithCountries && service) {
       const serviceWithCountries = find(propEq('id', service.id))(
         servicesWithCountries,
       );
       if (
         serviceWithCountries &&
-        JSON.stringify(length(serviceWithCountries.countries)) !==
-          JSON.stringify(length(countries))
+        JSON.stringify(serviceWithCountries.countries) !==
+          JSON.stringify(countries)
       ) {
         return {
           ...prevState,
           countries: serviceWithCountries.countries,
-          country: head(serviceWithCountries.countries),
+          country: company
+            ? company.country
+            : head(serviceWithCountries.countries),
         };
       }
     }
@@ -68,7 +71,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { productCurrency, company, servicesWithCountries } = props;
-    console.log('---servicesWithCountries', servicesWithCountries);
+    // console.log('---possibleCountries', possibleCountries);
     const service = company ? company.service : head(props.services);
 
     let stateData = {
@@ -91,10 +94,16 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     this.state = stateData;
   }
 
-  componentDidUpdate(prevProps: PropsType) {
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    console.log('---prevState', prevState);
+    console.log('---this.state', this.state);
     const { services } = this.props;
+    const { service } = this.state;
     if (JSON.stringify(prevProps.services) !== JSON.stringify(services)) {
       this.updateCurrentService(head(services));
+    }
+    if (prevState.service && service && prevState.service.id !== service.id) {
+      this.updateCurrentService(service);
     }
   }
 
@@ -103,7 +112,8 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   // };
 
   updateCurrentService = (service: SelectType) => {
-    const { servicesWithCountries } = this.props;
+    const { servicesWithCountries, possibleCountries } = this.props;
+    console.log('---servicesWithCountries', servicesWithCountries);
     let stateData = {
       service,
       countries: [],
@@ -142,9 +152,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleOnSelectService = (service: SelectType) => {
-    this.setState({ service, country: head(service) }, () => {
-      this.props.redistributeCountries(service);
-    });
+    this.setState({ service });
   };
 
   handleOnSelectCountry = (country: SelectType) => {
@@ -169,7 +177,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       country,
       countries,
     } = this.state;
-    console.log('---service', service);
+    // console.log('---service', service);
     return (
       <div styleName="container">
         <div styleName="selects">
