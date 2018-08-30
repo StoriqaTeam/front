@@ -229,10 +229,9 @@ class Authorization extends Component<PropsType, StateType> {
           const today = new Date();
           const expirationDate = new Date();
           expirationDate.setDate(today.getDate() + 1);
-          // $FlowIgnore
-          setCookie('__jwt', jwt, expirationDate);
-          if (this.props.handleLogin) {
-            this.props.handleLogin();
+          setCookie('__jwt', { value: jwt }, expirationDate);
+          if (this.context.handleLogin) {
+            this.context.handleLogin();
             if (alone) {
               if (from && from !== '') {
                 window.location.replace(from);
@@ -356,7 +355,7 @@ class Authorization extends Component<PropsType, StateType> {
           errorsHandler(relayErrors, this.props.showAlert, () =>
             this.setState({
               isLoading: false,
-              errors:{ email: ['Email Not Found'] },
+              errors: { email: ['Email Not Found'] },
             }),
           );
           return;

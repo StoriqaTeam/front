@@ -1,11 +1,9 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr } from 'ramda';
+
 import isTokenExpired from 'utils/token';
-
 import { log, removeCookie, getCookie } from 'utils';
-
-// import routesProductCardQuery from 'pages/Store/Product/__mocks/product_with_attrs';
 
 class FetcherBase {
   constructor(url) {
@@ -22,47 +20,52 @@ class FetcherBase {
     throw new Error('should be implemented in subclasses');
   }
 
-  async fetch(operation, variables) {
-    // if (process.env.NODE_ENV === 'development') {
-    //   if (operation.operation.name === 'routes_ProductCard_Query') {
-    //     console.log({ routesProductCardQuery });
-    //     return { data: routesProductCardQuery };
-    //   }
-    // }
+  // eslint-disable-next-line
+  getCurrencyCodeFromCookies() {
+    throw new Error('should be implemented in subclasses');
+  }
 
+  async fetch(operation, variables) {
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
+    const currency = this.getCurrencyCodeFromCookies();
+
     let headers = { 'Content-Type': 'application/json' };
     if (jwt) {
       headers = assoc('Authorization', `Bearer ${jwt}`, headers);
     }
+
+    headers = assoc('Currency', currency || 'STQ', headers);
+
     const sessionId = this.getSessionIdFromCookies();
-    headers = {
-      ...headers,
-      'Session-Id': sessionId,
-    };
+    headers = assoc('Session-Id', sessionId, headers);
+
+    log.debug('\nRequest headers:\n', { headers }, '\n');
+
     try {
       const response = await axios({
         method: 'post',
         url: this.url,
         headers,
         data: JSON.stringify({ query: operation.text, variables }),
+        // withCredentials: true, // TODO: remove after fix
       });
       log.debug('GraphQL response', { response: response.data });
       return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
-      return {};
+      return { data: null, errors: ['No data returned from gateway'] };
     }
   }
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url, jwt, sessionId) {
+  constructor(url, jwt, sessionId, currencyCode) {
     super(url);
 
     this.jwt = jwt;
     this.sessionId = sessionId;
+    this.currencyCode = currencyCode;
     this.payloads = [];
   }
 
@@ -72,6 +75,10 @@ export class ServerFetcher extends FetcherBase {
 
   getSessionIdFromCookies() {
     return this.sessionId;
+  }
+
+  getCurrencyCodeFromCookies() {
+    return this.currencyCode;
   }
 
   async fetch(...args) {
@@ -107,6 +114,13 @@ export class ClientFetcher extends FetcherBase {
   getSessionIdFromCookies() {
     const cookies = new Cookies();
     return cookies.get('SESSION_ID');
+  }
+
+  // eslint-disable-next-line
+  getCurrencyCodeFromCookies() {
+    const cookies = new Cookies();
+    const currency = cookies.get('CURRENCY');
+    return currency || 'STQ';
   }
 
   async fetch(...args) {

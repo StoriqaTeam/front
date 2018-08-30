@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-relay';
 import { pathOr } from 'ramda';
 
-import { formatPrice } from 'utils';
+import { formatPrice, currentCurrency } from 'utils';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
@@ -127,7 +127,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                       <div styleName="label">Subtotal</div>
                       <div styleName="value">
                         {productsCost &&
-                          `${formatPrice(productsCost || 0)} STQ`}
+                          `${formatPrice(
+                            productsCost || 0,
+                          )} ${currentCurrency()}`}
                       </div>
                     </div>
                   </Col>
@@ -136,7 +138,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                       <div styleName="label">Delivery</div>
                       <div styleName="value">
                         {deliveryCost &&
-                          `${formatPrice(deliveryCost || 0)} STQ`}
+                          `${formatPrice(
+                            deliveryCost || 0,
+                          )} ${currentCurrency()}`}
                       </div>
                     </div>
                   </Col>
@@ -149,7 +153,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                         </span>
                       </div>
                       <div styleName="value bold">
-                        {totalCost && `${formatPrice(totalCost || 0)} STQ`}
+                        {totalCost &&
+                          `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
                       </div>
                     </div>
                   </Col>
