@@ -36,6 +36,8 @@ import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 import { StartSelling } from 'pages/StartSelling';
+import { Login } from 'pages/Login';
+import { PasswordReset } from 'pages/PasswordReset';
 
 const routes = (
   <Route>
@@ -496,10 +498,13 @@ const routes = (
 
       <Route
         path="/login"
-        Component={Authorization}
+        Component={Login}
         render={({ Component, props }) => <Component alone {...props} />}
       />
+
       <Route path="/logout" Component={Logout} />
+
+      <Route path="/password_reset/:token" Component={PasswordReset} />
 
       <Route
         path="/oauth_callback/fb"

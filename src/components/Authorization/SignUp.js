@@ -17,8 +17,8 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  handleRegistrationClick: Function,
-  handleChange: Function,
+  onRegistrationClick: Function,
+  onChange: Function,
 };
 
 class SignUp extends PureComponent<PropsType> {
@@ -30,8 +30,8 @@ class SignUp extends PureComponent<PropsType> {
       password,
       errors,
       formValid,
-      handleRegistrationClick,
-      handleChange,
+      onRegistrationClick,
+      onChange,
     } = this.props;
 
     return (
@@ -42,7 +42,7 @@ class SignUp extends PureComponent<PropsType> {
             name="firstName"
             type="text"
             model={firstName}
-            onChange={handleChange}
+            onChange={onChange}
             errors={propOr(null, 'firstName', errors)}
           />
         </div>
@@ -52,7 +52,7 @@ class SignUp extends PureComponent<PropsType> {
             name="lastName"
             type="text"
             model={lastName}
-            onChange={handleChange}
+            onChange={onChange}
             errors={propOr(null, 'lastName', errors)}
           />
         </div>
@@ -64,7 +64,7 @@ class SignUp extends PureComponent<PropsType> {
             type="email"
             model={email}
             validate="email"
-            onChange={handleChange}
+            onChange={onChange}
             errors={propOr(null, 'email', errors)}
           />
         </div>
@@ -75,7 +75,7 @@ class SignUp extends PureComponent<PropsType> {
             type="password"
             model={password}
             validate="password"
-            onChange={handleChange}
+            onChange={onChange}
             errors={propOr(null, 'password', errors)}
           />
         </div>
@@ -83,7 +83,7 @@ class SignUp extends PureComponent<PropsType> {
           <div styleName="signUpGroup">
             <div styleName="signUpButton">
               <Button
-                onClick={handleRegistrationClick}
+                onClick={onRegistrationClick}
                 type="button"
                 dataTest="signUpButton"
               >

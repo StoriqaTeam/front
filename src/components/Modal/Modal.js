@@ -1,6 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import type { Node } from 'react';
+import { isNil } from 'ramda';
 
 import { noScroll } from 'utils';
 import { Icon } from 'components/Icon';
@@ -13,6 +15,7 @@ type PropsTypes = {
   children: any,
   showModal: ?boolean,
   onClose: Function,
+  render?: () => Node,
 };
 
 type StateTypes = {
@@ -20,6 +23,9 @@ type StateTypes = {
 };
 
 class Modal extends Component<PropsTypes, StateTypes> {
+  static defaultProps = {
+    render: null,
+  };
   state = {
     showModal: false,
   };
@@ -66,24 +72,49 @@ class Modal extends Component<PropsTypes, StateTypes> {
     }
   };
 
+  handleClick = (e: any): void => {
+    const { onClose } = this.props;
+    const {
+      target: { id },
+    } = e;
+    if (id === 'overlay') {
+      onClose();
+    }
+  };
+
   render() {
     if (!this.state.showModal) return null;
-
+    const closeButton = (
+      <div
+        styleName="close"
+        onClick={this.onCloseModal}
+        onKeyDown={() => {}}
+        role="button"
+        tabIndex="0"
+      >
+        <Icon type="cross" />
+      </div>
+    );
     return (
       <Portal>
         <div styleName="container">
-          <div styleName="wrap">
+          <div
+            id="overlay"
+            onClick={this.handleClick}
+            onKeyDown={() => {}}
+            role="button"
+            styleName="wrap"
+            tabIndex="0"
+          >
             <div styleName="inner">
-              <div
-                styleName="close"
-                onClick={this.onCloseModal}
-                onKeyDown={() => {}}
-                role="button"
-                tabIndex="0"
-              >
-                <Icon type="cross" />
-              </div>
-              {this.props.children}
+              {isNil(this.props.render) ? (
+                <Fragment>
+                  {closeButton}
+                  {this.props.children}
+                </Fragment>
+              ) : (
+                this.props.render()
+              )}
             </div>
           </div>
         </div>

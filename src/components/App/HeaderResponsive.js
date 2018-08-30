@@ -231,7 +231,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     );
     return (
       <AppContext.Consumer>
-        {({ directories }) => (
+        {({ directories, environment, handleLogin }) => (
           <header
             styleName={classNames('container', {
               expanded: isMobileCategoriesOpen,
@@ -274,12 +274,18 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                   />
                 )}
             </Container>
-            <Modal showModal={showModal} onClose={this.handleCloseModal}>
-              <Authorization
-                isSignUp={isSignUp}
-                onCloseModal={this.handleCloseModal}
-              />
-            </Modal>
+            <Modal
+              showModal={showModal}
+              onClose={this.handleCloseModal}
+              render={() => (
+                <Authorization
+                  environment={environment}
+                  handleLogin={handleLogin}
+                  isSignUp={isSignUp}
+                  onCloseModal={this.handleCloseModal}
+                />
+              )}
+            />
             {isMobileCategoriesOpen ? (
               <MobileListItems
                 onClick={this.handleMobileCategories}

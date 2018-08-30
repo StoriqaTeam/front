@@ -1,22 +1,30 @@
 // @flow
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
+import type { Node } from 'react';
 import { pathOr } from 'ramda';
-import { withRouter, matchShape } from 'found';
+import { withRouter, matchShape, routerShape } from 'found';
+import type { Environment } from 'relay-runtime';
 
-import { Icon } from 'components/Icon';
-import { Button } from 'components/common/Button';
+import { PopUpWrapper } from 'components/PopUpWrapper';
 import { Spinner } from 'components/common/Spinner';
-import { SignUp, SignIn, Header, Separator } from 'components/Authorization';
 import {
-  log,
-  socialStrings,
-  fromRelayError,
-  errorsHandler,
-  setCookie,
-} from 'utils';
-import { CreateUserMutation, GetJWTByEmailMutation } from 'relay/mutations';
+  SignUp,
+  SignIn,
+  AuthorizationHeader,
+  Separator,
+  AuthorizationSocial,
+  RecoverPassword,
+  ResetPassword,
+} from 'components/Authorization';
+import { log, fromRelayError, errorsHandler, setCookie } from 'utils';
+import {
+  CreateUserMutation,
+  GetJWTByEmailMutation,
+  RequestPasswordResetMutation,
+  ApplyPasswordResetMutation,
+  ResendEmailVerificationLinkMutation,
+} from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -27,48 +35,77 @@ import { setPathForRedirectAfterLogin } from './utils';
 import './Authorization.scss';
 
 type PropsType = {
+  environment: Environment,
+  handleLogin: () => void,
   isSignUp: ?boolean,
   alone: ?boolean,
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
   onCloseModal?: () => void,
+  isResetPassword?: boolean,
+  router: routerShape,
+  isLogin: boolean,
 };
 
 type StateType = {
-  firstName: string,
-  lastName: string,
   email: string,
   emailValid: boolean,
-  firstNameValid: boolean,
-  lastNameValid: boolean,
-  password: string,
-  passwordValid: boolean,
-  formValid: boolean,
   errors: ?{
     [code: string]: Array<string>,
   },
+  firstName: string,
+  firstNameValid: boolean,
+  formValid: boolean,
+  lastName: string,
+  lastNameValid: boolean,
+  password: string,
+  passwordValid: boolean,
+  passwordRepeat: string,
+  headerTabs: Array<{ id: string, name: string }>,
   isLoading: boolean,
+  isRecoverPassword: boolean,
   isSignUp: ?boolean,
+  modalTitle: string,
+  selected: number,
 };
 
-class Authorization extends Component<PropsType, StateType> {
-  state: StateType = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    emailValid: false,
-    firstNameValid: false,
-    lastNameValid: false,
-    password: '',
-    passwordValid: false,
-    formValid: false,
-    isLoading: false,
-    errors: null,
-    isSignUp: false,
-  };
+const headerTabsItems = [
+  {
+    id: '0',
+    name: 'Sign Up',
+  },
+  {
+    id: '1',
+    name: 'Sign In',
+  },
+];
 
-  componentWillMount() {
-    this.setState({ isSignUp: this.props.isSignUp });
+class Authorization extends Component<PropsType, StateType> {
+  static defaultProps = {
+    isResetPassword: false,
+    isLogin: false,
+  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      emailValid: false,
+      errors: null,
+      firstName: '',
+      firstNameValid: false,
+      formValid: false,
+      headerTabs: headerTabsItems,
+      isLoading: false,
+      isRecoverPassword: false,
+      isSignUp: this.props.isSignUp,
+      lastName: '',
+      lastNameValid: false,
+      modalTitle: this.setModalTitle(),
+      password: '',
+      passwordValid: false,
+      passwordRepeat: '',
+      selected: this.props.isSignUp && !this.props.isLogin ? 0 : 1,
+    };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
     }
@@ -93,7 +130,15 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
-  handleAlertOnClick = () => {
+  setModalTitle = (): string => {
+    const { isSignUp, isResetPassword } = this.props;
+    if (isResetPassword) {
+      return 'Recover Password';
+    }
+    return headerTabsItems[isSignUp ? 0 : 1].name;
+  };
+
+  handleAlertOnClick = (): void => {
     if (this.props.alone) {
       window.location = '/';
     }
@@ -114,7 +159,7 @@ class Authorization extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const params: MutationParamsType = {
       input,
-      environment: this.context.environment,
+      environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
@@ -166,6 +211,7 @@ class Authorization extends Component<PropsType, StateType> {
       alone,
       match: {
         location: {
+          pathname,
           query: { from },
         },
       },
@@ -174,7 +220,7 @@ class Authorization extends Component<PropsType, StateType> {
     GetJWTByEmailMutation.commit({
       email,
       password,
-      environment: this.context.environment,
+      environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });
         log.debug({ response, errors });
@@ -184,14 +230,16 @@ class Authorization extends Component<PropsType, StateType> {
           const expirationDate = new Date();
           expirationDate.setDate(today.getDate() + 1);
           setCookie('__jwt', { value: jwt }, expirationDate);
-          if (this.context.handleLogin) {
-            this.context.handleLogin();
+          if (this.props.handleLogin) {
+            this.props.handleLogin();
             if (alone) {
               if (from && from !== '') {
                 window.location.replace(from);
               } else {
                 window.location = '/';
               }
+            } else if (pathname === '/login') {
+              window.location = '/';
             } else {
               window.location.reload();
             }
@@ -226,45 +274,48 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
-  /**
-   * @desc handles onChange event by setting the validity of the desired input
-   * @param {SyntheticEvent} evt
-   * @param {String} evt.name
-   * @param {any} evt.value
-   * @param {Boolean} evt.validity
-   * @return {void}
-   */
-  handleChange = (data: { name: string, value: any, validity: boolean }) => {
+  handleChange = (data: {
+    name: string,
+    value: any,
+    validity: boolean,
+  }): void => {
     const { name, value, validity } = data;
     this.setState({ [name]: value, [`${name}Valid`]: validity }, () =>
       this.validateForm(),
     );
   };
 
-  /**
-   * @desc Validates the form based on its values
-   * @return {void}
-   */
   validateForm = () => {
+    const { isResetPassword, isLogin } = this.props;
     const {
       firstNameValid,
       lastNameValid,
       emailValid,
       passwordValid,
       isSignUp,
+      isRecoverPassword,
+      password,
+      passwordRepeat,
     } = this.state;
-
     if (isSignUp) {
       this.setState({
         formValid:
           firstNameValid && lastNameValid && emailValid && passwordValid,
       });
-    } else {
+    } else if ((isSignUp === false && isRecoverPassword === false) || isLogin) {
       this.setState({ formValid: emailValid && passwordValid });
+    }
+    if (isRecoverPassword) {
+      this.setState({ formValid: emailValid });
+    }
+    if (isResetPassword) {
+      this.setState({
+        formValid: passwordValid && password === passwordRepeat,
+      });
     }
   };
 
-  handleToggle = () => {
+  handleClick = (modalTitle, selected) => {
     this.setState({
       isSignUp: !this.state.isSignUp,
       email: '',
@@ -272,6 +323,8 @@ class Authorization extends Component<PropsType, StateType> {
       lastName: '',
       password: '',
       errors: null,
+      modalTitle,
+      selected,
     });
   };
 
@@ -286,85 +339,295 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
-  render() {
-    const { alone } = this.props;
+  recoverPassword = () => {
+    const { environment } = this.props;
+    const { email } = this.state;
+    const params = {
+      input: { clientMutationId: '', email },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState({ isLoading: false });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, () =>
+            this.setState({
+              isLoading: false,
+              errors: { email: ['Email Not Found'] },
+            }),
+          );
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Please verify your email',
+          link: { text: '' },
+          onClick: this.handleAlertOnClick,
+        });
+        const { onCloseModal } = this.props;
+        if (onCloseModal) {
+          onCloseModal();
+        }
+      },
+      onError: (error: Error) => {
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, () =>
+            this.setState({
+              isLoading: false,
+              errors: { email: ['Email Not Found'] },
+            }),
+          );
+        }
+      },
+    };
+    RequestPasswordResetMutation.commit(params);
+  };
+
+  resetPassword = () => {
+    const {
+      environment,
+      match: {
+        params: { token },
+      },
+      router: { push },
+    } = this.props;
+    const { password } = this.state;
+    const params = {
+      input: { clientMutationId: '', password, token },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState({ isLoading: false });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Password Reset Successfully',
+          link: { text: '' },
+          onClick: this.handleAlertOnClick,
+        });
+        push('/login');
+      },
+      onError: (error: Error) => {
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, () =>
+            this.setState({
+              isLoading: false,
+              errors: { email: ['Email Not Found'] },
+            }),
+          );
+        }
+      },
+    };
+    ApplyPasswordResetMutation.commit(params);
+  };
+
+  handleResendEmail = (): void => {
+    const { environment } = this.props;
+    const { email } = this.state;
+    const params = {
+      input: { clientMutationId: '', email },
+      environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        log.debug({ response, errors });
+        this.setState({ isLoading: false });
+        const relayErrors = fromRelayError({ source: { errors } });
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Verification Email Sent Successfully',
+          link: { text: '' },
+          onClick: this.handleAlertOnClick,
+        });
+      },
+      onError: (error: Error) => {
+        const relayErrors = fromRelayError(error);
+        if (relayErrors) {
+          // pass showAlert for show alert errors in common cases
+          // pass handleCallback specify validation errors
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
+            this.setState({
+              isLoading: false,
+              errors: messages || null,
+            }),
+          );
+        }
+      },
+    };
+    ResendEmailVerificationLinkMutation.commit(params);
+  };
+
+  handleRecoverPassword = (): void => {
+    this.setState({
+      modalTitle: 'Reset Password',
+      isRecoverPassword: true,
+      email: '',
+      password: '',
+      errors: null,
+    });
+  };
+
+  handleBack = () => {
+    const {
+      isResetPassword,
+      router: { push },
+    } = this.props;
+    if (isResetPassword) {
+      push('/');
+    }
+    this.setState({
+      email: '',
+      errors: null,
+      modalTitle: headerTabsItems[1].name,
+      isSignUp: false,
+      isRecoverPassword: false,
+    });
+  };
+
+  passwordRecovery = (): Node => {
+    const { isResetPassword } = this.props;
+    const { password, passwordRepeat, email, formValid, errors } = this.state;
+    if (isResetPassword) {
+      return (
+        <ResetPassword
+          password={password}
+          passwordRepeat={passwordRepeat}
+          errors={errors}
+          formValid={formValid}
+          onBack={this.handleBack}
+          onClick={this.resetPassword}
+          onChange={this.handleChange}
+          onPasswordRepeat={this.handleChange}
+        />
+      );
+    }
+    return (
+      <RecoverPassword
+        email={email}
+        errors={errors}
+        formValid={formValid}
+        onBack={this.handleBack}
+        onClick={this.recoverPassword}
+        onChange={this.handleChange}
+      />
+    );
+  };
+
+  renderRegistration = (): Node => {
     const {
       email,
       firstName,
       lastName,
       password,
       formValid,
-      isLoading,
       errors,
       isSignUp,
     } = this.state;
+    return isSignUp ? (
+      <SignUp
+        email={email}
+        firstName={firstName}
+        lastName={lastName}
+        password={password}
+        errors={errors}
+        formValid={formValid}
+        onRegistrationClick={this.handleRegistrationClick}
+        onChange={this.handleChange}
+      />
+    ) : (
+      <SignIn
+        email={email}
+        password={password}
+        errors={errors}
+        formValid={formValid}
+        onLoginClick={this.handleLoginClick}
+        onChange={this.handleChange}
+        onRecoverPassword={this.handleRecoverPassword}
+        onResendEmail={this.handleResendEmail}
+      />
+    );
+  };
 
+  render() {
+    const { alone, onCloseModal, isResetPassword, isLogin } = this.props;
+    const text = 'Please Type new password';
+    const description = isResetPassword ? text : '';
+    const {
+      isLoading,
+      isSignUp,
+      headerTabs,
+      modalTitle,
+      selected,
+      isRecoverPassword,
+    } = this.state;
     return (
-      <div styleName="container">
-        <div styleName="wrap">
-          {isLoading && (
-            <div styleName="spinner">
-              <Spinner />
+      <PopUpWrapper
+        title={modalTitle}
+        description={description}
+        onClose={onCloseModal}
+        render={() => (
+          <div styleName="container">
+            <div styleName="wrap">
+              {isLoading && (
+                <div styleName="spinner">
+                  <Spinner />
+                </div>
+              )}
+              {isRecoverPassword || isResetPassword ? null : (
+                <AuthorizationHeader
+                  fullWidth={isLogin}
+                  alone={alone}
+                  isSignUp={isSignUp}
+                  onClick={this.handleClick}
+                  selected={selected}
+                  tabs={headerTabs}
+                />
+              )}
+              {isRecoverPassword || isResetPassword
+                ? this.passwordRecovery()
+                : this.renderRegistration()}
+              {isRecoverPassword || isResetPassword ? null : (
+                <Fragment>
+                  <div className="separatorBlock">
+                    <Separator text="or" />
+                  </div>
+                  <AuthorizationSocial />
+                </Fragment>
+              )}
             </div>
-          )}
-          <Header
-            isSignUp={isSignUp}
-            alone={alone}
-            handleToggle={this.handleToggle}
-          />
-          {isSignUp ? (
-            <SignUp
-              email={email}
-              firstName={firstName}
-              lastName={lastName}
-              password={password}
-              errors={errors}
-              formValid={formValid}
-              handleRegistrationClick={this.handleRegistrationClick}
-              handleChange={this.handleChange}
-            />
-          ) : (
-            <SignIn
-              email={email}
-              password={password}
-              errors={errors}
-              formValid={formValid}
-              handleLoginClick={this.handleLoginClick}
-              handleChange={this.handleChange}
-            />
-          )}
-          <div className="separatorBlock">
-            <Separator text="or" />
           </div>
-          <div styleName="firstButtonBlock">
-            <Button
-              iconic
-              href={socialStrings.facebookLoginString()}
-              dataTest="authFacebookButton"
-            >
-              <Icon type="facebook" />
-              <span>Sign in with Facebook</span>
-            </Button>
-          </div>
-          <div>
-            <Button
-              iconic
-              href={socialStrings.googleLoginString()}
-              dataTest="authGoogleButton"
-            >
-              <Icon type="google" />
-              <span>Sign In with Google</span>
-            </Button>
-          </div>
-        </div>
-      </div>
+        )}
+      />
     );
   }
 }
-
-Authorization.contextTypes = {
-  environment: PropTypes.object.isRequired,
-  handleLogin: PropTypes.func,
-};
 
 export default withShowAlert(withRouter(Authorization));

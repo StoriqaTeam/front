@@ -56,6 +56,11 @@ class Collapse extends Component<PropsType, StateType> {
       title: null,
     };
   }
+  state = {
+    isOpen: false,
+    index: 0,
+    title: null,
+  };
   handleClick = (): void => {
     const { isDisabled } = this.props;
     if (!isDisabled) {

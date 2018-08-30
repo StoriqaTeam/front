@@ -116,9 +116,12 @@ class App extends Component<PropsType, StateType> {
       categories,
       relay: { environment },
     } = this.props;
+    const { handleLogin } = this;
     const directories = this.makeDirectories();
     return (
-      <AppContext.Provider value={{ categories, environment, directories }}>
+      <AppContext.Provider
+        value={{ categories, environment, directories, handleLogin }}
+      >
         <Fragment>
           <AlertsContainer alerts={this.state.alerts} />
           <AlertContextProvider
