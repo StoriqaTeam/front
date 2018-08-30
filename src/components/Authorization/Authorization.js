@@ -230,8 +230,8 @@ class Authorization extends Component<PropsType, StateType> {
           const expirationDate = new Date();
           expirationDate.setDate(today.getDate() + 1);
           setCookie('__jwt', { value: jwt }, expirationDate);
-          if (this.context.handleLogin) {
-            this.context.handleLogin();
+          if (this.props.handleLogin) {
+            this.props.handleLogin();
             if (alone) {
               if (from && from !== '') {
                 window.location.replace(from);
