@@ -6,8 +6,6 @@ import classNames from 'classnames';
 import './AuthorizationHeader.scss';
 
 type PropsType = {
-  // isSignUp: ?boolean,
-  // alone: ?boolean,
   selected: number,
   onClick: Function,
   tabs: Array<{ id: string, name: string }>,
@@ -44,29 +42,6 @@ class AuthorizationHeader extends Component<PropsType, {}> {
             ))}
           </ul>
         </nav>
-        {/* {alone ? (
-          <Link
-            styleName="linkTitle"
-            onClick={handleToggle}
-            to={isSignUp ? '/login' : '/registration'}
-            data-test={isSignUp ? 'loginLink' : 'registrationLink'}
-          >
-            {linkText}
-          </Link>
-        ) : (
-          <div
-            styleName="linkTitle"
-            onClick={handleToggle}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-            data-test={
-              isSignUp ? 'loginToggleButton' : 'registrationToggleButton'
-            }
-          >
-            {linkText}
-          </div>
-        )} */}
       </div>
     );
   }

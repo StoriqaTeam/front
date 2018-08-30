@@ -23,14 +23,14 @@ $marginFullWidth: 9999rem;
 }
 
 .title {
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 2.5rem;
+  line-height: 3rem;
   float: left;
 }
 
 .linkTitle {
   font-size: 12px;
-  line-height: 24px;
+  line-height: 3rem;
   float: right;
   text-decoration: underline;
   cursor: pointer;
@@ -56,14 +56,14 @@ $marginFullWidth: 9999rem;
 }
 
 .tab {
-  border-bottom: 2px solid transparent;
+  border-bottom: 0.25rem solid transparent;
   color: $color_grey_minor;
   cursor: pointer;
   font-size: 14px;
-  padding-bottom: calc(2rem + 2px);
+  padding-bottom: calc(2rem + 0.25rem);
   text-transform: uppercase;
   &.clicked {
     color: $color_blue;
-    border-bottom: 2px solid $color_blue;
+    border-bottom: 0.25rem solid $color_blue;
   }
 }
