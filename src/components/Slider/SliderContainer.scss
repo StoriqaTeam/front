@@ -23,6 +23,7 @@
   z-index: 2;
   opacity: 0;
   transition: $transition_all_ease_out_quad_10;
+  visibility: hidden;
 
   & + .fadeItem {
     position: absolute;
@@ -33,6 +34,7 @@
 
 .activeSlide {
   opacity: 1;
+  visibility: visible;
 }
 
 .dots {
