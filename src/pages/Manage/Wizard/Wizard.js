@@ -60,7 +60,7 @@ type AttributeInputType = {
 export type BaseProductNodeType = {
   id: ?string,
   storeId: ?number,
-  currencyId: number,
+  currency: string,
   categoryId: ?number,
   name: string,
   shortDescription: string,
@@ -112,7 +112,7 @@ export const initialProductState = {
   baseProduct: {
     id: null,
     storeId: null,
-    currencyId: 6,
+    currency: 'STQ',
     categoryId: null,
     name: '',
     shortDescription: '',
@@ -1082,7 +1082,7 @@ export default createFragmentContainer(
                   rawId
                 }
                 storeId
-                currencyId
+                currency
                 products(first: 1) @connection(key: "Wizard_products") {
                   edges {
                     node {

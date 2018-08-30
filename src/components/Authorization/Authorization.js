@@ -183,8 +183,7 @@ class Authorization extends Component<PropsType, StateType> {
           const today = new Date();
           const expirationDate = new Date();
           expirationDate.setDate(today.getDate() + 1);
-          // $FlowIgnore
-          setCookie('__jwt', jwt, expirationDate);
+          setCookie('__jwt', { value: jwt }, expirationDate);
           if (this.context.handleLogin) {
             this.context.handleLogin();
             if (alone) {

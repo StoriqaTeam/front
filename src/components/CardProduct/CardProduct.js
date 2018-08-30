@@ -2,13 +2,14 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head } from 'ramda';
+import { head, map } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
+import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice, convertSrc } from 'utils';
+import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
 import './CardProduct.scss';
@@ -22,11 +23,11 @@ type VariantType = {
   rawId: ?number,
 };
 
-type PropsTypes = {
+type PropsType = {
   item: {
     rawId: number,
     storeId: number,
-    currencyId: number,
+    currency: string,
     name: Array<{
       lang: string,
       text: string,
@@ -40,10 +41,10 @@ type PropsTypes = {
   },
 };
 
-class CardProduct extends PureComponent<PropsTypes> {
+class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: { rawId, storeId, name, products, currencyId, rating },
+      item: { rawId, storeId, name, products, currency, rating },
     } = this.props;
     let discount = null;
     let photoMain = null;
@@ -54,7 +55,7 @@ class CardProduct extends PureComponent<PropsTypes> {
       ({ discount, photoMain, cashback, price } = product.node);
     }
 
-    if (!storeId || !rawId || !currencyId || !price) return null;
+    if (!storeId || !rawId || !currency || !price) return null;
 
     const lang = 'EN';
     const productLink = `/store/${storeId}/products/${rawId}`;
@@ -87,13 +88,57 @@ class CardProduct extends PureComponent<PropsTypes> {
               {name && <div styleName="title">{getNameText(name, lang)}</div>}
             </div>
             <div styleName="undiscountedPrice">
-              {Boolean(discount) && <span>{formatPrice(price)} STQ</span>}
+              {Boolean(discount) && (
+                <span>
+                  {formatPrice(price)} {currentCurrency()}
+                </span>
+              )}
             </div>
             <div styleName="price">
               {discountedPrice && (
-                <div styleName="actualPrice">
-                  {formatPrice(discountedPrice)} STQ
-                </div>
+                <MultiCurrencyDropdown
+                  elementStyleName="priceDropdown"
+                  price={discountedPrice}
+                  renderPrice={(priceItem: {
+                    price: number,
+                    currencyCode: string,
+                  }) => (
+                    <div styleName="priceDropdown">
+                      <div styleName="actualPrice">
+                        {`${formatPrice(priceItem.price)} ${
+                          priceItem.currencyCode
+                        }`}
+                      </div>
+                    </div>
+                  )}
+                  renderDropdown={(
+                    rates: Array<{ currencyCode: string, value: number }>,
+                  ) => (
+                    <div styleName="priceDropdownList">
+                      {map(
+                        item =>
+                          item.currencyCode !== currentCurrency() && (
+                            <div
+                              key={`priceDropdownItem-${
+                                this.props.item.rawId
+                              }-${item.currencyCode}`}
+                            >
+                              {`${formatPrice(item.value)} ${
+                                item.currencyCode
+                              }`}
+                            </div>
+                          ),
+                        rates,
+                      )}
+                    </div>
+                  )}
+                  renderDropdownToggle={(isDropdownOpened: boolean) => {
+                    if (isDropdownOpened) {
+                      return <button styleName="toggleRatesDropdownClosed" />;
+                    }
+                    return <button styleName="toggleRatesDropdownOpened" />;
+                  }}
+                />
               )}
               <div styleName="cashbackWrapper">
                 <div
