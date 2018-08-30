@@ -93,7 +93,7 @@ class NewProduct extends Component<PropsType, StateType> {
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: longDescription }],
-      currencyId: 6,
+      currency: 'STQ',
       categoryId,
       seoTitle:
         !seoTitle || seoTitle.length === 0
@@ -323,7 +323,7 @@ export default createFragmentContainer(
                 rawId
               }
               storeId
-              currencyId
+              currency
               products(first: 1) @connection(key: "Wizard_products") {
                 edges {
                   node {

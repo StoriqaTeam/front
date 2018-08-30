@@ -190,7 +190,7 @@ class Checkout extends Component<PropsType, StateType> {
           addressFull,
           receiverName,
           receiverPhone,
-          currencyId: 6,
+          currency: 'STQ',
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {

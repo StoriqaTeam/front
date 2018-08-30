@@ -1,8 +1,8 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .wrapper {
@@ -48,6 +48,7 @@
   z-index: 2;
   opacity: 0;
   transition: $transition_all_ease_out_quad_10;
+  visibility: hidden;
 
   & + .fadeItem {
     position: absolute;
@@ -58,6 +59,7 @@
 
 .activeSlide {
   opacity: 1;
+  visibility: visible;
 }
 
 .dots {
@@ -72,7 +74,7 @@
 
 .dot {
   display: inline-block;
-  background-color: rgba(255,255,255,.3);
+  background-color: rgba(255, 255, 255, 0.3);
   margin-left: 1.4rem;
   width: 1.5rem;
   height: 1.5rem;
