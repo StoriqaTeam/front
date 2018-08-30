@@ -37,46 +37,131 @@
 }
 
 /*
- * Circe
+ * Montserrat
  */
+ @font-face {
+  font-family: 'Montserrat_Black';
+  src: url('./styles/fonts/Montserrat/Montserrat-Black.ttf');
+  font-style: normal;
+  font-weight: normal;
+}
+
 @font-face {
-  font-family: 'Circe_Bold';
-  src: url('./styles/fonts/Circe/Circe-Bold.ttf');
+  font-family: 'Montserrat_BlackItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-BlackItalic.ttf');
+  font-style: italic;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat_Bold';
+  src: url('./styles/fonts/Montserrat/Montserrat-Bold.ttf');
   font-style: normal;
   font-weight: bold;
 }
 
 @font-face {
-  font-family: 'Circe_ExtraBold';
-  src: url('./styles/fonts/Circe/Circe-ExtraBold.ttf');
+  font-family: 'Montserrat_BoldItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-BoldItalic.ttf');
+  font-style: italic;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Montserrat_ExtraBold';
+  src: url('./styles/fonts/Montserrat/Montserrat-ExtraBold.ttf');
   font-style: normal;
   font-weight: bold;
 }
 
 @font-face {
-  font-family: 'Circe_ExtraLight';
-  src: url('./styles/fonts/Circe/Circe-ExtraLight.ttf');
+  font-family: 'Montserrat_ExtraBoldItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf');
+  font-style: italic;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Montserrat_ExtraLight';
+  src: url('./styles/fonts/Montserrat/Montserrat-ExtraLight.ttf');
+  font-style: normal;
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: 'Montserrat_ExtraLightItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf');
+  font-style: italic;
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: 'Montserrat_Italic';
+  src: url('./styles/fonts/Montserrat/Montserrat-Italic.ttf');
+  font-style: italic;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat_Light';
+  src: url('./styles/fonts/Montserrat/Montserrat-Light.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Circe_Light';
-  src: url('./styles/fonts/Circe/Circe-Light.ttf');
+  font-family: 'Montserrat_LightItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-LightItalic.ttf');
+  font-style: italic;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat_Medium';
+  src: url('./styles/fonts/Montserrat/Montserrat-Medium.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Circe_Regular';
-  src: url('./styles/fonts/Circe/Circe-Regular.ttf');
+  font-family: 'Montserrat_MediumItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-MediumItalic.ttf');
+  font-style: italic;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat_Regular';
+  src: url('./styles/fonts/Montserrat/Montserrat-Regular.ttf');
+  font-style: normal;
+  font-weight: normal;
+
+}
+
+@font-face {
+  font-family: 'Montserrat_SemiBold';
+  src: url('./styles/fonts/Montserrat/Montserrat-SemiBold.ttf');
+  font-style: normal;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Montserrat_SemiBoldItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf');
+  font-style: italic;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Montserrat_Thin';
+  src: url('./styles/fonts/Montserrat/Montserrat-Thin.ttf');
   font-style: normal;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Circe_Thin';
-  src: url('./styles/fonts/Circe/Circe-Thin.ttf');
+  font-family: 'Montserrat_ThinItalic';
+  src: url('./styles/fonts/Montserrat/Montserrat-ThinItalic.ttf');
   font-style: italic;
   font-weight: normal;
 }

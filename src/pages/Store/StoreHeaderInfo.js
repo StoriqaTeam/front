@@ -79,7 +79,7 @@ class StoreHeader extends Component<{}, StateTypes> {
                 <div styleName="rating">
                   <Rating value={rating} />
                 </div>
-                <span styleName="reviews">380 Reviews</span>
+                <span styleName="reviews">0 Reviews</span>
               </div>
             </div>
           </div>
