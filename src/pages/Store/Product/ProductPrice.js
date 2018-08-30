@@ -2,8 +2,10 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { map, addIndex } from 'ramda';
 
-import { formatPrice } from 'utils';
+import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
+import { formatPrice, currentCurrency } from 'utils';
 
 import './ProductPrice.scss';
 
@@ -14,6 +16,8 @@ type PropsType = {
   discount: number,
   buttonText?: string,
 };
+
+const indexedMap = addIndex(map);
 
 const ProductPrice = ({
   currency,
@@ -29,10 +33,36 @@ const ProductPrice = ({
       </span>
     ) : null}
     <div styleName="stq">
-      <span styleName="price">
-        {formatPrice(discount && discount > 0 ? price * (1 - discount) : price)}{' '}
-        {currency}
-      </span>
+      <MultiCurrencyDropdown
+        price={discount && discount > 0 ? price * (1 - discount) : price}
+        renderPrice={(item: { price: number, currencyCode: string }) => (
+          <span styleName="price">
+            {formatPrice(item.price)} {item.currencyCode}
+          </span>
+        )}
+        renderDropdown={(
+          rates: Array<{ currencyCode: string, value: number }>,
+        ) => (
+          <div styleName="priceDropdownList">
+            {indexedMap(
+              (item, idx) =>
+                item.currencyCode !== currentCurrency() && (
+                  <div key={`priceDropdownItem-${idx}-${item.currencyCode}`}>
+                    {`${formatPrice(item.value)} ${item.currencyCode}`}
+                  </div>
+                ),
+              rates,
+            )}
+          </div>
+        )}
+        renderDropdownToggle={(isDropdownOpened: boolean) => (
+          <button
+            styleName={
+              isDropdownOpened ? 'dropdownToggleOpened' : 'dropdownToggleClosed'
+            }
+          />
+        )}
+      />
       <span styleName={classNames('cashback', { noCashback: !cashback })}>
         {buttonText} {`${cashback ? (cashback * 100).toFixed(0) : 0}%`}
       </span>
@@ -41,7 +71,7 @@ const ProductPrice = ({
 );
 
 ProductPrice.defaultProps = {
-  currency: 'STQ',
+  currency: currentCurrency() || 'STQ',
   buttonText: 'Cashback',
 };
 

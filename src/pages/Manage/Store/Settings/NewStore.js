@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { assocPath, pathOr, toUpper, isEmpty } from 'ramda';
+import { pathOr, toUpper, isEmpty } from 'ramda';
 import { withRouter, routerShape } from 'found';
 
 import { currentUserShape } from 'utils/shapes';
@@ -36,10 +36,6 @@ class NewStore extends Component<PropsType, StateType> {
   state: StateType = {
     serverValidationErrors: {},
     isLoading: false,
-  };
-
-  handleShopCurrency = (shopCurrency: { id: string, label: string }) => {
-    this.setState(assocPath(['form', 'currencyId'], +shopCurrency.id));
   };
 
   handleSave = ({ form, optionLanguage }) => {

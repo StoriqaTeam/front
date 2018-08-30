@@ -116,6 +116,10 @@ app.use(
       });
     }
 
+    if (process.env.NODE_ENV === 'development') {
+      req.universalCookies.set('holyshit', 'iamcool', { path: '/' });
+    }
+
     const store = createReduxStore(new ServerProtocol(req.url));
     const jwtCookie = req.universalCookies.get('__jwt');
     let jwt = typeof jwtCookie === 'object' && jwtCookie.value;
@@ -129,10 +133,12 @@ app.use(
         ? process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS
         : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
+    const currency = req.universalCookies.get('CURRENCY');
     const fetcher = new ServerFetcher(
       url,
       jwt,
       req.universalCookies.get('SESSION_ID'),
+      currency,
     );
 
     store.dispatch(FarceActions.init());
@@ -188,7 +194,7 @@ app.use(
         element,
       )}</div>
       <div id="global-modal-root"></div>
-      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
+      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;"></div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {

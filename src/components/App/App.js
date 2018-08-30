@@ -37,6 +37,7 @@ type PropsType = {
   currencies: Array<CurrencyType>,
   categories: CategoryType,
   orderStatuses: OrderStatusesType,
+  currencyExchange: Object,
   children: any,
   relay: {
     environment: Environment,
@@ -62,12 +63,19 @@ class App extends Component<PropsType, StateType> {
   }
 
   makeDirectories = (): DirectoriesType => {
-    const { languages, currencies, categories, orderStatuses } = this.props;
+    const {
+      languages,
+      currencies,
+      categories,
+      orderStatuses,
+      currencyExchange,
+    } = this.props;
     return {
       categories,
-      currencies,
       languages,
       orderStatuses,
+      currencies,
+      currencyExchange,
     };
   };
 
@@ -130,8 +138,6 @@ App.childContextTypes = {
   environment: PropTypes.object.isRequired,
   handleLogin: PropTypes.func,
   showAlert: PropTypes.func,
-  // TODO: create HOC that extract directories from context to props
-  // withDirectories(directoriesNames: Array<string> = [])(Component)
   directories: PropTypes.object,
   currentUser: currentUserShape,
 };
