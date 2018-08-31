@@ -5,7 +5,7 @@
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last } from 'ramda';
+import { find, pathEq, pathOr, last, isNil } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -498,8 +498,23 @@ const routes = (
 
       <Route
         path="/login"
+        query={graphql`
+          query routes_Login_Query {
+            me {
+              id
+            }
+          }
+        `}
         Component={Login}
-        render={({ Component, props }) => <Component alone {...props} />}
+        render={({ Component, props }) => {
+          if (props && !isNil(props.me)) {
+            throw new RedirectException(`/`);
+            // $FlowIgnoreMe
+            return; // eslint-disable-line
+          }
+          // eslint-disable-next-line
+          return <Component alone {...props} />;
+        }}
       />
 
       <Route path="/logout" Component={Logout} />
