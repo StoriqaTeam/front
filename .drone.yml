@@ -83,7 +83,7 @@ pipeline:
     - docker_username
     - docker_password
     when:
-      event: [ push, tag ]
+      event: push
       branch: master
   deploy2nightly:
     image: jackthestripper/drone_setimage
