@@ -492,7 +492,7 @@ const routes = (
               return <Component isSignUp {...props} />;
             }
           }
-          return <Component isSignUp alone {...props} />;
+          return <Component isSignUp {...props} />;
         }}
       />
 
