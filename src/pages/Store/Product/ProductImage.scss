@@ -81,14 +81,14 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  height: calc(99.375rem - 1rem);
+  max-height: calc(99.375rem - 1rem);
   overflow-x: hidden;
   overflow-y: scroll;
   position: absolute;
   top: 0;
 
   @media (min-width: $lg) {
-    height: calc(69.875rem - 1rem);
+    max-height: calc(47.875rem - 1rem);
   }
 
 }
