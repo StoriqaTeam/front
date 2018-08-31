@@ -8,7 +8,7 @@ import { Icon } from 'components/Icon';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { Col } from 'layout';
 
-import { convertSrc, formatPrice, getNameText } from 'utils';
+import { convertSrc, formatPrice, getNameText, currentCurrency } from 'utils';
 
 import './ProductsTableRow.scss';
 
@@ -78,7 +78,9 @@ const ProductsTableRow = ({
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
         {product &&
-          product.price && <span>{`${formatPrice(product.price)} STQ`}</span>}
+          product.price && (
+            <span>{`${formatPrice(product.price)} ${currentCurrency()}`}</span>
+          )}
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
         {product &&
