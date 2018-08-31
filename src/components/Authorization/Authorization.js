@@ -38,7 +38,6 @@ type PropsType = {
   environment: Environment,
   handleLogin: () => void,
   isSignUp: ?boolean,
-  alone: ?boolean,
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
   onCloseModal?: () => void,
@@ -139,9 +138,7 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   handleAlertOnClick = (): void => {
-    if (this.props.alone) {
-      window.location = '/';
-    }
+    window.location = '/';
   };
 
   handleRegistrationClick = () => {
@@ -208,10 +205,8 @@ class Authorization extends Component<PropsType, StateType> {
   handleLoginClick = () => {
     this.setState({ isLoading: true, errors: null });
     const {
-      alone,
       match: {
         location: {
-          pathname,
           query: { from },
         },
       },
@@ -232,16 +227,10 @@ class Authorization extends Component<PropsType, StateType> {
           setCookie('__jwt', { value: jwt }, expirationDate);
           if (this.props.handleLogin) {
             this.props.handleLogin();
-            if (alone) {
-              if (from && from !== '') {
-                window.location.replace(from);
-              } else {
-                window.location = '/';
-              }
-            } else if (pathname === '/login') {
-              window.location = '/';
+            if (from && from !== '') {
+              window.location.replace(from);
             } else {
-              window.location.reload();
+              window.location = '/';
             }
           }
           return;
@@ -577,7 +566,7 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { alone, onCloseModal, isResetPassword, isLogin } = this.props;
+    const { onCloseModal, isResetPassword, isLogin } = this.props;
     const text = 'Please Type new password';
     const description = isResetPassword ? text : '';
     const {
@@ -604,7 +593,6 @@ class Authorization extends Component<PropsType, StateType> {
               {isRecoverPassword || isResetPassword ? null : (
                 <AuthorizationHeader
                   fullWidth={isLogin}
-                  alone={alone}
                   isSignUp={isSignUp}
                   onClick={this.handleClick}
                   selected={selected}

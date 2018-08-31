@@ -492,14 +492,14 @@ const routes = (
               return <Component isSignUp {...props} />;
             }
           }
-          return <Component isSignUp alone {...props} />;
+          return <Component isSignUp {...props} />;
         }}
       />
 
       <Route
         path="/login"
         Component={Login}
-        render={({ Component, props }) => <Component alone {...props} />}
+        render={({ Component, props }) => <Component {...props} />}
       />
 
       <Route path="/logout" Component={Logout} />
