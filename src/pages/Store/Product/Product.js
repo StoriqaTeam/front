@@ -219,7 +219,16 @@ class Product extends Component<PropsType, StateType> {
         content: (
           <div
             styleName="longDescription"
-            dangerouslySetInnerHTML={{ __html: xss(modifLongDescription) }} // eslint-disable-line
+            // eslint-disable-next-line
+            dangerouslySetInnerHTML={{
+              __html: xss(`${modifLongDescription}`, {
+                whiteList: {
+                  img: ['src', 'style', 'sizes', 'srcset'],
+                  br: [],
+                  div: ['style'],
+                },
+              }),
+            }}
           />
         ),
       },
