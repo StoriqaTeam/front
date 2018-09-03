@@ -63,17 +63,20 @@
   font-size: 16px;
 }
 
-.attributeWrapper {
+.attributes {
   display: flex;
-  align-items: center;
-}
+  margin-left: 4rem;
 
-.attributeName {
-  width: 8rem;
-  color: $color_grey_minor;
-  font-size: 14px;
-}
+  @media (max-width: #{$sm - 1px}) {
+    display: none;
+  }
 
-.attributeValue {
-  width: 20rem;
+  .names {
+    color: $color_grey_minor;
+    font-size: 14px;
+  }
+
+  .values {
+    margin-left: 2rem;
+  }
 }

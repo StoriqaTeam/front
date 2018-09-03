@@ -116,9 +116,9 @@ type StateType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { baseProduct, currencies } = this.props;
+    const { baseProduct, currencies } = props;
     // $FlowIgnore
-    const currencyId = pathOr(6, ['baseProduct', 'currencyId'], props);
+    const currency = pathOr('STQ', ['baseProduct', 'currency'], props);
     let form = {};
     if (baseProduct) {
       form = {
@@ -146,10 +146,8 @@ class Form extends Component<PropsType, StateType> {
       form,
       formErrors: {},
       category: null,
-      currencies: convertCurrenciesForSelect(currenciesFromBack),
-      currency: find(propEq('id', `${currencyId}`))(
-        convertCurrenciesForSelect(currenciesFromBack),
-      ),
+      currencies: convertCurrenciesForSelect(currencies),
+      currency: { id: currency, label: currency },
     };
   }
 
@@ -305,7 +303,6 @@ class Form extends Component<PropsType, StateType> {
     } = this.props;
     const { category, currencies, currency } = this.state;
     const status = baseProduct ? baseProduct.status : 'Draft';
-    const currencyId = baseProduct ? baseProduct.currencyId : 6;
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
     const filteredVariants = map(item => item.node, variants);
@@ -417,13 +414,13 @@ class Form extends Component<PropsType, StateType> {
               {baseProduct && (
                 <LocalShipping
                   currencies={directories.currencies}
-                  currencyId={currencyId}
+                  currency={currency}
                 />
               )}
               {baseProduct && (
                 <InterShipping
                   currencies={directories.currencies}
-                  currencyId={currencyId}
+                  currency={currency}
                 />
               )}
               {baseProduct && (

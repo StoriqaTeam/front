@@ -61,7 +61,7 @@ class OAuthCallback extends PureComponent<PropsType> {
             const today = new Date();
             const expirationDate = new Date();
             expirationDate.setDate(today.getDate() + 1);
-            setCookie('__jwt', jwt, expirationDate);
+            setCookie('__jwt', { value: jwt }, expirationDate);
 
             const redirectPath = getPathForRedirectAfterLogin();
             if (redirectPath) {

@@ -37,7 +37,7 @@ type StateType = {
 
 type PropsType = {
   currencies: Array<CompanyType>,
-  currencyId: number,
+  currency: string,
   inter?: boolean,
   companies: Array<CompanyType>,
   editableItemId: ?string,
@@ -52,20 +52,14 @@ type PropsType = {
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { currencies, currencyId } = props;
+    const { currencies, currencyId, currency } = props;
     this.state = {
       isCheckedOnlyPickup: false,
       isCheckedPickup: false,
       isCheckedFixPrice: true,
       pickupPrice: 0,
-      productCurrency: findSelectedFromList(
-        convertCurrenciesForSelect(currenciesFromBack),
-        currencyId,
-      ),
-      pickupCurrency: findSelectedFromList(
-        convertCurrenciesForSelect(currenciesFromBack),
-        currencyId,
-      ),
+      productCurrency: currency,
+      pickupCurrency: currency,
     };
   }
 

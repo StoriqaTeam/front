@@ -23,6 +23,7 @@ import {
   dropRepeats,
 } from 'ramda';
 
+import { AppContext } from 'components/App';
 import type { SelectType } from 'types';
 import type { CompanyType } from './types';
 

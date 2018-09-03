@@ -70,6 +70,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+    console.log('---props', props);
     const { productCurrency, company, servicesWithCountries } = props;
     // console.log('---possibleCountries', possibleCountries);
     const service = company ? company.service : head(props.services);
@@ -164,19 +165,13 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleOnChangeCurrency = (currency: SelectType) => {
+    console.log('---currency', currency);
     this.setState({ currency });
   };
 
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
-    const {
-      price,
-      currency,
-      service,
-      companies,
-      country,
-      countries,
-    } = this.state;
+    const { price, currency, service, country, countries } = this.state;
     // console.log('---service', service);
     return (
       <div styleName="container">

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { propOr } from 'ramda';
+import { any, propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
@@ -15,9 +15,11 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  handleLoginClick: Function,
-  handleChange: Function,
-  handleBlur: Function,
+  onLoginClick: () => void,
+  onChange: () => void,
+  onBlur: () => void,
+  onRecoverPassword: () => void,
+  onResendEmail: () => void,
 };
 
 type StateType = {
@@ -39,12 +41,18 @@ class SignIn extends Component<PropsType, StateType> {
       password,
       errors,
       formValid,
-      handleLoginClick,
-      handleChange,
-      handleBlur,
+      onLoginClick,
+      onChange,
+      onBlur,
+      onRecoverPassword,
+      onResendEmail,
     } = this.props;
     const { autocomplete } = this.state;
-
+    // $FlowIgnoreMe
+    const showResendEmail = any(
+      i => i === 'Email not verified',
+      propOr('', 'email', errors),
+    );
     return (
       <div styleName="signIn">
         <div styleName="inputBlock">
@@ -54,30 +62,43 @@ class SignIn extends Component<PropsType, StateType> {
             name="email"
             type="text"
             model={email}
-            onChange={handleChange}
+            onChange={onChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'email', errors)}
-            onBlur={handleBlur}
+            showResendEmail={showResendEmail}
+            onBlur={onBlur}
+            onResendEmail={onResendEmail}
             validate="email"
           />
         </div>
-        <div styleName="inputBlock">
+        <div styleName="inputBlock userPassword">
           <Input
+            noPasswordHints
             label="Password"
             name="password"
             type="password"
             model={password}
             validate="password"
-            onChange={handleChange}
+            onChange={onChange}
             autocomplete={autocomplete}
             errors={propOr(null, 'password', errors)}
           />
+        </div>
+        <div styleName="forgotPassword">
+          <span
+            onClick={onRecoverPassword}
+            onKeyPress={() => {}}
+            role="button"
+            tabIndex="-1"
+          >
+            Forgot Password
+          </span>
         </div>
         {formValid && (
           <div styleName="signInGroup">
             <div styleName="signInButton">
               <Button
-                onClick={handleLoginClick}
+                onClick={onLoginClick}
                 type="button"
                 dataTest="signInButton"
               >

@@ -29,3 +29,4 @@ export {
   default as convertCurrenciesForSelect,
 } from './convertCurrenciesForSelect';
 export { default as findSelectedFromList } from './findSelectedFromList';
+export { default as currentCurrency } from './currentCurrency';

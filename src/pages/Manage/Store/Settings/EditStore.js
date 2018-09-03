@@ -118,6 +118,7 @@ class EditStore extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
     const { isLoading } = this.state;
     // $FlowIgnoreMe
     const store = pathOr(null, ['myStore'], this.props.me);

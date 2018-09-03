@@ -4,7 +4,6 @@ import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { isEmpty, map } from 'ramda';
 
-import { AppContext } from 'components/App';
 import { RadioButton } from 'components/common/RadioButton';
 
 import { convertCurrenciesForSelect, findSelectedFromList } from 'utils';
@@ -73,7 +72,8 @@ type StateType = {
 };
 
 type PropsType = {
-  currencyId: number,
+  currencies: any,
+  currency: string,
   inter?: boolean,
   companies: Array<CompanyType>,
   editableItemId: ?string,
@@ -91,14 +91,12 @@ type PropsType = {
 class InterShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { currencies, currencyId } = props;
+    console.log('---props', props);
+    const { currency } = props;
     this.state = {
       isCheckedWithout: false,
       isCheckedFixPrice: true,
-      productCurrency: findSelectedFromList(
-        convertCurrenciesForSelect(currenciesFromBack),
-        currencyId,
-      ),
+      productCurrency: currency,
     };
   }
 

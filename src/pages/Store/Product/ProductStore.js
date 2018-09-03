@@ -36,7 +36,7 @@ const ProductStore = () => (
               </Link>
               <div styleName="storeDetails">
                 <p>{store.productsCount} goods</p>
-                <p>97,5% user reviews</p>
+                <p>0 user reviews</p>
               </div>
             </div>
             <div styleName="iconsWrapper">

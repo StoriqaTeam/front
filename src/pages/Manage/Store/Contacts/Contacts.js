@@ -324,6 +324,7 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
     const { isLoading, addressFull } = this.state;
     return (
       <div styleName="container">

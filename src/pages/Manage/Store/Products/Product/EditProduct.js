@@ -291,7 +291,7 @@ export default createFragmentContainer(
         id
         rawId
         status
-        currencyId
+        currency
         products(first: 100) @connection(key: "Wizard_products") {
           edges {
             node {
