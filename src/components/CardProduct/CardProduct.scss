@@ -159,6 +159,13 @@
     display: flex;
     position: relative;
   }
+
+  &.isSearchPage {
+    flex-direction: column !important;
+    > div:nth-child(1) {
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 .actualPrice {

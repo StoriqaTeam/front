@@ -39,12 +39,14 @@ type PropsType = {
     },
     rating: number,
   },
+  isSearchPage: boolean,
 };
 
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
       item: { rawId, storeId, name, products, currency, rating },
+      isSearchPage,
     } = this.props;
     let discount = null;
     let photoMain = null;
@@ -94,7 +96,12 @@ class CardProduct extends PureComponent<PropsType> {
                 </span>
               )}
             </div>
-            <div styleName="price">
+            <div
+              
+              styleName={classNames('price', {
+                isSearchPage,
+              })}
+            >
               {discountedPrice && (
                 <MultiCurrencyDropdown
                   elementStyleName="priceDropdown"
