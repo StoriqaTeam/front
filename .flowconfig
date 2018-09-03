@@ -20,6 +20,7 @@ module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./src
 suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+esproposal.optional_chaining=enable
 
 include_warnings=true
 module.file_ext=.js
@@ -31,3 +32,9 @@ module.name_mapper.extension='css' -> 'empty/object'
 module.name_mapper.extension='scss' -> 'empty/object'
 
 [strict]
+#nonstrict-import
+unclear-type
+unsafe-getters-setters
+untyped-import
+untyped-type-import
+sketchy-null

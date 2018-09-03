@@ -1,23 +1,11 @@
 // @flow
 
-let debug: Function = () => {};
-let info: Function = () => {};
-let warn: Function = () => {};
-let error: Function = () => {};
+const log = require('node-pretty-log');
 
-/* eslint-disable */
-if (process.env.NODE_ENV === 'development') {
-  debug = console.log;
-  info = console.info;
-  warn = console.warn;
-  error = console.error;
-} else if (process.env.NODE_ENV === 'production') {
-  debug = console.log;
-  info = console.info;
-  warn = console.warn;
-  error = console.error;
-}
-/* eslint-enable */
+const debug = (val: any, args: any) => log('info', val, args);
+const info = (val: any, args: any) => log('info', val, args);
+const warn = (val: any, rest: any) => log('warn', val, rest);
+const error = (val: any, rest: any) => log('error', val, rest);
 
 export default {
   debug,

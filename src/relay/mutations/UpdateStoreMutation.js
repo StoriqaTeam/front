@@ -2,8 +2,11 @@
 
 // TODO: rename to UpdateStoreContactsMutation
 
-import { graphql, commitMutation } from 'react-relay';
-import { Environment } from 'relay-runtime';
+import { graphql } from 'react-relay';
+
+import { basicMutation } from 'relay/mutations';
+import type { MutationType } from 'relay/mutations/basicMutation';
+
 import type {
   UpdateStoreMutationVariables,
   UpdateStoreMutationResponse,
@@ -54,24 +57,9 @@ const mutation = graphql`
   }
 `;
 
-export type MutationParamsType = {
-  ...UpdateStoreMutationVariables,
-  environment: Environment,
-  onCompleted: ?(
-    response: ?UpdateStoreMutationResponse,
-    errors: ?Array<Error>,
-  ) => void,
-  onError: ?(error: Error) => void,
-};
+const updateStoreMutation: MutationType<
+  UpdateStoreMutationVariables,
+  UpdateStoreMutationResponse,
+> = basicMutation(mutation);
 
-const commit = (params: MutationParamsType) =>
-  commitMutation(params.environment, {
-    mutation,
-    variables: {
-      input: params.input,
-    },
-    onCompleted: params.onCompleted,
-    onError: params.onError,
-  });
-
-export default { commit };
+export { updateStoreMutation };

@@ -26,7 +26,11 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
-    log.debug('GraphQL request', { url: this.url, operation, variables });
+    log.debug('GraphQL request', {
+      url: this.url,
+      operation,
+      variables,
+    });
     const jwt = this.getJWTFromCookies();
     const currency = this.getCurrencyCodeFromCookies();
 
@@ -40,7 +44,7 @@ class FetcherBase {
     const sessionId = this.getSessionIdFromCookies();
     headers = assoc('Session-Id', sessionId, headers);
 
-    log.debug('\nRequest headers:\n', { headers }, '\n');
+    log.debug('Request headers:', headers);
 
     try {
       const response = await axios({

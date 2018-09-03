@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -9,9 +9,9 @@ import './Textarea.scss';
 type PropsType = {
   id: string,
   value: string,
-  label: string,
+  label: React.Node,
   errors: ?Array<string>,
-  onBlur: ?() => void,
+  onBlur?: ?() => void,
   onChange: (e: { target: { value: string } }) => void,
   fullWidth: ?boolean,
 };
@@ -21,7 +21,7 @@ type StateType = {
   isFocus: boolean,
 };
 
-class Textarea extends Component<PropsType, StateType> {
+class Textarea extends React.Component<PropsType, StateType> {
   state = {
     labelFloat: false,
     isFocus: false,

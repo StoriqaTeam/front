@@ -265,6 +265,7 @@ const routes = (
                   storeId
                 }
                 ...Wizard_me
+                ...StoreNameStep_me
               }
             }
           `}

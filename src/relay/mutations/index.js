@@ -1,3 +1,6 @@
+// @flow strict
+
+export { default as basicMutation } from './basicMutation';
 export { default as CreateUserMutation } from './CreateUserMutation';
 export { default as GetJWTByEmailMutation } from './GetJWTByEmailMutation';
 export {
@@ -42,8 +45,6 @@ export {
   default as CreateUserDeliveryAddressFullMutation,
 } from './CreateUserDeliveryAddressFullMutation';
 export { default as ChangePasswordMutation } from './ChangePasswordMutation';
-export { default as CreateWizardMutation } from './CreateWizardMutation';
-export { default as UpdateWizardMutation } from './UpdateWizardMutation';
 export {
   default as DeactivateBaseProductMutation,
 } from './DeactivateBaseProductMutation';

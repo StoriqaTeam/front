@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -10,24 +10,24 @@ import './Input.scss';
 type PropsType = {
   id: string,
   value: string,
-  label: string,
-  errors: ?Array<string>,
+  label: React.Node,
+  errors?: ?Array<string>,
   onChange: (e: { target: { value: string } }) => void,
-  onBlur: (e: any) => void,
-  onFocus: (e: any) => void,
-  onKeyDown: () => void,
-  onClick: () => void,
-  min: ?string,
-  icon: ?string,
-  isUrl: ?boolean,
-  inputRef: ?(e: any) => void,
-  isAutocomplete: ?boolean,
-  limit: ?number,
+  onBlur?: (e: any) => void,
+  onFocus?: (e: any) => void,
+  onKeyDown?: () => void,
+  onClick?: () => void,
+  min?: ?string,
+  icon?: ?string,
+  isUrl?: ?boolean,
+  inputRef?: ?(e: any) => void,
+  isAutocomplete?: ?boolean,
+  limit?: ?number,
   type?: string,
   fullWidth?: boolean,
-  postfix: ?string,
-  dataTest: ?string,
-  inline: ?boolean,
+  postfix?: ?string,
+  dataTest?: ?string,
+  inline?: ?boolean,
   search?: boolean,
 };
 
@@ -36,7 +36,7 @@ type StateType = {
   isFocus: boolean,
 };
 
-class Input extends Component<PropsType, StateType> {
+class Input extends React.Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const value = nextProps.value == null ? '' : `${nextProps.value}`;
     if (Boolean(value) !== prevState.labelFloat) {

@@ -131,7 +131,7 @@ export const initialProductState = {
 };
 
 class WizardWrapper extends React.Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const wizardStore = pathOr(null, ['me', 'wizardStore'], nextProps);
     return {
       ...prevState,

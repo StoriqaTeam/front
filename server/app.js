@@ -22,7 +22,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import createReduxStore from 'redux/createReduxStore';
 import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
-import { generateSessionId } from 'utils';
+import { generateSessionId, log } from 'utils';
 import isTokenExpired from 'utils/token';
 import moment from 'moment';
 
@@ -35,8 +35,8 @@ if (process.env.NODE_ENV === 'development') {
     config = JSON.parse(babelrc);
     config.ignore = /\/(build|node_modules)\//;
   } catch (err) {
-    console.error('==>     ERROR: Error parsing your .babelrc.');
-    console.error(err);
+    log.error('==>     ERROR: Error parsing your .babelrc.');
+    log.error(err);
   }
   require('babel-register')(config);
 }
@@ -98,11 +98,11 @@ const wrapAsync = fn => (req, res, next) => {
     // Make sure to `.catch()` any errors and pass them along to the `next()`
     // middleware in the chain, in this case the error handler.
     fn(req, res, next).catch(e => {
-      console.log(e);
+      log.error(e);
       res.redirect('/error');
     });
   } catch (e) {
-    console.log(e);
+    log.error(e);
     res.redirect('/error');
   }
 };
@@ -210,7 +210,7 @@ app.use(
     } else if (process.env.NODE_ENV === 'production') {
       fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
         if (err) {
-          console.error('read err', err);
+          log.error('read err', err);
           return res.status(404).end();
         }
 

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import * as React from 'react';
 
@@ -19,8 +19,8 @@ const {
   Consumer: AlertContextConsumer,
 } = React.createContext({ addAlert: () => {} });
 
-const withShowAlert = (Component: React.ComponentType<any>) =>
-  class extends React.PureComponent<{}> {
+const withShowAlert = (Component: React.ComponentType<*>) =>
+  class extends React.PureComponent<*> {
     render() {
       return (
         <AlertContextConsumer>
