@@ -12,6 +12,8 @@ import BannerLoading from 'components/Banner/BannerLoading';
 import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
+import { CardProductCashback } from './index';
+
 import './CardProduct.scss';
 
 type VariantType = {
@@ -97,7 +99,6 @@ class CardProduct extends PureComponent<PropsType> {
               )}
             </div>
             <div
-              
               styleName={classNames('price', {
                 isSearchPage,
               })}
@@ -147,16 +148,7 @@ class CardProduct extends PureComponent<PropsType> {
                   }}
                 />
               )}
-              <div styleName="cashbackWrapper">
-                <div
-                  styleName={classNames('cashback', {
-                    noneCashback: !cashbackValue,
-                  })}
-                >
-                  <b>Cashback</b>
-                  <b styleName="value">{`${cashbackValue || 0}%`}</b>
-                </div>
-              </div>
+              <CardProductCashback cashbackValue={cashbackValue} />
             </div>
           </div>
         </Link>
