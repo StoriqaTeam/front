@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head, map } from 'ramda';
+import { head } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -12,7 +12,7 @@ import BannerLoading from 'components/Banner/BannerLoading';
 import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
-import { CardProductCashback } from './index';
+import { CardProductCashback, CardProductDropdown } from './index';
 
 import './CardProduct.scss';
 
@@ -121,27 +121,13 @@ class CardProduct extends PureComponent<PropsType> {
                   )}
                   renderDropdown={(
                     rates: Array<{ currencyCode: string, value: number }>,
-                  ) => (
-                    <div styleName="priceDropdownList">
-                      {map(
-                        item =>
-                          item.currencyCode !== currentCurrency() && (
-                            <div
-                              key={`priceDropdownItem-${
-                                this.props.item.rawId
-                              }-${item.currencyCode}`}
-                            >
-                              {`${formatPrice(item.value)} ${
-                                item.currencyCode
-                              }`}
-                            </div>
-                          ),
-                        rates,
-                      )}
-                    </div>
-                  )}
+                  ) => <CardProductDropdown rates={rates} />}
                   renderDropdownToggle={(isDropdownOpened: boolean) => (
-                    <button styleName={`toggleRatesDropdown${isDropdownOpened ? 'Closed' : 'Opened'}`} />
+                    <button
+                      styleName={`toggleRatesDropdown${
+                        isDropdownOpened ? 'Closed' : 'Opened'
+                      }`}
+                    />
                   )}
                 />
               )}
