@@ -1,4 +1,4 @@
-// @flow 
+// @flow
 
 import React from 'react';
 import classNames from 'classnames';
@@ -10,7 +10,7 @@ type PropsType = {
 };
 
 const CardProductCashback = ({ cashbackValue }: PropsType) => (
-   <div styleName="cashbackWrapper">
+  <div styleName="cashbackWrapper">
     <div
       styleName={classNames('cashback', {
         noneCashback: !cashbackValue,

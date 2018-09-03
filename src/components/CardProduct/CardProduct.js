@@ -140,12 +140,9 @@ class CardProduct extends PureComponent<PropsType> {
                       )}
                     </div>
                   )}
-                  renderDropdownToggle={(isDropdownOpened: boolean) => {
-                    if (isDropdownOpened) {
-                      return <button styleName="toggleRatesDropdownClosed" />;
-                    }
-                    return <button styleName="toggleRatesDropdownOpened" />;
-                  }}
+                  renderDropdownToggle={(isDropdownOpened: boolean) => (
+                    <button styleName={`toggleRatesDropdown${isDropdownOpened ? 'Closed' : 'Opened'}`} />
+                  )}
                 />
               )}
               <CardProductCashback cashbackValue={cashbackValue} />
