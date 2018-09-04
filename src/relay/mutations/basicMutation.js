@@ -13,7 +13,7 @@ export type { MutationType };
 
 const basicMutation = <V, R: {}>(
   mutation: string,
-  objectRootField?: $Keys<R>,
+  objectRootField: $Keys<R>,
 ): MutationType<V, R> => (params: {
   environment: Environment,
   variables: V,
@@ -44,7 +44,9 @@ const basicMutation = <V, R: {}>(
           reject(new Error('Unknown error'));
         }
       },
-      // TODO: handle onError too
+      onError: (error: Error) => {
+        reject(error);
+      },
       optimisticResponse: params.optimisticResponse,
     });
   });

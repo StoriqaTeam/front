@@ -10,6 +10,7 @@ import { log } from 'utils';
 import CommonForm from './CommonForm';
 
 import { updateWizardMutation } from './mutations/StoreNameStepUpdateWizardMutation';
+import { createStoreMutation } from './mutations/StoreNameStepCreateStoreMutation';
 
 import type { WithoutStore_me as MeWithoutStore } from './__generated__/WithoutStore_me.graphql';
 import type { CommonFormFormInputs } from './CommonForm';
@@ -78,13 +79,45 @@ class WithoutStore extends CommonForm<PropsType> {
     this.updateWizard();
   }
 
-  runMutations = (): Promise<*> => Promise.resolve({});
+  runMutations = (): Promise<*> => {
+    const { me } = this.props;
+    const wizardStore = me && me.wizardStore;
+    if (!me || !wizardStore) {
+      return Promise.resolve({});
+    }
+
+    return createStoreMutation({
+      environment: this.props.relay.environment,
+      variables: {
+        input: {
+          clientMutationId: '',
+          name: [
+            {
+              lang: 'EN',
+              text: this.state.form.name,
+            },
+          ],
+          defaultLanguage: 'EN',
+          slug: this.state.form.slug,
+          shortDescription: [
+            {
+              lang: 'EN',
+              text: this.state.form.desc,
+            },
+          ],
+          addressFull: {},
+          userId: me.rawId,
+        },
+      },
+    });
+  };
 }
 
 export default createFragmentContainer(
   withShowAlert(WithoutStore),
   graphql`
     fragment WithoutStore_me on User {
+      rawId
       wizardStore {
         id
         name
