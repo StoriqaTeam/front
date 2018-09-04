@@ -122,9 +122,7 @@ class HeaderTop extends PureComponent<PropsType> {
           <a href="_">Help</a> {/* eslint-disable-line */}
         </div>
         <div>
-          <a href="/start-selling">
-            Sell on Storiqa
-          </a>
+          <a href="/start-selling">Sell on Storiqa</a>
         </div>
       </div>
     );

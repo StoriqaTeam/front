@@ -31,7 +31,7 @@ import Cart from 'pages/Cart';
 import Checkout from 'pages/Checkout';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
-import Logout from 'pages/Logout';
+import { Logout } from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
