@@ -1,10 +1,5 @@
 [
   {
-    "id": "1",
-    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-pMeUHF2MnfUC-medium.png",
-    "link": "/store/191"
-  },
-  {
     "id": "2",
     "img": "https://s3.amazonaws.com/storiqa-dev/img-AYQfG1KxAhkC.png",
     "link": "/categories?search=wallet&category=31"
