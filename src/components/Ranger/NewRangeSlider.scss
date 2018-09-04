@@ -139,3 +139,19 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: transparent;
 }
+
+.inputs {
+  display: flex;
+
+  .input {
+    &.left {
+
+    }
+
+    &.right {
+      margin-left: 2rem;
+    }
+  }
+}
+
+

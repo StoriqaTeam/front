@@ -3,6 +3,7 @@
 import React, { Component, createRef } from 'react';
 
 import { Input } from 'components/common/Input';
+import { InputPrice } from 'components/common/InputPrice';
 
 import './NewRangeSlider.scss';
 
@@ -123,7 +124,9 @@ class NewRangeSlider extends Component<PropsType, StateType> {
     }
   };
 
-  handleOnChangeInput = () => {};
+  handleOnChangeInput = value => {
+    console.log('---value', value);
+  };
 
   handleOnBlurInput = () => {};
 
@@ -170,23 +173,21 @@ class NewRangeSlider extends Component<PropsType, StateType> {
             />
           </div>
         </section>
-        <div className="inputs">
-          <div className="input left">
-            <Input
-              fullWidth
+        <div styleName="inputs">
+          <div styleName="input left">
+            <InputPrice
               id="rangeInput1"
-              onChange={this.handleOnChangeInput}
+              onChangePrice={this.handleOnChangeInput}
               onBlur={this.handleOnBlurInput}
-              value={thumb1}
+              price={thumb1}
             />
           </div>
-          <div className="input right">
-            <Input
-              fullWidth
+          <div styleName="input right">
+            <InputPrice
               id="rangeInput2"
-              onChange={this.handleOnChangeInput}
+              onChangePrice={this.handleOnChangeInput}
               onBlur={this.handleOnBlurInput}
-              value={thumb2}
+              price={thumb2}
             />
           </div>
         </div>
