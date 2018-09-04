@@ -228,7 +228,37 @@ const routes = (
         />
       </Route>
 
-      <Route path="start-selling" Component={StartSelling} />
+      <Route
+        path="start-selling"
+        query={graphql`
+          query routes_StartSelling_Query {
+            me {
+              id
+              wizardStore {
+                id
+                completed
+                storeId
+              }
+            }
+          }
+        `}
+        Component={StartSelling}
+        render={({ props, Component }) => {
+          if (props) {
+            if (!props.me) {
+              throw new RedirectException(`/login?from=/start-selling`);
+            } else if (props.me.wizardStore && props.me.wizardStore.completed) {
+              throw new RedirectException(
+                `/manage/store/${props.me.wizardStore.storeId}`,
+              );
+            } else {
+              return <Component />;
+            }
+          } else {
+            return null;
+          }
+        }}
+      />
 
       <Route
         path="/manage"
