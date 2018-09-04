@@ -2,6 +2,8 @@
 
 import React, { Component, createRef } from 'react';
 
+import { Input } from 'components/common/Input';
+
 import './NewRangeSlider.scss';
 
 type StateType = {
@@ -9,6 +11,7 @@ type StateType = {
   thumb2: number,
   minValue: number,
   maxValue: number,
+  step: number,
 };
 
 type PropsType = {
@@ -29,6 +32,7 @@ class NewRangeSlider extends Component<PropsType, StateType> {
       thumb2: parseFloat(50000),
       minValue: parseFloat(500),
       maxValue: parseFloat(50000),
+      step: parseFloat(500),
     };
   }
 
@@ -68,15 +72,12 @@ class NewRangeSlider extends Component<PropsType, StateType> {
   };
 
   handleOnMouseDownSection = (e: any) => {
-    // console.log('---e.clientX', e.clientX);
     const DOMRect = this.sectionRef.current.getBoundingClientRect();
-    console.log('---DOMRect', DOMRect);
 
-    // step (сколько в одной единице значения)
-    const { thumb1, thumb2, minValue, maxValue } = this.state;
+    // volume (how many in one unit of value)
+    const { thumb1, thumb2, minValue, maxValue, step } = this.state;
     const fullWidth = maxValue - minValue;
-    const step = fullWidth / (DOMRect.width - 16);
-    console.log('---step', step);
+    const volume = fullWidth / (DOMRect.width - 16);
 
     // Coordinate
     let coor = e.clientX - DOMRect.x;
@@ -84,12 +85,50 @@ class NewRangeSlider extends Component<PropsType, StateType> {
       coor = 0;
     } else if (coor >= DOMRect.width - 8) {
       coor = DOMRect.width - 16;
+    } else {
+      coor -= 8;
     }
-    console.log('---coor', coor);
+
+    // New thumb
+    let thumb = Math.round(coor * volume) + minValue;
+    const remainder = thumb % step;
+    if (remainder <= step) {
+      thumb -= remainder;
+    } else {
+      thumb += remainder;
+    }
+    let key = thumb2 === thumb1 && thumb2 < thumb ? 'thumb2' : 'thumb1';
+    if (Math.abs(thumb2 - thumb) < Math.abs(thumb - thumb1)) {
+      key = 'thumb2';
+    } else if (Math.abs(thumb2 - thumb) > Math.abs(thumb - thumb1)) {
+      key = 'thumb1';
+    }
+    const event = new Event('input', { bubbles: true });
+    // $FlowIgnore
+    event.simulated = true;
+    if (key === 'thumb1') {
+      this.thumb1Ref.current.value = `${thumb}`;
+      const tracker = this.thumb1Ref.current._valueTracker; // eslint-disable-line
+      if (tracker) {
+        tracker.setValue(thumb1);
+      }
+      this.thumb1Ref.current.dispatchEvent(event);
+    } else {
+      this.thumb2Ref.current.value = `${thumb}`;
+      const tracker = this.thumb2Ref.current._valueTracker; // eslint-disable-line
+      if (tracker) {
+        tracker.setValue(thumb2);
+      }
+      this.thumb2Ref.current.dispatchEvent(event);
+    }
   };
 
+  handleOnChangeInput = () => {};
+
+  handleOnBlurInput = () => {};
+
   render() {
-    const { thumb1, thumb2, minValue, maxValue } = this.state;
+    const { thumb1, thumb2, minValue, maxValue, step } = this.state;
     return (
       <div styleName="container">
         <span className="rangeValues">{`${thumb1} - ${thumb2}`}</span>
@@ -104,7 +143,7 @@ class NewRangeSlider extends Component<PropsType, StateType> {
             value={thumb1}
             min={minValue}
             max={maxValue}
-            step="500"
+            step={step}
             type="range"
             onChange={this.handleOnChange}
             onMouseDown={this.handleOnMouseDown}
@@ -115,7 +154,7 @@ class NewRangeSlider extends Component<PropsType, StateType> {
             value={thumb2}
             min={minValue}
             max={maxValue}
-            step="500"
+            step={step}
             type="range"
             onChange={this.handleOnChange}
             onMouseDown={this.handleOnMouseDown}
@@ -131,6 +170,26 @@ class NewRangeSlider extends Component<PropsType, StateType> {
             />
           </div>
         </section>
+        <div className="inputs">
+          <div className="input left">
+            <Input
+              fullWidth
+              id="rangeInput1"
+              onChange={this.handleOnChangeInput}
+              onBlur={this.handleOnBlurInput}
+              value={thumb1}
+            />
+          </div>
+          <div className="input right">
+            <Input
+              fullWidth
+              id="rangeInput2"
+              onChange={this.handleOnChangeInput}
+              onBlur={this.handleOnBlurInput}
+              value={thumb2}
+            />
+          </div>
+        </div>
       </div>
     );
   }
