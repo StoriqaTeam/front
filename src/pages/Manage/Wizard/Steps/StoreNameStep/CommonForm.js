@@ -18,6 +18,7 @@ type FormInputs = {
   slug: string,
   desc: string,
 };
+export type { FormInputs as CommonFormFormInputs };
 
 type HandlersType = FormHandlersType<FormInputs>;
 
@@ -51,14 +52,14 @@ class CommonForm<PropsType> extends FormComponent<FormInputs, PropsType> {
     desc: serverValidationErrors.shortDescription || [],
   });
 
-  handle = (input: $Keys<FormInputs>, value: $Values<FormInputs>) => {
+  handle(input: $Keys<FormInputs>, value: $Values<FormInputs>): void {
     if (this.state.isSubmitting) {
       return;
     }
 
     const handler = this.handlers[input](value);
     this.setState(assoc('form', handler(this.state.form)));
-  };
+  }
 
   render() {
     return (

@@ -2,21 +2,28 @@
 
 import { createFragmentContainer, graphql } from 'react-relay';
 import { reject, isEmpty } from 'ramda';
+import debounce from 'lodash.debounce';
 
 import { withShowAlert } from 'components/App/AlertContext';
+import { log } from 'utils';
 
 import CommonForm from './CommonForm';
 
-import { createWizardMutation } from './mutations/StoreNameStepCreateWizardMutation';
 import { updateWizardMutation } from './mutations/StoreNameStepUpdateWizardMutation';
 
 import type { WithoutStore_me as MeWithoutStore } from './__generated__/WithoutStore_me.graphql';
+import type { CommonFormFormInputs } from './CommonForm';
 
 type PropsType = {
-  me: ?MeWithoutStore, // eslint-disable-line
+  me: ?MeWithoutStore,
 };
 
 class WithoutStore extends CommonForm<PropsType> {
+  constructor(props) {
+    super(props);
+    this.updateWizard = debounce(this.updateWizard, 500);
+  }
+
   static getDerivedStateFromProps = (props: PropsType) => {
     const wizardStore = props.me && props.me.wizardStore;
     if (!wizardStore) {
@@ -32,35 +39,33 @@ class WithoutStore extends CommonForm<PropsType> {
     };
   };
 
-  runMutations = (): Promise<*> => {
-    const wizardStoreId =
-      this.props.me &&
-      this.props.me.wizardStore &&
-      this.props.me.wizardStore.id;
-
-    const initialMutation = !wizardStoreId
-      ? createWizardMutation({
-          environment: this.props.relay.environment,
-          variables: {},
-        })
-      : Promise.resolve({});
-
-    return initialMutation.then(() =>
-      updateWizardMutation({
-        environment: this.props.relay.environment,
-        variables: {
-          input: {
-            ...reject(isEmpty, {
-              name: this.state.form.name,
-              slug: this.state.form.slug,
-              shortDescription: this.state.form.desc,
-            }),
-            clientMutationId: '',
-            addressFull: {},
-          },
+  updateWizard = () => {
+    updateWizardMutation({
+      environment: this.props.relay.environment,
+      variables: {
+        input: {
+          ...reject(isEmpty, {
+            name: this.state.form.name,
+            slug: this.state.form.slug,
+            shortDescription: this.state.form.desc,
+          }),
+          clientMutationId: '',
+          addressFull: {},
         },
-      }),
-    );
+      },
+    });
+  };
+
+  handle(
+    input: $Keys<CommonFormFormInputs>,
+    value: $Values<CommonFormFormInputs>,
+  ): void {
+    super.handle(input, value);
+    this.updateWizard();
+  }
+
+  runMutations = (): Promise<*> => {
+    //
   };
 }
 
