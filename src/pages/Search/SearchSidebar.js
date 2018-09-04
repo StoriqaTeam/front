@@ -19,7 +19,7 @@ import classNames from 'classnames';
 import { flattenFunc, urlToInput, inputToUrl, getNameText } from 'utils';
 
 import { Accordion, prepareForAccordion } from 'components/Accordion';
-import { RangerSlider } from 'components/Ranger';
+import { RangerSlider, NewRangeSlider } from 'components/Ranger';
 import { AttributeControl } from 'components/AttributeControl';
 import { Icon } from 'components/Icon';
 
@@ -59,6 +59,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
   static defaultProps = {
     onClose: () => {},
   };
+
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -320,6 +321,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
     const { onClose, isOpen } = this.props;
     const { volume, volume2 } = this.state;
     const priceRange = this.getSearchFilter('priceRange');
+    console.log('---priceRange', priceRange);
     const attrFilters = this.getSearchFilter('attrFilters');
     const accordionItems = this.generateTree();
     // $FlowIgnoreMe
@@ -387,6 +389,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
           onChange2={value => this.handleOnRangeChange(value, 'volume2')}
           onChangeComplete={this.handleOnCompleteRange}
         />
+        <NewRangeSlider />
         {attrFilters &&
           sort(
             (a, b) => a.attribute.rawId - b.attribute.rawId,
