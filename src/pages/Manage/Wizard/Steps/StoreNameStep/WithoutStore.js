@@ -40,6 +40,11 @@ class WithoutStore extends CommonForm<PropsType> {
   };
 
   updateWizard = () => {
+    const wizardStore = this.props.me && this.props.me.wizardStore;
+    if (!wizardStore) {
+      return;
+    }
+
     updateWizardMutation({
       environment: this.props.relay.environment,
       variables: {
@@ -53,6 +58,15 @@ class WithoutStore extends CommonForm<PropsType> {
           addressFull: {},
         },
       },
+      optimisticResponse: {
+        updateWizardStore: {
+          id: wizardStore.id,
+          name: this.state.form.name,
+          shortDescription: this.state.form.desc,
+          slug: this.state.form.slug,
+          store: null,
+        },
+      },
     });
   };
 
@@ -64,9 +78,7 @@ class WithoutStore extends CommonForm<PropsType> {
     this.updateWizard();
   }
 
-  runMutations = (): Promise<*> => {
-    //
-  };
+  runMutations = (): Promise<*> => Promise.resolve({});
 }
 
 export default createFragmentContainer(

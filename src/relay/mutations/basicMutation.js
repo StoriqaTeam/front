@@ -7,6 +7,7 @@ import { head } from 'ramda';
 type MutationType<V, R> = (params: {|
   environment: Environment,
   variables: V,
+  optimisticResponse?: R,
 |}) => Promise<R>;
 export type { MutationType };
 
@@ -16,6 +17,7 @@ const basicMutation = <V, R: {}>(
 ): MutationType<V, R> => (params: {
   environment: Environment,
   variables: V,
+  optimisticResponse?: R,
 }) => {
   if (!params.environment || params.variables == null) {
     Promise.reject(new Error('Please provide environment and variables'));
@@ -42,6 +44,8 @@ const basicMutation = <V, R: {}>(
           reject(new Error('Unknown error'));
         }
       },
+      // TODO: handle onError too
+      optimisticResponse: params.optimisticResponse,
     });
   });
 };
