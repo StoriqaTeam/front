@@ -54,7 +54,7 @@ class FetcherBase {
         data: JSON.stringify({ query: operation.text, variables }),
         withCredentials: true,
       });
-      log.debug('GraphQL response', { response: response.data });
+      log.debug('GraphQL response', JSON.stringify(response.data, null, 2));
       return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
