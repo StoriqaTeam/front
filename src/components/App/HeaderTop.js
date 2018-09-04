@@ -1,14 +1,11 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { withRouter, routerShape } from 'found';
 import { head, propOr, map, find, equals } from 'ramda';
 import moment from 'moment';
 
 import { Select } from 'components/common/Select';
 import { getCookie, setCookie } from 'utils';
-
-import type { UserDataType } from 'types';
 
 import './HeaderTop.scss';
 
@@ -17,8 +14,6 @@ const currencyCookieName = 'CURRENCY';
 type PropsType = {
   // eslint-disable-next-line
   currencies: Array<string>,
-  router: routerShape,
-  userData: UserDataType,
 };
 
 type CurrencyType = {
@@ -102,18 +97,6 @@ class HeaderTop extends PureComponent<PropsType> {
     }
   };
 
-  handleClick = (): void => {
-    const { userData, router: { push } } = this.props;
-    let link = '';
-    if (userData && userData.myStore) {
-      const { myStore: { rawId } } = userData;
-      link = `/manage/store/${rawId}`;
-    } else {
-      link = '/start-selling';
-    }
-    push(link);
-  };
-
   render() {
     return (
       <div styleName="container">
@@ -139,12 +122,7 @@ class HeaderTop extends PureComponent<PropsType> {
           <a href="_">Help</a> {/* eslint-disable-line */}
         </div>
         <div>
-          <a
-            role="button"
-            tabIndex="-1"
-            onKeyPress={() => {}}
-            onClick={this.handleClick}
-          >
+          <a href="/start-selling">
             Sell on Storiqa
           </a>
         </div>
@@ -153,4 +131,4 @@ class HeaderTop extends PureComponent<PropsType> {
   }
 }
 
-export default withRouter(HeaderTop);
+export default HeaderTop;
