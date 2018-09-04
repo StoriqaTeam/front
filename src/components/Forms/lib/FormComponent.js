@@ -20,7 +20,7 @@ import { log, fromRelayError } from 'utils';
 
 type FormComponentPropsType<P> = P & {
   //
-  relay: { environment: Environment }, // eslint-disable-line
+  relay: { environment: Environment, refetch: () => void }, // eslint-disable-line
 
   //
   showAlert: (input: AddAlertInputType) => void, // eslint-disable-line

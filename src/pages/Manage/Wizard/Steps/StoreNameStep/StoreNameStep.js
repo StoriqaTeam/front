@@ -1,28 +1,155 @@
 // @flow strict
 
-import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import * as React from 'react';
+import { createRefetchContainer, graphql, Environment } from 'react-relay';
 
+import Logo from 'components/Icon/svg/logo.svg';
+import { Spinner } from 'components/common/Spinner';
+import { Button } from 'components/common/Button';
+import { log } from 'utils';
+
+import { createWizardMutation } from './mutations/StoreNameStepCreateWizardMutation';
 import WithStore from './WithStore';
 import WithoutStore from './WithoutStore';
 
 import type { StoreNameStep_me as StoreNameStepMe } from './__generated__/StoreNameStep_me.graphql';
 
+import './StoreNameStep.scss';
+
 type PropsType = {
   me: ?StoreNameStepMe,
+  relay: {
+    environment: Environment,
+    refetch: (...args: Array<mixed>) => void,
+  },
 };
 
-const StoreNameStep = (props: PropsType) => {
-  const storeId =
-    props.me &&
-    props.me.wizardStore &&
-    props.me.wizardStore.store &&
-    props.me.wizardStore.store.id;
-
-  return storeId ? <WithStore me={props.me} /> : <WithoutStore me={props.me} />;
+type StateType = {
+  isInProcess: boolean,
+  isError: boolean,
 };
 
-export default createFragmentContainer(
+class StoreNameStep extends React.Component<PropsType, StateType> {
+  state: StateType = {
+    isInProcess: false,
+    isError: false,
+  };
+
+  componentDidMount() {
+    this.mounted = true;
+
+    this.createWizard();
+  }
+
+  componentWillUnmout() {
+    this.mounted = false;
+  }
+
+  mounted: boolean = false;
+
+  createWizard = (): void => {
+    if (this.props.me && !this.props.me.wizardStore) {
+      this.setState({ isInProcess: true, isError: false });
+      createWizardMutation({
+        environment: this.props.relay.environment,
+        variables: {},
+      })
+        .then(() => {
+          if (!this.mounted) return;
+
+          log.debug('fetched');
+          this.props.relay.refetch(
+            {},
+            null,
+            (error: ?Error) => {
+              if (error) {
+                log.error('Wizard creation error', error);
+                this.setState(prevState => ({
+                  ...prevState,
+                  isError: true,
+                }));
+              }
+            },
+            { force: true },
+          );
+        })
+        .catch(err => {
+          if (!this.mounted) return;
+
+          log.error('Wizard creation error', err);
+          this.setState(prevState => ({
+            ...prevState,
+            isError: true,
+          }));
+        })
+        .finally(() => {
+          log.debug('finally', { mounted: this.mounted });
+          if (!this.mounted) return;
+
+          this.setState(prevState => ({
+            ...prevState,
+            isInProcess: false,
+          }));
+        });
+    }
+  };
+
+  renderLoader = (): React.Node => (
+    <div>
+      <div styleName="container">
+        <div styleName="logo">
+          <Logo />
+        </div>
+        <span styleName="text">
+          Loading...<br />Please wait.
+        </span>
+        <span styleName="description">- Storiqa team</span>
+        <Spinner />
+      </div>
+    </div>
+  );
+
+  renderError = (): React.Node => (
+    <div styleName="error">
+      <p>Error while initialize wizard</p>
+      <br />
+      <Button
+        big
+        onClick={() => {
+          this.createWizard();
+        }}
+      >
+        Try again
+      </Button>
+    </div>
+  );
+
+  render() {
+    const { isInProcess, isError } = this.state;
+    log.debug('render', { isInProcess, isError });
+    log.debug('mounted', this.mounted);
+    if (isInProcess) {
+      return this.renderLoader();
+    } else if (isError) {
+      return this.renderError();
+    }
+
+    const wizardStore = this.props.me && this.props.me.wizardStore;
+    if (!wizardStore) {
+      return this.renderLoader();
+    }
+
+    const storeId = wizardStore.store && wizardStore.store.id;
+
+    return storeId ? (
+      <WithStore me={this.props.me} />
+    ) : (
+      <WithoutStore me={this.props.me} />
+    );
+  }
+}
+
+export default createRefetchContainer(
   StoreNameStep,
   graphql`
     fragment StoreNameStep_me on User {
@@ -33,6 +160,13 @@ export default createFragmentContainer(
         store {
           id
         }
+      }
+    }
+  `,
+  graphql`
+    query StoreNameStep_Refetch_Query {
+      me {
+        ...StoreNameStep_me
       }
     }
   `,

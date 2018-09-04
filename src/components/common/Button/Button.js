@@ -8,18 +8,17 @@ import './Button.scss';
 
 type PropsTypes = {
   children: Node,
-  type: string,
   onClick: ?Function,
   disabled?: boolean,
-  iconic: boolean,
-  href: ?string,
+  iconic?: boolean,
+  href?: ?string,
   wireframe?: boolean,
   load?: boolean,
-  contour: ?boolean,
-  small: ?boolean,
-  big: ?boolean,
-  dataTest: string,
-  white: ?boolean,
+  contour?: ?boolean,
+  small?: ?boolean,
+  big?: ?boolean,
+  dataTest?: string,
+  white?: ?boolean,
   isLoading?: boolean,
   pink?: boolean,
   fullWidth?: boolean,
@@ -28,7 +27,6 @@ type PropsTypes = {
 class Button extends PureComponent<PropsTypes> {
   render() {
     const {
-      type,
       onClick,
       disabled,
       children,
@@ -47,7 +45,6 @@ class Button extends PureComponent<PropsTypes> {
     } = this.props;
 
     const props = {
-      type,
       disabled,
       onClick,
       href,
