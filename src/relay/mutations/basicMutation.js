@@ -13,7 +13,7 @@ type MutationType<V, R> = (params: {|
 |}) => Promise<R>;
 export type { MutationType };
 
-const basicMutation = <V, R: {}>(
+const basicMutation = <V: {}, R: {}>(
   mutation: string,
   objectRootField: $Keys<R>,
 ): MutationType<V, R> => (params: {
@@ -22,7 +22,9 @@ const basicMutation = <V, R: {}>(
   optimisticResponse?: R,
 }) => {
   if (!params.environment || params.variables == null) {
-    Promise.reject(new Error('Please provide environment and variables'));
+    return Promise.reject(
+      new Error('Please provide environment and variables'),
+    );
   }
 
   return new Promise((resolve, reject) => {

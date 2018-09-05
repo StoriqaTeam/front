@@ -94,7 +94,6 @@ class CommonForm<PropsType> extends FormComponent<FormInputs, PropsType> {
           </div>
           <div styleName="formItem">
             <InputSlug
-              realSlug="an"
               slug={this.state.form.slug}
               onChange={(value: string) => {
                 this.handle('slug', value);

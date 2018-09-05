@@ -2,12 +2,10 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { pathOr } from 'ramda';
 import { graphql } from 'react-relay';
 import { fetchQuery } from 'relay-runtime';
 import debounce from 'lodash.debounce';
 
-import { log } from 'utils';
 import { environment } from 'relay/createResolver';
 import { Input } from 'components/common/Input';
 
@@ -16,8 +14,7 @@ import './InputSlug.scss';
 type PropsType = {
   slug: string,
   onChange: (value: string) => void,
-  resetErrors: () => void,
-  errors?: ?Array<string>,
+  errors?: ?Array<string>, // eslint-disable-line
 };
 
 type StateType = {

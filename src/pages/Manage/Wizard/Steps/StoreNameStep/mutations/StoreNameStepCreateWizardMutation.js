@@ -49,6 +49,6 @@ const mutation = graphql`
 const createWizardMutation: MutationType<
   StoreNameStepCreateWizardMutationVariables,
   StoreNameStepCreateWizardMutationResponse,
-> = basicMutation(mutation);
+> = basicMutation(mutation, 'createWizardStore');
 
 export { createWizardMutation };
