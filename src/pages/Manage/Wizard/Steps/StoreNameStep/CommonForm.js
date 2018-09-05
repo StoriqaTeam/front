@@ -1,7 +1,7 @@
 // @flow strict
 
 import * as React from 'react';
-import { assoc } from 'ramda';
+import { assoc, omit } from 'ramda';
 
 import { FormComponent, validators } from 'components/Forms/lib';
 import { Input } from 'components/common/Input';
@@ -42,15 +42,19 @@ class CommonForm<PropsType> extends FormComponent<FormInputs, PropsType> {
   validators: FormValidatorType<FormInputs> = {
     name: validators.notEmpty,
     desc: validators.notEmpty,
+    slug: validators.notEmpty,
   };
 
-  transformValidationErrors = (serverValidationErrors: {
+  // eslint-disable-next-line
+  transformValidationErrors(serverValidationErrors: {
     [string]: Array<string>,
-  }): { [$Keys<FormInputs>]: Array<string> } => ({
-    slug: serverValidationErrors.slug || [],
-    name: serverValidationErrors.name || [],
-    desc: serverValidationErrors.shortDescription || [],
-  });
+  }): { [$Keys<FormInputs>]: Array<string> } {
+    return {
+      slug: serverValidationErrors.slug || [],
+      name: serverValidationErrors.name || [],
+      desc: serverValidationErrors.shortDescription || [],
+    };
+  }
 
   handle(input: $Keys<FormInputs>, value: $Values<FormInputs>): void {
     if (this.state.isSubmitting) {
@@ -58,7 +62,10 @@ class CommonForm<PropsType> extends FormComponent<FormInputs, PropsType> {
     }
 
     const handler = this.handlers[input](value);
-    this.setState(assoc('form', handler(this.state.form)));
+    this.setState({
+      form: handler(this.state.form),
+      validationErrors: omit([input], this.state.validationErrors),
+    });
   }
 
   render() {

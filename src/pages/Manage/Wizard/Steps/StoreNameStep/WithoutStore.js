@@ -1,7 +1,6 @@
 // @flow strict
 
 import { createFragmentContainer, graphql } from 'react-relay';
-import { reject, isEmpty } from 'ramda';
 import debounce from 'lodash.debounce';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -50,22 +49,11 @@ class WithoutStore extends CommonForm<PropsType> {
       environment: this.props.relay.environment,
       variables: {
         input: {
-          ...reject(isEmpty, {
-            name: this.state.form.name,
-            slug: this.state.form.slug,
-            shortDescription: this.state.form.desc,
-          }),
-          clientMutationId: '',
-          addressFull: {},
-        },
-      },
-      optimisticResponse: {
-        updateWizardStore: {
-          id: wizardStore.id,
           name: this.state.form.name,
-          shortDescription: this.state.form.desc,
           slug: this.state.form.slug,
-          store: null,
+          shortDescription: this.state.form.desc,
+          clientMutationId: `${this.mutationId}`,
+          addressFull: {},
         },
       },
     });
@@ -76,7 +64,26 @@ class WithoutStore extends CommonForm<PropsType> {
     value: $Values<CommonFormFormInputs>,
   ): void {
     super.handle(input, value);
+
+    // if you send empty slug you will get server validation error
+    if (input === 'slug' && value === '') {
+      return;
+    }
+
     this.updateWizard();
+  }
+
+  transformValidationErrors(serverErrors: {
+    [string]: Array<string>,
+  }): { [$Keys<CommonFormFormInputs>]: Array<string> } {
+    log.debug('transform without store', {
+      ...super.transformValidationErrors(serverErrors),
+      name: serverErrors.store,
+    });
+    return {
+      ...super.transformValidationErrors(serverErrors),
+      name: serverErrors.store,
+    };
   }
 
   runMutations = (): Promise<*> => {
@@ -86,11 +93,12 @@ class WithoutStore extends CommonForm<PropsType> {
       return Promise.resolve({});
     }
 
+    this.mutationId = this.mutationId + 1;
     return createStoreMutation({
       environment: this.props.relay.environment,
       variables: {
         input: {
-          clientMutationId: '',
+          clientMutationId: `${this.mutationId}`,
           name: [
             {
               lang: 'EN',
@@ -109,7 +117,18 @@ class WithoutStore extends CommonForm<PropsType> {
           userId: me.rawId,
         },
       },
-    });
+    }).then(resp =>
+      updateWizardMutation({
+        environment: this.props.relay.environment,
+        variables: {
+          input: {
+            clientMutationId: `${this.mutationId}`,
+            storeId: resp.createStore.rawId,
+            addressFull: {},
+          },
+        },
+      }),
+    );
   };
 }
 

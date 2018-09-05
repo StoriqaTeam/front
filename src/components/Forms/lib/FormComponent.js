@@ -1,7 +1,7 @@
 // @flow strict
 
 import * as React from 'react';
-import { isEmpty, find, whereEq, reject } from 'ramda';
+import { isEmpty, find, whereEq, reject, anyPass, isNil } from 'ramda';
 import { Environment } from 'react-relay';
 
 import { validate } from 'components/Forms/lib';
@@ -66,7 +66,7 @@ interface IFormComponent<FS: {}> {
   };
   submit: () => void;
   runMutations: () => Promise<*>;
-  transformValidationErrors: (serverValidationErrors: {
+  +transformValidationErrors: (serverValidationErrors: {
     [string]: Array<string>,
   }) => { [$Keys<FS>]: Array<string> };
 }
@@ -92,6 +92,17 @@ class FormComponent<FormState: {}, Props>
     },
   };
 
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  mutationId: number = 1;
+  mounted: boolean = false;
+
   /*
     values are functions that take new value and FI's state and return updated FI
   */
@@ -111,13 +122,13 @@ class FormComponent<FormState: {}, Props>
   validate = () => validate(this.state.form, this.validators);
 
   // eslint-disable-next-line
-  transformValidationErrors = (serverValidationErrors: {
+  transformValidationErrors(serverValidationErrors: {
     [string]: Array<string>,
-  }): { [$Keys<FormState>]: Array<string> } => {
+  }): { [$Keys<FormState>]: Array<string> } {
     throw new Error(
       'You should implement `transformValidationErrors` in subclasses',
     );
-  };
+  }
 
   runMutations = () => {
     throw new Error('You must implement `runMutations` in subclasses');
@@ -136,16 +147,26 @@ class FormComponent<FormState: {}, Props>
       .catch(err => {
         log.error('Mutation error', err);
 
+        if (!this.mounted) {
+          return;
+        }
+
         const relayErrors = fromRelayError({ source: { errors: [err] } });
         const relayValidationErrors =
           relayErrors && relayErrors['100'] && relayErrors['100'].messages;
-        if (relayValidationErrors) {
+        if (relayValidationErrors && !isEmpty(relayValidationErrors)) {
+          log.debug('validation errors', {
+            relayValidationErrors,
+            transformed: this.transformValidationErrors(relayValidationErrors),
+          });
           this.setState({
             // eslint-disable-next-line
-            validationErrors: reject(
-              isEmpty,
-              this.transformValidationErrors(relayValidationErrors),
-            ),
+            validationErrors: {
+              ...reject(
+                anyPass([isEmpty, isNil]),
+                this.transformValidationErrors(relayValidationErrors),
+              ),
+            },
           });
           return;
         }
@@ -157,7 +178,10 @@ class FormComponent<FormState: {}, Props>
         });
       })
       .finally(() => {
-        this.setState({ isSubmitting: false }); // eslint-disable-line
+        this.mutationId = this.mutationId + 1;
+        if (this.mounted) {
+          this.setState({ isSubmitting: false }); // eslint-disable-line
+        }
       });
   };
 

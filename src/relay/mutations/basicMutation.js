@@ -4,6 +4,8 @@ import { commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 import { head } from 'ramda';
 
+import { log } from 'utils';
+
 type MutationType<V, R> = (params: {|
   environment: Environment,
   variables: V,
@@ -28,6 +30,7 @@ const basicMutation = <V, R: {}>(
       mutation,
       variables: params.variables,
       onCompleted: (response: ?R, errors: ?Array<Error>) => {
+        log.debug('Mutation completed', { response, errors });
         if (response != null) {
           if (objectRootField != null) {
             if (response[objectRootField]) {

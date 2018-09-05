@@ -1,11 +1,14 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { pathOr } from 'ramda';
-import { createRefetchContainer, graphql, Relay } from 'react-relay';
-
+import { graphql } from 'react-relay';
+import { fetchQuery } from 'relay-runtime';
 import debounce from 'lodash.debounce';
+
+import { log } from 'utils';
+import { environment } from 'relay/createResolver';
 import { Input } from 'components/common/Input';
 
 import './InputSlug.scss';
@@ -13,20 +16,20 @@ import './InputSlug.scss';
 type PropsType = {
   slug: string,
   onChange: (value: string) => void,
-  relay: Relay,
-  realSlug: ?string,
   resetErrors: () => void,
+  errors?: ?Array<string>,
 };
 
 type StateType = {
   isFocus: boolean,
   value: string,
-  storeSlugExists: ?boolean,
-  errors: ?Array<string>,
+  isSlugExists: ?boolean,
+  isInProcess: boolean,
+  errors?: ?Array<string>,
 };
 
 class InputSlug extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     if (JSON.stringify(nextProps.errors) !== JSON.stringify(prevState.errors)) {
       return {
         ...prevState,
@@ -38,54 +41,56 @@ class InputSlug extends Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    this.state = {
-      isFocus: false,
-      value: props.slug,
-      storeSlugExists: null,
-      errors: null,
-    };
 
-    this.checkSlug = debounce(this.checkSlug, 250);
+    this.checkSlug = debounce(this.checkSlug, 500);
   }
 
-  checkSlug = (value: string) => {
-    const { realSlug } = this.props;
-    if (realSlug && value === realSlug) {
-      this.props.onChange(realSlug);
-      return;
-    }
-    this.props.relay.refetch(
-      {
-        slug: value,
-      },
-      null,
-      () => {
-        const store = this.props.relay.environment.getStore();
-        const storeSlugExists = pathOr(
-          null,
-          [`storeSlugExists(slug:"${this.state.value}")`],
-          store.getSource().get('client:root'),
-        );
-
-        if (!storeSlugExists) {
-          this.props.onChange(this.state.value);
-        }
-        // $FlowIgnore
-        this.setState({
-          storeSlugExists: value === '' ? null : storeSlugExists,
-        });
-      },
-      { force: true },
-    );
+  state: StateType = {
+    isFocus: false,
+    value: this.props.slug,
+    isSlugExists: null,
+    isInProcess: false,
+    errors: null,
   };
 
-  handleChange = (e: any) => {
-    const { slug, resetErrors } = this.props;
-    if (resetErrors) {
-      resetErrors();
-    }
-    const { value } = e.target;
-    const correctValue = value
+  checkSlugPromise = (value: string): Promise<boolean> =>
+    new Promise((resolve, reject) => {
+      fetchQuery(
+        environment,
+        graphql`
+          query InputSlug_Query($slug: String!) {
+            storeSlugExists(slug: $slug)
+          }
+        `,
+        {
+          slug: value,
+        },
+      )
+        .then(data => {
+          if (data && data.storeSlugExists != null) {
+            resolve(!!data.storeSlugExists);
+          }
+          reject(new Error('Some shit happens'));
+        })
+        .catch(err => reject(err));
+    });
+
+  checkSlug = (value: string) => {
+    this.checkSlug.cancel();
+    this.setState({ isInProcess: true }, () => {
+      this.checkSlugPromise(value)
+        .then(isExists => {
+          this.setState({ isSlugExists: isExists });
+        })
+        .finally(() => {
+          this.setState({ isInProcess: false });
+        });
+    });
+  };
+
+  handleChange = (e: { target: { value: string } }) => {
+    const { value: prevValue } = this.state;
+    const correctedValue = e.target.value
       .toString()
       .toLowerCase()
       // Replace spaces with -
@@ -98,12 +103,28 @@ class InputSlug extends Component<PropsType, StateType> {
       .replace(/^-+/, '')
       // Trim - from end of text
       .replace(/-+$/, '');
-    if (slug !== correctValue) {
-      this.setState(() => ({
-        value: correctValue,
-        storeSlugExists: null,
-      }));
-      this.checkSlug(correctValue);
+
+    if (correctedValue === '') {
+      this.checkSlug.cancel();
+      this.setState({
+        value: correctedValue,
+        isSlugExists: null,
+      });
+      this.props.onChange(correctedValue);
+      return;
+    }
+
+    if (prevValue !== correctedValue) {
+      this.setState(
+        {
+          value: correctedValue,
+          isSlugExists: null,
+        },
+        () => {
+          this.props.onChange(correctedValue);
+          this.checkSlug(correctedValue);
+        },
+      );
     }
   };
 
@@ -112,19 +133,14 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
-    const { realSlug } = this.props;
-    const { value, storeSlugExists } = this.state;
     this.setState({
       isFocus: false,
-      value:
-        realSlug === null && storeSlugExists && value ? '' : this.props.slug,
-      storeSlugExists: null,
+      isSlugExists: null,
     });
-    this.checkSlug.cancel();
   };
 
   render() {
-    const { isFocus, value, storeSlugExists, errors } = this.state;
+    const { isFocus, value, isSlugExists, errors, isInProcess } = this.state;
     return (
       <div styleName="container">
         <div styleName="input">
@@ -137,30 +153,32 @@ class InputSlug extends Component<PropsType, StateType> {
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
             errors={errors}
+            disabled={isInProcess}
           />
           {isFocus &&
-            storeSlugExists !== null && (
-              <div
-                styleName={classNames('light', {
-                  green: !storeSlugExists,
-                  red: storeSlugExists,
-                })}
-              >
-                {storeSlugExists ? 'In use' : 'Vacant'}
-              </div>
-            )}
-          {isFocus &&
-            storeSlugExists !== null && (
-              <div
-                styleName={classNames('hint', {
-                  green: !storeSlugExists,
-                  red: storeSlugExists,
-                })}
-              >
-                {storeSlugExists
-                  ? 'Oops! Someone has already using this address.'
-                  : 'Hoorah! Name is vacant!'}
-              </div>
+            isSlugExists !== null && (
+              <React.Fragment>
+                <div
+                  styleName={classNames('light', {
+                    green: !isSlugExists,
+                    red: isSlugExists,
+                  })}
+                >
+                  {isSlugExists != null && Boolean(isSlugExists)
+                    ? 'In use'
+                    : 'Vacant'}
+                </div>
+                <div
+                  styleName={classNames('hint', {
+                    green: !isSlugExists,
+                    red: isSlugExists,
+                  })}
+                >
+                  {isSlugExists != null && Boolean(isSlugExists)
+                    ? 'Oops! Someone has already using this address.'
+                    : 'Hoorah! Name is vacant!'}
+                </div>
+              </React.Fragment>
             )}
         </div>
         <div styleName="domen">
@@ -171,20 +189,4 @@ class InputSlug extends Component<PropsType, StateType> {
   }
 }
 
-export default createRefetchContainer(
-  InputSlug,
-  graphql`
-    fragment InputSlug_storeSlugExists on Query
-      @argumentDefinitions(slug: { type: "String!", defaultValue: "" }) {
-      id
-      storeSlugExists(slug: $slug)
-    }
-  `,
-  graphql`
-    query InputSlug_Query($slug: String!) {
-      ...InputSlug_storeSlugExists @arguments(slug: $slug)
-    }
-  `,
-);
-
-// export default InputSlug;
+export default InputSlug;

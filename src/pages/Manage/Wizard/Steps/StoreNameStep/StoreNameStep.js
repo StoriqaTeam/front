@@ -126,8 +126,6 @@ class StoreNameStep extends React.Component<PropsType, StateType> {
 
   render() {
     const { isInProcess, isError } = this.state;
-    log.debug('render', { isInProcess, isError });
-    log.debug('mounted', this.mounted);
     if (isInProcess) {
       return this.renderLoader();
     } else if (isError) {

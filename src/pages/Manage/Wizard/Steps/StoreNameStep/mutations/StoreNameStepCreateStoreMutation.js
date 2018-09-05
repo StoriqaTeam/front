@@ -14,6 +14,7 @@ const mutation = graphql`
   mutation StoreNameStepCreateStoreMutation($input: CreateStoreInput!) {
     createStore(input: $input) {
       id
+      rawId
       name {
         lang
         text
