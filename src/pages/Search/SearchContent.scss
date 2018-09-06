@@ -1,14 +1,12 @@
 @import "../../styles/variables";
 
 .container {
-  flex: 1;
-
   .topContentContainer {
     display: flex;
     flex-direction: row;
     height: 3rem;
     justify-content: space-between;
-    margin: 1rem 1rem 0.5rem 1rem;
+    margin-bottom: 1rem;
     position: relative;
 
     .breadcrumbs {
@@ -27,9 +25,7 @@
         .separator {
           margin: 0 1rem;
         }
-
       }
-
     }
 
     .sortingContainer {
@@ -39,7 +35,6 @@
 
   }
   .productsContainer {
-
     .loadMoreContainer {
       display: flex;
       height: 5rem;
