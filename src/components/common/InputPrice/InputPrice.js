@@ -17,11 +17,15 @@ type StateType = {
 };
 
 type PropsType = {
+  inputRef?: (node: any) => void,
   onChangePrice: (value: number) => void,
+  onFocus?: () => void,
+  onBlur?: () => void,
   // currency: SelectType,
   // onChangeCurrency?: (item: SelectType) => void,
   price: number,
   label?: string,
+  align?: 'center' | 'left' | 'right',
 };
 
 class InputPrice extends Component<PropsType, StateType> {
@@ -71,25 +75,36 @@ class InputPrice extends Component<PropsType, StateType> {
     }
   };
 
+  handlePriceFocus = () => {
+    const { onFocus } = this.props;
+    if (onFocus) {
+      onFocus();
+    }
+  };
+
   handlePriceBlur = () => {
     const value = `${this.state.price}`;
     if (Number(value) === 0) {
       this.setState({
         price: '0',
       });
-      return;
+    } else {
+      this.setState({
+        price: value
+          .replace(/\.$/, '')
+          .replace(/^0([0-9])/, '$1')
+          .replace(/\.0+$/, '')
+          .replace(/(^0\.[0-9])0+$/, '$1'),
+      });
     }
-    this.setState({
-      price: value
-        .replace(/\.$/, '')
-        .replace(/^0([0-9])/, '$1')
-        .replace(/\.0+$/, '')
-        .replace(/(^0\.[0-9])0+$/, '$1'),
-    });
+    const { onBlur } = this.props;
+    if (onBlur) {
+      onBlur();
+    }
   };
 
   render() {
-    const { currency, onChangeCurrency, label } = this.props;
+    const { currency, onChangeCurrency, label, align, inputRef } = this.props;
     const { price } = this.state;
     return (
       <AppContext.Consumer>
@@ -97,11 +112,14 @@ class InputPrice extends Component<PropsType, StateType> {
           <div styleName="container">
             <div styleName="input">
               <Input
+                inputRef={inputRef}
                 fullWidth
                 label={label}
                 onChange={this.handlePriceChange}
+                onFocus={this.handlePriceFocus}
                 onBlur={this.handlePriceBlur}
                 value={price}
+                align={align}
               />
             </div>
             {currency && (

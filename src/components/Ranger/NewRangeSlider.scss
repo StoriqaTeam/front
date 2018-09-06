@@ -13,37 +13,41 @@
   margin-bottom: 40px;
 }
 
-.track {
-  position: absolute;
-  top: 12px;
-  left: 1px;
-  right: 1px;
-  height: 3px;
-  border-radius: 8px;
-  background-color: $color_blue;
-}
+.trackWrap {
+  position: relative;
 
-.shadowTrack {
-  position: absolute;
-  top: 0;
-  height: 3px;
-  border-radius: 8px;
-  background-color: $color_grey_light;
-  z-index: 1;
-}
+  .track {
+    position: absolute;
+    top: 12px;
+    left: 2px;
+    right: 2px;
+    height: 3px;
+    border-radius: 8px;
+    background-color: $color_blue;
+  }
 
-.shadowLeftTrack {
-  left: 0;
-}
+  .shadowTrack {
+    position: absolute;
+    top: 12px;
+    height: 3px;
+    border-radius: 8px;
+    background-color: $color_grey_light;
+    z-index: 1;
+  }
 
-.shadowRightTrack {
-  right: 0;
+  .shadowLeftTrack {
+    left: 0;
+  }
+
+  .shadowRightTrack {
+    right: 0;
+  }
 }
 
 input[type=range] {
   pointer-events: none;
   position: absolute;
-  top: 4px;
+  top: 5px;
   left: 0;
   width: 100%;
   height: 16px;
@@ -152,6 +156,26 @@ input[type=range]:focus::-ms-fill-upper {
       margin-left: 2rem;
     }
   }
+}
+
+.minTooltip {
+  position: absolute;
+  top: 4px;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+}
+
+.maxTooltip {
+  position: absolute;
+  top: 4px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+}
+
+.rangeValues {
+  font-size: 12px;
 }
 
 

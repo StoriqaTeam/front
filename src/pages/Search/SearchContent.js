@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { map, pathOr } from 'ramda';
+import { map, pathOr, isEmpty } from 'ramda';
 import classNames from 'classnames';
 import { withRouter, routerShape } from 'found';
 import { Relay } from 'react-relay';
@@ -10,6 +10,7 @@ import { flattenFunc, getNameText, searchPathByParent } from 'utils';
 import { Button } from 'components/common/Button';
 import { CardProduct } from 'components/CardProduct';
 import { Icon } from 'components/Icon';
+import { SearchNoResults } from 'components/SearchNoResults';
 
 import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
 
@@ -105,6 +106,7 @@ class SearchContent extends Component<PropsType> {
     // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const productsWithVariants = map(item => item.node, products);
+    console.log('---productsWithVariants', productsWithVariants);
     return (
       <div styleName="container">
         <div styleName="topContentContainer">
@@ -121,7 +123,7 @@ class SearchContent extends Component<PropsType> {
           </span>
         </div>
         <div styleName="productsContainer">
-          {productsWithVariants &&
+          {!isEmpty(productsWithVariants) ? (
             map(
               item => (
                 <div key={item.id} styleName="cardWrapper">
@@ -129,7 +131,10 @@ class SearchContent extends Component<PropsType> {
                 </div>
               ),
               productsWithVariants,
-            )}
+            )
+          ) : (
+            <SearchNoResults />
+          )}
         </div>
         {relay.hasMore() && (
           <div styleName="button">
