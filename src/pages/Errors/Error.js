@@ -16,7 +16,7 @@ type PropsType = {
 
 class Error extends PureComponent<PropsType> {
   handleToMainPage = () => {
-    this.props.router.replace('/');
+    this.props.router.push('/');
   };
 
   render() {

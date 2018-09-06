@@ -2,6 +2,9 @@
 
 .container {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
 
   @media (max-width: #{$md - 1px}) {
     display: flex;
@@ -10,7 +13,11 @@
 
   .input {
     position: relative;
-    width: 100%;
+    flex: 1;
+
+    label {
+      margin-top: 0;
+    }
   }
 }
 
@@ -42,19 +49,7 @@
 .domen {
   padding-left: 1.5rem;
 
-  @media (min-width: $md) {
-    position: absolute;
-    bottom: 2.75rem;
-    right: -1.5rem;
-    padding-left: 0;
-  }
-
   & > span {
-    @media (min-width: $md) {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
     color: $color_blue;
     white-space: nowrap;
   }

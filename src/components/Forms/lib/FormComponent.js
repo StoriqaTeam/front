@@ -8,6 +8,7 @@ import { validate } from 'components/Forms/lib';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import { log, fromRelayError } from 'utils';
 
+// TODO: move types to separate file
 /*
   FS - type for inputs
   `type FormInputs = {

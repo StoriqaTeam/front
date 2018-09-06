@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { createRefetchContainer, graphql, Environment } from 'react-relay';
 
-import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
 import { Button } from 'components/common/Button';
 import { log } from 'utils';
@@ -97,11 +96,8 @@ class StoreNameStep extends React.Component<PropsType, StateType> {
   renderLoader = (): React.Node => (
     <div>
       <div styleName="container">
-        <div styleName="logo">
-          <Logo />
-        </div>
         <span styleName="text">
-          Loading...<br />Please wait.
+          Initializing wizard...<br />Please wait.
         </span>
         <span styleName="description">- Storiqa team</span>
         <Spinner />

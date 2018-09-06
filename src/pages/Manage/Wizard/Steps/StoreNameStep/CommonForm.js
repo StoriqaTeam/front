@@ -7,8 +7,8 @@ import { FormComponent, validators } from 'components/Forms/lib';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { InputSlug } from 'components/common/InputSlug';
-import type { FormHandlersType, FormValidatorType } from 'components/Forms/lib';
 
+import type { FormHandlersType, FormValidatorType } from 'components/Forms/lib';
 import FormWrapper from '../../FormWrapper';
 
 import './CommonForm.scss';
@@ -117,10 +117,6 @@ class CommonForm<PropsType> extends FormComponent<FormInputs, PropsType> {
               errors={this.state.validationErrors.desc}
             />
           </div>
-          <br />
-          <button disabled={this.state.isSubmitting} onClick={this.submit}>
-            Save
-          </button>
         </div>
       </FormWrapper>
     );

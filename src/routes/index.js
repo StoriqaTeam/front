@@ -41,6 +41,45 @@ import { PasswordReset } from 'pages/PasswordReset';
 
 const routes = (
   <Route>
+    <Route path="/error" Component={Error} />
+    <Route path="/404" Component={Error404} />
+
+    <Route
+      path="/manage/wizard"
+      query={graphql`
+        query routes_ManagaeWizard_Query {
+          languages {
+            isoCode
+          }
+          me {
+            id
+            wizardStore {
+              id
+              completed
+              storeId
+            }
+            ...StoreNameStep_me
+          }
+        }
+      `}
+      Component={Wizard}
+      render={({ props, Component }) => {
+        if (props) {
+          if (!props.me) {
+            throw new RedirectException(`/login?from=/start-selling`);
+          } else if (props.me.wizardStore && props.me.wizardStore.completed) {
+            throw new RedirectException(
+              `/manage/store/${props.me.wizardStore.storeId}/products`,
+            );
+          } else {
+            return <Component {...props} />;
+          }
+        } else {
+          return null;
+        }
+      }}
+    />
+
     <Route
       path="/"
       Component={App}
@@ -135,9 +174,7 @@ const routes = (
         return <Component {...props} />;
       }}
     >
-      <Route path="/error" Component={Error} />
       <Route Component={Start} />
-      <Route path="/404" Component={Error404} />
 
       <Route
         path="/cart"
@@ -250,45 +287,6 @@ const routes = (
         }}
         Component={() => <div />}
       >
-        <Route
-          path="/wizard"
-          query={graphql`
-            query routes_Wizard_Query {
-              languages {
-                isoCode
-              }
-              me {
-                id
-                wizardStore {
-                  id
-                  completed
-                  storeId
-                }
-                ...Wizard_me
-                ...StoreNameStep_me
-              }
-            }
-          `}
-          Component={Wizard}
-          render={({ props, Component }) => {
-            if (props) {
-              if (!props.me) {
-                throw new RedirectException(`/login?from=/start-selling`);
-              } else if (
-                props.me.wizardStore &&
-                props.me.wizardStore.completed
-              ) {
-                throw new RedirectException(
-                  `/manage/store/${props.me.wizardStore.storeId}/products`,
-                );
-              } else {
-                return <Component {...props} />;
-              }
-            } else {
-              return null;
-            }
-          }}
-        />
         <Route path="/store">
           <Route
             path="/new"

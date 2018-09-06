@@ -1,3 +1,3 @@
 // @flow strict
 
-export { default as Wizard } from './Steps/StoreNameStep';
+export { default as Wizard } from './Wizard';
