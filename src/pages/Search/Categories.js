@@ -36,7 +36,6 @@ class Categories extends PureComponent<PropsType, StateType> {
     }));
   };
   render() {
-    console.log('---this.props', this.props);
     const { search, relay } = this.props;
     const { isOpen } = this.state;
     return (

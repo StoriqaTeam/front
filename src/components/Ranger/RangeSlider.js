@@ -1,12 +1,10 @@
 // @flow
 
 import React, { Component, createRef } from 'react';
-import { length, last, split } from 'ramda';
 
-import { Input } from 'components/common/Input';
 import { InputPrice } from 'components/common/InputPrice';
 
-import './NewRangeSlider.scss';
+import './RangeSlider.scss';
 
 type StateType = {
   thumb1: number,
@@ -32,7 +30,7 @@ type PropsType = {
   }) => void,
 };
 
-class NewRangeSlider extends Component<PropsType, StateType> {
+class RangeSlider extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const { thumb1, thumb2, minValue, maxValue } = nextProps;
     if (minValue !== prevState.minValue || maxValue !== prevState.maxValue) {
@@ -45,8 +43,8 @@ class NewRangeSlider extends Component<PropsType, StateType> {
         maxValue,
         thumb1InputValue: thumb1,
         thumb2InputValue: thumb2,
-        thumb1Phantom: Math.round(thumb1 / stepPhantom),
-        thumb2Phantom: Math.round(thumb2 / stepPhantom),
+        thumb1Phantom: 0,
+        thumb2Phantom: 100,
         stepPhantom,
       };
     }
@@ -249,8 +247,6 @@ class NewRangeSlider extends Component<PropsType, StateType> {
 
   render() {
     const {
-      thumb1,
-      thumb2,
       minValue,
       maxValue,
       thumb1InputValue,
@@ -260,13 +256,12 @@ class NewRangeSlider extends Component<PropsType, StateType> {
     } = this.state;
     return (
       <div styleName="container">
-        <span styleName="rangeValues">{`${this.formatNumber(
-          thumb1,
-        )} - ${this.formatNumber(thumb2)}`}</span>
-        <section
+        <div
           ref={this.sectionRef}
           styleName="range-slider"
           onMouseDown={this.handleOnMouseDownSection}
+          role="button"
+          tabIndex="0"
         >
           <input
             ref={this.thumb1Ref}
@@ -303,9 +298,9 @@ class NewRangeSlider extends Component<PropsType, StateType> {
           </div>
           <div styleName="minTooltip" title={minValue} />
           <div styleName="maxTooltip" title={maxValue} />
-        </section>
+        </div>
         <div styleName="inputs">
-          <div styleName="input left">
+          <div>
             <InputPrice
               inputRef={node => {
                 this.thumb1InputRef = node;
@@ -320,7 +315,7 @@ class NewRangeSlider extends Component<PropsType, StateType> {
               align="center"
             />
           </div>
-          <div styleName="input right">
+          <div>
             <InputPrice
               inputRef={node => {
                 this.thumb2InputRef = node;
@@ -341,4 +336,4 @@ class NewRangeSlider extends Component<PropsType, StateType> {
   }
 }
 
-export default NewRangeSlider;
+export default RangeSlider;

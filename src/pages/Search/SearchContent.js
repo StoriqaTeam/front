@@ -106,7 +106,6 @@ class SearchContent extends Component<PropsType> {
     // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const productsWithVariants = map(item => item.node, products);
-    console.log('---productsWithVariants', productsWithVariants);
     return (
       <div styleName="container">
         <div styleName="topContentContainer">

@@ -9,8 +9,6 @@
 .range-slider {
   position: relative;
   height: 24px;
-  margin-top: 16px;
-  margin-bottom: 40px;
 }
 
 .trackWrap {
@@ -146,16 +144,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 .inputs {
   display: flex;
-
-  .input {
-    &.left {
-
-    }
-
-    &.right {
-      margin-left: 2rem;
-    }
-  }
+  margin-top: -2rem;
 }
 
 .minTooltip {

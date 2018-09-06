@@ -5,9 +5,7 @@ import { map, filter } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
-// import type { SelectType } from 'types';
-
-// import './CurrencySelect.scss';
+import type { SelectItemType } from 'types';
 
 const currenciesFromBack = [
   { key: 1, name: 'rouble', alias: 'RUB' },
@@ -18,17 +16,14 @@ const currenciesFromBack = [
   { key: 6, name: 'stq', alias: 'STQ' },
 ];
 
-// type CurrenciesPropsType = Array<{ key: number, name: string, alias: string }>;
-
 type StateType = {
-  // currencies: Array<SelectType>,
-  // currency: SelectType,
+  currencies: Array<SelectItemType>,
+  currency: SelectItemType,
 };
 
 type PropsType = {
-  // currencies: CurrenciesPropsType,
-  // currency: SelectType,
-  // onChangeCurrency: (item: SelectType) => void,
+  currency: SelectItemType,
+  onChangeCurrency: (item: SelectItemType) => void,
 };
 
 class CurrencySelect extends Component<PropsType, StateType> {
@@ -56,7 +51,7 @@ class CurrencySelect extends Component<PropsType, StateType> {
     };
   }
 
-  handleOnChange = (item: SelectType) => {
+  handleOnChange = (item: SelectItemType) => {
     this.setState({ currency: item });
     this.props.onChangeCurrency(item);
   };

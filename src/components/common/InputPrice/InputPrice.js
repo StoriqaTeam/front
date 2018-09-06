@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { AppContext } from 'components/App';
 import { Input } from 'components/common/Input';
 
-// import type { SelectType } from 'types';
+import type { SelectItemType } from 'types';
 
 import CurrencySelect from './CurrencySelect';
 
@@ -21,8 +21,8 @@ type PropsType = {
   onChangePrice: (value: number) => void,
   onFocus?: () => void,
   onBlur?: () => void,
-  // currency: SelectType,
-  // onChangeCurrency?: (item: SelectType) => void,
+  currency: SelectItemType,
+  onChangeCurrency?: (item: SelectItemType) => void,
   price: number,
   label?: string,
   align?: 'center' | 'left' | 'right',

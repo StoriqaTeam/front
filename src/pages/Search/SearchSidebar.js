@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   find,
   sort,
@@ -26,7 +26,7 @@ import {
 import debounce from 'lodash.debounce';
 
 import { Accordion, prepareForAccordion } from 'components/Accordion';
-import { NewRangeSlider } from 'components/Ranger';
+import { RangeSlider } from 'components/Ranger';
 import { AttributeControl } from 'components/AttributeControl';
 import { Icon } from 'components/Icon';
 
@@ -65,15 +65,8 @@ type AttrFilterType = {
 };
 
 class SearchSidebar extends Component<PropsType, StateType> {
-  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-  //
-  //
-  //   return null;
-  // };
-
   constructor(props: PropsType) {
     super(props);
-    console.log('---props', props);
     // $FlowIgnore
     const minValue = pathOr(
       0,
@@ -170,20 +163,15 @@ class SearchSidebar extends Component<PropsType, StateType> {
       this.props,
     );
     if (minValue !== prevState.minValue || maxValue !== prevState.maxValue) {
-      this.setRangeData(minValue, maxValue, minValue, maxValue);
+      this.setRangeData(minValue, maxValue);
     }
   }
 
-  setRangeData = (
-    thumb1: number,
-    thumb2: number,
-    minValue: number,
-    maxValue: number,
-  ) => {
+  setRangeData = (minValue: number, maxValue: number) => {
     this.setState(
       {
-        thumb1,
-        thumb2,
+        thumb1: minValue,
+        thumb2: maxValue,
         minValue,
         maxValue,
       },
@@ -205,10 +193,8 @@ class SearchSidebar extends Component<PropsType, StateType> {
       },
       oldPreparedObj,
     );
-    console.log('---newPreparedObj', newPreparedObj);
+    const newUrl = inputToUrl(newPreparedObj);
     if (oldPreparedObj !== newPreparedObj) {
-      const newUrl = inputToUrl(newPreparedObj);
-      console.log('---newUrl', newUrl);
       if (type === 'replace') {
         this.props.router.replace(`/categories${newUrl}`);
         return;
@@ -286,12 +272,6 @@ class SearchSidebar extends Component<PropsType, StateType> {
       this.props,
     );
     router.push(`/categories?search=${name}&category=${item.id}`);
-  };
-
-  handleOnRangeChangeOld = (value: number, fieldName: string): void => {
-    this.setState({
-      [fieldName]: value,
-    });
   };
 
   handleOnRangeChange = (data: { thumb1: number, thumb2: number }) => {
@@ -447,16 +427,20 @@ class SearchSidebar extends Component<PropsType, StateType> {
             activeId={categoryId ? parseInt(categoryId, 10) : null}
           />
         )}
-        <div styleName="blockTitle">{`Price (${currentCurrency()})`}</div>
-        <NewRangeSlider
-          thumb1={thumb1}
-          thumb2={thumb2}
-          minValue={minValue}
-          maxValue={maxValue}
-          onChange={(data: { thumb1: number, thumb2: number }) => {
-            this.setRangeUrl(data.thumb1, data.thumb2);
-          }}
-        />
+        {minValue !== maxValue && (
+          <Fragment>
+            <div styleName="blockTitle">{`Price (${currentCurrency()})`}</div>
+            <RangeSlider
+              thumb1={thumb1}
+              thumb2={thumb2}
+              minValue={minValue}
+              maxValue={maxValue}
+              onChange={(data: { thumb1: number, thumb2: number }) => {
+                this.setRangeUrl(data.thumb1, data.thumb2);
+              }}
+            />
+          </Fragment>
+        )}
         {attrFilters &&
           sort(
             (a, b) => a.attribute.rawId - b.attribute.rawId,
