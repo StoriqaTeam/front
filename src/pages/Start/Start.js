@@ -52,7 +52,19 @@ class Start extends PureComponent<PropsTypes> {
     return (
       <div styleName="container">
         <div styleName="item bannerSliderItem">
-          <BannersSlider items={bannersSliderWithMerge} />
+          <BannersSlider
+            items={
+              !process.env.REACT_APP_STORIQA_SHOP_ID
+                ? map(
+                    item => ({
+                      ...item,
+                      id: `${item.id - 1}`,
+                    }),
+                    bannersSlider,
+                  )
+                : bannersSliderWithMerge
+            }
+          />
         </div>
         <div styleName="item goodSliderItem">
           {viewedProducts &&
