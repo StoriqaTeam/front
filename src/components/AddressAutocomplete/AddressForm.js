@@ -14,6 +14,8 @@ import {
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
+import type { SelectItemType } from 'types';
+
 import { Select } from 'components/common/Select';
 import debounce from 'lodash.debounce';
 import { AutocompleteInput } from 'components/common/AutocompleteInput';
@@ -57,13 +59,8 @@ type PropsType = {
   isOpen?: boolean,
 };
 
-type SelectType = {
-  id: string,
-  label: string,
-};
-
 type StateType = {
-  country: ?SelectType,
+  country: ?SelectItemType,
   address: ?any,
   autocompleteValue: string,
   predictions: Array<{ mainText: string, secondaryText: string }>,
@@ -246,7 +243,7 @@ class Form extends Component<PropsType, StateType> {
     this.handleAutocomplete(value);
   };
 
-  handleOnChangeCountry = (value: ?SelectType) => {
+  handleOnChangeCountry = (value: ?SelectItemType) => {
     const { onUpdateForm } = this.props;
     this.setState(
       () => ({ country: value }),

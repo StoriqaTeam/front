@@ -2,161 +2,102 @@
 
 import React, { PureComponent } from 'react';
 
-import { head, find, propEq, assoc, prepend, length } from 'ramda';
+import { head, assoc, isEmpty, pathOr } from 'ramda';
 
 import { InputPrice, Select, Button } from 'components/common';
 
-// import { convertCurrenciesForSelect, findCurrencyById } from 'utils';
-
-import type { SelectType } from 'types';
-import type { CompanyType } from './types';
+import type { SelectItemType } from 'types';
+import type { ServiceType, CompanyType, ServicesType } from './types';
 
 import './FixPriceForm.scss';
 
-// type CurrenciesPropsType = Array<{ key: number, name: string, alias: string }>;
-
 type StateType = {
   price: number,
-  currency: ?SelectType,
-  service: SelectType,
-  countries?: any,
-  country?: ?SelectType,
+  currency: SelectItemType,
+  service: ?ServiceType,
+  country?: ?SelectItemType,
 };
 
 type PropsType = {
-  onSaveCompany: (company: CompanyType) => void,
-  onRemoveEditableItem?: () => void,
-  // currencies: CurrenciesPropsType,
-  productCurrency: ?SelectType,
-  services: Array<SelectType>,
+  currency: SelectItemType,
+  services: ServicesType,
   company?: {
     id?: string,
     price: number,
-    currency: SelectType,
-    service: SelectType,
+    currency: SelectItemType,
+    service: SelectItemType | (SelectItemType & { country: SelectItemType }),
+    country?: SelectItemType,
   },
   inter?: boolean,
-  servicesWithCountries: any,
-  possibleCountries: any,
+  onSaveCompany: (company: CompanyType) => void,
+  onRemoveEditableItem?: () => void,
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    console.log('---prevState', prevState);
-    console.log('---nextProps', nextProps);
-    const { servicesWithCountries, company } = nextProps;
-    const { countries, service } = prevState;
-
-    if (servicesWithCountries && service) {
-      const serviceWithCountries = find(propEq('id', service.id))(
-        servicesWithCountries,
-      );
-      if (
-        serviceWithCountries &&
-        JSON.stringify(serviceWithCountries.countries) !==
-          JSON.stringify(countries)
-      ) {
-        return {
-          ...prevState,
-          countries: serviceWithCountries.countries,
-          country: company
-            ? company.country
-            : head(serviceWithCountries.countries),
-        };
-      }
-    }
-    return null;
-  }
-
   constructor(props: PropsType) {
     super(props);
-    console.log('---props', props);
-    const { productCurrency, company, servicesWithCountries } = props;
-    // console.log('---possibleCountries', possibleCountries);
-    const service = company ? company.service : head(props.services);
-
-    let stateData = {
+    const { currency, company, services } = props;
+    const service = !isEmpty(services) ? head(services) : null;
+    const countries = (service && service.countries) || [];
+    const country = countries && !isEmpty(countries) ? head(countries) : null;
+    this.state = {
       price: company ? company.price : 0,
-      currency: productCurrency,
+      currency,
       service,
+      country,
     };
-    if (servicesWithCountries) {
-      const serviceWithCountries = find(propEq('id', service.id))(
-        servicesWithCountries,
-      );
-      const { countries } = serviceWithCountries;
-      const country = head(countries);
-      stateData = {
-        ...stateData,
-        countries,
-        country,
-      };
-    }
-    this.state = stateData;
   }
 
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
-    console.log('---prevState', prevState);
-    console.log('---this.state', this.state);
     const { services } = this.props;
-    const { service } = this.state;
     if (JSON.stringify(prevProps.services) !== JSON.stringify(services)) {
-      this.updateCurrentService(head(services));
+      const service = !isEmpty(services) ? head(services) : null;
+      const countries = (service && service.countries) || [];
+      const country = countries && !isEmpty(countries) ? head(countries) : null;
+      this.updateState({ country, service });
     }
-    if (prevState.service && service && prevState.service.id !== service.id) {
-      this.updateCurrentService(service);
+    if (
+      JSON.stringify(prevState.service) !== JSON.stringify(this.state.service)
+    ) {
+      // $FlowIgnore
+      const countries = pathOr([], ['service', 'countries'], this.state);
+      const country = countries && !isEmpty(countries) ? head(countries) : null;
+      this.updateState({ country });
     }
   }
 
-  // getCountriesData = (services, ) => {
-  //
-  // };
-
-  updateCurrentService = (service: SelectType) => {
-    const { servicesWithCountries, possibleCountries } = this.props;
-    console.log('---servicesWithCountries', servicesWithCountries);
-    let stateData = {
-      service,
-      countries: [],
-      country: null,
-    };
-    if (service && servicesWithCountries) {
-      const serviceWithCountries = find(propEq('id', service.id))(
-        servicesWithCountries,
-      );
-      const { countries } = serviceWithCountries;
-      const country = head(countries);
-      stateData = {
-        ...stateData,
-        countries,
-        country,
-      };
-    }
-    this.setState(stateData);
+  updateState = (newState: {
+    country: ?SelectItemType,
+    service?: ?ServiceType,
+  }) => {
+    this.setState(newState);
   };
 
   handleSaveCompany = () => {
-    const { company, productCurrency } = this.props;
+    const { company, currency: defaultCurrency } = this.props;
     const { service, price, currency, country } = this.state;
     let newCompany = {
       service,
       price,
       currency,
-      country,
     };
+    if (country) {
+      newCompany = assoc('country', country, newCompany);
+    }
     if (company) {
       newCompany = assoc('id', company.id, newCompany);
     } else {
-      this.setState({ price: 0, currency: productCurrency });
+      this.setState({ price: 0, currency: defaultCurrency });
     }
+    // $FlowIgnore
     this.props.onSaveCompany(newCompany);
   };
 
-  handleOnSelectService = (service: SelectType) => {
+  handleOnSelectService = (service: ?ServiceType) => {
     this.setState({ service });
   };
 
-  handleOnSelectCountry = (country: SelectType) => {
+  handleOnSelectCountry = (country: SelectItemType) => {
     this.setState({ country });
   };
 
@@ -164,15 +105,13 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     this.setState({ price });
   };
 
-  handleOnChangeCurrency = (currency: SelectType) => {
-    console.log('---currency', currency);
+  handleOnChangeCurrency = (currency: SelectItemType) => {
     this.setState({ currency });
   };
 
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
-    const { price, currency, service, country, countries } = this.state;
-    // console.log('---service', service);
+    const { price, currency, service, country } = this.state;
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -186,19 +125,18 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               onSelect={this.handleOnSelectService}
             />
           </div>
-          {countries &&
-            inter && (
-              <div styleName="countriesSelect">
-                <Select
-                  forForm
-                  fullWidth
-                  label="Send to"
-                  items={countries}
-                  activeItem={country}
-                  onSelect={this.handleOnSelectCountry}
-                />
-              </div>
-            )}
+          {inter && (
+            <div styleName="countriesSelect">
+              <Select
+                forForm
+                fullWidth
+                label="Send to"
+                items={service && service.countries ? service.countries : []}
+                activeItem={country}
+                onSelect={this.handleOnSelectCountry}
+              />
+            </div>
+          )}
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}

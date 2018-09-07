@@ -2,16 +2,10 @@
 
 import React, { PureComponent } from 'react';
 
-import { head, prepend, find, propEq } from 'ramda';
-
-import { Select } from 'components/common/Select';
-import { InputPrice } from 'components/common';
-import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 
 import { formatPrice } from 'utils';
 
-// import type { SelectType } from 'types';
 import type { CompanyType } from './types';
 
 import './CompanyItem.scss';
@@ -20,14 +14,13 @@ type StateType = {};
 
 type PropsType = {
   company: CompanyType,
-  onRemoveCompany: (id: string) => void,
-  onSetEditableItem: (id: string) => void,
+  onRemoveCompany: (company: CompanyType) => void,
+  onSetEditableItem: (company: CompanyType) => void,
 };
 
 class CompanyItem extends PureComponent<PropsType, StateType> {
   render() {
     const { company, onRemoveCompany, onSetEditableItem } = this.props;
-    console.log('---company', company);
     return (
       <div styleName="container">
         <div styleName="logo">

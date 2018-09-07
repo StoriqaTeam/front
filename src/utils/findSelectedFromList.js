@@ -2,9 +2,9 @@
 
 import { find, propEq } from 'ramda';
 
-import type { SelectType } from 'types';
+import type { SelectItemType } from 'types';
 
-export default (list: Array<SelectType>, id: string) => {
+export default (list: Array<SelectItemType>, id: string) => {
   const item = find(propEq('id', `${id}`))(list);
   return item || null;
 };

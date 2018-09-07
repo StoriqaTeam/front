@@ -6,10 +6,8 @@ import { isEmpty, map } from 'ramda';
 
 import { RadioButton } from 'components/common/RadioButton';
 
-import { convertCurrenciesForSelect, findSelectedFromList } from 'utils';
-
-import type { SelectType } from 'types';
-import type { CompanyType } from './types';
+import type { SelectItemType } from 'types';
+import type { CompanyType, CompaniesInterType, ServicesType } from './types';
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
@@ -17,86 +15,29 @@ import handlerShipping from './handlerShippingDecorator';
 
 import './InterShipping.scss';
 
-const currenciesFromBack = [
-  { key: 1, name: 'rouble', code: 'RUB' },
-  { key: 2, name: 'euro', code: 'EUR' },
-  { key: 3, name: 'dollar', code: 'USD' },
-  { key: 4, name: 'bitcoin', code: 'BTC' },
-  { key: 5, name: 'etherium', code: 'ETH' },
-  { key: 6, name: 'stq', code: 'STQ' },
-];
-
-const countries = [
-  { id: 'all', label: 'All countries' },
-  { id: 'us', label: 'United States' },
-  { id: 'ru', label: 'Russian Federation' },
-];
-
-const interServices: Array<SelectType> = [
-  {
-    id: 'ups',
-    label: 'Ups',
-    countries: [
-      { id: 'all', label: 'All countries' },
-      { id: 'rw', label: 'Rwanda' },
-      { id: 'sm', label: 'San Marino' },
-      { id: 'gf', label: 'French Guiana' },
-      { id: 'il', label: 'Israel' },
-    ],
-  },
-  {
-    id: 'fedex',
-    label: 'FedEx',
-    countries: [
-      { id: 'all', label: 'All countries' },
-      { id: 'rs', label: 'Serbia' },
-      { id: 'tk', label: 'Tokelau' },
-      { id: 'ye', label: 'Yemen' },
-    ],
-  },
-  {
-    id: 'post',
-    label: 'Post of Russia',
-    countries: [
-      { id: 'all', label: 'All countries' },
-      { id: 'us', label: 'United States' },
-      { id: 'ru', label: 'Russian Federation' },
-    ],
-  },
-];
-
 type StateType = {
   isCheckedWithout: boolean,
   isCheckedFixPrice: boolean,
-  productCurrency: ?SelectType,
 };
 
 type PropsType = {
-  currencies: any,
-  currency: string,
-  inter?: boolean,
-  companies: Array<CompanyType>,
+  currency: SelectItemType,
+  companies: CompaniesInterType,
   editableItemId: ?string,
-  remainingServices: Array<SelectType>,
-  remainingCountries: Array<SelectType>,
-  possibleServices: Array<SelectType>,
-  possibleCountries: Array<SelectType>,
+  remainingServices: ServicesType,
+  possibleServices: ServicesType,
   onSaveCompany: (company: CompanyType) => void,
-  onRemoveCompany: (id: string) => void,
-  onSetEditableItem: (id: string) => void,
+  onRemoveCompany: (company: CompanyType) => void,
+  onSetEditableItem: (company: CompanyType) => void,
   onRemoveEditableItem: () => void,
-  interServices: any,
 };
 
 class InterShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log('---props', props);
-    const { currency } = props;
     this.state = {
       isCheckedWithout: false,
       isCheckedFixPrice: true,
-      productCurrency: currency,
     };
   }
 
@@ -109,20 +50,13 @@ class InterShipping extends Component<PropsType, StateType> {
 
   render() {
     const {
-      currencyId,
+      currency,
       companies,
       editableItemId,
       remainingServices,
       possibleServices,
-      remainingCountries,
-      inter,
-      interServices,
-      countries,
-      servicesWithCountries,
-      possibleCountries,
-      possibleServicesWithCountries,
     } = this.props;
-    const { isCheckedWithout, isCheckedFixPrice, productCurrency } = this.state;
+    const { isCheckedWithout, isCheckedFixPrice } = this.state;
 
     return (
       <div styleName="container">
@@ -156,9 +90,8 @@ class InterShipping extends Component<PropsType, StateType> {
             })}
           >
             <FixPriceForm
-              inter={inter}
-              servicesWithCountries={servicesWithCountries}
-              productCurrency={productCurrency}
+              inter
+              currency={currency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
             />
@@ -176,11 +109,9 @@ class InterShipping extends Component<PropsType, StateType> {
                     {editableItemId === item.id && (
                       <div styleName="editableForm">
                         <FixPriceForm
-                          inter={inter}
+                          inter
                           services={possibleServices}
-                          possibleCountries={possibleCountries}
-                          productCurrency={item.currency}
-                          servicesWithCountries={possibleServicesWithCountries}
+                          currency={item.currency}
                           company={{
                             id: item.id,
                             price: item.price,

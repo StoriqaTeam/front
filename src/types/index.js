@@ -9,5 +9,4 @@ export type { OrderStatusesType } from './OrderStatusesType';
 export type { TransformedCategoryType } from './TransformedCategoryType';
 export type { TranslationType } from './TranslationType';
 export type { UserDataType } from './UserDataType';
-export type { CurrenciesType } from './CurrenciesType';
-export type { SelectType } from './SelectType';
+export type { SelectItemType } from './SelectItemType';

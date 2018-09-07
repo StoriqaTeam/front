@@ -84,7 +84,6 @@ class NewProduct extends Component<PropsType, StateType> {
       seoDescription,
       shortDescription,
       longDescription,
-      currencyId,
     } = form;
     const storeID = path(['myStore', 'id'], me);
     this.setState(() => ({ isLoading: true }));

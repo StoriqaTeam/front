@@ -17,22 +17,22 @@ import debounce from 'lodash.debounce';
 
 import { Icon } from 'components/Icon';
 
-import type { SelectType } from 'types';
+import type { SelectItemType } from 'types';
 
 import './Select.scss';
 
 type StateType = {
   isExpanded: boolean,
-  items: Array<SelectType>,
+  items: Array<SelectItemType>,
   searchValue: string,
 };
 
 type PropsType = {
   transparent: ?boolean,
-  items: Array<SelectType>,
-  onSelect: (item: ?SelectType) => void,
+  items: Array<SelectItemType>,
+  onSelect: (item: ?SelectItemType) => void,
   label: ?string,
-  activeItem: ?SelectType,
+  activeItem: ?SelectItemType,
   forForm: ?boolean,
   forSearch: ?boolean,
   forAutocomlete: ?boolean,
@@ -97,7 +97,7 @@ class Select extends Component<PropsType, StateType> {
     }
   }
 
-  getIndexFromItems = (item: ?SelectType) =>
+  getIndexFromItems = (item: ?SelectItemType) =>
     item ? findIndex(propEq('id', item.id))(this.props.items) : -1;
 
   button: any;

@@ -2,14 +2,12 @@
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { isEmpty, map, find, propEq } from 'ramda';
+import { isEmpty, map } from 'ramda';
 
 import { InputPrice, Checkbox, RadioButton } from 'components/common';
 
-import { convertCurrenciesForSelect, findSelectedFromList } from 'utils';
-
-import type { CurrenciesType, SelectType } from 'types';
-import type { CompanyType } from './types';
+import type { SelectItemType } from 'types';
+import type { ServicesType, CompanyType } from './types';
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
@@ -17,49 +15,35 @@ import handlerShipping from './handlerShippingDecorator';
 
 import './LocalShipping.scss';
 
-const currenciesFromBack = [
-  { key: 1, name: 'rouble', code: 'RUB' },
-  { key: 2, name: 'euro', code: 'EUR' },
-  { key: 3, name: 'dollar', code: 'USD' },
-  { key: 4, name: 'bitcoin', code: 'BTC' },
-  { key: 5, name: 'etherium', code: 'ETH' },
-  { key: 6, name: 'stq', code: 'STQ' },
-];
-
 type StateType = {
   isCheckedOnlyPickup: boolean,
   isCheckedPickup: boolean,
   isCheckedFixPrice: boolean,
   pickupPrice: number,
-  productCurrency: ?SelectType,
-  pickupCurrency: ?SelectType,
+  pickupCurrency: SelectItemType,
 };
 
 type PropsType = {
-  currencies: Array<CompanyType>,
-  currency: string,
-  inter?: boolean,
+  currency: SelectItemType,
   companies: Array<CompanyType>,
   editableItemId: ?string,
-  remainingServices: Array<SelectType>,
-  possibleServices: Array<SelectType>,
+  remainingServices: ServicesType,
+  possibleServices: ServicesType,
   onSaveCompany: (company: CompanyType) => void,
-  onRemoveCompany: (id: string) => void,
-  onSetEditableItem: (id: string) => void,
+  onRemoveCompany: (company: CompanyType) => void,
+  onSetEditableItem: (company: CompanyType) => void,
   onRemoveEditableItem: () => void,
 };
 
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { currencies, currencyId, currency } = props;
     this.state = {
       isCheckedOnlyPickup: false,
       isCheckedPickup: false,
       isCheckedFixPrice: true,
       pickupPrice: 0,
-      productCurrency: currency,
-      pickupCurrency: currency,
+      pickupCurrency: props.currency,
     };
   }
 
@@ -80,18 +64,17 @@ class LocalShipping extends Component<PropsType, StateType> {
     this.setState({ pickupPrice });
   };
 
-  handleOnChangeCurrency = (pickupCurrency: SelectType) => {
+  handleOnChangeCurrency = (pickupCurrency: SelectItemType) => {
     this.setState({ pickupCurrency });
   };
 
   render() {
     const {
-      currencyId,
+      currency,
       companies,
       editableItemId,
       remainingServices,
       possibleServices,
-      inter,
     } = this.props;
     const {
       isCheckedOnlyPickup,
@@ -99,7 +82,6 @@ class LocalShipping extends Component<PropsType, StateType> {
       isCheckedFixPrice,
       pickupPrice,
       pickupCurrency,
-      productCurrency,
     } = this.state;
     return (
       <div styleName="container">
@@ -152,8 +134,7 @@ class LocalShipping extends Component<PropsType, StateType> {
             })}
           >
             <FixPriceForm
-              inter={inter}
-              productCurrency={productCurrency}
+              currency={currency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
             />
@@ -171,9 +152,8 @@ class LocalShipping extends Component<PropsType, StateType> {
                     {editableItemId === item.id && (
                       <div styleName="editableForm">
                         <FixPriceForm
-                          inter={inter}
                           services={possibleServices}
-                          productCurrency={item.currency}
+                          currency={item.currency}
                           company={{
                             id: item.id,
                             price: item.price,

@@ -1,58 +1,51 @@
 // @flow
 
 import React, { Component } from 'react';
+import type { Node } from 'react';
 import {
-  head,
-  last,
-  slice,
-  append,
   prepend,
-  propEq,
-  findIndex,
-  concat,
-  length,
   map,
   difference,
   filter,
-  find,
   isEmpty,
+  forEach,
   dissoc,
-  mergeDeepLeft,
-  contains,
-  mergeAll,
-  dropRepeats,
 } from 'ramda';
 
-import { AppContext } from 'components/App';
-import type { SelectType } from 'types';
-import type { CompanyType } from './types';
+import type {
+  ServicesType,
+  ServicesInterType,
+  CompanyType,
+  CompaniesType,
+  CompaniesInterType,
+} from './types';
 
-type PropsType = {};
+type PropsType = {
+  children: Array<Node>,
+};
 
 type StateType = {
   companies: Array<CompanyType>,
-  remainingServices: Array<SelectType>,
-  possibleServices: Array<SelectType>,
-  remainingCountries: Array<SelectType>,
-  possibleCountries: Array<SelectType>,
   editableItemId: ?string,
-  servicesWithCountries: Array<SelectType>,
+  remainingServices: ServicesType | ServicesInterType,
+  possibleServices: ServicesType | ServicesInterType,
 };
 
-const services: Array<SelectType> = [
+const services: ServicesType = [
   { id: 'ups', label: 'Ups' },
   { id: 'fedex', label: 'FedEx' },
   { id: 'post', label: 'Post of Russia' },
 ];
 
-const servicesWithCountries: Array<SelectType> = [
+const servicesWithCountries: ServicesInterType = [
   {
     id: 'ups',
     label: 'Ups',
     countries: [
       { id: 'all', label: 'All countries' },
-      // { id: 'us', label: 'United States' },
-      // { id: 'ru', label: 'Russian Federation' },
+      { id: 'tk', label: 'Tokelau' },
+      { id: 'us', label: 'United States' },
+      { id: 'ru', label: 'Russian Federation' },
     ],
   },
   {
@@ -78,32 +71,14 @@ const servicesWithCountries: Array<SelectType> = [
   },
 ];
 
-const countries: Array<SelectType> = [
-  { id: 'all', label: 'All countries' },
-  { id: 'us', label: 'United States' },
-  { id: 'ru', label: 'Russian Federation' },
-];
-
 export default (OriginalComponent: any, inter?: boolean) =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
-    constructor(props: PropsType) {
-      super(props);
-      const servicess = map(
-        item => dissoc('countries', item),
-        servicesWithCountries,
-      );
-      this.state = {
-        companies: [],
-        editableItemId: null,
-        remainingServices: inter ? servicess : services,
-        possibleServices: inter ? servicess : services,
-        remainingCountries: countries,
-        possibleCountries: [],
-        countries,
-        servicesWithCountries,
-        editableCompany: null,
-      };
-    }
+    state: StateType = {
+      companies: [],
+      editableItemId: null,
+      remainingServices: inter ? servicesWithCountries : services,
+      possibleServices: inter ? servicesWithCountries : services,
+    };
 
     onSaveCompany = (company: CompanyType) => {
       let img = '';
@@ -125,20 +100,25 @@ export default (OriginalComponent: any, inter?: boolean) =>
       }
       if (company.id) {
         this.setState((prevState: StateType) => {
-          const newCompanies = map(item => {
-            if (item.id === company.id) {
-              return { ...company, img };
-            }
-            return { ...item };
-          }, prevState.companies);
-          if (inter) {
-            this.redistributeServices(company);
-          }
+          const newCompany = {
+            ...company,
+            img,
+            // $FlowIgnore
+            service: dissoc('countries', company.service),
+          };
+          const newCompanies = map(
+            item => (item.id === company.id ? newCompany : item),
+            prevState.companies,
+          );
+          const remainingServices = inter
+            // $FlowIgnore
+            ? this.setRemainingServicesInter(newCompanies)
+            // $FlowIgnore
+            : this.setRemainingServices(newCompanies);
           return {
+            // $FlowIgnore
             companies: newCompanies,
-            remainingServices: inter
-              ? prevState.remainingServices
-              : this.differenceServices(newCompanies),
+            remainingServices,
             editableItemId: null,
           };
         });
@@ -146,22 +126,19 @@ export default (OriginalComponent: any, inter?: boolean) =>
         this.setState((prevState: StateType) => {
           const newCompany = {
             ...company,
-            id: `${company.service.id}${
-              company.country ? company.country.id : ''
-            }`,
+            id: `${Date.now()}`,
             img,
+            // $FlowIgnore
+            service: dissoc('countries', company.service),
           };
           const newCompanies = prepend(newCompany, prevState.companies);
-          // const remainingServices = this.differenceServices(newCompanies);
-          // console.log('---remainingServices', remainingServices);
-          if (inter) {
-            this.redistributeServices(company);
-          }
+          const remainingServices = inter
+            // $FlowIgnore
+            ? this.setRemainingServicesInter(newCompanies)
+            : this.setRemainingServices(newCompanies);
           return {
             companies: newCompanies,
-            remainingServices: inter
-              ? prevState.remainingServices
-              : this.differenceServices(newCompanies),
+            remainingServices,
             editableItemId: null,
           };
         });
@@ -174,14 +151,13 @@ export default (OriginalComponent: any, inter?: boolean) =>
           item => company.id !== item.id,
           prevState.companies,
         );
-        if (inter) {
-          this.redistributeServicesRemove(company);
-        }
+        const remainingServices = inter
+          // $FlowIgnore
+          ? this.setRemainingServicesInter(newCompanies)
+          : this.setRemainingServices(newCompanies);
         return {
           companies: newCompanies,
-          remainingServices: inter
-            ? prevState.remainingServices
-            : this.differenceServices(newCompanies),
+          remainingServices,
           editableItemId: null,
         };
       });
@@ -189,27 +165,17 @@ export default (OriginalComponent: any, inter?: boolean) =>
 
     onSetEditableItem = (company: any) => {
       this.setState((prevState: StateType) => {
-        const { remainingServices } = prevState;
-        // console.log('---remainingServices', remainingServices);
-        // const { companies } = prevState;
-        // // console.log('---companies', companies);
-        // const thisCompany = find(propEq('id', company.id))(companies);
-        // const differenceArr = difference(
-        //   services,
-        //   map(item => item.service, companies),
-        // );
-        if (inter) {
-          this.redistributeCountries(company);
-        }
-        // console.log('---possibleServices', dropRepeats(prepend(company.service, remainingServices)));
-        return {
-          editableCompany: company,
-          editableItemId: company.id,
+        const newCompanies = filter(
+          item => company.id !== item.id,
+          prevState.companies,
+        );
+        const possibleServices = inter
           // $FlowIgnore
-          possibleServices: prepend(
-            company.service,
-            filter(item => company.service.id !== item.id, remainingServices),
-          ),
+          ? this.setRemainingServicesInter(newCompanies)
+          : this.setRemainingServices(newCompanies);
+        return {
+          editableItemId: company.id,
+          possibleServices,
         };
       });
     };
@@ -218,157 +184,35 @@ export default (OriginalComponent: any, inter?: boolean) =>
       this.setState({ editableItemId: null });
     };
 
-    differenceServices = (companies: Array<CompanyType>) =>
+    setRemainingServices = (companies: CompaniesType) =>
+      // $FlowIgnore
       difference(services, map(item => item.service, companies));
 
-    redistributeCountries = (company: any) => {
-      const { companies, servicesWithCountries: servicesState } = this.state;
-      const serviceFromBack = find(propEq('id', company.service.id))(
-        servicesWithCountries,
-      );
-      const usedCountries = map(
-        item => item.country,
-        filter(
-          item =>
-            company.service.id === item.service.id &&
-            company.country.id !== item.country.id,
-          companies,
-        ),
-      );
-      const possibleCountries = difference(
-        serviceFromBack.countries,
-        usedCountries,
-      );
-
-      let newServices;
-
-      if (find(propEq('id', company.service.id))(servicesState)) {
-        newServices = map(item => {
+    setRemainingServicesInter = (companies: CompaniesInterType) => {
+      let defaultServices = servicesWithCountries;
+      forEach(company => {
+        defaultServices = map(item => {
           if (item.id === company.service.id) {
             return {
               ...item,
-              countries: prepend(company.country, item.countries),
+              countries: filter(
+                country => country.id !== company.country.id,
+                item.countries,
+              ),
             };
           }
           return item;
-        }, servicesState);
-      } else {
-        newServices = prepend(
-          { ...company.service, countries: [company.country] },
-          servicesState,
-        );
-      }
+        }, defaultServices);
+      }, companies);
 
-      this.setState({
-        // possibleCountries,
-        possibleServicesWithCountries: newServices,
-      });
-    };
-
-    redistributeServices = (company: any) => {
-      const services = this.state.servicesWithCountries;
-      console.log('---services', services);
-      if (company.id) {
-        console.log('---company', company);
-        const { editableCompany } = this.state;
-        console.log('---editableCompany', editableCompany);
-
-        const newServices = this.addCompany(company);
-      } else {
-        const newServices = this.addCompany(company);
-        this.setState({
-          servicesWithCountries: newServices,
-          remainingServices: map(
-            item => dissoc('countries', item),
-            newServices,
-          ),
-        });
-      }
-    };
-
-    addCompany = (company: any) => {
-      const services = this.state.servicesWithCountries;
-      const newServices = filter(
+      const filteredDefaultServices = filter(
         item => !isEmpty(item.countries),
-        map(item => {
-          if (item.id === company.service.id) {
-            const countries = filter(
-              item => item.id !== company.country.id,
-              item.countries,
-            );
-            return { ...item, countries };
-          }
-          return item;
-        }, services),
+        defaultServices,
       );
-      return newServices;
-    };
-
-    redistributeServicesRemove = (company: any) => {
-      const servicesFromState = this.state.servicesWithCountries;
-      const serviceFromState = find(propEq('id', company.service.id))(
-        servicesFromState,
-      );
-      const serviceFromBack = find(propEq('id', company.service.id))(
-        servicesWithCountries,
-      );
-
-      if (serviceFromState) {
-        const newCountries = append(
-          company.country,
-          serviceFromState.countries,
-        );
-        const newCountriesSort = serviceFromBack.countries;
-        const countriesReady = filter(
-          item => contains(item, newCountries),
-          newCountriesSort,
-        );
-        this.setState(() => {
-          const newServices = map(item => {
-            if (item.id === company.service.id) {
-              return { ...item, countries: countriesReady };
-            }
-            return item;
-          }, servicesFromState);
-          return {
-            servicesWithCountries: newServices,
-            remainingServices: map(
-              item => dissoc('countries', item),
-              newServices,
-            ),
-          };
-        });
-      } else {
-        const newServicesState = append(
-          { ...serviceFromBack, countries: [company.country] },
-          servicesFromState,
-        );
-        const newServicesSort = map(
-          item => {
-            const serviceInState = find(propEq('id', item.id))(
-              newServicesState,
-            );
-            return { ...item, countries: serviceInState.countries };
-          },
-          filter(item => {
-            return contains(
-              item.id,
-              map(service => service.id, newServicesState),
-            );
-          }, servicesWithCountries),
-        );
-        this.setState({
-          servicesWithCountries: newServicesSort,
-          remainingServices: map(
-            item => dissoc('countries', item),
-            newServicesSort,
-          ),
-        });
-      }
+      return filteredDefaultServices;
     };
 
     render() {
-      console.log('---this.state.companies', this.state.companies);
       return (
         <OriginalComponent
           {...this.props}
@@ -383,4 +227,4 @@ export default (OriginalComponent: any, inter?: boolean) =>
         </OriginalComponent>
       );
     }
-  }; // eslint-disable-line
+  };

@@ -10,8 +10,6 @@ import {
   whereEq,
   pathOr,
   map,
-  find,
-  propEq,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
@@ -26,22 +24,13 @@ import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 
-import type { CurrenciesType, SelectType } from 'types';
+import type { SelectItemType } from 'types';
 
 import { ProductFormContext, LocalShipping, InterShipping } from './index';
 
 import Variants from './Variants/Variants';
 
 import './Product.scss';
-
-const currenciesFromBack = [
-  { key: 1, name: 'rouble', alias: 'RUB' },
-  { key: 2, name: 'euro', alias: 'EUR' },
-  { key: 3, name: 'dollar', alias: 'USD' },
-  { key: 4, name: 'bitcoin', alias: 'BTC' },
-  { key: 5, name: 'etherium', alias: 'ETH' },
-  { key: 6, name: 'stq', alias: 'STQ' },
-];
 
 type AttributeValueType = {
   attrId: number,
@@ -89,7 +78,7 @@ type PropsType = {
   isLoading: boolean,
   comeResponse: boolean,
   resetComeResponse: () => void,
-  currencies: CurrenciesType,
+  currencies: Array<string>,
 };
 
 type StateType = {
@@ -109,8 +98,8 @@ type StateType = {
     rawId: number,
     getAttributes: ?Array<*>,
   },
-  currencies: Array<SelectType>,
-  currency: SelectType,
+  currencies: Array<SelectItemType>,
+  currency: SelectItemType,
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -242,7 +231,7 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  handleOnSelectCurrency = (currency: SelectType) => {
+  handleOnSelectCurrency = (currency: SelectItemType) => {
     this.setState({ currency });
   };
 

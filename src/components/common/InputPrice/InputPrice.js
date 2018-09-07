@@ -4,24 +4,28 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import { AppContext } from 'components/App';
-import { Input } from 'components/common';
+import { Input } from 'components/common/Input';
 
-import type { SelectType } from 'types';
+import type { SelectItemType } from 'types';
 
 import CurrencySelect from './CurrencySelect';
 
 import './InputPrice.scss';
-import { head, length } from 'ramda';
 
 type StateType = {
   price: string,
 };
 
 type PropsType = {
+  inputRef?: (node: any) => void,
   onChangePrice: (value: number) => void,
-  currency: SelectType,
-  onChangeCurrency?: (item: SelectType) => void,
+  onFocus?: () => void,
+  onBlur?: () => void,
+  currency: SelectItemType,
+  onChangeCurrency?: (item: SelectItemType) => void,
   price: number,
+  label?: string,
+  align?: 'center' | 'left' | 'right',
 };
 
 class InputPrice extends Component<PropsType, StateType> {
@@ -71,25 +75,36 @@ class InputPrice extends Component<PropsType, StateType> {
     }
   };
 
+  handlePriceFocus = () => {
+    const { onFocus } = this.props;
+    if (onFocus) {
+      onFocus();
+    }
+  };
+
   handlePriceBlur = () => {
     const value = `${this.state.price}`;
     if (Number(value) === 0) {
       this.setState({
         price: '0',
       });
-      return;
+    } else {
+      this.setState({
+        price: value
+          .replace(/\.$/, '')
+          .replace(/^0([0-9])/, '$1')
+          .replace(/\.0+$/, '')
+          .replace(/(^0\.[0-9])0+$/, '$1'),
+      });
     }
-    this.setState({
-      price: value
-        .replace(/\.$/, '')
-        .replace(/^0([0-9])/, '$1')
-        .replace(/\.0+$/, '')
-        .replace(/(^0\.[0-9])0+$/, '$1'),
-    });
+    const { onBlur } = this.props;
+    if (onBlur) {
+      onBlur();
+    }
   };
 
   render() {
-    const { currency, onChangeCurrency } = this.props;
+    const { currency, onChangeCurrency, label, align, inputRef } = this.props;
     const { price } = this.state;
     return (
       <AppContext.Consumer>
@@ -97,28 +112,33 @@ class InputPrice extends Component<PropsType, StateType> {
           <div styleName="container">
             <div styleName="input">
               <Input
+                inputRef={inputRef}
                 fullWidth
-                label="Price"
+                label={label}
                 onChange={this.handlePriceChange}
+                onFocus={this.handlePriceFocus}
                 onBlur={this.handlePriceBlur}
                 value={price}
+                align={align}
               />
             </div>
-            <div
-              styleName={classNames('select', {
-                fixCurrencySelect: !onChangeCurrency,
-              })}
-            >
-              {onChangeCurrency ? (
-                <CurrencySelect
-                  currency={currency}
-                  onChangeCurrency={onChangeCurrency}
-                  currencies={directories.currencies}
-                />
-              ) : (
-                <div styleName="fixCurrency">{currency.label}</div>
-              )}
-            </div>
+            {currency && (
+              <div
+                styleName={classNames('select', {
+                  fixCurrencySelect: !onChangeCurrency,
+                })}
+              >
+                {onChangeCurrency ? (
+                  <CurrencySelect
+                    currency={currency}
+                    onChangeCurrency={onChangeCurrency}
+                    currencies={directories.currencies}
+                  />
+                ) : (
+                  <div styleName="fixCurrency">{currency.label}</div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </AppContext.Consumer>
