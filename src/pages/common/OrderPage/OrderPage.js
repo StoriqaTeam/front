@@ -251,7 +251,7 @@ class OrderPage extends PureComponent<PropsType> {
             </div>
             <div styleName="ticketButtonTitle">Having troubles?</div>
             <div styleName="ticketButtonWrapper">
-              <Button big wireframe fullWidth>
+              <Button big wireframe fullWidth onClick={() => {}}>
                 Open ticket
               </Button>
             </div>

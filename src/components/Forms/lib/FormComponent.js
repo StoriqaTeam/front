@@ -36,7 +36,7 @@ type FormComponentStateType<FS> = {
 };
 
 type FormHandlersType<FI> = {
-  [$Keys<FI>]: (value: $Values<FI>) => (state: FI) => FI,
+  [$Keys<FI>]: (value: *) => (state: FI) => FI,
 };
 export type { FormHandlersType };
 
@@ -65,7 +65,7 @@ interface IFormComponent<FS: {}> {
   validate: () => {
     [$Keys<FS>]: Array<string>,
   };
-  submit: () => void;
+  submit: (callback?: () => void) => void;
   runMutations: () => Promise<*>;
   +transformValidationErrors: (serverValidationErrors: {
     [string]: Array<string>,
@@ -135,7 +135,7 @@ class FormComponent<FormState: {}, Props>
     throw new Error('You must implement `runMutations` in subclasses');
   };
 
-  submit = () => {
+  submit = (callback?: () => void) => {
     const validationErrors = this.validate();
     if (!isEmpty(validationErrors)) {
       this.setState({ validationErrors }); // eslint-disable-line
@@ -144,7 +144,12 @@ class FormComponent<FormState: {}, Props>
 
     this.setState({ isSubmitting: true, validationErrors: {} }); // eslint-disable-line
     this.runMutations()
-      .then(log.debug)
+      .then(resp => {
+        log.debug('form submit resposnse', resp);
+        if (callback) {
+          callback();
+        }
+      })
       .catch(err => {
         log.error('Mutation error', err);
 

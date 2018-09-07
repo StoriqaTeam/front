@@ -10,8 +10,8 @@ import './WizardFooter.scss';
 
 type PropsType = {
   step: number,
-  disabled?: boolean,
-  loading?: boolean,
+  disabled: boolean,
+  loading: boolean,
   onClick: () => void,
 };
 
@@ -77,10 +77,5 @@ const WizardFooter = (props: PropsType) => (
     </Container>
   </div>
 );
-
-WizardFooter.defaultProps = {
-  disabled: false,
-  loading: false,
-};
 
 export default WizardFooter;

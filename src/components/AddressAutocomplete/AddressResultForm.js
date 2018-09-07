@@ -1,13 +1,15 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { Input } from 'components/common/Input';
 
+import type { AddressFullType } from './AddressForm';
+
 import './AddressResultForm.scss';
 
 type PropsType = {
-  address: any,
-  onChangeForm: (type: string) => (e: any) => void,
+  address: ?AddressFullType,
+  onChangeForm: (type: string) => (e: { target: { value: string } }) => void,
 };
 
 const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
@@ -39,7 +41,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="locality"
-          label="Locality"
+          label="City"
           onChange={onChangeForm('locality')}
           value={address ? address.locality : ''}
           limit={50}

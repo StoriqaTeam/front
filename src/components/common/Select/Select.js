@@ -31,16 +31,16 @@ type StateType = {
 };
 
 type PropsType = {
-  transparent: ?boolean,
+  transparent?: ?boolean,
   items: Array<SelectType>,
-  onSelect: (item: ?SelectType) => void,
+  onSelect: (item: SelectType) => void,
   label: ?string,
   activeItem: ?SelectType,
   forForm: ?boolean,
-  forSearch: ?boolean,
-  forAutocomlete: ?boolean,
+  forSearch?: ?boolean,
+  forAutocomlete?: ?boolean,
   fullWidth: ?boolean,
-  containerStyle: ?{
+  containerStyle?: ?{
     [name: string]: any,
   },
   dataTest: string,
@@ -205,10 +205,15 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  handleItemClick = (e: any): void => {
+  handleItemClick = (e: { target: { id: string, value: string } }): void => {
     const { onSelect, items } = this.props;
     if (this.props && onSelect) {
-      onSelect(find(propEq('id', e.target.id))(items));
+      onSelect(
+        find(propEq('id', e.target.id), items) || {
+          id: 'Not found',
+          label: 'Check Select.js',
+        },
+      );
     }
   };
 

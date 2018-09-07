@@ -1,4 +1,5 @@
 // @flow
+
 import React, { Component } from 'react';
 import {
   any,
@@ -33,16 +34,16 @@ type AutocompleteItemType = {
 };
 
 export type AddressFullType = {
-  value?: ?string,
-  country?: ?string,
-  administrativeAreaLevel1?: ?string,
-  administrativeAreaLevel2?: ?string,
-  locality?: ?string,
-  political?: ?string,
-  postalCode?: ?string,
-  route?: ?string,
-  streetNumber?: ?string,
-  placeId?: ?string,
+  value: ?string,
+  country: ?string,
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  locality: ?string,
+  political: ?string,
+  postalCode: ?string,
+  route: ?string,
+  streetNumber: ?string,
+  placeId: ?string,
 };
 
 type PropsType = {
@@ -50,7 +51,7 @@ type PropsType = {
   geocoderService: any,
   onChangeFormInput: (type: string) => (e: any) => void,
   onUpdateForm: (form: any) => void,
-  onChangeData: (data: any) => void,
+  onChangeData: (data: AddressFullType) => void,
   country: string,
   address: string,
   addressFull: AddressFullType,
@@ -64,7 +65,7 @@ type SelectType = {
 
 type StateType = {
   country: ?SelectType,
-  address: ?any,
+  address: ?AddressFullType,
   autocompleteValue: string,
   predictions: Array<{ mainText: string, secondaryText: string }>,
 };

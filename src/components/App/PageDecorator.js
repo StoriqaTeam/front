@@ -33,6 +33,7 @@ export default (
                 <HeaderResponsive
                   environment={environment}
                   user={this.props.me}
+                  // $FlowIgnoreMe
                   searchValue={pathOr(
                     '',
                     ['match', 'location', 'query', 'search'],
@@ -43,6 +44,7 @@ export default (
               ) : (
                 <Header
                   user={this.props.me}
+                  // $FlowIgnoreMe
                   searchValue={pathOr(
                     '',
                     ['match', 'location', 'query', 'search'],

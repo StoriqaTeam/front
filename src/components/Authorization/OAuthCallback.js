@@ -49,6 +49,7 @@ class OAuthCallback extends PureComponent<PropsType> {
         environment: this.context.environment,
         onCompleted: (response, errors) => {
           log.debug({ response, errors });
+          // $FlowIgnoreMe
           const relayErrors = fromRelayError({ source: { errors } });
           if (relayErrors) {
             // pass showAlert for show alert errors in common cases
