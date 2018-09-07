@@ -25,6 +25,7 @@ type CurrencyType = {
 class HeaderTop extends PureComponent<PropsType> {
   componentWillMount() {
     // set STQ (or first currency in array) as selected currency if no currency was set before
+    // $FlowIgnore
     const currencies = propOr([], 'currencies', this.props);
     // $FlowIgnore
     const urlCurrency = pathOr(
