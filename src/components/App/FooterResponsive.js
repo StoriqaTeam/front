@@ -17,11 +17,15 @@ type FooterCol = {
   links: Array<{ id: string, name: string }>,
 };
 
+type PropsType = {
+  isShopCreated: boolean,
+};
+
 type StateType = {
   columns: Array<FooterCol>,
 };
 
-class FooterResponsive extends PureComponent<{}, StateType> {
+class FooterResponsive extends PureComponent<PropsType, StateType> {
   state = {
     columns: [
       {
@@ -85,6 +89,7 @@ class FooterResponsive extends PureComponent<{}, StateType> {
     ],
   };
   render() {
+    const { isShopCreated } = this.props;
     const { columns } = this.state;
     const FooterLogo = () => (
       <Col lg={9} xl={9}>
@@ -158,7 +163,7 @@ class FooterResponsive extends PureComponent<{}, StateType> {
                 />
               </Col>
               <Col md={12} lg={12} xl={2}>
-                <StartSellingButton />
+                {isShopCreated ? null : <StartSellingButton />}
               </Col>
             </Row>
           </div>
