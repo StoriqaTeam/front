@@ -30,12 +30,12 @@ export default (
         <AppContext.Consumer>
           {({ environment }) => (
             <UserData environment={environment}>
-              {({ isShopCreated }) => (
+              {({ isShopCreated, userData, totalCount }) => (
                 <div styleName="container">
                   {responsive ? (
                     <HeaderResponsive
-                      environment={environment}
-                      user={this.props.me}
+                      userData={userData}
+                      totalCount={totalCount}
                       searchValue={pathOr(
                         '',
                         ['match', 'location', 'query', 'search'],
