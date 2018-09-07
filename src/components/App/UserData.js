@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { graphql } from 'react-relay';
 import { pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';

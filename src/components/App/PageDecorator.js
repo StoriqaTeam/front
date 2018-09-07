@@ -34,6 +34,7 @@ export default (
                 <div styleName="container">
                   {responsive ? (
                     <HeaderResponsive
+                      isShopCreated={isShopCreated}
                       userData={userData}
                       totalCount={totalCount}
                       searchValue={pathOr(

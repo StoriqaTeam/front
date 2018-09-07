@@ -26,6 +26,7 @@ type PropsType = {
   withoutCategories: ?boolean,
   totalCount: number,
   userData: ?UserDataType,
+  isShopCreated: boolean,
 };
 
 type StateType = {
@@ -100,7 +101,13 @@ class HeaderResponsive extends Component<PropsType, StateType> {
     pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const { searchValue, withoutCategories, userData, totalCount } = this.props;
+    const {
+      searchValue,
+      withoutCategories,
+      userData,
+      totalCount,
+      isShopCreated,
+    } = this.props;
     const {
       showModal,
       isSignUp,
@@ -155,7 +162,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
             />
             <Container>
               <BurgerMenu />
-              <HeaderTop user={userData} currencies={directories.currencies} />
+              <HeaderTop
+                user={userData}
+                currencies={directories.currencies}
+                isShopCreated={isShopCreated}
+              />
               <HeaderBottom
                 userData={userData}
                 searchCategories={searchCategories}

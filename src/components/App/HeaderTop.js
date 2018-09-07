@@ -14,6 +14,7 @@ const currencyCookieName = 'CURRENCY';
 type PropsType = {
   // eslint-disable-next-line
   currencies: Array<string>,
+  isShopCreated: boolean,
 };
 
 type CurrencyType = {
@@ -118,6 +119,7 @@ class HeaderTop extends PureComponent<PropsType> {
   };
 
   render() {
+    const { isShopCreated } = this.props;
     return (
       <div styleName="container">
         <div styleName="item">
@@ -142,7 +144,7 @@ class HeaderTop extends PureComponent<PropsType> {
           <a href="_">Help</a> {/* eslint-disable-line */}
         </div>
         <div>
-          <a href="/start-selling">Sell on Storiqa</a>
+          {isShopCreated ? null : <a href="/start-selling">Sell on Storiqa</a>}
         </div>
       </div>
     );

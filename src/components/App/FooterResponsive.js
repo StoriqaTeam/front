@@ -123,6 +123,7 @@ class FooterResponsive extends PureComponent<PropsType, StateType> {
     const StartSellingButton = () => (
       <div styleName="startSellingButton">
         <Button
+          wireframe
           href={
             process.env.REACT_APP_HOST
               ? `${process.env.REACT_APP_HOST}/start-selling`
