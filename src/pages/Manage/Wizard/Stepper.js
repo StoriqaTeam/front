@@ -4,20 +4,23 @@ import * as React from 'react';
 import { withRouter, matcherShape, routerShape } from 'found';
 
 import WizardHeader from './WizardHeader';
-import WizardFooter from './WizardFooter';
-import { StoreNameStep } from './Steps';
+
+import { StoreNameStep, AddressStep } from './Steps';
 
 import './Stepper.scss';
 
 type PropsType = {
   match: matcherShape,
   router: routerShape,
-  me: ?{},
+  me: ?{
+    wizardStore: ?{
+      store: ?{},
+    },
+  },
 };
 
 class Stepper extends React.PureComponent<PropsType> {
   render() {
-    console.log({ props: this.props });
     const {
       match: {
         location: {
@@ -39,15 +42,19 @@ class Stepper extends React.PureComponent<PropsType> {
           <WizardHeader
             currentStep={step}
             isReadyToNext={false}
-            onChangeStep={console.log}
+            onChangeStep={() => {}}
           />
         </div>
-        <div styleName="contentWrapper">
-          {step === 1 && <StoreNameStep me={this.props.me} />}
-        </div>
-        <div styleName="footerWrapper">
-          <WizardFooter step={step} onClick={() => {}} />
-        </div>
+        {step === 1 && <StoreNameStep me={this.props.me} />}
+        {step === 2 && (
+          <AddressStep
+            store={
+              this.props.me &&
+              this.props.me.wizardStore &&
+              this.props.me.wizardStore.store
+            }
+          />
+        )}
       </React.Fragment>
     );
   }

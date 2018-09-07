@@ -334,7 +334,7 @@ class Authorization extends Component<PropsType, StateType> {
     const params = {
       input: { clientMutationId: '', email },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?boolean, errors: ?Array<any>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
@@ -389,7 +389,7 @@ class Authorization extends Component<PropsType, StateType> {
     const params = {
       input: { clientMutationId: '', password, token },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?boolean, errors: ?Array<any>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
@@ -435,7 +435,7 @@ class Authorization extends Component<PropsType, StateType> {
     const params = {
       input: { clientMutationId: '', email },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?boolean, errors: ?Array<any>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });

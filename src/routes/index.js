@@ -48,15 +48,16 @@ const routes = (
       path="/manage/wizard"
       query={graphql`
         query routes_ManagaeWizard_Query {
-          languages {
-            isoCode
-          }
           me {
             id
             wizardStore {
               id
               completed
               storeId
+              store {
+                id
+                ...AddressStep_store
+              }
             }
             ...StoreNameStep_me
           }

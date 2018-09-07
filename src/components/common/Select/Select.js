@@ -33,7 +33,7 @@ type StateType = {
 type PropsType = {
   transparent: ?boolean,
   items: Array<SelectType>,
-  onSelect: (item: ?SelectType) => void,
+  onSelect: (item: SelectType) => void,
   label: ?string,
   activeItem: ?SelectType,
   forForm: ?boolean,

@@ -124,6 +124,7 @@ class FooterResponsive extends PureComponent<{}, StateType> {
               : '/'
           }
           dataTest="footerStartSellingButton"
+          onClick={() => {}}
         >
           Start selling
         </Button>

@@ -74,6 +74,7 @@ const Footer = () => (
                     : '/'
                 }
                 dataTest="footerStartSellingButton"
+                onClick={() => {}}
               >
                 Start selling
               </Button>

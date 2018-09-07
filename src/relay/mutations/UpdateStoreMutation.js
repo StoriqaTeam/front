@@ -60,6 +60,6 @@ const mutation = graphql`
 const updateStoreMutation: MutationType<
   UpdateStoreMutationVariables,
   UpdateStoreMutationResponse,
-> = basicMutation(mutation);
+> = basicMutation(mutation, 'updateStore');
 
 export { updateStoreMutation };

@@ -94,7 +94,7 @@ class StoreNameStep extends React.Component<PropsType, StateType> {
   };
 
   renderLoader = (): React.Node => (
-    <div>
+    <div styleName="loader">
       <div styleName="container">
         <span styleName="text">
           Initializing wizard...<br />Please wait.
