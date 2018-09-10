@@ -7,14 +7,14 @@
   padding: 0 1rem;
   @media (min-width: $lg) {
     background: url('./img/storiqa-start-selling-heading.png');
-    background-position: 90rem -30rem;
+    background-position: 85rem -21rem;
     background-repeat: no-repeat;
     background-size: 80%;
   }
   @media (min-width: $xl) {
     padding: 0;
     background: url('./img/storiqa-start-selling-heading.png');
-    background-position: 90rem -30rem;
+    background-position: calc(100vw - 90rem) -30rem;
     background-repeat: no-repeat;
     background-size: initial;
   }

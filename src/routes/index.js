@@ -5,7 +5,7 @@
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last } from 'ramda';
+import { find, pathEq, pathOr, last, isNil } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -50,6 +50,10 @@ const routes = (
           me {
             id
             ...App_me
+            wizardStore {
+              id
+              completed
+            }
           }
           cart {
             id
@@ -492,14 +496,29 @@ const routes = (
               return <Component isSignUp {...props} />;
             }
           }
-          return <Component isSignUp alone {...props} />;
+          return <Component isSignUp {...props} />;
         }}
       />
 
       <Route
         path="/login"
+        query={graphql`
+          query routes_Login_Query {
+            me {
+              id
+            }
+          }
+        `}
         Component={Login}
-        render={({ Component, props }) => <Component alone {...props} />}
+        render={({ Component, props }) => {
+          if (props && !isNil(props.me)) {
+            throw new RedirectException(`/`);
+            // $FlowIgnoreMe
+            return; // eslint-disable-line
+          }
+          // eslint-disable-next-line
+          return <Component alone {...props} />;
+        }}
       />
 
       <Route path="/logout" Component={Logout} />
