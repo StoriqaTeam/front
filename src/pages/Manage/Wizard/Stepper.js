@@ -5,7 +5,7 @@ import { withRouter, matcherShape, routerShape } from 'found';
 
 import WizardHeader from './WizardHeader';
 
-import { StoreNameStep, AddressStep } from './Steps';
+import { StoreNameStep, AddressStep, ProductsStep } from './Steps';
 
 import './Stepper.scss';
 
@@ -48,6 +48,15 @@ class Stepper extends React.PureComponent<PropsType> {
         {step === 1 && <StoreNameStep me={this.props.me} />}
         {step === 2 && (
           <AddressStep
+            store={
+              this.props.me &&
+              this.props.me.wizardStore &&
+              this.props.me.wizardStore.store
+            }
+          />
+        )}
+        {step === 3 && (
+          <ProductsStep
             store={
               this.props.me &&
               this.props.me.wizardStore &&

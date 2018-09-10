@@ -6,13 +6,13 @@ import classNames from 'classnames';
 import './Row.scss';
 
 type PropsTypes = {
-  withoutGrow: ?boolean,
   children: any,
-  reverseSm: ?boolean,
-  reverseMd: ?boolean,
-  reverseLg: ?boolean,
-  reverseXl: ?boolean,
-  noWrap: ?boolean,
+  withoutGrow?: boolean,
+  reverseSm?: boolean,
+  reverseMd?: boolean,
+  reverseLg?: boolean,
+  reverseXl?: boolean,
+  noWrap?: boolean,
 };
 
 const Row = ({
@@ -38,5 +38,14 @@ const Row = ({
     {children}
   </div>
 );
+
+Row.defaultProps = {
+  reverseSm: false,
+  reverseMd: false,
+  reverseLg: false,
+  reverseXl: false,
+  noWrap: false,
+  withoutGrow: false,
+};
 
 export default Row;

@@ -57,6 +57,7 @@ const routes = (
               store {
                 id
                 ...AddressStep_store
+                ...ProductsStep_store
               }
             }
             ...StoreNameStep_me
