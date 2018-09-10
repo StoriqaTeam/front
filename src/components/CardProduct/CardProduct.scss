@@ -102,33 +102,6 @@
   //
 }
 
-.priceDropdownList {
-  position: absolute;
-  background-color: #ffffff;
-  box-shadow: 0 0.3rem 1.7rem 0 rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  padding-bottom: 0;
-  margin-left: 1rem;
-  border-radius: 0.5rem;
-  color: $color_grey;
-  font-size: 14px;
-  line-height: 1.8;
-  font-family: $font_medium;
-  white-space: nowrap;
-  text-align: right;
-  z-index: 9999;
-
-  @media (max-width: $xl - 1px) {
-    bottom: 110%;
-    right: 50%;
-  }
-
-  @media (min-width: $xl) {
-    bottom: 0;
-    left: 100%;
-  }
-}
-
 .toggleRatesDropdownClosed {
   height: 18px;
   width: 18px;
@@ -159,49 +132,27 @@
     display: flex;
     position: relative;
   }
+
+  &.isSearchPage {
+    flex-direction: column !important;
+    > div:nth-child(1) {
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 .actualPrice {
   font-family: $font_medium;
   font-size: 14px;
   line-height: 2.25rem;
-  color: $color_blue;
+  color: $color_black;
   margin-bottom: 1rem;
 
   @media (min-width: $md) {
     font-size: 16px;
   }
   @media (min-width: $xl) {
-    margin-bottom: 0;
+    margin-bottom: 0.75rem;
   }
 }
 
-.cashbackWrapper {
-  display: block;
-
-  @media (min-width: $md) {
-    display: flex;
-  }
-}
-
-.cashback {
-  display: flex;
-  justify-content: space-between;
-  height: 2.25rem;
-  padding: 0 1rem;
-  color: $color_white;
-  font-size: 11px;
-  text-transform: uppercase;
-  line-height: 2.5rem;
-  vertical-align: bottom;
-  border-radius: 0.25rem;
-  background-color: $color_blue;
-
-  &.noneCashback {
-    background-color: $color_grey_light;
-  }
-
-  .value {
-    margin-left: 1rem;
-  }
-}

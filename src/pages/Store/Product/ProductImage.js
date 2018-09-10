@@ -6,6 +6,7 @@ import { equals, prepend, isNil } from 'ramda';
 import { isEmpty } from 'utils';
 
 import { Slider } from 'components/Slider';
+import { Icon } from 'components/Icon';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
@@ -92,23 +93,29 @@ class ProductImage extends Component<PropsType, StateType> {
         </div>
         <div styleName="imageWrapper">
           <figure styleName="image">
-            {!isSquared ? (
+            {!isSquared && !isNil(photoMain) ? (
               <img src={selected || photoMain} alt="" styleName="imageBlur" />
             ) : null}
             {discount > 0 ? <ProductDiscount discount={discount} /> : null}
-            <div
-              role="img"
-              style={{
-                backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : photoMain
-                })`,
-                backgroundSize: 'contain',
-                backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
-                backgroundRepeat: 'no-repeat',
-                height: '100%',
-                width: '100%',
-              }}
-            />
+            {!isNil(photoMain) ? (
+              <div
+                role="img"
+                style={{
+                  backgroundImage: `url(${
+                    !isEmpty(selected) ? selected : photoMain
+                  })`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
+                  backgroundRepeat: 'no-repeat',
+                  height: '100%',
+                  width: '100%',
+                }}
+              />
+            ) : (
+              <div styleName="noImage">
+                <Icon type="camera" size="80" />
+              </div>
+            )}
           </figure>
         </div>
         <div styleName="imageSlider">
@@ -122,7 +129,11 @@ class ProductImage extends Component<PropsType, StateType> {
               arrows
               counter
             />
-          ) : null}
+          ) : (
+            <div styleName="noImage">
+              <Icon type="camera" size="80" />
+            </div>
+          )}
         </div>
       </div>
     );

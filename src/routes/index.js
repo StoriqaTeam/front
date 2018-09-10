@@ -5,7 +5,7 @@
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last } from 'ramda';
+import { find, pathEq, pathOr, last, isNil } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -31,7 +31,7 @@ import Cart from 'pages/Cart';
 import Checkout from 'pages/Checkout';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
-import Logout from 'pages/Logout';
+import { Logout } from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
@@ -50,6 +50,10 @@ const routes = (
           me {
             id
             ...App_me
+            wizardStore {
+              id
+              completed
+            }
           }
           cart {
             id
@@ -228,7 +232,37 @@ const routes = (
         />
       </Route>
 
-      <Route path="start-selling" Component={StartSelling} />
+      <Route
+        path="start-selling"
+        query={graphql`
+          query routes_StartSelling_Query {
+            me {
+              id
+              wizardStore {
+                id
+                completed
+                storeId
+              }
+            }
+          }
+        `}
+        Component={StartSelling}
+        render={({ props, Component }) => {
+          if (props) {
+            if (!props.me) {
+              throw new RedirectException(`/login?from=/start-selling`);
+            } else if (props.me.wizardStore && props.me.wizardStore.completed) {
+              throw new RedirectException(
+                `/manage/store/${props.me.wizardStore.storeId}`,
+              );
+            } else {
+              return <Component />;
+            }
+          } else {
+            return null;
+          }
+        }}
+      />
 
       <Route
         path="/manage"
@@ -498,8 +532,23 @@ const routes = (
 
       <Route
         path="/login"
+        query={graphql`
+          query routes_Login_Query {
+            me {
+              id
+            }
+          }
+        `}
         Component={Login}
-        render={({ Component, props }) => <Component {...props} />}
+        render={({ Component, props }) => {
+          if (props && !isNil(props.me)) {
+            throw new RedirectException(`/`);
+            // $FlowIgnoreMe
+            return; // eslint-disable-line
+          }
+          // eslint-disable-next-line
+          return <Component alone {...props} />;
+        }}
       />
 
       <Route path="/logout" Component={Logout} />
