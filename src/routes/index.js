@@ -50,6 +50,10 @@ const routes = (
           me {
             id
             ...App_me
+            wizardStore {
+              id
+              completed
+            }
           }
           cart {
             id

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, propOr, map, find, equals } from 'ramda';
+import { head, propOr, map, find, equals, pathOr } from 'ramda';
 import moment from 'moment';
 
 import { Select } from 'components/common/Select';
@@ -14,6 +14,7 @@ const currencyCookieName = 'CURRENCY';
 type PropsType = {
   // eslint-disable-next-line
   currencies: Array<string>,
+  isShopCreated: boolean,
 };
 
 type CurrencyType = {
@@ -24,7 +25,28 @@ type CurrencyType = {
 class HeaderTop extends PureComponent<PropsType> {
   componentWillMount() {
     // set STQ (or first currency in array) as selected currency if no currency was set before
+    // $FlowIgnore
     const currencies = propOr([], 'currencies', this.props);
+    // $FlowIgnore
+    const urlCurrency = pathOr(
+      null,
+      ['match', 'location', 'query', 'currency'],
+      this.props,
+    );
+    if (urlCurrency) {
+      const foundCurrency = find(equals(urlCurrency), currencies);
+      if (foundCurrency) {
+        setCookie(
+          currencyCookieName,
+          foundCurrency,
+          moment()
+            .utc()
+            .add(7, 'd')
+            .toDate(),
+        );
+        return;
+      }
+    }
     const currentCurrency: ?CurrencyType = getCookie(currencyCookieName);
     if (!currentCurrency) {
       // try to get stq
@@ -98,6 +120,7 @@ class HeaderTop extends PureComponent<PropsType> {
   };
 
   render() {
+    const { isShopCreated } = this.props;
     return (
       <div styleName="container">
         <div styleName="item">
@@ -122,7 +145,7 @@ class HeaderTop extends PureComponent<PropsType> {
           <a href="_">Help</a> {/* eslint-disable-line */}
         </div>
         <div>
-          <a href="/start-selling">Sell on Storiqa</a>
+          {isShopCreated ? null : <a href="/start-selling">Sell on Storiqa</a>}
         </div>
       </div>
     );

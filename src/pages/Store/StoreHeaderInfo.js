@@ -66,7 +66,11 @@ class StoreHeader extends Component<{}, StateTypes> {
               )}
             </figure>
             <div styleName={classNames('mobileSearch', { isOpened })}>
-              {process.env.BROWSER ? <SocialShare noBorder /> : null}
+              {process.env.BROWSER ? (
+                <div styleName="share">
+                  <SocialShare noBorder />
+                </div>
+              ) : null}
             </div>
             <div styleName="shopTitleWrap">
               <h2 styleName="shopTitle">
