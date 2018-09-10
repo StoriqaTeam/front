@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, map } from 'ramda';
+import { pathOr, map, prepend } from 'ramda';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -40,10 +40,31 @@ class Start extends PureComponent<PropsTypes> {
 
     const discountProducts = map(item => item.node, mostDiscountProducts);
     const viewedProducts = map(item => item.node, mostViewedProducts);
+    const bannersSliderWithMerge = prepend(
+      {
+        id: '1',
+        img:
+          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-OZnA7dnYf7EC.png',
+        link: `/store/${Number(process.env.REACT_APP_STORIQA_SHOP_ID || null)}`,
+      },
+      bannersSlider,
+    );
     return (
       <div styleName="container">
         <div styleName="item bannerSliderItem">
-          <BannersSlider items={bannersSlider} />
+          <BannersSlider
+            items={
+              !process.env.REACT_APP_STORIQA_SHOP_ID
+                ? map(
+                    item => ({
+                      ...item,
+                      id: `${item.id - 1}`,
+                    }),
+                    bannersSlider,
+                  )
+                : bannersSliderWithMerge
+            }
+          />
         </div>
         <div styleName="item goodSliderItem">
           {viewedProducts &&
@@ -54,6 +75,12 @@ class Start extends PureComponent<PropsTypes> {
                 seeAllUrl="/categories?search=&sortBy=VIEWS"
               />
             )}
+        </div>
+        <div styleName="item bannerImage">
+          <img
+            src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC.png"
+            alt=""
+          />
         </div>
         <div styleName="item goodSliderItem">
           {discountProducts &&
