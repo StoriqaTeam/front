@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head, map } from 'ramda';
+import { head } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -11,6 +11,8 @@ import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
+
+import { CardProductCashback, CardProductDropdown } from './index';
 
 import './CardProduct.scss';
 
@@ -39,12 +41,14 @@ type PropsType = {
     },
     rating: number,
   },
+  isSearchPage: boolean,
 };
 
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
       item: { rawId, storeId, name, products, currency, rating },
+      isSearchPage,
     } = this.props;
     let discount = null;
     let photoMain = null;
@@ -94,7 +98,11 @@ class CardProduct extends PureComponent<PropsType> {
                 </span>
               )}
             </div>
-            <div styleName="price">
+            <div
+              styleName={classNames('price', {
+                isSearchPage,
+              })}
+            >
               {discountedPrice && (
                 <MultiCurrencyDropdown
                   elementStyleName="priceDropdown"
@@ -113,43 +121,17 @@ class CardProduct extends PureComponent<PropsType> {
                   )}
                   renderDropdown={(
                     rates: Array<{ currencyCode: string, value: number }>,
-                  ) => (
-                    <div styleName="priceDropdownList">
-                      {map(
-                        item =>
-                          item.currencyCode !== currentCurrency() && (
-                            <div
-                              key={`priceDropdownItem-${
-                                this.props.item.rawId
-                              }-${item.currencyCode}`}
-                            >
-                              {`${formatPrice(item.value)} ${
-                                item.currencyCode
-                              }`}
-                            </div>
-                          ),
-                        rates,
-                      )}
-                    </div>
+                  ) => <CardProductDropdown rates={rates} />}
+                  renderDropdownToggle={(isDropdownOpened: boolean) => (
+                    <button
+                      styleName={`toggleRatesDropdown${
+                        isDropdownOpened ? 'Closed' : 'Opened'
+                      }`}
+                    />
                   )}
-                  renderDropdownToggle={(isDropdownOpened: boolean) => {
-                    if (isDropdownOpened) {
-                      return <button styleName="toggleRatesDropdownClosed" />;
-                    }
-                    return <button styleName="toggleRatesDropdownOpened" />;
-                  }}
                 />
               )}
-              <div styleName="cashbackWrapper">
-                <div
-                  styleName={classNames('cashback', {
-                    noneCashback: !cashbackValue,
-                  })}
-                >
-                  <b>Cashback</b>
-                  <b styleName="value">{`${cashbackValue || 0}%`}</b>
-                </div>
-              </div>
+              <CardProductCashback cashbackValue={cashbackValue} />
             </div>
           </div>
         </Link>
