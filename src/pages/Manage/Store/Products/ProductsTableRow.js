@@ -119,7 +119,7 @@ const ProductsTableRow = ({
       </Col>
       <Col size={4} sm={4} md={3} lg={1} xl={1}>
         <div styleName="buttons">
-          <button styleName="editButton">
+          <button styleName="editButton" data-test="editProductButton">
             <Icon type="note" size={32} />
           </button>
           <button

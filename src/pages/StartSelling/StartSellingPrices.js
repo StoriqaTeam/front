@@ -47,7 +47,7 @@ const items: Array<PriceType> = [
   {
     id: '2',
     title: 'Fulfillment',
-    price: '=$0.06',
+    price: '=$0.09',
     plan: 3,
     includes: [
       'Online shop with catalog',
