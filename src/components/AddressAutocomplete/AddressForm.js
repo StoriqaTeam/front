@@ -11,6 +11,7 @@ import {
   find,
   omit,
   isNil,
+  contains,
 } from 'ramda';
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
@@ -56,6 +57,7 @@ type PropsType = {
   address: string,
   addressFull: AddressFullType,
   isOpen?: boolean,
+  requiredFields?: Array<string>,
 };
 
 type SelectType = {
@@ -264,7 +266,6 @@ class Form extends Component<PropsType, StateType> {
     const { onChangeData } = this.props;
     const { address, country, autocompleteValue } = this.state;
     if (onChangeData && address) {
-      // $FlowIgnore
       onChangeData({
         ...pick(
           [
@@ -341,10 +342,12 @@ class Form extends Component<PropsType, StateType> {
         />
       </div>
     );
+
     const autocompleteResult = (address || isOpen) && (
       <AddressResultForm
         onChangeForm={this.handleOnChangeForm}
         address={address}
+        requiredFields={this.props.requiredFields || []}
       />
     );
     return (
@@ -358,6 +361,7 @@ class Form extends Component<PropsType, StateType> {
             onSelect={this.handleOnChangeCountry}
             activeItem={this.state.country}
             dataTest="AddressFormSelect"
+            isRequired={contains('country', this.props.requiredFields || [])}
           />
           <div styleName="result">{addressBlock}</div>
         </div>

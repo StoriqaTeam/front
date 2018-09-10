@@ -49,6 +49,7 @@ type PropsType = {
   isBirthdate?: boolean,
   onClick: () => void,
   isMobile: boolean,
+  isRequired?: boolean,
 };
 
 const maxItemsCount = 5;
@@ -230,6 +231,7 @@ class Select extends Component<PropsType, StateType> {
       dataTest,
       isBirthdate,
       isMobile,
+      isRequired,
     } = this.props;
     const { isExpanded, items } = this.state;
     return (
@@ -252,6 +254,7 @@ class Select extends Component<PropsType, StateType> {
           <div
             styleName={classNames('label', {
               labelFloat: activeItem || isExpanded,
+              isRequired,
             })}
           >
             {label}

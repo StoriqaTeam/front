@@ -7,6 +7,7 @@ import { assoc, omit, where, complement, isEmpty, isNil, both } from 'ramda';
 import { FormComponent } from 'components/Forms/lib';
 import { Select } from 'components/common/Select';
 import { AddressForm } from 'components/AddressAutocomplete';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import type { FormHandlersType, FormValidatorType } from 'components/Forms/lib';
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
@@ -110,6 +111,12 @@ class AddressStep extends FormComponent<FormInputs, PropsType> {
       },
     });
 
+  handleSubmit = () => {
+    this.submit(() => {
+      window.location.href = '/manage/wizard?step=3';
+    });
+  };
+
   render() {
     const isFormValid = isEmpty(this.validate());
     return (
@@ -143,6 +150,13 @@ class AddressStep extends FormComponent<FormInputs, PropsType> {
                   address={this.state.form.address.value}
                   addressFull={this.state.form.address}
                   country={this.state.form.address.country}
+                  requiredFields={[
+                    'country',
+                    'locality',
+                    'route',
+                    'streetNumber',
+                    'postalCode',
+                  ]}
                 />
               </div>
             </div>
@@ -151,7 +165,7 @@ class AddressStep extends FormComponent<FormInputs, PropsType> {
         <div styleName="footerWrapper">
           <WizardFooter
             step={2}
-            onClick={this.submit}
+            onClick={this.handleSubmit}
             loading={this.state.isSubmitting}
             disabled={!isFormValid}
           />
@@ -162,7 +176,7 @@ class AddressStep extends FormComponent<FormInputs, PropsType> {
 }
 
 export default createFragmentContainer(
-  AddressStep,
+  withShowAlert(AddressStep),
   graphql`
     fragment AddressStep_store on Store {
       id

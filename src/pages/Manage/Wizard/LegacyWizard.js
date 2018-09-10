@@ -1029,7 +1029,9 @@ WizardWrapper.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default createFragmentContainer(
+export default WizardWrapper;
+
+/* export default createFragmentContainer(
   withRouter(Page(withShowAlert(WizardWrapper), true, true)),
   graphql`
     fragment Wizard_me on User {
@@ -1127,4 +1129,4 @@ export default createFragmentContainer(
       }
     }
   `,
-);
+); */

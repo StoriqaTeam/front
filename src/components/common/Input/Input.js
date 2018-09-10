@@ -29,6 +29,7 @@ type PropsType = {
   dataTest?: ?string,
   inline?: ?boolean,
   search?: boolean,
+  isRequired?: boolean,
 };
 
 type StateType = {
@@ -132,6 +133,7 @@ class Input extends React.Component<PropsType, StateType> {
       postfix,
       inline,
       search,
+      isRequired,
     } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
@@ -148,7 +150,10 @@ class Input extends React.Component<PropsType, StateType> {
       >
         {label && (
           <span
-            styleName={classNames('label', { labelFloat: labelFloat || value })}
+            styleName={classNames('label', {
+              labelFloat: labelFloat || value,
+              isRequired,
+            })}
           >
             {label}
           </span>
