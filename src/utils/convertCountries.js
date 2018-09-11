@@ -2,12 +2,13 @@
 
 import { forEach, append, flatten } from 'ramda';
 
-import type { CountriesDefaultTypes, SelectItemType } from 'types';
+import type { CountriesDefaultType } from 'types';
 
-export default (countries: CountriesDefaultTypes): Array<SelectItemType> => {
+export default (countries: CountriesDefaultType) => {
   let newCountries = [];
   forEach(item => {
     newCountries = append(item.children, newCountries);
   }, countries.children);
+  // $FlowIgnore
   return flatten(newCountries);
 };

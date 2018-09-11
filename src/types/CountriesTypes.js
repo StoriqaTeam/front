@@ -6,8 +6,10 @@ export type CountryType = {
   label: string,
 };
 
+export type CountriesType = Array<CountryType>;
+
 export type CountriesDefaultType = {
   children: Array<{
-    children: Array<CountryType>,
+    children: CountriesType,
   }>,
 };
