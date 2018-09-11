@@ -37,6 +37,7 @@ type AutocompleteItemType = {
 export type AddressFullType = {
   value?: ?string,
   country?: ?string,
+  countryCode?: ?string,
   administrativeAreaLevel1?: ?string,
   administrativeAreaLevel2?: ?string,
   locality?: ?string,
@@ -57,6 +58,7 @@ type PropsType = {
   address: string,
   addressFull: AddressFullType,
   isOpen?: boolean,
+  countries: any,
 };
 
 type StateType = {
@@ -123,6 +125,7 @@ class Form extends Component<PropsType, StateType> {
       address: {
         value: addressFull.value || '',
         country: addressFull.country || '',
+        countryCode: country && country.code ? country.code : '',
         administrativeAreaLevel1: addressFull.administrativeAreaLevel1 || '',
         administrativeAreaLevel2: addressFull.administrativeAreaLevel2 || '',
         locality: addressFull.locality || '',
@@ -266,6 +269,7 @@ class Form extends Component<PropsType, StateType> {
           [
             'value',
             'country',
+            'countryCode',
             'administrativeAreaLevel1',
             'administrativeAreaLevel2',
             'locality',
@@ -277,13 +281,15 @@ class Form extends Component<PropsType, StateType> {
           ],
           address,
         ),
-        country: country ? country.label : null,
+        country: country && country.id ? country.id : null,
+        countryCode: country && country.id ? country.id : null,
         value: autocompleteValue,
       });
     }
   };
 
   render() {
+    console.log('---this.props', this.props);
     const { isOpen } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
     const countriesArr = getIndexedCountries(countries);

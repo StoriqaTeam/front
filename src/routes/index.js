@@ -62,6 +62,15 @@ const routes = (
           mainPage {
             ...Start_mainPage
           }
+          countries {
+            children {
+              children {
+                alpha3
+                alpha2
+                label
+              }
+            }
+          }
           languages {
             isoCode
           }

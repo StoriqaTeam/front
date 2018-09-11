@@ -10,3 +10,5 @@ export type { TransformedCategoryType } from './TransformedCategoryType';
 export type { TranslationType } from './TranslationType';
 export type { UserDataType } from './UserDataType';
 export type { SelectItemType } from './SelectItemType';
+export type { CountriesDefaultTypes } from './CountriesTypes';
+export type { CountryTypes } from './CountriesTypes';

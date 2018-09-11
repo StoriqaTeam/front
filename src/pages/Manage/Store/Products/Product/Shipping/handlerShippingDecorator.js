@@ -111,10 +111,10 @@ export default (OriginalComponent: any, inter?: boolean) =>
             prevState.companies,
           );
           const remainingServices = inter
-            // $FlowIgnore
-            ? this.setRemainingServicesInter(newCompanies)
-            // $FlowIgnore
-            : this.setRemainingServices(newCompanies);
+            ? // $FlowIgnore
+              this.setRemainingServicesInter(newCompanies)
+            : // $FlowIgnore
+              this.setRemainingServices(newCompanies);
           return {
             // $FlowIgnore
             companies: newCompanies,
@@ -133,8 +133,8 @@ export default (OriginalComponent: any, inter?: boolean) =>
           };
           const newCompanies = prepend(newCompany, prevState.companies);
           const remainingServices = inter
-            // $FlowIgnore
-            ? this.setRemainingServicesInter(newCompanies)
+            ? // $FlowIgnore
+              this.setRemainingServicesInter(newCompanies)
             : this.setRemainingServices(newCompanies);
           return {
             companies: newCompanies,
@@ -152,8 +152,8 @@ export default (OriginalComponent: any, inter?: boolean) =>
           prevState.companies,
         );
         const remainingServices = inter
-          // $FlowIgnore
-          ? this.setRemainingServicesInter(newCompanies)
+          ? // $FlowIgnore
+            this.setRemainingServicesInter(newCompanies)
           : this.setRemainingServices(newCompanies);
         return {
           companies: newCompanies,
@@ -170,8 +170,8 @@ export default (OriginalComponent: any, inter?: boolean) =>
           prevState.companies,
         );
         const possibleServices = inter
-          // $FlowIgnore
-          ? this.setRemainingServicesInter(newCompanies)
+          ? // $FlowIgnore
+            this.setRemainingServicesInter(newCompanies)
           : this.setRemainingServices(newCompanies);
         return {
           editableItemId: company.id,

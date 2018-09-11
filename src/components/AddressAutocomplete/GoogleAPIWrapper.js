@@ -3,6 +3,10 @@
 import React, { Component } from 'react';
 import type { Node } from 'react';
 
+import { AppContext } from 'components/App';
+
+import { convertCountries } from 'utils';
+
 type StateType = {
   isGoogleMapsApiScriptLoaded: boolean,
   isGoogleMapsApiScriptLoading: boolean,
@@ -71,9 +75,16 @@ class GoogleAPIWrapper extends Component<PropsType, StateType> {
 const wrapper = (WrappedComponent: Class<React$Component<*, *>>) => (
   props: any,
 ) => (
-  <GoogleAPIWrapper>
-    <WrappedComponent {...props} />
-  </GoogleAPIWrapper>
+  <AppContext.Consumer>
+    {({ directories }) => (
+      <GoogleAPIWrapper>
+        <WrappedComponent
+          {...props}
+          countries={convertCountries(directories.countries)}
+        />
+      </GoogleAPIWrapper>
+    )}
+  </AppContext.Consumer>
 );
 
 export default wrapper;

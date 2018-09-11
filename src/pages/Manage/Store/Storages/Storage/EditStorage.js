@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty } from 'ramda';
+import { pathOr, isEmpty, dissoc } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 
@@ -70,9 +70,7 @@ class EditStorage extends Component<PropsType, StateType> {
         clientMutationId: '',
         id,
         name: data.name,
-        addressFull: {
-          ...data.addressFull,
-        },
+        addressFull: dissoc('countryCode', data.addressFull),
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
