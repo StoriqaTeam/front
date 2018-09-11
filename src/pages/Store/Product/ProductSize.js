@@ -36,6 +36,7 @@ class ProductSize extends PureComponent<PropsType> {
             return (
               <button
                 key={`${option.label}`}
+                data-test={`productSize${option.label}`}
                 onClick={() => {
                   if (available) {
                     this.props.onClick({
