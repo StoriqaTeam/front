@@ -39,16 +39,15 @@ type PropsType = {
   forForm: ?boolean,
   forSearch?: ?boolean,
   forAutocomlete?: ?boolean,
-  fullWidth: ?boolean,
+  fullWidth?: boolean,
   containerStyle?: ?{
     [name: string]: any,
   },
   dataTest: string,
-  // eslint-disable-next-line
-  withEmpty?: boolean,
+  withEmpty?: boolean, // eslint-disable-line
   isBirthdate?: boolean,
-  onClick: () => void,
-  isMobile: boolean,
+  onClick?: () => void,
+  isMobile?: boolean,
   isRequired?: boolean,
 };
 
@@ -311,5 +310,9 @@ class Select extends Component<PropsType, StateType> {
     );
   }
 }
+
+Select.defaultProps = {
+  withEmpty: false,
+};
 
 export default Select;

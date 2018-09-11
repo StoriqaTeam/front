@@ -10,7 +10,7 @@ type PropsType = {
   id: string,
   value: string,
   label: React.Node,
-  errors: ?Array<string>,
+  errors?: Array<string>,
   onBlur?: ?() => void,
   onChange: (e: { target: { value: string } }) => void,
   fullWidth: ?boolean,

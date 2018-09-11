@@ -1,30 +1,24 @@
-// @flow
+// @flow strict
 
 import React, { Fragment } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 import classNames from 'classnames';
 import { zipObj, isEmpty, filter, values } from 'ramda';
 
 import { getNameText, searchPathByParent, flattenFunc } from 'utils';
 
+import type { Node } from 'react';
+
 import LevelList from './LevelList';
+
+import type { CategorySelector_rootCategory as RootCategoryType } from './__generated__/CategorySelector_rootCategory.graphql';
 
 import './CategorySelector.scss';
 
-type NameType = {
-  lang: string,
-  text: string,
-};
-
-type CategoryType = {
-  children?: Array<CategoryType>,
-  name: Array<NameType>,
-  rawId?: string,
-};
-
 type PropsType = {
-  categories: CategoryType,
+  rootCategory: RootCategoryType,
   onSelect: (categoryId: number) => void,
-  category: {
+  category?: {
     rawId: number,
   },
 };
@@ -45,14 +39,14 @@ type StateType = {
 class CategorySelector extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { categories, category } = props;
+    const { rootCategory, category } = props;
     let items = {
       level1Item: null,
       level2Item: null,
       level3Item: null,
     };
-    if (categories && category) {
-      const flattenCategories = flattenFunc(categories.children);
+    if (rootCategory && category) {
+      const flattenCategories = flattenFunc(rootCategory.children);
       const currentCategories = searchPathByParent(
         flattenCategories,
         category.rawId,
@@ -88,14 +82,14 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     }
   }
 
-  categoryWrapp: any;
-  items: any;
-  button: any;
+  categoryWrapp: ?HTMLDivElement;
+  button: ?HTMLDivElement;
+  items: Array<{}>;
 
-  handleToggleExpand = (e: any) => {
+  handleToggleExpand = (e: { target: Node }) => {
     const { snapshot } = this.state;
     const isCategoryWrap =
-      this.categoryWrapp && this.categoryWrapp.contains(e.target);
+      this.categoryWrapp != null && this.categoryWrapp.contains(e.target);
     const isButton = this.button && this.button.contains(e.target);
     if (isButton && !isCategoryWrap) {
       this.setState({
@@ -111,7 +105,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     }
   };
 
-  handleOnChoose = (category: any) => () => {
+  handleOnChoose = (category: CategoryType) => () => {
     const { onSelect } = this.props;
     this.setState({
       [`level${category.level}Item`]: category,
@@ -175,7 +169,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const { categories } = this.props;
+    const { rootCategory } = this.props;
     const { lang, level1Item, level2Item, level3Item, isShow } = this.state;
 
     const level1ItemName = level1Item ? getNameText(level1Item.name, lang) : '';
@@ -209,7 +203,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                   <Fragment>
                     <div styleName="levelLabel">Categories</div>
                     <LevelList
-                      items={categories.children}
+                      items={rootCategory.children}
                       lang={lang}
                       onClick={this.handleOnChoose}
                       selectedItem={level1Item}
@@ -250,5 +244,62 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     );
   }
 }
-
-export default CategorySelector;
+/*
+*/
+export default createFragmentContainer(
+  CategorySelector,
+  graphql`
+    fragment CategorySelector_rootCategory on Category {
+      id
+      name {
+        lang
+        text
+      }
+      children {
+        id
+        rawId
+        parentId
+        level
+        name {
+          lang
+          text
+        }
+        children {
+          id
+          rawId
+          parentId
+          level
+          name {
+            lang
+            text
+          }
+          children {
+            id
+            rawId
+            parentId
+            level
+            name {
+              lang
+              text
+            }
+            getAttributes {
+              id
+              rawId
+              name {
+                text
+              }
+              metaField {
+                values
+                translatedValues {
+                  translations {
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+);

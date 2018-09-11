@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { withRouter, matcherShape, routerShape } from 'found';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import WizardHeader from './WizardHeader';
 
@@ -69,4 +70,22 @@ class Stepper extends React.PureComponent<PropsType> {
   }
 }
 
-export default withRouter(Stepper);
+export default createFragmentContainer(
+  withRouter(Stepper),
+  graphql`
+    fragment Stepper_me on User {
+      id
+      wizardStore {
+        id
+        completed
+        storeId
+        store {
+          id
+          ...AddressStep_store
+          ...ProductsStep_store
+        }
+      }
+      ...StoreNameStep_me
+    }
+  `,
+);

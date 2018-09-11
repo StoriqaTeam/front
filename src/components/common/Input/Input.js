@@ -8,15 +8,15 @@ import { Icon } from 'components/Icon';
 import './Input.scss';
 
 type PropsType = {
-  id: string,
-  value: string,
-  label: React.Node,
-  errors?: ?Array<string>,
   onChange: (e: { target: { value: string } }) => void,
   onBlur?: (e: any) => void,
   onFocus?: (e: any) => void,
   onKeyDown?: () => void,
   onClick?: () => void,
+  id: string,
+  value: string,
+  label: React.Node,
+  errors?: ?Array<string>,
   min?: ?string,
   icon?: ?string,
   isUrl?: ?boolean,

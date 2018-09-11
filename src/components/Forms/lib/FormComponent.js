@@ -161,22 +161,31 @@ class FormComponent<FormState: {}, Props>
         const relayValidationErrors =
           relayErrors && relayErrors['100'] && relayErrors['100'].messages;
         if (relayValidationErrors && !isEmpty(relayValidationErrors)) {
+          const transformedValidationErrors = this.transformValidationErrors(
+            relayValidationErrors,
+          );
           log.debug('validation errors', {
             relayValidationErrors,
-            transformed: this.transformValidationErrors(relayValidationErrors),
+            transformedValidationErrors,
           });
-          this.setState({
-            // eslint-disable-next-line
-            validationErrors: {
-              ...reject(
-                anyPass([isEmpty, isNil]),
-                this.transformValidationErrors(relayValidationErrors),
-              ),
-            },
-          });
-          return;
+
+          // if transformed not empty, show validation errors
+          // if empty -- exit from upper `if`
+          if (!isEmpty(transformedValidationErrors)) {
+            this.setState({
+              // eslint-disable-next-line
+              validationErrors: {
+                ...reject(
+                  anyPass([isEmpty, isNil]),
+                  transformedValidationErrors,
+                ),
+              },
+            });
+            return;
+          }
         }
 
+        log.debug('showAlert', this);
         this.props.showAlert({
           type: 'danger',
           text: 'Error :(',

@@ -1,15 +1,14 @@
 // @flow strict
 
-import React from 'react';
+import * as React from 'react';
 
 import { Main, FooterResponsive } from 'components/App';
-
-import Stepper from './Stepper';
 
 import './Wizard.scss';
 
 type PropsType = {
   me: ?{},
+  children: React.Element<*>,
 };
 
 const Wizard = (props: PropsType) => (
@@ -17,7 +16,7 @@ const Wizard = (props: PropsType) => (
     <div styleName="headerMock" />
     <Main>
       <div styleName="wizardContainer">
-        <Stepper me={props.me} />
+        {React.cloneElement(props.children, { me: props.me })}
       </div>
     </Main>
     <FooterResponsive />

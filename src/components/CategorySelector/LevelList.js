@@ -1,31 +1,22 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import classNames from 'classnames';
 
 import { getNameText } from 'utils';
 
+import type { CategoryType } from './CategorySelector';
+
 import './CategorySelector.scss';
 
-type NameType = {
-  lang: string,
-  text: string,
-};
-
-type CategoryType = {
-  children?: Array<CategoryType>,
-  name: Array<NameType>,
-  rawId?: string,
-};
-
-type LevelListType = {
+type PropsType = {
   items: ?Array<CategoryType>,
   lang: string,
-  onClick: (e: any) => () => void,
+  onClick: (e: CategoryType) => () => void,
   selectedItem: ?CategoryType,
 };
 
-const LevelList = ({ items, onClick, lang, selectedItem }: LevelListType) => (
+const LevelList = ({ items, onClick, lang, selectedItem }: PropsType) => (
   <div>
     {items &&
       items.map(item => (

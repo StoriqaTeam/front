@@ -5,7 +5,7 @@
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last } from 'ramda';
+import { find, pathEq, pathOr, last, omit } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -22,7 +22,8 @@ import {
   StorageProducts,
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
-import { Wizard } from 'pages/Manage/Wizard';
+import { Wizard, WizardStepper } from 'pages/Manage/Wizard';
+import ProductForm from 'pages/Manage/Wizard/Steps/ProductsStep/ProductForm';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
@@ -50,17 +51,7 @@ const routes = (
         query routes_ManagaeWizard_Query {
           me {
             id
-            wizardStore {
-              id
-              completed
-              storeId
-              store {
-                id
-                ...AddressStep_store
-                ...ProductsStep_store
-              }
-            }
-            ...StoreNameStep_me
+            ...Stepper_me
           }
         }
       `}
@@ -80,7 +71,42 @@ const routes = (
           return null;
         }
       }}
-    />
+    >
+      <Route Component={WizardStepper} />
+      <Route
+        path="/add"
+        Component={ProductForm}
+        query={graphql`
+          query routes_WizardProductForm_Query {
+            categories {
+              ...ProductForm_rootCategory
+            }
+            me {
+              id
+              wizardStore {
+                id
+                store {
+                  id
+                  ...ProductForm_store
+                }
+              }
+            }
+          }
+        `}
+        render={({ props, Component }) =>
+          props &&
+          Component && (
+            <Component
+              {...omit(['categories', 'me'], props)}
+              rootCategory={props.categories}
+              store={
+                props.me && props.me.wizardStore && props.me.wizardStore.store
+              }
+            />
+          )
+        }
+      />
+    </Route>
 
     <Route
       path="/"
@@ -103,57 +129,6 @@ const routes = (
             isoCode
           }
           currencies
-          categories {
-            name {
-              lang
-              text
-            }
-            children {
-              id
-              rawId
-              parentId
-              level
-              name {
-                lang
-                text
-              }
-              children {
-                id
-                rawId
-                parentId
-                level
-                name {
-                  lang
-                  text
-                }
-                children {
-                  id
-                  rawId
-                  parentId
-                  level
-                  name {
-                    lang
-                    text
-                  }
-                  getAttributes {
-                    id
-                    rawId
-                    name {
-                      text
-                    }
-                    metaField {
-                      values
-                      translatedValues {
-                        translations {
-                          text
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
           orderStatuses
           currencyExchange {
             code

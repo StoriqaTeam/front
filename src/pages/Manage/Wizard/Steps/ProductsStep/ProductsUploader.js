@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { map } from 'ramda';
@@ -11,12 +11,16 @@ import { Col, Row } from 'layout';
 import './ProductsUploader.scss';
 
 type PropsType = {
-  onUpload: (type: string, e: any) => Promise<*>,
+  onUpload: (type: string, e: {}) => Promise<*>,
   onRemove: (url: string) => void,
   additionalPhotos: Array<string>,
 };
 
-const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
+const ProductsUploader = ({
+  onUpload,
+  additionalPhotos,
+  onRemove,
+}: PropsType) => (
   <div styleName="wrapper">
     {additionalPhotos.length !== 0 && (
       <div styleName="uploadersWrapper">
@@ -83,4 +87,4 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
   </div>
 );
 
-export default Uploaders;
+export default ProductsUploader;

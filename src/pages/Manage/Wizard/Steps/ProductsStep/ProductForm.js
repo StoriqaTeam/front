@@ -1,41 +1,49 @@
-// @flow
+// @flow strict
 
-import React, { PureComponent } from 'react';
-import { map, pathOr, whereEq, filter } from 'ramda';
+import React from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { isEmpty, map, assoc, omit, is } from 'ramda';
 
-import { findCategory, convertSrc } from 'utils';
+import { FormComponent, validators } from 'components/Forms/lib';
+import { Container, Col, Row } from 'layout';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/common/Button';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
-import { Container, Col, Row } from 'layout';
 import { Select } from 'components/common/Select';
+import { withShowAlert } from 'components/App/AlertContext';
+import { convertSrc, log } from 'utils';
 
-import AttributesForm from './AttributesForm';
+import type { Node } from 'react';
 
-import type { AttrValueType } from './AttributesForm';
-import type { BaseProductNodeType } from '../Wizard';
+import ProductsUploader from './ProductsUploader';
+import { createProductMutation } from './mutations/WizardCreateProductWithAttributesMutation';
+import { createBaseProductMutation } from './mutations/WizardCreateBaseProductMutation';
 
-import './Form.scss';
+import type { ProductForm_rootCategory as ProductFormRootCategory } from './__generated__/ProductForm_rootCategory.graphql';
+import type { ProductForm_store as ProductFormStore } from './__generated__/ProductForm_store.graphql';
 
-type CategoriesTreeType = {
-  rawId: number,
-  level: number,
-  children: ?Array<CategoriesTreeType>,
+import './ProductForm.scss';
+
+type FormInputs = {
+  name: string,
+  desc: string,
+  categoryId: number,
+  price: number,
+  currency: { id: string, label: string },
+  vendorCode: string,
+  cashback: number,
+  quantity: number,
+  mainPhoto: ?string,
+  additionalPhotos: Array<string>,
+  attributes: Array<{}>,
 };
 
 type PropsType = {
-  categoryId?: ?number,
-  categories: CategoriesTreeType,
-  onChange: ({
-    [name: string]: any,
-  }) => void,
-  data: BaseProductNodeType,
-  onUpload: (type: string, e: any) => Promise<*>,
-  onSave: (callback: () => void) => void,
-  onClose: () => void,
+  rootCategory: ?ProductFormRootCategory,
+  store: ?ProductFormStore,
 };
 
 const photoIcons = [
@@ -69,107 +77,130 @@ const photoIcons = [
   },
 ];
 
-class ThirdForm extends PureComponent<PropsType> {
-  // TODO: remove useless function
-  handleChangeBaseProductState = (e: any) => {
-    const { data } = this.props;
-    const {
-      target: { value, name },
-    } = e;
-    this.props.onChange({
-      ...data,
-      [name]: value,
-    });
+class ProductForm extends FormComponent<FormInputs, PropsType> {
+  state = {
+    form: {
+      name: '',
+      desc: '',
+      categoryId: -1,
+      price: 0,
+      currency: { id: '', label: '' },
+      vendorCode: '',
+      cashback: 5,
+      quantity: 1,
+      mainPhoto: null,
+      additionalPhotos: [],
+      attributes: [],
+    },
+    isSubmitting: false,
+    validationErrors: {},
   };
 
-  handleChangeProductState = (e: any) => {
-    const { data } = this.props;
-    const {
-      target: { value, name },
-    } = e;
-    this.props.onChange({
-      ...data,
-      product: {
-        ...data.product,
-        [name]: name === 'vendorCode' ? value : parseInt(value, 10),
-      },
-    });
+  validators = {
+    name: validators.notEmpty,
+    desc: validators.notEmpty,
+    price: validators.isPositiveNumber,
+    vendorCode: validators.notEmpty,
+    quantity: validators.isPositiveNumber,
+    cashback: [[(val: mixed) => is(Number, val) && val >= 0 && val <= 100, '']],
+    categoryId: validators.isPositiveNumber,
   };
 
-  handleAttributesChange = (attrs: Array<AttrValueType>) => {
-    const { onChange } = this.props;
-    onChange({ attributes: attrs });
+  handlers = {
+    name: assoc('name'),
+    desc: assoc('desc'),
+    categoryId: assoc('categoryId'),
+    price: (value: number) => (form: FormInputs) => ({
+      ...form,
+      price: parseInt(value, 10) || 0,
+    }),
+    currency: assoc('currency'),
+    vendorCode: assoc('vendorCode'),
+    cashback: (value: number) => (form: FormInputs) => ({
+      ...form,
+      cashback: parseInt(value, 10) || 0,
+    }),
+    quantity: (value: number) => (form: FormInputs) => ({
+      ...form,
+      quantity: parseInt(value, 10) || 0,
+    }),
+    mainPhoto: assoc('mainPhoto'),
+    additionalPhotos: assoc('additionalPhotos'),
+    attributes: assoc('attributes'),
   };
 
-  handleRemoveAddtionalPhoto = (url: string) => {
-    const { onChange, data } = this.props;
-    onChange({
-      product: {
-        ...data.product,
-        additionalPhotos: [
-          ...filter(u => u !== url, data.product.additionalPhotos),
-        ],
-      },
-    });
-  };
-
-  handleOnRemoveMainPhoto = () => {
-    const { onChange, data } = this.props;
-    onChange({
-      product: {
-        ...data.product,
-        photoMain: '',
-      },
-    });
-  };
-
-  prepareValuesForAttributes = (
-    attributes: Array<{ value: string, attribute: { rawId: number } }>,
-  ) =>
-    map(
-      item => ({ value: item.value, attrId: item.attribute.rawId }),
-      attributes,
-    );
-
-  checkForSave = () => {
-    const { data } = this.props;
-    const isNotReady =
-      !data.name ||
-      !data.shortDescription ||
-      !data.categoryId ||
-      !data.product.price ||
-      !data.product.vendorCode;
-    if (isNotReady) {
-      return true;
+  handle(input: $Keys<FormInputs>, value: *): void {
+    if (this.state.isSubmitting) {
+      return;
     }
-    return false;
-  };
 
-  renderAttributes = () => {
-    const { categoryId, attributes } = this.props.data;
-    const catObj = findCategory(
-      whereEq({ rawId: parseInt(categoryId, 10) }),
-      this.props.categories,
+    const handler = this.handlers[input](value);
+    this.setState({
+      form: handler(this.state.form),
+      validationErrors: omit([input], this.state.validationErrors),
+    });
+  }
+
+  // eslint-disable-next-line
+  transformValidationErrors(serverValidationErrors: {
+    [string]: Array<string>,
+  }): { [$Keys<FormInputs>]: Array<string> } {
+    return {};
+  }
+
+  renderAttributes = (): Node => null;
+
+  runMutations = () =>
+    createBaseProductMutation({
+      environment: this.props.relay.environment,
+      variables: {
+        input: {
+          clientMutationId: `${this.mutationId}`,
+          name: [
+            {
+              lang: 'EN',
+              text: this.state.form.name,
+            },
+          ],
+          shortDescription: [
+            {
+              lang: 'EN',
+              text: this.state.form.desc,
+            },
+          ],
+          currency: 'STQ',
+          categoryId: this.state.form.categoryId,
+          storeId: (this.props.store && this.props.store.rawId) || -1,
+        },
+      },
+    }).then(resp =>
+      createProductMutation({
+        environment: this.props.relay.environment,
+        variables: {
+          input: {
+            clientMutationId: `${this.mutationId}`,
+            attributes: [],
+            product: {
+              baseProductId: resp.createBaseProduct.rawId,
+              photoMain: this.state.form.mainPhoto,
+              additionalPhotos: this.state.form.additionalPhotos,
+              vendorCode: this.state.form.vendorCode,
+              cashback: this.state.form.cashback / 100,
+              price: this.state.form.price,
+            },
+          },
+        },
+      }),
     );
-    return (
-      catObj &&
-      catObj.getAttributes && (
-        <div styleName="section correctMargin">
-          <div styleName="sectionName">Properties</div>
-          <AttributesForm
-            attributes={catObj.getAttributes}
-            values={attributes}
-            onChange={this.handleAttributesChange}
-          />
-        </div>
-      )
-    );
+
+  handleSubmit = () => {
+    this.submit(() => {
+      log.debug('', 'created');
+    });
   };
 
   render() {
-    const { data, onSave, onClose, onUpload } = this.props;
-    // $FlowIgnoreMe
-    const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
+    const isFormValid = isEmpty(this.validate());
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">
@@ -190,26 +221,30 @@ class ThirdForm extends PureComponent<PropsType> {
                     <div styleName="input">
                       <Input
                         id="name"
-                        value={data.name}
+                        value={this.state.form.name}
                         label={
                           <span>
                             Product name <span styleName="red">*</span>
                           </span>
                         }
-                        onChange={this.handleChangeBaseProductState}
+                        onChange={(e: { target: { value: string } }) => {
+                          this.handle('name', e.target.value);
+                        }}
                         fullWidth
                       />
                     </div>
                     <div styleName="input">
                       <Textarea
-                        id="shortDescription"
-                        value={data.shortDescription}
+                        id="desc"
+                        value={this.state.form.desc}
                         label={
                           <span>
                             Short description <span styleName="red">*</span>
                           </span>
                         }
-                        onChange={this.handleChangeBaseProductState}
+                        onChange={(e: { target: { value: string } }) => {
+                          this.handle('desc', e.target.value);
+                        }}
                         fullWidth
                       />
                     </div>
@@ -218,10 +253,10 @@ class ThirdForm extends PureComponent<PropsType> {
                     <div styleName="sectionName">Product main photo</div>
                     <div styleName="uploadersWrapper">
                       <div styleName="uploadedPhotoList">
-                        {(data.product.photoMain && (
+                        {(this.state.form.mainPhoto != null && (
                           <div
                             styleName="uploadItem"
-                            onClick={this.handleOnRemoveMainPhoto}
+                            onClick={() => {}}
                             onKeyDown={() => {}}
                             role="button"
                             tabIndex="0"
@@ -230,7 +265,7 @@ class ThirdForm extends PureComponent<PropsType> {
                               styleName="imageBG"
                               style={{
                                 backgroundImage: `url(${convertSrc(
-                                  data.product.photoMain,
+                                  this.state.form.mainPhoto,
                                   'small',
                                 )})`,
                               }}
@@ -281,9 +316,9 @@ class ThirdForm extends PureComponent<PropsType> {
                   <div styleName="section">
                     <div styleName="sectionName">Product photo gallery</div>
                     <ProductsUploader
-                      onRemove={this.handleRemoveAddtionalPhoto}
-                      onUpload={onUpload}
-                      additionalPhotos={data.product.additionalPhotos || []}
+                      onRemove={() => {}}
+                      onUpload={() => {}}
+                      additionalPhotos={this.state.form.additionalPhotos}
                     />
                     <div styleName="uploadDescriptionContainer">
                       <div styleName="description">
@@ -312,10 +347,14 @@ class ThirdForm extends PureComponent<PropsType> {
                       General settings and pricing
                     </div>
                     <div styleName="categorySelector">
-                      <CategorySelector
-                        categories={this.props.categories}
-                        onSelect={id => this.props.onChange({ categoryId: id })}
-                      />
+                      {this.props.rootCategory && (
+                        <CategorySelector
+                          rootCategory={this.props.rootCategory}
+                          onSelect={(id: number) => {
+                            this.handle('categoryId', id);
+                          }}
+                        />
+                      )}
                     </div>
                     <div styleName="productStates formItem">
                       <Container correct>
@@ -325,9 +364,9 @@ class ThirdForm extends PureComponent<PropsType> {
                               <Input
                                 id="price"
                                 value={
-                                  data.product.price == null
+                                  this.state.form.price == null
                                     ? ''
-                                    : `${data.product.price}`
+                                    : `${this.state.form.price}`
                                 }
                                 label={
                                   <span>
@@ -335,7 +374,11 @@ class ThirdForm extends PureComponent<PropsType> {
                                   </span>
                                 }
                                 min="0"
-                                onChange={this.handleChangeProductState}
+                                onChange={(e: {
+                                  target: { value: string },
+                                }) => {
+                                  this.handle('price', e.target.value);
+                                }}
                                 fullWidth
                                 type="number"
                               />
@@ -352,6 +395,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                   marginTop: '3rem',
                                 }}
                                 onSelect={() => {}}
+                                dataTest="wizard3rdStepCurrency"
                               />
                             </div>
                           </Col>
@@ -360,16 +404,20 @@ class ThirdForm extends PureComponent<PropsType> {
                               <Input
                                 id="vendorCode"
                                 value={
-                                  data.product.vendorCode == null
+                                  this.state.form.vendorCode == null
                                     ? ''
-                                    : `${data.product.vendorCode}`
+                                    : `${this.state.form.vendorCode}`
                                 }
                                 label={
                                   <span>
                                     Vendor code <span styleName="red">*</span>
                                   </span>
                                 }
-                                onChange={this.handleChangeProductState}
+                                onChange={(e: {
+                                  target: { value: string },
+                                }) => {
+                                  this.handle('vendorCode', e.target.value);
+                                }}
                                 fullWidth
                               />
                             </div>
@@ -379,12 +427,16 @@ class ThirdForm extends PureComponent<PropsType> {
                               <Input
                                 id="cashback"
                                 value={
-                                  data.product.cashback == null
+                                  this.state.form.cashback == null
                                     ? ''
-                                    : `${data.product.cashback}`
+                                    : `${this.state.form.cashback}`
                                 }
                                 label="Cashback"
-                                onChange={this.handleChangeProductState}
+                                onChange={(e: {
+                                  target: { value: string },
+                                }) => {
+                                  this.handle('cashback', e.target.value);
+                                }}
                                 fullWidth
                                 type="number"
                                 min="0"
@@ -397,12 +449,16 @@ class ThirdForm extends PureComponent<PropsType> {
                               <Input
                                 id="quantity"
                                 value={
-                                  data.product.quantity == null
+                                  this.state.form.quantity == null
                                     ? '0'
-                                    : `${data.product.quantity}`
+                                    : `${this.state.form.quantity}`
                                 }
                                 label="Quantity"
-                                onChange={this.handleChangeProductState}
+                                onChange={(e: {
+                                  target: { value: string },
+                                }) => {
+                                  this.handle('quantity', e.target.value);
+                                }}
                                 fullWidth
                                 type="number"
                                 min="0"
@@ -413,17 +469,16 @@ class ThirdForm extends PureComponent<PropsType> {
                       </Container>
                     </div>
                   </div>
-                  {categoryId && this.renderAttributes()}
+                  {this.state.form.categoryId > 0 && this.renderAttributes()}
                   <div styleName="buttons">
                     <div styleName="buttonContainer">
                       <Button
-                        onClick={() => {
-                          onSave(onClose);
-                        }}
+                        onClick={this.handleSubmit}
                         dataTest="wizardSaveProductButton"
                         big
-                        disabled={this.checkForSave()}
+                        disabled={!isFormValid}
                         fullWidth
+                        load={this.state.isSubmitting}
                       >
                         <span>Save</span>
                       </Button>
@@ -431,7 +486,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     <div styleName="buttonContainer">
                       <div
                         styleName="cancelButton"
-                        onClick={onClose}
+                        onClick={() => {}}
                         onKeyDown={() => {}}
                         role="button"
                         tabIndex="0"
@@ -450,4 +505,17 @@ class ThirdForm extends PureComponent<PropsType> {
   }
 }
 
-export default ThirdForm;
+export default createFragmentContainer(
+  withShowAlert(ProductForm),
+  graphql`
+    fragment ProductForm_rootCategory on Category {
+      id
+      ...CategorySelector_rootCategory
+    }
+
+    fragment ProductForm_store on Store {
+      id
+      rawId
+    }
+  `,
+);

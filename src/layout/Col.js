@@ -7,7 +7,7 @@ import './Col.scss';
 
 type PropsTypes = {
   children: any,
-  noGutter: boolean, // no padding
+  noGutter?: boolean, // no padding
   size?: number, // Size layout column: < 576
   sm?: number | 'auto', // Size layout column: >= 576
   md?: number | 'auto', // Size layout column: >= 768

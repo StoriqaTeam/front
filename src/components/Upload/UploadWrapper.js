@@ -9,19 +9,19 @@ import { Icon } from 'components/Icon';
 import './UploadWrapper.scss';
 
 type PropsType = {
-  children: Node,
+  children?: Node,
   onUpload: (e: any) => void,
   buttonLabel: string,
   buttonHeight: number | string,
   buttonWidth: number | string,
-  fullWidth: ?boolean,
+  fullWidth?: boolean,
   buttonIconType: ?string,
-  overPicture: ?string,
+  overPicture?: ?string,
   noIndents: ?boolean,
   id: string,
   dataTest: string,
   buttonIconSize: ?number,
-  disabled: ?boolean,
+  disabled?: boolean,
   customUnit?: boolean,
   square?: boolean,
 };
@@ -103,6 +103,10 @@ const UploadWrapper = ({
 UploadWrapper.defaultProps = {
   customUnit: false,
   square: false,
+  children: null,
+  overPicture: null,
+  disabled: false,
+  fullWidth: false,
 };
 
 export default UploadWrapper;
