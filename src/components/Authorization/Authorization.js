@@ -34,6 +34,10 @@ import { setPathForRedirectAfterLogin } from './utils';
 
 import './Authorization.scss';
 
+type ErrorsType = {
+  [code: string]: Array<string>,
+};
+
 type PropsType = {
   environment: Environment,
   handleLogin: () => void,
@@ -49,9 +53,7 @@ type PropsType = {
 type StateType = {
   email: string,
   emailValid: boolean,
-  errors: ?{
-    [code: string]: Array<string>,
-  },
+  errors: ?ErrorsType,
   firstName: string,
   firstNameValid: boolean,
   formValid: boolean,
@@ -341,10 +343,10 @@ class Authorization extends Component<PropsType, StateType> {
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, () =>
+          errorsHandler(relayErrors, this.props.showAlert, messages =>
             this.setState({
               isLoading: false,
-              errors: { email: ['Email Not Found'] },
+              errors: messages || null,
             }),
           );
           return;
@@ -393,6 +395,7 @@ class Authorization extends Component<PropsType, StateType> {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
+
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
           // pass handleCallback specify validation errors
