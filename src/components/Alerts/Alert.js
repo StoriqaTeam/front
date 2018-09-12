@@ -93,7 +93,7 @@ class Alert extends Component<AlertPropsType, StateType> {
             >
               <span styleName="link">{link.text}</span>
             </button>
-          ) : null }
+          ) : null}
         </div>
       </div>
     );
