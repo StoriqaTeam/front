@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { assocPath, map, assoc } from 'ramda';
+import { assocPath, map, assoc, pathOr } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -158,10 +158,25 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState(() => ({ isLoading: false }));
         log.debug({ response, errors });
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        log.debug({ validationErrors });
+        // $FlowIgnoreMe
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
+        if (status) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong.',
+            text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
           return;
@@ -206,12 +221,33 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
         this.setState(() => ({
           isLoading: false,
           editableAddressId: null,
         }));
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        log.debug({ validationErrors });
+        // $FlowIgnoreMe
+        const status: string = pathOr('', ['100', 'status'], relayErrors);
+        if (status) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${status}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
         this.resetForm();
         this.props.showAlert({
           type: 'success',
