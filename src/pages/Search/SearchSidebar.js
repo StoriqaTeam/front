@@ -196,10 +196,15 @@ class SearchSidebar extends Component<PropsType, StateType> {
     const newUrl = inputToUrl(newPreparedObj);
     if (oldPreparedObj !== newPreparedObj) {
       if (type === 'replace') {
-        this.props.router.replace(`/categories${newUrl}`);
+        if (process.env.BROWSER) {
+          this.props.router.replace(`/categories${newUrl}`);
+        }
         return;
       }
-      this.props.router.push(`/categories${newUrl}`);
+
+      if (process.env.BROWSER) {
+        this.props.router.push(`/categories${newUrl}`);
+      }
     }
   };
 
