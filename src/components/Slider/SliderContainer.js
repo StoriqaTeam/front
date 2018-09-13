@@ -111,7 +111,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
             animationDelay: fade ? '' : '.2s',
           }}
         >
-          {Children.map(this.props.children, child => (
+          {Children.map(this.props.children, (child, idx) => (
             <div
               styleName={classNames('item', {
                 fadeItem: fade,
@@ -121,6 +121,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
               style={{
                 width: `${slideWidth}%`,
               }}
+              key={`slider_${idx}_key`}
             >
               {cloneElement(child)}
             </div>
@@ -138,6 +139,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
                   onKeyDown={() => {}}
                   role="button"
                   tabIndex="0"
+                  key={`slider_dot_${idx}_key`}
                 />
               ))}
             </div>
