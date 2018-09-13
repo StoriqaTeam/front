@@ -293,6 +293,7 @@ export default createFragmentContainer(
         rawId
         status
         currency
+        ...Shipping_baseProduct
         products(first: 100) @connection(key: "Wizard_products") {
           edges {
             node {

@@ -10,21 +10,19 @@ import type { CompanyType } from './types';
 
 import './CompanyItem.scss';
 
-type StateType = {};
-
 type PropsType = {
   company: CompanyType,
   onRemoveCompany: (company: CompanyType) => void,
   onSetEditableItem: (company: CompanyType) => void,
 };
 
-class CompanyItem extends PureComponent<PropsType, StateType> {
+class CompanyItem extends PureComponent<PropsType> {
   render() {
     const { company, onRemoveCompany, onSetEditableItem } = this.props;
     return (
       <div styleName="container">
         <div styleName="logo">
-          <img src={company.img} alt={company.service.label} />
+          <img src={company.logo} alt={company.service.label} />
         </div>
         <div styleName="rest">
           <div styleName="info">

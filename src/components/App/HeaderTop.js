@@ -26,6 +26,7 @@ class HeaderTop extends PureComponent<PropsType> {
   componentWillMount() {
     // set STQ (or first currency in array) as selected currency if no currency was set before
     // $FlowIgnore
+    console.log('---this.props', this.props);
     const currencies = propOr([], 'currencies', this.props);
     // $FlowIgnore
     const urlCurrency = pathOr(
@@ -50,6 +51,7 @@ class HeaderTop extends PureComponent<PropsType> {
     const currentCurrency: ?CurrencyType = getCookie(currencyCookieName);
     if (!currentCurrency) {
       // try to get stq
+      console.log('---currencies', currencies);
       const stq = find(equals('STQ'), currencies);
       if (stq) {
         setCookie(

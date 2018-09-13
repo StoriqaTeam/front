@@ -7,7 +7,13 @@ import { isEmpty, map } from 'ramda';
 import { RadioButton } from 'components/common/RadioButton';
 
 import type { SelectItemType } from 'types';
-import type { CompanyType, CompaniesInterType, ServicesType } from './types';
+import type {
+  CompanyType,
+  CompaniesInterType,
+  ServicesType,
+  InterShippigType,
+  InterAvailablePackagesType,
+} from './types';
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
@@ -22,6 +28,9 @@ type StateType = {
 
 type PropsType = {
   currency: SelectItemType,
+  interShippig: InterShippigType,
+  interAvailablePackages: InterAvailablePackagesType,
+
   companies: CompaniesInterType,
   editableItemId: ?string,
   remainingServices: ServicesType,
@@ -94,6 +103,7 @@ class InterShipping extends Component<PropsType, StateType> {
               currency={currency}
               services={remainingServices}
               onSaveCompany={this.props.onSaveCompany}
+              interAvailablePackages={this.props.interAvailablePackages}
             />
           </div>
           {!isEmpty(companies) && (

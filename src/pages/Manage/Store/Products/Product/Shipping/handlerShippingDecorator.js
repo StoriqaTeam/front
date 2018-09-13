@@ -12,16 +12,26 @@ import {
   dissoc,
 } from 'ramda';
 
+import {
+  convertLocalAvailablePackages,
+  getServiceLogo,
+  convertInterAvailablePackages,
+} from './utils';
+
 import type {
   ServicesType,
   ServicesInterType,
   CompanyType,
   CompaniesType,
   CompaniesInterType,
+  LocalAvailablePackagesType,
+  InterAvailablePackagesType,
 } from './types';
 
 type PropsType = {
   children: Array<Node>,
+  localAvailablePackages: LocalAvailablePackagesType,
+  interAvailablePackages: InterAvailablePackagesType,
 };
 
 type StateType = {
@@ -31,11 +41,11 @@ type StateType = {
   possibleServices: ServicesType | ServicesInterType,
 };
 
-const services: ServicesType = [
-  { id: 'ups', label: 'Ups' },
-  { id: 'fedex', label: 'FedEx' },
-  { id: 'post', label: 'Post of Russia' },
-];
+// const services: ServicesType = [
+//   { id: 'ups', label: 'Ups' },
+//   { id: 'fedex', label: 'FedEx' },
+//   { id: 'post', label: 'Post of Russia' },
+// ];
 
 const servicesWithCountries: ServicesInterType = [
   {
@@ -47,6 +57,7 @@ const servicesWithCountries: ServicesInterType = [
       { id: 'us', label: 'United States' },
       { id: 'ru', label: 'Russian Federation' },
     ],
+    logo: 'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BJlKQe5H9p0C.png',
   },
   {
     id: 'fedex',
@@ -57,6 +68,7 @@ const servicesWithCountries: ServicesInterType = [
       { id: 'tk', label: 'Tokelau' },
       // { id: 'ye', label: 'Yemen' },
     ],
+    logo: 'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BJlKQe5H9p0C.png',
   },
   {
     id: 'post',
@@ -68,42 +80,43 @@ const servicesWithCountries: ServicesInterType = [
       { id: 'gf', label: 'French Guiana' },
       // { id: 'il', label: 'Israel' },
     ],
+    logo: 'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BJlKQe5H9p0C.png',
   },
 ];
 
 export default (OriginalComponent: any, inter?: boolean) =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
+    constructor(props: PropsType) {
+      super(props);
+
+      if (inter) {
+        const ghhhhdhd = convertInterAvailablePackages(
+          props.interAvailablePackages,
+        );
+        console.log('---ghhhhdhd', ghhhhdhd);
+      }
+    }
+
     state: StateType = {
       companies: [],
       editableItemId: null,
-      remainingServices: inter ? servicesWithCountries : services,
-      possibleServices: inter ? servicesWithCountries : services,
+      remainingServices: inter
+        ? convertInterAvailablePackages(this.props.interAvailablePackages)
+        : convertLocalAvailablePackages(this.props.localAvailablePackages),
+      possibleServices: inter
+        ? convertInterAvailablePackages(this.props.interAvailablePackages)
+        : convertLocalAvailablePackages(this.props.localAvailablePackages),
     };
 
     onSaveCompany = (company: CompanyType) => {
-      let img = '';
-      switch (company.service.id) {
-        case 'ups':
-          img =
-            'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BJlKQe5H9p0C.png';
-          break;
-        case 'fedex':
-          img =
-            'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-zakbquXuoLUC.png';
-          break;
-        case 'post':
-          img =
-            'https://s3.eu-west-2.amazonaws.com/storiqa/img-71Wnx40FWb8C.png';
-          break;
-        default:
-          img = '';
-      }
       if (company.id) {
         this.setState((prevState: StateType) => {
           const newCompany = {
             ...company,
-            img,
-            // $FlowIgnore
+            logo: getServiceLogo(
+              company.service.id,
+              this.props.localAvailablePackages,
+            ),
             service: dissoc('countries', company.service),
           };
           const newCompanies = map(
@@ -116,7 +129,6 @@ export default (OriginalComponent: any, inter?: boolean) =>
             : // $FlowIgnore
               this.setRemainingServices(newCompanies);
           return {
-            // $FlowIgnore
             companies: newCompanies,
             remainingServices,
             editableItemId: null,
@@ -127,10 +139,13 @@ export default (OriginalComponent: any, inter?: boolean) =>
           const newCompany = {
             ...company,
             id: `${Date.now()}`,
-            img,
-            // $FlowIgnore
+            logo: getServiceLogo(
+              company.service.id,
+              this.props.localAvailablePackages,
+            ),
             service: dissoc('countries', company.service),
           };
+          // $FlowIgnore
           const newCompanies = prepend(newCompany, prevState.companies);
           const remainingServices = inter
             ? // $FlowIgnore
@@ -185,8 +200,10 @@ export default (OriginalComponent: any, inter?: boolean) =>
     };
 
     setRemainingServices = (companies: CompaniesType) =>
-      // $FlowIgnore
-      difference(services, map(item => item.service, companies));
+      difference(
+        convertLocalAvailablePackages(this.props.localAvailablePackages),
+        map(item => item.service, companies),
+      );
 
     setRemainingServicesInter = (companies: CompaniesInterType) => {
       let defaultServices = servicesWithCountries;

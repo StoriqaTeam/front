@@ -250,6 +250,7 @@ class PersonalData extends Component<PropsType, StateType> {
   );
 
   render() {
+    console.log('---this.props', this.props);
     const { subtitle } = this.props;
     const { data, isLoading, formErrors } = this.state;
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);

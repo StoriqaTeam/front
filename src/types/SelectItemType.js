@@ -1,6 +1,6 @@
 // @flow
 
 export type SelectItemType = {
-  id: string | number,
+  id: string,
   label: string,
 };

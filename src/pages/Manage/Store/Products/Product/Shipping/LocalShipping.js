@@ -7,7 +7,12 @@ import { isEmpty, map } from 'ramda';
 import { InputPrice, Checkbox, RadioButton } from 'components/common';
 
 import type { SelectItemType } from 'types';
-import type { ServicesType, CompanyType } from './types';
+import type {
+  ServicesType,
+  CompanyType,
+  LocalShippigType,
+  PickupShippigType,
+} from './types';
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
@@ -25,6 +30,9 @@ type StateType = {
 
 type PropsType = {
   currency: SelectItemType,
+  localShippig: LocalShippigType,
+  pickupShippig: PickupShippigType,
+
   companies: Array<CompanyType>,
   editableItemId: ?string,
   remainingServices: ServicesType,
@@ -69,6 +77,7 @@ class LocalShipping extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
     const {
       currency,
       companies,

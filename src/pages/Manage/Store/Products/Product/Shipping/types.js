@@ -1,6 +1,7 @@
 // @flow
 
 import type { SelectItemType } from 'types';
+import type { Shipping_baseProduct as ShippingBaseProductType } from './__generated__/Shipping_baseProduct.graphql';
 
 export type ServiceType = SelectItemType & {
   countries?: Array<SelectItemType>,
@@ -12,13 +13,36 @@ export type ServicesInterType = Array<
 
 export type CompanyType = {
   id?: string,
-  img?: string,
-  service: SelectItemType,
+  logo: string,
+  service: ServiceType,
   price: number,
   currency: SelectItemType,
-} & { country?: SelectItemType };
+  country?: SelectItemType,
+};
 
 export type CompaniesType = Array<CompanyType>;
 export type CompaniesInterType = Array<
   { country: SelectItemType } & CompanyType,
+>;
+
+export type LocalShippigType = $PropertyType<
+  $PropertyType<ShippingBaseProductType, 'shipping'>,
+  'local',
+>;
+export type LocalAvailablePackagesType = $PropertyType<
+  $PropertyType<ShippingBaseProductType, 'availablePackages'>,
+  'local',
+>;
+export type PickupShippigType = $PropertyType<
+  $PropertyType<ShippingBaseProductType, 'shipping'>,
+  'pickup',
+>;
+
+export type InterShippigType = $PropertyType<
+  $PropertyType<ShippingBaseProductType, 'shipping'>,
+  'international',
+>;
+export type InterAvailablePackagesType = $PropertyType<
+  $PropertyType<ShippingBaseProductType, 'availablePackages'>,
+  'international',
 >;

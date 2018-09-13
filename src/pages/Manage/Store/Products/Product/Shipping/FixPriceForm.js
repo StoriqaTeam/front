@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import { head, assoc, isEmpty, pathOr } from 'ramda';
 
 import { InputPrice, Select, Button } from 'components/common';
+import Countries from './Countries';
 
 import type { SelectItemType } from 'types';
 import type { ServiceType, CompanyType, ServicesType } from './types';
@@ -16,6 +17,7 @@ type StateType = {
   currency: SelectItemType,
   service: ?ServiceType,
   country?: ?SelectItemType,
+  sendTo: SelectItemType,
 };
 
 type PropsType = {
@@ -25,19 +27,25 @@ type PropsType = {
     id?: string,
     price: number,
     currency: SelectItemType,
-    service: SelectItemType | (SelectItemType & { country: SelectItemType }),
+    service: ServiceType,
     country?: SelectItemType,
   },
   inter?: boolean,
   onSaveCompany: (company: CompanyType) => void,
   onRemoveEditableItem?: () => void,
+  interAvailablePackages: any,
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { currency, company, services } = props;
-    const service = !isEmpty(services) ? head(services) : null;
+    let service = null;
+    if (company) {
+      ({ service } = company);
+    } else {
+      service = !isEmpty(services) ? head(services) : null;
+    }
     const countries = (service && service.countries) || [];
     const country = countries && !isEmpty(countries) ? head(countries) : null;
     this.state = {
@@ -45,6 +53,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       currency,
       service,
       country,
+      sendTo: { id: 'сertain', label: 'Сertain countries' },
     };
   }
 
@@ -85,6 +94,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       newCompany = assoc('country', country, newCompany);
     }
     if (company) {
+      // $FlowIgnore
       newCompany = assoc('id', company.id, newCompany);
     } else {
       this.setState({ price: 0, currency: defaultCurrency });
@@ -101,6 +111,10 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     this.setState({ country });
   };
 
+  handleOnSelectCountryNew = (item: SelectItemType) => {
+    this.setState({ sendTo: item });
+  };
+
   handlePriceChange = (price: number) => {
     this.setState({ price });
   };
@@ -111,7 +125,8 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
 
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
-    const { price, currency, service, country } = this.state;
+    const { price, currency, service, country, sendTo } = this.state;
+    console.log('---service', service);
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -127,13 +142,24 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
           </div>
           {inter && (
             <div styleName="countriesSelect">
-              <Select
+              {/* <Select
                 forForm
                 fullWidth
                 label="Send to"
                 items={service && service.countries ? service.countries : []}
                 activeItem={country}
                 onSelect={this.handleOnSelectCountry}
+              /> */}
+              <Select
+                forForm
+                fullWidth
+                label="Send to"
+                items={[
+                  { id: 'all', label: 'All countries' },
+                  { id: 'сertain', label: 'Сertain countries' },
+                ]}
+                activeItem={sendTo}
+                onSelect={this.handleOnSelectCountryNew}
               />
             </div>
           )}
@@ -146,6 +172,16 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             />
           </div>
         </div>
+        {inter &&
+          sendTo.id === 'сertain' && (
+            <div styleName="countries">
+              <Countries
+                countries={
+                  service && service.countries ? head(service.countries) : []
+                }
+              />
+            </div>
+          )}
         <div styleName="buttons">
           <Button
             wireframe={!company}

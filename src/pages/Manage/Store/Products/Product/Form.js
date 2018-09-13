@@ -26,7 +26,7 @@ import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 
 import type { SelectItemType } from 'types';
 
-import { ProductFormContext, LocalShipping, InterShipping } from './index';
+import { ProductFormContext, Shipping } from './index';
 
 import Variants from './Variants/Variants';
 
@@ -290,6 +290,7 @@ class Form extends Component<PropsType, StateType> {
       comeResponse,
       resetComeResponse,
     } = this.props;
+    console.log('---baseProduct', baseProduct);
     const { category, currencies, currency } = this.state;
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
@@ -401,16 +402,7 @@ class Form extends Component<PropsType, StateType> {
                 />
               )}
               {baseProduct && (
-                <LocalShipping
-                  currencies={directories.currencies}
-                  currency={currency}
-                />
-              )}
-              {baseProduct && (
-                <InterShipping
-                  currencies={directories.currencies}
-                  currency={currency}
-                />
+                <Shipping currency={currency} baseProduct={baseProduct} />
               )}
               {baseProduct && (
                 <div styleName="button">
