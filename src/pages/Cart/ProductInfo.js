@@ -4,7 +4,7 @@ import { head, map } from 'ramda';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
-import { Select } from 'components/common/Select';
+// import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
 import { formatPrice, currentCurrency } from 'utils';
 
@@ -91,7 +91,7 @@ const ProductInfo = ({
               <Col size={12}>
                 <div styleName="contentBlock">
                   <div>
-                    <div styleName="cart-product-title">
+                    {/* <div styleName="cart-product-title">
                       Delivery and return
                     </div>
                     <Row>
@@ -124,7 +124,7 @@ const ProductInfo = ({
                           value="Seller pays"
                         />
                       </Col>
-                    </Row>
+                    </Row> */}
                     <div styleName="comment">
                       <Input
                         fullWidth

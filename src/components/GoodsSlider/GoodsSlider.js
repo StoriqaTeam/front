@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 
 import { Slider } from 'components/Slider';
-// import { Container, Row, Col } from 'layout';
 
 import './GoodsSlider.scss';
 
