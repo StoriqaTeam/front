@@ -113,7 +113,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 disabled: isDisabled,
               })}
             >
-              <Icon type="camera" size="40" />
+              <Icon type="camera" size={40} />
             </div>
           )}
         </button>

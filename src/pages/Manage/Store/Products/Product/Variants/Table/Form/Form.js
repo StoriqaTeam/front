@@ -378,6 +378,7 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="inputWidth">
           <div styleName="inputWidth">
             <Input
+              id=""
               fullWidth
               label={
                 <span>
@@ -395,6 +396,7 @@ class Form extends Component<PropsType, StateType> {
           <div styleName="inputWidth">
             <div styleName="inputWithIcon">
               <Input
+                id=""
                 fullWidth
                 label={
                   <span>
@@ -403,7 +405,7 @@ class Form extends Component<PropsType, StateType> {
                 }
                 onChange={this.handlePriceChange}
                 onBlur={this.handlePriceBlur}
-                value={price || ''}
+                value={price ? `${price}` : ''}
                 errors={formErrors && formErrors.price}
                 dataTest="variantPriceInput"
               />
@@ -414,10 +416,11 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="inputWidth">
           <div styleName="inputWidth">
             <Input
+              id=""
               fullWidth
               label="Cashback"
               onChange={this.handlePercentChange('cashback')}
-              value={cashback || ''}
+              value={cashback ? `${cashback}` : ''}
               dataTest="variantCashbackInput"
             />
             <span styleName="inputPostfix">Percent</span>
@@ -426,10 +429,11 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="inputWidth">
           <div styleName="inputWidth">
             <Input
+              id=""
               fullWidth
               label="Discount"
               onChange={this.handlePercentChange('discount')}
-              value={discount || ''}
+              value={discount ? `${discount}` : ''}
               dataTest="variantDiscountInput"
             />
             <span styleName="inputPostfix">Percent</span>

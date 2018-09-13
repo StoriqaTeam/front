@@ -90,16 +90,16 @@ class EditProduct extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
     UpdateBaseProductMutation.commit({
       id: baseProduct.id,
-      name: name ? [{ lang: 'EN', text: name }] : null,
+      name: name ? [{ lang: 'EN', text: name }] : [],
       shortDescription: shortDescription
         ? [{ lang: 'EN', text: shortDescription }]
-        : null,
+        : [],
       longDescription: [{ lang: 'EN', text: longDescription }],
-      categoryId,
-      seoTitle: seoTitle ? [{ lang: 'EN', text: seoTitle }] : null,
+      categoryId: categoryId || -1,
+      seoTitle: seoTitle ? [{ lang: 'EN', text: seoTitle }] : [],
       seoDescription: seoDescription
         ? [{ lang: 'EN', text: seoDescription }]
-        : null,
+        : [],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState(() => ({ isLoading: false }));

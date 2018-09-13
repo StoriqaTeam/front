@@ -18,7 +18,7 @@ const ProductButtons = ({
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
-      <Button disabled big>
+      <Button disabled big onClick={() => {}}>
         Buy now
       </Button>
       <Button

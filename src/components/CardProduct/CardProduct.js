@@ -72,7 +72,7 @@ class CardProduct extends PureComponent<PropsType> {
               </div>
             )}
             {!photoMain ? (
-              <Icon type="camera" size="40" />
+              <Icon type="camera" size={40} />
             ) : (
               <ImageLoader
                 fit
@@ -82,7 +82,7 @@ class CardProduct extends PureComponent<PropsType> {
             )}
           </div>
           <div styleName="bottom">
-            <div styleName="icon">{false && <Icon type="qa" size="20" />}</div>
+            <div styleName="icon">{false && <Icon type="qa" size={20} />}</div>
             <div>
               <Rating value={rating} />
               {name && <div styleName="title">{getNameText(name, lang)}</div>}

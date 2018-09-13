@@ -76,7 +76,7 @@ import './Icon.scss';
 
 type PropsTypes = {
   type: string,
-  size: 8 | 16 | 20 | 24 | 28 | 32 | 36 | 40 | 48 | 56 | 80 | 120,
+  size?: 8 | 16 | 20 | 24 | 28 | 32 | 36 | 40 | 48 | 56 | 80 | 120,
   inline?: boolean,
 };
 

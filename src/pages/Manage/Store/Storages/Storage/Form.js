@@ -92,7 +92,7 @@ class Form extends Component<PropsType, StateType> {
             value={name || ''}
             label="Storage name"
             onChange={this.handleInputChange}
-            errors={propOr(null, 'name', formErrors)}
+            errors={propOr([], 'name', formErrors)}
             limit={50}
             fullWidth
           />

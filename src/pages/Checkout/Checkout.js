@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
@@ -193,7 +192,7 @@ class Checkout extends Component<PropsType, StateType> {
           currency: 'STQ',
         },
         environment: this.context.environment,
-        onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
+        onCompleted: (response: ?CreateOrdersMutationResponseType, errors) => {
           log.debug('Success for DeleteFromCart mutation');
           if (response && response.createOrders) {
             log.debug('Response: ', response);

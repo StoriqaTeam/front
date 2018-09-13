@@ -88,20 +88,20 @@ class NewProduct extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
 
     CreateBaseProductMutation.commit({
-      parentID: storeID,
+      parentID: storeID || '',
       name: [{ lang: 'EN', text: name }],
       storeId: parseInt(this.props.match.params.storeId, 10),
       shortDescription: [{ lang: 'EN', text: shortDescription }],
       longDescription: [{ lang: 'EN', text: longDescription }],
       currency: 'STQ',
-      categoryId,
+      categoryId: categoryId || -1,
       seoTitle:
         !seoTitle || seoTitle.length === 0
-          ? null
+          ? []
           : [{ lang: 'EN', text: seoTitle }],
       seoDescription:
         !seoDescription || seoDescription.length === 0
-          ? null
+          ? []
           : [{ lang: 'EN', text: seoDescription }],
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {

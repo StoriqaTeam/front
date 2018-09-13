@@ -15,7 +15,7 @@ type PropsType = {
   onClick?: () => void,
   id: string,
   value: string,
-  label: React.Node,
+  label?: React.Node,
   errors?: ?Array<string>,
   min?: ?string,
   icon?: ?string,
@@ -160,7 +160,7 @@ class Input extends React.Component<PropsType, StateType> {
         )}
         {(icon || search) && (
           <div styleName="icon">
-            <Icon type={search ? 'magnifier' : icon} />
+            <Icon type={search ? 'magnifier' : icon || ''} />
           </div>
         )}
         <div styleName="input">

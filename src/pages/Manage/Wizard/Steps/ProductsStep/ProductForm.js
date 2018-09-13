@@ -14,7 +14,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { withShowAlert } from 'components/App/AlertContext';
-import { convertSrc, log } from 'utils';
+import { convertSrc, log, uploadFile } from 'utils';
 
 import type { Node } from 'react';
 
@@ -193,6 +193,17 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
       }),
     );
 
+  handleUpload = (e: {
+    target: { files: Array<File> },
+    preventDefault: () => void,
+  }) => {
+    e.preventDefault();
+    log.debug('e', e.target.files);
+    uploadFile(e.target.files[0])
+      .then(log.debug)
+      .catch(log.error);
+  };
+
   handleSubmit = () => {
     this.submit(() => {
       log.debug('', 'created');
@@ -280,9 +291,7 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
                             <Col size={12} mdHidden>
                               <UploadWrapper
                                 id="upload_photo"
-                                onUpload={e => {
-                                  onUpload('photoMain', e);
-                                }}
+                                onUpload={this.handleUpload}
                                 buttonHeight={10}
                                 buttonWidth={10}
                                 fullWidth
@@ -296,9 +305,7 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
                             <Col size={12} mdVisible>
                               <UploadWrapper
                                 id="upload_photo"
-                                onUpload={e => {
-                                  onUpload('photoMain', e);
-                                }}
+                                onUpload={this.handleUpload}
                                 buttonHeight={10}
                                 buttonWidth={10}
                                 noIndents

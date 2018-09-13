@@ -136,7 +136,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
                 id="send-order-modal-trackId"
                 label="Track number"
                 onChange={this.handleTrackIdChanged}
-                value={this.state.trackNumber}
+                value={this.state.trackNumber || ''}
                 limit={50}
               />
             </div>
@@ -146,7 +146,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
                 id="send-order-modal-comment"
                 label="Comment"
                 onChange={this.handleCommentChanged}
-                value={this.state.comment}
+                value={this.state.comment || ''}
                 limit={100}
               />
             </div>

@@ -14,6 +14,7 @@ import {
   toLower,
   toUpper,
   filter,
+  prop,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 
@@ -304,7 +305,7 @@ class Form extends Component<PropsType, StateType> {
         value={propOr('', id, this.state.form)}
         label={label}
         onChange={this.handleTextareaChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
+        errors={prop(id, this.state.formErrors)}
         fullWidth
       />
     </div>
@@ -368,7 +369,7 @@ class Form extends Component<PropsType, StateType> {
               forForm
               label="Language"
               activeItem={defaultLanguageValue}
-              items={langItems}
+              items={langItems || []}
               onSelect={this.handleDefaultLanguage}
               tabIndexValue={0}
               dataTest="storeLangSelect"

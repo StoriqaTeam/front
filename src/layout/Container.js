@@ -7,7 +7,7 @@ import './Container.scss';
 
 type PropsTypes = {
   withoutGrow?: boolean,
-  correct: ?boolean,
+  correct?: boolean,
   children: any,
 };
 
@@ -19,6 +19,7 @@ const Container = ({ correct, children, withoutGrow }: PropsTypes) => (
 
 Container.defaultProps = {
   withoutGrow: false,
+  correct: false,
 };
 
 export default Container;

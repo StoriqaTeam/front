@@ -49,7 +49,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
                 {avatar ? (
                   <img styleName="avatarImg" src={avatar} alt="img" />
                 ) : (
-                  <Icon type="person" size="16" />
+                  <Icon type="person" size={32} />
                 )}
               </div>
               {(firstName || lastName) && (

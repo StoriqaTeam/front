@@ -218,7 +218,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             to="/categories?search="
             data-test="allCategoriesLink"
           >
-            <Icon inline type="cats" size="24" />
+            <Icon inline type="cats" size={24} />
             <span styleName="buttonText">All</span>
           </Link>
         </div>

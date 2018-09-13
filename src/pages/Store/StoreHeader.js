@@ -20,7 +20,7 @@ const StoreHeader = () => (
             {cover ? (
               <ImageLoader fit src={cover} loader={<BannerLoading />} />
             ) : (
-              <Icon type="camera" size="56" />
+              <Icon type="camera" size={56} />
             )}
             <aside styleName="social">
               <h2 styleName="offscreen">Social Share</h2>

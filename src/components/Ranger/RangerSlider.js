@@ -316,7 +316,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
               onChange={e => this.handleChangeTypedValue(e, 'typedValue')}
               onBlur={this.handleOnBlur}
               onKeyDown={this.handleOnKeyDown('first')}
-              value={typedValue}
+              value={`${typedValue}`}
             />
           </div>
           <div styleName="rightValue value">
@@ -331,7 +331,7 @@ class RangerSlider extends React.Component<PropsType, StateType> {
               onChange={e => this.handleChangeTypedValue(e, 'typedValue2')}
               onBlur={this.handleOnBlur}
               onKeyDown={this.handleOnKeyDown('second')}
-              value={typedValue2}
+              value={`${typedValue2}`}
             />
           </div>
         </div>

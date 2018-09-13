@@ -232,7 +232,7 @@ class Form extends Component<PropsType, StateType> {
         value={prop(id, this.state.form) || ''}
         label={required ? requiredLabel : label}
         onChange={this.handleTextareaChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
+        errors={propOr([], id, this.state.formErrors)}
         fullWidth
       />
     );

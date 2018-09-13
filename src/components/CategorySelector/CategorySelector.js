@@ -7,13 +7,19 @@ import { zipObj, isEmpty, filter, values } from 'ramda';
 
 import { getNameText, searchPathByParent, flattenFunc } from 'utils';
 
-import type { Node } from 'react';
-
 import LevelList from './LevelList';
 
 import type { CategorySelector_rootCategory as RootCategoryType } from './__generated__/CategorySelector_rootCategory.graphql';
 
 import './CategorySelector.scss';
+
+type CategoryType = {
+  level: number,
+  rawId: number,
+  name: Array<{ lang: string, text: string }>,
+  children?: Array<CategoryType>,
+};
+export type { CategoryType };
 
 type PropsType = {
   rootCategory: RootCategoryType,
@@ -203,7 +209,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                   <Fragment>
                     <div styleName="levelLabel">Categories</div>
                     <LevelList
-                      items={rootCategory.children}
+                      items={Array(...rootCategory.children)}
                       lang={lang}
                       onClick={this.handleOnChoose}
                       selectedItem={level1Item}

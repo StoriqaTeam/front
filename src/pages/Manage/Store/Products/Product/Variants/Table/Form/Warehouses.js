@@ -173,7 +173,9 @@ class Warehouses extends Component<PropsType, StateType> {
                       inline
                       fullWidth
                       value={
-                        thisProduct ? storageFocusValue : `${item.quantity}`
+                        thisProduct
+                          ? storageFocusValue || ''
+                          : `${item.quantity}`
                       }
                       onFocus={(e: any) => {
                         this.handleFocus(e, item.quantity);

@@ -309,7 +309,7 @@ class Input extends PureComponent<PropsType, StateType> {
             role="button"
             tabIndex="0"
           >
-            <Icon type="eye" size="28" />
+            <Icon type="eye" size={28} />
           </div>
         )}
         {!noPasswordHints &&

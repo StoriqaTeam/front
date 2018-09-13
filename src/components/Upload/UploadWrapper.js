@@ -20,7 +20,20 @@ type PropsType = {
   noIndents: ?boolean,
   id: string,
   dataTest: string,
-  buttonIconSize: ?number,
+  buttonIconSize:
+    | 8
+    | 16
+    | 20
+    | 24
+    | 28
+    | 32
+    | 36
+    | 40
+    | 48
+    | 56
+    | 80
+    | 120
+    | void,
   disabled?: boolean,
   customUnit?: boolean,
   square?: boolean,

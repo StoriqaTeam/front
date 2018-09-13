@@ -42,6 +42,7 @@ class ProductMaterial extends Component<PropsType, StateType> {
         </div>
         {isNil(options) ? null : (
           <Select
+            dataTest="productMaterialSelect"
             forForm
             activeItem={
               this.props.selectedValue

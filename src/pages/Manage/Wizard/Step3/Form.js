@@ -1,4 +1,4 @@
-// @flow
+// flow
 
 import React, { PureComponent } from 'react';
 import { map, pathOr, whereEq, filter } from 'ramda';

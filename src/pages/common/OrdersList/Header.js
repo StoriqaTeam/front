@@ -6,7 +6,6 @@ import { addIndex, map } from 'ramda';
 
 import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
-// import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { BirthdateSelect } from 'components/common/BirthdateSelect';
 
@@ -20,7 +19,6 @@ import './Header.scss';
 type PropsType = {
   onSearchTermFilterChanged: string => void,
   onOrderStatusFilterChanged: (?string) => void,
-  // onOrderDateFilterChanged: string => void,
   onOrderFromDateFilterChanged: string => void,
   onOrderToDateFilterChanged: string => void,
 };
@@ -40,10 +38,7 @@ class Header extends Component<PropsType, StateType> {
     orderToDate: null,
   };
 
-  handleSearchTermChange = (e: {
-    target: { value: any },
-    persist: () => void,
-  }) => {
+  handleSearchTermChange = (e: Event) => {
     e.persist();
     this.setState({ searchTerm: e.target.value }, () =>
       this.props.onSearchTermFilterChanged(e.target.value),

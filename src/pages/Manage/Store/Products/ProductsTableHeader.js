@@ -12,7 +12,9 @@ const ProductsTableHeader = () => (
     <div styleName="tdCheckbox">
       <Checkbox id="header" onChange={() => {}} />
     </div>
-    <Col size={1} sm={2} md={2} lg={2} xl={1} mdVisible />
+    <Col size={1} sm={2} md={2} lg={2} xl={1} mdVisible>
+      {null}
+    </Col>
     <Col size={4} sm={4} md={4} lg={3} xl={2}>
       <div styleName="colColor name">
         <span>Name</span>
@@ -46,7 +48,7 @@ const ProductsTableHeader = () => (
     <Col size={3} sm={3} md={3} lg={1} xl={1}>
       <div styleName="tdDelete">
         <button styleName="deleteButton">
-          <Icon type="basket" size="32" />
+          <Icon type="basket" size={32} />
         </button>
       </div>
     </Col>

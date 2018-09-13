@@ -107,21 +107,21 @@ const Footer = () => (
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Icon type="facebookGray" size="32" />
+                <Icon type="facebookGray" size={32} />
               </a>
               <a
                 href="https://twitter.com/storiqa"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Icon type="twitterGray" size="32" />
+                <Icon type="twitterGray" size={32} />
               </a>
               <a
                 href="https://www.instagram.com/storiqa"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Icon type="instagramGray" size="32" />
+                <Icon type="instagramGray" size={32} />
               </a>
             </div>
           </div>

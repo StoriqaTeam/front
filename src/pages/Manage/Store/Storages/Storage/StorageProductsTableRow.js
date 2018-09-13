@@ -104,7 +104,7 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
         <Col size={4} sm={4} md={2} lg={2} xl={1}>
           <div styleName="foto">
             {!item || !item.photoMain ? (
-              <Icon type="camera" size="40" />
+              <Icon type="camera" size={40} />
             ) : (
               <ImageLoader
                 fit
@@ -159,11 +159,11 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
         <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
           <div styleName="quantity">
             <Input
-              id={item.productId}
+              id={`${item.productId}`}
               type="number"
               inline
               fullWidth
-              value={thisProduct ? storageFocusValue : `${item.quantity}`}
+              value={thisProduct ? storageFocusValue || '' : `${item.quantity}`}
               onFocus={(e: any) => {
                 this.handleFocus(e, item.quantity);
               }}
