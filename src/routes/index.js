@@ -256,7 +256,7 @@ const routes = (
               me.wizardStore.completed
             ) {
               throw new RedirectException(
-                `/manage/store/${props.me.wizardStore.storeId}`,
+                `/manage/store/${me.wizardStore.storeId}`,
               );
             } else {
               return <Component />;
