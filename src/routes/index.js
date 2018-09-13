@@ -249,9 +249,12 @@ const routes = (
         Component={StartSelling}
         render={({ props, Component }) => {
           if (props) {
-            if (!props.me) {
-              throw new RedirectException(`/login?from=/start-selling`);
-            } else if (props.me.wizardStore && props.me.wizardStore.completed) {
+            const { me } = props;
+            if (
+              !isNil(me) &&
+              !isNil(me.wizardStore) &&
+              me.wizardStore.completed
+            ) {
               throw new RedirectException(
                 `/manage/store/${props.me.wizardStore.storeId}`,
               );
