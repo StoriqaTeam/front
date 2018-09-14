@@ -11,7 +11,7 @@ import { Col, Row } from 'layout';
 import './ProductsUploader.scss';
 
 type PropsType = {
-  onUpload: (type: string, e: {}) => Promise<*>,
+  onUpload: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   onRemove: (url: string) => void,
   additionalPhotos: Array<string>,
 };
@@ -55,9 +55,7 @@ const ProductsUploader = ({
       <Col size={12} mdHidden>
         <UploadWrapper
           id="upload_additional_photo"
-          onUpload={e => {
-            onUpload('additionalPhoto', e);
-          }}
+          onUpload={onUpload}
           buttonHeight={10}
           buttonWidth={10}
           fullWidth
@@ -71,9 +69,7 @@ const ProductsUploader = ({
       <Col size={12} mdVisible>
         <UploadWrapper
           id="upload_additional_photo"
-          onUpload={e => {
-            onUpload('additionalPhoto', e);
-          }}
+          onUpload={onUpload}
           buttonHeight={10}
           buttonWidth={10}
           noIndents

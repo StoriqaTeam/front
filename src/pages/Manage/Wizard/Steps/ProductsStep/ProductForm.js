@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { isEmpty, map, assoc, omit, is } from 'ramda';
+import { isEmpty, map, assoc, omit, is, append, reject, equals } from 'ramda';
 
 import { FormComponent, validators } from 'components/Forms/lib';
 import { Container, Col, Row } from 'layout';
@@ -209,6 +209,32 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
       .catch(err => log.debug('catch', err));
   };
 
+  handleAdditionalPhotosUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    uploadFilePromise(e.currentTarget.files[0])
+      .then(resp => {
+        this.setState(prevState => ({
+          ...prevState,
+          form: {
+            ...prevState.form,
+            additionalPhotos: append(resp, prevState.form.additionalPhotos),
+          },
+        }));
+      })
+      .catch(err => log.debug('catch', err));
+  };
+
+  handleAdditionalPhotoRemove = (url: string) => {
+    this.setState(prevState => ({
+      ...prevState,
+      form: {
+        ...prevState.form,
+        additionalPhotos: reject(equals(url), prevState.form.additionalPhotos),
+      },
+    }));
+  };
+
   handleSubmit = () => {
     this.submit(() => {
       log.debug('', 'created');
@@ -328,8 +354,8 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
                   <div styleName="section">
                     <div styleName="sectionName">Product photo gallery</div>
                     <ProductsUploader
-                      onRemove={() => {}}
-                      onUpload={() => {}}
+                      onRemove={this.handleAdditionalPhotoRemove}
+                      onUpload={this.handleAdditionalPhotosUpload}
                       additionalPhotos={this.state.form.additionalPhotos}
                     />
                     <div styleName="uploadDescriptionContainer">
