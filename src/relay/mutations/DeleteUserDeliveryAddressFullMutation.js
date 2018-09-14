@@ -5,8 +5,8 @@ import { Environment } from 'relay-runtime';
 import { filter } from 'ramda';
 
 const mutation = graphql`
-  mutation DeleteUserDeliveryAddressMutation($id: Int!) {
-    deleteUserDeliveryAddress(id: $id) {
+  mutation DeleteUserDeliveryAddressFullMutation($id: Int!) {
+    deleteUserDeliveryAddressFull(id: $id) {
       id
       rawId
     }
@@ -30,16 +30,16 @@ const commit = (params: MutationParamsType) =>
     onError: params.onError,
     updater: relayStore => {
       const addressId = relayStore
-        .getRootField('deleteUserDeliveryAddress')
+        .getRootField('deleteUserDeliveryAddressFull')
         .getValue('id');
       relayStore.delete(addressId);
       const me = relayStore.getRoot().getLinkedRecord('me');
-      const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
+      const deliveryAddresses = me.getLinkedRecords('deliveryAddressesFull');
       const newDeliveryAddresses = filter(
         address => address !== null,
         deliveryAddresses,
       );
-      me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddresses');
+      me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddressesFull');
     },
   });
 
