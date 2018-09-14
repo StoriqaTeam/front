@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { reject, map, prop } from 'ramda';
 
 import { Col, Row } from 'layout';
 import { Icon } from 'components/Icon';
@@ -9,7 +10,9 @@ import { Button } from 'components/common/Button';
 import { log } from 'utils';
 
 import type { ProductsStep_store as ProductsStepStore } from './__generated__/ProductsStep_store.graphql';
+import type { WizardProductsStep_baseProduct as BaseProductType } from './__generated__/WizardProductsStep_baseProduct.graphql';
 
+import ProductCell from './WizardProductsStep';
 import FormWrapper from '../../FormWrapper';
 import WizardFooter from '../../WizardFooter';
 
@@ -20,6 +23,25 @@ type PropsType = {
 };
 
 class ProductsStep extends React.PureComponent<PropsType> {
+  productsWithVariants = (): Array<BaseProductType> => {
+    const baseProductsEdgesRO =
+      (this.props.store &&
+        this.props.store.baseProducts &&
+        this.props.store.baseProducts.edges) ||
+      [];
+
+    const baseProductsEdges: Array<BaseProductType> = map(
+      prop('node'),
+      Array(...baseProductsEdgesRO),
+    );
+
+    return reject(
+      (item: BaseProductType) =>
+        item.products == null || item.products.edges.length === 0,
+      baseProductsEdges,
+    );
+  };
+
   renderGreeting = () => (
     <div styleName="firstUploaderItem">
       <div styleName="firstUploaderItemWrapper">
@@ -32,7 +54,9 @@ class ProductsStep extends React.PureComponent<PropsType> {
         </div>
         <div styleName="button">
           <Button
-            onClick={() => {}}
+            onClick={() => {
+              window.location.href = '/manage/wizard/add';
+            }}
             dataTest="wizardUploaderProductFotoFirst"
             big
             wireframe
@@ -44,7 +68,14 @@ class ProductsStep extends React.PureComponent<PropsType> {
     </div>
   );
 
-  renderProducts = () => <div>products here</div>;
+  renderProducts = () => (
+    <React.Fragment>
+      {map(
+        item => <ProductCell product={item} key={item.id} />,
+        this.productsWithVariants(),
+      )}
+    </React.Fragment>
+  );
 
   render() {
     log.debug('ProductsStep props', this.props);
@@ -61,13 +92,9 @@ class ProductsStep extends React.PureComponent<PropsType> {
             <div styleName="view">
               <Row>
                 {(!store || !store.baseProducts) && <div>No data provided</div>}
-                {store &&
-                  store.baseProducts &&
-                  store.baseProducts.edges.length > 0 &&
+                {this.productsWithVariants().length > 0 &&
                   this.renderProducts()}
-                {store &&
-                  store.baseProducts &&
-                  store.baseProducts.edges.length === 0 &&
+                {this.productsWithVariants().length === 0 &&
                   this.renderGreeting()}
               </Row>
             </div>
@@ -95,6 +122,7 @@ export default createFragmentContainer(
         edges {
           node {
             id
+            ...WizardProductsStep_baseProduct
           }
         }
       }
