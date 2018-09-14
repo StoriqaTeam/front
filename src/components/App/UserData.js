@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { Component } from 'react';
 import { graphql } from 'react-relay';
@@ -6,7 +6,9 @@ import { pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 
 import { setWindowTag } from 'utils';
-import type { UserDataType } from 'types';
+import type { Node } from 'react';
+
+import type UserDataType from './__generated__/UserData_me.graphql'; 
 
 const TOTAL_FRAGMENT = graphql`
   fragment UserDataTotalLocalFragment on Cart {
@@ -30,15 +32,17 @@ const HEADER_FRAGMENT = graphql`
   }
 `;
 
-type PropsType = {
-  environment: Environment,
-  children: any,
-};
+type StoreType =  { getSource: () => ({ get: (val: string) => {}}) };
 
 type StateType = {
   totalCount: number,
   userData: ?UserDataType,
   isShopCreated: boolean,
+};
+
+type PropsType = {
+  environment: Environment,
+  children: (StateType) => Node,
 };
 
 class UserData extends Component<PropsType, StateType> {
@@ -106,7 +110,7 @@ class UserData extends Component<PropsType, StateType> {
     }
   }
   // $FlowIgnoreMe
-  getTotalCount = (snapshot: any): number =>
+  getTotalCount = (snapshot: { data: { totalCount: number} }): number =>
     pathOr(0, ['data', 'totalCount'], snapshot);
 
   setTotalCount = (totalCount: number): void => {
@@ -121,7 +125,7 @@ class UserData extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     pathOr(false, ['wizardStore', 'completed'], userData);
 
-  storeData = (store: any) => (prop: string) =>
+  storeData = (store: StoreType) => (prop: string) =>
     pathOr(null, [prop, '__ref'], store.getSource().get('client:root'));
 
   dispose: () => void;
