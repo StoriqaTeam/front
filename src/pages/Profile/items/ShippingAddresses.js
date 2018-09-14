@@ -15,18 +15,18 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import { log, fromRelayError } from 'utils';
 import {
-  CreateUserDeliveryAddressMutation,
-  DeleteUserDeliveryAddressMutation,
-  UpdateUserDeliveryAddressMutation,
+  CreateUserDeliveryAddressFullMutation,
+  DeleteUserDeliveryAddressFullMutation,
+  UpdateUserDeliveryAddressFullMutation,
 } from 'relay/mutations';
 
-import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddressMutation';
-import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressMutation';
-import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddressMutation';
+import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutations/UpdateUserDeliveryAddressFullMutation';
+import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
+import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddressFullMutation';
 
 import '../Profile.scss';
 
-type DeliveryAddressesType = {
+type DeliveryAddressesFullType = {
   id: string,
   rawId: number,
   isPriority: boolean,
@@ -50,7 +50,7 @@ type PropsType = {
     firstName: string,
     lastName: string,
     email: string,
-    deliveryAddresses: Array<DeliveryAddressesType>,
+    deliveryAddressesFull: Array<DeliveryAddressesFullType>,
   },
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -136,15 +136,17 @@ class ShippingAddresses extends Component<PropsType, StateType> {
 
     const input = {
       clientMutationId: '',
-      country,
-      administrativeAreaLevel1: administrativeAreaLevel1 || null,
-      administrativeAreaLevel2: administrativeAreaLevel2 || null,
-      political: political || null,
-      postalCode,
-      streetNumber: streetNumber || null,
-      address: value || null,
-      route: route || null,
-      locality: locality || null,
+      addressFull: {
+        country,
+        administrativeAreaLevel1: administrativeAreaLevel1 || null,
+        administrativeAreaLevel2: administrativeAreaLevel2 || null,
+        political: political || null,
+        postalCode,
+        streetNumber: streetNumber || null,
+        value: value || null,
+        route: route || null,
+        locality: locality || null,
+      },
       isPriority,
     };
 
@@ -205,9 +207,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       },
     };
     if (id) {
-      UpdateUserDeliveryAddressMutation.commit(params);
+      UpdateUserDeliveryAddressFullMutation.commit(params);
     } else {
-      CreateUserDeliveryAddressMutation.commit(params);
+      CreateUserDeliveryAddressFullMutation.commit(params);
     }
   };
 
@@ -266,7 +268,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         });
       },
     };
-    DeleteUserDeliveryAddressMutation.commit(params);
+    DeleteUserDeliveryAddressFullMutation.commit(params);
   };
 
   handleUpdateForm = (form: FormType) => {
@@ -284,7 +286,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     );
   };
 
-  toggleEditAddressForm = (id: number, data: DeliveryAddressesType) => {
+  toggleEditAddressForm = (id: number, data: DeliveryAddressesFullType) => {
     if (data) {
       const { address, isPriority } = data;
       this.handleUpdateForm({ ...address, isPriority });
@@ -362,15 +364,15 @@ class ShippingAddresses extends Component<PropsType, StateType> {
   render() {
     const { me } = this.props;
     const { editableAddressId, isOpenNewForm } = this.state;
-    const { deliveryAddresses = [] } = me;
+    const { deliveryAddressesFull = [] } = me;
     return (
       <div styleName="shippingAddresses">
-        {deliveryAddresses.length === 0 && (
+        {deliveryAddressesFull.length === 0 && (
           <div styleName="subtitle">
             <strong>Shipping address</strong>
           </div>
         )}
-        {deliveryAddresses.length > 0 && (
+        {deliveryAddressesFull.length > 0 && (
           <div styleName="addButton">
             <Button
               disabled={isOpenNewForm}
@@ -383,9 +385,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
             </Button>
           </div>
         )}
-        {(deliveryAddresses.length === 0 || isOpenNewForm) &&
+        {(deliveryAddressesFull.length === 0 || isOpenNewForm) &&
           this.renderAddressForm()}
-        {deliveryAddresses.length > 0 && (
+        {deliveryAddressesFull.length > 0 && (
           <div styleName={classNames('addressesWrap', { isOpenNewForm })}>
             <div styleName="subtitle">
               <strong>Saved addresses</strong>
@@ -453,9 +455,9 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                     )}
                   </Fragment>
                 );
-              }, deliveryAddresses)}
+              }, deliveryAddressesFull)}
             </div>
-            {deliveryAddresses.length > 0 && (
+            {deliveryAddressesFull.length > 0 && (
               <div styleName="addButtonMobile">
                 <Button
                   disabled={isOpenNewForm}
@@ -487,7 +489,7 @@ export default createFragmentContainer(
       firstName
       lastName
       email
-      deliveryAddresses {
+      deliveryAddressesFull {
         rawId
         id
         userId

@@ -55,7 +55,7 @@ const commit = (params: MutationParamsType) =>
       const address = relayStore.getRootField('createUserDeliveryAddressFull');
       const isPriority = address.getValue('isPriority');
       const me = relayStore.getRoot().getLinkedRecord('me');
-      const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
+      const deliveryAddresses = me.getLinkedRecords('deliveryAddressesFull');
       map(item => {
         if (isPriority) {
           item.setValue(false, 'isPriority');
@@ -63,7 +63,7 @@ const commit = (params: MutationParamsType) =>
         return item;
       }, deliveryAddresses);
       const newDeliveryAddresses = [address, ...deliveryAddresses];
-      me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddresses');
+      me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddressesFull');
     },
   });
 
