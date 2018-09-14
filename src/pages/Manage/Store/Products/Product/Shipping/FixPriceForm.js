@@ -1,13 +1,13 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-
+import classNames from 'classnames';
 import { head, assoc, isEmpty, pathOr } from 'ramda';
 
+import type { SelectItemType } from 'types';
 import { InputPrice, Select, Button } from 'components/common';
 import Countries from './Countries';
 
-import type { SelectItemType } from 'types';
 import type { ServiceType, CompanyType, ServicesType } from './types';
 
 import './FixPriceForm.scss';
@@ -18,6 +18,8 @@ type StateType = {
   service: ?ServiceType,
   country?: ?SelectItemType,
   sendTo: SelectItemType,
+  countries: any,
+  // countriesForResponse: Array<string>,
 };
 
 type PropsType = {
@@ -48,12 +50,18 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     }
     const countries = (service && service.countries) || [];
     const country = countries && !isEmpty(countries) ? head(countries) : null;
+    // const countriesForResponse =
+    //   !isEmpty(countries) ?
+    //     convertCountriesForResponse(countries, true) :
+    //     [];
     this.state = {
       price: company ? company.price : 0,
       currency,
       service,
       country,
-      sendTo: { id: 'сertain', label: 'Сertain countries' },
+      sendTo: { id: 'all', label: 'All countries' },
+      countries,
+      // countriesForResponse,
     };
   }
 
@@ -71,6 +79,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       // $FlowIgnore
       const countries = pathOr([], ['service', 'countries'], this.state);
       const country = countries && !isEmpty(countries) ? head(countries) : null;
+      // const countriesForResponse = !isEmpty(countries) ? convertCountriesForResponse(head(countries).children, true) : [];
       this.updateState({ country });
     }
   }
@@ -78,6 +87,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   updateState = (newState: {
     country: ?SelectItemType,
     service?: ?ServiceType,
+    // countriesForResponse?: any,
   }) => {
     this.setState(newState);
   };
@@ -112,7 +122,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleOnSelectCountryNew = (item: SelectItemType) => {
-    this.setState({ sendTo: item });
+    this.setState({ sendTo: item, countriesForResponse: [] });
   };
 
   handlePriceChange = (price: number) => {
@@ -123,10 +133,17 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     this.setState({ currency });
   };
 
+  handleOnChangeCountries = (countries: any) => {
+    // console.log('---countries', countries);
+    // console.log('---this.state.countries', this.state.countries);
+    this.setState({ countries });
+    // this.setState({ countriesForResponse: convertCountriesForResponse(countries)});
+  };
+
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
-    const { price, currency, service, country, sendTo } = this.state;
-    console.log('---service', service);
+    const { price, currency, service, country, countries } = this.state;
+    console.log('---countries', countries);
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -140,16 +157,16 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               onSelect={this.handleOnSelectService}
             />
           </div>
-          {inter && (
+          {/* inter && (
             <div styleName="countriesSelect">
-              {/* <Select
+              <Select
                 forForm
                 fullWidth
                 label="Send to"
                 items={service && service.countries ? service.countries : []}
                 activeItem={country}
                 onSelect={this.handleOnSelectCountry}
-              /> */}
+              />
               <Select
                 forForm
                 fullWidth
@@ -162,7 +179,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
                 onSelect={this.handleOnSelectCountryNew}
               />
             </div>
-          )}
+          ) */}
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}
@@ -172,16 +189,14 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             />
           </div>
         </div>
-        {inter &&
-          sendTo.id === 'сertain' && (
-            <div styleName="countries">
-              <Countries
-                countries={
-                  service && service.countries ? head(service.countries) : []
-                }
-              />
-            </div>
-          )}
+        {inter && (
+          <div styleName={classNames('countries')}>
+            <Countries
+              countries={(service && service.countries) || null}
+              onChange={this.handleOnChangeCountries}
+            />
+          </div>
+        )}
         <div styleName="buttons">
           <Button
             wireframe={!company}

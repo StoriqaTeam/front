@@ -248,7 +248,6 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { me } = this.props;
     const { isLoading, comeResponse } = this.state;
     let baseProduct = null;

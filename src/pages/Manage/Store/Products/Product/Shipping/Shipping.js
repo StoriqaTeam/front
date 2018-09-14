@@ -95,27 +95,6 @@ export default createFragmentContainer(
           companyPackageRawId
           name
           logo
-          deliveriesTo {
-            label
-            parent
-            level
-            children {
-              label
-              parent
-              level
-              children {
-                alpha3
-                alpha2
-                label
-              }
-              alpha2
-              alpha3
-              numeric
-            }
-            alpha2
-            alpha3
-            numeric
-          }
         }
         international {
           companyPackageId
@@ -131,6 +110,7 @@ export default createFragmentContainer(
               parent
               level
               children {
+                parent
                 alpha3
                 alpha2
                 label

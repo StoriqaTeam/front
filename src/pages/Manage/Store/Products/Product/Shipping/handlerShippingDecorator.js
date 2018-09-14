@@ -89,24 +89,17 @@ export default (OriginalComponent: any, inter?: boolean) =>
     constructor(props: PropsType) {
       super(props);
 
-      if (inter) {
-        const ghhhhdhd = convertInterAvailablePackages(
-          props.interAvailablePackages,
-        );
-        console.log('---ghhhhdhd', ghhhhdhd);
-      }
+      this.state = {
+        companies: [],
+        editableItemId: null,
+        remainingServices: inter
+          ? convertInterAvailablePackages(props.interAvailablePackages)
+          : convertLocalAvailablePackages(props.localAvailablePackages),
+        possibleServices: inter
+          ? convertInterAvailablePackages(props.interAvailablePackages)
+          : convertLocalAvailablePackages(props.localAvailablePackages),
+      };
     }
-
-    state: StateType = {
-      companies: [],
-      editableItemId: null,
-      remainingServices: inter
-        ? convertInterAvailablePackages(this.props.interAvailablePackages)
-        : convertLocalAvailablePackages(this.props.localAvailablePackages),
-      possibleServices: inter
-        ? convertInterAvailablePackages(this.props.interAvailablePackages)
-        : convertLocalAvailablePackages(this.props.localAvailablePackages),
-    };
 
     onSaveCompany = (company: CompanyType) => {
       if (company.id) {

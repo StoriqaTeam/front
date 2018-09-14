@@ -7,10 +7,10 @@
 
 .continent {
   display: inline-flex;
+}
 
-  & + .continent {
-    margin-top: 2rem;
-  }
+.allCheckbox {
+  margin-bottom: 2rem;
 }
 
 .checkbox {
@@ -40,20 +40,28 @@
 }
 
 .continentsCountries {
-  margin: 1.5rem 0 1.5rem 3rem;
+  height: 0;
+  margin: 0 0 0 3rem;
   opacity: 0;
   visibility: hidden;
-  transition: $transition_all_ease;
+
+  & + .continent {
+    margin-top: 2rem;
+  }
 
   &.show {
+    height: auto;
+    margin: 1.5rem 0 0 3rem;
     opacity: 1;
     visibility: visible;
+    transition: all .3s ease;
   }
 }
 
 .country {
   display: inline-block;
   width: 20rem;
+  margin-top: 0.5rem;
 
   & + .country {
     //margin-top: 2rem;

@@ -77,7 +77,6 @@ class LocalShipping extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const {
       currency,
       companies,

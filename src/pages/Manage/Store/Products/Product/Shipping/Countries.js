@@ -1,11 +1,15 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, prepend } from 'ramda';
+import { map, forEach } from 'ramda';
 import classNames from 'classnames';
 
 import { Checkbox } from 'components/common';
 import { Icon } from 'components/Icon';
+
+import { convertCountriesForSelect } from './utils';
+
+import './Countries.scss';
 
 type StateType = {
   countries: any,
@@ -13,16 +17,15 @@ type StateType = {
 
 type PropsType = {
   countries: any,
+  onChange: any,
 };
-
-import './Countries.scss';
 
 class Countries extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    this.state = {
-      countries: this.convertCountries(props.countries),
-    };
+    const countries = convertCountriesForSelect({ countries: props.countries });
+    this.state = { countries };
+    props.onChange(countries);
   }
 
   componentDidUpdate(prevProps: PropsType) {
@@ -34,83 +37,160 @@ class Countries extends Component<PropsType, StateType> {
 
   handleOpenContinent = (code: string) => {
     this.setState((prevState: StateType) => {
-      const newCountries = map(item => {
+      const newChildren = map(item => {
         if (code === item.alpha3) {
-          return { ...item, isChecked: !item.isChecked };
+          return { ...item, isOpen: !item.isOpen };
         }
-        return item;
-      }, prevState.countries);
+        return { ...item, isOpen: false };
+      }, prevState.countries.children);
       return {
-        countries: newCountries,
+        countries: { ...prevState.countries, children: newChildren },
       };
     });
   };
 
-  handleCheckCountry = (code: string) => {
-    // this.setState((prevState: StateType) => {
-    //   const newCountries = map(item => {
-    //     if (code === item.alpha3) {
-    //       return ({ ...item, isChecked: !item.isChecked });
-    //     }
-    //     return item;
-    //   }, prevState.countries);
-    //   return ({
-    //     countries: newCountries,
-    //   });
-    // });
-  };
-
-  convertCountries = (countries: any) => {
-    const newCountries = map(
-      item => ({
-        alpha3: item.alpha3,
-        label: item.label,
-        isChecked: false,
-        children: map(
-          child => ({
-            alpha3: child.alpha3,
-            label: child.label,
-            isChecked: false,
-          }),
-          item.children,
-        ),
-      }),
-      countries.children,
+  handleCheckContinent = (code: string) => {
+    this.setState(
+      (prevState: StateType) => {
+        let isCheckedAll = true;
+        const newChildren = map(item => {
+          if (code === item.alpha3) {
+            if (!item.isChecked) {
+              const newItem = {
+                ...item,
+                children: map(child => {
+                  return { ...child, isChecked: true };
+                }, item.children),
+              };
+              return { ...newItem, isChecked: true };
+            }
+            isCheckedAll = false;
+            const newItem = {
+              ...item,
+              children: map(child => {
+                return { ...child, isChecked: false };
+              }, item.children),
+            };
+            return { ...newItem, isChecked: false };
+          }
+          forEach(child => {
+            if (!child.isChecked) {
+              isCheckedAll = false;
+            }
+          }, item.children);
+          return item;
+        }, prevState.countries.children);
+        return {
+          countries: {
+            ...prevState.countries,
+            children: newChildren,
+            isChecked: isCheckedAll,
+          },
+        };
+      },
+      () => {
+        this.props.onChange(this.state.countries);
+      },
     );
-    // console.log('---newCountries', newCountries);
-    return newCountries;
   };
 
-  setCheck = (countries: any, code?: string) => {
-    let newCountries = [];
-    if (!code) {
-      newCountries = map(item => {
-        const newChildren = map(
-          child => ({ ...child, isCheck: !child.isCheck }),
-          item.children,
-        );
-        return { ...item, children: newChildren };
-      }, countries);
-    } else {
-      // тут по айдишнику надо затогглить нужную страну
-    }
+  handleCheckCountry = (country: any) => {
+    this.setState(
+      (prevState: StateType) => {
+        let isCheckedAll = true;
+        const newChildren = map(item => {
+          if (country.parent === item.alpha3) {
+            let isChecked = false;
+            const children = map(child => {
+              if (country.alpha3 === child.alpha3) {
+                if (!child.isChecked) {
+                  isChecked = true;
+                } else {
+                  isCheckedAll = false;
+                }
+                return { ...child, isChecked: !child.isChecked };
+              }
+              if (child.isChecked) {
+                isChecked = true;
+              } else {
+                isCheckedAll = false;
+              }
+              return child;
+            }, item.children);
+            return { ...item, children, isChecked };
+          }
+          forEach(child => {
+            if (!child.isChecked) {
+              isCheckedAll = false;
+            }
+          }, item.children);
+          return item;
+        }, prevState.countries.children);
+        return {
+          countries: {
+            ...prevState.countries,
+            children: newChildren,
+            isChecked: isCheckedAll,
+          },
+        };
+      },
+      () => {
+        this.props.onChange(this.state.countries);
+      },
+    );
+  };
+
+  handleCheckAll = () => {
+    this.setState(
+      (prevState: StateType) => {
+        return {
+          countries: convertCountriesForSelect({
+            countries: prevState.countries,
+            isChecked: !prevState.countries.isChecked,
+          }),
+        };
+      },
+      () => {
+        this.props.onChange(this.state.countries);
+      },
+    );
   };
 
   updateState = (countries: any) => {
-    this.setState({ countries: this.convertCountries(countries) });
+    this.setState(
+      {
+        countries: convertCountriesForSelect({ countries }),
+      },
+      () => {
+        this.props.onChange(this.state.countries);
+      },
+    );
   };
 
   render() {
     const { countries } = this.state;
-    // console.log('---countries', countries);
     return (
       <div styleName="container">
-        {map(item => {
-          return (
+        <div styleName="checkbox allCheckbox">
+          <Checkbox
+            id="shipping-all-countries"
+            label="Select all"
+            isChecked={countries.isChecked}
+            onChange={this.handleCheckAll}
+          />
+        </div>
+        {map(
+          item => (
             <Fragment key={item.alpha3}>
               <div styleName="continent">
                 <div styleName="checkbox">
-                  <Checkbox id={`shipping-continent-${item.alpha3}`} />
+                  <Checkbox
+                    id={`shipping-continent-${item.alpha3}`}
+                    isChecked={item.isChecked}
+                    onChange={() => {
+                      this.handleCheckContinent(item.alpha3);
+                    }}
+                  />
                 </div>
                 <div
                   styleName="label"
@@ -124,7 +204,7 @@ class Countries extends Component<PropsType, StateType> {
                   <strong>{item.label}</strong>
                   <div
                     styleName={classNames('icon', {
-                      rotateIcon: item.isChecked,
+                      rotateIcon: item.isOpen,
                     })}
                   >
                     <Icon type="arrowExpand" />
@@ -133,29 +213,31 @@ class Countries extends Component<PropsType, StateType> {
               </div>
               <div
                 styleName={classNames('continentsCountries', {
-                  show: item.isChecked,
+                  show: item.isOpen,
                 })}
               >
-                {map(country => {
-                  console.log('---country', country);
-                  return (
+                {map(
+                  country => (
                     <div key={country.alpha3} styleName="country">
                       <div styleName="checkbox">
                         <Checkbox
                           id={`shipping-country-${country.alpha3}`}
                           label={country.label}
+                          isChecked={country.isChecked}
                           onChange={() => {
-                            this.handleCheckCountry(item.alpha3);
+                            this.handleCheckCountry(country);
                           }}
                         />
                       </div>
                     </div>
-                  );
-                }, item.children)}
+                  ),
+                  item.children,
+                )}
               </div>
             </Fragment>
-          );
-        }, countries)}
+          ),
+          countries.children,
+        )}
       </div>
     );
   }
