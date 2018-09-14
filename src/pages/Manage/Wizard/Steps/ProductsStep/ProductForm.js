@@ -193,15 +193,10 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
       }),
     );
 
-  handleUpload = (e: {
-    target: { files: Array<File> },
-    preventDefault: () => void,
-  }) => {
+  handleUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-    log.debug('e', e.target.files);
-    uploadFile(e.target.files[0])
-      .then(log.debug)
-      .catch(log.error);
+
+    log.debug('handleUpload', e.currentTarget.files[0]);
   };
 
   handleSubmit = () => {
