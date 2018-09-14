@@ -14,7 +14,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { withShowAlert } from 'components/App/AlertContext';
-import { convertSrc, log, uploadFile } from 'utils';
+import { convertSrc, log, uploadFilePromise } from 'utils';
 
 import type { Node } from 'react';
 
@@ -193,10 +193,20 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
       }),
     );
 
-  handleUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
+  handleMainPhotoUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    log.debug('handleUpload', e.currentTarget.files[0]);
+    uploadFilePromise(e.currentTarget.files[0])
+      .then(resp => {
+        this.setState(prevState => ({
+          ...prevState,
+          form: {
+            ...prevState.form,
+            mainPhoto: resp,
+          },
+        }));
+      })
+      .catch(err => log.debug('catch', err));
   };
 
   handleSubmit = () => {
@@ -286,7 +296,7 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
                             <Col size={12} mdHidden>
                               <UploadWrapper
                                 id="upload_photo"
-                                onUpload={this.handleUpload}
+                                onUpload={this.handleMainPhotoUpload}
                                 buttonHeight={10}
                                 buttonWidth={10}
                                 fullWidth
@@ -300,7 +310,7 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
                             <Col size={12} mdVisible>
                               <UploadWrapper
                                 id="upload_photo"
-                                onUpload={this.handleUpload}
+                                onUpload={this.handleMainPhotoUpload}
                                 buttonHeight={10}
                                 buttonWidth={10}
                                 noIndents

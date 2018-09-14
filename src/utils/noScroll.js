@@ -1,11 +1,16 @@
+// @flow strict
+
 let isOn = false;
 let scrollbarSize;
 let scrollTop;
 
-const getScrollbarSize = () => {
+const getScrollbarSize = (): number => {
   if (typeof scrollbarSize !== 'undefined') return scrollbarSize;
 
   const doc = document.documentElement;
+
+  if (doc == null) return scrollbarSize;
+
   const dummyScroller = document.createElement('div');
   dummyScroller.setAttribute(
     'style',
@@ -18,11 +23,13 @@ const getScrollbarSize = () => {
 };
 
 const hasScrollbar = () =>
+  document.documentElement &&
   document.documentElement.scrollHeight > window.innerHeight;
 
 const on = () => {
   if (typeof document === 'undefined') return;
   const doc = document.documentElement;
+  if (doc == null) return;
   scrollTop = window.pageYOffset;
   if (hasScrollbar()) {
     doc.style.width = `calc(100% - ${getScrollbarSize()}px)`;
@@ -38,6 +45,9 @@ const on = () => {
 const off = () => {
   if (typeof document === 'undefined') return;
   const doc = document.documentElement;
+  if (doc == null) {
+    return;
+  }
   doc.style.width = '';
   doc.style.position = '';
   doc.style.top = '';
