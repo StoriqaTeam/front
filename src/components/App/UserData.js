@@ -8,7 +8,7 @@ import type { Environment } from 'relay-runtime';
 import { setWindowTag } from 'utils';
 import type { Node } from 'react';
 
-import type UserDataType from './__generated__/UserData_me.graphql'; 
+import type UserDataType from './__generated__/UserData_me.graphql';
 
 const TOTAL_FRAGMENT = graphql`
   fragment UserDataTotalLocalFragment on Cart {
@@ -32,7 +32,13 @@ const HEADER_FRAGMENT = graphql`
   }
 `;
 
-type StoreType =  { getSource: () => ({ get: (val: string) => {}}) };
+type StoreType = { getSource: () => { get: (val: string) => {} } };
+
+type SnapshotType = {
+  data: {
+    totalCount: number,
+  },
+};
 
 type StateType = {
   totalCount: number,
@@ -42,7 +48,7 @@ type StateType = {
 
 type PropsType = {
   environment: Environment,
-  children: (StateType) => Node,
+  children: StateType => Node,
 };
 
 class UserData extends Component<PropsType, StateType> {
@@ -109,8 +115,9 @@ class UserData extends Component<PropsType, StateType> {
       this.disposeUser();
     }
   }
-  // $FlowIgnoreMe
-  getTotalCount = (snapshot: { data: { totalCount: number} }): number =>
+
+  getTotalCount = (snapshot: SnapshotType): number =>
+    // $FlowIgnoreMe
     pathOr(0, ['data', 'totalCount'], snapshot);
 
   setTotalCount = (totalCount: number): void => {
