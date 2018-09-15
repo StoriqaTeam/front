@@ -49,6 +49,13 @@ const routes = (
       path="/manage/wizard"
       query={graphql`
         query routes_ManagaeWizard_Query {
+          currencyExchange {
+            code
+            rates {
+              code
+              value
+            }
+          }
           me {
             id
             ...Stepper_me
@@ -130,13 +137,6 @@ const routes = (
           }
           currencies
           orderStatuses
-          currencyExchange {
-            code
-            rates {
-              code
-              value
-            }
-          }
         }
       `}
       render={args => {

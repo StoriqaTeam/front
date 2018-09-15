@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import { map, find, whereEq, propOr } from 'ramda';
 
-import { AppContext } from 'components/App';
+import { CurrencyExchangesContext } from 'components/HOCs/CurrencyExchanges';
 import { getCookie } from 'utils';
 
 import type { Node, Element } from 'react';
@@ -33,8 +33,8 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
 
   render() {
     return (
-      <AppContext.Consumer>
-        {({ directories: { currencyExchange } }) => {
+      <CurrencyExchangesContext.Consumer>
+        {({ currencyExchange }) => {
           const currentCurrency = getCookie('CURRENCY');
           if (!currentCurrency) {
             return null;
@@ -45,18 +45,25 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
             currencyCode: currentCurrency,
           });
 
+          const arr = Array(...(currencyExchange || []));
           const currentCurrencyRates = find(
             whereEq({ code: currentCurrency }),
-            currencyExchange,
+            arr,
           );
           const values = map(
-            (item: { code: string, value: number }) => ({
+            (item: {
+              code: string,
+              value: number,
+            }): {
+              currencyCode: string,
+              value: number,
+            } => ({
               currencyCode: item.code,
               value: this.props.price / item.value,
             }),
+            // $FlowIgnoreMe
             propOr([], 'rates', currentCurrencyRates),
           );
-
           return (
             <Fragment>
               <div>
@@ -77,6 +84,7 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
                           if (this.props.onDropdownToggleClick) {
                             this.props.onDropdownToggleClick(
                               e,
+                              // $FlowIgnoreMe
                               values,
                               this.state.isDropdownShown,
                             );
@@ -87,12 +95,13 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
                   },
                 )}
                 {this.state.isDropdownShown &&
+                  // $FlowIgnoreMe
                   this.props.renderDropdown(values)}
               </div>
             </Fragment>
           );
         }}
-      </AppContext.Consumer>
+      </CurrencyExchangesContext.Consumer>
     );
   }
 }

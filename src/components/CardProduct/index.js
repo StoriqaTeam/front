@@ -1,2 +1,3 @@
-// eslint-disable-next-line
+// @flow strict
+
 export { default as CardProduct } from './CardProduct';

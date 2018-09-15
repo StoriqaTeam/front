@@ -154,6 +154,10 @@
   @media (min-width: $xl) {
     flex-direction: row;
   }
+}
+
+.priceWrapper {
+  display: flex;
 
   > div:nth-child(1) {
     display: flex;

@@ -2,19 +2,19 @@
 
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { reject, map, prop } from 'ramda';
+import { reject, map, prop, addIndex, omit } from 'ramda';
 
-import { Col, Row } from 'layout';
+import { Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
+import { CardProduct } from 'components/CardProduct';
 import { log } from 'utils';
 
 import type { ProductsStep_store as ProductsStepStore } from './__generated__/ProductsStep_store.graphql';
-import type { WizardProductsStep_baseProduct as BaseProductType } from './__generated__/WizardProductsStep_baseProduct.graphql';
 
-import ProductCell from './WizardProductsStep';
 import FormWrapper from '../../FormWrapper';
 import WizardFooter from '../../WizardFooter';
+import ProductLayer from './ProductLayer';
 
 import './ProductsStep.scss';
 
@@ -22,23 +22,34 @@ type PropsType = {
   store: ?ProductsStepStore,
 };
 
+type BaseProductsType = $NonMaybeType<
+  $PropertyType<ProductsStepStore, 'baseProducts'>,
+>;
+type BaseProductsEdgeType = $NonMaybeType<
+  $ElementType<$ElementType<BaseProductsType, 'edges'>, number>,
+>;
+type BaseProductsNodeType = $PropertyType<BaseProductsEdgeType, 'node'>;
+export type { BaseProductsNodeType };
+
+const mapIndexed = addIndex(map);
+
 class ProductsStep extends React.PureComponent<PropsType> {
-  productsWithVariants = (): Array<BaseProductType> => {
+  productsWithVariants = (): Array<BaseProductsNodeType> => {
     const baseProductsEdgesRO =
       (this.props.store &&
         this.props.store.baseProducts &&
         this.props.store.baseProducts.edges) ||
       [];
 
-    const baseProductsEdges: Array<BaseProductType> = map(
+    const baseProducts: Array<BaseProductsNodeType> = map(
       prop('node'),
       Array(...baseProductsEdgesRO),
     );
 
     return reject(
-      (item: BaseProductType) =>
+      (item: BaseProductsNodeType) =>
         item.products == null || item.products.edges.length === 0,
-      baseProductsEdges,
+      baseProducts,
     );
   };
 
@@ -70,10 +81,24 @@ class ProductsStep extends React.PureComponent<PropsType> {
 
   renderProducts = () => (
     <React.Fragment>
-      {map(
-        item => <ProductCell product={item} key={item.id} />,
-        this.productsWithVariants(),
-      )}
+      {mapIndexed((item, index) => {
+        return (
+          <Col size={12} md={4} xl={3} key={index}>
+            <div styleName="productItem cardItem">
+              <div styleName="productContent">
+                <CardProduct
+                  item={{
+                    ...omit(['name', 'products'], item),
+                    name: Array(...item.name),
+                    products: item.products || { edges: [] },
+                  }}
+                />
+                <ProductLayer onDelete={console.log} onEdit={console.log} />
+              </div>
+            </div>
+          </Col>
+        );
+      }, this.productsWithVariants())}
     </React.Fragment>
   );
 
@@ -122,7 +147,25 @@ export default createFragmentContainer(
         edges {
           node {
             id
-            ...WizardProductsStep_baseProduct
+            rawId
+            currency
+            name {
+              lang
+              text
+            }
+            storeId
+            rating
+            products {
+              edges {
+                node {
+                  id
+                  discount
+                  photoMain
+                  cashback
+                  price
+                }
+              }
+            }
           }
         }
       }

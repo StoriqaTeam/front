@@ -95,51 +95,53 @@ class CardProduct extends PureComponent<PropsType> {
               )}
             </div>
             <div styleName="price">
-              {discountedPrice && (
-                <MultiCurrencyDropdown
-                  elementStyleName="priceDropdown"
-                  price={discountedPrice}
-                  renderPrice={(priceItem: {
-                    price: number,
-                    currencyCode: string,
-                  }) => (
-                    <div styleName="priceDropdown">
-                      <div styleName="actualPrice">
-                        {`${formatPrice(priceItem.price)} ${
-                          priceItem.currencyCode
-                        }`}
+              <div styleName="priceWrapper">
+                {discountedPrice && (
+                  <MultiCurrencyDropdown
+                    elementStyleName="priceDropdown"
+                    price={discountedPrice}
+                    renderPrice={(priceItem: {
+                      price: number,
+                      currencyCode: string,
+                    }) => (
+                      <div styleName="priceDropdown">
+                        <div styleName="actualPrice">
+                          {`${formatPrice(priceItem.price)} ${
+                            priceItem.currencyCode
+                          }`}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  renderDropdown={(
-                    rates: Array<{ currencyCode: string, value: number }>,
-                  ) => (
-                    <div styleName="priceDropdownList">
-                      {map(
-                        item =>
-                          item.currencyCode !== currentCurrency() && (
-                            <div
-                              key={`priceDropdownItem-${
-                                this.props.item.rawId
-                              }-${item.currencyCode}`}
-                            >
-                              {`${formatPrice(item.value)} ${
-                                item.currencyCode
-                              }`}
-                            </div>
-                          ),
-                        rates,
-                      )}
-                    </div>
-                  )}
-                  renderDropdownToggle={(isDropdownOpened: boolean) => {
-                    if (isDropdownOpened) {
-                      return <button styleName="toggleRatesDropdownClosed" />;
-                    }
-                    return <button styleName="toggleRatesDropdownOpened" />;
-                  }}
-                />
-              )}
+                    )}
+                    renderDropdown={(
+                      rates: Array<{ currencyCode: string, value: number }>,
+                    ) => (
+                      <div styleName="priceDropdownList">
+                        {map(
+                          item =>
+                            item.currencyCode !== currentCurrency() && (
+                              <div
+                                key={`priceDropdownItem-${
+                                  this.props.item.rawId
+                                }-${item.currencyCode}`}
+                              >
+                                {`${formatPrice(item.value)} ${
+                                  item.currencyCode
+                                }`}
+                              </div>
+                            ),
+                          rates,
+                        )}
+                      </div>
+                    )}
+                    renderDropdownToggle={(isDropdownOpened: boolean) => {
+                      if (isDropdownOpened) {
+                        return <button styleName="toggleRatesDropdownClosed" />;
+                      }
+                      return <button styleName="toggleRatesDropdownOpened" />;
+                    }}
+                  />
+                )}
+              </div>
               <div styleName="cashbackWrapper">
                 <div
                   styleName={classNames('cashback', {
