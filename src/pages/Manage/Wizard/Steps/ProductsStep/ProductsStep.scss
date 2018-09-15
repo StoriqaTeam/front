@@ -169,6 +169,98 @@
   }
 }
 
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  background-color: rgba(255, 255, 255, 0.85);
+  overflow: scroll;
+  padding: 13rem 0 26rem 0;
+
+  .modal {
+    display: flex;
+    justify-content: center;
+
+    .modalContent {
+      position: relative;
+
+      .closeButton {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10rem;
+        height: 10rem;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.deleteWrapper {
+  padding: 3rem 2rem;
+  width: 35.75rem;
+
+  @media (min-width: $md) {
+    padding: 12rem 14.875rem;
+    width: 82rem;
+  }
+
+  .deleteContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .title {
+      font-family: $font_light;
+      font-size: 3rem;
+
+      @media (min-width: $md) {
+        font-size: 4.5rem;
+      }
+    }
+
+    .description {
+      text-align: center;
+      margin-top: 3rem;
+      margin-bottom: 6rem;
+      color: $color_grey_minor;
+      font-size: 1.75rem;
+
+      @media (min-width: $md) {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .buttonsContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    flex-wrap: wrap-reverse;
+
+    @media (min-width: $md) {
+      flex-direction: row;
+    }
+
+    .deleteButton {
+      margin-bottom: 2rem;
+
+      @media (min-width: $md) {
+        margin-bottom: 0;
+        margin-left: 2rem;
+      }
+    }
+  }
+}
+
 .footerWrapper {
   display: flex;
 }
