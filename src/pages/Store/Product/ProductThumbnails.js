@@ -93,6 +93,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       return (
         <button
           key={`${option.label || option.id}`}
+          data-test={`productThumbail${option.label}`}
           onClick={() => this.handleClick(option, index)}
         >
           {option.image ? (

@@ -72,7 +72,7 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
-    const { customer } = order;
+    const { customer, receiverPhone } = order;
     const customerDTO = customer
       ? {
           firstName: customer.firstName,
@@ -84,7 +84,7 @@ class OrderPage extends PureComponent<PropsType> {
         ? join(' ', filter(item => Boolean(item), values(customerDTO)))
         : '—';
     const customerAddress = addressToString(order.addressFull) || '—';
-    const customerPhone = customer.phone || null;
+    // const customerPhone = customer.phone || null; // is replaced by: order.receiverPhone
     const attributes = map(
       item => ({
         name: getNameText(pathOr([], ['attribute', 'name'], item), 'EN') || '',
@@ -132,7 +132,7 @@ class OrderPage extends PureComponent<PropsType> {
       },
       customerName,
       customerAddress,
-      customerPhone,
+      customerPhone: receiverPhone,
       date: order.createdAt,
       delivery: order.deliveryCompany || '—',
       trackId: order.trackId || '—',

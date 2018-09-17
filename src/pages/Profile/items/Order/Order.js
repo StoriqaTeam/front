@@ -80,6 +80,7 @@ export default createRefetchContainer(
           photoMain
         }
         receiverName
+        receiverPhone
         addressFull {
           value
           country
