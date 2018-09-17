@@ -31,25 +31,25 @@ const StorageProductsTableHeader = () => (
         <Icon inline type="sortArrows" />
       </div>
     </Col>
-    <Col size={2} sm={2} md={2} lg={2} xl={2} xlVisible>
+    <Col size={2} sm={2} md={2} lg={3} xl={3} xlVisible>
       <div styleName="colColor">
         <span>Characteristics</span>
         <Icon inline type="sortArrows" />
       </div>
     </Col>
-    <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
+    <Col size={3} sm={3} md={3} lg={3} xl={3} lgVisible>
       <div styleName="colColor">
         <span>Quantity</span>
         <Icon inline type="sortArrows" />
       </div>
     </Col>
-    <Col size={3} sm={3} md={3} lg={1} xl={1}>
+    {/* <Col size={3} sm={3} md={3} lg={1} xl={1}>
       <div styleName="tdDelete">
         <button styleName="deleteButton">
           <Icon type="move" size="24" />
         </button>
       </div>
-    </Col>
+    </Col> */}
   </div>
 );
 
