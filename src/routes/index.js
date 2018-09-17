@@ -23,7 +23,7 @@ import {
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard, WizardStepper } from 'pages/Manage/Wizard';
-import ProductForm from 'pages/Manage/Wizard/Steps/ProductsStep/ProductForm';
+import ProductAddForm from 'pages/Manage/Wizard/Steps/ProductsStep/ProductAddForm';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 import { Product as ProductCard } from 'pages/Store/Product';
@@ -82,11 +82,11 @@ const routes = (
       <Route Component={WizardStepper} />
       <Route
         path="/add"
-        Component={ProductForm}
+        Component={ProductAddForm}
         query={graphql`
-          query routes_WizardProductForm_Query {
+          query routes_WizardProductAddForm_Query {
             categories {
-              ...ProductForm_rootCategory
+              ...ProductAddForm_rootCategory
             }
             me {
               id
@@ -94,7 +94,7 @@ const routes = (
                 id
                 store {
                   id
-                  ...ProductForm_store
+                  ...ProductAddForm_store
                 }
               }
             }

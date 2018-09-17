@@ -1,7 +1,6 @@
 // @flow strict
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
 import { isEmpty, map, assoc, omit, is, append, reject, equals } from 'ramda';
 
 import { FormComponent, validators } from 'components/Forms/lib';
@@ -13,7 +12,6 @@ import { Button } from 'components/common/Button';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
-import { withShowAlert } from 'components/App/AlertContext';
 import { convertSrc, log, uploadFilePromise } from 'utils';
 
 import type { Node } from 'react';
@@ -21,9 +19,6 @@ import type { Node } from 'react';
 import ProductsUploader from './ProductsUploader';
 import { createProductMutation } from './mutations/WizardCreateProductWithAttributesMutation';
 import { createBaseProductMutation } from './mutations/WizardCreateBaseProductMutation';
-
-import type { ProductForm_rootCategory as ProductFormRootCategory } from './__generated__/ProductForm_rootCategory.graphql';
-import type { ProductForm_store as ProductFormStore } from './__generated__/ProductForm_store.graphql';
 
 import './ProductForm.scss';
 
@@ -39,11 +34,6 @@ type FormInputs = {
   mainPhoto: ?string,
   additionalPhotos: Array<string>,
   attributes: Array<{}>,
-};
-
-type PropsType = {
-  rootCategory: ?ProductFormRootCategory,
-  store: ?ProductFormStore,
 };
 
 const photoIcons = [
@@ -77,7 +67,10 @@ const photoIcons = [
   },
 ];
 
-class ProductForm extends FormComponent<FormInputs, PropsType> {
+class ProductForm<PropsType> extends FormComponent<
+  FormInputs,
+  PropsType & { storeId: number },
+> {
   state = {
     form: {
       name: '',
@@ -170,7 +163,7 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
           ],
           currency: 'STQ',
           categoryId: this.state.form.categoryId,
-          storeId: (this.props.store && this.props.store.rawId) || -1,
+          storeId: this.props.storeId,
         },
       },
     }).then(resp =>
@@ -385,14 +378,11 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
                       General settings and pricing
                     </div>
                     <div styleName="categorySelector">
-                      {this.props.rootCategory && (
-                        <CategorySelector
-                          rootCategory={this.props.rootCategory}
-                          onSelect={(id: number) => {
-                            this.handle('categoryId', id);
-                          }}
-                        />
-                      )}
+                      <CategorySelector
+                        onSelect={(id: number) => {
+                          this.handle('categoryId', id);
+                        }}
+                      />
                     </div>
                     <div styleName="productStates formItem">
                       <Container correct>
@@ -543,17 +533,4 @@ class ProductForm extends FormComponent<FormInputs, PropsType> {
   }
 }
 
-export default createFragmentContainer(
-  withShowAlert(ProductForm),
-  graphql`
-    fragment ProductForm_rootCategory on Category {
-      id
-      ...CategorySelector_rootCategory
-    }
-
-    fragment ProductForm_store on Store {
-      id
-      rawId
-    }
-  `,
-);
+export default ProductForm;

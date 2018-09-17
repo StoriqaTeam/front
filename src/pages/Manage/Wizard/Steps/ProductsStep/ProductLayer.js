@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Icon } from 'components/Icon';
 
+// so awful
 import './ProductsStep.scss';
 
 type PropsType = {

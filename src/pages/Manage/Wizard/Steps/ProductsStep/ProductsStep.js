@@ -53,6 +53,14 @@ class ProductsStep extends React.PureComponent<PropsType> {
     );
   };
 
+  handleEditItem = (id: number) => () => {
+    log.debug('handleEditItem', id);
+  };
+
+  handleDeleteItem = (id: number) => () => {
+    log.debug('handleDeleteItem', id);
+  };
+
   renderGreeting = () => (
     <div styleName="firstUploaderItem">
       <div styleName="firstUploaderItemWrapper">
@@ -81,8 +89,23 @@ class ProductsStep extends React.PureComponent<PropsType> {
 
   renderProducts = () => (
     <React.Fragment>
-      {mapIndexed((item, index) => {
-        return (
+      <Col size={12} md={4} xl={3}>
+        <div
+          styleName="productItem uploaderItem"
+          role="button"
+          onClick={() => log.debug('add', {})}
+          onKeyDown={() => {}}
+          tabIndex={0}
+          data-test="wizardUploaderProductFoto"
+        >
+          <div styleName="productContent">
+            <Icon type="cameraPlus" size={56} />
+            <span styleName="buttonLabel">Add new product</span>
+          </div>
+        </div>
+      </Col>
+      {mapIndexed(
+        (item, index) => (
           <Col size={12} md={4} xl={3} key={index}>
             <div styleName="productItem cardItem">
               <div styleName="productContent">
@@ -93,12 +116,16 @@ class ProductsStep extends React.PureComponent<PropsType> {
                     products: item.products || { edges: [] },
                   }}
                 />
-                <ProductLayer onDelete={console.log} onEdit={console.log} />
+                <ProductLayer
+                  onDelete={this.handleDeleteItem(item.rawId)}
+                  onEdit={this.handleEditItem(item.rawId)}
+                />
               </div>
             </div>
           </Col>
-        );
-      }, this.productsWithVariants())}
+        ),
+        this.productsWithVariants(),
+      )}
     </React.Fragment>
   );
 
