@@ -175,10 +175,11 @@ const clearPathForRedirectAfterLogin = () => {
 const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
 
-const makeInput = (
-  props: { [string]: string, onChange: () => void, errors: Array<string> },
-  inputName: string,
-): SignUpInputType => {
+const makeInput = (props: {
+  [string]: string,
+  onChange: () => void,
+  errors: Array<string>,
+}) => (inputName: string): SignUpInputType => {
   const nowhiteSpace = (str: string): string => str.replace(/ +/g, '');
   /**
    * @link https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment, PureComponent } from 'react';
-import { map, update } from 'ramda';
+import { map, adjust, pipe, assoc } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
@@ -50,10 +50,13 @@ class SignUp extends PureComponent<PropsType, StateType> {
       [privacy]: !prevState[privacy],
     }));
   };
-  makeInputs = (): Array<SignUpInputType> => {
-    const inputs = ['First Name', 'Last Name', 'Email', 'Password'];
-    return map(input => makeInput(this.props, input), inputs);
-  };
+  makeInputs = (): Array<SignUpInputType> =>
+    pipe(map(makeInput(this.props)), adjust(assoc('thisFocus', true), 0))([
+      'First Name',
+      'Last Name',
+      'Email',
+      'Password',
+    ]);
   render() {
     const { formValid, onRegistrationClick } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;
@@ -64,7 +67,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
             <Input {...input} />
           </div>
         ))}
-        {!formValid && (
+        {formValid && (
           <Fragment>
             <Policy
               isPrivacyChecked={isPrivacyChecked}
