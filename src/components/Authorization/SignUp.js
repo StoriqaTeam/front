@@ -10,6 +10,17 @@ import { Policy } from './index';
 
 import './Authorization.scss';
 
+type SignUpInputType = {
+  label: string,
+  name: string,
+  type: string,
+  model: string,
+  validate?: string,
+  thisFocus?: boolean,
+  onChange: () => void,
+  errors: ?Array<string>,
+};
+
 type PropsType = {
   email: string,
   firstName: string,
@@ -38,65 +49,56 @@ class SignUp extends PureComponent<PropsType, StateType> {
       [privacy]: !prevState[privacy],
     }));
   };
+  makeInputs = (): Array<SignUpInputType> => {
+    const { errors, onChange } = this.props;
+    return [
+      {
+        thisFocus: true,
+        label: 'First Name',
+        name: 'firstName',
+        type: 'text',
+        model: this.props.firstName,
+        onChange,
+        errors: propOr(null, 'firstName', errors),
+      },
+      {
+        label: 'Last Name',
+        name: 'lastName',
+        type: 'text',
+        model: this.props.lastName,
+        onChange,
+        errors: propOr(null, 'lastName', errors),
+      },
+      {
+        label: 'Email',
+        name: 'email',
+        type: 'email',
+        model: this.props.email,
+        validate: 'email',
+        onChange,
+        errors: propOr(null, 'email', errors),
+      },
+      {
+        label: 'Password',
+        name: 'password',
+        type: 'password',
+        model: this.props.password,
+        validate: 'password',
+        onChange,
+        errors: propOr(null, 'password', errors),
+      },
+    ];
+  };
   render() {
-    const {
-      email,
-      firstName,
-      lastName,
-      password,
-      errors,
-      formValid,
-      onRegistrationClick,
-      onChange,
-    } = this.props;
-
+    const { formValid, onRegistrationClick } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;
-
     return (
       <div styleName="signUp">
-        <div styleName="inputBlock">
-          <Input
-            label="First name"
-            name="firstName"
-            type="text"
-            model={firstName}
-            onChange={onChange}
-            errors={propOr(null, 'firstName', errors)}
-          />
-        </div>
-        <div styleName="inputBlock">
-          <Input
-            label="Last name"
-            name="lastName"
-            type="text"
-            model={lastName}
-            onChange={onChange}
-            errors={propOr(null, 'lastName', errors)}
-          />
-        </div>
-        <div styleName="inputBlock">
-          <Input
-            thisFocus
-            label="Email"
-            name="email"
-            type="email"
-            model={email}
-            validate="email"
-            onChange={onChange}
-            errors={propOr(null, 'email', errors)}
-          />
-        </div>
-        <div styleName="inputBlock">
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            model={password}
-            validate="password"
-            onChange={onChange}
-            errors={propOr(null, 'password', errors)}
-          />
-        </div>
+        {this.makeInputs().map(input => (
+          <div styleName="inputBlock">
+            <Input key={input.name} {...input} />
+          </div>
+        ))}
         {formValid && (
           <Fragment>
             <Policy
