@@ -43,13 +43,6 @@ const StorageProductsTableHeader = () => (
         <Icon inline type="sortArrows" />
       </div>
     </Col>
-    {/* <Col size={3} sm={3} md={3} lg={1} xl={1}>
-      <div styleName="tdDelete">
-        <button styleName="deleteButton">
-          <Icon type="move" size="24" />
-        </button>
-      </div>
-    </Col> */}
   </div>
 );
 

@@ -184,13 +184,6 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
             )}
           </div>
         </Col>
-        {/* <Col size={4} sm={4} md={3} lg={1} xl={1}>
-          <div styleName="buttons">
-            <button styleName="editButton">
-              <Icon type="move" size={24} />
-            </button>
-          </div>
-        </Col> */}
       </div>
     );
   }
