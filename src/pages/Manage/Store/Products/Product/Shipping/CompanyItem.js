@@ -5,6 +5,7 @@ import React, { PureComponent } from 'react';
 import { Icon } from 'components/Icon';
 
 import { formatPrice } from 'utils';
+import { convertCountriesToStringLabels } from './utils';
 
 import type { CompanyType } from './types';
 
@@ -32,7 +33,9 @@ class CompanyItem extends PureComponent<PropsType> {
               <div styleName="currency">{company.currency.label}</div>
             </div>
             <div styleName="td tdCountry">
-              {company.country ? company.country.label : ''}
+              {company && company.countries
+                ? convertCountriesToStringLabels(company.countries)
+                : ''}
             </div>
           </div>
           <div styleName="controller">

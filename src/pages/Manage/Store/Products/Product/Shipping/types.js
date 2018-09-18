@@ -25,7 +25,7 @@ export type CompaniesInterType = Array<
   { country: SelectItemType } & CompanyType,
 >;
 
-export type LocalShippigType = $PropertyType<
+export type LocalShippingType = $PropertyType<
   $PropertyType<ShippingBaseProductType, 'shipping'>,
   'local',
 >;
@@ -33,12 +33,12 @@ export type LocalAvailablePackagesType = $PropertyType<
   $PropertyType<ShippingBaseProductType, 'availablePackages'>,
   'local',
 >;
-export type PickupShippigType = $PropertyType<
+export type PickupShippingType = $PropertyType<
   $PropertyType<ShippingBaseProductType, 'shipping'>,
   'pickup',
 >;
 
-export type InterShippigType = $PropertyType<
+export type InterShippingType = $PropertyType<
   $PropertyType<ShippingBaseProductType, 'shipping'>,
   'international',
 >;

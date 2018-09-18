@@ -69,12 +69,12 @@
 .pickup {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
   margin-left: 3rem;
 
   .pickupCheckbox {
     position: relative;
-    top: -5px;
+    top: -0.25rem;
   }
 
   .pickupPriceInput {

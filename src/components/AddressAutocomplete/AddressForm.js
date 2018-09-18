@@ -294,7 +294,6 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { isOpen, countries } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
     const countriesArr = getIndexedCountries(countries);

@@ -10,8 +10,8 @@ import type { SelectItemType } from 'types';
 import type {
   ServicesType,
   CompanyType,
-  LocalShippigType,
-  PickupShippigType,
+  LocalShippingType,
+  PickupShippingType,
 } from './types';
 
 import FixPriceForm from './FixPriceForm';
@@ -21,17 +21,17 @@ import handlerShipping from './handlerShippingDecorator';
 import './LocalShipping.scss';
 
 type StateType = {
-  isCheckedOnlyPickup: boolean,
   isCheckedPickup: boolean,
-  isCheckedFixPrice: boolean,
   pickupPrice: number,
   pickupCurrency: SelectItemType,
+  isCheckedWithout: boolean,
+  isCheckedFixPrice: boolean,
 };
 
 type PropsType = {
   currency: SelectItemType,
-  localShippig: LocalShippigType,
-  pickupShippig: PickupShippigType,
+  localShipping: LocalShippingType,
+  pickupShipping: PickupShippingType,
 
   companies: Array<CompanyType>,
   editableItemId: ?string,
@@ -41,40 +41,75 @@ type PropsType = {
   onRemoveCompany: (company: CompanyType) => void,
   onSetEditableItem: (company: CompanyType) => void,
   onRemoveEditableItem: () => void,
+  globalOnChange: (data: {
+    pickup?: any,
+  }) => void,
+  localAvailablePackages: any,
 };
 
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    console.log('---props', props);
+    const { pickupShipping, currency, globalOnChange } = props;
+    const isCheckedPickup = Boolean(pickupShipping && pickupShipping.pickup);
+
+    globalOnChange({
+      pickup: {
+        pickup: Boolean(pickupShipping && pickupShipping.pickup),
+        price: (pickupShipping && pickupShipping.price) || 0,
+      },
+    });
+
     this.state = {
-      isCheckedOnlyPickup: false,
-      isCheckedPickup: false,
+      isCheckedPickup,
+      pickupPrice: (pickupShipping && pickupShipping.price) || 0,
+      pickupCurrency: currency,
+      isCheckedWithout: false,
       isCheckedFixPrice: true,
-      pickupPrice: 0,
-      pickupCurrency: props.currency,
     };
   }
 
   handleOnChangeRadioButton = (id: string) => {
-    this.setState({
-      isCheckedOnlyPickup: id === 'localShippingPickup',
-      isCheckedFixPrice: id !== 'localShippingPickup',
-    });
+    this.setState(
+      {
+        isCheckedWithout: id === 'withoutLocalShipping',
+        isCheckedFixPrice: id !== 'withoutLocalShipping',
+      },
+      () => {
+        this.props.globalOnChange({
+          inter: true,
+          withoutLocal: this.state.isCheckedWithout,
+        });
+      },
+    );
   };
 
   handleOnTogglePickup = () => {
-    this.setState((prevState: StateType) => ({
-      isCheckedPickup: !prevState.isCheckedPickup,
-    }));
+    this.setState(
+      (prevState: StateType) => ({
+        isCheckedPickup: !prevState.isCheckedPickup,
+      }),
+      this.handleGlobalOnChange,
+    );
   };
 
   handleOnChangePickupPrice = (pickupPrice: number) => {
-    this.setState({ pickupPrice });
+    this.setState({ pickupPrice }, this.handleGlobalOnChange);
   };
 
-  handleOnChangeCurrency = (pickupCurrency: SelectItemType) => {
-    this.setState({ pickupCurrency });
+  handleGlobalOnChange = () => {
+    this.props.globalOnChange({
+      pickup: {
+        pickup: this.state.isCheckedPickup,
+        price: this.state.pickupPrice,
+      },
+    });
   };
+
+  // handleOnChangeCurrency = (pickupCurrency: SelectItemType) => {
+  //   this.setState({ pickupCurrency });
+  // };
 
   render() {
     const {
@@ -85,11 +120,11 @@ class LocalShipping extends Component<PropsType, StateType> {
       possibleServices,
     } = this.props;
     const {
-      isCheckedOnlyPickup,
       isCheckedPickup,
-      isCheckedFixPrice,
       pickupPrice,
       pickupCurrency,
+      isCheckedWithout,
+      isCheckedFixPrice,
     } = this.state;
     return (
       <div styleName="container">
@@ -100,9 +135,9 @@ class LocalShipping extends Component<PropsType, StateType> {
           <div styleName="checkBox">
             <RadioButton
               inline
-              id="localShippingPickup"
-              label="Only pickup"
-              isChecked={isCheckedOnlyPickup}
+              id="withoutLocalShipping"
+              label="Without local delivery"
+              isChecked={isCheckedWithout}
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
@@ -116,7 +151,11 @@ class LocalShipping extends Component<PropsType, StateType> {
             />
           </div>
         </div>
-        <div styleName={classNames('form', { hidePlane: !isCheckedFixPrice })}>
+        <div
+          styleName={classNames('form', {
+            hidePlane: isCheckedWithout,
+          })}
+        >
           <div styleName="pickup">
             <div styleName="pickupCheckbox">
               <Checkbox
@@ -130,7 +169,6 @@ class LocalShipping extends Component<PropsType, StateType> {
             <div styleName="pickupPriceInput">
               <InputPrice
                 onChangePrice={this.handleOnChangePickupPrice}
-                onChangeCurrency={this.handleOnChangeCurrency}
                 price={pickupPrice}
                 currency={pickupCurrency}
               />
@@ -138,7 +176,7 @@ class LocalShipping extends Component<PropsType, StateType> {
           </div>
           <div
             styleName={classNames('formWrap', {
-              hidePlane: isEmpty(remainingServices),
+              hidePlane: isEmpty(remainingServices) && !isCheckedWithout,
             })}
           >
             <FixPriceForm
@@ -162,12 +200,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                         <FixPriceForm
                           services={possibleServices}
                           currency={item.currency}
-                          company={{
-                            id: item.id,
-                            price: item.price,
-                            currency: item.currency,
-                            service: item.service,
-                          }}
+                          company={item}
                           onSaveCompany={this.props.onSaveCompany}
                           onRemoveEditableItem={this.props.onRemoveEditableItem}
                         />

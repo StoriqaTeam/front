@@ -67,6 +67,9 @@ type BaseProductType = {
   },
   status: string,
   currencyId: number,
+  store: {
+    rawId: number,
+  },
 };
 
 type PropsType = {
@@ -296,6 +299,10 @@ class Form extends Component<PropsType, StateType> {
     const filteredVariants = map(item => item.node, variants);
     // $FlowIgnore
     const storeID = pathOr(null, ['store', 'id'], baseProduct);
+    // $FlowIgnore
+    const storeRawID = pathOr(null, ['store', 'rawId'], baseProduct);
+    // $FlowIgnore
+    const baseProductRawID = pathOr(null, ['rawId'], baseProduct);
     return (
       <ProductFormContext.Provider
         value={{
@@ -398,7 +405,12 @@ class Form extends Component<PropsType, StateType> {
             />
           )}
           {baseProduct && (
-            <Shipping currency={currency} baseProduct={baseProduct} />
+            <Shipping
+              currency={currency}
+              baseProduct={baseProduct}
+              baseProductId={baseProductRawID}
+              storeId={storeRawID}
+            />
           )}
           {baseProduct && (
             <div styleName="button">

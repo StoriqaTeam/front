@@ -11,7 +11,7 @@ import type {
   CompanyType,
   CompaniesInterType,
   ServicesType,
-  InterShippigType,
+  InterShippingType,
   InterAvailablePackagesType,
 } from './types';
 
@@ -28,7 +28,7 @@ type StateType = {
 
 type PropsType = {
   currency: SelectItemType,
-  interShippig: InterShippigType,
+  interShipping: InterShippingType,
   interAvailablePackages: InterAvailablePackagesType,
 
   companies: CompaniesInterType,
@@ -39,22 +39,45 @@ type PropsType = {
   onRemoveCompany: (company: CompanyType) => void,
   onSetEditableItem: (company: CompanyType) => void,
   onRemoveEditableItem: () => void,
+  globalOnChange: (data: {
+    companies?: any,
+    inter?: boolean,
+  }) => void,
 };
 
 class InterShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    console.log('---INTER SHIPPING props', props);
+    const { interAvailablePackages } = props;
+
     this.state = {
-      isCheckedWithout: false,
-      isCheckedFixPrice: true,
+      isCheckedWithout: isEmpty(interAvailablePackages),
+      isCheckedFixPrice: !isEmpty(interAvailablePackages),
     };
   }
 
   handleOnChangeRadioButton = (id: string) => {
-    this.setState({
-      isCheckedWithout: id === 'interShippingWithout',
-      isCheckedFixPrice: id !== 'interShippingWithout',
-    });
+    console.log('---id', id);
+    if (isEmpty(this.props.interAvailablePackages)) {
+      this.setState({
+        isCheckedWithout: true,
+        isCheckedFixPrice: false,
+      });
+      return;
+    }
+    this.setState(
+      {
+        isCheckedWithout: id === 'interShippingWithout',
+        isCheckedFixPrice: id !== 'interShippingWithout',
+      },
+      () => {
+        this.props.globalOnChange({
+          inter: true,
+          withoutInter: this.state.isCheckedWithout,
+        });
+      },
+    );
   };
 
   render() {
@@ -92,10 +115,10 @@ class InterShipping extends Component<PropsType, StateType> {
             />
           </div>
         </div>
-        <div styleName={classNames('form', { hidePlane: !isCheckedFixPrice })}>
+        <div styleName={classNames('form', { hidePlane: isCheckedWithout })}>
           <div
             styleName={classNames('formWrap', {
-              hidePlane: isEmpty(remainingServices),
+              hidePlane: isEmpty(remainingServices) && !isCheckedWithout,
             })}
           >
             <FixPriceForm
@@ -122,13 +145,7 @@ class InterShipping extends Component<PropsType, StateType> {
                           inter
                           services={possibleServices}
                           currency={item.currency}
-                          company={{
-                            id: item.id,
-                            price: item.price,
-                            currency: item.currency,
-                            service: item.service,
-                            country: item.country,
-                          }}
+                          company={item}
                           onSaveCompany={this.props.onSaveCompany}
                           onRemoveEditableItem={this.props.onRemoveEditableItem}
                         />

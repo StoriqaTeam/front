@@ -1,13 +1,13 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, forEach } from 'ramda';
+import { map, forEach, isEmpty } from 'ramda';
 import classNames from 'classnames';
 
 import { Checkbox } from 'components/common';
 import { Icon } from 'components/Icon';
 
-import { convertCountriesForSelect } from './utils';
+import { convertCountriesForSelect, convertCountriesToArrCodes } from './utils';
 
 import './Countries.scss';
 
@@ -18,14 +18,25 @@ type StateType = {
 type PropsType = {
   countries: any,
   onChange: any,
+  company: any,
 };
 
 class Countries extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const countries = convertCountriesForSelect({ countries: props.countries });
-    this.state = { countries };
-    props.onChange(countries);
+    const { countries, company } = props;
+    // console.log('---company', company);
+    const countriesForSelect = !company
+      ? convertCountriesForSelect({ countries })
+      : convertCountriesForSelect({
+          countries,
+          checkedCountries: convertCountriesToArrCodes(company.countries),
+        });
+    this.state = {
+      countries: countriesForSelect,
+      // arrangeChecked(countries, convertCountriesToArrCodes(company.countries))
+    };
+    props.onChange(countriesForSelect);
   }
 
   componentDidUpdate(prevProps: PropsType) {
@@ -157,9 +168,15 @@ class Countries extends Component<PropsType, StateType> {
   };
 
   updateState = (countries: any) => {
+    const { company } = this.props;
     this.setState(
       {
-        countries: convertCountriesForSelect({ countries }),
+        countries: !company
+          ? convertCountriesForSelect({ countries })
+          : convertCountriesForSelect({
+              countries,
+              checkedCountries: convertCountriesToArrCodes(company.countries),
+            }),
       },
       () => {
         this.props.onChange(this.state.countries);
@@ -168,12 +185,16 @@ class Countries extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { company } = this.props;
     const { countries } = this.state;
+    if (isEmpty(countries)) {
+      return null;
+    }
     return (
       <div styleName="container">
         <div styleName="checkbox allCheckbox">
           <Checkbox
-            id="shipping-all-countries"
+            id={`shipping-${company ? 'company' : ''}all-countries`}
             label="Select all"
             isChecked={countries.isChecked}
             onChange={this.handleCheckAll}
@@ -185,7 +206,9 @@ class Countries extends Component<PropsType, StateType> {
               <div styleName="continent">
                 <div styleName="checkbox">
                   <Checkbox
-                    id={`shipping-continent-${item.alpha3}`}
+                    id={`shipping-${company ? 'company' : ''}continent-${
+                      item.alpha3
+                    }`}
                     isChecked={item.isChecked}
                     onChange={() => {
                       this.handleCheckContinent(item.alpha3);
@@ -221,7 +244,9 @@ class Countries extends Component<PropsType, StateType> {
                     <div key={country.alpha3} styleName="country">
                       <div styleName="checkbox">
                         <Checkbox
-                          id={`shipping-country-${country.alpha3}`}
+                          id={`shipping-${company ? 'company' : ''}country-${
+                            country.alpha3
+                          }`}
                           label={country.label}
                           isChecked={country.isChecked}
                           onChange={() => {

@@ -2,11 +2,15 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { head, assoc, isEmpty, pathOr } from 'ramda';
+import { head, assoc, isEmpty, pathOr, find, propEq } from 'ramda';
 
 import type { SelectItemType } from 'types';
 import { InputPrice, Select, Button } from 'components/common';
 import Countries from './Countries';
+import {
+  convertCountriesToArrCodes,
+  convertCountriesToStringLabels,
+} from './utils';
 
 import type { ServiceType, CompanyType, ServicesType } from './types';
 
@@ -44,11 +48,12 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     const { currency, company, services } = props;
     let service = null;
     if (company) {
-      ({ service } = company);
+      // ({ service } = company);
+      service = find(propEq('id', company.service.id))(services);
     } else {
       service = !isEmpty(services) ? head(services) : null;
     }
-    const countries = (service && service.countries) || [];
+    const countries = (service && service.countries) || null;
     const country = countries && !isEmpty(countries) ? head(countries) : null;
     // const countriesForResponse =
     //   !isEmpty(countries) ?
@@ -94,14 +99,14 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
 
   handleSaveCompany = () => {
     const { company, currency: defaultCurrency } = this.props;
-    const { service, price, currency, country } = this.state;
+    const { service, price, currency, country, countries } = this.state;
     let newCompany = {
       service,
       price,
       currency,
     };
-    if (country) {
-      newCompany = assoc('country', country, newCompany);
+    if (countries) {
+      newCompany = assoc('countries', countries, newCompany);
     }
     if (company) {
       // $FlowIgnore
@@ -134,16 +139,25 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleOnChangeCountries = (countries: any) => {
-    // console.log('---countries', countries);
-    // console.log('---this.state.countries', this.state.countries);
-    this.setState({ countries });
-    // this.setState({ countriesForResponse: convertCountriesForResponse(countries)});
+    const isCountries = !isEmpty(convertCountriesToArrCodes(countries));
+    this.setState({ countries: isCountries ? countries : null });
   };
 
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
     const { price, currency, service, country, countries } = this.state;
-    console.log('---countries', countries);
+    const isInterCompanyDisabled =
+      (company &&
+        convertCountriesToStringLabels(company.countries) ===
+          convertCountriesToStringLabels(countries) &&
+        company.service.id === service.id &&
+        company.price === price) ||
+      isEmpty(convertCountriesToStringLabels(countries));
+    const isLocalCompanyDisabled =
+      company && company.service.id === service.id && company.price === price;
+    const withCompanySaveButtonDisabled = inter
+      ? isInterCompanyDisabled
+      : isLocalCompanyDisabled;
     return (
       <div styleName="container">
         <div styleName="selects">
@@ -183,7 +197,6 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}
-              onChangeCurrency={this.handleOnChangeCurrency}
               price={price}
               currency={currency}
             />
@@ -194,6 +207,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             <Countries
               countries={(service && service.countries) || null}
               onChange={this.handleOnChangeCountries}
+              company={company}
             />
           </div>
         )}
@@ -203,6 +217,9 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             big
             add={!company}
             onClick={this.handleSaveCompany}
+            disabled={
+              company ? withCompanySaveButtonDisabled : inter && !countries
+            }
           >
             {company ? 'Save' : 'Add company'}
           </Button>

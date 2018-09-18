@@ -73,7 +73,6 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleUpdateAddressFull = (addressFull: AddressFullType) => {
-    console.log('---addressFull', addressFull);
     this.setState({
       addressFull: {
         ...this.state.addressFull,
