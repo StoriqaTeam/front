@@ -1,3 +1,5 @@
+// @flow strict
+
 import moment from 'moment';
 import { assoc, propOr, pipe } from 'ramda';
 
@@ -17,10 +19,10 @@ type SignUpInputType = {
 /**
  * @desc Detects whether or not CAPS LOCK is on.
  * @link http://jsfiddle.net/Mottie/a6nhqvv0/
- * @param {SyntheticEvent} evt
+ * @param {KeyboardEvent} evt
  * @return {boolean}
  */
-function isCapsLockOn(evt: SyntheticEvent) {
+function isCapsLockOn(evt: KeyboardEvent): boolean {
   return evt.getModifierState && evt.getModifierState('CapsLock');
 }
 
@@ -85,12 +87,12 @@ function passwordQuality(value) {
 }
 /**
  * @param {String} name - input's name
- * @param {any} value - input's value
+ * @param {String} value - input's value
  * @param {String} validate - What kind of validation it should be used
  * @param {String} errorMessage - The custom error message given by the user
  * @return {Object}
  */
-function validateField(name, value, validate, errorMessage) {
+function validateField(name: string, value: string, validate: string, errorMessage: string) {
   let validModel = '';
   let formError = '';
   let passwordQualityResult = {};

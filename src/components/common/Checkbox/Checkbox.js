@@ -10,7 +10,7 @@ type PropsType = {
   id: string | number,
   label: string | Element<'span'>,
   isChecked: ?boolean,
-  onChange: <T:string>(T) => T | void,
+  onChange: <T: string>(T) => T | void,
 };
 
 class Checkbox extends PureComponent<PropsType> {
