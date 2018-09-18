@@ -7,6 +7,8 @@ import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import { find, pathEq, pathOr, last, omit } from 'ramda';
 
+import ManageWizardAddRoute from 'pages/Manage/Wizard/routes/manage_wizard_add';
+
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
@@ -113,6 +115,7 @@ const routes = (
           )
         }
       />
+      {ManageWizardAddRoute}
     </Route>
 
     <Route

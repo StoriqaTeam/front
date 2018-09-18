@@ -59,8 +59,6 @@ const UploadWrapper = (props: PropsType) => {
     square,
   } = props;
 
-  log.debug('UploadWrapper', props);
-
   return (
     <div styleName={classNames('wrapper', { square })}>
       <div styleName={classNames('uploadContainer', { noIndents })}>

@@ -53,12 +53,16 @@ class ProductsStep extends React.PureComponent<PropsType> {
     );
   };
 
-  handleEditItem = (id: number) => () => {
-    log.debug('handleEditItem', id);
+  handleEditItem = (id: ?number) => () => {
+    if (id != null) {
+      window.location.href = `/manage/wizard/edit/${id}`;
+    }
   };
 
-  handleDeleteItem = (id: number) => () => {
-    log.debug('handleDeleteItem', id);
+  handleDeleteItem = (id: ?number) => () => {
+    if (id != null) {
+      log.debug('handleDeleteItem', id);
+    }
   };
 
   renderGreeting = () => (
@@ -104,8 +108,9 @@ class ProductsStep extends React.PureComponent<PropsType> {
           </div>
         </div>
       </Col>
-      {mapIndexed(
-        (item, index) => (
+      {mapIndexed((item, index) => {
+        log.debug('item', item);
+        return (
           <Col size={12} md={4} xl={3} key={index}>
             <div styleName="productItem cardItem">
               <div styleName="productContent">
@@ -118,14 +123,17 @@ class ProductsStep extends React.PureComponent<PropsType> {
                 />
                 <ProductLayer
                   onDelete={this.handleDeleteItem(item.rawId)}
-                  onEdit={this.handleEditItem(item.rawId)}
+                  onEdit={this.handleEditItem(
+                    item.products &&
+                      item.products.edges[0] &&
+                      item.products.edges[0].node.rawId,
+                  )}
                 />
               </div>
             </div>
           </Col>
-        ),
-        this.productsWithVariants(),
-      )}
+        );
+      }, this.productsWithVariants())}
     </React.Fragment>
   );
 
@@ -186,6 +194,7 @@ export default createFragmentContainer(
               edges {
                 node {
                   id
+                  rawId
                   discount
                   photoMain
                   cashback

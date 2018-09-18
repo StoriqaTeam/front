@@ -15,6 +15,7 @@ import { Select } from 'components/common/Select';
 import { convertSrc, log, uploadFilePromise } from 'utils';
 
 import type { Node } from 'react';
+import type { RootCategoryType } from 'components/CategorySelector';
 
 import ProductsUploader from './ProductsUploader';
 import { createProductMutation } from './mutations/WizardCreateProductWithAttributesMutation';
@@ -69,7 +70,7 @@ const photoIcons = [
 
 class ProductForm<PropsType> extends FormComponent<
   FormInputs,
-  PropsType & { storeId: number },
+  PropsType & { storeId: number, categories: RootCategoryType },
 > {
   state = {
     form: {
@@ -382,6 +383,8 @@ class ProductForm<PropsType> extends FormComponent<
                         onSelect={(id: number) => {
                           this.handle('categoryId', id);
                         }}
+                        rootCategory={this.props.categories}
+                        category={{ rawId: this.state.form.categoryId }}
                       />
                     </div>
                     <div styleName="productStates formItem">

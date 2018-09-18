@@ -209,7 +209,9 @@ class CategorySelector extends React.Component<PropsType, StateType> {
                   <Fragment>
                     <div styleName="levelLabel">Categories</div>
                     <LevelList
-                      items={Array(...rootCategory.children)}
+                      items={
+                        rootCategory ? Array(...rootCategory.children) : []
+                      }
                       lang={lang}
                       onClick={this.handleOnChoose}
                       selectedItem={level1Item}
@@ -250,8 +252,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     );
   }
 }
-/*
-*/
+
 export default createFragmentContainer(
   CategorySelector,
   graphql`
@@ -309,3 +310,5 @@ export default createFragmentContainer(
     }
   `,
 );
+
+export type { RootCategoryType };
