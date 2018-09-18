@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 
@@ -8,16 +8,16 @@ type PropsType = {
   id: string,
   label?: string,
   isChecked: boolean,
-  onChange: Function,
+  onChange: <T>(T) => T | void,
 };
 
 class Checkbox extends PureComponent<PropsType> {
-  onChange = () => {
+  onChange = (): void => {
     const { id, onChange } = this.props;
     onChange(id);
   };
 
-  stopPropagation = (e: any) => {
+  stopPropagation = (e: SyntheticEvent<HTMLDivElement>): void => {
     e.stopPropagation();
   };
 

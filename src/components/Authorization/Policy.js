@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { Checkbox } from 'components/common/Checkbox';
