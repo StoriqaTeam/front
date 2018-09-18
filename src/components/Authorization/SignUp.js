@@ -1,10 +1,12 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
+
+import { Policy } from './index';
 
 import './Authorization.scss';
 
@@ -21,7 +23,21 @@ type PropsType = {
   onChange: Function,
 };
 
-class SignUp extends PureComponent<PropsType> {
+type StateType = {
+  isPrivacyChecked: boolean,
+  isTermsChecked: boolean,
+};
+
+class SignUp extends PureComponent<PropsType, StateType> {
+  state = {
+    isPrivacyChecked: false,
+    isTermsChecked: false,
+  };
+  handleCheck = (privacy: string): void => {
+    this.setState((prevState: StateType) => ({
+      [privacy]: !prevState[privacy],
+    }));
+  };
   render() {
     const {
       email,
@@ -33,6 +49,8 @@ class SignUp extends PureComponent<PropsType> {
       onRegistrationClick,
       onChange,
     } = this.props;
+
+    const { isPrivacyChecked, isTermsChecked } = this.state;
 
     return (
       <div styleName="signUp">
@@ -80,27 +98,24 @@ class SignUp extends PureComponent<PropsType> {
           />
         </div>
         {formValid && (
-          <div styleName="signUpGroup">
-            <div styleName="signUpButton">
+          <Fragment>
+            <Policy
+              isPrivacyChecked={isPrivacyChecked}
+              isTermsChecked={isTermsChecked}
+              onCheck={this.handleCheck}
+            />
+            <div styleName="signUpGroup">
               <Button
                 onClick={onRegistrationClick}
                 type="button"
                 dataTest="signUpButton"
+                disabled={!(isPrivacyChecked && isTermsChecked)}
+                fullWidth
               >
                 <span>Sign Up</span>
               </Button>
             </div>
-            <div styleName="policy">
-              By clicking this button, you agree to Storiqa’s{' '}
-              <a href="/" styleName="link">
-                Anti-spam Policy
-              </a>{' '}
-              &{' '}
-              <a href="/" styleName="link">
-                Terms of Use
-              </a>.
-            </div>
-          </div>
+          </Fragment>
         )}
       </div>
     );

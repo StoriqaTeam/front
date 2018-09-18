@@ -29,10 +29,6 @@
   justify-content: space-between;
 }
 
-.signUpButton {
-  width: 16rem;
-}
-
 .signIn {
   position: relative;
 }
@@ -58,18 +54,6 @@
   & > * {
     width: 100%;
   }
-}
-
-.policy {
-  margin-left: 1rem;
-  color: $color_grey_minor;
-  font-size: 10px;
-  line-height: 1.75rem;
-  text-align: left;
-}
-
-.link {
-  color: $color_grey;
 }
 
 .inputBlock {
