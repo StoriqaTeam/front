@@ -12,8 +12,10 @@ export type VarianAttributeType = {
     id: string,
     rawId?: string,
     name: Array<TranslationType>,
+    valueType: ?string | ?number,
     metaField: {
       values?: Array<string>,
+      translated: Array<TranslationType>,
       uiElement: 'COMBOBOX' | 'RADIOBUTTON' | 'CHECKBOX' | 'COLOR_PICKER',
     },
   },
