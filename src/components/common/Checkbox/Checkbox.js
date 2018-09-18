@@ -2,25 +2,31 @@
 
 import React, { PureComponent } from 'react';
 
+import type { Element } from 'react';
+
 import './Checkbox.scss';
 
 type PropsType = {
-  id: string,
-  label?: string,
-  isChecked: boolean,
-  onChange: <T>(T) => T | void,
+  id: string | number,
+  label: string | Element<'span'>,
+  isChecked: ?boolean,
+  onChange: <T:string>(T) => T | void,
 };
 
 class Checkbox extends PureComponent<PropsType> {
+  static defaultProps = {
+    id: 'stq',
+    label: 'stqLabel',
+    isChecked: false,
+    onChange: () => {},
+  };
   onChange = (): void => {
     const { id, onChange } = this.props;
-    onChange(id);
+    onChange(`${id}`);
   };
-
   stopPropagation = (e: SyntheticEvent<HTMLDivElement>): void => {
     e.stopPropagation();
   };
-
   render() {
     const { id, label, isChecked } = this.props;
     return (
