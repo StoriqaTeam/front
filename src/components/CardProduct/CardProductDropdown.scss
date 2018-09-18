@@ -1,0 +1,28 @@
+@import '../../styles/variables.scss';
+
+.priceDropdownList {
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 0.3rem 1.7rem 0 rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  padding-bottom: 0;
+  margin-left: 1rem;
+  border-radius: 0.5rem;
+  color: $color_grey;
+  font-size: 14px;
+  line-height: 1.8;
+  font-family: $font_medium;
+  white-space: nowrap;
+  text-align: right;
+  z-index: 9999;
+
+  @media (max-width: $xl - 1px) {
+    bottom: 110%;
+    right: 50%;
+  }
+
+  @media (min-width: $xl) {
+    bottom: 0;
+    left: 100%;
+  }
+}

@@ -5,15 +5,15 @@ import { Environment } from 'relay-runtime';
 import { map } from 'ramda';
 
 import type {
-  UpdateUserDeliveryAddressMutationVariables,
-  UpdateUserDeliveryAddressMutationResponse,
-} from './__generated__/UpdateUserDeliveryAddressMutation.graphql';
+  UpdateUserDeliveryAddressFullMutationVariables,
+  UpdateUserDeliveryAddressFullMutationResponse,
+} from './__generated__/UpdateUserDeliveryAddressFullMutation.graphql';
 
 const mutation = graphql`
-  mutation UpdateUserDeliveryAddressMutation(
-    $input: UpdateUserDeliveryAddressInput!
+  mutation UpdateUserDeliveryAddressFullMutation(
+    $input: UpdateUserDeliveryAddressFullInput!
   ) {
-    updateUserDeliveryAddress(input: $input) {
+    updateUserDeliveryAddressFull(input: $input) {
       rawId
       id
       userId
@@ -34,10 +34,10 @@ const mutation = graphql`
 `;
 
 export type MutationParamsType = {
-  ...UpdateUserDeliveryAddressMutationVariables,
+  ...UpdateUserDeliveryAddressFullMutationVariables,
   environment: Environment,
   onCompleted: ?(
-    response: ?UpdateUserDeliveryAddressMutationResponse,
+    response: ?UpdateUserDeliveryAddressFullMutationResponse,
     errors: ?Array<Error>,
   ) => void,
   onError: ?(error: Error) => void,
@@ -53,12 +53,12 @@ const commit = (params: MutationParamsType) =>
     onError: params.onError,
     updater: relayStore => {
       const updatedAddress = relayStore.getRootField(
-        'updateUserDeliveryAddress',
+        'updateUserDeliveryAddressFull',
       );
       const isPriority = updatedAddress.getValue('isPriority');
       const updatedAddressId = updatedAddress.getValue('id');
       const me = relayStore.getRoot().getLinkedRecord('me');
-      const deliveryAddresses = me.getLinkedRecords('deliveryAddresses');
+      const deliveryAddresses = me.getLinkedRecords('deliveryAddressesFull');
       const newDeliveryAddresses = map(item => {
         /* eslint-disable */
         if (item._dataID === updatedAddressId) {
@@ -70,7 +70,7 @@ const commit = (params: MutationParamsType) =>
         }
         return item;
       }, deliveryAddresses);
-      me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddresses');
+      me.setLinkedRecords(newDeliveryAddresses, 'deliveryAddressesFull');
     },
   });
 

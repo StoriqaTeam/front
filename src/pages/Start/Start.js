@@ -77,10 +77,12 @@ class Start extends PureComponent<PropsTypes> {
             )}
         </div>
         <div styleName="item bannerImage">
-          <img
-            src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC.png"
-            alt=""
-          />
+          <a href="/start-selling">
+            <img
+              src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC.png"
+              alt=""
+            />
+          </a>
         </div>
         <div styleName="item goodSliderItem">
           {discountProducts &&

@@ -126,7 +126,7 @@ class SearchContent extends Component<PropsType> {
             map(
               item => (
                 <div key={item.id} styleName="cardWrapper">
-                  <CardProduct item={item} />
+                  <CardProduct item={item} isSearchPage />
                 </div>
               ),
               productsWithVariants,

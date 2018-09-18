@@ -30,14 +30,11 @@ export {
 export { default as DeleteFromCartMutation } from './DeleteFromCartMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';
 export {
-  default as CreateUserDeliveryAddressMutation,
-} from './CreateUserDeliveryAddressMutation';
+  default as DeleteUserDeliveryAddressFullMutation,
+} from './DeleteUserDeliveryAddressFullMutation';
 export {
-  default as DeleteUserDeliveryAddressMutation,
-} from './DeleteUserDeliveryAddressMutation';
-export {
-  default as UpdateUserDeliveryAddressMutation,
-} from './UpdateUserDeliveryAddressMutation';
+  default as UpdateUserDeliveryAddressFullMutation,
+} from './UpdateUserDeliveryAddressFullMutation';
 export {
   default as CreateUserDeliveryAddressFullMutation,
 } from './CreateUserDeliveryAddressFullMutation';

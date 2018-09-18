@@ -16,6 +16,7 @@ const StartSellingButton = ({ text, onClick }: PropsType) => (
     onKeyPress={() => {}}
     onClick={onClick}
     styleName="container"
+    data-test="startSelling"
   >
     <p styleName="text">{text}</p>
   </div>

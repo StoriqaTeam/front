@@ -1,13 +1,11 @@
 pipeline:
-#  restore-cache:
-#    image: plugins/s3-cache:1
-#    pull: true
-#    secrets: [ aws_access_key_id, aws_secret_access_key ]
-#    mount:
-#    - node_modules
-#    restore: true
-#    when:
-#      branch: [ master, release* ]
+  restore-cache:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ aws_access_key_id, aws_secret_access_key ]
+    mount:
+    - node_modules
+    restore: true
 
 ###
 # Test PR
@@ -330,15 +328,17 @@ pipeline:
 # Notifications and post-deploy ops
 ###
 
-#  rebuild-cache:
-#    image: plugins/s3-cache:1
-#    pull: true
-#    secrets: [ aws_access_key_id, aws_secret_access_key ]
-#    mount:
-#    - node_modules
-#    rebuild: true
-#    when:
-#      branch: [ master, release* ]
+  rebuild-cache:
+    group: package
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ aws_access_key_id, aws_secret_access_key ]
+    mount:
+    - node_modules
+    rebuild: true
+    when:
+      branch: master
+      event: push
   slack:
     image: plugins/slack
     webhook: https://hooks.slack.com/services/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

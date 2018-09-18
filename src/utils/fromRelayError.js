@@ -15,6 +15,7 @@ import {
 export type ProcessedErrorType = {
   ['100' | '200' | '300' | '400']: {
     status: string,
+    // $FlowIgnoreMe
     messages?: {
       [string]: Array<string>,
     },
