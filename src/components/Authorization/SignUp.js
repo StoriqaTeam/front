@@ -1,12 +1,12 @@
 // @flow
 
 import React, { Fragment, PureComponent } from 'react';
-import { propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
 import { Policy } from './index';
+import { makeInput } from './utils';
 
 import './Authorization.scss';
 
@@ -50,44 +50,8 @@ class SignUp extends PureComponent<PropsType, StateType> {
     }));
   };
   makeInputs = (): Array<SignUpInputType> => {
-    const { errors, onChange } = this.props;
-    return [
-      {
-        thisFocus: true,
-        label: 'First Name',
-        name: 'firstName',
-        type: 'text',
-        model: this.props.firstName,
-        onChange,
-        errors: propOr(null, 'firstName', errors),
-      },
-      {
-        label: 'Last Name',
-        name: 'lastName',
-        type: 'text',
-        model: this.props.lastName,
-        onChange,
-        errors: propOr(null, 'lastName', errors),
-      },
-      {
-        label: 'Email',
-        name: 'email',
-        type: 'email',
-        model: this.props.email,
-        validate: 'email',
-        onChange,
-        errors: propOr(null, 'email', errors),
-      },
-      {
-        label: 'Password',
-        name: 'password',
-        type: 'password',
-        model: this.props.password,
-        validate: 'password',
-        onChange,
-        errors: propOr(null, 'password', errors),
-      },
-    ];
+    const inputs = ['Firs Name', 'Last Name', 'Email', 'Password'];
+    return inputs.map(input => makeInput(this.props, input));
   };
   render() {
     const { formValid, onRegistrationClick } = this.props;
@@ -95,8 +59,8 @@ class SignUp extends PureComponent<PropsType, StateType> {
     return (
       <div styleName="signUp">
         {this.makeInputs().map(input => (
-          <div styleName="inputBlock">
-            <Input key={input.name} {...input} />
+          <div key={input.name} styleName="inputBlock">
+            <Input {...input} />
           </div>
         ))}
         {formValid && (

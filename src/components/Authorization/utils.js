@@ -1,6 +1,18 @@
 import moment from 'moment';
+import { assoc, propOr, pipe } from 'ramda';
 
 import { setCookie, removeCookie, getCookie } from 'utils';
+
+type SignUpInputType = {
+  label: string,
+  name: string,
+  type: string,
+  model: string,
+  validate?: string,
+  thisFocus?: boolean,
+  onChange: () => void,
+  errors: ?Array<string>,
+};
 
 /**
  * @desc Detects whether or not CAPS LOCK is on.
@@ -21,10 +33,10 @@ function isCapsLockOn(evt: SyntheticEvent) {
  * @return {string}
  */
 function setErrorMessage(
-  value,
-  validModel,
-  message = 'Invalid',
-  errorMessage = '',
+  value: string,
+  validModel: boolean,
+  message: string = 'Invalid',
+  errorMessage: string = '',
 ) {
   // check for enabling custom error message.
   const error = errorMessage !== '' ? errorMessage : message;
@@ -163,6 +175,46 @@ const clearPathForRedirectAfterLogin = () => {
 const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
 
+const makeInput = (props: { [string]: string, onChange: () => void, errors: Array<string>}, inputName: string): SignUpInputType => {
+
+  const nowhiteSpace = (str: string): string => str.replace(/ +/g, '');
+  /**
+   * @link https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
+   */
+  const camelize = (str: string): string =>
+    str.replace(
+      /(?:^\w|[A-Z]|\b\w)/g,
+      (letter, index) =>
+        index === 0 ? letter.toLowerCase() : letter.toUpperCase(),
+    );
+
+  const isPasswordOrEmail = (str: string): boolean => str === 'password' || str === 'email';
+
+  const cameledName: string => string = pipe(camelize, nowhiteSpace);
+
+  const setValidate = (input: SignUpInputType): SignUpInputType => {
+    if (isPasswordOrEmail(input.type)) {
+      return assoc('validate', input.type, input);
+    }
+    return input;
+  };
+
+  const setInitialShape = (label: string): SignUpInputType => {
+    const name = cameledName(label);
+    return {
+      label,
+      name,
+      type: isPasswordOrEmail(name) ? name : 'text',
+      model: props[name],
+      onChange: props.onChange,
+      errors: propOr(null, name, props.errors)
+    };
+  }
+
+  return pipe(setInitialShape, setValidate)(inputName);
+
+};
+
 export default {
   validateField,
   isCapsLockOn,
@@ -172,4 +224,5 @@ export default {
   setPathForRedirectAfterLogin,
   clearPathForRedirectAfterLogin,
   getPathForRedirectAfterLogin,
+  makeInput,
 };
