@@ -12,7 +12,7 @@ type PropsType = {
 };
 
 const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
-  <div styleName="policy">
+  <div styleName="container">
     <div styleName="policyText">
       <span styleName="checkbox">
         <Checkbox
@@ -21,7 +21,16 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
           onChange={() => onCheck('isPrivacyChecked')}
         />
       </span>
-      Check here to indicate that you have read and agree to the Terms of Use.
+      <p>
+        Check here to indicate that you have read and agree to the{' '}
+        <a href="/termsofuse.pdf" target="_blank" styleName="link">
+          Terms of Use
+        </a>{' '}
+        and{' '}
+        <a href="/privacy.pdf" target="_blank" styleName="link">
+          Privacy Policy
+        </a>.
+      </p>
     </div>
     <div styleName="policyText">
       <span styleName="checkbox">
@@ -31,10 +40,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
           onChange={() => onCheck('isTermsChecked')}
         />
       </span>
-      I agree to my personal data being stored and used.{' '}
-      <a href="/" styleName="link">
-        Privacy Policy
-      </a>
+      <p>I agree to my personal data being stored and used.</p>
     </div>
   </div>
 );

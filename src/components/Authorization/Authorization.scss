@@ -27,10 +27,16 @@
   display: flex;
   margin: 4rem 0 2rem;
   justify-content: space-between;
+  button {
+    height: 5rem;
+  }
 }
 
 .signIn {
   position: relative;
+  button {
+    height: 5rem;
+  }
 }
 
 .signInGroup {
@@ -110,6 +116,7 @@
     }
   }
   button {
+    height: 5rem;
     width: 100%;
   }
 }

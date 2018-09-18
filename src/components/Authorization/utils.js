@@ -175,8 +175,10 @@ const clearPathForRedirectAfterLogin = () => {
 const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
 
-const makeInput = (props: { [string]: string, onChange: () => void, errors: Array<string>}, inputName: string): SignUpInputType => {
-
+const makeInput = (
+  props: { [string]: string, onChange: () => void, errors: Array<string> },
+  inputName: string,
+): SignUpInputType => {
   const nowhiteSpace = (str: string): string => str.replace(/ +/g, '');
   /**
    * @link https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
@@ -188,7 +190,8 @@ const makeInput = (props: { [string]: string, onChange: () => void, errors: Arra
         index === 0 ? letter.toLowerCase() : letter.toUpperCase(),
     );
 
-  const isPasswordOrEmail = (str: string): boolean => str === 'password' || str === 'email';
+  const isPasswordOrEmail = (str: string): boolean =>
+    str === 'password' || str === 'email';
 
   const cameledName: string => string = pipe(camelize, nowhiteSpace);
 
@@ -207,12 +210,11 @@ const makeInput = (props: { [string]: string, onChange: () => void, errors: Arra
       type: isPasswordOrEmail(name) ? name : 'text',
       model: props[name],
       onChange: props.onChange,
-      errors: propOr(null, name, props.errors)
+      errors: propOr(null, name, props.errors),
     };
-  }
+  };
 
   return pipe(setInitialShape, setValidate)(inputName);
-
 };
 
 export default {
