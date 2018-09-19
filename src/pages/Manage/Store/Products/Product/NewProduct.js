@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
 import { pathOr, isEmpty, path } from 'ramda';
 
-import { Page } from 'components/App';
+import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 import {
@@ -277,15 +277,20 @@ class NewProduct extends Component<PropsType, StateType> {
     const { isLoading } = this.state;
 
     return (
-      <div styleName="wrap">
-        <Form
-          onSave={this.handleSave}
-          validationErrors={this.state.formErrors}
-          categories={this.context.directories.categories}
-          baseProduct={null}
-          isLoading={isLoading}
-        />
-      </div>
+      <AppContext.Consumer>
+        {({ directories }) => (
+          <div styleName="wrap">
+            <Form
+              onSave={this.handleSave}
+              validationErrors={this.state.formErrors}
+              categories={this.context.directories.categories}
+              baseProduct={null}
+              isLoading={isLoading}
+              currencies={directories.currencies}
+            />
+          </div>
+        )}
+      </AppContext.Consumer>
     );
   }
 }

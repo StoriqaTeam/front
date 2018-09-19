@@ -9,8 +9,8 @@ export default (countries: CountriesDefaultType) => {
   forEach(item => {
     newCountries = append(item.children, newCountries);
   }, countries.children);
-  // $FlowIgnore
   newCountries = sort(
+    // $FlowIgnore
     (a, b) => (a.label < b.label ? -1 : 1),
     flatten(newCountries),
   );
