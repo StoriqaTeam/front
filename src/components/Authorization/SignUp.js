@@ -18,9 +18,7 @@ type SignUpInputType = {
   validate?: string,
   thisFocus?: boolean,
   onChange: () => void,
-  errors: {
-    [string]: ?Array<string>,
-  },
+  errors: ?Array<string>,
 };
 
 type PropsType = {
