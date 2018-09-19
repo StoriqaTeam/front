@@ -15,11 +15,12 @@ type SignUpInputType = {
   label: string,
   name: string,
   type: string,
-  model: string,
   validate?: string,
   thisFocus?: boolean,
   onChange: () => void,
-  errors: ?Array<string>,
+  errors: {
+    [string]: ?Array<string>,
+  },
 };
 
 type PropsType = {
@@ -51,11 +52,16 @@ class SignUp extends PureComponent<PropsType, StateType> {
     }));
   };
   makeInputs = (): Array<SignUpInputType> => {
-    const inputs: Array<string> = ['First Name', 'Last Name', 'Email', 'Password'];
+    const inputs: Array<string> = [
+      'First Name',
+      'Last Name',
+      'Email',
+      'Password',
+    ];
     const makeInputFn = map(makeInput(this.props));
     const setFocus = adjust(assoc('thisFocus', true), 0);
     return pipe(makeInputFn, setFocus)(inputs);
-  }
+  };
   render() {
     const { formValid, onRegistrationClick } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;
@@ -63,10 +69,10 @@ class SignUp extends PureComponent<PropsType, StateType> {
       <div styleName="signUp">
         {this.makeInputs().map(input => (
           <div key={input.name} styleName="inputBlock">
-            <Input {...input} />
+            <Input {...input} model={this.props[input.name]} />
           </div>
         ))}
-        {!formValid && (
+        {formValid && (
           <Fragment>
             <Policy
               isPrivacyChecked={isPrivacyChecked}

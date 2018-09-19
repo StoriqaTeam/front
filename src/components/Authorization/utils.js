@@ -9,11 +9,12 @@ type SignUpInputType = {
   label: string,
   name: string,
   type: string,
-  model: string,
   validate?: string,
   thisFocus?: boolean,
   onChange: () => void,
-  errors: ?Array<string>,
+  errors: {
+    [string]: ?Array<string>,
+  },
 };
 
 type PasswordQualityType = {
@@ -186,9 +187,10 @@ const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
 
 const makeInput = (props: {
-  [string]: string,
   onChange: () => void,
-  errors: Array<string>,
+  errors: {
+    [string]: ?Array<string>,
+  },
 }) => (inputName: string): SignUpInputType => {
   const nowhiteSpace = (str: string): string => str.replace(/ +/g, '');
   /**
@@ -219,7 +221,6 @@ const makeInput = (props: {
       label,
       name,
       type: isPasswordOrEmail(name) ? name : 'text',
-      model: props[name],
       onChange: props.onChange,
       errors: propOr(null, name, props.errors),
     };
