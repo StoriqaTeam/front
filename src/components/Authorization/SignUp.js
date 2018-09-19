@@ -50,13 +50,12 @@ class SignUp extends PureComponent<PropsType, StateType> {
       [privacy]: !prevState[privacy],
     }));
   };
-  makeInputs = (): Array<SignUpInputType> =>
-    pipe(map(makeInput(this.props)), adjust(assoc('thisFocus', true), 0))([
-      'First Name',
-      'Last Name',
-      'Email',
-      'Password',
-    ]);
+  makeInputs = (): Array<SignUpInputType> => {
+    const inputs: Array<string> = ['First Name', 'Last Name', 'Email', 'Password'];
+    const makeInputFn = map(makeInput(this.props));
+    const setFocus = adjust(assoc('thisFocus', true), 0);
+    return pipe(makeInputFn, setFocus)(inputs);
+  }
   render() {
     const { formValid, onRegistrationClick } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;
