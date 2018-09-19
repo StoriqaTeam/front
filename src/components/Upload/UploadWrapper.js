@@ -59,9 +59,7 @@ const UploadWrapper = ({
         data-test={dataTest}
       >
         {buttonIconType &&
-          !overPicture && (
-            <Icon type={buttonIconType} size={buttonIconSize} />
-          )}
+          !overPicture && <Icon type={buttonIconType} size={buttonIconSize} />}
         {!overPicture && (
           <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
         )}
