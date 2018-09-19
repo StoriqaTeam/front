@@ -14,6 +14,7 @@ import { Spinner } from 'components/common/Spinner';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import prepareQueryString from './OAuthCallback.utils';
+
 import {
   getPathForRedirectAfterLogin,
   clearPathForRedirectAfterLogin,

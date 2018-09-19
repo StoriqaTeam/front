@@ -12,7 +12,7 @@ import { Icon } from 'components/Icon';
 import { log } from 'utils';
 
 import './Input.scss';
-import utils from './utils';
+import { validateField, isCapsLockOn } from './utils';
 
 type PropsType = {
   label: ?string,
@@ -93,15 +93,15 @@ class Input extends PureComponent<PropsType, StateType> {
     }
   }
 
-  onMouseDown = () => {
+  onMouseDown = (): void => {
     this.setState({ isFocusShow: true });
   };
 
-  onMouseUp = () => {
+  onMouseUp = (): void => {
     this.setState({ isFocusShow: false });
   };
 
-  onMouseOut = () => {
+  onMouseOut = (): void => {
     this.setState({ isFocusShow: false });
   };
 
@@ -110,7 +110,7 @@ class Input extends PureComponent<PropsType, StateType> {
    * @param {SyntheticEvent} evt
    * @return {void}
    */
-  handleChange = (evt: { target: { name: string, value: string } }) => {
+  handleChange = (evt: { target: { name: string, value: string } }): void => {
     const { name, value } = evt.target;
     this.validate(name, value);
 
@@ -120,15 +120,15 @@ class Input extends PureComponent<PropsType, StateType> {
   };
   /**
    * @desc Handles the onKeyPress event
-   * @param {SyntheticEvent} evt
+   * @param {KeyboardEvent} evt
    * @return {void}
    */
-  handleKeyPress = (evt: {}) => {
+  handleKeyPress = (evt: KeyboardEvent): void => {
     if (this.props.detectCapsLock) {
       this.setState({
-        isCapsLockOn: utils.isCapsLockOn(evt),
+        isCapsLockOn: isCapsLockOn(evt),
       });
-      log.info('utils.isCapsLockOn(evt)', utils.isCapsLockOn(evt));
+      log.info('isCapsLockOn(evt)', isCapsLockOn(evt));
     }
   };
 
@@ -137,7 +137,7 @@ class Input extends PureComponent<PropsType, StateType> {
    * and toggles 'showPasswordButton'
    * @return {void}
    */
-  handleFocus = (evt: { target: { name: string, value: string } }) => {
+  handleFocus = (evt: { target: { name: string, value: string } }): void => {
     const { name, value } = evt.target;
     const { model } = this.props;
     const { validity } = this.state;
@@ -161,7 +161,7 @@ class Input extends PureComponent<PropsType, StateType> {
    * @desc Puts back the label to its original position if the model is empty
    * @return {void}
    */
-  handleBlur = () => {
+  handleBlur = (): void => {
     const { model, name } = this.props;
 
     if (model === '') {
@@ -180,10 +180,10 @@ class Input extends PureComponent<PropsType, StateType> {
 
   /**
    * @param {String} inputName - input's name
-   * @param {any} inputValue - input's value
+   * @param {string} inputValue - input's value
    * @return {void}
    */
-  validate = (inputName: string, inputValue: any) => {
+  validate = (inputName: string, inputValue: string): void => {
     const { validate, errorMessage } = this.props;
     const {
       name,
@@ -191,7 +191,7 @@ class Input extends PureComponent<PropsType, StateType> {
       validity,
       formError,
       passwordQuality,
-    } = utils.validateField(inputName, inputValue, validate, errorMessage);
+    } = validateField(inputName, inputValue, validate, errorMessage);
 
     this.setState(
       {
@@ -212,7 +212,7 @@ class Input extends PureComponent<PropsType, StateType> {
    * @desc show password to the user
    * @return {void}
    */
-  handleShowPassword = () => {
+  handleShowPassword = (): void => {
     if (this.input) {
       this.input.focus();
     }

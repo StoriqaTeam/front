@@ -1,7 +1,7 @@
 // @flow strict
 
 import moment from 'moment';
-import { assoc, propOr, pipe } from 'ramda';
+import { assoc, propOr, pipe ,isNil } from 'ramda';
 
 import { setCookie, removeCookie, getCookie } from 'utils';
 
@@ -16,15 +16,21 @@ type SignUpInputType = {
   errors: ?Array<string>,
 };
 
+type PasswordQualityType = {
+  lowerCase: boolean,
+  upperCase: boolean,
+  digit: boolean,
+  length: boolean,
+};
+
 /**
  * @desc Detects whether or not CAPS LOCK is on.
  * @link http://jsfiddle.net/Mottie/a6nhqvv0/
  * @param {KeyboardEvent} evt
  * @return {boolean}
  */
-function isCapsLockOn(evt: KeyboardEvent): boolean {
-  return evt.getModifierState && evt.getModifierState('CapsLock');
-}
+const isCapsLockOn = (evt: KeyboardEvent): boolean =>
+  evt.getModifierState && evt.getModifierState('CapsLock')
 
 /**
  * @desc Set form error message based on its validation
@@ -39,7 +45,7 @@ function setErrorMessage(
   validModel: boolean,
   message: string = 'Invalid',
   errorMessage: string = '',
-) {
+): string {
   // check for enabling custom error message.
   const error = errorMessage !== '' ? errorMessage : message;
   let formError = '';
@@ -52,21 +58,20 @@ function setErrorMessage(
  * @desc validates that the value is an email
  * @link https://github.com/angular/angular/blob/5.2.2/packages/forms/src/validators.ts#L57-L43
  * @param {String} value
- * @return {Array|null}
+ * @return {Boolean}
  */
-function validateEmail(value) {
+const validateEmail = (value: string): boolean => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const isValid = !!value.match(emailRegex);
-  return isValid;
+  return !isNil(value.match(emailRegex));
 }
 /**
  * @desc validates that the value is a number
  * @param {String} value
- * @return {Array|null}
+ * @return {boolean}
  */
-function validateNumber(value) {
+const validateNumber = (value: string): boolean => {
   const numberRegex = /\d/;
-  return value.match(numberRegex);
+  return !isNil(value.match(numberRegex));
 }
 /**
  * @desc Checks that the password contains at least the following:
@@ -75,16 +80,14 @@ function validateNumber(value) {
  * one digit
  * 8 characters
  * @param {String} value
- * @return {Object}
+ * @return {PasswordQualityType}
  */
-function passwordQuality(value) {
-  return {
-    lowerCase: /(?=.*?[a-z])/.test(value),
-    upperCase: /(?=.*?[A-Z])/.test(value),
-    digit: /(?=.*?[0-9])/.test(value),
-    length: value.length >= 8,
-  };
-}
+const passwordQuality = (value: string): PasswordQualityType => ({
+  lowerCase: /(?=.*?[a-z])/.test(value),
+  upperCase: /(?=.*?[A-Z])/.test(value),
+  digit: /(?=.*?[0-9])/.test(value),
+  length: value.length >= 8,
+})
 /**
  * @param {String} name - input's name
  * @param {String} value - input's value
@@ -92,7 +95,12 @@ function passwordQuality(value) {
  * @param {String} errorMessage - The custom error message given by the user
  * @return {Object}
  */
-function validateField(name: string, value: string, validate: string, errorMessage: string) {
+const validateField = (
+  name: string,
+  value: string,
+  validate: string,
+  errorMessage: string,
+) => {
   let validModel = '';
   let formError = '';
   let passwordQualityResult = {};
@@ -216,11 +224,10 @@ const makeInput = (props: {
       errors: propOr(null, name, props.errors),
     };
   };
-
   return pipe(setInitialShape, setValidate)(inputName);
 };
 
-export default {
+export {
   validateField,
   isCapsLockOn,
   setErrorMessage,
