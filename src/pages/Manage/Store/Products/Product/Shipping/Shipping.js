@@ -14,18 +14,21 @@ import type { SelectItemType } from 'types';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 
 import { convertCountriesToArrCodes } from './utils';
+import type {
+  ShippingChangeDataType,
+  RequestLocalShippingType,
+  RequestInterShippingType,
+  PickupShippingType,
+} from './types';
 
 import type { Shipping_baseProduct as ShippingBaseProductType } from './__generated__/Shipping_baseProduct.graphql';
 
 import { LocalShipping, InterShipping } from '../index';
 
 type StateType = {
-  local: Array<*>,
-  international: Array<*>,
-  pickup: {
-    pickup: boolean,
-    price?: ?number,
-  },
+  local: Array<RequestLocalShippingType>,
+  international: Array<RequestInterShippingType>,
+  pickup: PickupShippingType,
   withoutInter: boolean,
   withoutLocal: boolean,
 };
@@ -134,46 +137,8 @@ class Shipping extends Component<PropsType, StateType> {
     UpsertShippingMutation.commit(params);
   };
 
-  globalHandleOnChange = (data: {
-    companies?: any,
-    inter?: boolean,
-    pickup?: any,
-    withoutInter?: boolean,
-    withoutLocal?: boolean,
-  }) => {
-    console.log('---pickup', data.pickup);
+  handleOnChangeShippingData = (data: ShippingChangeDataType) => {
     const { companies, inter, pickup, withoutInter, withoutLocal } = data;
-    // switch (true) {
-    //   case withoutInter:
-    //     this.setState({ withoutInter });
-    //     break;
-    //   case inter && companies: {
-    //     const international = map(item => ({
-    //       companyPackageId: item.companyPackageRawId,
-    //       price: item.price,
-    //       deliveriesTo: convertCountriesToArrCodes(item.countries),
-    //     }), companies);
-    //     this.setState({ international });
-    //     break;
-    //   }
-    //   case !inter && companies: {
-    //     const local = map(item => ({
-    //       companyPackageId: item.companyPackageRawId,
-    //       price: item.price,
-    //       deliveriesTo: ['RUS'],
-    //     }), companies);
-    //     this.setState({ local });
-    //     break;
-    //   }
-    //   case pickup: {
-    //     this.setState({ pickup });
-    //     break;
-    //   }
-    //   default: {
-    //     return false;
-    //   }
-    // }
-
     if (withoutInter !== undefined) {
       this.setState({ withoutInter });
       return;
@@ -182,24 +147,23 @@ class Shipping extends Component<PropsType, StateType> {
       this.setState({ withoutLocal });
       return;
     }
-    if (inter && companies) {
-      const international = map(
-        item => ({
-          companyPackageId: item.companyPackageRawId,
-          price: item.price,
-          deliveriesTo: convertCountriesToArrCodes(item.countries),
-        }),
-        companies,
-      );
-      this.setState({ international });
-      return;
-    }
-    if (!inter && companies) {
+    if (companies) {
+      if (inter) {
+        const international = map(
+          item => ({
+            companyPackageId: item.companyPackageRawId,
+            price: item.price,
+            deliveriesTo: convertCountriesToArrCodes(item.countries),
+          }),
+          companies,
+        );
+        this.setState({ international });
+        return;
+      }
       const local = map(
         item => ({
           companyPackageId: item.companyPackageRawId,
           price: item.price,
-          deliveriesTo: ['RUS'],
         }),
         companies,
       );
@@ -211,8 +175,6 @@ class Shipping extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
-    console.log('---this.state', this.state);
     const { currency, baseProduct } = this.props;
     // $FlowIgnore
     const localShipping = pathOr([], ['shipping', 'local'], baseProduct);
@@ -243,13 +205,13 @@ class Shipping extends Component<PropsType, StateType> {
           localShipping={localShipping}
           pickupShipping={pickupShipping}
           localAvailablePackages={localAvailablePackages}
-          globalOnChange={this.globalHandleOnChange}
+          onChangeShippingData={this.handleOnChangeShippingData}
         />
         <InterShipping
           currency={currency}
           interShipping={interShipping}
           interAvailablePackages={interAvailablePackages}
-          globalOnChange={this.globalHandleOnChange}
+          onChangeShippingData={this.handleOnChangeShippingData}
         />
         <Button big fullWidth onClick={this.handleSave} dataTest="">
           Save
@@ -272,21 +234,15 @@ export default createFragmentContainer(
           companyPackageId
           price
           deliveriesTo {
-            label
-            parent
-            level
             children {
               label
-              parent
-              level
               children {
+                parent
                 alpha3
                 alpha2
                 label
               }
-              alpha2
               alpha3
-              numeric
             }
           }
         }
@@ -308,26 +264,16 @@ export default createFragmentContainer(
           name
           logo
           deliveriesTo {
-            label
-            parent
-            level
             children {
               label
-              parent
-              level
               children {
                 parent
                 alpha3
                 alpha2
                 label
               }
-              alpha2
               alpha3
-              numeric
             }
-            alpha2
-            alpha3
-            numeric
           }
         }
       }

@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { head, assoc, isEmpty, pathOr, find, propEq } from 'ramda';
+import { head, assoc, isEmpty, find, propEq } from 'ramda';
 
 import type { SelectItemType } from 'types';
 import { InputPrice, Select, Button } from 'components/common';
@@ -12,7 +12,12 @@ import {
   convertCountriesToStringLabels,
 } from './utils';
 
-import type { ServiceType, CompanyType, ServicesType } from './types';
+import type {
+  ServiceType,
+  CompanyType,
+  ShippingCountriesType,
+  FilledCompanyType,
+} from './types';
 
 import './FixPriceForm.scss';
 
@@ -20,26 +25,16 @@ type StateType = {
   price: number,
   currency: SelectItemType,
   service: ?ServiceType,
-  country?: ?SelectItemType,
-  sendTo: SelectItemType,
-  countries: any,
-  // countriesForResponse: Array<string>,
+  countries: ?ShippingCountriesType,
 };
 
 type PropsType = {
   currency: SelectItemType,
-  services: ServicesType,
-  company?: {
-    id?: string,
-    price: number,
-    currency: SelectItemType,
-    service: ServiceType,
-    country?: SelectItemType,
-  },
-  inter?: boolean,
+  services: Array<ServiceType>,
   onSaveCompany: (company: CompanyType) => void,
+  company?: FilledCompanyType,
+  inter?: boolean,
   onRemoveEditableItem?: () => void,
-  interAvailablePackages: any,
 };
 
 class FixPriceForm extends PureComponent<PropsType, StateType> {
@@ -48,59 +43,37 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     const { currency, company, services } = props;
     let service = null;
     if (company) {
-      // ({ service } = company);
-      service = find(propEq('id', company.service.id))(services);
+      service = find(propEq('id', company.service && company.service.id))(
+        services,
+      );
     } else {
       service = !isEmpty(services) ? head(services) : null;
     }
     const countries = (service && service.countries) || null;
-    const country = countries && !isEmpty(countries) ? head(countries) : null;
-    // const countriesForResponse =
-    //   !isEmpty(countries) ?
-    //     convertCountriesForResponse(countries, true) :
-    //     [];
     this.state = {
-      price: company ? company.price : 0,
+      price: (company && company.price) || 0,
       currency,
       service,
-      country,
-      sendTo: { id: 'all', label: 'All countries' },
       countries,
-      // countriesForResponse,
     };
   }
 
-  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+  componentDidUpdate(prevProps: PropsType) {
     const { services } = this.props;
     if (JSON.stringify(prevProps.services) !== JSON.stringify(services)) {
       const service = !isEmpty(services) ? head(services) : null;
-      const countries = (service && service.countries) || [];
-      const country = countries && !isEmpty(countries) ? head(countries) : null;
-      this.updateState({ country, service });
-    }
-    if (
-      JSON.stringify(prevState.service) !== JSON.stringify(this.state.service)
-    ) {
-      // $FlowIgnore
-      const countries = pathOr([], ['service', 'countries'], this.state);
-      const country = countries && !isEmpty(countries) ? head(countries) : null;
-      // const countriesForResponse = !isEmpty(countries) ? convertCountriesForResponse(head(countries).children, true) : [];
-      this.updateState({ country });
+      this.updateState({ service });
     }
   }
 
-  updateState = (newState: {
-    country: ?SelectItemType,
-    service?: ?ServiceType,
-    // countriesForResponse?: any,
-  }) => {
+  updateState = (newState: { service: ?ServiceType }) => {
     this.setState(newState);
   };
 
   handleSaveCompany = () => {
-    const { company, currency: defaultCurrency } = this.props;
-    const { service, price, currency, country, countries } = this.state;
-    let newCompany = {
+    const { company, currency: defaultCurrency, onSaveCompany } = this.props;
+    const { service, price, currency, countries } = this.state;
+    let newCompany: CompanyType = {
       service,
       price,
       currency,
@@ -109,52 +82,43 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       newCompany = assoc('countries', countries, newCompany);
     }
     if (company) {
-      // $FlowIgnore
       newCompany = assoc('id', company.id, newCompany);
     } else {
       this.setState({ price: 0, currency: defaultCurrency });
     }
-    // $FlowIgnore
-    this.props.onSaveCompany(newCompany);
+    onSaveCompany(newCompany);
   };
 
   handleOnSelectService = (service: ?ServiceType) => {
     this.setState({ service });
   };
 
-  handleOnSelectCountry = (country: SelectItemType) => {
-    this.setState({ country });
-  };
-
-  handleOnSelectCountryNew = (item: SelectItemType) => {
-    this.setState({ sendTo: item, countriesForResponse: [] });
-  };
-
   handlePriceChange = (price: number) => {
     this.setState({ price });
   };
 
-  handleOnChangeCurrency = (currency: SelectItemType) => {
-    this.setState({ currency });
-  };
-
-  handleOnChangeCountries = (countries: any) => {
+  handleOnChangeCountries = (countries: ?ShippingCountriesType) => {
     const isCountries = !isEmpty(convertCountriesToArrCodes(countries));
     this.setState({ countries: isCountries ? countries : null });
   };
 
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
-    const { price, currency, service, country, countries } = this.state;
-    const isInterCompanyDisabled =
-      (company &&
-        convertCountriesToStringLabels(company.countries) ===
+    const { price, currency, service, countries } = this.state;
+    let isInterCompanyDisabled = true;
+    let isLocalCompanyDisabled = true;
+    if (company && company.service && service) {
+      const companyServiceId = company.service.id;
+      isInterCompanyDisabled =
+        (convertCountriesToStringLabels(company.countries) ===
           convertCountriesToStringLabels(countries) &&
-        company.service.id === service.id &&
-        company.price === price) ||
-      isEmpty(convertCountriesToStringLabels(countries));
-    const isLocalCompanyDisabled =
-      company && company.service.id === service.id && company.price === price;
+          companyServiceId === service.id &&
+          company.price === price) ||
+        isEmpty(convertCountriesToStringLabels(countries));
+      isLocalCompanyDisabled =
+        company && companyServiceId === service.id && company.price === price;
+    }
+
     const withCompanySaveButtonDisabled = inter
       ? isInterCompanyDisabled
       : isLocalCompanyDisabled;
@@ -171,29 +135,6 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               onSelect={this.handleOnSelectService}
             />
           </div>
-          {/* inter && (
-            <div styleName="countriesSelect">
-              <Select
-                forForm
-                fullWidth
-                label="Send to"
-                items={service && service.countries ? service.countries : []}
-                activeItem={country}
-                onSelect={this.handleOnSelectCountry}
-              />
-              <Select
-                forForm
-                fullWidth
-                label="Send to"
-                items={[
-                  { id: 'all', label: 'All countries' },
-                  { id: 'сertain', label: 'Сertain countries' },
-                ]}
-                activeItem={sendTo}
-                onSelect={this.handleOnSelectCountryNew}
-              />
-            </div>
-          ) */}
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}

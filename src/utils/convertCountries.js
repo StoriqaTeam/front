@@ -1,6 +1,6 @@
 // @flow
 
-import { forEach, append, flatten } from 'ramda';
+import { forEach, append, flatten, sort } from 'ramda';
 
 import type { CountriesDefaultType } from 'types';
 
@@ -10,5 +10,9 @@ export default (countries: CountriesDefaultType) => {
     newCountries = append(item.children, newCountries);
   }, countries.children);
   // $FlowIgnore
-  return flatten(newCountries);
+  newCountries = sort(
+    (a, b) => (a.label < b.label ? -1 : 1),
+    flatten(newCountries),
+  );
+  return newCountries;
 };

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, dissoc } from 'ramda';
+import { pathOr, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 
@@ -24,6 +24,7 @@ type AddressFullType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
   country: string,
+  countryCode: string,
   locality: ?string,
   political: ?string,
   postalCode: string,
@@ -70,7 +71,9 @@ class EditStorage extends Component<PropsType, StateType> {
         clientMutationId: '',
         id,
         name: data.name,
-        addressFull: dissoc('countryCode', data.addressFull),
+        addressFull: {
+          ...data.addressFull,
+        },
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {

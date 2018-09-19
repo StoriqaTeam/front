@@ -1,48 +1,99 @@
 // @flow
 
 import type { SelectItemType } from 'types';
-import type { Shipping_baseProduct as ShippingBaseProductType } from './__generated__/Shipping_baseProduct.graphql';
 
-export type ServiceType = SelectItemType & {
-  countries?: Array<SelectItemType>,
+export type CountryType = {
+  parent: string,
+  alpha3: string,
+  alpha2: string,
+  label: string,
+  isSelected?: boolean,
 };
-export type ServicesType = Array<ServiceType>;
-export type ServicesInterType = Array<
-  { countries: Array<SelectItemType> } & SelectItemType,
->;
+
+export type ShippingCountriesType = {
+  children: Array<{
+    alpha3: string,
+    label: string,
+    children: Array<CountryType>,
+    isOpen?: boolean,
+    isSelected?: boolean,
+  }>,
+  isSelected?: boolean,
+};
+
+export type ServiceType = {
+  id: string,
+  label: string,
+  countries?: ?ShippingCountriesType,
+};
+
+export type InterServiceType = {
+  id: string,
+  label: string,
+  countries: ?ShippingCountriesType,
+};
 
 export type CompanyType = {
   id?: string,
-  logo: string,
-  service: ServiceType,
-  price: number,
+  logo?: string,
+  service: ?ServiceType,
+  price: ?number,
   currency: SelectItemType,
-  country?: SelectItemType,
+  countries?: ShippingCountriesType,
 };
 
-export type CompaniesType = Array<CompanyType>;
-export type CompaniesInterType = Array<
-  { country: SelectItemType } & CompanyType,
->;
+export type FilledCompanyType = {
+  id: string,
+  companyPackageRawId: number,
+  logo: string,
+  service: ?ServiceType,
+  price: ?number,
+  currency: SelectItemType,
+  countries?: ?ShippingCountriesType,
+};
 
-export type LocalShippingType = $PropertyType<
-  $PropertyType<ShippingBaseProductType, 'shipping'>,
-  'local',
->;
-export type LocalAvailablePackagesType = $PropertyType<
-  $PropertyType<ShippingBaseProductType, 'availablePackages'>,
-  'local',
->;
-export type PickupShippingType = $PropertyType<
-  $PropertyType<ShippingBaseProductType, 'shipping'>,
-  'pickup',
->;
+export type ShippingType = {
+  companyPackageId: string,
+  price: ?number,
+  deliveriesTo?: Array<ShippingCountriesType>,
+};
 
-export type InterShippingType = $PropertyType<
-  $PropertyType<ShippingBaseProductType, 'shipping'>,
-  'international',
->;
-export type InterAvailablePackagesType = $PropertyType<
-  $PropertyType<ShippingBaseProductType, 'availablePackages'>,
-  'international',
->;
+export type RequestLocalShippingType = {
+  companyPackageId: number,
+  price?: ?number,
+};
+
+export type RequestInterShippingType = {
+  companyPackageId: number,
+  price?: ?number,
+  deliveriesTo: $ReadOnlyArray<string>,
+};
+
+export type AvailablePackagesType = {
+  companyPackageId: string,
+  companyPackageRawId: number,
+  name: string,
+  logo: string,
+  deliveriesTo?: Array<ShippingCountriesType>,
+};
+
+export type PickupShippingType = {
+  price: ?number,
+  pickup: boolean,
+};
+
+export type InterAvailablePackagesType = {
+  companyPackageId: string,
+  companyPackageRawId: number,
+  name: string,
+  logo: string,
+  deliveriesTo: Array<ShippingCountriesType>,
+};
+
+export type ShippingChangeDataType = {
+  companies?: Array<FilledCompanyType>,
+  inter?: boolean,
+  pickup?: PickupShippingType,
+  withoutInter?: boolean,
+  withoutLocal?: boolean,
+};

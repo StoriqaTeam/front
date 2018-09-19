@@ -8,10 +8,11 @@ import { InputPrice, Checkbox, RadioButton } from 'components/common';
 
 import type { SelectItemType } from 'types';
 import type {
-  ServicesType,
-  CompanyType,
-  LocalShippingType,
   PickupShippingType,
+  ShippingChangeDataType,
+  FilledCompanyType,
+  ServiceType,
+  CompanyType,
 } from './types';
 
 import FixPriceForm from './FixPriceForm';
@@ -21,40 +22,37 @@ import handlerShipping from './handlerShippingDecorator';
 import './LocalShipping.scss';
 
 type StateType = {
-  isCheckedPickup: boolean,
+  isSelectedPickup: boolean,
   pickupPrice: number,
   pickupCurrency: SelectItemType,
-  isCheckedWithout: boolean,
-  isCheckedFixPrice: boolean,
+  isSelectedWithout: boolean,
+  isSelectedFixPrice: boolean,
 };
 
 type PropsType = {
+  // From Shipping Component
   currency: SelectItemType,
-  localShipping: LocalShippingType,
   pickupShipping: PickupShippingType,
+  onChangeShippingData: (data: ShippingChangeDataType) => void,
 
-  companies: Array<CompanyType>,
+  // From Shipping Decorator
+  companies: Array<FilledCompanyType>,
   editableItemId: ?string,
-  remainingServices: ServicesType,
-  possibleServices: ServicesType,
+  remainingServices: Array<ServiceType>,
+  possibleServices: Array<ServiceType>,
   onSaveCompany: (company: CompanyType) => void,
-  onRemoveCompany: (company: CompanyType) => void,
-  onSetEditableItem: (company: CompanyType) => void,
+  onRemoveCompany: (company: FilledCompanyType) => void,
+  onSetEditableItem: (company: FilledCompanyType) => void,
   onRemoveEditableItem: () => void,
-  globalOnChange: (data: {
-    pickup?: any,
-  }) => void,
-  localAvailablePackages: any,
 };
 
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log('---props', props);
-    const { pickupShipping, currency, globalOnChange } = props;
-    const isCheckedPickup = Boolean(pickupShipping && pickupShipping.pickup);
+    const { pickupShipping, currency, onChangeShippingData } = props;
+    const isSelectedPickup = Boolean(pickupShipping && pickupShipping.pickup);
 
-    globalOnChange({
+    onChangeShippingData({
       pickup: {
         pickup: Boolean(pickupShipping && pickupShipping.pickup),
         price: (pickupShipping && pickupShipping.price) || 0,
@@ -62,24 +60,24 @@ class LocalShipping extends Component<PropsType, StateType> {
     });
 
     this.state = {
-      isCheckedPickup,
+      isSelectedPickup,
       pickupPrice: (pickupShipping && pickupShipping.price) || 0,
       pickupCurrency: currency,
-      isCheckedWithout: false,
-      isCheckedFixPrice: true,
+      isSelectedWithout: false,
+      isSelectedFixPrice: true,
     };
   }
 
   handleOnChangeRadioButton = (id: string) => {
     this.setState(
       {
-        isCheckedWithout: id === 'withoutLocalShipping',
-        isCheckedFixPrice: id !== 'withoutLocalShipping',
+        isSelectedWithout: id === 'withoutLocalShipping',
+        isSelectedFixPrice: id !== 'withoutLocalShipping',
       },
       () => {
-        this.props.globalOnChange({
+        this.props.onChangeShippingData({
           inter: true,
-          withoutLocal: this.state.isCheckedWithout,
+          withoutLocal: this.state.isSelectedWithout,
         });
       },
     );
@@ -88,7 +86,7 @@ class LocalShipping extends Component<PropsType, StateType> {
   handleOnTogglePickup = () => {
     this.setState(
       (prevState: StateType) => ({
-        isCheckedPickup: !prevState.isCheckedPickup,
+        isSelectedPickup: !prevState.isSelectedPickup,
       }),
       this.handleGlobalOnChange,
     );
@@ -99,17 +97,13 @@ class LocalShipping extends Component<PropsType, StateType> {
   };
 
   handleGlobalOnChange = () => {
-    this.props.globalOnChange({
+    this.props.onChangeShippingData({
       pickup: {
-        pickup: this.state.isCheckedPickup,
+        pickup: this.state.isSelectedPickup,
         price: this.state.pickupPrice,
       },
     });
   };
-
-  // handleOnChangeCurrency = (pickupCurrency: SelectItemType) => {
-  //   this.setState({ pickupCurrency });
-  // };
 
   render() {
     const {
@@ -118,13 +112,17 @@ class LocalShipping extends Component<PropsType, StateType> {
       editableItemId,
       remainingServices,
       possibleServices,
+      onSaveCompany,
+      onRemoveCompany,
+      onSetEditableItem,
+      onRemoveEditableItem,
     } = this.props;
     const {
-      isCheckedPickup,
+      isSelectedPickup,
       pickupPrice,
       pickupCurrency,
-      isCheckedWithout,
-      isCheckedFixPrice,
+      isSelectedWithout,
+      isSelectedFixPrice,
     } = this.state;
     return (
       <div styleName="container">
@@ -137,7 +135,7 @@ class LocalShipping extends Component<PropsType, StateType> {
               inline
               id="withoutLocalShipping"
               label="Without local delivery"
-              isChecked={isCheckedWithout}
+              isChecked={isSelectedWithout}
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
@@ -146,14 +144,14 @@ class LocalShipping extends Component<PropsType, StateType> {
               inline
               id="localShippingFixPrice"
               label="Fixed, single price for all"
-              isChecked={isCheckedFixPrice}
+              isChecked={isSelectedFixPrice}
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
         </div>
         <div
           styleName={classNames('form', {
-            hidePlane: isCheckedWithout,
+            hidePlane: isSelectedWithout,
           })}
         >
           <div styleName="pickup">
@@ -162,7 +160,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                 inline
                 id="localPickupCheckbox"
                 label="Pickup"
-                isChecked={isCheckedPickup}
+                isChecked={isSelectedPickup}
                 onChange={this.handleOnTogglePickup}
               />
             </div>
@@ -176,13 +174,13 @@ class LocalShipping extends Component<PropsType, StateType> {
           </div>
           <div
             styleName={classNames('formWrap', {
-              hidePlane: isEmpty(remainingServices) && !isCheckedWithout,
+              hidePlane: isEmpty(remainingServices) && !isSelectedWithout,
             })}
           >
             <FixPriceForm
               currency={currency}
               services={remainingServices}
-              onSaveCompany={this.props.onSaveCompany}
+              onSaveCompany={onSaveCompany}
             />
           </div>
           {!isEmpty(companies) && (
@@ -192,8 +190,8 @@ class LocalShipping extends Component<PropsType, StateType> {
                   <Fragment key={item.id}>
                     <CompanyItem
                       company={item}
-                      onRemoveCompany={this.props.onRemoveCompany}
-                      onSetEditableItem={this.props.onSetEditableItem}
+                      onRemoveCompany={onRemoveCompany}
+                      onSetEditableItem={onSetEditableItem}
                     />
                     {editableItemId === item.id && (
                       <div styleName="editableForm">
@@ -201,8 +199,8 @@ class LocalShipping extends Component<PropsType, StateType> {
                           services={possibleServices}
                           currency={item.currency}
                           company={item}
-                          onSaveCompany={this.props.onSaveCompany}
-                          onRemoveEditableItem={this.props.onRemoveEditableItem}
+                          onSaveCompany={onSaveCompany}
+                          onRemoveEditableItem={onRemoveEditableItem}
                         />
                       </div>
                     )}

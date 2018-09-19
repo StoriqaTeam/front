@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, forEach, isEmpty } from 'ramda';
+import { map, forEach } from 'ramda';
 import classNames from 'classnames';
 
 import { Checkbox } from 'components/common';
@@ -9,23 +9,28 @@ import { Icon } from 'components/Icon';
 
 import { convertCountriesForSelect, convertCountriesToArrCodes } from './utils';
 
+import type {
+  ShippingCountriesType,
+  FilledCompanyType,
+  CountryType,
+} from './types';
+
 import './Countries.scss';
 
 type StateType = {
-  countries: any,
+  countries: ?ShippingCountriesType,
 };
 
 type PropsType = {
-  countries: any,
-  onChange: any,
-  company: any,
+  countries: ?ShippingCountriesType,
+  onChange: (countries: ?ShippingCountriesType) => void,
+  company?: FilledCompanyType,
 };
 
 class Countries extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { countries, company } = props;
-    // console.log('---company', company);
     const countriesForSelect = !company
       ? convertCountriesForSelect({ countries })
       : convertCountriesForSelect({
@@ -34,7 +39,6 @@ class Countries extends Component<PropsType, StateType> {
         });
     this.state = {
       countries: countriesForSelect,
-      // arrangeChecked(countries, convertCountriesToArrCodes(company.countries))
     };
     props.onChange(countriesForSelect);
   }
@@ -48,12 +52,13 @@ class Countries extends Component<PropsType, StateType> {
 
   handleOpenContinent = (code: string) => {
     this.setState((prevState: StateType) => {
+      const { countries } = prevState;
       const newChildren = map(item => {
         if (code === item.alpha3) {
           return { ...item, isOpen: !item.isOpen };
         }
         return { ...item, isOpen: false };
-      }, prevState.countries.children);
+      }, countries && countries.children ? countries.children : []);
       return {
         countries: { ...prevState.countries, children: newChildren },
       };
@@ -63,39 +68,42 @@ class Countries extends Component<PropsType, StateType> {
   handleCheckContinent = (code: string) => {
     this.setState(
       (prevState: StateType) => {
-        let isCheckedAll = true;
+        const { countries } = prevState;
+        let isSelectedAll = true;
         const newChildren = map(item => {
           if (code === item.alpha3) {
-            if (!item.isChecked) {
+            if (!item.isSelected) {
               const newItem = {
                 ...item,
-                children: map(child => {
-                  return { ...child, isChecked: true };
-                }, item.children),
+                children: map(
+                  child => ({ ...child, isSelected: true }),
+                  item.children,
+                ),
               };
-              return { ...newItem, isChecked: true };
+              return { ...newItem, isSelected: true };
             }
-            isCheckedAll = false;
+            isSelectedAll = false;
             const newItem = {
               ...item,
-              children: map(child => {
-                return { ...child, isChecked: false };
-              }, item.children),
+              children: map(
+                child => ({ ...child, isSelected: false }),
+                item.children,
+              ),
             };
-            return { ...newItem, isChecked: false };
+            return { ...newItem, isSelected: false };
           }
           forEach(child => {
-            if (!child.isChecked) {
-              isCheckedAll = false;
+            if (!child.isSelected) {
+              isSelectedAll = false;
             }
           }, item.children);
           return item;
-        }, prevState.countries.children);
+        }, countries && countries.children ? countries.children : []);
         return {
           countries: {
             ...prevState.countries,
             children: newChildren,
-            isChecked: isCheckedAll,
+            isSelected: isSelectedAll,
           },
         };
       },
@@ -105,43 +113,44 @@ class Countries extends Component<PropsType, StateType> {
     );
   };
 
-  handleCheckCountry = (country: any) => {
+  handleCheckCountry = (country: CountryType) => {
     this.setState(
       (prevState: StateType) => {
-        let isCheckedAll = true;
-        const newChildren = map(item => {
-          if (country.parent === item.alpha3) {
-            let isChecked = false;
+        const { countries } = prevState;
+        let isSelectedAll = true;
+        const newChildren = map(continent => {
+          if (country.parent === continent.alpha3) {
+            let isSelected = false;
             const children = map(child => {
               if (country.alpha3 === child.alpha3) {
-                if (!child.isChecked) {
-                  isChecked = true;
+                if (!child.isSelected) {
+                  isSelected = true;
                 } else {
-                  isCheckedAll = false;
+                  isSelectedAll = false;
                 }
-                return { ...child, isChecked: !child.isChecked };
+                return { ...child, isSelected: !child.isSelected };
               }
-              if (child.isChecked) {
-                isChecked = true;
+              if (child.isSelected) {
+                isSelected = true;
               } else {
-                isCheckedAll = false;
+                isSelectedAll = false;
               }
               return child;
-            }, item.children);
-            return { ...item, children, isChecked };
+            }, continent.children);
+            return { ...continent, children, isSelected };
           }
           forEach(child => {
-            if (!child.isChecked) {
-              isCheckedAll = false;
+            if (!child.isSelected) {
+              isSelectedAll = false;
             }
-          }, item.children);
-          return item;
-        }, prevState.countries.children);
+          }, continent.children);
+          return continent;
+        }, countries && countries.children ? countries.children : []);
         return {
           countries: {
             ...prevState.countries,
             children: newChildren,
-            isChecked: isCheckedAll,
+            isSelected: isSelectedAll,
           },
         };
       },
@@ -154,10 +163,11 @@ class Countries extends Component<PropsType, StateType> {
   handleCheckAll = () => {
     this.setState(
       (prevState: StateType) => {
+        const { countries } = prevState;
         return {
           countries: convertCountriesForSelect({
             countries: prevState.countries,
-            isChecked: !prevState.countries.isChecked,
+            isSelected: countries ? !countries.isSelected : false,
           }),
         };
       },
@@ -167,7 +177,7 @@ class Countries extends Component<PropsType, StateType> {
     );
   };
 
-  updateState = (countries: any) => {
+  updateState = (countries: ?ShippingCountriesType) => {
     const { company } = this.props;
     this.setState(
       {
@@ -187,7 +197,7 @@ class Countries extends Component<PropsType, StateType> {
   render() {
     const { company } = this.props;
     const { countries } = this.state;
-    if (isEmpty(countries)) {
+    if (!countries) {
       return null;
     }
     return (
@@ -196,7 +206,7 @@ class Countries extends Component<PropsType, StateType> {
           <Checkbox
             id={`shipping-${company ? 'company' : ''}all-countries`}
             label="Select all"
-            isChecked={countries.isChecked}
+            isChecked={countries.isSelected}
             onChange={this.handleCheckAll}
           />
         </div>
@@ -209,7 +219,7 @@ class Countries extends Component<PropsType, StateType> {
                     id={`shipping-${company ? 'company' : ''}continent-${
                       item.alpha3
                     }`}
-                    isChecked={item.isChecked}
+                    isChecked={item.isSelected}
                     onChange={() => {
                       this.handleCheckContinent(item.alpha3);
                     }}
@@ -248,7 +258,7 @@ class Countries extends Component<PropsType, StateType> {
                             country.alpha3
                           }`}
                           label={country.label}
-                          isChecked={country.isChecked}
+                          isChecked={country.isSelected}
                           onChange={() => {
                             this.handleCheckCountry(country);
                           }}

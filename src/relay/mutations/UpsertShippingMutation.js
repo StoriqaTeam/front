@@ -14,10 +14,6 @@ const mutation = graphql`
       local {
         companyPackageId
         price
-        deliveriesTo {
-          alpha3
-          label
-        }
       }
       international {
         companyPackageId

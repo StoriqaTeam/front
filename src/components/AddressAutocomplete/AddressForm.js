@@ -170,7 +170,7 @@ class Form extends Component<PropsType, StateType> {
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
     const componentRestrictions = {
-      country: countryFromResource ? countryFromResource.alpha3 : '',
+      country: countryFromResource ? countryFromResource.alpha2 : '',
     };
     this.props.geocoderService.geocode(
       {
@@ -236,7 +236,7 @@ class Form extends Component<PropsType, StateType> {
     const inputObj = {
       input: value,
       componentRestrictions: {
-        country: countryFromResource ? countryFromResource.alpha3 : '',
+        country: countryFromResource ? countryFromResource.alpha2 : '',
       },
       types: ['geocode'],
     };
@@ -286,7 +286,7 @@ class Form extends Component<PropsType, StateType> {
           ],
           address,
         ),
-        country: country && country.id ? country.id : null,
+        country: country && country.label ? country.label : null,
         countryCode: country && country.id ? country.id : null,
         value: autocompleteValue,
       });

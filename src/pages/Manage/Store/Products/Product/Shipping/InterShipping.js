@@ -9,10 +9,10 @@ import { RadioButton } from 'components/common/RadioButton';
 import type { SelectItemType } from 'types';
 import type {
   CompanyType,
-  CompaniesInterType,
-  ServicesType,
-  InterShippingType,
   InterAvailablePackagesType,
+  ShippingChangeDataType,
+  FilledCompanyType,
+  InterServiceType,
 } from './types';
 
 import FixPriceForm from './FixPriceForm';
@@ -22,59 +22,55 @@ import handlerShipping from './handlerShippingDecorator';
 import './InterShipping.scss';
 
 type StateType = {
-  isCheckedWithout: boolean,
-  isCheckedFixPrice: boolean,
+  isSelectedWithout: boolean,
+  isSelectedFixPrice: boolean,
 };
 
 type PropsType = {
+  // From Shipping Component
   currency: SelectItemType,
-  interShipping: InterShippingType,
   interAvailablePackages: InterAvailablePackagesType,
+  onChangeShippingData: (data: ShippingChangeDataType) => void,
 
-  companies: CompaniesInterType,
+  // From Shipping Decorator
+  companies: Array<FilledCompanyType>,
   editableItemId: ?string,
-  remainingServices: ServicesType,
-  possibleServices: ServicesType,
+  remainingServices: Array<InterServiceType>,
+  possibleServices: Array<InterServiceType>,
   onSaveCompany: (company: CompanyType) => void,
-  onRemoveCompany: (company: CompanyType) => void,
-  onSetEditableItem: (company: CompanyType) => void,
+  onRemoveCompany: (company: FilledCompanyType) => void,
+  onSetEditableItem: (company: FilledCompanyType) => void,
   onRemoveEditableItem: () => void,
-  globalOnChange: (data: {
-    companies?: any,
-    inter?: boolean,
-  }) => void,
 };
 
 class InterShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log('---INTER SHIPPING props', props);
     const { interAvailablePackages } = props;
 
     this.state = {
-      isCheckedWithout: isEmpty(interAvailablePackages),
-      isCheckedFixPrice: !isEmpty(interAvailablePackages),
+      isSelectedWithout: isEmpty(interAvailablePackages),
+      isSelectedFixPrice: !isEmpty(interAvailablePackages),
     };
   }
 
   handleOnChangeRadioButton = (id: string) => {
-    console.log('---id', id);
     if (isEmpty(this.props.interAvailablePackages)) {
       this.setState({
-        isCheckedWithout: true,
-        isCheckedFixPrice: false,
+        isSelectedWithout: true,
+        isSelectedFixPrice: false,
       });
       return;
     }
     this.setState(
       {
-        isCheckedWithout: id === 'interShippingWithout',
-        isCheckedFixPrice: id !== 'interShippingWithout',
+        isSelectedWithout: id === 'interShippingWithout',
+        isSelectedFixPrice: id !== 'interShippingWithout',
       },
       () => {
-        this.props.globalOnChange({
+        this.props.onChangeShippingData({
           inter: true,
-          withoutInter: this.state.isCheckedWithout,
+          withoutInter: this.state.isSelectedWithout,
         });
       },
     );
@@ -87,8 +83,13 @@ class InterShipping extends Component<PropsType, StateType> {
       editableItemId,
       remainingServices,
       possibleServices,
+      onSaveCompany,
+      interAvailablePackages,
+      onRemoveCompany,
+      onSetEditableItem,
+      onRemoveEditableItem,
     } = this.props;
-    const { isCheckedWithout, isCheckedFixPrice } = this.state;
+    const { isSelectedWithout, isSelectedFixPrice } = this.state;
 
     return (
       <div styleName="container">
@@ -101,7 +102,7 @@ class InterShipping extends Component<PropsType, StateType> {
               inline
               id="interShippingWithout"
               label="Without international delivery"
-              isChecked={isCheckedWithout}
+              isChecked={isSelectedWithout}
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
@@ -110,23 +111,23 @@ class InterShipping extends Component<PropsType, StateType> {
               inline
               id="interShippingFixPrice"
               label="Fixed, single price for all"
-              isChecked={isCheckedFixPrice}
+              isChecked={isSelectedFixPrice}
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
         </div>
-        <div styleName={classNames('form', { hidePlane: isCheckedWithout })}>
+        <div styleName={classNames('form', { hidePlane: isSelectedWithout })}>
           <div
             styleName={classNames('formWrap', {
-              hidePlane: isEmpty(remainingServices) && !isCheckedWithout,
+              hidePlane: isEmpty(remainingServices) && !isSelectedWithout,
             })}
           >
             <FixPriceForm
               inter
               currency={currency}
               services={remainingServices}
-              onSaveCompany={this.props.onSaveCompany}
-              interAvailablePackages={this.props.interAvailablePackages}
+              onSaveCompany={onSaveCompany}
+              interAvailablePackages={interAvailablePackages}
             />
           </div>
           {!isEmpty(companies) && (
@@ -136,8 +137,8 @@ class InterShipping extends Component<PropsType, StateType> {
                   <Fragment key={item.id}>
                     <CompanyItem
                       company={item}
-                      onRemoveCompany={this.props.onRemoveCompany}
-                      onSetEditableItem={this.props.onSetEditableItem}
+                      onRemoveCompany={onRemoveCompany}
+                      onSetEditableItem={onSetEditableItem}
                     />
                     {editableItemId === item.id && (
                       <div styleName="editableForm">
@@ -146,8 +147,8 @@ class InterShipping extends Component<PropsType, StateType> {
                           services={possibleServices}
                           currency={item.currency}
                           company={item}
-                          onSaveCompany={this.props.onSaveCompany}
-                          onRemoveEditableItem={this.props.onRemoveEditableItem}
+                          onSaveCompany={onSaveCompany}
+                          onRemoveEditableItem={onRemoveEditableItem}
                         />
                       </div>
                     )}
