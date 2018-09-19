@@ -17,7 +17,7 @@ const items: Array<{ id: string, title: string, text: string }> = [
     id: '1',
     title: '24/7 customer support',
     text:
-      'One of the most important aspects of running an online store is clear and quick communication with customers. We provide 24/7 customer service and and online consultants in regional languages.',
+      'One of the most important aspects of running an online store is clear and quick communication with customers. We provide 24/7 customer service and online consultants in regional languages.',
   },
   {
     id: '2',

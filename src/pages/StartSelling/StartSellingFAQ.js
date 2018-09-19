@@ -14,7 +14,7 @@ type PropsType = {
 };
 
 const faqs: Array<string> = [
-  'What is Storiqa marketlace?',
+  'What is Storiqa marketplace?',
   'What kind of goods will I be able to sell on Storiqa platform?',
   'What countries will I be able to send my goods to?',
   'What currencies will I be able to sell my goods with?',
