@@ -17,7 +17,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
       <span styleName="checkbox">
         <Checkbox
           id="terms"
-          checked={isPrivacyChecked}
+          isChecked={isPrivacyChecked}
           onChange={() => onCheck('isPrivacyChecked')}
         />
       </span>
@@ -36,7 +36,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
       <span styleName="checkbox">
         <Checkbox
           id="privacy"
-          checked={isTermsChecked}
+          isChecked={isTermsChecked}
           onChange={() => onCheck('isTermsChecked')}
         />
       </span>

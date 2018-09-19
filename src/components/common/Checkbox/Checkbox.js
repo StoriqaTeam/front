@@ -16,7 +16,7 @@ type PropsType = {
 class Checkbox extends PureComponent<PropsType> {
   static defaultProps = {
     id: 'stq',
-    label: 'stqLabel',
+    label: '',
     isChecked: false,
     onChange: () => {},
   };

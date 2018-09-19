@@ -66,7 +66,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
             <Input {...input} />
           </div>
         ))}
-        {formValid && (
+        {!formValid && (
           <Fragment>
             <Policy
               isPrivacyChecked={isPrivacyChecked}
