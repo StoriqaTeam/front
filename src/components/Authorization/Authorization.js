@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
