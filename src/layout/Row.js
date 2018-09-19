@@ -47,6 +47,6 @@ Row.defaultProps = {
   reverseLg: false,
   reverseXl: false,
   noWrap: false,
-}
+};
 
 export default Row;
