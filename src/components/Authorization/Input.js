@@ -1,8 +1,9 @@
-// @flow
+// @flow strict
 
 // TODO: do refactoring after tests
 
 import React, { PureComponent } from 'react';
+
 import classNames from 'classnames';
 
 import { PasswordHints } from 'components/PasswordHints';
@@ -15,7 +16,7 @@ import './Input.scss';
 import { validateField, isCapsLock } from './utils';
 
 type PropsType = {
-  label: ?string,
+  label: string,
   placeholder: ?string,
   className: string,
   name: string,
@@ -23,19 +24,23 @@ type PropsType = {
   type: ?string,
   validate: string,
   errorMessage: string,
-  onChange: Function,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
   focus: boolean,
   detectCapsLock: boolean,
-  autocomplete: ?boolean,
+  autocomplete: boolean,
   errors: ?Array<string>,
-  thisFocus: ?boolean,
-  showResendEmail: ?boolean,
-  onResendEmail: () => any,
+  thisFocus: boolean,
+  showResendEmail: boolean,
+  onResendEmail: () => void,
   noPasswordHints: boolean,
 };
 
 type StateType = {
-  labelFloat: string | null,
+  labelFloat: string,
   showPassword: boolean,
   showPasswordButton: boolean,
   showHints: boolean,
@@ -68,9 +73,10 @@ class Input extends PureComponent<PropsType, StateType> {
     isFocus: false,
     isFocusShow: false,
     noPasswordHints: false,
+    showResendEmail: false,
   };
   state = {
-    labelFloat: null,
+    labelFloat: '',
     showPassword: false,
     showPasswordButton: false,
     showHints: false,
@@ -89,23 +95,16 @@ class Input extends PureComponent<PropsType, StateType> {
 
   componentDidMount() {
     const { input } = this;
-
     if (input && this.props.thisFocus) {
       input.focus();
     }
   }
 
-  onMouseDown = (): void => {
-    this.setState({ isFocusShow: true });
-  };
+  onMouseDown = (): void => this.setState({ isFocusShow: true });
 
-  onMouseUp = (): void => {
-    this.setState({ isFocusShow: false });
-  };
+  onMouseUp = (): void => this.setState({ isFocusShow: false });
 
-  onMouseOut = (): void => {
-    this.setState({ isFocusShow: false });
-  };
+  onMouseOut = (): void => this.setState({ isFocusShow: false });
 
   /**
    * @desc Handles the onChange event by setting the model's value
@@ -168,7 +167,7 @@ class Input extends PureComponent<PropsType, StateType> {
 
     if (model === '') {
       this.setState({
-        labelFloat: null,
+        labelFloat: '',
       });
     }
 
@@ -225,7 +224,7 @@ class Input extends PureComponent<PropsType, StateType> {
    */
   input = {};
 
-  errorClass = (error: string) => (error.length === 0 ? '' : 'invalidInput');
+  errorClass = (error: string): string => (error.length === 0 ? '' : 'invalidInput');
 
   render() {
     const {
@@ -254,7 +253,6 @@ class Input extends PureComponent<PropsType, StateType> {
       isFocus,
       isFocusShow,
     } = this.state;
-
     return (
       <span>
         <div

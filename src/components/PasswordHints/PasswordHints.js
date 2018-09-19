@@ -1,14 +1,14 @@
-// @ flow
+// @flow strict
 
 import React from 'react';
 
 import './PasswordHints.scss';
 
 type PropTypes = {
-  lowerCase?: boolean,
-  upperCase?: boolean,
-  digit?: boolean,
-  length?: boolean,
+  lowerCase: boolean,
+  upperCase: boolean,
+  digit: boolean,
+  length: boolean,
 };
 
 const PasswordHints = (props: PropTypes) => {
@@ -27,13 +27,6 @@ const PasswordHints = (props: PropTypes) => {
       </ul>
     </aside>
   );
-};
-
-PasswordHints.defaultProps = {
-  lowerCase: false,
-  upperCase: false,
-  digit: false,
-  length: false,
 };
 
 export default PasswordHints;
