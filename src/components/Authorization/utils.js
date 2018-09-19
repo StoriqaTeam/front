@@ -22,6 +22,14 @@ type PasswordQualityType = {
   length: boolean,
 };
 
+type ValidFieldType = {
+  formError: string,
+  name: string,
+  value: string,
+  validity: boolean,
+  passwordQuality: PasswordQualityType,
+};
+
 /**
  * @desc Detects whether or not CAPS LOCK is on.
  * @link http://jsfiddle.net/Mottie/a6nhqvv0/
@@ -81,7 +89,7 @@ const validateNumber = (value: string): boolean => {
  * @param {String} value
  * @return {PasswordQualityType}
  */
-const passwordQuality = (value: string): PasswordQualityType => ({
+const setPasswordQuality = (value: string): PasswordQualityType => ({
   lowerCase: /(?=.*?[a-z])/.test(value),
   upperCase: /(?=.*?[A-Z])/.test(value),
   digit: /(?=.*?[0-9])/.test(value),
@@ -99,10 +107,15 @@ const validateField = (
   value: string,
   validate: string,
   errorMessage: string,
-) => {
-  let validModel = '';
+): ValidFieldType => {
+  let validModel = false;
   let formError = '';
-  let passwordQualityResult = {};
+  let passwordQualityResult = {
+    lowerCase: false,
+    upperCase: false,
+    digit: false,
+    length: false,
+  };
   switch (validate) {
     case 'text':
       validModel = value !== '';
@@ -126,7 +139,7 @@ const validateField = (
       );
       break;
     case 'password':
-      passwordQualityResult = passwordQuality(value);
+      passwordQualityResult = setPasswordQuality(value);
       // check that every value is true.
       validModel = Object.values(passwordQualityResult).every(p => p === true);
       formError = setErrorMessage(
@@ -148,7 +161,7 @@ const validateField = (
   };
 };
 
-const facebookLoginString = () => {
+const facebookLoginString = (): string => {
   // $FlowIgnore
   const appId = `${process.env.REACT_APP_OAUTH_FACEBOOK_APP_ID}`;
   // $FlowIgnore
@@ -156,7 +169,7 @@ const facebookLoginString = () => {
   return `https://www.facebook.com/v2.11/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&scope=email,public_profile&response_type=token`;
 };
 
-const googleLoginString = () => {
+const googleLoginString = (): string => {
   // $FlowIgnore
   const appId = `${process.env.REACT_APP_OAUTH_GOOGLE_CLIENT_ID}`;
   // $FlowIgnore

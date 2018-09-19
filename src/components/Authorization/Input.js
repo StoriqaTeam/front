@@ -21,8 +21,8 @@ type PropsType = {
   name: string,
   model: string,
   type: ?string,
-  validate: ?string,
-  errorMessage: ?string,
+  validate: string,
+  errorMessage: string,
   onChange: Function,
   focus: boolean,
   detectCapsLock: boolean,
@@ -41,12 +41,13 @@ type StateType = {
   showHints: boolean,
   formError: string,
   passwordQuality: {
-    percentage: number,
-    message: string,
-    qualityClass: string,
+    lowerCase: boolean,
+    upperCase: boolean,
+    digit: boolean,
+    length: boolean,
   },
   isCapsLockOn: boolean,
-  validity: ?boolean,
+  validity: boolean,
   isFocus: boolean,
   isFocusShow: boolean,
 };
@@ -68,19 +69,20 @@ class Input extends PureComponent<PropsType, StateType> {
     isFocusShow: false,
     noPasswordHints: false,
   };
-  state: StateType = {
+  state = {
     labelFloat: null,
     showPassword: false,
     showPasswordButton: false,
     showHints: false,
     formError: '',
     passwordQuality: {
-      percentage: 0,
-      message: '',
-      qualityClass: '',
+      lowerCase: false,
+      upperCase: false,
+      digit: false,
+      length: false,
     },
     isCapsLockOn: false,
-    validity: null,
+    validity: false,
     isFocus: false,
     isFocusShow: false,
   };
@@ -184,14 +186,13 @@ class Input extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   validate = (inputName: string, inputValue: string): void => {
-    const { validate, errorMessage } = this.props;
+    const { validate, errorMessage, onChange } = this.props;
     const { name, value, validity, formError, passwordQuality } = validateField(
       inputName,
       inputValue,
       validate,
       errorMessage,
     );
-
     this.setState(
       {
         formError,
@@ -199,7 +200,7 @@ class Input extends PureComponent<PropsType, StateType> {
         validity,
         showHints: inputName === 'password' && !validity,
       },
-      this.props.onChange({
+      onChange({
         name,
         value,
         validity,
@@ -215,7 +216,6 @@ class Input extends PureComponent<PropsType, StateType> {
     if (this.input) {
       this.input.focus();
     }
-
     this.setState({ showPassword: !this.state.showPassword });
   };
 
