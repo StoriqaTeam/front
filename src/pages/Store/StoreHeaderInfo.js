@@ -62,7 +62,7 @@ class StoreHeader extends Component<{}, StateTypes> {
               {logo ? (
                 <ImageLoader fit src={logo} loader={<BannerLoading />} />
               ) : (
-                <Icon type="camera" size="56" />
+                <Icon type="camera" size={56} />
               )}
             </figure>
             <div styleName={classNames('mobileSearch', { isOpened })}>

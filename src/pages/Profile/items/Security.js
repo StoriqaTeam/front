@@ -321,7 +321,7 @@ class Security extends Component<PropsType, StateType> {
               role="button"
               tabIndex="0"
             >
-              <Icon type="eye" size="28" />
+              <Icon type="eye" size={28} />
             </div>
             <div>
               {!isValidNewPassword &&
@@ -344,7 +344,7 @@ class Security extends Component<PropsType, StateType> {
               role="button"
               tabIndex="0"
             >
-              <Icon type="eye" size="28" />
+              <Icon type="eye" size={28} />
             </div>
           </div>
         </div>

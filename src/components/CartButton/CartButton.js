@@ -34,7 +34,7 @@ class CartButton extends PureComponent<PropsTypes> {
             </div>
           )}
         <div>
-          <Icon type="cart" size="16" />
+          <Icon type="cart" size={16} />
         </div>
       </Link>
     );

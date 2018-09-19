@@ -217,7 +217,7 @@ class SearchInput extends Component<PropsType, StateType> {
           onClick={this.handleSearch}
           data-test="searchButton"
         >
-          <Icon inline type="magnifier" size="16" />
+          <Icon inline type="magnifier" size={16} />
         </button>
       </div>
     );

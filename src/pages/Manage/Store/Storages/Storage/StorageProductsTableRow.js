@@ -101,7 +101,7 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
         <Col size={6} sm={6} md={2} lg={2} xl={1}>
           <div styleName="foto">
             {!item || !item.photoMain ? (
-              <Icon type="camera" size="40" />
+              <Icon type="camera" size={40} />
             ) : (
               <ImageLoader
                 fit
