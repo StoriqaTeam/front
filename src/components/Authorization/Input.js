@@ -12,7 +12,7 @@ import { Icon } from 'components/Icon';
 import { log } from 'utils';
 
 import './Input.scss';
-import { validateField, isCapsLockOn } from './utils';
+import { validateField, isCapsLock } from './utils';
 
 type PropsType = {
   label: ?string,
@@ -126,9 +126,9 @@ class Input extends PureComponent<PropsType, StateType> {
   handleKeyPress = (evt: KeyboardEvent): void => {
     if (this.props.detectCapsLock) {
       this.setState({
-        isCapsLockOn: isCapsLockOn(evt),
+        isCapsLockOn: isCapsLock(evt),
       });
-      log.info('isCapsLockOn(evt)', isCapsLockOn(evt));
+      log.info('isCapsLock(evt)', isCapsLock(evt));
     }
   };
 
@@ -185,13 +185,12 @@ class Input extends PureComponent<PropsType, StateType> {
    */
   validate = (inputName: string, inputValue: string): void => {
     const { validate, errorMessage } = this.props;
-    const {
-      name,
-      value,
-      validity,
-      formError,
-      passwordQuality,
-    } = validateField(inputName, inputValue, validate, errorMessage);
+    const { name, value, validity, formError, passwordQuality } = validateField(
+      inputName,
+      inputValue,
+      validate,
+      errorMessage,
+    );
 
     this.setState(
       {

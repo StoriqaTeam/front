@@ -1,7 +1,7 @@
 // @flow strict
 
 import moment from 'moment';
-import { assoc, propOr, pipe ,isNil } from 'ramda';
+import { assoc, propOr, pipe, isNil } from 'ramda';
 
 import { setCookie, removeCookie, getCookie } from 'utils';
 
@@ -29,8 +29,8 @@ type PasswordQualityType = {
  * @param {KeyboardEvent} evt
  * @return {boolean}
  */
-const isCapsLockOn = (evt: KeyboardEvent): boolean =>
-  evt.getModifierState && evt.getModifierState('CapsLock')
+const isCapsLock = (evt: KeyboardEvent): boolean =>
+  evt.getModifierState && evt.getModifierState('CapsLock');
 
 /**
  * @desc Set form error message based on its validation
@@ -63,7 +63,7 @@ function setErrorMessage(
 const validateEmail = (value: string): boolean => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return !isNil(value.match(emailRegex));
-}
+};
 /**
  * @desc validates that the value is a number
  * @param {String} value
@@ -72,7 +72,7 @@ const validateEmail = (value: string): boolean => {
 const validateNumber = (value: string): boolean => {
   const numberRegex = /\d/;
   return !isNil(value.match(numberRegex));
-}
+};
 /**
  * @desc Checks that the password contains at least the following:
  * one lower case character
@@ -87,7 +87,7 @@ const passwordQuality = (value: string): PasswordQualityType => ({
   upperCase: /(?=.*?[A-Z])/.test(value),
   digit: /(?=.*?[0-9])/.test(value),
   length: value.length >= 8,
-})
+});
 /**
  * @param {String} name - input's name
  * @param {String} value - input's value
@@ -147,7 +147,7 @@ const validateField = (
     validity: validModel,
     passwordQuality: passwordQualityResult,
   };
-}
+};
 
 const facebookLoginString = () => {
   // $FlowIgnore
@@ -229,7 +229,7 @@ const makeInput = (props: {
 
 export {
   validateField,
-  isCapsLockOn,
+  isCapsLock,
   setErrorMessage,
   facebookLoginString,
   googleLoginString,
