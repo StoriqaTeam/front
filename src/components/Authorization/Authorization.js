@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
@@ -34,7 +34,8 @@ import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/CreateUserMutation';
-
+import type { CreateUserMutationResponse } from 'relay/mutations/__generated__/CreateUserMutation.graphql';
+import type { ResponseErrorType } from 'utils/fromRelayError';
 import { setPathForRedirectAfterLogin } from './utils';
 
 import './Authorization.scss';
@@ -165,7 +166,10 @@ class Authorization extends Component<PropsType, StateType> {
     const params: MutationParamsType = {
       input,
       environment: this.props.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (
+        response: ?CreateUserMutationResponse,
+        errors: ?Array<ResponseErrorType>,
+      ) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });

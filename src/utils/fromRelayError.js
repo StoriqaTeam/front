@@ -43,6 +43,10 @@ type RelayErrorType = {
   },
 };
 
+export type ResponseErrorType = {
+  data: RelayAPIErrorType | RelayDefaultErrorType,
+};
+
 /*
   see tests
 */

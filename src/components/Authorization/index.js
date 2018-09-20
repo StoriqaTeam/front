@@ -1,4 +1,4 @@
-// eslint-disable-next-line
+// @flow strict
 export { default as Authorization } from './Authorization';
 export { default as AuthorizationHeader } from './AuthorizationHeader';
 export { default as AuthorizationSocial } from './AuthorizationSocial';
