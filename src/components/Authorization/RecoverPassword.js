@@ -14,10 +14,10 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  onBack: () => any,
-  onClick: () => any,
-  onChange: () => any,
-  onBlur: () => any,
+  onBack: () => void,
+  onClick: () => void,
+  onChange: () => void,
+  onBlur: () => void,
 };
 
 type StateType = {
@@ -25,6 +25,9 @@ type StateType = {
 };
 
 class RecoverPassword extends Component<PropsType, StateType> {
+  static defaultProps = {
+    onBlur: () => {},
+  };
   state: StateType = {
     autocomplete: false,
   };
@@ -36,8 +39,8 @@ class RecoverPassword extends Component<PropsType, StateType> {
       formValid,
       onClick,
       onChange,
-      onBlur,
       onBack,
+      onBlur,
     } = this.props;
     const { autocomplete } = this.state;
     return (
@@ -57,10 +60,20 @@ class RecoverPassword extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="recoverPasswordButtons">
-          <Button wireframe big onClick={onBack}>
+          <Button
+            wireframe
+            big
+            onClick={onBack}
+            dataTest="recoverPasswordButtonBack"
+          >
             Back
           </Button>
-          <Button onClick={onClick} big disabled={!formValid}>
+          <Button
+            onClick={onClick}
+            big
+            disabled={!formValid}
+            dataTest="recoverPasswordButtonSendEmail"
+          >
             Send Email
           </Button>
         </div>

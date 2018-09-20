@@ -30,8 +30,8 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  onRegistrationClick: Function,
-  onChange: Function,
+  onRegistrationClick: () => void,
+  onChange: () => void,
 };
 
 type StateType = {

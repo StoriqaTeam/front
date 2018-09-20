@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import type { Node } from 'react';
@@ -9,23 +9,38 @@ import './Button.scss';
 type PropsTypes = {
   children: Node,
   type: string,
-  onClick: ?Function,
-  disabled?: boolean,
+  onClick: () => void,
+  disabled: boolean,
   iconic: boolean,
-  href: ?string,
-  wireframe?: boolean,
+  href: string,
+  wireframe: boolean,
   load?: boolean,
-  contour: ?boolean,
-  small: ?boolean,
-  big: ?boolean,
+  contour: boolean,
+  small: boolean,
+  big: boolean,
   dataTest: string,
-  white: ?boolean,
-  isLoading?: boolean,
-  pink?: boolean,
+  white: boolean,
+  isLoading: boolean,
+  pink: boolean,
   fullWidth?: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
+  static defaultProps = {
+    isLoading: false,
+    disabled: false,
+    href: '',
+    contour: false,
+    small: false,
+    big: false,
+    iconic: false,
+    white: false,
+    pink: false,
+    wireframe: false,
+    onClick: () => {},
+    type: 'button',
+    dataTest: 'stqButton',
+  };
   render() {
     const {
       type,
@@ -68,7 +83,7 @@ class Button extends PureComponent<PropsTypes> {
       fullWidth,
     });
 
-    if (href) {
+    if (href !== '') {
       return (
         <a styleName={styleName} data-test={dataTest} {...props}>
           {children}

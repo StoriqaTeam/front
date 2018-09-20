@@ -1,7 +1,5 @@
 // @flow strict
 
-// TODO: do refactoring after tests
-
 import React, { PureComponent } from 'react';
 
 import classNames from 'classnames';
@@ -74,6 +72,7 @@ class Input extends PureComponent<PropsType, StateType> {
     isFocusShow: false,
     noPasswordHints: false,
     showResendEmail: false,
+    thisFocus: false,
   };
   state = {
     labelFloat: '',

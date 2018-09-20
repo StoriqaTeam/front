@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { any, propOr } from 'ramda';
+import { isNil, any, propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
@@ -48,11 +48,11 @@ class SignIn extends Component<PropsType, StateType> {
       onResendEmail,
     } = this.props;
     const { autocomplete } = this.state;
-    // $FlowIgnoreMe
-    const showResendEmail = any(
-      i => i === 'Email not verified',
-      propOr('', 'email', errors),
-    );
+    const errorsArray = propOr([], 'email', errors);
+    let showResendEmail = false;
+    if (!isNil(errorsArray)) {
+      showResendEmail = any(i => i === 'Email not verified')(errorsArray);
+    }
     return (
       <div styleName="signIn">
         <div styleName="inputBlock">

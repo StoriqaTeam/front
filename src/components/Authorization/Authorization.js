@@ -1,5 +1,4 @@
-// @flow strict
-
+// @flow
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
@@ -18,11 +17,17 @@ import {
   ResetPassword,
 } from 'components/Authorization';
 import { log, fromRelayError, errorsHandler, setCookie } from 'utils';
+// TODO: while mutations
 import {
+  // $FlowIgnoreMe
   CreateUserMutation,
+  // $FlowIgnoreMe
   GetJWTByEmailMutation,
+  // $FlowIgnoreMe
   RequestPasswordResetMutation,
+  // $FlowIgnoreMe
   ApplyPasswordResetMutation,
+  // $FlowIgnoreMe
   ResendEmailVerificationLinkMutation,
 } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
@@ -41,11 +46,11 @@ type ErrorsType = {
 type PropsType = {
   environment: Environment,
   handleLogin: () => void,
-  isSignUp: ?boolean,
+  isSignUp: boolean,
   match: matchShape,
   showAlert: (input: AddAlertInputType) => void,
   onCloseModal?: () => void,
-  isResetPassword?: boolean,
+  isResetPassword: boolean,
   router: routerShape,
   isLogin: boolean,
 };
@@ -85,6 +90,7 @@ class Authorization extends Component<PropsType, StateType> {
   static defaultProps = {
     isResetPassword: false,
     isLogin: false,
+    isSignUp: false,
   };
   constructor(props) {
     super(props);
@@ -143,7 +149,7 @@ class Authorization extends Component<PropsType, StateType> {
     window.location = '/';
   };
 
-  handleRegistrationClick = () => {
+  handleRegistrationClick = (): void => {
     this.setState({ isLoading: true, errors: null });
     const { email, password, firstName, lastName } = this.state;
 
@@ -267,7 +273,7 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleChange = (data: {
     name: string,
-    value: any,
+    value: string,
     validity: boolean,
   }): void => {
     const { name, value, validity } = data;
@@ -319,7 +325,7 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
-  handleKeydown = (e: any) => {
+  handleKeydown = (e: KeyboardEvent) => {
     const { formValid, isSignUp } = this.state;
     if (e.keyCode === 13 && formValid) {
       if (isSignUp) {
