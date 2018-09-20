@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import { propOr } from 'ramda';
@@ -15,9 +15,17 @@ type PropsType = {
     [string]: ?Array<string>,
   },
   formValid: boolean,
-  onPasswordRepeat: () => any,
-  onClick: () => any,
-  onChange: () => any,
+  onPasswordRepeat: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
+  onClick: () => void,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
 };
 
 type StateType = {
