@@ -33,8 +33,11 @@ import {
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import type { MutationParamsType } from 'relay/mutations/CreateUserMutation';
 import type { CreateUserMutationResponse } from 'relay/mutations/__generated__/CreateUserMutation.graphql';
+import type { GetJWTByEmailMutationResponse } from 'relay/mutations/__generated__/GetJWTByEmailMutation.graphql';
+import type { RequestPasswordResetMutationResponse } from 'relay/mutations/__generated__/RequestPasswordResetMutation.graphql';
+import type { ApplyPasswordResetMutationResponse } from 'relay/mutations/__generated__/ApplyPasswordResetMutation.graphql';
+import type { ResendEmailVerificationLinkMutationResponse } from 'relay/mutations/__generated__/ResendEmailVerificationLinkMutation.graphql';
 import type { ResponseErrorType } from 'utils/fromRelayError';
 import { setPathForRedirectAfterLogin } from './utils';
 
@@ -71,7 +74,7 @@ type StateType = {
   headerTabs: Array<{ id: string, name: string }>,
   isLoading: boolean,
   isRecoverPassword: boolean,
-  isSignUp: ?boolean,
+  isSignUp: boolean,
   modalTitle: string,
   selected: number,
 };
@@ -162,8 +165,7 @@ class Authorization extends Component<PropsType, StateType> {
       password,
     };
 
-    // $FlowIgnoreMe
-    const params: MutationParamsType = {
+    const params = {
       input,
       environment: this.props.environment,
       onCompleted: (
@@ -214,7 +216,7 @@ class Authorization extends Component<PropsType, StateType> {
     CreateUserMutation.commit(params);
   };
 
-  handleLoginClick = () => {
+  handleLoginClick = (): void => {
     this.setState({ isLoading: true, errors: null });
     const {
       match: {
@@ -228,13 +230,15 @@ class Authorization extends Component<PropsType, StateType> {
       email,
       password,
       environment: this.props.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?GetJWTByEmailMutationResponse, errors: ?Array<ResponseErrorType>) => {
         this.setState({ isLoading: false });
         log.debug({ response, errors });
-        const jwt = pathOr(null, ['getJWTByEmail', 'token'], response);
+        // $FlowIgnore
+        const jwt = pathOr(null, ['getJWTByEmail', 'token'], Object.freeze(response));
         if (jwt) {
-          const today = new Date();
-          const expirationDate = new Date();
+          const date = new Date();
+          const today = date;
+          const expirationDate = date;
           expirationDate.setDate(today.getDate() + 1);
           setCookie('__jwt', { value: jwt }, expirationDate);
           if (this.props.handleLogin) {
@@ -259,7 +263,7 @@ class Authorization extends Component<PropsType, StateType> {
           );
         }
       },
-      onError: (error: Error) => {
+      onError: (error: Error): void => {
         const relayErrors = fromRelayError(error);
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
@@ -346,7 +350,7 @@ class Authorization extends Component<PropsType, StateType> {
     const params = {
       input: { clientMutationId: '', email },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?RequestPasswordResetMutationResponse, errors: ?Array<ResponseErrorType>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
@@ -401,7 +405,7 @@ class Authorization extends Component<PropsType, StateType> {
     const params = {
       input: { clientMutationId: '', password, token },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ?ApplyPasswordResetMutationResponse, errors: ?Array<ResponseErrorType>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
@@ -448,7 +452,7 @@ class Authorization extends Component<PropsType, StateType> {
     const params = {
       input: { clientMutationId: '', email },
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+      onCompleted: (response: ResendEmailVerificationLinkMutationResponse, errors: ?Array<ResponseErrorType>) => {
         log.debug({ response, errors });
         this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
