@@ -8,6 +8,8 @@ import { Input } from 'components/Authorization';
 
 import './Authorization.scss';
 
+import type { InputOnChangeType } from './types';
+
 type PropsType = {
   email: string,
   errors: ?{
@@ -17,11 +19,7 @@ type PropsType = {
   onBack: () => void,
   onClick: () => void,
   onBlur: () => void,
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {

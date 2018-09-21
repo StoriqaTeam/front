@@ -8,6 +8,8 @@ import { Input } from 'components/Authorization';
 
 import './Authorization.scss';
 
+import type { InputOnChangeType } from './types';
+
 type PropsType = {
   email: string,
   password: string,
@@ -18,11 +20,7 @@ type PropsType = {
   onLoginClick: () => void,
   onRecoverPassword: () => void,
   onResendEmail: () => void,
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {
@@ -33,11 +31,9 @@ class SignIn extends Component<PropsType, StateType> {
   state: StateType = {
     autocomplete: false,
   };
-
   handleCheckboxChange = () => {
     this.setState({ autocomplete: !this.state.autocomplete });
   };
-
   render() {
     const {
       email,

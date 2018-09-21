@@ -8,6 +8,8 @@ import { Input } from 'components/Authorization';
 
 import './Authorization.scss';
 
+import type { InputOnChangeType } from './types';
+
 type PropsType = {
   password: string,
   passwordRepeat: string,
@@ -15,17 +17,9 @@ type PropsType = {
     [string]: Array<string>,
   },
   formValid: boolean,
-  onPasswordRepeat: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
   onClick: () => void,
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
+  onPasswordRepeat: InputOnChangeType,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {
@@ -36,7 +30,6 @@ class ResetPassword extends Component<PropsType, StateType> {
   state: StateType = {
     autocomplete: false,
   };
-  handleClick = () => {};
   render() {
     const {
       password,

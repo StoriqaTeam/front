@@ -43,9 +43,7 @@ import { setPathForRedirectAfterLogin } from './utils';
 
 import './Authorization.scss';
 
-type ErrorsType = {
-  [code: string]: Array<string>,
-};
+import type { ErrorsType } from './types';
 
 type PropsType = {
   environment: Environment,
@@ -351,7 +349,7 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
-  recoverPassword = () => {
+  recoverPassword = (): void => {
     const { environment } = this.props;
     const { email } = this.state;
     const params = {
@@ -403,7 +401,7 @@ class Authorization extends Component<PropsType, StateType> {
     RequestPasswordResetMutation.commit(params);
   };
 
-  resetPassword = () => {
+  resetPassword = (): void => {
     const {
       environment,
       match: {

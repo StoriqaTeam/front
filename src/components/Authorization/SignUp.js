@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Fragment, PureComponent } from 'react';
 import { map, adjust, pipe, assoc } from 'ramda';
@@ -11,19 +11,7 @@ import { makeInput } from './utils';
 
 import './Authorization.scss';
 
-type SignUpInputType = {
-  label: string,
-  name: string,
-  type: string,
-  validate?: string,
-  thisFocus?: boolean,
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
-  errors: ?Array<string>,
-};
+import type { SignUpInputType, InputOnChangeType } from './types';
 
 type PropsType = {
   email: string,
@@ -35,11 +23,7 @@ type PropsType = {
   },
   formValid: boolean,
   onRegistrationClick: () => void,
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {

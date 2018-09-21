@@ -5,34 +5,7 @@ import { assoc, propOr, pipe, isNil } from 'ramda';
 
 import { setCookie, removeCookie, getCookie } from 'utils';
 
-type SignUpInputType = {
-  label: string,
-  name: string,
-  type: string,
-  validate?: string,
-  thisFocus?: boolean,
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
-  errors: ?Array<string>,
-};
-
-type PasswordQualityType = {
-  lowerCase: boolean,
-  upperCase: boolean,
-  digit: boolean,
-  length: boolean,
-};
-
-type ValidFieldType = {
-  formError: string,
-  name: string,
-  value: string,
-  validity: boolean,
-  passwordQuality: PasswordQualityType,
-};
+import type { SignUpInputType, PasswordQualityType, ValidFieldType, InputOnChangeType } from './types';
 
 /**
  * @desc Detects whether or not CAPS LOCK is on.
@@ -51,12 +24,12 @@ const isCapsLock = (evt: KeyboardEvent): boolean =>
  * @param {String} errorMessage = ''
  * @return {string}
  */
-function setErrorMessage(
+const setErrorMessage = (
   value: string,
   validModel: boolean,
   message: string = 'Invalid',
   errorMessage: string = '',
-): string {
+): string => {
   // check for enabling custom error message.
   const error = errorMessage !== '' ? errorMessage : message;
   let formError = '';
@@ -202,11 +175,7 @@ const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
 
 const makeInput = (props: {
-  onChange: ({
-    name: string,
-    value: string,
-    validity: boolean,
-  }) => void,
+  onChange: InputOnChangeType,
   errors: ?{
     [string]: Array<string>,
   },
