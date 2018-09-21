@@ -45,22 +45,15 @@ class SignIn extends Component<PropsType, StateType> {
     this.setState({ autocomplete: !this.state.autocomplete });
   };
   makeInputs = (): Array<SignUpInputType> => {
-    const inputs: Array<string> = [
-      'Email',
-      'Password',
-    ];
+    const inputs: Array<string> = ['Email', 'Password'];
     const makeInputFn = map(makeInput(this.props));
     const setFocus = adjust(assoc('thisFocus', true), 0);
     const setResendEmail = adjust(this.setResendEmail, 0);
-    const setNoHints = adjust(assoc('noPasswordHints', true), 1)
+    const setNoHints = adjust(assoc('noPasswordHints', true), 1);
     return pipe(makeInputFn, setFocus, setResendEmail, setNoHints)(inputs);
   };
   render() {
-    const {
-      formValid,
-      onLoginClick,
-      onRecoverPassword,
-    } = this.props;
+    const { formValid, onLoginClick, onRecoverPassword } = this.props;
     return (
       <div styleName="signIn">
         {this.makeInputs().map(input => (
