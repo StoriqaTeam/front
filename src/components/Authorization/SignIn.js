@@ -11,15 +11,18 @@ import './Authorization.scss';
 type PropsType = {
   email: string,
   password: string,
-  errors: {
-    [string]: ?Array<string>,
+  errors: ?{
+    [string]: Array<string>,
   },
   formValid: boolean,
   onLoginClick: () => void,
-  onChange: () => void,
-  onBlur: () => void,
   onRecoverPassword: () => void,
   onResendEmail: () => void,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
 };
 
 type StateType = {
@@ -43,12 +46,11 @@ class SignIn extends Component<PropsType, StateType> {
       formValid,
       onLoginClick,
       onChange,
-      onBlur,
       onRecoverPassword,
       onResendEmail,
     } = this.props;
     const { autocomplete } = this.state;
-    const errorsArray = propOr([], 'email', errors);
+    const errorsArray = !isNil(errors) ? propOr([], 'email', errors) : [];
     let showResendEmail = false;
     if (!isNil(errorsArray)) {
       showResendEmail = any(i => i === 'Email not verified')(errorsArray);
@@ -64,9 +66,8 @@ class SignIn extends Component<PropsType, StateType> {
             model={email}
             onChange={onChange}
             autocomplete={autocomplete}
-            errors={propOr(null, 'email', errors)}
+            errors={!isNil(errors) ? propOr(null, 'email', errors) : null}
             showResendEmail={showResendEmail}
-            onBlur={onBlur}
             onResendEmail={onResendEmail}
             validate="email"
           />
@@ -81,7 +82,7 @@ class SignIn extends Component<PropsType, StateType> {
             validate="password"
             onChange={onChange}
             autocomplete={autocomplete}
-            errors={propOr(null, 'password', errors)}
+            errors={!isNil(errors) ? propOr(null, 'password', errors) : null}
           />
         </div>
         <div styleName="forgotPassword">
