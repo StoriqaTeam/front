@@ -8,13 +8,11 @@ import { Input } from 'components/Authorization';
 
 import './Authorization.scss';
 
-import type { InputOnChangeType } from './types';
+import type { InputOnChangeType, ErrorsType } from './types';
 
 type PropsType = {
   email: string,
-  errors: ?{
-    [string]: Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
   onBack: () => void,
   onClick: () => void,

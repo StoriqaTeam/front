@@ -11,16 +11,14 @@ import { makeInput } from './utils';
 
 import './Authorization.scss';
 
-import type { SignUpInputType, InputOnChangeType } from './types';
+import type { SignUpInputType, InputOnChangeType, ErrorsType } from './types';
 
 type PropsType = {
   email: string,
   firstName: string,
   lastName: string,
   password: string,
-  errors: ?{
-    [string]: Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
   onRegistrationClick: () => void,
   onChange: InputOnChangeType,

@@ -9,14 +9,12 @@ import { Input } from 'components/Authorization';
 import { makeInput } from './utils';
 import './Authorization.scss';
 
-import type { SignUpInputType, InputOnChangeType } from './types';
+import type { SignUpInputType, InputOnChangeType, ErrorsType } from './types';
 
 type PropsType = {
   email: string,
   password: string,
-  errors: ?{
-    [string]: Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
   onLoginClick: () => void,
   onRecoverPassword: () => void,

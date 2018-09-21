@@ -10,6 +10,7 @@ import type {
   PasswordQualityType,
   ValidFieldType,
   InputOnChangeType,
+  ErrorsType,
 } from './types';
 
 /**
@@ -191,9 +192,7 @@ const getPathForRedirectAfterLogin = (): ?string =>
 
 const makeInput = (props: {
   onChange: InputOnChangeType,
-  errors: ?{
-    [string]: Array<string>,
-  },
+  errors: ?ErrorsType,
 }) => (inputName: string): SignUpInputType => {
   const nowhiteSpace = (str: string): string => str.replace(/ +/g, '');
   /**
