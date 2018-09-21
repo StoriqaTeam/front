@@ -17,7 +17,11 @@ type SignUpInputType = {
   type: string,
   validate?: string,
   thisFocus?: boolean,
-  onChange: () => void,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
   errors: ?Array<string>,
 };
 
@@ -26,12 +30,16 @@ type PropsType = {
   firstName: string,
   lastName: string,
   password: string,
-  errors: {
-    [string]: ?Array<string>,
+  errors: ?{
+    [string]: Array<string>,
   },
   formValid: boolean,
   onRegistrationClick: () => void,
-  onChange: () => void,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
 };
 
 type StateType = {

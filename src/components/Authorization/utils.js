@@ -11,7 +11,11 @@ type SignUpInputType = {
   type: string,
   validate?: string,
   thisFocus?: boolean,
-  onChange: () => void,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
   errors: ?Array<string>,
 };
 
@@ -198,9 +202,13 @@ const getPathForRedirectAfterLogin = (): ?string =>
   getCookie(cookiesPathForRedirectAfterLogin);
 
 const makeInput = (props: {
-  onChange: () => void,
-  errors: {
-    [string]: ?Array<string>,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
+  errors: ?{
+    [string]: Array<string>,
   },
 }) => (inputName: string): SignUpInputType => {
   const nowhiteSpace = (str: string): string => str.replace(/ +/g, '');
@@ -233,7 +241,7 @@ const makeInput = (props: {
       name,
       type: isPasswordOrEmail(name) ? name : 'text',
       onChange: props.onChange,
-      errors: propOr(null, name, props.errors),
+      errors: !isNil(props.errors) ? propOr(null, name, props.errors) : null,
     };
   };
   return pipe(setInitialShape, setValidate)(inputName);
