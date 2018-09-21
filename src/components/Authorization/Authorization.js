@@ -537,7 +537,6 @@ class Authorization extends Component<PropsType, StateType> {
   passwordRecovery = (): Node => {
     const { isResetPassword } = this.props;
     const { password, passwordRepeat, email, formValid, errors } = this.state;
-    console.log('----===errors', errors);
     if (isResetPassword) {
       return (
         <ResetPassword

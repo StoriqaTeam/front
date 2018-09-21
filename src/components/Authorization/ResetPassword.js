@@ -1,7 +1,7 @@
 // @flow strict
 
 import React, { Component } from 'react';
-import { propOr } from 'ramda';
+import { propOr, isNil } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
@@ -48,6 +48,7 @@ class ResetPassword extends Component<PropsType, StateType> {
       onPasswordRepeat,
     } = this.props;
     const { autocomplete } = this.state;
+
     return (
       <div styleName="signIn">
         <div styleName="inputBlock">
@@ -59,7 +60,7 @@ class ResetPassword extends Component<PropsType, StateType> {
             validate="password"
             onChange={onChange}
             autocomplete={autocomplete}
-            errors={propOr(null, 'password', errors)}
+            errors={!isNil(errors) ? propOr(null, 'password', errors) : null}
           />
         </div>
         <div styleName="inputBlock">
