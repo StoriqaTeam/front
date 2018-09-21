@@ -44,7 +44,7 @@ import { setPathForRedirectAfterLogin } from './utils';
 import './Authorization.scss';
 
 type ErrorsType = {
-  [code: string]: ?Array<string>,
+  [code: string]: Array<string>,
 };
 
 type PropsType = {
@@ -297,7 +297,7 @@ class Authorization extends Component<PropsType, StateType> {
     );
   };
 
-  validateForm = () => {
+  validateForm = (): void => {
     const { isResetPassword, isLogin } = this.props;
     const {
       firstNameValid,
@@ -327,7 +327,7 @@ class Authorization extends Component<PropsType, StateType> {
     }
   };
 
-  handleClick = (modalTitle, selected) => {
+  handleClick = (modalTitle, selected): void => {
     this.setState({
       isSignUp: !this.state.isSignUp,
       email: '',
@@ -340,7 +340,7 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
-  handleKeydown = (e: KeyboardEvent) => {
+  handleKeydown = (e: KeyboardEvent): void => {
     const { formValid, isSignUp } = this.state;
     if (e.keyCode === 13 && formValid) {
       if (isSignUp) {
@@ -386,7 +386,7 @@ class Authorization extends Component<PropsType, StateType> {
           onCloseModal();
         }
       },
-      onError: (error: Error) => {
+      onError: (error: Error): void => {
         const relayErrors = fromRelayError(error);
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
@@ -442,7 +442,7 @@ class Authorization extends Component<PropsType, StateType> {
         });
         push('/login');
       },
-      onError: (error: Error) => {
+      onError: (error: Error): void => {
         const relayErrors = fromRelayError(error);
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
@@ -490,7 +490,7 @@ class Authorization extends Component<PropsType, StateType> {
           onClick: this.handleAlertOnClick,
         });
       },
-      onError: (error: Error) => {
+      onError: (error: Error): void => {
         const relayErrors = fromRelayError(error);
         if (relayErrors) {
           // pass showAlert for show alert errors in common cases
@@ -517,7 +517,7 @@ class Authorization extends Component<PropsType, StateType> {
     });
   };
 
-  handleBack = () => {
+  handleBack = (): void => {
     const {
       isResetPassword,
       router: { push },
@@ -537,6 +537,7 @@ class Authorization extends Component<PropsType, StateType> {
   passwordRecovery = (): Node => {
     const { isResetPassword } = this.props;
     const { password, passwordRepeat, email, formValid, errors } = this.state;
+    console.log('----===errors', errors);
     if (isResetPassword) {
       return (
         <ResetPassword

@@ -11,8 +11,8 @@ import './Authorization.scss';
 type PropsType = {
   password: string,
   passwordRepeat: string,
-  errors: {
-    [string]: ?Array<string>,
+  errors: ?{
+    [string]: Array<string>,
   },
   formValid: boolean,
   onPasswordRepeat: ({
