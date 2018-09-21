@@ -5,7 +5,12 @@ import { assoc, propOr, pipe, isNil } from 'ramda';
 
 import { setCookie, removeCookie, getCookie } from 'utils';
 
-import type { SignUpInputType, PasswordQualityType, ValidFieldType, InputOnChangeType } from './types';
+import type {
+  SignUpInputType,
+  PasswordQualityType,
+  ValidFieldType,
+  InputOnChangeType,
+} from './types';
 
 /**
  * @desc Detects whether or not CAPS LOCK is on.
@@ -37,7 +42,7 @@ const setErrorMessage = (
   // fallback
   formError = value === '' ? '' : formError;
   return formError;
-}
+};
 /**
  * @desc validates that the value is an email
  * @link https://github.com/angular/angular/blob/5.2.2/packages/forms/src/validators.ts#L57-L43
