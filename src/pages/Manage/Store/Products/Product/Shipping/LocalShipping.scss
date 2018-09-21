@@ -29,14 +29,21 @@
 }
 
 .form {
-  margin-top: 1rem;
-}
-
-.formWrap {
-  position: relative;
+  max-height: 1000rem;
+  opacity: 1;
+  transition: $transition_all_ease;
 }
 
 .hidePlane {
+  position: relative;
+  max-height: 0;
+  padding-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: none;
+}
+
+.coverPlane {
   position: relative;
 
   &:after {
@@ -50,6 +57,11 @@
     opacity: .5;
     z-index: 5;
   }
+}
+
+.formWrap {
+  position: relative;
+  margin-top: 4rem;
 }
 
 .companies {
@@ -69,7 +81,6 @@
 .pickup {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 3rem;
   margin-left: 3rem;
 
   .pickupCheckbox {
@@ -80,4 +91,10 @@
   .pickupPriceInput {
     margin-left: 2rem;
   }
+}
+
+.emptyPackegesText, .error {
+  margin-top: 2rem;
+  font-size: 14px;
+  color: $color_red;
 }

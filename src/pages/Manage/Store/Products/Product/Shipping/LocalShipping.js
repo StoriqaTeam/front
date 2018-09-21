@@ -13,6 +13,8 @@ import type {
   FilledCompanyType,
   ServiceType,
   CompanyType,
+  AvailablePackageType,
+  ShippingType,
 } from './types';
 
 import FixPriceForm from './FixPriceForm';
@@ -32,6 +34,7 @@ type StateType = {
 type PropsType = {
   // From Shipping Component
   currency: SelectItemType,
+  localShipping: ShippingType,
   pickupShipping: PickupShippingType,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
 
@@ -44,13 +47,26 @@ type PropsType = {
   onRemoveCompany: (company: FilledCompanyType) => void,
   onSetEditableItem: (company: FilledCompanyType) => void,
   onRemoveEditableItem: () => void,
+
+  localAvailablePackages: Array<AvailablePackageType>,
+  error: string,
 };
 
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { pickupShipping, currency, onChangeShippingData } = props;
+    const {
+      pickupShipping,
+      currency,
+      onChangeShippingData,
+      localAvailablePackages,
+      localShipping,
+    } = props;
     const isSelectedPickup = Boolean(pickupShipping && pickupShipping.pickup);
+    const isSelectedWithout =
+      !localAvailablePackages ||
+      isEmpty(localAvailablePackages) ||
+      (isEmpty(localShipping) && !isSelectedPickup);
 
     onChangeShippingData({
       pickup: {
@@ -63,12 +79,16 @@ class LocalShipping extends Component<PropsType, StateType> {
       isSelectedPickup,
       pickupPrice: (pickupShipping && pickupShipping.price) || 0,
       pickupCurrency: currency,
-      isSelectedWithout: false,
-      isSelectedFixPrice: true,
+      isSelectedWithout,
+      isSelectedFixPrice: !isSelectedWithout,
     };
   }
 
   handleOnChangeRadioButton = (id: string) => {
+    const { localAvailablePackages } = this.props;
+    if (!localAvailablePackages || isEmpty(localAvailablePackages)) {
+      return;
+    }
     this.setState(
       {
         isSelectedWithout: id === 'withoutLocalShipping',
@@ -116,6 +136,8 @@ class LocalShipping extends Component<PropsType, StateType> {
       onRemoveCompany,
       onSetEditableItem,
       onRemoveEditableItem,
+      localAvailablePackages,
+      error,
     } = this.props;
     const {
       isSelectedPickup,
@@ -149,11 +171,7 @@ class LocalShipping extends Component<PropsType, StateType> {
             />
           </div>
         </div>
-        <div
-          styleName={classNames('form', {
-            hidePlane: isSelectedWithout,
-          })}
-        >
+        <div styleName={classNames('form', { hidePlane: isSelectedWithout })}>
           <div styleName="pickup">
             <div styleName="pickupCheckbox">
               <Checkbox
@@ -174,7 +192,7 @@ class LocalShipping extends Component<PropsType, StateType> {
           </div>
           <div
             styleName={classNames('formWrap', {
-              hidePlane: isEmpty(remainingServices) && !isSelectedWithout,
+              coverPlane: isEmpty(remainingServices) && !isSelectedWithout,
             })}
           >
             <FixPriceForm
@@ -211,6 +229,12 @@ class LocalShipping extends Component<PropsType, StateType> {
             </div>
           )}
         </div>
+        {!localAvailablePackages ||
+          (isEmpty(localAvailablePackages) && (
+            <div styleName="emptyPackegesText">No available packages</div>
+          ))}
+        {localAvailablePackages &&
+          error && <div styleName="error">{error}</div>}
       </div>
     );
   }

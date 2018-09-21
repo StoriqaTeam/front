@@ -40,7 +40,7 @@
 
 .continentsCountries {
   height: 0;
-  margin: 0 0 0 3rem;
+  margin: 0;
   opacity: 0;
   visibility: hidden;
 
@@ -50,7 +50,7 @@
 
   &.show {
     height: auto;
-    margin: 1.5rem 0 0 3rem;
+    margin-top: 1.5rem;
     opacity: 1;
     visibility: visible;
     transition: all .3s ease;
@@ -59,10 +59,7 @@
 
 .country {
   display: inline-block;
-  width: 20rem;
+  width: 21rem;
   margin-top: 0.5rem;
-
-  & + .country {
-    //margin-top: 2rem;
-  }
+  margin-left: 3rem;
 }

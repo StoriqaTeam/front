@@ -69,7 +69,7 @@ export type RequestInterShippingType = {
   deliveriesTo: $ReadOnlyArray<string>,
 };
 
-export type AvailablePackagesType = {
+export type AvailablePackageType = {
   companyPackageId: string,
   companyPackageRawId: number,
   name: string,
@@ -82,7 +82,7 @@ export type PickupShippingType = {
   pickup: boolean,
 };
 
-export type InterAvailablePackagesType = {
+export type InterAvailablePackageType = {
   companyPackageId: string,
   companyPackageRawId: number,
   name: string,
@@ -96,4 +96,17 @@ export type ShippingChangeDataType = {
   pickup?: PickupShippingType,
   withoutInter?: boolean,
   withoutLocal?: boolean,
+};
+
+export type AvailablePackagesType = {
+  local: AvailablePackageType,
+  international: AvailablePackageType,
+};
+
+export type FullShippingType = {
+  local: Array<RequestLocalShippingType>,
+  international: Array<RequestInterShippingType>,
+  pickup: PickupShippingType,
+  withoutInter: boolean,
+  withoutLocal: boolean,
 };

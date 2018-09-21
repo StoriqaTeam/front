@@ -9,10 +9,11 @@ import { RadioButton } from 'components/common/RadioButton';
 import type { SelectItemType } from 'types';
 import type {
   CompanyType,
-  InterAvailablePackagesType,
+  InterAvailablePackageType,
   ShippingChangeDataType,
   FilledCompanyType,
   InterServiceType,
+  ShippingType,
 } from './types';
 
 import FixPriceForm from './FixPriceForm';
@@ -29,9 +30,11 @@ type StateType = {
 type PropsType = {
   // From Shipping Component
   currency: SelectItemType,
-  interAvailablePackages: InterAvailablePackagesType,
+  interShipping: ShippingType,
+  interAvailablePackages: InterAvailablePackageType,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
 
+  //
   // From Shipping Decorator
   companies: Array<FilledCompanyType>,
   editableItemId: ?string,
@@ -41,21 +44,28 @@ type PropsType = {
   onRemoveCompany: (company: FilledCompanyType) => void,
   onSetEditableItem: (company: FilledCompanyType) => void,
   onRemoveEditableItem: () => void,
+
+  error: string,
 };
 
 class InterShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { interAvailablePackages } = props;
+    const { interAvailablePackages, interShipping } = props;
+    const isSelectedWithout =
+      !interAvailablePackages ||
+      isEmpty(interAvailablePackages) ||
+      isEmpty(interShipping);
 
     this.state = {
-      isSelectedWithout: isEmpty(interAvailablePackages),
-      isSelectedFixPrice: !isEmpty(interAvailablePackages),
+      isSelectedWithout,
+      isSelectedFixPrice: !isSelectedWithout,
     };
   }
 
   handleOnChangeRadioButton = (id: string) => {
-    if (isEmpty(this.props.interAvailablePackages)) {
+    const { interAvailablePackages } = this.props;
+    if (!interAvailablePackages || isEmpty(interAvailablePackages)) {
       this.setState({
         isSelectedWithout: true,
         isSelectedFixPrice: false,
@@ -88,6 +98,7 @@ class InterShipping extends Component<PropsType, StateType> {
       onRemoveCompany,
       onSetEditableItem,
       onRemoveEditableItem,
+      error,
     } = this.props;
     const { isSelectedWithout, isSelectedFixPrice } = this.state;
 
@@ -119,7 +130,7 @@ class InterShipping extends Component<PropsType, StateType> {
         <div styleName={classNames('form', { hidePlane: isSelectedWithout })}>
           <div
             styleName={classNames('formWrap', {
-              hidePlane: isEmpty(remainingServices) && !isSelectedWithout,
+              coverPlane: isEmpty(remainingServices) && !isSelectedWithout,
             })}
           >
             <FixPriceForm
@@ -159,6 +170,12 @@ class InterShipping extends Component<PropsType, StateType> {
             </div>
           )}
         </div>
+        {!interAvailablePackages ||
+          (isEmpty(interAvailablePackages) && (
+            <div styleName="emptyPackegesText">No available packages</div>
+          ))}
+        {interAvailablePackages &&
+          error && <div styleName="error">{error}</div>}
       </div>
     );
   }

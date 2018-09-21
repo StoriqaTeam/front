@@ -58,9 +58,16 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     };
   }
 
-  componentDidUpdate(prevProps: PropsType) {
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
     const { services } = this.props;
     if (JSON.stringify(prevProps.services) !== JSON.stringify(services)) {
+      const newService = find(
+        propEq('id', prevState.service ? prevState.service.id : null),
+      )(services);
+      if (newService) {
+        this.updateState({ service: newService });
+        return;
+      }
       const service = !isEmpty(services) ? head(services) : null;
       this.updateState({ service });
     }

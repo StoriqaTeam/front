@@ -34,7 +34,7 @@ import type {
   ShippingChangeDataType,
   ServiceType,
   ShippingType,
-  AvailablePackagesType,
+  AvailablePackageType,
 } from './types';
 
 type PropsType = {
@@ -42,8 +42,8 @@ type PropsType = {
   currency: SelectItemType,
   localShipping: Array<ShippingType>,
   interShipping: Array<ShippingType>,
-  localAvailablePackages: Array<AvailablePackagesType>,
-  interAvailablePackages: Array<AvailablePackagesType>,
+  localAvailablePackages: Array<AvailablePackageType>,
+  interAvailablePackages: Array<AvailablePackageType>,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
 };
 

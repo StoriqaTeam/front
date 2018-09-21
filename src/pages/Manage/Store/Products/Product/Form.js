@@ -10,12 +10,14 @@ import {
   whereEq,
   pathOr,
   map,
+  assoc,
+  dissoc,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Select } from 'components/common';
+import { Select, SpinnerCircle } from 'components/common';
 import { Button } from 'components/common/Button';
 import { CategorySelector } from 'components/CategorySelector';
 import { Textarea } from 'components/common/Textarea';
@@ -26,6 +28,7 @@ import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 import type { SelectItemType } from 'types';
 
 import { ProductFormContext, Shipping } from './index';
+import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
 import Variants from './Variants/Variants';
 
@@ -81,6 +84,13 @@ type PropsType = {
   comeResponse: boolean,
   resetComeResponse: () => void,
   currencies: Array<string>,
+  availablePackages: ?AvailablePackagesType,
+  isLoadingPackages: boolean,
+  onChangeVariantForm: (variantData: ?VariantType) => void,
+  variantData: VariantType,
+  closedVariantFormAnnunciator: boolean,
+  onChangeShipping: (shippingData: ?FullShippingType) => void,
+  shippingData: ?FullShippingType,
 };
 
 type StateType = {
@@ -95,6 +105,13 @@ type StateType = {
   formErrors: {
     [string]: Array<string>,
   },
+  shippingErrors: ?{
+    local?: string,
+    inter?: string,
+  },
+  variantFormErrors: {
+    [string]: Array<string>,
+  },
   category: ?{
     id: string,
     rawId: number,
@@ -102,6 +119,11 @@ type StateType = {
   },
   currencies: Array<SelectItemType>,
   currency: SelectItemType,
+  variantFormErrors: {
+    vendorCode?: Array<string>,
+    price?: Array<string>,
+    attributes?: Array<string>,
+  },
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -139,6 +161,8 @@ class Form extends Component<PropsType, StateType> {
       category: null,
       currencies: convertCurrenciesForSelect(currencies),
       currency: { id: currency, label: currency },
+      variantFormErrors: {},
+      shippingErrors: null,
     };
   }
 
@@ -159,6 +183,19 @@ class Form extends Component<PropsType, StateType> {
     }
   }
 
+  componentDidUpdate(prevProps: PropsType) {
+    const { shippingData } = this.props;
+    if (
+      JSON.stringify(shippingData) !== JSON.stringify(prevProps.shippingData)
+    ) {
+      this.resetShippingErrors();
+    }
+  }
+
+  resetShippingErrors = () => {
+    this.setState({ shippingErrors: null });
+  };
+
   validate = () => {
     // TODO: вынести спеки
     const { errors } = validate(
@@ -170,24 +207,74 @@ class Form extends Component<PropsType, StateType> {
         longDescription: [
           [val => !isEmpty(val), 'Long description must not be empty'],
         ],
+        categoryId: [[val => val, 'Select a category']],
       },
       this.state.form,
     );
     return errors;
   };
 
-  handleSave = (props: { variantData: VariantType, isCanCreate: boolean }) => {
-    const { form, currency } = this.state;
-    const { variantData, isCanCreate } = props;
-    this.setState({ formErrors: {} });
-    const preValidationErrors = this.validate();
-    if (preValidationErrors) {
-      this.setState({
-        formErrors: preValidationErrors,
-      });
-      return;
+  variantValidate = () => {
+    const { errors } = validate(
+      {
+        vendorCode: [[val => !isEmpty(val || ''), 'Vendor code is required']],
+        price: [[val => !isEmpty(val || ''), 'Price is required']],
+      },
+      this.props.variantData || {},
+    );
+    return errors;
+  };
+
+  shippingValidate = () => {
+    const { shippingData } = this.props;
+    let shippingErrors = null;
+    if (
+      shippingData &&
+      !shippingData.withoutLocal &&
+      isEmpty(shippingData.local) &&
+      !shippingData.pickup.pickup
+    ) {
+      shippingErrors = assoc(
+        'local',
+        'Add at least one delivery service or pickup',
+        shippingErrors,
+      );
     }
-    if (!isCanCreate) {
+    if (
+      shippingData &&
+      !shippingData.withoutInter &&
+      isEmpty(shippingData.international)
+    ) {
+      shippingErrors = assoc(
+        'inter',
+        'Add at least one delivery service',
+        shippingErrors,
+      );
+    }
+    return shippingErrors;
+  };
+
+  handleSave = () => {
+    const { variantData } = this.props;
+    const { form, currency } = this.state;
+    this.setState({
+      formErrors: {},
+      variantFormErrors: {},
+      shippingErrors: null,
+    });
+    const preValidationErrors = this.validate();
+    const preVariantValidationErrors = this.variantValidate();
+    const shippingValidationErrors = this.shippingValidate();
+    if (
+      preValidationErrors ||
+      preVariantValidationErrors ||
+      shippingValidationErrors
+    ) {
+      this.setState({
+        formErrors: preValidationErrors || {},
+        variantFormErrors: preVariantValidationErrors || {},
+        shippingErrors: shippingValidationErrors || null,
+      });
       return;
     }
     this.props.onSave(
@@ -220,7 +307,7 @@ class Form extends Component<PropsType, StateType> {
       whereEq({ rawId: parseInt(categoryId, 10) }),
       categories,
     );
-    this.setState({
+    this.setState((prevState: StateType) => ({
       form: {
         ...this.state.form,
         categoryId,
@@ -230,7 +317,8 @@ class Form extends Component<PropsType, StateType> {
         rawId: category.rawId,
         getAttributes: category.getAttributes,
       },
-    });
+      formErrors: dissoc('categoryId', prevState.formErrors),
+    }));
   };
 
   handleOnSelectCurrency = (currency: SelectItemType) => {
@@ -291,8 +379,20 @@ class Form extends Component<PropsType, StateType> {
       baseProduct,
       comeResponse,
       resetComeResponse,
+      availablePackages,
+      isLoadingPackages,
+      onChangeVariantForm,
+      closedVariantFormAnnunciator,
+      onChangeShipping,
     } = this.props;
-    const { category, currencies, currency } = this.state;
+    const {
+      category,
+      currencies,
+      currency,
+      variantFormErrors,
+      shippingErrors,
+      formErrors,
+    } = this.state;
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
@@ -308,6 +408,8 @@ class Form extends Component<PropsType, StateType> {
         value={{
           isLoading,
           handleSaveBaseProductWithVariant: this.handleSave,
+          onChangeVariantForm,
+          variantFormErrors,
         }}
       >
         <div styleName="container">
@@ -381,6 +483,10 @@ class Form extends Component<PropsType, StateType> {
                   this.handleSelectedCategory(itemId);
                 }}
               />
+              {formErrors &&
+                formErrors.categoryId && (
+                  <div styleName="categoryError">{formErrors.categoryId}</div>
+                )}
             </div>
           </div>
           {category &&
@@ -390,6 +496,7 @@ class Form extends Component<PropsType, StateType> {
                 category={category}
                 comeResponse={comeResponse}
                 resetComeResponse={resetComeResponse}
+                closedVariantFormAnnunciator={closedVariantFormAnnunciator}
               />
             )}
 
@@ -402,30 +509,39 @@ class Form extends Component<PropsType, StateType> {
               storeID={storeID}
               comeResponse={comeResponse}
               resetComeResponse={resetComeResponse}
+              closedVariantFormAnnunciator={closedVariantFormAnnunciator}
             />
           )}
-          {baseProduct && (
-            <Shipping
-              currency={currency}
-              baseProduct={baseProduct}
-              baseProductId={baseProductRawID}
-              storeId={storeRawID}
-            />
+          {!isLoadingPackages &&
+            (category || baseProduct) && (
+              <Shipping
+                currency={currency}
+                baseProduct={baseProduct}
+                baseProductId={baseProductRawID}
+                storeId={storeRawID}
+                availablePackages={availablePackages}
+                onChangeShipping={onChangeShipping}
+                shippingErrors={shippingErrors}
+              />
+            )}
+          {isLoadingPackages && (
+            <div styleName="spinner">
+              <SpinnerCircle />
+            </div>
           )}
-          {baseProduct && (
+          {
             <div styleName="button">
               <Button
                 big
                 fullWidth
-                onClick={() => {
-                  this.handleSave({ variantData: null, isCanCreate: true });
-                }}
+                onClick={this.handleSave}
                 dataTest="saveProductButton"
+                isLoading={isLoading}
               >
                 Save
               </Button>
             </div>
-          )}
+          }
         </div>
       </ProductFormContext.Provider>
     );

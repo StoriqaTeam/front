@@ -12,14 +12,14 @@ import {
 } from 'ramda';
 
 import type {
-  AvailablePackagesType,
+  AvailablePackageType,
   ShippingCountriesType,
   ServiceType,
   InterServiceType,
 } from './types';
 
 export const convertLocalAvailablePackages = (
-  localAvailablePackages: Array<AvailablePackagesType>,
+  localAvailablePackages: Array<AvailablePackageType>,
 ): Array<ServiceType> => {
   const newPackages = map(
     item => ({ id: item.name, label: item.name }),
@@ -29,7 +29,7 @@ export const convertLocalAvailablePackages = (
 };
 
 export const convertInterAvailablePackages = (
-  interAvailablePackages: Array<AvailablePackagesType>,
+  interAvailablePackages: Array<AvailablePackageType>,
 ): Array<InterServiceType> => {
   const newPackages = map(item => {
     const { deliveriesTo } = item;
@@ -44,7 +44,7 @@ export const convertInterAvailablePackages = (
 
 export const getServiceLogo = (
   id: ?string,
-  availablePackages: Array<AvailablePackagesType>,
+  availablePackages: Array<AvailablePackageType>,
 ): string => {
   if (!id) {
     return '';
@@ -55,7 +55,7 @@ export const getServiceLogo = (
 
 export const getServiceRawId = (
   id: ?string,
-  availablePackages: Array<AvailablePackagesType>,
+  availablePackages: Array<AvailablePackageType>,
 ): number => {
   if (!id) {
     return -1;
@@ -66,7 +66,7 @@ export const getServiceRawId = (
 
 export const getService = (
   id: string,
-  availablePackages: Array<AvailablePackagesType>,
+  availablePackages: Array<AvailablePackageType>,
 ): ?ServiceType => {
   const foundPackage = find(propEq('companyPackageId', id))(availablePackages);
   return foundPackage
@@ -76,7 +76,7 @@ export const getService = (
 
 export const getCountries = (
   id: string,
-  availablePackages: Array<AvailablePackagesType>,
+  availablePackages: Array<AvailablePackageType>,
 ) => {
   const foundPackage = find(propEq('companyPackageId', id))(availablePackages);
   return foundPackage && foundPackage.deliveriesTo
@@ -163,4 +163,23 @@ export const convertCountriesToStringLabels = (
     ),
   );
   return join(', ', newCountries);
+};
+
+export const convertCountriesToArrLabels = (
+  countries: ?ShippingCountriesType,
+): Array<string> => {
+  if (!countries) {
+    return [];
+  }
+  const newCountries = flatten(
+    map(
+      item =>
+        map(
+          child => child.label,
+          filter(child => Boolean(child.isSelected), item.children),
+        ),
+      countries.children,
+    ),
+  );
+  return newCountries;
 };

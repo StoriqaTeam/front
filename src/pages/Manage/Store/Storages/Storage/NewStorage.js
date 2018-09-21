@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, isEmpty } from 'ramda';
-import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -152,22 +151,6 @@ NewStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default createFragmentContainer(
-  withShowAlert(
-    Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
-  ),
-  graphql`
-    fragment NewStorage_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
-        id
-        rawId
-        name {
-          lang
-          text
-        }
-        logo
-      }
-    }
-  `,
+export default withShowAlert(
+  Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
 );

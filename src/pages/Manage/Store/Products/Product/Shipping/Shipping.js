@@ -1,17 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createFragmentContainer, graphql, Relay } from 'react-relay';
-import { pathOr, map, isEmpty } from 'ramda';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { pathOr, map } from 'ramda';
 
 import { withShowAlert } from 'components/App/AlertContext';
-import { Button } from 'components/common/Button';
-import { log, fromRelayError } from 'utils';
-import { UpsertShippingMutation } from 'relay/mutations';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { SelectItemType } from 'types';
-import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 
 import { convertCountriesToArrCodes } from './utils';
 import type {
@@ -19,6 +14,7 @@ import type {
   RequestLocalShippingType,
   RequestInterShippingType,
   PickupShippingType,
+  FullShippingType,
 } from './types';
 
 import type { Shipping_baseProduct as ShippingBaseProductType } from './__generated__/Shipping_baseProduct.graphql';
@@ -36,106 +32,35 @@ type StateType = {
 type PropsType = {
   currency: SelectItemType,
   baseProduct: ShippingBaseProductType,
-  baseProductId: number,
-  storeId: number,
-  showAlert: (input: AddAlertInputType) => void,
-  relay: Relay,
+  onChangeShipping: (shippingData: ?FullShippingType) => void,
+  shippingErrors: ?{
+    local?: string,
+    inter?: string,
+  },
 };
 
 class Shipping extends Component<PropsType, StateType> {
-  state = {
-    local: [],
-    international: [],
-    pickup: {
-      pickup: false,
-      price: 0,
-    },
-    withoutInter: false,
-    withoutLocal: false,
-  };
-
-  handleSave = () => {
-    const { baseProductId, storeId, relay } = this.props;
-    const {
-      local,
-      international,
-      pickup,
-      withoutInter,
-      withoutLocal,
-    } = this.state;
-    const params: UpsertShippingMutationType = {
-      input: {
-        local: withoutLocal ? [] : local,
-        international: withoutInter ? [] : international,
-        pickup: withoutLocal ? { ...pickup, pickup: false } : pickup,
-        baseProductId,
-        storeId,
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      local: [],
+      international: [],
+      pickup: {
+        pickup: false,
+        price: 0,
       },
-      environment: relay.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        if (errors) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Deliveryt update!',
-          link: { text: '' },
-        });
-      },
-      onError: (error: Error) => {
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
+      withoutInter: true,
+      withoutLocal: true,
     };
-    UpsertShippingMutation.commit(params);
-  };
+    props.onChangeShipping(this.state);
+  }
+
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    const { state } = this;
+    if (JSON.stringify(state) !== JSON.stringify(prevState)) {
+      this.props.onChangeShipping({ ...this.state });
+    }
+  }
 
   handleOnChangeShippingData = (data: ShippingChangeDataType) => {
     const { companies, inter, pickup, withoutInter, withoutLocal } = data;
@@ -175,7 +100,7 @@ class Shipping extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { currency, baseProduct } = this.props;
+    const { currency, baseProduct, shippingErrors } = this.props;
     // $FlowIgnore
     const localShipping = pathOr([], ['shipping', 'local'], baseProduct);
     // $FlowIgnore
@@ -190,13 +115,13 @@ class Shipping extends Component<PropsType, StateType> {
     const localAvailablePackages = pathOr(
       [],
       ['availablePackages', 'local'],
-      baseProduct,
+      this.props,
     );
     // $FlowIgnore
     const interAvailablePackages = pathOr(
       [],
       ['availablePackages', 'international'],
-      baseProduct,
+      this.props,
     );
     return (
       <div className="container">
@@ -206,16 +131,15 @@ class Shipping extends Component<PropsType, StateType> {
           pickupShipping={pickupShipping}
           localAvailablePackages={localAvailablePackages}
           onChangeShippingData={this.handleOnChangeShippingData}
+          error={shippingErrors ? shippingErrors.local : null}
         />
         <InterShipping
           currency={currency}
           interShipping={interShipping}
           interAvailablePackages={interAvailablePackages}
           onChangeShippingData={this.handleOnChangeShippingData}
+          error={shippingErrors ? shippingErrors.inter : null}
         />
-        <Button big fullWidth onClick={this.handleSave} dataTest="">
-          Save
-        </Button>
       </div>
     );
   }
@@ -249,32 +173,6 @@ export default createFragmentContainer(
         pickup {
           price
           pickup
-        }
-      }
-      availablePackages {
-        local {
-          companyPackageId
-          companyPackageRawId
-          name
-          logo
-        }
-        international {
-          companyPackageId
-          companyPackageRawId
-          name
-          logo
-          deliveriesTo {
-            children {
-              label
-              children {
-                parent
-                alpha3
-                alpha2
-                label
-              }
-              alpha3
-            }
-          }
         }
       }
     }
