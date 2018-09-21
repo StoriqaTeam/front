@@ -23,11 +23,21 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
       </span>
       <p>
         Check here to indicate that you have read and agree to the{' '}
-        <a href="/termsofuse.pdf" target="_blank" styleName="link">
+        <a
+          href="https://s3.eu-west-2.amazonaws.com/storiqa/Terms+of+use+STORIQA(Final).pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          styleName="link"
+        >
           Terms of Use
         </a>{' '}
         and{' '}
-        <a href="/privacy.pdf" target="_blank" styleName="link">
+        <a
+          href="https://s3.eu-west-2.amazonaws.com/storiqa/Privacy+Policy.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          styleName="link"
+        >
           Privacy Policy
         </a>.
       </p>
