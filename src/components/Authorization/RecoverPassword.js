@@ -1,7 +1,7 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
-import { propOr } from 'ramda';
+import { isNil, propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
@@ -10,14 +10,18 @@ import './Authorization.scss';
 
 type PropsType = {
   email: string,
-  errors: {
-    [string]: ?Array<string>,
+  errors: ?{
+    [string]: Array<string>,
   },
   formValid: boolean,
   onBack: () => void,
   onClick: () => void,
-  onChange: () => void,
   onBlur: () => void,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
 };
 
 type StateType = {
@@ -54,7 +58,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
             model={email}
             onChange={onChange}
             autocomplete={autocomplete}
-            errors={propOr(null, 'email', errors)}
+            errors={!isNil(errors) ? propOr(null, 'email', errors) : null}
             onBlur={onBlur}
             validate="email"
           />
