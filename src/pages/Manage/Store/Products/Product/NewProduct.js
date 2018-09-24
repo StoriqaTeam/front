@@ -489,7 +489,7 @@ export default createFragmentContainer(
         }
         warehouses {
           addressFull {
-            country
+            countryCode
           }
         }
         baseProducts(first: 100) @connection(key: "Wizard_baseProducts") {
