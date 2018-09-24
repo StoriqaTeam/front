@@ -62,6 +62,15 @@ const routes = (
           mainPage {
             ...Start_mainPage
           }
+          countries {
+            children {
+              children {
+                alpha3
+                alpha2
+                label
+              }
+            }
+          }
           languages {
             isoCode
           }
@@ -473,20 +482,7 @@ const routes = (
                 storeId: parseInt(params.storeId, 10) || 0,
               })}
             />
-            <Route
-              path="/storage/new"
-              Component={NewStorage}
-              query={graphql`
-                query routes_NewStorage_Query($storeId: Int!) {
-                  me {
-                    ...NewStorage_me @arguments(storeId: $storeId)
-                  }
-                }
-              `}
-              prepareVariables={(_, { params }) => ({
-                storeId: parseInt(params.storeId, 10) || 0,
-              })}
-            />
+            <Route path="/storage/new" Component={NewStorage} />
             <Route
               path="/storages/:storageSlug"
               Component={StorageProducts}

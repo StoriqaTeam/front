@@ -1,4 +1,6 @@
 /* eslint-disable */
+import {setCookie} from "../src/components/Authorization/utils";
+
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
@@ -118,7 +120,10 @@ app.use(
     }
 
     if (process.env.NODE_ENV === 'development') {
-      req.universalCookies.set('holyshit', 'iamcool', { path: '/' });
+      const today = new Date();
+      const expirationDate = new Date();
+      expirationDate.setDate(today.getDate() + 29);
+      req.universalCookies.set('holyshit', 'iamcool', { path: '/', expires: expirationDate });
     }
 
     const store = createReduxStore(new ServerProtocol(req.url));

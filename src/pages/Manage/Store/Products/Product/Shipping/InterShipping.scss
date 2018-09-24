@@ -1,0 +1,77 @@
+@import "../../../../../../styles/variables";
+
+.container {
+  margin-top: 2rem;
+  padding: 4rem;
+  background-color: $color_white;
+}
+
+.title {
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.radioButtons {
+  margin-top: 2.5rem;
+}
+
+.radioButton + .radioButton {
+  margin-top: 0.5rem;
+}
+
+.form {
+  padding-top: 2.5rem;
+  max-height: 1000rem;
+  opacity: 1;
+  transition: $transition_all_ease;
+}
+
+.hidePlane {
+  position: relative;
+  max-height: 0;
+  padding-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: none;
+}
+
+.formWrap {
+  position: relative;
+}
+
+.coverPlane {
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: $color_white;
+    opacity: .5;
+    z-index: 5;
+  }
+}
+
+.companies {
+
+}
+
+.company {
+  margin-top: 2rem;
+  padding: 3rem;
+  background-color: $color_grey_bg;
+}
+
+.editableForm {
+  margin-top: 2rem;
+}
+
+.emptyPackegesText, .error {
+  margin-top: 2rem;
+  font-size: 14px;
+  color: $color_red;
+}
