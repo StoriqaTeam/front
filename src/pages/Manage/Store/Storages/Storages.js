@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, map } from 'ramda';
+import { pathOr, isEmpty, map, length } from 'ramda';
 import { withRouter, routerShape } from 'found';
 import { graphql, createFragmentContainer } from 'react-relay';
 import type { Environment } from 'relay-runtime';
@@ -115,16 +115,19 @@ class Storages extends PureComponent<PropsType> {
           <div styleName="subtitle">
             <strong>Items list</strong>
           </div>
-          <div styleName="addButton">
-            <Button
-              wireframe
-              big
-              onClick={this.createStorage}
-              dataTest="createStorageButton"
-            >
-              Add storage
-            </Button>
-          </div>
+          {storages &&
+            length(storages) > 1 && (
+              <div styleName="addButton">
+                <Button
+                  wireframe
+                  big
+                  onClick={this.createStorage}
+                  dataTest="createStorageButton"
+                >
+                  Add storage
+                </Button>
+              </div>
+            )}
         </header>
         <div>
           <StoragesHeader />

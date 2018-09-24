@@ -43,6 +43,7 @@ type PropsType = {
     environment: Environment,
     refetch: Function,
   },
+  countries: any,
 };
 
 class App extends Component<PropsType, StateType> {
@@ -69,6 +70,7 @@ class App extends Component<PropsType, StateType> {
       categories,
       orderStatuses,
       currencyExchange,
+      countries,
     } = this.props;
     return {
       categories,
@@ -76,6 +78,7 @@ class App extends Component<PropsType, StateType> {
       orderStatuses,
       currencies,
       currencyExchange,
+      countries,
     };
   };
 

@@ -265,7 +265,7 @@ class Checkout extends Component<PropsType, StateType> {
     // $FlowIgnore
     const deliveryAddresses = pathOr(
       null,
-      ['me', 'deliveryAddresses'],
+      ['me', 'deliveryAddressesFull'],
       this.props,
     );
     const {
@@ -403,7 +403,7 @@ export default createPaginationContainer(
       firstName
       lastName
       phone
-      deliveryAddresses {
+      deliveryAddressesFull {
         address {
           value
           country
