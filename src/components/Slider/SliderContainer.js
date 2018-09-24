@@ -29,7 +29,7 @@ type PropsTypes = {
   num: number,
   seeAllUrl: ?string,
   fade?: boolean,
-  dotIdx?: boolean,
+  dotIdx?: number,
   arrows?: boolean,
   counter?: boolean,
 };
@@ -115,7 +115,8 @@ class SliderContainer extends Component<PropsTypes, StateType> {
             <div
               styleName={classNames('item', {
                 fadeItem: fade,
-                activeSlide: dotIdx === child.key - 1,
+                activeSlide:
+                  dotIdx !== undefined && `${dotIdx}` === `${child.key}`,
                 image: type === 'image',
               })}
               style={{
