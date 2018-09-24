@@ -86,6 +86,7 @@ export default createRefetchContainer(
             phone
           }
           receiverName
+          receiverPhone
           addressFull {
             value
             country
