@@ -437,7 +437,7 @@ class EditProduct extends Component<PropsType, StateType> {
       input: {
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
-        pickup,
+        pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,
         baseProductId: productRawId,
         storeId: storeRawId,
       },

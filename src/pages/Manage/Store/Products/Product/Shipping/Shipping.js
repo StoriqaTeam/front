@@ -49,8 +49,8 @@ class Shipping extends Component<PropsType, StateType> {
         pickup: false,
         price: 0,
       },
-      withoutInter: true,
-      withoutLocal: true,
+      withoutInter: false,
+      withoutLocal: false,
     };
     props.onChangeShipping(this.state);
   }

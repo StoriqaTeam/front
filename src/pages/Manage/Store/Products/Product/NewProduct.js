@@ -356,7 +356,7 @@ class NewProduct extends Component<PropsType, StateType> {
       input: {
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
-        pickup,
+        pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,
         baseProductId: baseProductRawId,
         storeId: parseInt(storeId, 10),
       },
