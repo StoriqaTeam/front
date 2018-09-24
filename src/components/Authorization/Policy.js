@@ -24,7 +24,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
       <p>
         Check here to indicate that you have read and agree to the{' '}
         <a
-          href="https://s3.eu-west-2.amazonaws.com/storiqa/Terms+of+use+STORIQA(Final).pdf"
+          href="https://s3.eu-west-2.amazonaws.com/storiqa/Terms+of+use.pdf"
           target="_blank"
           rel="noopener noreferrer"
           styleName="link"
