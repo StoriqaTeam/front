@@ -1,106 +1,84 @@
-// @flow
+// @flow strict
 
-import React, { PureComponent } from 'react';
-import { propOr } from 'ramda';
+import React, { Fragment, PureComponent } from 'react';
+import { map, adjust, pipe, assoc } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
+import { Policy } from './index';
+import { makeInput } from './utils';
+
 import './Authorization.scss';
+
+import type { SignUpInputType, InputOnChangeType, ErrorsType } from './types';
 
 type PropsType = {
   email: string,
   firstName: string,
   lastName: string,
   password: string,
-  errors: {
-    [string]: ?Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
-  onRegistrationClick: Function,
-  onChange: Function,
+  onRegistrationClick: () => void,
+  onChange: InputOnChangeType,
 };
 
-class SignUp extends PureComponent<PropsType> {
-  render() {
-    const {
-      email,
-      firstName,
-      lastName,
-      password,
-      errors,
-      formValid,
-      onRegistrationClick,
-      onChange,
-    } = this.props;
+type StateType = {
+  isPrivacyChecked: boolean,
+  isTermsChecked: boolean,
+};
 
+class SignUp extends PureComponent<PropsType, StateType> {
+  state = {
+    isPrivacyChecked: false,
+    isTermsChecked: false,
+  };
+  handleCheck = (privacy: string): void => {
+    this.setState((prevState: StateType) => ({
+      [privacy]: !prevState[privacy],
+    }));
+  };
+  makeInputs = (): Array<SignUpInputType> => {
+    const inputs: Array<string> = [
+      'First Name',
+      'Last Name',
+      'Email',
+      'Password',
+    ];
+    const makeInputFn = map(makeInput(this.props));
+    const setFocus = adjust(assoc('thisFocus', true), 0);
+    return pipe(makeInputFn, setFocus)(inputs);
+  };
+  render() {
+    const { formValid, onRegistrationClick } = this.props;
+    const { isPrivacyChecked, isTermsChecked } = this.state;
     return (
       <div styleName="signUp">
-        <div styleName="inputBlock">
-          <Input
-            label="First name"
-            name="firstName"
-            type="text"
-            model={firstName}
-            onChange={onChange}
-            errors={propOr(null, 'firstName', errors)}
-          />
-        </div>
-        <div styleName="inputBlock">
-          <Input
-            label="Last name"
-            name="lastName"
-            type="text"
-            model={lastName}
-            onChange={onChange}
-            errors={propOr(null, 'lastName', errors)}
-          />
-        </div>
-        <div styleName="inputBlock">
-          <Input
-            thisFocus
-            label="Email"
-            name="email"
-            type="email"
-            model={email}
-            validate="email"
-            onChange={onChange}
-            errors={propOr(null, 'email', errors)}
-          />
-        </div>
-        <div styleName="inputBlock">
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            model={password}
-            validate="password"
-            onChange={onChange}
-            errors={propOr(null, 'password', errors)}
-          />
-        </div>
+        {this.makeInputs().map(input => (
+          <div key={input.name} styleName="inputBlock">
+            <Input {...input} model={this.props[input.name]} />
+          </div>
+        ))}
         {formValid && (
-          <div styleName="signUpGroup">
-            <div styleName="signUpButton">
+          <Fragment>
+            <Policy
+              isPrivacyChecked={isPrivacyChecked}
+              isTermsChecked={isTermsChecked}
+              onCheck={this.handleCheck}
+            />
+            <div styleName="signUpGroup">
               <Button
                 onClick={onRegistrationClick}
                 type="button"
                 dataTest="signUpButton"
+                disabled={!(isPrivacyChecked && isTermsChecked)}
+                fullWidth
               >
                 <span>Sign Up</span>
               </Button>
             </div>
-            <div styleName="policy">
-              By clicking this button, you agree to Storiqa’s{' '}
-              <a href="/" styleName="link">
-                Anti-spam Policy
-              </a>{' '}
-              &{' '}
-              <a href="/" styleName="link">
-                Terms of Use
-              </a>.
-            </div>
-          </div>
+          </Fragment>
         )}
       </div>
     );

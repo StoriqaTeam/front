@@ -1,26 +1,32 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
+
+import type { Element } from 'react';
 
 import './Checkbox.scss';
 
 type PropsType = {
-  id: string,
-  label?: string,
-  isChecked: boolean,
-  onChange: Function,
+  id: string | number,
+  label: string | Element<'span'>,
+  isChecked: ?boolean,
+  onChange: <T: string>(T) => T | void,
 };
 
 class Checkbox extends PureComponent<PropsType> {
-  onChange = () => {
-    const { id, onChange } = this.props;
-    onChange(id);
+  static defaultProps = {
+    id: 'stq',
+    label: '',
+    isChecked: false,
+    onChange: () => {},
   };
-
-  stopPropagation = (e: any) => {
+  onChange = (): void => {
+    const { id, onChange } = this.props;
+    onChange(`${id}`);
+  };
+  stopPropagation = (e: SyntheticEvent<HTMLDivElement>): void => {
     e.stopPropagation();
   };
-
   render() {
     const { id, label, isChecked } = this.props;
     return (

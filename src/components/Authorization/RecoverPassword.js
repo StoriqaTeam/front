@@ -1,23 +1,23 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
-import { propOr } from 'ramda';
+import { isNil, propOr } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
 import './Authorization.scss';
 
+import type { InputOnChangeType, ErrorsType } from './types';
+
 type PropsType = {
   email: string,
-  errors: {
-    [string]: ?Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
-  onBack: () => any,
-  onClick: () => any,
-  onChange: () => any,
-  onBlur: () => any,
+  onBack: () => void,
+  onClick: () => void,
+  onBlur: () => void,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {
@@ -25,6 +25,9 @@ type StateType = {
 };
 
 class RecoverPassword extends Component<PropsType, StateType> {
+  static defaultProps = {
+    onBlur: () => {},
+  };
   state: StateType = {
     autocomplete: false,
   };
@@ -36,8 +39,8 @@ class RecoverPassword extends Component<PropsType, StateType> {
       formValid,
       onClick,
       onChange,
-      onBlur,
       onBack,
+      onBlur,
     } = this.props;
     const { autocomplete } = this.state;
     return (
@@ -47,20 +50,30 @@ class RecoverPassword extends Component<PropsType, StateType> {
             thisFocus
             label="Email"
             name="email"
-            type="text"
+            type="email"
             model={email}
             onChange={onChange}
             autocomplete={autocomplete}
-            errors={propOr(null, 'email', errors)}
+            errors={!isNil(errors) ? propOr(null, 'email', errors) : null}
             onBlur={onBlur}
             validate="email"
           />
         </div>
         <div styleName="recoverPasswordButtons">
-          <Button wireframe big onClick={onBack}>
+          <Button
+            wireframe
+            big
+            onClick={onBack}
+            dataTest="recoverPasswordButtonBack"
+          >
             Back
           </Button>
-          <Button onClick={onClick} big disabled={!formValid}>
+          <Button
+            onClick={onClick}
+            big
+            disabled={!formValid}
+            dataTest="recoverPasswordButtonSendEmail"
+          >
             Send Email
           </Button>
         </div>

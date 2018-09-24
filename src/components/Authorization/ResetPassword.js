@@ -1,23 +1,23 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
-import { propOr } from 'ramda';
+import { propOr, isNil } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
 import './Authorization.scss';
 
+import type { InputOnChangeType, ErrorsType } from './types';
+
 type PropsType = {
   password: string,
   passwordRepeat: string,
-  errors: {
-    [string]: ?Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
-  onPasswordRepeat: () => any,
-  onClick: () => any,
-  onChange: () => any,
+  onClick: () => void,
+  onPasswordRepeat: InputOnChangeType,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {
@@ -28,7 +28,6 @@ class ResetPassword extends Component<PropsType, StateType> {
   state: StateType = {
     autocomplete: false,
   };
-  handleClick = () => {};
   render() {
     const {
       password,
@@ -40,6 +39,7 @@ class ResetPassword extends Component<PropsType, StateType> {
       onPasswordRepeat,
     } = this.props;
     const { autocomplete } = this.state;
+
     return (
       <div styleName="signIn">
         <div styleName="inputBlock">
@@ -51,7 +51,7 @@ class ResetPassword extends Component<PropsType, StateType> {
             validate="password"
             onChange={onChange}
             autocomplete={autocomplete}
-            errors={propOr(null, 'password', errors)}
+            errors={!isNil(errors) ? propOr(null, 'password', errors) : null}
           />
         </div>
         <div styleName="inputBlock">

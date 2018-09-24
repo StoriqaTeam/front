@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';

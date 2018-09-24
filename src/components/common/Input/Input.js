@@ -18,7 +18,7 @@ type PropsType = {
   onKeyDown: () => void,
   onClick: () => void,
   min: ?string,
-  icon: ?string,
+  icon: string,
   isUrl: ?boolean,
   inputRef: ?(e: any) => void,
   isAutocomplete: ?boolean,
@@ -38,6 +38,9 @@ type StateType = {
 };
 
 class Input extends Component<PropsType, StateType> {
+  static defaultProps = {
+    icon: '',
+  };
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const value = nextProps.value == null ? '' : `${nextProps.value}`;
     if (Boolean(value) !== prevState.labelFloat) {

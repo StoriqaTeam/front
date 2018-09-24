@@ -27,14 +27,16 @@
   display: flex;
   margin: 4rem 0 2rem;
   justify-content: space-between;
-}
-
-.signUpButton {
-  width: 16rem;
+  button {
+    height: 5rem;
+  }
 }
 
 .signIn {
   position: relative;
+  button {
+    height: 5rem;
+  }
 }
 
 .signInGroup {
@@ -60,18 +62,6 @@
   }
 }
 
-.policy {
-  margin-left: 1rem;
-  color: $color_grey_minor;
-  font-size: 10px;
-  line-height: 1.75rem;
-  text-align: left;
-}
-
-.link {
-  color: $color_grey;
-}
-
 .inputBlock {
   position: relative;
   margin-bottom: 4rem;
@@ -84,6 +74,7 @@
 .forgotPassword {
   font-size: 14px;
   margin-bottom: 1rem;
+  margin-top: -2rem;
   text-align: right;
   span {
     cursor: pointer;
@@ -126,6 +117,7 @@
     }
   }
   button {
+    height: 5rem;
     width: 100%;
   }
 }

@@ -6,6 +6,8 @@ import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 
+import type { IconSizeType } from 'types';
+
 import './UploadWrapper.scss';
 
 type PropsType = {
@@ -20,7 +22,7 @@ type PropsType = {
   noIndents: ?boolean,
   id: string,
   dataTest: string,
-  buttonIconSize: ?number,
+  buttonIconSize?: IconSizeType,
   disabled: ?boolean,
   customUnit?: boolean,
   square?: boolean,
@@ -57,9 +59,7 @@ const UploadWrapper = ({
         data-test={dataTest}
       >
         {buttonIconType &&
-          !overPicture && (
-            <Icon type={buttonIconType} size={buttonIconSize || 32} />
-          )}
+          !overPicture && <Icon type={buttonIconType} size={buttonIconSize} />}
         {!overPicture && (
           <span styleName={classNames('buttonLabel')}>{buttonLabel}</span>
         )}
@@ -103,6 +103,7 @@ const UploadWrapper = ({
 UploadWrapper.defaultProps = {
   customUnit: false,
   square: false,
+  buttonIconSize: 32,
 };
 
 export default UploadWrapper;

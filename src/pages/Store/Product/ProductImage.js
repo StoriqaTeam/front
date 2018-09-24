@@ -113,7 +113,7 @@ class ProductImage extends Component<PropsType, StateType> {
               />
             ) : (
               <div styleName="noImage">
-                <Icon type="camera" size="80" />
+                <Icon type="camera" size={80} />
               </div>
             )}
           </figure>
@@ -131,7 +131,7 @@ class ProductImage extends Component<PropsType, StateType> {
             />
           ) : (
             <div styleName="noImage">
-              <Icon type="camera" size="80" />
+              <Icon type="camera" size={80} />
             </div>
           )}
         </div>

@@ -1,25 +1,25 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
-import { any, propOr } from 'ramda';
+import { map, adjust, assoc, pipe, isNil, any } from 'ramda';
 
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
+import { makeInput } from './utils';
 import './Authorization.scss';
+
+import type { SignUpInputType, InputOnChangeType, ErrorsType } from './types';
 
 type PropsType = {
   email: string,
   password: string,
-  errors: {
-    [string]: ?Array<string>,
-  },
+  errors: ?ErrorsType,
   formValid: boolean,
   onLoginClick: () => void,
-  onChange: () => void,
-  onBlur: () => void,
   onRecoverPassword: () => void,
   onResendEmail: () => void,
+  onChange: InputOnChangeType,
 };
 
 type StateType = {
@@ -30,60 +30,35 @@ class SignIn extends Component<PropsType, StateType> {
   state: StateType = {
     autocomplete: false,
   };
-
-  handleCheckboxChange = () => {
+  setResendEmail = (input: SignUpInputType): SignUpInputType => {
+    const { onResendEmail } = this.props;
+    const errorsArray = input.errors;
+    let showResendEmail = false;
+    if (!isNil(errorsArray)) {
+      showResendEmail = any(i => i === 'Email not verified')(errorsArray);
+    }
+    return { ...input, onResendEmail, showResendEmail };
+  };
+  handleCheckboxChange = (): void => {
     this.setState({ autocomplete: !this.state.autocomplete });
   };
-
+  makeInputs = (): Array<SignUpInputType> => {
+    const inputs: Array<string> = ['Email', 'Password'];
+    const makeInputFn = map(makeInput(this.props));
+    const setFocus = adjust(assoc('thisFocus', true), 0);
+    const setResendEmail = adjust(this.setResendEmail, 0);
+    const setNoHints = adjust(assoc('noPasswordHints', true), 1);
+    return pipe(makeInputFn, setFocus, setResendEmail, setNoHints)(inputs);
+  };
   render() {
-    const {
-      email,
-      password,
-      errors,
-      formValid,
-      onLoginClick,
-      onChange,
-      onBlur,
-      onRecoverPassword,
-      onResendEmail,
-    } = this.props;
-    const { autocomplete } = this.state;
-    // $FlowIgnoreMe
-    const showResendEmail = any(
-      i => i === 'Email not verified',
-      propOr('', 'email', errors),
-    );
+    const { formValid, onLoginClick, onRecoverPassword } = this.props;
     return (
       <div styleName="signIn">
-        <div styleName="inputBlock">
-          <Input
-            thisFocus
-            label="Email"
-            name="email"
-            type="text"
-            model={email}
-            onChange={onChange}
-            autocomplete={autocomplete}
-            errors={propOr(null, 'email', errors)}
-            showResendEmail={showResendEmail}
-            onBlur={onBlur}
-            onResendEmail={onResendEmail}
-            validate="email"
-          />
-        </div>
-        <div styleName="inputBlock userPassword">
-          <Input
-            noPasswordHints
-            label="Password"
-            name="password"
-            type="password"
-            model={password}
-            validate="password"
-            onChange={onChange}
-            autocomplete={autocomplete}
-            errors={propOr(null, 'password', errors)}
-          />
-        </div>
+        {this.makeInputs().map(input => (
+          <div key={input.name} styleName="inputBlock">
+            <Input {...input} model={this.props[input.name]} />
+          </div>
+        ))}
         <div styleName="forgotPassword">
           <span
             onClick={onRecoverPassword}

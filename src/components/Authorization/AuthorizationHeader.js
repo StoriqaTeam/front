@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
@@ -7,7 +7,7 @@ import './AuthorizationHeader.scss';
 
 type PropsType = {
   selected: number,
-  onClick: Function,
+  onClick: (string, number) => void,
   tabs: Array<{ id: string, name: string }>,
   fullWidth?: boolean,
 };
@@ -16,7 +16,7 @@ class AuthorizationHeader extends Component<PropsType, {}> {
   static defaultProps = {
     fullWidth: false,
   };
-  handleClick = (name: string, selected: number) => {
+  handleClick = (name: string, selected: number): void => {
     const { onClick } = this.props;
     onClick(name, selected);
   };

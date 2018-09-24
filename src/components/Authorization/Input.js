@@ -1,8 +1,7 @@
-// @flow
-
-// TODO: do refactoring after tests
+// @flow strict
 
 import React, { PureComponent } from 'react';
+
 import classNames from 'classnames';
 
 import { PasswordHints } from 'components/PasswordHints';
@@ -12,41 +11,46 @@ import { Icon } from 'components/Icon';
 import { log } from 'utils';
 
 import './Input.scss';
-import utils from './utils';
+import { validateField, isCapsLock } from './utils';
 
 type PropsType = {
-  label: ?string,
+  label: string,
   placeholder: ?string,
   className: string,
   name: string,
   model: string,
   type: ?string,
-  validate: ?string,
-  errorMessage: ?string,
-  onChange: Function,
+  validate: string,
+  errorMessage: string,
+  onChange: ({
+    name: string,
+    value: string,
+    validity: boolean,
+  }) => void,
   focus: boolean,
   detectCapsLock: boolean,
-  autocomplete: ?boolean,
+  autocomplete: boolean,
   errors: ?Array<string>,
-  thisFocus: ?boolean,
-  showResendEmail: ?boolean,
-  onResendEmail: () => any,
+  thisFocus: boolean,
+  showResendEmail: boolean,
+  onResendEmail: () => void,
   noPasswordHints: boolean,
 };
 
 type StateType = {
-  labelFloat: string | null,
+  labelFloat: string,
   showPassword: boolean,
   showPasswordButton: boolean,
   showHints: boolean,
   formError: string,
   passwordQuality: {
-    percentage: number,
-    message: string,
-    qualityClass: string,
+    lowerCase: boolean,
+    upperCase: boolean,
+    digit: boolean,
+    length: boolean,
   },
   isCapsLockOn: boolean,
-  validity: ?boolean,
+  validity: boolean,
   isFocus: boolean,
   isFocusShow: boolean,
 };
@@ -67,50 +71,46 @@ class Input extends PureComponent<PropsType, StateType> {
     isFocus: false,
     isFocusShow: false,
     noPasswordHints: false,
+    showResendEmail: false,
+    thisFocus: false,
   };
-  state: StateType = {
-    labelFloat: null,
+  state = {
+    labelFloat: '',
     showPassword: false,
     showPasswordButton: false,
     showHints: false,
     formError: '',
     passwordQuality: {
-      percentage: 0,
-      message: '',
-      qualityClass: '',
+      lowerCase: false,
+      upperCase: false,
+      digit: false,
+      length: false,
     },
     isCapsLockOn: false,
-    validity: null,
+    validity: false,
     isFocus: false,
     isFocusShow: false,
   };
 
   componentDidMount() {
     const { input } = this;
-
     if (input && this.props.thisFocus) {
       input.focus();
     }
   }
 
-  onMouseDown = () => {
-    this.setState({ isFocusShow: true });
-  };
+  onMouseDown = (): void => this.setState({ isFocusShow: true });
 
-  onMouseUp = () => {
-    this.setState({ isFocusShow: false });
-  };
+  onMouseUp = (): void => this.setState({ isFocusShow: false });
 
-  onMouseOut = () => {
-    this.setState({ isFocusShow: false });
-  };
+  onMouseOut = (): void => this.setState({ isFocusShow: false });
 
   /**
    * @desc Handles the onChange event by setting the model's value
    * @param {SyntheticEvent} evt
    * @return {void}
    */
-  handleChange = (evt: { target: { name: string, value: string } }) => {
+  handleChange = (evt: { target: { name: string, value: string } }): void => {
     const { name, value } = evt.target;
     this.validate(name, value);
 
@@ -120,15 +120,15 @@ class Input extends PureComponent<PropsType, StateType> {
   };
   /**
    * @desc Handles the onKeyPress event
-   * @param {SyntheticEvent} evt
+   * @param {KeyboardEvent} evt
    * @return {void}
    */
-  handleKeyPress = (evt: {}) => {
+  handleKeyPress = (evt: KeyboardEvent): void => {
     if (this.props.detectCapsLock) {
       this.setState({
-        isCapsLockOn: utils.isCapsLockOn(evt),
+        isCapsLockOn: isCapsLock(evt),
       });
-      log.info('utils.isCapsLockOn(evt)', utils.isCapsLockOn(evt));
+      log.info('isCapsLock(evt)', isCapsLock(evt));
     }
   };
 
@@ -137,7 +137,7 @@ class Input extends PureComponent<PropsType, StateType> {
    * and toggles 'showPasswordButton'
    * @return {void}
    */
-  handleFocus = (evt: { target: { name: string, value: string } }) => {
+  handleFocus = (evt: { target: { name: string, value: string } }): void => {
     const { name, value } = evt.target;
     const { model } = this.props;
     const { validity } = this.state;
@@ -161,12 +161,12 @@ class Input extends PureComponent<PropsType, StateType> {
    * @desc Puts back the label to its original position if the model is empty
    * @return {void}
    */
-  handleBlur = () => {
+  handleBlur = (): void => {
     const { model, name } = this.props;
 
     if (model === '') {
       this.setState({
-        labelFloat: null,
+        labelFloat: '',
       });
     }
 
@@ -180,19 +180,17 @@ class Input extends PureComponent<PropsType, StateType> {
 
   /**
    * @param {String} inputName - input's name
-   * @param {any} inputValue - input's value
+   * @param {string} inputValue - input's value
    * @return {void}
    */
-  validate = (inputName: string, inputValue: any) => {
-    const { validate, errorMessage } = this.props;
-    const {
-      name,
-      value,
-      validity,
-      formError,
-      passwordQuality,
-    } = utils.validateField(inputName, inputValue, validate, errorMessage);
-
+  validate = (inputName: string, inputValue: string): void => {
+    const { validate, errorMessage, onChange } = this.props;
+    const { name, value, validity, formError, passwordQuality } = validateField(
+      inputName,
+      inputValue,
+      validate,
+      errorMessage,
+    );
     this.setState(
       {
         formError,
@@ -200,7 +198,7 @@ class Input extends PureComponent<PropsType, StateType> {
         validity,
         showHints: inputName === 'password' && !validity,
       },
-      this.props.onChange({
+      onChange({
         name,
         value,
         validity,
@@ -212,11 +210,10 @@ class Input extends PureComponent<PropsType, StateType> {
    * @desc show password to the user
    * @return {void}
    */
-  handleShowPassword = () => {
+  handleShowPassword = (): void => {
     if (this.input) {
       this.input.focus();
     }
-
     this.setState({ showPassword: !this.state.showPassword });
   };
 
@@ -226,7 +223,8 @@ class Input extends PureComponent<PropsType, StateType> {
    */
   input = {};
 
-  errorClass = (error: string) => (error.length === 0 ? '' : 'invalidInput');
+  errorClass = (error: string): string =>
+    error.length === 0 ? '' : 'invalidInput';
 
   render() {
     const {
@@ -255,7 +253,6 @@ class Input extends PureComponent<PropsType, StateType> {
       isFocus,
       isFocusShow,
     } = this.state;
-
     return (
       <span>
         <div
@@ -309,7 +306,7 @@ class Input extends PureComponent<PropsType, StateType> {
             role="button"
             tabIndex="0"
           >
-            <Icon type="eye" size="28" />
+            <Icon type="eye" size={28} />
           </div>
         )}
         {!noPasswordHints &&

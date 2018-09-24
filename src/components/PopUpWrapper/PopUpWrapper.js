@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import type { Node } from 'react';
@@ -13,7 +13,7 @@ type PropsType = {
   title: string,
   description: string,
   render: () => Node,
-  onClose?: () => any,
+  onClose?: () => void,
 };
 
 class PopUpWrapper extends Component<PropsType> {

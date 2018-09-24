@@ -56,7 +56,7 @@ const Header = (props: PropsType) => (
     <div styleName="headerItem tdBasket">
       {!props.notRemove && (
         <button styleName="deleteButton">
-          <Icon type="basket" size="32" />
+          <Icon type="basket" size={32} />
         </button>
       )}
     </div>
