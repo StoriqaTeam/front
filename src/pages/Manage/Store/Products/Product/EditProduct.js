@@ -124,11 +124,17 @@ class EditProduct extends Component<PropsType, StateType> {
             link: { text: 'Close.' },
           });
         });
+    } else {
+      this.handlerOffLoadingPackages();
     }
   }
 
   setLoadingPackages = (value: boolean) => {
     this.setState({ isLoadingPackages: value });
+  };
+
+  handlerOffLoadingPackages = () => {
+    this.setState({ isLoadingPackages: false });
   };
 
   handleSave = (form: FormType) => {
