@@ -50,7 +50,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
             thisFocus
             label="Email"
             name="email"
-            type="text"
+            type="email"
             model={email}
             onChange={onChange}
             autocomplete={autocomplete}

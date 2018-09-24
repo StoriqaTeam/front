@@ -371,8 +371,8 @@ class Authorization extends Component<PropsType, StateType> {
         }
       })
       .catch((errors: ?Array<ResponseErrorType>) => {
+        this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors } });
-        // console.log('relayErrors', relayErrors);
         if (relayErrors) {
           errorsHandler(relayErrors, showAlert, () =>
             this.setState({

@@ -47,20 +47,19 @@ export type ResponseErrorType = {
   data: RelayAPIErrorType | RelayDefaultErrorType,
 };
 
+const isNotNil: <T>(T) => boolean = complement(isNil);
+
 /*
   see tests
 */
 const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
   // $FlowIgnoreMe
   const errorsArr = pathOr([], ['source', 'errors'], relayError);
-
   if (isEmpty(errorsArr)) {
     return null;
   }
-
   const convertedErrors = map(item => {
     const error = item.data;
-
     if (!error) {
       return null;
     }
@@ -70,9 +69,10 @@ const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
     if (code !== 100) {
       return [toString(code), { status: (error && error.details) || item }];
     }
-
-    const status = pathOr('', ['details', 'status'], error);
-    const messagesRaw = pathOr('', ['details', 'message'], error);
+    const fromDetails = (prop: string): string =>
+      pathOr('', ['details', prop], error);
+    const status = fromDetails('status');
+    const messagesRaw = fromDetails('message');
     let messagesData;
 
     try {
@@ -80,11 +80,10 @@ const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
     } catch (e) {
       //
     }
-
     const messages = {};
+
     try {
       const prependKeyAndDouble = (val, key) => {
-        // eslint-disable-line
         messages[key] = map(i => i.message, val);
       };
       mapObjIndexed(prependKeyAndDouble, messagesData);
@@ -94,7 +93,7 @@ const processError = (relayError: RelayErrorType): ?ProcessedErrorType => {
     return [toString(code), { status, messages }];
   }, errorsArr);
   // $FlowIgnoreMe
-  return fromPairs(filter(complement(isNil), convertedErrors));
+  return fromPairs(filter(isNotNil, convertedErrors));
 };
 
 export default processError;
