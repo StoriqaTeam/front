@@ -358,7 +358,7 @@ class Authorization extends Component<PropsType, StateType> {
         input: { clientMutationId: '', email },
       },
     })
-      .then(() => {
+      .then((): void => {
         const { onCloseModal } = this.props;
         this.props.showAlert({
           type: 'success',
@@ -370,65 +370,17 @@ class Authorization extends Component<PropsType, StateType> {
           onCloseModal();
         }
       })
-      .catch((errors: ?Array<ResponseErrorType>) => {
-        this.setState({ isLoading: false });
-        const relayErrors = fromRelayError({ source: { errors } });
+      .catch((errs: ResponseErrorType): void => {
+        const relayErrors = fromRelayError({ source: { errors: [errs] } });
         if (relayErrors) {
-          errorsHandler(relayErrors, showAlert, () =>
+          errorsHandler(relayErrors, showAlert, errMessages =>
             this.setState({
               isLoading: false,
-              errors: { email: ['Email Not Found'] },
+              errors: errMessages || null,
             }),
           );
         }
       });
-    // const params = {
-    //   input: { clientMutationId: '', email },
-    //   environment,
-    //   onCompleted: (
-    //     response: ?RequestPasswordResetMutationResponse,
-    //     errors: ?Array<ResponseErrorType>,
-    //   ) => {
-    //     log.debug({ response, errors });
-    //     this.setState({ isLoading: false });
-    //     const relayErrors = fromRelayError({ source: { errors } });
-    //     if (relayErrors) {
-    //       // pass showAlert for show alert errors in common cases
-    //       // pass handleCallback specify validation errors
-    //       errorsHandler(relayErrors, this.props.showAlert, messages =>
-    //         this.setState({
-    //           isLoading: false,
-    //           errors: messages || null,
-    //         }),
-    //       );
-    //       return;
-    //     }
-    //     this.props.showAlert({
-    //       type: 'success',
-    //       text: 'Please verify your email',
-    //       link: { text: '' },
-    //       onClick: this.handleAlertOnClick,
-    //     });
-    //     const { onCloseModal } = this.props;
-    //     if (onCloseModal) {
-    //       onCloseModal();
-    //     }
-    //   },
-    //   onError: (error: Error): void => {
-    //     const relayErrors = fromRelayError(error);
-    //     if (relayErrors) {
-    //       // pass showAlert for show alert errors in common cases
-    //       // pass handleCallback specify validation errors
-    //       errorsHandler(relayErrors, this.props.showAlert, () =>
-    //         this.setState({
-    //           isLoading: false,
-    //           errors: { email: ['Email Not Found'] },
-    //         }),
-    //       );
-    //     }
-    //   },
-    // };
-    // RequestPasswordResetMutation.commit(params);
   };
 
   resetPassword = (): void => {
