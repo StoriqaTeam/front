@@ -35,7 +35,9 @@ class Countries extends Component<PropsType, StateType> {
       ? convertCountriesForSelect({ countries })
       : convertCountriesForSelect({
           countries,
-          checkedCountries: convertCountriesToArrCodes(company.countries),
+          checkedCountries: convertCountriesToArrCodes({
+            countries: company.countries,
+          }),
         });
     this.state = {
       countries: countriesForSelect,
@@ -185,7 +187,9 @@ class Countries extends Component<PropsType, StateType> {
           ? convertCountriesForSelect({ countries })
           : convertCountriesForSelect({
               countries,
-              checkedCountries: convertCountriesToArrCodes(company.countries),
+              checkedCountries: convertCountriesToArrCodes({
+                countries: company.countries,
+              }),
             }),
       },
       () => {

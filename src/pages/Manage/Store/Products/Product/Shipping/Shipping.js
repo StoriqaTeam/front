@@ -78,7 +78,9 @@ class Shipping extends Component<PropsType, StateType> {
           item => ({
             companyPackageId: item.companyPackageRawId,
             price: item.price,
-            deliveriesTo: convertCountriesToArrCodes(item.countries),
+            deliveriesTo: convertCountriesToArrCodes({
+              countries: item.countries,
+            }),
           }),
           companies,
         );

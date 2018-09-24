@@ -95,9 +95,9 @@ export default (OriginalComponent: any, inter?: boolean) =>
         defaultServices = map(service => {
           if (company.service && company.service.id === service.id) {
             const { countries } = service;
-            const companyCountriesArr = convertCountriesToArrCodes(
-              company.countries,
-            );
+            const companyCountriesArr = convertCountriesToArrCodes({
+              countries: company.countries,
+            });
 
             const newContinentsChildren = map(continent => {
               const newCountriesChildren = filter(
@@ -137,18 +137,18 @@ export default (OriginalComponent: any, inter?: boolean) =>
             const { service } = company;
             const newCompany = {
               ...company,
-              companyPackageRawId: getServiceRawId(
-                company.service && company.service.id,
-                inter
+              companyPackageRawId: getServiceRawId({
+                id: company.service && company.service.id,
+                packages: inter
                   ? this.props.interAvailablePackages
                   : this.props.localAvailablePackages,
-              ),
-              logo: getServiceLogo(
-                company.service && company.service.id,
-                inter
+              }),
+              logo: getServiceLogo({
+                id: company.service && company.service.id,
+                packages: inter
                   ? this.props.interAvailablePackages
                   : this.props.localAvailablePackages,
-              ),
+              }),
               service: service
                 ? { id: service.id, label: service.label }
                 : null,
@@ -180,18 +180,18 @@ export default (OriginalComponent: any, inter?: boolean) =>
             const newCompany = {
               ...company,
               id: `${Date.now()}`,
-              companyPackageRawId: getServiceRawId(
-                company.service && company.service.id,
-                inter
+              companyPackageRawId: getServiceRawId({
+                id: company.service && company.service.id,
+                packages: inter
                   ? this.props.interAvailablePackages
                   : this.props.localAvailablePackages,
-              ),
-              logo: getServiceLogo(
-                company.service && company.service.id,
-                inter
+              }),
+              logo: getServiceLogo({
+                id: company.service && company.service.id,
+                packages: inter
                   ? this.props.interAvailablePackages
                   : this.props.localAvailablePackages,
-              ),
+              }),
               service: service
                 ? { id: service.id, label: service.label }
                 : null,
@@ -270,36 +270,36 @@ export default (OriginalComponent: any, inter?: boolean) =>
         localAvailablePackages,
         currency,
       } = this.props;
-      const service = getService(
-        data.companyPackageId,
-        inter ? interAvailablePackages : localAvailablePackages,
-      );
+      const service = getService({
+        id: data.companyPackageId,
+        packages: inter ? interAvailablePackages : localAvailablePackages,
+      });
 
       let company = {
         id: `${Date.now()}-${idx}`,
-        companyPackageRawId: getServiceRawId(
-          service && service.id,
-          inter ? interAvailablePackages : localAvailablePackages,
-        ),
+        companyPackageRawId: getServiceRawId({
+          id: service && service.id,
+          packages: inter ? interAvailablePackages : localAvailablePackages,
+        }),
         currency,
         price: data.price,
-        logo: getServiceLogo(
-          service && service.id,
-          inter ? interAvailablePackages : localAvailablePackages,
-        ),
+        logo: getServiceLogo({
+          id: service && service.id,
+          packages: inter ? interAvailablePackages : localAvailablePackages,
+        }),
         service,
       };
 
       if (inter) {
         const countries = convertCountriesForSelect({
-          countries: getCountries(
-            data.companyPackageId,
-            interAvailablePackages,
-          ),
-          checkedCountries: convertCountriesToArrCodes(
-            data.deliveriesTo ? head(data.deliveriesTo) : null,
-            true,
-          ),
+          countries: getCountries({
+            id: data.companyPackageId,
+            packages: interAvailablePackages,
+          }),
+          checkedCountries: convertCountriesToArrCodes({
+            countries: data.deliveriesTo ? head(data.deliveriesTo) : null,
+            isSelectedAll: true,
+          }),
         });
         company = { ...company, countries };
       }

@@ -105,7 +105,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleOnChangeCountries = (countries: ?ShippingCountriesType) => {
-    const isCountries = !isEmpty(convertCountriesToArrCodes(countries));
+    const isCountries = !isEmpty(convertCountriesToArrCodes({ countries }));
     this.setState({ countries: isCountries ? countries : null });
   };
 

@@ -42,43 +42,47 @@ export const convertInterAvailablePackages = (
   return newPackages;
 };
 
-export const getServiceLogo = (
+export const getServiceLogo = (params: {
   id: ?string,
-  availablePackages: Array<AvailablePackageType>,
-): string => {
-  if (!id) {
+  packages: Array<AvailablePackageType>,
+}): string => {
+  if (!params.id) {
     return '';
   }
-  const foundPackage = find(propEq('name', id))(availablePackages);
+  const foundPackage = find(propEq('name', params.id))(params.packages);
   return foundPackage ? foundPackage.logo : '';
 };
 
-export const getServiceRawId = (
+export const getServiceRawId = (params: {
   id: ?string,
-  availablePackages: Array<AvailablePackageType>,
-): number => {
-  if (!id) {
+  packages: Array<AvailablePackageType>,
+}): number => {
+  if (!params.id) {
     return -1;
   }
-  const foundPackage = find(propEq('name', id))(availablePackages);
+  const foundPackage = find(propEq('name', params.id))(params.packages);
   return foundPackage ? foundPackage.companyPackageRawId : -1;
 };
 
-export const getService = (
+export const getService = (params: {
   id: string,
-  availablePackages: Array<AvailablePackageType>,
-): ?ServiceType => {
-  const foundPackage = find(propEq('companyPackageId', id))(availablePackages);
+  packages: Array<AvailablePackageType>,
+}): ?ServiceType => {
+  const foundPackage = find(propEq('companyPackageId', params.id))(
+    params.packages,
+  );
   return foundPackage
     ? { id: foundPackage.name, label: foundPackage.name }
     : null;
 };
 
-export const getCountries = (
+export const getCountries = (params: {
   id: string,
-  availablePackages: Array<AvailablePackageType>,
-) => {
-  const foundPackage = find(propEq('companyPackageId', id))(availablePackages);
+  packages: Array<AvailablePackageType>,
+}) => {
+  const foundPackage = find(propEq('companyPackageId', params.id))(
+    params.packages,
+  );
   return foundPackage && foundPackage.deliveriesTo
     ? head(foundPackage.deliveriesTo)
     : null;
@@ -123,10 +127,11 @@ export const convertCountriesForSelect = (params: {
   return null;
 };
 
-export const convertCountriesToArrCodes = (
+export const convertCountriesToArrCodes = (params: {
   countries: ?ShippingCountriesType,
   isSelectedAll?: boolean,
-): Array<string> => {
+}): Array<string> => {
+  const { countries, isSelectedAll } = params;
   if (!countries) {
     return [];
   }
