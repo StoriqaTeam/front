@@ -25,7 +25,7 @@ type PropsTypes = {
   isLoading: boolean,
   pink: boolean,
   fullWidth?: boolean,
-  add?: boolean,
+  add: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -43,6 +43,7 @@ class Button extends PureComponent<PropsTypes> {
     onClick: () => {},
     type: 'button',
     dataTest: 'stqButton',
+    add: false,
   };
   render() {
     const {
