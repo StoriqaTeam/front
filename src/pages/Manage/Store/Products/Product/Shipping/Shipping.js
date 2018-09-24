@@ -68,11 +68,9 @@ class Shipping extends Component<PropsType, StateType> {
     const { companies, inter, pickup, withoutInter, withoutLocal } = data;
     if (withoutInter !== undefined) {
       this.setState({ withoutInter });
-      return;
     }
     if (withoutLocal !== undefined) {
       this.setState({ withoutLocal });
-      return;
     }
     if (companies) {
       if (inter) {
