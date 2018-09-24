@@ -324,16 +324,11 @@ class OrderPage extends PureComponent<PropsType> {
             </div>
           </div>
           {this.props.isAbleToManageOrder &&
-            (orderFromProps.state === 'IN_PROCESSING' ||
-              orderFromProps.state === 'PAYMENT_AWAITED' ||
-              orderFromProps.state === 'IN_PROCESSING') && (
+            orderFromProps.state === 'PAID' && (
               <div styleName="manageBlock">
                 <ManageOrderBlock
-                  isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
-                  isAbleToCancel={
-                    orderFromProps.state === 'PAYMENT_AWAITED' ||
-                    orderFromProps.state === 'IN_PROCESSING'
-                  }
+                  isAbleToSend={orderFromProps.state === 'PAID'}
+                  isAbleToCancel={false}
                   orderSlug={parseInt(order.number, 10)}
                   onOrderSend={this.handleOrderSent}
                   onOrderCancel={this.handleOrderCanceled}

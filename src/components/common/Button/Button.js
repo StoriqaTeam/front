@@ -4,6 +4,8 @@ import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
 
+import { Icon } from 'components/Icon';
+
 import './Button.scss';
 
 type PropsTypes = {
@@ -23,6 +25,7 @@ type PropsTypes = {
   isLoading: boolean,
   pink: boolean,
   fullWidth?: boolean,
+  add?: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -59,6 +62,7 @@ class Button extends PureComponent<PropsTypes> {
       isLoading,
       pink,
       fullWidth,
+      add,
     } = this.props;
 
     const props = {
@@ -81,6 +85,8 @@ class Button extends PureComponent<PropsTypes> {
       isLoading,
       pink,
       fullWidth,
+      add,
+      transparent: isLoading,
     });
 
     if (href !== '') {
@@ -98,8 +104,13 @@ class Button extends PureComponent<PropsTypes> {
         data-test={dataTest}
         {...props}
       >
-        <div styleName={classNames('spinner')} />
-        {!isLoading && <div>{children}</div>}
+        <div styleName="spinner" />
+        <div styleName="children">{children}</div>
+        {add && (
+          <div styleName="plusIcon">
+            <Icon type="plus" size={24} />
+          </div>
+        )}
       </button>
     );
   }

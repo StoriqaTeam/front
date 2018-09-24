@@ -140,6 +140,7 @@ const iconsMap = {
   searchNoResults: <SearchNoResults />,
   status: <Status />,
   calendar: <Calendar />,
+  //
 
   // For product
   mainFoto: <MainFoto />,

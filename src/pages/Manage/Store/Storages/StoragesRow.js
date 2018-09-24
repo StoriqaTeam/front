@@ -22,7 +22,7 @@ type AddressFullType = {
 
 type PropsType = {
   onEdit: () => void,
-  onDelete: () => void,
+  // onDelete: () => void,
   handleCheckboxClick: (id: string | number) => void,
   id: string,
   name: string,
@@ -32,7 +32,7 @@ type PropsType = {
 
 const StoragesRow = ({
   onEdit,
-  onDelete,
+  // onDelete,
   handleCheckboxClick,
   id,
   name,
@@ -74,7 +74,7 @@ const StoragesRow = ({
         >
           <Icon type="note" size={32} />
         </button>
-        <button
+        {/* <button
           styleName="deleteButton"
           onClick={(e: any) => {
             onDelete(id, e);
@@ -82,7 +82,7 @@ const StoragesRow = ({
           data-test="deleteStorageButton"
         >
           <Icon type="basket" size="32" />
-        </button>
+        </button> */}
       </div>
     </Col>
   </div>

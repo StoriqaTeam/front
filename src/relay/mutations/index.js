@@ -67,3 +67,4 @@ export {
 export {
   default as ResendEmailVerificationLinkMutation,
 } from './ResendEmailVerificationLinkMutation';
+export { default as UpsertShippingMutation } from './UpsertShippingMutation';

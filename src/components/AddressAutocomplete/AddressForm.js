@@ -14,6 +14,8 @@ import {
 import Autocomplete from 'react-autocomplete';
 import classNames from 'classnames';
 
+import type { SelectItemType, CountriesType } from 'types';
+
 import { Select } from 'components/common/Select';
 import debounce from 'lodash.debounce';
 import { AutocompleteInput } from 'components/common/AutocompleteInput';
@@ -21,8 +23,7 @@ import { renameCamelCase } from 'utils';
 
 import googleApiWrapper from './GoogleAPIWrapper';
 import AddressResultForm from './AddressResultForm';
-import countries from './countries.json';
-import { getIndexedCountries, getCountryByName } from './utils';
+import { getCountryByName, getIndexedCountries } from './utils';
 
 import './AddressForm.scss';
 
@@ -35,6 +36,7 @@ type AutocompleteItemType = {
 export type AddressFullType = {
   value?: ?string,
   country?: ?string,
+  countryCode?: ?string,
   administrativeAreaLevel1?: ?string,
   administrativeAreaLevel2?: ?string,
   locality?: ?string,
@@ -55,15 +57,11 @@ type PropsType = {
   address: string,
   addressFull: AddressFullType,
   isOpen?: boolean,
-};
-
-type SelectType = {
-  id: string,
-  label: string,
+  countries: CountriesType,
 };
 
 type StateType = {
-  country: ?SelectType,
+  country: ?SelectItemType,
   address: ?any,
   autocompleteValue: string,
   predictions: Array<{ mainText: string, secondaryText: string }>,
@@ -85,10 +83,12 @@ class Form extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const country = find(
       item =>
-        item.name === nextProps.country || item.code === nextProps.country,
-    )(countries);
+        item.alpha2 === nextProps.country ||
+        item.alpha3 === nextProps.country ||
+        item.label === nextProps.country,
+    )(nextProps.countries);
     const propsCountry = country
-      ? { id: country.code, label: country.name }
+      ? { id: country.alpha3, label: country.label }
       : null;
     const uneqCountry =
       JSON.stringify(propsCountry) !== JSON.stringify(prevState.country);
@@ -117,15 +117,19 @@ class Form extends Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    const { addressFull } = props;
+    const { addressFull, countries } = props;
     const country = find(
-      item => item.name === props.country || item.code === props.country,
+      item =>
+        item.alpha2 === props.country ||
+        item.alpha3 === props.country ||
+        item.label === props.country,
     )(countries);
     this.state = {
-      country: country ? { id: country.code, label: country.name } : null,
+      country: country ? { id: country.alpha3, label: country.label } : null,
       address: {
         value: addressFull.value || '',
         country: addressFull.country || '',
+        countryCode: country && country.alpha3 ? country.alpha3 : '',
         administrativeAreaLevel1: addressFull.administrativeAreaLevel1 || '',
         administrativeAreaLevel2: addressFull.administrativeAreaLevel2 || '',
         locality: addressFull.locality || '',
@@ -161,11 +165,12 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleOnSetAddress = (value: string, item: AutocompleteItemType) => {
+    const { countries } = this.props;
     const { country } = this.state;
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
     const componentRestrictions = {
-      country: countryFromResource ? countryFromResource.code : '',
+      country: countryFromResource ? countryFromResource.alpha2 : '',
     };
     this.props.geocoderService.geocode(
       {
@@ -217,7 +222,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleAutocomplete = (value: string) => {
-    const { autocompleteService, onUpdateForm } = this.props;
+    const { autocompleteService, onUpdateForm, countries } = this.props;
     const { country } = this.state;
     const label = country ? country.label : '';
     const countryFromResource = getCountryByName(label, countries);
@@ -231,7 +236,7 @@ class Form extends Component<PropsType, StateType> {
     const inputObj = {
       input: value,
       componentRestrictions: {
-        country: countryFromResource ? countryFromResource.code : '',
+        country: countryFromResource ? countryFromResource.alpha2 : '',
       },
       types: ['geocode'],
     };
@@ -246,7 +251,7 @@ class Form extends Component<PropsType, StateType> {
     this.handleAutocomplete(value);
   };
 
-  handleOnChangeCountry = (value: ?SelectType) => {
+  handleOnChangeCountry = (value: ?SelectItemType) => {
     const { onUpdateForm } = this.props;
     this.setState(
       () => ({ country: value }),
@@ -269,6 +274,7 @@ class Form extends Component<PropsType, StateType> {
           [
             'value',
             'country',
+            'countryCode',
             'administrativeAreaLevel1',
             'administrativeAreaLevel2',
             'locality',
@@ -280,14 +286,15 @@ class Form extends Component<PropsType, StateType> {
           ],
           address,
         ),
-        country: country ? country.label : null,
+        country: country && country.label ? country.label : null,
+        countryCode: country && country.id ? country.id : null,
         value: autocompleteValue,
       });
     }
   };
 
   render() {
-    const { isOpen } = this.props;
+    const { isOpen, countries } = this.props;
     const { country, address, autocompleteValue, predictions } = this.state;
     const countriesArr = getIndexedCountries(countries);
     const countryLabel = country ? country.label : '';
