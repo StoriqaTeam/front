@@ -96,12 +96,12 @@ class EditProduct extends Component<PropsType, StateType> {
     );
     const warehouse =
       warehouses && !isEmpty(warehouses) ? head(warehouses) : null;
-    const countryCode = pathOr(null, ['addressFull', 'country'], warehouse);
+    const countryCode = pathOr(null, ['addressFull', 'countryCode'], warehouse);
 
     if (countryCode && process.env.BROWSER) {
       this.setLoadingPackages(true);
       const variables = {
-        countryCode: 'RUS',
+        countryCode,
         size: 0,
         weight: 0,
       };
@@ -677,7 +677,7 @@ export default createFragmentContainer(
           }
           warehouses {
             addressFull {
-              country
+              countryCode
             }
           }
         }
