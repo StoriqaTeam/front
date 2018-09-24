@@ -40,6 +40,10 @@ class FetcherBase {
     const sessionId = this.getSessionIdFromCookies();
     headers = assoc('Session-Id', sessionId, headers);
 
+    if (!process.env.BROWSER && process.env.NODE_ENV !== 'production') {
+      headers = assoc('Cookie', 'holyshit=iamcool', headers);
+    }
+
     log.debug('\nRequest headers:\n', { headers }, '\n');
 
     try {

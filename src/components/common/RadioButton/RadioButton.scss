@@ -34,6 +34,10 @@
       }
     }
   }
+
+  &.inline {
+    display: inline-block;
+  }
 }
 
 .labelText {
