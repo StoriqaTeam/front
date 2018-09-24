@@ -13,19 +13,19 @@ const items: Array<{ id: string, title: string, text: string }> = [
     id: '0',
     title: 'CRM Analytics',
     text:
-      'Manage your store, sales, employees, warehouses in a convenient interface anywhere in the world. Get statistics and analytics online',
+      'Manage your store, sales, employees, warehouses in a convenient interface anywhere in the world. Get statistics and analytics online.',
   },
   {
     id: '1',
     title: 'CPA networks',
     text:
-      'Use our CPA network in order to advertise your products and increase sales',
+      'Use our CPA network in order to advertise your products and increase sales.',
   },
   {
     id: '2',
     title: 'Mobile Wallet',
     text:
-      'Track all cash inflows in a convenient mobile application, convert and withdraw funds',
+      'Track all cash inflows in a convenient mobile application, convert and withdraw funds.',
   },
 ];
 
