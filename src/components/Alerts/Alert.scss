@@ -1,13 +1,36 @@
 @import '../../styles/variables';
 
 .container {
-  width: 40rem;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: $color_white;
+  justify-content: center;
+  align-items: center;
   box-shadow: 0 7px 21px 5px rgba(0, 0, 0, 0.08);
-  margin: 2rem;
+  position: relative;
+  min-height: 6.25rem;
+
+  &.success {
+    background-color: $color_green;
+  }
+
+  &.success {
+    background-image: $alert_success_background_gradient;
+  }
+
+  &.danger {
+    background-image: $alert_danger_background_gradient;
+  }
+
+  &.warning {
+    background-color: $color_yellow;
+  }
+
+  @media (min-width: $md) {
+    flex-direction: row;
+  }
+  
 }
 
 .disappering {
@@ -24,60 +47,63 @@
   width: 0.25rem;
 }
 
-.default {
-  background-color: $color_grey_minor;
-}
-
-.success {
-  background-color: $color_green;
-}
-
-.warning {
-  background-color: $color_yellow;
-}
-
-.danger {
-  background-color: $color_red;
-}
-
 .closeButton {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 2rem;
+  width: 2rem;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  svg {
+    path {
+      fill: $color_white !important;
+    }
+  }
 }
 
 .titleContainer {
-  display: flex;
-  justify-content: space-between;
-  margin-left: 2rem;
-  margin-top: 1.5rem;
-  margin-right: 1.5rem;
+  margin-top: 1rem;
+
+  @media (min-width: $md) {
+    margin-top: 0;
+  }
 }
 
 .title {
-  color: $color_grey;
+  color: $color_white;
   font-family: $font_regular;
-  font-size: 14px;
+  font-weight: bolder;
+  font-size: 18px;
 }
 
 .alertMessage {
-  margin-left: 2rem;
-  margin-top: 2.5rem;
-  margin-right: 1.5rem;
+  margin: 1rem 0;
   line-height: 1.43;
   letter-spacing: normal;
-  color: $color_grey_minor;
+  color: $color_white;
   font-family: $font_regular;
-  font-size: 14px;
+  font-size: 18px;
+  
+  @media (min-width: $md) {
+    margin: 0 2rem;
+  }
+}
+
+.buttonLink {
+  max-width: 17.25rem;
+  width: 17.25rem;
+  height: 4rem;
+  border-radius: 4px;
+  border: 1px solid $color_white;
+  margin-bottom: 2rem;
+
+  @media (min-width: $md) {
+    margin-bottom: 0;
+  }
 }
 
 .link {
-  color: $color_blue;
-  text-decoration: underline;
+  color: $color_white;
   font-family: $font_regular;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.43;
-  margin-left: 1rem;
-  margin-top: 1.5rem;
-  margin-right: 1.5rem;
-  margin-bottom: 2rem;
 }

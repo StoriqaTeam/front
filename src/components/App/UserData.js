@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { Component } from 'react';
 import { graphql } from 'react-relay';
@@ -6,7 +6,9 @@ import { pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 
 import { setWindowTag } from 'utils';
-import type { UserDataType } from 'types';
+import type { Node } from 'react';
+
+import type UserDataType from './__generated__/UserData_me.graphql';
 
 const TOTAL_FRAGMENT = graphql`
   fragment UserDataTotalLocalFragment on Cart {
@@ -30,15 +32,23 @@ const HEADER_FRAGMENT = graphql`
   }
 `;
 
-type PropsType = {
-  environment: Environment,
-  children: any,
+type StoreType = { getSource: () => { get: (val: string) => {} } };
+
+type SnapshotType = {
+  data: {
+    totalCount: number,
+  },
 };
 
 type StateType = {
   totalCount: number,
   userData: ?UserDataType,
   isShopCreated: boolean,
+};
+
+type PropsType = {
+  environment: Environment,
+  children: StateType => Node,
 };
 
 class UserData extends Component<PropsType, StateType> {
@@ -50,37 +60,27 @@ class UserData extends Component<PropsType, StateType> {
       isShopCreated: false,
     };
     const store = props.environment.getStore();
-    const cartId = pathOr(
-      null,
-      ['cart', '__ref'],
-      store.getSource().get('client:root'),
-    );
+    const getStoreData = this.storeData(store);
+    const cartId = getStoreData('cart');
     const queryNode = TOTAL_FRAGMENT.data();
     const snapshot = store.lookup({
       dataID: cartId,
       node: queryNode,
     });
-    const { dispose } = store.subscribe(snapshot, s => {
-      const newTotalCount = pathOr(0, ['data', 'totalCount'], s);
-      this.updateStateTotalCount(newTotalCount);
+    const { dispose } = store.subscribe(snapshot, snap => {
+      const newTotalCount = this.getTotalCount(snap);
+      this.setTotalCount(newTotalCount);
       // tmp code
       setWindowTag('cartCount', newTotalCount);
       // end tmp code
     });
-    const totalCount = pathOr(0, ['data', 'totalCount'], snapshot);
-
+    const totalCount = this.getTotalCount(snapshot);
     this.dispose = dispose;
-    // $FlowIgnoreMe
     this.state.totalCount = totalCount;
     // tmp code
     setWindowTag('cartCount', totalCount);
     // end tmp code
-
-    const meId = pathOr(
-      null,
-      ['me', '__ref'],
-      store.getSource().get('client:root'),
-    );
+    const meId = getStoreData('me');
     if (!meId) {
       // tmp code
       setWindowTag('user', null);
@@ -92,10 +92,10 @@ class UserData extends Component<PropsType, StateType> {
         dataID: meId,
         node: queryUser,
       });
-      const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
-        this.updateStateUserData(s.data);
+      const { dispose: disposeUser } = store.subscribe(snapshotUser, snap => {
+        this.setUserData(snap.data);
         // tmp code
-        setWindowTag('user', s.data);
+        setWindowTag('user', snap.data);
         // end tmp code
       });
       this.disposeUser = disposeUser;
@@ -116,17 +116,24 @@ class UserData extends Component<PropsType, StateType> {
     }
   }
 
-  updateStateTotalCount = (totalCount: number): void => {
+  getTotalCount = (snapshot: SnapshotType): number =>
+    // $FlowIgnoreMe
+    pathOr(0, ['data', 'totalCount'], snapshot);
+
+  setTotalCount = (totalCount: number): void => {
     this.setState({ totalCount });
+  };
+
+  setUserData = (userData: ?UserDataType): void => {
+    this.setState({ userData });
   };
 
   checkIfStoreCreated = (userData: ?UserDataType): boolean =>
     // $FlowIgnoreMe
     pathOr(false, ['wizardStore', 'completed'], userData);
 
-  updateStateUserData = (userData: ?UserDataType): void => {
-    this.setState({ userData });
-  };
+  storeData = (store: StoreType) => (prop: string) =>
+    pathOr(null, [prop, '__ref'], store.getSource().get('client:root'));
 
   dispose: () => void;
 
