@@ -63,14 +63,23 @@ export default (OriginalComponent: any, inter?: boolean) =>
         (item, idx) => this.makeCompany(item, idx),
         inter ? interShipping : localShipping,
       );
-      onChangeShippingData({ companies, inter });
+      const checkedCompanies = filter(
+        item => item.companyPackageRawId !== -1,
+        companies || [],
+      );
+      onChangeShippingData({
+        companies: checkedCompanies,
+        inter,
+        withoutInter: inter && isEmpty(checkedCompanies),
+        withoutLocal: !inter && isEmpty(checkedCompanies),
+      });
 
       const remainingServices = inter
-        ? this.setRemainingServicesInter(companies)
-        : this.setRemainingServicesLocal(companies);
+        ? this.setRemainingServicesInter(checkedCompanies)
+        : this.setRemainingServicesLocal(checkedCompanies);
 
       this.state = {
-        companies,
+        companies: checkedCompanies,
         editableItemId: null,
         remainingServices,
       };
