@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, map } from 'ramda';
+import { pathOr, map, isEmpty } from 'ramda';
 
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -42,6 +42,8 @@ type PropsType = {
 class Shipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    // $FlowIgnore
+    const shipping = pathOr(null, ['baseProduct', 'shipping'], props);
     this.state = {
       local: [],
       international: [],
@@ -49,8 +51,8 @@ class Shipping extends Component<PropsType, StateType> {
         pickup: false,
         price: 0,
       },
-      withoutInter: false,
-      withoutLocal: false,
+      withoutInter: Boolean(shipping && isEmpty(shipping.international)),
+      withoutLocal: Boolean(shipping && isEmpty(shipping.local)),
     };
     props.onChangeShipping(this.state);
   }
