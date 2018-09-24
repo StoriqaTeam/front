@@ -63,6 +63,7 @@ class ProductMaterial extends Component<PropsType, StateType> {
             )}
             onSelect={this.handleSelect}
             fullWidth
+            dataTest="productMaterialSelect"
           />
         )}
       </div>
