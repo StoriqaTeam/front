@@ -24,22 +24,22 @@ import {
   // $FlowIgnoreMe
   GetJWTByEmailMutation,
   // $FlowIgnoreMe
-  RequestPasswordResetMutation,
-  // $FlowIgnoreMe
   ApplyPasswordResetMutation,
   // $FlowIgnoreMe
   ResendEmailVerificationLinkMutation,
 } from 'relay/mutations';
+
 import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { CreateUserMutationResponse } from 'relay/mutations/__generated__/CreateUserMutation.graphql';
 import type { GetJWTByEmailMutationResponse } from 'relay/mutations/__generated__/GetJWTByEmailMutation.graphql';
-import type { RequestPasswordResetMutationResponse } from 'relay/mutations/__generated__/RequestPasswordResetMutation.graphql';
 import type { ApplyPasswordResetMutationResponse } from 'relay/mutations/__generated__/ApplyPasswordResetMutation.graphql';
 import type { ResendEmailVerificationLinkMutationResponse } from 'relay/mutations/__generated__/ResendEmailVerificationLinkMutation.graphql';
 import type { ResponseErrorType } from 'utils/fromRelayError';
 import { setPathForRedirectAfterLogin } from './utils';
+
+import { requestPasswordResetMutation } from './mutations';
 
 import './Authorization.scss';
 
@@ -350,55 +350,85 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   recoverPassword = (): void => {
-    const { environment } = this.props;
+    const { environment, showAlert } = this.props;
     const { email } = this.state;
-    const params = {
-      input: { clientMutationId: '', email },
+    requestPasswordResetMutation({
       environment,
-      onCompleted: (
-        response: ?RequestPasswordResetMutationResponse,
-        errors: ?Array<ResponseErrorType>,
-      ) => {
-        log.debug({ response, errors });
-        this.setState({ isLoading: false });
-        const relayErrors = fromRelayError({ source: { errors } });
-        if (relayErrors) {
-          // pass showAlert for show alert errors in common cases
-          // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, messages =>
-            this.setState({
-              isLoading: false,
-              errors: messages || null,
-            }),
-          );
-          return;
-        }
+      variables: {
+        input: { clientMutationId: '', email },
+      },
+    })
+      .then(() => {
+        const { onCloseModal } = this.props;
         this.props.showAlert({
           type: 'success',
           text: 'Please verify your email',
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
-        const { onCloseModal } = this.props;
         if (onCloseModal) {
           onCloseModal();
         }
-      },
-      onError: (error: Error): void => {
-        const relayErrors = fromRelayError(error);
+      })
+      .catch((errors: ?Array<ResponseErrorType>) => {
+        const relayErrors = fromRelayError({ source: { errors } });
+        // console.log('relayErrors', relayErrors);
         if (relayErrors) {
-          // pass showAlert for show alert errors in common cases
-          // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, () =>
+          errorsHandler(relayErrors, showAlert, () =>
             this.setState({
               isLoading: false,
               errors: { email: ['Email Not Found'] },
             }),
           );
         }
-      },
-    };
-    RequestPasswordResetMutation.commit(params);
+      });
+    // const params = {
+    //   input: { clientMutationId: '', email },
+    //   environment,
+    //   onCompleted: (
+    //     response: ?RequestPasswordResetMutationResponse,
+    //     errors: ?Array<ResponseErrorType>,
+    //   ) => {
+    //     log.debug({ response, errors });
+    //     this.setState({ isLoading: false });
+    //     const relayErrors = fromRelayError({ source: { errors } });
+    //     if (relayErrors) {
+    //       // pass showAlert for show alert errors in common cases
+    //       // pass handleCallback specify validation errors
+    //       errorsHandler(relayErrors, this.props.showAlert, messages =>
+    //         this.setState({
+    //           isLoading: false,
+    //           errors: messages || null,
+    //         }),
+    //       );
+    //       return;
+    //     }
+    //     this.props.showAlert({
+    //       type: 'success',
+    //       text: 'Please verify your email',
+    //       link: { text: '' },
+    //       onClick: this.handleAlertOnClick,
+    //     });
+    //     const { onCloseModal } = this.props;
+    //     if (onCloseModal) {
+    //       onCloseModal();
+    //     }
+    //   },
+    //   onError: (error: Error): void => {
+    //     const relayErrors = fromRelayError(error);
+    //     if (relayErrors) {
+    //       // pass showAlert for show alert errors in common cases
+    //       // pass handleCallback specify validation errors
+    //       errorsHandler(relayErrors, this.props.showAlert, () =>
+    //         this.setState({
+    //           isLoading: false,
+    //           errors: { email: ['Email Not Found'] },
+    //         }),
+    //       );
+    //     }
+    //   },
+    // };
+    // RequestPasswordResetMutation.commit(params);
   };
 
   resetPassword = (): void => {

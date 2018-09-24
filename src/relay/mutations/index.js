@@ -60,9 +60,7 @@ export {
 export {
   default as RecalcInvoiceAmountMutation,
 } from './RecalcInvoiceAmountMutation';
-export {
-  default as RequestPasswordResetMutation,
-} from './RequestPasswordResetMutation';
+
 export {
   default as ApplyPasswordResetMutation,
 } from './ApplyPasswordResetMutation';
