@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import { propOr } from 'ramda';
+import { propOr, isEmpty } from 'ramda';
 
 import CloseIcon from './svg/close_icon.svg';
 
@@ -57,36 +57,43 @@ class Alert extends Component<AlertPropsType, StateType> {
       <div
         styleName={classnames('container', {
           disappering: this.state.isDisappearing,
+          default: type === 'default',
+          success: type === 'success',
+          danger: type === 'danger',
+          warning: type === 'warning',
         })}
       >
-        <div styleName={classnames('leftEdge', type)} />
+        <button
+          name="alertCloseButton"
+          onClick={() => {
+            this.props.onClose(createdAtTimestamp);
+            if (onClick) {
+              onClick();
+            }
+          }}
+          styleName="closeButton"
+        >
+          <CloseIcon />
+        </button>
+        {/* <div styleName={classnames('leftEdge', type)} /> */}
         <div styleName="titleContainer">
           <div styleName="title">{title}</div>
-          <button
-            name="alertCloseButton"
-            onClick={() => {
-              this.props.onClose(createdAtTimestamp);
-              if (onClick) {
-                onClick();
-              }
-            }}
-            styleName="closeButton"
-          >
-            <CloseIcon />
-          </button>
         </div>
         <div styleName="alertMessage">{text}</div>
         <div styleName="link">
-          <button
-            onClick={() => {
-              this.props.onClose(createdAtTimestamp);
-              if (onClick) {
-                onClick();
-              }
-            }}
-          >
-            <span styleName="link">{link.text}</span>
-          </button>
+          {!isEmpty(link.text) ? (
+            <button
+              styleName="buttonLink"
+              onClick={() => {
+                this.props.onClose(createdAtTimestamp);
+                if (onClick) {
+                  onClick();
+                }
+              }}
+            >
+              <span styleName="link">{link.text}</span>
+            </button>
+          ) : null}
         </div>
       </div>
     );

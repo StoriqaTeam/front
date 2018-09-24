@@ -26,6 +26,7 @@ type NestedObject<T> = { [k: string]: T | NestedObject<T> };
 type addressFullType = {
   value?: ?string,
   country?: ?string,
+  countryCode: ?string,
   administrativeAreaLevel1?: ?string,
   administrativeAreaLevel2?: ?string,
   locality?: ?string,
@@ -78,6 +79,7 @@ class Contacts extends Component<PropsType, StateType> {
     addressFull: {
       value: '',
       country: '',
+      countryCode: null,
       administrativeAreaLevel1: '',
       administrativeAreaLevel2: '',
       locality: '',
