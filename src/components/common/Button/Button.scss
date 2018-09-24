@@ -114,13 +114,35 @@
 }
 
 .wireframe {
+  position: relative;
   background: transparent;
   font-family: $font_regular;
   border: $color_blue 1px solid;
   color: $color_blue;
 
+  &.add {
+    padding-left: 5rem;
+    padding-right: 2rem;
+  }
+
+  .plusIcon {
+    position: absolute;
+    left: 0.75rem;
+
+    svg {
+      fill: $color_blue;
+      transition: $transition_all_ease;
+    }
+  }
+
   &:hover {
     color: $color_white;
+
+    .plusIcon {
+      svg {
+        fill: $color_white;
+      }
+    }
   }
 
   &.disabled {
@@ -158,6 +180,8 @@
   width: 2rem;
   height: 2rem;
   animation: spin 2s linear infinite;
+  left: 50%;
+  margin-left: -1rem;
   // transition: $transition_all_ease;
 }
 
@@ -171,4 +195,11 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(-360deg); }
+}
+
+.transparent {
+  .children,
+  .plusIcon {
+    opacity: 0;
+  }
 }

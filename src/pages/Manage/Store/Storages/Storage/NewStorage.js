@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, isEmpty } from 'ramda';
-import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -24,6 +23,7 @@ type AddressFullType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
   country: string,
+  countryCode: string,
   locality: ?string,
   political: ?string,
   postalCode: string,
@@ -57,6 +57,7 @@ class NewStorage extends Component<PropsType, StateType> {
         administrativeAreaLevel1: '',
         administrativeAreaLevel2: '',
         country: '',
+        countryCode: '',
         locality: '',
         political: '',
         postalCode: '',
@@ -150,22 +151,6 @@ NewStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default createFragmentContainer(
-  withShowAlert(
-    Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
-  ),
-  graphql`
-    fragment NewStorage_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
-        id
-        rawId
-        name {
-          lang
-          text
-        }
-        logo
-      }
-    }
-  `,
+export default withShowAlert(
+  Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
 );

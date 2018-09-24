@@ -56,12 +56,22 @@ type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   comeResponse: boolean,
   resetComeResponse: () => void,
+  closedVariantFormAnnunciator: boolean,
 };
 
 class Variants extends Component<PropsType, StateType> {
   state = {
     isNewVariant: false,
   };
+
+  componentDidUpdate(prevProps: PropsType) {
+    const { closedVariantFormAnnunciator } = this.props;
+    if (
+      closedVariantFormAnnunciator !== prevProps.closedVariantFormAnnunciator
+    ) {
+      this.toggleNewVariantParam(false);
+    }
+  }
 
   handleDeleteVariant = (id: string) => {
     const { environment } = this.context;
@@ -126,6 +136,7 @@ class Variants extends Component<PropsType, StateType> {
       storeID,
       comeResponse,
       resetComeResponse,
+      closedVariantFormAnnunciator,
     } = this.props;
     const { isNewVariant } = this.state;
     return (
@@ -165,6 +176,7 @@ class Variants extends Component<PropsType, StateType> {
             resetComeResponse={resetComeResponse}
             isNewVariant={isNewVariant}
             toggleNewVariantParam={this.toggleNewVariantParam}
+            closedVariantFormAnnunciator={closedVariantFormAnnunciator}
           />
         </div>
       </Fragment>

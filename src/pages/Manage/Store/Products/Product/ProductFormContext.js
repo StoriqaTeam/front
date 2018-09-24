@@ -5,6 +5,8 @@ const ProductFormContext = createContext({
   handleSaveBaseProductWithVariant: () => {},
   comeResponse: true,
   resetComeResponse: () => {},
+  onChangeVariantForm: () => {},
+  variantFormErrors: null,
 });
 
 export default ProductFormContext;

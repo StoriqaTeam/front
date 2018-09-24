@@ -1,12 +1,13 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import type { Node } from 'react';
 import classNames from 'classnames';
 
 import './Col.scss';
 
 type PropsTypes = {
-  children: any,
+  children: Node,
   noGutter: boolean, // no padding
   size?: number, // Size layout column: < 576
   sm?: number | 'auto', // Size layout column: >= 576
@@ -34,6 +35,10 @@ type PropsTypes = {
 };
 
 class Col extends PureComponent<PropsTypes> {
+  static defaultProps = {
+    children: null,
+    noGutter: false,
+  };
   render() {
     const {
       noGutter,

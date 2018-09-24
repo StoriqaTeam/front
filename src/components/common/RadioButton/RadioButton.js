@@ -10,6 +10,7 @@ type PropsType = {
   label?: string,
   isChecked: boolean,
   onChange: Function,
+  inline?: boolean,
 };
 
 class RadioCheckbox extends PureComponent<PropsType> {
@@ -19,10 +20,10 @@ class RadioCheckbox extends PureComponent<PropsType> {
   };
 
   render() {
-    const { id, label, isChecked } = this.props;
+    const { id, label, inline, isChecked } = this.props;
     return (
       <div
-        styleName={classNames('container', { isChecked })}
+        styleName={classNames('container', { isChecked, inline })}
         onClick={this.onChange}
         onKeyDown={() => {}}
         role="button"
