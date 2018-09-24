@@ -14,10 +14,15 @@
 }
 
 .subtitle {
+  display: none;
   margin-bottom: 5rem;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
+
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .moveButton {
@@ -38,14 +43,11 @@
   position: absolute;
   top: -2rem;
   right: 1rem;
-  width: 30rem;
+  width: calc(100% - 2rem);
 
-  @media (max-width: #{$lg - 1px}) {
-    top: 8rem;
-  }
-
-  @media (max-width: #{$md - 1px}) {
-    top: 3rem;
+  @media (min-width: $md) {
+    top: -2rem;
+    width: 30rem;
   }
 }
 

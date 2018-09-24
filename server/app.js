@@ -195,7 +195,7 @@ app.use(
         element,
       )}</div>
       <div id="global-modal-root"></div>
-      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;"></div>
+      <div id="alerts-root" style="right: 0;top: 0;left: 0;position: fixed;z-index: 100;"></div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {

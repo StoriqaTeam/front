@@ -1,9 +1,9 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { pathOr, isEmpty, map, addIndex } from 'ramda';
 import { graphql, createRefetchContainer } from 'react-relay';
+import type { Environment } from 'relay-runtime';
 
 import { Paginator } from 'components/common/Paginator';
 import { withShowAlert } from 'components/App/AlertContext';
@@ -29,6 +29,7 @@ type PropsType = {
     refetch: Function,
   },
   me: StorageProductsMeType,
+  environment: Environment,
 };
 
 type StateType = {
@@ -49,7 +50,7 @@ class StorageProducts extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const warehouseId = pathOr(null, ['me', 'warehouse', 'id'], this.props);
     // const { storageFocusValue: quantity } = this.state;
-    const { environment } = this.context;
+    const { environment } = this.props;
     const params: MutationParamsType = {
       input: {
         clientMutationId: '',
@@ -281,10 +282,6 @@ class StorageProducts extends Component<PropsType, StateType> {
     );
   }
 }
-
-StorageProducts.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
 
 export default createRefetchContainer(
   withShowAlert(
