@@ -12,6 +12,7 @@ import {
   contains,
   head,
   addIndex,
+  assoc,
 } from 'ramda';
 
 import type { SelectItemType } from 'types';
@@ -74,13 +75,29 @@ export default (OriginalComponent: any, inter?: boolean) =>
         item => item.companyPackageRawId !== -1,
         companies || [],
       );
-      onChangeShippingData({
+      let shippingData = {
         companies: checkedCompanies,
         inter,
-        withoutInter: inter && isEmpty(checkedCompanies),
-        withoutLocal:
-          !inter && isEmpty(checkedCompanies) && !pickupShipping.pickup,
-      });
+      };
+      if (inter) {
+        shippingData = assoc(
+          'withoutInter',
+          Boolean(inter && isEmpty(checkedCompanies)),
+          shippingData,
+        );
+      } else {
+        shippingData = assoc(
+          'withoutLocal',
+          Boolean(
+            !inter &&
+              isEmpty(checkedCompanies) &&
+              pickupShipping &&
+              !pickupShipping.pickup,
+          ),
+          shippingData,
+        );
+      }
+      onChangeShippingData(shippingData);
 
       const remainingServices = inter
         ? this.setRemainingServicesInter(checkedCompanies)
