@@ -59,14 +59,10 @@ class LocalShipping extends Component<PropsType, StateType> {
       pickupShipping,
       currency,
       onChangeShippingData,
-      localAvailablePackages,
       localShipping,
     } = props;
     const isSelectedPickup = Boolean(pickupShipping && pickupShipping.pickup);
-    const isSelectedWithout =
-      !localAvailablePackages ||
-      isEmpty(localAvailablePackages) ||
-      (isEmpty(localShipping) && !isSelectedPickup);
+    const isSelectedWithout = isEmpty(localShipping) && !isSelectedPickup;
 
     onChangeShippingData({
       pickup: {
@@ -85,10 +81,6 @@ class LocalShipping extends Component<PropsType, StateType> {
   }
 
   handleOnChangeRadioButton = (id: string) => {
-    const { localAvailablePackages } = this.props;
-    if (!localAvailablePackages || isEmpty(localAvailablePackages)) {
-      return;
-    }
     this.setState(
       {
         isSelectedWithout: id === 'withoutLocalShipping',
@@ -187,20 +179,24 @@ class LocalShipping extends Component<PropsType, StateType> {
                 onChangePrice={this.handleOnChangePickupPrice}
                 price={pickupPrice}
                 currency={pickupCurrency}
+                dataTest="shippingPickupPrice"
               />
             </div>
           </div>
-          <div
-            styleName={classNames('formWrap', {
-              coverPlane: isEmpty(remainingServices) && !isSelectedWithout,
-            })}
-          >
-            <FixPriceForm
-              currency={currency}
-              services={remainingServices}
-              onSaveCompany={onSaveCompany}
-            />
-          </div>
+          {localAvailablePackages &&
+            !isEmpty(localAvailablePackages) && (
+              <div
+                styleName={classNames('formWrap', {
+                  coverPlane: isEmpty(remainingServices) && !isSelectedWithout,
+                })}
+              >
+                <FixPriceForm
+                  currency={currency}
+                  services={remainingServices}
+                  onSaveCompany={onSaveCompany}
+                />
+              </div>
+            )}
           {!isEmpty(companies) && (
             <div styleName="companies">
               {map(

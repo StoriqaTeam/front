@@ -117,15 +117,18 @@ class InterShipping extends Component<PropsType, StateType> {
               onChange={this.handleOnChangeRadioButton}
             />
           </div>
-          <div styleName="radioButton">
-            <RadioButton
-              inline
-              id="interShippingFixPrice"
-              label="Fixed, single price for all"
-              isChecked={isSelectedFixPrice}
-              onChange={this.handleOnChangeRadioButton}
-            />
-          </div>
+          {interAvailablePackages &&
+            !isEmpty(interAvailablePackages) && (
+              <div styleName="radioButton">
+                <RadioButton
+                  inline
+                  id="interShippingFixPrice"
+                  label="Fixed, single price for all"
+                  isChecked={isSelectedFixPrice}
+                  onChange={this.handleOnChangeRadioButton}
+                />
+              </div>
+            )}
         </div>
         <div styleName={classNames('form', { hidePlane: isSelectedWithout })}>
           <div

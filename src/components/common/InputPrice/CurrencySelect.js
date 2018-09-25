@@ -15,6 +15,7 @@ type PropsType = {
   currencies: Array<string>,
   currency: SelectItemType,
   onChangeCurrency: (item: SelectItemType) => void,
+  dataTest: string,
 };
 
 class CurrencySelect extends Component<PropsType, StateType> {
@@ -39,6 +40,7 @@ class CurrencySelect extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { dataTest } = this.props;
     const { currency } = this.state;
     const currencies = map(
       item => ({ id: item, label: item }),
@@ -52,6 +54,7 @@ class CurrencySelect extends Component<PropsType, StateType> {
         items={currencies}
         activeItem={currency}
         onSelect={this.handleOnChange}
+        dataTest={dataTest}
       />
     );
   }
