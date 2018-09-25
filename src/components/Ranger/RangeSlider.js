@@ -1,7 +1,8 @@
 // @flow
 
 import React, { Component, createRef } from 'react';
-
+import { isNil } from 'ramda';
+// $FlowIgnore
 import { InputPrice } from 'components/common/InputPrice';
 
 import './RangeSlider.scss';
@@ -120,28 +121,28 @@ class RangeSlider extends Component<PropsType, StateType> {
 
   formatNumber = (value: number) => Number(value.toFixed(8));
 
-  transferData = () => {
+  transferData = (): void => {
     this.props.onChange({
       thumb1: this.formatNumber(this.state.thumb1),
       thumb2: this.formatNumber(this.state.thumb2),
     });
   };
 
-  handleKeydown = (e: any) => {
+  handleKeydown = (e: SyntheticKeyboardEvent<>): void => {
     const { focusedInput } = this.state;
-    if (e.keyCode === 13 && focusedInput) {
+    if (e.keyCode === 13 && !isNil(focusedInput)) {
       // $FlowIgnore
       this[`${focusedInput}Ref`].blur();
     }
   };
 
-  thumb1Ref: any;
-  thumb2Ref: any;
-  sectionRef: any;
-  thumb1InputRef: any;
-  thumb2InputRef: any;
+  thumb1Ref: { current: null | HTMLInputElement };
+  thumb2Ref: { current: null | HTMLInputElement };
+  sectionRef: { current: null | HTMLDivElement };
+  thumb1InputRef: ?HTMLInputElement;
+  thumb2InputRef: ?HTMLInputElement;
 
-  handleOnChange = (e: any) => {
+  handleOnChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { value, id } = e.target;
     const { stepPhantom } = this.state;
     this.setState(
@@ -150,7 +151,7 @@ class RangeSlider extends Component<PropsType, StateType> {
         [`${id}Phantom`]: parseFloat(value),
         [`${id}InputValue`]: parseFloat(value) * stepPhantom,
       },
-      () => {
+      (): void => {
         this.transferData();
         if (this.state.thumb1Phantom > this.state.thumb2Phantom) {
           this.setState(
@@ -169,23 +170,30 @@ class RangeSlider extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnMouseDown = (e: any) => {
+  handleOnMouseDown = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { id } = e.target;
     if (id === 'thumb1Phantom') {
-      this.thumb1Ref.current.style.zIndex = 3;
+      // $FlowIgnoreMe
+      this.thumb1Ref.current.style.zIndex = '3';
     } else {
+      // $FlowIgnoreMe
       this.thumb1Ref.current.style.zIndex = '';
     }
   };
 
-  handleOnMouseDownSection = (e: any) => {
-    const DOMRect = this.sectionRef.current.getBoundingClientRect();
+  handleOnMouseDownSection = (e: SyntheticMouseEvent<HTMLDivElement>): void => {
+    let DOMRect = {};
+
+    if (!isNil(this.sectionRef.current)) {
+      DOMRect = this.sectionRef.current.getBoundingClientRect();
+    }
 
     // volume (how many in one unit of value)
     const { thumb1Phantom, thumb2Phantom } = this.state;
     const volume = 100 / (DOMRect.width - 16);
 
     // Coordinate
+    // $FlowIgnoreMe
     let coor = e.clientX - DOMRect.x;
     if (coor <= 8) {
       coor = 0;
@@ -207,7 +215,7 @@ class RangeSlider extends Component<PropsType, StateType> {
     this.onChangeEvent('thumb1', thumb, thumb1Phantom);
   };
 
-  handleOnChangeInput = (id: string, value: number) => {
+  handleOnChangeInput = (id: string, value: number): void => {
     if (id === 'thumb1Input') {
       this.setState({ thumb1InputValue: value });
     } else {
@@ -215,11 +223,11 @@ class RangeSlider extends Component<PropsType, StateType> {
     }
   };
 
-  handleOnFocusInput = (id: string) => {
+  handleOnFocusInput = (id: string): void => {
     this.setState({ focusedInput: id });
   };
 
-  handleOnBlurInput = (id: string) => {
+  handleOnBlurInput = (id: string): void => {
     const {
       thumb1InputValue,
       thumb2InputValue,
