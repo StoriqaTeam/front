@@ -44,6 +44,7 @@ type VariantType = {
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues: Array<AttributeValueType>,
+  preOrderDays: string,
 };
 
 type FormType = {
@@ -251,6 +252,8 @@ class EditProduct extends Component<PropsType, StateType> {
           additionalPhotos: variantData.photos,
           cashback: variantData.cashback ? variantData.cashback / 100 : null,
           discount: variantData.discount ? variantData.discount / 100 : null,
+          preOrder: Boolean(variantData.preOrderDays),
+          preOrderDays: parseInt(variantData.preOrderDays, 10),
         },
         attributes: variantData.attributeValues,
       },
@@ -341,6 +344,8 @@ class EditProduct extends Component<PropsType, StateType> {
           additionalPhotos: variantData.photos,
           cashback: variantData.cashback ? variantData.cashback / 100 : null,
           discount: variantData.discount ? variantData.discount / 100 : null,
+          preOrder: Boolean(variantData.preOrderDays),
+          preOrderDays: parseInt(variantData.preOrderDays, 10),
         },
         attributes: variantData.attributeValues,
       },
@@ -626,6 +631,8 @@ export default createFragmentContainer(
               vendorCode
               cashback
               price
+              preOrder
+              preOrderDays
               attributes {
                 attrId
                 value

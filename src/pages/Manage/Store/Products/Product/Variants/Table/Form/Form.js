@@ -44,6 +44,7 @@ type StateType = {
     attributes?: Array<string>,
   },
   isLoading: boolean,
+  preOrderDays: string,
 };
 
 type PropsType = {
@@ -73,6 +74,8 @@ type PropsType = {
         },
       },
     },
+    preOrder: boolean,
+    preOrderDays: number,
   },
   onExpandClick: (id: string) => void,
   onChangeVariantForm: (variantData: ?VariantType) => void,
@@ -100,6 +103,7 @@ class Form extends Component<PropsType, StateType> {
         price: null,
         formErrors: undefined,
         isLoading: false,
+        preOrderDays: '',
       };
     } else {
       this.state = {
@@ -112,6 +116,10 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: this.resetAttrValues(),
         formErrors: undefined,
         isLoading: false,
+        preOrderDays:
+          product.preOrder && product.preOrderDays
+            ? `${product.preOrderDays}`
+            : '',
       };
     }
 
@@ -274,9 +282,22 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ [id]: parseFloat(value) });
   };
 
+  handleOnChangePreOrderDays = (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    const regexp = /(^\d*$)/;
+    if (!regexp.test(value)) {
+      return;
+    }
+    this.setState({
+      preOrderDays: value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1'),
+    });
+  };
+
   renderVariant = () => {
     const { formErrors } = this.props;
-    const { vendorCode, price, cashback, discount } = this.state;
+    const { vendorCode, price, cashback, discount, preOrderDays } = this.state;
     return (
       <div styleName="variant">
         <div styleName="inputWidth">
@@ -339,6 +360,17 @@ class Form extends Component<PropsType, StateType> {
             <span styleName="inputPostfix">Percent</span>
           </div>
         </div>
+        <div styleName="inputWidth">
+          <div styleName="inputWidth">
+            <Input
+              fullWidth
+              label="Pre-order days"
+              onChange={this.handleOnChangePreOrderDays}
+              value={preOrderDays}
+              dataTest="variantPreOrderDaysInput"
+            />
+          </div>
+        </div>
       </div>
     );
   };
@@ -371,31 +403,6 @@ class Form extends Component<PropsType, StateType> {
         {variant &&
           variant.stocks &&
           !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
-        {/* <div styleName="buttons">
-          <div styleName="saveButton">
-            <Button
-              isLoading={isLoading || isLoadingLocal}
-              big
-              fullWidth
-              type="button"
-              onClick={
-                isNewVariant ? this.handleCreateVariant : this.handleSaveProduct
-              }
-              dataTest="variantsProductSaveButton"
-            >
-              Save
-            </Button>
-          </div>
-          {isNewVariant && (
-            <button
-              styleName="cancelButton"
-              onClick={() => toggleNewVariantParam(false)}
-              data-test="cancelNewVariantButton"
-            >
-              Cancel
-            </button>
-          )}
-        </div> */}
       </div>
     );
   }

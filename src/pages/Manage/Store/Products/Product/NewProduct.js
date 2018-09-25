@@ -42,6 +42,7 @@ type VariantType = {
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues: Array<AttributeValueType>,
+  preOrderDays: string,
 };
 
 type FormType = {
@@ -249,6 +250,7 @@ class NewProduct extends Component<PropsType, StateType> {
       photos: additionalPhotos,
       cashback,
       attributeValues: attributes,
+      preOrderDays,
     } = variantData;
     const params: CreateProductWithAttributesMutationType = {
       input: {
@@ -260,6 +262,8 @@ class NewProduct extends Component<PropsType, StateType> {
           photoMain,
           additionalPhotos,
           cashback: cashback ? cashback / 100 : null,
+          preOrder: Boolean(preOrderDays),
+          preOrderDays: parseInt(preOrderDays, 10),
         },
         attributes,
       },
@@ -517,6 +521,8 @@ export default createFragmentContainer(
                     id
                     rawId
                     price
+                    preOrder
+                    preOrderDays
                     discount
                     photoMain
                     additionalPhotos

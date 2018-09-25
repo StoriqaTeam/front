@@ -49,6 +49,8 @@ const mutation = graphql`
       vendorCode
       cashback
       price
+      preOrder
+      preOrderDays
       attributes {
         attrId
         value
