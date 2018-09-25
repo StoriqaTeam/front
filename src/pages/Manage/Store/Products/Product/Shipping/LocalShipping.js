@@ -14,7 +14,6 @@ import type {
   ServiceType,
   CompanyType,
   AvailablePackageType,
-  ShippingType,
 } from './types';
 
 import FixPriceForm from './FixPriceForm';
@@ -34,7 +33,6 @@ type StateType = {
 type PropsType = {
   // From Shipping Component
   currency: SelectItemType,
-  localShipping: ShippingType,
   pickupShipping: PickupShippingType,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
 
@@ -55,14 +53,9 @@ type PropsType = {
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const {
-      pickupShipping,
-      currency,
-      onChangeShippingData,
-      localShipping,
-    } = props;
+    const { pickupShipping, currency, onChangeShippingData, companies } = props;
     const isSelectedPickup = Boolean(pickupShipping && pickupShipping.pickup);
-    const isSelectedWithout = isEmpty(localShipping) && !isSelectedPickup;
+    const isSelectedWithout = isEmpty(companies) && !isSelectedPickup;
 
     onChangeShippingData({
       pickup: {
