@@ -52,7 +52,9 @@ class Shipping extends Component<PropsType, StateType> {
         price: 0,
       },
       withoutInter: Boolean(shipping && isEmpty(shipping.international)),
-      withoutLocal: !shipping.pickup.pickup,
+      withoutLocal: Boolean(
+        shipping && shipping.pickup && !shipping.pickup.pickup,
+      ),
     };
     props.onChangeShipping(this.state);
   }

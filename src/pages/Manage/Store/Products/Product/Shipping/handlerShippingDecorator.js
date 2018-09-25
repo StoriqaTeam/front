@@ -77,9 +77,13 @@ export default (OriginalComponent: any, inter?: boolean) =>
       onChangeShippingData({
         companies: checkedCompanies,
         inter,
-        withoutInter: inter && isEmpty(checkedCompanies),
-        withoutLocal:
-          !inter && isEmpty(checkedCompanies) && !pickupShipping.pickup,
+        withoutInter: Boolean(inter && isEmpty(checkedCompanies)),
+        withoutLocal: Boolean(
+          !inter &&
+            isEmpty(checkedCompanies) &&
+            pickupShipping &&
+            !pickupShipping.pickup,
+        ),
       });
 
       const remainingServices = inter
