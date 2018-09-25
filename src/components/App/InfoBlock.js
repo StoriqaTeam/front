@@ -1,10 +1,28 @@
+// @flow strict
+
 import React, { Component } from 'react';
 
 import { Icon } from 'components/Icon';
 
+import type { IconSizeType } from 'types';
+
 import './InfoBlock.scss';
 
-class InfoBlock extends Component {
+type StateType = {
+  social: Array<{
+    id: string,
+    type: string,
+    size: IconSizeType,
+    href: string,
+  }>,
+  links: Array<{
+    id: string,
+    href: string,
+    name: string,
+  }>,
+};
+
+class InfoBlock extends Component<{}, StateType> {
   state = {
     social: [
       {

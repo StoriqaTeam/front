@@ -1,4 +1,6 @@
+// @flow strict
 import React from 'react';
+import type { Node } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -9,7 +11,7 @@ import './MobileSearchMenu.scss';
 type PropsType = {
   isOpen: boolean,
   onClick: () => void,
-  children: any,
+  children: Node,
 };
 
 const MobileSearchMenu = ({ isOpen, onClick, children }: PropsType) => (
@@ -30,7 +32,7 @@ const MobileSearchMenu = ({ isOpen, onClick, children }: PropsType) => (
           styleName="close"
           tabIndex="-1"
         >
-          <Icon type="cross" size="16" />
+          <Icon type="cross" size={16} />
         </span>
       </Col>
     </Row>
