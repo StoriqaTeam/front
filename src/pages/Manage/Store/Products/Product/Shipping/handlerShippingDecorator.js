@@ -35,6 +35,7 @@ import type {
   ServiceType,
   ShippingType,
   AvailablePackageType,
+  PickupShippingType,
 } from './types';
 
 type PropsType = {
@@ -45,6 +46,7 @@ type PropsType = {
   localAvailablePackages: Array<AvailablePackageType>,
   interAvailablePackages: Array<AvailablePackageType>,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
+  pickupShipping: PickupShippingType,
 };
 
 type StateType = {
@@ -58,7 +60,12 @@ export default (OriginalComponent: any, inter?: boolean) =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
     constructor(props: PropsType) {
       super(props);
-      const { interShipping, localShipping, onChangeShippingData } = props;
+      const {
+        interShipping,
+        localShipping,
+        onChangeShippingData,
+        pickupShipping,
+      } = props;
       const companies = addIndex(map)(
         (item, idx) => this.makeCompany(item, idx),
         inter ? interShipping : localShipping,
@@ -71,7 +78,8 @@ export default (OriginalComponent: any, inter?: boolean) =>
         companies: checkedCompanies,
         inter,
         withoutInter: inter && isEmpty(checkedCompanies),
-        withoutLocal: !inter && isEmpty(checkedCompanies),
+        withoutLocal:
+          !inter && isEmpty(checkedCompanies) && !pickupShipping.pickup,
       });
 
       const remainingServices = inter
