@@ -67,7 +67,7 @@ type AttrFilterType = {
 class SearchSidebar extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
-  
+
     const minValue = pathOr(
       0,
       [
@@ -80,7 +80,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       props,
     );
-  
+
     const maxValue = pathOr(
       0,
       [
@@ -93,13 +93,13 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       props,
     );
-  
+
     let thumb1 = pathOr(
       null,
       ['match', 'location', 'query', 'minValue'],
       props,
     );
-  
+
     let thumb2 = pathOr(
       null,
       ['match', 'location', 'query', 'maxValue'],
@@ -149,7 +149,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       this.props,
     );
-    
+
     // $FlowIgnore
     const maxValue = pathOr(
       0,

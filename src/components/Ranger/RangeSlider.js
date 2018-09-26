@@ -7,7 +7,6 @@ import { InputPrice } from 'components/common/InputPrice';
 
 import './RangeSlider.scss';
 
-
 type PropsType = {
   thumb1: number,
   thumb2: number,
@@ -323,7 +322,7 @@ class RangeSlider extends Component<PropsType, StateType> {
               onBlur={() => this.handleOnBlurInput('thumb1Input')}
               onFocus={() => this.handleOnFocusInput('thumb1Input')}
               price={this.formatNumber(thumb1InputValue)}
-              align="center"
+              align="left"
             />
           </div>
           <div>
@@ -338,7 +337,7 @@ class RangeSlider extends Component<PropsType, StateType> {
               onFocus={() => this.handleOnFocusInput('thumb2Input')}
               onBlur={() => this.handleOnBlurInput('thumb2Input')}
               price={this.formatNumber(thumb2InputValue)}
-              align="center"
+              align="left"
             />
           </div>
         </div>
