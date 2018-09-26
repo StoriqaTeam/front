@@ -114,7 +114,7 @@ class Shipping extends Component<PropsType, StateType> {
       baseProduct,
     );
     // $FlowIgnore
-    const pickupShipping = pathOr(null, ['shipping', 'pickup'], baseProduct);
+    const pickupShipping = pathOr({}, ['shipping', 'pickup'], baseProduct);
     // $FlowIgnore
     const localAvailablePackages = pathOr(
       [],
