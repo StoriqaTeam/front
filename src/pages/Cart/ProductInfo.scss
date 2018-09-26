@@ -101,3 +101,15 @@
   height: 2px;
   background-color: $color_grey;
 }
+
+.preOrder {
+  margin-bottom: 1.75rem;
+
+  .preOrderText {
+    color: $color_grey_minor;
+
+    .preOrderDays {
+      color: $color_green;
+    }
+  }
+}

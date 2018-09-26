@@ -270,6 +270,7 @@ class Product extends Component<PropsType, StateType> {
       availableAttributes,
     } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
+    console.log('---baseProduct', baseProduct);
     return (
       <AppContext.Consumer>
         {({ categories }) => (
@@ -300,6 +301,7 @@ class Product extends Component<PropsType, StateType> {
                         availableAttributes={availableAttributes}
                         onWidgetClick={this.handleWidget}
                         unselectedAttr={unselectedAttr}
+                        productVariant={productVariant}
                       >
                         <ProductButtons
                           onAddToCart={() =>
@@ -360,6 +362,8 @@ export default createFragmentContainer(
           photoMain
           additionalPhotos
           price
+          preOrder
+          preOrderDays
           cashback
           discount
           quantity

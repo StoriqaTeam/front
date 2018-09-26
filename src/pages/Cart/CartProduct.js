@@ -268,6 +268,8 @@ export default createFragmentContainer(
       }
       photoMain
       price
+      preOrder
+      preOrderDays
       quantity
       comment
       selected
