@@ -7,6 +7,18 @@ import { InputPrice } from 'components/common/InputPrice';
 
 import './RangeSlider.scss';
 
+
+type PropsType = {
+  thumb1: number,
+  thumb2: number,
+  minValue: number,
+  maxValue: number,
+  onChange: ({
+    thumb1: number,
+    thumb2: number,
+  }) => void,
+};
+
 type StateType = {
   thumb1: number,
   thumb2: number,
@@ -18,17 +30,6 @@ type StateType = {
   thumb1Phantom: number,
   thumb2Phantom: number,
   stepPhantom: number,
-};
-
-type PropsType = {
-  thumb1: number,
-  thumb2: number,
-  minValue: number,
-  maxValue: number,
-  onChange: ({
-    thumb1: number,
-    thumb2: number,
-  }) => void,
 };
 
 class RangeSlider extends Component<PropsType, StateType> {
@@ -119,12 +120,14 @@ class RangeSlider extends Component<PropsType, StateType> {
     );
   };
 
-  formatNumber = (value: number) => Number(value.toFixed(8));
+  formatNumber = (value: number): number => Number(value.toFixed());
 
   transferData = (): void => {
-    this.props.onChange({
-      thumb1: this.formatNumber(this.state.thumb1),
-      thumb2: this.formatNumber(this.state.thumb2),
+    const { onChange } = this.props;
+    const { thumb1, thumb2 } = this.state;
+    onChange({
+      thumb1: this.formatNumber(thumb1),
+      thumb2: this.formatNumber(thumb2),
     });
   };
 
@@ -314,7 +317,7 @@ class RangeSlider extends Component<PropsType, StateType> {
                 this.thumb1InputRef = node;
               }}
               id="thumb1Input"
-              onChangePrice={(value: number) => {
+              onChangePrice={(value: number): void => {
                 this.handleOnChangeInput('thumb1Input', value);
               }}
               onBlur={() => this.handleOnBlurInput('thumb1Input')}
