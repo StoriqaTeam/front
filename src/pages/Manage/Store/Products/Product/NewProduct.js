@@ -42,6 +42,7 @@ type VariantType = {
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues: Array<AttributeValueType>,
+  preOrder: boolean,
   preOrderDays: string,
 };
 
@@ -250,6 +251,7 @@ class NewProduct extends Component<PropsType, StateType> {
       photos: additionalPhotos,
       cashback,
       attributeValues: attributes,
+      preOrder,
       preOrderDays,
     } = variantData;
     const params: CreateProductWithAttributesMutationType = {
@@ -262,8 +264,8 @@ class NewProduct extends Component<PropsType, StateType> {
           photoMain,
           additionalPhotos,
           cashback: cashback ? cashback / 100 : null,
-          preOrder: Boolean(preOrderDays),
-          preOrderDays: parseInt(preOrderDays, 10),
+          preOrder,
+          preOrderDays: Number(preOrderDays),
         },
         attributes,
       },
@@ -358,6 +360,7 @@ class NewProduct extends Component<PropsType, StateType> {
     } = shippingData;
     const params: UpsertShippingMutationType = {
       input: {
+        clientMutationId: '',
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
         pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,

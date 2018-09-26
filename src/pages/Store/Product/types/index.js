@@ -91,6 +91,8 @@ export type ProductVariantType = {
   discount: ?number,
   description: string,
   quantity: number,
+  preOrder: boolean,
+  preOrderDays: number,
 };
 
 export type SelectionType = {

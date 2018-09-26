@@ -103,6 +103,8 @@ class Product extends Component<PropsType, StateType> {
         cashback: null,
         discount: null,
         quantity: 0,
+        preOrder: false,
+        preOrderDays: 0,
       },
       unselectedAttr: null,
       selectedAttributes: {},
@@ -270,7 +272,6 @@ class Product extends Component<PropsType, StateType> {
       availableAttributes,
     } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
-    console.log('---baseProduct', baseProduct);
     return (
       <AppContext.Consumer>
         {({ categories }) => (
@@ -309,6 +310,8 @@ class Product extends Component<PropsType, StateType> {
                           }
                           unselectedAttr={unselectedAttr}
                           quantity={productVariant.quantity}
+                          preOrder={productVariant.preOrder}
+                          preOrderDays={productVariant.preOrderDays}
                         />
                         <div styleName="line" />
                         <ProductStore />
