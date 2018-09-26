@@ -146,12 +146,12 @@ class RangeSlider extends Component<PropsType, StateType> {
 
   handleOnChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { value, id } = e.target;
-    const { stepPhantom } = this.state;
+    const { stepPhantom, minValue } = this.state;
     this.setState(
-      {
-        [id]: parseFloat(value) * stepPhantom,
+       {
+        [id]: parseFloat(value) ? parseFloat(value) * stepPhantom : minValue,
         [`${id}Phantom`]: parseFloat(value),
-        [`${id}InputValue`]: parseFloat(value) * stepPhantom,
+        [`${id}InputValue`]: parseFloat(value) ? parseFloat(value) * stepPhantom : minValue,
       },
       (): void => {
         this.transferData();
