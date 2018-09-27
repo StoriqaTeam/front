@@ -46,7 +46,7 @@ class InfoBlock extends Component {
       },
       {
         id: '1',
-        href: 'https://s3.eu-west-2.amazonaws.com/storiqa/Privacy+Policy.pdf',
+        href: 'https://beta.storiqa.com/privacy_policy.pdf',
         name: 'Privacy Policy',
       },
       {
@@ -56,7 +56,7 @@ class InfoBlock extends Component {
       },
       {
         id: '3',
-        href: 'https://s3.eu-west-2.amazonaws.com/storiqa/Terms+of+use.pdf',
+        href: 'https://beta.storiqa.com/terms_of_use.pdf',
         name: 'Terms of Use',
       },
     ],
