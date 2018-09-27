@@ -46,7 +46,7 @@ class InfoBlock extends Component {
       },
       {
         id: '1',
-        href: '/',
+        href: 'https://s3.eu-west-2.amazonaws.com/storiqa/Privacy+Policy.pdf',
         name: 'Privacy Policy',
       },
       {
@@ -56,8 +56,8 @@ class InfoBlock extends Component {
       },
       {
         id: '3',
-        href: '/',
-        name: 'Conditions of use',
+        href: 'https://s3.eu-west-2.amazonaws.com/storiqa/Terms+of+use.pdf',
+        name: 'Terms of Use',
       },
     ],
   };
@@ -76,7 +76,12 @@ class InfoBlock extends Component {
         <ul styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
             <li key={id} styleName="aboutNavItem">
-              <a styleName="link" href={href}>
+              <a
+                styleName="link"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {name}
               </a>
             </li>
