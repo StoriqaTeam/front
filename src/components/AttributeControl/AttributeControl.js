@@ -94,7 +94,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
     } else if (isMultiSelectable && !value) {
       onChange([val]);
     } else {
-      onChange([val]);
+      onChange([receivedVal]);
     }
   };
 
