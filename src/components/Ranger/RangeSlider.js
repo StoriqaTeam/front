@@ -5,7 +5,7 @@ import { isNil } from 'ramda';
 // $FlowIgnore
 import { InputPrice } from 'components/common/InputPrice';
 
-import { setRefValue, setZindex } from './utils';
+import { calcStep, setRefValue, setZindex } from './utils';
 
 import './RangeSlider.scss';
 
@@ -115,7 +115,7 @@ class RangeSlider extends Component<PropsType, StateType> {
   getInputPriceRef = (id: ThumbInputNameType): ?HTMLInputElement =>
     id === 'thumb1Input' ? this.thumb1InputRef : this.thumb2InputRef;
 
-  setValues = (id: ThumbNameType, value: number) => {
+  setValues = (id: ThumbNameType, value: number): void => {
     const { stepPhantom } = this.state;
     const thumbRef = this.getThumbRef(id);
     const roundedValue = Math.round(value / stepPhantom);
@@ -161,25 +161,26 @@ class RangeSlider extends Component<PropsType, StateType> {
   handleOnChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { value, id } = e.target;
     const { stepPhantom, minValue } = this.state;
+    const step: number => number = calcStep(stepPhantom);
+    const parsedValue = parseFloat(value);
+    const inputValue = parsedValue ? step(parsedValue) : minValue;
     this.setState(
       {
-        [id]: parseFloat(value) ? parseFloat(value) * stepPhantom : minValue,
-        [`${id}Phantom`]: parseFloat(value),
-        [`${id}InputValue`]: parseFloat(value)
-          ? parseFloat(value) * stepPhantom
-          : minValue,
+        [id]: inputValue,
+        [`${id}Phantom`]: parsedValue,
+        [`${id}InputValue`]: inputValue,
       },
       (): void => {
         this.transferData();
         if (this.state.thumb1Phantom > this.state.thumb2Phantom) {
           this.setState(
             (prevState: StateType) => ({
-              thumb1: prevState.thumb2 * stepPhantom,
-              thumb2: prevState.thumb1 * stepPhantom,
+              thumb1: step(prevState.thumb2),
+              thumb2: step(prevState.thumb1),
               thumb1Phantom: prevState.thumb2Phantom,
               thumb2Phantom: prevState.thumb1Phantom,
-              thumb1InputValue: prevState.thumb2Phantom * stepPhantom,
-              thumb2InputValue: prevState.thumb1Phantom * stepPhantom,
+              thumb1InputValue: step(prevState.thumb2Phantom),
+              thumb2InputValue: step(prevState.thumb1Phantom),
             }),
             this.transferData,
           );
