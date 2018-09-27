@@ -9,6 +9,9 @@ import { setZindex } from './utils';
 
 import './RangeSlider.scss';
 
+type InputRefType = { current: null | HTMLInputElement};
+type DivRefType = { current: null | HTMLDivElement};
+
 type PropsType = {
   thumb1: number,
   thumb2: number,
@@ -87,25 +90,30 @@ class RangeSlider extends Component<PropsType, StateType> {
       window.removeEventListener('keydown', this.handleKeydown);
     }
   }
-
+  
   onChangeEvent = (
     id: 'thumb1' | 'thumb2',
     value: number,
     prevValue: number,
   ) => {
+    const thumbRef = this.getThumbRef(id);
     const event = new Event('input', { bubbles: true });
     // $FlowIgnore
     event.simulated = true;
+    if (!isNil(thumbRef.current)) {
+      thumbRef.current.value = `${value}`;
+    }
     // $FlowIgnore
-    this[`${id}Ref`].current.value = value;
-    // $FlowIgnore
-    const tracker = this[`${id}Ref`].current._valueTracker; // eslint-disable-line
+    const tracker = thumbRef.current._valueTracker; // eslint-disable-line
     if (tracker) {
       tracker.setValue(prevValue);
     }
-    // $FlowIgnore
-    this[`${id}Ref`].current.dispatchEvent(event);
+    if (!isNil(thumbRef.current)) {
+       thumbRef.current.dispatchEvent(event);
+    }
   };
+
+  getThumbRef = (id: 'thumb1' | 'thumb2'): InputRefType => id === 'thumb1' ? this.thumb1Ref : this.thumb2Ref;
 
   setValues = (id: 'thumb1' | 'thumb2', value: number) => {
     const { stepPhantom } = this.state;
@@ -140,9 +148,9 @@ class RangeSlider extends Component<PropsType, StateType> {
     }
   };
 
-  thumb1Ref: { current: null | HTMLInputElement };
-  thumb2Ref: { current: null | HTMLInputElement };
-  sectionRef: { current: null | HTMLDivElement };
+  thumb1Ref: InputRefType;
+  thumb2Ref: InputRefType;
+  sectionRef: DivRefType;
   thumb1InputRef: ?HTMLInputElement;
   thumb2InputRef: ?HTMLInputElement;
 
@@ -179,7 +187,7 @@ class RangeSlider extends Component<PropsType, StateType> {
   handleOnMouseDown = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { id } = e.target;
     const { current } = this.thumb1Ref;
-    const applyZindex: (string) => ?HTMLInputElement = setZindex(current);
+    const applyZindex: string => ?HTMLInputElement = setZindex(current);
     if (id === 'thumb1Phantom') {
       applyZindex('3');
     } else {
