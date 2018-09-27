@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { map, find, whereEq, propOr } from 'ramda';
+import { map, find, whereEq, propOr, isEmpty } from 'ramda';
 
 import { AppContext } from 'components/App';
 import { getCookie } from 'utils';
@@ -61,31 +61,32 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
             <Fragment>
               <div>
                 {priceElement}
-                {React.cloneElement(
-                  this.props.renderDropdownToggle(this.state.isDropdownShown),
-                  {
-                    onClick: (e: any) => {
-                      e.persist();
-                      e.preventDefault();
-                      e.stopPropagation();
-                      e.nativeEvent.stopImmediatePropagation();
-                      this.setState(
-                        prevState => ({
-                          isDropdownShown: !prevState.isDropdownShown,
-                        }),
-                        () => {
-                          if (this.props.onDropdownToggleClick) {
-                            this.props.onDropdownToggleClick(
-                              e,
-                              values,
-                              this.state.isDropdownShown,
-                            );
-                          }
-                        },
-                      );
+                {!isEmpty(values) &&
+                  React.cloneElement(
+                    this.props.renderDropdownToggle(this.state.isDropdownShown),
+                    {
+                      onClick: (e: any) => {
+                        e.persist();
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
+                        this.setState(
+                          prevState => ({
+                            isDropdownShown: !prevState.isDropdownShown,
+                          }),
+                          () => {
+                            if (this.props.onDropdownToggleClick) {
+                              this.props.onDropdownToggleClick(
+                                e,
+                                values,
+                                this.state.isDropdownShown,
+                              );
+                            }
+                          },
+                        );
+                      },
                     },
-                  },
-                )}
+                  )}
                 {this.state.isDropdownShown &&
                   this.props.renderDropdown(values)}
               </div>

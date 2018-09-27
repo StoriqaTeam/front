@@ -157,11 +157,15 @@ class RangeSlider extends Component<PropsType, StateType> {
         if (this.state.thumb1Phantom > this.state.thumb2Phantom) {
           this.setState(
             (prevState: StateType) => ({
-              thumb1: prevState.thumb2 * stepPhantom,
+              thumb1: prevState.thumb2
+                ? prevState.thumb2 * stepPhantom
+                : prevState.minValue,
               thumb2: prevState.thumb1 * stepPhantom,
               thumb1Phantom: prevState.thumb2Phantom,
               thumb2Phantom: prevState.thumb1Phantom,
-              thumb1InputValue: prevState.thumb2Phantom * stepPhantom,
+              thumb1InputValue: prevState.thumb2Phantom
+                ? prevState.thumb2Phantom * stepPhantom
+                : prevState.minValue,
               thumb2InputValue: prevState.thumb1Phantom * stepPhantom,
             }),
             this.transferData,
