@@ -5,7 +5,7 @@ import { isNil } from 'ramda';
 // $FlowIgnore
 import { InputPrice } from 'components/common/InputPrice';
 
-import { setZindex } from './utils';
+import { setRefValue, setZindex } from './utils';
 
 import './RangeSlider.scss';
 
@@ -97,9 +97,7 @@ class RangeSlider extends Component<PropsType, StateType> {
     const event = new Event('input', { bubbles: true });
     // $FlowIgnore
     event.simulated = true;
-    if (!isNil(thumbRef.current)) {
-      thumbRef.current.value = `${value}`;
-    }
+    setRefValue(thumbRef.current)(`${value}`);
     // $FlowIgnore
     const tracker = thumbRef.current._valueTracker; // eslint-disable-line
     if (tracker) {
