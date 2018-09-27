@@ -2,7 +2,7 @@
 
 import React, { Component, createRef } from 'react';
 import { isNil } from 'ramda';
-// $FlowIgnore
+
 import { InputPrice } from 'components/common/InputPrice';
 
 import { calcStep, setRefValue, setZindex } from './utils';

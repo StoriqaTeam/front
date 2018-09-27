@@ -1,4 +1,4 @@
-// @flow strict 
+// @flow strict
 
 import React from 'react';
 
@@ -9,10 +9,7 @@ type PropsType = {
   thumb2Phantom: number,
 };
 
-const RangeSliderTrack = ({
-  thumb1Phantom,
-  thumb2Phantom,
-}: PropsType) => (
+const RangeSliderTrack = ({ thumb1Phantom, thumb2Phantom }: PropsType) => (
   <div styleName="container">
     <div styleName="track" />
     <div
