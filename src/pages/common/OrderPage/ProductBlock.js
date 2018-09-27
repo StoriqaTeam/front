@@ -23,6 +23,8 @@ export type ProductDTOType = {
     name: string,
     value: string,
   }>,
+  preOrder: boolean,
+  preOrderDays: number,
 };
 
 type PropsType = {

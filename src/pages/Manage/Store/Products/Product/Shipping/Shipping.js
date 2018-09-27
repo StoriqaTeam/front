@@ -52,7 +52,9 @@ class Shipping extends Component<PropsType, StateType> {
         price: 0,
       },
       withoutInter: Boolean(shipping && isEmpty(shipping.international)),
-      withoutLocal: Boolean(shipping && isEmpty(shipping.local)),
+      withoutLocal: Boolean(
+        shipping && shipping.pickup && !shipping.pickup.pickup,
+      ),
     };
     props.onChangeShipping(this.state);
   }
@@ -68,11 +70,9 @@ class Shipping extends Component<PropsType, StateType> {
     const { companies, inter, pickup, withoutInter, withoutLocal } = data;
     if (withoutInter !== undefined) {
       this.setState({ withoutInter });
-      return;
     }
     if (withoutLocal !== undefined) {
       this.setState({ withoutLocal });
-      return;
     }
     if (companies) {
       if (inter) {
@@ -114,7 +114,7 @@ class Shipping extends Component<PropsType, StateType> {
       baseProduct,
     );
     // $FlowIgnore
-    const pickupShipping = pathOr(null, ['shipping', 'pickup'], baseProduct);
+    const pickupShipping = pathOr({}, ['shipping', 'pickup'], baseProduct);
     // $FlowIgnore
     const localAvailablePackages = pathOr(
       [],

@@ -16,6 +16,7 @@ const mutation = graphql`
       storeId
       addressFull {
         country
+        countryCode
         administrativeAreaLevel1
         administrativeAreaLevel2
         political

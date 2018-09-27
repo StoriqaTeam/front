@@ -31,6 +31,7 @@ const mutation = graphql`
           name
           addressFull {
             country
+            countryCode
             administrativeAreaLevel1
             administrativeAreaLevel2
             political
@@ -49,6 +50,8 @@ const mutation = graphql`
       vendorCode
       cashback
       price
+      preOrder
+      preOrderDays
       attributes {
         attrId
         value

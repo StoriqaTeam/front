@@ -47,3 +47,16 @@
 .zeroQuantity {
   color: $color_red;
 }
+
+.preOrder {
+  margin-top: 4rem;
+
+  .preOrderText {
+    margin-top: 2rem;
+    color: $color_grey_minor;
+
+    .preOrderDays {
+      color: $color_green;
+    }
+  }
+}

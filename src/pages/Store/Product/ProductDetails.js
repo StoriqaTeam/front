@@ -130,7 +130,11 @@ class ProductDetails extends PureComponent<PropsType> {
             <div styleName="widgets">
               {sortByProp('id')(widgets).map(this.generateWidget)}
             </div>
-            <ProductQuantity quantity={productVariant.quantity} />
+            <ProductQuantity
+              quantity={productVariant.quantity}
+              preOrder={productVariant.preOrder}
+              preOrderDays={productVariant.preOrderDays}
+            />
             {children}
           </div>
         )}

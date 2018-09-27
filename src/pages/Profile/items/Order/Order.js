@@ -79,6 +79,8 @@ export default createRefetchContainer(
           }
           photoMain
         }
+        preOrder
+        preOrderDays
         receiverName
         receiverPhone
         addressFull {

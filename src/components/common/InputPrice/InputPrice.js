@@ -27,6 +27,7 @@ type PropsType = {
   price: number,
   label?: string,
   align?: 'center' | 'left' | 'right',
+  dataTest: string,
 };
 
 class InputPrice extends Component<PropsType, StateType> {
@@ -105,7 +106,14 @@ class InputPrice extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { currency, onChangeCurrency, label, align, inputRef } = this.props;
+    const {
+      currency,
+      onChangeCurrency,
+      label,
+      align,
+      inputRef,
+      dataTest,
+    } = this.props;
     const { price } = this.state;
     return (
       <AppContext.Consumer>
@@ -121,6 +129,7 @@ class InputPrice extends Component<PropsType, StateType> {
                 onBlur={this.handlePriceBlur}
                 value={price}
                 align={align}
+                dataTest={`${dataTest}Input`}
               />
             </div>
             {!isNil(currency) && (
@@ -134,6 +143,7 @@ class InputPrice extends Component<PropsType, StateType> {
                     currency={currency}
                     onChangeCurrency={onChangeCurrency}
                     currencies={directories.currencies}
+                    dataTest={`${dataTest}CurrencySelect`}
                   />
                 ) : (
                   <div styleName="fixCurrency">{currency.label}</div>

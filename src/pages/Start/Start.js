@@ -42,7 +42,7 @@ class Start extends PureComponent<PropsTypes> {
     const viewedProducts = map(item => item.node, mostViewedProducts);
     const bannersSliderWithMerge = prepend(
       {
-        id: '1',
+        id: '0',
         img:
           'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-OZnA7dnYf7EC.png',
         link: `/store/${Number(process.env.REACT_APP_STORIQA_SHOP_ID || null)}`,

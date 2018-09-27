@@ -42,6 +42,8 @@ type VariantType = {
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues: Array<AttributeValueType>,
+  preOrder: boolean,
+  preOrderDays: string,
 };
 
 type FormType = {
@@ -249,6 +251,8 @@ class NewProduct extends Component<PropsType, StateType> {
       photos: additionalPhotos,
       cashback,
       attributeValues: attributes,
+      preOrder,
+      preOrderDays,
     } = variantData;
     const params: CreateProductWithAttributesMutationType = {
       input: {
@@ -260,6 +264,8 @@ class NewProduct extends Component<PropsType, StateType> {
           photoMain,
           additionalPhotos,
           cashback: cashback ? cashback / 100 : null,
+          preOrder,
+          preOrderDays: Number(preOrderDays),
         },
         attributes,
       },
@@ -354,6 +360,7 @@ class NewProduct extends Component<PropsType, StateType> {
     } = shippingData;
     const params: UpsertShippingMutationType = {
       input: {
+        clientMutationId: '',
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
         pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,
@@ -517,6 +524,8 @@ export default createFragmentContainer(
                     id
                     rawId
                     price
+                    preOrder
+                    preOrderDays
                     discount
                     photoMain
                     additionalPhotos

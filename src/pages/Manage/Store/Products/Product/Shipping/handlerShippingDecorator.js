@@ -12,6 +12,7 @@ import {
   contains,
   head,
   addIndex,
+  assoc,
 } from 'ramda';
 
 import type { SelectItemType } from 'types';
@@ -35,6 +36,7 @@ import type {
   ServiceType,
   ShippingType,
   AvailablePackageType,
+  PickupShippingType,
 } from './types';
 
 type PropsType = {
@@ -45,6 +47,7 @@ type PropsType = {
   localAvailablePackages: Array<AvailablePackageType>,
   interAvailablePackages: Array<AvailablePackageType>,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
+  pickupShipping: PickupShippingType,
 };
 
 type StateType = {
@@ -58,19 +61,50 @@ export default (OriginalComponent: any, inter?: boolean) =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
     constructor(props: PropsType) {
       super(props);
-      const { interShipping, localShipping, onChangeShippingData } = props;
+      const {
+        interShipping,
+        localShipping,
+        onChangeShippingData,
+        pickupShipping,
+      } = props;
       const companies = addIndex(map)(
         (item, idx) => this.makeCompany(item, idx),
         inter ? interShipping : localShipping,
       );
-      onChangeShippingData({ companies, inter });
+      const checkedCompanies = filter(
+        item => item.companyPackageRawId !== -1,
+        companies || [],
+      );
+      let shippingData = {
+        companies: checkedCompanies,
+        inter,
+      };
+      if (inter) {
+        shippingData = assoc(
+          'withoutInter',
+          Boolean(inter && isEmpty(checkedCompanies)),
+          shippingData,
+        );
+      } else {
+        shippingData = assoc(
+          'withoutLocal',
+          Boolean(
+            !inter &&
+              isEmpty(checkedCompanies) &&
+              pickupShipping &&
+              !pickupShipping.pickup,
+          ),
+          shippingData,
+        );
+      }
+      onChangeShippingData(shippingData);
 
       const remainingServices = inter
-        ? this.setRemainingServicesInter(companies)
-        : this.setRemainingServicesLocal(companies);
+        ? this.setRemainingServicesInter(checkedCompanies)
+        : this.setRemainingServicesLocal(checkedCompanies);
 
       this.state = {
-        companies,
+        companies: checkedCompanies,
         editableItemId: null,
         remainingServices,
       };

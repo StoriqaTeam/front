@@ -140,6 +140,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               items={services}
               activeItem={service}
               onSelect={this.handleOnSelectService}
+              dataTest={`shipping${inter ? 'Inter' : 'Local'}ServiceSelect`}
             />
           </div>
           <div styleName="inputPrice">
@@ -147,6 +148,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               onChangePrice={this.handlePriceChange}
               price={price}
               currency={currency}
+              dataTest={`shipping${inter ? 'Inter' : 'Local'}ServicePrice`}
             />
           </div>
         </div>
@@ -168,11 +170,16 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             disabled={
               company ? withCompanySaveButtonDisabled : inter && !countries
             }
+            dataTest={`shipping${company ? 'Save' : 'Add'}CompanyButton`}
           >
             {company ? 'Save' : 'Add company'}
           </Button>
           {company && (
-            <button styleName="cancelButton" onClick={onRemoveEditableItem}>
+            <button
+              styleName="cancelButton"
+              onClick={onRemoveEditableItem}
+              data-test="shippingEditFormCancel"
+            >
               Cancel
             </button>
           )}
