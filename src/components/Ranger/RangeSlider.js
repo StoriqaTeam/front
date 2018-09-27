@@ -113,12 +113,14 @@ class RangeSlider extends Component<PropsType, StateType> {
 
   setValues = (id: ThumbNameType, value: number) => {
     const { stepPhantom } = this.state;
-    // $FlowIgnore
-    this[`${id}Ref`].current.value = Math.round(value / stepPhantom);
+    const thumbRef = this.getThumbRef(id);
+    const roundedValue =  Math.round(value / stepPhantom);
+    setRefValue(thumbRef.current)(`${roundedValue}`);
+
     this.setState(
       {
         [`${id}`]: value,
-        [`${id}Phantom`]: Math.round(value / stepPhantom),
+        [`${id}Phantom`]: roundedValue,
         [`${id}InputValue`]: value,
       },
       this.transferData,
