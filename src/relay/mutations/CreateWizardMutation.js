@@ -19,6 +19,7 @@ const mutation = graphql`
       }
       addressFull {
         country
+        countryCode
         value
         administrativeAreaLevel1
         administrativeAreaLevel2

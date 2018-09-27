@@ -44,6 +44,7 @@ const mutation = graphql`
                 name
                 addressFull {
                   country
+                  countryCode
                   administrativeAreaLevel1
                   administrativeAreaLevel2
                   political
