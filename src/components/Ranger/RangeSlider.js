@@ -12,9 +12,13 @@ import { RangeSliderTrack } from './index';
 import './RangeSlider.scss';
 
 type InputRefType = { current: null | HTMLInputElement };
+
 type DivRefType = { current: null | HTMLDivElement };
+
 type ThumbNameType = 'thumb1' | 'thumb2';
+
 type ThumbInputNameType = 'thumb1Input' | 'thumb2Input';
+
 type InputRangeType = {
   ref: InputRefType,
   id: string,
@@ -25,6 +29,16 @@ type InputRangeType = {
   type: string,
   onChange: (SyntheticInputEvent<HTMLInputElement>) => void,
   onMouseDown: (SyntheticInputEvent<HTMLInputElement>) => void,
+};
+
+type InputPriceType = {
+  inputRef: (?HTMLInputElement) => void,
+  id: string,
+  onChangePrice: number => void,
+  onFocus: () => void,
+  onBlur: () => void,
+  price: number,
+  align: 'center' | 'left' | 'right',
 };
 
 type PropsType = {
@@ -301,15 +315,35 @@ class RangeSlider extends Component<PropsType, StateType> {
       value: this.state[`${id}Phantom`],
     }));
 
+  makeInputPrices = (ids: Array<ThumbInputNameType>): Array<InputPriceType> =>
+    ids.map((id: ThumbInputNameType) => ({
+      inputRef: node => {
+        this.applyInputNode(id, node);
+      },
+      id,
+      onChangePrice: (value: number) => {
+        this.handleOnChangeInput(id, value);
+      },
+      onFocus: () => {
+        this.handleOnFocusInput(id);
+      },
+      onBlur: () => {
+        this.handleOnBlurInput(id);
+      },
+      price: this.formatNumber(this.state[`${id}Value`]),
+      align: 'left',
+    }));
+
+  applyInputNode = (id: string, node: ?HTMLInputElement): void => {
+    if (id === 'thumb1Input') {
+      this.thumb1InputRef = node;
+    } else {
+      this.thumb2InputRef = node;
+    }
+  };
+
   render() {
-    const {
-      minValue,
-      maxValue,
-      thumb1InputValue,
-      thumb2InputValue,
-      thumb1Phantom,
-      thumb2Phantom,
-    } = this.state;
+    const { minValue, maxValue, thumb1Phantom, thumb2Phantom } = this.state;
     return (
       <div styleName="container">
         <div
@@ -330,36 +364,11 @@ class RangeSlider extends Component<PropsType, StateType> {
           <div styleName="maxTooltip" title={maxValue} />
         </div>
         <div styleName="inputs">
-          <div>
-            <InputPrice
-              inputRef={node => {
-                this.thumb1InputRef = node;
-              }}
-              id="thumb1Input"
-              onChangePrice={(value: number): void => {
-                this.handleOnChangeInput('thumb1Input', value);
-              }}
-              onBlur={() => this.handleOnBlurInput('thumb1Input')}
-              onFocus={() => this.handleOnFocusInput('thumb1Input')}
-              price={this.formatNumber(thumb1InputValue)}
-              align="left"
-            />
-          </div>
-          <div>
-            <InputPrice
-              inputRef={node => {
-                this.thumb2InputRef = node;
-              }}
-              id="thumb2Input"
-              onChangePrice={(value: number) => {
-                this.handleOnChangeInput('thumb2Input', value);
-              }}
-              onFocus={() => this.handleOnFocusInput('thumb2Input')}
-              onBlur={() => this.handleOnBlurInput('thumb2Input')}
-              price={this.formatNumber(thumb2InputValue)}
-              align="left"
-            />
-          </div>
+          {this.makeInputPrices(['thumb1Input', 'thumb2Input']).map(input => (
+            <div>
+              <InputPrice key={input.id} {...input} />
+            </div>
+          ))}
         </div>
       </div>
     );
