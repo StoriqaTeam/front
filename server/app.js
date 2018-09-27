@@ -252,6 +252,25 @@ app.use(
         `
           : '';
 
+        const RRSnippet = process.env.REACT_APP_RRPARTNERID
+        ? `<!-- Retail Rocket -->
+          <script type="text/javascript">
+            var rrPartnerId = process.env.REACT_APP_RRPARTNERID;
+            var rrApi = {};
+            var rrApiOnReady = rrApiOnReady || [];
+            rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
+            rrApi.recomMouseDown = rrApi.recomAddToCart = function() {}; (function(d) {
+            var ref = d.getElementsByTagName('script')[0]; var apiJs, apiJsId = 'rrApi-jssdk';
+            if (d.getElementById(apiJsId)) return;
+            apiJs = d.createElement('script');
+            apiJs.id = apiJsId;
+            apiJs.async = true;
+            apiJs.src = "//cdn.retailrocket.ru/content/javascript/tracking.js"; ref.parentNode.insertBefore(apiJs, ref);
+            }(document));
+          </script>
+          <!-- End Retail Rocket -->`
+        : '';
+
         const renderedEl = ReactDOMServer.renderToString(element);
         const RenderedApp = htmlData
           .replace(
@@ -271,7 +290,8 @@ app.use(
             })}</script>`,
           )
           .replace('<noscript>GTM_SNIPPET_1</noscript>', GTMSnippet1)
-          .replace('<noscript>GTM_SNIPPET_2</noscript>', GTMSnippet2);
+          .replace('<noscript>GTM_SNIPPET_2</noscript>', GTMSnippet2)
+          .replace('<noscript>RRSnippet</noscript>', RRSnippet);
         res
           .status(renderArgs.error ? renderArgs.error.status : 200)
           .send(RenderedApp);
