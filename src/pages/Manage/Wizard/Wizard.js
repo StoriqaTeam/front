@@ -530,6 +530,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             [
               'value',
               'country',
+              'countryCode',
               'administrativeAreaLevel1',
               'administrativeAreaLevel2',
               'locality',
@@ -1064,6 +1065,7 @@ export default createFragmentContainer(
         completed
         addressFull {
           country
+          countryCode
           value
           administrativeAreaLevel1
           administrativeAreaLevel2

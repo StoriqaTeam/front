@@ -16,6 +16,7 @@ const mutation = graphql`
       defaultLanguage
       addressFull {
         country
+        countryCode
         value
         administrativeAreaLevel1
         administrativeAreaLevel2
