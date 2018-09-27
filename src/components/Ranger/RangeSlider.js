@@ -7,6 +7,8 @@ import { InputPrice } from 'components/common/InputPrice';
 
 import { calcStep, setRefValue, setZindex } from './utils';
 
+import { RangeSliderTrack } from './index';
+
 import './RangeSlider.scss';
 
 type InputRefType = { current: null | HTMLInputElement };
@@ -320,17 +322,10 @@ class RangeSlider extends Component<PropsType, StateType> {
           {this.makeInputRanges(['thumb1', 'thumb2']).map(input => (
             <input key={input.id} {...input} />
           ))}
-          <div styleName="trackWrap">
-            <div styleName="track" />
-            <div
-              styleName="shadowTrack shadowLeftTrack"
-              style={{ width: `${thumb1Phantom}%` }}
-            />
-            <div
-              styleName="shadowTrack shadowRightTrack"
-              style={{ width: `${100 - thumb2Phantom}%` }}
-            />
-          </div>
+          <RangeSliderTrack
+            thumb1Phantom={thumb1Phantom}
+            thumb2Phantom={thumb2Phantom}
+          />
           <div styleName="minTooltip" title={minValue} />
           <div styleName="maxTooltip" title={maxValue} />
         </div>

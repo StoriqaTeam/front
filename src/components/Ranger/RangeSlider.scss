@@ -11,37 +11,6 @@
   height: 24px;
 }
 
-.trackWrap {
-  position: relative;
-
-  .track {
-    position: absolute;
-    top: 12px;
-    left: 2px;
-    right: 2px;
-    height: 3px;
-    border-radius: 8px;
-    background-color: $color_blue;
-  }
-
-  .shadowTrack {
-    position: absolute;
-    top: 12px;
-    height: 3px;
-    border-radius: 8px;
-    background-color: $color_grey_light;
-    z-index: 1;
-  }
-
-  .shadowLeftTrack {
-    left: 0;
-  }
-
-  .shadowRightTrack {
-    right: 0;
-  }
-}
-
 input[type=range] {
   pointer-events: none;
   position: absolute;
