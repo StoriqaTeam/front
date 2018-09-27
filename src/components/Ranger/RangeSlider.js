@@ -1,9 +1,11 @@
-// @flow
+// @flow strict
 
 import React, { Component, createRef } from 'react';
 import { isNil } from 'ramda';
 // $FlowIgnore
 import { InputPrice } from 'components/common/InputPrice';
+
+import { setZindex } from './utils';
 
 import './RangeSlider.scss';
 
@@ -148,10 +150,12 @@ class RangeSlider extends Component<PropsType, StateType> {
     const { value, id } = e.target;
     const { stepPhantom, minValue } = this.state;
     this.setState(
-       {
+      {
         [id]: parseFloat(value) ? parseFloat(value) * stepPhantom : minValue,
         [`${id}Phantom`]: parseFloat(value),
-        [`${id}InputValue`]: parseFloat(value) ? parseFloat(value) * stepPhantom : minValue,
+        [`${id}InputValue`]: parseFloat(value)
+          ? parseFloat(value) * stepPhantom
+          : minValue,
       },
       (): void => {
         this.transferData();
@@ -174,12 +178,12 @@ class RangeSlider extends Component<PropsType, StateType> {
 
   handleOnMouseDown = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { id } = e.target;
+    const { current } = this.thumb1Ref;
+    const applyZindex: (string) => ?HTMLInputElement = setZindex(current);
     if (id === 'thumb1Phantom') {
-      // $FlowIgnoreMe
-      this.thumb1Ref.current.style.zIndex = '3';
+      applyZindex('3');
     } else {
-      // $FlowIgnoreMe
-      this.thumb1Ref.current.style.zIndex = '';
+      applyZindex('');
     }
   };
 
