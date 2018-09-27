@@ -114,7 +114,7 @@ class RangeSlider extends Component<PropsType, StateType> {
   setValues = (id: ThumbNameType, value: number) => {
     const { stepPhantom } = this.state;
     const thumbRef = this.getThumbRef(id);
-    const roundedValue =  Math.round(value / stepPhantom);
+    const roundedValue = Math.round(value / stepPhantom);
     setRefValue(thumbRef.current)(`${roundedValue}`);
 
     this.setState(
@@ -205,8 +205,11 @@ class RangeSlider extends Component<PropsType, StateType> {
     const volume = 100 / (DOMRect.width - 16);
 
     // Coordinate
-    // $FlowIgnoreMe
-    let coor = e.clientX - DOMRect.x;
+    /**
+     * @desc 'x' is an experimental feature. use 'left' instead
+     * @link https://github.com/facebook/flow/issues/5357
+     */
+    let coor = e.clientX - DOMRect.left;
     if (coor <= 8) {
       coor = 0;
     } else if (coor >= DOMRect.width - 8) {
