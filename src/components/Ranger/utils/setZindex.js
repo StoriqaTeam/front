@@ -1,7 +1,7 @@
 // @flow strict
-import { isNil, assocPath } from 'ramda';
+import { setElementValue } from './index';
 
 const setZindex = (element: ?HTMLInputElement) => (value: string) =>
-  !isNil(element) ? assocPath(['style', 'zIndex'], value, element) : null;
+  setElementValue(element)(['style', 'zIndex'], value);
 
 export default setZindex;

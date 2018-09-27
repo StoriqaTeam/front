@@ -9,8 +9,9 @@ import { setZindex } from './utils';
 
 import './RangeSlider.scss';
 
-type InputRefType = { current: null | HTMLInputElement};
-type DivRefType = { current: null | HTMLDivElement};
+type InputRefType = { current: null | HTMLInputElement };
+type DivRefType = { current: null | HTMLDivElement };
+type ThumbNameType = 'thumb1' | 'thumb2';
 
 type PropsType = {
   thumb1: number,
@@ -90,12 +91,8 @@ class RangeSlider extends Component<PropsType, StateType> {
       window.removeEventListener('keydown', this.handleKeydown);
     }
   }
-  
-  onChangeEvent = (
-    id: 'thumb1' | 'thumb2',
-    value: number,
-    prevValue: number,
-  ) => {
+
+  onChangeEvent = (id: ThumbNameType, value: number, prevValue: number) => {
     const thumbRef = this.getThumbRef(id);
     const event = new Event('input', { bubbles: true });
     // $FlowIgnore
@@ -109,13 +106,14 @@ class RangeSlider extends Component<PropsType, StateType> {
       tracker.setValue(prevValue);
     }
     if (!isNil(thumbRef.current)) {
-       thumbRef.current.dispatchEvent(event);
+      thumbRef.current.dispatchEvent(event);
     }
   };
 
-  getThumbRef = (id: 'thumb1' | 'thumb2'): InputRefType => id === 'thumb1' ? this.thumb1Ref : this.thumb2Ref;
+  getThumbRef = (id: ThumbNameType): InputRefType =>
+    id === 'thumb1' ? this.thumb1Ref : this.thumb2Ref;
 
-  setValues = (id: 'thumb1' | 'thumb2', value: number) => {
+  setValues = (id: ThumbNameType, value: number) => {
     const { stepPhantom } = this.state;
     // $FlowIgnore
     this[`${id}Ref`].current.value = Math.round(value / stepPhantom);
