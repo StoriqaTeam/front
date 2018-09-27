@@ -12,6 +12,7 @@ import './RangeSlider.scss';
 type InputRefType = { current: null | HTMLInputElement };
 type DivRefType = { current: null | HTMLDivElement };
 type ThumbNameType = 'thumb1' | 'thumb2';
+type ThumbInputNameType = 'thumb1Input' | 'thumb2Input';
 
 type PropsType = {
   thumb1: number,
@@ -31,7 +32,7 @@ type StateType = {
   maxValue: number,
   thumb1InputValue: number,
   thumb2InputValue: number,
-  focusedInput: ?string,
+  focusedInput: ?ThumbInputNameType,
   thumb1Phantom: number,
   thumb2Phantom: number,
   stepPhantom: number,
@@ -111,6 +112,9 @@ class RangeSlider extends Component<PropsType, StateType> {
   getThumbRef = (id: ThumbNameType): InputRefType =>
     id === 'thumb1' ? this.thumb1Ref : this.thumb2Ref;
 
+  getInputPriceRef = (id: ThumbInputNameType): ?HTMLInputElement =>
+    id === 'thumb1Input' ? this.thumb1InputRef : this.thumb2InputRef;
+
   setValues = (id: ThumbNameType, value: number) => {
     const { stepPhantom } = this.state;
     const thumbRef = this.getThumbRef(id);
@@ -138,11 +142,13 @@ class RangeSlider extends Component<PropsType, StateType> {
     });
   };
 
-  handleKeydown = (e: SyntheticKeyboardEvent<>): void => {
+  handleKeydown = (e: SyntheticKeyboardEvent<HTMLInputElement>): void => {
     const { focusedInput } = this.state;
     if (e.keyCode === 13 && !isNil(focusedInput)) {
-      // $FlowIgnore
-      this[`${focusedInput}Ref`].blur();
+      const inputRef = this.getInputPriceRef(focusedInput);
+      if (!isNil(inputRef)) {
+        inputRef.blur();
+      }
     }
   };
 
@@ -230,7 +236,7 @@ class RangeSlider extends Component<PropsType, StateType> {
     this.onChangeEvent('thumb1', thumb, thumb1Phantom);
   };
 
-  handleOnChangeInput = (id: string, value: number): void => {
+  handleOnChangeInput = (id: ThumbInputNameType, value: number): void => {
     if (id === 'thumb1Input') {
       this.setState({ thumb1InputValue: value });
     } else {
@@ -238,11 +244,11 @@ class RangeSlider extends Component<PropsType, StateType> {
     }
   };
 
-  handleOnFocusInput = (id: string): void => {
+  handleOnFocusInput = (id: ThumbInputNameType): void => {
     this.setState({ focusedInput: id });
   };
 
-  handleOnBlurInput = (id: string): void => {
+  handleOnBlurInput = (id: ThumbInputNameType): void => {
     const {
       thumb1InputValue,
       thumb2InputValue,
