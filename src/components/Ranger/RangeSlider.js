@@ -13,6 +13,17 @@ type InputRefType = { current: null | HTMLInputElement };
 type DivRefType = { current: null | HTMLDivElement };
 type ThumbNameType = 'thumb1' | 'thumb2';
 type ThumbInputNameType = 'thumb1Input' | 'thumb2Input';
+type InputRangeType = {
+  ref: InputRefType,
+  id: string,
+  value: string,
+  min: number,
+  max: number,
+  step: number,
+  type: string,
+  onChange: (SyntheticInputEvent<HTMLInputElement>) => void,
+  onMouseDown: (SyntheticInputEvent<HTMLInputElement>) => void,
+};
 
 type PropsType = {
   thumb1: number,
@@ -275,6 +286,19 @@ class RangeSlider extends Component<PropsType, StateType> {
     this.setState({ focusedInput: null });
   };
 
+  makeInputRanges = (ids: Array<ThumbNameType>): Array<InputRangeType> =>
+    ids.map((id: ThumbNameType) => ({
+      id,
+      max: 100,
+      min: 0,
+      onChange: this.handleOnChange,
+      onMouseDown: this.handleOnMouseDown,
+      ref: this.getThumbRef(id),
+      step: 1,
+      type: 'range',
+      value: this.state[`${id}Phantom`],
+    }));
+
   render() {
     const {
       minValue,
@@ -293,28 +317,9 @@ class RangeSlider extends Component<PropsType, StateType> {
           role="button"
           tabIndex="0"
         >
-          <input
-            ref={this.thumb1Ref}
-            id="thumb1"
-            value={thumb1Phantom}
-            min={0}
-            max={100}
-            step={1}
-            type="range"
-            onChange={this.handleOnChange}
-            onMouseDown={this.handleOnMouseDown}
-          />
-          <input
-            ref={this.thumb2Ref}
-            id="thumb2"
-            value={thumb2Phantom}
-            min={0}
-            max={100}
-            step={1}
-            type="range"
-            onChange={this.handleOnChange}
-            onMouseDown={this.handleOnMouseDown}
-          />
+          {this.makeInputRanges(['thumb1', 'thumb2']).map(input => (
+            <input key={input.id} {...input} />
+          ))}
           <div styleName="trackWrap">
             <div styleName="track" />
             <div
