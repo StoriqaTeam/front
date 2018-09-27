@@ -7,6 +7,8 @@ import './ProductQuantity.scss';
 
 type PropsType = {
   quantity: number,
+  preOrder: boolean,
+  preOrderDays: number,
 };
 
 const ProductQuantity = (props: PropsType) => (
@@ -30,6 +32,22 @@ const ProductQuantity = (props: PropsType) => (
         {`In stock (${props.quantity})`}
       </span>
     </div>
+    {props.quantity === 0 &&
+      props.preOrder &&
+      props.preOrderDays && (
+        <div styleName="preOrder">
+          <div styleName="title">
+            <strong>Pre order</strong>
+          </div>
+          <div styleName="preOrderText">
+            <div>Available for pre-order.</div>
+            <div>
+              Lead time (days):{' '}
+              <span styleName="preOrderDays">{props.preOrderDays}</span>
+            </div>
+          </div>
+        </div>
+      )}
   </div>
 );
 

@@ -9,12 +9,14 @@ type PropsType = {
   onAddToCart: () => any,
   unselectedAttr: ?Array<string>,
   quantity: number,
+  preOrder: boolean,
 };
 
 const ProductButtons = ({
   onAddToCart,
   unselectedAttr,
   quantity,
+  preOrder,
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
@@ -25,7 +27,7 @@ const ProductButtons = ({
         id="productAddToCart"
         wireframe
         big
-        disabled={!quantity}
+        disabled={!quantity && !preOrder}
         onClick={onAddToCart}
         dataTest="product-addToCart"
       >

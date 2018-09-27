@@ -6,7 +6,7 @@ import { find, append, head, pathOr, map, isEmpty, omit, reject } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { withShowAlert } from 'components/App/AlertContext';
-import { Input } from 'components/common/Input';
+import { Input, Checkbox } from 'components/common';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
@@ -44,6 +44,9 @@ type StateType = {
     attributes?: Array<string>,
   },
   isLoading: boolean,
+  preOrderDays: string,
+  preOrder: boolean,
+  preOrderDays: string,
 };
 
 type PropsType = {
@@ -73,6 +76,8 @@ type PropsType = {
         },
       },
     },
+    preOrder: boolean,
+    preOrderDays: number,
   },
   onExpandClick: (id: string) => void,
   onChangeVariantForm: (variantData: ?VariantType) => void,
@@ -100,6 +105,8 @@ class Form extends Component<PropsType, StateType> {
         price: null,
         formErrors: undefined,
         isLoading: false,
+        preOrder: false,
+        preOrderDays: '',
       };
     } else {
       this.state = {
@@ -112,6 +119,11 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: this.resetAttrValues(),
         formErrors: undefined,
         isLoading: false,
+        preOrder: Boolean(product.preOrder),
+        preOrderDays:
+          product.preOrder && product.preOrderDays
+            ? `${product.preOrderDays}`
+            : '',
       };
     }
 
@@ -274,6 +286,27 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ [id]: parseFloat(value) });
   };
 
+  handleOnChangePreOrderDays = (e: any) => {
+    let {
+      target: { value },
+    } = e;
+    const regexp = /(^\d*$)/;
+    if (!regexp.test(value)) {
+      return;
+    }
+    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
+    this.setState((prevState: StateType) => ({
+      preOrder: prevState.preOrder && Boolean(value),
+      preOrderDays: value,
+    }));
+  };
+
+  handleOnChangePreOrder = () => {
+    this.setState((prevState: StateType) => ({
+      preOrder: !prevState.preOrder && Boolean(prevState.preOrderDays),
+    }));
+  };
+
   renderVariant = () => {
     const { formErrors } = this.props;
     const { vendorCode, price, cashback, discount } = this.state;
@@ -345,7 +378,13 @@ class Form extends Component<PropsType, StateType> {
 
   render() {
     const { category, variant, formErrors } = this.props;
-    const { photos = [], mainPhoto, attributeValues } = this.state;
+    const {
+      photos = [],
+      mainPhoto,
+      attributeValues,
+      preOrder,
+      preOrderDays,
+    } = this.state;
     return (
       <div styleName="container">
         <div styleName="title">
@@ -371,31 +410,30 @@ class Form extends Component<PropsType, StateType> {
         {variant &&
           variant.stocks &&
           !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
-        {/* <div styleName="buttons">
-          <div styleName="saveButton">
-            <Button
-              isLoading={isLoading || isLoadingLocal}
-              big
-              fullWidth
-              type="button"
-              onClick={
-                isNewVariant ? this.handleCreateVariant : this.handleSaveProduct
-              }
-              dataTest="variantsProductSaveButton"
-            >
-              Save
-            </Button>
+        <div styleName="preOrder">
+          <div styleName="preOrderTitle">
+            <div styleName="title">
+              <strong>Available for pre-order</strong>
+            </div>
+            <div styleName="preOrderCheckbox">
+              <Checkbox
+                inline
+                id="preOrderCheckbox"
+                isChecked={preOrder}
+                onChange={this.handleOnChangePreOrder}
+              />
+            </div>
           </div>
-          {isNewVariant && (
-            <button
-              styleName="cancelButton"
-              onClick={() => toggleNewVariantParam(false)}
-              data-test="cancelNewVariantButton"
-            >
-              Cancel
-            </button>
-          )}
-        </div> */}
+          <div styleName="preOrderDaysInput">
+            <Input
+              fullWidth
+              label="Lead time (days)"
+              onChange={this.handleOnChangePreOrderDays}
+              value={preOrderDays}
+              dataTest="variantPreOrderDaysInput"
+            />
+          </div>
+        </div>
       </div>
     );
   }

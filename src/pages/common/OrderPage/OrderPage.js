@@ -129,6 +129,8 @@ class OrderPage extends PureComponent<PropsType> {
         price: order.product ? order.product.price : -1,
         // $FlowIgnore
         attributes,
+        preOrder: order.preOrder,
+        preOrderDays: order.preOrderDays,
       },
       customerName,
       customerAddress,
@@ -261,6 +263,21 @@ class OrderPage extends PureComponent<PropsType> {
           ) : (
             <div styleName="noProduct">The product was deleted</div>
           )}
+          {order.product &&
+            order.product.preOrder &&
+            order.product.preOrderDays && (
+              <div styleName="preOrder">
+                <div styleName="preOrderText">
+                  <div>This product was bought on pre-order.</div>
+                  <div>
+                    Lead time (days):{' '}
+                    <span styleName="preOrderDays">
+                      {order.product.preOrderDays}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           <div styleName="infoBlock">
             <div styleName="infoBlockItem">
               <Row>

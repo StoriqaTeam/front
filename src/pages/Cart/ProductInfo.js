@@ -48,6 +48,20 @@ const ProductInfo = ({
                 <div styleName="contentBlock">
                   <div styleName="product-summary-attributes">
                     <div styleName="cart-product-title">About product</div>
+                    {product.preOrder &&
+                      product.preOrderDays && (
+                        <div styleName="preOrder">
+                          <div styleName="preOrderText">
+                            <div>Available for pre-order.</div>
+                            <div>
+                              Lead time (days):{' '}
+                              <span styleName="preOrderDays">
+                                {product.preOrderDays}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     {(attrs.length > 0 && (
                       <Row>
                         {attrs.map(attr => (
