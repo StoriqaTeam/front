@@ -255,7 +255,7 @@ app.use(
         const RRSnippet = process.env.REACT_APP_RRPARTNERID
         ? `<!-- Retail Rocket -->
           <script type="text/javascript">
-            var rrPartnerId = process.env.REACT_APP_RRPARTNERID;
+            var rrPartnerId = ${process.env.REACT_APP_RRPARTNERID};
             var rrApi = {};
             var rrApiOnReady = rrApiOnReady || [];
             rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
