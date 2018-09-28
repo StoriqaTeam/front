@@ -55,8 +55,6 @@ class RangeSlider extends Component<PropsType, StateType> {
     super(props);
     const { thumb1, thumb2, minValue, maxValue } = props;
 
-    const stepPhantom = (maxValue - minValue) / 100;
-
     this.state = {
       thumb1,
       thumb2,
@@ -65,9 +63,9 @@ class RangeSlider extends Component<PropsType, StateType> {
       thumb1InputValue: thumb1,
       thumb2InputValue: thumb2,
       focusedInput: null,
-      thumb1Phantom: Math.round(thumb1 / stepPhantom),
-      thumb2Phantom: Math.round(thumb2 / stepPhantom),
-      stepPhantom,
+      thumb1Phantom: 0,
+      thumb2Phantom: 100,
+      stepPhantom: (maxValue - minValue) / 100,
     };
 
     this.thumb1Ref = createRef();
