@@ -64,7 +64,7 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '1',
-        href: '/',
+        href: 'https://beta.storiqa.com/privacy_policy.pdf',
         name: 'Privacy Policy',
       },
       {
@@ -74,8 +74,8 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '3',
-        href: '/',
-        name: 'Conditions of use',
+        href: 'https://beta.storiqa.com/terms_of_use.pdf',
+        name: 'Terms of Use',
       },
     ],
   };
@@ -94,7 +94,12 @@ class InfoBlock extends Component<{}, StateType> {
         <ul styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
             <li key={id} styleName="aboutNavItem">
-              <a styleName="link" href={href}>
+              <a
+                styleName="link"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {name}
               </a>
             </li>
