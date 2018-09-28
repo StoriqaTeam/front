@@ -39,6 +39,7 @@ type InputPriceType = {
   onBlur: () => void,
   price: number,
   align: 'center' | 'left' | 'right',
+  dataTest: string,
 };
 
 type PropsType = {
@@ -336,6 +337,7 @@ class RangeSlider extends Component<PropsType, StateType> {
       },
       price: this.formatNumber(this.state[`${id}Value`]),
       align: 'left',
+      dataTest: `${id}InputPrice`
     }));
 
   applyInputNode = (id: string, node: ?HTMLInputElement): void => {
