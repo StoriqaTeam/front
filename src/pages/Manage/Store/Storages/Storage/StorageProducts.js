@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { pathOr, isEmpty, map, addIndex } from 'ramda';
+import {pathOr, isEmpty, map, addIndex, dissoc} from 'ramda';
 import { graphql, createRefetchContainer } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 
@@ -40,6 +40,11 @@ type StateType = {
 };
 
 class StorageProducts extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    console.log('---StorageProducts props', props);
+  }
+
   state = {
     currentPage: 1,
     autocompleteValue: '',

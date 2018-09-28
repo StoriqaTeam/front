@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
@@ -7,6 +7,7 @@ import { head, assoc, isEmpty, find, propEq } from 'ramda';
 import type { SelectItemType } from 'types';
 import { InputPrice, Select, Button } from 'components/common';
 import Countries from './Countries';
+import ShippingInterSelect from './ShippingInterSelect';
 import {
   convertCountriesToArrCodes,
   convertCountriesToStringLabels,
@@ -64,10 +65,10 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
       const newService = find(
         propEq('id', prevState.service ? prevState.service.id : null),
       )(services);
-      if (newService) {
-        this.updateState({ service: newService });
-        return;
-      }
+      // if (newService) {
+      //   this.updateState({ service: newService });
+      //   return;
+      // }
       const service = !isEmpty(services) ? head(services) : null;
       this.updateState({ service });
     }
@@ -97,6 +98,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleOnSelectService = (service: ?ServiceType) => {
+    console.log('---service', service);
     this.setState({ service });
   };
 
@@ -126,33 +128,40 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
         company && companyServiceId === service.id && company.price === price;
     }
 
-    const withCompanySaveButtonDisabled = inter
+    const withCompanySaveButtonDisabled = inter === true
       ? isInterCompanyDisabled
       : isLocalCompanyDisabled;
     return (
       <div styleName="container">
         <div styleName="selects">
           <div styleName="serviceSelect">
-            <Select
-              forForm
-              fullWidth
-              label="Service"
-              items={services}
-              activeItem={service}
-              onSelect={this.handleOnSelectService}
-              dataTest={`shipping${inter ? 'Inter' : 'Local'}ServiceSelect`}
-            />
+            {inter === true
+              ? <ShippingInterSelect
+                  services={services}
+                  service={service}
+                  handleOnSelectService={this.handleOnSelectService}
+                />
+              : <Select
+                  forForm
+                  fullWidth
+                  label="Service"
+                  items={services}
+                  activeItem={service}
+                  onSelect={this.handleOnSelectService}
+                  dataTest="shippingLocalServiceSelect"
+                />
+            }
           </div>
           <div styleName="inputPrice">
             <InputPrice
               onChangePrice={this.handlePriceChange}
               price={price}
               currency={currency}
-              dataTest={`shipping${inter ? 'Inter' : 'Local'}ServicePrice`}
+              dataTest={`shipping${inter === true ? 'Inter' : 'Local'}ServicePrice`}
             />
           </div>
         </div>
-        {inter && (
+        {inter === true && (
           <div styleName={classNames('countries')}>
             <Countries
               countries={(service && service.countries) || null}
@@ -168,7 +177,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             add={!company}
             onClick={this.handleSaveCompany}
             disabled={
-              company ? withCompanySaveButtonDisabled : inter && !countries
+              company ? withCompanySaveButtonDisabled : inter === true && !countries
             }
             dataTest={`shipping${company ? 'Save' : 'Add'}CompanyButton`}
           >

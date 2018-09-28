@@ -43,6 +43,7 @@ const StoragesRow = ({
     key={id}
     styleName="container"
     onClick={(e: any) => {
+      e.stopPropagation();
       onEdit(slug, false, e);
     }}
     onKeyDown={() => {}}

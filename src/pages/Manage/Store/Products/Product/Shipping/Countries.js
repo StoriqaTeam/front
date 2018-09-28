@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component, Fragment } from 'react';
 import { map, forEach } from 'ramda';
@@ -74,7 +74,7 @@ class Countries extends Component<PropsType, StateType> {
         let isSelectedAll = true;
         const newChildren = map(item => {
           if (code === item.alpha3) {
-            if (!item.isSelected) {
+            if (item.isSelected !== true) {
               const newItem = {
                 ...item,
                 children: map(
@@ -95,7 +95,7 @@ class Countries extends Component<PropsType, StateType> {
             return { ...newItem, isSelected: false };
           }
           forEach(child => {
-            if (!child.isSelected) {
+            if (child.isSelected !== true) {
               isSelectedAll = false;
             }
           }, item.children);
@@ -125,14 +125,14 @@ class Countries extends Component<PropsType, StateType> {
             let isSelected = false;
             const children = map(child => {
               if (country.alpha3 === child.alpha3) {
-                if (!child.isSelected) {
+                if (child.isSelected !== true) {
                   isSelected = true;
                 } else {
                   isSelectedAll = false;
                 }
                 return { ...child, isSelected: !child.isSelected };
               }
-              if (child.isSelected) {
+              if (child.isSelected === true) {
                 isSelected = true;
               } else {
                 isSelectedAll = false;
@@ -142,7 +142,7 @@ class Countries extends Component<PropsType, StateType> {
             return { ...continent, children, isSelected };
           }
           forEach(child => {
-            if (!child.isSelected) {
+            if (child.isSelected !== true) {
               isSelectedAll = false;
             }
           }, continent.children);
