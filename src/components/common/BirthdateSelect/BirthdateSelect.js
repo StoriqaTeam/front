@@ -14,7 +14,7 @@ type PropsType = {
   label: ?string,
   handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
-  errors: ?Array<string>,
+  errors?: ?Array<string>,
 };
 
 type StateType = {
@@ -187,7 +187,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
           {this.renderSelect('month', 'Month')}
           {this.renderSelect('day', 'Day')}
         </div>
-        {errors &&
+        {!isNil(errors) &&
           errors.length && (
             <div styleName="errors">
               {map((item, idx) => <div key={idx}>{item}</div>, errors)}
