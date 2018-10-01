@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -40,10 +40,7 @@ class Header extends Component<PropsType, StateType> {
     orderToDate: null,
   };
 
-  handleSearchTermChange = (e: {
-    target: { value: any },
-    persist: () => void,
-  }) => {
+  handleSearchTermChange = (e: SyntheticInputEvent<>): void => {
     e.persist();
     this.setState({ searchTerm: e.target.value }, () =>
       this.props.onSearchTermFilterChanged(e.target.value),
