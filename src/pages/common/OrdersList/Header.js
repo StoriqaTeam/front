@@ -47,7 +47,7 @@ class Header extends Component<PropsType, StateType> {
     );
   };
 
-  handleOrderStatusChange = (item: { id: string, label: string }) => {
+  handleOrderStatusChange = (item: ?{ id: string, label: string }) => {
     if (!item) {
       this.setState({ orderStatus: null }, () => {
         this.props.onOrderStatusFilterChanged(null);
