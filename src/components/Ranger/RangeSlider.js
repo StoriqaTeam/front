@@ -335,7 +335,7 @@ class RangeSlider extends Component<PropsType, StateType> {
       },
       price: this.formatNumber(this.state[`${id}Value`]),
       align: 'left',
-      dataTest: `${id}InputPrice`
+      dataTest: `${id}InputPrice`,
     }));
 
   applyInputNode = (id: string, node: ?HTMLInputElement): void => {
