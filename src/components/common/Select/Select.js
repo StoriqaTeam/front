@@ -29,16 +29,16 @@ type StateType = {
 };
 
 type PropsType = {
-  transparent: ?boolean,
+  transparent: boolean,
   items: Array<SelectItemType>,
   onSelect: (item: ?SelectItemType) => void,
-  label: ?string,
+  label?: ?string,
   activeItem: ?SelectItemType,
-  forForm: ?boolean,
-  forSearch: ?boolean,
-  forAutocomlete: ?boolean,
-  fullWidth: ?boolean,
-  containerStyle: ?{
+  forForm: boolean,
+  forSearch: boolean,
+  forAutocomlete: boolean,
+  fullWidth: boolean,
+  containerStyle?: ?{
     [name: string]: string,
   },
   dataTest: string,
@@ -64,6 +64,11 @@ class Select extends Component<PropsType, StateType> {
   static defaultProps = {
     onClick: () => {},
     isMobile: false,
+    forForm: false,
+    forSearch: false,
+    forAutocomlete: false,
+    fullWidth: false,
+    transparent: false,
   };
 
   constructor(props: PropsType) {
@@ -173,15 +178,15 @@ class Select extends Component<PropsType, StateType> {
     // new item is not included above
     if ((idx - 1) * itemHeight < itemsWrapScroll) {
       // $FlowIgnoreMe
-       if (!isNil(this.itemsWrap) && !isNil(this.itemsWrap.scroll)) {
-        this.itemsWrap.scroll({ top: idx * itemHeight, behavior });  
+      if (!isNil(this.itemsWrap) && !isNil(this.itemsWrap.scroll)) {
+        this.itemsWrap.scroll({ top: idx * itemHeight, behavior });
       }
     }
     // new item is not included below
     if ((idx + 1) * itemHeight > itemsWrapScroll + visibleHeight) {
       // $FlowIgnoreMe
-       if (!isNil(this.itemsWrap) && !isNil(this.itemsWrap.scroll)) {
-         this.itemsWrap.scroll({
+      if (!isNil(this.itemsWrap) && !isNil(this.itemsWrap.scroll)) {
+        this.itemsWrap.scroll({
           top: (idx + 1) * itemHeight - visibleHeight,
           behavior,
         });
@@ -248,7 +253,8 @@ class Select extends Component<PropsType, StateType> {
         style={containerStyle}
         data-test={dataTest}
       >
-        {((!isNil(label) && !isBirthdate) || !(!isNil(isBirthdate) && activeItem)) && (
+        {((!isNil(label) && !isBirthdate) ||
+          !(!isNil(isBirthdate) && activeItem)) && (
           <div
             styleName={classNames('label', {
               labelFloat: activeItem || isExpanded,
@@ -303,7 +309,9 @@ class Select extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        {(!isNil(forForm) || !isNil(forSearch) || isBirthdate) && <div styleName="hr" />}
+        {(!isNil(forForm) || !isNil(forSearch) || isBirthdate) && (
+          <div styleName="hr" />
+        )}
       </div>
     );
   }

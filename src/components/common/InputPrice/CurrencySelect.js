@@ -14,7 +14,7 @@ type StateType = {
 type PropsType = {
   currencies: Array<string>,
   currency: SelectItemType,
-  onChangeCurrency: (item: SelectItemType) => void,
+  onChangeCurrency: (item: ?SelectItemType) => void,
   dataTest: string,
 };
 
