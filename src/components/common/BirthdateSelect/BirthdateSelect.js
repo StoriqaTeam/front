@@ -101,9 +101,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
     return map(
       item => ({
         id: `${item}`.length === 1 ? `0${item}` : `${item}`,
-        label: !isNil(brief)
-          ? briefMonthNames[item - 1]
-          : monthNames[item - 1],
+        label: !isNil(brief) ? briefMonthNames[item - 1] : monthNames[item - 1],
       }),
       items,
     );
