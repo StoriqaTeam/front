@@ -253,7 +253,7 @@ app.use(
           : '';
 
         const RRSnippet = process.env.REACT_APP_RRPARTNERID
-        ? `<!-- Retail Rocket -->
+          ? `<!-- Retail Rocket -->
           <script type="text/javascript">
             var rrPartnerId = ${process.env.REACT_APP_RRPARTNERID};
             var rrApi = {};
@@ -269,7 +269,25 @@ app.use(
             }(document));
           </script>
           <!-- End Retail Rocket -->`
-        : '';
+          : '';
+
+        const CQSnippet = process.env.REACT_APP_CARROT_QUEST_API_KEY
+          ? `<script type="text/javascript">
+              !function () {
+                function t(t, e) {
+                  return function () {
+                    window.carrotquestasync.push(t, arguments)
+                  }
+                }
+          
+                if ('undefined' == typeof carrotquest) {
+                  var e = document.createElement('script');
+                  e.type = "text/javascript", e.async = !0, e.src = '//cdn.carrotquest.io/api.min.js', document.getElementsByTagName('head')[0].appendChild(e), window.carrotquest = {}, window.carrotquestasync = [], carrotquest.settings = {};
+                  for (var n = ['connect', 'track', 'identify', auth, 'oth', 'onReady', 'addCallback', 'removeCallback', 'trackMessageInteraction'], a = 0; a < n.length; a++) carrotquest[n[a]] = t(n[a])
+                }
+              }(), carrotquest.connect('${process.env.REACT_APP_CARROT_QUEST_API_KEY}');
+            </script>`
+          : '';
 
         const renderedEl = ReactDOMServer.renderToString(element);
         const RenderedApp = htmlData
@@ -291,7 +309,8 @@ app.use(
           )
           .replace('<noscript>GTM_SNIPPET_1</noscript>', GTMSnippet1)
           .replace('<noscript>GTM_SNIPPET_2</noscript>', GTMSnippet2)
-          .replace('<noscript>RRSnippet</noscript>', RRSnippet);
+          .replace('<noscript>RRSnippet</noscript>', RRSnippet)
+          .replace('<noscript>CQSnippet</noscript>', CQSnippet);
         res
           .status(renderArgs.error ? renderArgs.error.status : 200)
           .send(RenderedApp);
