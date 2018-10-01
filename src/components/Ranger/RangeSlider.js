@@ -54,6 +54,7 @@ class RangeSlider extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const { thumb1, thumb2, minValue, maxValue } = props;
+    const stepPhantom = (maxValue - minValue) / 100;
 
     this.state = {
       thumb1,
@@ -63,9 +64,9 @@ class RangeSlider extends Component<PropsType, StateType> {
       thumb1InputValue: thumb1,
       thumb2InputValue: thumb2,
       focusedInput: null,
-      thumb1Phantom: 0,
-      thumb2Phantom: 100,
-      stepPhantom: (maxValue - minValue) / 100,
+      thumb1Phantom: Math.round((thumb1 - minValue) / stepPhantom),
+      thumb2Phantom: Math.round((thumb2 - minValue) / stepPhantom),
+      stepPhantom,
     };
 
     this.thumb1Ref = createRef();
@@ -103,13 +104,13 @@ class RangeSlider extends Component<PropsType, StateType> {
   };
 
   setValues = (id: 'thumb1' | 'thumb2', value: number) => {
-    const { stepPhantom } = this.state;
+    const { stepPhantom, minValue } = this.state;
     // $FlowIgnore
     this[`${id}Ref`].current.value = Math.round(value / stepPhantom);
     this.setState(
       {
         [`${id}`]: value,
-        [`${id}Phantom`]: Math.round(value / stepPhantom),
+        [`${id}Phantom`]: Math.round((value - minValue) / stepPhantom),
         [`${id}InputValue`]: value,
       },
       this.transferData,
@@ -140,31 +141,28 @@ class RangeSlider extends Component<PropsType, StateType> {
   thumb2InputRef: any;
 
   handleOnChange = (e: any) => {
-    const { value, id } = e.target;
+    const { id } = e.target;
+    const value = parseFloat(e.target.value);
     const { stepPhantom, minValue } = this.state;
     this.setState(
       {
-        [id]: parseFloat(value) ? parseFloat(value) * stepPhantom : minValue,
-        [`${id}Phantom`]: parseFloat(value),
-        [`${id}InputValue`]: parseFloat(value)
-          ? parseFloat(value) * stepPhantom
-          : minValue,
+        [id]: minValue + value * stepPhantom,
+        [`${id}Phantom`]: value,
+        [`${id}InputValue`]: minValue + value * stepPhantom,
       },
       () => {
         this.transferData();
         if (this.state.thumb1Phantom > this.state.thumb2Phantom) {
           this.setState(
             (prevState: StateType) => ({
-              thumb1: prevState.thumb2
-                ? prevState.thumb2 * stepPhantom
-                : prevState.minValue,
-              thumb2: prevState.thumb1 * stepPhantom,
+              thumb1: prevState.thumb2 ? prevState.thumb2 : prevState.minValue,
+              thumb2: prevState.thumb1,
               thumb1Phantom: prevState.thumb2Phantom,
               thumb2Phantom: prevState.thumb1Phantom,
-              thumb1InputValue: prevState.thumb2Phantom
-                ? prevState.thumb2Phantom * stepPhantom
+              thumb1InputValue: prevState.thumb2InputValue
+                ? prevState.thumb2InputValue
                 : prevState.minValue,
-              thumb2InputValue: prevState.thumb1Phantom * stepPhantom,
+              thumb2InputValue: prevState.thumb1InputValue,
             }),
             this.transferData,
           );
@@ -233,18 +231,26 @@ class RangeSlider extends Component<PropsType, StateType> {
     if (id === 'thumb1Input') {
       if (thumb1InputValue < minValue) {
         this.setValues('thumb1', minValue);
-      } else if (thumb1InputValue > thumb2InputValue) {
-        this.setValues('thumb1', thumb2InputValue);
-      } else {
-        this.setValues('thumb1', thumb1InputValue);
+        return;
       }
+      if (thumb1InputValue > thumb2InputValue) {
+        this.setValues('thumb1', thumb2InputValue);
+        return;
+      }
+      this.setValues('thumb1', thumb1InputValue);
+      return;
     }
-    if (thumb2InputValue > maxValue) {
-      this.setValues('thumb2', maxValue);
-    } else if (thumb2InputValue < thumb1InputValue) {
-      this.setValues('thumb2', thumb1InputValue);
-    } else {
+    if (id === 'thumb2Input') {
+      if (thumb2InputValue > maxValue) {
+        this.setValues('thumb2', maxValue);
+        return;
+      }
+      if (thumb2InputValue < thumb1InputValue) {
+        this.setValues('thumb2', thumb1InputValue);
+        return;
+      }
       this.setValues('thumb2', thumb2InputValue);
+      return;
     }
     this.setState({ focusedInput: null });
   };
