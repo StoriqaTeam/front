@@ -40,7 +40,7 @@ type PropsType = {
 type StateType = {
   isLoading: boolean,
   formErrors: {
-    [string]: string,
+    [string]: Array<string>,
   },
   name: string,
   addressFull: AddressFullType,
