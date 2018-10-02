@@ -1,6 +1,7 @@
 // @flow strict
 
 import React, { Component } from 'react';
+import type { Element } from 'react';
 import classNames from 'classnames';
 import { isNil, isEmpty } from 'ramda';
 
@@ -11,7 +12,7 @@ import './Input.scss';
 type PropsType = {
   id: string,
   value: string,
-  label: string,
+  label: string | Element<'span'>,
   errors?: ?Array<string>,
   onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   onBlur: (e: SyntheticInputEvent<HTMLInputElement>) => void,
