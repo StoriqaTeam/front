@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { pathOr, isNil } from 'ramda';
 import PropTypes from 'prop-types';
 
 import { Input } from 'components/common/Input';
@@ -45,12 +46,18 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     comment: null,
   };
 
-  handleTrackIdChanged = (e: { target: { value: string } }) => {
-    this.setState({ trackNumber: e.target.value });
+  handleTrackIdChanged = (e: ?SyntheticInputEvent<HTMLInputElement>) => {
+    if (!isNil(e)) {
+      const value = pathOr(null, ['target', 'value'], e);
+      this.setState({ trackNumber: value });
+    }
   };
 
-  handleCommentChanged = (e: { target: { value: string } }) => {
-    this.setState({ comment: e.target.value });
+  handleCommentChanged = (e: ?SyntheticInputEvent<HTMLInputElement>) => {
+    if (!isNil(e)) {
+      const value = pathOr(null, ['target', 'value'], e);
+      this.setState({ comment: value });
+    }
   };
 
   handleSendOrderModalClose = () => {
@@ -136,7 +143,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
                 id="send-order-modal-trackId"
                 label="Track number"
                 onChange={this.handleTrackIdChanged}
-                value={this.state.trackNumber}
+                value={this.state.trackNumber || ''}
                 limit={50}
               />
             </div>
@@ -146,7 +153,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
                 id="send-order-modal-comment"
                 label="Comment"
                 onChange={this.handleCommentChanged}
-                value={this.state.comment}
+                value={this.state.comment || ''}
                 limit={100}
               />
             </div>
