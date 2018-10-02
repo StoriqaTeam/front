@@ -286,7 +286,10 @@ class OrderPage extends PureComponent<PropsType> {
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
-                      <TextWithLabel label="Customer" text={order.customerName} />
+                      <TextWithLabel
+                        label="Customer"
+                        text={order.customerName}
+                      />
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
@@ -333,7 +336,10 @@ class OrderPage extends PureComponent<PropsType> {
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
-                      <TextWithLabel label="Quantity" text={`${order.quantity}`} />
+                      <TextWithLabel
+                        label="Quantity"
+                        text={`${order.quantity}`}
+                      />
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel

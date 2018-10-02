@@ -31,7 +31,7 @@ type StateType = {
 type PropsType = {
   transparent: boolean,
   items: Array<SelectItemType>,
-  onSelect: (item: ?SelectItemType) => void,
+  onSelect: (item: SelectItemType) => void,
   label?: ?string,
   activeItem: ?SelectItemType,
   forForm: boolean,
@@ -217,8 +217,9 @@ class Select extends Component<PropsType, StateType> {
 
   handleItemClick = (e: SyntheticInputEvent<HTMLDivElement>): void => {
     const { onSelect, items } = this.props;
-    if (this.props && onSelect) {
-      onSelect(find(propEq('id', e.target.id))(items));
+    const result = find(propEq('id', e.target.id), items);
+    if (this.props && onSelect && !isNil(result)) {
+      onSelect(result);
     }
   };
 
