@@ -353,6 +353,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                   marginTop: '3rem',
                                 }}
                                 onSelect={() => {}}
+                                dataTest="step3Currency"
                               />
                             </div>
                           </Col>
