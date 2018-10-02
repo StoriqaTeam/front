@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { isEmpty, map } from 'ramda';
 
+// $FlowIgnoreMe
 import ImageLoader from 'libs/react-image-loader';
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
@@ -30,25 +31,25 @@ type PropsType = {
       value: string,
     }>,
   },
-  onSave: (number, string) => any,
+  onSave: (number, string) => void,
 };
 
 type StateType = {
-  storageFocusId: ?number,
+  storageFocusId: ?string,
   storageFocusCurrentValue: ?string,
-  storageFocusValue: ?string,
+  storageFocusValue: string,
 };
 
 class StorageProductsTableRow extends Component<PropsType, StateType> {
   state = {
     storageFocusId: null,
     storageFocusCurrentValue: null,
-    storageFocusValue: null,
+    storageFocusValue: '',
   };
   handleCheckboxClick = (id: string | number): void => {
     log.info('id', id);
   };
-  handleFocus = (e: any, quantity: number): void => {
+  handleFocus = (e: SyntheticInputEvent<HTMLInputElement>, quantity: number): void => {
     const { id, value } = e.target;
     this.setState({
       storageFocusId: id,
@@ -64,9 +65,9 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
       });
     }
   };
-  handleChange = (e: any): void => {
+  handleChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { value } = e.target;
-    if (value >= 0 && value !== '') {
+    if (parseInt(value, 10) >= 0 && value !== '') {
       this.setState({
         storageFocusValue: value.replace(/^0+/, ''),
       });
@@ -80,7 +81,6 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
   handleSave = (productId: number): void => {
     const { onSave } = this.props;
     const { storageFocusValue } = this.state;
-    // $FlowIgnoreMe
     onSave(productId, storageFocusValue);
     this.setState({
       storageFocusId: null,
@@ -156,7 +156,7 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
         <Col size={3} sm={3} md={3} lg={3} xl={3} lgVisible>
           <div styleName="quantity">
             <Input
-              id={item.productId}
+              id={`${item.productId}`}
               type="number"
               inline
               fullWidth
