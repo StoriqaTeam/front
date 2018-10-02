@@ -28,7 +28,7 @@ type PropsType = {
   addressFull: AddressFullType,
   handleCancel: () => void,
   formErrors: {
-    [string]: string,
+    [string]: Array<string>,
   },
   handleSave: (data: {
     name: string,
@@ -40,7 +40,7 @@ type StateType = {
   name: string,
   addressFull: AddressFullType,
   formErrors: {
-    [string]: string,
+    [string]: Array<string>,
   },
 };
 
@@ -93,7 +93,7 @@ class Form extends Component<PropsType, StateType> {
             value={name || ''}
             label="Storage name"
             onChange={this.handleInputChange}
-            errors={propOr(null, 'name', formErrors) || null}
+            errors={propOr(null, 'name', formErrors)}
             limit={50}
             fullWidth
           />
