@@ -29,8 +29,6 @@ type PropsType = {
   environment: Environment,
 };
 
-let count = 0;
-
 class Storages extends PureComponent<PropsType> {
   createStorage = () => {
     // $FlowIgnoreMe
@@ -42,7 +40,6 @@ class Storages extends PureComponent<PropsType> {
   };
 
   handleEdit = (slug: ?string, isStorageData: boolean, e: any): void => {
-    console.log('---this.props', this.props);
     e.stopPropagation();
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);

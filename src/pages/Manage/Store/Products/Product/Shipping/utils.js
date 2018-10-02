@@ -143,7 +143,7 @@ export const convertCountriesToArrCodes = (params: {
         map(
           child => child.alpha3,
           filter(
-            child => child.isSelected || Boolean(isSelectedAll),
+            child => child.isSelected === true || Boolean(isSelectedAll),
             item.children,
           ),
         ),

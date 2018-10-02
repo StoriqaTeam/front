@@ -6,7 +6,8 @@ import { find, append, head, pathOr, map, isEmpty, omit, reject } from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { withShowAlert } from 'components/App/AlertContext';
-import { Input, Checkbox } from 'components/common';
+import { Input } from 'components/common/Input';
+import { Checkbox } from 'components/common/Checkbox';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';

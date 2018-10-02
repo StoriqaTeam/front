@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
@@ -19,7 +19,7 @@ import type {
 
 import type { Shipping_baseProduct as ShippingBaseProductType } from './__generated__/Shipping_baseProduct.graphql';
 
-import { LocalShipping, InterShipping } from '../index';
+import { LocalShipping, InterShipping } from './index';
 
 type StateType = {
   local: Array<RequestLocalShippingType>,
@@ -43,7 +43,11 @@ class Shipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     // $FlowIgnore
-    const shipping = pathOr(null, ['baseProduct', 'shipping'], props);
+    const shipping = pathOr(
+      null,
+      ['baseProduct', 'shipping'],
+      props.baseProduct,
+    );
     this.state = {
       local: [],
       international: [],
@@ -75,7 +79,7 @@ class Shipping extends Component<PropsType, StateType> {
       this.setState({ withoutLocal });
     }
     if (companies) {
-      if (inter) {
+      if (inter === true) {
         const international = map(
           item => ({
             companyPackageId: item.companyPackageRawId,
