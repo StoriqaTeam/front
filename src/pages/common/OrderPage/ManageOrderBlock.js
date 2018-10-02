@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { pathOr, isNil } from 'ramda';
-import PropTypes from 'prop-types';
+import { Environment } from 'relay-runtime';
 
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
@@ -22,6 +22,7 @@ import type {
 import './ManageOrderBlock.scss';
 
 type PropsType = {
+  environment: Environment,
   isAbleToSend: boolean,
   isAbleToCancel: boolean,
   onOrderSend: (success: boolean) => void,
@@ -73,7 +74,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
         trackId: this.state.trackNumber,
         comment: this.state.comment,
       },
-      environment: this.context.environment,
+      environment: this.props.environment,
       onCompleted: (
         response: ?SendOrderMutationResponseType,
         errors: ?Array<Error>,
@@ -190,9 +191,5 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     );
   }
 }
-
-ManageOrderBlock.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
 
 export default ManageOrderBlock;
