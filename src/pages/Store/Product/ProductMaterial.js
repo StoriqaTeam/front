@@ -19,8 +19,8 @@ type PropsType = {
   title: string,
   options: Array<MaterialType>,
   onSelect: ({
-      attributeId: string,
-      attributeValue: string,
+    attributeId: string,
+    attributeValue: string,
   }) => void,
   selectedValue: ?string,
   isOnSelected: boolean,
