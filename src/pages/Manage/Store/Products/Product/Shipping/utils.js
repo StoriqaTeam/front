@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import {
   map,
@@ -46,10 +46,11 @@ export const getServiceLogo = (params: {
   id: ?string,
   packages: Array<AvailablePackageType>,
 }): string => {
-  if (!params.id) {
+  const { id, packages } = params;
+  if (id == null) {
     return '';
   }
-  const foundPackage = find(propEq('name', params.id))(params.packages);
+  const foundPackage = find(propEq('name', id))(packages);
   return foundPackage ? foundPackage.logo : '';
 };
 
@@ -57,10 +58,11 @@ export const getServiceRawId = (params: {
   id: ?string,
   packages: Array<AvailablePackageType>,
 }): number => {
-  if (!params.id) {
+  const { id, packages } = params;
+  if (id == null) {
     return -1;
   }
-  const foundPackage = find(propEq('name', params.id))(params.packages);
+  const foundPackage = find(propEq('name', id))(packages);
   return foundPackage ? foundPackage.companyPackageRawId : -1;
 };
 
@@ -141,7 +143,7 @@ export const convertCountriesToArrCodes = (params: {
         map(
           child => child.alpha3,
           filter(
-            child => child.isSelected || Boolean(isSelectedAll),
+            child => child.isSelected === true || Boolean(isSelectedAll),
             item.children,
           ),
         ),

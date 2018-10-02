@@ -218,8 +218,8 @@ const routes = (
             }
           }
         `}
-        prepareVariables={(...args) => {
-          const queryObj = pathOr('', ['query'], last(args).location);
+        prepareVariables={(_, { location }) => {
+          const queryObj = pathOr('', ['query'], location);
           const searchTerm = urlToInput(queryObj);
           return { input: { ...searchTerm, getStoresTotalCount: true } };
         }}

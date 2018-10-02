@@ -17,8 +17,7 @@ import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Select, SpinnerCircle } from 'components/common';
-import { Button } from 'components/common/Button';
+import { Select, SpinnerCircle, Button } from 'components/common';
 import { CategorySelector } from 'components/CategorySelector';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
@@ -27,7 +26,8 @@ import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 
 import type { SelectItemType } from 'types';
 
-import { ProductFormContext, Shipping } from './index';
+import { ProductFormContext } from './index';
+import { Shipping } from './Shipping';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
 import Variants from './Variants/Variants';
@@ -118,7 +118,7 @@ type StateType = {
     getAttributes: ?Array<*>,
   },
   currencies: Array<SelectItemType>,
-  currency: SelectItemType,
+  currency: ?SelectItemType,
   variantFormErrors: {
     vendorCode?: Array<string>,
     price?: Array<string>,
@@ -278,7 +278,7 @@ class Form extends Component<PropsType, StateType> {
       return;
     }
     this.props.onSave(
-      { ...form, currencyId: Number(currency.id) },
+      { ...form, currencyId: currency ? Number(currency.id) : null },
       variantData,
     );
   };
@@ -321,7 +321,7 @@ class Form extends Component<PropsType, StateType> {
     }));
   };
 
-  handleOnSelectCurrency = (currency: SelectItemType) => {
+  handleOnSelectCurrency = (currency: ?SelectItemType) => {
     this.setState({ currency });
   };
 

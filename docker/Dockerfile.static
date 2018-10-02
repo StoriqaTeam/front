@@ -5,3 +5,4 @@ COPY docker/misc /app/build
 
 RUN mkdir -p /app/build/static
 COPY build/static /app/build/static
+COPY build/favicon.ico /app/build/favicon.ico

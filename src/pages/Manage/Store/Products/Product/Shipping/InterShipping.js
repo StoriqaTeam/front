@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
@@ -18,7 +18,7 @@ import type {
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
-import handlerShipping from './handlerShippingDecorator';
+import handlerShipping from './handlerInterShippingDecorator';
 
 import './InterShipping.scss';
 
@@ -34,7 +34,6 @@ type PropsType = {
   interAvailablePackages: InterAvailablePackageType,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
 
-  //
   // From Shipping Decorator
   companies: Array<FilledCompanyType>,
   editableItemId: ?string,
@@ -184,4 +183,4 @@ class InterShipping extends Component<PropsType, StateType> {
   }
 }
 
-export default handlerShipping(InterShipping, true);
+export default handlerShipping(InterShipping);
