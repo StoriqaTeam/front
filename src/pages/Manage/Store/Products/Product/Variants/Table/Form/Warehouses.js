@@ -45,14 +45,14 @@ type PropsType = {
 type StateType = {
   storageFocusId: ?string,
   storageFocusCurrentValue: ?string,
-  storageFocusValue: ?string,
+  storageFocusValue: string,
 };
 
 class Warehouses extends Component<PropsType, StateType> {
   state = {
     storageFocusId: null,
-    storageFocusCurrentValue: null,
-    storageFocusValue: null,
+    storageFocusCurrentValue: '',
+    storageFocusValue: '',
   };
 
   handleFocus = (e: any, quantity: number) => {
@@ -73,10 +73,10 @@ class Warehouses extends Component<PropsType, StateType> {
     }
   };
 
-  handleChange = (e: any) => {
+  handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    if (value >= 0 && value !== '') {
+    if (parseInt(value, 10) >= 0 && value !== '') {
       this.setState({
         storageFocusValue: value.replace(/^0+/, ''),
       });
