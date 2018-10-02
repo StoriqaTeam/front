@@ -49,7 +49,10 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
   handleCheckboxClick = (id: string | number): void => {
     log.info('id', id);
   };
-  handleFocus = (e: SyntheticInputEvent<HTMLInputElement>, quantity: number): void => {
+  handleFocus = (
+    e: SyntheticInputEvent<HTMLInputElement>,
+    quantity: number,
+  ): void => {
     const { id, value } = e.target;
     this.setState({
       storageFocusId: id,

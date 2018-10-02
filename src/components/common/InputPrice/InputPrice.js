@@ -23,7 +23,7 @@ type PropsType = {
   onFocus?: () => void,
   onBlur?: () => void,
   currency?: SelectItemType,
-  onChangeCurrency?: (item: SelectItemType) => void,
+  onChangeCurrency?: (item: ?SelectItemType) => void,
   price: number,
   label?: string,
   align?: 'center' | 'left' | 'right',
