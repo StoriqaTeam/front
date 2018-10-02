@@ -28,16 +28,16 @@ type StateType = {
 };
 
 type PropsType = {
-  transparent: ?boolean,
+  transparent?: boolean,
   items: Array<SelectItemType>,
   onSelect: (item: ?SelectItemType) => void,
   label: ?string,
   activeItem: ?SelectItemType,
   forForm: ?boolean,
-  forSearch: ?boolean,
-  forAutocomlete: ?boolean,
+  forSearch?: boolean,
+  forAutocomlete?: boolean,
   fullWidth: ?boolean,
-  containerStyle: ?{
+  containerStyle?: {
     [name: string]: any,
   },
   dataTest: string,

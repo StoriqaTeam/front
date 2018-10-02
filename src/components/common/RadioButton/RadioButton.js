@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
@@ -9,7 +9,7 @@ type PropsType = {
   id: string,
   label?: string,
   isChecked: boolean,
-  onChange: Function,
+  onChange: (id: string) => void,
   inline?: boolean,
 };
 

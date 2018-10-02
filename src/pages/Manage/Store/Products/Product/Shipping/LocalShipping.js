@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
@@ -18,7 +18,7 @@ import type {
 
 import FixPriceForm from './FixPriceForm';
 import CompanyItem from './CompanyItem';
-import handlerShipping from './handlerShippingDecorator';
+import handlerShipping from './handlerLocalShippingDecorator';
 
 import './LocalShipping.scss';
 

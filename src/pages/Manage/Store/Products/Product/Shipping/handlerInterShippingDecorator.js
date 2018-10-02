@@ -1,24 +1,21 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
-import type { Node } from 'react';
+import type { Node, ComponentType } from 'react';
 import {
   prepend,
   map,
-  difference,
   filter,
   isEmpty,
   forEach,
   contains,
   head,
   addIndex,
-  assoc,
 } from 'ramda';
 
 import type { SelectItemType } from 'types';
 
 import {
-  convertLocalAvailablePackages,
   getServiceLogo,
   convertInterAvailablePackages,
   convertCountriesToArrCodes,
@@ -36,18 +33,15 @@ import type {
   ServiceType,
   ShippingType,
   AvailablePackageType,
-  PickupShippingType,
 } from './types';
 
 type PropsType = {
-  children: Node,
+  children?: Node,
   currency: SelectItemType,
-  localShipping: Array<ShippingType>,
   interShipping: Array<ShippingType>,
-  localAvailablePackages: Array<AvailablePackageType>,
   interAvailablePackages: Array<AvailablePackageType>,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
-  pickupShipping: PickupShippingType,
+  error: ?string,
 };
 
 type StateType = {
@@ -57,51 +51,27 @@ type StateType = {
   possibleServices?: Array<ServiceType>,
 };
 
-export default (OriginalComponent: any, inter?: boolean) =>
+export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
     constructor(props: PropsType) {
       super(props);
-      const {
-        interShipping,
-        localShipping,
-        onChangeShippingData,
-        pickupShipping,
-      } = props;
+      const { interShipping, onChangeShippingData } = props;
       const companies = addIndex(map)(
         (item, idx) => this.makeCompany(item, idx),
-        inter ? interShipping : localShipping,
+        interShipping,
       );
       const checkedCompanies = filter(
         item => item.companyPackageRawId !== -1,
         companies || [],
       );
-      let shippingData = {
+      const shippingData = {
         companies: checkedCompanies,
-        inter,
+        inter: true,
+        withoutInter: Boolean(isEmpty(checkedCompanies)),
       };
-      if (inter) {
-        shippingData = assoc(
-          'withoutInter',
-          Boolean(inter && isEmpty(checkedCompanies)),
-          shippingData,
-        );
-      } else {
-        shippingData = assoc(
-          'withoutLocal',
-          Boolean(
-            !inter &&
-              isEmpty(checkedCompanies) &&
-              pickupShipping &&
-              !pickupShipping.pickup,
-          ),
-          shippingData,
-        );
-      }
       onChangeShippingData(shippingData);
 
-      const remainingServices = inter
-        ? this.setRemainingServicesInter(checkedCompanies)
-        : this.setRemainingServicesLocal(checkedCompanies);
+      const remainingServices = this.setRemainingServices(checkedCompanies);
 
       this.state = {
         companies: checkedCompanies,
@@ -110,16 +80,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
       };
     }
 
-    setRemainingServicesLocal = (
-      companies: Array<FilledCompanyType>,
-    ): Array<ServiceType> =>
-      difference(
-        convertLocalAvailablePackages(this.props.localAvailablePackages),
-        // $FlowIgnore
-        map(item => item.service, companies),
-      );
-
-    setRemainingServicesInter = (
+    setRemainingServices = (
       companies: Array<FilledCompanyType>,
     ): Array<InterServiceType> => {
       let defaultServices = convertInterAvailablePackages(
@@ -165,7 +126,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
     };
 
     handleOnSaveCompany = (company: CompanyType) => {
-      if (company.id) {
+      if (company.id !== undefined) {
         this.setState(
           (prevState: StateType) => {
             const { service } = company;
@@ -173,15 +134,11 @@ export default (OriginalComponent: any, inter?: boolean) =>
               ...company,
               companyPackageRawId: getServiceRawId({
                 id: company.service && company.service.id,
-                packages: inter
-                  ? this.props.interAvailablePackages
-                  : this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               logo: getServiceLogo({
                 id: company.service && company.service.id,
-                packages: inter
-                  ? this.props.interAvailablePackages
-                  : this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               service: service
                 ? { id: service.id, label: service.label }
@@ -191,9 +148,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
               item => (item.id === company.id ? newCompany : item),
               prevState.companies,
             );
-            const remainingServices = inter
-              ? this.setRemainingServicesInter(newCompanies)
-              : this.setRemainingServicesLocal(newCompanies);
+            const remainingServices = this.setRemainingServices(newCompanies);
             return {
               companies: newCompanies,
               remainingServices,
@@ -203,7 +158,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
           () => {
             this.props.onChangeShippingData({
               companies: this.state.companies,
-              inter,
+              inter: true,
             });
           },
         );
@@ -216,24 +171,18 @@ export default (OriginalComponent: any, inter?: boolean) =>
               id: `${Date.now()}`,
               companyPackageRawId: getServiceRawId({
                 id: company.service && company.service.id,
-                packages: inter
-                  ? this.props.interAvailablePackages
-                  : this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               logo: getServiceLogo({
                 id: company.service && company.service.id,
-                packages: inter
-                  ? this.props.interAvailablePackages
-                  : this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               service: service
                 ? { id: service.id, label: service.label }
                 : null,
             };
             const newCompanies = prepend(newCompany, prevState.companies);
-            const remainingServices = inter
-              ? this.setRemainingServicesInter(newCompanies)
-              : this.setRemainingServicesLocal(newCompanies);
+            const remainingServices = this.setRemainingServices(newCompanies);
             return {
               companies: newCompanies,
               remainingServices,
@@ -243,7 +192,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
           () => {
             this.props.onChangeShippingData({
               companies: this.state.companies,
-              inter,
+              inter: true,
             });
           },
         );
@@ -257,9 +206,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
             item => company.id !== item.id,
             prevState.companies,
           );
-          const remainingServices = inter
-            ? this.setRemainingServicesInter(newCompanies)
-            : this.setRemainingServicesLocal(newCompanies);
+          const remainingServices = this.setRemainingServices(newCompanies);
           return {
             companies: newCompanies,
             remainingServices,
@@ -269,7 +216,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
         () => {
           this.props.onChangeShippingData({
             companies: this.state.companies,
-            inter,
+            inter: true,
           });
         },
       );
@@ -281,12 +228,7 @@ export default (OriginalComponent: any, inter?: boolean) =>
           item => company.id !== item.id,
           prevState.companies,
         );
-        let possibleServices = [];
-        if (inter && company.countries) {
-          possibleServices = this.setRemainingServicesInter(newCompanies);
-        } else {
-          possibleServices = this.setRemainingServicesLocal(newCompanies);
-        }
+        const possibleServices = this.setRemainingServices(newCompanies);
         return {
           editableItemId: company.id,
           possibleServices,
@@ -299,58 +241,71 @@ export default (OriginalComponent: any, inter?: boolean) =>
     };
 
     makeCompany = (data: ShippingType, idx: number): FilledCompanyType => {
-      const {
-        interAvailablePackages,
-        localAvailablePackages,
-        currency,
-      } = this.props;
+      const { interAvailablePackages, currency } = this.props;
       const service = getService({
         id: data.companyPackageId,
-        packages: inter ? interAvailablePackages : localAvailablePackages,
+        packages: interAvailablePackages,
       });
 
       let company = {
         id: `${Date.now()}-${idx}`,
         companyPackageRawId: getServiceRawId({
           id: service && service.id,
-          packages: inter ? interAvailablePackages : localAvailablePackages,
+          packages: interAvailablePackages,
         }),
         currency,
         price: data.price,
         logo: getServiceLogo({
           id: service && service.id,
-          packages: inter ? interAvailablePackages : localAvailablePackages,
+          packages: interAvailablePackages,
         }),
         service,
       };
 
-      if (inter) {
-        const countries = convertCountriesForSelect({
-          countries: getCountries({
-            id: data.companyPackageId,
-            packages: interAvailablePackages,
-          }),
-          checkedCountries: convertCountriesToArrCodes({
-            countries: data.deliveriesTo ? head(data.deliveriesTo) : null,
-            isSelectedAll: true,
-          }),
-        });
-        company = { ...company, countries };
-      }
+      const countries = convertCountriesForSelect({
+        countries: getCountries({
+          id: data.companyPackageId,
+          packages: interAvailablePackages,
+        }),
+        checkedCountries: convertCountriesToArrCodes({
+          countries: data.deliveriesTo ? head(data.deliveriesTo) : null,
+          isSelectedAll: true,
+        }),
+      });
+      company = { ...company, countries };
 
       return company;
     };
 
     render() {
+      const {
+        currency,
+        error,
+        interAvailablePackages,
+        interShipping,
+        onChangeShippingData,
+      } = this.props;
+      const {
+        companies,
+        editableItemId,
+        remainingServices,
+        possibleServices,
+      } = this.state;
       return (
         <OriginalComponent
-          {...this.props}
-          {...this.state}
-          inter={inter}
+          currency={currency}
+          error={error}
+          companies={companies}
+          editableItemId={editableItemId}
+          remainingServices={remainingServices}
+          possibleServices={possibleServices}
+          onChangeShippingData={onChangeShippingData}
           onSaveCompany={this.handleOnSaveCompany}
           onRemoveCompany={this.handleOnRemoveCompany}
           onSetEditableItem={this.handleOnSetEditableItem}
           onRemoveEditableItem={this.handleOnRemoveEditableItem}
+          interAvailablePackages={interAvailablePackages}
+          interShipping={interShipping}
         >
           {this.props.children}
         </OriginalComponent>
