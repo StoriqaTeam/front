@@ -36,11 +36,13 @@ type PropsType = {
 
 type StateType = {
   timerValue: string,
+  isFirstRefetch: boolean,
 };
 
 class PaymentInfo extends PureComponent<PropsType, StateType> {
-  state: StateType = {
+  state = {
     timerValue: '',
+    isFirstRefetch: true,
   };
 
   componentDidMount() {
@@ -56,6 +58,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   unmounted: boolean = true;
 
   refetchInvoice = () => {
+    // console.log('---this.props', this.props);
     if (
       this.unmounted ||
       !this.props.invoiceId ||
@@ -87,6 +90,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
         setTimeout(() => {
           this.refetchInvoice();
         }, 5000);
+        this.setState({ isFirstRefetch: false });
       },
       { force: true },
     );
@@ -166,11 +170,34 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   render() {
+    const { isFirstRefetch } = this.state;
+    if (isFirstRefetch) {
+      return (
+        <div styleName="container">
+          <div styleName="title">Payment</div>
+          <div styleName="description">
+            Please wait until payment data<br />will be uploaded
+          </div>
+          <div styleName="info">
+            <div styleName="loader" />
+          </div>
+          <div styleName="separator" />
+          <div styleName="links">
+            <div>
+              You can pay with <span>Storiqa Wallet</span>
+            </div>
+            <div>
+              Don’t you have one yet? <span>Download</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
     // $FlowIgnoreMe;
     const invoice = pathOr(null, ['me', 'invoice'], this.props);
     if (!invoice) {
       return (
-        <div styleName="container">
+        <div styleName="container" data-test="PAYMENT_INFO_FAILED">
           <div>
             <div styleName="title">Error</div>
             <div styleName="description">Your payment was failed :(</div>
@@ -188,12 +215,23 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
       );
     }
 
-    const { wallet, amount, transactions } = invoice;
+    let wallet;
+    let amount;
+    let transactions;
+    let state: ?OrderStateType;
 
-    // eslint-disable-next-line
-    const state: OrderStateType = invoice.state;
+    if (invoice) {
+      ({ wallet, amount, transactions } = invoice);
+      // eslint-disable-next-line
+      state = invoice.state;
+    }
+
+    const dataTest =
+      state === 'NEW' || state === 'PAYMENT_AWAITED' || state === 'PAID'
+        ? state
+        : '';
     return (
-      <div styleName="container">
+      <div styleName="container" data-test={`PAYMENT_INFO_${dataTest}`}>
         {state !== 'PAID' && (
           <Fragment>
             <div styleName="title">Payment</div>
@@ -207,6 +245,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
             <div styleName="loader" />
           )}
           {wallet &&
+            amount &&
             (state === 'TRANSACTION_PENDING' ||
               state === 'PAYMENT_AWAITED') && (
               <Fragment>
@@ -244,32 +283,37 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                       <div styleName="loader-small" />
                     </div>
                   </div>
-                  {transactions.length > 0 && (
-                    <div styleName="transactions">
-                      <div styleName="row">
-                        <div styleName="transactions-title-tx">
-                          Transaction ID
-                        </div>
-                        <div styleName="transactions-title-amount">Amount</div>
-                      </div>
-                      {map(
-                        (item: { id: string, amount: number }) => (
-                          <div key={item.id} styleName="row">
-                            <div styleName="row-tx">
-                              <a
-                                href={`https://etherscan.io/tx/${item.id}`}
-                                target="_blank"
-                              >
-                                {item.id}
-                              </a>
-                            </div>
-                            <div styleName="row-amount">{item.amount} STQ</div>
+                  {transactions &&
+                    transactions.length > 0 && (
+                      <div styleName="transactions">
+                        <div styleName="row">
+                          <div styleName="transactions-title-tx">
+                            Transaction ID
                           </div>
-                        ),
-                        transactions,
-                      )}
-                    </div>
-                  )}
+                          <div styleName="transactions-title-amount">
+                            Amount
+                          </div>
+                        </div>
+                        {map(
+                          (item: { id: string, amount: number }) => (
+                            <div key={item.id} styleName="row">
+                              <div styleName="row-tx">
+                                <a
+                                  href={`https://etherscan.io/tx/${item.id}`}
+                                  target="_blank"
+                                >
+                                  {item.id}
+                                </a>
+                              </div>
+                              <div styleName="row-amount">
+                                {item.amount} STQ
+                              </div>
+                            </div>
+                          ),
+                          transactions,
+                        )}
+                      </div>
+                    )}
                 </div>
               </Fragment>
             )}
