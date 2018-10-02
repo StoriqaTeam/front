@@ -3,6 +3,7 @@ export type { CategoryChildrenType } from './CategoryChildrenType';
 export type { CategoryType } from './CategoryType';
 export type { CurrencyType } from './CurrencyType';
 export type { DirectoriesType } from './DirectoriesType';
+export type { FormErrorsType } from './FormErrorsType';
 export type { IconSizeType } from './IconSizeType';
 export type { LanguageType } from './LanguageType';
 export type { MobileCategoryType } from './MobileCategoryType';

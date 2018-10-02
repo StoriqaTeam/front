@@ -7,6 +7,8 @@ import { Button } from 'components/common/Button';
 import { Input } from 'components/common/Input';
 import { AddressForm } from 'components/AddressAutocomplete';
 
+import type { FormErrorsType } from 'types';
+
 import './Form.scss';
 
 type AddressFullType = {
@@ -39,9 +41,7 @@ type PropsType = {
 type StateType = {
   name: string,
   addressFull: AddressFullType,
-  formErrors: {
-    [string]: Array<string>,
-  },
+  formErrors: FormErrorsType,
 };
 
 class Form extends Component<PropsType, StateType> {
