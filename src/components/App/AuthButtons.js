@@ -1,3 +1,4 @@
+// @flow strict
 import React from 'react';
 import { Icon } from 'components/Icon';
 
@@ -16,7 +17,7 @@ const AuthButtons = ({ onOpenModal }: PropsType) => (
       role="button"
       tabIndex="0"
     >
-      <Icon type="login" size="24" />
+      <Icon type="login" size={24} />
     </div>
     <div
       styleName="signUpButton"

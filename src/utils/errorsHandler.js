@@ -1,10 +1,10 @@
-// @flow
+// @flow strict
 
 import { keys, isEmpty, pathOr, values } from 'ramda';
 
 import type { ProcessedErrorType } from 'utils/fromRelayError';
 
-import type { AlertType } from 'components/Alerts/Alert';
+import type { AlertType } from 'components/Alerts/types';
 
 export type AlertPropsType = {
   type: AlertType,

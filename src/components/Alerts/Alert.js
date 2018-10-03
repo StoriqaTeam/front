@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import classnames from 'classnames';
@@ -8,16 +8,7 @@ import CloseIcon from './svg/close_icon.svg';
 
 import './Alert.scss';
 
-export type AlertType = 'default' | 'success' | 'warning' | 'danger';
-
-export type AlertPropsType = {
-  createdAtTimestamp: number,
-  type: AlertType,
-  text: string,
-  link: { text: string, path?: string },
-  onClose: (timestamp: number) => void,
-  onClick?: () => void,
-};
+import type { AlertPropsType } from './types';
 
 type StateType = {
   isDisappearing: boolean,

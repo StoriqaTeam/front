@@ -10,7 +10,7 @@ import { AlertsContainer } from 'components/Alerts';
 import { AlertContextProvider } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 
-import type { AlertPropsType } from 'components/Alerts';
+import type { AlertPropsType } from 'components/Alerts/types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import type {

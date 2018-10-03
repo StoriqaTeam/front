@@ -2,7 +2,17 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { find, append, head, pathOr, map, isEmpty, omit, reject } from 'ramda';
+import {
+  find,
+  append,
+  head,
+  pathOr,
+  map,
+  isEmpty,
+  omit,
+  reject,
+  isNil,
+} from 'ramda';
 import { validate } from '@storiqa/shared';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -341,7 +351,7 @@ class Form extends Component<PropsType, StateType> {
                 }
                 onChange={this.handlePriceChange}
                 onBlur={this.handlePriceBlur}
-                value={price || ''}
+                value={!isNil(price) ? `${price}` : ''}
                 errors={formErrors && formErrors.price}
                 dataTest="variantPriceInput"
               />
@@ -355,7 +365,7 @@ class Form extends Component<PropsType, StateType> {
               fullWidth
               label="Cashback"
               onChange={this.handlePercentChange('cashback')}
-              value={cashback || ''}
+              value={!isNil(cashback) ? `${cashback}` : ''}
               dataTest="variantCashbackInput"
             />
             <span styleName="inputPostfix">Percent</span>
@@ -367,7 +377,7 @@ class Form extends Component<PropsType, StateType> {
               fullWidth
               label="Discount"
               onChange={this.handlePercentChange('discount')}
-              value={discount || ''}
+              value={!isNil(discount) ? `${discount}` : ''}
               dataTest="variantDiscountInput"
             />
             <span styleName="inputPostfix">Percent</span>

@@ -17,7 +17,7 @@ type TranslatedType = {
 };
 
 type DataType = {
-  name: ?Array<TranslatedType>,
+  name: string,
   shortDescription: ?Array<TranslatedType>,
   slug: ?string,
   defaultLanguage: ?string,

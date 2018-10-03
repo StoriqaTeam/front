@@ -15,7 +15,7 @@ import { UpdateWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateWarehouseMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
-
+import type { FormErrorsType } from 'types';
 import Form from './Form';
 
 import './EditStorage.scss';
@@ -40,9 +40,7 @@ type PropsType = {
 
 type StateType = {
   isLoading: boolean,
-  formErrors: {
-    [string]: string,
-  },
+  formErrors: FormErrorsType,
   name: string,
   addressFull: AddressFullType,
 };

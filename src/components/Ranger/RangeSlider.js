@@ -1,22 +1,45 @@
-// @flow
+// @flow strict
 
 import React, { Component, createRef } from 'react';
+import { isNil } from 'ramda';
 
 import { InputPrice } from 'components/common/InputPrice';
 
+import { setRefValue, setZindex } from './utils';
+
+import { RangeSliderTrack } from './index';
+
 import './RangeSlider.scss';
 
-type StateType = {
-  thumb1: number,
-  thumb2: number,
-  minValue: number,
-  maxValue: number,
-  thumb1InputValue: number,
-  thumb2InputValue: number,
-  focusedInput: ?string,
-  thumb1Phantom: number,
-  thumb2Phantom: number,
-  stepPhantom: number,
+type InputRefType = { current: null | HTMLInputElement };
+
+type DivRefType = { current: null | HTMLDivElement };
+
+type ThumbNameType = 'thumb1' | 'thumb2';
+
+type ThumbInputNameType = 'thumb1Input' | 'thumb2Input';
+
+type InputRangeType = {
+  ref: InputRefType,
+  id: string,
+  value: string,
+  min: number,
+  max: number,
+  step: number,
+  type: string,
+  onChange: (SyntheticInputEvent<HTMLInputElement>) => void,
+  onMouseDown: (SyntheticInputEvent<HTMLInputElement>) => void,
+};
+
+type InputPriceType = {
+  inputRef: (?HTMLInputElement) => void,
+  id: string,
+  onChangePrice: number => void,
+  onFocus: () => void,
+  onBlur: () => void,
+  price: number,
+  align: 'center' | 'left' | 'right',
+  dataTest: string,
 };
 
 type PropsType = {
@@ -28,6 +51,19 @@ type PropsType = {
     thumb1: number,
     thumb2: number,
   }) => void,
+};
+
+type StateType = {
+  thumb1: number,
+  thumb2: number,
+  minValue: number,
+  maxValue: number,
+  thumb1InputValue: number,
+  thumb2InputValue: number,
+  focusedInput: ?ThumbInputNameType,
+  thumb1Phantom: number,
+  thumb2Phantom: number,
+  stepPhantom: number,
 };
 
 class RangeSlider extends Component<PropsType, StateType> {
@@ -84,29 +120,34 @@ class RangeSlider extends Component<PropsType, StateType> {
     }
   }
 
-  onChangeEvent = (
-    id: 'thumb1' | 'thumb2',
-    value: number,
-    prevValue: number,
-  ) => {
+  onChangeEvent = (id: ThumbNameType, value: number, prevValue: number) => {
+    const thumbRef = this.getThumbRef(id);
     const event = new Event('input', { bubbles: true });
     // $FlowIgnore
     event.simulated = true;
+    setRefValue(thumbRef.current)(`${value}`);
     // $FlowIgnore
-    this[`${id}Ref`].current.value = value;
-    // $FlowIgnore
-    const tracker = this[`${id}Ref`].current._valueTracker; // eslint-disable-line
+    const tracker = thumbRef.current._valueTracker; // eslint-disable-line
     if (tracker) {
       tracker.setValue(prevValue);
     }
-    // $FlowIgnore
-    this[`${id}Ref`].current.dispatchEvent(event);
+    if (!isNil(thumbRef.current)) {
+      thumbRef.current.dispatchEvent(event);
+    }
   };
 
-  setValues = (id: 'thumb1' | 'thumb2', value: number) => {
+  getThumbRef = (id: ThumbNameType): InputRefType =>
+    id === 'thumb1' ? this.thumb1Ref : this.thumb2Ref;
+
+  getInputPriceRef = (id: ThumbInputNameType): ?HTMLInputElement =>
+    id === 'thumb1Input' ? this.thumb1InputRef : this.thumb2InputRef;
+
+  setValues = (id: ThumbNameType, value: number): void => {
     const { stepPhantom, minValue } = this.state;
-    // $FlowIgnore
-    this[`${id}Ref`].current.value = Math.round(value / stepPhantom);
+    const thumbRef = this.getThumbRef(id);
+    const roundedValue = Math.round(value / stepPhantom);
+    setRefValue(thumbRef.current)(`${roundedValue}`);
+
     this.setState(
       {
         [`${id}`]: value,
@@ -117,40 +158,44 @@ class RangeSlider extends Component<PropsType, StateType> {
     );
   };
 
-  formatNumber = (value: number) => Number(value.toFixed(8));
+  formatNumber = (value: number): number => Number(value.toFixed());
 
-  transferData = () => {
-    this.props.onChange({
-      thumb1: this.formatNumber(this.state.thumb1),
-      thumb2: this.formatNumber(this.state.thumb2),
+  transferData = (): void => {
+    const { onChange } = this.props;
+    const { thumb1, thumb2 } = this.state;
+    onChange({
+      thumb1: this.formatNumber(thumb1),
+      thumb2: this.formatNumber(thumb2),
     });
   };
 
-  handleKeydown = (e: any) => {
+  handleKeydown = (e: SyntheticKeyboardEvent<HTMLInputElement>): void => {
     const { focusedInput } = this.state;
-    if (e.keyCode === 13 && focusedInput) {
-      // $FlowIgnore
-      this[`${focusedInput}Ref`].blur();
+    if (e.keyCode === 13 && !isNil(focusedInput)) {
+      const inputRef = this.getInputPriceRef(focusedInput);
+      if (!isNil(inputRef)) {
+        inputRef.blur();
+      }
     }
   };
 
-  thumb1Ref: any;
-  thumb2Ref: any;
-  sectionRef: any;
-  thumb1InputRef: any;
-  thumb2InputRef: any;
+  thumb1Ref: InputRefType;
+  thumb2Ref: InputRefType;
+  sectionRef: DivRefType;
+  thumb1InputRef: ?HTMLInputElement;
+  thumb2InputRef: ?HTMLInputElement;
 
-  handleOnChange = (e: any) => {
+  handleOnChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { id } = e.target;
-    const value = parseFloat(e.target.value);
+    const parsedValue = parseFloat(e.target.value);
     const { stepPhantom, minValue } = this.state;
     this.setState(
       {
-        [id]: minValue + value * stepPhantom,
-        [`${id}Phantom`]: value,
-        [`${id}InputValue`]: minValue + value * stepPhantom,
+        [id]: minValue + parsedValue * stepPhantom,
+        [`${id}Phantom`]: parsedValue,
+        [`${id}InputValue`]: minValue + parsedValue * stepPhantom,
       },
-      () => {
+      (): void => {
         this.transferData();
         if (this.state.thumb1Phantom > this.state.thumb2Phantom) {
           this.setState(
@@ -171,24 +216,34 @@ class RangeSlider extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnMouseDown = (e: any) => {
+  handleOnMouseDown = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { id } = e.target;
+    const { current } = this.thumb1Ref;
+    const applyZindex: string => ?HTMLInputElement = setZindex(current);
     if (id === 'thumb1Phantom') {
-      this.thumb1Ref.current.style.zIndex = 3;
+      applyZindex('3');
     } else {
-      this.thumb1Ref.current.style.zIndex = '';
+      applyZindex('');
     }
   };
 
-  handleOnMouseDownSection = (e: any) => {
-    const DOMRect = this.sectionRef.current.getBoundingClientRect();
+  handleOnMouseDownSection = (e: SyntheticMouseEvent<HTMLDivElement>): void => {
+    let DOMRect = {};
+
+    if (!isNil(this.sectionRef.current)) {
+      DOMRect = this.sectionRef.current.getBoundingClientRect();
+    }
 
     // volume (how many in one unit of value)
     const { thumb1Phantom, thumb2Phantom } = this.state;
     const volume = 100 / (DOMRect.width - 16);
 
     // Coordinate
-    let coor = e.clientX - DOMRect.x;
+    /**
+     * @desc 'x' is an experimental feature. use 'left' instead
+     * @link https://github.com/facebook/flow/issues/5357
+     */
+    let coor = e.clientX - DOMRect.left;
     if (coor <= 8) {
       coor = 0;
     } else if (coor >= DOMRect.width - 8) {
@@ -209,7 +264,7 @@ class RangeSlider extends Component<PropsType, StateType> {
     this.onChangeEvent('thumb1', thumb, thumb1Phantom);
   };
 
-  handleOnChangeInput = (id: string, value: number) => {
+  handleOnChangeInput = (id: ThumbInputNameType, value: number): void => {
     if (id === 'thumb1Input') {
       this.setState({ thumb1InputValue: value });
     } else {
@@ -217,11 +272,11 @@ class RangeSlider extends Component<PropsType, StateType> {
     }
   };
 
-  handleOnFocusInput = (id: string) => {
+  handleOnFocusInput = (id: ThumbInputNameType): void => {
     this.setState({ focusedInput: id });
   };
 
-  handleOnBlurInput = (id: string) => {
+  handleOnBlurInput = (id: ThumbInputNameType): void => {
     const {
       thumb1InputValue,
       thumb2InputValue,
@@ -255,15 +310,49 @@ class RangeSlider extends Component<PropsType, StateType> {
     this.setState({ focusedInput: null });
   };
 
+  makeInputRanges = (ids: Array<ThumbNameType>): Array<InputRangeType> =>
+    ids.map((id: ThumbNameType) => ({
+      id,
+      max: 100,
+      min: 0,
+      onChange: this.handleOnChange,
+      onMouseDown: this.handleOnMouseDown,
+      ref: this.getThumbRef(id),
+      step: 1,
+      type: 'range',
+      value: this.state[`${id}Phantom`],
+    }));
+
+  makeInputPrices = (ids: Array<ThumbInputNameType>): Array<InputPriceType> =>
+    ids.map((id: ThumbInputNameType) => ({
+      inputRef: node => {
+        this.applyInputNode(id, node);
+      },
+      id,
+      onChangePrice: (value: number) => {
+        this.handleOnChangeInput(id, value);
+      },
+      onFocus: () => {
+        this.handleOnFocusInput(id);
+      },
+      onBlur: () => {
+        this.handleOnBlurInput(id);
+      },
+      price: this.formatNumber(this.state[`${id}Value`]),
+      align: 'left',
+      dataTest: `${id}InputPrice`,
+    }));
+
+  applyInputNode = (id: string, node: ?HTMLInputElement): void => {
+    if (id === 'thumb1Input') {
+      this.thumb1InputRef = node;
+    } else {
+      this.thumb2InputRef = node;
+    }
+  };
+
   render() {
-    const {
-      minValue,
-      maxValue,
-      thumb1InputValue,
-      thumb2InputValue,
-      thumb1Phantom,
-      thumb2Phantom,
-    } = this.state;
+    const { minValue, maxValue, thumb1Phantom, thumb2Phantom } = this.state;
     return (
       <div styleName="container">
         <div
@@ -273,73 +362,22 @@ class RangeSlider extends Component<PropsType, StateType> {
           role="button"
           tabIndex="0"
         >
-          <input
-            ref={this.thumb1Ref}
-            id="thumb1"
-            value={thumb1Phantom}
-            min={0}
-            max={100}
-            step={1}
-            type="range"
-            onChange={this.handleOnChange}
-            onMouseDown={this.handleOnMouseDown}
+          {this.makeInputRanges(['thumb1', 'thumb2']).map(input => (
+            <input key={input.id} {...input} />
+          ))}
+          <RangeSliderTrack
+            thumb1Phantom={thumb1Phantom}
+            thumb2Phantom={thumb2Phantom}
           />
-          <input
-            ref={this.thumb2Ref}
-            id="thumb2"
-            value={thumb2Phantom}
-            min={0}
-            max={100}
-            step={1}
-            type="range"
-            onChange={this.handleOnChange}
-            onMouseDown={this.handleOnMouseDown}
-          />
-          <div styleName="trackWrap">
-            <div styleName="track" />
-            <div
-              styleName="shadowTrack shadowLeftTrack"
-              style={{ width: `${thumb1Phantom}%` }}
-            />
-            <div
-              styleName="shadowTrack shadowRightTrack"
-              style={{ width: `${100 - thumb2Phantom}%` }}
-            />
-          </div>
           <div styleName="minTooltip" title={minValue} />
           <div styleName="maxTooltip" title={maxValue} />
         </div>
         <div styleName="inputs">
-          <div>
-            <InputPrice
-              inputRef={node => {
-                this.thumb1InputRef = node;
-              }}
-              id="thumb1Input"
-              onChangePrice={(value: number) => {
-                this.handleOnChangeInput('thumb1Input', value);
-              }}
-              onBlur={() => this.handleOnBlurInput('thumb1Input')}
-              onFocus={() => this.handleOnFocusInput('thumb1Input')}
-              price={this.formatNumber(thumb1InputValue)}
-              align="center"
-            />
-          </div>
-          <div>
-            <InputPrice
-              inputRef={node => {
-                this.thumb2InputRef = node;
-              }}
-              id="thumb2Input"
-              onChangePrice={(value: number) => {
-                this.handleOnChangeInput('thumb2Input', value);
-              }}
-              onFocus={() => this.handleOnFocusInput('thumb2Input')}
-              onBlur={() => this.handleOnBlurInput('thumb2Input')}
-              price={this.formatNumber(thumb2InputValue)}
-              align="center"
-            />
-          </div>
+          {this.makeInputPrices(['thumb1Input', 'thumb2Input']).map(input => (
+            <div key={input.id}>
+              <InputPrice {...input} />
+            </div>
+          ))}
         </div>
       </div>
     );

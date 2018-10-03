@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
@@ -12,6 +12,7 @@ import {
   toLower,
   head,
   isEmpty,
+  isNil,
 } from 'ramda';
 import debounce from 'lodash.debounce';
 
@@ -28,17 +29,17 @@ type StateType = {
 };
 
 type PropsType = {
-  transparent?: boolean,
+  transparent: boolean,
   items: Array<SelectItemType>,
-  onSelect: (item: ?SelectItemType) => void,
-  label: ?string,
+  onSelect: (item: SelectItemType) => void,
+  label?: ?string,
   activeItem: ?SelectItemType,
-  forForm: ?boolean,
-  forSearch?: boolean,
-  forAutocomlete?: boolean,
-  fullWidth: ?boolean,
-  containerStyle?: {
-    [name: string]: any,
+  forForm: boolean,
+  forSearch: boolean,
+  forAutocomlete: boolean,
+  fullWidth: boolean,
+  containerStyle?: ?{
+    [name: string]: string,
   },
   dataTest: string,
   // eslint-disable-next-line
@@ -56,13 +57,18 @@ class Select extends Component<PropsType, StateType> {
     const { items, withEmpty } = nextProps;
     return {
       ...prevState,
-      items: withEmpty ? prepend({ id: '', label: '' }, items) : items,
+      items: !isNil(withEmpty) ? prepend({ id: '', label: '' }, items) : items,
     };
   }
 
   static defaultProps = {
     onClick: () => {},
     isMobile: false,
+    forForm: false,
+    forSearch: false,
+    forAutocomlete: false,
+    fullWidth: false,
+    transparent: false,
   };
 
   constructor(props: PropsType) {
@@ -100,11 +106,11 @@ class Select extends Component<PropsType, StateType> {
   getIndexFromItems = (item: ?SelectItemType) =>
     item ? findIndex(propEq('id', item.id))(this.props.items) : -1;
 
-  button: any;
-  itemsWrap: any;
-  items: any;
+  button: ?HTMLDivElement;
+  itemsWrap: ?HTMLElement;
+  items: ?HTMLDivElement;
 
-  handleKeydown = (e: any): void => {
+  handleKeydown = (e: SyntheticKeyboardEvent<>): void => {
     if (this.state.isExpanded) {
       e.preventDefault();
       const { items, activeItem } = this.props;
@@ -145,7 +151,7 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  handleKeyActiveItem = () => {
+  handleKeyActiveItem = (): void => {
     const { items, onSelect } = this.props;
     const { searchValue } = this.state;
     const filteredItems = filter(
@@ -159,29 +165,36 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  resetSearchValue = () => {
+  resetSearchValue = (): void => {
     this.setState({ searchValue: '' });
   };
 
-  handleAutoScroll = (idx: number, behavior: ?string) => {
+  handleAutoScroll = (idx: number, behavior: ?string): void => {
     const visibleHeight = itemHeight * maxItemsCount;
-    const itemsWrapScroll = this.itemsWrap.scrollTop;
-
+    let itemsWrapScroll = 0;
+    if (!isNil(this.itemsWrap)) {
+      itemsWrapScroll = this.itemsWrap.scrollTop;
+    }
     // new item is not included above
     if ((idx - 1) * itemHeight < itemsWrapScroll) {
-      this.itemsWrap.scroll({ top: idx * itemHeight, behavior });
+      // $FlowIgnoreMe
+      if (!isNil(this.itemsWrap) && !isNil(this.itemsWrap.scroll)) {
+        this.itemsWrap.scroll({ top: idx * itemHeight, behavior });
+      }
     }
-
     // new item is not included below
     if ((idx + 1) * itemHeight > itemsWrapScroll + visibleHeight) {
-      this.itemsWrap.scroll({
-        top: (idx + 1) * itemHeight - visibleHeight,
-        behavior,
-      });
+      // $FlowIgnoreMe
+      if (!isNil(this.itemsWrap) && !isNil(this.itemsWrap.scroll)) {
+        this.itemsWrap.scroll({
+          top: (idx + 1) * itemHeight - visibleHeight,
+          behavior,
+        });
+      }
     }
   };
 
-  handleToggleExpand = (e: any): void => {
+  handleToggleExpand = (e: SyntheticInputEvent<>): void => {
     const { onClick } = this.props;
     const isButtonClick = this.button && this.button.contains(e.target);
     const isItemsWrap = this.itemsWrap && this.itemsWrap.contains(e.target);
@@ -202,10 +215,11 @@ class Select extends Component<PropsType, StateType> {
     }
   };
 
-  handleItemClick = (e: any): void => {
+  handleItemClick = (e: SyntheticInputEvent<HTMLDivElement>): void => {
     const { onSelect, items } = this.props;
-    if (this.props && onSelect) {
-      onSelect(find(propEq('id', e.target.id))(items));
+    const result = find(propEq('id', e.target.id), items);
+    if (this.props && onSelect && !isNil(result)) {
+      onSelect(result);
     }
   };
 
@@ -240,7 +254,8 @@ class Select extends Component<PropsType, StateType> {
         style={containerStyle}
         data-test={dataTest}
       >
-        {((label && !isBirthdate) || !(isBirthdate && activeItem)) && (
+        {((!isNil(label) && !isBirthdate) ||
+          !(!isNil(isBirthdate) && activeItem)) && (
           <div
             styleName={classNames('label', {
               labelFloat: activeItem || isExpanded,
@@ -295,7 +310,9 @@ class Select extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        {(forForm || forSearch || isBirthdate) && <div styleName="hr" />}
+        {(!isNil(forForm) || !isNil(forSearch) || isBirthdate) && (
+          <div styleName="hr" />
+        )}
       </div>
     );
   }

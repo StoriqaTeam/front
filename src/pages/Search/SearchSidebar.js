@@ -65,9 +65,9 @@ type AttrFilterType = {
 };
 
 class SearchSidebar extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
+  constructor(props) {
     super(props);
-    // $FlowIgnore
+
     const minValue = pathOr(
       0,
       [
@@ -80,7 +80,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       props,
     );
-    // $FlowIgnore
+
     const maxValue = pathOr(
       0,
       [
@@ -93,13 +93,13 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       props,
     );
-    // $FlowIgnore
+
     let thumb1 = pathOr(
       null,
       ['match', 'location', 'query', 'minValue'],
       props,
     );
-    // $FlowIgnore
+
     let thumb2 = pathOr(
       null,
       ['match', 'location', 'query', 'maxValue'],
@@ -149,6 +149,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       this.props,
     );
+
     // $FlowIgnore
     const maxValue = pathOr(
       0,
@@ -162,12 +163,15 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ],
       this.props,
     );
+    // console.log('minValue', minValue);
+    // console.log('maxValue', maxValue);
+
     if (minValue !== prevState.minValue || maxValue !== prevState.maxValue) {
       this.setRangeData(minValue, maxValue);
     }
   }
 
-  setRangeData = (minValue: number, maxValue: number) => {
+  setRangeData = (minValue: number, maxValue: number): void => {
     this.setState(
       {
         thumb1: minValue,
@@ -175,7 +179,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
         minValue,
         maxValue,
       },
-      () => {
+      (): void => {
         this.setRangeUrl(minValue, maxValue);
       },
     );

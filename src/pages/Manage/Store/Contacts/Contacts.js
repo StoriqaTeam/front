@@ -314,7 +314,7 @@ class Contacts extends Component<PropsType, StateType> {
           isUrl={Boolean(icon)}
           icon={icon}
           id={id}
-          value={propOr('', id, this.state.form)}
+          value={propOr('', id, this.state.form) || ''}
           label={label}
           onChange={this.handleInputChange(id)}
           errors={propOr(null, id, this.state.formErrors)}

@@ -6,6 +6,8 @@ import classNames from 'classnames';
 
 import { Select } from 'components/common/Select';
 
+import type { SelectItemType } from 'types';
+
 import './ProductMaterial.scss';
 
 import type { WidgetOptionType } from './types';
@@ -16,7 +18,10 @@ type PropsType = {
   id: string,
   title: string,
   options: Array<MaterialType>,
-  onSelect: Function,
+  onSelect: ({
+    attributeId: string,
+    attributeValue: string,
+  }) => void,
   selectedValue: ?string,
   isOnSelected: boolean,
   availableValues: Array<string>,
@@ -27,7 +32,7 @@ type StateType = {
 };
 
 class ProductMaterial extends Component<PropsType, StateType> {
-  handleSelect = (selected: WidgetOptionType): void => {
+  handleSelect = (selected: SelectItemType): void => {
     this.props.onSelect({
       attributeId: this.props.id,
       attributeValue: selected.label,

@@ -1,8 +1,9 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
+import { isNil } from 'ramda';
 import classNames from 'classnames';
-
+// $FlowIgnoreMe
 import { AppContext } from 'components/App';
 import { Input } from 'components/common/Input';
 
@@ -17,12 +18,12 @@ type StateType = {
 };
 
 type PropsType = {
-  inputRef?: (node: any) => void,
+  inputRef?: (node: ?HTMLInputElement) => void,
   onChangePrice: (value: number) => void,
   onFocus?: () => void,
   onBlur?: () => void,
-  currency: SelectItemType,
-  onChangeCurrency?: (item: SelectItemType) => void,
+  currency?: SelectItemType,
+  onChangeCurrency?: (item: ?SelectItemType) => void,
   price: number,
   label?: string,
   align?: 'center' | 'left' | 'right',
@@ -45,7 +46,7 @@ class InputPrice extends Component<PropsType, StateType> {
     };
   }
 
-  handlePriceChange = (e: any) => {
+  handlePriceChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const {
       target: { value },
     } = e;
@@ -131,7 +132,7 @@ class InputPrice extends Component<PropsType, StateType> {
                 dataTest={`${dataTest}Input`}
               />
             </div>
-            {currency && (
+            {!isNil(currency) && (
               <div
                 styleName={classNames('select', {
                   fixCurrencySelect: !onChangeCurrency,

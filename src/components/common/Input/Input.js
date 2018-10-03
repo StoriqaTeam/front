@@ -1,7 +1,9 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
+import type { Element } from 'react';
 import classNames from 'classnames';
+import { isNil, isEmpty } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -10,25 +12,25 @@ import './Input.scss';
 type PropsType = {
   id: string,
   value: string,
-  label: string,
-  errors: ?Array<string>,
-  onChange: (e: { target: { value: string } }) => void,
-  onBlur: (e: any) => void,
-  onFocus: (e: any) => void,
+  label: string | Element<'span'>,
+  errors?: ?Array<string>,
+  onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
+  onBlur: (e: SyntheticInputEvent<HTMLInputElement>) => void,
+  onFocus: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   onKeyDown: () => void,
   onClick: () => void,
-  min: ?string,
+  min: string,
   icon: string,
-  isUrl: ?boolean,
-  inputRef: ?(e: any) => void,
-  isAutocomplete: ?boolean,
-  limit: ?number,
+  isUrl: boolean,
+  inputRef: ?(node: ?HTMLInputElement) => void,
+  isAutocomplete: boolean,
+  limit?: ?number,
   type?: string,
   fullWidth?: boolean,
-  postfix: ?string,
+  postfix: string,
   dataTest: ?string,
-  inline: ?boolean,
-  search?: boolean,
+  inline: boolean,
+  search: boolean,
   align?: 'center' | 'left' | 'right',
 };
 
@@ -39,7 +41,22 @@ type StateType = {
 
 class Input extends Component<PropsType, StateType> {
   static defaultProps = {
+    id: 'stq-input',
+    label: '',
     icon: '',
+    isAutocomplete: false,
+    search: false,
+    isUrl: false,
+    postfix: '',
+    dataTest: '',
+    min: '',
+    inline: false,
+    onChange: () => {},
+    onBlur: () => {},
+    onFocus: () => {},
+    onKeyDown: () => {},
+    onClick: () => {},
+    inputRef: () => {},
   };
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const value = nextProps.value == null ? '' : `${nextProps.value}`;
@@ -60,12 +77,12 @@ class Input extends Component<PropsType, StateType> {
 
   input: ?HTMLInputElement;
 
-  handleChange = (e: any) => {
+  handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { onChange } = this.props;
     onChange(e);
   };
 
-  handleFocus = (e: any) => {
+  handleFocus = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { onFocus } = this.props;
     this.setState({
       labelFloat: !this.state.labelFloat || true,
@@ -74,7 +91,7 @@ class Input extends Component<PropsType, StateType> {
     if (onFocus) onFocus(e);
   };
 
-  handleBlur = (e: any) => {
+  handleBlur = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value, onBlur } = this.props;
     this.setState({
       labelFloat: Boolean(value) && value.length > 0,
@@ -105,7 +122,7 @@ class Input extends Component<PropsType, StateType> {
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
         onClick={this.props.onClick}
-        data-test={dataTest || id}
+        data-test={!isEmpty(dataTest) || id}
         style={{ textAlign: align || 'left' }}
       />
     ) : (
@@ -113,14 +130,14 @@ class Input extends Component<PropsType, StateType> {
         id={id}
         ref={inputRef}
         name={id}
-        type={type || 'text'}
+        type={!isNil(type) || 'text'}
         value={value || ''}
-        min={min || ''}
+        min={!isEmpty(min) || ''}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
-        data-test={dataTest || id}
+        data-test={!isEmpty(dataTest) || id}
         style={{ textAlign: align || 'left' }}
       />
     );
@@ -153,7 +170,7 @@ class Input extends Component<PropsType, StateType> {
           inline,
         })}
       >
-        {label && (
+        {!isEmpty(label) && (
           <span
             styleName={classNames('label', { labelFloat: labelFloat || value })}
           >
@@ -168,7 +185,7 @@ class Input extends Component<PropsType, StateType> {
         <div styleName="input">
           <div styleName="inputContent">
             {this.renderInput()}
-            {postfix && <span styleName="postfix">{postfix}</span>}
+            {!isEmpty(postfix) && <span styleName="postfix">{postfix}</span>}
           </div>
           <hr />
         </div>
@@ -187,7 +204,7 @@ class Input extends Component<PropsType, StateType> {
           )}
         {isFocus &&
           !isUrl &&
-          limit && (
+          !isNil(limit) && (
             <div
               styleName={classNames('valueLength', {
                 maxValueLength: value && value.length === limit,

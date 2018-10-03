@@ -1,12 +1,12 @@
-// @flow
+// @flow strict
 
-import * as React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { map } from 'ramda';
 
-import { Alert } from 'components/Alerts';
+import { Alert } from './index';
 
-import type { AlertPropsType } from 'components/Alerts';
+import type { AlertPropsType } from './types';
 
 const alertsRootDiv = process.env.BROWSER
   ? document.getElementById('alerts-root')
@@ -16,7 +16,7 @@ type PropsType = {
   alerts: Array<AlertPropsType>,
 };
 
-class AlertsContainer extends React.PureComponent<PropsType> {
+class AlertsContainer extends PureComponent<PropsType> {
   renderAlerts = map(alertProps => (
     <Alert key={alertProps.createdAtTimestamp} {...alertProps} />
   ));
