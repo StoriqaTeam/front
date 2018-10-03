@@ -248,7 +248,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           <div style={{ margin: '1.05rem 0' }} />
           {activeItem === 'settings' ? (
             <MobileUpload
-              img={storeLogo}
+              img={convertSrc(storeLogo, 'small')}
               iconType="upload"
               id="some"
               onUpload={this.handleOnUpload}

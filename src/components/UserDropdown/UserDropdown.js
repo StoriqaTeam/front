@@ -3,6 +3,8 @@
 import React, { PureComponent } from 'react';
 import { toUpper, pathOr } from 'ramda';
 
+import { convertSrc } from 'utils';
+
 import { Dropdown } from 'components/Dropdown';
 import { Icon } from 'components/Icon';
 
@@ -47,7 +49,11 @@ class UserDropdown extends PureComponent<PropsTypes> {
             <div styleName="user">
               <div styleName="avatar">
                 {avatar ? (
-                  <img styleName="avatarImg" src={avatar} alt="img" />
+                  <img
+                    styleName="avatarImg"
+                    src={convertSrc(avatar, 'small')}
+                    alt="img"
+                  />
                 ) : (
                   <Icon type="person" size={16} />
                 )}

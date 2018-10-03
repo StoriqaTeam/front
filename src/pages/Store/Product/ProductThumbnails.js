@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { isEmpty, isNil, contains } from 'ramda';
 import classNames from 'classnames';
 
+import { convertSrc } from 'utils';
+
 import { Icon } from 'components/Icon';
 
 import './ProductThumbnails.scss';
@@ -103,7 +105,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                   clicked: isSelected || selected === index,
                   disabled: isDisabled,
                 })}
-                src={option.image}
+                src={convertSrc(option.image, 'small')}
                 alt={option.alt || 'image alt'}
               />
             </figure>

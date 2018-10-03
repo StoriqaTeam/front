@@ -7,7 +7,7 @@ import { filter, whereEq } from 'ramda';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
-import { formatPrice, getNameText, currentCurrency } from 'utils';
+import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 
 import CartProduct from './CartProduct';
 
@@ -59,7 +59,7 @@ class CartStore extends PureComponent<PropsType> {
                       <div styleName="store-info">
                         {store.logo ? (
                           <img
-                            src={store.logo}
+                            src={convertSrc(store.logo, 'small')}
                             alt="store_picture"
                             styleName="image"
                           />
