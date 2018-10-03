@@ -5,7 +5,7 @@ import { Link } from 'found';
 
 import { Rating } from 'components/common/Rating';
 
-import { extractText } from 'utils';
+import { extractText, convertSrc } from 'utils';
 
 import type { ProductType } from './types';
 import ChatIcon from './svg/chat.svg';
@@ -26,7 +26,9 @@ const ProductStore = () => (
                   role="img"
                   styleName="image"
                   style={{
-                    backgroundImage: store.logo ? `url(${store.logo})` : 'none',
+                    backgroundImage: convertSrc(store.logo, 'small')
+                      ? `url(${convertSrc(store.logo, 'small')})`
+                      : 'none',
                   }}
                 />
                 <div>

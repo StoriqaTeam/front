@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
+import { convertSrc } from 'utils';
+
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { SocialShare } from 'components/SocialShare';
@@ -60,7 +62,11 @@ class StoreHeader extends Component<{}, StateTypes> {
             </span>
             <figure styleName="shopLogo">
               {logo ? (
-                <ImageLoader fit src={logo} loader={<BannerLoading />} />
+                <ImageLoader
+                  fit
+                  src={convertSrc(logo, 'small')}
+                  loader={<BannerLoading />}
+                />
               ) : (
                 <Icon type="camera" size={56} />
               )}

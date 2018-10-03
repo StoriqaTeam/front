@@ -3,6 +3,8 @@
 import React from 'react';
 import { Link } from 'found';
 
+import { convertSrc } from 'utils';
+
 import { Icon } from 'components/Icon';
 
 import './UserDropdown.scss';
@@ -35,7 +37,7 @@ const ProfileMenu = ({
     <div styleName="top">
       <div styleName="icon">
         {avatar ? (
-          <img styleName="topImg" src={avatar} alt="img" />
+          <img styleName="topImg" src={convertSrc(avatar, 'small')} alt="img" />
         ) : (
           <Icon type="person" size={32} />
         )}

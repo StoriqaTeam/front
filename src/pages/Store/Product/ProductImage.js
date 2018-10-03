@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { equals, prepend, isNil } from 'ramda';
 
-import { isEmpty } from 'utils';
+import { isEmpty, convertSrc } from 'utils';
 
 import { Slider } from 'components/Slider';
 import { Icon } from 'components/Icon';
@@ -94,7 +94,11 @@ class ProductImage extends Component<PropsType, StateType> {
         <div styleName="imageWrapper">
           <figure styleName="image">
             {!isSquared && !isNil(photoMain) ? (
-              <img src={selected || photoMain} alt="" styleName="imageBlur" />
+              <img
+                src={convertSrc(selected || photoMain, 'medium')}
+                alt=""
+                styleName="imageBlur"
+              />
             ) : null}
             {discount > 0 ? <ProductDiscount discount={discount} /> : null}
             {!isNil(photoMain) ? (
@@ -102,7 +106,9 @@ class ProductImage extends Component<PropsType, StateType> {
                 role="img"
                 style={{
                   backgroundImage: `url(${
-                    !isEmpty(selected) ? selected : photoMain
+                    !isEmpty(selected)
+                      ? convertSrc(selected, 'medium')
+                      : convertSrc(photoMain, 'medium')
                   })`,
                   backgroundSize: 'contain',
                   backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
