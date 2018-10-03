@@ -7,6 +7,7 @@ export { default as Header } from './Header';
 export { default as HeaderBottom } from './HeaderBottom';
 export { default as HeaderResponsive } from './HeaderResponsive';
 export { default as HeaderTop } from './HeaderTop';
+export { default as HeaderDisclaimer } from './HeaderDisclaimer';
 export { default as InfoBlock } from './InfoBlock';
 export { default as Main } from './Main';
 export { default as MobileSearchMenu } from './MobileSearchMenu';

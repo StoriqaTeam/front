@@ -11,6 +11,7 @@ import {
   Footer,
   FooterResponsive,
   UserData,
+  HeaderDisclaimer,
 } from 'components/App';
 
 import './Page.scss';
@@ -32,6 +33,7 @@ export default (
             <UserData environment={environment}>
               {({ isShopCreated, userData, totalCount }) => (
                 <div styleName="container">
+                  {process.env.NODE_ENV === 'production' && <HeaderDisclaimer />}
                   {responsive ? (
                     <HeaderResponsive
                       isShopCreated={isShopCreated}
