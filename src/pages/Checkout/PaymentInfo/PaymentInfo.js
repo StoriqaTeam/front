@@ -58,7 +58,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   unmounted: boolean = true;
 
   refetchInvoice = () => {
-    // console.log('---this.props', this.props);
     if (
       this.unmounted ||
       !this.props.invoiceId ||
