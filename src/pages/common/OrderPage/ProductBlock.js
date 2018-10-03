@@ -5,7 +5,7 @@ import { slice, isEmpty } from 'ramda';
 import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
-import { formatPrice } from 'utils';
+import { formatPrice, convertSrc } from 'utils';
 
 import './ProductBlock.scss';
 
@@ -65,7 +65,11 @@ class ProductBlock extends PureComponent<PropsType> {
       <div styleName="container">
         <div styleName="photoWrapper">
           {product.photoUrl ? (
-            <img src={product.photoUrl} alt="" styleName="photo" />
+            <img
+              src={convertSrc(product.photoUrl, 'small')}
+              alt=""
+              styleName="photo"
+            />
           ) : (
             <div styleName="emptyLogo">
               <Icon type="camera" size={40} />
