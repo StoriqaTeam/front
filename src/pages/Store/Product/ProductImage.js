@@ -48,7 +48,7 @@ class ProductImage extends Component<PropsType, StateType> {
       this.clearSelected();
     }
   }
-  setImage = async (selected: string): Promise<any> => {
+  setImage = async (selected: string): Promise<void> => {
     const { height, width } = await getImageMeta(selected);
     this.setState({ isSquared: equals(height, width) });
   };
@@ -69,27 +69,25 @@ class ProductImage extends Component<PropsType, StateType> {
     const { selected, isSquared } = this.state;
     return (
       <div styleName="container">
-        <div styleName="thumbnails">
-          <div
-            styleName={
-              !isEmpty(additionalPhotos)
-                ? 'thumbnailsWrapper'
-                : 'noThumbnailsWrapper'
-            }
-          >
-            {!isEmpty(additionalPhotos) ? (
-              <div styleName="thumbnailsContent">
-                <ProductThumbnails
-                  isFirstSelected
-                  isReset={isEmpty(selected)}
-                  onClick={this.handleClick}
-                  options={makeAdditionalPhotos(
-                    prepend(photoMain, additionalPhotos || []),
-                  )}
-                />
-              </div>
-            ) : null}
-          </div>
+        <div
+          styleName={
+            !isEmpty(additionalPhotos)
+              ? 'thumbnailsWrapper'
+              : 'noThumbnailsWrapper'
+          }
+        >
+          {!isEmpty(additionalPhotos) ? (
+            <div styleName="thumbnailsContent">
+              <ProductThumbnails
+                isFirstSelected
+                isReset={isEmpty(selected)}
+                onClick={this.handleClick}
+                options={makeAdditionalPhotos(
+                  prepend(photoMain, additionalPhotos || []),
+                )}
+              />
+            </div>
+          ) : null}
         </div>
         <div styleName="imageWrapper">
           <figure styleName="image">

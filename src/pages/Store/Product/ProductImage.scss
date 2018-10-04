@@ -78,27 +78,23 @@
 }
 
 .thumbnailsContent {
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  max-height: calc(99.375rem - 1rem);
-  overflow-x: hidden;
-  overflow-y: scroll;
   position: absolute;
   top: 0;
-
-  @media (min-width: $lg) {
-    max-height: calc(47.875rem - 1rem);
-  }
-
 }
 
 .thumbnailsWrapper {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  display: none;
   margin: 2rem;
-  width: 12rem;
-  padding-top: 100%;
+  overflow-y: scroll;
+  padding-top: calc(100% - 15.975rem);
   position: relative;
-  //
+  width: 10rem;
+  @media (min-width: $md) {
+    display: block;
+  }
 }
 
 .noThumbnailsWrapper {
