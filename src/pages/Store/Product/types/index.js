@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import * as React from 'react';
 
@@ -105,5 +105,5 @@ export type SelectionType = {
 export type TabType = {
   id: string,
   label: string,
-  content: React.Node | React.Component<any, any> | string,
+  content: React.Node | React.Component<{}, {}> | string,
 };
