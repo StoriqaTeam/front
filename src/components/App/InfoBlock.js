@@ -84,7 +84,7 @@ class InfoBlock extends Component<{}, StateType> {
     return (
       <div styleName="container">
         <p styleName="address">
-          Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287{' '}
+          Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong{' '}
           <span>
             <a href="mailto:support@storiqa.com" styleName="email">
               support@storiqa.com
