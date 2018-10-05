@@ -63,8 +63,8 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
-    const { receiverPhone, recieverName } = order;
-    const customerName = recieverName || '-';
+    const { receiverPhone, receiverName } = order;
+    const customerName = receiverName || '-';
     const customerAddress = addressToString(order.addressFull) || '—';
     // const customerPhone = customer.phone || null; // is replaced by: order.receiverPhone
     const attributes = map(
