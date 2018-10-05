@@ -14,6 +14,15 @@ import Header from './Header';
 
 import './Table.scss';
 
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
+
 type PropsType = {
   category: {},
   variants: Array<{
@@ -51,6 +60,9 @@ type PropsType = {
   resetComeResponse: () => void,
   isNewVariant: boolean,
   toggleNewVariantParam: (value: boolean) => void,
+  customAttributes: Array<{
+    attribute: AttributeType,
+  }>,
 };
 
 type StateType = {
@@ -116,6 +128,7 @@ class Table extends Component<PropsType, StateType> {
       attributes?: Array<string>,
     },
   ) => {
+    const { customAttributes } = this.props;
     const { expandedItemId } = this.state;
     return map(
       item => (
@@ -143,6 +156,7 @@ class Table extends Component<PropsType, StateType> {
               }
               onChangeVariantForm={onChangeVariantForm}
               formErrors={variantFormErrors}
+              customAttributes={customAttributes}
             />
           )}
         </Fragment>

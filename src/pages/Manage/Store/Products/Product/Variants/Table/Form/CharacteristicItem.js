@@ -31,7 +31,7 @@ type AttributeType = {
 type PropsType = {
   attribute: AttributeType,
   onSelect: Function,
-  value: { attrId: number, value: string, metaField?: string },
+  value: { attrId: number, value: string, metaField?: ?string },
 };
 
 class CharacteristicItem extends PureComponent<PropsType> {
@@ -70,10 +70,10 @@ class CharacteristicItem extends PureComponent<PropsType> {
     return filter(complement(isNil), items);
   };
 
-  handleSelect = (value: { label: string }) => {
+  handleSelect = (value: ?{ label: string }) => {
     this.props.onSelect({
       ...this.props.value,
-      value: value.label,
+      value: value ? value.label : null,
       attrId: this.props.attribute.rawId,
     });
   };

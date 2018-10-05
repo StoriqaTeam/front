@@ -57,6 +57,32 @@ const mutation = graphql`
           }
         }
       }
+      customAttributes {
+        customAttribute {
+          id
+          rawId
+          attributeId
+          attribute {
+            id
+            rawId
+            name {
+              lang
+              text
+            }
+            metaField {
+              values
+              translatedValues {
+                translations {
+                  text
+                }
+              }
+            }
+          }
+        }
+        customAttributeId
+        productId
+        value
+      }
     }
   }
 `;

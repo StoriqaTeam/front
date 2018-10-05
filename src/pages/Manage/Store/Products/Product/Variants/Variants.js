@@ -17,6 +17,15 @@ import Table from './Table/Table';
 
 import './Variants.scss';
 
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
+
 type StateType = {
   isNewVariant: boolean,
 };
@@ -57,6 +66,9 @@ type PropsType = {
   comeResponse: boolean,
   resetComeResponse: () => void,
   closedVariantFormAnnunciator: boolean,
+  customAttributes: Array<{
+    attribute: AttributeType,
+  }>,
 };
 
 class Variants extends Component<PropsType, StateType> {
@@ -137,6 +149,7 @@ class Variants extends Component<PropsType, StateType> {
       comeResponse,
       resetComeResponse,
       closedVariantFormAnnunciator,
+      customAttributes,
     } = this.props;
     const { isNewVariant } = this.state;
     return (
@@ -167,6 +180,7 @@ class Variants extends Component<PropsType, StateType> {
           )}
           <Table
             category={category}
+            customAttributes={customAttributes}
             variants={variants}
             productRawId={productRawId}
             productId={productId}

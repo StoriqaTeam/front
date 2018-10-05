@@ -68,3 +68,9 @@ export {
   default as ResendEmailVerificationLinkMutation,
 } from './ResendEmailVerificationLinkMutation';
 export { default as UpsertShippingMutation } from './UpsertShippingMutation';
+export {
+  default as CreateCustomAttributeMutation,
+} from './CreateCustomAttributeMutation';
+export {
+  default as DeleteCustomAttributeMutation,
+} from './DeleteCustomAttributeMutation';

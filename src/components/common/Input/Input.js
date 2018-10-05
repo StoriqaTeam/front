@@ -130,7 +130,7 @@ class Input extends Component<PropsType, StateType> {
         id={id}
         ref={inputRef}
         name={id}
-        type={!isNil(type) || 'text'}
+        type={!isNil(type) ? type : 'text'}
         value={value || ''}
         min={!isEmpty(min) || ''}
         onChange={onChange}

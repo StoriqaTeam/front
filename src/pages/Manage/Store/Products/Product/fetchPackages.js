@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { fetchQuery, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';

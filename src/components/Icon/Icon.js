@@ -95,7 +95,6 @@ const iconsMap = {
   cats: <Cats />,
   chat: <Chat />,
   closeArrow: <CloseArrow />,
-  //
   controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,
@@ -140,7 +139,6 @@ const iconsMap = {
   searchNoResults: <SearchNoResults />,
   status: <Status />,
   calendar: <Calendar />,
-  //
 
   // For product
   mainFoto: <MainFoto />,

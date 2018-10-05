@@ -20,10 +20,20 @@ import { Input } from 'components/common/Input';
 import { Checkbox } from 'components/common/Checkbox';
 
 import Characteristics from './Characteristics';
+import CustomCharacteristics from './CustomCharacteristics';
 import Photos from './Photos';
 import Warehouses from './Warehouses';
 
 import './Form.scss';
+
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
 
 type AttributeValueType = {
   attrId: number,
@@ -49,6 +59,7 @@ type StateType = {
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues?: Array<AttributeValueType>,
+  customAttributeValues?: Array<AttributeValueType>,
   formErrors: ?{
     vendorCode?: Array<string>,
     price?: Array<string>,
@@ -97,6 +108,9 @@ type PropsType = {
     price?: Array<string>,
     attributes?: Array<string>,
   },
+  customAttributes: Array<{
+    attribute: AttributeType,
+  }>,
 };
 
 type ValueForAttributeInputType = {
@@ -112,6 +126,7 @@ class Form extends Component<PropsType, StateType> {
     if (!product) {
       this.state = {
         attributeValues: this.resetAttrValues(),
+        customAttributeValues: this.resetCustomAttrValues(),
         vendorCode: null,
         price: null,
         formErrors: undefined,
@@ -128,6 +143,7 @@ class Form extends Component<PropsType, StateType> {
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
         attributeValues: this.resetAttrValues(),
+        customAttributeValues: this.resetCustomAttrValues(),
         formErrors: undefined,
         isLoading: false,
         preOrder: Boolean(product.preOrder),
@@ -155,10 +171,27 @@ class Form extends Component<PropsType, StateType> {
       };
       onChangeVariantForm(variantData);
     }
+    if (
+      JSON.stringify(this.props.category) !== JSON.stringify(prevProps.category)
+    ) {
+      this.onChangeValues(this.resetAttrValues());
+      this.onChangeCustomValues(this.resetCustomAttrValues());
+    }
+    if (
+      JSON.stringify(this.props.customAttributes) !==
+      JSON.stringify(prevProps.customAttributes)
+    ) {
+      this.onChangeCustomValues(this.resetCustomAttrValues());
+    }
   }
 
   onChangeValues = (values: Array<AttributeValueType>) => {
     this.setState({ attributeValues: values });
+  };
+
+  onChangeCustomValues = (values: Array<AttributeValueType>) => {
+    console.log('---values', values);
+    this.setState({ customAttributeValues: values });
   };
 
   validate = () => {
@@ -179,6 +212,20 @@ class Form extends Component<PropsType, StateType> {
         ...this.valueForAttribute({ attr: item, variant: this.props.variant }),
       }),
       this.props.category.getAttributes,
+    );
+    return attrValues;
+  };
+
+  resetCustomAttrValues = () => {
+    const attrValues: Array<AttributeValueType> = map(
+      item => ({
+        attrId: item.rawId,
+        ...this.valueForCustomAttribute({
+          attr: item,
+          variant: this.props.variant,
+        }),
+      }),
+      map(item => ({ ...item.attribute }), this.props.customAttributes),
     );
     return attrValues;
   };
@@ -255,6 +302,66 @@ class Form extends Component<PropsType, StateType> {
       return {
         value: attrFromVariant.value,
         metaField: attrFromVariant.metaField,
+      };
+    }
+    const { values, translatedValues } = attr.metaField;
+    if (values) {
+      return {
+        value: head(values) || '',
+      };
+    } else if (translatedValues && !isEmpty(translatedValues)) {
+      return {
+        // $FlowIgnoreMe
+        value: pathOr(
+          '',
+          // $FlowIgnoreMe
+          [0, 'translations', 0, 'text'],
+          translatedValues || [],
+        ),
+      };
+    }
+    return {
+      value: '',
+    };
+  };
+
+  valueForCustomAttribute = (
+    input: ValueForAttributeInputType,
+  ): { value: string } => {
+    const { attr, variant } = input;
+    console.log('---attr', attr);
+    console.log('---variant', variant);
+
+    // $FlowIgnore
+    const customAttributeValues = pathOr(
+      null,
+      ['customAttributeValues'],
+      this.state,
+    );
+    const customAttribute = customAttributeValues
+      ? find(item => item.attrId === attr.rawId, customAttributeValues)
+      : null;
+    console.log('---customAttribute', customAttribute);
+    const attrFromVariant =
+      variant &&
+      variant.customAttributes &&
+      find(item => {
+        const attributeId = pathOr(
+          null,
+          ['customAttribute', 'attribute', 'id'],
+          item,
+        );
+        return attributeId === attr.rawId;
+      }, variant.customAttributes);
+    console.log('---attrFromVariant', attrFromVariant);
+    if (attrFromVariant && attrFromVariant.value) {
+      return {
+        value: attrFromVariant.value,
+      };
+    }
+    if (customAttribute) {
+      return {
+        value: customAttribute.value,
       };
     }
     const { values, translatedValues } = attr.metaField;
@@ -388,14 +495,17 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { category, variant, formErrors } = this.props;
+    console.log('---this.props', this.props);
+    const { category, variant, formErrors, customAttributes } = this.props;
     const {
       photos = [],
       mainPhoto,
       attributeValues,
       preOrder,
       preOrderDays,
+      customAttributeValues,
     } = this.state;
+    console.log('---this.state', this.state);
     return (
       <div styleName="container">
         <div styleName="title">
@@ -415,6 +525,17 @@ class Form extends Component<PropsType, StateType> {
               category={category}
               values={this.state.attributeValues || []}
               onChange={this.onChangeValues}
+              errors={(formErrors && formErrors.attributes) || null}
+            />
+          )}
+        {customAttributeValues &&
+          !isEmpty(customAttributeValues) && (
+            <CustomCharacteristics
+              customAttributes={customAttributes}
+              customAttributeValues={customAttributeValues}
+              category={category}
+              values={this.state.customAttributeValues || []}
+              onChange={this.onChangeCustomValues}
               errors={(formErrors && formErrors.attributes) || null}
             />
           )}

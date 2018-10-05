@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
-import { pathOr, isEmpty, path, head } from 'ramda';
+import { pathOr, isEmpty, path, head, map, filter } from 'ramda';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -14,6 +14,8 @@ import {
   UpdateProductMutation,
   CreateProductWithAttributesMutation,
   UpsertShippingMutation,
+  CreateCustomAttributeMutation,
+  DeleteCustomAttributeMutation,
 } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
@@ -21,13 +23,25 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
+import type { MutationParamsType as CreateCustomAttributeMutationType } from 'relay/mutations/CreateCustomAttributeMutation';
+import type { MutationParamsType as DeleteCustomAttributeMutationType } from 'relay/mutations/DeleteCustomAttributeMutation';
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
 import fetchPackages from './fetchPackages';
+import fetchAttributes from './fetchAttributes';
 import Form from './Form';
 
 import './Product.scss';
+
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
 
 type AttributeValueType = {
   attrId: number,
@@ -46,6 +60,7 @@ type VariantType = {
   attributeValues: Array<AttributeValueType>,
   preOrder: boolean,
   preOrderDays: string,
+  customAttributeValues: Array<AttributeValueType>,
 };
 
 type FormType = {
@@ -72,9 +87,11 @@ type StateType = {
   comeResponse: boolean,
   availablePackages: ?AvailablePackagesType,
   isLoadingPackages: boolean,
+  isLoadingAttributes: boolean,
   variantData: ?VariantType,
   closedVariantFormAnnunciator: boolean,
   shippingData: ?FullShippingType,
+  attributes: Array<AttributeType>,
 };
 
 class EditProduct extends Component<PropsType, StateType> {
@@ -84,9 +101,11 @@ class EditProduct extends Component<PropsType, StateType> {
     comeResponse: false,
     availablePackages: null,
     isLoadingPackages: true,
+    isLoadingAttributes: true,
     variantData: null,
     closedVariantFormAnnunciator: false,
     shippingData: null,
+    attributes: [],
   };
 
   componentDidMount() {
@@ -122,7 +141,26 @@ class EditProduct extends Component<PropsType, StateType> {
           });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
+            text: 'Shipping packages loading error',
+            link: { text: 'Close.' },
+          });
+        });
+
+      fetchAttributes(this.props.environment)
+        .then(({ attributes }) => {
+          this.setState({
+            attributes,
+            isLoadingAttributes: false,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            attributes: [],
+            isLoadingAttributes: false,
+          });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Attributes loading error',
             link: { text: 'Close.' },
           });
         });
@@ -242,6 +280,35 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   handleUpdateVariant = (variantData: VariantType) => {
+    // $FlowIgnore
+    const baseProductCustomAttributes = pathOr(
+      [],
+      ['me', 'baseProduct', 'customAttributes'],
+      this.props,
+    );
+    console.log('---baseProductCustomAttributes', baseProductCustomAttributes);
+    const variantDataCustomAttributeValues = variantData.customAttributeValues;
+    console.log(
+      '---variantDataCustomAttributeValues',
+      variantDataCustomAttributeValues,
+    );
+    // const customAttributes = map(item => { customAttributeId }, variantData.customAttributes);
+
+    const customAttributes = map(
+      item => ({
+        customAttributeId: head(
+          filter(
+            customAttribute => customAttribute.attribute.rawId === item.attrId,
+            baseProductCustomAttributes,
+          ),
+        ).rawId,
+        value: item.value,
+      }),
+      variantDataCustomAttributeValues,
+    );
+
+    console.log('---customAttributes', customAttributes);
+
     const params: UpdateProductMutationType = {
       input: {
         clientMutationId: '',
@@ -257,6 +324,7 @@ class EditProduct extends Component<PropsType, StateType> {
           preOrderDays: Number(variantData.preOrderDays),
         },
         attributes: variantData.attributeValues,
+        customAttributes,
       },
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -527,6 +595,167 @@ class EditProduct extends Component<PropsType, StateType> {
     UpsertShippingMutation.commit(params);
   };
 
+  handleCreateAttribute = (attributeId: number) => {
+    // $FlowIgnore
+    const baseProductId = pathOr(null, ['me', 'baseProduct', 'id'], this.props);
+    // $FlowIgnore
+    const baseProductRawId = pathOr(
+      null,
+      ['me', 'baseProduct', 'rawId'],
+      this.props,
+    );
+    const params: CreateCustomAttributeMutationType = {
+      input: {
+        clientMutationId: '',
+        attributeId,
+        baseProductId: baseProductRawId,
+      },
+      baseProductId,
+      environment: this.props.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Validation Error!',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Attribute added!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState({ isLoading: false });
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    };
+    CreateCustomAttributeMutation.commit(params);
+  };
+
+  handleDeleteAttribute = (attributeId: number) => {
+    // $FlowIgnore
+    const baseProductId = pathOr(null, ['me', 'baseProduct', 'id'], this.props);
+    const params: DeleteCustomAttributeMutationType = {
+      input: {
+        clientMutationId: '',
+        customAttributeId: attributeId,
+      },
+      baseProductId,
+      environment: this.props.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Validation Error!',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
+        if (parsingError) {
+          log.debug('parsingError:', { parsingError });
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Attribute deleted!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState({ isLoading: false });
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    };
+    DeleteCustomAttributeMutation.commit(params);
+  };
+
   handleOnChangeVariantForm = (variantData: ?VariantType) => {
     this.setState({ variantData });
   };
@@ -546,9 +775,11 @@ class EditProduct extends Component<PropsType, StateType> {
       comeResponse,
       availablePackages,
       isLoadingPackages,
+      isLoadingAttributes,
       variantData,
       closedVariantFormAnnunciator,
       shippingData,
+      attributes,
     } = this.state;
     let baseProduct = null;
     if (me && me.baseProduct) {
@@ -571,11 +802,15 @@ class EditProduct extends Component<PropsType, StateType> {
               currencies={directories.currencies}
               availablePackages={availablePackages}
               isLoadingPackages={isLoadingPackages}
+              isLoadingAttributes={isLoadingAttributes}
               onChangeVariantForm={this.handleOnChangeVariantForm}
               variantData={variantData}
               closedVariantFormAnnunciator={closedVariantFormAnnunciator}
               onChangeShipping={this.handleOnChangeShipping}
               shippingData={shippingData}
+              attributes={attributes}
+              onCreateAttribute={this.handleCreateAttribute}
+              onDeleteAttribute={this.handleDeleteAttribute}
             />
           </div>
         )}
@@ -600,6 +835,29 @@ export default createFragmentContainer(
         status
         currency
         ...Shipping_baseProduct
+        customAttributes {
+          id
+          rawId
+          attribute {
+            id
+            rawId
+            name {
+              lang
+              text
+            }
+            valueType
+            metaField {
+              values
+              translatedValues {
+                translations {
+                  lang
+                  text
+                }
+              }
+              uiElement
+            }
+          }
+        }
         products(first: 100) @connection(key: "Wizard_products") {
           edges {
             node {
@@ -655,6 +913,32 @@ export default createFragmentContainer(
                     }
                   }
                 }
+              }
+              customAttributes {
+                customAttribute {
+                  id
+                  rawId
+                  attributeId
+                  attribute {
+                    id
+                    rawId
+                    name {
+                      lang
+                      text
+                    }
+                    metaField {
+                      values
+                      translatedValues {
+                        translations {
+                          text
+                        }
+                      }
+                    }
+                  }
+                }
+                customAttributeId
+                productId
+                value
               }
             }
           }

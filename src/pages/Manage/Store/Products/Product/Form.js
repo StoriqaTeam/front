@@ -26,13 +26,22 @@ import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 
 import type { SelectItemType } from 'types';
 
-import { ProductFormContext } from './index';
+import { ProductFormContext, AdditionalAttributes } from './index';
 import { Shipping } from './Shipping';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
 import Variants from './Variants/Variants';
 
 import './Product.scss';
+
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
 
 type AttributeValueType = {
   attrId: number,
@@ -68,6 +77,7 @@ type BaseProductType = {
     rawId: number,
     getAttributes: ?Array<*>,
   },
+  customAttributes: Array<AttributeType>,
   status: string,
   currencyId: number,
   store: {
@@ -86,11 +96,15 @@ type PropsType = {
   currencies: Array<string>,
   availablePackages: ?AvailablePackagesType,
   isLoadingPackages: boolean,
+  isLoadingAttributes: boolean,
   onChangeVariantForm: (variantData: ?VariantType) => void,
   variantData: VariantType,
   closedVariantFormAnnunciator: boolean,
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   shippingData: ?FullShippingType,
+  attributes: Array<AttributeType>,
+  onCreateAttribute: (attributeId: number) => void,
+  onDeleteAttribute: (attributeId: number) => void,
 };
 
 type StateType = {
@@ -115,7 +129,7 @@ type StateType = {
   category: ?{
     id: string,
     rawId: number,
-    getAttributes: ?Array<*>,
+    getAttributes: ?Array<AttributeType>,
   },
   currencies: Array<SelectItemType>,
   currency: ?SelectItemType,
@@ -381,10 +395,15 @@ class Form extends Component<PropsType, StateType> {
       resetComeResponse,
       availablePackages,
       isLoadingPackages,
+      isLoadingAttributes,
       onChangeVariantForm,
       closedVariantFormAnnunciator,
       onChangeShipping,
+      attributes,
+      onCreateAttribute,
+      onDeleteAttribute,
     } = this.props;
+    console.log('---baseProduct', baseProduct);
     const {
       category,
       currencies,
@@ -393,6 +412,7 @@ class Form extends Component<PropsType, StateType> {
       shippingErrors,
       formErrors,
     } = this.state;
+    console.log('---category', category);
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
@@ -403,6 +423,24 @@ class Form extends Component<PropsType, StateType> {
     const storeRawID = pathOr(null, ['store', 'rawId'], baseProduct);
     // $FlowIgnore
     const baseProductRawID = pathOr(null, ['rawId'], baseProduct);
+    // $FlowIgnore
+    const categoryAttributes = pathOr(
+      [],
+      ['category', 'getAttributes'],
+      this.state,
+    );
+    // $FlowIgnore
+    const baseProductCategoryAttributes = pathOr(
+      [],
+      ['baseProduct', 'category', 'getAttributes'],
+      this.props,
+    );
+    // $FlowIgnore
+    const customAttributes = pathOr(
+      [],
+      ['baseProduct', 'customAttributes'],
+      this.props,
+    );
     return (
       <ProductFormContext.Provider
         value={{
@@ -488,6 +526,29 @@ class Form extends Component<PropsType, StateType> {
                   <div styleName="categoryError">{formErrors.categoryId}</div>
                 )}
             </div>
+            {baseProduct &&
+              baseProduct.category &&
+              !isLoadingAttributes && (
+                <div styleName="formItem additionalAttributes">
+                  <AdditionalAttributes
+                    customAttributes={customAttributes}
+                    attributes={attributes}
+                    categoryAttributes={categoryAttributes}
+                    baseProductCategoryAttributes={
+                      baseProductCategoryAttributes
+                    }
+                    onCreateAttribute={onCreateAttribute}
+                    onDeleteAttribute={onDeleteAttribute}
+                  />
+                </div>
+              )}
+            {baseProduct &&
+              baseProduct.category &&
+              isLoadingAttributes && (
+                <div styleName="spinner">
+                  <SpinnerCircle />
+                </div>
+              )}
           </div>
           {category &&
             !baseProduct && (
@@ -504,7 +565,8 @@ class Form extends Component<PropsType, StateType> {
             <Variants
               productRawId={baseProduct.rawId}
               productId={baseProduct.id}
-              category={baseProduct.category}
+              category={category || baseProduct.category}
+              customAttributes={baseProduct.customAttributes}
               variants={filteredVariants}
               storeID={storeID}
               comeResponse={comeResponse}
