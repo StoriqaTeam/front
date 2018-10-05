@@ -19,7 +19,7 @@ const HeaderDisclaimer = () => (
       </div>
       <div styleName="link">
         <a
-          href="https://storiqasupport.zendesk.com/hc/ru/requests/new"
+          href="https://storiqa.zendesk.com/hc/en-us/requests/new"
           rel="noopener noreferrer"
           target="_blank"
         >
