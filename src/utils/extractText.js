@@ -1,4 +1,6 @@
-// @flow
+// @flow strict
+
+import { isNil, has, filter } from 'ramda';
 
 import validArray from './validArray';
 
@@ -20,10 +22,11 @@ export default function extractText(
   message: string = 'No Text',
 ): string {
   if (validArray(array)) {
-    const [translation] = array.filter(
-      (item: TranslationType) => item.lang === lang,
+    const [translation] = filter(
+      item => has(lang)(item) && item.lang === lang,
+      array,
     );
-    return translation.text;
+    return isNil(translation) ? array[0].text : translation.text;
   }
   return message;
 }
