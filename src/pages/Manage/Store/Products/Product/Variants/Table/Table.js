@@ -166,7 +166,7 @@ class Table extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { variants, isNewVariant } = this.props;
+    const { variants, isNewVariant, customAttributes } = this.props;
     const { expandedItemId } = this.state;
     return (
       <ProductFormContext.Consumer>
@@ -208,6 +208,7 @@ class Table extends Component<PropsType, StateType> {
                     }
                     onChangeVariantForm={onChangeVariantForm}
                     formErrors={variantFormErrors}
+                    customAttributes={customAttributes}
                   />
                 </div>
               )}

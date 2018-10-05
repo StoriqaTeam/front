@@ -213,9 +213,13 @@ class PersonalData extends Component<PropsType, StateType> {
     }
   };
 
-  handleGenderSelect = (genderValue: { id: string, label: string }) => {
+  handleGenderSelect = (genderValue: ?{ id: string, label: string }) => {
     this.setState((prevState: StateType) =>
-      assocPath(['data', 'gender'], toUpper(genderValue.id), prevState),
+      assocPath(
+        ['data', 'gender'],
+        toUpper(genderValue ? genderValue.id : 'UNDEFINED'),
+        prevState,
+      ),
     );
   };
 

@@ -126,7 +126,7 @@ class Form extends Component<PropsType, StateType> {
     if (!product) {
       this.state = {
         attributeValues: this.resetAttrValues(),
-        customAttributeValues: this.resetCustomAttrValues(),
+        customAttributeValues: undefined,
         vendorCode: null,
         price: null,
         formErrors: undefined,
@@ -175,7 +175,6 @@ class Form extends Component<PropsType, StateType> {
       JSON.stringify(this.props.category) !== JSON.stringify(prevProps.category)
     ) {
       this.onChangeValues(this.resetAttrValues());
-      this.onChangeCustomValues(this.resetCustomAttrValues());
     }
     if (
       JSON.stringify(this.props.customAttributes) !==
@@ -190,7 +189,6 @@ class Form extends Component<PropsType, StateType> {
   };
 
   onChangeCustomValues = (values: Array<AttributeValueType>) => {
-    console.log('---values', values);
     this.setState({ customAttributeValues: values });
   };
 
@@ -329,9 +327,6 @@ class Form extends Component<PropsType, StateType> {
     input: ValueForAttributeInputType,
   ): { value: string } => {
     const { attr, variant } = input;
-    console.log('---attr', attr);
-    console.log('---variant', variant);
-
     // $FlowIgnore
     const customAttributeValues = pathOr(
       null,
@@ -341,27 +336,25 @@ class Form extends Component<PropsType, StateType> {
     const customAttribute = customAttributeValues
       ? find(item => item.attrId === attr.rawId, customAttributeValues)
       : null;
-    console.log('---customAttribute', customAttribute);
     const attrFromVariant =
       variant &&
       variant.customAttributes &&
       find(item => {
         const attributeId = pathOr(
           null,
-          ['customAttribute', 'attribute', 'id'],
+          ['customAttribute', 'attribute', 'rawId'],
           item,
         );
         return attributeId === attr.rawId;
       }, variant.customAttributes);
-    console.log('---attrFromVariant', attrFromVariant);
-    if (attrFromVariant && attrFromVariant.value) {
-      return {
-        value: attrFromVariant.value,
-      };
-    }
     if (customAttribute) {
       return {
         value: customAttribute.value,
+      };
+    }
+    if (attrFromVariant && attrFromVariant.value) {
+      return {
+        value: attrFromVariant.value,
       };
     }
     const { values, translatedValues } = attr.metaField;
@@ -495,7 +488,6 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { category, variant, formErrors, customAttributes } = this.props;
     const {
       photos = [],
@@ -505,7 +497,6 @@ class Form extends Component<PropsType, StateType> {
       preOrderDays,
       customAttributeValues,
     } = this.state;
-    console.log('---this.state', this.state);
     return (
       <div styleName="container">
         <div styleName="title">
@@ -533,7 +524,6 @@ class Form extends Component<PropsType, StateType> {
             <CustomCharacteristics
               customAttributes={customAttributes}
               customAttributeValues={customAttributeValues}
-              category={category}
               values={this.state.customAttributeValues || []}
               onChange={this.onChangeCustomValues}
               errors={(formErrors && formErrors.attributes) || null}

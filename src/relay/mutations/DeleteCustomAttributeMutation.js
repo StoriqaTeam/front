@@ -2,12 +2,12 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { filter } from 'ramda';
 
 import type {
   DeleteCustomAttributeMutationVariables,
   DeleteCustomAttributeMutationResponse,
 } from './__generated__/DeleteCustomAttributeMutation.graphql';
-import { filter } from 'ramda';
 
 const mutation = graphql`
   mutation DeleteCustomAttributeMutation($input: DeleteCustomAttributeInput!) {

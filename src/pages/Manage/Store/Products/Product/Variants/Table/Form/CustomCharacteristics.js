@@ -48,13 +48,10 @@ class CustomCharacteristics extends PureComponent<PropsType> {
 
   render() {
     const { errors } = this.props;
-    console.log('---this.props.values', this.props.values);
-    // $FlowIgnoreMe
     const attributes = map(
       item => ({ ...item.attribute }),
       this.props.customAttributes,
     );
-    console.log('---attributes', attributes);
     return (
       <div styleName="container">
         <div styleName="title">

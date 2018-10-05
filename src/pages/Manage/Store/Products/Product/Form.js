@@ -403,7 +403,6 @@ class Form extends Component<PropsType, StateType> {
       onCreateAttribute,
       onDeleteAttribute,
     } = this.props;
-    console.log('---baseProduct', baseProduct);
     const {
       category,
       currencies,
@@ -412,7 +411,6 @@ class Form extends Component<PropsType, StateType> {
       shippingErrors,
       formErrors,
     } = this.state;
-    console.log('---category', category);
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
@@ -515,6 +513,7 @@ class Form extends Component<PropsType, StateType> {
             </div>
             <div styleName="categorySelector">
               <CategorySelector
+                onlyView={Boolean(baseProduct)}
                 categories={this.props.categories}
                 category={baseProduct && baseProduct.category}
                 onSelect={itemId => {

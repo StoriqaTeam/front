@@ -8,7 +8,7 @@ import { Select } from 'components/common/Select';
 import type { SelectItemType } from 'types';
 
 type StateType = {
-  currency: SelectItemType,
+  currency: ?SelectItemType,
 };
 
 type PropsType = {
@@ -34,7 +34,7 @@ class CurrencySelect extends Component<PropsType, StateType> {
     };
   }
 
-  handleOnChange = (item: SelectItemType) => {
+  handleOnChange = (item: ?SelectItemType) => {
     this.setState({ currency: item });
     this.props.onChangeCurrency(item);
   };

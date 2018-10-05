@@ -22,7 +22,7 @@ import './Characteristics.scss';
 type AttributeType = {
   rawId: number,
   id: string,
-  metaField: {
+  metaField?: {
     translatedValues: ?Array<{}>,
     values: ?Array<string>,
   },

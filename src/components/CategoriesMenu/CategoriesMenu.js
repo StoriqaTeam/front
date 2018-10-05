@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { find, propEq, head, pathOr } from 'ramda';
+import { find, propEq, head, pathOr, isEmpty } from 'ramda';
 import { Link, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
@@ -150,7 +150,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
       const name = find(propEq('lang', lang))(category.name);
       let onMouseOver = null;
       let onMouseOut = null;
-      if (isRoot) {
+      if (isRoot && !isEmpty(categoryChildren)) {
         onMouseOver = (e: any) => {
           this.onMouseOver(e, head(categoryChildren).rawId);
         };

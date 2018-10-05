@@ -108,10 +108,12 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleSearchDropDownSelect = (activeItem: {
-    id: string,
-    label: string,
-  }): void => {
+  handleSearchDropDownSelect = (
+    activeItem: ?{
+      id: string,
+      label: string,
+    },
+  ): void => {
     this.setState(() => ({ activeItem }));
   };
 

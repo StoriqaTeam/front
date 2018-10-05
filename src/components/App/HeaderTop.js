@@ -104,8 +104,10 @@ class HeaderTop extends PureComponent<PropsType> {
     return null;
   };
 
-  handleSelect = (value: { id: string, label: string }) => {
-    const currency = find(equals(value.id), this.props.currencies);
+  handleSelect = (value: ?{ id: string, label: string }) => {
+    const currency = value
+      ? find(equals(value.id), this.props.currencies)
+      : null;
     if (currency) {
       setCookie(
         currencyCookieName,

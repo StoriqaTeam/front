@@ -71,7 +71,7 @@ class CharacteristicItem extends PureComponent<PropsType> {
     return filter(complement(isNil), items);
   };
 
-  handleSelect = (value: { label: string }) => {
+  handleSelect = (value: ?{ label: string }) => {
     this.props.onSelect({
       ...this.props.value,
       value: value ? value.label : null,

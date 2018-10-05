@@ -72,6 +72,12 @@
     text-overflow: ellipsis;
   }
 
+  &.onlyView {
+    border-bottom: 0;
+    color: $color_blue_hover;
+    cursor: default;
+  }
+
   @media (min-width: $md) {
     // min-width: 41rem;
   }

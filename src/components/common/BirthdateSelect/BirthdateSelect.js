@@ -118,7 +118,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
     );
   };
 
-  handleSelect = (value: ItemType, id: string) => {
+  handleSelect = (value: ?ItemType, id: string) => {
     const { yearValue, monthValue, dayValue } = this.state;
     const year = yearValue ? yearValue.label : null;
     const month = monthValue ? monthValue.id : null;
@@ -139,19 +139,21 @@ class BirthdateSelect extends Component<PropsType, StateType> {
       return bool1 || bool2;
     };
 
-    if (
-      id === 'year' &&
-      Number(value.label) % 4 !== 0 &&
-      month === '02' &&
-      day === '29'
-    ) {
-      this.setState(() => ({ dayValue: null }), this.checkDate);
-    } else if (id === 'month' && checkDayMonth(value.id, day)) {
-      this.setState(() => ({ dayValue: null }), this.checkDate);
-    } else if (id === 'day' && checkDayMonth(month, value.label)) {
-      this.setState(() => ({ monthValue: null }), this.checkDate);
+    if (value) {
+      if (
+        id === 'year' &&
+        Number(value.label) % 4 !== 0 &&
+        month === '02' &&
+        day === '29'
+      ) {
+        this.setState(() => ({ dayValue: null }), this.checkDate);
+      } else if (id === 'month' && checkDayMonth(value.id, day)) {
+        this.setState(() => ({ dayValue: null }), this.checkDate);
+      } else if (id === 'day' && checkDayMonth(month, value.label)) {
+        this.setState(() => ({ monthValue: null }), this.checkDate);
+      }
+      this.setState(() => ({ [`${id}Value`]: value }), this.checkDate);
     }
-    this.setState(() => ({ [`${id}Value`]: value }), this.checkDate);
   };
 
   checkDate = () => {

@@ -7,7 +7,6 @@ import type {
   CreateCustomAttributeMutationVariables,
   CreateCustomAttributeMutationResponse,
 } from './__generated__/CreateCustomAttributeMutation.graphql';
-import { map } from 'ramda';
 
 const mutation = graphql`
   mutation CreateCustomAttributeMutation($input: NewCustomAttributeInput!) {

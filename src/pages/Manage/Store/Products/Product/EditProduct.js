@@ -286,14 +286,7 @@ class EditProduct extends Component<PropsType, StateType> {
       ['me', 'baseProduct', 'customAttributes'],
       this.props,
     );
-    console.log('---baseProductCustomAttributes', baseProductCustomAttributes);
     const variantDataCustomAttributeValues = variantData.customAttributeValues;
-    console.log(
-      '---variantDataCustomAttributeValues',
-      variantDataCustomAttributeValues,
-    );
-    // const customAttributes = map(item => { customAttributeId }, variantData.customAttributes);
-
     const customAttributes = map(
       item => ({
         customAttributeId: head(
@@ -306,9 +299,6 @@ class EditProduct extends Component<PropsType, StateType> {
       }),
       variantDataCustomAttributeValues,
     );
-
-    console.log('---customAttributes', customAttributes);
-
     const params: UpdateProductMutationType = {
       input: {
         clientMutationId: '',

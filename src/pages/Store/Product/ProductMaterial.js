@@ -32,11 +32,13 @@ type StateType = {
 };
 
 class ProductMaterial extends Component<PropsType, StateType> {
-  handleSelect = (selected: SelectItemType): void => {
-    this.props.onSelect({
-      attributeId: this.props.id,
-      attributeValue: selected.label,
-    });
+  handleSelect = (selected: ?SelectItemType): void => {
+    if (selected) {
+      this.props.onSelect({
+        attributeId: this.props.id,
+        attributeValue: selected.label,
+      });
+    }
   };
   render() {
     const { title, options, isOnSelected } = this.props;

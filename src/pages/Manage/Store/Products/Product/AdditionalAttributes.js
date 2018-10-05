@@ -69,7 +69,6 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
       baseProductCategoryAttributes,
       customAttributes,
     } = this.props;
-    console.log('---attributes', attributes);
 
     const filteredAttributes = filter(
       item =>
@@ -142,7 +141,6 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
       activeAttribute,
       selectedAttributes,
     } = this.state;
-    console.log('---selectableAttributes', selectableAttributes);
     return (
       <div styleName="container">
         <div

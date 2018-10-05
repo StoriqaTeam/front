@@ -51,7 +51,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
   }
   handleClick = (
     stateName: string,
-    item: { id: string, label: string },
+    item: ?{ id: string, label: string },
   ): void => {
     // $FlowIgnore
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
