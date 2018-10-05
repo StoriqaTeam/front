@@ -239,7 +239,10 @@ class Checkout extends Component<PropsType, StateType> {
     });
   };
 
-  checkReadyToCheckout = () => {
+  checkReadyToCheckout = (): boolean => {
+    const {
+      cart: { totalCount },
+    } = this.props;
     const {
       step,
       orderInput: {
@@ -248,10 +251,8 @@ class Checkout extends Component<PropsType, StateType> {
         receiverPhone,
       },
     } = this.state;
-    const {
-      cart: { totalCount },
-    } = this.props;
-    if (step === 1 && (!receiverName || !receiverPhone)) {
+    const emptyString = (str: string): boolean => /^\s*$/.test(str);
+    if (step === 1 && (emptyString(receiverName) || !receiverPhone)) {
       return false;
     }
     if (!country || !postalCode || (totalCount === 0 && step === 2)) {

@@ -1,18 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import {
-  pathOr,
-  filter,
-  prop,
-  propEq,
-  head,
-  map,
-  slice,
-  sort,
-  values,
-  join,
-} from 'ramda';
+import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
 import { withRouter, routerShape } from 'found';
 
@@ -74,17 +63,8 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
-    const { customer, receiverPhone } = order;
-    const customerDTO = customer
-      ? {
-          firstName: customer.firstName,
-          lastName: customer.lastName,
-        }
-      : null;
-    const customerName =
-      customerDTO && (customerDTO.firstName || customerDTO.lastName)
-        ? join(' ', filter(item => Boolean(item), values(customerDTO)))
-        : '—';
+    const { receiverPhone, recieverName } = order;
+    const customerName = recieverName || '-';
     const customerAddress = addressToString(order.addressFull) || '—';
     // const customerPhone = customer.phone || null; // is replaced by: order.receiverPhone
     const attributes = map(
@@ -171,7 +151,7 @@ class OrderPage extends PureComponent<PropsType> {
     return orderDTO;
   };
 
-  handleOrderSent = (success: boolean) => {
+  handleOrderSent = (success: boolean): void => {
     if (success) {
       this.props.showAlert({
         type: 'success',
@@ -191,7 +171,7 @@ class OrderPage extends PureComponent<PropsType> {
     }
   };
 
-  handleOrderCanceled = (success: boolean) => {
+  handleOrderCanceled = (success: boolean): void => {
     if (success) {
       this.props.showAlert({
         type: 'success',
