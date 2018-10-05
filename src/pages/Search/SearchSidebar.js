@@ -255,7 +255,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       filter(
         where({
           level: equals(level),
-          children: i => i.length !== 0,
+          children: i => i && i.length !== 0,
         }),
       );
     // check that we need to render category 1 level with children in sidebar
