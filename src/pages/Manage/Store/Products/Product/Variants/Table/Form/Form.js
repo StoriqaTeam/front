@@ -111,6 +111,7 @@ type PropsType = {
   customAttributes: Array<{
     attribute: AttributeType,
   }>,
+  productId?: string,
 };
 
 type ValueForAttributeInputType = {
@@ -121,12 +122,14 @@ type ValueForAttributeInputType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { onChangeVariantForm, variant } = props;
+    const { onChangeVariantForm, variant, productId } = props;
     const product = variant;
     if (!product) {
       this.state = {
         attributeValues: this.resetAttrValues(),
-        customAttributeValues: undefined,
+        customAttributeValues: productId
+          ? this.resetCustomAttrValues()
+          : undefined,
         vendorCode: null,
         price: null,
         formErrors: undefined,
