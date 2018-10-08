@@ -1,28 +1,25 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
+import { isNil } from 'ramda';
 
 import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
 import { Collapse } from 'components/Collapse';
 import { Button } from 'components/common/Button';
 
+import type { CollapseItemType } from 'types';
+
 import './FooterResponsive.scss';
-
+// $FlowIgnoreMe
 import { InfoBlock } from './index';
-
-type FooterCol = {
-  id: string,
-  title: string,
-  links: Array<{ id: string, name: string }>,
-};
 
 type PropsType = {
   isShopCreated: boolean,
 };
 
 type StateType = {
-  columns: Array<FooterCol>,
+  columns: Array<CollapseItemType>,
 };
 
 class FooterResponsive extends PureComponent<PropsType, StateType> {
@@ -102,14 +99,14 @@ class FooterResponsive extends PureComponent<PropsType, StateType> {
         </div>
       </Col>
     );
-    const FooterColumn = ({ title, links }: FooterCol) => (
+    const FooterColumn = ({ title, links }: CollapseItemType) => (
       <Col sm={12} md={4} lg={4} xl={4}>
         <nav styleName="footerColumn">
           <header styleName="navHeader">
             <h3>{title}</h3>
           </header>
           <ul>
-            {links.map(({ id, name }) => (
+            {!isNil(links) && links.map(({ id, name }) => (
               <li key={id}>
                 <a href="/" styleName="navItem">
                   {name}
