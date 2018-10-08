@@ -5,7 +5,7 @@ import { isNil } from 'ramda';
 
 import { InputPrice } from 'components/common/InputPrice';
 
-import { setRefValue, setZindex } from './utils';
+import { setZindex } from './utils';
 
 import { RangeSliderTrack } from './index';
 
@@ -121,19 +121,18 @@ class RangeSlider extends Component<PropsType, StateType> {
   }
 
   onChangeEvent = (id: ThumbNameType, value: number, prevValue: number) => {
-    const thumbRef = this.getThumbRef(id);
     const event = new Event('input', { bubbles: true });
     // $FlowIgnore
     event.simulated = true;
-    setRefValue(thumbRef.current)(`${value}`);
     // $FlowIgnore
-    const tracker = thumbRef.current._valueTracker; // eslint-disable-line
+    this[`${id}Ref`].current.value = value;
+    // $FlowIgnore
+    const tracker = this[`${id}Ref`].current._valueTracker; // eslint-disable-line
     if (tracker) {
       tracker.setValue(prevValue);
     }
-    if (!isNil(thumbRef.current)) {
-      thumbRef.current.dispatchEvent(event);
-    }
+    // $FlowIgnore
+    this[`${id}Ref`].current.dispatchEvent(event);
   };
 
   getThumbRef = (id: ThumbNameType): InputRefType =>
@@ -144,9 +143,6 @@ class RangeSlider extends Component<PropsType, StateType> {
 
   setValues = (id: ThumbNameType, value: number): void => {
     const { stepPhantom, minValue } = this.state;
-    const thumbRef = this.getThumbRef(id);
-    const roundedValue = Math.round(value / stepPhantom);
-    setRefValue(thumbRef.current)(`${roundedValue}`);
 
     this.setState(
       {

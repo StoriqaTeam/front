@@ -86,7 +86,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
           active: null,
           activeMid: null,
         }));
-      }, 150);
+      }, 500);
     }
   };
 
