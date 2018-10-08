@@ -6,4 +6,3 @@ export type CollapseItemType = {
   links?: Array<{ id: string, name: string }>,
   isNew?: boolean,
 };
-

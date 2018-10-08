@@ -106,13 +106,14 @@ class FooterResponsive extends PureComponent<PropsType, StateType> {
             <h3>{title}</h3>
           </header>
           <ul>
-            {!isNil(links) && links.map(({ id, name }) => (
-              <li key={id}>
-                <a href="/" styleName="navItem">
-                  {name}
-                </a>
-              </li>
-            ))}
+            {!isNil(links) &&
+              links.map(({ id, name }) => (
+                <li key={id}>
+                  <a href="/" styleName="navItem">
+                    {name}
+                  </a>
+                </li>
+              ))}
           </ul>
         </nav>
       </Col>

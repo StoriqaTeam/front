@@ -207,7 +207,8 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     if (!isEmpty(link)) {
       if (!isNil(storeId)) {
         const storePath = `/manage/store/${storeId}`;
-        const path = link === '/' ? storePath : `${storePath}${!isNil(link) ? link : ''}`;
+        const path =
+          link === '/' ? storePath : `${storePath}${!isNil(link) ? link : ''}`;
         replace(path);
       }
     }

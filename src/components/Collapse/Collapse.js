@@ -12,7 +12,7 @@ import './Collapse.scss';
 
 type PropsType = {
   items: Array<CollapseItemType>,
-  onSelected: (CollapseItemType) => void,
+  onSelected: CollapseItemType => void,
   isDisabled: boolean,
   // eslint-disable-next-line
   selected: string,
@@ -68,10 +68,7 @@ class Collapse extends Component<PropsType, StateType> {
     }
   };
 
-  handleSelected = (
-    item: CollapseItemType,
-    index: number,
-  ): void => {
+  handleSelected = (item: CollapseItemType, index: number): void => {
     const { onSelected } = this.props;
     this.setState(
       {
@@ -97,7 +94,8 @@ class Collapse extends Component<PropsType, StateType> {
         >
           <span styleName="itemTitle">{item.title}</span>
           <ul>
-            {!isNil(item.links) && item.links.map(link => <li key={link.id}>{link.name}</li>)}
+            {!isNil(item.links) &&
+              item.links.map(link => <li key={link.id}>{link.name}</li>)}
           </ul>
         </li>
       ))}
