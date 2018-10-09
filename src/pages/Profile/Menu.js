@@ -15,6 +15,8 @@ import { uploadFile, log, fromRelayError, convertSrc } from 'utils';
 import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 
+import type { CollapseItemType } from 'types';
+
 import './Menu.scss';
 
 type PropsType = {
@@ -24,7 +26,7 @@ type PropsType = {
   firstName: string,
   id: string,
   lastName: string,
-  menuItems: Array<{ id: string, title: string }>,
+  menuItems: Array<CollapseItemType>,
   provider: ?string,
   router: routerShape,
 };
