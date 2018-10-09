@@ -1,4 +1,5 @@
 // @flow strict
+
 import { isNil, assocPath } from 'ramda';
 
 const setElementValue = (element: ?HTMLInputElement) => (

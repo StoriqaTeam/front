@@ -1,6 +1,7 @@
 // @flow
 export type { CategoryChildrenType } from './CategoryChildrenType';
 export type { CategoryType } from './CategoryType';
+export type { CollapseItemType } from './CollapseItemType';
 export type { CurrencyType } from './CurrencyType';
 export type { DirectoriesType } from './DirectoriesType';
 export type { FormErrorsType } from './FormErrorsType';
