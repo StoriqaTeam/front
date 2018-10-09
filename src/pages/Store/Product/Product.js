@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { routerShape } from 'found';
 import PropTypes from 'prop-types';
 import xss from 'xss';
 import { isNil, head, ifElse, assoc, dissoc, propEq, has, prop } from 'ramda';
@@ -50,6 +51,7 @@ import './Product.scss';
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   baseProduct: ProductType,
+  router: routerShape,
 };
 
 type StateType = {
@@ -62,6 +64,7 @@ type StateType = {
   availableAttributes: {
     [string]: Array<string>,
   },
+  isAddToCart: boolean,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -109,6 +112,7 @@ class Product extends Component<PropsType, StateType> {
       unselectedAttr: null,
       selectedAttributes: {},
       availableAttributes: {},
+      isAddToCart: false,
     };
   }
 
@@ -142,6 +146,7 @@ class Product extends Component<PropsType, StateType> {
               text: 'Product added to cart!',
               link: { text: '' },
             });
+            this.setState({ isAddToCart: true });
           }
         },
         onError: error => {
@@ -205,6 +210,7 @@ class Product extends Component<PropsType, StateType> {
           ),
       // $FlowIgnoreMe
       productVariant: head(matchedVariants),
+      isAddToCart: false,
     });
   };
 
@@ -264,12 +270,14 @@ class Product extends Component<PropsType, StateType> {
         rating,
         store,
       },
+      router,
     } = this.props;
     const {
       widgets,
       productVariant,
       selectedAttributes,
       availableAttributes,
+      isAddToCart,
     } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
@@ -312,6 +320,8 @@ class Product extends Component<PropsType, StateType> {
                           quantity={productVariant.quantity}
                           preOrder={productVariant.preOrder}
                           preOrderDays={productVariant.preOrderDays}
+                          isAddToCart={isAddToCart}
+                          router={router}
                         />
                         <div styleName="line" />
                         <ProductStore />
