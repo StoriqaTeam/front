@@ -33,13 +33,11 @@ const tabs = [
     id: 'reviews',
     title: 'Reviews',
     isNew: false,
-    link: null,
   },
   {
     id: 'actions',
     title: 'Actions',
     isNew: true,
-    link: null,
   },
   {
     id: 'about',

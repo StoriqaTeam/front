@@ -15,7 +15,7 @@ type PropsType = {
   onSelected: CollapseItemType => void,
   isDisabled: boolean,
   // eslint-disable-next-line
-  selected: string,
+  selected: ?string | ?number,
   transparent: boolean,
   grouped: boolean,
   menuTitle?: string,
@@ -42,7 +42,7 @@ class Collapse extends Component<PropsType, StateType> {
   ): StateType | null {
     const { selected, items } = nextProps;
     const index =
-      !isNil(selected) && !isEmpty(selected)
+      !isNil(selected) && !isEmpty(`${selected}`)
         ? findIndex(propEq('id', selected))(items)
         : 0;
     return {
