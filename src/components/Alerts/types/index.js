@@ -9,4 +9,6 @@ export type AlertPropsType = {
   link: { text: string, path?: string },
   onClose: (timestamp: number) => void,
   onClick?: () => void,
+  isStatic?: boolean,
+  longText?: boolean,
 };

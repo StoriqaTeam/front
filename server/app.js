@@ -30,6 +30,8 @@ import moment from 'moment';
 
 import { Error404, Error } from '../src/pages/Errors';
 
+import { COOKIE_NAME } from 'constants';
+
 if (process.env.NODE_ENV === 'development') {
   var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
   var config;
@@ -111,6 +113,8 @@ const wrapAsync = fn => (req, res, next) => {
 
 app.use(
   wrapAsync(async (req, res) => {
+     const expirationDate = new Date();
+    req.universalCookies.set(COOKIE_NAME, 'yes');
     // set session_id cookie if not setted :)
     const sessionIdCookie = req.universalCookies.get('SESSION_ID');
     if (!sessionIdCookie) {
@@ -121,7 +125,6 @@ app.use(
 
     if (process.env.NODE_ENV === 'development') {
       const today = new Date();
-      const expirationDate = new Date();
       expirationDate.setDate(today.getDate() + 29);
       req.universalCookies.set('holyshit', 'iamcool', { path: '/', expires: expirationDate });
     }
