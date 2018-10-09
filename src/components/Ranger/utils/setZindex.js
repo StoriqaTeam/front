@@ -1,4 +1,5 @@
 // @flow strict
+
 import { setElementValue } from './index';
 
 const setZindex = (element: ?HTMLInputElement) => (value: string) =>
