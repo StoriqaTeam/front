@@ -241,6 +241,11 @@ class OrderPage extends PureComponent<PropsType> {
                     Open ticket
                   </Button>
                 </div>
+                <div styleName="ticketButtonWrapper">
+                  <Button big wireframe fullWidth>
+                    Invoice
+                  </Button>
+                </div>
               </div>
               {order.product.name ? (
                 <ProductBlock product={order.product} />
