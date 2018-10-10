@@ -8,28 +8,57 @@ import computerImage from './img/storiqa-computer-market.png';
 
 import './StartSellingMarket.scss';
 
-const StartSellingMarket = () => (
+type PropsType = {
+  lang: string,
+};
+
+const StartSellingMarket = ({ lang }: PropsType) => (
   <div styleName="container">
-    <h2 styleName="title">STORIQA IS YOUR DOOR TO GLOBAL MARKET</h2>
-    <p styleName="subtitle">
-      Our goal is to guarantee the quality of experience and goods, for both
-      buyers and sellers.
-    </p>
+    <h2
+      styleName="title"
+      /* eslint-disable */
+      dangerouslySetInnerHTML={{
+        /* eslint-enable */
+        __html:
+          lang === 'ru'
+            ? 'Storiqa дает возможность продавать ваши товары в&nbsp;Сингапуре уже сейчас'
+            : 'Storiqa give you the opportunity to&nbsp;sell your goods in&nbsp;Singapore today',
+      }}
+    />
+    <p
+      styleName="subtitle"
+      /* eslint-disable */
+      dangerouslySetInnerHTML={{
+        /* eslint-enable */
+        __html:
+          lang === 'ru'
+            ? 'Наша цель&nbsp;— предоставить высококлассный сервис продавцу и&nbsp;гарантировать наивысшее качество товаров покупателю.'
+            : 'Our goal is to guarantee the&nbsp;quality of&nbsp;experience and goods, for both buyers and&nbsp;sellers.',
+      }}
+    />
     <Row>
       <Col size={12} sm={12} md={6} lg={6} xl={6}>
         <article styleName="parragraphs">
-          <p>
-            Storiqa is an online marketplace offering global access with minimal
-            financial borders and global transactional fees. We’re committed to
-            helping our sellers thrive. Our goal is to guarantee the quality of
-            experience and goods, for both buyers and sellers.
-          </p>
-          <p>
-            Key platform features such as inclusive advertising and promotion,
-            sales analysis, book-keeping and direct customer feedback make
-            Storiqa ideal for entrepreneurs, small-scale manufacturers, family
-            businesses and makers of handmade crafts.
-          </p>
+          <p
+            /* eslint-disable */
+            dangerouslySetInnerHTML={{
+              /* eslint-enable */
+              __html:
+                lang === 'ru'
+                  ? 'Storiqa&nbsp;— это онлайн-маркетплейс, который предлагает производителям из&nbsp;России, Сингапура, Малайзии, Индонезии и&nbsp;Тайланда создать магазин на&nbsp;платформе и&nbsp;продавать свои товары в&nbsp;странах APAC: на&nbsp;первом этапе&nbsp;— в&nbsp;Сингапуре, и&nbsp;количество доступных стран будет увеличиваться.'
+                  : 'Storiqa is an&nbsp;marketplace which offer sellers from Singapore, Thailand, Malasia, Indonesia and Russia create their shop on&nbsp;Storiqa now and start selling their goods to the APAC countries. For the first step Storiqa will support Singapore only and every month we will add more and more contries.',
+            }}
+          />
+          <p
+            /* eslint-disable */
+            dangerouslySetInnerHTML={{
+              /* eslint-enable */
+              __html:
+                lang === 'ru'
+                  ? 'Мы ищем производителей товаров ручной работы или мелкосерийные производства. Если вы&nbsp;создаете красивые, уникальные и&nbsp;вдохновляющие вещи&nbsp;— найдите новую аудиторию вместе с&nbsp;нами!'
+                  : 'We are inviting small-scale producers of&nbsp;craft and tailor made goods. If it is you and you are creating unique, good quality and wonderful goods&nbsp;— apply our program today.',
+            }}
+          />
         </article>
       </Col>
       <Col size={12} sm={12} md={6} lg={6} xl={6}>

@@ -1,6 +1,8 @@
 // @flow
 
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { withRouter } from 'found';
+import { pathOr } from 'ramda';
 
 import { FooterResponsive } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -11,33 +13,38 @@ import {
   StartSellingMarket,
   StartSellingForSellers,
   StartSellingTryStoriqa,
-  StartSellingPrices,
+  // StartSellingPrices,
   StartSellingFAQ,
 } from './index';
 
 import './StartSelling.scss';
 
-const StartSelling = () => (
-  <div styleName="container">
-    <Container>
-      <StartSellingHeader />
-      <div styleName="wrapper">
-        <Row>
-          <Col size={1} />
-          <Col size={12} sm={12} md={12} lg={10} xl={10}>
-            <StartSellingHeading />
-            <StartSellingMarket />
-            <StartSellingTryStoriqa />
-            <StartSellingForSellers />
-            <StartSellingPrices />
-            <StartSellingFAQ />
-            <FooterResponsive />
-          </Col>
-          <Col size={1} />
-        </Row>
+class StartSelling extends PureComponent<{}> {
+  render() {
+    const lang = pathOr('en', ['match', 'params', 'lang'], this.props);
+    return (
+      <div styleName="container">
+        <Container>
+          <StartSellingHeader lang={lang} />
+          <div styleName="wrapper">
+            <Row>
+              <Col size={1} />
+              <Col size={12} sm={12} md={12} lg={10} xl={10}>
+                <StartSellingHeading lang={lang} />
+                <StartSellingMarket lang={lang} />
+                <StartSellingTryStoriqa lang={lang} />
+                <StartSellingForSellers lang={lang} />
+                {/* <StartSellingPrices lang={lang} /> */}
+                <StartSellingFAQ lang={lang} />
+                <FooterResponsive />
+              </Col>
+              <Col size={1} />
+            </Row>
+          </div>
+        </Container>
       </div>
-    </Container>
-  </div>
-);
+    );
+  }
+}
 
-export default StartSelling;
+export default withRouter(StartSelling);

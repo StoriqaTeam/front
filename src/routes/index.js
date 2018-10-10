@@ -241,8 +241,9 @@ const routes = (
         />
       </Route>
 
+      <Redirect from="/start-selling" to={() => '/start-selling/en'} />
       <Route
-        path="start-selling"
+        path="start-selling/:lang"
         query={graphql`
           query routes_StartSelling_Query {
             me {
