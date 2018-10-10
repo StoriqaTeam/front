@@ -16,6 +16,7 @@ import Start from 'pages/Start/Start';
 import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
 import { Products } from 'pages/Manage/Store/Products';
 import { Storages } from 'pages/Manage/Store/Storages';
+import { OrderInvoice } from 'pages/Manage/Store/OrderInvoice';
 import {
   NewStorage,
   EditStorage,
@@ -38,6 +39,7 @@ import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
+
 
 const routes = (
   <Route>
@@ -430,6 +432,11 @@ const routes = (
                   }
                 }
               `}
+            />
+            <Route
+              path="/orders/:orderId/invoice"
+              Component={OrderInvoice}
+              
             />
             <Route
               path="/product/new"

@@ -208,7 +208,7 @@ class OrderPage extends PureComponent<PropsType> {
                 </div>
                 <div styleName="statusPaymentBlock">
                   <div styleName="statusesBlock">
-                    <div styleName="statusItem">
+                  <div styleName="statusItem">
                       <div styleName="statusTitle">Status</div>
                       <div styleName="statusInfo">
                         {getStatusStringFromEnum(order.status)}
