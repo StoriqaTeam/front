@@ -40,7 +40,6 @@ import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
 
-
 const routes = (
   <Route>
     <Route
@@ -433,11 +432,7 @@ const routes = (
                 }
               `}
             />
-            <Route
-              path="/orders/:orderId/invoice"
-              Component={OrderInvoice}
-              
-            />
+            <Route path="/orders/:orderId/invoice" Component={OrderInvoice} />
             <Route
               path="/product/new"
               Component={({ me }) => <NewProduct me={me} />}

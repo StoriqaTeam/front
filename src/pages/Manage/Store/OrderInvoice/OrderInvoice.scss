@@ -1,0 +1,20 @@
+
+.container {
+  position: relative;
+  padding: 2.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4.75rem;
+}
+
+.title {
+  font-size: 6rem;
+}
+
+.invoiceDetails {
+  display: flex;
+  justify-content: space-between;
+}
