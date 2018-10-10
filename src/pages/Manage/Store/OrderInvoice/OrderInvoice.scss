@@ -1,20 +1,78 @@
+@import "../../../../styles/variables";
 
 .container {
+  margin: 0 auto;
+  max-width: 170rem;
+  padding: 4rem 0;
   position: relative;
-  padding: 2.5rem;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 4.75rem;
+  margin-bottom: 6rem;
 }
 
 .title {
-  font-size: 6rem;
+  font-size: 5rem;
 }
 
 .invoiceDetails {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2.75rem;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  
+}
+
+.tableHeaderItem {
+  background: $color_order_invoice_table_item_bg;
+  color: $color_order_invoice_table_item;
+  flex: 1;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 4rem;
+  margin-right: 0.5rem;
+  height: 4rem;
+  padding-left: 1.25rem;
+  &:first-child {
+    max-width: 5.3rem;
+  }
+  &:nth-child(2) {
+    flex: 3;
+  }
+}
+
+.tableRow {
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  &:nth-child(odd) {
+    background: $color_grey_bg;
+  }
+}
+
+.tableRowItem {
+  color: $color_order_invoice_table_item;
+  flex: 1;
+  font-size: 10px;
+  line-height: 4rem;
+  margin-right: 0.5rem;
+  height: 4rem;
+  padding-left: 1.25rem;
+  &:first-child {
+    max-width: 5.3rem;
+  }
+  &:nth-child(2) {
+    flex: 3;
+  }
+  
 }
