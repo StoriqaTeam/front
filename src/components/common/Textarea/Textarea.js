@@ -7,12 +7,12 @@ import TextareaAutosize from 'react-autosize-textarea';
 import './Textarea.scss';
 
 type PropsType = {
-  id: string,
+  id?: string,
   value: string,
   label: string,
-  errors: ?Array<string>,
-  onBlur: ?() => void,
-  onChange: (e: { target: { value: string } }) => void,
+  errors?: Array<string>,
+  onBlur?: () => void,
+  onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   fullWidth: ?boolean,
 };
 
@@ -31,7 +31,7 @@ class Textarea extends Component<PropsType, StateType> {
     this.setState({ labelFloat: Boolean(this.props.value) });
   }
 
-  handleChange = (e: any) => {
+  handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { onChange } = this.props;
     onChange(e);
   };
@@ -87,7 +87,6 @@ class Textarea extends Component<PropsType, StateType> {
               {errors.map((item, idx) => (
                 <div
                   key={/* eslint-disable */ idx /* eslint-enable */}
-                  id={`error-label-${id}`}
                 >
                   {item}
                 </div>

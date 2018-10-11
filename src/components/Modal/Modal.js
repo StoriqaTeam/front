@@ -77,7 +77,7 @@ class Modal extends Component<PropsTypes, StateTypes> {
     const {
       target: { id },
     } = e;
-    if (id === 'overlay') {
+    if (id === 'overlay' || id === 'inner') {
       onClose();
     }
   };
@@ -106,11 +106,16 @@ class Modal extends Component<PropsTypes, StateTypes> {
             styleName="wrap"
             tabIndex="0"
           >
-            <div styleName="inner">
+            <div
+              id="inner"
+              styleName="inner"
+            >
               {isNil(this.props.render) ? (
                 <Fragment>
-                  {closeButton}
-                  {this.props.children}
+                  <div styleName="body">
+                    {closeButton}
+                    {this.props.children}
+                  </div>
                 </Fragment>
               ) : (
                 this.props.render()

@@ -1,10 +1,11 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
 import { withRouter, routerShape } from 'found';
 
+import { Modal } from 'components/Modal';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
@@ -27,9 +28,14 @@ import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
 import ManageOrderBlock from './ManageOrderBlock';
+import OpenTicketModal from './OpenTicketModal';
 import { getStatusStringFromEnum } from './utils';
 
 import './OrderPage.scss';
+
+type StateType = {
+  isOpenTicketModalShown: boolean,
+};
 
 type PropsType = {
   order: any, // TODO: use common type here.
@@ -55,7 +61,11 @@ type OrderDTOType = {
   customerAddress: string,
 };
 
-class OrderPage extends PureComponent<PropsType> {
+class OrderPage extends Component<PropsType, StateType> {
+  state = {
+    isOpenTicketModalShown: false,
+  };
+
   getDateFromTimestamp = (timestamp: string): string =>
     fullDateFromTimestamp(timestamp);
 
@@ -191,13 +201,28 @@ class OrderPage extends PureComponent<PropsType> {
     }
   };
 
+  handlerOpenTicket = () => {
+    this.setState({ isOpenTicketModalShown: true });
+  };
+
+  handleOpenTicketModalClose = () => {
+    this.setState({ isOpenTicketModalShown: false });
+  };
+
   render() {
-    const { order: orderFromProps } = this.props;
+    const { order: orderFromProps, isPaymentInfoCanBeShown } = this.props;
+    const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
       <AppContext>
         {({ environment }) => (
           <div styleName="container">
+            <Modal
+              showModal={isOpenTicketModalShown}
+              onClose={this.handleOpenTicketModalClose}
+            >
+              <OpenTicketModal />
+            </Modal>
             <div styleName="mainBlock">
               <div styleName="orderNumber">
                 <strong>ORDER #{order.number}</strong>
@@ -215,7 +240,7 @@ class OrderPage extends PureComponent<PropsType> {
                       </div>
                     </div>
                   </div>
-                  {this.props.isPaymentInfoCanBeShown &&
+                  {isPaymentInfoCanBeShown &&
                     (orderFromProps.state === 'NEW' ||
                       orderFromProps.state === 'PAYMENT_AWAITED' ||
                       orderFromProps.state === 'TRANSACTION_PENDING' ||
@@ -235,9 +260,16 @@ class OrderPage extends PureComponent<PropsType> {
                       </div>
                     )}
                 </div>
-                <div styleName="ticketButtonTitle">Having troubles?</div>
+                <div styleName="ticketButtonTitle">
+                  Having troubles?
+                </div>
                 <div styleName="ticketButtonWrapper">
-                  <Button big wireframe fullWidth>
+                  <Button
+                    big
+                    wireframe
+                    fullWidth
+                    onClick={isPaymentInfoCanBeShown ? this.handlerOpenTicket : () => {}}
+                  >
                     Open ticket
                   </Button>
                 </div>
