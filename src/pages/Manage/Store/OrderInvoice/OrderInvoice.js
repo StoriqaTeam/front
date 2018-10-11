@@ -1,6 +1,7 @@
 // @flow strict
 
 import React, { Component } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
@@ -42,4 +43,84 @@ class OrderInvoice extends Component<{}> {
   }
 }
 
-export default OrderInvoice;
+export default createFragmentContainer(
+  OrderInvoice,
+  graphql`
+    fragment OrderInvoice_me on User
+      @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
+      myStore {
+        rawId
+        order(slug: $slug) {
+          id
+          slug
+          storeId
+          product {
+            baseProduct {
+              rawId
+              name {
+                text
+              }
+              category {
+                rawId
+                name {
+                  text
+                  lang
+                }
+              }
+            }
+            price
+            attributes {
+              value
+              attribute {
+                name {
+                  lang
+                  text
+                }
+              }
+            }
+            photoMain
+          }
+          customer {
+            firstName
+            lastName
+            phone
+          }
+          receiverName
+          receiverPhone
+          addressFull {
+            value
+            country
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            locality
+            political
+            postalCode
+            route
+            streetNumber
+            placeId
+          }
+          createdAt
+          deliveryCompany
+          trackId
+          quantity
+          subtotal
+          state
+          paymentStatus
+          history {
+            edges {
+              node {
+                state
+                committedAt
+                user {
+                  firstName
+                  lastName
+                }
+                comment
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+);

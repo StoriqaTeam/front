@@ -432,7 +432,17 @@ const routes = (
                 }
               `}
             />
-            <Route path="/orders/:orderId/invoice" Component={OrderInvoice} />
+            <Route
+              path="/orders/:orderId/invoice"
+              Component={OrderInvoice}
+              query={graphql`
+                query routes_OrderInvoice_Query {
+                  me {
+                    ...OrderInvoice_me
+                  }
+                }
+              `}
+            />
             <Route
               path="/product/new"
               Component={({ me }) => <NewProduct me={me} />}
