@@ -184,9 +184,11 @@ const routes = (
           query routes_Checkout_Query {
             me {
               ...Checkout_me
+              ...UserData_me
             }
             cart {
               ...Checkout_cart
+              ...UserDataTotalLocalFragment
             }
           }
         `}
@@ -283,6 +285,10 @@ const routes = (
           query routes_Manage_Query {
             me {
               id
+              ...UserData_me
+            }
+            cart {
+              ...UserDataTotalLocalFragment
             }
           }
         `}
@@ -312,6 +318,10 @@ const routes = (
                   storeId
                 }
                 ...Wizard_me
+                ...UserData_me
+              }
+              cart {
+                ...UserDataTotalLocalFragment
               }
             }
           `}
@@ -602,6 +612,10 @@ const routes = (
             query routes_ProfileItem_Query {
               me {
                 ...Profile_me
+                ...UserData_me
+              }
+              cart {
+                ...UserDataTotalLocalFragment
               }
             }
           `}
