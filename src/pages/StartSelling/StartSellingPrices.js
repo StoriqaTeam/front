@@ -66,7 +66,7 @@ const items: Array<PriceType> = [
 
 const StartSellingPrices = () => (
   <div styleName="container">
-    <h2 styleName="title">Low fee & high transparency</h2>
+    <h2 styleName="title">LOW FEE & HIGH TRANSPARENCY</h2>
     <p styleName="subtitle">
       We deliver high quality services and support, including marketing
       assistance and sales advice.

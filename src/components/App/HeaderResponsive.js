@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr } from 'ramda';
+import { pathOr, isNil } from 'ramda';
 import classNames from 'classnames';
 
 import { AppContext } from 'components/App';
@@ -12,10 +12,16 @@ import { MobileMenu } from 'components/MobileMenu';
 import { Modal } from 'components/Modal';
 import { SearchInput } from 'components/SearchInput';
 import { CategoriesMenu } from 'components/CategoriesMenu';
+import { withShowAlert } from 'components/App/AlertContext';
 
 import { Container } from 'layout';
 
 import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
+import type { AddAlertInputType } from 'components/App/AlertContext';
+
+import { getCookie } from 'utils/cookiesOp';
+
+import { COOKIE_NAME } from 'constants';
 
 import { HeaderBottom, HeaderTop, MobileSearchMenu } from './index';
 
@@ -27,6 +33,7 @@ type PropsType = {
   totalCount: number,
   userData: ?UserDataType,
   isShopCreated: boolean,
+  showAlert: AddAlertInputType => void,
 };
 
 type StateType = {
@@ -49,6 +56,21 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       isMobileCategoriesOpen: false,
       selectedCategory: null,
     };
+  }
+
+  componentDidMount() {
+    const { showAlert } = this.props;
+    const cookie = getCookie(COOKIE_NAME);
+    if (isNil(cookie)) {
+      showAlert({
+        type: 'success',
+        text:
+          'This website uses ‘cookies’ to give you best, most relevant experience. Using this website means you’re Ok with this. If you do not use cookies, you will not be able to access the website.',
+        link: { text: 'OK' },
+        isStatic: true,
+        longText: true,
+      });
+    }
   }
 
   handleOpenModal = (isSignUp: ?boolean): void => {
@@ -207,4 +229,4 @@ class HeaderResponsive extends Component<PropsType, StateType> {
   }
 }
 
-export default HeaderResponsive;
+export default withShowAlert(HeaderResponsive);

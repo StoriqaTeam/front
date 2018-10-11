@@ -185,9 +185,11 @@ const routes = (
           query routes_Checkout_Query {
             me {
               ...Checkout_me
+              ...UserData_me
             }
             cart {
               ...Checkout_cart
+              ...UserDataTotalLocalFragment
             }
           }
         `}
@@ -242,8 +244,9 @@ const routes = (
         />
       </Route>
 
+      <Redirect from="/start-selling" to={() => '/start-selling/en'} />
       <Route
-        path="start-selling"
+        path="start-selling/:lang"
         query={graphql`
           query routes_StartSelling_Query {
             me {
@@ -283,6 +286,10 @@ const routes = (
           query routes_Manage_Query {
             me {
               id
+              ...UserData_me
+            }
+            cart {
+              ...UserDataTotalLocalFragment
             }
           }
         `}
@@ -312,6 +319,10 @@ const routes = (
                   storeId
                 }
                 ...Wizard_me
+                ...UserData_me
+              }
+              cart {
+                ...UserDataTotalLocalFragment
               }
             }
           `}
@@ -613,6 +624,10 @@ const routes = (
             query routes_ProfileItem_Query {
               me {
                 ...Profile_me
+                ...UserData_me
+              }
+              cart {
+                ...UserDataTotalLocalFragment
               }
             }
           `}

@@ -76,15 +76,26 @@
 }
 
 .alertMessage {
-  margin: 1rem 0;
-  line-height: 1.43;
-  letter-spacing: normal;
   color: $color_white;
   font-family: $font_regular;
   font-size: 18px;
+  letter-spacing: normal;
+  line-height: 1.43;
+  margin: 1rem 0;
+  
   
   @media (min-width: $md) {
+    font-size: 18px;
     margin: 0 2rem;
+  }
+
+  &.longText {
+    font-size: 12px;
+    padding: 0 1rem;
+    text-align: justify;
+    @media (min-width: $sm) {
+      font-size: 14px;
+    }
   }
 }
 
