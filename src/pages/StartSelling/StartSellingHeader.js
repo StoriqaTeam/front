@@ -7,7 +7,11 @@ import { Container, Row } from 'layout';
 
 import './StartSellingHeader.scss';
 
-const StartSellingHeader = () => (
+type PropsType = {
+  lang: string,
+};
+
+const StartSellingHeader = ({ lang }: PropsType) => (
   <Container>
     <Row>
       <header styleName="container">
@@ -16,6 +20,13 @@ const StartSellingHeader = () => (
             <Link to="/" data-test="logoLink">
               <Icon type="logo" />
             </Link>
+          </div>
+          <div styleName="text">
+            <strong>
+              {lang === 'ru'
+                ? 'Онлайн-маркетплейс'
+                : 'Online crypto marketplace'}
+            </strong>
           </div>
         </div>
       </header>

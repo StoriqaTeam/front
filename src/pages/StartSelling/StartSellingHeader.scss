@@ -25,11 +25,43 @@
 .logo {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   padding-top: 1.2rem;
-  @media (min-width: $md) {
-    padding-top: 0.8rem;
+
+  //@media (min-width: $md) {
+  //  padding-top: 0.8rem;
+  //}
+  //
+  //@media (min-width: $lg) {
+  //  padding-top: 0;
+  //}
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
   }
-  @media (min-width: $lg) {
-    padding-top: 0;
+}
+
+.text {
+  display: inline-block;
+  font-size: 14px;
+  color: $color_blue;
+  letter-spacing: 1px;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-top: 1rem;
+  }
+
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 3rem;
+    margin: 0 3.5rem;
+    border-left: 1px solid $color_blue;
+    vertical-align: middle;
+    opacity: 0.2;
+
+    @media (max-width: #{$sm - 1px}) {
+      display: none;
+    }
   }
 }
