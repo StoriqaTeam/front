@@ -446,10 +446,13 @@ const routes = (
             <Route
               path="/orders/:orderId/invoice"
               Component={OrderInvoice}
+              prepareVariables={(_, { params }) => ({
+                orderId: parseInt(params.orderId, 10) || 0,
+              })}
               query={graphql`
-                query routes_OrderInvoice_Query {
+                query routes_OrderInvoice_Query($orderId: Int!) {
                   me {
-                    ...OrderInvoice_me
+                    ...OrderInvoice_me @arguments(slug: $orderId)
                   }
                 }
               `}
