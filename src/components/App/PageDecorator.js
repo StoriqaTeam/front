@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
 import { setCookie, getCookie } from 'utils';
+import moment from 'moment';
 
 import {
   AppContext,
@@ -30,33 +31,49 @@ export default (
     constructor(props: PropsType) {
       super(props);
 
-      /**
-       * @desc Uncomment later!
-
-       const cookieLocale = pathOr(null, ['value'], getCookie('locale'));
-       if (!cookieLocale) {
-      if (process.env.BROWSER) {
-        const browserLang = window.navigator ? (window.navigator.language ||
-          window.navigator.systemLanguage ||
-          window.navigator.userLanguage) : null;
-        const browserLocale = browserLang ? browserLang.substr(0, 2).toLowerCase() : 'en';
-        setCookie('locale', browserLocale);
-      } else {
-        setCookie('locale', 'en');
+      const cookieLocale = getCookie('locale');
+      if (!cookieLocale) {
+        if (process.env.BROWSER) {
+          const browserLang = window.navigator
+            ? window.navigator.language ||
+              window.navigator.systemLanguage ||
+              window.navigator.userLanguage
+            : null;
+          const browserLocale = browserLang
+            ? browserLang.substr(0, 2).toLowerCase()
+            : 'en';
+          setCookie(
+            'locale',
+            browserLocale,
+            moment()
+              .utc()
+              .add(30, 'd')
+              .toDate(),
+          );
+        } else {
+          setCookie(
+            'locale',
+            'en',
+            moment()
+              .utc()
+              .add(30, 'd')
+              .toDate(),
+          );
+        }
       }
-    }
-       */
-
-      /**
-       * @desc And this is to remove!
-       */
-      setCookie('locale', 'en');
     }
 
     setLang = (lang: string) => {
       const locale = getCookie('locale');
       if (locale && locale.value !== lang && process.env.BROWSER) {
-        setCookie('locale', lang);
+        setCookie(
+          'locale',
+          lang,
+          moment()
+            .utc()
+            .add(30, 'd')
+            .toDate(),
+        );
         window.location.reload();
       }
     };

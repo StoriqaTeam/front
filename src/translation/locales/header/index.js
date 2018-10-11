@@ -23,7 +23,7 @@ const locale: LocalType = {
     products: 'Товары',
     stores: 'Магазины',
     i_find: 'Я ищу...',
-    sign_up: 'Зарегестрироваться',
+    sign_up: 'Зарегистрироваться',
     sign_in: 'Войти',
   },
   ja: {

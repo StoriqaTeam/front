@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { pathOr } from 'ramda';
 
 import { getCookie } from 'utils';
 
@@ -43,10 +42,8 @@ export const t = (
 };
 
 export const getLocale = () => {
-  const localeValue = pathOr('en', ['value'], getCookie('locale'));
-  // $FlowIgnore
+  const localeValue = getCookie('locale') || 'en';
   return locale[localeValue].messages;
 };
 
-export const getCurrentLang = () =>
-  pathOr('en', ['value'], getCookie('locale'));
+export const getCurrentLang = () => getCookie('locale') || 'en';

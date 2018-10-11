@@ -14,7 +14,6 @@ import './HeaderTop.scss';
 
 type PropsType = {
   setLang: (lang: string) => void,
-  // eslint-disable-next-line
   currencies: Array<string>,
   isShopCreated: boolean,
 };
@@ -130,7 +129,7 @@ class HeaderTop extends PureComponent<PropsType> {
   };
 
   render() {
-    const currentLocale = pathOr('en', ['value'], getCookie('locale'));
+    const currentLocale = getCookie('locale') || 'en';
     const activeLocaleItem = find(propEq('id', currentLocale))(languages);
     const { isShopCreated } = this.props;
     return (
@@ -148,7 +147,7 @@ class HeaderTop extends PureComponent<PropsType> {
         <div styleName="item">
           <Select
             activeItem={activeLocaleItem}
-            items={[{ id: 'en', label: 'ENG' }]}
+            items={[{ id: 'en', label: 'ENG' }, { id: 'ru', label: 'RUS' }]}
             onSelect={this.handleChangeLocale}
             dataTest="headerLanguagesSelect"
           />
