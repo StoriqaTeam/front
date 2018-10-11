@@ -22,17 +22,26 @@ const titlesHashMap = {
 };
 
 class Alert extends Component<AlertPropsType, StateType> {
-  state: StateType = {
+  static defaultProps = {
+    isStatic: false,
+    longText: false,
+  };
+
+  state = {
     isDisappearing: false,
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      this.props.onClose(this.props.createdAtTimestamp);
-    }, 3000);
-    setTimeout(() => {
-      this.setState({ isDisappearing: true });
-    }, 1500);
+    const { isStatic } = this.props;
+    // $FlowIgnoreMe
+    if (!isStatic) {
+      setTimeout(() => {
+        this.props.onClose(this.props.createdAtTimestamp);
+      }, 3000);
+      setTimeout(() => {
+        this.setState({ isDisappearing: true });
+      }, 1500);
+    }
   }
 
   render() {
@@ -42,6 +51,8 @@ class Alert extends Component<AlertPropsType, StateType> {
       link,
       createdAtTimestamp,
       onClick,
+      isStatic,
+      longText,
     } = this.props;
     const title = propOr('Information.', type, titlesHashMap);
     return (
@@ -54,23 +65,29 @@ class Alert extends Component<AlertPropsType, StateType> {
           warning: type === 'warning',
         })}
       >
-        <button
-          name="alertCloseButton"
-          onClick={() => {
-            this.props.onClose(createdAtTimestamp);
-            if (onClick) {
-              onClick();
-            }
-          }}
-          styleName="closeButton"
-        >
-          <CloseIcon />
-        </button>
+        {/* $FlowIgnoreMe */}
+        {!isStatic ? (
+          <button
+            name="alertCloseButton"
+            onClick={() => {
+              this.props.onClose(createdAtTimestamp);
+              if (onClick) {
+                onClick();
+              }
+            }}
+            styleName="closeButton"
+          >
+            <CloseIcon />
+          </button>
+        ) : null}
         {/* <div styleName={classnames('leftEdge', type)} /> */}
-        <div styleName="titleContainer">
-          <div styleName="title">{title}</div>
-        </div>
-        <div styleName="alertMessage">{text}</div>
+        {/* $FlowIgnoreMe */}
+        {!isStatic ? (
+          <div styleName="titleContainer">
+            <div styleName="title">{title}</div>
+          </div>
+        ) : null}
+        <div styleName={classnames('alertMessage', { longText })}>{text}</div>
         <div styleName="link">
           {!isEmpty(link.text) ? (
             <button
