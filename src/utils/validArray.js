@@ -1,9 +1,9 @@
-// @flow
+// @flow strict
 
 /**
  * @param {[]} array
  * @return {boolean}
  */
-export default function validArray(array: Array<any>): boolean {
+export default function validArray<T>(array: Array<T>): boolean {
   return Array.isArray(array);
 }

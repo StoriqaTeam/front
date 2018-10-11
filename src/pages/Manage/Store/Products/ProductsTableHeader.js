@@ -46,7 +46,7 @@ const ProductsTableHeader = () => (
     <Col size={3} sm={3} md={3} lg={1} xl={1}>
       <div styleName="tdDelete">
         <button styleName="deleteButton">
-          <Icon type="basket" size="32" />
+          <Icon type="basket" size={32} />
         </button>
       </div>
     </Col>

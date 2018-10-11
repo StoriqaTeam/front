@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   find,
   sort,
@@ -16,10 +16,17 @@ import {
 import { withRouter, routerShape } from 'found';
 import classNames from 'classnames';
 
-import { flattenFunc, urlToInput, inputToUrl, getNameText } from 'utils';
+import {
+  flattenFunc,
+  urlToInput,
+  inputToUrl,
+  getNameText,
+  currentCurrency,
+} from 'utils';
+import debounce from 'lodash.debounce';
 
 import { Accordion, prepareForAccordion } from 'components/Accordion';
-import { RangerSlider } from 'components/Ranger';
+import { RangeSlider } from 'components/Ranger';
 import { AttributeControl } from 'components/AttributeControl';
 import { Icon } from 'components/Icon';
 
@@ -36,8 +43,10 @@ type PropsType = {
 };
 
 type StateType = {
-  volume: number,
-  volume2: number,
+  thumb1: number,
+  thumb2: number,
+  minValue: number,
+  maxValue: number,
 };
 
 type TranslateType = {
@@ -56,64 +65,151 @@ type AttrFilterType = {
 };
 
 class SearchSidebar extends Component<PropsType, StateType> {
-  static defaultProps = {
-    onClose: () => {},
-  };
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): ?StateType {
-    // minValue of ranger from back (permanent for each category)
-    // $FlowIgnoreMe
+  constructor(props) {
+    super(props);
+
     const minValue = pathOr(
       0,
-      ['findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'minValue'],
-      nextProps.search,
+      [
+        'search',
+        'findProduct',
+        'pageInfo',
+        'searchFilters',
+        'priceRange',
+        'minValue',
+      ],
+      props,
     );
-    // minValue of ranger from url
-    // $FlowIgnoreMe
-    const minValueFromUrl = pathOr(
-      0,
-      ['match', 'location', 'query', 'minValue'],
-      nextProps,
-    );
-    const minValueFromUrlInt = parseFloat(minValueFromUrl);
-    // get initial minValue ranger from url if we can
-    const volume =
-      minValueFromUrlInt && minValueFromUrlInt > minValue
-        ? minValueFromUrlInt
-        : minValue;
 
-    // maxValue of ranger from back (permanent for each category)
-    // $FlowIgnoreMe
     const maxValue = pathOr(
       0,
-      ['findProduct', 'pageInfo', 'searchFilters', 'priceRange', 'maxValue'],
-      nextProps.search,
+      [
+        'search',
+        'findProduct',
+        'pageInfo',
+        'searchFilters',
+        'priceRange',
+        'maxValue',
+      ],
+      props,
     );
-    // maxValue of ranger from url
-    // $FlowIgnoreMe
-    const maxValueFromUrl = pathOr(
-      0,
+
+    let thumb1 = pathOr(
+      null,
+      ['match', 'location', 'query', 'minValue'],
+      props,
+    );
+
+    let thumb2 = pathOr(
+      null,
       ['match', 'location', 'query', 'maxValue'],
-      nextProps,
+      props,
     );
-    const maxValueFromUrlInt = parseFloat(maxValueFromUrl);
-    // get initial maxValue ranger from url if we can
-    const volume2 =
-      maxValueFromUrlInt && maxValueFromUrlInt < maxValue
-        ? maxValueFromUrlInt
-        : maxValue;
-    return {
-      ...prevState,
-      volume,
-      volume2,
+
+    thumb1 = Number(thumb1 || minValue);
+    thumb2 = Number(thumb2 || maxValue);
+
+    if (thumb1 < minValue) {
+      thumb1 = minValue;
+    }
+    if (thumb1 > maxValue) {
+      thumb1 = maxValue;
+    }
+    if (thumb2 < minValue) {
+      thumb2 = minValue;
+    }
+    if (thumb2 > maxValue) {
+      thumb2 = maxValue;
+    }
+    if (thumb2 < thumb1) {
+      thumb2 = thumb1;
+    }
+
+    this.state = {
+      thumb1,
+      thumb2,
+      minValue,
+      maxValue,
     };
+    this.setRangeUrl = debounce(this.setRangeUrl, 500);
+    this.setRangeUrl(thumb1, thumb2, 'replace');
   }
 
-  state = {
-    volume: 0,
-    volume2: 0,
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    // $FlowIgnore
+    const minValue = pathOr(
+      0,
+      [
+        'search',
+        'findProduct',
+        'pageInfo',
+        'searchFilters',
+        'priceRange',
+        'minValue',
+      ],
+      this.props,
+    );
+
+    // $FlowIgnore
+    const maxValue = pathOr(
+      0,
+      [
+        'search',
+        'findProduct',
+        'pageInfo',
+        'searchFilters',
+        'priceRange',
+        'maxValue',
+      ],
+      this.props,
+    );
+    // console.log('minValue', minValue);
+    // console.log('maxValue', maxValue);
+
+    if (minValue !== prevState.minValue || maxValue !== prevState.maxValue) {
+      this.setRangeData(minValue, maxValue);
+    }
+  }
+
+  setRangeData = (minValue: number, maxValue: number): void => {
+    this.setState(
+      {
+        thumb1: minValue,
+        thumb2: maxValue,
+        minValue,
+        maxValue,
+      },
+      (): void => {
+        this.setRangeUrl(minValue, maxValue);
+      },
+    );
+  };
+
+  setRangeUrl = (thumb1: number, thumb2: number, type?: string) => {
+    // $FlowIgnore
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+    const newPreparedObj = assocPath(
+      ['options', 'priceFilter'],
+      {
+        minValue: thumb1,
+        maxValue: thumb2,
+      },
+      oldPreparedObj,
+    );
+    const newUrl = inputToUrl(newPreparedObj);
+    if (oldPreparedObj !== newPreparedObj) {
+      if (type === 'replace') {
+        if (process.env.BROWSER) {
+          this.props.router.replace(`/categories${newUrl}`);
+        }
+        return;
+      }
+
+      if (process.env.BROWSER) {
+        this.props.router.push(`/categories${newUrl}`);
+      }
+    }
   };
 
   getSearchFilter = (filterProp: string) => {
@@ -159,7 +255,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
       filter(
         where({
           level: equals(level),
-          children: i => i.length !== 0,
+          children: i => i && i.length !== 0,
         }),
       );
     // check that we need to render category 1 level with children in sidebar
@@ -187,10 +283,8 @@ class SearchSidebar extends Component<PropsType, StateType> {
     router.push(`/categories?search=${name}&category=${item.id}`);
   };
 
-  handleOnRangeChange = (value: number, fieldName: string): void => {
-    this.setState({
-      [fieldName]: value,
-    });
+  handleOnRangeChange = (data: { thumb1: number, thumb2: number }) => {
+    this.setRangeUrl(data.thumb1, data.thumb2);
   };
 
   prepareAttrsToUrlStr = (id, values) => {
@@ -233,24 +327,6 @@ class SearchSidebar extends Component<PropsType, StateType> {
         });
       }
     };
-  };
-
-  handleOnCompleteRange = (value: number, value2: number): void => {
-    const { router } = this.props;
-    // getting current searchInput data change range and push to new url
-    // $FlowIgnoreMe
-    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
-    const oldPreparedObj = urlToInput(queryObj);
-    const newPreparedObj = assocPath(
-      ['options', 'priceFilter'],
-      {
-        minValue: value,
-        maxValue: value2,
-      },
-      oldPreparedObj,
-    );
-    const newUrl = inputToUrl(newPreparedObj);
-    router.push(`/categories${newUrl}`);
   };
 
   renderParentLink = () => {
@@ -297,11 +373,9 @@ class SearchSidebar extends Component<PropsType, StateType> {
     const findCatPred = rawId => find(whereEq({ rawId }));
     const catObj = findCatPred(parseInt(categoryId, 10))(arr);
     let parentObj = null;
-    // подготовка объекта категории
     if (catObj) {
       switch (catObj.level) {
         case 3:
-          // если категория 3 уровня надо отрисовать backlink на бабушку
           parentObj = findCatPred(catObj.parentId)(arr);
           parentObj = parentObj ? findCatPred(parentObj.parentId)(arr) : null;
           break;
@@ -318,8 +392,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
 
   render() {
     const { onClose, isOpen } = this.props;
-    const { volume, volume2 } = this.state;
-    const priceRange = this.getSearchFilter('priceRange');
+    const { thumb1, thumb2, minValue, maxValue } = this.state;
     const attrFilters = this.getSearchFilter('attrFilters');
     const accordionItems = this.generateTree();
     // $FlowIgnoreMe
@@ -337,19 +410,6 @@ class SearchSidebar extends Component<PropsType, StateType> {
       ['options', 'attrFilters'],
       initialSearchInput,
     );
-    const maxValue = (priceRange && priceRange.maxValue) || 0;
-    let valueRange;
-    let valueRange2;
-    if (volume > volume2) {
-      valueRange = 0;
-    } else {
-      valueRange = volume;
-    }
-    if (volume2 < volume) {
-      valueRange2 = maxValue;
-    } else {
-      valueRange2 = volume2;
-    }
     return (
       <aside
         styleName={classNames('container', {
@@ -376,17 +436,20 @@ class SearchSidebar extends Component<PropsType, StateType> {
             activeId={categoryId ? parseInt(categoryId, 10) : null}
           />
         )}
-        <div styleName="blockTitle">Price (STQ)</div>
-        <RangerSlider
-          min={0}
-          max={maxValue}
-          step={0.01}
-          value={valueRange}
-          value2={valueRange2}
-          onChange={value => this.handleOnRangeChange(value, 'volume')}
-          onChange2={value => this.handleOnRangeChange(value, 'volume2')}
-          onChangeComplete={this.handleOnCompleteRange}
-        />
+        {minValue !== maxValue && (
+          <Fragment>
+            <div styleName="blockTitle">{`Price (${currentCurrency()})`}</div>
+            <RangeSlider
+              thumb1={thumb1}
+              thumb2={thumb2}
+              minValue={minValue}
+              maxValue={maxValue}
+              onChange={(data: { thumb1: number, thumb2: number }) => {
+                this.setRangeUrl(data.thumb1, data.thumb2);
+              }}
+            />
+          </Fragment>
+        )}
         {attrFilters &&
           sort(
             (a, b) => a.attribute.rawId - b.attribute.rawId,

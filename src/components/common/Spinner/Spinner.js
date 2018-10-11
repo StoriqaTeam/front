@@ -1,14 +1,14 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
 import './Spinner.scss';
 
-const Rating = () => (
+const Spinner = () => (
   <div styleName="container">
     <div styleName="double-bounce1" />
     <div styleName="double-bounce2" />
   </div>
 );
 
-export default Rating;
+export default Spinner;

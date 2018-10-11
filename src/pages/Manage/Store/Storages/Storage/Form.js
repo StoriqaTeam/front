@@ -7,12 +7,15 @@ import { Button } from 'components/common/Button';
 import { Input } from 'components/common/Input';
 import { AddressForm } from 'components/AddressAutocomplete';
 
+import type { FormErrorsType } from 'types';
+
 import './Form.scss';
 
 type AddressFullType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
   country: string,
+  countryCode: string,
   locality: ?string,
   political: ?string,
   postalCode: string,
@@ -27,7 +30,7 @@ type PropsType = {
   addressFull: AddressFullType,
   handleCancel: () => void,
   formErrors: {
-    [string]: string,
+    [string]: Array<string>,
   },
   handleSave: (data: {
     name: string,
@@ -38,9 +41,7 @@ type PropsType = {
 type StateType = {
   name: string,
   addressFull: AddressFullType,
-  formErrors: {
-    [string]: string,
-  },
+  formErrors: FormErrorsType,
 };
 
 class Form extends Component<PropsType, StateType> {

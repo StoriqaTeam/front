@@ -2,18 +2,22 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { find, append, head, pathOr, map, isEmpty, omit, reject } from 'ramda';
+import {
+  find,
+  append,
+  head,
+  pathOr,
+  map,
+  isEmpty,
+  omit,
+  reject,
+  isNil,
+} from 'ramda';
 import { validate } from '@storiqa/shared';
 
-import { Button } from 'components/common/Button';
-import { log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Input } from 'components/common/Input';
-
-import { CreateProductWithAttributesMutation } from 'relay/mutations';
-import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
-
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import { Checkbox } from 'components/common/Checkbox';
 
 import Characteristics from './Characteristics';
 import Photos from './Photos';
@@ -25,6 +29,16 @@ type AttributeValueType = {
   attrId: number,
   value: string,
   metaField?: ?string,
+};
+
+type VariantType = ?{
+  vendorCode?: ?string,
+  price?: ?number,
+  cashback?: ?number,
+  mainPhoto?: ?string,
+  photos?: Array<string>,
+  attributeValues?: Array<AttributeValueType>,
+  variantId: ?string,
 };
 
 type StateType = {
@@ -41,12 +55,12 @@ type StateType = {
     attributes?: Array<string>,
   },
   isLoading: boolean,
+  preOrderDays: string,
+  preOrder: boolean,
+  preOrderDays: string,
 };
 
 type PropsType = {
-  showAlert: (input: AddAlertInputType) => void,
-  productRawId: number,
-  productId: string,
   category: {
     getAttributes: Array<{
       rawId: number,
@@ -73,15 +87,16 @@ type PropsType = {
         },
       },
     },
+    preOrder: boolean,
+    preOrderDays: number,
   },
   onExpandClick: (id: string) => void,
-  handleSaveBaseProductWithVariant: ({
-    variantData: StateType,
-    isCanCreate: boolean,
-  }) => void,
-  isLoading: boolean,
-  isNewVariant: boolean,
-  toggleNewVariantParam: (value: boolean) => void,
+  onChangeVariantForm: (variantData: ?VariantType) => void,
+  formErrors: ?{
+    vendorCode?: Array<string>,
+    price?: Array<string>,
+    attributes?: Array<string>,
+  },
 };
 
 type ValueForAttributeInputType = {
@@ -92,7 +107,8 @@ type ValueForAttributeInputType = {
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const product = props.variant;
+    const { onChangeVariantForm, variant } = props;
+    const product = variant;
     if (!product) {
       this.state = {
         attributeValues: this.resetAttrValues(),
@@ -100,6 +116,8 @@ class Form extends Component<PropsType, StateType> {
         price: null,
         formErrors: undefined,
         isLoading: false,
+        preOrder: false,
+        preOrderDays: '',
       };
     } else {
       this.state = {
@@ -112,7 +130,30 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: this.resetAttrValues(),
         formErrors: undefined,
         isLoading: false,
+        preOrder: Boolean(product.preOrder),
+        preOrderDays:
+          product.preOrder && product.preOrderDays
+            ? `${product.preOrderDays}`
+            : '',
       };
+    }
+
+    const variantData = {
+      ...this.state,
+      variantId: variant ? variant.id : null,
+    };
+    onChangeVariantForm(variantData);
+  }
+
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    const { state } = this;
+    if (JSON.stringify(state) !== JSON.stringify(prevState)) {
+      const { onChangeVariantForm, variant } = this.props;
+      const variantData = {
+        ...this.state,
+        variantId: variant ? variant.id : null,
+      };
+      onChangeVariantForm(variantData);
     }
   }
 
@@ -129,121 +170,6 @@ class Form extends Component<PropsType, StateType> {
       this.state,
     );
     return errors;
-  };
-
-  handleSaveProduct = () => {
-    const { handleSaveBaseProductWithVariant, variant } = this.props;
-
-    const variantData = {
-      ...this.state,
-      variantId: variant ? variant.id : null,
-    };
-    const formErrors = this.validate();
-    if (formErrors) {
-      this.setState({ formErrors });
-      handleSaveBaseProductWithVariant({ variantData, isCanCreate: false });
-      return;
-    }
-
-    handleSaveBaseProductWithVariant({ variantData, isCanCreate: true });
-  };
-
-  handleCreateVariant = () => {
-    const formErrors = this.validate();
-    if (formErrors) {
-      this.setState({ formErrors });
-      return;
-    }
-    const { environment } = this.context;
-    const {
-      price,
-      vendorCode,
-      mainPhoto,
-      photos,
-      cashback,
-      discount,
-      attributeValues,
-    } = this.state;
-    if (!price || !vendorCode) {
-      this.props.showAlert({
-        type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
-      });
-      return;
-    }
-    this.setState({ isLoading: true });
-    const params: CreateProductWithAttributesMutationType = {
-      input: {
-        clientMutationId: '',
-        product: {
-          baseProductId: this.props.productRawId,
-          price,
-          vendorCode,
-          photoMain: mainPhoto,
-          additionalPhotos: photos,
-          cashback: cashback ? cashback / 100 : null,
-          discount: discount ? discount / 100 : null,
-        },
-        attributes: attributeValues || [],
-      },
-      parentID: this.props.productId,
-      environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState({ isLoading: false });
-        // this.setState(() => ({ isLoading: false }));
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          this.setState({ formErrors: validationErrors });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Variant created!',
-          link: { text: '' },
-        });
-        this.props.toggleNewVariantParam(false);
-      },
-      onError: (error: Error) => {
-        this.setState({ isLoading: false });
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    };
-    CreateProductWithAttributesMutation.commit(params);
   };
 
   resetAttrValues = () => {
@@ -371,8 +297,30 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ [id]: parseFloat(value) });
   };
 
+  handleOnChangePreOrderDays = (e: any) => {
+    let {
+      target: { value },
+    } = e;
+    const regexp = /(^\d*$)/;
+    if (!regexp.test(value)) {
+      return;
+    }
+    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
+    this.setState((prevState: StateType) => ({
+      preOrder: prevState.preOrder && Boolean(value),
+      preOrderDays: value,
+    }));
+  };
+
+  handleOnChangePreOrder = () => {
+    this.setState((prevState: StateType) => ({
+      preOrder: !prevState.preOrder && Boolean(prevState.preOrderDays),
+    }));
+  };
+
   renderVariant = () => {
-    const { vendorCode, price, cashback, discount, formErrors } = this.state;
+    const { formErrors } = this.props;
+    const { vendorCode, price, cashback, discount } = this.state;
     return (
       <div styleName="variant">
         <div styleName="inputWidth">
@@ -387,6 +335,7 @@ class Form extends Component<PropsType, StateType> {
               value={vendorCode || ''}
               onChange={this.handleVendorCodeChange}
               errors={formErrors && formErrors.vendorCode}
+              dataTest="variantVendorcodeInput"
             />
           </div>
         </div>
@@ -402,8 +351,9 @@ class Form extends Component<PropsType, StateType> {
                 }
                 onChange={this.handlePriceChange}
                 onBlur={this.handlePriceBlur}
-                value={price || ''}
+                value={!isNil(price) ? `${price}` : ''}
                 errors={formErrors && formErrors.price}
+                dataTest="variantPriceInput"
               />
               <span styleName="priceIcon">STQ</span>
             </div>
@@ -415,7 +365,8 @@ class Form extends Component<PropsType, StateType> {
               fullWidth
               label="Cashback"
               onChange={this.handlePercentChange('cashback')}
-              value={cashback || ''}
+              value={!isNil(cashback) ? `${cashback}` : ''}
+              dataTest="variantCashbackInput"
             />
             <span styleName="inputPostfix">Percent</span>
           </div>
@@ -426,7 +377,8 @@ class Form extends Component<PropsType, StateType> {
               fullWidth
               label="Discount"
               onChange={this.handlePercentChange('discount')}
-              value={discount || ''}
+              value={!isNil(discount) ? `${discount}` : ''}
+              dataTest="variantDiscountInput"
             />
             <span styleName="inputPostfix">Percent</span>
           </div>
@@ -436,19 +388,13 @@ class Form extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      category,
-      variant,
-      isLoading,
-      isNewVariant,
-      toggleNewVariantParam,
-    } = this.props;
+    const { category, variant, formErrors } = this.props;
     const {
       photos = [],
       mainPhoto,
-      formErrors,
-      isLoading: isLoadingLocal,
       attributeValues,
+      preOrder,
+      preOrderDays,
     } = this.state;
     return (
       <div styleName="container">
@@ -475,30 +421,29 @@ class Form extends Component<PropsType, StateType> {
         {variant &&
           variant.stocks &&
           !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
-        <div styleName="buttons">
-          <div styleName="saveButton">
-            <Button
-              isLoading={isLoading || isLoadingLocal}
-              big
-              fullWidth
-              type="button"
-              onClick={
-                isNewVariant ? this.handleCreateVariant : this.handleSaveProduct
-              }
-              dataTest="variantsProductSaveButton"
-            >
-              Save
-            </Button>
+        <div styleName="preOrder">
+          <div styleName="preOrderTitle">
+            <div styleName="title">
+              <strong>Available for pre-order</strong>
+            </div>
+            <div styleName="preOrderCheckbox">
+              <Checkbox
+                inline
+                id="preOrderCheckbox"
+                isChecked={preOrder}
+                onChange={this.handleOnChangePreOrder}
+              />
+            </div>
           </div>
-          {isNewVariant && (
-            <button
-              styleName="cancelButton"
-              onClick={() => toggleNewVariantParam(false)}
-              data-test="cancelNewVariantButton"
-            >
-              Cancel
-            </button>
-          )}
+          <div styleName="preOrderDaysInput">
+            <Input
+              fullWidth
+              label="Lead time (days)"
+              onChange={this.handleOnChangePreOrderDays}
+              value={preOrderDays}
+              dataTest="variantPreOrderDaysInput"
+            />
+          </div>
         </div>
       </div>
     );

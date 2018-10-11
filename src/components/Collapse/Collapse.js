@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import { remove, isNil, findIndex, propEq, isEmpty } from 'ramda';
@@ -6,23 +6,18 @@ import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 
+import type { CollapseItemType } from 'types';
+
 import './Collapse.scss';
 
-type ItemType = {
-  id: string,
-  title: string,
-  link?: string,
-  links?: Array<{ id: string, name: string }>,
-};
-
 type PropsType = {
-  items: Array<ItemType>,
-  onSelected: (item: { id: string, title: string }) => void,
+  items: Array<CollapseItemType>,
+  onSelected: CollapseItemType => void,
   isDisabled: boolean,
   // eslint-disable-next-line
-  selected: string,
+  selected: ?string | ?number,
   transparent: boolean,
-  grouped?: boolean,
+  grouped: boolean,
   menuTitle?: string,
 };
 
@@ -40,13 +35,14 @@ class Collapse extends Component<PropsType, StateType> {
     transparent: false,
     grouped: false,
   };
+
   static getDerivedStateFromProps(
     nextProps: PropsType,
     nextState: StateType,
   ): StateType | null {
     const { selected, items } = nextProps;
     const index =
-      !isNil(selected) && !isEmpty(selected)
+      !isNil(selected) && !isEmpty(`${selected}`)
         ? findIndex(propEq('id', selected))(items)
         : 0;
     return {
@@ -56,6 +52,13 @@ class Collapse extends Component<PropsType, StateType> {
       title: null,
     };
   }
+
+  state = {
+    isOpen: false,
+    index: 0,
+    title: null,
+  };
+
   handleClick = (): void => {
     const { isDisabled } = this.props;
     if (!isDisabled) {
@@ -64,10 +67,8 @@ class Collapse extends Component<PropsType, StateType> {
       }));
     }
   };
-  handleSelected = (
-    item: { id: string, title: string },
-    index: number,
-  ): void => {
+
+  handleSelected = (item: CollapseItemType, index: number): void => {
     const { onSelected } = this.props;
     this.setState(
       {
@@ -80,7 +81,8 @@ class Collapse extends Component<PropsType, StateType> {
       },
     );
   };
-  renderGroupedItems = (items: Array<ItemType>) => (
+
+  renderGroupedItems = (items: Array<CollapseItemType>) => (
     <ul>
       {items.map((item, idx) => (
         <li
@@ -92,13 +94,14 @@ class Collapse extends Component<PropsType, StateType> {
         >
           <span styleName="itemTitle">{item.title}</span>
           <ul>
-            {/* $FlowIgnoreMe */}
-            {item.links.map(link => <li key={link.id}>{link.name}</li>)}
+            {!isNil(item.links) &&
+              item.links.map(link => <li key={link.id}>{link.name}</li>)}
           </ul>
         </li>
       ))}
     </ul>
   );
+
   renderTitle = (): string => {
     const { menuTitle, items } = this.props;
     const { title, index } = this.state;
@@ -107,6 +110,7 @@ class Collapse extends Component<PropsType, StateType> {
     }
     return isNil(title) ? items[index].title : title;
   };
+
   render() {
     const { items, transparent, grouped } = this.props;
     const { isOpen, index } = this.state;

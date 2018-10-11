@@ -5,7 +5,7 @@
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last } from 'ramda';
+import { find, pathEq, pathOr, last, isNil } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -31,11 +31,13 @@ import Cart from 'pages/Cart';
 import Checkout from 'pages/Checkout';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
-import Logout from 'pages/Logout';
+import { Logout } from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 import { StartSelling } from 'pages/StartSelling';
+import { Login } from 'pages/Login';
+import { PasswordReset } from 'pages/PasswordReset';
 
 const routes = (
   <Route>
@@ -48,6 +50,10 @@ const routes = (
           me {
             id
             ...App_me
+            wizardStore {
+              id
+              completed
+            }
           }
           cart {
             id
@@ -56,13 +62,19 @@ const routes = (
           mainPage {
             ...Start_mainPage
           }
+          countries {
+            children {
+              children {
+                alpha3
+                alpha2
+                label
+              }
+            }
+          }
           languages {
             isoCode
           }
-          currencies {
-            key
-            name
-          }
+          currencies
           categories {
             name {
               lang
@@ -115,6 +127,13 @@ const routes = (
             }
           }
           orderStatuses
+          currencyExchange {
+            code
+            rates {
+              code
+              value
+            }
+          }
         }
       `}
       render={args => {
@@ -165,9 +184,11 @@ const routes = (
           query routes_Checkout_Query {
             me {
               ...Checkout_me
+              ...UserData_me
             }
             cart {
               ...Checkout_cart
+              ...UserDataTotalLocalFragment
             }
           }
         `}
@@ -199,8 +220,8 @@ const routes = (
             }
           }
         `}
-        prepareVariables={(...args) => {
-          const queryObj = pathOr('', ['query'], last(args).location);
+        prepareVariables={(_, { location }) => {
+          const queryObj = pathOr('', ['query'], location);
           const searchTerm = urlToInput(queryObj);
           return { input: { ...searchTerm, getStoresTotalCount: true } };
         }}
@@ -222,7 +243,41 @@ const routes = (
         />
       </Route>
 
-      <Route path="start-selling" Component={StartSelling} />
+      <Redirect from="/start-selling" to={() => '/start-selling/en'} />
+      <Route
+        path="start-selling/:lang"
+        query={graphql`
+          query routes_StartSelling_Query {
+            me {
+              id
+              wizardStore {
+                id
+                completed
+                storeId
+              }
+            }
+          }
+        `}
+        Component={StartSelling}
+        render={({ props, Component }) => {
+          if (props) {
+            const { me } = props;
+            if (
+              !isNil(me) &&
+              !isNil(me.wizardStore) &&
+              me.wizardStore.completed
+            ) {
+              throw new RedirectException(
+                `/manage/store/${me.wizardStore.storeId}`,
+              );
+            } else {
+              return <Component />;
+            }
+          } else {
+            return null;
+          }
+        }}
+      />
 
       <Route
         path="/manage"
@@ -230,6 +285,10 @@ const routes = (
           query routes_Manage_Query {
             me {
               id
+              ...UserData_me
+            }
+            cart {
+              ...UserDataTotalLocalFragment
             }
           }
         `}
@@ -259,6 +318,10 @@ const routes = (
                   storeId
                 }
                 ...Wizard_me
+                ...UserData_me
+              }
+              cart {
+                ...UserDataTotalLocalFragment
               }
             }
           `}
@@ -430,20 +493,7 @@ const routes = (
                 storeId: parseInt(params.storeId, 10) || 0,
               })}
             />
-            <Route
-              path="/storage/new"
-              Component={NewStorage}
-              query={graphql`
-                query routes_NewStorage_Query($storeId: Int!) {
-                  me {
-                    ...NewStorage_me @arguments(storeId: $storeId)
-                  }
-                }
-              `}
-              prepareVariables={(_, { params }) => ({
-                storeId: parseInt(params.storeId, 10) || 0,
-              })}
-            />
+            <Route path="/storage/new" Component={NewStorage} />
             <Route
               path="/storages/:storageSlug"
               Component={StorageProducts}
@@ -486,16 +536,34 @@ const routes = (
               return <Component isSignUp {...props} />;
             }
           }
-          return <Component isSignUp alone {...props} />;
+          return <Component isSignUp {...props} />;
         }}
       />
 
       <Route
         path="/login"
-        Component={Authorization}
-        render={({ Component, props }) => <Component alone {...props} />}
+        query={graphql`
+          query routes_Login_Query {
+            me {
+              id
+            }
+          }
+        `}
+        Component={Login}
+        render={({ Component, props }) => {
+          if (props && !isNil(props.me)) {
+            throw new RedirectException(`/`);
+            // $FlowIgnoreMe
+            return; // eslint-disable-line
+          }
+          // eslint-disable-next-line
+          return <Component alone {...props} />;
+        }}
       />
+
       <Route path="/logout" Component={Logout} />
+
+      <Route path="/password_reset/:token" Component={PasswordReset} />
 
       <Route
         path="/oauth_callback/fb"
@@ -544,6 +612,10 @@ const routes = (
             query routes_ProfileItem_Query {
               me {
                 ...Profile_me
+                ...UserData_me
+              }
+              cart {
+                ...UserDataTotalLocalFragment
               }
             }
           `}

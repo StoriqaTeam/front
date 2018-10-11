@@ -1,23 +1,14 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import { propOr } from 'ramda';
+import { propOr, isEmpty } from 'ramda';
 
 import CloseIcon from './svg/close_icon.svg';
 
 import './Alert.scss';
 
-export type AlertType = 'default' | 'success' | 'warning' | 'danger';
-
-export type AlertPropsType = {
-  createdAtTimestamp: number,
-  type: AlertType,
-  text: string,
-  link: { text: string, path?: string },
-  onClose: (timestamp: number) => void,
-  onClick?: () => void,
-};
+import type { AlertPropsType } from './types';
 
 type StateType = {
   isDisappearing: boolean,
@@ -31,17 +22,26 @@ const titlesHashMap = {
 };
 
 class Alert extends Component<AlertPropsType, StateType> {
-  state: StateType = {
+  static defaultProps = {
+    isStatic: false,
+    longText: false,
+  };
+
+  state = {
     isDisappearing: false,
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      this.props.onClose(this.props.createdAtTimestamp);
-    }, 3000);
-    setTimeout(() => {
-      this.setState({ isDisappearing: true });
-    }, 1500);
+    const { isStatic } = this.props;
+    // $FlowIgnoreMe
+    if (!isStatic) {
+      setTimeout(() => {
+        this.props.onClose(this.props.createdAtTimestamp);
+      }, 3000);
+      setTimeout(() => {
+        this.setState({ isDisappearing: true });
+      }, 1500);
+    }
   }
 
   render() {
@@ -51,18 +51,24 @@ class Alert extends Component<AlertPropsType, StateType> {
       link,
       createdAtTimestamp,
       onClick,
+      isStatic,
+      longText,
     } = this.props;
     const title = propOr('Information.', type, titlesHashMap);
     return (
       <div
         styleName={classnames('container', {
           disappering: this.state.isDisappearing,
+          default: type === 'default',
+          success: type === 'success',
+          danger: type === 'danger',
+          warning: type === 'warning',
         })}
       >
-        <div styleName={classnames('leftEdge', type)} />
-        <div styleName="titleContainer">
-          <div styleName="title">{title}</div>
+        {/* $FlowIgnoreMe */}
+        {!isStatic ? (
           <button
+            name="alertCloseButton"
             onClick={() => {
               this.props.onClose(createdAtTimestamp);
               if (onClick) {
@@ -73,19 +79,29 @@ class Alert extends Component<AlertPropsType, StateType> {
           >
             <CloseIcon />
           </button>
-        </div>
-        <div styleName="alertMessage">{text}</div>
+        ) : null}
+        {/* <div styleName={classnames('leftEdge', type)} /> */}
+        {/* $FlowIgnoreMe */}
+        {!isStatic ? (
+          <div styleName="titleContainer">
+            <div styleName="title">{title}</div>
+          </div>
+        ) : null}
+        <div styleName={classnames('alertMessage', { longText })}>{text}</div>
         <div styleName="link">
-          <button
-            onClick={() => {
-              this.props.onClose(createdAtTimestamp);
-              if (onClick) {
-                onClick();
-              }
-            }}
-          >
-            <span styleName="link">{link.text}</span>
-          </button>
+          {!isEmpty(link.text) ? (
+            <button
+              styleName="buttonLink"
+              onClick={() => {
+                this.props.onClose(createdAtTimestamp);
+                if (onClick) {
+                  onClick();
+                }
+              }}
+            >
+              <span styleName="link">{link.text}</span>
+            </button>
+          ) : null}
         </div>
       </div>
     );

@@ -270,7 +270,7 @@ class Security extends Component<PropsType, StateType> {
     );
   };
 
-  handleFocus = (e: { target: { name: string } }) => {
+  handleFocus = (e: SyntheticInputEvent<HTMLInputElement>) => {
     if (e.target.name === 'newPassword') {
       this.setState({
         newPasswordFocus: true,
@@ -278,7 +278,7 @@ class Security extends Component<PropsType, StateType> {
     }
   };
 
-  handleBlur = (e: { target: { name: string } }) => {
+  handleBlur = (e: SyntheticInputEvent<HTMLInputElement>) => {
     if (e.target.name === 'newPassword') {
       this.setState({
         newPasswordFocus: false,
@@ -321,7 +321,7 @@ class Security extends Component<PropsType, StateType> {
               role="button"
               tabIndex="0"
             >
-              <Icon type="eye" size="28" />
+              <Icon type="eye" size={28} />
             </div>
             <div>
               {!isValidNewPassword &&
@@ -344,7 +344,7 @@ class Security extends Component<PropsType, StateType> {
               role="button"
               tabIndex="0"
             >
-              <Icon type="eye" size="28" />
+              <Icon type="eye" size={28} />
             </div>
           </div>
         </div>

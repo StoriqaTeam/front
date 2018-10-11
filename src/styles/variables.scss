@@ -12,9 +12,12 @@ $color_grey_trivial: #F5F5F5;
 $color_grey_light: #E3E3E3;
 $color_grey_bg: #FAFAFA;
 $color_grey_spiner: #D3D2D3;
+$color_grey_royal: #7c7c7c;
 
 $color_white: #FFFFFF;
 $color_black: #000000;
+
+$color_royal: #0f339b;
 
 // Colors with opacity
 $color_opacity_white: rgba(255, 255, 255, 0.95);
@@ -22,15 +25,35 @@ $color_opacity_white: rgba(255, 255, 255, 0.95);
 // Fonts
 $font_regular: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $font_light: 'Roboto_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
-$font_bold: 'Roboto_Bold', 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
+$font_bold: 'Roboto_Bold', '' 'Helvetica Neue Bold', Helvetica, Arial, sans-serif;
 $font_italic: 'Roboto_Italic', 'Helvetica Neue Italic', Helvetica, Arial, sans-serif;
 $font_medium: 'Roboto_Medium', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+
+$font_montserrat_black: 'Montserrat_Black';
+$font_montserrat_black_italic: 'Montserrat_BlackItalic';
+$font_montserrat_bold: 'Montserrat_Bold';
+$font_montserrat_bold_italic: 'Montserrat_BoldItalic';
+$font_montserrat_extra_bold: 'Montserrat_ExtraBold';
+$font_montserrat_extra_bold_italic: 'Montserrat_ExtraBoldItalic';
+$font_montserrat_extra_light: 'Montserrat_ExtraLight';
+$font_montserrat_extra_light_italic: 'Montserrat_ExtraLightItalic';
+$font_montserrat_italic: 'Montserrat_Italic';
+$font_montserrat_light: 'Montserrat_Light';
+$font_montserrat_light_italic: 'Montserrat_LightItalic';
+$font_montserrat_medium: 'Montserrat_Medium';
+$font_montserrat_mediumItalic: 'Montserrat_MediumItalic';
+$font_montserrat_regular: 'Montserrat_Regular';
+$font_montserrat_semi_bold: 'Montserrat_SemiBold';
+$font_montserrat_semi_bold_italic: 'Montserrat_SemiBoldItalic';
+$font_montserrat_thin: 'Montserrat_Thin';
+$font_montserrat_thin_italic: 'Montserrat_ThinItalic';
 
 // Shadows
 $shadow_1: 0 0.15rem 0.5rem 0 rgba(0, 0, 0, .05);
 $shadow_1_hover: 0 0.3rem 1.7rem 0 rgba(0, 0, 0, .1);
 $shadow_2: 0 0.5rem 1rem 0 rgba(0, 0, 0, .25);
 $shadow_3: 0 0 10px rgba(0, 0, 0, .5);
+$shadow_4: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
 
 // Transition
 $transition_all_ease: all .3s ease;
@@ -39,6 +62,9 @@ $transition_all_cb: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 
 // Overlays
 $overlay_black: rgba(0, 0, 0, .7);
+
+$alert_success_background_gradient: linear-gradient(to right, $color_green, #7a9c24);
+$alert_danger_background_gradient: linear-gradient(to right, $color_red, $color_red);
 
 // Responsive Breakpoints
 $sm: 576px;

@@ -90,6 +90,8 @@
   color: $color_red;
   font-size: 10px;
   text-align: left;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .icon {
@@ -122,4 +124,10 @@
     transform: rotate(33deg);
     transition: $transition_all_ease;
   }
+}
+
+.resendEmail {
+  color: $color_blue;
+  cursor: pointer;
+  margin-left: 1rem
 }

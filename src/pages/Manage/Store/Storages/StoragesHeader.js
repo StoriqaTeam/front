@@ -25,13 +25,13 @@ const StoragesHeader = () => (
         <Icon inline type="sortArrows" />
       </div>
     </Col>
-    <Col size={12} sm={6} md={3} lg={1} xl={1} mdVisible>
+    {/* <Col size={12} sm={6} md={3} lg={1} xl={1} mdVisible>
       <div styleName="deleteButtonWrapper">
         <button styleName="deleteButton">
           <Icon type="basket" size="32" />
         </button>
       </div>
-    </Col>
+    </Col> */}
   </div>
 );
 

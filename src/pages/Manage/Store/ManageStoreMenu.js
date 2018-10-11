@@ -34,7 +34,7 @@ import './ManageStoreMenu.scss';
 type MenuItemType = {
   id: string,
   title: string,
-  link: string,
+  link?: string,
   disabled: boolean,
   dataTest: string,
 };
@@ -195,7 +195,8 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     };
     UpdateStoreMainMutation.commit(params);
   };
-  handleClick = (item: MenuItemType): void => {
+
+  handleClick = (item: { link?: string }): void => {
     const { link } = item;
     const {
       router: { replace },
@@ -206,14 +207,17 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     if (!isEmpty(link)) {
       if (!isNil(storeId)) {
         const storePath = `/manage/store/${storeId}`;
-        const path = link === '/' ? storePath : `${storePath}${link}`;
+        const path =
+          link === '/' ? storePath : `${storePath}${!isNil(link) ? link : ''}`;
         replace(path);
       }
     }
   };
+
   deleteAvatar = (): void => {
     this.handleLogoUpload('');
   };
+
   render() {
     const { activeItem } = this.props;
     const { storeData } = this.state;
@@ -248,7 +252,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           <div style={{ margin: '1.05rem 0' }} />
           {activeItem === 'settings' ? (
             <MobileUpload
-              img={storeLogo}
+              img={convertSrc(storeLogo, 'small')}
               iconType="upload"
               id="some"
               onUpload={this.handleOnUpload}

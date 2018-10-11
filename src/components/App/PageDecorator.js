@@ -11,6 +11,8 @@ import {
   Main,
   Footer,
   FooterResponsive,
+  UserData,
+  HeaderDisclaimer,
 } from 'components/App';
 
 import './Page.scss';
@@ -63,35 +65,46 @@ export default (
       return (
         <AppContext.Consumer>
           {({ environment }) => (
-            <div styleName="container">
-              {responsive ? (
-                <HeaderResponsive
-                  environment={environment}
-                  user={this.props.me}
-                  searchValue={pathOr(
-                    '',
-                    ['match', 'location', 'query', 'search'],
-                    this.props,
+            <UserData environment={environment}>
+              {({ isShopCreated, userData, totalCount }) => (
+                <div styleName="container">
+                  {process.env.NODE_ENV === 'production' && (
+                    <HeaderDisclaimer />
                   )}
-                  withoutCategories={withoutCategories}
-                  setLang={this.setLang}
-                />
-              ) : (
-                <Header
-                  user={this.props.me}
-                  searchValue={pathOr(
-                    '',
-                    ['match', 'location', 'query', 'search'],
-                    this.props,
+                  {responsive ? (
+                    <HeaderResponsive
+                      isShopCreated={isShopCreated}
+                      userData={userData}
+                      totalCount={totalCount}
+                      searchValue={pathOr(
+                        '',
+                        ['match', 'location', 'query', 'search'],
+                        this.props,
+                      )}
+                      withoutCategories={withoutCategories}
+                      setLang={this.setLang}
+                    />
+                  ) : (
+                    <Header
+                      user={this.props.me}
+                      searchValue={pathOr(
+                        '',
+                        ['match', 'location', 'query', 'search'],
+                        this.props,
+                      )}
+                    />
                   )}
-                  setLang={this.setLang}
-                />
+                  <Main>
+                    <OriginalComponent {...this.props} />
+                  </Main>
+                  {responsive ? (
+                    <FooterResponsive isShopCreated={isShopCreated} />
+                  ) : (
+                    <Footer />
+                  )}
+                </div>
               )}
-              <Main>
-                <OriginalComponent {...this.props} />
-              </Main>
-              {responsive ? <FooterResponsive /> : <Footer />}
-            </div>
+            </UserData>
           )}
         </AppContext.Consumer>
       );

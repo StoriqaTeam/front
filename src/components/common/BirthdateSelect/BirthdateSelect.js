@@ -1,7 +1,7 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
-import { map, find, propEq } from 'ramda';
+import { map, find, propEq, isNil } from 'ramda';
 
 import { Select } from 'components/common/Select';
 
@@ -14,7 +14,7 @@ type PropsType = {
   label: ?string,
   handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
-  errors: ?Array<string>,
+  errors?: ?Array<string>,
 };
 
 type StateType = {
@@ -41,7 +41,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
 
   componentWillMount() {
     const { birthdate } = this.props;
-    if (birthdate) {
+    if (!isNil(birthdate)) {
       const date = new Date(birthdate);
       const { years, months, days } = this.state;
       const yearValue = `${date.getFullYear()}`;
@@ -97,12 +97,11 @@ class BirthdateSelect extends Component<PropsType, StateType> {
       'Dec',
     ];
     const items = [...Array.from(Array(count).keys(), x => start + x)];
+    const { brief } = this.props;
     return map(
       item => ({
         id: `${item}`.length === 1 ? `0${item}` : `${item}`,
-        label: this.props.brief
-          ? briefMonthNames[item - 1]
-          : monthNames[item - 1],
+        label: !isNil(brief) ? briefMonthNames[item - 1] : monthNames[item - 1],
       }),
       items,
     );
@@ -182,13 +181,13 @@ class BirthdateSelect extends Component<PropsType, StateType> {
     const { errors, label } = this.props;
     return (
       <div styleName="container">
-        {label && <div styleName="label">{label}</div>}
+        {!isNil(label) && <div styleName="label">{label}</div>}
         <div styleName="items">
           {this.renderSelect('year', 'Year')}
           {this.renderSelect('month', 'Month')}
           {this.renderSelect('day', 'Day')}
         </div>
-        {errors &&
+        {!isNil(errors) &&
           errors.length && (
             <div styleName="errors">
               {map((item, idx) => <div key={idx}>{item}</div>, errors)}

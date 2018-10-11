@@ -1,10 +1,10 @@
-// @flow
+// @flow strict
 
-import { keys, isEmpty, pathOr } from 'ramda';
+import { keys, isEmpty, pathOr, values } from 'ramda';
 
 import type { ProcessedErrorType } from 'utils/fromRelayError';
 
-import type { AlertType } from 'components/Alerts/Alert';
+import type { AlertType } from 'components/Alerts/types';
 
 export type AlertPropsType = {
   type: AlertType,
@@ -19,20 +19,23 @@ export type AlertPropsType = {
 // third arg is callback for handling validation errors
 export const errorsHandler = (
   relayErrors: ?ProcessedErrorType,
-  showAlertHandler: (config: AlertPropsType) => void,
+  alertHandler: (config: AlertPropsType) => void,
   callback?: (messages?: {
     [string]: Array<string>,
   }) => void,
 ) => {
-  const handleDefaultEvent = (code: string) => {
-    // $FlowIgnoreMe
-    const status = pathOr(null, [code, 'status'], relayErrors);
-    showAlertHandler({
+  const displayAlert = (errorName: string): void => {
+    alertHandler({
       type: 'danger',
-      // $FlowIgnoreMe
-      text: `Error: "${status}"`,
+      text: `Error: "${errorName}"`,
       link: { text: 'Close.' },
     });
+  };
+  const handleErrorCode = (code: string) => {
+    // $FlowIgnoreMe
+    const status = pathOr(null, [code, 'status'], relayErrors);
+    // $FlowIgnoreMe
+    displayAlert(status);
     if (callback) {
       callback();
     }
@@ -45,19 +48,23 @@ export const errorsHandler = (
       const { messages } = relayErrors['100'];
       if (!isEmpty(messages) && callback) {
         callback(messages);
+        const [errorMessage] = values(messages);
+        if (!isEmpty(errorMessage)) {
+          displayAlert(...errorMessage);
+        }
       } else {
-        handleDefaultEvent('100');
+        handleErrorCode('100');
       }
       break;
     }
     case '200':
-      handleDefaultEvent('200');
+      handleErrorCode('200');
       break;
     case '300':
-      handleDefaultEvent('300');
+      handleErrorCode('300');
       break;
     case '400':
-      handleDefaultEvent('400');
+      handleErrorCode('400');
       break;
     default: {
       break;

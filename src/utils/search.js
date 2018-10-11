@@ -14,6 +14,10 @@ import {
   assocPath,
   path,
   omit,
+  toPairs,
+  head,
+  last,
+  fromPairs,
 } from 'ramda';
 
 import { renameKeys } from 'utils/ramda';
@@ -87,8 +91,11 @@ const assocInt = (arr, getterValue) => obj => {
 const assocStr = (arr, getterValue) => obj =>
   assocPath(arr, getterValue(obj))(obj);
 
-export const urlToInput = (queryObj: {}) =>
-  pipe(
+export const urlToInput = (queryObj: {}) => {
+  const modifQueryObj = fromPairs(
+    map(item => [head(item), last(item) || ''], toPairs(queryObj)),
+  );
+  return pipe(
     renameKeys({ search: 'name' }),
     when(
       has('category'),
@@ -116,7 +123,8 @@ export const urlToInput = (queryObj: {}) =>
       'sortBy',
       'country',
     ]),
-  )(queryObj);
+  )(modifQueryObj);
+};
 
 export const inputToUrl = (obj: {
   name: string,

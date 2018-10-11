@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
+import { convertSrc } from 'utils';
+
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { SocialShare } from 'components/SocialShare';
@@ -60,13 +62,21 @@ class StoreHeader extends Component<{}, StateTypes> {
             </span>
             <figure styleName="shopLogo">
               {logo ? (
-                <ImageLoader fit src={logo} loader={<BannerLoading />} />
+                <ImageLoader
+                  fit
+                  src={convertSrc(logo, 'small')}
+                  loader={<BannerLoading />}
+                />
               ) : (
-                <Icon type="camera" size="56" />
+                <Icon type="camera" size={56} />
               )}
             </figure>
             <div styleName={classNames('mobileSearch', { isOpened })}>
-              {process.env.BROWSER ? <SocialShare noBorder /> : null}
+              {process.env.BROWSER ? (
+                <div styleName="share">
+                  <SocialShare noBorder />
+                </div>
+              ) : null}
             </div>
             <div styleName="shopTitleWrap">
               <h2 styleName="shopTitle">
@@ -79,7 +89,7 @@ class StoreHeader extends Component<{}, StateTypes> {
                 <div styleName="rating">
                   <Rating value={rating} />
                 </div>
-                <span styleName="reviews">380 Reviews</span>
+                <span styleName="reviews">0 Reviews</span>
               </div>
             </div>
           </div>

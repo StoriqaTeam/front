@@ -26,6 +26,7 @@ type NestedObject<T> = { [k: string]: T | NestedObject<T> };
 type addressFullType = {
   value?: ?string,
   country?: ?string,
+  countryCode: ?string,
   administrativeAreaLevel1?: ?string,
   administrativeAreaLevel2?: ?string,
   locality?: ?string,
@@ -78,6 +79,7 @@ class Contacts extends Component<PropsType, StateType> {
     addressFull: {
       value: '',
       country: '',
+      countryCode: null,
       administrativeAreaLevel1: '',
       administrativeAreaLevel2: '',
       locality: '',
@@ -312,7 +314,7 @@ class Contacts extends Component<PropsType, StateType> {
           isUrl={Boolean(icon)}
           icon={icon}
           id={id}
-          value={propOr('', id, this.state.form)}
+          value={propOr('', id, this.state.form) || ''}
           label={label}
           onChange={this.handleInputChange(id)}
           errors={propOr(null, id, this.state.formErrors)}

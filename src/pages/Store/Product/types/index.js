@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import * as React from 'react';
 
@@ -12,8 +12,10 @@ export type VarianAttributeType = {
     id: string,
     rawId?: string,
     name: Array<TranslationType>,
+    valueType: ?string | ?number,
     metaField: {
       values?: Array<string>,
+      translated: Array<TranslationType>,
       uiElement: 'COMBOBOX' | 'RADIOBUTTON' | 'CHECKBOX' | 'COLOR_PICKER',
     },
   },
@@ -89,6 +91,8 @@ export type ProductVariantType = {
   discount: ?number,
   description: string,
   quantity: number,
+  preOrder: boolean,
+  preOrderDays: number,
 };
 
 export type SelectionType = {
@@ -101,5 +105,5 @@ export type SelectionType = {
 export type TabType = {
   id: string,
   label: string,
-  content: React.Node | React.Component<any, any> | string,
+  content: React.Node | React.Component<{}, {}> | string,
 };

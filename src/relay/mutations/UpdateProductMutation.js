@@ -25,6 +25,8 @@ const mutation = graphql`
       cashback
       price
       quantity
+      preOrder
+      preOrderDays
       baseProduct {
         id
         store {

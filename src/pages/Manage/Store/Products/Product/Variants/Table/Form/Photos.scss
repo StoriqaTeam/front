@@ -1,6 +1,7 @@
 @import '../../../../../../../../styles/variables';
 
 .container {
+  margin-top: 4rem;
   margin-bottom: 2rem;
 }
 
@@ -59,6 +60,7 @@
   & > img {
     height: 10rem;
     width: 10rem;
+    background-color: $color_white;
     object-fit: cover;
   }
 }

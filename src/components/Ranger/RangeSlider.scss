@@ -1,0 +1,139 @@
+@import "../../styles/variables";
+
+.container {
+  position: relative;
+  padding: 1px;
+  z-index: 3;
+}
+
+.range-slider {
+  position: relative;
+  height: 24px;
+}
+
+input[type=range] {
+  pointer-events: none;
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  -webkit-appearance: none;
+  width: 100%;
+  z-index: 2;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 50px;
+  border: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  pointer-events: all;
+  box-shadow: $shadow_4;
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 31px;
+  background: $color_white;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7px;
+  z-index: 10;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: transparent;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 3px;
+  animate: 0.2s;
+  box-shadow: none;
+  background: transparent;
+  border-radius: 50px;
+  border: none;
+}
+input[type=range]::-moz-range-thumb {
+  pointer-events: all;
+  box-shadow: $shadow_4;
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 31px;
+  background: $color_white;
+  cursor: pointer;
+  z-index: 10;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+}
+input[type=range]::-ms-fill-upper {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+}
+input[type=range]::-ms-thumb {
+  pointer-events: all;
+  margin-top: 1px;
+  box-shadow: $shadow_4;
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: $color_white;
+  cursor: pointer;
+  z-index: 10;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: transparent;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: transparent;
+}
+
+.inputs {
+  display: flex;
+  margin-top: -2rem;
+}
+
+.minTooltip {
+  position: absolute;
+  top: 4px;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+}
+
+.maxTooltip {
+  position: absolute;
+  top: 4px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+}
+
+.rangeValues {
+  font-size: 12px;
+}
+
+

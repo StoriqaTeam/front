@@ -30,14 +30,11 @@ export {
 export { default as DeleteFromCartMutation } from './DeleteFromCartMutation';
 export { default as VerifyEmailMutation } from './VerifyEmailMutation';
 export {
-  default as CreateUserDeliveryAddressMutation,
-} from './CreateUserDeliveryAddressMutation';
+  default as DeleteUserDeliveryAddressFullMutation,
+} from './DeleteUserDeliveryAddressFullMutation';
 export {
-  default as DeleteUserDeliveryAddressMutation,
-} from './DeleteUserDeliveryAddressMutation';
-export {
-  default as UpdateUserDeliveryAddressMutation,
-} from './UpdateUserDeliveryAddressMutation';
+  default as UpdateUserDeliveryAddressFullMutation,
+} from './UpdateUserDeliveryAddressFullMutation';
 export {
   default as CreateUserDeliveryAddressFullMutation,
 } from './CreateUserDeliveryAddressFullMutation';
@@ -63,3 +60,11 @@ export {
 export {
   default as RecalcInvoiceAmountMutation,
 } from './RecalcInvoiceAmountMutation';
+
+export {
+  default as ApplyPasswordResetMutation,
+} from './ApplyPasswordResetMutation';
+export {
+  default as ResendEmailVerificationLinkMutation,
+} from './ResendEmailVerificationLinkMutation';
+export { default as UpsertShippingMutation } from './UpsertShippingMutation';

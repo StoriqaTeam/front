@@ -1,0 +1,77 @@
+@import '../../styles/variables.scss';
+
+.container {
+  position: relative;
+  margin-bottom: 9.75rem;
+  width: 100%;
+  @media (min-width: $lg) {
+    margin-bottom: 17.75rem;
+  }
+}
+
+.imageContainer {
+  position: absolute;
+  top: 0%;
+  right: 0;
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+.title {
+  font-family: $font_montserrat_extra_bold;
+  font-size: 30px;
+  color: $color_blue;
+  max-width: 100%;
+  line-height: 1.15;
+
+  &.royal {
+    color: $color_royal;
+    margin-bottom: 8rem;
+  }
+
+  @media (min-width: $sm) {
+    font-size: 36px;
+  }
+
+  @media (min-width: $md) {
+    font-size: 48px;
+  }
+
+  @media (min-width: $lg) {
+    max-width: 72rem;
+  }
+}
+
+.titleSpacer {
+  height: 2px;
+  background: $color_blue;
+  width: 21.25rem;
+  margin: 4rem 0;
+}
+
+.subtitle {
+  color: $color_royal;
+  font-family: $font_montserrat_medium;
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 52rem;
+  margin-bottom: 6rem;
+
+  a {
+    font-size: 20px;
+    text-decoration: underline;
+  }
+}
+
+.button  {
+  margin: 0 auto 0 0;
+  margin-bottom: 9.75rem;
+  width: 100%;
+  @media (min-width: $lg) {
+    width: 38.25rem;
+    margin-bottom: 31.75rem;
+  }
+}

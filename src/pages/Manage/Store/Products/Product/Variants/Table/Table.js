@@ -109,6 +109,12 @@ class Table extends Component<PropsType, StateType> {
   renderRows = (
     handleSaveBaseProductWithVariant: () => void,
     isLoading: boolean,
+    onChangeVariantForm: any,
+    variantFormErrors: ?{
+      vendorCode?: Array<string>,
+      price?: Array<string>,
+      attributes?: Array<string>,
+    },
   ) => {
     const { expandedItemId } = this.state;
     return map(
@@ -123,7 +129,6 @@ class Table extends Component<PropsType, StateType> {
           />
           {propEq('rawId', expandedItemId, item) && (
             <Form
-              isLoading={isLoading}
               category={this.props.category}
               variant={item}
               productRawId={this.props.productRawId}
@@ -136,6 +141,8 @@ class Table extends Component<PropsType, StateType> {
               handleSaveBaseProductWithVariant={
                 handleSaveBaseProductWithVariant
               }
+              onChangeVariantForm={onChangeVariantForm}
+              formErrors={variantFormErrors}
             />
           )}
         </Fragment>
@@ -145,15 +152,19 @@ class Table extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { variants, isNewVariant, toggleNewVariantParam } = this.props;
+    const { variants, isNewVariant } = this.props;
     const { expandedItemId } = this.state;
     return (
       <ProductFormContext.Consumer>
-        {({ isLoading, handleSaveBaseProductWithVariant }) => (
+        {({
+          isLoading,
+          handleSaveBaseProductWithVariant,
+          onChangeVariantForm,
+          variantFormErrors,
+        }) => (
           <div
             styleName={classNames('container', {
               hiddenButton: expandedItemId || isNewVariant,
-              newVariant: isEmpty(variants),
             })}
           >
             {!isEmpty(variants) && (
@@ -162,14 +173,18 @@ class Table extends Component<PropsType, StateType> {
                   onSelectAllClick={this.handleSelectAll}
                   notRemove={length(this.props.variants) === 1}
                 />
-                {this.renderRows(handleSaveBaseProductWithVariant, isLoading)}
+                {this.renderRows(
+                  handleSaveBaseProductWithVariant,
+                  isLoading,
+                  onChangeVariantForm,
+                  variantFormErrors,
+                )}
               </div>
             )}
             {(isEmpty(variants) || isNewVariant) &&
               !expandedItemId && (
                 <div styleName="emptyForm">
                   <Form
-                    isLoading={isLoading}
                     category={this.props.category}
                     productRawId={this.props.productRawId}
                     productId={this.props.productId}
@@ -177,8 +192,8 @@ class Table extends Component<PropsType, StateType> {
                     handleSaveBaseProductWithVariant={
                       handleSaveBaseProductWithVariant
                     }
-                    isNewVariant={isNewVariant}
-                    toggleNewVariantParam={toggleNewVariantParam}
+                    onChangeVariantForm={onChangeVariantForm}
+                    formErrors={variantFormErrors}
                   />
                 </div>
               )}

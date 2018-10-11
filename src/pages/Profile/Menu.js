@@ -10,10 +10,12 @@ import { Icon } from 'components/Icon';
 import { MobileUpload } from 'components/MobileUpload';
 import { UploadWrapper } from 'components/Upload';
 
-import { uploadFile, log, fromRelayError } from 'utils';
+import { uploadFile, log, fromRelayError, convertSrc } from 'utils';
 
 import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
+
+import type { CollapseItemType } from 'types';
 
 import './Menu.scss';
 
@@ -24,7 +26,7 @@ type PropsType = {
   firstName: string,
   id: string,
   lastName: string,
-  menuItems: Array<{ id: string, title: string }>,
+  menuItems: Array<CollapseItemType>,
   provider: ?string,
   router: routerShape,
 };
@@ -98,7 +100,7 @@ class Menu extends PureComponent<PropsType> {
           {activeItem === 'personal-data' ? (
             <Fragment>
               <MobileUpload
-                img={avatar}
+                img={convertSrc(avatar, 'small')}
                 iconType="user"
                 id={this.props.id}
                 onDelete={() => this.handleUpdateUser('')}
@@ -118,7 +120,7 @@ class Menu extends PureComponent<PropsType> {
             buttonIconType="user"
             buttonIconSize={48}
             buttonLabel="Click to upload avatar"
-            overPicture={avatar}
+            overPicture={convertSrc(avatar, 'medium')}
             dataTest="storeImgUploader"
           />
           {avatar && (

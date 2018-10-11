@@ -140,7 +140,7 @@ export default createPaginationContainer(
           node {
             id
             rawId
-            currencyId
+            currency
             name {
               text
               lang

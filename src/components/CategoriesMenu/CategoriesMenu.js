@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { find, propEq, head } from 'ramda';
+import { find, propEq, head, pathOr } from 'ramda';
 import { Link, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
@@ -86,7 +86,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
           active: null,
           activeMid: null,
         }));
-      }, 150);
+      }, 500);
     }
   };
 
@@ -136,6 +136,12 @@ class CategoriesMenu extends Component<PropsType, StateType> {
   };
 
   renderMenu(categories: any, isRoot: ?boolean) {
+    // $FlowIgnore
+    const locationQuery = pathOr(
+      null,
+      ['match', 'location', 'query'],
+      this.props,
+    );
     const { active, activeMid } = this.state;
     const lang = 'EN';
     return categories.map(category => {
@@ -187,6 +193,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             to={{
               pathname: '/categories',
               query: {
+                ...locationQuery,
                 search: '',
                 category: rawId,
               },
@@ -218,7 +225,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             to="/categories?search="
             data-test="allCategoriesLink"
           >
-            <Icon inline type="cats" size="24" />
+            <Icon inline type="cats" size={24} />
             <span styleName="buttonText">All</span>
           </Link>
         </div>

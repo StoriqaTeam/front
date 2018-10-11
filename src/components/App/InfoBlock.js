@@ -1,10 +1,28 @@
+// @flow strict
+
 import React, { Component } from 'react';
 
 import { Icon } from 'components/Icon';
 
+import type { IconSizeType } from 'types';
+
 import './InfoBlock.scss';
 
-class InfoBlock extends Component {
+type StateType = {
+  social: Array<{
+    id: string,
+    type: string,
+    size: IconSizeType,
+    href: string,
+  }>,
+  links: Array<{
+    id: string,
+    href: string,
+    name: string,
+  }>,
+};
+
+class InfoBlock extends Component<{}, StateType> {
   state = {
     social: [
       {
@@ -46,7 +64,7 @@ class InfoBlock extends Component {
       },
       {
         id: '1',
-        href: '/',
+        href: 'https://beta.storiqa.com/privacy_policy.pdf',
         name: 'Privacy Policy',
       },
       {
@@ -56,8 +74,8 @@ class InfoBlock extends Component {
       },
       {
         id: '3',
-        href: '/',
-        name: 'Conditions of use',
+        href: 'https://beta.storiqa.com/terms_of_use.pdf',
+        name: 'Terms of Use',
       },
     ],
   };
@@ -66,7 +84,7 @@ class InfoBlock extends Component {
     return (
       <div styleName="container">
         <p styleName="address">
-          Storiqa Global Trades inc. Hong-Kong, Sunset Roadway 20 287{' '}
+          Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong{' '}
           <span>
             <a href="mailto:support@storiqa.com" styleName="email">
               support@storiqa.com
@@ -76,7 +94,12 @@ class InfoBlock extends Component {
         <ul styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
             <li key={id} styleName="aboutNavItem">
-              <a styleName="link" href={href}>
+              <a
+                styleName="link"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {name}
               </a>
             </li>

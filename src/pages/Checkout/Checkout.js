@@ -190,7 +190,7 @@ class Checkout extends Component<PropsType, StateType> {
           addressFull,
           receiverName,
           receiverPhone,
-          currencyId: 6,
+          currency: 'STQ',
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
@@ -239,7 +239,10 @@ class Checkout extends Component<PropsType, StateType> {
     });
   };
 
-  checkReadyToCheckout = () => {
+  checkReadyToCheckout = (): boolean => {
+    const {
+      cart: { totalCount },
+    } = this.props;
     const {
       step,
       orderInput: {
@@ -248,10 +251,8 @@ class Checkout extends Component<PropsType, StateType> {
         receiverPhone,
       },
     } = this.state;
-    const {
-      cart: { totalCount },
-    } = this.props;
-    if (step === 1 && (!receiverName || !receiverPhone)) {
+    const emptyString = (str: string): boolean => /^\s*$/.test(str);
+    if (step === 1 && (emptyString(receiverName) || !receiverPhone)) {
       return false;
     }
     if (!country || !postalCode || (totalCount === 0 && step === 2)) {
@@ -265,7 +266,7 @@ class Checkout extends Component<PropsType, StateType> {
     // $FlowIgnore
     const deliveryAddresses = pathOr(
       null,
-      ['me', 'deliveryAddresses'],
+      ['me', 'deliveryAddressesFull'],
       this.props,
     );
     const {
@@ -403,7 +404,7 @@ export default createPaginationContainer(
       firstName
       lastName
       phone
-      deliveryAddresses {
+      deliveryAddressesFull {
         address {
           value
           country

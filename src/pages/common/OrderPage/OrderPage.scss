@@ -190,3 +190,15 @@
 .noProduct {
   color: $color_red;
 }
+
+.preOrder {
+  margin-top: 2rem;
+
+  .preOrderText {
+    color: $color_grey_minor;
+
+    .preOrderDays {
+      color: $color_green;
+    }
+  }
+}

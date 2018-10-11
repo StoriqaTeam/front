@@ -1,11 +1,11 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import { slice } from 'ramda';
+import React, { PureComponent, Fragment } from 'react';
+import { slice, isEmpty } from 'ramda';
 import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
-import { formatPrice } from 'utils';
+import { formatPrice, convertSrc } from 'utils';
 
 import './ProductBlock.scss';
 
@@ -23,6 +23,8 @@ export type ProductDTOType = {
     name: string,
     value: string,
   }>,
+  preOrder: boolean,
+  preOrderDays: number,
 };
 
 type PropsType = {
@@ -36,14 +38,23 @@ class ProductBlock extends PureComponent<PropsType> {
       value: string,
     }>,
   ) => (
-    <div>
-      {attributes.map((item, idx) => (
-        // eslint-disable-next-line
-        <div styleName="attributeWrapper" key={`order-attribute-${idx}`}>
-          <div styleName="attributeName">{item.name}</div>
-          <div styleName="attributeValue">{item.value}</div>
-        </div>
-      ))}
+    <div styleName="attributes">
+      <div styleName="names">
+        {attributes.map((item, idx) => (
+          // eslint-disable-next-line
+          <Fragment key={`order-attribute-name-${idx}`}>
+            <div>{item.name}</div>
+          </Fragment>
+        ))}
+      </div>
+      <div styleName="values">
+        {attributes.map((item, idx) => (
+          // eslint-disable-next-line
+          <Fragment key={`order-attribute-value-${idx}`}>
+            <div>{item.value}</div>
+          </Fragment>
+        ))}
+      </div>
     </div>
   );
 
@@ -54,7 +65,11 @@ class ProductBlock extends PureComponent<PropsType> {
       <div styleName="container">
         <div styleName="photoWrapper">
           {product.photoUrl ? (
-            <img src={product.photoUrl} alt="" styleName="photo" />
+            <img
+              src={convertSrc(product.photoUrl, 'small')}
+              alt=""
+              styleName="photo"
+            />
           ) : (
             <div styleName="emptyLogo">
               <Icon type="camera" size={40} />
@@ -76,7 +91,7 @@ class ProductBlock extends PureComponent<PropsType> {
             {formatPrice(product.price)} <strong>STQ</strong>
           </div>
         </div>
-        {this.renderAttributes(attributes)}
+        {!isEmpty(attributes) && this.renderAttributes(attributes)}
       </div>
     );
   }

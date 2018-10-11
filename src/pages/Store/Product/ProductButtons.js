@@ -1,20 +1,28 @@
-// @flow
+// @flow strict
 
 import React from 'react';
+import { routerShape } from 'found';
+
 import { Button } from 'components/common/Button';
 
 import './ProductButtons.scss';
 
 type PropsType = {
-  onAddToCart: () => any,
+  onAddToCart: () => void,
   unselectedAttr: ?Array<string>,
   quantity: number,
+  preOrder: boolean,
+  isAddToCart: boolean,
+  router: routerShape,
 };
 
 const ProductButtons = ({
   onAddToCart,
   unselectedAttr,
   quantity,
+  preOrder,
+  isAddToCart,
+  router,
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
@@ -25,11 +33,17 @@ const ProductButtons = ({
         id="productAddToCart"
         wireframe
         big
-        disabled={!quantity}
-        onClick={onAddToCart}
+        disabled={!quantity && !preOrder}
+        onClick={
+          !isAddToCart
+            ? onAddToCart
+            : () => {
+                router.push('/cart');
+              }
+        }
         dataTest="product-addToCart"
       >
-        Add to cart
+        {!isAddToCart ? 'Add to cart' : 'View cart'}
       </Button>
     </div>
     {unselectedAttr && (

@@ -1,4 +1,6 @@
 /* eslint-disable */
+import {setCookie} from "../src/components/Authorization/utils";
+
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
@@ -24,8 +26,11 @@ import { ServerFetcher } from 'relay/fetcher';
 import createResolver from 'relay/createResolver';
 import { generateSessionId } from 'utils';
 import isTokenExpired from 'utils/token';
+import moment from 'moment';
 
 import { Error404, Error } from '../src/pages/Errors';
+
+import { COOKIE_NAME } from 'constants';
 
 if (process.env.NODE_ENV === 'development') {
   var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
@@ -108,12 +113,20 @@ const wrapAsync = fn => (req, res, next) => {
 
 app.use(
   wrapAsync(async (req, res) => {
+     const expirationDate = new Date();
+    req.universalCookies.set(COOKIE_NAME, 'yes');
     // set session_id cookie if not setted :)
     const sessionIdCookie = req.universalCookies.get('SESSION_ID');
     if (!sessionIdCookie) {
       req.universalCookies.set('SESSION_ID', generateSessionId(), {
         path: '/',
       });
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      const today = new Date();
+      expirationDate.setDate(today.getDate() + 29);
+      req.universalCookies.set('holyshit', 'iamcool', { path: '/', expires: expirationDate });
     }
 
     const store = createReduxStore(new ServerProtocol(req.url));
@@ -129,10 +142,12 @@ app.use(
         ? process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS
         : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
+    const currency = req.universalCookies.get('CURRENCY') || 'STQ';
     const fetcher = new ServerFetcher(
       url,
       jwt,
       req.universalCookies.get('SESSION_ID'),
+      currency,
     );
 
     store.dispatch(FarceActions.init());
@@ -188,7 +203,7 @@ app.use(
         element,
       )}</div>
       <div id="global-modal-root"></div>
-      <div id="alerts-root" style="right: 0;top: 0;bottom: 0;position: fixed;z-index: 100;" />
+      <div id="alerts-root" style="right: 0;top: 0;left: 0;position: fixed;z-index: 100;"></div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {
@@ -240,6 +255,43 @@ app.use(
         `
           : '';
 
+        const RRSnippet = process.env.REACT_APP_RRPARTNERID
+          ? `<!-- Retail Rocket -->
+          <script type="text/javascript">
+            var rrPartnerId = ${process.env.REACT_APP_RRPARTNERID};
+            var rrApi = {};
+            var rrApiOnReady = rrApiOnReady || [];
+            rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
+            rrApi.recomMouseDown = rrApi.recomAddToCart = function() {}; (function(d) {
+            var ref = d.getElementsByTagName('script')[0]; var apiJs, apiJsId = 'rrApi-jssdk';
+            if (d.getElementById(apiJsId)) return;
+            apiJs = d.createElement('script');
+            apiJs.id = apiJsId;
+            apiJs.async = true;
+            apiJs.src = "//cdn.retailrocket.ru/content/javascript/tracking.js"; ref.parentNode.insertBefore(apiJs, ref);
+            }(document));
+          </script>
+          <!-- End Retail Rocket -->`
+          : '';
+
+        const CQSnippet = process.env.REACT_APP_CARROT_QUEST_API_KEY
+          ? `<script type="text/javascript">
+              !function () {
+                function t(t, e) {
+                  return function () {
+                    window.carrotquestasync.push(t, arguments)
+                  }
+                }
+          
+                if ('undefined' == typeof carrotquest) {
+                  var e = document.createElement('script');
+                  e.type = "text/javascript", e.async = !0, e.src = '//cdn.carrotquest.io/api.min.js', document.getElementsByTagName('head')[0].appendChild(e), window.carrotquest = {}, window.carrotquestasync = [], carrotquest.settings = {};
+                  for (var n = ['connect', 'track', 'identify', auth, 'oth', 'onReady', 'addCallback', 'removeCallback', 'trackMessageInteraction'], a = 0; a < n.length; a++) carrotquest[n[a]] = t(n[a])
+                }
+              }(), carrotquest.connect('${process.env.REACT_APP_CARROT_QUEST_API_KEY}');
+            </script>`
+          : '';
+
         const renderedEl = ReactDOMServer.renderToString(element);
         const RenderedApp = htmlData
           .replace(
@@ -259,7 +311,9 @@ app.use(
             })}</script>`,
           )
           .replace('<noscript>GTM_SNIPPET_1</noscript>', GTMSnippet1)
-          .replace('<noscript>GTM_SNIPPET_2</noscript>', GTMSnippet2);
+          .replace('<noscript>GTM_SNIPPET_2</noscript>', GTMSnippet2)
+          .replace('<noscript>RRSnippet</noscript>', RRSnippet)
+          .replace('<noscript>CQSnippet</noscript>', CQSnippet);
         res
           .status(renderArgs.error ? renderArgs.error.status : 200)
           .send(RenderedApp);

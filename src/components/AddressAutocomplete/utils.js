@@ -1,19 +1,19 @@
 // @flow
 
-import { replace, map, addIndex, find, propEq } from 'ramda';
+import { replace, find, propEq, addIndex, map } from 'ramda';
 
-type CountriesType = Array<{ code: string, name: string }>;
+import type { CountriesType } from 'types';
 
 export const getIndexedCountries = (countries: CountriesType) => {
   const mapIndexed = addIndex(map);
   return mapIndexed(
-    country => ({ id: country.code, label: country.name }),
+    country => ({ id: country.alpha3, label: country.label }),
     countries,
   );
 };
 
-export const getCountryByName = (name: string, countries: CountriesType) =>
-  find(propEq('name', name))(countries);
+export const getCountryByName = (label: string, countries: CountriesType) =>
+  find(propEq('label', label))(countries);
 
 export const getScriptURL = () => {
   // workaround for storybook

@@ -42,7 +42,7 @@ class StoresRow extends PureComponent<PropsType> {
           </Col>
           <Col sm={1} md={3} lg={3} xl={3} mdVisible>
             <div styleName="storeElect">
-              <Icon type="heart" size="32" />
+              <Icon type="heart" size={32} />
             </div>
           </Col>
           <Col sm={7} md={5} lg={5} xl={5}>

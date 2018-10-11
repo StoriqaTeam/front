@@ -1,11 +1,11 @@
 // @flow
 
-import React, { Component } from 'react';
-import { find, propEq, pathOr } from 'ramda';
+import React, { PureComponent } from 'react';
+import { head, propOr, propEq, map, find, equals, pathOr } from 'ramda';
+import moment from 'moment';
 
 import { Select } from 'components/common/Select';
-
-import { getCookie } from 'utils';
+import { getCookie, setCookie } from 'utils';
 import { t, getLocale } from 'translation/utils';
 
 import languages from 'translation/languages.json';
@@ -14,25 +14,134 @@ import './HeaderTop.scss';
 
 type PropsType = {
   setLang: (lang: string) => void,
+  // eslint-disable-next-line
+  currencies: Array<string>,
+  isShopCreated: boolean,
 };
 
-class HeaderTop extends Component<PropsType> {
+const currencyCookieName = 'CURRENCY';
+
+type CurrencyType = {
+  key: number,
+  code: string,
+};
+
+class HeaderTop extends PureComponent<PropsType> {
+  componentWillMount() {
+    // set STQ (or first currency in array) as selected currency if no currency was set before
+    // $FlowIgnore
+    const currencies = propOr([], 'currencies', this.props);
+    // $FlowIgnore
+    const urlCurrency = pathOr(
+      null,
+      ['match', 'location', 'query', 'currency'],
+      this.props,
+    );
+    if (urlCurrency) {
+      const foundCurrency = find(equals(urlCurrency), currencies);
+      if (foundCurrency) {
+        setCookie(
+          currencyCookieName,
+          foundCurrency,
+          moment()
+            .utc()
+            .add(7, 'd')
+            .toDate(),
+        );
+        return;
+      }
+    }
+    const currentCurrency: ?CurrencyType = getCookie(currencyCookieName);
+    if (!currentCurrency) {
+      // try to get stq
+      const stq = find(equals('STQ'), currencies);
+      if (stq) {
+        setCookie(
+          currencyCookieName,
+          stq,
+          moment()
+            .utc()
+            .add(7, 'd')
+            .toDate(),
+        );
+      } else {
+        const firstCurrency = head(currencies);
+        if (firstCurrency) {
+          setCookie(
+            currencyCookieName,
+            firstCurrency,
+            moment()
+              .utc()
+              .add(7, 'd')
+              .toDate(),
+          );
+        }
+      }
+    }
+  }
+
+  getCurrenciesItems = (): Array<{ id: string, label: string }> =>
+    map(
+      item => ({
+        id: item,
+        label: item,
+      }),
+      this.props.currencies,
+    );
+
+  getCurrentCurrencyAsItem = (): ?{ id: string, label: string } => {
+    const currency = getCookie(currencyCookieName);
+    if (currency) {
+      return {
+        id: currency,
+        label: currency,
+      };
+    }
+    const firstCurrency: ?string = head(this.props.currencies);
+
+    if (firstCurrency) {
+      return {
+        id: firstCurrency,
+        label: firstCurrency,
+      };
+    }
+    return null;
+  };
+
   handleChangeLocale = (item: { id: string, label: string }) => {
     if (item && item.id) {
       this.props.setLang(item.id);
     }
   };
 
+  handleSelect = (value: { id: string, label: string }) => {
+    const currency = find(equals(value.id), this.props.currencies);
+    if (currency) {
+      setCookie(
+        currencyCookieName,
+        currency,
+        moment()
+          .utc()
+          .add(7, 'd')
+          .toDate(),
+      );
+      window.location.reload(true);
+    }
+  };
+
   render() {
     const currentLocale = pathOr('en', ['value'], getCookie('locale'));
     const activeLocaleItem = find(propEq('id', currentLocale))(languages);
+    const { isShopCreated } = this.props;
     return (
       <div styleName="container">
         <div styleName="item">
           <Select
-            activeItem={{ id: '3', label: 'STQ' }}
-            items={[{ id: '3', label: 'STQ' }]}
-            onSelect={() => {}}
+            activeItem={
+              this.getCurrentCurrencyAsItem() || head(this.getCurrenciesItems())
+            }
+            items={this.getCurrenciesItems()}
+            onSelect={this.handleSelect}
             dataTest="headerСurrenciesSelect"
           />
         </div>
@@ -48,7 +157,9 @@ class HeaderTop extends Component<PropsType> {
           <a href="_">{t(getLocale().header.help)}</a>
         </div>
         <div>
-          <a href="/start-selling">{t(getLocale().header.sell_on_storiqa)}</a>
+          {isShopCreated ? null : (
+            <a href="/start-selling">{t(getLocale().header.sell_on_storiqa)}</a>
+          )}
         </div>
       </div>
     );

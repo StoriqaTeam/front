@@ -1,31 +1,50 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
+
+import { Icon } from 'components/Icon';
 
 import './Button.scss';
 
 type PropsTypes = {
   children: Node,
   type: string,
-  onClick: ?Function,
-  disabled?: boolean,
+  onClick: () => void,
+  disabled: boolean,
   iconic: boolean,
-  href: ?string,
-  wireframe?: boolean,
+  href: string,
+  wireframe: boolean,
   load?: boolean,
-  contour: ?boolean,
-  small: ?boolean,
-  big: ?boolean,
+  contour: boolean,
+  small: boolean,
+  big: boolean,
   dataTest: string,
-  white: ?boolean,
-  isLoading?: boolean,
-  pink?: boolean,
+  white: boolean,
+  isLoading: boolean,
+  pink: boolean,
   fullWidth?: boolean,
+  add: boolean,
 };
 
 class Button extends PureComponent<PropsTypes> {
+  static defaultProps = {
+    isLoading: false,
+    disabled: false,
+    href: '',
+    contour: false,
+    small: false,
+    big: false,
+    iconic: false,
+    white: false,
+    pink: false,
+    wireframe: false,
+    onClick: () => {},
+    type: 'button',
+    dataTest: 'stqButton',
+    add: false,
+  };
   render() {
     const {
       type,
@@ -44,6 +63,7 @@ class Button extends PureComponent<PropsTypes> {
       isLoading,
       pink,
       fullWidth,
+      add,
     } = this.props;
 
     const props = {
@@ -66,9 +86,11 @@ class Button extends PureComponent<PropsTypes> {
       isLoading,
       pink,
       fullWidth,
+      add,
+      transparent: isLoading,
     });
 
-    if (href) {
+    if (href !== '') {
       return (
         <a styleName={styleName} data-test={dataTest} {...props}>
           {children}
@@ -83,8 +105,13 @@ class Button extends PureComponent<PropsTypes> {
         data-test={dataTest}
         {...props}
       >
-        <div styleName={classNames('spinner')} />
-        {!isLoading && <div>{children}</div>}
+        <div styleName="spinner" />
+        <div styleName="children">{children}</div>
+        {add && (
+          <div styleName="plusIcon">
+            <Icon type="plus" size={24} />
+          </div>
+        )}
       </button>
     );
   }

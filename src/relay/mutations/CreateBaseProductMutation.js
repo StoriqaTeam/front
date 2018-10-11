@@ -26,13 +26,13 @@ const mutation = graphql`
         lang
         text
       }
-      currencyId
+      currency
       category {
         id
         rawId
       }
       storeId
-      currencyId
+      currency
       products(first: 1) @connection(key: "Wizard_products") {
         edges {
           node {
@@ -44,6 +44,7 @@ const mutation = graphql`
                 name
                 addressFull {
                   country
+                  countryCode
                   administrativeAreaLevel1
                   administrativeAreaLevel2
                   political
@@ -99,7 +100,7 @@ type MutationParamsType = {
   longDescription: Array<{ lang: string, text: string }>,
   seoTitle: Array<{ lang: string, text: string }>,
   seoDescription: Array<{ lang: string, text: string }>,
-  currencyId: number,
+  currency: string,
   categoryId: number,
   parentID: string,
   environment: Environment,
@@ -122,7 +123,7 @@ const commit = (params: MutationParamsType) =>
         longDescription: params.longDescription,
         seoTitle: params.seoTitle,
         seoDescription: params.seoDescription,
-        currencyId: params.currencyId,
+        currency: params.currency,
         categoryId: params.categoryId,
       },
     },
@@ -154,7 +155,7 @@ const promise = (
     longDescription: Array<{ lang: string, text: string }>,
     seoTitle: Array<{ lang: string, text: string }>,
     seoDescription: Array<{ lang: string, text: string }>,
-    currencyId: number,
+    currency: string,
     categoryId: number,
     parentID: string,
   },

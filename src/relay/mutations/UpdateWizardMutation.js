@@ -3,7 +3,6 @@
 import { graphql, commitMutation } from 'react-relay';
 import { omit } from 'ramda';
 import { Environment } from 'relay-runtime';
-import { log } from 'utils';
 
 const mutation = graphql`
   mutation UpdateWizardMutation($input: UpdateWizardStoreInput!) {
@@ -17,6 +16,7 @@ const mutation = graphql`
       defaultLanguage
       addressFull {
         country
+        countryCode
         value
         administrativeAreaLevel1
         administrativeAreaLevel2
@@ -54,7 +54,7 @@ const mutation = graphql`
                 rawId
               }
               storeId
-              currencyId
+              currency
               products(first: 1) @connection(key: "Wizard_products") {
                 edges {
                   node {
@@ -122,9 +122,8 @@ type MutationParamsType = {
   onError: ?(error: Error) => void,
 };
 
-const commit = (params: MutationParamsType) => {
-  log.info('!!! UpdateWizardMutation params: ', params);
-  return commitMutation(params.environment, {
+const commit = (params: MutationParamsType) =>
+  commitMutation(params.environment, {
     mutation,
     variables: {
       input: {
@@ -135,6 +134,5 @@ const commit = (params: MutationParamsType) => {
     onCompleted: params.onCompleted,
     onError: params.onError,
   });
-};
 
 export default { commit };

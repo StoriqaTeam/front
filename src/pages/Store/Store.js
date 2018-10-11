@@ -10,6 +10,8 @@ import { Collapse } from 'components/Collapse';
 import { Container } from 'layout';
 import { getNameText } from 'utils';
 
+import type { CollapseItemType } from 'types';
+
 import { StoreContext, StoreHeader } from './index';
 
 import './Store.scss';
@@ -31,13 +33,11 @@ const tabs = [
     id: 'reviews',
     title: 'Reviews',
     isNew: false,
-    link: null,
   },
   {
     id: 'actions',
     title: 'Actions',
     isNew: true,
-    link: null,
   },
   {
     id: 'about',
@@ -64,7 +64,7 @@ type PropsType = {
 };
 
 class Store extends PureComponent<PropsType> {
-  onSelected = (item: { link: string }) => {
+  onSelected = (item: CollapseItemType) => {
     const { store } = this.props;
     if (store) {
       this.props.router.push(`/store/${store.rawId}${item.link || ''}`);
@@ -102,7 +102,7 @@ class Store extends PureComponent<PropsType> {
                 transparent
                 items={tabs}
                 onSelected={this.onSelected}
-                selected={children.key}
+                selected={!isNil(children) ? children.key : ''}
               />
             </div>
             {children && cloneElement(children, { shop: store })}

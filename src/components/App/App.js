@@ -10,7 +10,7 @@ import { AlertsContainer } from 'components/Alerts';
 import { AlertContextProvider } from 'components/App/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 
-import type { AlertPropsType } from 'components/Alerts';
+import type { AlertPropsType } from 'components/Alerts/types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import type {
@@ -37,11 +37,13 @@ type PropsType = {
   currencies: Array<CurrencyType>,
   categories: CategoryType,
   orderStatuses: OrderStatusesType,
+  currencyExchange: Object,
   children: any,
   relay: {
     environment: Environment,
     refetch: Function,
   },
+  countries: any,
 };
 
 class App extends Component<PropsType, StateType> {
@@ -62,12 +64,21 @@ class App extends Component<PropsType, StateType> {
   }
 
   makeDirectories = (): DirectoriesType => {
-    const { languages, currencies, categories, orderStatuses } = this.props;
+    const {
+      languages,
+      currencies,
+      categories,
+      orderStatuses,
+      currencyExchange,
+      countries,
+    } = this.props;
     return {
       categories,
-      currencies,
       languages,
       orderStatuses,
+      currencies,
+      currencyExchange,
+      countries,
     };
   };
 
@@ -108,14 +119,11 @@ class App extends Component<PropsType, StateType> {
       categories,
       relay: { environment },
     } = this.props;
+    const { handleLogin } = this;
     const directories = this.makeDirectories();
     return (
       <AppContext.Provider
-        value={{
-          categories,
-          environment,
-          directories,
-        }}
+        value={{ categories, environment, directories, handleLogin }}
       >
         <Fragment>
           <AlertsContainer alerts={this.state.alerts} />
@@ -136,8 +144,6 @@ App.childContextTypes = {
   environment: PropTypes.object.isRequired,
   handleLogin: PropTypes.func,
   showAlert: PropTypes.func,
-  // TODO: create HOC that extract directories from context to props
-  // withDirectories(directoriesNames: Array<string> = [])(Component)
   directories: PropTypes.object,
   currentUser: currentUserShape,
 };

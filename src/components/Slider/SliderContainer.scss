@@ -1,8 +1,8 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .wrapper {
@@ -16,6 +16,31 @@
   position: relative;
   display: inline-block;
   vertical-align: bottom;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+  &.image {
+    vertical-align: middle;
+  }
+}
+
+.counter {
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 3rem;
+  left: 2rem;
+  position: absolute;
+  z-index: 10;
+  width: 6rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.counterText {
+  color: $color_white;
 }
 
 .fadeItem {
@@ -23,6 +48,7 @@
   z-index: 2;
   opacity: 0;
   transition: $transition_all_ease_out_quad_10;
+  visibility: hidden;
 
   & + .fadeItem {
     position: absolute;
@@ -33,6 +59,7 @@
 
 .activeSlide {
   opacity: 1;
+  visibility: visible;
 }
 
 .dots {
@@ -47,12 +74,13 @@
 
 .dot {
   display: inline-block;
-  background-color: rgba(255,255,255,.3);
+  background-color: rgba(255, 255, 255, 0.3);
   margin-left: 1.4rem;
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
   cursor: pointer;
+  border: 1px solid $color_grey_light;
 }
 
 .dot.active {

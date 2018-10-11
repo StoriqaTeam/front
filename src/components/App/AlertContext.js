@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import type { AlertType } from 'components/Alerts';
+import type { AlertType } from 'components/Alerts/types';
 
 export type AddAlertInputType = {
   type: AlertType,

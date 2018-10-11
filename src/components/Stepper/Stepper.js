@@ -81,7 +81,7 @@ class Stepper extends Component<PropsType, StateType> {
           onClick={() => this.handleClick('decrease')}
           data-test="cartProductsDecreaseButton"
         >
-          <Icon type="minus" size="16" />
+          <Icon type="minus" size={16} />
         </button>
         <input
           styleName="input"
@@ -95,7 +95,7 @@ class Stepper extends Component<PropsType, StateType> {
           onClick={() => this.handleClick('increase')}
           data-test="cartProductIncreaseButton"
         >
-          <Icon type="plus" size="16" />
+          <Icon type="plus" size={16} />
         </button>
       </div>
     );

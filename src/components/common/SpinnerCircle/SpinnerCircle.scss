@@ -1,0 +1,25 @@
+@import "../../../styles/variables";
+
+.container {
+  width: 100%;
+  height: 6rem;
+  position: relative;
+}
+
+.spinner {
+  position: absolute;
+  left: 50%;
+  margin-left: -3rem;
+  border: 2px solid transparent;
+  border-top: 2px solid $color_blue;
+  border-left: 2px solid $color_blue;
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}

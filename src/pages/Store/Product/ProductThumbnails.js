@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { isEmpty, isNil, contains } from 'ramda';
 import classNames from 'classnames';
 
+import { convertSrc } from 'utils';
+
 import { Icon } from 'components/Icon';
 
 import './ProductThumbnails.scss';
@@ -93,6 +95,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       return (
         <button
           key={`${option.label || option.id}`}
+          data-test={`productThumbail${option.label}`}
           onClick={() => this.handleClick(option, index)}
         >
           {option.image ? (
@@ -102,7 +105,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                   clicked: isSelected || selected === index,
                   disabled: isDisabled,
                 })}
-                src={option.image}
+                src={convertSrc(option.image, 'small')}
                 alt={option.alt || 'image alt'}
               />
             </figure>
@@ -113,7 +116,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 disabled: isDisabled,
               })}
             >
-              <Icon type="camera" size="40" />
+              <Icon type="camera" size={40} />
             </div>
           )}
         </button>

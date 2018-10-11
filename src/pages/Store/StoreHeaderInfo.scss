@@ -119,10 +119,17 @@
     display: none;
   }
 
+  & > .share {
+    display: none;
+  }
+
   &.isOpened {
     height: 6rem;
     margin-top: 2rem;
     opacity: 1;
+    & > .share {
+      display: block;
+    }
   }
 }
 

@@ -9,48 +9,44 @@ import { Select } from 'components/common/Select';
 
 import { urlToInput, inputToUrl } from 'utils';
 
+import type { SelectItemType } from 'types';
 import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
 
-import './StoresSidebar.scss';
 import { fromQueryString, fromSearchFilters } from './StoreUtils';
+
+import './StoresSidebar.scss';
 
 type PropsType = {
   router: routerShape,
-  // eslint-disable-next-line
   match: matchShape,
-  // eslint-disable-next-line
   search: SearchType,
   onClose: () => void,
 };
 
-type StateType = {
-  category: string,
-  categories: string,
-  country: string,
-  countries: string,
-};
+type StateType = $Shape<{
+  category: SelectItemType,
+  categories: Array<SelectItemType>,
+  country: SelectItemType,
+  countries: Array<SelectItemType>,
+}>;
 
 class StoresSidebar extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
-    this.state = {
-      category: '',
-      categories: '',
-      country: '',
-      countries: '',
-    };
     const { search, match } = this.props;
     const categories = fromSearchFilters(search, ['category', 'children']);
-    this.state.categories = categories;
-    const category = fromQueryString(match, 'category')(categories, 'id');
-    if (category) {
-      this.state.category = category;
-    }
     const countries = fromSearchFilters(search, ['country']);
-    this.state.countries = countries;
+    this.state = {
+      categories,
+      countries,
+    };
     const country = fromQueryString(match, 'country')(countries, 'label');
     if (country) {
       this.state.country = country;
+    }
+    const category = fromQueryString(match, 'category')(categories, 'id');
+    if (category) {
+      this.state.category = category;
     }
   }
   handleClick = (

@@ -7,7 +7,6 @@ const sortByProp = (propName: string) => (
   arr: Array<WidgetType>,
 ): Array<WidgetType> => {
   const comparator = ascend(prop(propName));
-  // $FlowFixMe: Дьжэро, you MUST apply proper signature
   const sort: Function = sortWith([comparator]);
   return sort(arr);
 };

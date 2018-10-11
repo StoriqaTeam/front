@@ -60,7 +60,7 @@ type AttributeInputType = {
 export type BaseProductNodeType = {
   id: ?string,
   storeId: ?number,
-  currencyId: number,
+  currency: string,
   categoryId: ?number,
   name: string,
   shortDescription: string,
@@ -112,7 +112,7 @@ export const initialProductState = {
   baseProduct: {
     id: null,
     storeId: null,
-    currencyId: 6,
+    currency: 'STQ',
     categoryId: null,
     name: '',
     shortDescription: '',
@@ -530,6 +530,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             [
               'value',
               'country',
+              'countryCode',
               'administrativeAreaLevel1',
               'administrativeAreaLevel2',
               'locality',
@@ -786,12 +787,20 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
-        if (relayErrors) {
+        if (isEmpty(relayErrors)) {
           errorsHandler(
             relayErrors,
             this.props.showAlert,
             this.handleWizardError,
           );
+          return;
+        }
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
           return;
         }
         this.clearValidationErrors();
@@ -805,6 +814,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           this.props.showAlert,
           this.handleWizardError,
         );
+        if (error) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+        }
       },
     });
   };
@@ -1049,6 +1065,7 @@ export default createFragmentContainer(
         completed
         addressFull {
           country
+          countryCode
           value
           administrativeAreaLevel1
           administrativeAreaLevel2
@@ -1082,7 +1099,7 @@ export default createFragmentContainer(
                   rawId
                 }
                 storeId
-                currencyId
+                currency
                 products(first: 1) @connection(key: "Wizard_products") {
                   edges {
                     node {

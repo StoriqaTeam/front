@@ -23,7 +23,7 @@ type ProductNodeType = {
   id: string,
   rawId: number,
   storeId: number,
-  currencyId: number,
+  currency: string,
   category: { id: string, rawId: number },
   name: Array<{
     lang: string,
@@ -216,7 +216,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       <FormWrapper
         thirdForm
         title="Fill your store with goods"
-        description="Choose what you gonna sale in your marketplace and add it with ease"
+        description="Please add the product you would like to sell in your marketplace"
       >
         <div styleName="view">
           <Row>

@@ -1,9 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { equals, prepend } from 'ramda';
+import { equals, prepend, isNil } from 'ramda';
 
-import { isEmpty } from 'utils';
+import { isEmpty, convertSrc } from 'utils';
+
+import { Slider } from 'components/Slider';
+import { Icon } from 'components/Icon';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
@@ -45,7 +48,7 @@ class ProductImage extends Component<PropsType, StateType> {
       this.clearSelected();
     }
   }
-  setImage = async (selected: string): Promise<any> => {
+  setImage = async (selected: string): Promise<void> => {
     const { height, width } = await getImageMeta(selected);
     this.setState({ isSquared: equals(height, width) });
   };
@@ -59,53 +62,82 @@ class ProductImage extends Component<PropsType, StateType> {
       this.setImage(image);
     });
   };
+  imgsToSlider = (imgs: Array<string>): Array<{ id: string, img: string }> =>
+    imgs.map(img => ({ id: img, img }));
   render() {
     const { photoMain, additionalPhotos, discount } = this.props;
     const { selected, isSquared } = this.state;
     return (
       <div styleName="container">
-        <div styleName="thumbnails">
-          <div
-            styleName={
-              !isEmpty(additionalPhotos)
-                ? 'thumbnailsWrapper'
-                : 'noThumbnailsWrapper'
-            }
-          >
-            {!isEmpty(additionalPhotos) ? (
-              <div styleName="thumbnailsContent">
-                <ProductThumbnails
-                  isFirstSelected
-                  isReset={isEmpty(selected)}
-                  onClick={this.handleClick}
-                  options={makeAdditionalPhotos(
-                    prepend(photoMain, additionalPhotos || []),
-                  )}
-                />
-              </div>
-            ) : null}
-          </div>
+        <div
+          styleName={
+            !isEmpty(additionalPhotos)
+              ? 'thumbnailsWrapper'
+              : 'noThumbnailsWrapper'
+          }
+        >
+          {!isEmpty(additionalPhotos) ? (
+            <div styleName="thumbnailsContent">
+              <ProductThumbnails
+                isFirstSelected
+                isReset={isEmpty(selected)}
+                onClick={this.handleClick}
+                options={makeAdditionalPhotos(
+                  prepend(photoMain, additionalPhotos || []),
+                )}
+              />
+            </div>
+          ) : null}
         </div>
         <div styleName="imageWrapper">
           <figure styleName="image">
-            {!isSquared ? (
-              <img src={selected || photoMain} alt="" styleName="imageBlur" />
+            {!isSquared && !isNil(photoMain) ? (
+              <img
+                src={convertSrc(selected || photoMain, 'medium')}
+                alt=""
+                styleName="imageBlur"
+              />
             ) : null}
             {discount > 0 ? <ProductDiscount discount={discount} /> : null}
-            <div
-              role="img"
-              style={{
-                backgroundImage: `url(${
-                  !isEmpty(selected) ? selected : photoMain
-                })`,
-                backgroundSize: 'contain',
-                backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
-                backgroundRepeat: 'no-repeat',
-                height: '100%',
-                width: '100%',
-              }}
-            />
+            {!isNil(photoMain) ? (
+              <div
+                role="img"
+                style={{
+                  backgroundImage: `url(${
+                    !isEmpty(selected)
+                      ? convertSrc(selected, 'medium')
+                      : convertSrc(photoMain, 'medium')
+                  })`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
+                  backgroundRepeat: 'no-repeat',
+                  height: '100%',
+                  width: '100%',
+                }}
+              />
+            ) : (
+              <div styleName="noImage">
+                <Icon type="camera" size={80} />
+              </div>
+            )}
           </figure>
+        </div>
+        <div styleName="imageSlider">
+          {!isNil(additionalPhotos) ? (
+            <Slider
+              infinity
+              animationSpeed={500}
+              slidesToShow={1}
+              items={this.imgsToSlider(additionalPhotos)}
+              type="image"
+              arrows
+              counter
+            />
+          ) : (
+            <div styleName="noImage">
+              <Icon type="camera" size={80} />
+            </div>
+          )}
         </div>
       </div>
     );

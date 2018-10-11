@@ -7,9 +7,12 @@ import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
+import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice, convertSrc } from 'utils';
+import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
+
+import { CardProductCashback, CardProductDropdown } from './index';
 
 import './CardProduct.scss';
 
@@ -22,11 +25,11 @@ type VariantType = {
   rawId: ?number,
 };
 
-type PropsTypes = {
+type PropsType = {
   item: {
     rawId: number,
     storeId: number,
-    currencyId: number,
+    currency: string,
     name: Array<{
       lang: string,
       text: string,
@@ -38,12 +41,14 @@ type PropsTypes = {
     },
     rating: number,
   },
+  isSearchPage: boolean,
 };
 
-class CardProduct extends PureComponent<PropsTypes> {
+class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: { rawId, storeId, name, products, currencyId, rating },
+      item: { rawId, storeId, name, products, currency, rating },
+      isSearchPage,
     } = this.props;
     let discount = null;
     let photoMain = null;
@@ -54,7 +59,7 @@ class CardProduct extends PureComponent<PropsTypes> {
       ({ discount, photoMain, cashback, price } = product.node);
     }
 
-    if (!storeId || !rawId || !currencyId || !price) return null;
+    if (!storeId || !rawId || !currency || !price) return null;
 
     const lang = 'EN';
     const productLink = `/store/${storeId}/products/${rawId}`;
@@ -71,7 +76,7 @@ class CardProduct extends PureComponent<PropsTypes> {
               </div>
             )}
             {!photoMain ? (
-              <Icon type="camera" size="40" />
+              <Icon type="camera" size={40} />
             ) : (
               <ImageLoader
                 fit
@@ -81,30 +86,52 @@ class CardProduct extends PureComponent<PropsTypes> {
             )}
           </div>
           <div styleName="bottom">
-            <div styleName="icon">{false && <Icon type="qa" size="20" />}</div>
+            <div styleName="icon">{false && <Icon type="qa" size={20} />}</div>
             <div>
               <Rating value={rating} />
               {name && <div styleName="title">{getNameText(name, lang)}</div>}
             </div>
             <div styleName="undiscountedPrice">
-              {Boolean(discount) && <span>{formatPrice(price)} STQ</span>}
-            </div>
-            <div styleName="price">
-              {discountedPrice && (
-                <div styleName="actualPrice">
-                  {formatPrice(discountedPrice)} STQ
-                </div>
+              {Boolean(discount) && (
+                <span>
+                  {formatPrice(price)} {currentCurrency()}
+                </span>
               )}
-              <div styleName="cashbackWrapper">
-                <div
-                  styleName={classNames('cashback', {
-                    noneCashback: !cashbackValue,
-                  })}
-                >
-                  <b>Cashback</b>
-                  <b styleName="value">{`${cashbackValue || 0}%`}</b>
-                </div>
-              </div>
+            </div>
+            <div
+              styleName={classNames('price', {
+                isSearchPage,
+              })}
+            >
+              {discountedPrice && (
+                <MultiCurrencyDropdown
+                  elementStyleName="priceDropdown"
+                  price={discountedPrice}
+                  renderPrice={(priceItem: {
+                    price: number,
+                    currencyCode: string,
+                  }) => (
+                    <div styleName="priceDropdown">
+                      <div styleName="actualPrice">
+                        {`${formatPrice(priceItem.price)} ${
+                          priceItem.currencyCode
+                        }`}
+                      </div>
+                    </div>
+                  )}
+                  renderDropdown={(
+                    rates: Array<{ currencyCode: string, value: number }>,
+                  ) => <CardProductDropdown rates={rates} />}
+                  renderDropdownToggle={(isDropdownOpened: boolean) => (
+                    <button
+                      styleName={`toggleRatesDropdown${
+                        isDropdownOpened ? 'Closed' : 'Opened'
+                      }`}
+                    />
+                  )}
+                />
+              )}
+              <CardProductCashback cashbackValue={cashbackValue} />
             </div>
           </div>
         </Link>

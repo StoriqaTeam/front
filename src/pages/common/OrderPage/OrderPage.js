@@ -1,18 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import {
-  pathOr,
-  filter,
-  prop,
-  propEq,
-  head,
-  map,
-  slice,
-  sort,
-  values,
-  join,
-} from 'ramda';
+import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
 import { withRouter, routerShape } from 'found';
 
@@ -30,7 +19,9 @@ import { withShowAlert } from 'components/App/AlertContext';
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import { addressToString, formatPrice } from 'utils';
+import { addressToString, formatPrice, getNameText } from 'utils';
+
+import { AppContext } from 'components/App';
 
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
@@ -72,19 +63,17 @@ class OrderPage extends PureComponent<PropsType> {
     timeFromTimestamp(timestamp);
 
   getOrderDTO = (order: any): OrderDTOType => {
-    const { customer } = order;
-    const customerDTO = customer
-      ? {
-          firstName: customer.firstName,
-          lastName: customer.lastName,
-        }
-      : null;
-    const customerName =
-      customerDTO && (customerDTO.firstName || customerDTO.lastName)
-        ? join(' ', filter(item => Boolean(item), values(customerDTO)))
-        : '—';
+    const { receiverPhone, receiverName } = order;
+    const customerName = receiverName || '-';
     const customerAddress = addressToString(order.addressFull) || '—';
-    const customerPhone = customer.phone || null;
+    // const customerPhone = customer.phone || null; // is replaced by: order.receiverPhone
+    const attributes = map(
+      item => ({
+        name: getNameText(pathOr([], ['attribute', 'name'], item), 'EN') || '',
+        value: item.value,
+      }),
+      pathOr([], ['product', 'attributes'], order),
+    );
     const orderDTO: OrderDTOType = {
       number: `${order.slug}`,
       product: {
@@ -120,11 +109,14 @@ class OrderPage extends PureComponent<PropsType> {
           ),
         },
         price: order.product ? order.product.price : -1,
-        attributes: [],
+        // $FlowIgnore
+        attributes,
+        preOrder: order.preOrder,
+        preOrderDays: order.preOrderDays,
       },
       customerName,
       customerAddress,
-      customerPhone,
+      customerPhone: receiverPhone,
       date: order.createdAt,
       delivery: order.deliveryCompany || '—',
       trackId: order.trackId || '—',
@@ -159,7 +151,7 @@ class OrderPage extends PureComponent<PropsType> {
     return orderDTO;
   };
 
-  handleOrderSent = (success: boolean) => {
+  handleOrderSent = (success: boolean): void => {
     if (success) {
       this.props.showAlert({
         type: 'success',
@@ -179,7 +171,7 @@ class OrderPage extends PureComponent<PropsType> {
     }
   };
 
-  handleOrderCanceled = (success: boolean) => {
+  handleOrderCanceled = (success: boolean): void => {
     if (success) {
       this.props.showAlert({
         type: 'success',
@@ -203,140 +195,161 @@ class OrderPage extends PureComponent<PropsType> {
     const { order: orderFromProps } = this.props;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
-      <div styleName="container">
-        <div styleName="mainBlock">
-          <div styleName="orderNumber">
-            <strong>ORDER #{order.number}</strong>
-          </div>
-          <div styleName="statusBlock">
-            <div styleName="title">
-              <strong>Order status info</strong>
-            </div>
-            <div styleName="statusPaymentBlock">
-              <div styleName="statusesBlock">
-                <div styleName="statusItem">
-                  <div styleName="statusTitle">Status</div>
-                  <div styleName="statusInfo">
-                    {getStatusStringFromEnum(order.status)}
+      <AppContext>
+        {({ environment }) => (
+          <div styleName="container">
+            <div styleName="mainBlock">
+              <div styleName="orderNumber">
+                <strong>ORDER #{order.number}</strong>
+              </div>
+              <div styleName="statusBlock">
+                <div styleName="title">
+                  <strong>Order status info</strong>
+                </div>
+                <div styleName="statusPaymentBlock">
+                  <div styleName="statusesBlock">
+                    <div styleName="statusItem">
+                      <div styleName="statusTitle">Status</div>
+                      <div styleName="statusInfo">
+                        {getStatusStringFromEnum(order.status)}
+                      </div>
+                    </div>
                   </div>
+                  {this.props.isPaymentInfoCanBeShown &&
+                    (orderFromProps.state === 'NEW' ||
+                      orderFromProps.state === 'PAYMENT_AWAITED' ||
+                      orderFromProps.state === 'TRANSACTION_PENDING' ||
+                      orderFromProps.state === 'AMOUNT_EXPIRED') && (
+                      <div styleName="paymentButtonWrapper">
+                        <Button
+                          big
+                          fullWidth
+                          onClick={() => {
+                            this.props.router.push(
+                              `/profile/orders/${order.number}/payment-info`,
+                            );
+                          }}
+                        >
+                          Payment info
+                        </Button>
+                      </div>
+                    )}
+                </div>
+                <div styleName="ticketButtonTitle">Having troubles?</div>
+                <div styleName="ticketButtonWrapper">
+                  <Button big wireframe fullWidth>
+                    Open ticket
+                  </Button>
                 </div>
               </div>
-              {this.props.isPaymentInfoCanBeShown &&
-                (orderFromProps.state === 'NEW' ||
-                  orderFromProps.state === 'PAYMENT_AWAITED' ||
-                  orderFromProps.state === 'TRANSACTION_PENDING' ||
-                  orderFromProps.state === 'AMOUNT_EXPIRED') && (
-                  <div styleName="paymentButtonWrapper">
-                    <Button
-                      big
-                      fullWidth
-                      onClick={() => {
-                        this.props.router.push(
-                          `/profile/orders/${order.number}/payment-info`,
-                        );
-                      }}
-                    >
-                      Payment info
-                    </Button>
+              {order.product.name ? (
+                <ProductBlock product={order.product} />
+              ) : (
+                <div styleName="noProduct">The product was deleted</div>
+              )}
+              {order.product &&
+                order.product.preOrder &&
+                order.product.preOrderDays && (
+                  <div styleName="preOrder">
+                    <div styleName="preOrderText">
+                      <div>This product was bought on pre-order.</div>
+                      <div>
+                        Lead time (days):{' '}
+                        <span styleName="preOrderDays">
+                          {order.product.preOrderDays}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 )}
-            </div>
-            <div styleName="ticketButtonTitle">Having troubles?</div>
-            <div styleName="ticketButtonWrapper">
-              <Button big wireframe fullWidth>
-                Open ticket
-              </Button>
-            </div>
-          </div>
-          {order.product.name ? (
-            <ProductBlock product={order.product} />
-          ) : (
-            <div styleName="noProduct">The product was deleted</div>
-          )}
-          <div styleName="infoBlock">
-            <div styleName="infoBlockItem">
-              <Row>
-                <Col size={12} lg={5}>
-                  <TextWithLabel label="Customer" text={order.customerName} />
-                </Col>
-                <Col size={12} lg={7}>
-                  <TextWithLabel
-                    label="Contacts"
-                    text={`${order.customerAddress}${
-                      order.customerPhone ? `, ${order.customerPhone}` : ''
-                    }`}
-                  />
-                </Col>
-              </Row>
-            </div>
-            <div styleName="infoBlockItem">
-              <Row>
-                <Col size={12} lg={5}>
-                  <TextWithLabel
-                    label="Date"
-                    text={stringFromTimestamp({
-                      timestamp: order.date,
-                      format: 'DD MMMM YYYY',
-                    })}
-                  />
-                </Col>
-                <Col size={12} lg={7}>
-                  <TextWithLabel
-                    label="Time"
-                    text={stringFromTimestamp({
-                      timestamp: order.date,
-                      format: 'HH:mm',
-                    })}
-                  />
-                </Col>
-              </Row>
-            </div>
-            <div styleName="infoBlockItem">
-              <Row>
-                <Col size={12} lg={5}>
-                  <TextWithLabel label="Delivery" text={order.delivery} />
-                </Col>
-                <Col size={12} lg={7}>
-                  <TextWithLabel label="Track ID" text={order.trackId} />
-                </Col>
-              </Row>
-            </div>
-            <div styleName="infoBlockItem">
-              <Row>
-                <Col size={12} lg={5}>
-                  <TextWithLabel label="Quantity" text={`${order.quantity}`} />
-                </Col>
-                <Col size={12} lg={7}>
-                  <TextWithLabel
-                    label="Subtotal"
-                    text={`${formatPrice(order.subtotal)} STQ`}
-                  />
-                </Col>
-              </Row>
-            </div>
-          </div>
-          {this.props.isAbleToManageOrder &&
-            (orderFromProps.state === 'IN_PROCESSING' ||
-              orderFromProps.state === 'PAYMENT_AWAITED' ||
-              orderFromProps.state === 'IN_PROCESSING') && (
-              <div styleName="manageBlock">
-                <ManageOrderBlock
-                  isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
-                  isAbleToCancel={
-                    orderFromProps.state === 'PAYMENT_AWAITED' ||
-                    orderFromProps.state === 'IN_PROCESSING'
-                  }
-                  orderSlug={parseInt(order.number, 10)}
-                  onOrderSend={this.handleOrderSent}
-                  onOrderCancel={this.handleOrderCanceled}
-                />
+              <div styleName="infoBlock">
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
+                      <TextWithLabel
+                        label="Customer"
+                        text={order.customerName}
+                      />
+                    </Col>
+                    <Col size={12} lg={7}>
+                      <TextWithLabel
+                        label="Contacts"
+                        text={`${order.customerAddress}${
+                          order.customerPhone ? `, ${order.customerPhone}` : ''
+                        }`}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
+                      <TextWithLabel
+                        label="Date"
+                        text={stringFromTimestamp({
+                          timestamp: order.date,
+                          format: 'DD MMMM YYYY',
+                        })}
+                      />
+                    </Col>
+                    <Col size={12} lg={7}>
+                      <TextWithLabel
+                        label="Time"
+                        text={stringFromTimestamp({
+                          timestamp: order.date,
+                          format: 'HH:mm',
+                        })}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
+                      <TextWithLabel label="Delivery" text={order.delivery} />
+                    </Col>
+                    <Col size={12} lg={7}>
+                      <TextWithLabel label="Track ID" text={order.trackId} />
+                    </Col>
+                  </Row>
+                </div>
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
+                      <TextWithLabel
+                        label="Quantity"
+                        text={`${order.quantity}`}
+                      />
+                    </Col>
+                    <Col size={12} lg={7}>
+                      <TextWithLabel
+                        label="Subtotal"
+                        text={`${formatPrice(order.subtotal)} STQ`}
+                      />
+                    </Col>
+                  </Row>
+                </div>
               </div>
-            )}
-          <div styleName="statusList">
-            <StatusList items={order.statusHistory} />
+              {this.props.isAbleToManageOrder &&
+                orderFromProps.state === 'PAID' && (
+                  <div styleName="manageBlock">
+                    <ManageOrderBlock
+                      environment={environment}
+                      isAbleToSend={orderFromProps.state === 'PAID'}
+                      isAbleToCancel={false}
+                      orderSlug={parseInt(order.number, 10)}
+                      onOrderSend={this.handleOrderSent}
+                      onOrderCancel={this.handleOrderCanceled}
+                    />
+                  </div>
+                )}
+              <div styleName="statusList">
+                <StatusList items={order.statusHistory} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </AppContext>
     );
   }
 }

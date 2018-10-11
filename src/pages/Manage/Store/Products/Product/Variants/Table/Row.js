@@ -187,7 +187,7 @@ class Row extends PureComponent<PropsType> {
                 onClick={this.handleDelete}
                 data-test="deleteVariantButton"
               >
-                <Icon type="basket" size="32" />
+                <Icon type="basket" size={32} />
               </button>
             )}
           </div>

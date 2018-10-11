@@ -1,0 +1,25 @@
+@import '../../styles/variables.scss';
+
+.container {
+  cursor: pointer;
+  font-size: 18px;
+  font-family: $font_montserrat_extra_bold;
+  width: 100%;
+  height: 65px;
+  border-radius: 10px;
+  background-image: linear-gradient(to left, #8d70ce, #4cb1f9 99%), linear-gradient(#4cb1f9, #4cb1f9);
+  color: $color_white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  padding: 0 2rem;
+
+  @media (min-width: $md) {
+    font-size: 24px;
+  }
+}
+
+.text {
+  text-align: center
+}

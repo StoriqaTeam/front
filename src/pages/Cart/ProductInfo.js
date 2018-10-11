@@ -4,9 +4,9 @@ import { head, map } from 'ramda';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
-import { Select } from 'components/common/Select';
+// import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
-import { formatPrice } from 'utils';
+import { formatPrice, currentCurrency } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -48,6 +48,20 @@ const ProductInfo = ({
                 <div styleName="contentBlock">
                   <div styleName="product-summary-attributes">
                     <div styleName="cart-product-title">About product</div>
+                    {product.preOrder &&
+                      product.preOrderDays && (
+                        <div styleName="preOrder">
+                          <div styleName="preOrderText">
+                            <div>Available for pre-order.</div>
+                            <div>
+                              Lead time (days):{' '}
+                              <span styleName="preOrderDays">
+                                {product.preOrderDays}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     {(attrs.length > 0 && (
                       <Row>
                         {attrs.map(attr => (
@@ -78,18 +92,20 @@ const ProductInfo = ({
                     title="Subtotal"
                     value={`${formatPrice(
                       product.quantity * product.price || 0,
-                    )} STQ`}
+                    )} ${currentCurrency()}`}
                   />
                   <CartProductAttribute
                     title="Delivery"
-                    value={`${formatPrice(product.deliveryCost || 0)} STQ`}
+                    value={`${formatPrice(
+                      product.deliveryCost || 0,
+                    )} ${currentCurrency()}`}
                   />
                 </div>
               </Col>
               <Col size={12}>
                 <div styleName="contentBlock">
                   <div>
-                    <div styleName="cart-product-title">
+                    {/* <div styleName="cart-product-title">
                       Delivery and return
                     </div>
                     <Row>
@@ -122,7 +138,7 @@ const ProductInfo = ({
                           value="Seller pays"
                         />
                       </Col>
-                    </Row>
+                    </Row> */}
                     <div styleName="comment">
                       <Input
                         fullWidth
@@ -155,11 +171,13 @@ const ProductInfo = ({
                 title="Subtotal"
                 value={`${formatPrice(
                   product.quantity * product.price || 0,
-                )} STQ`}
+                )} ${currentCurrency()}`}
               />
               <CartProductAttribute
                 title="Delivery"
-                value={`${formatPrice(product.deliveryCost || 0)} STQ`}
+                value={`${formatPrice(
+                  product.deliveryCost || 0,
+                )} ${currentCurrency()}`}
               />
             </div>
           </Col>

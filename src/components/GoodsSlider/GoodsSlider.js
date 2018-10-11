@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 
 import { Slider } from 'components/Slider';
-// import { Container, Row, Col } from 'layout';
 
 import './GoodsSlider.scss';
 
@@ -16,7 +15,7 @@ type ProductType = {
     lang: string,
     text: string,
   }>,
-  currencyId: number,
+  currency: string,
   variants: {
     first: {
       rawId: number,

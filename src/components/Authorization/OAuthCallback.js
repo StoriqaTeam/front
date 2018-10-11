@@ -14,6 +14,7 @@ import { Spinner } from 'components/common/Spinner';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import prepareQueryString from './OAuthCallback.utils';
+
 import {
   getPathForRedirectAfterLogin,
   clearPathForRedirectAfterLogin,
@@ -61,7 +62,7 @@ class OAuthCallback extends PureComponent<PropsType> {
             const today = new Date();
             const expirationDate = new Date();
             expirationDate.setDate(today.getDate() + 1);
-            setCookie('__jwt', jwt, expirationDate);
+            setCookie('__jwt', { value: jwt }, expirationDate);
 
             const redirectPath = getPathForRedirectAfterLogin();
             if (redirectPath) {

@@ -16,7 +16,7 @@ import {
   DeleteFromCartMutation,
   SetCommentInCartMutation,
 } from 'relay/mutations';
-import { log } from 'utils';
+import { log, convertSrc } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
@@ -200,7 +200,12 @@ class CartProduct extends Component<PropsType, StateType> {
                     )}
                     <div
                       styleName="picture"
-                      style={{ backgroundImage: `url(${photoMain})` }}
+                      style={{
+                        backgroundImage: `url(${convertSrc(
+                          photoMain,
+                          'medium',
+                        )})`,
+                      }}
                     />
                   </div>
                 </Col>
@@ -268,6 +273,8 @@ export default createFragmentContainer(
       }
       photoMain
       price
+      preOrder
+      preOrderDays
       quantity
       comment
       selected

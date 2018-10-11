@@ -1,4 +1,4 @@
-@import "../../styles/variables.scss";
+@import '../../styles/variables.scss';
 
 .container {
   padding: 1rem;
@@ -10,7 +10,6 @@
   display: block;
   height: 100%;
   border-radius: 0.25rem;
-  overflow: hidden;
   position: relative;
   transition: $transition_all_ease;
 
@@ -99,6 +98,26 @@
   }
 }
 
+.priceDropdown {
+  //
+}
+
+.toggleRatesDropdownClosed {
+  height: 18px;
+  width: 18px;
+  background: url('./img/dropdown_toggle_opened.svg');
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.toggleRatesDropdownOpened {
+  height: 18px;
+  width: 18px;
+  background: url('./img/dropdown_toggle_closed.svg');
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
 .price {
   display: flex;
   flex-direction: column;
@@ -107,6 +126,18 @@
 
   @media (min-width: $xl) {
     flex-direction: row;
+  }
+
+  > div:nth-child(1) {
+    display: flex;
+    position: relative;
+  }
+
+  &.isSearchPage {
+    flex-direction: column !important;
+    > div:nth-child(1) {
+      margin-bottom: 1rem;
+    }
   }
 }
 
@@ -121,36 +152,7 @@
     font-size: 16px;
   }
   @media (min-width: $xl) {
-    margin-bottom: 0;
+    margin-bottom: 0.75rem;
   }
 }
 
-.cashbackWrapper {
-  display: block;
-
-  @media (min-width: $md) {
-    display: flex;
-  }
-}
-
-.cashback {
-  display: flex;
-  justify-content: space-between;
-  height: 2.25rem;
-  padding: 0 1rem;
-  color: $color_white;
-  font-size: 11px;
-  text-transform: uppercase;
-  line-height: 2.5rem;
-  vertical-align: bottom;
-  border-radius: 0.25rem;
-  background-color: $color_blue;
-
-  &.noneCashback {
-    background-color: $color_grey_light;
-  }
-
-  .value {
-    margin-left: 1rem;
-  }
-}

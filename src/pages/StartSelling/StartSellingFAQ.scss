@@ -1,0 +1,129 @@
+@import '../../styles/variables.scss';
+
+.container {
+  margin-bottom: 9.75rem;
+  @media (min-width: $md) {
+    margin-bottom: 17.75rem;
+  }
+}
+
+.title {
+  font-family: $font_montserrat_extra_bold;
+  font-size: 28px;
+  color: $color_royal;
+  max-width: 52rem;
+  line-height: normal;
+  margin-bottom: 8rem;
+
+  @media (min-width: $md) {
+    font-size: 36px;
+  }
+}
+
+.subtitle {
+  font-family: $font_montserrat_medium;
+  color: $color_royal;
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 56rem;
+  margin-bottom: 6rem;
+}
+
+.faqs {
+  margin-bottom: 10rem; 
+  @media (min-width: $md) {
+    margin-bottom: 20rem; 
+  }
+}
+
+.faq {
+  display: flex;
+  font-family: $font_montserrat_regular;
+  color: $color_royal;
+  font-size: 28px;
+  line-height: 6rem;
+  font-weight: 800;
+  margin-right: 3rem;
+  cursor: pointer;
+
+  @media (max-width: #{$md - 1px}) {
+    font-size: 22px;
+    line-height: 5rem;
+  }
+}
+
+.plusMinus {
+  width: 2rem;
+  margin-right: 1rem;
+
+  @media (min-width: $md) {
+    margin-right: 2rem;
+  }
+}
+
+.text {
+  flex: 1 0;
+}
+
+.desc {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  margin-left: 4rem;
+  padding-top: 0;
+  font-family: $font_montserrat_regular;
+  color: $color_grey_royal;
+  font-size: 20px;
+  line-height: 1.6;
+  transition: $transition_all_ease;
+  overflow: hidden;
+
+  &.show {
+    height: auto;
+    padding-top: 2rem;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  & + .faq {
+    margin-top: 3rem;
+
+    @media (max-width: #{$md - 1px}) {
+      margin-top: 2rem;
+    }
+  }
+
+  a {
+    font-size: 20px;
+    text-decoration: underline;
+  }
+
+  @media (max-width: #{$md - 1px}) {
+    margin-left: 2.5rem;
+  }
+}
+
+.ready {
+  font-family: $font_montserrat_extra_bold;
+  color: $color_blue;
+  font-size: 30px;
+  line-height: 1.43;
+  font-weight: 800;
+  margin-bottom: 4rem; 
+  text-align: center;
+  @media (min-width: $md) {
+    font-size: 39px;
+  }
+  @media (min-width: $lg) {
+    margin-bottom: 0;
+    text-align: left; 
+  }
+}
+
+.button  {
+  margin: 0 auto;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 46.125rem;
+  }
+}

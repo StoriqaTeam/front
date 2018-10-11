@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, isEmpty } from 'ramda';
-import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -15,6 +14,7 @@ import { CreateWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/CreateWarehouseMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { FormErrorsType } from 'types';
 
 import Form from './Form';
 
@@ -24,6 +24,7 @@ type AddressFullType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
   country: string,
+  countryCode: string,
   locality: ?string,
   political: ?string,
   postalCode: string,
@@ -39,9 +40,7 @@ type PropsType = {
 
 type StateType = {
   isLoading: boolean,
-  formErrors: {
-    [string]: string,
-  },
+  formErrors: FormErrorsType,
   name: string,
   addressFull: AddressFullType,
 };
@@ -57,6 +56,7 @@ class NewStorage extends Component<PropsType, StateType> {
         administrativeAreaLevel1: '',
         administrativeAreaLevel2: '',
         country: '',
+        countryCode: '',
         locality: '',
         political: '',
         postalCode: '',
@@ -150,22 +150,6 @@ NewStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default createFragmentContainer(
-  withShowAlert(
-    Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
-  ),
-  graphql`
-    fragment NewStorage_me on User
-      @argumentDefinitions(storeId: { type: "Int!" }) {
-      store(id: $storeId) {
-        id
-        rawId
-        name {
-          lang
-          text
-        }
-        logo
-      }
-    }
-  `,
+export default withShowAlert(
+  Page(ManageStore(NewStorage, 'Storages', 'Add new storage'), true),
 );
