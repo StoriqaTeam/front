@@ -2,34 +2,36 @@
 
 import React from 'react';
 
+import './OrderInvoice.scss';
+
 const OrderInvoiceData = () => (
-  <div>
-    <div>
-      <span>Postal Code:</span> 760001
+  <div styleName="address">
+    <div styleName="addressField">
+      <span>Postal Code:</span> <span>760001</span>
     </div>
-    <div>
-      <span>Country #:</span> Russia
+    <div styleName="addressField">
+      <span>Country #:</span> <span>Russia</span>
     </div>
-    <div>
-      <span>Region:</span> Moscow
+    <div styleName="addressField">
+      <span>Region:</span> <span>Moscow</span>
     </div>
-    <div>
-      <span>Locality:</span> Moscow
+    <div styleName="addressField">
+      <span>Locality:</span> <span>Moscow</span>
     </div>
-    <div>
-      <span>Area/District:</span> Some district
+    <div styleName="addressField">
+      <span>Area/District:</span> <span>Some district</span>
     </div>
-    <div>
-      <span>Street:</span> Семёносвкая 1
+    <div styleName="addressField">
+      <span>Street:</span> <span>Семёносвкая 1</span>
     </div>
-    <div>
-      <span>Apt/Suite/Other:</span> 30
+    <div styleName="addressField">
+      <span>Apt/Suite/Other:</span> <span>30</span>
     </div>
-    <div>
-      <span>Email:</span> stq@storiqa.com
+    <div styleName="addressField">
+      <span>Email:</span> <span>stq@storiqa.com</span>
     </div>
-    <div>
-      <span>Phone Number:</span> +7123456789
+    <div styleName="addressField">
+      <span>Phone Number:</span> <span>+7123456789</span>
     </div>
   </div>
 );

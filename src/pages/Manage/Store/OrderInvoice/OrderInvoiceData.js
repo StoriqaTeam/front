@@ -2,22 +2,24 @@
 
 import React from 'react';
 
+import './OrderInvoice.scss';
+
 const OrderInvoiceData = () => (
-  <div>
+  <div styleName="invoiceData">
     <div>
-      <span>Customer:</span> Jero
+      <span styleName="customerData">Customer:</span> Jero
     </div>
     <div>
-      <span>Order #:</span> 123
+      <span styleName="customerData">Order #:</span> 123
     </div>
     <div>
-      <span>Track ID:</span> 146746746
+      <span styleName="customerData">Track ID:</span> 146746746
     </div>
     <div>
-      <span>Delivery:</span> 10/10/2018
+      <span styleName="customerData">Delivery:</span> 10/10/2018
     </div>
     <div>
-      <span>Status:</span>
+      <span styleName="customerData">Status:</span>
     </div>
   </div>
 );
