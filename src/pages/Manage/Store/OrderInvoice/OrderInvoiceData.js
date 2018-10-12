@@ -4,22 +4,35 @@ import React from 'react';
 
 import './OrderInvoice.scss';
 
-const OrderInvoiceData = () => (
+type PropsType = {
+  receiverName: string,
+  slug: string,
+  trackId: ?string,
+  state: string,
+};
+
+const OrderInvoiceData = ({
+  receiverName,
+  slug,
+  trackId,
+  state,
+}: PropsType) => (
   <div styleName="invoiceData">
     <div>
-      <span styleName="customerData">Customer:</span> Jero
+      <span styleName="customerData">Customer: </span> {receiverName}
     </div>
     <div>
-      <span styleName="customerData">Order #:</span> 123
+      <span styleName="customerData">Order #: </span> {slug}
     </div>
     <div>
-      <span styleName="customerData">Track ID:</span> 146746746
+      <span styleName="customerData">Track ID: </span> {trackId}
     </div>
     <div>
-      <span styleName="customerData">Delivery:</span> 10/10/2018
+      <span styleName="customerData">Delivery: </span>
     </div>
     <div>
-      <span styleName="customerData">Status:</span>
+      <span styleName="customerData">Status: </span>
+      {state}
     </div>
   </div>
 );

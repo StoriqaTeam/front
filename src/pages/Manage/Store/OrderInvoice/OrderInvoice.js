@@ -1,10 +1,12 @@
 // @flow strict
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Link } from 'found';
-
 import { Icon } from 'components/Icon';
+import { isNil } from 'ramda';
+
+import type { OrderInvoice_me as OrderInvoiceType } from './__generated__/OrderInvoice_me.graphql';
 
 import {
   OrderInvoiceData,
@@ -13,12 +15,29 @@ import {
   OrderInvoiceTableRow,
 } from './index';
 
+import { formatStatus } from './utils';
+
 import './OrderInvoice.scss';
 
-class OrderInvoice extends Component<{}> {
-  handleClick = () => {};
+type PropsType = {
+  me: OrderInvoiceType,
+};
 
+class OrderInvoice extends PureComponent<PropsType> {
   render() {
+    const {
+      me: { email, myStore },
+    } = this.props;
+    const order = myStore && myStore.order;
+    const invoiceData = {
+      receiverName: !isNil(order) ? order.receiverName : '',
+      slug: !isNil(order) ? `${order.slug}` : '',
+      trackId: !isNil(order) ? order.trackId : '',
+      state: !isNil(order) ? formatStatus(order.state) : '',
+    };
+    const address = !isNil(order) ? order.addressFull : {};
+    const phone = !isNil(order) ? order.receiverPhone : '';
+    const invoiceAddress = { ...address, email, phone };
     return (
       <section styleName="container">
         <header styleName="header">
@@ -30,8 +49,8 @@ class OrderInvoice extends Component<{}> {
           </div>
         </header>
         <div styleName="invoiceDetails">
-          <OrderInvoiceData />
-          <OrderInvoiceAddress />
+          <OrderInvoiceData {...invoiceData} />
+          <OrderInvoiceAddress {...invoiceAddress} />
         </div>
         <OrderInvoiceTable>
           <OrderInvoiceTableRow />
@@ -48,6 +67,7 @@ export default createFragmentContainer(
   graphql`
     fragment OrderInvoice_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
+      email
       myStore {
         rawId
         order(slug: $slug) {
