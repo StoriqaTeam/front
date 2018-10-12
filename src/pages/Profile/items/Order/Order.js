@@ -32,11 +32,12 @@ class Order extends PureComponent<PropsType> {
 
   render() {
     const { order } = this.props.me;
+    const { email } = this.props.me;
     if (!order) {
       return null;
     }
 
-    return <OrderPage order={order} isPaymentInfoCanBeShown />;
+    return <OrderPage order={order} email={email} isPaymentInfoCanBeShown />;
   }
 }
 
@@ -45,6 +46,7 @@ export default createRefetchContainer(
   graphql`
     fragment Order_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
+      email
       order(slug: $slug) {
         slug
         storeId

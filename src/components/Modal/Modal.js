@@ -106,10 +106,7 @@ class Modal extends Component<PropsTypes, StateTypes> {
             styleName="wrap"
             tabIndex="0"
           >
-            <div
-              id="inner"
-              styleName="inner"
-            >
+            <div id="inner" styleName="inner">
               {isNil(this.props.render) ? (
                 <Fragment>
                   <div styleName="body">

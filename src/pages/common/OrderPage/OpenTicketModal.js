@@ -1,29 +1,40 @@
 // @flow strict
 
 import React, { Component } from 'react';
+// $FlowIgnore
 import axios from 'axios';
 
 import { Input, Textarea, Button } from 'components/common';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './OpenTicketModal.scss';
 
 type StateType = {
   ticketTitleText: string,
   ticketProblemText: string,
+  isLoading: boolean,
+  success: boolean,
 };
 
 type PropsType = {
-  //
+  email: string,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 class OpenTicketModal extends Component<PropsType, StateType> {
   state = {
     ticketTitleText: '',
     ticketProblemText: '',
+    isLoading: false,
+    success: false,
   };
 
   handleTicketTitleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    if (value.length > 50) {
+      return;
+    }
     this.setState({ ticketTitleText: value });
   };
 
@@ -33,33 +44,60 @@ class OpenTicketModal extends Component<PropsType, StateType> {
   };
 
   handleCreateTicket = () => {
+    this.setState({ isLoading: true });
+    const { email, showAlert } = this.props;
+    const { ticketTitleText, ticketProblemText } = this.state;
+    const authEmail = process.env.REACT_APP_ZENDESK_EMAIL;
+    const token = process.env.REACT_APP_ZENDESK_TOKEN;
     const api = axios.create({
       baseURL: 'https://storiqa.zendesk.com',
       headers: {
         'Content-Type': 'application/json',
       },
       auth: {
-        username: 'p.bokaj@storiqa.com',
-        password: 'ExtraThicc420',
+        username: `${authEmail || ''}/token`,
+        password: token,
       },
     });
-    const { ticketTitleText, ticketProblemText } = this.state;
-    api.post('/api/v2/tickets.json', {
-      ticket: {
-        subject: ticketTitleText,
-        comment: { body: ticketProblemText },
-      },
-    })
-    .then(data => {
-      console.log('---data', data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+    api
+      .post('/api/v2/tickets.json', {
+        ticket: {
+          subject: `[db-platform] ${ticketTitleText}`,
+          comment: { body: `[${email}] ${ticketProblemText}` },
+        },
+      })
+      .then(() => {
+        this.setState({
+          isLoading: false,
+          success: true,
+        });
+        showAlert({
+          type: 'success',
+          text: 'New ticket was successfully sent.',
+          link: {
+            text: 'Ok',
+          },
+        });
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something is going wrong :(',
+          link: {
+            text: 'Ok',
+          },
+        });
+      });
   };
 
   render() {
-    const { ticketTitleText, ticketProblemText } = this.state;
+    const {
+      ticketTitleText,
+      ticketProblemText,
+      isLoading,
+      success,
+    } = this.state;
     return (
       <div styleName="container">
         <div styleName="title">
@@ -82,10 +120,15 @@ class OpenTicketModal extends Component<PropsType, StateType> {
             onChange={this.handleTicketProblemChange}
           />
         </div>
+        {success && (
+          <div styleName="success">New ticket was successfully sent</div>
+        )}
         <div styleName="createTicketButton">
           <Button
             big
             inline
+            disabled={!ticketTitleText || !ticketProblemText || success}
+            isLoading={isLoading}
             onClick={this.handleCreateTicket}
           >
             Create ticket
