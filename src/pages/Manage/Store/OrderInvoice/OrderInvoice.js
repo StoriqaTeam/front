@@ -43,7 +43,7 @@ class OrderInvoice extends PureComponent<PropsType> {
       <section styleName="container">
         <header styleName="header">
           <h2 styleName="title">Invoice</h2>
-          <div>
+          <div styleName="logo">
             <Link to="/" data-test="logoLink">
               <Icon type="logo" />
             </Link>
@@ -53,9 +53,15 @@ class OrderInvoice extends PureComponent<PropsType> {
           <OrderInvoiceData {...invoiceData} />
           <OrderInvoiceAddress {...invoiceAddress} />
         </div>
-        <OrderInvoiceTable>
-          {orders.map(odr => <OrderInvoiceTableRow key={odr.id} {...odr} />)}
-        </OrderInvoiceTable>
+        <div styleName="table">
+          <div styleName="tableWrapper">
+            <OrderInvoiceTable>
+              {orders.map(odr => (
+                <OrderInvoiceTableRow key={odr.id} {...odr} />
+              ))}
+            </OrderInvoiceTable>
+          </div>
+        </div>
       </section>
     );
   }
