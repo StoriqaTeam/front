@@ -329,7 +329,7 @@ class Form extends Component<PropsType, StateType> {
               fullWidth
               label={
                 <span>
-                  VendorCode <span styleName="asterisk">*</span>
+                  Vendor code <span styleName="asterisk">*</span>
                 </span>
               }
               value={vendorCode || ''}

@@ -122,7 +122,7 @@ class Input extends Component<PropsType, StateType> {
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
         onClick={this.props.onClick}
-        data-test={!isEmpty(dataTest) || id}
+        data-test={!isEmpty(dataTest) ? dataTest : id}
         style={{ textAlign: align || 'left' }}
       />
     ) : (
@@ -137,7 +137,7 @@ class Input extends Component<PropsType, StateType> {
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
-        data-test={!isEmpty(dataTest) || id}
+        data-test={!isEmpty(dataTest) ? dataTest : id}
         style={{ textAlign: align || 'left' }}
       />
     );
