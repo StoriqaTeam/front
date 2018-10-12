@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
-import { withRouter, routerShape } from 'found';
+import { withRouter, routerShape, matchShape } from 'found';
 
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
@@ -37,6 +37,7 @@ type PropsType = {
   isAbleToManageOrder?: boolean,
   isPaymentInfoCanBeShown?: boolean,
   router: routerShape,
+  match: matchShape,
 };
 
 type OrderDTOType = {
@@ -191,6 +192,17 @@ class OrderPage extends PureComponent<PropsType> {
     }
   };
 
+  invoice = (): void => {
+    const {
+      match: {
+        location: { pathname },
+      },
+    } = this.props;
+    if (process.env.BROWSER) {
+      window.open(`${pathname}/invoice`);
+    }
+  };
+
   render() {
     const { order: orderFromProps } = this.props;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
@@ -242,7 +254,7 @@ class OrderPage extends PureComponent<PropsType> {
                   </Button>
                 </div>
                 <div styleName="ticketButtonWrapper">
-                  <Button big wireframe fullWidth>
+                  <Button big wireframe fullWidth onClick={this.invoice}>
                     Invoice
                   </Button>
                 </div>
