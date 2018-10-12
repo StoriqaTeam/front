@@ -12,7 +12,7 @@ type PropsType = {
 const OrderInvoiceTable = ({ children }: PropsType) => (
   <Fragment>
     <div styleName="tableHeader">
-      <div styleName="tableHeaderItem">No.</div>
+      <div styleName="tableHeaderItem">№</div>
       <div styleName="tableHeaderItem">Description</div>
       <div styleName="tableHeaderItem">Quantity</div>
       <div styleName="tableHeaderItem">Unit Price</div>

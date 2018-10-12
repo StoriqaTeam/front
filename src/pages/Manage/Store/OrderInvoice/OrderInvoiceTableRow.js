@@ -1,16 +1,47 @@
 // @flow strict
 
 import React from 'react';
+import { product } from 'ramda';
+
+import type { TranslationType } from 'types';
+
+import { extractText } from 'utils';
 
 import './OrderInvoice.scss';
 
-const OrderInvoiceTableRow = () => (
+type PropsType = {
+  slug: number,
+  price: number,
+  quantity: number,
+  product: {
+    currency: string,
+    baseProduct: {
+      name: Array<TranslationType>,
+    },
+  },
+};
+
+const OrderInvoiceTableRow = ({
+  slug,
+  price,
+  quantity,
+  product: {
+    currency,
+    baseProduct: { name },
+  },
+}: PropsType) => (
   <div styleName="tableRow">
-    <div styleName="tableRowItem">1</div>
-    <div styleName="tableRowItem">Lorem Ipsum dolor it samet neque porro</div>
-    <div styleName="tableRowItem">2</div>
-    <div styleName="tableRowItem">$ 0,00</div>
-    <div styleName="tableRowItem">$ 0,00</div>
+    <div styleName="tableRowItem"> {slug} </div>
+    <div styleName="tableRowItem"> {extractText(name, 'EN')}</div>
+    <div styleName="tableRowItem"> {quantity}</div>
+    <div styleName="tableRowItem">
+      {' '}
+      {price} - {currency}
+    </div>
+    <div styleName="tableRowItem">
+      {' '}
+      {product([quantity, price])} - {currency}
+    </div>
   </div>
 );
 
