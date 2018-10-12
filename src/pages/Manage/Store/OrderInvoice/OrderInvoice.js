@@ -26,9 +26,8 @@ type PropsType = {
 class OrderInvoice extends PureComponent<PropsType> {
   render() {
     const {
-      me: { email, myStore },
+      me: { email, order },
     } = this.props;
-    const order = myStore && myStore.order;
     const invoiceData = {
       receiverName: !isNil(order) ? order.receiverName : '',
       slug: !isNil(order) ? `${order.slug}` : '',
@@ -68,77 +67,32 @@ export default createFragmentContainer(
     fragment OrderInvoice_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       email
-      myStore {
-        rawId
-        order(slug: $slug) {
+      order(slug: $slug) {
+        slug
+        receiverName
+        receiverPhone
+        trackId
+        state
+        invoice {
           id
-          slug
-          storeId
-          product {
-            baseProduct {
-              rawId
-              name {
-                text
-              }
-              category {
-                rawId
-                name {
-                  text
-                  lang
-                }
-              }
-            }
+          orders {
+            id
+            slug
+            quantity
             price
-            attributes {
-              value
-              attribute {
-                name {
-                  lang
-                  text
-                }
-              }
-            }
-            photoMain
           }
-          customer {
-            firstName
-            lastName
-            phone
-          }
-          receiverName
-          receiverPhone
-          addressFull {
-            value
-            country
-            administrativeAreaLevel1
-            administrativeAreaLevel2
-            locality
-            political
-            postalCode
-            route
-            streetNumber
-            placeId
-          }
-          createdAt
-          deliveryCompany
-          trackId
-          quantity
-          subtotal
-          state
-          paymentStatus
-          history {
-            edges {
-              node {
-                state
-                committedAt
-                user {
-                  firstName
-                  lastName
-                }
-                comment
-              }
-            }
-          }
+        }
+        addressFull {
+          value
+          country
+          administrativeAreaLevel1
+          administrativeAreaLevel2
+          locality
+          political
+          postalCode
+          route
+          streetNumber
+          placeId
         }
       }
     }

@@ -44,7 +44,7 @@ const OrderInvoiceData = ({
       <span>Locality:</span> <span>{locality}</span>
     </div>
     <div styleName="addressField">
-      <span>Area/District:</span> <span> { political }</span>
+      <span>Area/District:</span> <span> {political}</span>
     </div>
     <div styleName="addressField">
       <span>Street:</span> <span> {value}</span>
