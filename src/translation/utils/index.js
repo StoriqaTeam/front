@@ -18,7 +18,7 @@ const supplant = (s: string, d: {}) => {
 
 const createHTMLMarkup = (html: string) => ({ __html: html });
 
-export const t = (
+export const tt = (
   key: string,
   props?: {
     placeholders?: { [string]: string },
@@ -47,3 +47,15 @@ export const getLocale = () => {
 };
 
 export const getCurrentLang = () => getCookie('locale') || 'en';
+
+type Lang = 'en' | 'ru';
+
+type Translation<T> = {
+  [Lang]: T,
+};
+
+const t = <T>(bundle: Translation<T>): T =>
+  bundle[getCurrentLang()] || bundle.en;
+
+export { t };
+export type { Translation };

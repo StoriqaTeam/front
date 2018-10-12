@@ -6,11 +6,11 @@ import moment from 'moment';
 
 import { Select } from 'components/common/Select';
 import { getCookie, setCookie } from 'utils';
-import { t, getLocale } from 'translation/utils';
 
 import languages from 'translation/languages.json';
 
 import './HeaderTop.scss';
+import t from './i18n';
 
 type PropsType = {
   setLang: (lang: string) => void,
@@ -153,12 +153,10 @@ class HeaderTop extends PureComponent<PropsType> {
           />
         </div>
         <div>
-          <a href="_">{t(getLocale().header.help)}</a>
+          <a href="_">{t.help}</a>
         </div>
         <div>
-          {isShopCreated ? null : (
-            <a href="/start-selling">{t(getLocale().header.sell_on_storiqa)}</a>
-          )}
+          {isShopCreated ? null : <a href="/start-selling">{t.startSelling}</a>}
         </div>
       </div>
     );
