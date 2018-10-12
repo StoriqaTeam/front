@@ -43,6 +43,7 @@ type PropsType = {
   isAbleToManageOrder?: boolean,
   isPaymentInfoCanBeShown?: boolean,
   router: routerShape,
+  email: string,
 };
 
 type OrderDTOType = {
@@ -210,7 +211,12 @@ class OrderPage extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { order: orderFromProps, isPaymentInfoCanBeShown } = this.props;
+    const {
+      order: orderFromProps,
+      isPaymentInfoCanBeShown,
+      email,
+      showAlert,
+    } = this.props;
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
@@ -221,7 +227,7 @@ class OrderPage extends Component<PropsType, StateType> {
               showModal={isOpenTicketModalShown}
               onClose={this.handleOpenTicketModalClose}
             >
-              <OpenTicketModal />
+              <OpenTicketModal email={email} showAlert={showAlert} />
             </Modal>
             <div styleName="mainBlock">
               <div styleName="orderNumber">
@@ -260,15 +266,17 @@ class OrderPage extends Component<PropsType, StateType> {
                       </div>
                     )}
                 </div>
-                <div styleName="ticketButtonTitle">
-                  Having troubles?
-                </div>
+                <div styleName="ticketButtonTitle">Having troubles?</div>
                 <div styleName="ticketButtonWrapper">
                   <Button
                     big
                     wireframe
                     fullWidth
-                    onClick={isPaymentInfoCanBeShown ? this.handlerOpenTicket : () => {}}
+                    onClick={
+                      isPaymentInfoCanBeShown
+                        ? this.handlerOpenTicket
+                        : () => {}
+                    }
                   >
                     Open ticket
                   </Button>
