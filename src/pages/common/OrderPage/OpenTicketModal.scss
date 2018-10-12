@@ -1,0 +1,46 @@
+@import '../../.././styles/variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 67rem;
+  padding: 0 9.5rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    width: 100%;
+    padding: 0 3rem;
+  }
+}
+
+.title {
+  margin: 8rem 0 4rem;
+  font-size: 36px;
+  text-align: center;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin: 6rem 0 4rem;
+  }
+}
+
+.ticketTitle {
+
+}
+
+.ticketText {
+  margin-top: 2rem;
+}
+
+.createTicketButton {
+  margin: 15rem 0 4rem;
+  text-align: center;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin: 12rem 0 4rem;
+  }
+}
+
+.success {
+  color: $color_green;
+  font-size: 12px;
+}

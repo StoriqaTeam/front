@@ -1,3 +1,5 @@
+@import '../.././styles/variables.scss';
+
 .container {
   position: fixed;
   top: 0;
@@ -9,17 +11,25 @@
 }
 
 .wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100%;
   overflow: scroll;
 }
 
 .inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15rem 5rem;
+}
+
+.body {
   position: relative;
+  background-color: $color_white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-  background-color: white;
+
+  @media (max-width: #{$sm - 1px}) {
+    width: 100%;
+  }
 }
 
 .close {
