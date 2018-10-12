@@ -203,7 +203,7 @@ app.use(
         element,
       )}</div>
       <div id="global-modal-root"></div>
-      <div id="alerts-root" style="right: 0;top: 0;left: 0;position: fixed;z-index: 100;"></div>
+      <div id="alerts-root" style="right: 0;top: 0;left: 0;position: fixed;z-index: 10000;"></div>
       <script>
         window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })};
         window.__PRELOADED_STATE__= ${serialize(store.getState(), {
@@ -286,7 +286,7 @@ app.use(
                 if ('undefined' == typeof carrotquest) {
                   var e = document.createElement('script');
                   e.type = "text/javascript", e.async = !0, e.src = '//cdn.carrotquest.io/api.min.js', document.getElementsByTagName('head')[0].appendChild(e), window.carrotquest = {}, window.carrotquestasync = [], carrotquest.settings = {};
-                  for (var n = ['connect', 'track', 'identify', auth, 'oth', 'onReady', 'addCallback', 'removeCallback', 'trackMessageInteraction'], a = 0; a < n.length; a++) carrotquest[n[a]] = t(n[a])
+                  for (var n = ['connect', 'track', 'identify', 'auth', 'oth', 'onReady', 'addCallback', 'removeCallback', 'trackMessageInteraction'], a = 0; a < n.length; a++) carrotquest[n[a]] = t(n[a])
                 }
               }(), carrotquest.connect('${process.env.REACT_APP_CARROT_QUEST_API_KEY}');
             </script>`
