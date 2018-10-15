@@ -78,7 +78,7 @@ class MobileMenu extends Component<PropsType, StateType> {
               categories={selectedCategory.children}
               isOpen={isCategoriesOpen && isOpen}
               isSecondary
-              onClick={() => {}}
+              onClick={this.handleCategoryClick}
               onClose={this.handleClose}
               title={selectedCategory.name}
             />

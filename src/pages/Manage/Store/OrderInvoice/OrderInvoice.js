@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Link } from 'found';
 import { Icon } from 'components/Icon';
-import { sum, isNil, pathOr, product } from 'ramda';
+import { isNil, product } from 'ramda';
 
 import type { OrderInvoice_me as OrderInvoiceType } from './__generated__/OrderInvoice_me.graphql';
 
@@ -29,6 +29,7 @@ class OrderInvoice extends PureComponent<PropsType> {
     const {
       me: { email, order },
     } = this.props;
+    const clonedOrder = !isNil(order) ? order : {};
     const invoiceData = {
       receiverName: !isNil(order) ? order.receiverName : '',
       slug: !isNil(order) ? `${order.slug}` : '',
@@ -39,11 +40,9 @@ class OrderInvoice extends PureComponent<PropsType> {
     const phone = !isNil(order) ? order.receiverPhone : '';
     const currency = !isNil(order) ? order.currency : '';
     const invoiceAddress = { ...address, email, phone };
-    // $FlowIgnore
-    const orders = pathOr(null, ['invoice', 'orders'], order);
-    const total = sum(
-      orders.map(({ quantity, price }) => product([quantity, price])),
-    );
+    const quantity = !isNil(order) ? order.quantity : 0;
+    const price = !isNil(order) ? order.price : 0;
+    const total = product([quantity, price]);
     return (
       <section styleName="container">
         <header styleName="header">
@@ -61,9 +60,8 @@ class OrderInvoice extends PureComponent<PropsType> {
         <div styleName="table">
           <div styleName="tableWrapper">
             <OrderInvoiceTable>
-              {orders.map(odr => (
-                <OrderInvoiceTableRow key={odr.id} {...odr} />
-              ))}
+              {/* $FlowIgnoreMe */}
+              <OrderInvoiceTableRow {...clonedOrder} />
               <InvoiceTotal total={`${total} ${currency}`} shipping="N/A" />
             </OrderInvoiceTable>
           </div>
@@ -86,24 +84,17 @@ export default createFragmentContainer(
         receiverPhone
         trackId
         state
-        invoice {
-          id
-          orders {
-            id
-            slug
-            quantity
-            price
-            product {
-              currency
-              attributes {
-                value
-              }
-              baseProduct {
-                name {
-                  lang
-                  text
-                }
-              }
+        quantity
+        price
+        product {
+          currency
+          attributes {
+            value
+          }
+          baseProduct {
+            name {
+              lang
+              text
             }
           }
         }
