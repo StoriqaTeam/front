@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import { isEmpty, isNil } from 'ramda';
@@ -14,7 +14,7 @@ import './SidebarMenu.scss';
 type PropsType = {
   categories: ?Array<TransformedCategoryType>,
   onClose: () => void,
-  onClick: any => any,
+  onClick: (TransformedCategoryType) => void,
   isOpen: boolean,
   isSecondary: boolean,
   title: string,
