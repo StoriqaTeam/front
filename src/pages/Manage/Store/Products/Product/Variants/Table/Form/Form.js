@@ -172,6 +172,8 @@ class Form extends Component<PropsType, StateType> {
     return errors;
   };
 
+  preOrderDaysInput: ?HTMLInputElement;
+
   resetAttrValues = () => {
     const attrValues: Array<AttributeValueType> = map(
       item => ({
@@ -306,16 +308,27 @@ class Form extends Component<PropsType, StateType> {
       return;
     }
     value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
-    this.setState((prevState: StateType) => ({
-      preOrder: prevState.preOrder && Boolean(value),
-      preOrderDays: value,
-    }));
+    this.setState({ preOrderDays: value });
+  };
+
+  handleOnBlurPreOrderDays = (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    if (!value || value === '0') {
+      this.setState(() => ({
+        preOrder: false,
+      }));
+    }
   };
 
   handleOnChangePreOrder = () => {
     this.setState((prevState: StateType) => ({
-      preOrder: !prevState.preOrder && Boolean(prevState.preOrderDays),
+      preOrder: !prevState.preOrder,
     }));
+    if (this.preOrderDaysInput) {
+      this.preOrderDaysInput.focus();
+    }
   };
 
   renderVariant = () => {
@@ -437,9 +450,13 @@ class Form extends Component<PropsType, StateType> {
           </div>
           <div styleName="preOrderDaysInput">
             <Input
+              inputRef={node => {
+                this.preOrderDaysInput = node;
+              }}
               fullWidth
               label="Lead time (days)"
               onChange={this.handleOnChangePreOrderDays}
+              onBlur={this.handleOnBlurPreOrderDays}
               value={preOrderDays}
               dataTest="variantPreOrderDaysInput"
             />
