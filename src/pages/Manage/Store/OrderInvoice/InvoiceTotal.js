@@ -1,7 +1,7 @@
 // @flow strict
 import React, { Fragment } from 'react';
 
-import './OrderInvoice.scss'
+import './OrderInvoice.scss';
 
 type PropsType = {
   total: string,
@@ -14,23 +14,15 @@ const InvoiceTotal = ({ total, shipping }: PropsType) => (
       <div styleName="totalFieldItem" />
       <div styleName="totalFieldItem" />
       <div styleName="totalFieldItem" />
-      <div styleName="totalFieldItem shipping">
-      SHIPPING & HANDLING
-      </div>
-      <div styleName="totalFieldItem shipping">
-        {shipping}
-      </div> 
+      <div styleName="totalFieldItem shipping">SHIPPING & HANDLING</div>
+      <div styleName="totalFieldItem shipping">{shipping}</div>
     </div>
     <div styleName="totalField">
       <div styleName="totalFieldItem" />
       <div styleName="totalFieldItem" />
       <div styleName="totalFieldItem" />
-      <div styleName="totalFieldItem total">
-        TOTAL 
-      </div>
-      <div styleName="totalFieldItem total">
-        {total}
-      </div>
+      <div styleName="totalFieldItem total">TOTAL</div>
+      <div styleName="totalFieldItem total">{total}</div>
     </div>
   </Fragment>
 );

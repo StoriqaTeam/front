@@ -41,7 +41,9 @@ class OrderInvoice extends PureComponent<PropsType> {
     const invoiceAddress = { ...address, email, phone };
     // $FlowIgnore
     const orders = pathOr(null, ['invoice', 'orders'], order);
-    const total = sum(orders.map(({quantity, price}) => product([quantity, price])));
+    const total = sum(
+      orders.map(({ quantity, price }) => product([quantity, price])),
+    );
     return (
       <section styleName="container">
         <header styleName="header">
