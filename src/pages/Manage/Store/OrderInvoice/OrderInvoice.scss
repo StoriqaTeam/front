@@ -1,0 +1,208 @@
+@import "../../../../styles/variables";
+
+.container {
+  margin: 0 auto;
+  max-width: 170rem;
+  padding: 4rem 0;
+  position: relative;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  line-height: normal;
+  margin-bottom: 6rem;
+  padding: 0 2rem;
+  @media (min-width: $lg) {
+    padding: 0;
+    align-items: initial;
+  }
+
+}
+
+.title {
+  font-size: 3rem;
+  @media (min-width: $md) {
+    font-size: 5rem;
+  }
+}
+
+.logo {
+  width: 16rem;
+  @media (min-width: $md) {
+    width: initial;
+  }
+}
+
+.invoiceData {
+  color: $color_order_invoice;
+  font-family: $font_medium;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  @media (min-width: $md) {
+    margin-bottom: 0;
+    text-align: left;
+  }
+}
+
+.address {
+  color: $color_gray_order_invoice;
+  font-family: $font_medium;
+  font-size: 9px;
+  width: 20rem;
+  @media (min-width: $md) {
+    width: 28rem;
+  }
+}
+
+.addressField {
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    display: block;
+    width: 50%;
+  }
+
+  span:first-child {
+    text-align: left;
+    @media (min-width: $md) {
+      text-align: right;
+    }
+  }
+
+  span:nth-child(2) {
+    margin-left: 0;
+    @media (min-width: $md) {
+      margin-left: 4rem;
+    }
+  }
+}
+
+.customerData {
+  color: $color_gray_order_invoice;
+  font-family: $font_light;
+}
+
+.invoiceDetails {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.75rem;
+  padding: 0 2rem;
+  
+  @media (min-width: $md) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  @media (min-width: $lg) { 
+    padding: 0;
+  }
+}
+
+.table {
+  overflow-x: scroll;
+  padding: 0 2rem;
+  @media (min-width: $md) { 
+    overflow-x: initial;
+    padding: 0;
+  }
+  .tableWrapper {
+    min-height: 19rem;
+    width: 70rem;
+    @media (min-width: $md) { 
+      min-height: initial;
+      width: 100%;
+    }
+  }
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  
+}
+
+.tableHeaderItem {
+  background: $color_order_invoice_table_item_bg;
+  color: $color_order_invoice;
+  flex: 1;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 4rem;
+  margin-right: 0.5rem;
+  height: 4rem;
+  padding-left: 1.25rem;
+  &:first-child {
+    max-width: 5.3rem;
+    padding-left: 2rem;
+  }
+  &:nth-child(2) {
+    flex: 3;
+  }
+}
+
+.tableRow {
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  &:nth-child(odd) {
+    background: $color_grey_bg;
+  }
+}
+
+.tableRowItem {
+  color: $color_order_invoice;
+  flex: 1;
+  font-size: 10px;
+  line-height: 4rem;
+  margin-right: 0.5rem;
+  height: 4rem;
+  padding-left: 1.25rem;
+  &:first-child {
+    max-width: 5.3rem;
+  }
+  &:nth-child(2) {
+    flex: 3;
+  }
+}
+
+
+.shipping {
+  height: 5rem !important;
+  line-height: 5rem !important;
+}
+.total {
+  background: $color_grey_bg;
+  color: $color_order_invoice;
+  font-weight: bold;
+}
+
+.totalField {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.totalFieldItem {
+  color: $color_order_invoice;
+  flex: 1;
+  font-size: 10px;
+  line-height: 4rem;
+  margin-right: 0.5rem;
+  height: 4rem;
+  padding-left: 1.25rem;
+  &:first-child {
+    max-width: 5.3rem;
+  }
+  &:nth-child(2) {
+    flex: 3;
+  }
+}
+
