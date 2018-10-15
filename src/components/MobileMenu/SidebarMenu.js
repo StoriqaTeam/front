@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import { isEmpty, isNil } from 'ramda';
@@ -14,7 +14,7 @@ import './SidebarMenu.scss';
 type PropsType = {
   categories: ?Array<TransformedCategoryType>,
   onClose: () => void,
-  onClick: any => any,
+  onClick: TransformedCategoryType => void,
   isOpen: boolean,
   isSecondary: boolean,
   title: string,
@@ -38,7 +38,9 @@ class SidebarMenu extends Component<PropsType, StateType> {
         selected,
       },
       () => {
-        onClick(cat);
+        if (!isEmpty(cat.children)) {
+          onClick(cat);
+        }
       },
     );
   };
@@ -96,7 +98,7 @@ class SidebarMenu extends Component<PropsType, StateType> {
                       {cat.name}
                     </Link>
                   </span>
-                  <Icon type="arrowRight" />
+                  {!isEmpty(cat.children) ? <Icon type="arrowRight" /> : null}
                 </li>
               ))}
             </ul>
