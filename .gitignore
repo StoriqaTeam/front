@@ -28,6 +28,7 @@ yarn-error.log*
 
 .env.development
 .vscode/
+scripts/translations.json
 
 # saldin
 flow_check.log
