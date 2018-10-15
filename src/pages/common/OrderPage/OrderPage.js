@@ -45,6 +45,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   email: string,
+  showInvoice: boolean,
 };
 
 type OrderDTOType = {
@@ -64,6 +65,10 @@ type OrderDTOType = {
 };
 
 class OrderPage extends Component<PropsType, StateType> {
+  static defaultProps = {
+    showInvoice: false,
+  };
+
   state = {
     isOpenTicketModalShown: false,
   };
@@ -228,6 +233,7 @@ class OrderPage extends Component<PropsType, StateType> {
       isPaymentInfoCanBeShown,
       email,
       showAlert,
+      showInvoice,
     } = this.props;
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
@@ -293,11 +299,13 @@ class OrderPage extends Component<PropsType, StateType> {
                     Open ticket
                   </Button>
                 </div>
-                <div styleName="ticketButtonWrapper">
-                  <Button big wireframe fullWidth onClick={this.invoice}>
-                    Invoice
-                  </Button>
-                </div>
+                {showInvoice ? (
+                  <div styleName="ticketButtonWrapper">
+                    <Button big wireframe fullWidth onClick={this.invoice}>
+                      Invoice
+                    </Button>
+                  </div>
+                ) : null}
               </div>
               {order.product.name ? (
                 <ProductBlock product={order.product} />
