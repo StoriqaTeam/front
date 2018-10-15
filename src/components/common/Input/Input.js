@@ -19,7 +19,6 @@ type PropsType = {
   onFocus: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   onKeyDown: () => void,
   onClick: () => void,
-  min: string,
   icon: string,
   isUrl: boolean,
   inputRef: ?(node: ?HTMLInputElement) => void,
@@ -49,7 +48,6 @@ class Input extends Component<PropsType, StateType> {
     isUrl: false,
     postfix: '',
     dataTest: '',
-    min: '',
     inline: false,
     onChange: () => {},
     onBlur: () => {},
@@ -108,7 +106,6 @@ class Input extends Component<PropsType, StateType> {
       id,
       value,
       type,
-      min,
       dataTest,
       align,
     } = this.props;
@@ -130,9 +127,8 @@ class Input extends Component<PropsType, StateType> {
         id={id}
         ref={inputRef}
         name={id}
-        type={!isNil(type) || 'text'}
+        type={!isNil(type) ? type : 'text'}
         value={value || ''}
-        min={!isEmpty(min) || ''}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
