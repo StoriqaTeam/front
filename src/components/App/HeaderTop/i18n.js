@@ -21,6 +21,7 @@ const translations: TranslationsBundleType = {
   },
 };
 
+// TODO: made for non-production
 const validate = (json: {}, verbose: boolean = false): boolean => {
   try {
     (json: TranslationsBundleType); // eslint-disable-line
