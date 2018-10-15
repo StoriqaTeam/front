@@ -39,7 +39,7 @@ class StoreOrder extends PureComponent<PropsType> {
       return null;
     }
 
-    return <OrderPage order={order} isAbleToManageOrder />;
+    return <OrderPage order={order} isAbleToManageOrder showInvoice />;
   }
 }
 
