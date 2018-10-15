@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
 import moment from 'moment';
-import { withRouter, routerShape } from 'found';
+import { withRouter, routerShape, matchShape } from 'found';
 
 import { Modal } from 'components/Modal';
 import { Button } from 'components/common/Button';
@@ -43,6 +43,7 @@ type PropsType = {
   isAbleToManageOrder?: boolean,
   isPaymentInfoCanBeShown?: boolean,
   router: routerShape,
+  match: matchShape,
   email: string,
 };
 
@@ -202,6 +203,17 @@ class OrderPage extends Component<PropsType, StateType> {
     }
   };
 
+  invoice = (): void => {
+    const {
+      match: {
+        location: { pathname },
+      },
+    } = this.props;
+    if (process.env.BROWSER) {
+      window.open(`${pathname}/invoice`);
+    }
+  };
+
   handlerOpenTicket = () => {
     this.setState({ isOpenTicketModalShown: true });
   };
@@ -279,6 +291,11 @@ class OrderPage extends Component<PropsType, StateType> {
                     }
                   >
                     Open ticket
+                  </Button>
+                </div>
+                <div styleName="ticketButtonWrapper">
+                  <Button big wireframe fullWidth onClick={this.invoice}>
+                    Invoice
                   </Button>
                 </div>
               </div>

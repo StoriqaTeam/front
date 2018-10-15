@@ -16,6 +16,7 @@ import Start from 'pages/Start/Start';
 import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
 import { Products } from 'pages/Manage/Store/Products';
 import { Storages } from 'pages/Manage/Store/Storages';
+import { OrderInvoice } from 'pages/Manage/Store/OrderInvoice';
 import {
   NewStorage,
   EditStorage,
@@ -438,6 +439,20 @@ const routes = (
                 query routes_StoreOrder_Query {
                   me {
                     ...StoreOrder_me
+                  }
+                }
+              `}
+            />
+            <Route
+              path="/orders/:orderId/invoice"
+              Component={OrderInvoice}
+              prepareVariables={(_, { params }) => ({
+                orderId: parseInt(params.orderId, 10) || 0,
+              })}
+              query={graphql`
+                query routes_OrderInvoice_Query($orderId: Int!) {
+                  me {
+                    ...OrderInvoice_me @arguments(slug: $orderId)
                   }
                 }
               `}
