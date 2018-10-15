@@ -14,7 +14,7 @@ type PropsType = {
   slug: string,
   onChange: (value: string) => void,
   relay: Relay,
-  realSlug: ?string,
+  realSlug?: string,
   resetErrors: () => void,
 };
 
@@ -46,6 +46,7 @@ class InputSlug extends Component<PropsType, StateType> {
     };
 
     this.checkSlug = debounce(this.checkSlug, 250);
+    this.handleAfterBlur = debounce(this.handleAfterBlur, 400);
   }
 
   checkSlug = (value: string) => {
@@ -66,7 +67,6 @@ class InputSlug extends Component<PropsType, StateType> {
           [`storeSlugExists(slug:"${this.state.value}")`],
           store.getSource().get('client:root'),
         );
-
         if (!storeSlugExists) {
           this.props.onChange(this.state.value);
         }
@@ -80,7 +80,7 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   handleChange = (e: any) => {
-    const { slug, resetErrors } = this.props;
+    const { resetErrors } = this.props;
     if (resetErrors) {
       resetErrors();
     }
@@ -98,13 +98,11 @@ class InputSlug extends Component<PropsType, StateType> {
       .replace(/^-+/, '')
       // Trim - from end of text
       .replace(/-+$/, '');
-    if (slug !== correctValue) {
-      this.setState(() => ({
-        value: correctValue,
-        storeSlugExists: null,
-      }));
-      this.checkSlug(correctValue);
-    }
+    this.setState(() => ({
+      value: correctValue,
+      storeSlugExists: null,
+    }));
+    this.checkSlug(correctValue);
   };
 
   handleFocus = () => {
@@ -112,15 +110,23 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
+    this.setState(
+      {
+        isFocus: false,
+        storeSlugExists: null,
+      },
+      this.handleAfterBlur,
+    );
+    this.checkSlug.cancel();
+  };
+
+  handleAfterBlur = () => {
     const { realSlug } = this.props;
     const { value, storeSlugExists } = this.state;
     this.setState({
-      isFocus: false,
       value:
-        realSlug === null && storeSlugExists && value ? '' : this.props.slug,
-      storeSlugExists: null,
+        Boolean(realSlug) && storeSlugExists && value ? '' : this.props.slug,
     });
-    this.checkSlug.cancel();
   };
 
   render() {
