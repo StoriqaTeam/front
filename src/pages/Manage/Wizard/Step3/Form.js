@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { map, pathOr, whereEq, filter } from 'ramda';
+import { map, pathOr, whereEq, filter, isEmpty } from 'ramda';
 
 import { findCategory, convertSrc } from 'utils';
 import { Input } from 'components/common/Input';
@@ -154,7 +154,8 @@ class ThirdForm extends PureComponent<PropsType> {
     );
     return (
       catObj &&
-      catObj.getAttributes && (
+      catObj.getAttributes &&
+      !isEmpty(catObj.getAttributes) && (
         <div styleName="section correctMargin">
           <div styleName="sectionName">Properties</div>
           <AttributesForm
