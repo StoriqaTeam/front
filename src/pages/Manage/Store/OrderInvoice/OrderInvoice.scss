@@ -43,7 +43,7 @@
   margin-bottom: 2rem;
   @media (min-width: $md) {
     margin-bottom: 0;
-    text-align: right;
+    text-align: left;
   }
 }
 
@@ -110,9 +110,11 @@
     padding: 0;
   }
   .tableWrapper {
+    min-height: 19rem;
     width: 70rem;
     @media (min-width: $md) { 
-      width: 100%
+      min-height: initial;
+      width: 100%;
     }
   }
 }
@@ -170,3 +172,37 @@
     flex: 3;
   }
 }
+
+
+.shipping {
+  height: 5rem !important;
+  line-height: 5rem !important;
+}
+.total {
+  background: $color_grey_bg;
+  color: $color_order_invoice;
+  font-weight: bold;
+}
+
+.totalField {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.totalFieldItem {
+  color: $color_order_invoice;
+  flex: 1;
+  font-size: 10px;
+  line-height: 4rem;
+  margin-right: 0.5rem;
+  height: 4rem;
+  padding-left: 1.25rem;
+  &:first-child {
+    max-width: 5.3rem;
+  }
+  &:nth-child(2) {
+    flex: 3;
+  }
+}
+

@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Link } from 'found';
 import { Icon } from 'components/Icon';
-import { isNil, pathOr } from 'ramda';
+import { sum, isNil, pathOr, product } from 'ramda';
 
 import type { OrderInvoice_me as OrderInvoiceType } from './__generated__/OrderInvoice_me.graphql';
 
@@ -13,6 +13,7 @@ import {
   OrderInvoiceAddress,
   OrderInvoiceTable,
   OrderInvoiceTableRow,
+  InvoiceTotal,
 } from './index';
 
 import { formatStatus } from './utils';
@@ -36,9 +37,11 @@ class OrderInvoice extends PureComponent<PropsType> {
     };
     const address = !isNil(order) ? order.addressFull : {};
     const phone = !isNil(order) ? order.receiverPhone : '';
+    const currency = !isNil(order) ? order.currency : '';
     const invoiceAddress = { ...address, email, phone };
     // $FlowIgnore
     const orders = pathOr(null, ['invoice', 'orders'], order);
+    const total = sum(orders.map(({quantity, price}) => product([quantity, price])));
     return (
       <section styleName="container">
         <header styleName="header">
@@ -59,6 +62,7 @@ class OrderInvoice extends PureComponent<PropsType> {
               {orders.map(odr => (
                 <OrderInvoiceTableRow key={odr.id} {...odr} />
               ))}
+              <InvoiceTotal total={`${total} ${currency}`} shipping="N/A" />
             </OrderInvoiceTable>
           </div>
         </div>
@@ -75,6 +79,7 @@ export default createFragmentContainer(
       email
       order(slug: $slug) {
         slug
+        currency
         receiverName
         receiverPhone
         trackId
