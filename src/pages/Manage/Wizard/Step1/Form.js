@@ -117,11 +117,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
             />
           </div>
           <div styleName="formItem">
-            <InputSlug
-              realSlug="an"
-              slug={slug}
-              onChange={this.handleOnChangeSlug}
-            />
+            <InputSlug slug={slug} onChange={this.handleOnChangeSlug} />
           </div>
           <div>
             <Textarea
