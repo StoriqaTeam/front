@@ -38,7 +38,9 @@ class SidebarMenu extends Component<PropsType, StateType> {
         selected,
       },
       () => {
-        onClick(cat);
+        if (!isEmpty(cat.children)) {
+          onClick(cat);
+        }
       },
     );
   };
@@ -96,7 +98,7 @@ class SidebarMenu extends Component<PropsType, StateType> {
                       {cat.name}
                     </Link>
                   </span>
-                  <Icon type="arrowRight" />
+                  {!isEmpty(cat.children) ? <Icon type="arrowRight" /> : null}
                 </li>
               ))}
             </ul>
