@@ -5,19 +5,16 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  help: string,
-  startSelling: string,
+  order: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    help: 'Help',
-    startSelling: 'Sell on Storiqa',
+    order: 'Order',
   },
   ru: {
-    help: 'Помощь',
-    startSelling: 'Начать продавать',
+    order: 'Заказ',
   },
 };
 

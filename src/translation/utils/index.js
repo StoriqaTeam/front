@@ -1,4 +1,5 @@
 // @flow
+// @flow-runtime
 
 import React from 'react';
 

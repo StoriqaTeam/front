@@ -8,5 +8,13 @@
       "help": "Помощь",
       "startSelling": "Начать продавать"
     }
+  },
+  "pages/Checkout/PaymentInfo": {
+    "en": {
+      "order": "Order"
+    },
+    "ru": {
+      "order": "Заказ"
+    }
   }
 }
