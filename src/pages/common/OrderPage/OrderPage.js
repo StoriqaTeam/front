@@ -228,9 +228,13 @@ class OrderPage extends Component<PropsType, StateType> {
       isPaymentInfoCanBeShown,
       email,
       showAlert,
+      match: {
+        location: { pathname },
+      },
     } = this.props;
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
+    const diplayInvoiceButton = pathname.includes('/manage/store/');
     return (
       <AppContext>
         {({ environment }) => (
@@ -293,11 +297,13 @@ class OrderPage extends Component<PropsType, StateType> {
                     Open ticket
                   </Button>
                 </div>
-                <div styleName="ticketButtonWrapper">
-                  <Button big wireframe fullWidth onClick={this.invoice}>
-                    Invoice
-                  </Button>
-                </div>
+                {diplayInvoiceButton ? (
+                  <div styleName="ticketButtonWrapper">
+                    <Button big wireframe fullWidth onClick={this.invoice}>
+                      Invoice
+                    </Button>
+                  </div>
+                ) : null}
               </div>
               {order.product.name ? (
                 <ProductBlock product={order.product} />
