@@ -4,6 +4,7 @@
 .container {
   background: $color_grey_bg;
   height: 100%;
+  overflow-y: scroll;
   position: absolute;
   top: 0;
   left: -31.25rem;
@@ -37,7 +38,7 @@
 }
 
 .menu {
-
+  overflow: hidden;
   & .item {
     align-items: center;
     display: flex;

@@ -14,7 +14,7 @@ import './SidebarMenu.scss';
 type PropsType = {
   categories: ?Array<TransformedCategoryType>,
   onClose: () => void,
-  onClick: (TransformedCategoryType) => void,
+  onClick: TransformedCategoryType => void,
   isOpen: boolean,
   isSecondary: boolean,
   title: string,
