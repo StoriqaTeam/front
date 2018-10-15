@@ -13,9 +13,6 @@ const translations: TranslationsBundleType = {
   en: {
     order: 'Order',
   },
-  ru: {
-    order: 'Заказ',
-  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
@@ -28,5 +25,5 @@ const validate = (json: {}, verbose: boolean = false): boolean => {
   }
 };
 
+export { translations, validate };
 export default t(translations);
-export { validate, translations };
