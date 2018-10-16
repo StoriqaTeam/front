@@ -1,21 +1,24 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, propOr, map, find, equals, pathOr } from 'ramda';
+import { head, propOr, propEq, map, find, equals, pathOr } from 'ramda';
 import moment from 'moment';
 
 import { Select } from 'components/common/Select';
 import { getCookie, setCookie } from 'utils';
 
-import './HeaderTop.scss';
+import languages from 'translation/languages.json';
 
-const currencyCookieName = 'CURRENCY';
+import './HeaderTop.scss';
+import t from './i18n';
 
 type PropsType = {
-  // eslint-disable-next-line
+  setLang: (lang: string) => void,
   currencies: Array<string>,
   isShopCreated: boolean,
 };
+
+const currencyCookieName = 'CURRENCY';
 
 type CurrencyType = {
   key: number,
@@ -104,6 +107,12 @@ class HeaderTop extends PureComponent<PropsType> {
     return null;
   };
 
+  handleChangeLocale = (item: { id: string, label: string }) => {
+    if (item && item.id) {
+      this.props.setLang(item.id);
+    }
+  };
+
   handleSelect = (value: { id: string, label: string }) => {
     const currency = find(equals(value.id), this.props.currencies);
     if (currency) {
@@ -120,6 +129,8 @@ class HeaderTop extends PureComponent<PropsType> {
   };
 
   render() {
+    const currentLocale = getCookie('locale') || 'en';
+    const activeLocaleItem = find(propEq('id', currentLocale))(languages);
     const { isShopCreated } = this.props;
     return (
       <div styleName="container">
@@ -135,17 +146,17 @@ class HeaderTop extends PureComponent<PropsType> {
         </div>
         <div styleName="item">
           <Select
-            activeItem={{ id: '1', label: 'ENG' }}
-            items={[{ id: '1', label: 'ENG' }]}
-            onSelect={() => {}}
+            activeItem={activeLocaleItem}
+            items={[{ id: 'en', label: 'ENG' }, { id: 'ru', label: 'RUS' }]}
+            onSelect={this.handleChangeLocale}
             dataTest="headerLanguagesSelect"
           />
         </div>
         <div>
-          <a href="_">Help</a> {/* eslint-disable-line */}
+          <a href="_">{t.help}</a>
         </div>
         <div>
-          {isShopCreated ? null : <a href="/start-selling">Sell on Storiqa</a>}
+          {isShopCreated ? null : <a href="/start-selling">{t.startSelling}</a>}
         </div>
       </div>
     );

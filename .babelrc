@@ -56,6 +56,13 @@
           }
         ],
         [
+          "flow-runtime",
+          {
+            "optInOnly": true
+          }
+        ],
+        "transform-decorators-legacy",
+        [
           "react-css-modules",
           {
             "filetypes": {

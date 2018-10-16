@@ -30,6 +30,7 @@ import './HeaderResponsive.scss';
 type PropsType = {
   searchValue: string,
   withoutCategories: ?boolean,
+  setLang: (lang: string) => void,
   totalCount: number,
   userData: ?UserDataType,
   isShopCreated: boolean,
@@ -129,6 +130,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
       userData,
       totalCount,
       isShopCreated,
+      setLang,
     } = this.props;
     const {
       showModal,
@@ -188,6 +190,7 @@ class HeaderResponsive extends Component<PropsType, StateType> {
                 userData={userData}
                 currencies={directories.currencies}
                 isShopCreated={isShopCreated}
+                setLang={setLang}
               />
               <HeaderBottom
                 userData={userData}
