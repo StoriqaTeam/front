@@ -2,6 +2,7 @@
 import React from 'react';
 import { Icon } from 'components/Icon';
 
+import t from './i18n';
 import './AuthButtons.scss';
 
 type PropsType = {
@@ -27,7 +28,7 @@ const AuthButtons = ({ onOpenModal }: PropsType) => (
       tabIndex="0"
       data-test="headerSignUpButton"
     >
-      Sign Up
+      {t.signUp}
     </div>
     <div
       styleName="signInButton"
@@ -37,7 +38,7 @@ const AuthButtons = ({ onOpenModal }: PropsType) => (
       tabIndex="0"
       data-test="headerSignInButton"
     >
-      <strong>Sign In</strong>
+      <strong>{t.signIn}</strong>
     </div>
   </div>
 );
