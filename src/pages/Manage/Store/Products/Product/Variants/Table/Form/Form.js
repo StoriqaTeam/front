@@ -41,6 +41,12 @@ type VariantType = ?{
   variantId: ?string,
 };
 
+type FormErrorsType = {
+  vendorCode?: Array<string>,
+  price?: Array<string>,
+  attributes?: Array<string>,
+};
+
 type StateType = {
   vendorCode: ?string,
   price: ?number,
@@ -49,11 +55,7 @@ type StateType = {
   mainPhoto?: ?string,
   photos?: Array<string>,
   attributeValues?: Array<AttributeValueType>,
-  formErrors: ?{
-    vendorCode?: Array<string>,
-    price?: Array<string>,
-    attributes?: Array<string>,
-  },
+  formErrors: FormErrorsType,
   isLoading: boolean,
   preOrderDays: string,
   preOrder: boolean,
@@ -92,11 +94,8 @@ type PropsType = {
   },
   onExpandClick: (id: string) => void,
   onChangeVariantForm: (variantData: ?VariantType) => void,
-  formErrors: ?{
-    vendorCode?: Array<string>,
-    price?: Array<string>,
-    attributes?: Array<string>,
-  },
+  formErrors: FormErrorsType,
+  resetVariantFormErrors: (field: string) => {},
 };
 
 type ValueForAttributeInputType = {
@@ -105,16 +104,29 @@ type ValueForAttributeInputType = {
 };
 
 class Form extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    if (
+      JSON.stringify(nextProps.formErrors) !==
+      JSON.stringify(prevState.formErrors)
+    ) {
+      return {
+        ...prevState,
+        formErrors: nextProps.formErrors,
+      };
+    }
+    return null;
+  }
+
   constructor(props: PropsType) {
     super(props);
-    const { onChangeVariantForm, variant } = props;
+    const { onChangeVariantForm, variant, formErrors } = props;
     const product = variant;
     if (!product) {
       this.state = {
         attributeValues: this.resetAttrValues(),
         vendorCode: null,
         price: null,
-        formErrors: undefined,
+        formErrors,
         isLoading: false,
         preOrder: false,
         preOrderDays: '',
@@ -128,7 +140,7 @@ class Form extends Component<PropsType, StateType> {
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
         attributeValues: this.resetAttrValues(),
-        formErrors: undefined,
+        formErrors,
         isLoading: false,
         preOrder: Boolean(product.preOrder),
         preOrderDays:
@@ -161,6 +173,10 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ attributeValues: values });
   };
 
+  setFormErrors = (errors: FormErrorsType) => {
+    this.setState({ formErrors: errors });
+  };
+
   validate = () => {
     const { errors } = validate(
       {
@@ -186,16 +202,16 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleVendorCodeChange = (e: any) => {
+    this.props.resetVariantFormErrors('vendor_code');
     this.setState({
       vendorCode: e.target.value,
-      // $FlowIgnore
       formErrors: omit(['vendorCode'], this.state.formErrors),
     });
   };
 
   handlePriceChange = (e: any) => {
+    this.props.resetVariantFormErrors('price');
     const resetErrorObj = {
-      // $FlowIgnore
       formErrors: omit(['price'], this.state.formErrors),
     };
     const {
@@ -332,8 +348,8 @@ class Form extends Component<PropsType, StateType> {
   };
 
   renderVariant = () => {
-    const { formErrors } = this.props;
-    const { vendorCode, price, cashback, discount } = this.state;
+    // const { formErrors } = this.props;
+    const { vendorCode, price, cashback, discount, formErrors } = this.state;
     return (
       <div styleName="variant">
         <div styleName="inputWidth">

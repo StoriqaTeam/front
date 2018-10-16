@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
-import { pathOr, isEmpty, path, head } from 'ramda';
+import { pathOr, isEmpty, path, head, omit } from 'ramda';
 import { Environment } from 'relay-runtime';
 
 import { AppContext, Page } from 'components/App';
@@ -73,6 +73,9 @@ type StateType = {
   formErrors: {
     [string]: Array<string>,
   },
+  variantFormErrors: {
+    [string]: Array<string>,
+  },
   isLoading: boolean,
   availablePackages: ?AvailablePackagesType,
   variantData: ?VariantType,
@@ -82,6 +85,7 @@ type StateType = {
 class NewProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
+    variantFormErrors: {},
     isLoading: false,
     availablePackages: null,
     variantData: null,
@@ -122,7 +126,10 @@ class NewProduct extends Component<PropsType, StateType> {
   }
 
   handleSave = (form: FormType) => {
-    this.setState({ formErrors: {} });
+    this.setState({
+      formErrors: {},
+      variantFormErrors: {},
+    });
     const { me } = this.props;
     const {
       name,
@@ -280,12 +287,10 @@ class NewProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
+          this.setState({
+            variantFormErrors: validationErrors,
+            isLoading: false,
           });
-          this.setState({ isLoading: false });
           return;
         }
 
@@ -446,12 +451,19 @@ class NewProduct extends Component<PropsType, StateType> {
     this.setState({ shippingData });
   };
 
+  resetVariantFormErrors = (field: string) => {
+    this.setState({
+      variantFormErrors: omit([field], this.state.variantFormErrors),
+    });
+  };
+
   render() {
     const {
       isLoading,
       availablePackages,
       variantData,
       shippingData,
+      variantFormErrors,
     } = this.state;
 
     return (
@@ -470,6 +482,8 @@ class NewProduct extends Component<PropsType, StateType> {
               onChangeVariantForm={this.handleOnChangeVariantForm}
               onChangeShipping={this.handleOnChangeShipping}
               shippingData={shippingData}
+              resetVariantFormErrors={this.resetVariantFormErrors}
+              variantFormErrors={variantFormErrors}
             />
           </div>
         )}
