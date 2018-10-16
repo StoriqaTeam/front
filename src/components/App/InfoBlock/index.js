@@ -6,6 +6,8 @@ import { Icon } from 'components/Icon';
 
 import type { IconSizeType } from 'types';
 
+import t from './i18n';
+
 import './InfoBlock.scss';
 
 type StateType = {
@@ -60,22 +62,22 @@ class InfoBlock extends Component<{}, StateType> {
       {
         id: '0',
         href: '/',
-        name: 'About Storiqa',
+        name: t.aboutStoriqa,
       },
       {
         id: '1',
         href: 'https://beta.storiqa.com/privacy_policy.pdf',
-        name: 'Privacy Policy',
+        name: t.privacyPolicy,
       },
       {
         id: '2',
         href: '/',
-        name: 'Help',
+        name: t.help,
       },
       {
         id: '3',
         href: 'https://beta.storiqa.com/terms_of_use.pdf',
-        name: 'Terms of Use',
+        name: t.termsOfUse,
       },
     ],
   };
@@ -84,7 +86,7 @@ class InfoBlock extends Component<{}, StateType> {
     return (
       <div styleName="container">
         <p styleName="address">
-          Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong{' '}
+          {t.address}{' '}
           <span>
             <a href="mailto:support@storiqa.com" styleName="email">
               support@storiqa.com

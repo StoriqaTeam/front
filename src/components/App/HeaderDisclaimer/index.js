@@ -2,28 +2,24 @@
 
 import React from 'react';
 
+import t from './i18n';
+
 import './HeaderDisclaimer.scss';
 
 const HeaderDisclaimer = () => (
   <div styleName="container">
     <div styleName="body">
       <div>
-        <strong>
-          Dear users! Currently Storiqa is&nbsp;working
-          in&nbsp;the&nbsp;demo&nbsp;mode.
-        </strong>
+        <strong>{t.disclainer}</strong>
       </div>
-      <div>
-        If you have any questions or&nbsp;problems, please follow
-        the&nbsp;link&nbsp;below.
-      </div>
+      <div>{t.questions}</div>
       <div styleName="link">
         <a
           href="https://storiqa.zendesk.com/hc/en-us/requests/new"
           rel="noopener noreferrer"
           target="_blank"
         >
-          Support
+          {t.support}
         </a>
       </div>
     </div>
