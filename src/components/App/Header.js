@@ -1,269 +1,235 @@
 // @flow
 
 import React, { Component } from 'react';
-import { graphql } from 'react-relay';
-import PropTypes from 'prop-types';
-import { Link } from 'found';
-import { find, pathOr, propEq } from 'ramda';
+import { pathOr, isNil } from 'ramda';
+import classNames from 'classnames';
 
-import { SearchInput } from 'components/SearchInput';
-import { UserDropdown } from 'components/UserDropdown';
-import { CartButton } from 'components/CartButton';
-import { Select } from 'components/common/Select';
-import { Icon } from 'components/Icon';
-import { Modal } from 'components/Modal';
+import { AppContext } from 'components/App';
 import { Authorization } from 'components/Authorization';
-import { setWindowTag } from 'utils';
+import { Icon } from 'components/Icon';
+import { MobileListItems } from 'components/MobileListItems';
+import { MobileMenu } from 'components/MobileMenu';
+import { Modal } from 'components/Modal';
+import { SearchInput } from 'components/SearchInput';
+import { CategoriesMenu } from 'components/CategoriesMenu';
+import { withShowAlert } from 'components/App/AlertContext';
 
-import { Container, Row, Col } from 'layout';
+import { Container } from 'layout';
+
+import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
+import type { AddAlertInputType } from 'components/App/AlertContext';
+
+import { getCookie } from 'utils/cookiesOp';
+
+import { COOKIE_NAME } from 'constants';
+
+import { HeaderBottom, HeaderTop, MobileSearchMenu } from './index';
 
 import './Header.scss';
 
-const languages = [
-  {
-    id: 'en',
-    label: 'ENG',
-  },
-  {
-    id: 'ru',
-    label: 'RUS',
-  },
-  {
-    id: 'ja',
-    label: 'JAP',
-  },
-];
-
-const TOTAL_FRAGMENT = graphql`
-  fragment HeaderTotalLocalFragment on Cart {
-    id
-    totalCount
-  }
-`;
-
-const HEADER_FRAGMENT = graphql`
-  fragment Header_me on User {
-    email
-    firstName
-    lastName
-    avatar
-    myStore {
-      rawId
-    }
-  }
-`;
-
 type PropsType = {
   searchValue: string,
-  currentLocale: string,
+  withoutCategories: ?boolean,
   setLang: (lang: string) => void,
+  totalCount: number,
+  userData: ?UserDataType,
+  isShopCreated: boolean,
+  showAlert: AddAlertInputType => void,
 };
 
 type StateType = {
   showModal: boolean,
   isSignUp: ?boolean,
-  userData: ?{
-    avatar: ?string,
-    email: ?string,
-    firstName: ?string,
-    lastName: ?string,
-    myStore: ?{
-      rawId: number,
-    },
-  },
-  totalCount: number,
+  isMenuToggled: boolean,
+  isMobileSearchOpen: boolean,
+  isMobileCategoriesOpen: boolean,
+  selectedCategory: ?MobileCategoryType,
 };
 
 class Header extends Component<PropsType, StateType> {
-  state = {
-    showModal: false,
-    isSignUp: false,
-    userData: null,
-    totalCount: 0,
-  };
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      showModal: false,
+      isSignUp: false,
+      isMenuToggled: false,
+      isMobileSearchOpen: false,
+      isMobileCategoriesOpen: false,
+      selectedCategory: null,
+    };
+  }
 
-  componentWillMount() {
-    const store = this.context.environment.getStore();
-    const cartId = pathOr(
-      null,
-      ['cart', '__ref'],
-      store.getSource().get('client:root'),
-    );
-    const queryNode = TOTAL_FRAGMENT.data();
-    const snapshot = store.lookup({
-      dataID: cartId,
-      node: queryNode,
-    });
-    const { dispose } = store.subscribe(snapshot, s => {
-      const newTotalCount = pathOr(0, ['data', 'totalCount'], s);
-      this.setState({ totalCount: newTotalCount });
-      // tmp code
-      setWindowTag('cartCount', newTotalCount);
-      // end tmp code
-    });
-    const totalCount = pathOr(0, ['data', 'totalCount'], snapshot);
-
-    this.dispose = dispose;
-    // $FlowIgnoreMe
-    this.setState({ totalCount });
-    // tmp code
-    setWindowTag('cartCount', totalCount);
-    // end tmp code
-
-    const meId = pathOr(
-      null,
-      ['me', '__ref'],
-      store.getSource().get('client:root'),
-    );
-    if (!meId) {
-      // tmp code
-      setWindowTag('user', null);
-      // end tmp code
-    }
-    if (meId) {
-      const queryUser = HEADER_FRAGMENT.me();
-      const snapshotUser = store.lookup({
-        dataID: meId,
-        node: queryUser,
+  componentDidMount() {
+    const { showAlert } = this.props;
+    const cookie = getCookie(COOKIE_NAME);
+    if (isNil(cookie)) {
+      showAlert({
+        type: 'success',
+        text:
+          'This website uses ‘cookies’ to give you best, most relevant experience. Using this website means you’re Ok with this. If you do not use cookies, you will not be able to access the website.',
+        link: { text: 'OK' },
+        isStatic: true,
+        longText: true,
       });
-      const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
-        this.setState({ userData: s.data });
-        // tmp code
-        setWindowTag('user', s.data);
-        // end tmp code
-      });
-      this.disposeUser = disposeUser;
-      this.setState({ userData: snapshotUser.data });
-      // tmp code
-      setWindowTag('user', snapshotUser.data);
-      // end tmp code
     }
   }
 
-  componentWillUnmount() {
-    if (this.dispose) {
-      this.dispose();
-    }
-    if (this.disposeUser) {
-      this.disposeUser();
-    }
-  }
-
-  onOpenModal = (isSignUp: ?boolean) => {
+  handleOpenModal = (isSignUp: ?boolean): void => {
     this.setState({
       showModal: true,
       isSignUp,
     });
   };
 
-  onCloseModal = () => {
+  handleCloseModal = (): void => {
     this.setState({ showModal: false });
   };
 
-  handleChangeLocale = (item: { id: string, label: string }) => {
-    if (item && item.id) {
-      this.props.setLang(item.id);
-    }
+  closeMobileCategories = (): void => {
+    this.setState(({ isMobileCategoriesOpen }) => ({
+      isMobileCategoriesOpen: !isMobileCategoriesOpen,
+    }));
   };
 
-  dispose: () => void;
-  disposeUser: () => void;
+  handleMobileMenu = (): void => {
+    this.setState(({ isMenuToggled }) => ({
+      isMenuToggled: !isMenuToggled,
+    }));
+  };
+
+  handleMobileSearch = (): void => {
+    this.setState(({ isMobileSearchOpen }) => ({
+      isMobileSearchOpen: !isMobileSearchOpen,
+      isMobileCategoriesOpen: false,
+    }));
+  };
+
+  handleDropDown = (): void => {
+    this.closeMobileCategories();
+  };
+
+  handleMobileCategories = (selectedCategory: MobileCategoryType): void => {
+    this.setState(
+      {
+        selectedCategory,
+      },
+      () => {
+        this.closeMobileCategories();
+      },
+    );
+  };
+
+  makeCategories = (directories: DirectoriesType) =>
+    // $FlowIgnore
+    pathOr(null, ['categories', 'children'], directories);
 
   render() {
-    const { searchValue, currentLocale } = this.props;
-    const { showModal, isSignUp, userData, totalCount } = this.state;
-    const activeLocaleItem = find(propEq('id', currentLocale))(languages);
+    const {
+      searchValue,
+      withoutCategories,
+      userData,
+      totalCount,
+      isShopCreated,
+      setLang,
+    } = this.props;
+    const {
+      showModal,
+      isSignUp,
+      selectedCategory,
+      isMenuToggled,
+      isMobileSearchOpen,
+      isMobileCategoriesOpen,
+    } = this.state;
+    const searchCategories = [
+      { id: 'products', label: 'Products' },
+      { id: 'stores', label: 'Shops' },
+    ];
+    const BurgerMenu = () => (
+      <div
+        onClick={this.handleMobileMenu}
+        onKeyPress={() => {}}
+        role="button"
+        styleName="burgerMenu"
+        tabIndex="-1"
+      >
+        <span role="img">
+          <Icon type="burgerMenu" size={24} />
+        </span>
+      </div>
+    );
     return (
-      <header styleName="container">
-        <Container>
-          <Row>
-            <Col size={12}>
-              <div styleName="top">
-                <div styleName="item">
-                  <Select
-                    activeItem={{ id: '3', label: 'STQ' }}
-                    items={[{ id: '3', label: 'STQ' }]}
-                    onSelect={() => {}}
-                    dataTest="headerСurrenciesSelect"
+      <AppContext.Consumer>
+        {({ directories, environment, handleLogin }) => (
+          <header
+            styleName={classNames('container', {
+              expanded: isMobileCategoriesOpen,
+              withoutCategories,
+            })}
+          >
+            <MobileSearchMenu
+              isOpen={isMobileSearchOpen}
+              searchCategories={searchCategories}
+              searchValue={searchValue}
+              onClick={this.handleMobileSearch}
+            >
+              <SearchInput
+                isMobile
+                selectedCategory={selectedCategory}
+                onDropDown={this.handleDropDown}
+                searchCategories={searchCategories}
+                searchValue={searchValue}
+              />
+            </MobileSearchMenu>
+            <MobileMenu
+              isOpen={isMenuToggled}
+              onClose={this.handleMobileMenu}
+            />
+            <Container>
+              <BurgerMenu />
+              <HeaderTop
+                userData={userData}
+                currencies={directories.currencies}
+                isShopCreated={isShopCreated}
+                setLang={setLang}
+              />
+              <HeaderBottom
+                userData={userData}
+                searchCategories={searchCategories}
+                searchValue={searchValue}
+                totalCount={totalCount}
+                onMobileSearch={this.handleMobileSearch}
+                onOpenModal={this.handleOpenModal}
+              />
+              {this.makeCategories(directories) &&
+                !withoutCategories && (
+                  <CategoriesMenu
+                    categories={this.makeCategories(directories)}
                   />
-                </div>
-                <div styleName="item">
-                  <Select
-                    activeItem={activeLocaleItem}
-                    items={languages}
-                    onSelect={this.handleChangeLocale}
-                    dataTest="headerLanguagesSelect"
-                  />
-                </div>
-                <div>
-                  <a href="_">Help</a> {/* eslint-disable-line */}
-                </div>
-                <div>
-                  <a href="/start-selling">Sell on Storiqa</a>
-                </div>
-              </div>
-              <div styleName="bottom">
-                <Link to="/" data-test="logoLink">
-                  <Icon type="logo" />
-                </Link>
-                <div styleName="searchInput">
-                  <SearchInput
-                    searchCategories={[
-                      { id: 'products', label: 'Products' },
-                      { id: 'stores', label: 'Shops' },
-                    ]}
-                    searchValue={searchValue}
-                  />
-                </div>
-                <div>
-                  {userData ? (
-                    <UserDropdown user={userData} />
-                  ) : (
-                    <div styleName="authButtons">
-                      <div
-                        styleName="signUpButton"
-                        onClick={() => {
-                          this.onOpenModal(true);
-                        }}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex="0"
-                        data-test="headerSignUpButton"
-                      >
-                        Sign Up
-                      </div>
-                      <div
-                        styleName="signInButton"
-                        onClick={() => {
-                          this.onOpenModal(false);
-                        }}
-                        onKeyDown={() => {}}
-                        role="button"
-                        tabIndex="0"
-                        data-test="headerSignInButton"
-                      >
-                        <strong>Sign In</strong>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div styleName="cartIcon">
-                  <CartButton href="/cart" amount={totalCount} />
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-        <Modal showModal={showModal} onClose={this.onCloseModal}>
-          <Authorization isSignUp={isSignUp} onCloseModal={this.onCloseModal} />
-        </Modal>
-      </header>
+                )}
+            </Container>
+            <Modal
+              showModal={showModal}
+              onClose={this.handleCloseModal}
+              render={() => (
+                <Authorization
+                  environment={environment}
+                  handleLogin={handleLogin}
+                  isSignUp={isSignUp}
+                  onCloseModal={this.handleCloseModal}
+                />
+              )}
+            />
+            {isMobileCategoriesOpen ? (
+              <MobileListItems
+                onClick={this.handleMobileCategories}
+                items={searchCategories}
+              />
+            ) : null}
+          </header>
+        )}
+      </AppContext.Consumer>
     );
   }
 }
 
-export default Header;
-
-Header.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
+export default withShowAlert(Header);

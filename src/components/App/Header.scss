@@ -1,81 +1,58 @@
 @import '../../styles/variables';
 
-.container {
-  position: relative;
-  width: 170rem;
-  margin: 0 auto;
-  padding-bottom: 2rem;
-  z-index: 2;
-}
+$burger_menu_size: 7rem;
 
-.top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-top: 1rem;
-  a {
-    margin-left: 3rem;
+.container {
+  border-bottom: 1px solid $color_grey_light;
+  margin: 0 auto;
+  max-width: 170rem;
+  padding-bottom: 1.4rem;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+
+  @media (min-width: $lg) {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  &.expanded {
+    padding-bottom: 0;
   }
 
 }
 
-.item {
-  margin-left: 3rem;
+.withoutCategories {
+  padding-bottom: 2rem;
 }
 
 .qaIcon {
-  position: relative;
-  top: 0.5rem;
   display: inline-block;
   margin-right: 0.5rem;
+  position: relative;
+  top: 0.5rem;
 }
 
-.bottom {
-  background-color: $color_white;
-  display: flex;
+.burgerMenu {
   align-items: center;
-  margin-top: 3rem;
-}
-
-.searchInput {
-  margin-left: 18rem;
-  flex: 1;
-}
-
-.cartIcon {
-  width: 4rem;
-  margin-left: 1rem;
-}
-
-.authButtons {
+  border-right: 1px solid $color_grey_light;
   display: flex;
+  height: $burger_menu_size;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: $burger_menu_size;
+  z-index: 10;
 
-  & .signInButton {
-    margin-left: 2rem;
-    padding: 0 2rem;
-    border-radius: 0.5rem;
-    border: solid 1px rgba(151,151,151,.2);
-    font-size: 14px;
-    height: 4rem;
-    line-height: 4rem;
-    cursor: pointer;
-    transition: $transition_all_ease;
-
-    &:hover {
-      color: $color_white;
-      background-color: $color_blue_hover;
-    }
+  @media (min-width: $lg) {
+    display: none;
   }
 
-  & .signUpButton {
-    font-size: 14px;
-    height: 4rem;
-    line-height: 4rem;
-    cursor: pointer;
-    transition: $transition_all_ease;
+}
 
-    &:hover {
-      color: $color_blue;
-    }
-  }
+.mobileCategories {
+  padding-bottom: 2rem;
+  position: relative;
+  transition: padding-bottom 0.2s ease;
 }

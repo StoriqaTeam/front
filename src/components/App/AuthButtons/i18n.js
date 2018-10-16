@@ -15,7 +15,7 @@ const translations: TranslationsBundleType = {
   en: {
     signIn: 'Sign In',
     signUp: 'sign Up',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

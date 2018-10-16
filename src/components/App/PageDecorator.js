@@ -8,10 +8,8 @@ import moment from 'moment';
 import {
   AppContext,
   Header,
-  HeaderResponsive,
   Main,
   Footer,
-  FooterResponsive,
   UserData,
   HeaderDisclaimer,
 } from 'components/App';
@@ -24,7 +22,6 @@ type PropsType = {
 
 export default (
   OriginalComponent: any,
-  responsive: ?boolean,
   withoutCategories: ?boolean,
 ) =>
   class Page extends PureComponent<PropsType> {
@@ -88,37 +85,22 @@ export default (
                   {process.env.NODE_ENV === 'production' && (
                     <HeaderDisclaimer />
                   )}
-                  {responsive ? (
-                    <HeaderResponsive
-                      isShopCreated={isShopCreated}
-                      userData={userData}
-                      totalCount={totalCount}
-                      searchValue={pathOr(
-                        '',
-                        ['match', 'location', 'query', 'search'],
-                        this.props,
-                      )}
-                      withoutCategories={withoutCategories}
-                      setLang={this.setLang}
-                    />
-                  ) : (
-                    <Header
-                      user={this.props.me}
-                      searchValue={pathOr(
-                        '',
-                        ['match', 'location', 'query', 'search'],
-                        this.props,
-                      )}
-                    />
-                  )}
+                  <Header
+                    isShopCreated={isShopCreated}
+                    userData={userData}
+                    totalCount={totalCount}
+                    searchValue={pathOr(
+                      '',
+                      ['match', 'location', 'query', 'search'],
+                      this.props,
+                    )}
+                    withoutCategories={withoutCategories}
+                    setLang={this.setLang}
+                  />
                   <Main>
                     <OriginalComponent {...this.props} />
                   </Main>
-                  {responsive ? (
-                    <FooterResponsive isShopCreated={isShopCreated} />
-                  ) : (
-                    <Footer />
-                  )}
+                  <Footer isShopCreated={isShopCreated} />
                 </div>
               )}
             </UserData>
