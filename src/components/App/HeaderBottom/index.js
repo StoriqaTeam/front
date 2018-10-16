@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { Link } from 'found';
 import { Icon } from 'components/Icon';
 
+import { AuthButtons } from 'components/App';
 import { SearchInput } from 'components/SearchInput';
 import { UserDropdown } from 'components/UserDropdown';
 import { CartButton } from 'components/CartButton';
@@ -12,7 +13,6 @@ import { Row, Col } from 'layout';
 
 import type { UserDataType, MobileCategoryType } from 'types';
 
-import { AuthButtons } from './index';
 
 import './HeaderBottom.scss';
 
