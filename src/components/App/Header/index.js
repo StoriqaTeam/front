@@ -4,7 +4,12 @@ import React, { Component } from 'react';
 import { pathOr, isNil } from 'ramda';
 import classNames from 'classnames';
 
-import { AppContext } from 'components/App';
+import {
+  AppContext,
+  HeaderBottom,
+  HeaderTop,
+  MobileSearchMenu,
+} from 'components/App';
 import { Authorization } from 'components/Authorization';
 import { Icon } from 'components/Icon';
 import { MobileListItems } from 'components/MobileListItems';
@@ -23,7 +28,7 @@ import { getCookie } from 'utils/cookiesOp';
 
 import { COOKIE_NAME } from 'constants';
 
-import { HeaderBottom, HeaderTop, MobileSearchMenu } from './index';
+import t from './i18n';
 
 import './Header.scss';
 
@@ -65,8 +70,7 @@ class Header extends Component<PropsType, StateType> {
     if (isNil(cookie)) {
       showAlert({
         type: 'success',
-        text:
-          'This website uses ‘cookies’ to give you best, most relevant experience. Using this website means you’re Ok with this. If you do not use cookies, you will not be able to access the website.',
+        text: t.cookiePolicy,
         link: { text: 'OK' },
         isStatic: true,
         longText: true,
@@ -141,8 +145,8 @@ class Header extends Component<PropsType, StateType> {
       isMobileCategoriesOpen,
     } = this.state;
     const searchCategories = [
-      { id: 'products', label: 'Products' },
-      { id: 'stores', label: 'Shops' },
+      { id: t.searchCategory_products, label: t.searchCategory_products },
+      { id: t.searchCategory_shops, label: t.searchCategory_shops },
     ];
     const BurgerMenu = () => (
       <div
