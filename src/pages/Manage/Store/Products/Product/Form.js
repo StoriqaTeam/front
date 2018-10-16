@@ -78,7 +78,12 @@ type BaseProductType = {
 type PropsType = {
   baseProduct: ?BaseProductType,
   onSave: Function,
-  validationErrors: ?{},
+  validationErrors: {
+    [string]: Array<string>,
+  },
+  variantFormErrors: {
+    [string]: Array<string>,
+  },
   categories: Array<{}>,
   isLoading: boolean,
   comeResponse: boolean,
@@ -91,6 +96,7 @@ type PropsType = {
   closedVariantFormAnnunciator: boolean,
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   shippingData: ?FullShippingType,
+  resetVariantFormErrors: (field: string) => void,
 };
 
 type StateType = {
@@ -184,13 +190,25 @@ class Form extends Component<PropsType, StateType> {
   }
 
   componentDidUpdate(prevProps: PropsType) {
-    const { shippingData } = this.props;
+    const { shippingData, variantFormErrors } = this.props;
     if (
       JSON.stringify(shippingData) !== JSON.stringify(prevProps.shippingData)
     ) {
       this.resetShippingErrors();
     }
+    if (
+      JSON.stringify(variantFormErrors) !==
+      JSON.stringify(prevProps.variantFormErrors)
+    ) {
+      this.setVariantFormErrors(
+        renameKeys({ vendor_code: 'vendorCode' }, variantFormErrors),
+      );
+    }
   }
+
+  setVariantFormErrors = (errors: { [string]: Array<string> }) => {
+    this.setState({ variantFormErrors: errors });
+  };
 
   resetShippingErrors = () => {
     this.setState({ shippingErrors: null });
@@ -384,6 +402,7 @@ class Form extends Component<PropsType, StateType> {
       onChangeVariantForm,
       closedVariantFormAnnunciator,
       onChangeShipping,
+      resetVariantFormErrors,
     } = this.props;
     const {
       category,
@@ -410,6 +429,8 @@ class Form extends Component<PropsType, StateType> {
           handleSaveBaseProductWithVariant: this.handleSave,
           onChangeVariantForm,
           variantFormErrors,
+          // $FlowIgnore
+          resetVariantFormErrors,
         }}
       >
         <div styleName="container">

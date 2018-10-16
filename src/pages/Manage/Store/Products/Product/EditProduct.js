@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
-import { pathOr, isEmpty, path, head } from 'ramda';
+import { pathOr, isEmpty, path, head, omit } from 'ramda';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -68,6 +68,9 @@ type StateType = {
   formErrors: {
     [string]: Array<string>,
   },
+  variantFormErrors: {
+    [string]: Array<string>,
+  },
   isLoading: boolean,
   comeResponse: boolean,
   availablePackages: ?AvailablePackagesType,
@@ -80,6 +83,7 @@ type StateType = {
 class EditProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
+    variantFormErrors: {},
     isLoading: false,
     comeResponse: false,
     availablePackages: null,
@@ -140,7 +144,10 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   handleSave = (form: FormType) => {
-    this.setState({ formErrors: {} });
+    this.setState({
+      formErrors: {},
+      variantFormErrors: {},
+    });
     const baseProduct = path(['me', 'baseProduct'], this.props);
     if (!baseProduct || !baseProduct.id) {
       this.props.showAlert({
@@ -268,12 +275,10 @@ class EditProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
+          this.setState({
+            variantFormErrors: validationErrors,
+            isLoading: false,
           });
-          this.setState({ isLoading: false });
           return;
         }
 
@@ -362,7 +367,7 @@ class EditProduct extends Component<PropsType, StateType> {
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
           this.setState({
-            formErrors: validationErrors,
+            variantFormErrors: validationErrors,
             isLoading: false,
           });
           return;
@@ -539,6 +544,12 @@ class EditProduct extends Component<PropsType, StateType> {
     this.setState({ comeResponse: false });
   };
 
+  resetVariantFormErrors = (field: string) => {
+    this.setState({
+      variantFormErrors: omit([field], this.state.variantFormErrors),
+    });
+  };
+
   render() {
     const { me } = this.props;
     const {
@@ -549,6 +560,8 @@ class EditProduct extends Component<PropsType, StateType> {
       variantData,
       closedVariantFormAnnunciator,
       shippingData,
+      formErrors,
+      variantFormErrors,
     } = this.state;
     let baseProduct = null;
     if (me && me.baseProduct) {
@@ -563,7 +576,8 @@ class EditProduct extends Component<PropsType, StateType> {
             <Form
               baseProduct={baseProduct}
               onSave={this.handleSave}
-              validationErrors={this.state.formErrors}
+              validationErrors={formErrors}
+              variantFormErrors={variantFormErrors}
               categories={this.context.directories.categories}
               isLoading={isLoading}
               comeResponse={comeResponse}
@@ -576,6 +590,7 @@ class EditProduct extends Component<PropsType, StateType> {
               closedVariantFormAnnunciator={closedVariantFormAnnunciator}
               onChangeShipping={this.handleOnChangeShipping}
               shippingData={shippingData}
+              resetVariantFormErrors={this.resetVariantFormErrors}
             />
           </div>
         )}
