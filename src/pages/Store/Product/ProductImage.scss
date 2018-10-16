@@ -27,19 +27,21 @@
 .imageWrapper {
   overflow: hidden;
   width: 100%;
-  display: none;
-  @media (min-width: $md) {
-    display: block;
-    width: calc(100% - 14rem);
+  &.hasMobileSlider {
+    display: none;
+    @media (min-width: $md) {
+      display: block;
+      width: calc(100% - 14rem);
+    }
   }
 }
 
 .imageSlider {
-  overflow: hidden;
-  width: 100%;
   display: block;
   height: 0;
+  overflow: hidden;
   padding-bottom: 56.25%;
+  width: 100%;
   @media (min-width: $md) {
     display: none;
     width: calc(100% - 14rem);
