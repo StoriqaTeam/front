@@ -2,6 +2,8 @@
 
 import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
+import { setCookie, getCookie } from 'utils';
+import moment from 'moment';
 
 import {
   AppContext,
@@ -26,6 +28,56 @@ export default (
   withoutCategories: ?boolean,
 ) =>
   class Page extends PureComponent<PropsType> {
+    constructor(props: PropsType) {
+      super(props);
+
+      const cookieLocale = getCookie('locale');
+      if (!cookieLocale) {
+        if (process.env.BROWSER) {
+          const browserLang = window.navigator
+            ? window.navigator.language ||
+              window.navigator.systemLanguage ||
+              window.navigator.userLanguage
+            : null;
+          const browserLocale = browserLang
+            ? browserLang.substr(0, 2).toLowerCase()
+            : 'en';
+          setCookie(
+            'locale',
+            browserLocale,
+            moment()
+              .utc()
+              .add(30, 'd')
+              .toDate(),
+          );
+        } else {
+          setCookie(
+            'locale',
+            'en',
+            moment()
+              .utc()
+              .add(30, 'd')
+              .toDate(),
+          );
+        }
+      }
+    }
+
+    setLang = (lang: string) => {
+      const locale = getCookie('locale');
+      if (locale && locale.value !== lang && process.env.BROWSER) {
+        setCookie(
+          'locale',
+          lang,
+          moment()
+            .utc()
+            .add(30, 'd')
+            .toDate(),
+        );
+        window.location.reload();
+      }
+    };
+
     render() {
       return (
         <AppContext.Consumer>
@@ -47,6 +99,7 @@ export default (
                         this.props,
                       )}
                       withoutCategories={withoutCategories}
+                      setLang={this.setLang}
                     />
                   ) : (
                     <Header
