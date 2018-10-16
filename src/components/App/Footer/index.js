@@ -7,12 +7,13 @@ import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
 import { Collapse } from 'components/Collapse';
 import { Button } from 'components/common/Button';
+// $FlowIgnoreMe
+import { InfoBlock } from 'components/App';
 
 import type { CollapseItemType } from 'types';
 
+import t from './i18n';
 import './Footer.scss';
-// $FlowIgnoreMe
-import { InfoBlock } from './index';
 
 type PropsType = {
   isShopCreated: boolean,
@@ -26,60 +27,60 @@ class Footer extends PureComponent<PropsType, StateType> {
   state = {
     columns: [
       {
-        id: 'Storiqa market',
-        title: 'Storiqa market',
+        id: t.storiqaMarket,
+        title: t.storiqaMarket,
         links: [
           {
-            id: '0',
-            name: 'Sale',
+            id: t.storiqaMarket_sales,
+            name: t.storiqaMarket_sales,
           },
           {
-            id: '1',
-            name: 'Recommended',
+            id: t.storiqaMarket_recommended,
+            name: t.storiqaMarket_recommended,
           },
           {
-            id: '2',
-            name: 'Popular',
+            id: t.storiqaMarket_popular,
+            name: t.storiqaMarket_popular,
           },
           {
-            id: '3',
-            name: 'Reviews',
+            id: t.storiqaMarket_reviews,
+            name: t.storiqaMarket_reviews,
           },
         ],
       },
       {
-        id: 'Sections',
-        title: 'Sections',
+        id: t.sections,
+        title: t.sections,
         links: [
           {
-            id: '0',
-            name: 'Showcase',
+            id: t.sections_showcase,
+            name: t.sections_showcase,
           },
           {
-            id: '1',
-            name: 'Goods',
+            id: t.sections_goods,
+            name: t.sections_goods,
           },
           {
-            id: '2',
-            name: 'Shop',
+            id: t.sections_shop,
+            name: t.sections_shop,
           },
           {
-            id: '3',
-            name: 'Storiqa Community',
+            id: t.sections_storiqaCommunity,
+            name: t.sections_storiqaCommunity,
           },
         ],
       },
       {
-        id: 'Services',
-        title: 'Services',
+        id: t.services,
+        title: t.services,
         links: [
           {
-            id: '0',
-            name: 'Quality Assurance',
+            id: t.services_qualityAssurance,
+            name: t.services_qualityAssurance,
           },
           {
-            id: '1',
-            name: 'Storiqa wallet',
+            id: t.services_storiqaWallet,
+            name: t.services_storiqaWallet,
           },
         ],
       },
@@ -92,10 +93,7 @@ class Footer extends PureComponent<PropsType, StateType> {
       <Col lg={9} xl={9}>
         <div styleName="footerLogo">
           <Icon type="logo" />
-          <p styleName="logoDescription">
-            Storiqa is a global marketplace for any kind of legal goods
-            supporting cryptocurrency payments
-          </p>
+          <p styleName="logoDescription">{t.logoDescription}</p>
         </div>
       </Col>
     );
@@ -129,13 +127,13 @@ class Footer extends PureComponent<PropsType, StateType> {
           }
           dataTest="footerStartSellingButton"
         >
-          Start selling
+          {t.startSelling}
         </Button>
       </div>
     );
     return (
       <footer styleName="container">
-        <h2 styleName="offscreen">Storiqa Sections</h2>
+        <h2 styleName="offscreen">{t.offscreenSections}</h2>
         <Container>
           <div styleName="footerTop">
             <Row>
@@ -169,9 +167,7 @@ class Footer extends PureComponent<PropsType, StateType> {
           <Row>
             <Col>
               <InfoBlock />
-              <div styleName="rightsBlock">
-                © Storiqa Marketplace. All rights reserved. 2018
-              </div>
+              <div styleName="rightsBlock">{t.copyRight}</div>
             </Col>
           </Row>
         </Container>

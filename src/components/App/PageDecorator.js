@@ -20,10 +20,7 @@ type PropsType = {
   me: ?{},
 };
 
-export default (
-  OriginalComponent: any,
-  withoutCategories: ?boolean,
-) =>
+export default (OriginalComponent: any, withoutCategories: ?boolean) =>
   class Page extends PureComponent<PropsType> {
     constructor(props: PropsType) {
       super(props);
