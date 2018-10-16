@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop } from 'ramda';
+import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -77,11 +77,12 @@ const emptyAddress = {
 class Checkout extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    const { deliveryAddressesFull } = props.me;
     this.state = {
       storesRef: null,
       step: 1,
-      isAddressSelect: true,
-      isNewAddress: false,
+      isAddressSelect: !isEmpty(deliveryAddressesFull),
+      isNewAddress: isEmpty(deliveryAddressesFull),
       saveAsNewAddress: true,
       orderInput: {
         addressFull: emptyAddress,
@@ -163,6 +164,10 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleOnChangeAddressType = () => {
+    const { me } = this.props;
+    if (isEmpty(me.deliveryAddressesFull)) {
+      return;
+    }
     this.setState(prevState => ({
       isAddressSelect: !prevState.isAddressSelect,
       isNewAddress: !prevState.isNewAddress,
@@ -417,6 +422,7 @@ export default createPaginationContainer(
           streetNumber
           placeId
         }
+        isPriority
       }
     }
 

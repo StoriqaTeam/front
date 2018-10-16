@@ -2,18 +2,9 @@
 
 import { filter, join } from 'ramda';
 
-export default (addressFull: {|
-  value: ?string,
-  country: ?string,
-  administrativeAreaLevel1: ?string,
-  administrativeAreaLevel2: ?string,
-  locality: ?string,
-  political: ?string,
-  postalCode: ?string,
-  route: ?string,
-  streetNumber: ?string,
-  placeId: ?string,
-|}) => {
+import type { AddressFullType } from 'types';
+
+export default (addressFull: AddressFullType): string => {
   const {
     // value,
     country,
@@ -30,5 +21,5 @@ export default (addressFull: {|
   const filteredAddressArr = filter(item => Boolean(item), addressArr);
   const address = join(', ', filteredAddressArr);
   join(', ', []);
-  return address || null;
+  return address || '';
 };

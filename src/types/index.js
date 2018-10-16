@@ -16,3 +16,4 @@ export type { SelectItemType } from './SelectItemType';
 export type { CountriesDefaultType } from './CountriesTypes';
 export type { CountriesType } from './CountriesTypes';
 export type { CountryType } from './CountriesTypes';
+export type { AddressFullType } from './AddressFullType';
