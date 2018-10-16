@@ -4,12 +4,17 @@ import { addressToString } from 'utils';
 
 import { map, addIndex } from 'ramda';
 
-import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
+import type { AddressFullType } from 'types';
 
-export const addressesToSelect = (deliveryAddresses: any) =>
+export const addressesToSelect = (
+  deliveryAddresses: Array<{
+    address: AddressFullType,
+    isPriority: boolean,
+  }>,
+) =>
   addIndex(map)(
     (item, idx) => ({
-      id: `${idx}`,
+      id: item.isPriority ? '0' : `${idx + 1}`,
       label: addressToString(item.address),
     }),
     deliveryAddresses,
