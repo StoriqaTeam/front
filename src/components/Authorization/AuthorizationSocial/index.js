@@ -7,6 +7,8 @@ import { Button } from 'components/common/Button';
 
 import { socialStrings } from 'utils';
 
+import t from './i18n';
+
 import './AuthorizationSocial.scss';
 
 const buttons = [
@@ -15,14 +17,14 @@ const buttons = [
     href: socialStrings.facebookLoginString(),
     iconType: 'facebook',
     dataTest: 'authFacebookButton',
-    message: 'Sign in with Facebook',
+    message: t.signInWithFacebook,
   },
   {
     id: '1',
     href: socialStrings.googleLoginString(),
     iconType: 'google',
     dataTest: 'authGoogleButton',
-    message: 'Sign in with Google',
+    message: t.signInWithGoogle,
   },
 ];
 
