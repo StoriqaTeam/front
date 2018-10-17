@@ -35,6 +35,10 @@
 
   }
   .productsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -1rem;
+
     .loadMoreContainer {
       display: flex;
       height: 5rem;
@@ -56,23 +60,16 @@
 }
 
 .cardWrapper {
-  display: inline-block;
   position: relative;
-  vertical-align: bottom;
-  width: 100%;
+  width: 25%;
 
-  @media (min-width: 768px) {
-    width: 50%;
-  }
-
-  @media (min-width: 992px) {
+  @media (max-width: #{$xl - 1px}) {
     width: 33%;
   }
 
-  @media (min-width: 1200px) {
-    width: 25%;
+  @media (max-width: #{$md - 1px}) {
+    width: 50%;
   }
-
 }
 
 .button {

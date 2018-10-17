@@ -65,6 +65,9 @@ export type StoreType = {
   rating: number,
   productsCount: string,
   logo: ?string,
+  facebookUrl: ?string,
+  twitterUrl: ?string,
+  instagramUrl: ?string,
 };
 
 export type ProductType = {

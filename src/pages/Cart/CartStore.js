@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { filter, whereEq } from 'ramda';
+import { Link } from 'found';
 
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
@@ -57,23 +58,25 @@ class CartStore extends PureComponent<PropsType> {
                   <Container correct>
                     <Row>
                       <div styleName="store-info">
-                        {store.logo ? (
-                          <img
-                            src={convertSrc(store.logo, 'small')}
-                            alt="store_picture"
-                            styleName="image"
-                          />
-                        ) : (
-                          <div styleName="noLogo">
-                            <Icon type="camera" size={28} />
+                        <Link to={`/store/${store.rawId}`}>
+                          {store.logo ? (
+                            <img
+                              src={convertSrc(store.logo, 'small')}
+                              alt="store_picture"
+                              styleName="image"
+                            />
+                          ) : (
+                            <div styleName="noLogo">
+                              <Icon type="camera" size={28} />
+                            </div>
+                          )}
+                          <div styleName="store-description">
+                            <div styleName="store-name">
+                              {getNameText(store.name, 'EN')}
+                            </div>
+                            <Rating value={store.rating} />
                           </div>
-                        )}
-                        <div styleName="store-description">
-                          <div styleName="store-name">
-                            {getNameText(store.name, 'EN')}
-                          </div>
-                          <Rating value={store.rating} />
-                        </div>
+                        </Link>
                       </div>
                       <div styleName="storeTotalWrapper">
                         <div>
@@ -101,6 +104,7 @@ export default createFragmentContainer(
   graphql`
     fragment CartStore_store on CartStore {
       id
+      rawId
       productsCost
       deliveryCost
       totalCost

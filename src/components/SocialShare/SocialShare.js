@@ -1,6 +1,6 @@
-// @flow
+// @flow strict
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 
 import Facebook from './svg/logo-facebook.svg';
@@ -13,11 +13,14 @@ import HeartIcon from './svg/heart.svg';
 import './SocialShare.scss';
 
 type PropsType = {
-  photoMain: string,
-  description: string,
   big: boolean,
   noBorder: boolean,
   noBorderX: boolean,
+  facebookUrl?: string,
+  pinterestUrl?: string,
+  twitterUrl?: string,
+  instagramUrl?: string,
+  vkontakteUrl?: string,
 };
 
 class SocialShare extends Component<PropsType> {
@@ -28,67 +31,72 @@ class SocialShare extends Component<PropsType> {
   };
   handleShare = () => {};
   render() {
-    const { photoMain, description, big, noBorder, noBorderX } = this.props;
-    //
-    const { href } = window.location;
-    const url = window.encodeURIComponent(href);
-    // const url = 'https://nightly.stq.cloud/store/129/products/468';
+    const {
+      big,
+      noBorder,
+      noBorderX,
+      facebookUrl,
+      pinterestUrl,
+      twitterUrl,
+      instagramUrl,
+      vkontakteUrl,
+    } = this.props;
     return (
       <nav styleName={classNames('container', { big, noBorder, noBorderX })}>
-        <ul styleName={classNames('socialIcons', { big })}>
-          <li styleName="linkContainer">
-            <a
-              styleName="link"
-              rel="noopener noreferrer"
-              target="_blank"
-              href={`https://www.facebook.com/sharer/sharer.php?u=${url};src=sdkpreparse`}
-            >
-              <Facebook />
-            </a>
-          </li>
-          <li styleName="linkContainer">
-            <a
-              data-pin-do="buttonBookmark"
-              data-pin-custom="true"
-              styleName="link"
-              rel="noopener noreferrer"
-              target="_blank"
-              href={`https://www.pinterest.com/pin/create/button/?url=${photoMain}&description=${description}`}
-            >
-              <Pinterest />
-            </a>
-          </li>
-          <li styleName="linkContainer">
-            <a
-              styleName="link"
-              rel="noopener noreferrer"
-              target="_blank"
-              href={`https://twitter.com/intent/tweet?url=${url}&text=${description}`}
-            >
-              <Twitter />
-            </a>
-          </li>
-          <li styleName="linkContainer">
-            <a
-              styleName="link"
-              rel="noopener noreferrer"
-              target="_blank"
-              href={`https://www.instagram.com//share.php?url=${url}`}
-            >
-              <Instagram />
-            </a>
-          </li>
-          <li styleName="linkContainer">
-            <a
-              styleName="link"
-              rel="noopener noreferrer"
-              target="_blank"
-              href={`http://vk.com/share.php?url=${url}`}
-            >
-              <VK />
-            </a>
-          </li>
-        </ul>
+        <div styleName={classNames('socialIcons', { big })}>
+          <Fragment>
+            {Boolean(facebookUrl) && (
+              <a
+                styleName="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={facebookUrl}
+              >
+                <Facebook />
+              </a>
+            )}
+            {Boolean(pinterestUrl) && (
+              <a
+                styleName="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={pinterestUrl}
+              >
+                <Pinterest />
+              </a>
+            )}
+            {Boolean(twitterUrl) && (
+              <a
+                styleName="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={twitterUrl}
+              >
+                <Twitter />
+              </a>
+            )}
+            {Boolean(instagramUrl) && (
+              <a
+                styleName="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={instagramUrl}
+              >
+                <Instagram />
+              </a>
+            )}
+            {Boolean(vkontakteUrl) && (
+              <a
+                styleName="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={vkontakteUrl}
+              >
+                <VK />
+              </a>
+            )}
+          </Fragment>
+        </div>
         {!noBorder && (
           <div styleName={classNames('favorite', { big, noBorder })}>
             <HeartIcon />

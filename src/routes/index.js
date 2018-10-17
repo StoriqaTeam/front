@@ -675,6 +675,9 @@ const routes = (
                 text
               }
               rating
+              facebookUrl
+              twitterUrl
+              instagramUrl
               ...StoreItems_shop @arguments(storeId: $storeId)
               ...About_shop
               ...Showcase_shop

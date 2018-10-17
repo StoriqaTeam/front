@@ -17,22 +17,34 @@
 
   &.noBorder {
     border: none;
+    .link:last-child {border-right: 0; padding-right: 2rem;}
   }
 
   &.noBorderX {
     border-left: none;
     border-right: none;
+    .link:last-child {border-right: 0; padding-right: 2rem;}
   }
 }
 
 .socialIcons {
   display: flex;
   justify-content: flex-start;
-  padding: 1.7rem 1.8rem 0.7rem 1.8rem;
 
-  .link svg {
-    height: 2.7rem;
-    width: 2.7rem;
+  .link {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+
+    &:last-child {
+      padding-right: 2.5rem;
+      border-right: 1px solid $color_grey_minor;
+    }
+
+    svg {
+      height: 2.7rem;
+      width: 2.7rem;
+    }
   }
 
   &.big {
@@ -44,32 +56,23 @@
       }
     }
     @media (min-width: $md) {
-      padding: 4.5rem;
+      padding: 2rem;
     }
   }
-
-  .linkContainer {
-    margin-right: 4.475rem;
-  }
-
-  & > .linkContainer:last-child {
-    margin-right: 1rem;
-  }
-
 }
 
 .favorite {
   align-items: center;
-  border-left: 1px solid $color_grey_minor;
   display: flex;
   justify-content: center;
-  padding: 0 2rem;
+  padding: 2rem;
 
   &.big {
     border-left: 1px solid $color_grey_trivial;
     padding: 0 2.25rem;
+
     @media (min-width: $md) {
-      padding: 0 4.25rem;
+      padding: 4.25rem;
     }
   }
 

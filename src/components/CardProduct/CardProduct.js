@@ -131,7 +131,9 @@ class CardProduct extends PureComponent<PropsType> {
                   )}
                 />
               )}
-              <CardProductCashback cashbackValue={cashbackValue} />
+              {Boolean(cashbackValue) && (
+                <CardProductCashback cashbackValue={cashbackValue} />
+              )}
             </div>
           </div>
         </Link>

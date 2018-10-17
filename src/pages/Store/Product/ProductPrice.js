@@ -63,9 +63,11 @@ const ProductPrice = ({
           />
         )}
       />
-      <span styleName={classNames('cashback', { noCashback: !cashback })}>
-        {buttonText} {`${cashback ? (cashback * 100).toFixed(0) : 0}%`}
-      </span>
+      {Boolean(cashback) && (
+        <span styleName={classNames('cashback', { noCashback: !cashback })}>
+          {buttonText} {`${cashback ? (cashback * 100).toFixed(0) : 0}%`}
+        </span>
+      )}
     </div>
   </div>
 );
