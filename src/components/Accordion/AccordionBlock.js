@@ -6,6 +6,8 @@ import { map, addIndex, find, whereEq, slice } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
+import t from './i18n';
+
 import './AccordionBlock.scss';
 
 type TreeType = {
@@ -110,7 +112,7 @@ class AccordionBlock extends React.Component<PropsType, StateType> {
                   role="button"
                   tabIndex="0"
                 >
-                  show all
+                  {t.showAll}
                 </div>
               )}
           </div>

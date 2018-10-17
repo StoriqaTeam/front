@@ -13,7 +13,6 @@ import { Row, Col } from 'layout';
 
 import type { UserDataType, MobileCategoryType } from 'types';
 
-
 import './HeaderBottom.scss';
 
 type PropsType = {
