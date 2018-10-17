@@ -3,6 +3,8 @@
 import React from 'react';
 import { Checkbox } from 'components/common/Checkbox';
 
+import t from './i18n';
+
 import './Policy.scss';
 
 type PropsType = {
@@ -22,23 +24,23 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
         />
       </span>
       <p>
-        Check here to indicate that you have read and agree to the{' '}
+        {t.checkHere}{' '}
         <a
           href="https://beta.storiqa.com/terms_of_use.pdf"
           target="_blank"
           rel="noopener noreferrer"
           styleName="link"
         >
-          Terms of Use
+          {t.termsOfUse}
         </a>{' '}
-        and{' '}
+        {t.and}{' '}
         <a
           href="https://beta.storiqa.com/privacy_policy.pdf"
           target="_blank"
           rel="noopener noreferrer"
           styleName="link"
         >
-          Privacy Policy
+          {t.privatePolicy}
         </a>.
       </p>
     </div>
@@ -50,7 +52,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
           onChange={() => onCheck('isTermsChecked')}
         />
       </span>
-      <p>I agree to my personal data being stored and used.</p>
+      <p>{t.agree}</p>
     </div>
   </div>
 );

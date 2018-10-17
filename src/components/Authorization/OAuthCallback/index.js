@@ -131,7 +131,9 @@ class OAuthCallback extends PureComponent<PropsType> {
           <Logo />
         </div>
         <span styleName="text">
-          {t.loading}<br />{t.pleaseWait}
+          {t.loading}
+          <br />
+          {t.pleaseWait}
         </span>
         <span styleName="description">- {t.storiqaTeam}</span>
         <Spinner />

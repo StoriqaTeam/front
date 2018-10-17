@@ -5,18 +5,22 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  pleaseWait: string,
-  loading: string,
-  storiqaTeam: string,
+  checkHere: string,
+  termsOfUse: string,
+  and: string,
+  privatePolicy: string,
+  agree: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    pleaseWait: 'Please Wait.',
-    loading: 'Loading...',
-    storiqaTeam: 'Storiqa Team',
-  },
+    checkHere: 'Check here to indicate that you have read and agree to the',
+    termsOfUse: 'Terms of Use',
+    and: 'and',
+    privatePolicy: 'Privacy Policy',
+    agree: 'I agree to my personal data being stored and used.',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
