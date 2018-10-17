@@ -2,7 +2,16 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fromPairs, map, pathOr, prop, pipe, replace, split, isNil } from 'ramda';
+import {
+  fromPairs,
+  map,
+  pathOr,
+  prop,
+  pipe,
+  replace,
+  split,
+  isNil,
+} from 'ramda';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
@@ -23,6 +32,8 @@ import {
 } from '../utils';
 
 import './OAuthCallback.scss';
+
+import t from './i18n';
 
 type PropsType = {
   provider: 'EMAIL' | 'FACEBOOK' | 'GOOGLE' | '%future added value',
@@ -53,33 +64,35 @@ class OAuthCallback extends PureComponent<PropsType> {
             provider: this.props.provider,
             token: accessToken,
             clientMutationId: '',
-          }
-        }
-      }).then(response => {
-        log.debug({ response });
-        // $FlowIgnoreMe
-        const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
-        if (jwt) {
-          const today = new Date();
-          const expirationDate = new Date();
-          expirationDate.setDate(today.getDate() + 1);
-          setCookie('__jwt', { value: jwt }, expirationDate);
-          const redirectPath = getPathForRedirectAfterLogin();
-          if (!isNil(redirectPath)) {
-            clearPathForRedirectAfterLogin();
-            this.props.router.push(redirectPath);
-          } else {
-            window.location.href = '/'; // TODO: use refetch or store update
-          }
-        }
-      }).catch((errs: ResponseErrorType) => {
-        log.error(errs);
-        const relayErrors = fromRelayError({ source: { errors: [errs] } });
-        if (relayErrors) {
-          errorsHandler(relayErrors, this.props.showAlert);
-        }
-        this.props.router.replace('/login');
+          },
+        },
       })
+        .then(response => {
+          log.debug({ response });
+          // $FlowIgnoreMe
+          const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
+          if (jwt) {
+            const today = new Date();
+            const expirationDate = new Date();
+            expirationDate.setDate(today.getDate() + 1);
+            setCookie('__jwt', { value: jwt }, expirationDate);
+            const redirectPath = getPathForRedirectAfterLogin();
+            if (!isNil(redirectPath)) {
+              clearPathForRedirectAfterLogin();
+              this.props.router.push(redirectPath);
+            } else {
+              window.location.href = '/'; // TODO: use refetch or store update
+            }
+          }
+        })
+        .catch((errs: ResponseErrorType) => {
+          log.error(errs);
+          const relayErrors = fromRelayError({ source: { errors: [errs] } });
+          if (relayErrors) {
+            errorsHandler(relayErrors, this.props.showAlert);
+          }
+          this.props.router.replace('/login');
+        });
     } else {
       window.location.href = '/login';
     }
@@ -118,9 +131,9 @@ class OAuthCallback extends PureComponent<PropsType> {
           <Logo />
         </div>
         <span styleName="text">
-          Loading...<br />Please wait.
+          {t.loading}<br />{t.pleaseWait}
         </span>
-        <span styleName="description">- Storiqa team</span>
+        <span styleName="description">- {t.storiqaTeam}</span>
         <Spinner />
       </div>
     );

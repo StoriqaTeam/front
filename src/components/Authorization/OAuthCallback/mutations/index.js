@@ -1,2 +1,4 @@
 // @flow strict
-export { default as getJWTByProviderMutation } from './GetJWTByProviderMutation';
+export {
+  default as getJWTByProviderMutation,
+} from './GetJWTByProviderMutation';
