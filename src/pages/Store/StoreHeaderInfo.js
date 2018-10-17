@@ -42,10 +42,12 @@ class StoreHeader extends Component<{}, StateTypes> {
     const { isOpened, isShare } = this.state;
     return (
       <StoreContext.Consumer>
-        {({ logo, name, rating }) => (
+        {({ logo, name, rating, facebookUrl, twitterUrl, instagramUrl }) => (
           <div styleName="container">
             <span
-              styleName="share"
+              styleName={classNames('share', {
+                hide: !facebookUrl && !twitterUrl && !instagramUrl,
+              })}
               role="button"
               onClick={() => this.handleClick('isShare')}
               onKeyPress={() => {}}
@@ -74,7 +76,12 @@ class StoreHeader extends Component<{}, StateTypes> {
             <div styleName={classNames('mobileSearch', { isOpened })}>
               {process.env.BROWSER ? (
                 <div styleName="share">
-                  <SocialShare noBorder />
+                  <SocialShare
+                    noBorder
+                    facebookUrl={facebookUrl}
+                    twitterUrl={twitterUrl}
+                    instagramUrl={instagramUrl}
+                  />
                 </div>
               ) : null}
             </div>

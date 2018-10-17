@@ -297,7 +297,14 @@ class Product extends Component<PropsType, StateType> {
                     <ProductImage {...productVariant} />
                     <ImageDetail />
                     {process.env.BROWSER ? (
-                      <SocialShare noBorderX big {...productVariant} />
+                      <SocialShare
+                        noBorderX
+                        big
+                        facebookUrl={store.facebookUrl}
+                        twitterUrl={store.twitterUrl}
+                        instagramUrl={store.instagramUrl}
+                        {...productVariant}
+                      />
                     ) : null}
                   </Col>
                   <Col sm={12} md={12} lg={6} xl={6}>
@@ -366,6 +373,9 @@ export default createFragmentContainer(
         rating
         productsCount
         logo
+        facebookUrl
+        twitterUrl
+        instagramUrl
       }
       rating
       variants {

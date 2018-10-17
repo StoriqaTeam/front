@@ -10,6 +10,9 @@ const StoreContext = createContext({
   name: ' ',
   rating: 0,
   active: null,
+  facebookUrl: '',
+  twitterUrl: '',
+  instagramUrl: '',
 });
 
 export default StoreContext;
