@@ -22,8 +22,6 @@ import {
   // $FlowIgnoreMe
   CreateUserMutation,
   // $FlowIgnoreMe
-  GetJWTByEmailMutation,
-  // $FlowIgnoreMe
   ApplyPasswordResetMutation,
   // $FlowIgnoreMe
   ResendEmailVerificationLinkMutation,
@@ -33,13 +31,16 @@ import { withShowAlert } from 'components/App/AlertContext';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { CreateUserMutationResponse } from 'relay/mutations/__generated__/CreateUserMutation.graphql';
-import type { GetJWTByEmailMutationResponse } from 'relay/mutations/__generated__/GetJWTByEmailMutation.graphql';
 import type { ApplyPasswordResetMutationResponse } from 'relay/mutations/__generated__/ApplyPasswordResetMutation.graphql';
 import type { ResendEmailVerificationLinkMutationResponse } from 'relay/mutations/__generated__/ResendEmailVerificationLinkMutation.graphql';
 import type { ResponseErrorType } from 'utils/fromRelayError';
 import { setPathForRedirectAfterLogin } from './utils';
 
-import { requestPasswordResetMutation } from './mutations';
+import type { GetJWTByEmailMutationResponse } from './mutations/__generated__/GetJWTByEmailMutation.graphql';
+import {
+  getJWTByEmailMutation,
+  requestPasswordResetMutation,
+} from './mutations';
 
 import './Authorization.scss';
 
@@ -222,19 +223,24 @@ class Authorization extends Component<PropsType, StateType> {
           query: { from },
         },
       },
+      environment,
+      showAlert,
     } = this.props;
     const { email, password } = this.state;
-    GetJWTByEmailMutation.commit({
-      email,
-      password,
-      environment: this.props.environment,
-      onCompleted: (
-        response: ?GetJWTByEmailMutationResponse,
-        errors: ?Array<ResponseErrorType>,
-      ) => {
+    getJWTByEmailMutation({
+      environment,
+      variables: {
+        input: {
+          email,
+          password,
+          clientMutationId: '',
+        },
+      },
+    })
+      .then((response: GetJWTByEmailMutationResponse) => {
         this.setState({ isLoading: false });
-        log.debug({ response, errors });
-        // $FlowIgnore
+        log.debug({ response });
+        // $FlowIgnoreMe
         const jwt = pathOr(
           null,
           ['getJWTByEmail', 'token'],
@@ -254,34 +260,19 @@ class Authorization extends Component<PropsType, StateType> {
               window.location = '/';
             }
           }
-          return;
         }
-        const relayErrors = fromRelayError({ source: { errors } });
+      })
+      .catch((errs: ResponseErrorType): void => {
+        const relayErrors = fromRelayError({ source: { errors: [errs] } });
         if (relayErrors) {
-          // pass showAlert for show alert errors in common cases
-          // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, messages =>
+          errorsHandler(relayErrors, showAlert, errMessages =>
             this.setState({
               isLoading: false,
-              errors: messages || null,
+              errors: errMessages || null,
             }),
           );
         }
-      },
-      onError: (error: Error): void => {
-        const relayErrors = fromRelayError(error);
-        if (relayErrors) {
-          // pass showAlert for show alert errors in common cases
-          // pass handleCallback specify validation errors
-          errorsHandler(relayErrors, this.props.showAlert, messages =>
-            this.setState({
-              isLoading: false,
-              errors: messages || null,
-            }),
-          );
-        }
-      },
-    });
+      });
   };
 
   handleChange = (data: {
