@@ -1,29 +1,31 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fromPairs, map, pathOr, prop, pipe, replace, split } from 'ramda';
+import { fromPairs, map, pathOr, prop, pipe, replace, split, isNil } from 'ramda';
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/App/AlertContext';
 import { log, errorsHandler, fromRelayError, setCookie } from 'utils';
-import { GetJWTByProviderMutation } from 'relay/mutations';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
+import type { ResponseErrorType } from 'utils/fromRelayError';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
+
+import { getJWTByProviderMutation } from './mutations';
 
 import prepareQueryString from './OAuthCallback.utils';
 
 import {
   getPathForRedirectAfterLogin,
   clearPathForRedirectAfterLogin,
-} from './utils';
+} from '../utils';
 
 import './OAuthCallback.scss';
 
 type PropsType = {
-  provider: string,
+  provider: 'EMAIL' | 'FACEBOOK' | 'GOOGLE' | '%future added value',
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -44,46 +46,40 @@ class OAuthCallback extends PureComponent<PropsType> {
     }
     log.debug({ accessToken });
     if (accessToken) {
-      GetJWTByProviderMutation.commit({
-        provider: this.props.provider,
-        token: accessToken,
+      getJWTByProviderMutation({
         environment: this.context.environment,
-        onCompleted: (response, errors) => {
-          log.debug({ response, errors });
-          const relayErrors = fromRelayError({ source: { errors } });
-          if (relayErrors) {
-            // pass showAlert for show alert errors in common cases
-            // pass handleCallback specify validation errors
-            errorsHandler(relayErrors, this.props.showAlert);
-            return;
+        variables: {
+          input: {
+            provider: this.props.provider,
+            token: accessToken,
+            clientMutationId: '',
           }
-          const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
-          if (jwt) {
-            const today = new Date();
-            const expirationDate = new Date();
-            expirationDate.setDate(today.getDate() + 1);
-            setCookie('__jwt', { value: jwt }, expirationDate);
-
-            const redirectPath = getPathForRedirectAfterLogin();
-            if (redirectPath) {
-              clearPathForRedirectAfterLogin();
-              this.props.router.push(redirectPath);
-            } else {
-              window.location.href = '/'; // TODO: use refetch or store update
-            }
+        }
+      }).then(response => {
+        log.debug({ response });
+        // $FlowIgnoreMe
+        const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
+        if (jwt) {
+          const today = new Date();
+          const expirationDate = new Date();
+          expirationDate.setDate(today.getDate() + 1);
+          setCookie('__jwt', { value: jwt }, expirationDate);
+          const redirectPath = getPathForRedirectAfterLogin();
+          if (!isNil(redirectPath)) {
+            clearPathForRedirectAfterLogin();
+            this.props.router.push(redirectPath);
+          } else {
+            window.location.href = '/'; // TODO: use refetch or store update
           }
-        },
-        onError: (error: Error) => {
-          log.error(error);
-          const relayErrors = fromRelayError(error);
-          if (relayErrors) {
-            // pass showAlert for show alert errors in common cases
-            // pass handleCallback specify validation errors
-            errorsHandler(relayErrors, this.props.showAlert);
-          }
-          this.props.router.replace('/login');
-        },
-      });
+        }
+      }).catch((errs: ResponseErrorType) => {
+        log.error(errs);
+        const relayErrors = fromRelayError({ source: { errors: [errs] } });
+        if (relayErrors) {
+          errorsHandler(relayErrors, this.props.showAlert);
+        }
+        this.props.router.replace('/login');
+      })
     } else {
       window.location.href = '/login';
     }
