@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import { map } from 'ramda';
@@ -6,6 +6,8 @@ import { map } from 'ramda';
 import { Select } from 'components/common/Select';
 
 import type { SelectItemType } from 'types';
+
+import t from './i18n';
 
 type StateType = {
   currency: SelectItemType,
@@ -50,7 +52,7 @@ class CurrencySelect extends Component<PropsType, StateType> {
       <Select
         forForm
         fullWidth
-        label="Currency"
+        label={t.labelCurrency}
         items={currencies}
         activeItem={currency}
         onSelect={this.handleOnChange}
