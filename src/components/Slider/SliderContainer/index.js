@@ -4,11 +4,9 @@ import React, { Component, Children, cloneElement } from 'react';
 import classNames from 'classnames';
 import type { Node } from 'react';
 
-import { SliderHeader } from 'components/Slider';
+import { SliderHeader, SliderArrows } from 'components/Slider';
 
-import handlerSlide from './handlerSlidesDecorator';
-
-import { SliderArrows } from './index';
+import handlerSlide from '../handlerSlidesDecorator';
 
 import './SliderContainer.scss';
 
@@ -42,6 +40,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
   state = {
     current: 1,
   };
+
   handleClick = (direction: string): void => {
     const { handleSlide } = this.props;
     let { current } = this.state;
@@ -56,6 +55,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
     }
     this.setState({ current });
   };
+  
   render() {
     const {
       type,

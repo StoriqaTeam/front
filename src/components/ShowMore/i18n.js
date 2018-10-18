@@ -14,7 +14,7 @@ const translations: TranslationsBundleType = {
   en: {
     showLess: 'Show Less',
     showMore: 'Show More',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

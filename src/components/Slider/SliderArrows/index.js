@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Fragment } from 'react';
 
@@ -7,7 +7,7 @@ import { Icon } from 'components/Icon';
 import './SliderArrows.scss';
 
 type PropsType = {
-  onClick: string => any,
+  onClick: string => void,
 };
 
 const SliderArrows = ({ onClick }: PropsType) => (

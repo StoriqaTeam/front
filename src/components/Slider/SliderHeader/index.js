@@ -1,4 +1,7 @@
+// @flow strict
+
 import React, { PureComponent } from 'react';
+import { isNil } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -7,7 +10,7 @@ import './SliderHeader.scss';
 type PropsTypes = {
   title: string,
   isRevealButton: boolean,
-  handleSlide: Function,
+  handleSlide: string => void,
   seeAllUrl: ?string,
 };
 
@@ -25,18 +28,18 @@ class SliderHeader extends PureComponent<PropsTypes> {
               styleName="button"
               onClick={() => handleSlide('prev')}
             >
-              <Icon type="prev" size="32" />
+              <Icon type="prev" size={32} />
             </button>
             <button
               direction="next"
               styleName="button"
               onClick={() => handleSlide('next')}
             >
-              <Icon type="next" size="32" />
+              <Icon type="next" size={32} />
             </button>
           </div>
         )}
-        {seeAllUrl && (
+        {!isNil(seeAllUrl) && (
           <a styleName="reveal" href={seeAllUrl} data-test="seeAllLink">
             See all
           </a>
