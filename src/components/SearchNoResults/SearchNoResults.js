@@ -21,9 +21,9 @@ const SearchNoResults = (props: PropsType) => (
         /* eslint-enable */
         __html: `${t.sorryButNotResults}${
           !isNil(props.value)
-            ? ` ${t.for} ‘<strong>${
-                props.value
-              }</strong>’. ${t.checkYourSearch}`
+            ? ` ${t.for} ‘<strong>${props.value}</strong>’. ${
+                t.checkYourSearch
+              }`
             : ''
         }.`,
       }}

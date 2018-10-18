@@ -5,19 +5,16 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  sorryButNotResults: string,
-  for: string,
-  checkYourSearch: string,
+  showLess: string,
+  showMore: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    sorryButNotResults: 'Sorry, but no results',
-    for: 'for',
-    checkYourSearch:
-      'Check your search request for mistakes or try to find somethind else.',
-  },
+    showLess: 'Show Less',
+    showMore: 'Show More',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
