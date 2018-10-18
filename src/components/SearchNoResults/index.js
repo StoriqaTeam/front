@@ -1,2 +1,2 @@
-// eslint-disable-next-line
+// @flow strict
 export { default as SearchNoResults } from './SearchNoResults';

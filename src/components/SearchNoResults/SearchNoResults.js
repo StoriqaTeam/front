@@ -1,11 +1,13 @@
-import React from 'react';
+// @flow strict
 
+import React from 'react';
+import { isNil } from 'ramda'
 import { Icon } from 'components/Icon';
 
 import './SearchNoResults.scss';
 
 type PropsType = {
-  value: ?string,
+  value?: ?string,
 };
 
 const SearchNoResults = (props: PropsType) => (
@@ -16,7 +18,7 @@ const SearchNoResults = (props: PropsType) => (
       dangerouslySetInnerHTML={{
         /* eslint-enable */
         __html: `Sorry, but no results${
-          props.value
+          !isNil(props.value)
             ? ` for ‘<strong>${
                 props.value
               }</strong>’. Check your search request for mistakes or try to find somethind else.`
@@ -26,5 +28,9 @@ const SearchNoResults = (props: PropsType) => (
     />
   </div>
 );
+
+SearchNoResults.defaultProps = {
+  value: null,
+};
 
 export default SearchNoResults;
