@@ -6,10 +6,13 @@ import { map, adjust, assoc, pipe, isNil, any } from 'ramda';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
-import { makeInput } from './utils';
-import './Authorization.scss';
+import { makeInput } from '../utils';
 
-import type { SignUpInputType, InputOnChangeType, ErrorsType } from './types';
+import '../Authorization.scss';
+
+import type { SignUpInputType, InputOnChangeType, ErrorsType } from '../types';
+
+import t from './i18n';
 
 type PropsType = {
   email: string,
@@ -30,18 +33,21 @@ class SignIn extends Component<PropsType, StateType> {
   state: StateType = {
     autocomplete: false,
   };
+
   setResendEmail = (input: SignUpInputType): SignUpInputType => {
     const { onResendEmail } = this.props;
     const errorsArray = input.errors;
     let showResendEmail = false;
     if (!isNil(errorsArray)) {
-      showResendEmail = any(i => i === 'Email not verified')(errorsArray);
+      showResendEmail = any(i => i === t.emailNotVerified)(errorsArray);
     }
     return { ...input, onResendEmail, showResendEmail };
   };
+
   handleCheckboxChange = (): void => {
     this.setState({ autocomplete: !this.state.autocomplete });
   };
+
   makeInputs = (): Array<SignUpInputType> => {
     const inputs: Array<string> = ['Email', 'Password'];
     const makeInputFn = map(makeInput(this.props));
@@ -50,6 +56,7 @@ class SignIn extends Component<PropsType, StateType> {
     const setNoHints = adjust(assoc('noPasswordHints', true), 1);
     return pipe(makeInputFn, setFocus, setResendEmail, setNoHints)(inputs);
   };
+  
   render() {
     const { formValid, onLoginClick, onRecoverPassword } = this.props;
     return (
@@ -66,7 +73,7 @@ class SignIn extends Component<PropsType, StateType> {
             role="button"
             tabIndex="-1"
           >
-            Forgot Password
+            {t.forgotPassword}
           </span>
         </div>
         {formValid && (
@@ -77,7 +84,7 @@ class SignIn extends Component<PropsType, StateType> {
                 type="button"
                 dataTest="signInButton"
               >
-                <span>Sign In</span>
+                <span> {t.signIn}</span>
               </Button>
             </div>
           </div>

@@ -34,11 +34,13 @@ class SignUp extends PureComponent<PropsType, StateType> {
     isPrivacyChecked: false,
     isTermsChecked: false,
   };
+
   handleCheck = (privacy: string): void => {
     this.setState((prevState: StateType) => ({
       [privacy]: !prevState[privacy],
     }));
   };
+
   makeInputs = (): Array<SignUpInputType> => {
     const inputs: Array<string> = [
       'First Name',
@@ -50,6 +52,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
     const setFocus = adjust(assoc('thisFocus', true), 0);
     return pipe(makeInputFn, setFocus)(inputs);
   };
+  
   render() {
     const { onRegistrationClick } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;

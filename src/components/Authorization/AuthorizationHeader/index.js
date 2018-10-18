@@ -21,7 +21,7 @@ class AuthorizationHeader extends Component<PropsType, {}> {
     const { onClick } = this.props;
     onClick(name, selected);
   };
-  
+
   render() {
     const { tabs, selected, fullWidth } = this.props;
     return (
