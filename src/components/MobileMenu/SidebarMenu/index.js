@@ -11,6 +11,8 @@ import type { TransformedCategoryType } from 'types';
 
 import './SidebarMenu.scss';
 
+import t from './i18n';
+
 type PropsType = {
   categories: ?Array<TransformedCategoryType>,
   onClose: () => void,
@@ -53,7 +55,7 @@ class SidebarMenu extends Component<PropsType, StateType> {
           toggled2: isOpen,
         })}
       >
-        <h2 styleName="offscreen">Sidebar Menu</h2>
+        <h2 styleName="offscreen">{t.offscreenSidebarMenu}</h2>
         <nav>
           <header styleName="header">
             <span

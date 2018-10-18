@@ -8,7 +8,7 @@ type ItemType = { id: string, label: string };
 
 type PropsType = {
   items: Array<ItemType>,
-  onClick: (ItemType) => void,
+  onClick: ItemType => void,
   idName: string,
 };
 
