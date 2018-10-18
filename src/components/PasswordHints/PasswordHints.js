@@ -25,7 +25,9 @@ const PasswordHints = (props: PropTypes) => {
           {t.oneUpperCaseCharacter}
         </li>
         <li styleName={digit ? 'valid' : 'list-item'}>{t.oneNumber}</li>
-        <li styleName={length ? 'valid' : 'list-item'}>{t.eightCharactersMinimun}</li>
+        <li styleName={length ? 'valid' : 'list-item'}>
+          {t.eightCharactersMinimun}
+        </li>
       </ul>
     </aside>
   );

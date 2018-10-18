@@ -5,19 +5,13 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  oneLowerCaseCharacter: string,
-  oneUpperCaseCharacter: string,
-  oneNumber: string,
-  eightCharactersMinimun: string,
+  iFind: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    oneLowerCaseCharacter: 'One lower case character',
-    oneUpperCaseCharacter: 'One upper case character',
-    oneNumber: 'One number',
-    eightCharactersMinimun: '8 characters minimum',
+    iFind: 'I find...',
   },
 };
 

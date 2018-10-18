@@ -23,6 +23,8 @@ import { urlToInput, inputToUrl } from 'utils';
 
 import './SearchInput.scss';
 
+import t from './i18n';
+
 type PropsType = {
   items: ?Array<any>,
   searchCategories: ?Array<{ id: string, label: string }>,
@@ -190,7 +192,7 @@ class SearchInput extends Component<PropsType, StateType> {
                   styleName="input"
                   onFocus={this.onFocus}
                   onBlur={this.onBlur}
-                  placeholder="I find..."
+                  placeholder={t.iFind}
                   data-test="searchInput"
                 />
               </div>
