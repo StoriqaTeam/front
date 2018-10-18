@@ -5,14 +5,14 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  cashback: string
+  cashback: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
     cashback: 'Cashback',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
