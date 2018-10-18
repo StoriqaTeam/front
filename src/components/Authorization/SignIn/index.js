@@ -56,7 +56,7 @@ class SignIn extends Component<PropsType, StateType> {
     const setNoHints = adjust(assoc('noPasswordHints', true), 1);
     return pipe(makeInputFn, setFocus, setResendEmail, setNoHints)(inputs);
   };
-  
+
   render() {
     const { formValid, onLoginClick, onRecoverPassword } = this.props;
     return (

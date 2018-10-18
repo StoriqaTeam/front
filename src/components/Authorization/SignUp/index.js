@@ -4,14 +4,15 @@ import React, { Fragment, PureComponent } from 'react';
 import { map, adjust, pipe, assoc } from 'ramda';
 
 import { Button } from 'components/common/Button';
-import { Input } from 'components/Authorization';
+import { Input, Policy } from 'components/Authorization';
 
-import { Policy } from './index';
-import { makeInput } from './utils';
+import { makeInput } from '../utils';
 
-import './Authorization.scss';
+import '../Authorization.scss';
 
-import type { SignUpInputType, InputOnChangeType, ErrorsType } from './types';
+import t from './i18n';
+
+import type { SignUpInputType, InputOnChangeType, ErrorsType } from '../types';
 
 type PropsType = {
   email: string,
@@ -52,7 +53,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
     const setFocus = adjust(assoc('thisFocus', true), 0);
     return pipe(makeInputFn, setFocus)(inputs);
   };
-  
+
   render() {
     const { onRegistrationClick } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;
@@ -77,7 +78,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
               disabled={!(isPrivacyChecked && isTermsChecked)}
               fullWidth
             >
-              <span>Sign Up</span>
+              <span>{t.signUp}</span>
             </Button>
           </div>
         </Fragment>
