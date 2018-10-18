@@ -5,14 +5,20 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  uploadPhoto: string,
+  oneLowerCaseCharacter: string,
+  oneUpperCaseCharacter: string,
+  oneNumber: string,
+  eightCharactersMinimun: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    uploadPhoto: 'Upload Photo',
-  },
+    oneLowerCaseCharacter: 'One lower case character',
+    oneUpperCaseCharacter: 'One upper case character',
+    oneNumber: 'One number',
+    eightCharactersMinimun: '8 characters minimum',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
