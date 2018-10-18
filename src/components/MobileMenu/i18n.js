@@ -5,14 +5,14 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  offscreenSidebarMenu: string,
+  title: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    offscreenSidebarMenu: 'Sidebar Menu',
-  },
+    title: 'Categories',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
