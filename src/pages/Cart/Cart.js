@@ -44,18 +44,19 @@ type StateType = {
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      storesRef: null,
-      totals: {},
-      priceUsd: null,
-    };
+  state = {
+    storesRef: null,
+    totals: {},
+    priceUsd: null,
+  };
+
+  componentDidMount() {
+    this.isMount = true;
     axios
       .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
       .then(({ data }) => {
         const dataObj = head(data);
-        if (dataObj) {
+        if (dataObj && this.isMount) {
           this.setState({ priceUsd: Number(dataObj.price_usd) });
         }
       })
@@ -65,6 +66,7 @@ class Cart extends Component<PropsType, StateType> {
   }
 
   componentWillUnmount() {
+    this.isMount = false;
     if (this.dispose) {
       this.dispose();
     }
@@ -78,6 +80,7 @@ class Cart extends Component<PropsType, StateType> {
 
   storesRef: any;
   dispose: () => void;
+  isMount = false;
 
   totalsForStore(id: string) {
     return (

@@ -31,16 +31,17 @@ type PropsType = {
 };
 
 class SearchContent extends Component<PropsType, StateType> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      priceUsd: null,
-    };
+  state = {
+    priceUsd: null,
+  };
+
+  componentDidMount() {
+    this.isMount = true;
     axios
       .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
       .then(({ data }) => {
         const dataObj = head(data);
-        if (dataObj) {
+        if (dataObj && this.isMount) {
           this.setState({ priceUsd: Number(dataObj.price_usd) });
         }
       })
@@ -48,6 +49,12 @@ class SearchContent extends Component<PropsType, StateType> {
         log.debug(error);
       });
   }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  isMount = false;
 
   productsRefetch = (): void => {
     const { relay, productsPerRequest } = this.props;

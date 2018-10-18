@@ -31,18 +31,19 @@ type StateType = {
 
 // eslint-disable-next-line
 class StoreItems extends Component<PropsType, StateType> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      autocompleteValue: '',
-      autocompleteItems: [],
-      priceUsd: null,
-    };
+  state = {
+    autocompleteValue: '',
+    autocompleteItems: [],
+    priceUsd: null,
+  };
+
+  componentDidMount() {
+    this.isMount = true;
     axios
       .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
       .then(({ data }) => {
         const dataObj = head(data);
-        if (dataObj) {
+        if (dataObj && this.isMount) {
           this.setState({ priceUsd: Number(dataObj.price_usd) });
         }
       })
@@ -50,6 +51,12 @@ class StoreItems extends Component<PropsType, StateType> {
         log.debug(error);
       });
   }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  isMount = false;
 
   productsRefetch = () => {
     const { autocompleteValue } = this.state;

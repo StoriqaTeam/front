@@ -30,16 +30,17 @@ type PropsTypes = {
 };
 
 class Start extends Component<PropsTypes, StateTypes> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      priceUsd: null,
-    };
+  state = {
+    priceUsd: null,
+  };
+
+  componentDidMount() {
+    this.isMount = true;
     axios
       .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
       .then(({ data }) => {
         const dataObj = head(data);
-        if (dataObj) {
+        if (dataObj && this.isMount) {
           this.setState({ priceUsd: Number(dataObj.price_usd) });
         }
       })
@@ -47,6 +48,12 @@ class Start extends Component<PropsTypes, StateTypes> {
         log.debug(error);
       });
   }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  isMount = false;
 
   render() {
     const { mainPage } = this.props;
