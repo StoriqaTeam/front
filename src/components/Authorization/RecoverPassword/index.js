@@ -6,9 +6,11 @@ import { isNil, propOr } from 'ramda';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
-import './Authorization.scss';
+import '../Authorization.scss';
 
-import type { InputOnChangeType, ErrorsType } from './types';
+import type { InputOnChangeType, ErrorsType } from '../types';
+
+import t from './i18n';
 
 type PropsType = {
   email: string,
@@ -28,10 +30,13 @@ class RecoverPassword extends Component<PropsType, StateType> {
   static defaultProps = {
     onBlur: () => {},
   };
+
   state: StateType = {
     autocomplete: false,
   };
+
   handleClick = () => {};
+  
   render() {
     const {
       email,
@@ -48,7 +53,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
         <div styleName="inputBlock">
           <Input
             thisFocus
-            label="Email"
+            label={t.labelEmail}
             name="email"
             type="email"
             model={email}
@@ -66,7 +71,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
             onClick={onBack}
             dataTest="recoverPasswordButtonBack"
           >
-            Back
+            {t.back}
           </Button>
           <Button
             onClick={onClick}
@@ -74,7 +79,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
             disabled={!formValid}
             dataTest="recoverPasswordButtonSendEmail"
           >
-            Send Email
+            {t.sendEmail}
           </Button>
         </div>
       </div>

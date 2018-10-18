@@ -5,15 +5,18 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  signInWithFacebook: string,
-  signInWithGoogle: string,
+  labelEmail: string,
+  back: string,
+  sendEmail: string,
 |};
+
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    signInWithFacebook: 'Sign in with Facebook',
-    signInWithGoogle: 'Sign in with Google',
+    labelEmail: 'Email',
+    back: 'Back',
+    sendEmail: 'Send Email',
   },
 };
 
