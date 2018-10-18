@@ -5,19 +5,21 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  labelEmail: string,
-  back: string,
-  sendEmail: string,
+  labelNewPassword: string,
+  labelRepeatPassword: string,
+  submitNewPassword: string,
+  errorNotMatch: string,
 |};
 
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    labelEmail: 'Email',
-    back: 'Back',
-    sendEmail: 'Send Email',
-  },
+    labelNewPassword: 'New Password',
+    labelRepeatPassword: 'New Password Again',
+    submitNewPassword: 'Submit New Password',
+    errorNotMatch: 'Not Match',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

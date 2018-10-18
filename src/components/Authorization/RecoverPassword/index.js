@@ -36,7 +36,7 @@ class RecoverPassword extends Component<PropsType, StateType> {
   };
 
   handleClick = () => {};
-  
+
   render() {
     const {
       email,

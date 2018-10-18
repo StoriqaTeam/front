@@ -6,9 +6,11 @@ import { propOr, isNil } from 'ramda';
 import { Button } from 'components/common/Button';
 import { Input } from 'components/Authorization';
 
-import './Authorization.scss';
+import '../Authorization.scss';
 
-import type { InputOnChangeType, ErrorsType } from './types';
+import type { InputOnChangeType, ErrorsType } from '../types';
+
+import t from './i18n';
 
 type PropsType = {
   password: string,
@@ -28,6 +30,7 @@ class ResetPassword extends Component<PropsType, StateType> {
   state: StateType = {
     autocomplete: false,
   };
+
   render() {
     const {
       password,
@@ -44,7 +47,7 @@ class ResetPassword extends Component<PropsType, StateType> {
       <div styleName="signIn">
         <div styleName="inputBlock">
           <Input
-            label="New Password"
+            label={t.labelNewPassword}
             name="password"
             type="password"
             model={password}
@@ -56,19 +59,19 @@ class ResetPassword extends Component<PropsType, StateType> {
         </div>
         <div styleName="inputBlock">
           <Input
-            label="New Password again"
+            label={t.labelRepeatPassword}
             name="passwordRepeat"
             type="password"
             model={passwordRepeat}
             validate="password"
             onChange={onPasswordRepeat}
             autocomplete={autocomplete}
-            errors={password === passwordRepeat ? null : ['Not Match']}
+            errors={password === passwordRepeat ? null : [t.errorNotMatch]}
           />
         </div>
         <div styleName="recoverPasswordButtons">
           <Button onClick={onClick} big disabled={!formValid}>
-            Submit New Password
+            {t.submitNewPassword}
           </Button>
         </div>
       </div>
