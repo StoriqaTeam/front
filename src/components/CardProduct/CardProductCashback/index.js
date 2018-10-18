@@ -1,9 +1,11 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import classNames from 'classnames';
 
 import './CardProductCashback.scss';
+
+import t from './i18n';
 
 type PropsType = {
   cashbackValue: string | number,
@@ -16,7 +18,7 @@ const CardProductCashback = ({ cashbackValue }: PropsType) => (
         noneCashback: !cashbackValue,
       })}
     >
-      <b>Cashback</b>
+      <b>{t.cashback}</b>
       <b styleName="value">{`${cashbackValue || 0}%`}</b>
     </div>
   </div>
