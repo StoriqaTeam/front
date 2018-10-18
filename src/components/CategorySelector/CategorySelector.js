@@ -10,6 +10,8 @@ import LevelList from './LevelList';
 
 import './CategorySelector.scss';
 
+import t from './i18n';
+
 type NameType = {
   lang: string,
   text: string,
@@ -184,7 +186,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="wrapper">
-          <div styleName="label">Category</div>
+          <div styleName="label">{t.category}</div>
           <div
             styleName="breadcrumbsWrapper"
             ref={node => {
@@ -207,7 +209,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
               <div styleName="levelWrapper">
                 <div styleName="level">
                   <Fragment>
-                    <div styleName="levelLabel">Categories</div>
+                    <div styleName="levelLabel">{t.categories}</div>
                     <LevelList
                       items={categories.children}
                       lang={lang}
