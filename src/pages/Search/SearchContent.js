@@ -1,12 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import { map, pathOr, isEmpty } from 'ramda';
+import { map, pathOr, isEmpty, head } from 'ramda';
 import classNames from 'classnames';
 import { withRouter, routerShape } from 'found';
 import { Relay } from 'react-relay';
+import axios from 'axios';
 
-import { flattenFunc, getNameText, searchPathByParent } from 'utils';
+import { flattenFunc, getNameText, searchPathByParent, log } from 'utils';
 import { Button } from 'components/common/Button';
 import { CardProduct } from 'components/CardProduct';
 import { Icon } from 'components/Icon';
@@ -15,6 +16,10 @@ import { SearchNoResults } from 'components/SearchNoResults';
 import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
 
 import './SearchContent.scss';
+
+type StateType = {
+  priceUsd: ?number,
+};
 
 type PropsType = {
   router: routerShape,
@@ -25,7 +30,25 @@ type PropsType = {
   onFilterMenu: () => void,
 };
 
-class SearchContent extends Component<PropsType> {
+class SearchContent extends Component<PropsType, StateType> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      priceUsd: null,
+    };
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+  }
+
   productsRefetch = (): void => {
     const { relay, productsPerRequest } = this.props;
     relay.loadMore(productsPerRequest);
@@ -103,6 +126,7 @@ class SearchContent extends Component<PropsType> {
   };
   render() {
     const { relay, onFilterMenu } = this.props;
+    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const productsWithVariants = map(item => item.node, products);
@@ -126,7 +150,7 @@ class SearchContent extends Component<PropsType> {
             map(
               item => (
                 <div key={item.id} styleName="cardWrapper">
-                  <CardProduct item={item} isSearchPage />
+                  <CardProduct item={{ ...item, priceUsd }} isSearchPage />
                 </div>
               ),
               productsWithVariants,

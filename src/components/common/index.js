@@ -8,3 +8,4 @@ export { default as Button } from './Button/Button';
 export { default as Checkbox } from './Checkbox/Checkbox';
 export { default as RadioButton } from './RadioButton/RadioButton';
 export { default as SpinnerCircle } from './SpinnerCircle/SpinnerCircle';
+export { default as CurrencyPrice } from './CurrencyPrice/CurrencyPrice';

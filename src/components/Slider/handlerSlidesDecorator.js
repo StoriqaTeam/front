@@ -10,6 +10,7 @@ import {
   propEq,
   findIndex,
   concat,
+  equals,
 } from 'ramda';
 
 type PropsType = {
@@ -66,9 +67,11 @@ export default (OriginalComponent: any) =>
     }
 
     componentWillReceiveProps(nextProps: PropsType) {
+      const { children } = this.props;
       if (
-        this.props.children &&
-        this.props.children.length !== nextProps.children.length
+        children &&
+        (children.length !== nextProps.children.length ||
+          equals(children) !== equals(nextProps.children))
       ) {
         this.sliderPropsCalc(nextProps.children);
       }

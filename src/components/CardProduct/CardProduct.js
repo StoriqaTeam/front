@@ -5,6 +5,7 @@ import { Link } from 'found';
 import { head } from 'ramda';
 import classNames from 'classnames';
 
+import { CurrencyPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
@@ -40,6 +41,7 @@ type PropsType = {
       }>,
     },
     rating: number,
+    priceUsd: ?number,
   },
   isSearchPage: boolean,
 };
@@ -47,7 +49,7 @@ type PropsType = {
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: { rawId, storeId, name, products, currency, rating },
+      item: { rawId, storeId, name, products, currency, rating, priceUsd },
       isSearchPage,
     } = this.props;
     let discount = null;
@@ -117,6 +119,14 @@ class CardProduct extends PureComponent<PropsType> {
                           priceItem.currencyCode
                         }`}
                       </div>
+                      {priceUsd && (
+                        <CurrencyPrice
+                          price={priceItem.price || 0}
+                          currencyPrice={priceUsd}
+                          currencyCode="USD"
+                          toFixedValue={2}
+                        />
+                      )}
                     </div>
                   )}
                   renderDropdown={(

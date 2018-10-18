@@ -1,8 +1,11 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { isEmpty, map, pathOr } from 'ramda';
+import { head, isEmpty, map, pathOr } from 'ramda';
+import axios from 'axios';
+
+import { log } from 'utils';
 
 import { GoodsSlider } from 'components/GoodsSlider';
 import { SearchNoResults } from 'components/SearchNoResults';
@@ -11,13 +14,36 @@ import type { Showcase_shop as ShowcaseShopType } from './__generated__/Showcase
 
 import './Showcase.scss';
 
+type StateType = {
+  priceUsd: ?number,
+};
+
 type PropsType = {
   shop: ShowcaseShopType,
 };
 
-class Showcase extends PureComponent<PropsType> {
+class Showcase extends Component<PropsType, StateType> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      priceUsd: null,
+    };
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+  }
+
   render() {
     const { shop } = this.props;
+    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -30,8 +56,14 @@ class Showcase extends PureComponent<PropsType> {
       ['findMostDiscountProducts', 'edges'],
       shop,
     );
-    const discountProducts = map(item => item.node, mostDiscountProducts);
-    const viewedProducts = map(item => item.node, mostViewedProducts);
+    const discountProducts = map(
+      item => ({ ...item.node, priceUsd }),
+      mostDiscountProducts,
+    );
+    const viewedProducts = map(
+      item => ({ ...item.node, priceUsd }),
+      mostViewedProducts,
+    );
     return (
       <div styleName="container">
         {viewedProducts &&

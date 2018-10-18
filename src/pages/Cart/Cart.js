@@ -4,12 +4,14 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
+import { pipe, pathOr, path, map, prop, isEmpty, head } from 'ramda';
 import { routerShape, withRouter } from 'found';
+import axios from 'axios';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { StickyBar } from 'components/StickyBar';
+import { log } from 'utils';
 
 import CartStore from './CartStore';
 import CartEmpty from './CartEmpty';
@@ -37,14 +39,30 @@ type Totals = {
 type StateType = {
   storesRef: ?Object,
   totals: Totals,
+  priceUsd: ?number,
 };
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
-  state = {
-    storesRef: null,
-    totals: {},
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      storesRef: null,
+      totals: {},
+      priceUsd: null,
+    };
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+  }
 
   componentWillUnmount() {
     if (this.dispose) {
@@ -83,6 +101,7 @@ class Cart extends Component<PropsType, StateType> {
     const {
       cart: { totalCount },
     } = this.props;
+    const { priceUsd } = this.state;
     const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
       <div styleName="container">
@@ -110,6 +129,7 @@ class Cart extends Component<PropsType, StateType> {
                               store={store}
                               totals={this.totalsForStore(store.__id)}
                               isOpenInfo
+                              priceUsd={priceUsd}
                             />
                           ))}
                         </div>
@@ -124,6 +144,7 @@ class Cart extends Component<PropsType, StateType> {
                             buttonText="Checkout"
                             onClick={this.handleToCheckout}
                             isReadyToClick={totalCount > 0}
+                            priceUsd={priceUsd}
                           />
                         </StickyBar>
                       </div>
