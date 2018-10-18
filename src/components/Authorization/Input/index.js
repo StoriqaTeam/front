@@ -11,7 +11,10 @@ import { Icon } from 'components/Icon';
 import { log } from 'utils';
 
 import './Input.scss';
-import { validateField, isCapsLock } from './utils';
+
+import { validateField, isCapsLock } from '../utils';
+
+import t from './i18n';
 
 type PropsType = {
   label: string,
@@ -327,7 +330,7 @@ class Input extends PureComponent<PropsType, StateType> {
                   role="button"
                   onClick={onResendEmail}
                 >
-                  Resend verification Email
+                  {t.resendVerificationEmail}
                 </span>
               ) : null}
             </div>

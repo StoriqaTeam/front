@@ -5,22 +5,14 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  labelFirstName: string,
-  labelLastName: string,
-  labelEmail: string,
-  labelPassword: string,
-  signUp: string,
+  resendVerificationEmail: string,
 |};
 
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    labelFirstName: 'First Name',
-    labelLastName: 'Last Name',
-    labelEmail: 'Email',
-    labelPassword: 'Password',
-    signUp: 'Sign Up',
+    resendVerificationEmail: 'Resend verification Email',
   },
 };
 
