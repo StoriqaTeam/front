@@ -19,7 +19,7 @@ const translations: TranslationsBundleType = {
     labelRepeatPassword: 'New Password Again',
     submitNewPassword: 'Submit New Password',
     errorNotMatch: 'Not Match',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

@@ -16,10 +16,12 @@ class AuthorizationHeader extends Component<PropsType, {}> {
   static defaultProps = {
     fullWidth: false,
   };
+
   handleClick = (name: string, selected: number): void => {
     const { onClick } = this.props;
     onClick(name, selected);
   };
+  
   render() {
     const { tabs, selected, fullWidth } = this.props;
     return (
