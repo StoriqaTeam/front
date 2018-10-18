@@ -7,7 +7,9 @@ import { convertSrc } from 'utils';
 
 import { Icon } from 'components/Icon';
 
-import './UserDropdown.scss';
+import '../UserDropdown.scss';
+
+import t from './i18n';
 
 type PropsTypes = {
   lastName: ?string,
@@ -57,21 +59,21 @@ const ProfileMenu = ({
         styleName="item"
         data-test="header-user-menu-profileOrdersLink"
       >
-        Orders
+        {t.orders}
       </Link>
       <Link
         to="/profile"
         styleName="item"
         data-test="header-user-menu-profileLink"
       >
-        Profile settings
+        {t.profileSettings}
       </Link>
       <Link
         to={getStoreLink(myStoreId)}
         styleName="item"
         data-test="header-user-menu-myShops"
       >
-        <span>{myStoreId ? 'My shop' : 'Start selling'}</span>
+        <span>{myStoreId ? t.myShop : t.startSelling}</span>
       </Link>
     </div>
     <Link
@@ -80,7 +82,7 @@ const ProfileMenu = ({
       data-test="header-user-menu-logoutLink"
     >
       <Icon inline type="logout" size={24} />
-      <span styleName="logoutText">Logout</span>
+      <span styleName="logoutText">{t.logout}</span>
     </Link>
   </div>
 );

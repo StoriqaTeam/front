@@ -5,15 +5,21 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  seeAll: string,
-  recommendationSettings: string,
+  orders: string,
+  profileSettings: string,
+  myShop: string,
+  startSelling: string,
+  logout: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    seeAll: 'See All',
-    recommendationSettings: 'Recommendations settings',
+    orders: 'Orders',
+    profileSettings: 'Profile Settings',
+    myShop: 'My Shop',
+    startSelling: 'Start Selling',
+    logout: 'Logout',
   },
 };
 
