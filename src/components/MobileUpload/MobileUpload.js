@@ -5,6 +5,8 @@ import { Icon } from 'components/Icon';
 
 import './MobileUpload.scss';
 
+import t from './i18n';
+
 type PropsType = {
   onUpload: (e: any) => void,
   onDelete: (e: any) => void,
@@ -44,7 +46,7 @@ const MobileUpload = ({
       </figure>
     )}
     <label htmlFor={id} styleName="upload" data-test={dataTest}>
-      Upload Photo
+      {t.uploadPhoto}
     </label>
     {!disabled && (
       <input

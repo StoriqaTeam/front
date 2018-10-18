@@ -5,14 +5,14 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  title: string,
+  uploadPhoto: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    title: 'Categories',
-  },
+    uploadPhoto: 'Upload Photo',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
