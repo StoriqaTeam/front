@@ -55,7 +55,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
     }
     this.setState({ current });
   };
-  
+
   render() {
     const {
       type,

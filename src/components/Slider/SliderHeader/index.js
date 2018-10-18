@@ -7,6 +7,8 @@ import { Icon } from 'components/Icon';
 
 import './SliderHeader.scss';
 
+import t from './i18n';
+
 type PropsTypes = {
   title: string,
   isRevealButton: boolean,
@@ -41,10 +43,10 @@ class SliderHeader extends PureComponent<PropsTypes> {
         )}
         {!isNil(seeAllUrl) && (
           <a styleName="reveal" href={seeAllUrl} data-test="seeAllLink">
-            See all
+            {t.seeAll}
           </a>
         )}
-        {false && <a styleName="settings">Recommendations settings</a>}
+        {false && <a styleName="settings">{t.recommendationSettings}</a>}
       </div>
     );
   }
