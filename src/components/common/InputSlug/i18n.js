@@ -20,7 +20,7 @@ const translations: TranslationsBundleType = {
     vacant: 'Vacant',
     oops: 'Oops! Someone has already using this address.',
     hoorah: 'Hoorah! Name is vacant!',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

@@ -165,9 +165,7 @@ class InputSlug extends Component<PropsType, StateType> {
                   red: storeSlugExists,
                 })}
               >
-                {storeSlugExists
-                  ? t.oops
-                  : t.hoorah}
+                {storeSlugExists ? t.oops : t.hoorah}
               </div>
             )}
         </div>
