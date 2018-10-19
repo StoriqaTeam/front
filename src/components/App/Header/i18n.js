@@ -16,8 +16,8 @@ const translations: TranslationsBundleType = {
   en: {
     cookiePolicy:
       'This website uses ‘cookies’ to give you best, most relevant experience. Using this website means you’re Ok with this. If you do not use cookies, you will not be able to access the website.',
-    searchCategory_products: 'Products',
-    searchCategory_shops: 'Shops',
+    searchCategory_products: 'products',
+    searchCategory_shops: 'shops',
   },
 };
 

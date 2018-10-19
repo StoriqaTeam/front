@@ -145,8 +145,8 @@ class Header extends Component<PropsType, StateType> {
       isMobileCategoriesOpen,
     } = this.state;
     const searchCategories = [
-      { id: t.searchCategory_products, label: t.searchCategory_products },
-      { id: t.searchCategory_shops, label: t.searchCategory_shops },
+      { id: 'products', label: t.searchCategory_products },
+      { id: 'stores', label: t.searchCategory_shops },
     ];
     const BurgerMenu = () => (
       <div

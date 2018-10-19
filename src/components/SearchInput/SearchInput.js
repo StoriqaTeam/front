@@ -132,7 +132,6 @@ class SearchInput extends Component<PropsType, StateType> {
 
     const newPreparedObj = assocPath(['name'], inputValue, oldPreparedObj);
     const newUrl = inputToUrl(newPreparedObj);
-
     switch (
       (selectedCategory && selectedCategory.id) || (activeItem && activeItem.id)
     ) {
