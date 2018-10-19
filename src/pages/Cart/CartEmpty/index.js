@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import { routerShape, withRouter } from 'found';
@@ -7,6 +7,8 @@ import { Icon } from 'components/Icon';
 import { Button } from 'components/common/Button';
 
 import './CartEmpty.scss';
+
+import t from './i18n';
 
 type PropsType = {
   router: routerShape,
@@ -25,12 +27,11 @@ class CartEmpty extends PureComponent<PropsType> {
             <Icon type="emptyCart" size={120} />
           </div>
           <div styleName="text">
-            Currently cart is empty.<br />Go to market and place some goods in
-            your cart.
+            {t.currentlyCartIsEmpty}<br />{t.goToMarketAndPlaceSomeGoods}
           </div>
           <div styleName="button">
             <Button big wireframe onClick={this.onClick}>
-              Go to market
+              {t.goToMarket}
             </Button>
           </div>
         </div>

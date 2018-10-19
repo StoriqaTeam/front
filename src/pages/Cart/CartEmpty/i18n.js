@@ -5,21 +5,17 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  orders: string,
-  profileSettings: string,
-  myShop: string,
-  startSelling: string,
-  logout: string,
+  currentlyCartIsEmpty: string,
+  goToMarketAndPlaceSomeGoods: string,
+  goToMarket: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    orders: 'Orders',
-    profileSettings: 'Profile Settings',
-    myShop: 'My Shop',
-    startSelling: 'Start Selling',
-    logout: 'Logout',
+    currentlyCartIsEmpty: 'Currently cart is empty.',
+    goToMarketAndPlaceSomeGoods: 'Go to market and place some goods in your cart.',
+    goToMarket: 'Go To Market',
   },
 };
 
