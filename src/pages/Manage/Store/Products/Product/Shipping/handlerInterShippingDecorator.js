@@ -13,8 +13,6 @@ import {
   addIndex,
 } from 'ramda';
 
-import type { SelectItemType } from 'types';
-
 import {
   getServiceLogo,
   convertInterAvailablePackages,
@@ -37,7 +35,6 @@ import type {
 
 type PropsType = {
   children?: Node,
-  currency: SelectItemType,
   interShipping: Array<ShippingType>,
   interAvailablePackages: Array<AvailablePackageType>,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
@@ -141,7 +138,11 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
                 packages: this.props.interAvailablePackages,
               }),
               service: service
-                ? { id: service.id, label: service.label }
+                ? {
+                    id: service.id,
+                    label: service.label,
+                    currency: service.currency,
+                  }
                 : null,
             };
             const newCompanies = map(
@@ -178,7 +179,11 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
                 packages: this.props.interAvailablePackages,
               }),
               service: service
-                ? { id: service.id, label: service.label }
+                ? {
+                    id: service.id,
+                    label: service.label,
+                    currency: service.currency,
+                  }
                 : null,
             };
             const newCompanies = prepend(newCompany, prevState.companies);
@@ -241,7 +246,7 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
     };
 
     makeCompany = (data: ShippingType, idx: number): FilledCompanyType => {
-      const { interAvailablePackages, currency } = this.props;
+      const { interAvailablePackages } = this.props;
       const service = getService({
         id: data.companyPackageId,
         packages: interAvailablePackages,
@@ -253,7 +258,6 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
           id: service && service.id,
           packages: interAvailablePackages,
         }),
-        currency,
         price: data.price,
         logo: getServiceLogo({
           id: service && service.id,
@@ -279,7 +283,6 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
 
     render() {
       const {
-        currency,
         error,
         interAvailablePackages,
         interShipping,
@@ -293,7 +296,6 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
       } = this.state;
       return (
         <OriginalComponent
-          currency={currency}
           error={error}
           companies={companies}
           editableItemId={editableItemId}

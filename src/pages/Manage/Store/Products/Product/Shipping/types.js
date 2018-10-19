@@ -24,12 +24,14 @@ export type ShippingCountriesType = {
 export type ServiceType = {
   id: string,
   label: string,
+  currency: SelectItemType,
   countries?: ?ShippingCountriesType,
 };
 
 export type InterServiceType = {
   id: string,
   label: string,
+  currency: SelectItemType,
   countries: ?ShippingCountriesType,
 };
 
@@ -38,7 +40,6 @@ export type CompanyType = {
   logo?: string,
   service: ?ServiceType,
   price: ?number,
-  currency: SelectItemType,
   countries?: ShippingCountriesType,
 };
 
@@ -48,7 +49,6 @@ export type FilledCompanyType = {
   logo: string,
   service: ?ServiceType,
   price: ?number,
-  currency: SelectItemType,
   countries?: ?ShippingCountriesType,
 };
 
@@ -70,11 +70,13 @@ export type RequestInterShippingType = {
 };
 
 export type AvailablePackageType = {
+  id: string,
   companyPackageId: string,
   companyPackageRawId: number,
   name: string,
   logo: string,
   deliveriesTo?: Array<ShippingCountriesType>,
+  currency: string,
 };
 
 export type PickupShippingType = {
