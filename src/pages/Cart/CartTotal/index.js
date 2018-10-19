@@ -6,9 +6,11 @@ import { pipe, values, reduce } from 'ramda';
 import { Checkbox } from 'components/common/Checkbox';
 import { formatPrice } from 'utils';
 
-import CartProductAttribute from './CartProductAttribute';
+import CartProductAttribute from '../CartProductAttribute';
 
 import './CartTotal.scss';
+
+import t from './i18n';
 
 const STICKY_THRESHOLD_REM = 90;
 
@@ -126,9 +128,9 @@ class CartTotal extends Component<PropsType, StateType> {
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
-          <div styleName="cart-total-title">Total</div>
+          <div styleName="cart-total-title">{t.total}</div>
           <div styleName="payments-container">
-            <div styleName="value">Payment methods</div>
+            <div styleName="value">{t.paymentMethods}</div>
             {/* <div styleName="payments-group">
               <div styleName="title">My cards</div>
               <div styleName="payment-option">
@@ -161,7 +163,7 @@ class CartTotal extends Component<PropsType, StateType> {
             </div> */}
 
             <div styleName="payments-group">
-              <div styleName="title">Crypto payments</div>
+              <div styleName="title">{t.cryptoPayments}</div>
               <div styleName="payment-option">
                 <div>
                   <Checkbox isChecked label="STQ" />
@@ -169,7 +171,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 <div styleName="payment-option-icon">
                   <img
                     // eslint-disable-next-line
-                    src={require('./png/stq.png')}
+                    src={require('../png/stq.png')}
                     alt="stq"
                   />
                 </div>
@@ -182,7 +184,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 <div styleName="payment-option-icon">
                   <img
                     // eslint-disable-next-line
-                    src={require('./png/btc.png')}
+                    src={require('../png/btc.png')}
                     alt="btc"
                   />
                 </div>
@@ -195,7 +197,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 <div styleName="payment-option-icon">
                   <img
                     // eslint-disable-next-line
-                    src={require('./png/eth.png')}
+                    src={require('../png/eth.png')}
                     alt="eth"
                   />
                 </div>
@@ -204,17 +206,17 @@ class CartTotal extends Component<PropsType, StateType> {
           </div>
           <div styleName="totals-container">
             <CartProductAttribute
-              title="Products cost"
+              title={t.productsCost}
               value={`${formatPrice(productsCost || 0)} STQ`}
             />
             <CartProductAttribute
-              title="Delivery cost"
+              title={t.deliveryCost}
               value={`${formatPrice(deliveryCost || 0)} STQ`}
             />
             <CartProductAttribute
               title={
                 <div>
-                  <span>Total</span>
+                  <span>{t.total}</span>
                   <span style={{ color: '#8fb62c' }}>
                     {` (${totalCount} items)`}
                   </span>
@@ -225,7 +227,7 @@ class CartTotal extends Component<PropsType, StateType> {
           </div>
           <div styleName="checkout">
             <Button id="cartTotalCheckout" disabled={!totalCount} big>
-              Checkout
+              {t.checkout}
             </Button>
           </div>
         </div>

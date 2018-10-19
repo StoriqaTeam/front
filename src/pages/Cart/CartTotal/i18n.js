@@ -5,13 +5,23 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  subtotal: string,
+  total: string,
+  paymentMethods: string,
+  cryptoPayments: string,
+  productsCost: string,
+  deliveryCost: string,
+  checkout: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    subtotal: 'Subtotal',
+    total: 'Total',
+    paymentMethods: 'Payment Methods',
+    cryptoPayments: 'Crypto Payments',
+    productsCost: 'Products Cost',
+    deliveryCost: 'Delivery Cost', 
+    checkout: 'Checkout',
   },
 };
 
