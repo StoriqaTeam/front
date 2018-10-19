@@ -112,7 +112,6 @@ class LocalShipping extends Component<PropsType, StateType> {
 
   render() {
     const {
-      currency,
       companies,
       editableItemId,
       remainingServices,
@@ -184,7 +183,6 @@ class LocalShipping extends Component<PropsType, StateType> {
                 })}
               >
                 <FixPriceForm
-                  currency={currency}
                   services={remainingServices}
                   onSaveCompany={onSaveCompany}
                 />
@@ -204,7 +202,6 @@ class LocalShipping extends Component<PropsType, StateType> {
                       <div styleName="editableForm">
                         <FixPriceForm
                           services={possibleServices}
-                          currency={item.currency}
                           company={item}
                           onSaveCompany={onSaveCompany}
                           onRemoveEditableItem={onRemoveEditableItem}
