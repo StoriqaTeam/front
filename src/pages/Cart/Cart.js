@@ -139,10 +139,6 @@ class Cart extends Component<PropsType, StateType> {
   }
 }
 
-Cart.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
-
 export default createPaginationContainer(
   withRouter(Page(Cart, true, true)),
   graphql`
