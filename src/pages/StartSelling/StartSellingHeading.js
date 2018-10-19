@@ -25,7 +25,7 @@ const StartSellingHeading = ({ router: { push }, lang }: PropsType) => (
             __html:
               lang === 'ru'
                 ? 'Прими участие в&nbsp;программе тестирования, чтобы привлечь покупателей из&nbsp;Сингапура!'
-                : 'Join the testing program and receive buyers from Singapore for&nbsp;free!',
+                : 'Join our community of&nbsp;sellers, and sell to&nbsp;buyers across the&nbsp;globe. Premium shop tools and rewards in&nbsp;crypto!',
           }}
         />
         <div styleName="titleSpacer" />
@@ -37,7 +37,7 @@ const StartSellingHeading = ({ router: { push }, lang }: PropsType) => (
             __html:
               lang === 'ru'
                 ? 'Первые 50&nbsp;магазинов получат до&nbsp;5&nbsp;000$ на&nbsp;промо их&nbsp;товаров в&nbsp;Юго&#8209;Восточной Азии.'
-                : 'First 50&nbsp;vendors get&nbsp;up to&nbsp;5&nbsp;000$ for&nbsp;their promo in&nbsp;Southeast&nbsp;Asia.',
+                : 'Act Now! FIrst 50 registered sellers get&nbsp;up to&nbsp;$5000 in&nbsp;credits to&nbsp;promote their shop online. ',
           }}
         />
         <div styleName="button">
