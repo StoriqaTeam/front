@@ -233,6 +233,30 @@ const routes = (
           Component={ProductCard}
           query={graphql`
             query routes_ProductCard_Query($productID: Int!) {
+              me {
+                id
+                rawId
+                phone
+                firstName
+                lastName
+                deliveryAddressesFull {
+                  id
+                  address {
+                    country
+                    countryCode
+                    value
+                    administrativeAreaLevel1
+                    administrativeAreaLevel2
+                    locality
+                    political
+                    postalCode
+                    route
+                    streetNumber
+                    placeId
+                  }
+                  isPriority
+                }
+              }
               baseProduct(id: $productID) {
                 ...Product_baseProduct
               }

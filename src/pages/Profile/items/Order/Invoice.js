@@ -14,6 +14,10 @@ type PropsType = {
 };
 
 class Invoice extends PureComponent<PropsType> {
+  componentDidMount() {
+    window.scroll({ top: 0 });
+  }
+
   render() {
     // $FlowIgnoreMe
     const invoiceId = pathOr(null, ['order', 'invoice', 'id'], this.props.me);
