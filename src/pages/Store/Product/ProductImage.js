@@ -105,7 +105,7 @@ class ProductImage extends Component<PropsType, StateType> {
           <figure styleName="image">
             {!isSquared && !isNil(photoMain) ? (
               <img
-                src={convertSrc(selected || photoMain, 'medium')}
+                src={convertSrc(selected || photoMain, 'large')}
                 alt=""
                 styleName="imageBlur"
               />
@@ -117,8 +117,8 @@ class ProductImage extends Component<PropsType, StateType> {
                 style={{
                   backgroundImage: `url(${
                     !isEmpty(selected)
-                      ? convertSrc(selected, 'medium')
-                      : convertSrc(photoMain, 'medium')
+                      ? convertSrc(selected, 'large')
+                      : convertSrc(photoMain, 'large')
                   })`,
                   backgroundSize: 'contain',
                   backgroundPosition: `${isSquared ? 'center top' : 'center'}`,

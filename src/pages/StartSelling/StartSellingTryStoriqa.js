@@ -16,20 +16,20 @@ const itemsEn: Array<{ id: string, title: string, text: string }> = [
     id: '1',
     title: 'Personal manager',
     text:
-      'We will provide you with the personal account manager that will help you to&nbsp;make a&nbsp;high quality description for your items answer all of&nbsp;your questions and support you on&nbsp;every step.',
+      'We provide you with a&nbsp;personal manager that will help you craft high quality item descriptions as well as answer all of&nbsp;your questions to&nbsp;support you every step of&nbsp;the&nbsp;way.',
   },
   {
     id: '2',
-    title: 'Payments both in cryptocurrency and fiat',
+    title: 'Payments in both cryptocurrency and fiat',
     text:
-      'Did you know that hundreds of&nbsp;crypto holders are ready to&nbsp;use&nbsp;them as the&nbsp;real paying currency? We will give the manufacturers the opportunity to&nbsp;receive their revenue in&nbsp;STQ, BTC, ETH and other popular cryptocurrencies. More of&nbsp;that, standard fiat currencies such as&nbsp;USD, SGD or&nbsp;RUR would also be available for special items categories.',
+      'Did you know? Hundreds of&nbsp;crypto holders are ready to&nbsp;use crypto as a&nbsp;preferred method to&nbsp;traditional currency? We give the&nbsp;manufacturers the&nbsp;opportunity to&nbsp;receive their revenue in&nbsp;STQ, BTC, ETH, and other popular cryptocurrencies. Traditional payment forms such as&nbsp;USD, SGD, or&nbsp;RUR are available in&nbsp;select product lines.',
   },
   {
     id: '3',
     title:
-      '3 months free product support and promotion.<br />You give us feedback&nbsp;— we give you clients',
+      '3 months free of&nbsp;promotional credits and&nbsp;product support.<br />Seller Feedback is prioritized and gets rewawded in&nbsp;credits!',
     text:
-      'Do you have a selling channel paid by the information? During the limited period our first sellers will use our services for free. All you need to&nbsp;do is give us feedback and spend 30&nbsp;minutes a&nbsp;day.',
+      'We incentivize seller feedback, if&nbsp;you take the&nbsp;time to&nbsp;provide&nbsp;us input into your seller experiance you are rewarded with credits that you are able to&nbsp;use to&nbsp;list products for&nbsp;free.',
   },
 ];
 
@@ -49,7 +49,7 @@ const itemsRu: Array<{ id: string, title: string, text: string }> = [
   {
     id: '3',
     title:
-      '3 месяца бесплатно.<br />Мы вам новых клиентов&nbsp;— вы&nbsp;нам обратную связь',
+      '3 месяца бесплатно. Мы вам новых клиентов&nbsp;— вы&nbsp;нам обратную связь',
     text:
       'Хотите получить канал продаж, где вы&nbsp;расплачиваетесь не&nbsp;деньгами, а&nbsp;информацией? В&nbsp;течение трех&nbsp;месяцев наши первые магазины будут продавать товары без комиссий. В&nbsp;обмен мы&nbsp;просим лишь обратную связь и&nbsp;30&nbsp;минут вашего времени в&nbsp;день.',
   },
@@ -65,7 +65,7 @@ const StartSellingTryStoriqa = ({ lang }: PropsType) => (
         __html:
           lang === 'ru'
             ? 'Почему стоит начать сейчас?'
-            : 'Why should you try Storiqa?',
+            : 'Why give Storiqa a&nbsp;shot?',
       }}
     />
     <p
@@ -76,7 +76,7 @@ const StartSellingTryStoriqa = ({ lang }: PropsType) => (
         __html:
           lang === 'ru'
             ? 'Вместе с персональным менеджером вы&nbsp;выстроите персональную траекторию по&nbsp;маркетингу, увеличению продаж и&nbsp;поддержке клиентов.'
-            : 'We deliver high quality services and support, including marketing assistance and sales advice.',
+            : 'We deliver high quality services and support to&nbsp;our sellers, including marketing assistance and&nbsp;sales advice.',
       }}
     />
     <Row>
