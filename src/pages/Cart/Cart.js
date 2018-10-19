@@ -19,6 +19,8 @@ import type Cart_cart from './__generated__/Cart_cart.graphql';
 
 import './Cart.scss';
 
+import t from './i18n';
+
 type PropsType = {
   // eslint-disable-next-line
   cart: Cart_cart,
@@ -88,7 +90,7 @@ class Cart extends Component<PropsType, StateType> {
         <Container withoutGrow>
           <Row withoutGrow>
             <Col size={12}>
-              <div styleName="header">My cart</div>
+              <div styleName="header">{t.myCart}</div>
               <div ref={ref => this.setStoresRef(ref)}>
                 <Row withoutGrow>
                   {emptyCart ? (
