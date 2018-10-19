@@ -5,18 +5,32 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 import PropTypes from 'prop-types';
 import xss from 'xss';
-import { isNil, head, ifElse, assoc, dissoc, propEq, has, prop } from 'ramda';
+import {
+  isNil,
+  head,
+  ifElse,
+  assoc,
+  dissoc,
+  propEq,
+  has,
+  prop,
+  find,
+  pathOr,
+} from 'ramda';
+import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
-import { IncrementInCartMutation } from 'relay/mutations';
+import { IncrementInCartMutation, BuyNowMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
 
+import type { AddressFullType } from 'types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { MutationParamsType } from 'relay/mutations/BuyNowMutation';
 
 import {
   makeWidgets,
@@ -49,9 +63,24 @@ import type {
 import './Product.scss';
 
 type PropsType = {
+  me: {
+    id: string,
+    rawId: number,
+    phone: ?string,
+    firstName: string,
+    lastName: string,
+    deliveryAddressesFull: ?Array<{
+      id: string,
+      address: AddressFullType,
+      isPriority: boolean,
+    }>,
+  },
   showAlert: (input: AddAlertInputType) => void,
   baseProduct: ProductType,
   router: routerShape,
+  relay: {
+    environment: Environment,
+  },
 };
 
 type StateType = {
@@ -65,6 +94,7 @@ type StateType = {
     [string]: Array<string>,
   },
   isAddToCart: boolean,
+  isLoading: boolean,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -113,6 +143,7 @@ class Product extends Component<PropsType, StateType> {
       selectedAttributes: {},
       availableAttributes: {},
       isAddToCart: false,
+      isLoading: false,
     };
   }
 
@@ -120,7 +151,7 @@ class Product extends Component<PropsType, StateType> {
     window.scrollTo(0, 0);
   }
 
-  handleAddToCart = (id: number) => {
+  handleAddToCart = (id: number, isBuyNow?: boolean) => {
     this.setState({ unselectedAttr: null });
     const { widgets, selectedAttributes } = this.state;
     const unselectedAttr = isNoSelected(
@@ -146,7 +177,12 @@ class Product extends Component<PropsType, StateType> {
               text: 'Product added to cart!',
               link: { text: '' },
             });
-            this.setState({ isAddToCart: true });
+            this.setState({ isAddToCart: true }, () => {
+              if (isBuyNow) {
+                this.setState({ isLoading: false });
+                this.props.router.push('/checkout');
+              }
+            });
           }
         },
         onError: error => {
@@ -159,6 +195,93 @@ class Product extends Component<PropsType, StateType> {
           });
         },
       });
+    } else {
+      this.setState({ unselectedAttr });
+      smoothscroll.scrollTo(head(unselectedAttr));
+    }
+  };
+
+  handleBuyNow = (productId: number) => {
+    this.setState({ unselectedAttr: null });
+    const { widgets, selectedAttributes } = this.state;
+    const unselectedAttr = isNoSelected(
+      sortByProp('id')(widgets),
+      selectedAttributes,
+    );
+
+    if (isEmpty(widgets) || !unselectedAttr) {
+      const { me } = this.props;
+      const deliveryAddressesFull = me.deliveryAddressesFull || [];
+      const receiverName = `${me.firstName} ${me.lastName}`;
+      const receiverPhone = me.phone;
+      this.setState({ isLoading: true });
+      if (isEmpty(deliveryAddressesFull) || !receiverName || !receiverPhone) {
+        this.handleAddToCart(productId, true);
+        return;
+      }
+      const deliveryAddressFull =
+        find(propEq('isPriority', true))(deliveryAddressesFull) ||
+        deliveryAddressesFull[0];
+      const addressFull = deliveryAddressFull.address;
+
+      const params: MutationParamsType = {
+        input: {
+          clientMutationId: '',
+          productId,
+          quantity: 1,
+          addressFull,
+          receiverName,
+          receiverPhone,
+          currency: 'STQ',
+        },
+        environment: this.props.relay.environment,
+        onCompleted: (response, errors) => {
+          this.setState({ isLoading: false });
+          log.debug('Success for BuyNowMutation');
+          if (response && response.buyNow) {
+            log.debug('Response: ', response);
+            this.props.showAlert({
+              type: 'success',
+              text: 'Orders successfully created',
+              link: { text: 'Close.' },
+            });
+            const responseOrders = pathOr(
+              null,
+              ['invoice', 'orders'],
+              response.buyNow,
+            );
+            const order = responseOrders[0];
+            this.props.router.push(
+              `/profile/orders/${order.slug}/payment-info`,
+            );
+          } else if (!errors) {
+            this.props.showAlert({
+              type: 'danger',
+              text: 'Error :(',
+              link: { text: 'Close.' },
+            });
+            // this.setState({ checkoutInProcess: false });
+          } else {
+            log.debug('Errors: ', errors);
+            this.props.showAlert({
+              type: 'danger',
+              text: 'Error :(',
+              link: { text: 'Close.' },
+            });
+          }
+        },
+        onError: error => {
+          this.setState({ isLoading: false });
+          log.error('Error in BuyNowMutation');
+          log.error(error);
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something went wrong :(',
+            link: { text: 'Close.' },
+          });
+        },
+      };
+      BuyNowMutation.commit(params);
     } else {
       this.setState({ unselectedAttr });
       smoothscroll.scrollTo(head(unselectedAttr));
@@ -278,6 +401,7 @@ class Product extends Component<PropsType, StateType> {
       selectedAttributes,
       availableAttributes,
       isAddToCart,
+      isLoading,
     } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
@@ -323,12 +447,16 @@ class Product extends Component<PropsType, StateType> {
                           onAddToCart={() =>
                             this.handleAddToCart(productVariant.rawId)
                           }
+                          onBuyNow={() =>
+                            this.handleBuyNow(productVariant.rawId)
+                          }
                           unselectedAttr={unselectedAttr}
                           quantity={productVariant.quantity}
                           preOrder={productVariant.preOrder}
                           preOrderDays={productVariant.preOrderDays}
                           isAddToCart={isAddToCart}
                           router={router}
+                          isLoading={isLoading}
                         />
                         <div styleName="line" />
                         <ProductStore />

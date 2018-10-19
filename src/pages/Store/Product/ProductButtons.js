@@ -9,11 +9,13 @@ import './ProductButtons.scss';
 
 type PropsType = {
   onAddToCart: () => void,
+  onBuyNow: () => void,
   unselectedAttr: ?Array<string>,
   quantity: number,
   preOrder: boolean,
   isAddToCart: boolean,
   router: routerShape,
+  isLoading: boolean,
 };
 
 const ProductButtons = ({
@@ -23,10 +25,12 @@ const ProductButtons = ({
   preOrder,
   isAddToCart,
   router,
+  onBuyNow,
+  isLoading,
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
-      <Button disabled big>
+      <Button big isLoading={isLoading} onClick={onBuyNow}>
         Buy now
       </Button>
       <Button

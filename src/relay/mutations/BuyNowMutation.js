@@ -3,15 +3,13 @@
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
-import type { CreateOrdersMutationResponse } from './__generated__/CreateOrdersMutation.graphql';
+import type { BuyNowMutationResponse } from './__generated__/BuyNowMutation.graphql';
 
-export type {
-  CreateOrdersMutationResponse as CreateOrdersMutationResponseType,
-};
+export type { BuyNowMutationResponse as BuyNowMutationResponseType };
 
 const mutation = graphql`
-  mutation CreateOrdersMutation($input: CreateOrderInput!) {
-    createOrders(input: $input) {
+  mutation BuyNowMutation($input: BuyNowInput!) {
+    buyNow(input: $input) {
       cart {
         id
         totalCount
@@ -42,18 +40,18 @@ const mutation = graphql`
 `;
 
 type AddressParamsType = {
-  country: string,
-  value: string,
-  administrativeAreaLevel1?: string,
-  administrativeAreaLevel2?: string,
-  locality: string,
-  political?: string,
-  postalCode: string,
-  route?: string,
-  streetNumber: string,
+  country: ?string,
+  value: ?string,
+  administrativeAreaLevel1: ?string,
+  administrativeAreaLevel2: ?string,
+  locality: ?string,
+  political: ?string,
+  postalCode: ?string,
+  route: ?string,
+  streetNumber: ?string,
 };
 
-type CreateOrdersMutationVariables = {
+type BuyNowMutationVariables = {
   input: {
     receiverName: string,
     receiverPhone: string,
@@ -62,7 +60,7 @@ type CreateOrdersMutationVariables = {
 };
 
 export type MutationParamsType = {
-  ...CreateOrdersMutationVariables,
+  ...BuyNowMutationVariables,
   environment: Environment,
   onCompleted: ?(response: ?Object, errors: ?Array<Error>) => void,
   onError: ?(error: Error) => void,

@@ -1,6 +1,7 @@
 @import "../../../styles/variables.scss";
 
 .container {
+  position: relative;
   font-family: $font_medium;
   height: 4rem;
   display: inline-flex;
@@ -114,7 +115,6 @@
 }
 
 .wireframe {
-  position: relative;
   background: transparent;
   font-family: $font_regular;
   border: $color_blue 1px solid;
