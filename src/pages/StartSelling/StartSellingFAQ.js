@@ -23,35 +23,35 @@ type PropsType = {
 const faqsEn: Array<{ id: string, text: string, desc: string }> = [
   {
     id: '1',
-    text:
-      'What is Storiqa marketplace exactly? Where can I get the&nbsp;details?',
+    text: 'Storiqa marketplace what is it exactly?',
     desc:
-      'Storiqa&nbsp;— first blockchain marketplace for small batch manufacturers, which will grant them access to&nbsp;the new auditory around the&nbsp;world without any logistics problem for&nbsp;sellers. All you need to&nbsp;do is register on&nbsp;the&nbsp;platform, create your own shop and start selling. We will cover all the other stuff. You can get more details on&nbsp;<a href="storiqa.zendesk.com" target="_blank">storiqa.zendesk.com</a>.',
+      'Storiqa is the&nbsp;first blockchain marketplace for&nbsp;small batch craft goods which gives access to&nbsp;the&nbsp;new markets around the&nbsp;globe, while removing the&nbsp;logistics problem for&nbsp;sellers. All you need to&nbsp;do&nbsp;is to&nbsp;register on&nbsp;the&nbsp;platform, create your own shop and begin selling. We’ll take care of&nbsp;the&nbsp;rest.',
   },
   {
     id: '2',
     text: 'What kind of items would be sold on&nbsp;Storiqa?',
     desc:
-      'Our marketplace is focused on items with the next parameters: small batch, quality, possibly handmade. At the very beginning we will sell such things as&nbsp;bags, backpacks, glasses, wallets and other accessories. We would also have some art pieces and items for&nbsp;home.<br />We have very high conditions for upcoming manufacturers, each of&nbsp;them will&nbsp;be manually checked before entering the&nbsp;platform.',
+      'Our marketplace is focused on&nbsp;items with the&nbsp;following characteriestics: small batch quantity of&nbsp;tailor and craft items, quality goods made with a&nbsp;passion and&nbsp;a&nbsp;story. Handmade? All the&nbsp;better! A&nbsp;good idea of&nbsp;initial types of&nbsp;items we&nbsp;will offer are: bags, backpacks, glasses, wallets and other reasonably sized items. This is just an&nbsp;idea this is by no&nbsp;means a&nbsp;limiting factor, but will give you a&nbsp;better understanding. We do have high standards for&nbsp;our sellers and&nbsp;the&nbsp;goods they offer, each will need to&nbsp;pass our standards prior to&nbsp;being listed to&nbsp;sell on&nbsp;our&nbsp;platform.',
   },
   {
     id: '3',
-    text: 'In which countries I can sell my&nbsp;goods?',
+    text: 'I am from X country can I&nbsp;sell on&nbsp;your&nbsp;platform?',
     desc:
-      'Our marketplace will be available for all users around the globe in&nbsp;time. For the first step we will start to work with the&nbsp;Indochina countries, such as&nbsp;Singapore, Malaysia, Indonesia&nbsp;etc.',
+      'We are a&nbsp;global marketplace and will allow sellers from most if not all countries around the&nbsp;globle to&nbsp;sell on&nbsp;Storiqa. However we&nbsp;need to&nbsp;start out from inital tested markets, and currently you are allowed to&nbsp;sell from Singapore and&nbsp;Russia. Sellers from&nbsp;Thailand, Malaysia and Indonesia will&nbsp;be the&nbsp;next order of&nbsp;those who can sell on&nbsp;Storiqa.',
   },
   {
     id: '4',
-    text: 'In which currency can I get the&nbsp;revenue?',
+    text:
+      'As a&nbsp;seller in&nbsp;which currency do I&nbsp;get paid out&nbsp;in?',
     desc:
-      'During the first platform release you can get the revenue in common crypto coins and traditional currency such as&nbsp;USD, RUR or&nbsp;SGD. Other would&nbsp;be implemented soon.',
+      'Currently you can get paid out in&nbsp;common crypto coins and traditional currency such as&nbsp;USD, RUR or&nbsp;SGD. Others will follow shortly. ',
   },
   {
     id: '5',
     text:
-      'What is STQ token exactly? How can I convert it to&nbsp;the&nbsp;common currencies?',
+      'What is STQ token exactly? Can I&nbsp;convert&nbsp;it to&nbsp;common currencies?',
     desc:
-      'STQ&nbsp;— crypto token, which will be used on&nbsp;the&nbsp;Storiqa marketplace as&nbsp;an&nbsp;instrument for the&nbsp;operations, cashback and reward for finishing several activities. Besides that STQ can&nbsp;be traded for other crypto coins or&nbsp;traditional currencies on&nbsp;exchanges.&nbsp;*<br />(*&nbsp;trade pairs are different for different exchanges)',
+      'STQ is a&nbsp;payment token, which will&nbsp;be used on&nbsp;the&nbsp;Storiqa marketplace as&nbsp;an&nbsp;instrument for operations, cashback, and&nbsp;rewards.  Purchase and payment of&nbsp;goods for&nbsp;both buyers and sellers. STQ can also be converted into other crypto coins or&nbsp;traditional currencies on&nbsp;various exchanges.',
   },
 ];
 
@@ -129,7 +129,7 @@ class StartSellingFAQ extends Component<PropsType, StateType> {
             __html:
               lang === 'ru'
                 ? 'Возможно, у&nbsp;вас возникли вопросы.<br />Вот ответы на&nbsp;самые популярные:'
-                : 'Here are some common questions about selling on Storiqa:',
+                : 'Here are some common questions we recieve about selling on&nbsp;Storiqa:',
           }}
         />
         <div
@@ -175,7 +175,9 @@ class StartSellingFAQ extends Component<PropsType, StateType> {
           <Col size={12} sm={12} md={12} lg={5} xl={5}>
             <div styleName="button">
               <StartSellingButton
-                text={lang === 'ru' ? 'Создать магазин' : 'Start selling'}
+                text={
+                  lang === 'ru' ? 'Создать магазин' : 'Start selling on Storiqa'
+                }
                 onClick={() => router.push('/manage/wizard')}
               />
             </div>

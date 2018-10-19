@@ -6,6 +6,7 @@ import { graphql } from 'react-relay';
 import { pathOr } from 'ramda';
 
 import { formatPrice, currentCurrency } from 'utils';
+import { CurrencyPrice } from 'components/common';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
@@ -16,6 +17,7 @@ type PropsType = {
   isReadyToClick: Function,
   buttonText: string,
   checkoutInProcess: boolean,
+  priceUsd: ?number,
 };
 
 type StateType = {
@@ -107,6 +109,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       isReadyToClick,
       buttonText,
       checkoutInProcess,
+      priceUsd,
     } = this.props;
     const { productsCost, deliveryCost, totalCost, totalCount } = this.state;
     return (
@@ -156,6 +159,14 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                         {totalCost &&
                           `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
                       </div>
+                      {priceUsd && (
+                        <CurrencyPrice
+                          price={totalCost || 0}
+                          currencyPrice={priceUsd}
+                          currencyCode="USD"
+                          toFixedValue={2}
+                        />
+                      )}
                     </div>
                   </Col>
                 </Row>

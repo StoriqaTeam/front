@@ -1,6 +1,7 @@
 import React from 'react';
 import { head, map } from 'ramda';
 
+import { CurrencyPrice } from 'components/common';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
@@ -21,6 +22,7 @@ type PropsType = {
   comment: string,
   // eslint-disable-next-line
   ...CartProduct_product,
+  priceUsd: ?number,
 };
 
 const ProductInfo = ({
@@ -29,6 +31,7 @@ const ProductInfo = ({
   onChangeComment,
   comment,
   isOpen,
+  priceUsd,
 }: PropsType) => {
   const attrs = map(attr => ({
     title: head(attr.attribute.name).text,
@@ -173,6 +176,14 @@ const ProductInfo = ({
                   product.quantity * product.price || 0,
                 )} ${currentCurrency()}`}
               />
+              {priceUsd && (
+                <CurrencyPrice
+                  price={product.quantity * product.price || 0}
+                  currencyPrice={priceUsd}
+                  currencyCode="USD"
+                  toFixedValue={2}
+                />
+              )}
               <CartProductAttribute
                 title="Delivery"
                 value={`${formatPrice(
