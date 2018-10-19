@@ -27,7 +27,9 @@ class CartEmpty extends PureComponent<PropsType> {
             <Icon type="emptyCart" size={120} />
           </div>
           <div styleName="text">
-            {t.currentlyCartIsEmpty}<br />{t.goToMarketAndPlaceSomeGoods}
+            {t.currentlyCartIsEmpty}
+            <br />
+            {t.goToMarketAndPlaceSomeGoods}
           </div>
           <div styleName="button">
             <Button big wireframe onClick={this.onClick}>

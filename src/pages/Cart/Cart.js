@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
-import PropTypes from 'prop-types';
 import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
 import { routerShape, withRouter } from 'found';
 

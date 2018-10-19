@@ -20,12 +20,14 @@ import { log, convertSrc } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
-import ProductInfo from './ProductInfo';
+import ProductInfo from '../ProductInfo';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
 
 import './CartProduct.scss';
+
+import t from './i18n';
 
 type PropsType = {
   unselectable: ?boolean,
@@ -54,21 +56,21 @@ class CartProduct extends Component<PropsType, StateType> {
       input: { clientMutationId: '', productId: id },
       environment: this.context.environment,
       onCompleted: (response, errors) => {
-        log.debug('Success for DeleteFromCart mutation');
+        log.debug(t.successForDeleteFromCart);
         if (response) {
-          log.debug('Response: ', response);
+          log.debug(t.response, response);
         }
         if (errors) {
-          log.debug('Errors: ', errors);
+          log.debug(t.errors, errors);
         }
       },
       onError: error => {
-        log.error('Error in DeleteFromCart mutation');
+        log.error(t.errorInDeleteFromCart);
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Unable to delete product quantity in cart',
-          link: { text: 'Close.' },
+          text: t.unableToDeleteProductQuantity,
+          link: { text: t.close },
         });
       },
     });
@@ -85,21 +87,21 @@ class CartProduct extends Component<PropsType, StateType> {
       nodeId,
       environment: this.context.environment,
       onCompleted: (response, errors) => {
-        log.debug('Success for SetSelectionInCart mutation');
+        log.debug(t.successForSetSelectionInCart);
         if (response) {
-          log.debug('Response: ', response);
+          log.debug(t.response, response);
         }
         if (errors) {
-          log.debug('Errors: ', errors);
+          log.debug(t.errors, errors);
         }
       },
       onError: error => {
-        log.error('Error in SetSelectionInCart mutation');
+        log.error(t.errorInSetSelectionInCart);
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Unable to set product selection in cart',
-          link: { text: 'Close.' },
+          text: t.unableToSetProductSelection,
+          link: { text: t.close },
         });
       },
     });
@@ -114,21 +116,21 @@ class CartProduct extends Component<PropsType, StateType> {
       storeId,
       environment: this.context.environment,
       onCompleted: (response, errors) => {
-        log.debug('Success for SetQuantityInCart mutation');
+        log.debug(t.successForSetQuantityInCart);
         if (response) {
-          log.debug('Response: ', response);
+          log.debug(t.response, response);
         }
         if (errors) {
-          log.debug('Errors: ', errors);
+          log.debug(t.errors, errors);
         }
       },
       onError: error => {
-        log.error('Error in SetQuantityInCart mutation');
+        log.error(t.errorInSetQuantityInCart);
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Unable to set product quantity in cart',
-          link: { text: 'Close.' },
+          text: t.unableToSetProductQuantity,
+          link: { text: t.close },
         });
       },
     });
@@ -149,21 +151,21 @@ class CartProduct extends Component<PropsType, StateType> {
         input: { clientMutationId: '', productId, value },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
-          log.debug('Success for SetCommentInCart mutation');
+          log.debug(t.successForSetCommentInCart);
           if (response) {
-            log.debug('Response: ', response);
+            log.debug(t.response, response);
           }
           if (errors) {
-            log.debug('Errors: ', errors);
+            log.debug(t.errors, errors);
           }
         },
         onError: error => {
-          log.error('Error in SetCommentInCart mutation');
+          log.error(t.errorInSetCommentInCart);
           log.error(error);
           this.props.showAlert({
             type: 'danger',
-            text: 'Unable to set comment for product',
-            link: { text: 'Close.' },
+            text: t.unableToSetComment,
+            link: { text: t.close },
           });
         },
       });

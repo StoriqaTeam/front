@@ -14,7 +14,8 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     currentlyCartIsEmpty: 'Currently cart is empty.',
-    goToMarketAndPlaceSomeGoods: 'Go to market and place some goods in your cart.',
+    goToMarketAndPlaceSomeGoods:
+      'Go to market and place some goods in your cart.',
     goToMarket: 'Go To Market',
   },
 };
