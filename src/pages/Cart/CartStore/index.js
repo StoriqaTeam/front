@@ -9,12 +9,14 @@ import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
 import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 
-import CartProduct from './CartProduct';
+import CartProduct from '../CartProduct';
 
 // eslint-disable-next-line
 import type CartStore_store from './__generated__/CartStore_store.graphql';
 
 import './CartStore.scss';
+
+import t from './i18n';
 
 type PropsType = {
   onlySelected: ?boolean,
@@ -77,7 +79,7 @@ class CartStore extends PureComponent<PropsType> {
                       </div>
                       <div styleName="storeTotalWrapper">
                         <div>
-                          <div styleName="label">Subtotal</div>
+                          <div styleName="label">{t.subtotal}</div>
                           <div styleName="value">
                             {formatPrice(store.productsCost || 0)}{' '}
                             {currentCurrency()}
