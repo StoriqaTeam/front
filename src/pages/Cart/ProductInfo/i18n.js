@@ -5,23 +5,27 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  total: string,
-  paymentMethods: string,
-  cryptoPayments: string,
-  productsCost: string,
-  deliveryCost: string,
-  checkout: string,
+  aboutProduct: string,
+  availableForPreOrder: string,
+  leadTime: string,
+  price: string,
+  count: string,
+  subtotal: string,
+  delivery: string,
+  labelCostumerComment: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    total: 'Total',
-    paymentMethods: 'Payment Methods',
-    cryptoPayments: 'Crypto Payments',
-    productsCost: 'Products Cost',
-    deliveryCost: 'Delivery Cost',
-    checkout: 'Checkout',
+    aboutProduct: 'About Product',
+    availableForPreOrder: 'Available for pre-order.',
+    leadTime: 'Lead time (days): ',
+    price: 'Price',
+    count: 'Count',
+    subtotal: 'Subtotal',
+    delivery: 'Delivery',
+    labelCostumerComment: 'Customer comment',
   },
 };
 

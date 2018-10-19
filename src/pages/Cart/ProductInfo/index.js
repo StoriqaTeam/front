@@ -8,12 +8,14 @@ import { Input } from 'components/common/Input';
 import { Container, Col, Row } from 'layout';
 import { formatPrice, currentCurrency } from 'utils';
 
-import CartProductAttribute from './CartProductAttribute';
+import CartProductAttribute from '../CartProductAttribute';
 
 // eslint-disable-next-line
-import type CartProduct_product from './__generated__/CartProduct_product.graphql';
+import type CartProduct_product from 'pages/Cart/CartProduct/__generated__/CartProduct_product.graphql';
 
 import './ProductInfo.scss';
+
+import t from './i18n';
 
 type PropsType = {
   onQuantityChange: Function,
@@ -47,14 +49,14 @@ const ProductInfo = ({
               <Col size={6} xl={12}>
                 <div styleName="contentBlock">
                   <div styleName="product-summary-attributes">
-                    <div styleName="cart-product-title">About product</div>
+                    <div styleName="cart-product-title">{t.aboutProduct}</div>
                     {product.preOrder &&
                       product.preOrderDays && (
                         <div styleName="preOrder">
                           <div styleName="preOrderText">
-                            <div>Available for pre-order.</div>
+                            <div>{t.availableForPreOrder}</div>
                             <div>
-                              Lead time (days):{' '}
+                              {t.leadTime}{' '}
                               <span styleName="preOrderDays">
                                 {product.preOrderDays}
                               </span>
@@ -76,9 +78,9 @@ const ProductInfo = ({
               </Col>
               <Col size={6} xlHidden>
                 <div styleName="contentBlock">
-                  <div styleName="cart-product-title">Price</div>
+                  <div styleName="cart-product-title">{t.price}</div>
                   <CartProductAttribute
-                    title="Count"
+                    title={t.count}
                     value={
                       <Stepper
                         value={product.quantity}
@@ -89,13 +91,13 @@ const ProductInfo = ({
                     }
                   />
                   <CartProductAttribute
-                    title="Subtotal"
+                    title={t.subtotal}
                     value={`${formatPrice(
                       product.quantity * product.price || 0,
                     )} ${currentCurrency()}`}
                   />
                   <CartProductAttribute
-                    title="Delivery"
+                    title={t.delivery}
                     value={`${formatPrice(
                       product.deliveryCost || 0,
                     )} ${currentCurrency()}`}
@@ -145,7 +147,7 @@ const ProductInfo = ({
                         id="customerComment"
                         onChange={onChangeComment}
                         value={comment}
-                        label="Customer comment"
+                        label={t.labelCostumerComment}
                       />
                     </div>
                   </div>
@@ -155,9 +157,9 @@ const ProductInfo = ({
           </Col>
           <Col size={4} xlVisibleOnly>
             <div styleName="contentBlock">
-              <div styleName="cart-product-title">Price</div>
+              <div styleName="cart-product-title">{t.price}</div>
               <CartProductAttribute
-                title="Count"
+                title={t.count}
                 value={
                   <Stepper
                     value={product.quantity}
@@ -168,13 +170,13 @@ const ProductInfo = ({
                 }
               />
               <CartProductAttribute
-                title="Subtotal"
+                title={t.subtotal}
                 value={`${formatPrice(
                   product.quantity * product.price || 0,
                 )} ${currentCurrency()}`}
               />
               <CartProductAttribute
-                title="Delivery"
+                title={t.delivery}
                 value={`${formatPrice(
                   product.deliveryCost || 0,
                 )} ${currentCurrency()}`}
