@@ -5,7 +5,7 @@ import { withRouter, routerShape, Link } from 'found';
 
 import { Col } from 'layout';
 import { stringFromTimestamp } from 'utils/formatDate';
-import { getStatusStringFromEnum } from '../OrderPage/utils';
+import { getStatusStringFromEnum } from '../../OrderPage/utils';
 
 import './TableRow.scss';
 

@@ -5,7 +5,7 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  noOrders: string
+  noOrders: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
