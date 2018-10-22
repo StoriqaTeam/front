@@ -8,6 +8,8 @@ import { timeFromTimestamp, shortDateFromTimestamp } from 'utils/formatDate';
 
 import './StatusList.scss';
 
+import t from './i18n';
+
 export type OrderStatusType = {
   date: string,
   manager: string,
@@ -25,10 +27,10 @@ class StatusList extends PureComponent<PropsType> {
 
   renderTitle = () => (
     <div styleName="headerContainer">
-      <span styleName="headerDate">Date</span>
-      <span styleName="headerManager">User</span>
-      <span styleName="headerStatus">Status</span>
-      <span styleName="headerAdditionalInfo">Additional info</span>
+      <span styleName="headerDate">{t.date}</span>
+      <span styleName="headerManager">{t.user}</span>
+      <span styleName="headerStatus">{t.status}</span>
+      <span styleName="headerAdditionalInfo">{t.additionalInfo}</span>
     </div>
   );
 
@@ -60,7 +62,7 @@ class StatusList extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>Status history</strong>
+          <strong>{t.statusHistory}</strong>
         </div>
         {this.renderTitle()}
         {this.renderRows(items)}
