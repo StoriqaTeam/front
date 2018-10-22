@@ -21,6 +21,8 @@ import type {
 
 import './ManageOrderBlock.scss';
 
+import t from './i18n';
+
 type PropsType = {
   environment: Environment,
   isAbleToSend: boolean,
@@ -95,7 +97,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
 
   cancelOrder = () => {
     // eslint-disable-next-line
-    const isConfirmed = confirm('Are you sure to cancel order?');
+    const isConfirmed = confirm(t.areYouSureToCancelOrder);
     if (!isConfirmed) {
       return;
     }
@@ -132,17 +134,16 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
         >
           <div styleName="sendOrderModal">
             <div styleName="title">
-              Send your product<br />to customer
+              {t.sendYourProduct}<br />{t.toCustomer}
             </div>
             <div styleName="description">
-              Do not forget to attach track number you get from delivery service
-              used for product sending
+              {t.doNotForgetToAttach}
             </div>
             <div styleName="inputWrapperTrackId">
               <Input
                 fullWidth
                 id="send-order-modal-trackId"
-                label="Track number"
+                label={t.labelTrackNumber}
                 onChange={this.handleTrackIdChanged}
                 value={this.state.trackNumber || ''}
                 limit={50}
@@ -152,7 +153,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               <Input
                 fullWidth
                 id="send-order-modal-comment"
-                label="Comment"
+                label={t.labelComment}
                 onChange={this.handleCommentChanged}
                 value={this.state.comment || ''}
                 limit={100}
@@ -160,7 +161,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
             </div>
             <div styleName="sendOrderButtonWrapper">
               <Button big isLoading={isSendInProgress} onClick={this.sendOrder}>
-                Send order
+                {t.sendOrder}
               </Button>
             </div>
           </div>
@@ -171,7 +172,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               big
               onClick={() => this.setState({ isSendOrderModalShown: true })}
             >
-              Send now
+              {t.sendNow}
             </Button>
           </div>
         )}
@@ -183,7 +184,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               isLoading={isCancelInProgress}
               onClick={this.cancelOrder}
             >
-              Cancel order
+              {t.cancelOrder}
             </Button>
           </div>
         )}
