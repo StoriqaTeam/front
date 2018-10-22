@@ -4,8 +4,11 @@ import React from 'react';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
+import AddressInfo from '../AddressInfo';
+
 import './CheckoutProducts.scss';
-import AddressInfo from './AddressInfo';
+
+import t from './i18n';
 
 type PropsType = {
   orderInput: any,
@@ -17,12 +20,12 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
-        <div styleName="title">Summary</div>
+        <div styleName="title">{t.summary}</div>
         <div styleName="infoContainer">
           <Row>
             <Col size={3}>
               <div styleName="centeredTitle">
-                <div>Address</div>
+                <div>{t.address}</div>
               </div>
             </Col>
             <Col size={9} smVisible>
@@ -35,7 +38,7 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                     type="button"
                     dataTest="changeAddress"
                   >
-                    <span>Replace address</span>
+                    <span>{t.replaceAddress}</span>
                   </Button>
                 </div>
               </div>
@@ -64,7 +67,7 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                   type="button"
                   dataTest="changeAddress"
                 >
-                  <span>Replace address</span>
+                  <span>{t.replaceAddress}</span>
                 </Button>
               </div>
             </Col>
