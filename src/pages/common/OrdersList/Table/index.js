@@ -3,11 +3,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import { map, isEmpty } from 'ramda';
 
-import TableRow from './TableRow';
+import TableRow from '../TableRow';
 
-import type { TableItemType } from './TableRow';
+import type { TableItemType } from '../TableRow';
 
 import './Table.scss';
+
+import t from './i18n';
 
 type PropsType = {
   items: Array<TableItemType>,
@@ -34,7 +36,7 @@ class Table extends PureComponent<PropsType> {
         {items && !isEmpty(items) ? (
           <div>{this.renderItems(items)}</div>
         ) : (
-          <div styleName="noOrders">No orders</div>
+          <div styleName="noOrders">{t.noOrders}</div>
         )}
       </Fragment>
     );

@@ -5,19 +5,13 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  labelSearchOrder: string,
-  labelOrderStatus: string,
-  labelFrom: string,
-  labelTo: string,
+  noOrders: string
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    labelSearchOrder: 'Search Order',
-    labelOrderStatus: 'Order Status',
-    labelFrom: 'From',
-    labelTo: 'To',
+    noOrders: 'No Orders',
   },
 };
 
