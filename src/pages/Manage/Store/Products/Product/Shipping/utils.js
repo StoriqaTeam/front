@@ -22,7 +22,11 @@ export const convertLocalAvailablePackages = (
   localAvailablePackages: Array<AvailablePackageType>,
 ): Array<ServiceType> => {
   const newPackages = map(
-    item => ({ id: item.name, label: item.name }),
+    item => ({
+      id: item.companyPackageId,
+      label: item.name,
+      currency: { id: item.currency, label: item.currency },
+    }),
     localAvailablePackages,
   );
   return newPackages;
@@ -34,9 +38,10 @@ export const convertInterAvailablePackages = (
   const newPackages = map(item => {
     const { deliveriesTo } = item;
     return {
-      id: item.name,
+      id: item.companyPackageId,
       label: item.name,
       countries: deliveriesTo ? head(deliveriesTo) : null,
+      currency: { id: item.currency, label: item.currency },
     };
   }, interAvailablePackages);
   return newPackages;
@@ -50,7 +55,7 @@ export const getServiceLogo = (params: {
   if (id == null) {
     return '';
   }
-  const foundPackage = find(propEq('name', id))(packages);
+  const foundPackage = find(propEq('companyPackageId', id))(packages);
   return foundPackage ? foundPackage.logo : '';
 };
 
@@ -62,7 +67,7 @@ export const getServiceRawId = (params: {
   if (id == null) {
     return -1;
   }
-  const foundPackage = find(propEq('name', id))(packages);
+  const foundPackage = find(propEq('companyPackageId', id))(packages);
   return foundPackage ? foundPackage.companyPackageRawId : -1;
 };
 
@@ -74,7 +79,11 @@ export const getService = (params: {
     params.packages,
   );
   return foundPackage
-    ? { id: foundPackage.name, label: foundPackage.name }
+    ? {
+        id: foundPackage.companyPackageId,
+        label: foundPackage.name,
+        currency: { id: foundPackage.currency, label: foundPackage.currency },
+      }
     : null;
 };
 

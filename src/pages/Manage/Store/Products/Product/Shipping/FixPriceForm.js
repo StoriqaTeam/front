@@ -2,11 +2,11 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { head, assoc, isEmpty, find, propEq, map } from 'ramda';
+import { head, assoc, isEmpty, find, propEq } from 'ramda';
 
-import type { SelectItemType } from 'types';
-import { InputPrice, Select, Button } from 'components/common';
+import { InputPrice, Button } from 'components/common';
 import Countries from './Countries';
+import ShippingLocalSelect from './ShippingLocalSelect';
 import ShippingInterSelect from './ShippingInterSelect';
 import {
   convertCountriesToArrCodes,
@@ -24,13 +24,11 @@ import './FixPriceForm.scss';
 
 type StateType = {
   price: number,
-  currency: SelectItemType,
   service: ?ServiceType,
   countries: ?ShippingCountriesType,
 };
 
 type PropsType = {
-  currency: SelectItemType,
   services: Array<ServiceType>,
   onSaveCompany: (company: CompanyType) => void,
   company?: FilledCompanyType,
@@ -41,7 +39,7 @@ type PropsType = {
 class FixPriceForm extends PureComponent<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { currency, company, services } = props;
+    const { company, services } = props;
     let service = null;
     if (company) {
       service = find(propEq('id', company.service && company.service.id))(
@@ -53,7 +51,6 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     const countries = (service && service.countries) || null;
     this.state = {
       price: (company && company.price) || 0,
-      currency,
       service,
       countries,
     };
@@ -79,12 +76,11 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   handleSaveCompany = () => {
-    const { company, currency: defaultCurrency, onSaveCompany } = this.props;
-    const { service, price, currency, countries } = this.state;
+    const { company, onSaveCompany } = this.props;
+    const { service, price, countries } = this.state;
     let newCompany: CompanyType = {
       service,
       price,
-      currency,
     };
     if (countries) {
       newCompany = assoc('countries', countries, newCompany);
@@ -92,12 +88,12 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
     if (company) {
       newCompany = assoc('id', company.id, newCompany);
     } else {
-      this.setState({ price: 0, currency: defaultCurrency });
+      this.setState({ price: 0 });
     }
     onSaveCompany(newCompany);
   };
 
-  handleOnSelectLocalService = (service: ?SelectItemType) => {
+  handleOnSelectLocalService = (service: ?ServiceType) => {
     this.setState({ service: { ...service } });
   };
 
@@ -116,7 +112,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
 
   render() {
     const { services, company, onRemoveEditableItem, inter } = this.props;
-    const { price, currency, service, countries } = this.state;
+    const { price, service, countries } = this.state;
     let isInterCompanyDisabled = true;
     let isLocalCompanyDisabled = true;
     if (company && company.service && service) {
@@ -144,17 +140,10 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
                 handleOnSelectService={this.handleOnSelectInterService}
               />
             ) : (
-              <Select
-                forForm
-                fullWidth
-                label="Service"
-                items={map(
-                  item => ({ id: item.id, label: item.label }),
-                  services,
-                )}
-                activeItem={service}
-                onSelect={this.handleOnSelectLocalService}
-                dataTest="shippingLocalServiceSelect"
+              <ShippingLocalSelect
+                services={services}
+                service={service}
+                handleOnSelectService={this.handleOnSelectLocalService}
               />
             )}
           </div>
@@ -162,7 +151,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             <InputPrice
               onChangePrice={this.handlePriceChange}
               price={price}
-              currency={currency}
+              currency={service ? service.currency : null}
               dataTest={`shipping${
                 inter === true ? 'Inter' : 'Local'
               }ServicePrice`}
