@@ -22,7 +22,8 @@ const translations: TranslationsBundleType = {
     areYouSureToCancelOrder: 'Are you sure to cancel order?',
     sendYourProduct: 'Send your Product',
     toCustomer: 'to customer',
-    doNotForgetToAttach: 'Do not forget to attach track number you get from delivery service used for product sending',
+    doNotForgetToAttach:
+      'Do not forget to attach track number you get from delivery service used for product sending',
     labelTrackNumber: 'Track Number',
     labelComment: 'Comment',
     sendOrder: 'Send Order',

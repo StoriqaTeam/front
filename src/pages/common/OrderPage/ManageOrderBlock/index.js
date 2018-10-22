@@ -134,11 +134,11 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
         >
           <div styleName="sendOrderModal">
             <div styleName="title">
-              {t.sendYourProduct}<br />{t.toCustomer}
+              {t.sendYourProduct}
+              <br />
+              {t.toCustomer}
             </div>
-            <div styleName="description">
-              {t.doNotForgetToAttach}
-            </div>
+            <div styleName="description">{t.doNotForgetToAttach}</div>
             <div styleName="inputWrapperTrackId">
               <Input
                 fullWidth

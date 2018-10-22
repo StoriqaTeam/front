@@ -10,6 +10,8 @@ import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import './OpenTicketModal.scss';
 
+import t from './i18n';
+
 type StateType = {
   ticketTitleText: string,
   ticketProblemText: string,
@@ -73,9 +75,9 @@ class OpenTicketModal extends Component<PropsType, StateType> {
         });
         showAlert({
           type: 'success',
-          text: 'New ticket was successfully sent.',
+          text: t.newTicketWasSuccessfullySent,
           link: {
-            text: 'Ok',
+            text: t.ok,
           },
         });
       })
@@ -83,9 +85,9 @@ class OpenTicketModal extends Component<PropsType, StateType> {
         this.setState({ isLoading: false });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something is going wrong :(',
+          text: t.somethingIsGoingWrong,
           link: {
-            text: 'Ok',
+            text: t.ok,
           },
         });
       });
@@ -101,13 +103,13 @@ class OpenTicketModal extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <thin>Support</thin>
+          <thin>{t.support}</thin>
         </div>
         <div styleName="ticketTitle">
           <Input
             fullWidth
             value={ticketTitleText}
-            label="Ticket title"
+            label={t.labelTicketTitle}
             onChange={this.handleTicketTitleChange}
             limit={50}
           />
@@ -116,12 +118,12 @@ class OpenTicketModal extends Component<PropsType, StateType> {
           <Textarea
             fullWidth
             value={ticketProblemText}
-            label="Your problem"
+            label={t.labelYourProblem}
             onChange={this.handleTicketProblemChange}
           />
         </div>
         {success && (
-          <div styleName="success">New ticket was successfully sent</div>
+          <div styleName="success">{t.newTicketWasSuccessfullySent}</div>
         )}
         <div styleName="createTicketButton">
           <Button
@@ -131,7 +133,7 @@ class OpenTicketModal extends Component<PropsType, StateType> {
             isLoading={isLoading}
             onClick={this.handleCreateTicket}
           >
-            Create ticket
+            {t.createTicket}
           </Button>
         </div>
       </div>
