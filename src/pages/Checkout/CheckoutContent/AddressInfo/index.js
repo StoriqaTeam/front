@@ -4,6 +4,8 @@ import React from 'react';
 
 import './AddressInfo.scss';
 
+import t from './i18n';
+
 export type AddressFullType = {
   value?: ?string,
   country?: ?string,
@@ -26,14 +28,14 @@ type PropsType = {
 const AddressInfo = ({ receiverName, addressFull, email }: PropsType) => (
   <div styleName="infoContent">
     <div styleName="wrapper">
-      <div styleName="label">Delivery address</div>
+      <div styleName="label">{t.deliveryAddress}</div>
       <div>
         {addressFull.country}, {addressFull.locality}
       </div>
       <div>{addressFull.value}</div>
       <div>{addressFull.postalCode}</div>
     </div>
-    <div styleName="label">Name</div>
+    <div styleName="label">{t.name}</div>
     <div styleName="name">{receiverName}</div>
     <div styleName="email">{email}</div>
   </div>
