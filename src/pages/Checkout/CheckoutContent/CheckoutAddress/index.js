@@ -13,11 +13,13 @@ import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm
 
 import { addressToString } from 'utils';
 
-import { addressesToSelect } from '../utils';
+import { addressesToSelect } from '../../utils';
 
-import AddressInfo from './AddressInfo';
+import AddressInfo from '../AddressInfo';
 
 import './CheckoutAddress.scss';
+
+import t from './i18n';
 
 type PropsType = {
   deliveryAddresses: any,
@@ -39,7 +41,7 @@ type StateType = {
   },
 };
 
-class CheckoutContent extends React.Component<PropsType, StateType> {
+class CheckoutAddress extends React.Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     if (
       nextProps.deliveryAddresses &&
@@ -123,14 +125,14 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
             <div styleName="addressWrapper">
               <Row>
                 <Col size={12}>
-                  <div styleName="title">Delivery info</div>
+                  <div styleName="title">{t.deliveryInfo}</div>
                   <div styleName="receiverContainer">
                     <Input
                       fullWidth
                       id="receiverName"
                       label={
                         <span>
-                          Receiver name <span styleName="red">*</span>
+                          {t.labelReceiverName} <span styleName="red">*</span>
                         </span>
                       }
                       onChange={this.handleChangeReceiver}
@@ -144,7 +146,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                       id="receiverPhone"
                       label={
                         <span>
-                          Receiver phone <span styleName="red">*</span>
+                          {t.labelReceiverPhone}<span styleName="red">*</span>
                         </span>
                       }
                       onChange={this.handleChangePhone}
@@ -155,7 +157,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                   <div styleName="selectAddressContainer">
                     <RadioButton
                       id="existingAddressCheckbox"
-                      label="choose your address"
+                      label={t.labelChooseYourAddress}
                       isChecked={isAddressSelect}
                       onChange={this.handleOnChangeAddressType}
                     />
@@ -163,7 +165,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                       <div styleName="selectWrapper">
                         <div>
                           <Select
-                            label="Address"
+                            label={t.labelAddress}
                             items={items}
                             activeItem={selectedAddress}
                             onSelect={this.handleOnSelectAddress}
@@ -192,7 +194,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                   <div>
                     <RadioButton
                       id="newAddressCheckbox"
-                      label="Or fill fields below and save as address"
+                      label={t.labelOrFillFields}
                       isChecked={isNewAddress}
                       onChange={this.handleOnChangeAddressType}
                     />
@@ -208,7 +210,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                         <div styleName="saveAddressWrapper">
                           <Checkbox
                             id="saveAddressCheckbox"
-                            label="Save as a new address"
+                            label={t.labelSaveAsNewAddress}
                             isChecked={saveAsNewAddress}
                             onChange={onChangeSaveCheckbox}
                           />
@@ -239,4 +241,4 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
   }
 }
 
-export default CheckoutContent;
+export default CheckoutAddress;
