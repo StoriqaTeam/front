@@ -11,6 +11,8 @@ import { Row, Col } from 'layout';
 
 import './CheckoutSidebar.scss';
 
+import t from './i18n';
+
 type PropsType = {
   onClick: Function,
   isReadyToClick: Function,
@@ -117,14 +119,14 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
           <div styleName="corner tr" />
         </div>
         <div styleName="container">
-          <div styleName="title">Subtotal</div>
+          <div styleName="title">{t.subtotal}</div>
           <div styleName="totalsContainer">
             <Row>
               <Col size={12} sm={9} md={12}>
                 <Row>
                   <Col size={12} sm={4} lg={12}>
                     <div styleName="attributeContainer">
-                      <div styleName="label">Subtotal</div>
+                      <div styleName="label">{t.subtotal}</div>
                       <div styleName="value">
                         {productsCost &&
                           `${formatPrice(
@@ -135,7 +137,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   </Col>
                   <Col size={12} sm={4} lg={12}>
                     <div styleName="attributeContainer">
-                      <div styleName="label">Delivery</div>
+                      <div styleName="label">{t.delivery}</div>
                       <div styleName="value">
                         {deliveryCost &&
                           `${formatPrice(
@@ -147,9 +149,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <Col size={12} sm={4} lg={12}>
                     <div styleName="attributeContainer">
                       <div styleName="label">
-                        Total{' '}
+                        {t.total}{' '}
                         <span styleName="subLabel">
-                          ({totalCount && totalCount} items)
+                          ({totalCount && totalCount} {t.items})
                         </span>
                       </div>
                       <div styleName="value bold">
