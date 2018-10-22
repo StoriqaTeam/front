@@ -6,12 +6,14 @@ import { Icon } from 'components/Icon';
 
 import './TableTitle.scss';
 
+import t from './i18n';
+
 const TableTitle = () => (
   <div styleName="container">
     <Col size={2} sm={4} md={3} lg={2} xl={1}>
       <span styleName="number">
         <span styleName="title">
-          Number
+          {t.number}
           <Icon type="sortArrows" />
         </span>
       </span>
@@ -24,37 +26,37 @@ const TableTitle = () => (
     </Col>
     <Col size={5} sm={4} md={3} lg={3} xl={1}>
       <span styleName="title">
-        Date
+        {t.date}
         <Icon type="sortArrows" />
       </span>
     </Col>
     <Col lg={2} xl={2} xlVisible>
       <span styleName="title">
-        Shop
+        {t.shop}
         <Icon type="sortArrows" />
       </span>
     </Col>
     <Col lg={2} xl={1} xlVisible>
       <span styleName="title">
-        Delivery
+        {t.delivery}
         <Icon type="sortArrows" />
       </span>
     </Col>
     <Col size={5} sm={4} md={3} lg={2} xl={2}>
       <span styleName="title">
-        Items
+        {t.items}
         <Icon type="sortArrows" />
       </span>
     </Col>
     <Col md={2} lg={2} xl={1} mdVisible>
       <span styleName="title">
-        Price
+        {t.price}
         <Icon type="sortArrows" />
       </span>
     </Col>
     <Col md={2} lg={3} xl={2} lgVisible>
       <span styleName="title">
-        Status
+        {t.status}
         <Icon type="sortArrows" />
       </span>
     </Col>
