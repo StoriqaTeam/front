@@ -251,7 +251,9 @@ class OrderPage extends Component<PropsType, StateType> {
             </Modal>
             <div styleName="mainBlock">
               <div styleName="orderNumber">
-                <strong>{t.order} #{order.number}</strong>
+                <strong>
+                  {t.order} #{order.number}
+                </strong>
               </div>
               <div styleName="statusBlock">
                 <div styleName="title">
@@ -373,10 +375,16 @@ class OrderPage extends Component<PropsType, StateType> {
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
-                      <TextWithLabel label={t.labelDelivery} text={order.delivery} />
+                      <TextWithLabel
+                        label={t.labelDelivery}
+                        text={order.delivery}
+                      />
                     </Col>
                     <Col size={12} lg={7}>
-                      <TextWithLabel label={t.labelTrackID} text={order.trackId} />
+                      <TextWithLabel
+                        label={t.labelTrackID}
+                        text={order.trackId}
+                      />
                     </Col>
                   </Row>
                 </div>

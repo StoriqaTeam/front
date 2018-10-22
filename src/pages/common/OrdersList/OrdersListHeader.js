@@ -15,7 +15,7 @@ import {
   getEnumFromStatusString,
 } from '../OrderPage/utils';
 
-import './Header.scss';
+import './OrdersListHeader.scss';
 
 type PropsType = {
   onSearchTermFilterChanged: string => void,
@@ -32,7 +32,7 @@ type StateType = {
   orderToDate: ?string,
 };
 
-class Header extends Component<PropsType, StateType> {
+class OrdersListHeader extends Component<PropsType, StateType> {
   state: StateType = {
     searchTerm: null,
     orderStatus: null,
@@ -141,8 +141,8 @@ class Header extends Component<PropsType, StateType> {
   }
 }
 
-Header.contextTypes = {
+OrdersListHeader.contextTypes = {
   directories: PropTypes.object.isRequired,
 };
 
-export default Header;
+export default OrdersListHeader;
