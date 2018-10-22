@@ -20,7 +20,7 @@ const translations: TranslationsBundleType = {
     user: 'User',
     status: 'Status',
     additionalInfo: 'Additional Info',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
