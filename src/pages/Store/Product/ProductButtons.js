@@ -16,6 +16,7 @@ type PropsType = {
   isAddToCart: boolean,
   router: routerShape,
   isLoading: boolean,
+  isDisabledBuyNowButton: boolean,
 };
 
 const ProductButtons = ({
@@ -27,10 +28,16 @@ const ProductButtons = ({
   router,
   onBuyNow,
   isLoading,
+  isDisabledBuyNowButton,
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
-      <Button big isLoading={isLoading} onClick={onBuyNow}>
+      <Button
+        big
+        isLoading={isLoading}
+        onClick={onBuyNow}
+        disabled={isDisabledBuyNowButton}
+      >
         Buy now
       </Button>
       <Button
