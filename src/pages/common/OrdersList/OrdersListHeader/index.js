@@ -13,9 +13,11 @@ import { BirthdateSelect } from 'components/common/BirthdateSelect';
 import {
   getStatusStringFromEnum,
   getEnumFromStatusString,
-} from '../OrderPage/utils';
+} from 'pages/common/OrderPage/utils';
 
 import './OrdersListHeader.scss';
+
+import t from './i18n';
 
 type PropsType = {
   onSearchTermFilterChanged: string => void,
@@ -91,7 +93,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
         <div styleName="searchInput">
           <Input
             id="searchTermInput"
-            label="Search order"
+            label={t.labelSearchOrder}
             onChange={this.handleSearchTermChange}
             value={this.state.searchTerm || ''}
             fullWidth
@@ -108,7 +110,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
             dataTest="OrderStatusSelect"
             forForm
             onSelect={this.handleOrderStatusChange}
-            label="Order status"
+            label={t.labelOrderStatus}
             withEmpty
             fullWidth
           />
@@ -121,7 +123,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
             <div styleName="item">
               <BirthdateSelect
                 brief
-                label="From"
+                label={t.labelFrom}
                 handleBirthdateSelect={this.handleOrderFromDateChange}
                 birthdate={this.state.orderFromDate}
               />
@@ -129,7 +131,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
             <div styleName="item">
               <BirthdateSelect
                 brief
-                label="To"
+                label={t.labelTo}
                 handleBirthdateSelect={this.handleOrderToDateChange}
                 birthdate={this.state.orderToDate}
               />
