@@ -33,6 +33,8 @@ import { getStatusStringFromEnum } from './utils';
 
 import './OrderPage.scss';
 
+import t from './i18n';
+
 type StateType = {
   isOpenTicketModalShown: boolean,
 };
@@ -140,7 +142,7 @@ class OrderPage extends Component<PropsType, StateType> {
       quantity: order.quantity,
       subtotal: order.subtotal,
       status: order.state,
-      paymentStatus: order.paymentStatus ? 'Paid' : 'Not paid',
+      paymentStatus: order.paymentStatus ? t.paid : t.notPaid,
       statusHistory: map(historyEdge => {
         let manager = '';
         if (historyEdge.node.user) {
@@ -172,17 +174,17 @@ class OrderPage extends Component<PropsType, StateType> {
     if (success) {
       this.props.showAlert({
         type: 'success',
-        text: 'Order was successfully sent.',
+        text: t.orderWasSuccessfullySent,
         link: {
-          text: 'Ok',
+          text: t.ok,
         },
       });
     } else {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something is going wrong :(',
+        text: t.somethingIsGoingWrong,
         link: {
-          text: 'Ok',
+          text: t.ok,
         },
       });
     }
@@ -192,17 +194,17 @@ class OrderPage extends Component<PropsType, StateType> {
     if (success) {
       this.props.showAlert({
         type: 'success',
-        text: 'Order successfully canceled.',
+        text: t.orderSuccessfullyCanceled,
         link: {
-          text: 'Ok',
+          text: t.ok,
         },
       });
     } else {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something is going wrong :(',
+        text: t.somethingIsGoingWrong,
         link: {
-          text: 'Ok',
+          text: t.ok,
         },
       });
     }
@@ -249,16 +251,16 @@ class OrderPage extends Component<PropsType, StateType> {
             </Modal>
             <div styleName="mainBlock">
               <div styleName="orderNumber">
-                <strong>ORDER #{order.number}</strong>
+                <strong>{t.order} #{order.number}</strong>
               </div>
               <div styleName="statusBlock">
                 <div styleName="title">
-                  <strong>Order status info</strong>
+                  <strong>{t.orderStatusInfo}</strong>
                 </div>
                 <div styleName="statusPaymentBlock">
                   <div styleName="statusesBlock">
                     <div styleName="statusItem">
-                      <div styleName="statusTitle">Status</div>
+                      <div styleName="statusTitle">{t.status}</div>
                       <div styleName="statusInfo">
                         {getStatusStringFromEnum(order.status)}
                       </div>
@@ -279,12 +281,12 @@ class OrderPage extends Component<PropsType, StateType> {
                             );
                           }}
                         >
-                          Payment info
+                          {t.paymentInfo}
                         </Button>
                       </div>
                     )}
                 </div>
-                <div styleName="ticketButtonTitle">Having troubles?</div>
+                <div styleName="ticketButtonTitle">{t.havingTroubles}</div>
                 <div styleName="ticketButtonWrapper">
                   <Button
                     big
@@ -296,13 +298,13 @@ class OrderPage extends Component<PropsType, StateType> {
                         : () => {}
                     }
                   >
-                    Open ticket
+                    {t.openTicket}
                   </Button>
                 </div>
                 {showInvoice ? (
                   <div styleName="ticketButtonWrapper">
                     <Button big wireframe fullWidth onClick={this.invoice}>
-                      Invoice
+                      {t.invoice}
                     </Button>
                   </div>
                 ) : null}
@@ -310,16 +312,16 @@ class OrderPage extends Component<PropsType, StateType> {
               {order.product.name ? (
                 <ProductBlock product={order.product} />
               ) : (
-                <div styleName="noProduct">The product was deleted</div>
+                <div styleName="noProduct">{t.theProductWasDeleted}</div>
               )}
               {order.product &&
                 order.product.preOrder &&
                 order.product.preOrderDays && (
                   <div styleName="preOrder">
                     <div styleName="preOrderText">
-                      <div>This product was bought on pre-order.</div>
+                      <div>{t.thisProductWasBougthOnPreOrder}</div>
                       <div>
-                        Lead time (days):{' '}
+                        {t.leadTime}{' '}
                         <span styleName="preOrderDays">
                           {order.product.preOrderDays}
                         </span>
@@ -332,13 +334,13 @@ class OrderPage extends Component<PropsType, StateType> {
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
-                        label="Customer"
+                        label={t.labelCustomer}
                         text={order.customerName}
                       />
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
-                        label="Contacts"
+                        label={t.labelContacts}
                         text={`${order.customerAddress}${
                           order.customerPhone ? `, ${order.customerPhone}` : ''
                         }`}
@@ -350,7 +352,7 @@ class OrderPage extends Component<PropsType, StateType> {
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
-                        label="Date"
+                        label={t.labelDate}
                         text={stringFromTimestamp({
                           timestamp: order.date,
                           format: 'DD MMMM YYYY',
@@ -359,7 +361,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
-                        label="Time"
+                        label={t.labelTime}
                         text={stringFromTimestamp({
                           timestamp: order.date,
                           format: 'HH:mm',
@@ -371,10 +373,10 @@ class OrderPage extends Component<PropsType, StateType> {
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
-                      <TextWithLabel label="Delivery" text={order.delivery} />
+                      <TextWithLabel label={t.labelDelivery} text={order.delivery} />
                     </Col>
                     <Col size={12} lg={7}>
-                      <TextWithLabel label="Track ID" text={order.trackId} />
+                      <TextWithLabel label={t.labelTrackID} text={order.trackId} />
                     </Col>
                   </Row>
                 </div>
@@ -382,13 +384,13 @@ class OrderPage extends Component<PropsType, StateType> {
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
-                        label="Quantity"
+                        label={t.labelQuantity}
                         text={`${order.quantity}`}
                       />
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
-                        label="Subtotal"
+                        label={t.labelSubtotal}
                         text={`${formatPrice(order.subtotal)} STQ`}
                       />
                     </Col>
