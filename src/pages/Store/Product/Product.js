@@ -376,7 +376,7 @@ class Product extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { baseProduct } = this.props;
+    const { me, baseProduct } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {
       return <div styleName="productNotFound">Product Not Found</div>;
@@ -457,6 +457,7 @@ class Product extends Component<PropsType, StateType> {
                           isAddToCart={isAddToCart}
                           router={router}
                           isLoading={isLoading}
+                          isDisabledBuyNowButton={!me}
                         />
                         <div styleName="line" />
                         <ProductStore />
