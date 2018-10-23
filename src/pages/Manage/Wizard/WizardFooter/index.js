@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
@@ -7,6 +7,8 @@ import { Button } from 'components/common/Button';
 import { Container, Col, Row } from 'layout';
 
 import './WizardFooter.scss';
+
+import t from './i18n';
 
 const WizardFooter = ({
   currentStep,
@@ -39,15 +41,14 @@ const WizardFooter = ({
               tabIndex="0"
             >
               <Icon type="arrowLeft" />
-              <span>Go back</span>
+              <span>{t.goBack}</span>
             </div>
           </div>
         </Col>
         <Col size={12} md={currentStep !== 1 ? 6 : 8}>
           <div styleName="footerTextContainer">
             <span styleName="footerText">
-              This listing isn’t active yet. It will be available to shoppers
-              once you open your shop.
+              {t.thisListingIsntActiveYet}
             </span>
           </div>
         </Col>
@@ -62,8 +63,8 @@ const WizardFooter = ({
               disabled={!isReadyToNext}
               isLoading={isSavingInProgress}
             >
-              {(currentStep === 3 && <span>Publish my store</span>) || (
-                <span>Next step</span>
+              {(currentStep === 3 && <span>{t.publishStore}</span>) || (
+                <span>{t.nextStep}</span>
               )}
             </Button>
           </div>
@@ -77,7 +78,7 @@ const WizardFooter = ({
             tabIndex="0"
           >
             <Icon type="arrowLeft" />
-            <span>Go back</span>
+            <span>{t.goBack}</span>
           </div>
         </Col>
       </Row>

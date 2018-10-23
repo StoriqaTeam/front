@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import classNames from 'classnames';
@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { Icon } from 'components/Icon';
 
 import './WizardHeader.scss';
+
+import t from './i18n';
 
 const WizardStepper = ({
   currentStep,
@@ -34,11 +36,11 @@ const WizardStepper = ({
 
   return (
     <div styleName="stepperContainer">
-      <StepLabel step={1} text="name your store" />
+      <StepLabel step={1} text={t.nameYourStore} />
       <Icon type="arrowRight" />
-      <StepLabel step={2} text="set up store" />
+      <StepLabel step={2} text={t.setUpStore}/>
       <Icon type="arrowRight" />
-      <StepLabel step={3} text="fill your store with goods" />
+      <StepLabel step={3} text={t.fillYourStoreWithGoods}/>
     </div>
   );
 };
