@@ -11,6 +11,8 @@ import Logo from 'components/Icon/svg/logo.svg';
 
 import './LogoutPage.scss';
 
+import t from './i18n';
+
 type PropsType = {
   environment: Environment,
   router: routerShape,
@@ -52,9 +54,9 @@ class LogoutPage extends PureComponent<PropsType> {
             <Logo />
           </div>
           <span styleName="text">
-            Loading...<br />Please wait.
+            {t.loading}<br />{t.pleaseWait}
           </span>
-          <span styleName="description">- Storiqa team</span>
+          <span styleName="description">- {t.storiqaTeam}</span>
           <div styleName="spinner">
             <div styleName="double-bounce1" />
             <div styleName="double-bounce2" />
