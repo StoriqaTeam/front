@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Icon } from 'components/Icon';
 
-import './View.scss';
+import './View/View.scss';
 
 type PropsType = {
   onDelete: () => void,

@@ -5,18 +5,19 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  setupStore: string,
-  defineFewSettings: string,
-  labelMainLanguage: string,
+  fillYouStoreWithGoods: string,
+  pleaseAddTheProduct: string,
+  currentlyYouHaveNoProducts: string,
+  addFirstProduct: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    setupStore: 'Set up store',
-    defineFewSettings:
-      'Define a few settings that will make your sells effective and comfortable.',
-    labelMainLanguage: 'Main language',
+    fillYouStoreWithGoods: 'Fill your store with goods',
+    pleaseAddTheProduct: 'Please add the product you would like to sell in your marketplace',
+    currentlyYouHaveNoProducts: 'Currently you have no products in your store. Click ‘Add’ to start filling your store with products.',
+    addFirstProduct: 'Add first product',
   },
 };
 

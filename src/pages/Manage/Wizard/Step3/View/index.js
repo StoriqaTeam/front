@@ -11,13 +11,15 @@ import { Button } from 'components/common/Button';
 import { getNameText } from 'utils';
 import { Modal } from 'components/Modal';
 
-import ProductLayer from './ProductLayer';
-import FormWrapper from '../FormWrapper';
+import ProductLayer from '../ProductLayer';
+import FormWrapper from '../../FormWrapper';
 
-import type { BaseProductNodeType } from '../Wizard';
-import Form from './Form';
+import type { BaseProductNodeType } from '../../Wizard';
+import Form from '../Form';
 
 import './View.scss';
+
+import t from './i18n';
 
 type ProductNodeType = {
   id: string,
@@ -168,8 +170,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             <Icon type="cameraPlus" size={80} />
           </div>
           <div styleName="text">
-            Currently you have no products in your store. Click ‘Add’ to start
-            filling your store with products.
+            {t.currentlyYouHaveNoProducts}
           </div>
           <div styleName="button">
             <Button
@@ -182,7 +183,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
               big
               wireframe
             >
-              <span>Add first product</span>
+              <span>{t.addFirstProduct}</span>
             </Button>
           </div>
         </div>
@@ -215,8 +216,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     return (
       <FormWrapper
         thirdForm
-        title="Fill your store with goods"
-        description="Please add the product you would like to sell in your marketplace"
+        title={t.fillYouStoreWithGoods}
+        description={t.pleaseAddTheProduct}
       >
         <div styleName="view">
           <Row>
