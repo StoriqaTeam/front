@@ -8,6 +8,8 @@ import CharacteristicItem from './CharacteristicItem';
 
 import './Characteristics.scss';
 
+import t from './i18n';
+
 type AttributeValueType = {
   attrId: number,
   value: string,
@@ -43,7 +45,7 @@ class Characteristics extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>Characteristics</strong>
+          <strong>{t.characteristics}</strong>
         </div>
         <div styleName="items">
           {attributes.map(item => (
