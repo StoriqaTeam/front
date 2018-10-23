@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { map, concat, filter, complement, propEq, find } from 'ramda';
 import { Col, Row } from 'layout';
 
-import { CharacteristicItem } from './CharacteristicItem';
+import { CharacteristicItem } from '../CharacteristicItem';
 
 import './AttributesForm.scss';
 
