@@ -15,8 +15,10 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     fillYouStoreWithGoods: 'Fill your store with goods',
-    pleaseAddTheProduct: 'Please add the product you would like to sell in your marketplace',
-    currentlyYouHaveNoProducts: 'Currently you have no products in your store. Click ‘Add’ to start filling your store with products.',
+    pleaseAddTheProduct:
+      'Please add the product you would like to sell in your marketplace',
+    currentlyYouHaveNoProducts:
+      'Currently you have no products in your store. Click ‘Add’ to start filling your store with products.',
     addFirstProduct: 'Add first product',
   },
 };

@@ -13,13 +13,15 @@ import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import { Select } from 'components/common/Select';
 
-import AttributesForm from './AttributesForm';
-import ProductsUploader from './ProductsUploader';
+import AttributesForm from '../AttributesForm';
+import ProductsUploader from '../ProductsUploader';
 
-import type { AttrValueType } from './AttributesForm';
-import type { BaseProductNodeType } from '../Wizard';
+import type { AttrValueType } from '../AttributesForm';
+import type { BaseProductNodeType } from '../../Wizard';
 
 import './Form.scss';
+
+import t from './i18n';
 
 type CategoriesTreeType = {
   rawId: number,
@@ -42,31 +44,31 @@ type PropsType = {
 const photoIcons = [
   {
     type: 'mainFoto',
-    text: 'Add main photo',
+    text: t.iconAddMainPhoto,
   },
   {
     type: 'angleView',
-    text: 'Add angle view',
+    text: t.iconAddAngleView,
   },
   {
     type: 'showDetails',
-    text: 'Show details',
+    text: t.iconShowDetails,
   },
   {
     type: 'showInScene',
-    text: 'Show in scene',
+    text: t.iconShowInScene,
   },
   {
     type: 'showInUse',
-    text: 'Show in use',
+    text: t.iconShowInUse,
   },
   {
     type: 'showSizes',
-    text: 'Show sizes',
+    text: t.iconShowSizes,
   },
   {
     type: 'showVariety',
-    text: 'Show variety',
+    text: t.iconShowVariety,
   },
 ];
 
@@ -157,7 +159,7 @@ class ThirdForm extends PureComponent<PropsType> {
       catObj.getAttributes &&
       !isEmpty(catObj.getAttributes) && (
         <div styleName="section correctMargin">
-          <div styleName="sectionName">Properties</div>
+          <div styleName="sectionName">{t.properties}</div>
           <AttributesForm
             attributes={catObj.getAttributes}
             values={attributes}
@@ -179,10 +181,9 @@ class ThirdForm extends PureComponent<PropsType> {
             <Row>
               <Col size={12}>
                 <div styleName="centered">
-                  <div styleName="headerTitle">Add new product</div>
+                  <div styleName="headerTitle">{t.addNewProduct}</div>
                   <div styleName="headerDescription">
-                    Choose what you gonna sale in your marketplace and add it
-                    with ease
+                    {t.chooseWhatYouGonnaSale}
                   </div>
                 </div>
               </Col>
@@ -195,7 +196,7 @@ class ThirdForm extends PureComponent<PropsType> {
                         value={data.name}
                         label={
                           <span>
-                            Product name <span styleName="red">*</span>
+                            {t.labelProductName} <span styleName="red">*</span>
                           </span>
                         }
                         onChange={this.handleChangeBaseProductState}
@@ -208,7 +209,7 @@ class ThirdForm extends PureComponent<PropsType> {
                         value={data.shortDescription}
                         label={
                           <span>
-                            Short description <span styleName="red">*</span>
+                            {t.labelShortDescription} <span styleName="red">*</span>
                           </span>
                         }
                         onChange={this.handleChangeBaseProductState}
@@ -217,7 +218,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     </div>
                   </div>
                   <div styleName="section correctMargin">
-                    <div styleName="sectionName">Product main photo</div>
+                    <div styleName="sectionName">{t.productMainPhoto}</div>
                     <div styleName="uploadersWrapper">
                       <div styleName="uploadedPhotoList">
                         {(data.product.photoMain && (
@@ -256,7 +257,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 noIndents
                                 buttonIconType="camera"
                                 buttonIconSize={20}
-                                buttonLabel="Add photo"
+                                buttonLabel={t.labelAddPhoto}
                                 dataTest="productPhotosUploader"
                               />
                             </Col>
@@ -271,7 +272,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 noIndents
                                 buttonIconType="camera"
                                 buttonIconSize={20}
-                                buttonLabel="Add photo"
+                                buttonLabel={t.labelAddPhoto}
                                 dataTest="productPhotosUploader"
                               />
                             </Col>
@@ -281,7 +282,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     </div>
                   </div>
                   <div styleName="section">
-                    <div styleName="sectionName">Product photo gallery</div>
+                    <div styleName="sectionName">{t.productPhotoGallery}</div>
                     <ProductsUploader
                       onRemove={this.handleRemoveAddtionalPhoto}
                       onUpload={onUpload}
@@ -289,8 +290,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     />
                     <div styleName="uploadDescriptionContainer">
                       <div styleName="description">
-                        * For better product appearance follow recomendations
-                        below and upload appropriate photos:
+                        {t.forBetterProductAppeareance}
                       </div>
                       <div styleName="iconsWrapper">
                         <div styleName="iconsContainer">
@@ -311,7 +311,7 @@ class ThirdForm extends PureComponent<PropsType> {
                   </div>
                   <div styleName="section">
                     <div styleName="sectionName">
-                      General settings and pricing
+                      {t.generalSettingsAndPricing}
                     </div>
                     <div styleName="categorySelector">
                       <CategorySelector
@@ -333,7 +333,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 }
                                 label={
                                   <span>
-                                    Price <span styleName="red">*</span>
+                                    {t.price} <span styleName="red">*</span>
                                   </span>
                                 }
                                 min="0"
@@ -369,7 +369,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 }
                                 label={
                                   <span>
-                                    Vendor code <span styleName="red">*</span>
+                                    {t.vendorCode} <span styleName="red">*</span>
                                   </span>
                                 }
                                 onChange={this.handleChangeProductState}
@@ -386,7 +386,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                     ? ''
                                     : `${data.product.cashback}`
                                 }
-                                label="Cashback"
+                                label={t.labelCashback}
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
@@ -404,7 +404,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                     ? '0'
                                     : `${data.product.quantity}`
                                 }
-                                label="Quantity"
+                                label={t.labelQuantity}
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
@@ -428,7 +428,7 @@ class ThirdForm extends PureComponent<PropsType> {
                         disabled={this.checkForSave()}
                         fullWidth
                       >
-                        <span>Save</span>
+                        <span>{t.save}</span>
                       </Button>
                     </div>
                     <div styleName="buttonContainer">
@@ -439,7 +439,7 @@ class ThirdForm extends PureComponent<PropsType> {
                         role="button"
                         tabIndex="0"
                       >
-                        <span>Cancel</span>
+                        <span>{t.cancel}</span>
                       </div>
                     </div>
                   </div>

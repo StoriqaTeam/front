@@ -169,9 +169,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           <div styleName="icon">
             <Icon type="cameraPlus" size={80} />
           </div>
-          <div styleName="text">
-            {t.currentlyYouHaveNoProducts}
-          </div>
+          <div styleName="text">{t.currentlyYouHaveNoProducts}</div>
           <div styleName="button">
             <Button
               onClick={() =>
