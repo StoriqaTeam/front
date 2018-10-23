@@ -6,20 +6,21 @@ import './StartSellingButton.scss';
 
 type PropsType = {
   text: string,
-  onClick: () => any,
+  href: string,
 };
 
-const StartSellingButton = ({ text, onClick }: PropsType) => (
-  <div
+const StartSellingButton = ({ text, href }: PropsType) => (
+  <a
     role="button"
     tabIndex="-1"
     onKeyPress={() => {}}
-    onClick={onClick}
+    href={href}
     styleName="container"
     data-test="startSelling"
+    target="blank_"
   >
-    <p styleName="text">{text}</p>
-  </div>
+    <span styleName="text">{text}</span>
+  </a>
 );
 
 export default StartSellingButton;

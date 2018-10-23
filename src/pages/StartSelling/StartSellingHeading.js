@@ -1,7 +1,7 @@
 // flow@
 
 import React from 'react';
-import { withRouter, routerShape } from 'found';
+import { withRouter } from 'found';
 import { Container, Row } from 'layout';
 
 import { StartSellingButton } from './index';
@@ -9,11 +9,10 @@ import { StartSellingButton } from './index';
 import './StartSellingHeading.scss';
 
 type PropsType = {
-  router: routerShape,
   lang: string,
 };
 
-const StartSellingHeading = ({ router: { push }, lang }: PropsType) => (
+const StartSellingHeading = ({ lang }: PropsType) => (
   <Container>
     <Row>
       <div styleName="container">
@@ -42,7 +41,11 @@ const StartSellingHeading = ({ router: { push }, lang }: PropsType) => (
         />
         <div styleName="button">
           <StartSellingButton
-            onClick={() => push('/manage/wizard')}
+            href={
+              lang === 'ru'
+                ? 'https://goo.gl/forms/WK4wj1cQuyNA32wc2'
+                : 'https://goo.gl/forms/MS8FAQ9nD2HOzlku1'
+            }
             text={lang === 'ru' ? 'Создать магазин' : 'Start Selling'}
           />
         </div>
