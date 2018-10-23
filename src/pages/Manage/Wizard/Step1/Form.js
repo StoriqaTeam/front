@@ -110,7 +110,8 @@ class FirstForm extends React.Component<PropsType, StateType> {
               value={name || ''}
               label={
                 <span>
-                  {t.storeName}<span styleName="red">*</span>
+                  {t.storeName}
+                  <span styleName="red">*</span>
                 </span>
               }
               onChange={this.handleOnChange}
