@@ -18,7 +18,11 @@ type PropsType = {
   additionalPhotos: Array<string>,
 };
 
-const ProductsUploader = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
+const ProductsUploader = ({
+  onUpload,
+  additionalPhotos,
+  onRemove,
+}: PropsType) => (
   <div styleName="wrapper">
     {additionalPhotos.length !== 0 && (
       <div styleName="uploadersWrapper">

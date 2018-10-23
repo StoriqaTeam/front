@@ -1,10 +1,12 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
 import { Icon } from 'components/Icon';
 
-import './View/View.scss';
+import '../View/View.scss';
+
+import t from './i18n';
 
 type PropsType = {
   onDelete: () => void,
@@ -22,7 +24,7 @@ const ProductLayer = ({ onEdit, onDelete }: PropsType) => (
       data-test="wizardEditProductButton"
     >
       <Icon type="note" size={56} />
-      <span styleName="buttonLabel">Edit product</span>
+      <span styleName="buttonLabel">{t.editProduct}</span>
     </div>
     <div
       styleName="editbutton"
@@ -33,7 +35,7 @@ const ProductLayer = ({ onEdit, onDelete }: PropsType) => (
       data-test="wizardDeleteProductButton"
     >
       <Icon type="basket" size={56} />
-      <span styleName="buttonLabel">Delete product</span>
+      <span styleName="buttonLabel">{t.deleteProduct}</span>
     </div>
   </div>
 );
