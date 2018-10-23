@@ -209,7 +209,8 @@ class ThirdForm extends PureComponent<PropsType> {
                         value={data.shortDescription}
                         label={
                           <span>
-                            {t.labelShortDescription} <span styleName="red">*</span>
+                            {t.labelShortDescription}{' '}
+                            <span styleName="red">*</span>
                           </span>
                         }
                         onChange={this.handleChangeBaseProductState}
@@ -369,7 +370,8 @@ class ThirdForm extends PureComponent<PropsType> {
                                 }
                                 label={
                                   <span>
-                                    {t.vendorCode} <span styleName="red">*</span>
+                                    {t.vendorCode}{' '}
+                                    <span styleName="red">*</span>
                                   </span>
                                 }
                                 onChange={this.handleChangeProductState}

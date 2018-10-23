@@ -10,13 +10,15 @@ import { Col, Row } from 'layout';
 
 import './ProductsUploader.scss';
 
+import t from './i18n';
+
 type PropsType = {
   onUpload: (type: string, e: any) => Promise<*>,
   onRemove: (url: string) => void,
   additionalPhotos: Array<string>,
 };
 
-const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
+const ProductsUploader = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
   <div styleName="wrapper">
     {additionalPhotos.length !== 0 && (
       <div styleName="uploadersWrapper">
@@ -60,7 +62,7 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
           noIndents
           buttonIconType="camera"
           buttonIconSize={20}
-          buttonLabel="Add photo"
+          buttonLabel={t.addPhoto}
           dataTest="productAdditionalPhotosUploader"
         />
       </Col>
@@ -75,7 +77,7 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
           noIndents
           buttonIconType="camera"
           buttonIconSize={20}
-          buttonLabel="Add photo"
+          buttonLabel={t.addPhoto}
           dataTest="productAdditionalPhotosUploader"
         />
       </Col>
@@ -83,4 +85,4 @@ const Uploaders = ({ onUpload, additionalPhotos, onRemove }: PropsType) => (
   </div>
 );
 
-export default Uploaders;
+export default ProductsUploader;

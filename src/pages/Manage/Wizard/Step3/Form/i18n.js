@@ -34,13 +34,15 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     addNewProduct: 'Add new product',
-    chooseWhatYouGonnaSale: 'Choose what you gonna sale in your marketplace and add it with ease',
+    chooseWhatYouGonnaSale:
+      'Choose what you gonna sale in your marketplace and add it with ease',
     labelProductName: 'Product Name',
     labelShortDescription: 'Short Description',
     productMainPhoto: 'Product Main Photo',
     labelAddPhoto: 'Add Photo',
     productPhotoGallery: 'Product photo gallery',
-    forBetterProductAppeareance: '* For better product appearance follow recomendations below and upload appropriate photos:',
+    forBetterProductAppeareance:
+      '* For better product appearance follow recomendations below and upload appropriate photos:',
     iconAddMainPhoto: 'Add main photo',
     iconAddAngleView: 'Add angle view',
     iconShowDetails: 'Show Details',
@@ -56,7 +58,7 @@ const translations: TranslationsBundleType = {
     labelQuantity: 'Quantity',
     save: 'Save',
     cancel: 'Cancel',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
