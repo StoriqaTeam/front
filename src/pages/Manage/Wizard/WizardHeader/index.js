@@ -38,9 +38,9 @@ const WizardStepper = ({
     <div styleName="stepperContainer">
       <StepLabel step={1} text={t.nameYourStore} />
       <Icon type="arrowRight" />
-      <StepLabel step={2} text={t.setUpStore}/>
+      <StepLabel step={2} text={t.setUpStore} />
       <Icon type="arrowRight" />
-      <StepLabel step={3} text={t.fillYourStoreWithGoods}/>
+      <StepLabel step={3} text={t.fillYourStoreWithGoods} />
     </div>
   );
 };

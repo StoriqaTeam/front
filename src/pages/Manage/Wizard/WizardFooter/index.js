@@ -47,9 +47,7 @@ const WizardFooter = ({
         </Col>
         <Col size={12} md={currentStep !== 1 ? 6 : 8}>
           <div styleName="footerTextContainer">
-            <span styleName="footerText">
-              {t.thisListingIsntActiveYet}
-            </span>
+            <span styleName="footerText">{t.thisListingIsntActiveYet}</span>
           </div>
         </Col>
         <Col size={12} md={4}>

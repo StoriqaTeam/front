@@ -16,7 +16,7 @@ const translations: TranslationsBundleType = {
     nameYourStore: 'Name your store',
     setUpStore: 'Set up store',
     fillYourStoreWithGoods: 'fill your store with goods',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

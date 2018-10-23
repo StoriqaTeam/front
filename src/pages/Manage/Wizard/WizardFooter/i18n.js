@@ -15,7 +15,8 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     goBack: 'Go back',
-    thisListingIsntActiveYet: 'This listing isn’t active yet. It will be available to shoppers once you open your shop.',
+    thisListingIsntActiveYet:
+      'This listing isn’t active yet. It will be available to shoppers once you open your shop.',
     nextStep: 'Next Step',
     publishStore: 'Publish Store',
   },
@@ -33,4 +34,3 @@ const validate = (json: {}, verbose: boolean = false): boolean => {
 
 export { translations, validate };
 export default t(translations);
-

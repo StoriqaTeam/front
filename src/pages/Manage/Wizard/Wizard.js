@@ -51,6 +51,8 @@ import Step3 from './Step3/View';
 
 import './Wizard.scss';
 
+import t from './i18n';
+
 type AttributeInputType = {
   attrId: number,
   value: ?string,
@@ -315,8 +317,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (!createStore) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Unknown error',
-            link: { text: 'Close.' },
+            text: t.unknownError,
+            link: { text: t.close },
           });
           callback(false);
           return;
@@ -594,7 +596,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             createBaseProductMutationResponse,
           );
           if (!baseProductId || !baseProductID) {
-            throw new Error("Can't create variant without base product id");
+            throw new Error(t.cantCreateVariantWithoutBaseProductId);
           }
           this.clearValidationErrors();
           // create variant after create base product
@@ -659,12 +661,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           this.props.showAlert({
             type: 'danger',
             // $FlowIgnoreMe
-            text: `Error: ${pathOr(
-              'Unknown error',
+            text: `${t.error}: ${pathOr(
+              t.unknownError,
               ['message'],
               head(errors),
             )}`,
-            link: { text: 'Close.' },
+            link: { text: t.close },
           });
         }
       });
@@ -736,8 +738,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.handleOnClearProductState();
         this.props.showAlert({
           type: 'success',
-          text: 'Product updated!',
-          link: { text: 'Close.' },
+          text: t.productUpdated,
+          link: { text: t.close },
         });
         callback();
       })
@@ -753,12 +755,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           this.props.showAlert({
             type: 'danger',
             // $FlowIgnoreMe
-            text: `Error: ${pathOr(
-              'Unknown error',
+            text: `${t.error}: ${pathOr(
+              t.unknownError,
               ['message'],
               head(errors),
             )}`,
-            link: { text: 'Close.' },
+            link: { text: t.close },
           });
         }
       });
@@ -817,8 +819,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if (error) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
         }
       },
@@ -840,7 +842,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const result = await uploadFile(file);
     if (!result.url) {
       this.props.showAlert({
-        text: "Can't upload photo",
+        text: t.cantUploadPhoto,
         type: 'success',
         link: { text: '' },
       });
@@ -1011,9 +1013,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         >
           <div styleName="endingWrapper">
             <div styleName="endingContent">
-              <div styleName="title">
-                Do you really want to leave this page?
-              </div>
+              <div styleName="title">{t.doYouReallyWantToLeaveThisPage}</div>
               <div styleName="buttonsContainer">
                 <Button
                   onClick={() => this.setState({ showConfirm: false })}
@@ -1021,7 +1021,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
                   wireframe
                   big
                 >
-                  <span>Cancel</span>
+                  <span>{t.cancel}</span>
                 </Button>
                 <div styleName="secondButton">
                   <Button
@@ -1029,7 +1029,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
                     dataTest="closeWizard"
                     big
                   >
-                    <span>Publish my store</span>
+                    <span>{t.publishMyStore}</span>
                   </Button>
                 </div>
               </div>
