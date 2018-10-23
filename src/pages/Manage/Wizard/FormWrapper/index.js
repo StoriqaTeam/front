@@ -1,7 +1,9 @@
-// @flow
+// @flow strict
 
 import React from 'react';
+import type { Node } from 'react';
 import classNames from 'classnames';
+import { isNil } from 'ramda';
 
 import './FormWrapper.scss';
 
@@ -9,7 +11,7 @@ type PropsType = {
   firstForm?: boolean,
   secondForm?: boolean,
   thirdForm?: boolean,
-  children: any,
+  children: Node,
   title: string,
   description: string,
 };
@@ -31,7 +33,7 @@ const FormWrapper = ({
   >
     <div styleName="headerTitle">{title}</div>
     <div styleName="headerDescription">{description}</div>
-    {children && children}
+    {!isNil(children) && children}
   </div>
 );
 
