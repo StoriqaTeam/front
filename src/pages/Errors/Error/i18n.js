@@ -5,20 +5,17 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  oopsItSeemsThatThePageDoesntExist: string,
-  tryToStartAgain: string,
+  oopsSomethingGoneWrong: string,
+  crushed: string,
   startFromMainPage: string,
-  back: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    oopsItSeemsThatThePageDoesntExist:
-      '"Oops! Seems that the page you searching doesn\'t exist."',
-    tryToStartAgain: 'Try to start again from main page or use search tool.',
+    oopsSomethingGoneWrong: 'Oops! Something gone wrong and page has been',
+    crushed: 'crushed. Try to start again from main page.',
     startFromMainPage: 'Start from main page',
-    back: 'Back',
   },
 };
 

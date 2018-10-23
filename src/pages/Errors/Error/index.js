@@ -5,10 +5,12 @@ import { withRouter, routerShape } from 'found';
 
 import { Button } from 'components/common/Button';
 
-import Logo from './svg/logo.svg';
-import ErrorImage from './svg/error.svg';
+import Logo from '../svg/logo.svg';
+import ErrorImage from '../svg/error.svg';
 
-import './styles.scss';
+import '../styles.scss';
+
+import t from './i18n';
 
 type PropsType = {
   router: routerShape,
@@ -32,8 +34,8 @@ class Error extends PureComponent<PropsType> {
             <ErrorImage />
           </div>
           <div styleName="text">
-            Oops! Something gone wrong and page has been<br />
-            crushed. Try to start again from main page.
+            {t.oopsSomethingGoneWrong}n<br />
+            {t.crushed}
           </div>
           <div styleName="button">
             <Button
@@ -42,7 +44,7 @@ class Error extends PureComponent<PropsType> {
               onClick={this.handleToMainPage}
               dataTest="errorPageButton"
             >
-              Start from main page
+              {t.startFromMainPage}
             </Button>
           </div>
         </div>
