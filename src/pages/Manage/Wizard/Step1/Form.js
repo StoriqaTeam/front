@@ -11,6 +11,8 @@ import FormWrapper from '../FormWrapper';
 
 import './Form.scss';
 
+import t from './i18n';
+
 type TranslatedType = {
   lang?: string,
   text: string,
@@ -98,8 +100,8 @@ class FirstForm extends React.Component<PropsType, StateType> {
     return (
       <FormWrapper
         firstForm
-        title="Give your store a name"
-        description="Make a bright name for your store to attend your customers and encrease your sales"
+        title={t.giveYourStoreAname}
+        description={t.makeAbrightName}
       >
         <div styleName="form">
           <div styleName="formItem">
@@ -108,7 +110,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
               value={name || ''}
               label={
                 <span>
-                  Store name <span styleName="red">*</span>
+                  {t.storeName}<span styleName="red">*</span>
                 </span>
               }
               onChange={this.handleOnChange}
@@ -125,7 +127,7 @@ class FirstForm extends React.Component<PropsType, StateType> {
               value={shortDescription || ''}
               label={
                 <span>
-                  Short description <span styleName="red">*</span>
+                  {t.shortDescription} <span styleName="red">*</span>
                 </span>
               }
               onChange={this.handleOnChange}

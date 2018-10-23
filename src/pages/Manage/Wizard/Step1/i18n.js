@@ -5,17 +5,19 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  loading: string,
-  pleaseWait: string,
-  storiqaTeam: string,
+  giveYourStoreAname: string,
+  makeAbrightName: string,
+  storeName: string,
+  shortDescription: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    loading: 'Loading...',
-    pleaseWait: 'Please wait.',
-    storiqaTeam: 'Storiqa team',
+    giveYourStoreAname: 'Give your store a name',
+    makeAbrightName: 'Make a bright name for your store to attend your customers and encrease your sales',
+    storeName: 'Store name',
+    shortDescription: 'Short Description',
   },
 };
 
