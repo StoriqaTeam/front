@@ -1,13 +1,15 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import { withRouter, routerShape } from 'found';
 
 import { Button } from 'components/common/Button';
 
-import Logo from './svg/logo.svg';
+import Logo from '../svg/logo.svg';
 
-import './styles.scss';
+import '../styles.scss';
+
+import t from './i18n';
 
 type PropsType = {
   router: routerShape,
@@ -35,9 +37,9 @@ class Error404 extends PureComponent<PropsType> {
             <span styleName="code404">404</span>
           </div>
           <div styleName="text">
-            {"Oops! Seems that the page you searching doesn't exist."}
+            {t.oopsItSeemsThatThePageDoesntExist}
             <br />
-            Try to start again from main page or use search tool.
+            {t.tryToStartAgain}
           </div>
           <div styleName="button">
             <Button
@@ -46,13 +48,13 @@ class Error404 extends PureComponent<PropsType> {
               onClick={this.handleToMainPage}
               dataTest="404Button"
             >
-              Start from main page
+              {t.startFromMainPage}
             </Button>
             <div // eslint-disable-line
               styleName="linkBack"
               onClick={this.handleBack}
             >
-              Back
+              {t.back}
             </div>
           </div>
         </div>
