@@ -1,5 +1,9 @@
 // @flow
 
+// TODO: отрефакторить таким образом, чтобы hidden input и вызов uploadFile с
+// отображением ошибок рулились из этого компонента.
+// другими словами, сделать полностью автономным
+
 import React from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
@@ -11,21 +15,22 @@ import type { IconSizeType } from 'types';
 import './UploadWrapper.scss';
 
 type PropsType = {
-  children: Node,
-  onUpload: (e: any) => void,
+  children?: ?Node,
+  onUpload: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   buttonLabel: string,
   buttonHeight: number | string,
   buttonWidth: number | string,
-  fullWidth: ?boolean,
+  fullWidth?: ?boolean,
   buttonIconType: ?string,
-  overPicture: ?string,
-  noIndents: ?boolean,
+  overPicture?: ?string,
+  noIndents?: ?boolean,
   id: string,
   dataTest: string,
   buttonIconSize?: IconSizeType,
-  disabled: ?boolean,
+  disabled?: ?boolean,
   customUnit?: boolean,
   square?: boolean,
+  loading?: boolean,
 };
 
 // TODO: refactor for avoid use style props
@@ -46,8 +51,14 @@ const UploadWrapper = ({
   disabled,
   customUnit,
   square,
+  loading,
 }: PropsType) => (
   <div styleName={classNames('wrapper', { square })}>
+    {loading && (
+      <div styleName="uploadIndicator">
+        <div styleName="spinner" />{' '}
+      </div>
+    )}
     <div styleName={classNames('uploadContainer', { noIndents })}>
       <label
         htmlFor={id}
@@ -104,6 +115,12 @@ UploadWrapper.defaultProps = {
   customUnit: false,
   square: false,
   buttonIconSize: 32,
+  children: null,
+  fullWidth: null,
+  overPicture: null,
+  noIndents: null,
+  disabled: null,
+  loading: false,
 };
 
 export default UploadWrapper;
