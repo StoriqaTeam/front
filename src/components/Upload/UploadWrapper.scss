@@ -1,9 +1,10 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .wrapper {
   display: flex;
   flex-direction: row;
   width: 100%;
+  position: relative;
 }
 
 .square {
@@ -28,6 +29,40 @@
   &.noIndents {
     padding-bottom: 0;
     margin-right: 0;
+  }
+}
+
+.uploadIndicator {
+  background-color: #000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.25;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+
+  & .spinner {
+    opacity: 1;
+    border: 1px solid transparent;
+    border-top: 1px solid $color_white;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    animation: spin 2s linear infinite;
+    z-index: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
   }
 }
 

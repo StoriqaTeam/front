@@ -47,6 +47,7 @@ type StateType = {
   langItems: ?Array<{ id: string, label: string }>,
   optionLanguage: string,
   realSlug: ?string,
+  isMainPhotoUploading: boolean,
 };
 
 type PropsType = {
@@ -101,6 +102,7 @@ class Form extends Component<PropsType, StateType> {
         optionLanguage: 'EN',
         formErrors: {},
         realSlug: store.slug,
+        isMainPhotoUploading: false,
       };
     }
   }
@@ -119,6 +121,7 @@ class Form extends Component<PropsType, StateType> {
     optionLanguage: 'EN',
     formErrors: {},
     realSlug: null,
+    isMainPhotoUploading: false,
   };
 
   componentWillMount() {
@@ -250,12 +253,21 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  handleOnUpload = async (e: any) => {
+  handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    this.setState(assocPath(['form', 'cover'], result.url, this.state));
+
+    this.setState({ isMainPhotoUploading: true });
+    uploadFile(e.target.files[0])
+      .then(result => {
+        if (!result || result.url == null) {
+          alert('Error :('); // eslint-disable-line
+        }
+        this.setState(assocPath(['form', 'cover'], result.url, this.state));
+      })
+      .catch(alert)
+      .finally(() => {
+        this.setState({ isMainPhotoUploading: false });
+      });
   };
 
   handleDeleteCover = () => {
@@ -338,6 +350,8 @@ class Form extends Component<PropsType, StateType> {
                   buttonIconSize={32}
                   buttonIconType="upload"
                   dataTest="storeCoverUploader"
+                  buttonLabel=""
+                  loading={this.state.isMainPhotoUploading}
                 />
               </div>
               <div>
