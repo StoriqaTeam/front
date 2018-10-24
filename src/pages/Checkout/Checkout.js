@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
@@ -245,6 +244,10 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   checkReadyToCheckout = (): boolean => {
+    if (!this.props.cart) {
+      return false;
+    }
+
     const {
       cart: { totalCount },
     } = this.props;
@@ -355,7 +358,7 @@ class Checkout extends Component<PropsType, StateType> {
                               <CartStore
                                 onlySelected
                                 unselectable
-                                key={store.__id}
+                                key={store.__id} // eslint-disable-line
                                 store={store}
                                 totals={1000}
                               />
