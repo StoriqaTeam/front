@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
-import { pathOr, isEmpty, path, head, omit } from 'ramda';
+import {pathOr, isEmpty, path, head, omit, filter, prepend, find, propEq} from 'ramda';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -29,6 +29,15 @@ import Form from './Form';
 
 import './Product.scss';
 
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
+
 type AttributeValueType = {
   attrId: number,
   value: string,
@@ -36,13 +45,14 @@ type AttributeValueType = {
 };
 
 type VariantType = {
-  variantId: string,
+  idMainVariant: string,
+  rawIdMainVariant: ?number,
   vendorCode: string,
-  price: number,
-  cashback?: ?number,
-  discount?: ?number,
-  mainPhoto?: ?string,
-  photos?: Array<string>,
+  price: ?number,
+  cashback: ?number,
+  discount: ?number,
+  photoMain: ?string,
+  photos: ?Array<string>,
   attributeValues: Array<AttributeValueType>,
   preOrder: boolean,
   preOrderDays: string,
@@ -56,6 +66,20 @@ type FormType = {
   longDescription: string,
   categoryId: ?number,
   currencyId: number,
+
+
+
+  idMainVariant: string,
+  rawIdMainVariant: ?number,
+  photoMain: ?string,
+  photos: ?Array<string>,
+  vendorCode: string,
+  price: number,
+  cashback: ?number,
+  discount: ?number,
+  preOrderDays: string,
+  preOrder: boolean,
+  attributeValues: Array<AttributeValueType>,
 };
 
 type PropsType = {
@@ -78,20 +102,34 @@ type StateType = {
   variantData: ?VariantType,
   closedVariantFormAnnunciator: boolean,
   shippingData: ?FullShippingType,
+  customAttributes: Array<AttributeType>,
 };
 
 class EditProduct extends Component<PropsType, StateType> {
-  state: StateType = {
-    formErrors: {},
-    variantFormErrors: {},
-    isLoading: false,
-    comeResponse: false,
-    availablePackages: null,
-    isLoadingPackages: true,
-    variantData: null,
-    closedVariantFormAnnunciator: false,
-    shippingData: null,
-  };
+  constructor(props: PropsType) {
+    super(props);
+    // $FlowIgnore
+    const baseProduct = pathOr(null, ['me', 'baseProduct'], props);
+    const { category, customAttributes } = baseProduct;
+    const newCustomAttributes = filter(item => {
+      return Boolean(find(propEq('attributeId', item.rawId))(customAttributes));
+    }, category.getAttributes);
+
+    console.log('---newCustomAttributes', newCustomAttributes);
+
+    this.state = {
+      formErrors: {},
+      variantFormErrors: {},
+      isLoading: false,
+      comeResponse: false,
+      availablePackages: null,
+      isLoadingPackages: true,
+      variantData: null,
+      closedVariantFormAnnunciator: false,
+      shippingData: null,
+      customAttributes: newCustomAttributes,
+    };
+  }
 
   componentDidMount() {
     // $FlowIgnore
@@ -144,6 +182,7 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   handleSave = (form: FormType) => {
+    console.log('---form', form);
     this.setState({
       formErrors: {},
       variantFormErrors: {},
@@ -217,16 +256,32 @@ class EditProduct extends Component<PropsType, StateType> {
           this.setState({ isLoading: false });
           return;
         }
-        const { variantData } = this.state;
-        if (variantData) {
-          if (variantData.variantId) {
-            this.handleUpdateVariant(variantData);
-          } else {
-            this.handleCreateVariant(variantData);
-          }
-        } else {
-          this.handleShippingSave();
+
+        if (form && form.rawIdMainVariant) {
+          this.handleUpdateVariant({
+            idMainVariant: form.idMainVariant,
+            rawIdMainVariant: form.rawIdMainVariant,
+            photoMain: form.photoMain,
+            photos: form.photos,
+            vendorCode: form.vendorCode,
+            price: form.price,
+            cashback: form.cashback,
+            discount: form.discount,
+            preOrderDays: form.preOrderDays,
+            preOrder: form.preOrder,
+            attributeValues: form.attributeValues,
+          });
         }
+        // const { variantData } = this.state;
+        // if (variantData) {
+        //   if (variantData.variantId) {
+        //     this.handleUpdateVariant(variantData);
+        //   } else {
+        //     this.handleCreateVariant(variantData);
+        //   }
+        // } else {
+        //   this.handleShippingSave();
+        // }
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -252,11 +307,11 @@ class EditProduct extends Component<PropsType, StateType> {
     const params: UpdateProductMutationType = {
       input: {
         clientMutationId: '',
-        id: variantData.variantId,
+        id: variantData.idMainVariant,
         product: {
           price: variantData.price,
           vendorCode: variantData.vendorCode,
-          photoMain: variantData.mainPhoto,
+          photoMain: variantData.photoMain,
           additionalPhotos: variantData.photos,
           cashback: variantData.cashback ? variantData.cashback / 100 : null,
           discount: variantData.discount ? variantData.discount / 100 : null,
@@ -267,6 +322,7 @@ class EditProduct extends Component<PropsType, StateType> {
       },
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
@@ -277,7 +333,6 @@ class EditProduct extends Component<PropsType, StateType> {
         if (!isEmpty(validationErrors)) {
           this.setState({
             variantFormErrors: validationErrors,
-            isLoading: false,
           });
           return;
         }
@@ -290,7 +345,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: `Error: "${statusError}"`,
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
 
@@ -303,7 +357,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
         if (errors) {
@@ -312,10 +365,13 @@ class EditProduct extends Component<PropsType, StateType> {
             text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
-        this.handleShippingSave();
+        this.props.showAlert({
+          type: 'success',
+          text: 'Product update!',
+          link: { text: '' },
+        });
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -550,7 +606,16 @@ class EditProduct extends Component<PropsType, StateType> {
     });
   };
 
+  handleCreateAttribute = (attribute: AttributeType) => {
+    this.setState((prevState: StateType) => ({ customAttributes: prepend(attribute, prevState.customAttributes) }));
+  };
+
+  handleRemoveAttribute = (id: string) => {
+    this.setState((prevState: StateType) => ({ customAttributes: filter(item => (item.id !== id), prevState.customAttributes) }));
+  };
+
   render() {
+    console.log('---BASE PRODUCT this.props', this.props);
     const { me } = this.props;
     const {
       isLoading,
@@ -562,6 +627,7 @@ class EditProduct extends Component<PropsType, StateType> {
       shippingData,
       formErrors,
       variantFormErrors,
+      customAttributes,
     } = this.state;
     let baseProduct = null;
     if (me && me.baseProduct) {
@@ -591,6 +657,9 @@ class EditProduct extends Component<PropsType, StateType> {
               onChangeShipping={this.handleOnChangeShipping}
               shippingData={shippingData}
               resetVariantFormErrors={this.resetVariantFormErrors}
+              customAttributes={customAttributes}
+              onCreateAttribute={this.handleCreateAttribute}
+              onRemoveAttribute={this.handleRemoveAttribute}
             />
           </div>
         )}
@@ -612,6 +681,15 @@ export default createFragmentContainer(
       baseProduct(id: $productID) {
         id
         rawId
+        customAttributes {
+          id
+          rawId
+          attributeId
+          attribute {
+            id
+            rawId
+          }
+        }
         status
         currency
         ...Shipping_baseProduct

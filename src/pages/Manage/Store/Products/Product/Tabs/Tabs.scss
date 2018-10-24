@@ -1,0 +1,54 @@
+@import '../../../../../../styles/variables';
+
+.container {
+
+}
+
+.head {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  border-bottom: 1px solid $color_grey_trivial;
+}
+
+.tab {
+  color: #505050;
+  cursor: pointer;
+  font-size: 14px;
+  height: 7.25rem;
+  line-height: 7.25rem;
+  letter-spacing: 1.2px;
+  padding: 0 3rem;
+  vertical-align: middle;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  &:hover, &.active {
+    color: #03A9FF;
+
+    &:after {
+      background-color: #03A9FF;
+    }
+  }
+
+  &.active {
+
+  }
+}
+
+.body {
+
+}

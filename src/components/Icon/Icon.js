@@ -55,7 +55,6 @@ import Move from 'components/Icon/svg/move.svg';
 import EmptyCart from 'components/Icon/svg/emptyCart.svg';
 import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
 import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
-//
 import Status from 'components/Icon/svg/status.svg';
 import Calendar from 'components/Icon/svg/calendar.svg';
 
@@ -71,6 +70,7 @@ import ShowVariety from 'components/Icon/svg/product/showVariety.svg';
 import SortArrows from 'components/Icon/svg/sortArrows.svg';
 import User from 'components/Icon/svg/user.svg';
 import Chat from 'components/Icon/svg/chat.svg';
+import AddVariant from 'components/Icon/svg/addVariant.svg';
 
 import type { IconSizeType } from 'types';
 
@@ -140,7 +140,7 @@ const iconsMap = {
   searchNoResults: <SearchNoResults />,
   status: <Status />,
   calendar: <Calendar />,
-  //
+  addVariant: <AddVariant />,
 
   // For product
   mainFoto: <MainFoto />,

@@ -22,11 +22,13 @@ type CategoryType = {
 };
 
 type PropsType = {
+  id?: string,
   categories: CategoryType,
   onSelect: (categoryId: number) => void,
   category: {
     rawId: number,
   },
+  onlyView?: boolean,
 };
 
 type StateType = {
@@ -93,11 +95,12 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   button: any;
 
   handleToggleExpand = (e: any) => {
+    const { onlyView } = this.props;
     const { snapshot } = this.state;
     const isCategoryWrap =
       this.categoryWrapp && this.categoryWrapp.contains(e.target);
     const isButton = this.button && this.button.contains(e.target);
-    if (isButton && !isCategoryWrap) {
+    if (isButton && !isCategoryWrap && !onlyView) {
       this.setState({
         isShow: true,
         ...snapshot,
@@ -145,10 +148,11 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   };
 
   renderPath = () => {
+    const { onlyView } = this.props;
     const { lang, snapshot } = this.state;
     return (
       <div
-        styleName="breadcrumbs"
+        styleName={classNames('breadcrumbs', { onlyView })}
         onClick={() => this.setState({ isShow: true })}
         onKeyDown={() => {}}
         role="button"
@@ -175,14 +179,17 @@ class CategorySelector extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const { categories } = this.props;
+    const { id, categories } = this.props;
     const { lang, level1Item, level2Item, level3Item, isShow } = this.state;
 
     const level1ItemName = level1Item ? getNameText(level1Item.name, lang) : '';
     const level2ItemName = level2Item ? getNameText(level2Item.name, lang) : '';
 
     return (
-      <div styleName="container">
+      <div
+        id={id || null}
+        styleName="container"
+      >
         <div styleName="wrapper">
           <div styleName="label">Category</div>
           <div

@@ -19,25 +19,28 @@ const smoothScroll = {
     let percentage;
     let startTime;
     const node = document.getElementById(id);
-    const nodeTop = node.offsetTop;
     const nodeHeight = node.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
-    const height = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight,
-    );
-    const windowHeight = window.innerHeight;
+    const nodeTop = node.getBoundingClientRect().top;
+    if (nodeTop > 0) {
+      return;
+    }
+    // const body = document.body;
+    // const html = document.documentElement;
+    // const height = Math.max(
+    //   body.scrollHeight,
+    //   body.offsetHeight,
+    //   html.clientHeight,
+    //   html.scrollHeight,
+    //   html.offsetHeight,
+    // );
+    // const windowHeight = window.innerHeight;
     const offset = window.pageYOffset;
-    const delta = nodeTop - offset;
-    const bottomScrollableY = height - windowHeight;
-    const targetY =
-      bottomScrollableY < delta
-        ? bottomScrollableY - (height - nodeTop - nodeHeight + offset)
-        : delta;
+    // const delta = nodeTop - offset;
+    // const bottomScrollableY = height - windowHeight;
+    // const targetY =
+    //   bottomScrollableY < delta
+    //     ? bottomScrollableY - (height - nodeTop - nodeHeight + offset)
+    //     : delta;
 
     startTime = Date.now();
     percentage = 0;
@@ -67,7 +70,7 @@ const smoothScroll = {
           0,
           elapsed,
           offset,
-          targetY,
+          nodeTop - 150,
           settings.duration,
         );
         window.scrollTo(0, yScroll);

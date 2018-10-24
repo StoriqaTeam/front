@@ -9,7 +9,6 @@ import './Header.scss';
 
 type PropsType = {
   onSelectAllClick: () => void,
-  notRemove: boolean,
 };
 
 const Header = (props: PropsType) => (
@@ -54,11 +53,9 @@ const Header = (props: PropsType) => (
       </div>
     </div>
     <div styleName="headerItem tdBasket">
-      {!props.notRemove && (
-        <button styleName="deleteButton">
-          <Icon type="basket" size={32} />
-        </button>
-      )}
+      <button styleName="deleteButton">
+        <Icon type="basket" size={32} />
+      </button>
     </div>
     <div styleName="headerItem tdDropdawn" />
   </div>

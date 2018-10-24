@@ -17,6 +17,15 @@ import Table from './Table/Table';
 
 import './Variants.scss';
 
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
+
 type StateType = {
   isNewVariant: boolean,
 };
@@ -57,6 +66,7 @@ type PropsType = {
   comeResponse: boolean,
   resetComeResponse: () => void,
   closedVariantFormAnnunciator: boolean,
+  customAttributes: Array<AttributeType>,
 };
 
 class Variants extends Component<PropsType, StateType> {
@@ -137,7 +147,9 @@ class Variants extends Component<PropsType, StateType> {
       comeResponse,
       resetComeResponse,
       closedVariantFormAnnunciator,
+      customAttributes,
     } = this.props;
+    // console.log('---attributes', attributes);
     const { isNewVariant } = this.state;
     return (
       <Fragment>

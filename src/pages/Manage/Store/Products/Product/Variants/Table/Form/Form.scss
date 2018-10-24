@@ -1,10 +1,9 @@
 @import '../../../../../../../../styles/variables';
 
 .container {
-  background-color: $color_grey_bg;
-  border: 1px solid $color_grey_trivial;
-  margin: -1px 0;
-  padding: 4rem;
+  //background-color: $color_grey_bg;
+  //border: 1px solid $color_grey_trivial;
+  //margin: -1px 0;
 }
 
 .variants {
@@ -17,8 +16,12 @@
 }
 
 .inputWidth {
-  width: 23.875rem;
-  margin-right: 2rem;
+  max-width: 41rem;
+  margin-top: 6rem;
+
+  &.inputWidthPrice {
+    margin-top: 3rem;
+  }
 }
 
 .priceIcon {
@@ -57,12 +60,13 @@
 }
 
 .variant {
-  display: flex;
-  flex-wrap: wrap;
+  //display: flex;
+  //flex-wrap: wrap;
   margin-bottom: 2rem;
 }
 
 .inputPostfix {
+  position: absolute;
   color: $color_grey_minor;
   font-size: 12px;
 }
@@ -102,7 +106,7 @@
 }
 
 .preOrder {
-  margin-top: 4rem;
+  margin-top: 8rem;
 
   .preOrderTitle {
     display: flex;

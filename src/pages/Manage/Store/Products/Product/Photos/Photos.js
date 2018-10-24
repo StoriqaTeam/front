@@ -13,7 +13,7 @@ type PropsType = {
   onAddMainPhoto: (url: string) => void,
   onAddPhoto: (url: string) => void,
   onRemovePhoto: (url: string) => void,
-  mainPhoto: ?string,
+  photoMain: ?string,
   photos: ?Array<string>,
   isMainVariant?: boolean,
 };
@@ -36,13 +36,10 @@ class Photos extends PureComponent<PropsType> {
   };
 
   render() {
-    const { mainPhoto, photos: items, onRemovePhoto, isMainVariant } = this.props;
+    const { photoMain, photos: items, onRemovePhoto, isMainVariant } = this.props;
     return (
       <div styleName="container">
         <div styleName="mainPhoto">
-          <div styleName="title">
-            <strong>Product photos</strong>
-          </div>
           <div styleName="upload mainPhotoUpload">
             <UploadWrapper
               id={`${isMainVariant ? 'main-variant' : ''}main-photo`}
@@ -54,15 +51,15 @@ class Photos extends PureComponent<PropsType> {
               dataTest="productPhotosUploader"
             />
           </div>
-          {mainPhoto && (
+          {photoMain && (
             <div styleName="item mainPhotoItem">
               <div styleName="mainPhotoItemWrap">
-                <img src={convertSrc(mainPhoto, 'small')} alt="img" />
+                <img src={convertSrc(photoMain, 'small')} alt="img" />
               </div>
               <div
                 styleName="remove"
                 onClick={() => {
-                  onRemovePhoto(mainPhoto);
+                  onRemovePhoto(photoMain);
                 }}
                 onKeyDown={() => {}}
                 role="button"

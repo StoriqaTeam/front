@@ -25,6 +25,15 @@ import Warehouses from './Warehouses';
 
 import './Form.scss';
 
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
+
 type AttributeValueType = {
   attrId: number,
   value: string,
@@ -47,6 +56,12 @@ type FormErrorsType = {
   attributes?: Array<string>,
 };
 
+type CategoryType = {
+  getAttributes: Array<{
+    rawId: number,
+  }>,
+};
+
 type StateType = {
   vendorCode: ?string,
   price: ?number,
@@ -59,15 +74,10 @@ type StateType = {
   isLoading: boolean,
   preOrderDays: string,
   preOrder: boolean,
-  preOrderDays: string,
 };
 
 type PropsType = {
-  category: {
-    getAttributes: Array<{
-      rawId: number,
-    }>,
-  },
+  category: CategoryType,
   variant: ?{
     id: string,
     productRawId: string,
@@ -96,6 +106,8 @@ type PropsType = {
   onChangeVariantForm: (variantData: ?VariantType) => void,
   formErrors: FormErrorsType,
   resetVariantFormErrors: (field: string) => {},
+  customAttributes: Array<AttributeType>,
+  isMainVariant?: boolean,
 };
 
 type ValueForAttributeInputType = {
@@ -119,11 +131,12 @@ class Form extends Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    const { onChangeVariantForm, variant, formErrors } = props;
+    const { onChangeVariantForm, variant, formErrors, customAttributes } = props;
+    // console.log('---customAttributes', customAttributes);
     const product = variant;
     if (!product) {
       this.state = {
-        attributeValues: this.resetAttrValues(),
+        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes) : [],
         vendorCode: null,
         price: null,
         formErrors,
@@ -139,7 +152,7 @@ class Form extends Component<PropsType, StateType> {
         discount: Math.round((product.discount || 0) * 100),
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
-        attributeValues: this.resetAttrValues(),
+        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes) : [],
         formErrors,
         isLoading: false,
         preOrder: Boolean(product.preOrder),
@@ -167,15 +180,20 @@ class Form extends Component<PropsType, StateType> {
       };
       onChangeVariantForm(variantData);
     }
+    const { customAttributes } = this.props;
+    if (JSON.stringify(prevProps.customAttributes) !== JSON.stringify(customAttributes)) {
+      const attrValues = this.resetAttrValues(customAttributes);
+      this.onChangeValues(attrValues);
+    }
   }
 
   onChangeValues = (values: Array<AttributeValueType>) => {
     this.setState({ attributeValues: values });
   };
 
-  setFormErrors = (errors: FormErrorsType) => {
-    this.setState({ formErrors: errors });
-  };
+  // setFormErrors = (errors: FormErrorsType) => {
+  //   this.setState({ formErrors: errors });
+  // };
 
   validate = () => {
     const { errors } = validate(
@@ -190,13 +208,13 @@ class Form extends Component<PropsType, StateType> {
 
   preOrderDaysInput: ?HTMLInputElement;
 
-  resetAttrValues = () => {
+  resetAttrValues = (customAttributes: Array<AttributeType>) => {
     const attrValues: Array<AttributeValueType> = map(
       item => ({
         attrId: item.rawId,
         ...this.valueForAttribute({ attr: item, variant: this.props.variant }),
       }),
-      this.props.category.getAttributes,
+      customAttributes,
     );
     return attrValues;
   };
@@ -348,76 +366,68 @@ class Form extends Component<PropsType, StateType> {
   };
 
   renderVariant = () => {
-    // const { formErrors } = this.props;
+    // const { isMainVariant } = this.props;
     const { vendorCode, price, cashback, discount, formErrors } = this.state;
     return (
       <div styleName="variant">
         <div styleName="inputWidth">
-          <div styleName="inputWidth">
+          <Input
+            fullWidth
+            label={
+              <span>
+                  Vendor code <span styleName="asterisk">*</span>
+                </span>
+            }
+            value={vendorCode || ''}
+            onChange={this.handleVendorCodeChange}
+            errors={formErrors && formErrors.vendorCode}
+            dataTest="variantVendorcodeInput"
+          />
+        </div>
+        <div styleName="inputWidth inputWidthPrice">
+          <div styleName="inputWithIcon">
             <Input
               fullWidth
               label={
                 <span>
-                  Vendor code <span styleName="asterisk">*</span>
+                  Price <span styleName="asterisk">*</span>
                 </span>
               }
-              value={vendorCode || ''}
-              onChange={this.handleVendorCodeChange}
-              errors={formErrors && formErrors.vendorCode}
-              dataTest="variantVendorcodeInput"
+              onChange={this.handlePriceChange}
+              onBlur={this.handlePriceBlur}
+              value={!isNil(price) ? `${price}` : ''}
+              errors={formErrors && formErrors.price}
+              dataTest="variantPriceInput"
             />
+            <span styleName="priceIcon">STQ</span>
           </div>
         </div>
         <div styleName="inputWidth">
-          <div styleName="inputWidth">
-            <div styleName="inputWithIcon">
-              <Input
-                fullWidth
-                label={
-                  <span>
-                    Price <span styleName="asterisk">*</span>
-                  </span>
-                }
-                onChange={this.handlePriceChange}
-                onBlur={this.handlePriceBlur}
-                value={!isNil(price) ? `${price}` : ''}
-                errors={formErrors && formErrors.price}
-                dataTest="variantPriceInput"
-              />
-              <span styleName="priceIcon">STQ</span>
-            </div>
-          </div>
+          <Input
+            fullWidth
+            label="Cashback"
+            onChange={this.handlePercentChange('cashback')}
+            value={!isNil(cashback) ? `${cashback}` : ''}
+            dataTest="variantCashbackInput"
+          />
+          <span styleName="inputPostfix">Percent</span>
         </div>
         <div styleName="inputWidth">
-          <div styleName="inputWidth">
-            <Input
-              fullWidth
-              label="Cashback"
-              onChange={this.handlePercentChange('cashback')}
-              value={!isNil(cashback) ? `${cashback}` : ''}
-              dataTest="variantCashbackInput"
-            />
-            <span styleName="inputPostfix">Percent</span>
-          </div>
-        </div>
-        <div styleName="inputWidth">
-          <div styleName="inputWidth">
-            <Input
-              fullWidth
-              label="Discount"
-              onChange={this.handlePercentChange('discount')}
-              value={!isNil(discount) ? `${discount}` : ''}
-              dataTest="variantDiscountInput"
-            />
-            <span styleName="inputPostfix">Percent</span>
-          </div>
+          <Input
+            fullWidth
+            label="Discount"
+            onChange={this.handlePercentChange('discount')}
+            value={!isNil(discount) ? `${discount}` : ''}
+            dataTest="variantDiscountInput"
+          />
+          <span styleName="inputPostfix">Percent</span>
         </div>
       </div>
     );
   };
 
   render() {
-    const { category, variant, formErrors } = this.props;
+    const { variant, formErrors, customAttributes, isMainVariant } = this.props;
     const {
       photos = [],
       mainPhoto,
@@ -427,29 +437,18 @@ class Form extends Component<PropsType, StateType> {
     } = this.state;
     return (
       <div styleName="container">
-        <div styleName="title">
+        {/* <div styleName="title">
           <strong>General</strong>
-        </div>
-        <div styleName="variants">{this.renderVariant()}</div>
+        </div> */}
         <Photos
           photos={photos}
           mainPhoto={mainPhoto}
           onAddMainPhoto={this.handleAddMainPhoto}
           onAddPhoto={this.handleAddPhoto}
           onRemovePhoto={this.handleRemovePhoto}
+          isMainVariant={isMainVariant}
         />
-        {attributeValues &&
-          !isEmpty(attributeValues) && (
-            <Characteristics
-              category={category}
-              values={this.state.attributeValues || []}
-              onChange={this.onChangeValues}
-              errors={(formErrors && formErrors.attributes) || null}
-            />
-          )}
-        {variant &&
-          variant.stocks &&
-          !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
+        <div styleName="variants">{this.renderVariant()}</div>
         <div styleName="preOrder">
           <div styleName="preOrderTitle">
             <div styleName="title">
@@ -478,6 +477,18 @@ class Form extends Component<PropsType, StateType> {
             />
           </div>
         </div>
+        {variant &&
+          variant.stocks &&
+          !isEmpty(variant.stocks) && <Warehouses stocks={variant.stocks} />}
+        {attributeValues &&
+          !isEmpty(attributeValues) && (
+            <Characteristics
+              customAttributes={customAttributes}
+              values={this.state.attributeValues || []}
+              onChange={this.onChangeValues}
+              errors={(formErrors && formErrors.attributes) || null}
+            />
+          )}
       </div>
     );
   }

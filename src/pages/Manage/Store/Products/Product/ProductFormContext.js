@@ -8,6 +8,7 @@ const ProductFormContext = createContext({
   onChangeVariantForm: () => {},
   variantFormErrors: {},
   resetVariantFormErrors: () => {},
+  customAttributes: [],
 });
 
 export default ProductFormContext;

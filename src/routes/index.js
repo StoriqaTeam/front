@@ -113,6 +113,7 @@ const routes = (
                     rawId
                     name {
                       text
+                      lang
                     }
                     metaField {
                       values

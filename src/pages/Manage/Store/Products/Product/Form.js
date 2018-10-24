@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   assocPath,
   prop,
@@ -12,27 +12,51 @@ import {
   map,
   assoc,
   dissoc,
+  prepend,
+  filter,
+  keys,
+  head, find, reject, append, isNil, contains,
+  propEq,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Select, SpinnerCircle, Button } from 'components/common';
+import { Select, SpinnerCircle, Button, InputPrice } from 'components/common';
 import { CategorySelector } from 'components/CategorySelector';
+import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { renameKeys } from 'utils/ramda';
 import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
+import smoothscroll from 'libs/smoothscroll';
 
 import type { SelectItemType } from 'types';
 
-import { ProductFormContext } from './index';
+import { ProductFormContext, AdditionalAttributes } from './index';
 import { Shipping } from './Shipping';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
 import Variants from './Variants/Variants';
+import Photos from './Photos/Photos';
+import Warehouses from './Warehouses/Warehouses';
+import Tabs from './Tabs/Tabs';
+import Characteristics from './Characteristics/Characteristics';
+import VariantForm from './VariantForm/VariantForm';
+
+
+
 
 import './Product.scss';
+
+type AttributeType = {
+  id: string,
+  rawId: number,
+  name: {
+    lang: string,
+    text: string,
+  },
+};
 
 type AttributeValueType = {
   attrId: number,
@@ -73,6 +97,13 @@ type BaseProductType = {
   store: {
     rawId: number,
   },
+  currency: string,
+  products: any,
+};
+
+type ValueForAttributeInputType = {
+  attr: any,
+  variant: any,
 };
 
 type PropsType = {
@@ -97,16 +128,36 @@ type PropsType = {
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   shippingData: ?FullShippingType,
   resetVariantFormErrors: (field: string) => void,
+
+  customAttributes: Array<AttributeType>,
+  onCreateAttribute: (attribute: AttributeType) => void,
+  onRemoveAttribute: (id: string) => void,
+  onResetAttribute: () => void,
 };
 
 type StateType = {
   form: {
     name: string,
-    shortDescription: string,
-    longDescription: string,
     seoTitle: string,
     seoDescription: string,
+    shortDescription: string,
+    longDescription: string,
+    currency: ?SelectItemType,
     categoryId: ?number,
+
+
+
+    idMainVariant: ?string,
+    rawIdMainVariant: ?number,
+    photoMain: ?string,
+    photos: ?Array<string>,
+    vendorCode: ?string,
+    price: ?number,
+    cashback: ?number,
+    discount: ?number,
+    preOrderDays: string,
+    preOrder: boolean,
+    attributeValues: Array<AttributeValueType>,
   },
   formErrors: {
     [string]: Array<string>,
@@ -124,22 +175,36 @@ type StateType = {
     getAttributes: ?Array<*>,
   },
   currencies: Array<SelectItemType>,
-  currency: ?SelectItemType,
   variantFormErrors: {
     vendorCode?: Array<string>,
     price?: Array<string>,
     attributes?: Array<string>,
   },
+  scrollArr: Array<string>,
+  activeTab: string,
+  tabs: Array<{
+    id: string,
+    label: string,
+  }>,
+  isNewVariant: boolean,
 };
 
 class Form extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { baseProduct, currencies } = props;
+    const { baseProduct, currencies, customAttributes } = props;
     // $FlowIgnore
     const currency = pathOr('STQ', ['baseProduct', 'currency'], props);
     let form = {};
+    console.log('---baseProduct', baseProduct);
+
     if (baseProduct) {
+      // $FlowIgnore
+      const allVariants = pathOr([], ['products', 'edges'], baseProduct);
+      const filteredVariants = map(item => item.node, allVariants);
+      const mainVariant = head(filteredVariants);
+      console.log('---mainVariant', mainVariant);
+
       form = {
         name: getNameText(baseProduct.name || [], 'EN') || '',
         shortDescription:
@@ -150,6 +215,20 @@ class Form extends Component<PropsType, StateType> {
         seoDescription:
           getNameText(baseProduct.seoDescription || [], 'EN') || '',
         categoryId: baseProduct.category ? baseProduct.category.rawId : null,
+
+
+
+        idMainVariant: mainVariant.id,
+        rawIdMainVariant: mainVariant.rawId,
+        photoMain: mainVariant.photoMain,
+        photos: mainVariant.additionalPhotos || [],
+        vendorCode: mainVariant.vendorCode,
+        price: mainVariant.price,
+        cashback: Math.round((mainVariant.cashback || 0) * 100),
+        discount: Math.round((mainVariant.discount || 0) * 100),
+        preOrderDays: mainVariant.preOrderDays,
+        preOrder: mainVariant.preOrder,
+        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes, mainVariant) : [],
       };
     } else {
       form = {
@@ -159,6 +238,20 @@ class Form extends Component<PropsType, StateType> {
         seoTitle: '',
         seoDescription: '',
         categoryId: null,
+
+
+
+        idMainVariant: null,
+        rawIdMainVariant: null,
+        photoMain: null,
+        photos: [],
+        vendorCode: null,
+        price: null,
+        cashback: null,
+        discount: null,
+        preOrderDays: '',
+        preOrder: false,
+        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes, null) : [],
       };
     }
     this.state = {
@@ -169,6 +262,19 @@ class Form extends Component<PropsType, StateType> {
       currency: { id: currency, label: currency },
       variantFormErrors: {},
       shippingErrors: null,
+      scrollArr: ['name', 'shortDescription', 'longDescription', 'categoryId', 'vendorCode', 'price'],
+      activeTab: 'variants',
+      tabs: [
+        {
+          id: 'variants',
+          label: 'Variants',
+        },
+        {
+          id: 'delivery',
+          label: 'Delivery',
+        },
+      ],
+      isNewVariant: false,
     };
   }
 
@@ -190,7 +296,7 @@ class Form extends Component<PropsType, StateType> {
   }
 
   componentDidUpdate(prevProps: PropsType) {
-    const { shippingData, variantFormErrors } = this.props;
+    const { shippingData, variantFormErrors, customAttributes } = this.props;
     if (
       JSON.stringify(shippingData) !== JSON.stringify(prevProps.shippingData)
     ) {
@@ -204,11 +310,87 @@ class Form extends Component<PropsType, StateType> {
         renameKeys({ vendor_code: 'vendorCode' }, variantFormErrors),
       );
     }
+
+
+
+
+    if (JSON.stringify(prevProps.customAttributes) !== JSON.stringify(customAttributes)) {
+      const attrValues = this.resetAttrValues(customAttributes);
+      this.onChangeValues(attrValues);
+    }
   }
 
   setVariantFormErrors = (errors: { [string]: Array<string> }) => {
     this.setState({ variantFormErrors: errors });
   };
+
+
+
+
+
+
+
+  resetAttrValues = (customAttributes: Array<AttributeType>, variant) => {
+    // $FlowIgnoreMe
+    const attributeValues = pathOr(null, ['form', 'attributeValues'], this.state);
+    const attrValues: Array<AttributeValueType> = map(
+      item => {
+        if (attributeValues) {
+          const isAttributeValue = find(propEq('attrId', item.rawId))(attributeValues);
+          if (isAttributeValue) {
+            return isAttributeValue;
+          }
+        }
+        return ({
+          attrId: item.rawId,
+          ...this.valueForAttribute({ attr: item, variant }),
+        });
+      },
+      customAttributes,
+    );
+    return attrValues;
+  };
+
+  valueForAttribute = (
+    input: ValueForAttributeInputType,
+  ): { value: string, metaField?: string } => {
+    const { attr, variant } = input;
+    const attrFromVariant =
+      variant &&
+      find(item => item.attribute.rawId === attr.rawId, variant.attributes);
+    if (attrFromVariant && attrFromVariant.value) {
+      return {
+        value: attrFromVariant.value,
+        metaField: attrFromVariant.metaField,
+      };
+    }
+    const { values, translatedValues } = attr.metaField;
+    if (values) {
+      return {
+        value: head(values) || '',
+      };
+    } else if (translatedValues && !isEmpty(translatedValues)) {
+      return {
+        // $FlowIgnoreMe
+        value: pathOr(
+          '',
+          // $FlowIgnoreMe
+          [0, 'translations', 0, 'text'],
+          translatedValues || [],
+        ),
+      };
+    }
+    return {
+      value: '',
+    };
+  };
+
+
+
+
+
+
+
 
   resetShippingErrors = () => {
     this.setState({ shippingErrors: null });
@@ -218,14 +400,16 @@ class Form extends Component<PropsType, StateType> {
     // TODO: вынести спеки
     const { errors } = validate(
       {
-        name: [[val => !isEmpty(val), 'Name must not be empty']],
+        name: [[val => Boolean(val), 'Name is required']],
         shortDescription: [
-          [val => !isEmpty(val), 'Short description must not be empty'],
+          [val => Boolean(val), 'Short description is required'],
         ],
         longDescription: [
-          [val => !isEmpty(val), 'Long description must not be empty'],
+          [val => Boolean(val), 'Long description is required'],
         ],
-        categoryId: [[val => val, 'Select a category']],
+        categoryId: [[val => Boolean(val), 'Category is required']],
+        vendorCode: [[val => Boolean(val), 'Vendor code is required']],
+        price: [[val => Boolean(val), 'Price is required']],
       },
       this.state.form,
     );
@@ -274,31 +458,30 @@ class Form extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { variantData } = this.props;
-    const { form, currency } = this.state;
+    const { form, currency, scrollArr } = this.state;
     this.setState({
       formErrors: {},
       variantFormErrors: {},
       shippingErrors: null,
     });
     const preValidationErrors = this.validate();
-    const preVariantValidationErrors = this.variantValidate();
-    const shippingValidationErrors = this.shippingValidate();
+    // const preVariantValidationErrors = this.variantValidate();
+    // const shippingValidationErrors = this.shippingValidate();
     if (
-      preValidationErrors ||
-      preVariantValidationErrors ||
-      shippingValidationErrors
+      preValidationErrors
+      // preVariantValidationErrors ||
+      // shippingValidationErrors
     ) {
       this.setState({
         formErrors: preValidationErrors || {},
-        variantFormErrors: preVariantValidationErrors || {},
-        shippingErrors: shippingValidationErrors || null,
+        // variantFormErrors: preVariantValidationErrors || {},
+        // shippingErrors: shippingValidationErrors || null,
       });
+      const oneArr = filter(item => contains(item, keys(preValidationErrors)), scrollArr);
+      smoothscroll.scrollTo(head(oneArr));
       return;
     }
-    this.props.onSave(
-      { ...form, currencyId: currency ? Number(currency.id) : null },
-      variantData,
-    );
+    this.props.onSave({ ...form, currency }, variantData);
   };
 
   handleInputChange = (id: string) => (e: any) => {
@@ -320,7 +503,7 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleSelectedCategory = (categoryId: number) => {
-    const { categories } = this.props;
+    const { categories, onResetAttribute } = this.props;
     const category = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
       categories,
@@ -336,7 +519,7 @@ class Form extends Component<PropsType, StateType> {
         getAttributes: category.getAttributes,
       },
       formErrors: dissoc('categoryId', prevState.formErrors),
-    }));
+    }), onResetAttribute);
   };
 
   handleOnSelectCurrency = (currency: ?SelectItemType) => {
@@ -373,16 +556,16 @@ class Form extends Component<PropsType, StateType> {
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
-    const requiredLabel = (
+    const requiredLabel = required ? (
       <span>
         {label} <span styleName="asterisk">*</span>
       </span>
-    );
+    ) : label;
     return (
       <Input
         id={id}
         value={prop(id, this.state.form) || ''}
-        label={required ? requiredLabel : label}
+        label={requiredLabel}
         onChange={this.handleInputChange(id)}
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
@@ -390,6 +573,89 @@ class Form extends Component<PropsType, StateType> {
       />
     );
   };
+
+
+  handleAddMainPhoto = (url: string) => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'photoMain'], url, prevState),
+    );
+  };
+
+  handleAddPhoto = (url: string) => {
+    const { photos } = this.state.form;
+    const newPhotos = append(url, photos || []);
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'photos'], newPhotos, prevState),
+    );
+  };
+
+  handleRemovePhoto = (url: string) => {
+    const { photoMain, photos } = this.state.form;
+    if (url === photoMain) {
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'photoMain'], null, prevState),
+      );
+      return;
+    }
+
+    const newPhotos = filter(item => item !== url, photos || []);
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'photos'], newPhotos, prevState),
+    );
+  };
+
+
+
+
+
+  handlePriceChange = (value: number) => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'price'], value, prevState),
+    );
+  };
+
+  handlePercentChange = (id: string) => (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    if (value === '') {
+      this.setState((prevState: StateType) => assocPath(['form', id], null, prevState));
+      return;
+    } else if (value === 0) {
+      this.setState((prevState: StateType) => assocPath(['form', id], 0, prevState));
+      return;
+    } else if (value > 100) {
+      this.setState((prevState: StateType) => assocPath(['form', id], 99, prevState));
+      return;
+    } else if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], parseFloat(value), prevState),
+    );
+  };
+
+  handleChangeValues = (values: Array<AttributeValueType>) => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'attributeValues'], values, prevState),
+    );
+  };
+
+  handleChangeTab = (activeTab: string) => {
+    this.setState({ activeTab });
+  };
+
+  addNewVariant = () => {
+    this.setState({ isNewVariant: true });
+    window.scroll({ top: 0 });
+  };
+
+  cancelNewVariant = () => {
+    this.setState({ isNewVariant: false });
+  };
+
+
+
 
   render() {
     const {
@@ -403,6 +669,9 @@ class Form extends Component<PropsType, StateType> {
       closedVariantFormAnnunciator,
       onChangeShipping,
       resetVariantFormErrors,
+      onCreateAttribute,
+      onRemoveAttribute,
+      customAttributes,
     } = this.props;
     const {
       category,
@@ -411,17 +680,42 @@ class Form extends Component<PropsType, StateType> {
       variantFormErrors,
       shippingErrors,
       formErrors,
+      form,
+      activeTab,
+      tabs,
+      isNewVariant,
     } = this.state;
+
+    console.log('---baseProduct', baseProduct);
+
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
     const filteredVariants = map(item => item.node, variants);
+    // $FlowIgnore
+    const mainVariant = isEmpty(filteredVariants) ? null : head(filteredVariants);
     // $FlowIgnore
     const storeID = pathOr(null, ['store', 'id'], baseProduct);
     // $FlowIgnore
     const storeRawID = pathOr(null, ['store', 'rawId'], baseProduct);
     // $FlowIgnore
     const baseProductRawID = pathOr(null, ['rawId'], baseProduct);
+    let defaultAttributes = null;
+    // $FlowIgnore
+    const categoryAttributes = pathOr(null, ['getAttributes'], category);
+    // $FlowIgnore
+    const baseProductAttributes = pathOr(null, ['category', 'getAttributes'], baseProduct);
+    if (categoryAttributes && !isEmpty(categoryAttributes)) {
+      defaultAttributes = categoryAttributes;
+    }
+    if (baseProductAttributes && !isEmpty(baseProductAttributes)) {
+      defaultAttributes = baseProductAttributes;
+    }
+
+
+    const { photos, photoMain, price, cashback, discount, attributeValues } = form;
+
+
     return (
       <ProductFormContext.Provider
         value={{
@@ -431,136 +725,264 @@ class Form extends Component<PropsType, StateType> {
           variantFormErrors,
           // $FlowIgnore
           resetVariantFormErrors,
+          customAttributes,
         }}
       >
         <div styleName="container">
-          {baseProduct && (
-            <div
-              styleName={classNames('status', {
-                draft: status === 'DRAFT',
-                moderation: status === 'MODERATION',
-                decline: status === 'DECLINE',
-                published: status === 'PUBLISHED',
-              })}
-            >
-              {status}
-            </div>
-          )}
-          <div styleName="form">
-            <div styleName="title">
-              <strong>General settings</strong>
-            </div>
-            <div styleName="formItem">
-              {this.renderInput({
-                id: 'name',
-                label: 'Product name',
-                limit: 50,
-                required: true,
-              })}
-            </div>
-            <div styleName="formItem">
-              {this.renderInput({
-                id: 'seoTitle',
-                label: 'SEO title',
-                limit: 50,
-              })}
-            </div>
-            <div styleName="formItem textArea">
-              {this.renderTextarea({
-                id: 'seoDescription',
-                label: 'SEO description',
-              })}
-            </div>
-            <div styleName="formItem textArea">
-              {this.renderTextarea({
-                id: 'shortDescription',
-                label: 'Short description',
-                required: true,
-              })}
-            </div>
-            <div styleName="formItem textArea">
-              {this.renderTextarea({
-                id: 'longDescription',
-                label: 'Long description',
-                required: true,
-              })}
-            </div>
-            <div styleName="formItem">
-              <Select
-                forForm
-                label="Currency"
-                activeItem={currency}
-                items={currencies}
-                onSelect={this.handleOnSelectCurrency}
-                dataTest="productCurrencySelect"
-                fullWidth
-              />
-            </div>
-            <div styleName="categorySelector">
-              <CategorySelector
-                categories={this.props.categories}
-                category={baseProduct && baseProduct.category}
-                onSelect={itemId => {
-                  this.handleSelectedCategory(itemId);
-                }}
-              />
-              {formErrors &&
-                formErrors.categoryId && (
-                  <div styleName="categoryError">{formErrors.categoryId}</div>
+          {!isNewVariant &&
+            <div>
+              {baseProduct && (
+                <div
+                  styleName={classNames('status', {
+                    draft: status === 'DRAFT',
+                    moderation: status === 'MODERATION',
+                    decline: status === 'DECLINE',
+                    published: status === 'PUBLISHED',
+                  })}
+                >
+                  {status}
+                </div>
+              )}
+              <div styleName="form">
+                <div styleName="title">
+                  <strong>Product photos</strong>
+                </div>
+                <Photos
+                  photos={photos}
+                  photoMain={photoMain}
+                  onAddMainPhoto={this.handleAddMainPhoto}
+                  onAddPhoto={this.handleAddPhoto}
+                  onRemovePhoto={this.handleRemovePhoto}
+                />
+                <div styleName="title">
+                  <strong>General settings</strong>
+                </div>
+                <div styleName="formItem">
+                  {this.renderInput({
+                    id: 'name',
+                    label: 'Product name',
+                    limit: 50,
+                    required: true,
+                  })}
+                </div>
+                <div styleName="formItem textArea">
+                  {this.renderTextarea({
+                    id: 'shortDescription',
+                    label: 'Short description',
+                    required: true,
+                  })}
+                </div>
+                <div styleName="formItem textArea">
+                  {this.renderTextarea({
+                    id: 'longDescription',
+                    label: 'Long description',
+                    required: true,
+                  })}
+                </div>
+                <div styleName="formItem">
+                  <Select
+                    forForm
+                    label="Currency"
+                    activeItem={currency}
+                    items={currencies}
+                    onSelect={this.handleOnSelectCurrency}
+                    dataTest="productCurrencySelect"
+                    fullWidth
+                  />
+                </div>
+                <div styleName="formItem">
+                  {this.renderInput({
+                    id: 'vendorCode',
+                    label: 'Vendor code',
+                    limit: 50,
+                    required: true,
+                  })}
+                </div>
+                <div styleName="formItem">
+                  {this.renderInput({
+                    id: 'seoTitle',
+                    label: 'SEO title',
+                    limit: 50,
+                  })}
+                </div>
+                <div styleName="formItem textArea">
+                  {this.renderTextarea({
+                    id: 'seoDescription',
+                    label: 'SEO description',
+                  })}
+                </div>
+                <div styleName="categorySelector">
+                  <CategorySelector
+                    id="categoryId"
+                    onlyView={Boolean(baseProduct)}
+                    categories={this.props.categories}
+                    category={baseProduct && baseProduct.category}
+                    onSelect={itemId => {
+                      this.handleSelectedCategory(itemId);
+                    }}
+                  />
+                  {formErrors &&
+                  formErrors.categoryId && (
+                    <div styleName="categoryError">{formErrors.categoryId}</div>
+                  )}
+                </div>
+                <div styleName="title">
+                  <strong>PRICING</strong>
+                </div>
+                <div styleName="formItem">
+                  <InputPrice
+                    required
+                    label="Price"
+                    onChangePrice={this.handlePriceChange}
+                    price={parseFloat(price) || 0}
+                    currency={baseProduct ? { id: baseProduct.currency, label: baseProduct.currency } : currency}
+                    errors={formErrors && formErrors.price}
+                    dataTest="variantPriceInput"
+                  />
+                </div>
+                <div styleName="formItem">
+                  <Input
+                    fullWidth
+                    label="Cashback"
+                    onChange={this.handlePercentChange('cashback')}
+                    value={!isNil(cashback) ? `${cashback}` : ''}
+                    dataTest="variantCashbackInput"
+                  />
+                  <span styleName="inputPostfix">Percent</span>
+                </div>
+                <div styleName="formItem">
+                  <Input
+                    fullWidth
+                    label="Discount"
+                    onChange={this.handlePercentChange('discount')}
+                    value={!isNil(discount) ? `${discount}` : ''}
+                    dataTest="variantDiscountInput"
+                  />
+                  <span styleName="inputPostfix">Percent</span>
+                </div>
+                {!isEmpty(defaultAttributes) && !isEmpty(customAttributes) && (
+                  <Fragment>
+                    <div styleName="title">
+                      <strong>Characteriscics</strong>
+                    </div>
+                    <div styleName="formItem additionalAttributes">
+                      <AdditionalAttributes
+                        onlyView={Boolean(baseProduct)}
+                        // $FlowIgnore
+                        attributes={defaultAttributes}
+                        customAttributes={customAttributes}
+                        onCreateAttribute={onCreateAttribute}
+                        onRemoveAttribute={onRemoveAttribute}
+                      />
+                    </div>
+                  </Fragment>
                 )}
-            </div>
-          </div>
-          {category &&
-            !baseProduct && (
+                {!isEmpty(customAttributes) && <div styleName="formItem additionalAttributes">
+                  <Characteristics
+                    customAttributes={customAttributes}
+                    values={attributeValues || []}
+                    onChange={this.handleChangeValues}
+                    errors={(formErrors && formErrors.attributes) || null}
+                  />
+                </div>}
+                <div styleName="warehouses">
+                  {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
+                </div>
+                <div styleName="button">
+                  <Button
+                    big
+                    fullWidth
+                    onClick={this.handleSave}
+                    dataTest="saveProductButton"
+                    isLoading={isLoading}
+                  >
+                    {baseProduct ? 'Update product' : 'Create product'}
+                  </Button>
+                </div>
+              </div>
+              <div styleName="tabs">
+                <Tabs
+                  tabs={tabs}
+                  activeTab={activeTab}
+                  onChangeTab={this.handleChangeTab}
+                >
+                  <div styleName="tabsWrap">
+                    <div styleName={classNames('variants', { hidden: activeTab !== 'variants' })}>
+                      <div styleName="variantsIcon">
+                        <Icon type="addVariant" size={80} />
+                      </div>
+                      <div styleName="variantsText">
+                        Currently you have no variants for you product.<br />
+                        Add variants if you need some.
+                      </div>
+                      <div styleName="variantsButton">
+                        <Button
+                          big
+                          wireframe
+                          fullWidth
+                          onClick={baseProduct ? this.addNewVariant : this.handleSave}
+                          dataTest="addVariantButton"
+                        >
+                          Add variant
+                        </Button>
+                      </div>
+                      <div styleName="variantsWarnText">You can’t add variant until create and save base product.</div>
+                    </div>
+                    <div styleName={classNames('delivery', { hidden: activeTab !== 'delivery' })}>
+                      Delivery
+                    </div>
+                  </div>
+                </Tabs>
+              </div>
+              {/* !baseProduct && (
+                <Variants
+                  variants={[]}
+                  category={category}
+                  comeResponse={comeResponse}
+                  resetComeResponse={resetComeResponse}
+                  closedVariantFormAnnunciator={closedVariantFormAnnunciator}
+                  customAttributes={customAttributes}
+                />
+              ) */}
+
+              {/* baseProduct && (
               <Variants
-                variants={[]}
-                category={category}
+                productRawId={baseProduct.rawId}
+                productId={baseProduct.id}
+                category={baseProduct.category}
+                variants={filteredVariants}
+                storeID={storeID}
                 comeResponse={comeResponse}
                 resetComeResponse={resetComeResponse}
                 closedVariantFormAnnunciator={closedVariantFormAnnunciator}
+                customAttributes={customAttributes}
               />
-            )}
-
-          {baseProduct && (
-            <Variants
-              productRawId={baseProduct.rawId}
-              productId={baseProduct.id}
-              category={baseProduct.category}
-              variants={filteredVariants}
-              storeID={storeID}
-              comeResponse={comeResponse}
-              resetComeResponse={resetComeResponse}
-              closedVariantFormAnnunciator={closedVariantFormAnnunciator}
-            />
-          )}
-          {!isLoadingPackages &&
-            (category || baseProduct) && (
-              <Shipping
-                currency={currency}
-                baseProduct={baseProduct}
-                baseProductId={baseProductRawID}
-                storeId={storeRawID}
-                availablePackages={availablePackages}
-                onChangeShipping={onChangeShipping}
-                shippingErrors={shippingErrors}
-              />
-            )}
-          {isLoadingPackages && (
-            <div styleName="spinner">
-              <SpinnerCircle />
+            ) */}
+              {/* !isLoadingPackages &&
+              (category || baseProduct) && (
+                <Shipping
+                  currency={currency}
+                  baseProduct={baseProduct}
+                  baseProductId={baseProductRawID}
+                  storeId={storeRawID}
+                  availablePackages={availablePackages}
+                  onChangeShipping={onChangeShipping}
+                  shippingErrors={shippingErrors}
+                />
+              ) */}
+              {/* isLoadingPackages && (
+              <div styleName="spinner">
+                <SpinnerCircle />
+              </div>
+            ) */}
             </div>
-          )}
-          {
-            <div styleName="button">
-              <Button
-                big
-                fullWidth
-                onClick={this.handleSave}
-                dataTest="saveProductButton"
-                isLoading={isLoading}
-              >
-                Save
-              </Button>
+          }
+          {isNewVariant &&
+            <div className="variantForm">
+              <VariantForm
+                cancelNewVariant={this.cancelNewVariant}
+                customAttributes={customAttributes}
+              />
             </div>
           }
         </div>

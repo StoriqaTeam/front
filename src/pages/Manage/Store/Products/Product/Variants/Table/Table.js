@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { isEmpty, map, propEq, length } from 'ramda';
+import { isEmpty, map, propEq, length, drop, head } from 'ramda';
 import classNames from 'classnames';
 
 import { log } from 'utils';
@@ -106,56 +106,84 @@ class Table extends Component<PropsType, StateType> {
     this.props.handleDeleteVariant(id);
   };
 
-  renderRows = (
-    handleSaveBaseProductWithVariant: () => void,
-    isLoading: boolean,
-    onChangeVariantForm: any,
-    variantFormErrors: ?{
-      vendorCode?: Array<string>,
-      price?: Array<string>,
-      attributes?: Array<string>,
-    },
-    resetVariantFormErrors: (field: string) => void,
-  ) => {
-    const { expandedItemId } = this.state;
-    return map(
-      item => (
-        <Fragment key={item.id}>
-          <Row
-            variant={item}
-            onExpandClick={this.expandRow}
-            handleDeleteVariant={this.handleDeleteVariant}
-            isOpen={item.rawId === expandedItemId}
-            notRemove={length(this.props.variants) === 1}
-          />
-          {propEq('rawId', expandedItemId, item) && (
-            <Form
-              category={this.props.category}
-              variant={item}
-              productRawId={this.props.productRawId}
-              productId={this.props.productId}
-              key={item.id}
-              isExpanded
-              onExpandClick={this.expandRow}
-              storeID={this.props.storeID}
-              handleCollapseVariant={this.handleCollapseVariant}
-              handleSaveBaseProductWithVariant={
-                handleSaveBaseProductWithVariant
-              }
-              onChangeVariantForm={onChangeVariantForm}
-              formErrors={variantFormErrors}
-              resetVariantFormErrors={resetVariantFormErrors}
-            />
-          )}
-        </Fragment>
-      ),
-      this.props.variants,
-    );
-  };
+  // renderRows = (
+  //   handleSaveBaseProductWithVariant: () => void,
+  //   isLoading: boolean,
+  //   onChangeVariantForm: any,
+  //   variantFormErrors: ?{
+  //     vendorCode?: Array<string>,
+  //     price?: Array<string>,
+  //     attributes?: Array<string>,
+  //   },
+  //   resetVariantFormErrors: (field: string) => void,
+  // ) => {
+  //   const { variants } = this.props;
+  //   const headVariant = head(variants);
+  //   const { expandedItemId } = this.state;
+  //   return (
+  //     <Fragment>
+  //       <Form
+  //         category={this.props.category}
+  //         variant={headVariant}
+  //         productRawId={this.props.productRawId}
+  //         productId={this.props.productId}
+  //         isExpanded
+  //         onExpandClick={this.expandRow}
+  //         storeID={this.props.storeID}
+  //         handleCollapseVariant={this.handleCollapseVariant}
+  //         handleSaveBaseProductWithVariant={
+  //           handleSaveBaseProductWithVariant
+  //         }
+  //         onChangeVariantForm={onChangeVariantForm}
+  //         formErrors={variantFormErrors}
+  //         resetVariantFormErrors={resetVariantFormErrors}
+  //       />
+  //       <Header
+  //         onSelectAllClick={this.handleSelectAll}
+  //         notRemove={length(variants) === 1}
+  //       />
+  //       {map(
+  //         item => (
+  //           <Fragment key={item.id}>
+  //             <Row
+  //               variant={item}
+  //               onExpandClick={this.expandRow}
+  //               handleDeleteVariant={this.handleDeleteVariant}
+  //               isOpen={item.rawId === expandedItemId}
+  //               notRemove={length(this.props.variants) === 1}
+  //             />
+  //             {propEq('rawId', expandedItemId, item) && (
+  //               <Form
+  //                 category={this.props.category}
+  //                 variant={item}
+  //                 productRawId={this.props.productRawId}
+  //                 productId={this.props.productId}
+  //                 key={item.id}
+  //                 isExpanded
+  //                 onExpandClick={this.expandRow}
+  //                 storeID={this.props.storeID}
+  //                 handleCollapseVariant={this.handleCollapseVariant}
+  //                 handleSaveBaseProductWithVariant={
+  //                   handleSaveBaseProductWithVariant
+  //                 }
+  //                 onChangeVariantForm={onChangeVariantForm}
+  //                 formErrors={variantFormErrors}
+  //                 resetVariantFormErrors={resetVariantFormErrors}
+  //               />
+  //             )}
+  //           </Fragment>
+  //         ),
+  //         drop(1, variants),
+  //       )}
+  //     </Fragment>
+  //   );
+  // };
 
   render() {
     const { variants, isNewVariant } = this.props;
     const { expandedItemId } = this.state;
+    const headVariant = head(variants);
+    console.log('---variants', variants);
     return (
       <ProductFormContext.Consumer>
         {({
@@ -164,24 +192,61 @@ class Table extends Component<PropsType, StateType> {
           onChangeVariantForm,
           variantFormErrors,
           resetVariantFormErrors,
+          customAttributes,
         }) => (
           <div
             styleName={classNames('container', {
               hiddenButton: expandedItemId || isNewVariant,
             })}
           >
+            {console.log('---customAttributes', customAttributes)}
             {!isEmpty(variants) && (
               <div styleName="table">
-                <Header
-                  onSelectAllClick={this.handleSelectAll}
-                  notRemove={length(this.props.variants) === 1}
+                <Form
+                  isMainVariant
+                  category={this.props.category}
+                  variant={headVariant}
+                  productRawId={this.props.productRawId}
+                  productId={this.props.productId}
+                  isExpanded
+                  onExpandClick={this.expandRow}
+                  storeID={this.props.storeID}
+                  handleCollapseVariant={this.handleCollapseVariant}
+                  onChangeVariantForm={onChangeVariantForm}
+                  formErrors={variantFormErrors}
+                  resetVariantFormErrors={resetVariantFormErrors}
+                  customAttributes={customAttributes}
                 />
-                {this.renderRows(
-                  handleSaveBaseProductWithVariant,
-                  isLoading,
-                  onChangeVariantForm,
-                  variantFormErrors,
-                  resetVariantFormErrors,
+                {length(drop(1, variants)) > 0 && <Header onSelectAllClick={this.handleSelectAll} />}
+                {map(
+                  item => (
+                    <Fragment key={item.id}>
+                      <Row
+                        variant={item}
+                        onExpandClick={this.expandRow}
+                        handleDeleteVariant={this.handleDeleteVariant}
+                        isOpen={item.rawId === expandedItemId}
+                        notRemove={length(this.props.variants) === 1}
+                      />
+                      {propEq('rawId', expandedItemId, item) && (
+                        <Form
+                          category={this.props.category}
+                          variant={item}
+                          productRawId={this.props.productRawId}
+                          productId={this.props.productId}
+                          isExpanded
+                          onExpandClick={this.expandRow}
+                          storeID={this.props.storeID}
+                          handleCollapseVariant={this.handleCollapseVariant}
+                          onChangeVariantForm={onChangeVariantForm}
+                          formErrors={variantFormErrors}
+                          resetVariantFormErrors={resetVariantFormErrors}
+                          customAttributes={customAttributes}
+                        />
+                      )}
+                    </Fragment>
+                  ),
+                  drop(1, variants),
                 )}
               </div>
             )}
@@ -199,6 +264,7 @@ class Table extends Component<PropsType, StateType> {
                     onChangeVariantForm={onChangeVariantForm}
                     formErrors={variantFormErrors}
                     resetVariantFormErrors={resetVariantFormErrors}
+                    customAttributes={customAttributes}
                   />
                 </div>
               )}

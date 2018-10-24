@@ -49,11 +49,9 @@ class Characteristics extends PureComponent<PropsType> {
 
   render() {
     const { errors, customAttributes } = this.props;
+    console.log('---customAttributes', customAttributes);
     return (
       <div styleName="container">
-        <div styleName="title">
-          <strong>Characteristics</strong>
-        </div>
         <div styleName="items">
           <Row>
             {map(item => (
