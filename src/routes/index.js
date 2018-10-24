@@ -1,11 +1,9 @@
 // @flow
 
-// just for reinit cd. can remove.
-
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last, isNil } from 'ramda';
+import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -208,7 +206,7 @@ const routes = (
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
           const searchTerm = urlToInput(queryObj);
-          return { searchTerm };
+          return { searchTerm: pick(['name', 'options'], searchTerm) };
         }}
       />
       <Route
