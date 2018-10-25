@@ -30,7 +30,9 @@ import { renameKeys } from 'utils/ramda';
 import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
 
-import '../Profile.scss';
+import '../../Profile.scss';
+
+import t from './i18n';
 
 type DataType = {
   firstName: string,
@@ -94,13 +96,13 @@ class PersonalData extends Component<PropsType, StateType> {
         firstName: [
           [
             (value: string) => value && value.length > 0,
-            'First name must not be empty',
-          ],
+              t.firstNameMustNotBeEmpty,
+            ],
         ],
         lastName: [
           [
             (value: string) => value && value.length > 0,
-            'Last name must not be empty',
+            t.lastNameMustNotBeEmpty,
           ],
         ],
       },
@@ -152,21 +154,21 @@ class PersonalData extends Component<PropsType, StateType> {
         } else if (status) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${status}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${status}"`,
+            link: { text: t.close },
           });
           return;
         } else if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'User update!',
+          text: t.userUpdated,
           link: { text: '' },
         });
       },
@@ -192,8 +194,8 @@ class PersonalData extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -257,22 +259,22 @@ class PersonalData extends Component<PropsType, StateType> {
       <div styleName="personalData">
         <div styleName="personalDataWrap">
           <div styleName="subtitle">
-            <strong>Personal data settings</strong>
+            <strong>{t.personalDataSettings}</strong>
           </div>
           {this.renderInput({
             id: 'firstName',
-            label: 'First name',
+            label: t.labelFirstName,
             limit: 50,
           })}
           {this.renderInput({
             id: 'lastName',
-            label: 'Last name',
+            label: t.labelLastName,
             limit: 50,
           })}
           <div styleName="formItem">
             <Select
               forForm
-              label="Gender"
+              label={t.labelGender}
               activeItem={genderValue}
               items={genderItems}
               onSelect={this.handleGenderSelect}
@@ -282,7 +284,7 @@ class PersonalData extends Component<PropsType, StateType> {
           </div>
           <div styleName="formItem">
             <BirthdateSelect
-              label="Birthdate"
+              label={t.labelBirthdate}
               birthdate={data.birthdate}
               handleBirthdateSelect={this.handleBirthdateSelect}
               errors={propOr(null, 'birthdate', formErrors)}
@@ -290,7 +292,7 @@ class PersonalData extends Component<PropsType, StateType> {
           </div>
           {this.renderInput({
             id: 'phone',
-            label: 'Phone',
+            label: t.labelPhone,
           })}
           <div styleName="formItem">
             <SpinnerButton
@@ -298,7 +300,7 @@ class PersonalData extends Component<PropsType, StateType> {
               isLoading={isLoading}
               dataTest="saveButton"
             >
-              Save
+              {t.save}
             </SpinnerButton>
           </div>
         </div>
