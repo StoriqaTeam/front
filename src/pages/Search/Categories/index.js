@@ -7,9 +7,9 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Container, Col, Row } from 'layout';
 import { Page } from 'components/App';
 
-import SearchSidebar from './SearchSidebar';
+import SearchSidebar from '../SearchSidebar';
 
-import { SearchContent, SearchMobileMenu } from './index';
+import { SearchContent, SearchMobileMenu } from '../index';
 
 import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
 
