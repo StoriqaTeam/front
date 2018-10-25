@@ -17,9 +17,11 @@ import type { MutationParamsType } from 'relay/mutations/SetProductQuantityInWar
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { StorageProducts_me as StorageProductsMeType } from './__generated__/StorageProducts_me.graphql';
 
-import { StorageProductsTableHeader, StorageProductsTableRow } from './index';
+import { StorageProductsTableHeader, StorageProductsTableRow } from '../index';
 
 import './StorageProducts.scss';
+
+import t from './i18n';
 
 const itemsPerPage = 10;
 
@@ -68,16 +70,16 @@ class StorageProducts extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           // eslint-disable-next-line
           return;
@@ -87,8 +89,8 @@ class StorageProducts extends Component<PropsType, StateType> {
         log.debug({ error });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -271,7 +273,7 @@ class StorageProducts extends Component<PropsType, StateType> {
             )}
           </Fragment>
         ) : (
-          <div styleName="emptyProductsBlock">No products</div>
+          <div styleName="emptyProductsBlock">{t.noProducts}</div>
         )}
         <Paginator
           pagesCount={pagesCount}
@@ -285,7 +287,7 @@ class StorageProducts extends Component<PropsType, StateType> {
 
 export default createRefetchContainer(
   withShowAlert(
-    Page(ManageStore(StorageProducts, 'Storages', 'Storage products'), true),
+    Page(ManageStore(StorageProducts, 'Storages', 'Storage products')),
   ),
   graphql`
     fragment StorageProducts_me on User

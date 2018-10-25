@@ -5,19 +5,19 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  labelStorageName: string,
-  storageAddress: string,
-  save: string,
-  cancel: string,
+  error: string,
+  close: string,
+  somethingGoingWrong: string,
+  noProducts: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    labelStorageName: 'Storage Name',
-    storageAddress: 'Storage Address',
-    save: 'Save',
-    cancel: 'Cancel',
+    error: 'Error: ',
+    close: 'Close.',
+    somethingGoingWrong: 'Something going wrong :(',
+    noProducts: 'No Products',
   },
 };
 
