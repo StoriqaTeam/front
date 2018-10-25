@@ -15,6 +15,8 @@ import type { Start_mainPage as StartMainPage } from './__generated__/Start_main
 
 import './Start.scss';
 
+import t from './i18n';
+
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 
@@ -71,7 +73,7 @@ class Start extends PureComponent<PropsTypes> {
             viewedProducts.length > 0 && (
               <GoodsSlider
                 items={viewedProducts}
-                title="Most Popular"
+                title={t.mostPopular}
                 seeAllUrl="/categories?search=&sortBy=VIEWS"
               />
             )}
@@ -89,7 +91,7 @@ class Start extends PureComponent<PropsTypes> {
             discountProducts.length > 0 && (
               <GoodsSlider
                 items={discountProducts}
-                title="Sale"
+                title={t.sale}
                 seeAllUrl="/categories?search=&sortBy=DISCOUNT"
               />
             )}

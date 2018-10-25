@@ -16,7 +16,6 @@ import type { Categories_search as CategoriesSearch } from './__generated__/Cate
 
 import './SearchContent.scss';
 
-
 import t from './i18n';
 
 type PropsType = {
