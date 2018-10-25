@@ -7,6 +7,8 @@ import { Button } from 'components/common/Button';
 
 import './ProductButtons.scss';
 
+import t from './i18n';
+
 type PropsType = {
   onAddToCart: () => void,
   unselectedAttr: ?Array<string>,
@@ -27,7 +29,7 @@ const ProductButtons = ({
   <div styleName="container">
     <div styleName="buttons">
       <Button disabled big>
-        Buy now
+        {t.buyNow}
       </Button>
       <Button
         id="productAddToCart"
@@ -43,11 +45,11 @@ const ProductButtons = ({
         }
         dataTest="product-addToCart"
       >
-        {!isAddToCart ? 'Add to cart' : 'View cart'}
+        {!isAddToCart ? t.addToCart : t.viewCart}
       </Button>
     </div>
     {unselectedAttr && (
-      <div styleName="message">You must select an attribute</div>
+      <div styleName="message">{t.youMustSelectAnAttribute}</div>
     )}
   </div>
 );
