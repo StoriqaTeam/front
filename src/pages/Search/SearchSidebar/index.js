@@ -30,9 +30,11 @@ import { RangeSlider } from 'components/Ranger';
 import { AttributeControl } from 'components/AttributeControl';
 import { Icon } from 'components/Icon';
 
-import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
+import type { Categories_search as CategoriesSearch } from '../__generated__/Categories_search.graphql';
 
 import './SearchSidebar.scss';
+
+import t from './i18n';
 
 type PropsType = {
   router: routerShape,
@@ -365,7 +367,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
         tabIndex="0"
       >
         {obj && getNameText(obj.name, 'EN')}
-        {!obj && 'All categories'}
+        {!obj && t.allCategories}
       </div>
     );
     if (!categoryId) return linkComponent();
@@ -417,7 +419,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
         })}
       >
         <header styleName="header">
-          <h3>Filters</h3>
+          <h3>{t.filters}</h3>
           <span
             id="close"
             onClick={onClose}
