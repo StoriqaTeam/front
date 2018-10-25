@@ -15,23 +15,33 @@ import {
   prepend,
   filter,
   keys,
-  head, find, reject, append, isNil, contains,
+  head,
+  find,
+  reject,
+  append,
+  isNil,
+  contains,
   propEq,
+  drop,
+  length,
+  reverse,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import { Select, SpinnerCircle, Button, InputPrice } from 'components/common';
+import { Select, SpinnerCircle, Button, InputPrice, Checkbox } from 'components/common';
 import { CategorySelector } from 'components/CategorySelector';
 import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
+import { withShowAlert } from 'components/App/AlertContext';
 import { renameKeys } from 'utils/ramda';
 import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 
 import type { SelectItemType } from 'types';
+import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import { ProductFormContext, AdditionalAttributes } from './index';
 import { Shipping } from './Shipping';
@@ -43,9 +53,6 @@ import Warehouses from './Warehouses/Warehouses';
 import Tabs from './Tabs/Tabs';
 import Characteristics from './Characteristics/Characteristics';
 import VariantForm from './VariantForm/VariantForm';
-
-
-
 
 import './Product.scss';
 
@@ -133,6 +140,8 @@ type PropsType = {
   onCreateAttribute: (attribute: AttributeType) => void,
   onRemoveAttribute: (id: string) => void,
   onResetAttribute: () => void,
+
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -144,8 +153,6 @@ type StateType = {
     longDescription: string,
     currency: ?SelectItemType,
     categoryId: ?number,
-
-
 
     idMainVariant: ?string,
     rawIdMainVariant: ?number,
@@ -186,7 +193,7 @@ type StateType = {
     id: string,
     label: string,
   }>,
-  isNewVariant: boolean,
+  variantForForm: ?any,
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -196,14 +203,12 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnore
     const currency = pathOr('STQ', ['baseProduct', 'currency'], props);
     let form = {};
-    console.log('---baseProduct', baseProduct);
 
     if (baseProduct) {
       // $FlowIgnore
       const allVariants = pathOr([], ['products', 'edges'], baseProduct);
-      const filteredVariants = map(item => item.node, allVariants);
+      const filteredVariants = reverse(map(item => item.node, allVariants));
       const mainVariant = head(filteredVariants);
-      console.log('---mainVariant', mainVariant);
 
       form = {
         name: getNameText(baseProduct.name || [], 'EN') || '',
@@ -216,8 +221,6 @@ class Form extends Component<PropsType, StateType> {
           getNameText(baseProduct.seoDescription || [], 'EN') || '',
         categoryId: baseProduct.category ? baseProduct.category.rawId : null,
 
-
-
         idMainVariant: mainVariant.id,
         rawIdMainVariant: mainVariant.rawId,
         photoMain: mainVariant.photoMain,
@@ -228,7 +231,9 @@ class Form extends Component<PropsType, StateType> {
         discount: Math.round((mainVariant.discount || 0) * 100),
         preOrderDays: mainVariant.preOrderDays,
         preOrder: mainVariant.preOrder,
-        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes, mainVariant) : [],
+        attributeValues: !isEmpty(customAttributes)
+          ? this.resetAttrValues(customAttributes, mainVariant)
+          : [],
       };
     } else {
       form = {
@@ -238,8 +243,6 @@ class Form extends Component<PropsType, StateType> {
         seoTitle: '',
         seoDescription: '',
         categoryId: null,
-
-
 
         idMainVariant: null,
         rawIdMainVariant: null,
@@ -251,7 +254,9 @@ class Form extends Component<PropsType, StateType> {
         discount: null,
         preOrderDays: '',
         preOrder: false,
-        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes, null) : [],
+        attributeValues: !isEmpty(customAttributes)
+          ? this.resetAttrValues(customAttributes, null)
+          : [],
       };
     }
     this.state = {
@@ -262,7 +267,14 @@ class Form extends Component<PropsType, StateType> {
       currency: { id: currency, label: currency },
       variantFormErrors: {},
       shippingErrors: null,
-      scrollArr: ['name', 'shortDescription', 'longDescription', 'categoryId', 'vendorCode', 'price'],
+      scrollArr: [
+        'name',
+        'shortDescription',
+        'longDescription',
+        'categoryId',
+        'vendorCode',
+        'price',
+      ],
       activeTab: 'variants',
       tabs: [
         {
@@ -274,7 +286,7 @@ class Form extends Component<PropsType, StateType> {
           label: 'Delivery',
         },
       ],
-      isNewVariant: false,
+      variantForForm: null,
     };
   }
 
@@ -311,43 +323,46 @@ class Form extends Component<PropsType, StateType> {
       );
     }
 
-
-
-
-    if (JSON.stringify(prevProps.customAttributes) !== JSON.stringify(customAttributes)) {
+    if (
+      JSON.stringify(prevProps.customAttributes) !==
+      JSON.stringify(customAttributes)
+    ) {
       const attrValues = this.resetAttrValues(customAttributes);
       this.onChangeValues(attrValues);
     }
   }
 
+  onChangeValues = (values: Array<AttributeValueType>) => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'attributeValues'], values, prevState),
+    );
+  };
+
   setVariantFormErrors = (errors: { [string]: Array<string> }) => {
     this.setState({ variantFormErrors: errors });
   };
 
-
-
-
-
-
-
   resetAttrValues = (customAttributes: Array<AttributeType>, variant) => {
     // $FlowIgnoreMe
-    const attributeValues = pathOr(null, ['form', 'attributeValues'], this.state);
-    const attrValues: Array<AttributeValueType> = map(
-      item => {
-        if (attributeValues) {
-          const isAttributeValue = find(propEq('attrId', item.rawId))(attributeValues);
-          if (isAttributeValue) {
-            return isAttributeValue;
-          }
-        }
-        return ({
-          attrId: item.rawId,
-          ...this.valueForAttribute({ attr: item, variant }),
-        });
-      },
-      customAttributes,
+    const attributeValues = pathOr(
+      null,
+      ['form', 'attributeValues'],
+      this.state,
     );
+    const attrValues: Array<AttributeValueType> = map(item => {
+      if (attributeValues) {
+        const isAttributeValue = find(propEq('attrId', item.rawId))(
+          attributeValues,
+        );
+        if (isAttributeValue) {
+          return isAttributeValue;
+        }
+      }
+      return {
+        attrId: item.rawId,
+        ...this.valueForAttribute({ attr: item, variant }),
+      };
+    }, customAttributes);
     return attrValues;
   };
 
@@ -385,19 +400,11 @@ class Form extends Component<PropsType, StateType> {
     };
   };
 
-
-
-
-
-
-
-
   resetShippingErrors = () => {
     this.setState({ shippingErrors: null });
   };
 
   validate = () => {
-    // TODO: вынести спеки
     const { errors } = validate(
       {
         name: [[val => Boolean(val), 'Name is required']],
@@ -413,6 +420,14 @@ class Form extends Component<PropsType, StateType> {
       },
       this.state.form,
     );
+    if (errors && !isEmpty(errors)) {
+      const { scrollArr } = this.state;
+      const oneArr = filter(
+        item => contains(item, keys(errors)),
+        scrollArr,
+      );
+      smoothscroll.scrollTo(head(oneArr));
+    }
     return errors;
   };
 
@@ -458,7 +473,7 @@ class Form extends Component<PropsType, StateType> {
 
   handleSave = () => {
     const { variantData } = this.props;
-    const { form, currency, scrollArr } = this.state;
+    const { form, currency } = this.state;
     this.setState({
       formErrors: {},
       variantFormErrors: {},
@@ -477,8 +492,6 @@ class Form extends Component<PropsType, StateType> {
         // variantFormErrors: preVariantValidationErrors || {},
         // shippingErrors: shippingValidationErrors || null,
       });
-      const oneArr = filter(item => contains(item, keys(preValidationErrors)), scrollArr);
-      smoothscroll.scrollTo(head(oneArr));
       return;
     }
     this.props.onSave({ ...form, currency }, variantData);
@@ -508,18 +521,21 @@ class Form extends Component<PropsType, StateType> {
       whereEq({ rawId: parseInt(categoryId, 10) }),
       categories,
     );
-    this.setState((prevState: StateType) => ({
-      form: {
-        ...this.state.form,
-        categoryId,
-      },
-      category: {
-        id: category.id,
-        rawId: category.rawId,
-        getAttributes: category.getAttributes,
-      },
-      formErrors: dissoc('categoryId', prevState.formErrors),
-    }), onResetAttribute);
+    this.setState(
+      (prevState: StateType) => ({
+        form: {
+          ...this.state.form,
+          categoryId,
+        },
+        category: {
+          id: category.id,
+          rawId: category.rawId,
+          getAttributes: category.getAttributes,
+        },
+        formErrors: dissoc('categoryId', prevState.formErrors),
+      }),
+      onResetAttribute,
+    );
   };
 
   handleOnSelectCurrency = (currency: ?SelectItemType) => {
@@ -560,7 +576,9 @@ class Form extends Component<PropsType, StateType> {
       <span>
         {label} <span styleName="asterisk">*</span>
       </span>
-    ) : label;
+    ) : (
+      label
+    );
     return (
       <Input
         id={id}
@@ -573,7 +591,6 @@ class Form extends Component<PropsType, StateType> {
       />
     );
   };
-
 
   handleAddMainPhoto = (url: string) => {
     this.setState((prevState: StateType) =>
@@ -604,14 +621,11 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-
-
-
-
   handlePriceChange = (value: number) => {
-    this.setState((prevState: StateType) =>
-      assocPath(['form', 'price'], value, prevState),
-    );
+    this.setState((prevState: StateType) => {
+      const formErrors = dissoc('price', prevState.formErrors);
+      return { ...assocPath(['form', 'price'], value, prevState), formErrors };
+    });
   };
 
   handlePercentChange = (id: string) => (e: any) => {
@@ -619,13 +633,19 @@ class Form extends Component<PropsType, StateType> {
       target: { value },
     } = e;
     if (value === '') {
-      this.setState((prevState: StateType) => assocPath(['form', id], null, prevState));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', id], null, prevState),
+      );
       return;
     } else if (value === 0) {
-      this.setState((prevState: StateType) => assocPath(['form', id], 0, prevState));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', id], 0, prevState),
+      );
       return;
     } else if (value > 100) {
-      this.setState((prevState: StateType) => assocPath(['form', id], 99, prevState));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', id], 99, prevState),
+      );
       return;
     } else if (Number.isNaN(parseFloat(value))) {
       return;
@@ -641,21 +661,59 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
+  preOrderDaysInput: ?HTMLInputElement;
+
+  handleOnChangePreOrderDays = (e: any) => {
+    let {
+      target: { value },
+    } = e;
+    const regexp = /(^\d*$)/;
+    if (!regexp.test(value)) {
+      return;
+    }
+    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'preOrderDays'], value, prevState),
+    );
+  };
+
+  handleOnBlurPreOrderDays = (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    if (!value || value === '0') {
+      this.setState((prevState: StateType) => assocPath(['form', 'preOrderDays'], '', assocPath(['form', 'preOrder'], false, prevState)));
+    }
+  };
+
+  handleOnChangePreOrder = () => {
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'preOrder'], !prevState.form.preOrder, prevState),
+    );
+    if (this.preOrderDaysInput && !this.state.form.preOrder && !this.state.form.preOrderDays) {
+      this.preOrderDaysInput.focus();
+    }
+  };
+
   handleChangeTab = (activeTab: string) => {
     this.setState({ activeTab });
   };
 
   addNewVariant = () => {
-    this.setState({ isNewVariant: true });
-    window.scroll({ top: 0 });
+    this.setState({ variantForForm: {} });
   };
 
-  cancelNewVariant = () => {
-    this.setState({ isNewVariant: false });
+  cancelVariantForm = () => {
+    this.setState({ variantForForm: null }, () => {smoothscroll.scrollTo('tabs', () => {}, true)});
   };
 
-
-
+  expandClick = (id: number) => {
+    // $FlowIgnore
+    const variants = pathOr([], ['products', 'edges'], this.props.baseProduct);
+    const filteredVariants = map(item => item.node, variants);
+    const variant = find(propEq('rawId', id))(filteredVariants);
+    this.setState({ variantForForm: variant || {} });
+  };
 
   render() {
     const {
@@ -672,6 +730,8 @@ class Form extends Component<PropsType, StateType> {
       onCreateAttribute,
       onRemoveAttribute,
       customAttributes,
+      showAlert,
+      environment,
     } = this.props;
     const {
       category,
@@ -683,17 +743,24 @@ class Form extends Component<PropsType, StateType> {
       form,
       activeTab,
       tabs,
-      isNewVariant,
+      variantForForm,
     } = this.state;
+    //
 
-    console.log('---baseProduct', baseProduct);
+    console.log('---variantForForm', variantForForm);
 
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
-    const filteredVariants = map(item => item.node, variants);
+    const filteredVariants = reverse(map(item => item.node, variants));
     // $FlowIgnore
-    const mainVariant = isEmpty(filteredVariants) ? null : head(filteredVariants);
+    const mainVariant = isEmpty(filteredVariants)
+      ? null
+      : head(filteredVariants);
+    // $FlowIgnore
+    const restVariants = !isEmpty(filteredVariants) && length(filteredVariants) > 1
+      ? drop(1, filteredVariants)
+      : null;
     // $FlowIgnore
     const storeID = pathOr(null, ['store', 'id'], baseProduct);
     // $FlowIgnore
@@ -704,7 +771,11 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnore
     const categoryAttributes = pathOr(null, ['getAttributes'], category);
     // $FlowIgnore
-    const baseProductAttributes = pathOr(null, ['category', 'getAttributes'], baseProduct);
+    const baseProductAttributes = pathOr(
+      null,
+      ['category', 'getAttributes'],
+      baseProduct,
+    );
     if (categoryAttributes && !isEmpty(categoryAttributes)) {
       defaultAttributes = categoryAttributes;
     }
@@ -712,9 +783,18 @@ class Form extends Component<PropsType, StateType> {
       defaultAttributes = baseProductAttributes;
     }
 
+    const {
+      photos,
+      photoMain,
+      price,
+      cashback,
+      discount,
+      attributeValues,
+      preOrder,
+      preOrderDays,
+    } = form;
 
-    const { photos, photoMain, price, cashback, discount, attributeValues } = form;
-
+    console.log('---defaultAttributes', defaultAttributes);
 
     return (
       <ProductFormContext.Provider
@@ -725,11 +805,10 @@ class Form extends Component<PropsType, StateType> {
           variantFormErrors,
           // $FlowIgnore
           resetVariantFormErrors,
-          customAttributes,
         }}
       >
         <div styleName="container">
-          {!isNewVariant &&
+          {!variantForForm && (
             <div>
               {baseProduct && (
                 <div
@@ -822,20 +901,30 @@ class Form extends Component<PropsType, StateType> {
                     }}
                   />
                   {formErrors &&
-                  formErrors.categoryId && (
-                    <div styleName="categoryError">{formErrors.categoryId}</div>
-                  )}
+                    formErrors.categoryId && (
+                      <div styleName="categoryError">
+                        {formErrors.categoryId}
+                      </div>
+                    )}
                 </div>
                 <div styleName="title">
                   <strong>PRICING</strong>
                 </div>
                 <div styleName="formItem">
                   <InputPrice
+                    id="price"
                     required
                     label="Price"
                     onChangePrice={this.handlePriceChange}
                     price={parseFloat(price) || 0}
-                    currency={baseProduct ? { id: baseProduct.currency, label: baseProduct.currency } : currency}
+                    currency={
+                      baseProduct
+                        ? {
+                            id: baseProduct.currency,
+                            label: baseProduct.currency,
+                          }
+                        : currency
+                    }
                     errors={formErrors && formErrors.price}
                     dataTest="variantPriceInput"
                   />
@@ -860,31 +949,65 @@ class Form extends Component<PropsType, StateType> {
                   />
                   <span styleName="inputPostfix">Percent</span>
                 </div>
-                {!isEmpty(defaultAttributes) && !isEmpty(customAttributes) && (
-                  <Fragment>
-                    <div styleName="title">
-                      <strong>Characteriscics</strong>
+                {defaultAttributes && !isEmpty(defaultAttributes) && (
+                  (!baseProduct) || (!isEmpty(customAttributes) && baseProduct)
+                ) && (
+                    <Fragment>
+                      <div styleName="title">
+                        <strong>Characteriscics</strong>
+                      </div>
+                      <div styleName="formItem additionalAttributes">
+                        <AdditionalAttributes
+                          onlyView={Boolean(baseProduct)}
+                          // $FlowIgnore
+                          attributes={defaultAttributes}
+                          customAttributes={customAttributes}
+                          onCreateAttribute={onCreateAttribute}
+                          onRemoveAttribute={onRemoveAttribute}
+                        />
+                      </div>
+                    </Fragment>
+                  )}
+                {!isEmpty(customAttributes) && (
+                  <div styleName="formItem additionalAttributes">
+                    <Characteristics
+                      customAttributes={customAttributes}
+                      values={attributeValues || []}
+                      onChange={this.handleChangeValues}
+                      errors={(formErrors && formErrors.attributes) || null}
+                    />
+                  </div>
+                )}
+                <div styleName="formItem">
+                  <div styleName="preOrder">
+                    <div styleName="preOrderTitle">
+                      <div styleName="title">
+                        <strong>Available for pre-order</strong>
+                      </div>
+                      <div styleName="preOrderCheckbox">
+                        <Checkbox
+                          inline
+                          id="preOrderCheckbox"
+                          isChecked={preOrder}
+                          onChange={this.handleOnChangePreOrder}
+                        />
+                      </div>
                     </div>
-                    <div styleName="formItem additionalAttributes">
-                      <AdditionalAttributes
-                        onlyView={Boolean(baseProduct)}
-                        // $FlowIgnore
-                        attributes={defaultAttributes}
-                        customAttributes={customAttributes}
-                        onCreateAttribute={onCreateAttribute}
-                        onRemoveAttribute={onRemoveAttribute}
+                    <div styleName="preOrderDaysInput">
+                      <Input
+                        inputRef={node => {
+                          this.preOrderDaysInput = node;
+                        }}
+                        fullWidth
+                        label="Lead time (days)"
+                        onChange={this.handleOnChangePreOrderDays}
+                        onBlur={this.handleOnBlurPreOrderDays}
+                        value={preOrderDays || ''}
+                        dataTest="variantPreOrderDaysInput"
                       />
                     </div>
-                  </Fragment>
-                )}
-                {!isEmpty(customAttributes) && <div styleName="formItem additionalAttributes">
-                  <Characteristics
-                    customAttributes={customAttributes}
-                    values={attributeValues || []}
-                    onChange={this.handleChangeValues}
-                    errors={(formErrors && formErrors.attributes) || null}
-                  />
-                </div>}
+                  </div>
+                </div>
                 <div styleName="warehouses">
                   {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
                 </div>
@@ -900,35 +1023,73 @@ class Form extends Component<PropsType, StateType> {
                   </Button>
                 </div>
               </div>
-              <div styleName="tabs">
+              <div id="tabs" styleName="tabs">
                 <Tabs
                   tabs={tabs}
                   activeTab={activeTab}
                   onChangeTab={this.handleChangeTab}
                 >
                   <div styleName="tabsWrap">
-                    <div styleName={classNames('variants', { hidden: activeTab !== 'variants' })}>
-                      <div styleName="variantsIcon">
-                        <Icon type="addVariant" size={80} />
-                      </div>
-                      <div styleName="variantsText">
-                        Currently you have no variants for you product.<br />
-                        Add variants if you need some.
-                      </div>
-                      <div styleName="variantsButton">
-                        <Button
-                          big
-                          wireframe
-                          fullWidth
-                          onClick={baseProduct ? this.addNewVariant : this.handleSave}
-                          dataTest="addVariantButton"
-                        >
-                          Add variant
-                        </Button>
-                      </div>
-                      <div styleName="variantsWarnText">You can’t add variant until create and save base product.</div>
+                    <div
+                      styleName={classNames('variants', {
+                        hidden: activeTab !== 'variants',
+                      })}
+                    >
+                      {!restVariants &&
+                        <div styleName="noVariants">
+                          <div styleName="variantsIcon">
+                            <Icon type="addVariant" size={80} />
+                          </div>
+                          <div styleName="variantsText">
+                            Currently you have no variants for you product.<br />
+                            Add variants if you need some.
+                          </div>
+                          <div styleName="variantsButton">
+                            <Button
+                              big
+                              wireframe
+                              fullWidth
+                              onClick={
+                                baseProduct ? this.addNewVariant : this.handleSave
+                              }
+                              dataTest="addVariantButton"
+                            >
+                              Add variant
+                            </Button>
+                          </div>
+                          <div styleName="variantsWarnText">
+                            You can’t add variant until create and save base
+                            product.
+                          </div>
+                        </div>
+                      }
+                      {restVariants && baseProduct &&
+                        <div styleName="isVariants">
+                          <Variants
+                            variants={restVariants}
+                            productId={baseProduct.id}
+                            environment={environment}
+                            onExpandClick={this.expandClick}
+                          />
+                          <div styleName="variantsButton">
+                            <Button
+                              big
+                              wireframe
+                              fullWidth
+                              onClick={this.addNewVariant}
+                              dataTest="addVariantButton"
+                            >
+                              Add variant
+                            </Button>
+                          </div>
+                        </div>
+                      }
                     </div>
-                    <div styleName={classNames('delivery', { hidden: activeTab !== 'delivery' })}>
+                    <div
+                      styleName={classNames('delivery', {
+                        hidden: activeTab !== 'delivery',
+                      })}
+                    >
                       Delivery
                     </div>
                   </div>
@@ -976,15 +1137,21 @@ class Form extends Component<PropsType, StateType> {
               </div>
             ) */}
             </div>
-          }
-          {isNewVariant &&
+          )}
+          {variantForForm && baseProduct && (
             <div className="variantForm">
               <VariantForm
-                cancelNewVariant={this.cancelNewVariant}
+                cancelVariantForm={this.cancelVariantForm}
                 customAttributes={customAttributes}
+                mainVariant={mainVariant}
+                variant={variantForForm}
+                showAlert={showAlert}
+                environment={environment}
+                productId={baseProduct.id}
+                productRawId={baseProduct.rawId}
               />
             </div>
-          }
+          )}
         </div>
       </ProductFormContext.Provider>
     );
@@ -992,4 +1159,4 @@ class Form extends Component<PropsType, StateType> {
 }
 
 // $FlowIgnoreMe
-export default withErrorBoundary(Form);
+export default withErrorBoundary(withShowAlert(Form));

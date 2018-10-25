@@ -1,0 +1,45 @@
+@import "../../../../../../../styles/variables";
+
+.header {
+  display: flex;
+  width: 138rem;
+  margin: 0;
+  padding: 0 4rem 2rem;
+  border-bottom: 1px solid $color_grey_trivial;
+  background-color: $color_white;
+}
+
+.headerItem {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 2.5rem;
+  color: $color_grey_minor;
+}
+
+.headerItemWrap {
+  & > span {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+}
+
+.deleteButton {
+  & svg {
+    fill: $color_grey_minor;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
+
+.tdCheckbox {width: 5%;}
+.tdArticle {width: 17%;}
+.tdCashback {width: 10%;}
+.tdDiscount {width: 10%;}
+.tdCharacteristics {width: 18%;}
+.tdPrice {width: 15%;}
+.tdCount {width: 17%;}
+.tdBasket {width: 4%; justify-content: flex-end;}
+.tdDropdawn {width: 4%; justify-content: flex-end;}

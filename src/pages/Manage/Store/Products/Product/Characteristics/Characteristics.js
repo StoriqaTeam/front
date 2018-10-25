@@ -54,15 +54,20 @@ class Characteristics extends PureComponent<PropsType> {
       <div styleName="container">
         <div styleName="items">
           <Row>
-            {map(item => (
-              <Col key={item.id} size={12} sm={12} md={6} lg={4} xl={4}>
-                <CharacteristicItem
-                  attribute={item}
-                  onSelect={this.handleItemChange}
-                  value={filter(propEq('attrId', item.rawId), this.props.values)[0]}
-                />
-              </Col>
-            ), customAttributes)}
+            {map(
+              item => (
+                <Col key={item.id} size={12} sm={12} md={6} lg={4} xl={4}>
+                  <CharacteristicItem
+                    attribute={item}
+                    onSelect={this.handleItemChange}
+                    value={
+                      filter(propEq('attrId', item.rawId), this.props.values)[0]
+                    }
+                  />
+                </Col>
+              ),
+              customAttributes,
+            )}
           </Row>
         </div>
         <div styleName="errors">

@@ -1,12 +1,21 @@
 @import '../../../../../../styles/variables';
 
 .container {
+  position: relative;
   padding: 4rem;
   background-color: $color_white;
 }
 
+.cross {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+}
+
 .title {
-  margin-bottom: 4rem;
   font-size: 14px;
   line-height: 18px;
   text-transform: uppercase;
@@ -35,9 +44,25 @@
   font-size: 12px;
 }
 
+.preOrder {
+  margin-top: 8rem;
 
+  .preOrderTitle {
+    display: flex;
 
+    .preOrderCheckbox {
+      margin-left: 2rem;
+    }
+  }
 
+  .preOrderDaysInput {
+    width: 15rem;
+  }
+}
+
+.warehouses {
+
+}
 
 .buttons {
   display: flex;

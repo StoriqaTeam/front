@@ -2,8 +2,9 @@
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, pathOr } from 'ramda';
+import { isEmpty, pathOr, map } from 'ramda';
 import classNames from 'classnames';
+import { Environment } from 'relay-runtime';
 
 import { Button } from 'components/common/Button';
 import { log, fromRelayError } from 'utils';
@@ -14,6 +15,8 @@ import type { MutationParamsType } from 'relay/mutations/DeactivateProductMutati
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
 import Table from './Table/Table';
+import Header from './Header/Header';
+import Row from './Row/Row';
 
 import './Variants.scss';
 
@@ -31,6 +34,22 @@ type StateType = {
 };
 
 type PropsType = {
+  variants: Array<*>,
+  productId: string,
+  environment: Environment,
+  onExpandClick: (id: number) => void,
+
+
+
+
+
+
+
+
+
+
+
+
   productRawId: number,
   productId: string,
   category: {},
@@ -74,18 +93,17 @@ class Variants extends Component<PropsType, StateType> {
     isNewVariant: false,
   };
 
-  componentDidUpdate(prevProps: PropsType) {
-    const { closedVariantFormAnnunciator } = this.props;
-    if (
-      closedVariantFormAnnunciator !== prevProps.closedVariantFormAnnunciator
-    ) {
-      this.toggleNewVariantParam(false);
-    }
-  }
-
+  // componentDidUpdate(prevProps: PropsType) {
+  //   const { closedVariantFormAnnunciator } = this.props;
+  //   if (
+  //     closedVariantFormAnnunciator !== prevProps.closedVariantFormAnnunciator
+  //   ) {
+  //     this.toggleNewVariantParam(false);
+  //   }
+  // }
+  //
   handleDeleteVariant = (id: string) => {
-    const { environment } = this.context;
-    const { productId } = this.props;
+    const { environment, productId } = this.props;
     if (!productId || !id) {
       this.props.showAlert({
         type: 'danger',
@@ -133,72 +151,87 @@ class Variants extends Component<PropsType, StateType> {
     DeactivateProductMutation.commit(params);
   };
 
-  toggleNewVariantParam = (value: boolean) => {
-    this.setState({ isNewVariant: value });
+  expandClick = (id: number) => {
+    this.props.onExpandClick(id);
   };
+  //
+  // toggleNewVariantParam = (value: boolean) => {
+  //   this.setState({ isNewVariant: value });
+  // };
 
   render() {
-    const {
-      category,
-      variants,
-      productRawId,
-      productId,
-      storeID,
-      comeResponse,
-      resetComeResponse,
-      closedVariantFormAnnunciator,
-      customAttributes,
-    } = this.props;
-    // console.log('---attributes', attributes);
-    const { isNewVariant } = this.state;
+    // const {
+    //   category,
+    //   variants,
+    //   productRawId,
+    //   productId,
+    //   storeID,
+    //   comeResponse,
+    //   resetComeResponse,
+    //   closedVariantFormAnnunciator,
+    //   customAttributes,
+    // } = this.props;
+    // // console.log('---attributes', attributes);
+    // const { isNewVariant } = this.state;
+
+    const { variants } = this.props;
+    console.log('---variants', variants);
     return (
-      <Fragment>
-        <div
-          styleName={classNames('container', { newVariant: isEmpty(variants) })}
-        >
-          {!isEmpty(variants) && (
-            <div styleName="header">
-              <div styleName="title">
-                <strong>Item variants</strong>
-              </div>
-              {!isNewVariant && (
-                <div styleName="button">
-                  <Button
-                    wireframe
-                    big
-                    onClick={() => {
-                      this.toggleNewVariantParam(true);
-                    }}
-                    dataTest="addVariantButton"
-                  >
-                    Add variant
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-          <Table
-            category={category}
-            variants={variants}
-            productRawId={productRawId}
-            productId={productId}
-            storeID={storeID}
-            handleDeleteVariant={this.handleDeleteVariant}
-            comeResponse={comeResponse}
-            resetComeResponse={resetComeResponse}
-            isNewVariant={isNewVariant}
-            toggleNewVariantParam={this.toggleNewVariantParam}
-            closedVariantFormAnnunciator={closedVariantFormAnnunciator}
-          />
+      <div className="container">
+        <Header />
+        <div className="rows">
+          {map(item => (
+            <Row
+              key={item.rawId}
+              variant={item}
+              handleDeleteVariant={this.handleDeleteVariant}
+              onExpandClick={this.expandClick}
+            />
+          ), variants)}
         </div>
-      </Fragment>
+        {/* <Fragment>
+          <div
+            styleName={classNames('container', { newVariant: isEmpty(variants) })}
+          >
+            {!isEmpty(variants) && (
+              <div styleName="header">
+                <div styleName="title">
+                  <strong>Item variants</strong>
+                </div>
+                {!isNewVariant && (
+                  <div styleName="button">
+                    <Button
+                      wireframe
+                      big
+                      onClick={() => {
+                        this.toggleNewVariantParam(true);
+                      }}
+                      dataTest="addVariantButton"
+                    >
+                      Add variant
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+            <Table
+              category={category}
+              variants={variants}
+              productRawId={productRawId}
+              productId={productId}
+              storeID={storeID}
+              handleDeleteVariant={this.handleDeleteVariant}
+              comeResponse={comeResponse}
+              resetComeResponse={resetComeResponse}
+              isNewVariant={isNewVariant}
+              toggleNewVariantParam={this.toggleNewVariantParam}
+              closedVariantFormAnnunciator={closedVariantFormAnnunciator}
+            />
+          </div>
+        </Fragment> */}
+      </div>
     );
   }
 }
-
-Variants.contextTypes = {
-  environment: PropTypes.object.isRequired,
-  directories: PropTypes.object,
-};
 
 export default withShowAlert(Variants);

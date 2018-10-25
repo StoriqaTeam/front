@@ -17,6 +17,7 @@ const mutation = graphql`
       id
       rawId
       baseProduct {
+        id
         store {
           warehouses {
             id

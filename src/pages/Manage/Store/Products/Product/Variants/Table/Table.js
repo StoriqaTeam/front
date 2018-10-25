@@ -217,7 +217,9 @@ class Table extends Component<PropsType, StateType> {
                   resetVariantFormErrors={resetVariantFormErrors}
                   customAttributes={customAttributes}
                 />
-                {length(drop(1, variants)) > 0 && <Header onSelectAllClick={this.handleSelectAll} />}
+                {length(drop(1, variants)) > 0 && (
+                  <Header onSelectAllClick={this.handleSelectAll} />
+                )}
                 {map(
                   item => (
                     <Fragment key={item.id}>

@@ -26,7 +26,7 @@
 }
 
 .title {
-  margin-bottom: 4rem;
+  //margin-bottom: 4rem;
   font-size: 14px;
   line-height: 18px;
   text-transform: uppercase;
@@ -124,43 +124,70 @@
 
 }
 
+.preOrder {
+  margin-top: 8rem;
+
+  .preOrderTitle {
+    display: flex;
+
+    .preOrderCheckbox {
+      margin-left: 2rem;
+    }
+  }
+
+  .preOrderDaysInput {
+    width: 15rem;
+  }
+}
+
 .tabs {
   width: 100%;
   margin-top: 2rem;
   background-color: $color_white;
 
   .tabsWrap {
-    padding: 4rem;
-
     .variants {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      .noVariants {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem;
 
-      .variantsIcon {}
+        .variantsIcon {}
 
-      .variantsText {
-        margin: 4rem 0;
-        color: $color_grey_minor;
-        text-align: center;
+        .variantsText {
+          margin: 4rem 0;
+          color: $color_grey_minor;
+          text-align: center;
+        }
+
+        .variantsButton {}
+
+        .variantsWarnText {
+          margin-top: 4rem;
+          color: $color_pink;
+          text-align: center;
+        }
       }
 
-      .variantsButton {}
+      .isVariants {
+        padding-top: 4rem;
 
-      .variantsWarnText {
-        margin-top: 4rem;
-        color: $color_pink;
-        text-align: center;
+        .variantsButton {
+          width: 22.5rem;
+          margin: 4rem;
+        }
       }
-
     }
 
     .delivery {
-
+      padding: 4rem;
     }
 
     .hidden {
-      display: none;
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
     }
   }
 

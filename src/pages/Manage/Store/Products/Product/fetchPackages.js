@@ -15,7 +15,6 @@ const AVAILABLEPACKAGES_QUERY = graphql`
         companyPackageRawId
         name
         logo
-        currency
       }
       international {
         companyPackageId
@@ -34,7 +33,6 @@ const AVAILABLEPACKAGES_QUERY = graphql`
             alpha3
           }
         }
-        currency
       }
     }
   }

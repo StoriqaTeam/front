@@ -18,6 +18,7 @@ type StateType = {
 };
 
 type PropsType = {
+  id?: string,
   required?: boolean,
   inputRef?: (node: ?HTMLInputElement) => void,
   onChangePrice: (value: number) => void,
@@ -117,17 +118,24 @@ class InputPrice extends Component<PropsType, StateType> {
       inputRef,
       dataTest,
       errors,
+      id,
     } = this.props;
     const { price } = this.state;
-    const requiredLabel = required === true ? (
-      <span>
-        {label} <span styleName="asterisk">*</span>
-      </span>
-    ) : label;
+    const requiredLabel =
+      required === true ? (
+        <span>
+          {label} <span styleName="asterisk">*</span>
+        </span>
+      ) : (
+        label
+      );
     return (
       <AppContext.Consumer>
         {({ directories }) => (
-          <div styleName="container">
+          <div
+            id={id !== undefined ? id : null}
+            styleName="container"
+          >
             <div styleName="input">
               <Input
                 inputRef={inputRef}

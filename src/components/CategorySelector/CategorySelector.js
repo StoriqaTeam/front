@@ -186,10 +186,7 @@ class CategorySelector extends React.Component<PropsType, StateType> {
     const level2ItemName = level2Item ? getNameText(level2Item.name, lang) : '';
 
     return (
-      <div
-        id={id || null}
-        styleName="container"
-      >
+      <div id={id || null} styleName="container">
         <div styleName="wrapper">
           <div styleName="label">Category</div>
           <div

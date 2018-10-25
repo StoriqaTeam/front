@@ -36,7 +36,12 @@ class Photos extends PureComponent<PropsType> {
   };
 
   render() {
-    const { mainPhoto, photos: items, onRemovePhoto, isMainVariant } = this.props;
+    const {
+      mainPhoto,
+      photos: items,
+      onRemovePhoto,
+      isMainVariant,
+    } = this.props;
     return (
       <div styleName="container">
         <div styleName="mainPhoto">

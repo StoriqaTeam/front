@@ -4,7 +4,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
-import {pathOr, isEmpty, path, head, omit, filter, prepend, find, propEq} from 'ramda';
+import {
+  pathOr,
+  isEmpty,
+  path,
+  head,
+  omit,
+  filter,
+  prepend,
+  find,
+  propEq,
+} from 'ramda';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -67,8 +77,6 @@ type FormType = {
   categoryId: ?number,
   currencyId: number,
 
-
-
   idMainVariant: string,
   rawIdMainVariant: ?number,
   photoMain: ?string,
@@ -110,6 +118,7 @@ class EditProduct extends Component<PropsType, StateType> {
     super(props);
     // $FlowIgnore
     const baseProduct = pathOr(null, ['me', 'baseProduct'], props);
+    console.log('---baseProduct', baseProduct);
     const { category, customAttributes } = baseProduct;
     const newCustomAttributes = filter(item => {
       return Boolean(find(propEq('attributeId', item.rawId))(customAttributes));
@@ -607,11 +616,18 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   handleCreateAttribute = (attribute: AttributeType) => {
-    this.setState((prevState: StateType) => ({ customAttributes: prepend(attribute, prevState.customAttributes) }));
+    this.setState((prevState: StateType) => ({
+      customAttributes: prepend(attribute, prevState.customAttributes),
+    }));
   };
 
   handleRemoveAttribute = (id: string) => {
-    this.setState((prevState: StateType) => ({ customAttributes: filter(item => (item.id !== id), prevState.customAttributes) }));
+    this.setState((prevState: StateType) => ({
+      customAttributes: filter(
+        item => item.id !== id,
+        prevState.customAttributes,
+      ),
+    }));
   };
 
   render() {
@@ -637,7 +653,7 @@ class EditProduct extends Component<PropsType, StateType> {
     }
     return (
       <AppContext.Consumer>
-        {({ directories }) => (
+        {({ directories, environment }) => (
           <div styleName="wrap">
             <Form
               baseProduct={baseProduct}
@@ -660,6 +676,7 @@ class EditProduct extends Component<PropsType, StateType> {
               customAttributes={customAttributes}
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
+              environment={environment}
             />
           </div>
         )}

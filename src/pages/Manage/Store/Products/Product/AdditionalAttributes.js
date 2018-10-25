@@ -38,6 +38,7 @@ type StateType = {
 class AdditionalAttributes extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    console.log('---props', props);
 
     const { attributes } = props;
     const selectableAttributes = this.updateAttributes(attributes);
@@ -51,10 +52,7 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
   componentDidUpdate(prevProps: PropsType) {
     const { attributes, customAttributes } = this.props;
     const { activeAttribute } = this.state;
-    if (
-      JSON.stringify(prevProps.attributes) !==
-      JSON.stringify(attributes)
-    ) {
+    if (JSON.stringify(prevProps.attributes) !== JSON.stringify(attributes)) {
       const selectableAttributes = this.updateAttributes(attributes);
       this.updateState(selectableAttributes, head(selectableAttributes));
     }
@@ -62,10 +60,15 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
       JSON.stringify(prevProps.customAttributes) !==
       JSON.stringify(customAttributes)
     ) {
-      const selectableAttributes = this.updateAttributes(difference(attributes, customAttributes));
+      console.log('---YEEES');
+      const selectableAttributes = this.updateAttributes(
+        difference(attributes, customAttributes),
+      );
       this.updateState(
         selectableAttributes,
-        find(propEq('id', activeAttribute && activeAttribute.id))(selectableAttributes)
+        find(propEq('id', activeAttribute && activeAttribute.id))(
+          selectableAttributes,
+        )
           ? activeAttribute
           : head(selectableAttributes),
       );
@@ -74,12 +77,19 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
 
   updateAttributes = (
     attributes: Array<AttributeType>,
-  ): Array<SelectItemType> => map(item => ({
-    id: item.id,
-    label: getNameText(item.name, 'EN'),
-  }), attributes);
+  ): Array<SelectItemType> =>
+    map(
+      item => ({
+        id: item.id,
+        label: getNameText(item.name, 'EN'),
+      }),
+      attributes,
+    );
 
-  updateState = (selectableAttributes: Array<SelectItemType>, activeAttribute: ?SelectItemType) => {
+  updateState = (
+    selectableAttributes: Array<SelectItemType>,
+    activeAttribute: ?SelectItemType,
+  ) => {
     this.setState({
       selectableAttributes,
       activeAttribute,
@@ -107,15 +117,14 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
 
   render() {
     const { customAttributes, onlyView } = this.props;
-    const {
-      selectableAttributes,
-      activeAttribute,
-    } = this.state;
+    const { selectableAttributes, activeAttribute } = this.state;
     return (
-      <div styleName={classNames('container', {
-        onlyViewContainer: onlyView,
-      })}>
-        {!onlyView &&
+      <div
+        styleName={classNames('container', {
+          onlyViewContainer: onlyView,
+        })}
+      >
+        {!onlyView && (
           <div>
             <div
               styleName={classNames('select', {
@@ -141,8 +150,10 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
               </button>
             )}
           </div>
-        }
-        {onlyView && <div styleName="onlyViewTitle">Additional characteristics</div>}
+        )}
+        {onlyView && (
+          <div styleName="onlyViewTitle">Additional characteristics</div>
+        )}
         <div styleName="customAttributes">
           {map(
             item => (
@@ -153,7 +164,7 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
                 })}
               >
                 <div styleName="label">{getNameText(item.name, 'EN')}</div>
-                {!onlyView &&
+                {!onlyView && (
                   <button
                     styleName="cross"
                     onClick={() => {
@@ -162,7 +173,7 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
                   >
                     <Icon inline type="cross" size={12} />
                   </button>
-                }
+                )}
               </div>
             ),
             customAttributes,

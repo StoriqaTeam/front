@@ -23,22 +23,25 @@ class Tabs extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="head">
-          {map(item => (
-            <div
-              key={item.id}
-              styleName={classNames('tab', { active: item.id === activeTab })}
-              onClick={() => {onChangeTab(item.id)}}
-              onKeyDown={() => {}}
-              role="button"
-              tabIndex="0"
-            >
-              {item.label}
-            </div>
-          ), tabs)}
+          {map(
+            item => (
+              <div
+                key={item.id}
+                styleName={classNames('tab', { active: item.id === activeTab })}
+                onClick={() => {
+                  onChangeTab(item.id);
+                }}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {item.label}
+              </div>
+            ),
+            tabs,
+          )}
         </div>
-        <div styleName="body">
-          {this.props.children}
-        </div>
+        <div styleName="body">{this.props.children}</div>
       </div>
     );
   }

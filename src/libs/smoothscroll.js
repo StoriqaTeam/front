@@ -7,7 +7,7 @@ const smoothScroll = {
     clearTimeout(this.timer);
   },
 
-  scrollTo: function(id, callback) {
+  scrollTo: function(id, callback, necessarily) {
     const settings = {
       duration: 500,
       easing: {
@@ -19,9 +19,9 @@ const smoothScroll = {
     let percentage;
     let startTime;
     const node = document.getElementById(id);
-    const nodeHeight = node.offsetHeight;
+    // const nodeHeight = node.offsetHeight;
     const nodeTop = node.getBoundingClientRect().top;
-    if (nodeTop > 0) {
+    if (nodeTop > 0 && !necessarily) {
       return;
     }
     // const body = document.body;

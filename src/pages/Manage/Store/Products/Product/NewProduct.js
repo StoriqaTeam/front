@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
-import {pathOr, isEmpty, path, head, omit, filter, prepend, map} from 'ramda';
+import { pathOr, isEmpty, path, head, omit, filter, prepend, map } from 'ramda';
 import { Environment } from 'relay-runtime';
 
 import { AppContext, Page } from 'components/App';
@@ -66,11 +66,6 @@ type FormType = {
   categoryId: number,
   currencyId: number,
   currency: SelectItemType,
-
-
-
-
-
 
   idMainVariant: string,
   rawIdMainVariant: ?number,
@@ -218,20 +213,22 @@ class NewProduct extends Component<PropsType, StateType> {
         currency: currency.id,
         categoryId,
         selectedAttributes: map(item => item.rawId, customAttributes),
-        variants: [{
-          clientMutationId: '',
-          product: {
-            price: form.price,
-            vendorCode: form.vendorCode,
-            photoMain: form.photoMain,
-            additionalPhotos: form.photos,
-            cashback: form.cashback ? form.cashback / 100 : null,
-            discount: form.discount ? form.discount / 100 : null,
-            preOrder: form.preOrder,
-            preOrderDays: Number(form.preOrderDays),
+        variants: [
+          {
+            clientMutationId: '',
+            product: {
+              price: form.price,
+              vendorCode: form.vendorCode,
+              photoMain: form.photoMain,
+              additionalPhotos: form.photos,
+              cashback: form.cashback ? form.cashback / 100 : null,
+              discount: form.discount ? form.discount / 100 : null,
+              preOrder: form.preOrder,
+              preOrderDays: Number(form.preOrderDays),
+            },
+            attributes: form.attributeValues,
           },
-          attributes: form.attributeValues,
-        }],
+        ],
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
@@ -624,11 +621,18 @@ class NewProduct extends Component<PropsType, StateType> {
   };
 
   handleCreateAttribute = (attribute: AttributeType) => {
-    this.setState((prevState: StateType) => ({ customAttributes: prepend(attribute, prevState.customAttributes) }));
+    this.setState((prevState: StateType) => ({
+      customAttributes: prepend(attribute, prevState.customAttributes),
+    }));
   };
 
   handleRemoveAttribute = (id: string) => {
-    this.setState((prevState: StateType) => ({ customAttributes: filter(item => (item.id !== id), prevState.customAttributes) }));
+    this.setState((prevState: StateType) => ({
+      customAttributes: filter(
+        item => item.id !== id,
+        prevState.customAttributes,
+      ),
+    }));
   };
 
   handleResetAttribute = () => {

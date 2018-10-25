@@ -131,12 +131,19 @@ class Form extends Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    const { onChangeVariantForm, variant, formErrors, customAttributes } = props;
+    const {
+      onChangeVariantForm,
+      variant,
+      formErrors,
+      customAttributes,
+    } = props;
     // console.log('---customAttributes', customAttributes);
     const product = variant;
     if (!product) {
       this.state = {
-        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes) : [],
+        attributeValues: !isEmpty(customAttributes)
+          ? this.resetAttrValues(customAttributes)
+          : [],
         vendorCode: null,
         price: null,
         formErrors,
@@ -152,7 +159,9 @@ class Form extends Component<PropsType, StateType> {
         discount: Math.round((product.discount || 0) * 100),
         mainPhoto: product.photoMain,
         photos: product.additionalPhotos,
-        attributeValues: !isEmpty(customAttributes) ? this.resetAttrValues(customAttributes) : [],
+        attributeValues: !isEmpty(customAttributes)
+          ? this.resetAttrValues(customAttributes)
+          : [],
         formErrors,
         isLoading: false,
         preOrder: Boolean(product.preOrder),
@@ -181,7 +190,10 @@ class Form extends Component<PropsType, StateType> {
       onChangeVariantForm(variantData);
     }
     const { customAttributes } = this.props;
-    if (JSON.stringify(prevProps.customAttributes) !== JSON.stringify(customAttributes)) {
+    if (
+      JSON.stringify(prevProps.customAttributes) !==
+      JSON.stringify(customAttributes)
+    ) {
       const attrValues = this.resetAttrValues(customAttributes);
       this.onChangeValues(attrValues);
     }
@@ -375,8 +387,8 @@ class Form extends Component<PropsType, StateType> {
             fullWidth
             label={
               <span>
-                  Vendor code <span styleName="asterisk">*</span>
-                </span>
+                Vendor code <span styleName="asterisk">*</span>
+              </span>
             }
             value={vendorCode || ''}
             onChange={this.handleVendorCodeChange}
