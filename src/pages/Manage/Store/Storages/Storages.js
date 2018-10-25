@@ -22,6 +22,8 @@ import { StoragesHeader, StoragesRow } from './index';
 
 import './Storages.scss';
 
+import t from './i18n';
+
 type PropsType = {
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
@@ -72,8 +74,8 @@ class Storages extends PureComponent<PropsType> {
         if (!isEmpty(validationErrors)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Something going wrong :(`,
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
@@ -82,14 +84,14 @@ class Storages extends PureComponent<PropsType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Storage delete!',
+          text: t.storageDeleted,
           link: { text: '' },
         });
       },
@@ -97,8 +99,8 @@ class Storages extends PureComponent<PropsType> {
         log.debug({ error });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -113,7 +115,7 @@ class Storages extends PureComponent<PropsType> {
       <div styleName="container">
         <header styleName="headerBar">
           <div styleName="subtitle">
-            <strong>Items list</strong>
+            <strong>{t.itemList}</strong>
           </div>
           {storages &&
             length(storages) > 1 && (
@@ -124,7 +126,7 @@ class Storages extends PureComponent<PropsType> {
                   onClick={this.createStorage}
                   dataTest="createStorageButton"
                 >
-                  Add storage
+                  {t.addStorage}
                 </Button>
               </div>
             )}
@@ -133,7 +135,7 @@ class Storages extends PureComponent<PropsType> {
           <StoragesHeader />
           <div>
             {isEmpty(storages) ? (
-              <div styleName="emptyStoragesBlock">No storages</div>
+              <div styleName="emptyStoragesBlock">{t.noStorages}</div>
             ) : (
               map(
                 item => (

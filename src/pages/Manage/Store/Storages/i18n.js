@@ -5,13 +5,25 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  addressNotSpecified: string,
+  error: string,
+  close: string,
+  somethingGoingWrong: string,
+  storageDeleted: string,
+  itemList: string,
+  addStorage: string,
+  noStorages: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    addressNotSpecified: 'Address not specified',
+    error: 'Error: ',
+    close: 'Close.',
+    somethingGoingWrong: 'Something going wrong :(',
+    storageDeleted: 'Storage delete!',
+    itemList: 'Items list',
+    addStorage: 'Add storage',
+    noStorages: 'No storages',
   },
 };
 
