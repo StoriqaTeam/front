@@ -8,6 +8,8 @@ import { addressToString } from 'utils';
 
 import './StoragesRow.scss';
 
+import t from './i18n';
+
 type AddressFullType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
@@ -61,7 +63,7 @@ const StoragesRow = ({
     </Col>
     <Col size={12} sm={12} md={4} lg={8} xl={8}>
       <address styleName="address">
-        <span>{addressToString(addressFull) || 'Address not specified'}</span>
+        <span>{addressToString(addressFull) || t.addressNotSpecified}</span>
       </address>
     </Col>
     <Col size={12} sm={6} md={3} lg={1} xl={1} mdVisible>
