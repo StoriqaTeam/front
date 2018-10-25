@@ -16,9 +16,11 @@ import type { MutationParamsType } from 'relay/mutations/CreateWarehouseMutation
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { FormErrorsType } from 'types';
 
-import Form from './Form';
+import Form from '../Form';
 
 import './NewStorage.scss';
+
+import t from './i18n';
 
 type AddressFullType = {
   administrativeAreaLevel1: ?string,
@@ -97,14 +99,14 @@ class NewStorage extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Storage create!',
+          text: t.storageCreated,
           link: { text: '' },
         });
         this.props.router.push(`/manage/store/${storeId}/storages`);
@@ -113,8 +115,8 @@ class NewStorage extends Component<PropsType, StateType> {
         log.debug({ error });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
