@@ -5,17 +5,19 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  somethingWentWrong: string,
-  offscreenProfileMenu: string,
-  clickToUploadAvatar: string,
+  personalData: string,
+  shippingAddresses: string,
+  security: string,
+  orders: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    somethingWentWrong: 'Something going wrong :(',
-    offscreenProfileMenu: 'Profile Menu',
-    clickToUploadAvatar: 'Click to upload avatar',
+    personalData: 'Personal data',
+    shippingAddresses: 'Shipping addresses',
+    security: 'Security',
+    orders: 'Orders',
   },
 };
 
