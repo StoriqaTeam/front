@@ -31,6 +31,8 @@ import { uploadFile, convertSrc } from 'utils';
 
 import './Form.scss';
 
+import t from './i18n';
+
 type StateType = {
   form: {
     name: string,
@@ -199,25 +201,25 @@ class Form extends Component<PropsType, StateType> {
         name: [
           [
             (value: string) => value && value.length > 0,
-            'Name must not be empty',
+            t.nameMustNotBeEmpty,
           ],
         ],
         shortDescription: [
           [
             (value: string) => value && value.length > 0,
-            'Short description must not be empty',
+            t.shortDescriptionMustNotBeEmpty,
           ],
         ],
         longDescription: [
           [
             (value: string) => value && value.length > 0,
-            'Long description must not be empty',
+            t.longDescriptionMustNotBeEmpty,
           ],
         ],
         slug: [
           [
             (value: string) => value && value.length > 0,
-            'Slug must not be empty',
+            t.slugMustNotBeEmpty,
           ],
         ],
       },
@@ -341,10 +343,9 @@ class Form extends Component<PropsType, StateType> {
                 />
               </div>
               <div>
-                <div>Upload main photo</div>
+                <div>{t.uploadMainPhoto}</div>
                 <div styleName="uploadRec">
-                  Strongly recommend to upload:<br />1360px × 350px | .jpg .jpeg
-                  .png
+                  {t.stronglyRecommendToUpload}<br />{t.size1360x350}
                 </div>
               </div>
             </div>
@@ -354,20 +355,20 @@ class Form extends Component<PropsType, StateType> {
                 <Icon type="basket" size={28} />
               </button>
               <div styleName="image">
-                <img src={convertSrc(cover, 'medium')} alt="Store cover" />
+                <img src={convertSrc(cover, 'medium')} alt={t.altStoreCover} />
               </div>
             </div>
           )}
           {this.renderInput({
             id: 'name',
-            label: 'Store name',
+            label: t.labelStoreName,
             limit: 50,
           })}
           <div styleName="formItem maxWidthInput">
             {/* $FlowIgnoreMe */}
             <Select
               forForm
-              label="Language"
+              label={t.labelLanguage}
               activeItem={defaultLanguageValue}
               items={langItems}
               onSelect={this.handleDefaultLanguage}
@@ -378,7 +379,7 @@ class Form extends Component<PropsType, StateType> {
           </div>
           {this.renderInput({
             id: 'slogan',
-            label: 'Slogan',
+            label: t.labelSlogan,
             limit: 50,
           })}
           <div styleName="formItem maxWidthInput">
@@ -392,11 +393,11 @@ class Form extends Component<PropsType, StateType> {
           </div>
           {this.renderTextarea({
             id: 'shortDescription',
-            label: 'Short description',
+            label: t.labelShortDescription,
           })}
           {this.renderTextarea({
             id: 'longDescription',
-            label: 'Long description',
+            label: t.labelLongDescription,
           })}
           <div styleName="formItem">
             <div styleName="saveButton">
@@ -405,7 +406,7 @@ class Form extends Component<PropsType, StateType> {
                 isLoading={isLoading}
                 dataTest="saveButton"
               >
-                Save
+                {t.save}
               </SpinnerButton>
             </div>
           </div>
