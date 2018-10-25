@@ -31,6 +31,8 @@ import menuItems from './menuItems.json';
 
 import './ManageStoreMenu.scss';
 
+import t from './i18n';
+
 type MenuItemType = {
   id: string,
   title: string,
@@ -133,8 +135,8 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     if (!storeId) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong.',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -163,7 +165,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           this.props.showAlert({
             type: 'danger',
             text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            link: { text: t.close },
           });
           return;
         }
@@ -173,14 +175,14 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Saved!',
+          text: t.saved,
           link: { text: '' },
         });
       },
@@ -188,8 +190,8 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -241,7 +243,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     }
     return (
       <aside styleName="container">
-        <h2 styleName="offscreen">Manage</h2>
+        <h2 styleName="offscreen">{t.manage}</h2>
         <div styleName="mobileMenu">
           <Collapse
             selected={activeItem}
@@ -269,7 +271,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
             buttonWidth="100%"
             buttonIconSize={48}
             buttonIconType="upload"
-            buttonLabel="Click to upload logo"
+            buttonLabel={t.buttonLabel}
             overPicture={
               myStore ? convertSrc(storeLogo, 'medium') || null : newStoreLogo
             }
