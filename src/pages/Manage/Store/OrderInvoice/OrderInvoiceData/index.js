@@ -2,7 +2,9 @@
 
 import React from 'react';
 
-import './OrderInvoice.scss';
+import '../OrderInvoice.scss';
+
+import t from './i18n';
 
 type PropsType = {
   receiverName: string,
@@ -19,19 +21,19 @@ const OrderInvoiceData = ({
 }: PropsType) => (
   <div styleName="invoiceData">
     <div>
-      <span styleName="customerData">Customer: </span> {receiverName}
+      <span styleName="customerData">{t.customer}: </span> {receiverName}
     </div>
     <div>
-      <span styleName="customerData">Order #: </span> {slug}
+      <span styleName="customerData">{t.order}: </span> {slug}
     </div>
     <div>
-      <span styleName="customerData">Track ID: </span> {trackId}
+      <span styleName="customerData">{t.trackID}: </span> {trackId}
     </div>
     <div>
-      <span styleName="customerData">Delivery: </span>
+      <span styleName="customerData">{t.delivery}: </span>
     </div>
     <div>
-      <span styleName="customerData">Status: </span>
+      <span styleName="customerData">{t.status}: </span>
       {state}
     </div>
   </div>
