@@ -6,6 +6,8 @@ import { Col } from 'layout';
 
 import './StoragesHeader.scss';
 
+import t from './i18n';
+
 const StoragesHeader = () => (
   <div styleName="container">
     <Col size={12} sm={6} md={5} lg={3} xl={3} mdVisible>
@@ -14,14 +16,14 @@ const StoragesHeader = () => (
           <Checkbox id="header" onChange={() => {}} />
         </div>
         <div>
-          <span>Storage</span>
+          <span>{t.storage}</span>
           <Icon inline type="sortArrows" />
         </div>
       </div>
     </Col>
     <Col size={12} sm={6} md={4} lg={8} xl={8} mdVisible>
       <div>
-        <span>Address</span>
+        <span>{t.address}</span>
         <Icon inline type="sortArrows" />
       </div>
     </Col>
