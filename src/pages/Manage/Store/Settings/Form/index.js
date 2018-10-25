@@ -199,10 +199,7 @@ class Form extends Component<PropsType, StateType> {
     const { errors: formErrors } = validate(
       {
         name: [
-          [
-            (value: string) => value && value.length > 0,
-            t.nameMustNotBeEmpty,
-          ],
+          [(value: string) => value && value.length > 0, t.nameMustNotBeEmpty],
         ],
         shortDescription: [
           [
@@ -217,10 +214,7 @@ class Form extends Component<PropsType, StateType> {
           ],
         ],
         slug: [
-          [
-            (value: string) => value && value.length > 0,
-            t.slugMustNotBeEmpty,
-          ],
+          [(value: string) => value && value.length > 0, t.slugMustNotBeEmpty],
         ],
       },
       {
@@ -345,7 +339,9 @@ class Form extends Component<PropsType, StateType> {
               <div>
                 <div>{t.uploadMainPhoto}</div>
                 <div styleName="uploadRec">
-                  {t.stronglyRecommendToUpload}<br />{t.size1360x350}
+                  {t.stronglyRecommendToUpload}
+                  <br />
+                  {t.size1360x350}
                 </div>
               </div>
             </div>
