@@ -3,7 +3,7 @@
 import React, { Fragment } from 'react';
 import type { Node } from 'react';
 
-import './OrderInvoice.scss';
+import '../OrderInvoice.scss';
 
 type PropsType = {
   children: Node,

@@ -7,7 +7,7 @@ import type { TranslationType } from 'types';
 
 import { extractText } from 'utils';
 
-import './OrderInvoice.scss';
+import '../OrderInvoice.scss';
 
 type PropsType = {
   slug: number,
