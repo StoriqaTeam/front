@@ -14,6 +14,8 @@ import { Col, Row } from 'layout';
 
 import './StoreItems.scss';
 
+import t from './i18n';
+
 const productsPerRequest = 8;
 
 type PropsType = {
@@ -85,7 +87,7 @@ class StoreItems extends Component<PropsType, StateType> {
             autocompleteItems={autocompleteItems}
             onChange={this.handleOnChangeAutocomplete}
             onSet={this.handleOnSetAutocomplete}
-            label="Search shop’s products"
+            label={t.labelSearchShopsProducts}
             search
             fullWidth
           />
@@ -114,7 +116,7 @@ class StoreItems extends Component<PropsType, StateType> {
               onClick={this.productsRefetch}
               dataTest="shopProductsLoadMoreButton"
             >
-              Load more
+              {t.loadMore}
             </Button>
           </div>
         )}
