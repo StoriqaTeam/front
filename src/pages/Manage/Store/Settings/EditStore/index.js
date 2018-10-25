@@ -16,7 +16,9 @@ import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { EditStore_me as EditStoreMeType } from './__generated__/EditStore_me.graphql';
 
-import Form from './Form';
+import Form from '../Form';
+
+import t from './i18n';
 
 type PropsType = {
   me: EditStoreMeType,
@@ -83,14 +85,14 @@ class EditStore extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Saved!',
+          text: t.saved,
           link: { text: '' },
         });
       },
@@ -109,8 +111,8 @@ class EditStore extends Component<PropsType, StateType> {
 
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -122,7 +124,7 @@ class EditStore extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const store = pathOr(null, ['myStore'], this.props.me);
     if (!store) {
-      return <div>Store not found :(</div>;
+      return <div>{t.storeNotFound}</div>;
     }
     return (
       <Form
