@@ -103,13 +103,6 @@ class ProductImage extends Component<PropsType, StateType> {
           })}
         >
           <figure styleName="image">
-            {!isSquared && !isNil(photoMain) ? (
-              <img
-                src={convertSrc(selected || photoMain, 'large')}
-                alt=""
-                styleName="imageBlur"
-              />
-            ) : null}
             {discount > 0 ? <ProductDiscount discount={discount} /> : null}
             {!isNil(photoMain) ? (
               <div
