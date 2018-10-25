@@ -16,7 +16,9 @@ import type { MutationParamsType } from 'relay/mutations/CreateStoreMutation';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
 
-import Form from './Form';
+import Form from '../Form';
+
+import t from './i18n';
 
 type StateType = {
   serverValidationErrors: any,
@@ -44,8 +46,8 @@ class NewStore extends Component<PropsType, StateType> {
     if (!newStoreName) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -92,8 +94,8 @@ class NewStore extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -104,8 +106,8 @@ class NewStore extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
@@ -120,7 +122,7 @@ class NewStore extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Store created!',
+          text: t.storeCreated,
           link: { text: '' },
         });
       },
@@ -129,8 +131,8 @@ class NewStore extends Component<PropsType, StateType> {
         this.setState({ isLoading: false });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
