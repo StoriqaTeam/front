@@ -8,6 +8,8 @@ import { flattenFunc, searchPathByParent, getNameText } from 'utils';
 
 import './ProductBreadcrumbs.scss';
 
+import t from './i18n';
+
 type PropsType = {
   router: routerShape,
   categories: any,
@@ -28,7 +30,7 @@ class ProductBreadcrumbs extends PureComponent<PropsType> {
           role="button"
           tabIndex="0"
         >
-          All categories
+          {t.allCategories}
         </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (

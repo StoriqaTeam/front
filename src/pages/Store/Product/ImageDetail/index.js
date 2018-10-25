@@ -12,7 +12,8 @@ const ImageDetail = () => (
   <p styleName="container">
     <span styleName="zoom">
       <Zoom />
-    </span>{t.moveYourMouseToSeeTheDetails}
+    </span>
+    {t.moveYourMouseToSeeTheDetails}
   </p>
 );
 
