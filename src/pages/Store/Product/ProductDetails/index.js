@@ -6,7 +6,7 @@ import { propOr, prop } from 'ramda';
 
 import { Rating } from 'components/common/Rating';
 
-import type { WidgetType } from './types';
+import type { WidgetType } from '../types';
 
 import {
   ProductContext,
@@ -15,9 +15,9 @@ import {
   ProductQuantity,
   ProductSize,
   ProductThumbnails,
-} from './index';
+} from '../index';
 
-import { sortByProp } from './utils';
+import { sortByProp } from '../utils';
 
 import './ProductDetails.scss';
 

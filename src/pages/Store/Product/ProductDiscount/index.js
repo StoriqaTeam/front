@@ -1,8 +1,10 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
 import './ProductDiscount.scss';
+
+import t from './i18n';
 
 type PropType = {
   discount: number,
@@ -11,7 +13,7 @@ type PropType = {
 const ProductDiscount = ({ discount }: PropType) => (
   <span styleName="container">
     <span styleName="price">
-      Price <br /> Off <br />
+      {t.price} <br /> {t.off} <br />
     </span>
     <span
       style={{
