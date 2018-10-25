@@ -30,7 +30,8 @@ const translations: TranslationsBundleType = {
     close: 'Close.',
     countryIsRequiredParameter: 'Country is required parameter',
     postalCodeIsRequiredParameter: 'Postal Code is required parameter',
-    countryAndPostalCodeIsRequiredParameter: 'Country and Postal Code is required parameter',
+    countryAndPostalCodeIsRequiredParameter:
+      'Country and Postal Code is required parameter',
     somethingWentWrong: 'Something going wrong :(',
     addressDeleted: 'Address deleted!',
     save: 'Save',

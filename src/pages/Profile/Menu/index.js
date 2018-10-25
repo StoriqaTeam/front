@@ -19,6 +19,8 @@ import type { CollapseItemType } from 'types';
 
 import './Menu.scss';
 
+import t from './i18n';
+
 type PropsType = {
   activeItem: string,
   avatar: ?string,
@@ -67,7 +69,7 @@ class Menu extends PureComponent<PropsType> {
         const relayErrors = fromRelayError(error);
         log.debug({ relayErrors });
         // eslint-disable-next-line
-        alert('Something going wrong :(');
+        alert(t.somethingWentWrong);
       },
     };
     UpdateUserMutation.commit(params);
@@ -89,7 +91,7 @@ class Menu extends PureComponent<PropsType> {
     } = this.props;
     return (
       <aside styleName="container">
-        <h3 styleName="offscreen">Profile Menu</h3>
+        <h3 styleName="offscreen">{t.offscreenProfileMenu}</h3>
         <div styleName="mobileMenu">
           <Collapse
             selected={activeItem}
@@ -119,7 +121,7 @@ class Menu extends PureComponent<PropsType> {
             buttonWidth="100%"
             buttonIconType="user"
             buttonIconSize={48}
-            buttonLabel="Click to upload avatar"
+            buttonLabel={t.clickToUploadAvatar}
             overPicture={convertSrc(avatar, 'medium')}
             dataTest="storeImgUploader"
           />
