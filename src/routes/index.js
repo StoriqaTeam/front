@@ -37,6 +37,7 @@ import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
+import { BuyNow } from 'pages/BuyNow';
 
 const routes = (
   <Route>
@@ -191,6 +192,15 @@ const routes = (
             }
           }
         `}
+      />
+
+      <Route
+        path="/buy-now"
+        Component={BuyNow}
+        render={({ props, Component }) => <Component {...props} />}
+        prepareVariables={(_, { location: { query } }) => {
+          return {};
+        }}
       />
 
       <Route
