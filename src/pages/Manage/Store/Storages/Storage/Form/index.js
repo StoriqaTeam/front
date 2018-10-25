@@ -11,6 +11,8 @@ import type { FormErrorsType } from 'types';
 
 import './Form.scss';
 
+import t from './i18n';
+
 type AddressFullType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
@@ -91,7 +93,7 @@ class Form extends Component<PropsType, StateType> {
           <Input
             id="name"
             value={name || ''}
-            label="Storage name"
+            label={t.labelStorageName}
             onChange={this.handleInputChange}
             errors={propOr(null, 'name', formErrors)}
             limit={50}
@@ -99,7 +101,7 @@ class Form extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="formItem">
-          <div styleName="subtitle">Storage address</div>
+          <div styleName="subtitle">{t.storageAddress}</div>
           <div styleName="address">
             <AddressForm
               isOpen
@@ -120,14 +122,14 @@ class Form extends Component<PropsType, StateType> {
               isLoading={isLoading}
               dataTest="saveStorageButton"
             >
-              Save
+              {t.save}
             </Button>
             <button
               styleName="cancelButton"
               onClick={handleCancel}
               data-test="cancelSaveStorageButton"
             >
-              Cancel
+              {t.cancel}
             </button>
           </div>
         </div>
