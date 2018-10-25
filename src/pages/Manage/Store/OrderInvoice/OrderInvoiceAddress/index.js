@@ -2,7 +2,9 @@
 
 import React from 'react';
 
-import './OrderInvoice.scss';
+import '../OrderInvoice.scss';
+
+import t from './i18n';
 
 type PropsType = $Shape<{
   value: ?string,
@@ -32,31 +34,31 @@ const OrderInvoiceData = ({
 }: PropsType) => (
   <div styleName="address">
     <div styleName="addressField">
-      <span>Postal Code:</span> <span>{postalCode}</span>
+      <span>{t.postalCode}e:</span> <span>{postalCode}</span>
     </div>
     <div styleName="addressField">
-      <span>Country #:</span> <span>{country}</span>
+      <span>{t.country}:</span> <span>{country}</span>
     </div>
     <div styleName="addressField">
-      <span>Region:</span> <span> {administrativeAreaLevel1}</span>
+      <span>{t.region}:</span> <span> {administrativeAreaLevel1}</span>
     </div>
     <div styleName="addressField">
-      <span>Locality:</span> <span>{locality}</span>
+      <span>{t.locality}:</span> <span>{locality}</span>
     </div>
     <div styleName="addressField">
-      <span>Area/District:</span> <span> {political}</span>
+      <span>{t.areaDistrict}:</span> <span> {political}</span>
     </div>
     <div styleName="addressField">
-      <span>Street:</span> <span> {value}</span>
+      <span>{t.street}:</span> <span> {value}</span>
     </div>
     <div styleName="addressField">
-      <span>Apt/Suite/Other:</span> <span> {streetNumber}</span>
+      <span>{t.aptSuiteOther}:</span> <span> {streetNumber}</span>
     </div>
     <div styleName="addressField">
-      <span>Email:</span> <span> {email}</span>
+      <span>{t.email}:</span> <span> {email}</span>
     </div>
     <div styleName="addressField">
-      <span>Phone Number:</span> <span> {phone}</span>
+      <span>{t.phoneNumber}:</span> <span> {phone}</span>
     </div>
   </div>
 );
