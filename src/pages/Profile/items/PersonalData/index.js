@@ -96,8 +96,8 @@ class PersonalData extends Component<PropsType, StateType> {
         firstName: [
           [
             (value: string) => value && value.length > 0,
-              t.firstNameMustNotBeEmpty,
-            ],
+            t.firstNameMustNotBeEmpty,
+          ],
         ],
         lastName: [
           [

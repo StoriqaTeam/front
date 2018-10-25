@@ -29,7 +29,9 @@ import { renameKeys } from 'utils/ramda';
 import { ChangePasswordMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/ChangePasswordMutation';
 
-import '../Profile.scss';
+import '../../Profile.scss';
+
+import t from './i18n';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
@@ -88,26 +90,26 @@ class Security extends Component<PropsType, StateType> {
         oldPassword: [
           [
             (value: string) => value && value.length > 0,
-            'Password must not be empty',
+            t.passwordMustNotBeEmpty,
           ],
         ],
         newPassword: [
           [
             (value: string) => value && value.length > 0,
-            'Password must not be empty',
+            t.passwordMustNotBeEmpty,
           ],
-          [() => isValidNewPassword, 'Not valid password'],
+          [() => isValidNewPassword, t.notValidPassword],
           [
             (value: string) => value !== oldPassword,
-            'Password has not changed',
+            t.passwordHasNotChange,
           ],
         ],
         repeatNewPassword: [
           [
             (value: string) => value && value.length > 0,
-            'Password must not be empty',
+            t.passwordMustNotBeEmpty,
           ],
-          [(value: string) => value === newPassword, 'Not the same password'],
+          [(value: string) => value === newPassword, t.notTheSamePassword],
         ],
       },
       {
@@ -156,21 +158,21 @@ class Security extends Component<PropsType, StateType> {
         } else if (status) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${status}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${status}"`,
+            link: { text: t.close },
           });
           return;
         } else if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Password successfully update!',
+          text: t.passwordSuccessfullyUpdated,
           link: { text: '' },
         });
         this.setState(() => ({
@@ -200,8 +202,8 @@ class Security extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
         this.setState(() => ({
           newPasswordSee: false,
@@ -298,19 +300,19 @@ class Security extends Component<PropsType, StateType> {
     return (
       <div styleName="security">
         <div styleName="subtitle">
-          <strong>Security settings</strong>
+          <strong>{t.securitySettings}</strong>
         </div>
         <div styleName="passwordInputs">
           <div styleName="passwordInput">
             {this.renderInput({
               id: 'oldPassword',
-              label: 'Current password',
+              label: t.labelCurrentPassword,
             })}
           </div>
           <div styleName="passwordInput">
             {this.renderInput({
               id: 'newPassword',
-              label: 'New password',
+              label: t.labelNewPassword,
             })}
             <div
               styleName={classNames('icon', { openIcon: newPasswordSee })}
@@ -333,7 +335,7 @@ class Security extends Component<PropsType, StateType> {
           <div styleName="passwordInput">
             {this.renderInput({
               id: 'repeatNewPassword',
-              label: 'Repeat new password',
+              label: t.labelRepeatPassword,
             })}
             <div
               styleName={classNames('icon', { openIcon: repeatNewPasswordSee })}
@@ -349,7 +351,7 @@ class Security extends Component<PropsType, StateType> {
           </div>
         </div>
         <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
-          Save
+          {t.save}
         </SpinnerButton>
       </div>
     );
