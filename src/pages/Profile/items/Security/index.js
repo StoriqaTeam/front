@@ -99,10 +99,7 @@ class Security extends Component<PropsType, StateType> {
             t.passwordMustNotBeEmpty,
           ],
           [() => isValidNewPassword, t.notValidPassword],
-          [
-            (value: string) => value !== oldPassword,
-            t.passwordHasNotChange,
-          ],
+          [(value: string) => value !== oldPassword, t.passwordHasNotChange],
         ],
         repeatNewPassword: [
           [

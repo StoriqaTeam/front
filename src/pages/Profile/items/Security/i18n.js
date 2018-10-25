@@ -36,7 +36,7 @@ const translations: TranslationsBundleType = {
     labelNewPassword: 'New password',
     labelRepeatPassword: 'Repeat new password',
     save: 'Save',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

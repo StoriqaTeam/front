@@ -24,7 +24,9 @@ import type { MutationParamsType as UpdateMutationParamsType } from 'relay/mutat
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
 import type { MutationParamsType as DeleteMutationParamsType } from 'relay/mutations/DeleteUserDeliveryAddressFullMutation';
 
-import '../Profile.scss';
+import '../../Profile.scss';
+
+import t from './i18n';
 
 type DeliveryAddressesFullType = {
   id: string,
@@ -117,16 +119,16 @@ class ShippingAddresses extends Component<PropsType, StateType> {
 
     if (!country || !postalCode) {
       if (!country)
-        assoc('country', 'Country is required parameter', availabilityErrors);
+        assoc('country', t.countryIsRequiredParameter, availabilityErrors);
       if (!postalCode)
         assoc(
           'postalCode',
-          'Postal code is required parameter',
+          t.postalCodeIsRequiredParameter,
           availabilityErrors,
         );
       this.props.showAlert({
         type: 'danger',
-        text: 'Country and postal code are required parameters',
+        text: t.countryAndPostalCodeIsRequiredParameter,
         link: { text: '' },
       });
       return;
@@ -170,16 +172,16 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         if (status) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${status}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${status}"`,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingWentWrong,
+            link: { text: t.close },
           });
           return;
         }
@@ -201,8 +203,8 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -237,23 +239,23 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         if (status) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${status}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${status}"`,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingWentWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.resetForm();
         this.props.showAlert({
           type: 'success',
-          text: 'Address deleted!',
+          text: t.addressDeleted,
           link: { text: '' },
         });
       },
@@ -263,8 +265,8 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         log.debug({ relayErrors });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -342,7 +344,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
             isLoading={isLoading}
             dataTest="saveShippingAddressButton"
           >
-            {editableAddressId ? 'Save' : 'Add'}
+            {editableAddressId ? t.save : t.add}
           </Button>
           {(editableAddressId || isOpenNewForm) && (
             <button
@@ -353,7 +355,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                   : this.toggleEditAddressForm
               }
             >
-              Cancel
+              {t.cancel}
             </button>
           )}
         </div>
@@ -369,7 +371,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       <div styleName="shippingAddresses">
         {deliveryAddressesFull.length === 0 && (
           <div styleName="subtitle">
-            <strong>Shipping address</strong>
+            <strong>{t.shippingAddress}</strong>
           </div>
         )}
         {deliveryAddressesFull.length > 0 && (
@@ -381,7 +383,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
               onClick={this.toggleNewAddressForm}
               dataTest="addShippingAddressButton"
             >
-              Add address
+              {t.addAddress}
             </Button>
           </div>
         )}
@@ -390,7 +392,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
         {deliveryAddressesFull.length > 0 && (
           <div styleName={classNames('addressesWrap', { isOpenNewForm })}>
             <div styleName="subtitle">
-              <strong>Saved addresses</strong>
+              <strong>{t.savedAddresses}</strong>
             </div>
             <div styleName="addresses">
               {map(item => {
@@ -405,7 +407,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                   <Fragment key={item.rawId}>
                     <div styleName="item">
                       {item.isPriority && (
-                        <div styleName="priorityText">Priority address</div>
+                        <div styleName="priorityText">{t.priorityAddress}</div>
                       )}
                       <div styleName="address">
                         {`${country}, `}
@@ -431,7 +433,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                           }}
                           dataTest="editShippingAddressButton"
                         >
-                          Edit
+                          {t.edit}
                         </Button>
                         <div styleName="deleteButton">
                           <Button
@@ -443,7 +445,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                             }}
                             dataTest="deleteShippingAddressButton"
                           >
-                            Delete
+                            {t.delete}
                           </Button>
                         </div>
                       </div>
@@ -466,7 +468,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                   onClick={this.toggleNewAddressForm}
                   dataTest="addShippingAddressButton"
                 >
-                  Add address
+                  {t.addAddress}
                 </Button>
               </div>
             )}
