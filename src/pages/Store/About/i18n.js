@@ -5,15 +5,19 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  mostPopular: string,
-  sale: string,
+  aboutStore: string,
+  fullShopName: string,
+  location: string,
+  description: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    mostPopular: 'Most Popular',
-    sale: 'Sale',
+    aboutStore: 'About Store',
+    fullShopName: 'Full shop name',
+    location: 'Location',
+    description: 'Description',
   },
 };
 
