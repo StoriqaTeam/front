@@ -16,6 +16,9 @@ import type { Categories_search as CategoriesSearch } from './__generated__/Cate
 
 import './SearchContent.scss';
 
+
+import t from './i18n';
+
 type PropsType = {
   router: routerShape,
   relay: Relay,
@@ -61,7 +64,7 @@ class SearchContent extends Component<PropsType> {
             role="button"
             tabIndex="0"
           >
-            All categories
+            {t.allCategories}
           </div>
         </div>
       );
@@ -77,7 +80,7 @@ class SearchContent extends Component<PropsType> {
           role="button"
           tabIndex="0"
         >
-          All categories
+          {t.allCategories}
         </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (
@@ -118,7 +121,7 @@ class SearchContent extends Component<PropsType> {
             tabIndex="-1"
           >
             <Icon type="controls" />
-            <span>Filters</span>
+            <span>{t.filters}</span>
           </span>
         </div>
         <div styleName="productsContainer">
@@ -143,7 +146,7 @@ class SearchContent extends Component<PropsType> {
               onClick={this.productsRefetch}
               dataTest="searchProductLoadMoreButton"
             >
-              Load more
+              {t.loadMore}
             </Button>
           </div>
         )}
