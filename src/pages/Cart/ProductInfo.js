@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { head, map } from 'ramda';
 
@@ -5,11 +7,11 @@ import { CurrencyPrice } from 'components/common';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
-// import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
 import { formatPrice, currentCurrency } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
+import DeliveryCompaniesSelect from './DeliveryCompaniesSelect';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -30,16 +32,18 @@ const ProductInfo = ({
   onQuantityChange,
   onChangeComment,
   comment,
-  isOpen,
   priceUsd,
 }: PropsType) => {
-  const attrs = map(attr => ({
-    title: head(attr.attribute.name).text,
-    value: attr.value.toString(),
-  }))(product.attributes);
+  const attrs = map(
+    attr => ({
+      title: head(attr.attribute.name).text,
+      value: attr.value.toString(),
+    }),
+    product.attributes,
+  );
   return (
     <ShowMore
-      isOpen={isOpen}
+      isOpen
       height={400}
       dataTest={`cart-product-${product.rawId}-showMore`}
     >
@@ -108,40 +112,21 @@ const ProductInfo = ({
               <Col size={12}>
                 <div styleName="contentBlock">
                   <div>
-                    {/* <div styleName="cart-product-title">
-                      Delivery and return
-                    </div>
+                    <div styleName="cart-product-title">Delivery</div>
                     <Row>
                       <Col size={6}>
                         <CartProductAttribute
-                          title="Shiping to"
+                          title="Delivery company"
                           value={
-                            <Select
-                              items={[{ id: 1, label: 'Everywhere' }]}
-                              activeItem={{ id: 1, label: 'Everywhere' }}
-                              forForm
-                              fullWidth
-                              onSelect={() => {}}
+                            <DeliveryCompaniesSelect
+                              country="RUS"
+                              baseProductId={123}
+                              onPackagesFetched={() => {}}
                             />
                           }
                         />
                       </Col>
-                      <Col size={6}>
-                        <CartProductAttribute title="Terms" value="14 days" />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Return type on return"
-                          value="Exchange or funds return"
-                        />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Delivery on return"
-                          value="Seller pays"
-                        />
-                      </Col>
-                    </Row> */}
+                    </Row>
                     <div styleName="comment">
                       <Input
                         fullWidth
