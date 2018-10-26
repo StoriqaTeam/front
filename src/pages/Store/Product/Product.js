@@ -95,6 +95,7 @@ type StateType = {
   },
   isAddToCart: boolean,
   isLoading: boolean,
+  cartQuantity: number,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -144,6 +145,7 @@ class Product extends Component<PropsType, StateType> {
       availableAttributes: {},
       isAddToCart: false,
       isLoading: false,
+      cartQuantity: 1,
     };
   }
 
@@ -151,9 +153,13 @@ class Product extends Component<PropsType, StateType> {
     window.scrollTo(0, 0);
   }
 
+  handleChangeQuantity = (quantity: number) => {
+    this.setState({ cartQuantity: quantity });
+  };
+
   handleAddToCart = (id: number, isBuyNow?: boolean) => {
     this.setState({ unselectedAttr: null });
-    const { widgets, selectedAttributes } = this.state;
+    const { widgets, selectedAttributes, cartQuantity } = this.state;
     const unselectedAttr = isNoSelected(
       sortByProp('id')(widgets),
       selectedAttributes,
@@ -161,7 +167,11 @@ class Product extends Component<PropsType, StateType> {
 
     if (isEmpty(widgets) || !unselectedAttr) {
       IncrementInCartMutation.commit({
-        input: { clientMutationId: '', productId: id },
+        input: {
+          clientMutationId: '',
+          productId: id,
+          value: cartQuantity,
+        },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
           log.debug('Success for IncrementInCart mutation');
@@ -402,6 +412,7 @@ class Product extends Component<PropsType, StateType> {
       availableAttributes,
       isAddToCart,
       isLoading,
+      cartQuantity,
     } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
@@ -442,6 +453,8 @@ class Product extends Component<PropsType, StateType> {
                         onWidgetClick={this.handleWidget}
                         unselectedAttr={unselectedAttr}
                         productVariant={productVariant}
+                        cartQuantity={cartQuantity}
+                        onChangeQuantity={this.handleChangeQuantity}
                       >
                         <ProductButtons
                           onAddToCart={() =>
