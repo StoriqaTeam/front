@@ -5,17 +5,13 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  message: string,
-  toSeller: string,
-  callSeller: string,
+  reviews: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    message: 'Message',
-    toSeller: 'to seller',
-    callSeller: 'Call seller',
+    reviews: 'Reviews',
   },
 };
 

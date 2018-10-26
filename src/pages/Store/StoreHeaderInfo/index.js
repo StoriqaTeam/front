@@ -11,9 +11,11 @@ import { SocialShare } from 'components/SocialShare';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
 
-import { StoreContext } from './index';
+import { StoreContext } from '../index';
 
 import './StoreHeaderInfo.scss';
+
+import t from './i18n';
 
 type StateTypes = {
   search: string,
@@ -89,7 +91,7 @@ class StoreHeader extends Component<{}, StateTypes> {
                 <div styleName="rating">
                   <Rating value={rating} />
                 </div>
-                <span styleName="reviews">0 Reviews</span>
+                <span styleName="reviews">0 {t.reviews}</span>
               </div>
             </div>
           </div>
