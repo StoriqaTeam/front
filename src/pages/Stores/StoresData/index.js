@@ -37,7 +37,9 @@ const StoresData = ({ store }: PropsType) => (
       <div styleName="storeAdd">
         <span>97,5% {t.reviews}</span>
         {store.productsCount && (
-          <span styleName="productsCount">{store.productsCount} {t.goods}</span>
+          <span styleName="productsCount">
+            {store.productsCount} {t.goods}
+          </span>
         )}
       </div>
     </div>
