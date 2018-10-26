@@ -1,10 +1,12 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { Link } from 'found';
 import classNames from 'classnames';
 
 import './StoreHeaderTabs.scss';
+
+import t from './i18n';
 
 type PropsType = {
   tabs: Array<{ id: string, title: string, isNew: boolean, link: string }>,
@@ -26,14 +28,14 @@ const StoreHeaderTabs = ({ tabs, storeId, active }: PropsType) => (
             >
               <strong styleName="text">
                 {tab.title}
-                {tab.isNew && <span styleName="new">New</span>}
+                {tab.isNew && <span styleName="new">{t.new}</span>}
               </strong>
             </Link>
           ) : (
             <div key={tab.id} styleName="tab">
               <strong styleName="text">
                 {tab.title}
-                {tab.isNew && <span styleName="new">New</span>}
+                {tab.isNew && <span styleName="new">{t.new}</span>}
               </strong>
             </div>
           ),
