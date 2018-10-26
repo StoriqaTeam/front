@@ -2,6 +2,7 @@
 
 .container {
   display: inline-block;
+  margin-right: 2rem;
 }
 
 .title {
@@ -16,7 +17,6 @@
   margin: 1.875rem 0;
   text-align: left;
   text-transform: uppercase;
-  width: 9.75rem;
 
   &.isOnSelected {
     color: $color_red;
@@ -29,6 +29,7 @@
 }
 
 .size {
+  padding: 0 2rem;
   align-self: center;
   border: solid 1px $color_grey_trivial;
   color: $color_grey_minor;
@@ -38,7 +39,10 @@
   opacity: 1;
   position: relative;
   text-align: center;
-  width: 7.25rem;
+
+  & + .size {
+    margin-left: 1rem;
+  }
 
   &.clicked {
     border: 1px solid $color_blue !important;

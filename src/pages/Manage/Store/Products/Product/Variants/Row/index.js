@@ -1,48 +1,21 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import { pathOr, map, addIndex, isEmpty, filter } from 'ramda';
-import classNames from 'classnames';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
 import { log } from 'utils';
 
+import type { ProductType } from 'pages/Manage/Store/Products/types';
+
 import './Row.scss';
 
 type PropsType = {
-  variant: {
-    id: string,
-    rawId: number,
-    vendorCode: string,
-    price: number,
-    cashback: number,
-    discount: number,
-    attributes: Array<{
-      attribute: {
-        name: Array<{ text: string }>,
-      },
-      value: string,
-    }>,
-    stocks: Array<{
-      id: string,
-      productId: number,
-      warehouseId: string,
-      quantity: number,
-      warehouse: {
-        name: ?string,
-        slug: string,
-        addressFull: {
-          value: string,
-        },
-      },
-    }>,
-  },
-  onExpandClick: (id: number) => void,
+  variant: ProductType,
   handleDeleteVariant: (id: string) => void,
-  isOpen: boolean,
-  notRemove: boolean,
+  onExpandClick: (id: number) => void,
 };
 
 class Row extends PureComponent<PropsType> {
@@ -51,16 +24,23 @@ class Row extends PureComponent<PropsType> {
   };
 
   handleExpandClick = () => {
-    this.props.onExpandClick(this.props.variant.rawId);
+    // $FlowIgnoreMe
+    const rawId = pathOr(null, ['variant', 'rawId'], this.props);
+    if (rawId) {
+      this.props.onExpandClick(rawId);
+    }
   };
 
-  handleDelete = (e: any) => {
+  handleDelete = (e: SyntheticEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    this.props.handleDeleteVariant(this.props.variant.id);
+    // $FlowIgnoreMe
+    const id = pathOr(null, ['variant', 'id'], this.props);
+    if (id) {
+      this.props.handleDeleteVariant(id);
+    }
   };
 
   render() {
-    const { isOpen, notRemove } = this.props;
     const {
       rawId,
       vendorCode,
@@ -95,20 +75,12 @@ class Row extends PureComponent<PropsType> {
           </div>
           <div styleName="td tdCashback">
             <span styleName="text cashbackText">
-              <strong>
-                {Math.round(cashback * 100) != null
-                  ? Math.round(cashback * 100)
-                  : null}
-              </strong>%
+              <strong>{!cashback ? 0 : Math.round(cashback * 100)}</strong>%
             </span>
           </div>
           <div styleName="td tdDiscount">
             <span styleName="text discountText">
-              <strong>
-                {Math.round(discount * 100) != null
-                  ? Math.round(discount * 100)
-                  : null}
-              </strong>%
+              <strong>{!discount ? 0 : Math.round(discount * 100)}</strong>%
             </span>
           </div>
           <div styleName="td tdCharacteristics">
@@ -181,20 +153,13 @@ class Row extends PureComponent<PropsType> {
             </div>
           </div>
           <div styleName="td tdBasket">
-            {!notRemove && (
-              <button
-                styleName="deleteButton"
-                onClick={this.handleDelete}
-                data-test="deleteVariantButton"
-              >
-                <Icon type="basket" size={32} />
-              </button>
-            )}
-          </div>
-          <div styleName={classNames('td tdDropdawn', { isOpen })}>
-            <div styleName="arrowExpand">
-              <Icon inline type="arrowExpand" />
-            </div>
+            <button
+              styleName="deleteButton"
+              onClick={this.handleDelete}
+              data-test="deleteVariantButton"
+            >
+              <Icon type="basket" size={32} />
+            </button>
           </div>
         </div>
       </div>

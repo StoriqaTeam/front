@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="89" height="82" viewBox="0 0 89 82">
+    <defs>
+        <rect id="a" width="89" height="24" x="20" y="53" rx="7"/>
+        <mask id="c" width="89" height="24" x="0" y="0" fill="#fff">
+            <use xlink:href="#a"/>
+        </mask>
+        <rect id="b" width="89" height="24" x="20" y="82" rx="7"/>
+        <mask id="d" width="89" height="24" x="0" y="0" fill="#fff">
+            <use xlink:href="#b"/>
+        </mask>
+    </defs>
+    <g fill="none" fill-rule="nonzero" transform="translate(-20 -24)">
+        <path d="M0 0h129v129H0z" opacity=".378"/>
+        <rect width="4" height="12" x="63" y="59" fill="#D8D8D8" rx="2"/>
+        <rect width="4" height="12" x="63" y="59" fill="#D8D8D8" rx="2" transform="rotate(-90 65 65)"/>
+        <rect width="86" height="21" x="21.5" y="25.5" stroke="#D8D8D8" stroke-width="3" rx="7"/>
+        <use stroke="#D8D8D8" stroke-dasharray="1,10" stroke-linecap="square" stroke-width="6" mask="url(#c)" xlink:href="#a"/>
+        <use stroke="#D8D8D8" stroke-dasharray="1,10" stroke-linecap="square" stroke-width="6" mask="url(#d)" xlink:href="#b"/>
+    </g>
+</svg>

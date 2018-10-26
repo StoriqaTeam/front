@@ -65,3 +65,6 @@ export {
 } from './ResendEmailVerificationLinkMutation';
 export { default as UpsertShippingMutation } from './UpsertShippingMutation';
 export { default as BuyNowMutation } from './BuyNowMutation';
+export {
+  default as CreateBaseProductWithVariantsMutation,
+} from './CreateBaseProductWithVariantsMutation';

@@ -1,8 +1,7 @@
-@import '../../../../../../../../styles/variables';
+@import '../../../../../../styles/variables';
 
 .container {
   margin-top: 4rem;
-  margin-bottom: 2rem;
 }
 
 .mainPhoto {
@@ -10,7 +9,7 @@
 }
 
 .additionalPhotos {
-  margin-top: 3rem;
+
 }
 
 .upload {
@@ -23,6 +22,11 @@
 
   svg {
     fill: $color_grey_light;
+  }
+
+  &.mainPhotoUpload {
+    width: 15rem;
+    height: 15rem;
   }
 }
 
@@ -52,7 +56,18 @@
   overflow: hidden;
 
   &.mainPhotoItem {
-    left: -12rem;
+    width: 15rem;
+    height: 15rem;
+    left: -17rem;
+  }
+}
+
+.mainPhotoItemWrap {
+  & > img {
+    height: 15rem;
+    width: 15rem;
+    background-color: $color_white;
+    object-fit: cover;
   }
 }
 
