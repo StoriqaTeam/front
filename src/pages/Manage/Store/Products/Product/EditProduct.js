@@ -332,7 +332,6 @@ class EditProduct extends Component<PropsType, StateType> {
           text: 'Product update!',
           link: { text: '' },
         });
-        // this.handleSaveShipping();
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -450,7 +449,7 @@ class EditProduct extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Product update!',
+          text: 'Delivery update!',
           link: { text: '' },
         });
       },

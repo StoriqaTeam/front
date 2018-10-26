@@ -158,7 +158,6 @@ class VariantForm extends Component<PropsType, StateType> {
 
   handleVendorCodeChange = (e: SyntheticInputEvent<>) => {
     const { value } = e.target;
-    // this.setState({ vendorCode: e.target.value });
     this.setState((prevState: StateType) => ({
       formErrors: dissoc('vendorCode', prevState.formErrors),
       vendorCode: value,
@@ -297,8 +296,6 @@ class VariantForm extends Component<PropsType, StateType> {
       this.preOrderDaysInput.focus();
     }
   };
-
-  handleSave = () => {};
 
   validate = () => {
     const { errors } = validate(
