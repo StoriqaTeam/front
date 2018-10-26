@@ -1,25 +1,26 @@
-// @flow strict
+// @flow
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'components/Icon';
 import { UploadWrapper } from 'components/Upload';
-import { uploadFile, convertSrc, log } from 'utils';
+import { uploadFile, log, convertSrc } from 'utils';
 
 import './Photos.scss';
+
+type StateType = {
+  isMainPhotoUploading: boolean,
+  isAdditionalPhotoUploading: boolean,
+};
 
 type PropsType = {
   onAddMainPhoto: (url: string) => void,
   onAddPhoto: (url: string) => void,
   onRemovePhoto: (url: string) => void,
-  mainPhoto: ?string,
+  photoMain: ?string,
   photos: ?Array<string>,
-};
-
-type StateType = {
-  isMainPhotoUploading: boolean,
-  isAdditionalPhotoUploading: boolean,
+  isMainVariant?: boolean,
 };
 
 class Photos extends Component<PropsType, StateType> {
@@ -46,8 +47,8 @@ class Photos extends Component<PropsType, StateType> {
   };
 
   handleOnUploadPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
-    this.setState({ isAdditionalPhotoUploading: true });
     e.preventDefault();
+    this.setState({ isAdditionalPhotoUploading: true });
     uploadFile(e.target.files[0])
       .then(result => {
         if (!result || result.url == null) {
@@ -63,35 +64,37 @@ class Photos extends Component<PropsType, StateType> {
   };
 
   render() {
-    log.info(this.state);
-    const { mainPhoto, photos: items, onRemovePhoto } = this.props;
+    const {
+      photoMain,
+      photos: items,
+      onRemovePhoto,
+      isMainVariant,
+    } = this.props;
+    const { isMainPhotoUploading, isAdditionalPhotoUploading } = this.state;
     return (
       <div styleName="container">
         <div styleName="mainPhoto">
-          <div styleName="title">
-            <strong>Main photo</strong>
-          </div>
-          <div styleName="upload">
+          <div styleName="upload mainPhotoUpload">
             <UploadWrapper
-              id="main-photo"
+              id={`${isMainVariant ? 'main-variant' : ''}main-photo`}
               onUpload={this.handleOnUploadMainPhoto}
-              buttonHeight={10}
-              buttonWidth={10}
+              buttonHeight={15}
+              buttonWidth={15}
               buttonIconType="camera"
-              buttonLabel="Add photo"
+              buttonLabel="Add main photo"
+              loading={isMainPhotoUploading}
               dataTest="productPhotosUploader"
-              loading={this.state.isMainPhotoUploading}
             />
           </div>
-          {mainPhoto != null && (
+          {photoMain && (
             <div styleName="item mainPhotoItem">
-              <div styleName="itemWrap">
-                <img src={convertSrc(mainPhoto, 'small')} alt="img" />
+              <div styleName="mainPhotoItemWrap">
+                <img src={convertSrc(photoMain, 'small')} alt="img" />
               </div>
               <div
                 styleName="remove"
                 onClick={() => {
-                  onRemovePhoto(mainPhoto);
+                  onRemovePhoto(photoMain);
                 }}
                 onKeyDown={() => {}}
                 role="button"
@@ -103,19 +106,16 @@ class Photos extends Component<PropsType, StateType> {
           )}
         </div>
         <div styleName="additionalPhotos">
-          <div styleName="title">
-            <strong>Product photos</strong>
-          </div>
           <div styleName="upload">
             <UploadWrapper
-              id="additional-photos"
+              id={`${isMainVariant ? 'main-variant' : ''}additional-photos`}
               onUpload={this.handleOnUploadPhoto}
               buttonHeight={10}
               buttonWidth={10}
               buttonIconType="camera"
               buttonLabel="Add photo"
+              loading={isAdditionalPhotoUploading}
               dataTest="productPhotosUploader"
-              loading={this.state.isAdditionalPhotoUploading}
             />
           </div>
           {items &&

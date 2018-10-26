@@ -1,46 +1,5 @@
 @import "../../../../../../styles/variables";
 
 .container {
-  position: relative;
-  margin-top: 2rem;
-  background-color: $color_white;
-  //overflow: hidden;
-  z-index: 1;
-
-  &.newVariant {
-    margin-top: 0;
-  }
-}
-
-.separator {
-  background: $color_grey_bg;
-  border-bottom: 1px solid $color_grey_trivial;
-  border-top: 1px solid $color_grey_trivial;
-  height: 2.875rem;
-  margin: 3rem -2rem 0;
-
-  @media (min-width: $md) {
-    margin: 3rem -4rem 0;
-  }
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 4rem;
-}
-
-.title {
-  min-height: 5rem;
-  font-size: 14px;
-  letter-spacing: 1.2px;
-  line-height: 18px;
-  //margin-top: 4rem;
-  // padding: 4rem;
-  //background-color: $color_white;
-  text-transform: uppercase;
-}
-
-.button {
-  //width: 22.5rem;
+  overflow-x: auto;
 }

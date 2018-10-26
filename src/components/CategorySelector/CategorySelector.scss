@@ -59,11 +59,23 @@
   font-size: 1.75rem;
   cursor: pointer;
   border-bottom: 1px dashed $color_blue;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue_hover;
+    border-bottom: 1px dashed $color_blue_hover;
+  }
 
   .breadcrumbsContent {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  &.onlyView {
+    border-bottom: 0;
+    color: $color_blue_hover;
+    cursor: default;
   }
 
   @media (min-width: $md) {

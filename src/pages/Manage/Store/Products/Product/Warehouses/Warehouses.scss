@@ -1,11 +1,10 @@
-@import '../../../../../../../../styles/variables';
+@import '../../../../../../styles/variables';
 
 .container {
-  margin-top: 2rem;
+
 }
 
 .title {
-  margin-bottom: 2.5rem;
   font-size: 14px;
   line-height: 18px;
   text-transform: uppercase;
@@ -13,7 +12,7 @@
 }
 
 .items {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   border-top: 1px solid $color_grey_light;
 }
 

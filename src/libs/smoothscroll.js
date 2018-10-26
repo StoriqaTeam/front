@@ -7,7 +7,7 @@ const smoothScroll = {
     clearTimeout(this.timer);
   },
 
-  scrollTo: function(id, callback) {
+  scrollTo: function(id, callback, necessarily) {
     const settings = {
       duration: 500,
       easing: {
@@ -19,25 +19,35 @@ const smoothScroll = {
     let percentage;
     let startTime;
     const node = document.getElementById(id);
-    const nodeTop = node.offsetTop;
-    const nodeHeight = node.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
-    const height = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight,
-    );
+    // const nodeHeight = node.offsetHeight;
+    const nodeTop = node.getBoundingClientRect().top;
+    const nodeHeight = node.getBoundingClientRect().height;
+    // const body = document.body;
+    // const html = document.documentElement;
+    // const height = Math.max(
+    //   body.scrollHeight,
+    //   body.offsetHeight,
+    //   html.clientHeight,
+    //   html.scrollHeight,
+    //   html.offsetHeight,
+    // );
     const windowHeight = window.innerHeight;
     const offset = window.pageYOffset;
-    const delta = nodeTop - offset;
-    const bottomScrollableY = height - windowHeight;
-    const targetY =
-      bottomScrollableY < delta
-        ? bottomScrollableY - (height - nodeTop - nodeHeight + offset)
-        : delta;
+    if (nodeTop > 0 && nodeTop + nodeHeight < windowHeight && !necessarily) {
+      return;
+    }
+
+    let scrollValue = nodeTop - 150;
+    if (nodeTop + nodeHeight > windowHeight) {
+      scrollValue = nodeTop + nodeHeight - windowHeight - 50;
+    }
+
+    // const delta = nodeTop - offset;
+    // const bottomScrollableY = height - windowHeight;
+    // const targetY =
+    //   bottomScrollableY < delta
+    //     ? bottomScrollableY - (height - nodeTop - nodeHeight + offset)
+    //     : delta;
 
     startTime = Date.now();
     percentage = 0;
@@ -67,7 +77,7 @@ const smoothScroll = {
           0,
           elapsed,
           offset,
-          targetY,
+          scrollValue,
           settings.duration,
         );
         window.scrollTo(0, yScroll);
