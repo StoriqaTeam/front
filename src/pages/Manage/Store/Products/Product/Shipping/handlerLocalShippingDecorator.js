@@ -95,7 +95,11 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
                 packages: this.props.localAvailablePackages,
               }),
               service: service
-                ? { id: service.id, label: service.label }
+                ? {
+                    id: service.id,
+                    label: service.label,
+                    currency: service.currency,
+                  }
                 : null,
             };
             const newCompanies = map(
@@ -132,7 +136,11 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
                 packages: this.props.localAvailablePackages,
               }),
               service: service
-                ? { id: service.id, label: service.label }
+                ? {
+                    id: service.id,
+                    label: service.label,
+                    currency: service.currency,
+                  }
                 : null,
             };
             const newCompanies = prepend(newCompany, prevState.companies);

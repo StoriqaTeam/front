@@ -1,10 +1,9 @@
 // @flow
-/* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop } from 'ramda';
+import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -79,11 +78,12 @@ const emptyAddress = {
 class Checkout extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+    const { deliveryAddressesFull } = props.me;
     this.state = {
       storesRef: null,
       step: 1,
-      isAddressSelect: true,
-      isNewAddress: false,
+      isAddressSelect: !isEmpty(deliveryAddressesFull),
+      isNewAddress: isEmpty(deliveryAddressesFull),
       saveAsNewAddress: true,
       orderInput: {
         addressFull: emptyAddress,
@@ -165,6 +165,10 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleOnChangeAddressType = () => {
+    const { me } = this.props;
+    if (isEmpty(me.deliveryAddressesFull)) {
+      return;
+    }
     this.setState(prevState => ({
       isAddressSelect: !prevState.isAddressSelect,
       isNewAddress: !prevState.isNewAddress,
@@ -242,6 +246,10 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   checkReadyToCheckout = (): boolean => {
+    if (!this.props.cart) {
+      return false;
+    }
+
     const {
       cart: { totalCount },
     } = this.props;
@@ -352,7 +360,7 @@ class Checkout extends Component<PropsType, StateType> {
                               <CartStore
                                 onlySelected
                                 unselectable
-                                key={store.__id}
+                                key={store.__id} // eslint-disable-line
                                 store={store}
                                 totals={1000}
                               />
@@ -419,6 +427,7 @@ export default createPaginationContainer(
           streetNumber
           placeId
         }
+        isPriority
       }
     }
 

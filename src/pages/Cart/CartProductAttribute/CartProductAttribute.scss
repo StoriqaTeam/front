@@ -1,7 +1,11 @@
 @import "../../../styles/variables.scss";
 
 .container {
-  padding-bottom: 2rem;
+  margin-top: 2rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
 .title {

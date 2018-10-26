@@ -17,7 +17,7 @@ const translations: TranslationsBundleType = {
     buyNow: 'Buy now',
     addToCart: 'Add to cart',
     viewCart: 'View cart',
-    youMustSelectAnAttribute: 'You must select an attribute',
+    youMustSelectAnAttribute: 'You must select an attribute(s): ',
   },
 };
 

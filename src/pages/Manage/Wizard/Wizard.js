@@ -158,6 +158,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
+    window.scroll({ top: 0 });
     this.createWizard();
   }
 

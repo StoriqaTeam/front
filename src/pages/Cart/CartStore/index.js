@@ -3,7 +3,9 @@
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { filter, whereEq } from 'ramda';
+import { Link } from 'found';
 
+import { CurrencyPrice } from 'components/common';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
@@ -24,12 +26,19 @@ type PropsType = {
   // eslint-disable-next-line
   store: CartStore_store,
   isOpenInfo: ?boolean,
+  priceUsd: ?number,
 };
 
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
-    const { store, onlySelected, unselectable, isOpenInfo } = this.props;
+    const {
+      store,
+      onlySelected,
+      unselectable,
+      isOpenInfo,
+      priceUsd,
+    } = this.props;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -50,6 +59,7 @@ class CartStore extends PureComponent<PropsType> {
                     onlySelected={onlySelected}
                     unselectable={unselectable}
                     isOpenInfo={isOpenInfo}
+                    priceUsd={priceUsd}
                   />
                   <div styleName="devider" />
                 </div>
@@ -59,23 +69,25 @@ class CartStore extends PureComponent<PropsType> {
                   <Container correct>
                     <Row>
                       <div styleName="store-info">
-                        {store.logo ? (
-                          <img
-                            src={convertSrc(store.logo, 'small')}
-                            alt="store_picture"
-                            styleName="image"
-                          />
-                        ) : (
-                          <div styleName="noLogo">
-                            <Icon type="camera" size={28} />
+                        <Link to={`/store/${store.rawId}`}>
+                          {store.logo ? (
+                            <img
+                              src={convertSrc(store.logo, 'small')}
+                              alt="store_picture"
+                              styleName="image"
+                            />
+                          ) : (
+                            <div styleName="noLogo">
+                              <Icon type="camera" size={28} />
+                            </div>
+                          )}
+                          <div styleName="store-description">
+                            <div styleName="store-name">
+                              {getNameText(store.name, 'EN')}
+                            </div>
+                            <Rating value={store.rating} />
                           </div>
-                        )}
-                        <div styleName="store-description">
-                          <div styleName="store-name">
-                            {getNameText(store.name, 'EN')}
-                          </div>
-                          <Rating value={store.rating} />
-                        </div>
+                        </Link>
                       </div>
                       <div styleName="storeTotalWrapper">
                         <div>
@@ -84,6 +96,14 @@ class CartStore extends PureComponent<PropsType> {
                             {formatPrice(store.productsCost || 0)}{' '}
                             {currentCurrency()}
                           </div>
+                          {priceUsd && (
+                            <CurrencyPrice
+                              price={store.productsCost || 0}
+                              currencyPrice={priceUsd}
+                              currencyCode="USD"
+                              toFixedValue={2}
+                            />
+                          )}
                         </div>
                       </div>
                     </Row>
@@ -103,6 +123,7 @@ export default createFragmentContainer(
   graphql`
     fragment CartStore_store on CartStore {
       id
+      rawId
       productsCost
       deliveryCost
       totalCost

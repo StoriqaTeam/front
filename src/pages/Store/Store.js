@@ -61,6 +61,9 @@ type PropsType = {
       text: string,
     },
     rating: number,
+    facebookUrl: ?string,
+    twitterUrl: ?string,
+    instagramUrl: ?string,
   },
   router: routerShape,
 };
@@ -94,6 +97,9 @@ class Store extends PureComponent<PropsType> {
           rating: store.rating,
           // $FlowIgnore
           active: children.key,
+          facebookUrl: store.facebookUrl || '',
+          twitterUrl: store.twitterUrl || '',
+          instagramUrl: store.instagramUrl || '',
         }}
       >
         <div styleName="container">

@@ -85,14 +85,6 @@ class InfoBlock extends Component<{}, StateType> {
     const { social, links } = this.state;
     return (
       <div styleName="container">
-        <p styleName="address">
-          {t.address}{' '}
-          <span>
-            <a href="mailto:support@storiqa.com" styleName="email">
-              support@storiqa.com
-            </a>
-          </span>
-        </p>
         <ul styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
             <li key={id} styleName="aboutNavItem">

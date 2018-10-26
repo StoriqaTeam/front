@@ -20,11 +20,10 @@ type PropsType = {
   handleOnSelectService: (service: ?ServiceType) => void,
 };
 
-class ShippingInterSelect extends Component<PropsType, StateType> {
+class ShippingLocalSelect extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType) {
     const { services, service } = nextProps;
     return {
-      countries: service ? service.countries : [],
       currency: service ? service.currency : null,
       services: map(item => ({ id: item.id, label: item.label }), services),
       service: service ? { id: service.id, label: service.label } : null,
@@ -34,10 +33,9 @@ class ShippingInterSelect extends Component<PropsType, StateType> {
   handleOnSelectService = (item: ?SelectItemType) => {
     if (item) {
       const service = find(propEq('id', item.id))(this.props.services);
-      if (service && service.countries && service.currency) {
+      if (service && service.currency) {
         this.props.handleOnSelectService({
           ...item,
-          countries: service.countries,
           currency: service.currency,
         });
       }
@@ -56,10 +54,10 @@ class ShippingInterSelect extends Component<PropsType, StateType> {
         items={services}
         activeItem={service}
         onSelect={this.handleOnSelectService}
-        dataTest="shippingInterServiceSelect"
+        dataTest="shippingLocalServiceSelect"
       />
     );
   }
 }
 
-export default ShippingInterSelect;
+export default ShippingLocalSelect;

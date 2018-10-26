@@ -115,6 +115,7 @@ class Table extends Component<PropsType, StateType> {
       price?: Array<string>,
       attributes?: Array<string>,
     },
+    resetVariantFormErrors: (field: string) => void,
   ) => {
     const { expandedItemId } = this.state;
     return map(
@@ -143,6 +144,7 @@ class Table extends Component<PropsType, StateType> {
               }
               onChangeVariantForm={onChangeVariantForm}
               formErrors={variantFormErrors}
+              resetVariantFormErrors={resetVariantFormErrors}
             />
           )}
         </Fragment>
@@ -161,6 +163,7 @@ class Table extends Component<PropsType, StateType> {
           handleSaveBaseProductWithVariant,
           onChangeVariantForm,
           variantFormErrors,
+          resetVariantFormErrors,
         }) => (
           <div
             styleName={classNames('container', {
@@ -178,6 +181,7 @@ class Table extends Component<PropsType, StateType> {
                   isLoading,
                   onChangeVariantForm,
                   variantFormErrors,
+                  resetVariantFormErrors,
                 )}
               </div>
             )}
@@ -194,6 +198,7 @@ class Table extends Component<PropsType, StateType> {
                     }
                     onChangeVariantForm={onChangeVariantForm}
                     formErrors={variantFormErrors}
+                    resetVariantFormErrors={resetVariantFormErrors}
                   />
                 </div>
               )}

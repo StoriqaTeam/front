@@ -102,7 +102,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       ...formStateData,
       product: {
         ...omit(['attributes'], productDataFromItem),
-        cashback: productDataFromItem.cashback * 100,
+        cashback: Math.round((productDataFromItem.cashback || 0) * 100),
+        price: parseInt(productDataFromItem.price, 10),
       },
       attributes: this.prepareAttributesValues(productDataFromItem.attributes),
       categoryId: item.category && item.category.rawId,

@@ -1,11 +1,9 @@
 // @flow
 
-// just for reinit cd. can remove.
-
 import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
-import { find, pathEq, pathOr, last, isNil } from 'ramda';
+import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
 
 import { log, removeCookie } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -208,7 +206,7 @@ const routes = (
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
           const searchTerm = urlToInput(queryObj);
-          return { searchTerm };
+          return { searchTerm: pick(['name', 'options'], searchTerm) };
         }}
       />
       <Route
@@ -233,6 +231,30 @@ const routes = (
           Component={ProductCard}
           query={graphql`
             query routes_ProductCard_Query($productID: Int!) {
+              me {
+                id
+                rawId
+                phone
+                firstName
+                lastName
+                deliveryAddressesFull {
+                  id
+                  address {
+                    country
+                    countryCode
+                    value
+                    administrativeAreaLevel1
+                    administrativeAreaLevel2
+                    locality
+                    political
+                    postalCode
+                    route
+                    streetNumber
+                    placeId
+                  }
+                  isPriority
+                }
+              }
               baseProduct(id: $productID) {
                 ...Product_baseProduct
               }
@@ -675,6 +697,9 @@ const routes = (
                 text
               }
               rating
+              facebookUrl
+              twitterUrl
+              instagramUrl
               ...StoreItems_shop @arguments(storeId: $storeId)
               ...About_shop
               ...Showcase_shop

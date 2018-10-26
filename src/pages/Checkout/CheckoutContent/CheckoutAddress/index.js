@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { find, propEq, head, filter, addIndex, map } from 'ramda';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { RadioButton } from 'components/common/RadioButton';
@@ -9,9 +10,9 @@ import { Input } from 'components/common/Input';
 import { Container, Row, Col } from 'layout';
 import { AddressForm } from 'components/AddressAutocomplete';
 
-import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
-
 import { addressToString } from 'utils';
+
+import type { AddressFullType, SelectItemType } from 'types';
 
 import { addressesToSelect } from '../../utils';
 
@@ -22,7 +23,10 @@ import './CheckoutAddress.scss';
 import t from './i18n';
 
 type PropsType = {
-  deliveryAddresses: any,
+  deliveryAddresses: Array<{
+    address: AddressFullType,
+    isPriority: boolean,
+  }>,
   onChangeOrderInput: Function,
   onChangeAddressType: Function,
   onChangeSaveCheckbox: Function,
@@ -42,32 +46,59 @@ type StateType = {
 };
 
 class CheckoutAddress extends React.Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    if (
-      nextProps.deliveryAddresses &&
-      nextProps.deliveryAddresses.length !== prevState.addresses.length
-    ) {
-      return {
-        ...prevState,
-        addresses: addressesToSelect(nextProps.deliveryAddresses),
-      };
-    }
-    return prevState;
+  constructor(props: PropsType) {
+    super(props);
+
+    const { deliveryAddresses } = props;
+    const addresses = addressesToSelect(deliveryAddresses);
+    const selectedAddress =
+      find(propEq('id', '0'))(addresses) || head(addresses);
+
+    this.handleOnSelectAddress(selectedAddress);
+    this.state = {
+      addresses,
+      selectedAddress,
+    };
   }
 
-  state = {
-    addresses: [],
-    selectedAddress: null,
-  };
+  componentDidUpdate(prevProps: PropsType) {
+    const { isAddressSelect } = this.props;
+    if (isAddressSelect && prevProps.isAddressSelect !== isAddressSelect) {
+      const { deliveryAddresses } = this.props;
+      const addresses = addressesToSelect(deliveryAddresses);
+      const selectedAddress =
+        find(propEq('id', '0'))(addresses) || head(addresses);
 
-  handleOnSelectAddress = (item: any) => {
+      this.handleOnSelectAddress(selectedAddress);
+    }
+  }
+
+  handleOnSelectAddress = (item: ?SelectItemType) => {
     const { onChangeOrderInput, orderInput, deliveryAddresses } = this.props;
     this.setState({ selectedAddress: item });
-    const addressFull = deliveryAddresses[item.id].address;
-    onChangeOrderInput({
-      ...orderInput,
-      addressFull,
-    });
+
+    const newDeliveryAddresses = filter(
+      newAddressItem => Boolean(newAddressItem.needed),
+      addIndex(map)(
+        (addressItem, idx) => ({
+          ...addressItem,
+          needed:
+            (item && item.id === '0' && addressItem.isPriority) ||
+            (item && item.id === `${idx + 1}`),
+        }),
+        deliveryAddresses,
+      ),
+    );
+
+    const deliveryAddress = head(newDeliveryAddresses);
+
+    if (deliveryAddress) {
+      const addressFull = deliveryAddress.address;
+      onChangeOrderInput({
+        ...orderInput,
+        addressFull,
+      });
+    }
   };
 
   handleChangeReceiver = (e: any) => {
@@ -99,9 +130,9 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
   };
 
   handleOnChangeAddressType = () => {
+    this.handleOnSelectAddress(this.state.selectedAddress);
     const { onChangeAddressType } = this.props;
-    this.setState({ selectedAddress: null });
-    onChangeAddressType();
+    this.setState({ selectedAddress: null }, onChangeAddressType);
   };
 
   render() {
@@ -113,10 +144,8 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
       orderInput,
       onChangeSaveCheckbox,
     } = this.props;
-
     const { addressFull } = orderInput;
-
-    const { addresses: items, selectedAddress } = this.state;
+    const { addresses, selectedAddress } = this.state;
 
     return (
       <Container correct>
@@ -167,7 +196,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                         <div>
                           <Select
                             label={t.labelAddress}
-                            items={items}
+                            items={addresses}
                             activeItem={selectedAddress}
                             onSelect={this.handleOnSelectAddress}
                             forForm

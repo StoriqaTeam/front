@@ -36,7 +36,7 @@ class StartSelling extends PureComponent<{}> {
                 <StartSellingForSellers lang={lang} />
                 {/* <StartSellingPrices lang={lang} /> */}
                 <StartSellingFAQ lang={lang} />
-                <Footer />
+                <Footer isShopCreated />
               </Col>
               <Col size={1} />
             </Row>

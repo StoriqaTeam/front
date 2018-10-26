@@ -64,3 +64,4 @@ export {
   default as ResendEmailVerificationLinkMutation,
 } from './ResendEmailVerificationLinkMutation';
 export { default as UpsertShippingMutation } from './UpsertShippingMutation';
+export { default as BuyNowMutation } from './BuyNowMutation';

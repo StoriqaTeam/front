@@ -3,7 +3,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'found';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { pathOr, map, addIndex, isEmpty } from 'ramda';
+import { pathOr, map, addIndex, isEmpty, head } from 'ramda';
+import axios from 'axios';
+
+import { log } from 'utils';
 
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
@@ -25,6 +28,7 @@ type PropsType = {
 type StateType = {
   autocompleteValue: string,
   autocompleteItems: Array<{ id: string, label: string }>,
+  priceUsd: ?number,
 };
 
 // eslint-disable-next-line
@@ -32,7 +36,29 @@ class StoreItems extends Component<PropsType, StateType> {
   state = {
     autocompleteValue: '',
     autocompleteItems: [],
+    priceUsd: null,
   };
+
+  componentDidMount() {
+    this.isMount = true;
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj && this.isMount) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+  }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  isMount = false;
 
   productsRefetch = () => {
     const { autocompleteValue } = this.state;
@@ -75,7 +101,7 @@ class StoreItems extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { autocompleteItems, autocompleteValue } = this.state;
+    const { autocompleteItems, autocompleteValue, priceUsd } = this.state;
     const products = map(
       item => item.node,
       pathOr([], ['shop', 'findProduct', 'edges'], this.props),
@@ -98,7 +124,7 @@ class StoreItems extends Component<PropsType, StateType> {
               item => (
                 <Col key={item.rawId} size={6} md={4} xl={3}>
                   <div key={item.id} styleName="cardWrapper">
-                    <CardProduct item={item} />
+                    <CardProduct item={{ ...item, priceUsd }} />
                   </div>
                 </Col>
               ),

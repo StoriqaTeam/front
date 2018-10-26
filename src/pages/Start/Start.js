@@ -1,9 +1,12 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, map, prepend } from 'ramda';
+import { pathOr, map, prepend, head } from 'ramda';
+import axios from 'axios';
+
+import { log } from 'utils';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -20,13 +23,43 @@ import t from './i18n';
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 
+type StateTypes = {
+  priceUsd: ?number,
+};
+
 type PropsTypes = {
   mainPage: StartMainPage,
 };
 
-class Start extends PureComponent<PropsTypes> {
+class Start extends Component<PropsTypes, StateTypes> {
+  state = {
+    priceUsd: null,
+  };
+
+  componentDidMount() {
+    this.isMount = true;
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj && this.isMount) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+  }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  isMount = false;
+
   render() {
     const { mainPage } = this.props;
+    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -40,8 +73,14 @@ class Start extends PureComponent<PropsTypes> {
       mainPage,
     );
 
-    const discountProducts = map(item => item.node, mostDiscountProducts);
-    const viewedProducts = map(item => item.node, mostViewedProducts);
+    const discountProducts = map(
+      item => ({ ...item.node, priceUsd }),
+      mostDiscountProducts,
+    );
+    const viewedProducts = map(
+      item => ({ ...item.node, priceUsd }),
+      mostViewedProducts,
+    );
     const bannersSliderWithMerge = prepend(
       {
         id: '0',

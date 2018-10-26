@@ -18,19 +18,19 @@ const itemsEn: Array<{ id: string, title: string, text: string }> = [
     id: '1',
     title: 'Delivery',
     text:
-      'Right after payment are only two&nbsp;things have to&nbsp;be done from seller side&nbsp;— pack good and give it to&nbsp;the&nbsp;delivery man.',
+      'Following payment, only two more steps are required of&nbsp;the&nbsp;seller&nbsp;— pack the&nbsp;good and pass&nbsp;it to&nbsp;the&nbsp;delivery man.',
   },
   {
     id: '2',
     title: 'Processing',
     text:
-      'Every seller could choose which exact currency suit him with every particular good. You can relay on&nbsp;us with&nbsp;that.',
+      'Each seller has the option to&nbsp;choose the&nbsp;exact currency that will suit&nbsp;him and his business needs.',
   },
   {
     id: '3',
     title: 'Marketing',
     text:
-      'Your personal manager stays in touch with our marketing department and will help to&nbsp;develop a&nbsp;strict and effective plan on «how to&nbsp;sell your goods on&nbsp;Singaporean market»',
+      'Your personal Storiqa manager will help you to&nbsp;develop an&nbsp;effective plan on&nbsp;how to&nbsp;sell goods on&nbsp;the&nbsp;Asian market and attract more buyers.',
   },
 ];
 
@@ -78,7 +78,7 @@ const StartSellingForSellers = ({ lang }: PropsType) => (
             __html:
               lang === 'ru'
                 ? 'С нашей помощью вы&nbsp;сможете эффективно управлять продажами по&nbsp;всему миру.'
-                : 'Spend less time managing your shop. Our tools will allow you to&nbsp;efficiently manage sales around the&nbsp;world.',
+                : 'Our service will allow you to&nbsp;efficiently manage sales around the&nbsp;globe and spend less time managing your&nbsp;shop.',
           }}
         />
         {map(

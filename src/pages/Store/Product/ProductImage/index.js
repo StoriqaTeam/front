@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { equals, prepend, isNil } from 'ramda';
-
+import classNames from 'classnames';
 import { isEmpty, convertSrc } from 'utils';
 
 import { Slider } from 'components/Slider';
@@ -34,10 +34,12 @@ class ProductImage extends Component<PropsType, StateType> {
     selected: '',
     isSquared: false,
   };
+
   componentDidMount() {
     const { photoMain } = this.props;
     this.setImage(photoMain);
   }
+
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
     const { rawId } = this.props;
     const { selected } = prevState;
@@ -48,25 +50,31 @@ class ProductImage extends Component<PropsType, StateType> {
       this.clearSelected();
     }
   }
+
   setImage = async (selected: string): Promise<void> => {
     const { height, width } = await getImageMeta(selected);
     this.setState({ isSquared: equals(height, width) });
   };
+
   clearSelected = (): void => {
     this.setState({
       selected: '',
     });
   };
+
   handleClick = ({ image }: WidgetOptionType): void => {
     this.setState({ selected: image }, () => {
       this.setImage(image);
     });
   };
+
   imgsToSlider = (imgs: Array<string>): Array<{ id: string, img: string }> =>
     imgs.map(img => ({ id: img, img }));
+
   render() {
     const { photoMain, additionalPhotos, discount } = this.props;
     const { selected, isSquared } = this.state;
+    const showMobileSlider = !isNil(additionalPhotos) && !isNil(photoMain);
     return (
       <div styleName="container">
         <div
@@ -89,15 +97,12 @@ class ProductImage extends Component<PropsType, StateType> {
             </div>
           ) : null}
         </div>
-        <div styleName="imageWrapper">
+        <div
+          styleName={classNames('imageWrapper', {
+            hasMobileSlider: showMobileSlider,
+          })}
+        >
           <figure styleName="image">
-            {!isSquared && !isNil(photoMain) ? (
-              <img
-                src={convertSrc(selected || photoMain, 'medium')}
-                alt=""
-                styleName="imageBlur"
-              />
-            ) : null}
             {discount > 0 ? <ProductDiscount discount={discount} /> : null}
             {!isNil(photoMain) ? (
               <div
@@ -105,8 +110,8 @@ class ProductImage extends Component<PropsType, StateType> {
                 style={{
                   backgroundImage: `url(${
                     !isEmpty(selected)
-                      ? convertSrc(selected, 'medium')
-                      : convertSrc(photoMain, 'medium')
+                      ? convertSrc(selected, 'large')
+                      : convertSrc(photoMain, 'large')
                   })`,
                   backgroundSize: 'contain',
                   backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
@@ -122,8 +127,8 @@ class ProductImage extends Component<PropsType, StateType> {
             )}
           </figure>
         </div>
-        <div styleName="imageSlider">
-          {!isNil(additionalPhotos) ? (
+        {showMobileSlider ? (
+          <div styleName="imageSlider">
             <Slider
               infinity
               animationSpeed={500}
@@ -133,12 +138,8 @@ class ProductImage extends Component<PropsType, StateType> {
               arrows
               counter
             />
-          ) : (
-            <div styleName="noImage">
-              <Icon type="camera" size={80} />
-            </div>
-          )}
-        </div>
+          </div>
+        ) : null}
       </div>
     );
   }

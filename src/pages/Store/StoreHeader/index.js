@@ -15,7 +15,15 @@ import t from './i18n';
 
 const StoreHeader = () => (
   <StoreContext.Consumer>
-    {({ cover, tabs, storeId, active }) => (
+    {({
+      cover,
+      tabs,
+      storeId,
+      active,
+      facebookUrl,
+      twitterUrl,
+      instagramUrl,
+    }) => (
       <header styleName="container">
         <div styleName="imageWrapper">
           <figure styleName="image">
@@ -26,7 +34,13 @@ const StoreHeader = () => (
             )}
             <aside styleName="social">
               <h2 styleName="offscreen">{t.offscreenSocialShare}</h2>
-              {process.env.BROWSER ? <SocialShare /> : null}
+              {process.env.BROWSER ? (
+                <SocialShare
+                  facebookUrl={facebookUrl}
+                  twitterUrl={twitterUrl}
+                  instagramUrl={instagramUrl}
+                />
+              ) : null}
             </aside>
           </figure>
         </div>

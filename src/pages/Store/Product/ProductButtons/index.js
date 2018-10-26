@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { routerShape } from 'found';
+import { join } from 'ramda';
 
 import { Button } from 'components/common/Button';
 
@@ -11,11 +12,13 @@ import t from './i18n';
 
 type PropsType = {
   onAddToCart: () => void,
+  onBuyNow: () => void,
   unselectedAttr: ?Array<string>,
   quantity: number,
   preOrder: boolean,
   isAddToCart: boolean,
   router: routerShape,
+  isLoading: boolean,
 };
 
 const ProductButtons = ({
@@ -25,10 +28,12 @@ const ProductButtons = ({
   preOrder,
   isAddToCart,
   router,
+  onBuyNow,
+  isLoading,
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
-      <Button disabled big>
+      <Button big isLoading={isLoading} onClick={onBuyNow} disabled>
         {t.buyNow}
       </Button>
       <Button
@@ -49,7 +54,9 @@ const ProductButtons = ({
       </Button>
     </div>
     {unselectedAttr && (
-      <div styleName="message">{t.youMustSelectAnAttribute}</div>
+      <div styleName="message">
+        {t.youMustSelectAnAttribute} {join(', ', unselectedAttr)}
+      </div>
     )}
   </div>
 );

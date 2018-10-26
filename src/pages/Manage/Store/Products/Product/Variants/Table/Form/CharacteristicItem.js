@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
   assoc,
   pathOr,
@@ -34,7 +34,15 @@ type PropsType = {
   value: { attrId: number, value: string, metaField?: string },
 };
 
-class CharacteristicItem extends PureComponent<PropsType> {
+type StateType = {
+  isPhotoUploading: boolean,
+};
+
+class CharacteristicItem extends Component<PropsType, StateType> {
+  state = {
+    isPhotoUploading: false,
+  };
+
   getSelectItems = (
     attribute: AttributeType,
   ): Array<{ id: string, label: string }> => {
@@ -78,12 +86,22 @@ class CharacteristicItem extends PureComponent<PropsType> {
     });
   };
 
-  handleOnUpload = async (e: any) => {
+  handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    this.props.onSelect(assoc('metaField', result.url, this.props.value));
+
+    this.setState({ isPhotoUploading: true });
+    uploadFile(e.target.files[0])
+      .then(result => {
+        if (!result || result.url == null) {
+          log.error(result);
+          alert('Error :('); // eslint-disable-line
+        }
+        this.props.onSelect(assoc('metaField', result.url, this.props.value));
+      })
+      .catch(alert)
+      .finally(() => {
+        this.setState({ isPhotoUploading: false });
+      });
   };
 
   render() {
@@ -111,6 +129,8 @@ class CharacteristicItem extends PureComponent<PropsType> {
             buttonIconType="upload"
             overPicture={convertSrc(characteristicImg, 'small')}
             dataTest="productCharacteristicImgUploader"
+            loading={this.state.isPhotoUploading}
+            buttonLabel=""
           />
         </div>
         <div styleName="characteristicSelect">

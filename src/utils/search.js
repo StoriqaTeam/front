@@ -123,7 +123,7 @@ export const urlToInput = (queryObj: {}) => {
       'sortBy',
       'country',
     ]),
-  )(modifQueryObj);
+  )({ ...modifQueryObj, search: modifQueryObj.search || '' });
 };
 
 export const inputToUrl = (obj: {

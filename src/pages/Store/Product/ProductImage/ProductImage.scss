@@ -8,8 +8,9 @@
   white-space: nowrap;
   overflow: hidden;
 
-  &:before, &:after {
-    content: " ";
+  &:before,
+  &:after {
+    content: ' ';
     display: table;
   }
 }
@@ -27,19 +28,21 @@
 .imageWrapper {
   overflow: hidden;
   width: 100%;
-  display: none;
-  @media (min-width: $md) {
-    display: block;
-    width: calc(100% - 14rem);
+  &.hasMobileSlider {
+    display: none;
+    @media (min-width: $md) {
+      display: block;
+      width: calc(100% - 14rem);
+    }
   }
 }
 
 .imageSlider {
-  overflow: hidden;
-  width: 100%;
   display: block;
   height: 0;
+  overflow: hidden;
   padding-bottom: 56.25%;
+  width: 100%;
   @media (min-width: $md) {
     display: none;
     width: calc(100% - 14rem);
@@ -49,8 +52,9 @@
 .image {
   padding-top: 100%;
   position: relative;
+  background-color: #f7f7f7;
 
-  div[role="img"] {
+  div[role='img'] {
     height: 100%;
     position: absolute;
     right: 0;

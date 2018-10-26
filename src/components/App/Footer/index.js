@@ -167,7 +167,11 @@ class Footer extends PureComponent<PropsType, StateType> {
           <Row>
             <Col>
               <InfoBlock />
-              <div styleName="rightsBlock">{t.copyRight}</div>
+              <div styleName="rightsBlock">
+                {t.copyRight}
+                <br />
+                {t.allRightsReserved}
+              </div>
             </Col>
           </Row>
         </Container>

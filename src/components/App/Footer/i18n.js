@@ -23,6 +23,7 @@ type TranslationDicType = {|
   //
   logoDescription: string,
   copyRight: string,
+  allRightsReserved: string,
   startSelling: string,
   offscreenSections: string,
 |};
@@ -49,7 +50,9 @@ const translations: TranslationsBundleType = {
     //
     logoDescription:
       'Storiqa is a global marketplace for any kind of legal goods supporting cryptocurrency payments',
-    copyRight: '© Storiqa Marketplace. All rights reserved. 2018',
+    copyRight:
+      '© Storiqa Marketplace DBA Storiqa Global Trades Inc. (Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong)',
+    allRightsReserved: 'All rights reserved.',
     startSelling: 'Start selling',
     offscreenSections: 'Storiqa Sections',
   },

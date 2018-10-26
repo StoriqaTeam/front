@@ -37,15 +37,16 @@
   }
 
   & img {
-    display: block;
     border-radius: 2px;
   }
 }
 
 .store-description {
+  display: inline-block;
   margin-left: 1rem;
   font-family: $font_regular;
   position: relative;
+  font-size: 16px;
 }
 
 .image {

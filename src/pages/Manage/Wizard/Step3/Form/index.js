@@ -73,7 +73,6 @@ const photoIcons = [
 ];
 
 class ThirdForm extends PureComponent<PropsType> {
-  // TODO: remove useless function
   handleChangeBaseProductState = (e: any) => {
     const { data } = this.props;
     const {
@@ -87,9 +86,16 @@ class ThirdForm extends PureComponent<PropsType> {
 
   handleChangeProductState = (e: any) => {
     const { data } = this.props;
-    const {
-      target: { value, name },
-    } = e;
+    const { name } = e.target;
+    let { value } = e.target;
+    if (name === 'cashback') {
+      if (parseInt(value, 10) > 100) {
+        value = '99';
+      }
+      if (value === '') {
+        value = '0';
+      }
+    }
     this.props.onChange({
       ...data,
       product: {
@@ -318,6 +324,7 @@ class ThirdForm extends PureComponent<PropsType> {
                       <CategorySelector
                         categories={this.props.categories}
                         onSelect={id => this.props.onChange({ categoryId: id })}
+                        category={{ rawId: data.categoryId }}
                       />
                     </div>
                     <div styleName="productStates formItem">

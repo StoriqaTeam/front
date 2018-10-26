@@ -28,6 +28,10 @@
     svg {
       fill: $color_grey_minor;
     }
+
+    &.hide {
+      display: none;
+    }
   }
 
   & > .heart {

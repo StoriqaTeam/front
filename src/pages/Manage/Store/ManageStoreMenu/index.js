@@ -54,6 +54,7 @@ type PropsType = {
 };
 
 type StateType = {
+  isMainPhotoUploading: boolean,
   storeData: ?{
     myStore: {
       id: string,
@@ -81,6 +82,7 @@ const MANAGE_STORE_MENU_FRAGMENT = graphql`
 class ManageStoreMenu extends Component<PropsType, StateType> {
   state = {
     storeData: null,
+    isMainPhotoUploading: false,
   };
 
   componentWillMount() {
@@ -119,18 +121,31 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
 
   disposeUser: () => void;
 
-  handleOnUpload = async (e: any) => {
+  handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    this.handleLogoUpload(result.url);
+    this.setState({ isMainPhotoUploading: true });
+    uploadFile(e.target.files[0])
+      .then(result => {
+        if (!result || result.url == null) {
+          log.error(result);
+          alert('Error :('); // eslint-disable-line
+        }
+        this.handleLogoUpload(result.url || '');
+      })
+      .catch(alert)
+      .finally(() => {
+        this.setState({ isMainPhotoUploading: false });
+      });
   };
 
   handleLogoUpload = (url: string) => {
     const { environment } = this.props;
     // $FlowIgnoreMe
-    const storeId = pathOr(null, ['storeData', 'myStore', 'id'], this.state);
+    const storeId: ?string = pathOr(
+      null,
+      ['storeData', 'myStore', 'id'],
+      this.state,
+    );
 
     if (!storeId) {
       this.props.showAlert({
@@ -276,6 +291,8 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
               myStore ? convertSrc(storeLogo, 'medium') || null : newStoreLogo
             }
             dataTest="storeImgUploader"
+            loading={this.state.isMainPhotoUploading}
+            buttonHeight="100%"
           />
           {((myStore && storeLogo) || (!myStore && newStoreLogo)) && (
             <div
