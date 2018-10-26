@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import { map, sortBy, prop, contains } from 'ramda';
@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import './ProductSize.scss';
 
-import type { WidgetOptionType } from './types';
+import type { WidgetOptionType } from '../types';
 
 type PropsType = {
   title: string,
