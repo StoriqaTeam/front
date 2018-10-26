@@ -1047,7 +1047,7 @@ WizardWrapper.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(Page(withShowAlert(WizardWrapper), true, true)),
+  withRouter(Page(withShowAlert(WizardWrapper), { withoutCategories: true })),
   graphql`
     fragment Wizard_me on User {
       id

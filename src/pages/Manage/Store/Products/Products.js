@@ -174,7 +174,7 @@ Products.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withShowAlert(withRouter(Page(ManageStore(Products, 'Goods'), true))),
+  withShowAlert(withRouter(Page(ManageStore(Products, 'Goods')))),
   graphql`
     fragment Products_me on User
       @argumentDefinitions(

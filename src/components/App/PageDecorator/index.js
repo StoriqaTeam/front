@@ -20,7 +20,10 @@ type PropsType = {
   me: ?{},
 };
 
-export default (OriginalComponent: any, withoutCategories: ?boolean) =>
+export default (
+  OriginalComponent: any,
+  config: { withoutCategories: ?boolean } = { withoutCategories: false },
+) =>
   class Page extends PureComponent<PropsType> {
     constructor(props: PropsType) {
       super(props);
@@ -91,7 +94,7 @@ export default (OriginalComponent: any, withoutCategories: ?boolean) =>
                       ['match', 'location', 'query', 'search'],
                       this.props,
                     )}
-                    withoutCategories={withoutCategories}
+                    withoutCategories={config.withoutCategories}
                     setLang={this.setLang}
                   />
                   <Main>

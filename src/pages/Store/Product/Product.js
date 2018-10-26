@@ -478,7 +478,7 @@ class Product extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(withErrorBoundary(Page(Product, true))),
+  withShowAlert(withErrorBoundary(Page(Product))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id

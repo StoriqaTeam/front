@@ -376,7 +376,7 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(Contacts, 'Contacts'), true)),
+  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
   graphql`
     fragment Contacts_me on User {
       myStore {

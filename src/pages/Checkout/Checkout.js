@@ -404,7 +404,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout)), true, true),
+  Page(withShowAlert(withRouter(Checkout)), { withoutCategories: true }),
   graphql`
     fragment Checkout_me on User {
       ...PaymentInfo_me

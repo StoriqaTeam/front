@@ -165,7 +165,7 @@ class Cart extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  withRouter(Page(Cart, true, true)),
+  withRouter(Page(Cart, { withoutCategories: true })),
   graphql`
     fragment Cart_cart on Cart
       @argumentDefinitions(

@@ -68,7 +68,7 @@ class Categories extends PureComponent<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  withErrorBoundary(Page(Categories, true)),
+  withErrorBoundary(Page(Categories)),
   graphql`
     fragment Categories_search on Search
       @argumentDefinitions(

@@ -605,7 +605,7 @@ EditProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(EditProduct, 'Goods'), true)),
+  withShowAlert(Page(ManageStore(EditProduct, 'Goods'))),
   graphql`
     fragment EditProduct_me on User
       @argumentDefinitions(productId: { type: "Int!" }) {

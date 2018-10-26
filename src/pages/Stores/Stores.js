@@ -158,7 +158,7 @@ class Stores extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  withErrorBoundary(Page(Stores, true)),
+  withErrorBoundary(Page(Stores)),
   graphql`
     fragment Stores_search on Search
       @argumentDefinitions(
