@@ -12,6 +12,8 @@ type PropsType = {
   quantity: number,
   preOrder: boolean,
   preOrderDays: number,
+  onChangeQuantity: (quantity: number) => void,
+  cartQuantity: number,
 };
 
 const ProductQuantity = (props: PropsType) => (
@@ -21,10 +23,10 @@ const ProductQuantity = (props: PropsType) => (
     </div>
     <div styleName="counter">
       <Stepper
-        value={props.quantity === 0 ? 0 : 1}
-        min={0}
+        value={props.cartQuantity}
+        min={1}
         max={props.quantity}
-        onChange={() => {}}
+        onChange={props.onChangeQuantity}
       />
       <p styleName="stock">{t.remainingStock}</p>
       <span
