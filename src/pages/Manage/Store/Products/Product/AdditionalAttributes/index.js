@@ -10,23 +10,15 @@ import { Icon } from 'components/Icon';
 import { Select } from 'components/common';
 
 import type { SelectItemType } from 'types';
+import type { GetAttributeType } from 'pages/Manage/Store/Products/types';
 
 import './AdditionalAttributes.scss';
 
-type AttributeType = {
-  id: string,
-  rawId: number,
-  name: {
-    lang: string,
-    text: string,
-  },
-};
-
 type PropsType = {
-  attributes: Array<AttributeType>,
-  onCreateAttribute: (attribute: AttributeType) => void,
+  attributes: Array<GetAttributeType>,
+  onCreateAttribute: (attribute: GetAttributeType) => void,
   onRemoveAttribute: (id: string) => void,
-  customAttributes: Array<AttributeType>,
+  customAttributes: Array<GetAttributeType>,
   onlyView: boolean,
 };
 
@@ -35,10 +27,9 @@ type StateType = {
   activeAttribute: ?SelectItemType,
 };
 
-class AdditionalAttributes extends Component<PropsType, StateType> {
+class Index extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    console.log('---props', props);
 
     const { attributes } = props;
     const selectableAttributes = this.updateAttributes(attributes);
@@ -60,7 +51,6 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
       JSON.stringify(prevProps.customAttributes) !==
       JSON.stringify(customAttributes)
     ) {
-      console.log('---YEEES');
       const selectableAttributes = this.updateAttributes(
         difference(attributes, customAttributes),
       );
@@ -76,7 +66,7 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
   }
 
   updateAttributes = (
-    attributes: Array<AttributeType>,
+    attributes: Array<GetAttributeType>,
   ): Array<SelectItemType> =>
     map(
       item => ({
@@ -184,4 +174,4 @@ class AdditionalAttributes extends Component<PropsType, StateType> {
   }
 }
 
-export default AdditionalAttributes;
+export default Index;

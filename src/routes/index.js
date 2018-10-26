@@ -505,7 +505,7 @@ const routes = (
               `}
             />
             <Route
-              path="/products/:productId"
+              path="/products/:productId/:tab?/:variantId?"
               Component={EditProduct}
               query={graphql`
                 query routes_Product_Query($productID: Int!) {

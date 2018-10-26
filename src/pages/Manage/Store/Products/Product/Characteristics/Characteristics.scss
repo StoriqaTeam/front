@@ -36,6 +36,7 @@
 }
 
 .characteristicImg {
+  position: relative;
   width: 10rem;
   height: 10rem;
   margin-right: 2rem;
@@ -48,6 +49,38 @@
     width: 23.875rem;
   }
 }
+
+.upload {
+
+}
+
+.remove {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  background-color: rgba(239,239,239,.9);
+  transition: $transition_all_ease;
+  cursor: pointer;
+
+  svg {
+    fill: $color_grey_minor;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.removeButton {
+
+}
+
 
 .errors {
   position: absolute;

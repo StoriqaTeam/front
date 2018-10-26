@@ -132,10 +132,7 @@ class InputPrice extends Component<PropsType, StateType> {
     return (
       <AppContext.Consumer>
         {({ directories }) => (
-          <div
-            id={id !== undefined ? id : null}
-            styleName="container"
-          >
+          <div id={id !== undefined ? id : null} styleName="container">
             <div styleName="input">
               <Input
                 inputRef={inputRef}

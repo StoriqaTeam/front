@@ -15,28 +15,22 @@ import {
 
 import { UploadWrapper } from 'components/Upload';
 import { Select } from 'components/common/Select';
+import { Icon } from 'components/Icon';
 import { uploadFile, log, convertSrc } from 'utils';
+
+import type { GetAttributeType } from 'pages/Manage/Store/Products/types';
 
 import './Characteristics.scss';
 
-type AttributeType = {
-  rawId: number,
-  id: string,
-  metaField: {
-    translatedValues: ?Array<{}>,
-    values: ?Array<string>,
-  },
-};
-
 type PropsType = {
-  attribute: AttributeType,
+  attribute: GetAttributeType,
   onSelect: Function,
-  value: { attrId: number, value: string, metaField?: string },
+  value: { attrId: number, value: string, metaField?: ?string },
 };
 
 class CharacteristicItem extends PureComponent<PropsType> {
   getSelectItems = (
-    attribute: AttributeType,
+    attribute: GetAttributeType,
   ): Array<{ id: string, label: string }> => {
     // $FlowIgnoreMe
     const values = pathOr(null, ['metaField', 'values'], attribute);
@@ -86,6 +80,11 @@ class CharacteristicItem extends PureComponent<PropsType> {
     this.props.onSelect(assoc('metaField', result.url, this.props.value));
   };
 
+  handleRemoveImg = () => {
+    const { onSelect, value } = this.props;
+    onSelect(assoc('metaField', '', value));
+  };
+
   render() {
     const { attribute, value } = this.props;
     if (!value) {
@@ -103,15 +102,30 @@ class CharacteristicItem extends PureComponent<PropsType> {
     return (
       <div styleName="item">
         <div styleName="characteristicImg">
-          <UploadWrapper
-            id={attribute.id}
-            onUpload={this.handleOnUpload}
-            buttonHeight={10}
-            buttonWidth={10}
-            buttonIconType="upload"
-            overPicture={convertSrc(characteristicImg, 'small')}
-            dataTest="productCharacteristicImgUploader"
-          />
+          <div styleName="upload">
+            <UploadWrapper
+              id={attribute.id}
+              onUpload={this.handleOnUpload}
+              buttonHeight={10}
+              buttonWidth={10}
+              buttonIconType="upload"
+              overPicture={convertSrc(characteristicImg, 'small')}
+              dataTest="productCharacteristicImgUploader"
+            />
+          </div>
+          {characteristicImg && (
+            <div styleName="remove">
+              <div
+                styleName="removeButton"
+                onClick={this.handleRemoveImg}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                <Icon type="basket" size={32} />
+              </div>
+            </div>
+          )}
         </div>
         <div styleName="characteristicSelect">
           <Select

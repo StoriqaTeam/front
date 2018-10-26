@@ -1,38 +1,23 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { filter, propEq, map } from 'ramda';
 
 import { Row, Col } from 'layout';
+
+import type {
+  GetAttributeType,
+  AttributeValueType,
+} from 'pages/Manage/Store/Products/types';
 
 import CharacteristicItem from './CharacteristicItem';
 
 import './Characteristics.scss';
 
-type AttributeType = {
-  id: string,
-  rawId: number,
-  name: {
-    lang: string,
-    text: string,
-  },
-  metaField: {
-    translatedValues: ?Array<{}>,
-    values: ?Array<string>,
-  },
-};
-
-type AttributeValueType = {
-  attrId: number,
-  value: string,
-  metaField?: string,
-};
-
 type PropsType = {
-  onChange: Function,
+  onChange: (values: Array<AttributeValueType>) => void,
   values: Array<AttributeValueType>,
-  customAttributes: Array<AttributeType>,
+  customAttributes: Array<GetAttributeType>,
   errors: ?Array<string>,
 };
 
@@ -50,10 +35,7 @@ class Characteristics extends PureComponent<PropsType> {
   render() {
     const { errors, customAttributes } = this.props;
     return (
-      <div styleName="container">
-        <div styleName="title">
-          <strong>Characteristics</strong>
-        </div>
+      <div id="attributes" styleName="container">
         <div styleName="items">
           <Row>
             {map(
@@ -87,9 +69,5 @@ class Characteristics extends PureComponent<PropsType> {
     );
   }
 }
-
-Characteristics.contextTypes = {
-  directories: PropTypes.object,
-};
 
 export default Characteristics;

@@ -4,12 +4,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { matchShape, routerShape } from 'found';
 import {
   pathOr,
   isEmpty,
   path,
   head,
-  omit,
   filter,
   prepend,
   find,
@@ -19,17 +19,22 @@ import {
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
+import { renameKeys } from 'utils/ramda';
 import {
   UpdateBaseProductMutation,
   UpdateProductMutation,
-  CreateProductWithAttributesMutation,
   UpsertShippingMutation,
 } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 
+import type {
+  FormErrorsType,
+  CustomAttributeType,
+  FormType,
+  VariantType,
+} from 'pages/Manage/Store/Products/types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
-import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
@@ -39,78 +44,22 @@ import Form from './Form';
 
 import './Product.scss';
 
-type AttributeType = {
-  id: string,
-  rawId: number,
-  name: {
-    lang: string,
-    text: string,
-  },
-};
-
-type AttributeValueType = {
-  attrId: number,
-  value: string,
-  metaField?: ?string,
-};
-
-type VariantType = {
-  idMainVariant: string,
-  rawIdMainVariant: ?number,
-  vendorCode: string,
-  price: ?number,
-  cashback: ?number,
-  discount: ?number,
-  photoMain: ?string,
-  photos: ?Array<string>,
-  attributeValues: Array<AttributeValueType>,
-  preOrder: boolean,
-  preOrderDays: string,
-};
-
-type FormType = {
-  name: string,
-  seoTitle: string,
-  seoDescription: string,
-  shortDescription: string,
-  longDescription: string,
-  categoryId: ?number,
-  currencyId: number,
-
-  idMainVariant: string,
-  rawIdMainVariant: ?number,
-  photoMain: ?string,
-  photos: ?Array<string>,
-  vendorCode: string,
-  price: number,
-  cashback: ?number,
-  discount: ?number,
-  preOrderDays: string,
-  preOrder: boolean,
-  attributeValues: Array<AttributeValueType>,
-};
-
 type PropsType = {
   me: EditProductMeType,
   showAlert: (input: AddAlertInputType) => void,
+  router: routerShape,
   environment: Environment,
+  match: matchShape,
 };
 
 type StateType = {
-  formErrors: {
-    [string]: Array<string>,
-  },
-  variantFormErrors: {
-    [string]: Array<string>,
-  },
+  formErrors: FormErrorsType,
   isLoading: boolean,
-  comeResponse: boolean,
   availablePackages: ?AvailablePackagesType,
   isLoadingPackages: boolean,
-  variantData: ?VariantType,
-  closedVariantFormAnnunciator: boolean,
+  isLoadingShipping: boolean,
   shippingData: ?FullShippingType,
-  customAttributes: Array<AttributeType>,
+  customAttributes: Array<CustomAttributeType>,
 };
 
 class EditProduct extends Component<PropsType, StateType> {
@@ -118,23 +67,19 @@ class EditProduct extends Component<PropsType, StateType> {
     super(props);
     // $FlowIgnore
     const baseProduct = pathOr(null, ['me', 'baseProduct'], props);
-    console.log('---baseProduct', baseProduct);
     const { category, customAttributes } = baseProduct;
-    const newCustomAttributes = filter(item => {
-      return Boolean(find(propEq('attributeId', item.rawId))(customAttributes));
-    }, category.getAttributes);
-
-    console.log('---newCustomAttributes', newCustomAttributes);
+    const newCustomAttributes = filter(
+      item =>
+        Boolean(find(propEq('attributeId', item.rawId))(customAttributes)),
+      category.getAttributes,
+    );
 
     this.state = {
       formErrors: {},
-      variantFormErrors: {},
       isLoading: false,
-      comeResponse: false,
       availablePackages: null,
       isLoadingPackages: true,
-      variantData: null,
-      closedVariantFormAnnunciator: false,
+      isLoadingShipping: false,
       shippingData: null,
       customAttributes: newCustomAttributes,
     };
@@ -190,12 +135,8 @@ class EditProduct extends Component<PropsType, StateType> {
     this.setState({ isLoadingPackages: false });
   };
 
-  handleSave = (form: FormType) => {
-    console.log('---form', form);
-    this.setState({
-      formErrors: {},
-      variantFormErrors: {},
-    });
+  handleSave = (form: FormType & { currency: string }) => {
+    this.setState({ formErrors: {} });
     const baseProduct = path(['me', 'baseProduct'], this.props);
     if (!baseProduct || !baseProduct.id) {
       this.props.showAlert({
@@ -212,7 +153,7 @@ class EditProduct extends Component<PropsType, StateType> {
       seoDescription,
       shortDescription,
       longDescription,
-      currencyId,
+      currency,
     } = form;
     this.setState(() => ({ isLoading: true }));
     UpdateBaseProductMutation.commit({
@@ -227,7 +168,7 @@ class EditProduct extends Component<PropsType, StateType> {
       seoDescription: seoDescription
         ? [{ lang: 'EN', text: seoDescription }]
         : null,
-      currencyId,
+      currency,
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         log.debug({ response, errors });
@@ -243,7 +184,6 @@ class EditProduct extends Component<PropsType, StateType> {
           });
           return;
         }
-        log.debug({ validationErrors });
 
         // $FlowIgnoreMe
         const status: string = pathOr('', ['100', 'status'], relayErrors);
@@ -281,16 +221,6 @@ class EditProduct extends Component<PropsType, StateType> {
             attributeValues: form.attributeValues,
           });
         }
-        // const { variantData } = this.state;
-        // if (variantData) {
-        //   if (variantData.variantId) {
-        //     this.handleUpdateVariant(variantData);
-        //   } else {
-        //     this.handleCreateVariant(variantData);
-        //   }
-        // } else {
-        //   this.handleShippingSave();
-        // }
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -313,6 +243,14 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   handleUpdateVariant = (variantData: VariantType) => {
+    if (!variantData.idMainVariant) {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something going wrong :(',
+        link: { text: 'Close.' },
+      });
+      return;
+    }
     const params: UpdateProductMutationType = {
       input: {
         clientMutationId: '',
@@ -331,7 +269,6 @@ class EditProduct extends Component<PropsType, StateType> {
       },
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState({ isLoading: false });
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
@@ -340,99 +277,18 @@ class EditProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
+          const formErrors = renameKeys(
+            {
+              long_description: 'longDescription',
+              short_description: 'shortDescription',
+              seo_title: 'seoTitle',
+              seo_description: 'seoDescription',
+              vendor_code: 'vendorCode',
+            },
+            validationErrors,
+          );
           this.setState({
-            variantFormErrors: validationErrors,
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        if (errors) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Product update!',
-          link: { text: '' },
-        });
-      },
-      onError: (error: Error) => {
-        this.setState(() => ({ isLoading: false }));
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    };
-    UpdateProductMutation.commit(params);
-  };
-
-  handleCreateVariant = (variantData: VariantType) => {
-    // $FlowIgnore
-    const productRawId = pathOr(
-      null,
-      ['me', 'baseProduct', 'rawId'],
-      this.props,
-    );
-    // $FlowIgnore
-    const productId = pathOr(null, ['me', 'baseProduct', 'id'], this.props);
-    const params: CreateProductWithAttributesMutationType = {
-      input: {
-        clientMutationId: '',
-        product: {
-          baseProductId: productRawId,
-          price: variantData.price,
-          vendorCode: variantData.vendorCode,
-          photoMain: variantData.mainPhoto,
-          additionalPhotos: variantData.photos,
-          cashback: variantData.cashback ? variantData.cashback / 100 : null,
-          discount: variantData.discount ? variantData.discount / 100 : null,
-          preOrder: variantData.preOrder,
-          preOrderDays: Number(variantData.preOrderDays),
-        },
-        attributes: variantData.attributeValues,
-      },
-      parentID: productId,
-      environment: this.props.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
-          this.setState({
-            variantFormErrors: validationErrors,
+            formErrors,
             isLoading: false,
           });
           return;
@@ -471,10 +327,10 @@ class EditProduct extends Component<PropsType, StateType> {
           this.setState({ isLoading: false });
           return;
         }
-        this.handleShippingSave();
+        this.handleSaveShipping();
       },
       onError: (error: Error) => {
-        this.setState({ isLoading: false });
+        this.setState(() => ({ isLoading: false }));
         log.error(error);
         this.props.showAlert({
           type: 'danger',
@@ -483,10 +339,10 @@ class EditProduct extends Component<PropsType, StateType> {
         });
       },
     };
-    CreateProductWithAttributesMutation.commit(params);
+    UpdateProductMutation.commit(params);
   };
 
-  handleShippingSave = () => {
+  handleSaveShipping = (onlyShippingSave?: boolean) => {
     const { shippingData } = this.state;
     if (!shippingData) {
       this.props.showAlert({
@@ -515,6 +371,9 @@ class EditProduct extends Component<PropsType, StateType> {
       withoutInter,
       withoutLocal,
     } = shippingData;
+    if (onlyShippingSave) {
+      this.setState({ isLoadingShipping: true });
+    }
     const params: UpsertShippingMutationType = {
       input: {
         clientMutationId: '',
@@ -526,7 +385,10 @@ class EditProduct extends Component<PropsType, StateType> {
       },
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState({ isLoading: false });
+        this.setState({
+          isLoading: false,
+          isLoadingShipping: false,
+        });
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
@@ -573,19 +435,25 @@ class EditProduct extends Component<PropsType, StateType> {
           });
           return;
         }
+        if (onlyShippingSave) {
+          this.props.showAlert({
+            type: 'success',
+            text: 'Delivery update!',
+            link: { text: '' },
+          });
+          return;
+        }
         this.props.showAlert({
           type: 'success',
           text: 'Product update!',
           link: { text: '' },
         });
-        this.setState((prevState: StateType) => ({
-          comeResponse: true,
-          closedVariantFormAnnunciator: !prevState.closedVariantFormAnnunciator,
-          variantData: null,
-        }));
       },
       onError: (error: Error) => {
-        this.setState({ isLoading: false });
+        this.setState({
+          isLoading: false,
+          isLoadingShipping: false,
+        });
         log.error(error);
         this.props.showAlert({
           type: 'danger',
@@ -597,25 +465,11 @@ class EditProduct extends Component<PropsType, StateType> {
     UpsertShippingMutation.commit(params);
   };
 
-  handleOnChangeVariantForm = (variantData: ?VariantType) => {
-    this.setState({ variantData });
-  };
-
-  handleOnChangeShipping = (shippingData: ?FullShippingType) => {
+  handleChangeShipping = (shippingData: ?FullShippingType) => {
     this.setState({ shippingData });
   };
 
-  resetComeResponse = () => {
-    this.setState({ comeResponse: false });
-  };
-
-  resetVariantFormErrors = (field: string) => {
-    this.setState({
-      variantFormErrors: omit([field], this.state.variantFormErrors),
-    });
-  };
-
-  handleCreateAttribute = (attribute: AttributeType) => {
+  handleCreateAttribute = (attribute: CustomAttributeType) => {
     this.setState((prevState: StateType) => ({
       customAttributes: prepend(attribute, prevState.customAttributes),
     }));
@@ -631,19 +485,15 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---BASE PRODUCT this.props', this.props);
-    const { me } = this.props;
+    const { me, router, match } = this.props;
     const {
       isLoading,
-      comeResponse,
       availablePackages,
       isLoadingPackages,
-      variantData,
-      closedVariantFormAnnunciator,
       shippingData,
       formErrors,
-      variantFormErrors,
       customAttributes,
+      isLoadingShipping,
     } = this.state;
     let baseProduct = null;
     if (me && me.baseProduct) {
@@ -658,25 +508,22 @@ class EditProduct extends Component<PropsType, StateType> {
             <Form
               baseProduct={baseProduct}
               onSave={this.handleSave}
-              validationErrors={formErrors}
-              variantFormErrors={variantFormErrors}
-              categories={this.context.directories.categories}
-              isLoading={isLoading}
-              comeResponse={comeResponse}
-              resetComeResponse={this.resetComeResponse}
+              formErrors={formErrors}
+              categories={directories.categories}
               currencies={directories.currencies}
+              isLoading={isLoading}
               availablePackages={availablePackages}
               isLoadingPackages={isLoadingPackages}
-              onChangeVariantForm={this.handleOnChangeVariantForm}
-              variantData={variantData}
-              closedVariantFormAnnunciator={closedVariantFormAnnunciator}
-              onChangeShipping={this.handleOnChangeShipping}
+              onChangeShipping={this.handleChangeShipping}
               shippingData={shippingData}
-              resetVariantFormErrors={this.resetVariantFormErrors}
               customAttributes={customAttributes}
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
               environment={environment}
+              onSaveShipping={this.handleSaveShipping}
+              router={router}
+              match={match}
+              isLoadingShipping={isLoadingShipping}
             />
           </div>
         )}

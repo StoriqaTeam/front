@@ -181,7 +181,10 @@
     }
 
     .delivery {
-      padding: 4rem;
+      .deliveryButton {
+        width: 22.5rem;
+        margin: 4rem;
+      }
     }
 
     .hidden {

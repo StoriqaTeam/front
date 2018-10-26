@@ -3,23 +3,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { routerShape, withRouter, matchShape } from 'found';
-import { pathOr, isEmpty, path, head, omit, filter, prepend, map } from 'ramda';
+import { pathOr, isEmpty, head, filter, prepend, map } from 'ramda';
 import { Environment } from 'relay-runtime';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 import {
   CreateBaseProductWithVariantsMutation,
-  CreateProductWithAttributesMutation,
   UpsertShippingMutation,
 } from 'relay/mutations';
-import { createFragmentContainer, graphql } from 'react-relay';
 import { withShowAlert } from 'components/App/AlertContext';
+import { renameKeys } from 'utils/ramda';
 
-import type { SelectItemType } from 'types';
+import type {
+  FormErrorsType,
+  CustomAttributeType,
+  FormType,
+} from 'pages/Manage/Store/Products/types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { MutationParamsType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
@@ -30,90 +33,27 @@ import Form from './Form';
 
 import './Product.scss';
 
-type AttributeType = {
-  id: string,
-  rawId: number,
-  name: {
-    lang: string,
-    text: string,
-  },
-};
-
-type AttributeValueType = {
-  attrId: number,
-  value: string,
-  metaField?: ?string,
-};
-
-type VariantType = {
-  productRawId: ?string,
-  vendorCode: string,
-  price: number,
-  cashback?: ?number,
-  mainPhoto?: ?string,
-  photos?: Array<string>,
-  attributeValues: Array<AttributeValueType>,
-  preOrder: boolean,
-  preOrderDays: string,
-};
-
-type FormType = {
-  name: string,
-  seoTitle: string,
-  seoDescription: string,
-  shortDescription: string,
-  longDescription: string,
-  categoryId: number,
-  currencyId: number,
-  currency: SelectItemType,
-
-  idMainVariant: string,
-  rawIdMainVariant: ?number,
-  photoMain: ?string,
-  photos: ?Array<string>,
-  vendorCode: string,
-  price: number,
-  cashback: ?number,
-  discount: ?number,
-  preOrderDays: string,
-  preOrder: boolean,
-  attributeValues: Array<AttributeValueType>,
-};
-
 type PropsType = {
   me: NewProductMeType,
   showAlert: (input: AddAlertInputType) => void,
-  match: {
-    params: {
-      storeId: string,
-    },
-  },
   router: routerShape,
   match: matchShape,
   environment: Environment,
 };
 
 type StateType = {
-  formErrors: {
-    [string]: Array<string>,
-  },
-  variantFormErrors: {
-    [string]: Array<string>,
-  },
+  formErrors: FormErrorsType,
   isLoading: boolean,
   availablePackages: ?AvailablePackagesType,
-  variantData: ?VariantType,
   shippingData: ?FullShippingType,
-  customAttributes: Array<AttributeType>,
+  customAttributes: Array<CustomAttributeType>,
 };
 
 class NewProduct extends Component<PropsType, StateType> {
   state: StateType = {
     formErrors: {},
-    variantFormErrors: {},
     isLoading: false,
     availablePackages: null,
-    variantData: null,
     shippingData: null,
     customAttributes: [],
   };
@@ -144,20 +84,19 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ availablePackages: null });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
+            text: 'Something going wrong with shipping :(',
             link: { text: 'Close.' },
           });
         });
     }
   }
 
-  handleSave = (form: FormType) => {
-    console.log('---form', form);
-    this.setState({
-      formErrors: {},
-      variantFormErrors: {},
-    });
-    const { me, environment } = this.props;
+  handleSave = (
+    form: FormType & { currency: string },
+    isAddVariant?: boolean,
+  ) => {
+    this.setState({ formErrors: {} });
+    const { environment } = this.props;
     const {
       name,
       categoryId,
@@ -168,28 +107,16 @@ class NewProduct extends Component<PropsType, StateType> {
       currency,
     } = form;
 
-    const { variantData, customAttributes } = this.state;
-    console.log('---variantData', variantData);
-    // if (!variantData) {
-    //   this.props.showAlert({
-    //     type: 'danger',
-    //     text: 'Something going wrong :(',
-    //     link: { text: 'Close.' },
-    //   });
-    //   return;
-    // }
-    // const {
-    //   price,
-    //   vendorCode,
-    //   mainPhoto: photoMain,
-    //   photos: additionalPhotos,
-    //   cashback,
-    //   attributeValues: attributes,
-    //   preOrder,
-    //   preOrderDays,
-    // } = variantData;
+    if (!categoryId) {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'No category :(',
+        link: { text: 'Close.' },
+      });
+      return;
+    }
 
-    // const storeId = path(['myStore', 'id'], me);
+    const { customAttributes } = this.state;
     // $FlowIgnoreMe
     const storeRawId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     this.setState(() => ({ isLoading: true }));
@@ -210,7 +137,7 @@ class NewProduct extends Component<PropsType, StateType> {
             ? null
             : [{ lang: 'EN', text: seoDescription }],
         // $FlowIgnoreMe
-        currency: currency.id,
+        currency,
         categoryId,
         selectedAttributes: map(item => item.rawId, customAttributes),
         variants: [
@@ -232,9 +159,7 @@ class NewProduct extends Component<PropsType, StateType> {
       },
       environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState({ isLoading: false });
         log.debug({ response, errors });
-        console.log('---response', response);
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
@@ -242,216 +167,18 @@ class NewProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
-        if (!isEmpty(statusError)) {
-          this.props.showAlert({
-            type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-
-        // $FlowIgnoreMe
-        const parsingError = pathOr(null, ['300', 'message'], relayErrors);
-        if (parsingError) {
-          log.debug('parsingError:', { parsingError });
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        if (errors) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          return;
-        }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Product create!',
-          link: { text: '' },
-        });
-        if (response) {
-          const { createBaseProductWithVariants } = response;
-          const baseProductRawId = createBaseProductWithVariants.rawId;
-          this.props.router.push(
-            `/manage/store/${storeRawId}/products/${baseProductRawId}`,
+          const formErrors = renameKeys(
+            {
+              long_description: 'longDescription',
+              short_description: 'shortDescription',
+              seo_title: 'seoTitle',
+              seo_description: 'seoDescription',
+              vendor_code: 'vendorCode',
+            },
+            validationErrors,
           );
-        }
-      },
-      onError: (error: Error) => {
-        this.setState({ isLoading: false });
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
-        });
-      },
-    };
-    CreateBaseProductWithVariantsMutation.commit(params);
-
-    // CreateBaseProductWithVariantsMutation.commit({
-    //   parentID: storeID,
-    //   name: [{ lang: 'EN', text: name }],
-    //   storeId: parseInt(this.props.match.params.storeId, 10),
-    //   shortDescription: [{ lang: 'EN', text: shortDescription }],
-    //   longDescription: [{ lang: 'EN', text: longDescription }],
-    //   currency: 'STQ',
-    //   categoryId,
-    //   seoTitle:
-    //     !seoTitle || seoTitle.length === 0
-    //       ? null
-    //       : [{ lang: 'EN', text: seoTitle }],
-    //   seoDescription:
-    //     !seoDescription || seoDescription.length === 0
-    //       ? null
-    //       : [{ lang: 'EN', text: seoDescription }],
-    //   environment: this.context.environment,
-    //   onCompleted: (response: ?Object, errors: ?Array<any>) => {
-    //     log.debug({ response, errors });
-    //     const relayErrors = fromRelayError({ source: { errors } });
-    //     log.debug({ relayErrors });
-    //
-    //     // $FlowIgnoreMe
-    //     const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-    //     if (!isEmpty(validationErrors)) {
-    //       this.setState({
-    //         formErrors: validationErrors,
-    //         isLoading: false,
-    //       });
-    //       return;
-    //     }
-    //     log.debug({ validationErrors });
-    //
-    //     // $FlowIgnoreMe
-    //     const status: string = pathOr('', ['100', 'status'], relayErrors);
-    //     if (!isEmpty(validationErrors)) {
-    //       this.setState({
-    //         formErrors: validationErrors,
-    //         isLoading: false,
-    //       });
-    //       return;
-    //     }
-    //     if (status) {
-    //       this.props.showAlert({
-    //         type: 'danger',
-    //         text: `Error: "${status}"`,
-    //         link: { text: 'Close.' },
-    //       });
-    //       this.setState({ isLoading: false });
-    //       return;
-    //     }
-    //     if (errors) {
-    //       this.props.showAlert({
-    //         type: 'danger',
-    //         text: 'Something going wrong :(',
-    //         link: { text: 'Close.' },
-    //       });
-    //       this.setState({ isLoading: false });
-    //       return;
-    //     }
-    //
-    //     const baseProductId = pathOr(
-    //       null,
-    //       ['createBaseProduct', 'id'],
-    //       response,
-    //     );
-    //     const baseProductRawId = pathOr(
-    //       null,
-    //       ['createBaseProduct', 'rawId'],
-    //       response,
-    //     );
-    //     const { variantData } = this.state;
-    //     if (variantData && baseProductId && baseProductRawId) {
-    //       this.handleCreateVariant({
-    //         // $FlowIgnore
-    //         baseProductId,
-    //         // $FlowIgnore
-    //         baseProductRawId,
-    //         variantData,
-    //       });
-    //     }
-    //   },
-    //   onError: (error: Error) => {
-    //     this.setState(() => ({ isLoading: false }));
-    //     log.debug({ error });
-    //     const relayErrors = fromRelayError(error);
-    //     log.debug({ relayErrors });
-    //     // $FlowIgnoreMe
-    //     const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-    //     if (!isEmpty(validationErrors)) {
-    //       this.setState({ formErrors: validationErrors });
-    //       return;
-    //     }
-    //     this.props.showAlert({
-    //       type: 'danger',
-    //       text: 'Something going wrong :(',
-    //       link: { text: 'Close.' },
-    //     });
-    //   },
-    // });
-  };
-
-  handleCreateVariant = (props: {
-    baseProductId: string,
-    baseProductRawId: number,
-    variantData: VariantType,
-  }) => {
-    const { storeId } = this.props.match.params;
-    const { baseProductId, baseProductRawId, variantData } = props;
-    const {
-      price,
-      vendorCode,
-      mainPhoto: photoMain,
-      photos: additionalPhotos,
-      cashback,
-      attributeValues: attributes,
-      preOrder,
-      preOrderDays,
-    } = variantData;
-    const params: CreateProductWithAttributesMutationType = {
-      input: {
-        clientMutationId: '',
-        product: {
-          baseProductId: baseProductRawId,
-          price,
-          vendorCode,
-          photoMain,
-          additionalPhotos,
-          cashback: cashback ? cashback / 100 : null,
-          preOrder,
-          preOrderDays: Number(preOrderDays),
-        },
-        attributes,
-      },
-      parentID: baseProductId,
-      environment: this.context.environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
-
-        const relayErrors = fromRelayError({ source: { errors } });
-        log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        if (!isEmpty(validationErrors)) {
           this.setState({
-            variantFormErrors: validationErrors,
+            formErrors,
             isLoading: false,
           });
           return;
@@ -490,10 +217,18 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ isLoading: false });
           return;
         }
-        this.handleShippingSave({ baseProductRawId, storeId });
+        if (response) {
+          const { createBaseProductWithVariants } = response;
+          const baseProductRawId = createBaseProductWithVariants.rawId;
+          this.handleSaveShipping({
+            baseProductRawId,
+            storeId: storeRawId,
+            isAddVariant,
+          });
+        }
       },
       onError: (error: Error) => {
-        this.setState(() => ({ isLoading: false }));
+        this.setState({ isLoading: false });
         log.error(error);
         this.props.showAlert({
           type: 'danger',
@@ -502,14 +237,15 @@ class NewProduct extends Component<PropsType, StateType> {
         });
       },
     };
-    CreateProductWithAttributesMutation.commit(params);
+    CreateBaseProductWithVariantsMutation.commit(params);
   };
 
-  handleShippingSave = (props: {
+  handleSaveShipping = (props: {
     baseProductRawId: number,
     storeId: number,
+    isAddVariant?: boolean,
   }) => {
-    const { baseProductRawId, storeId } = props;
+    const { baseProductRawId, storeId, isAddVariant } = props;
     const { shippingData } = this.state;
     if (!shippingData) {
       this.props.showAlert({
@@ -584,14 +320,16 @@ class NewProduct extends Component<PropsType, StateType> {
           });
           return;
         }
-        this.props.router.push(
-          `/manage/store/${storeId}/products/${parseInt(baseProductRawId, 10)}`,
-        );
         this.props.showAlert({
           type: 'success',
           text: 'Product created!',
           link: { text: '' },
         });
+        this.props.router.push(
+          `/manage/store/${storeId}/products/${parseInt(baseProductRawId, 10)}${
+            isAddVariant ? '/variant/new' : ''
+          }`,
+        );
       },
       onError: (error: Error) => {
         this.setState({ isLoading: false });
@@ -606,21 +344,11 @@ class NewProduct extends Component<PropsType, StateType> {
     UpsertShippingMutation.commit(params);
   };
 
-  handleOnChangeVariantForm = (variantData: ?VariantType) => {
-    this.setState({ variantData });
-  };
-
-  handleOnChangeShipping = (shippingData: ?FullShippingType) => {
+  handleChangeShipping = (shippingData: ?FullShippingType) => {
     this.setState({ shippingData });
   };
 
-  resetVariantFormErrors = (field: string) => {
-    this.setState({
-      variantFormErrors: omit([field], this.state.variantFormErrors),
-    });
-  };
-
-  handleCreateAttribute = (attribute: AttributeType) => {
+  handleCreateAttribute = (attribute: CustomAttributeType) => {
     this.setState((prevState: StateType) => ({
       customAttributes: prepend(attribute, prevState.customAttributes),
     }));
@@ -643,32 +371,26 @@ class NewProduct extends Component<PropsType, StateType> {
     const {
       isLoading,
       availablePackages,
-      variantData,
       shippingData,
-      variantFormErrors,
       customAttributes,
+      formErrors,
     } = this.state;
-    console.log('---this.state', this.state);
 
     return (
       <AppContext.Consumer>
         {({ directories }) => (
           <div styleName="wrap">
             <Form
-              onSave={this.handleSave}
-              validationErrors={this.state.formErrors}
-              categories={this.context.directories.categories}
               baseProduct={null}
               isLoading={isLoading}
-              currencies={directories.currencies}
               availablePackages={availablePackages}
-              variantData={variantData}
-              onChangeVariantForm={this.handleOnChangeVariantForm}
-              onChangeShipping={this.handleOnChangeShipping}
               shippingData={shippingData}
-              resetVariantFormErrors={this.resetVariantFormErrors}
-              variantFormErrors={variantFormErrors}
               customAttributes={customAttributes}
+              formErrors={formErrors}
+              onSave={this.handleSave}
+              categories={directories.categories}
+              currencies={directories.currencies}
+              onChangeShipping={this.handleChangeShipping}
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
               onResetAttribute={this.handleResetAttribute}

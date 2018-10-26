@@ -132,12 +132,6 @@
   font-size: 12px;
 
   svg {transition: $transition_all_ease;}
-
-  &.isOpen {
-    svg {
-      transform: rotate(180deg);
-    }
-  }
 }
 
 .tdCheckbox {width: 5%;}

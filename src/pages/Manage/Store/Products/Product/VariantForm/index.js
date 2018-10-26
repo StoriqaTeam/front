@@ -3,19 +3,18 @@
 import React, { Component, Fragment } from 'react';
 import {
   append,
-  assocPath,
   find,
   isEmpty,
   isNil,
   map,
-  omit,
   propEq,
   reject,
   pathOr,
   head,
   dissoc,
   keys,
-  filter, contains
+  filter,
+  contains,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { validate } from '@storiqa/shared';
@@ -25,48 +24,31 @@ import { Icon } from 'components/Icon';
 
 import { log, fromRelayError } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
+import { renameKeys } from 'utils/ramda';
 
 import {
   UpdateProductMutation,
   CreateProductWithAttributesMutation,
 } from 'relay/mutations';
 
+import type {
+  ProductType,
+  ValueForAttributeInputType,
+  GetAttributeType,
+  FormErrorsType,
+  AttributeValueType,
+} from 'pages/Manage/Store/Products/types';
+
 import type { SelectItemType } from 'types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { MutationParamsType as CreateProductWithAttributesMutationType } from 'relay/mutations/CreateProductWithAttributesMutation';
 
-import Characteristics from '../Characteristics/Characteristics';
-import Photos from '../Photos/Photos';
-import Warehouses from '../Warehouses/Warehouses';
+import Characteristics from '../Characteristics';
+import Photos from '../Photos';
+import Warehouses from '../Warehouses';
 
 import './VariantForm.scss';
-
-type ValueForAttributeInputType = {
-  attr: any,
-  variant: any,
-};
-
-type AttributeType = {
-  id: string,
-  rawId: number,
-  name: {
-    lang: string,
-    text: string,
-  },
-};
-
-type FormErrorsType = {
-  vendorCode?: Array<string>,
-  price?: Array<string>,
-  attributes?: Array<string>,
-};
-
-type AttributeValueType = {
-  attrId: number,
-  value: string,
-  metaField?: ?string,
-};
 
 type StateType = {
   vendorCode: ?string,
@@ -84,45 +66,41 @@ type StateType = {
 };
 
 type PropsType = {
-  variant: any,
-  cancelVariantForm: () => void,
-  currency: SelectItemType,
+  cancelVariantForm: (isClose?: boolean) => void,
   customAttributes: any,
-  mainVariant: any,
+  mainVariant: ?ProductType,
+  variant: ?ProductType | 'new',
+  showAlert: (input: AddAlertInputType) => void,
+  environment: Environment,
   productId: string,
   productRawId: number,
-
-
-
-
-  environment: Environment,
-  showAlert: (input: AddAlertInputType) => void,
+  currency: ?SelectItemType,
 };
 
 class VariantForm extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    const { customAttributes, variant } = props;
-    console.log('---variant', variant);
-
+    const { customAttributes, variant, mainVariant } = props;
     let state = {};
 
-    if (isEmpty(variant)) {
+    if (mainVariant && (!variant || variant === 'new')) {
       state = {
         vendorCode: null,
         price: null,
         cashback: null,
         discount: null,
-        photoMain: null,
-        photos: [],
+        photoMain: mainVariant.photoMain,
+        photos: mainVariant.additionalPhotos,
         attributeValues: !isEmpty(customAttributes)
           ? this.resetAttrValues(customAttributes, null)
           : [],
         preOrderDays: '',
         preOrder: false,
       };
-    } else {
+    }
+
+    if (variant && variant !== 'new') {
       const {
         vendorCode,
         price,
@@ -143,7 +121,7 @@ class VariantForm extends Component<PropsType, StateType> {
         attributeValues: !isEmpty(customAttributes)
           ? this.resetAttrValues(customAttributes, variant)
           : [],
-        preOrderDays,
+        preOrderDays: `${preOrderDays || ''}`,
         preOrder,
       };
     }
@@ -152,9 +130,11 @@ class VariantForm extends Component<PropsType, StateType> {
       ...state,
       formErrors: {},
       isLoading: false,
-      scrollArr: ['vendorCode', 'price'],
+      scrollArr: ['vendorCode', 'price', 'attributes'],
     };
-    window.scroll({ top: 0 });
+    if (process.env.BROWSER) {
+      window.scroll({ top: 0 });
+    }
   }
 
   handleAddMainPhoto = (url: string) => {
@@ -173,7 +153,6 @@ class VariantForm extends Component<PropsType, StateType> {
       this.setState({ photoMain: null });
       return;
     }
-    // $FlowIgnoreMe
     this.setState({ photos: reject(n => url === n, photos) });
   };
 
@@ -212,7 +191,10 @@ class VariantForm extends Component<PropsType, StateType> {
     this.setState({ [id]: parseFloat(value) });
   };
 
-  resetAttrValues = (customAttributes: Array<AttributeType>, variant) => {
+  resetAttrValues = (
+    customAttributes: Array<GetAttributeType>,
+    variant: ?ProductType,
+  ) => {
     // $FlowIgnoreMe
     const attributeValues = pathOr(
       null,
@@ -242,6 +224,7 @@ class VariantForm extends Component<PropsType, StateType> {
     const { attr, variant } = input;
     const attrFromVariant =
       variant &&
+      variant.attributes &&
       find(item => item.attribute.rawId === attr.rawId, variant.attributes);
     if (attrFromVariant && attrFromVariant.value) {
       return {
@@ -259,7 +242,6 @@ class VariantForm extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         value: pathOr(
           '',
-          // $FlowIgnoreMe
           [0, 'translations', 0, 'text'],
           translatedValues || [],
         ),
@@ -271,7 +253,10 @@ class VariantForm extends Component<PropsType, StateType> {
   };
 
   handleChangeValues = (values: Array<AttributeValueType>) => {
-    this.setState({ attributeValues: values });
+    this.setState((prevState: StateType) => ({
+      attributeValues: values,
+      formErrors: dissoc('attributes', prevState.formErrors),
+    }));
   };
 
   preOrderDaysInput: ?HTMLInputElement;
@@ -304,14 +289,16 @@ class VariantForm extends Component<PropsType, StateType> {
     this.setState((prevState: StateType) => ({
       preOrder: !prevState.preOrder,
     }));
-    if (this.preOrderDaysInput && !this.state.preOrder && !this.state.preOrderDays) {
+    if (
+      this.preOrderDaysInput &&
+      !this.state.preOrder &&
+      !this.state.preOrderDays
+    ) {
       this.preOrderDaysInput.focus();
     }
   };
 
-  handleSave = () => {
-
-  };
+  handleSave = () => {};
 
   validate = () => {
     const { errors } = validate(
@@ -321,16 +308,16 @@ class VariantForm extends Component<PropsType, StateType> {
       },
       this.state,
     );
-    console.log('---errors', errors);
     if (errors && !isEmpty(errors)) {
-      const { scrollArr } = this.state;
-      const oneArr = filter(
-        item => contains(item, keys(errors)),
-        scrollArr,
-      );
-      smoothscroll.scrollTo(head(oneArr));
+      this.scrollToError(errors);
     }
     return errors;
+  };
+
+  scrollToError = (errors: FormErrorsType) => {
+    const { scrollArr } = this.state;
+    const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
+    smoothscroll.scrollTo(head(oneArr));
   };
 
   handleCreateVariant = () => {
@@ -353,13 +340,14 @@ class VariantForm extends Component<PropsType, StateType> {
       preOrderDays,
       attributeValues,
     } = this.state;
+    this.setState({ isLoading: true });
     const params: CreateProductWithAttributesMutationType = {
       input: {
         clientMutationId: '',
         product: {
           baseProductId: productRawId,
           price: price || 0,
-          vendorCode: vendorCode|| '',
+          vendorCode: vendorCode || '',
           photoMain,
           additionalPhotos: photos,
           cashback: cashback ? cashback / 100 : null,
@@ -381,7 +369,12 @@ class VariantForm extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.setState({ formErrors: validationErrors });
+          const formErrors = renameKeys(
+            { vendor_code: 'vendorCode' },
+            validationErrors,
+          );
+          this.setState({ formErrors });
+          this.scrollToError(formErrors);
           return;
         }
 
@@ -444,6 +437,9 @@ class VariantForm extends Component<PropsType, StateType> {
       return;
     }
     const { cancelVariantForm, variant } = this.props;
+    if (!variant || variant === 'new') {
+      return;
+    }
     const {
       price,
       vendorCode,
@@ -455,6 +451,7 @@ class VariantForm extends Component<PropsType, StateType> {
       preOrderDays,
       attributeValues,
     } = this.state;
+    this.setState({ isLoading: true });
     const params: UpdateProductMutationType = {
       input: {
         clientMutationId: '',
@@ -482,9 +479,12 @@ class VariantForm extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.setState({
-            formErrors: validationErrors,
-          });
+          const formErrors = renameKeys(
+            { vendor_code: 'vendorCode' },
+            validationErrors,
+          );
+          this.setState({ formErrors });
+          this.scrollToError(formErrors);
           return;
         }
 
@@ -539,7 +539,12 @@ class VariantForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { cancelVariantForm, currency, customAttributes, variant } = this.props;
+    const {
+      cancelVariantForm,
+      currency,
+      customAttributes,
+      variant,
+    } = this.props;
     const {
       photos,
       photoMain,
@@ -553,14 +558,9 @@ class VariantForm extends Component<PropsType, StateType> {
       preOrder,
       preOrderDays,
     } = this.state;
-    console.log('---this.props', this.props);
-    console.log('---this.state', this.state);
     return (
       <div styleName="container">
-        <button
-          styleName="cross"
-          onClick={cancelVariantForm}
-        >
+        <button styleName="cross" onClick={() => cancelVariantForm(true)}>
           <Icon type="cross" size={16} />
         </button>
         <div styleName="title">
@@ -674,30 +674,44 @@ class VariantForm extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName="warehouses">
-          {!isEmpty(variant) && <Warehouses stocks={variant.stocks} />}
+          {variant &&
+            !isEmpty(variant) &&
+            variant !== 'new' && <Warehouses stocks={variant.stocks} />}
         </div>
-        <div styleName="buttons">
-          <div styleName="saveButton">
-            <Button
-              big
-              fullWidth
-              onClick={isEmpty(variant) ? this.handleCreateVariant : this.handleUpdateVariant}
-              dataTest="saveVariantButton"
-              isLoading={isLoading}
-            >
-              Save
-            </Button>
+        <div styleName="footer">
+          <div styleName="buttons">
+            <div styleName="saveButton">
+              <Button
+                big
+                fullWidth
+                onClick={
+                  isEmpty(variant)
+                    ? this.handleCreateVariant
+                    : this.handleUpdateVariant
+                }
+                dataTest="saveVariantButton"
+                isLoading={isLoading}
+              >
+                Save
+              </Button>
+            </div>
+            <div styleName="cancelButton">
+              <Button
+                big
+                fullWidth
+                wireframe
+                onClick={() => {
+                  cancelVariantForm(true);
+                }}
+                dataTest="cancelVariantButton"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
-          <div styleName="cancelButton">
-            <Button
-              big
-              fullWidth
-              wireframe
-              onClick={cancelVariantForm}
-              dataTest="cancelVariantButton"
-            >
-              Cancel
-            </Button>
+          <div styleName="warnText">
+            You can’t save this variant&nbsp;- you have already have the same
+            one.
           </div>
         </div>
       </div>

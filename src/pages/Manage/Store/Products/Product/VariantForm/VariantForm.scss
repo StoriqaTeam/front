@@ -64,16 +64,27 @@
 
 }
 
-.buttons {
+.footer {
   display: flex;
+  align-items: center;
   margin-top: 4rem;
 
-  .saveButton {
-    width: 22.5rem;
+  .buttons {
+    display: flex;
+
+    .saveButton {
+      width: 22.5rem;
+    }
+
+    .cancelButton {
+      width: 22.5rem;
+      margin-left: 2rem;
+    }
   }
 
-  .cancelButton {
-    width: 22.5rem;
+  .warnText {
     margin-left: 2rem;
+    font-size: 14px;
+    color: $color_pink;
   }
 }
