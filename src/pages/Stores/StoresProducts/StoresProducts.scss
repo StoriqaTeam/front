@@ -1,11 +1,11 @@
-@import "../../styles/variables";
+@import "../../../styles/variables";
 
 .container {
   align-items: stretch;
   display: none;
   justify-content: flex-end;
 
-  @media (min-width: 576px) {
+  @media (min-width: $sm) {
     display: flex;
   }
 

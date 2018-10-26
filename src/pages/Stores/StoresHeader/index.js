@@ -34,12 +34,18 @@ const StoresHeader = ({
     <Col sm={2} md={2} lg={2} xl={2}>
       <div styleName="countInfo">
         {title}
-        {searchValue && <span> {t.with} {searchValue} {t.inTheTitle}</span>}
+        {searchValue && (
+          <span>
+            {' '}
+            {t.with} {searchValue} {t.inTheTitle}
+          </span>
+        )}
       </div>
     </Col>
     <Col sm={10} md={10} lg={10} xl={10}>
       <div styleName="breadcrumbs">
-        {t.allStores}{category && ` / ${category.label}`}
+        {t.allStores}
+        {category && ` / ${category.label}`}
       </div>
     </Col>
   </Row>

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { head, map, pathOr } from 'ramda';
 import { Link } from 'found';
@@ -31,7 +32,7 @@ const StoresProducts = ({ storeId, findMostViewedProducts }: PropsType) => (
               {photoMain ? (
                 <img src={convertSrc(photoMain, 'small')} alt="img" />
               ) : (
-                <Icon type="camera" size="32" />
+                <Icon type="camera" size={32} />
               )}
             </div>
           </Link>
