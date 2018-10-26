@@ -39,6 +39,8 @@ type PropsType = {
     [string]: Array<string>,
   },
   unselectedAttr: Array<string>,
+  onChangeQuantity: (quantity: number) => void,
+  cartQuantity: number,
 };
 
 class ProductDetails extends Component<PropsType, StateType> {
@@ -148,7 +150,14 @@ class ProductDetails extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { productTitle, productDescription, widgets, children } = this.props;
+    const {
+      productTitle,
+      productDescription,
+      widgets,
+      children,
+      onChangeQuantity,
+      cartQuantity,
+    } = this.props;
     const { priceUsd } = this.state;
     return (
       <ProductContext.Consumer>
@@ -167,6 +176,8 @@ class ProductDetails extends Component<PropsType, StateType> {
               quantity={productVariant.quantity}
               preOrder={productVariant.preOrder}
               preOrderDays={productVariant.preOrderDays}
+              onChangeQuantity={onChangeQuantity}
+              cartQuantity={cartQuantity}
             />
             {children}
           </div>
