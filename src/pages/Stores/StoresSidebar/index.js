@@ -10,11 +10,13 @@ import { Select } from 'components/common/Select';
 import { urlToInput, inputToUrl } from 'utils';
 
 import type { SelectItemType } from 'types';
-import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
+import type { Stores_search as SearchType } from '../__generated__/Stores_search.graphql';
 
-import { fromQueryString, fromSearchFilters } from './StoreUtils';
+import { fromQueryString, fromSearchFilters } from '../StoreUtils';
 
 import './StoresSidebar.scss';
+
+import t from './i18n';
 
 type PropsType = {
   router: routerShape,
@@ -85,7 +87,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
             <Select
               forSearch
               withEmpty
-              label="Categories"
+              label={t.labelCategories}
               activeItem={category}
               items={categories}
               onSelect={item => this.handleClick('category', item)}
@@ -96,7 +98,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
             <Select
               forSearch
               withEmpty
-              label="Location"
+              label={t.labelLocation}
               activeItem={country}
               items={countries}
               onSelect={item => this.handleClick('country', item)}
@@ -112,7 +114,7 @@ class StoresSidebar extends Component<PropsType, StateType> {
             dataTest="apply"
             style={{ width: '100%' }}
           >
-            Apply
+            {t.apply}
           </Button>
         </div>
       </div>
