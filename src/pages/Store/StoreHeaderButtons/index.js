@@ -7,6 +7,8 @@ import { Icon } from 'components/Icon';
 
 import './StoreHeaderButtons.scss';
 
+import t from './i18n';
+
 const StoreHeaderButtons = () => (
   <div styleName="container">
     <Button disabled big>
@@ -14,7 +16,7 @@ const StoreHeaderButtons = () => (
         <span styleName="buttonIcon email">
           <Icon type="email" size={20} />
         </span>
-        Message <span styleName="message">to seller</span>
+        {t.message} <span styleName="message">{t.toSeller}</span>
       </span>
     </Button>
     <Button disabled big wireframe onClick={() => {}}>
@@ -22,7 +24,7 @@ const StoreHeaderButtons = () => (
         <span styleName="buttonIcon phone">
           <Icon type="phone" size={20} />
         </span>{' '}
-        Call seller
+        {t.callSeller}
       </span>
     </Button>
   </div>
