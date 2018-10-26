@@ -5,17 +5,24 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  storesFound: string,
-  noStoresFound: string,
-  loadMore: string,
+  verifiedSuccessfully: string,
+  somethingGoingWrong: string,
+  close: string,
+  loading: string,
+  pleaseWait: string,
+  storiqaTeam: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    storesFound: 'stores found',
-    noStoresFound: 'No stores found',
-    loadMore: 'Load More',
+    verifiedSuccessfully:
+      'Verified successfully. Please login with your login data.',
+    somethingGoingWrong: 'Something going wrong',
+    close: 'Close.',
+    loading: 'Loading...',
+    pleaseWait: 'Please Wait',
+    storiqaTeam: 'Storiqa team',
   },
 };
 
