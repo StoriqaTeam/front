@@ -40,7 +40,9 @@ const ProductStore = () => (
                 </div>
               </Link>
               <div styleName="storeDetails">
-                <p>{store.productsCount} {t.goods}</p>
+                <p>
+                  {store.productsCount} {t.goods}
+                </p>
                 <p>0 {t.userReviews}</p>
               </div>
             </div>

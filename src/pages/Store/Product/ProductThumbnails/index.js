@@ -10,9 +10,9 @@ import { Icon } from 'components/Icon';
 
 import './ProductThumbnails.scss';
 
-import { sortByProp } from './utils';
+import { sortByProp } from '../utils';
 
-import type { WidgetOptionType } from './types';
+import type { WidgetOptionType } from '../types';
 
 type PropsType = {
   /* eslint-disable react/no-unused-prop-types */
