@@ -17,11 +17,13 @@ import StoresSidebar from './StoresSidebar';
 import StoresHeader from './StoresHeader';
 import StoresRow from './StoresRow';
 
-import './Stores.scss';
-
 import storesData from './stores.json';
 
 import type { Stores_search as SearchType } from './__generated__/Stores_search.graphql';
+
+import './Stores.scss';
+
+import t from './i18n';
 
 type SelectedType = {
   id: string,
@@ -95,7 +97,7 @@ class Stores extends Component<PropsType, StateType> {
     );
     const title = (
       <span>
-        <b>{totalCount}</b> stores found
+        <b>{totalCount}</b> {t.storesFound}
       </span>
     );
     return (
@@ -133,7 +135,7 @@ class Stores extends Component<PropsType, StateType> {
                   stores,
                 )
               ) : (
-                <div>No stores found</div>
+                <div>{t.noStoresFound}</div>
               )}
               {this.props.relay.hasMore() && (
                 <div styleName="button">
@@ -143,7 +145,7 @@ class Stores extends Component<PropsType, StateType> {
                     onClick={this.storesReFetch}
                     dataTest="searchStoresLoadMoreButton"
                   >
-                    Load more
+                    {t.loadMore}
                   </Button>
                 </div>
               )}
