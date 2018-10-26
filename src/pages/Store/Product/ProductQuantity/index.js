@@ -1,9 +1,12 @@
+// @flow strict
 import React from 'react';
 import classNames from 'classnames';
 
 import Stepper from 'components/Stepper';
 
 import './ProductQuantity.scss';
+
+import t from './i18n';
 
 type PropsType = {
   quantity: number,
@@ -14,7 +17,7 @@ type PropsType = {
 const ProductQuantity = (props: PropsType) => (
   <div styleName="container">
     <div styleName="title">
-      <strong>Amount</strong>
+      <strong>{t.amount}</strong>
     </div>
     <div styleName="counter">
       <Stepper
@@ -23,13 +26,13 @@ const ProductQuantity = (props: PropsType) => (
         max={props.quantity}
         onChange={() => {}}
       />
-      <p styleName="stock">Remaining stock:</p>
+      <p styleName="stock">{t.remainingStock}</p>
       <span
         styleName={classNames('inStock', {
           zeroQuantity: props.quantity === 0,
         })}
       >
-        {`In stock (${props.quantity})`}
+        {`${t.inStock} (${props.quantity})`}
       </span>
     </div>
     {props.quantity === 0 &&
@@ -37,12 +40,12 @@ const ProductQuantity = (props: PropsType) => (
       props.preOrderDays && (
         <div styleName="preOrder">
           <div styleName="title">
-            <strong>Pre order</strong>
+            <strong>{t.preOrder}</strong>
           </div>
           <div styleName="preOrderText">
-            <div>Available for pre-order.</div>
+            <div>{t.availableForPreOrder}</div>
             <div>
-              Lead time (days):{' '}
+              {t.leadTime}{' '}
               <span styleName="preOrderDays">{props.preOrderDays}</span>
             </div>
           </div>
