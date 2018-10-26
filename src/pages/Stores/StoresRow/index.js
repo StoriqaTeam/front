@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import { pathOr } from 'ramda';
@@ -6,8 +6,8 @@ import { pathOr } from 'ramda';
 import { Icon } from 'components/Icon';
 import { Row, Col } from 'layout';
 
-import StoresProducts from './StoresProducts';
-import StoresData from './StoresData';
+import StoresProducts from '../StoresProducts';
+import StoresData from '../StoresData';
 
 import './StoresRow.scss';
 
