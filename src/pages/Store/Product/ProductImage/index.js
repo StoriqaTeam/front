@@ -8,13 +8,13 @@ import { isEmpty, convertSrc } from 'utils';
 import { Slider } from 'components/Slider';
 import { Icon } from 'components/Icon';
 
-import { ProductThumbnails, ProductDiscount } from './index';
+import { ProductThumbnails, ProductDiscount } from '../index';
 
-import { getImageMeta, makeAdditionalPhotos } from './utils';
+import { getImageMeta, makeAdditionalPhotos } from '../utils';
 
 import './ProductImage.scss';
 
-import type { WidgetOptionType } from './types';
+import type { WidgetOptionType } from '../types';
 
 type PropsType = {
   rawId: number,
