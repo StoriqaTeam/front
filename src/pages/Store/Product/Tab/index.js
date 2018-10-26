@@ -1,11 +1,12 @@
-// @flow
+// @flow strict
 
-import * as React from 'react';
+import React from 'react';
+import type { Node } from 'react';
 
 import './Tab.scss';
 
 type PropsType = {
-  children: React.Node,
+  children: Node,
 };
 
 const Tab = (props: PropsType) => <div styleName="tab">{props.children}</div>;
