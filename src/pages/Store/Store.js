@@ -16,32 +16,34 @@ import { StoreContext, StoreHeader } from './index';
 
 import './Store.scss';
 
+import t from './i18n';
+
 const tabs = [
   {
     id: 'shop',
-    title: 'Shop',
+    title: t.shop,
     isNew: false,
     link: '',
   },
   {
     id: 'items',
-    title: 'Items',
+    title: t.items,
     isNew: false,
     link: '/items',
   },
   {
     id: 'reviews',
-    title: 'Reviews',
+    title: t.reviews,
     isNew: false,
   },
   {
     id: 'actions',
-    title: 'Actions',
+    title: t.actions,
     isNew: true,
   },
   {
     id: 'about',
-    title: 'About',
+    title: t.about,
     isNew: false,
     link: '/about',
   },
@@ -74,7 +76,7 @@ class Store extends PureComponent<PropsType> {
   render() {
     const { children, store } = this.props;
     if (isNil(store)) {
-      return <div styleName="storeNotFound">Store Not Found</div>;
+      return <div styleName="storeNotFound">{t.storeNotFound}</div>;
     }
     // $FlowIgnore
     const logo = pathOr(null, ['logo'], store);
