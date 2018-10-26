@@ -14,7 +14,7 @@ import {
   HeaderDisclaimer,
 } from 'components/App';
 
-import './Page.scss';
+import './PageDecorator.scss';
 
 type PropsType = {
   me: ?{},
