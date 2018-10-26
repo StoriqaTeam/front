@@ -8,8 +8,8 @@
 
 .cross {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 3.25rem;
+  right: 3rem;
   width: 3rem;
   height: 3rem;
   cursor: pointer;
@@ -20,6 +20,18 @@
   line-height: 18px;
   text-transform: uppercase;
   letter-spacing: 1.2px;
+
+  &.titleGeneral {
+    margin-top: 4rem;
+  }
+
+  &.titlePricing {
+    margin-top: 4rem;
+  }
+
+  &.titleCharacteriscics {
+    margin-top: 6rem;
+  }
 }
 
 .photos {
@@ -60,6 +72,10 @@
   }
 }
 
+.characteristics {
+
+}
+
 .warehouses {
 
 }
@@ -68,6 +84,10 @@
   display: flex;
   align-items: center;
   margin-top: 4rem;
+
+  @media (max-width: #{$md - 1px}) {
+    display: block;
+  }
 
   .buttons {
     display: flex;
@@ -86,5 +106,10 @@
     margin-left: 2rem;
     font-size: 14px;
     color: $color_pink;
+
+    @media (max-width: #{$md - 1px}) {
+      margin-left: 0;
+      margin-top: 1rem;
+    }
   }
 }

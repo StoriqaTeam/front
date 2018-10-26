@@ -575,7 +575,7 @@ class VariantForm extends Component<PropsType, StateType> {
             onRemovePhoto={this.handleRemovePhoto}
           />
         </div>
-        <div styleName="title">
+        <div styleName="title titleGeneral">
           <strong>General settings</strong>
         </div>
         <div styleName="formItem">
@@ -593,7 +593,7 @@ class VariantForm extends Component<PropsType, StateType> {
             dataTest="variantVendorcodeInput"
           />
         </div>
-        <div styleName="title">
+        <div styleName="title titlePricing">
           <strong>Pricing</strong>
         </div>
         <div styleName="formItem">
@@ -630,10 +630,10 @@ class VariantForm extends Component<PropsType, StateType> {
         </div>
         {!isEmpty(customAttributes) && (
           <Fragment>
-            <div styleName="title">
+            <div styleName="title titleCharacteriscics">
               <strong>Characteristics</strong>
             </div>
-            <div styleName="formItem">
+            <div styleName="characteristics">
               <Characteristics
                 customAttributes={customAttributes}
                 values={attributeValues || []}
@@ -685,7 +685,7 @@ class VariantForm extends Component<PropsType, StateType> {
                 big
                 fullWidth
                 onClick={
-                  isEmpty(variant)
+                  variant === 'new'
                     ? this.handleCreateVariant
                     : this.handleUpdateVariant
                 }

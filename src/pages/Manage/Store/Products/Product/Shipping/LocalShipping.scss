@@ -92,10 +92,21 @@
   }
 }
 
-.emptyPackegesText, .error {
+.emptyPackegesText {
   margin-top: 2rem;
   font-size: 14px;
   color: $color_red;
+}
+
+.error {
+  opacity: 0;
+  margin-top: 2rem;
+  font-size: 14px;
+  color: $color_red;
+
+  &.show {
+    opacity: 1;
+  }
 }
 
 .emptyPackegesText + .error {

@@ -63,7 +63,7 @@ import Warehouses from './Warehouses';
 import Tabs from './Tabs';
 import Characteristics from './Characteristics';
 import VariantForm from './VariantForm';
-import Index from './AdditionalAttributes';
+import AdditionalAttributes from './AdditionalAttributes';
 
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
@@ -427,6 +427,15 @@ class Form extends Component<PropsType, StateType> {
         shippingErrors,
       );
     }
+    if (isEmpty(this.state.formErrors)) {
+      if (shippingErrors && shippingErrors.local) {
+        smoothscroll.scrollTo('localShippingError');
+      }
+      if (shippingErrors && !shippingErrors.local && shippingErrors.inter) {
+        smoothscroll.scrollTo('interShippingError');
+      }
+    }
+
     return shippingErrors;
   };
 
@@ -437,8 +446,12 @@ class Form extends Component<PropsType, StateType> {
       shippingErrors: null,
     });
     const preValidationErrors = this.validate();
-    if (preValidationErrors) {
-      this.setState({ formErrors: preValidationErrors || {} });
+    const shippingValidationErrors = this.shippingValidate();
+    if (preValidationErrors || shippingValidationErrors) {
+      this.setState({
+        formErrors: preValidationErrors || {},
+        shippingErrors: shippingValidationErrors || null,
+      });
       return;
     }
     this.props.onSave(
@@ -651,6 +664,17 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
+  handleSaveShipping = (onlyShippingSave?: boolean) => {
+    const shippingValidationErrors = this.shippingValidate();
+    if (shippingValidationErrors) {
+      this.setState({
+        shippingErrors: shippingValidationErrors || null,
+      });
+      return;
+    }
+    this.props.onSaveShipping(onlyShippingSave);
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
@@ -720,7 +744,6 @@ class Form extends Component<PropsType, StateType> {
       onRemoveAttribute,
       customAttributes,
       environment,
-      onSaveShipping,
       isLoadingShipping,
       showAlert,
     } = this.props;
@@ -809,7 +832,7 @@ class Form extends Component<PropsType, StateType> {
                 onAddPhoto={this.handleAddPhoto}
                 onRemovePhoto={this.handleRemovePhoto}
               />
-              <div styleName="title">
+              <div styleName="title titleGeneral">
                 <strong>General settings</strong>
               </div>
               <div styleName="formItem">
@@ -881,7 +904,7 @@ class Form extends Component<PropsType, StateType> {
                     <div styleName="categoryError">{formErrors.categoryId}</div>
                   )}
               </div>
-              <div styleName="title">
+              <div styleName="title titlePricing">
                 <strong>PRICING</strong>
               </div>
               <div styleName="formItem">
@@ -928,11 +951,11 @@ class Form extends Component<PropsType, StateType> {
                 (!baseProduct ||
                   (!isEmpty(customAttributes) && baseProduct)) && (
                   <Fragment>
-                    <div styleName="title">
+                    <div styleName="title titleCharacteriscics">
                       <strong>Characteriscics</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
-                      <Index
+                      <AdditionalAttributes
                         onlyView={Boolean(baseProduct)}
                         // $FlowIgnore
                         attributes={defaultAttributes}
@@ -944,7 +967,7 @@ class Form extends Component<PropsType, StateType> {
                   </Fragment>
                 )}
               {!isEmpty(customAttributes) && (
-                <div styleName="formItem additionalAttributes">
+                <div styleName="characteristics">
                   <Characteristics
                     customAttributes={customAttributes}
                     values={attributeValues || []}
@@ -953,34 +976,32 @@ class Form extends Component<PropsType, StateType> {
                   />
                 </div>
               )}
-              <div styleName="formItem">
-                <div styleName="preOrder">
-                  <div styleName="preOrderTitle">
-                    <div styleName="title">
-                      <strong>Available for pre-order</strong>
-                    </div>
-                    <div styleName="preOrderCheckbox">
-                      <Checkbox
-                        inline
-                        id="preOrderCheckbox"
-                        isChecked={preOrder}
-                        onChange={this.handleOnChangePreOrder}
-                      />
-                    </div>
+              <div styleName="preOrder">
+                <div styleName="preOrderTitle">
+                  <div styleName="title">
+                    <strong>Available for pre-order</strong>
                   </div>
-                  <div styleName="preOrderDaysInput">
-                    <Input
-                      inputRef={node => {
-                        this.preOrderDaysInput = node;
-                      }}
-                      fullWidth
-                      label="Lead time (days)"
-                      onChange={this.handleOnChangePreOrderDays}
-                      onBlur={this.handleOnBlurPreOrderDays}
-                      value={preOrderDays || ''}
-                      dataTest="variantPreOrderDaysInput"
+                  <div styleName="preOrderCheckbox">
+                    <Checkbox
+                      inline
+                      id="preOrderCheckbox"
+                      isChecked={preOrder}
+                      onChange={this.handleOnChangePreOrder}
                     />
                   </div>
+                </div>
+                <div styleName="preOrderDaysInput">
+                  <Input
+                    inputRef={node => {
+                      this.preOrderDaysInput = node;
+                    }}
+                    fullWidth
+                    label="Lead time (days)"
+                    onChange={this.handleOnChangePreOrderDays}
+                    onBlur={this.handleOnBlurPreOrderDays}
+                    value={preOrderDays || ''}
+                    dataTest="variantPreOrderDaysInput"
+                  />
                 </div>
               </div>
               <div styleName="warehouses">
@@ -1090,7 +1111,7 @@ class Form extends Component<PropsType, StateType> {
                               big
                               fullWidth
                               onClick={() => {
-                                onSaveShipping(true);
+                                this.handleSaveShipping(true);
                               }}
                               dataTest="saveShippingButton"
                               isLoading={isLoadingShipping}

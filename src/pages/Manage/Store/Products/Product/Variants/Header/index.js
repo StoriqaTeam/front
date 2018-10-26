@@ -53,11 +53,10 @@ const Header = (props: PropsType) => (
       </div>
     </div>
     <div styleName="headerItem tdBasket">
-      <button styleName="deleteButton">
+      {/* <button styleName="deleteButton">
         <Icon type="basket" size={32} />
-      </button>
+      </button> */}
     </div>
-    <div styleName="headerItem tdDropdawn" />
   </div>
 );
 

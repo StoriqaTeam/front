@@ -75,20 +75,12 @@ class Row extends PureComponent<PropsType> {
           </div>
           <div styleName="td tdCashback">
             <span styleName="text cashbackText">
-              <strong>
-                {Math.round(cashback * 100) != null
-                  ? Math.round(cashback * 100)
-                  : null}
-              </strong>%
+              <strong>{!cashback ? 0 : Math.round(cashback * 100)}</strong>%
             </span>
           </div>
           <div styleName="td tdDiscount">
             <span styleName="text discountText">
-              <strong>
-                {Math.round(discount * 100) != null
-                  ? Math.round(discount * 100)
-                  : null}
-              </strong>%
+              <strong>{!discount ? 0 : Math.round(discount * 100)}</strong>%
             </span>
           </div>
           <div styleName="td tdCharacteristics">
@@ -168,11 +160,6 @@ class Row extends PureComponent<PropsType> {
             >
               <Icon type="basket" size={32} />
             </button>
-          </div>
-          <div styleName="td tdDropdawn">
-            <div styleName="arrowExpand">
-              <Icon inline type="arrowExpand" />
-            </div>
           </div>
         </div>
       </div>

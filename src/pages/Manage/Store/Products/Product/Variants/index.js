@@ -81,9 +81,9 @@ class Variants extends PureComponent<PropsType> {
   render() {
     const { variants } = this.props;
     return (
-      <div className="container">
+      <div styleName="container">
         <Header onSelectAllClick={() => {}} />
-        <div className="rows">
+        <div>
           {map(
             item => (
               <Row

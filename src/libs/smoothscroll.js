@@ -21,9 +21,7 @@ const smoothScroll = {
     const node = document.getElementById(id);
     // const nodeHeight = node.offsetHeight;
     const nodeTop = node.getBoundingClientRect().top;
-    if (nodeTop > 0 && !necessarily) {
-      return;
-    }
+    const nodeHeight = node.getBoundingClientRect().height;
     // const body = document.body;
     // const html = document.documentElement;
     // const height = Math.max(
@@ -33,8 +31,17 @@ const smoothScroll = {
     //   html.scrollHeight,
     //   html.offsetHeight,
     // );
-    // const windowHeight = window.innerHeight;
+    const windowHeight = window.innerHeight;
     const offset = window.pageYOffset;
+    if (nodeTop > 0 && nodeTop + nodeHeight < windowHeight && !necessarily) {
+      return;
+    }
+
+    let scrollValue = nodeTop - 150;
+    if (nodeTop + nodeHeight > windowHeight) {
+      scrollValue = nodeTop + nodeHeight - windowHeight - 50;
+    }
+
     // const delta = nodeTop - offset;
     // const bottomScrollableY = height - windowHeight;
     // const targetY =
@@ -70,7 +77,7 @@ const smoothScroll = {
           0,
           elapsed,
           offset,
-          nodeTop - 150,
+          scrollValue,
           settings.duration,
         );
         window.scrollTo(0, yScroll);

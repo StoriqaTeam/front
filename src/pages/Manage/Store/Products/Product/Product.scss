@@ -26,11 +26,22 @@
 }
 
 .title {
-  //margin-bottom: 4rem;
   font-size: 14px;
   line-height: 18px;
   text-transform: uppercase;
   letter-spacing: 1.2px;
+
+  &.titleGeneral {
+    margin-top: 4rem;
+  }
+
+  &.titlePricing {
+    margin-top: 4rem;
+  }
+
+  &.titleCharacteriscics {
+    margin-top: 6rem;
+  }
 }
 
 .formItem {
@@ -111,7 +122,11 @@
 }
 
 .additionalAttributes {
-  margin-top: 5.5rem;
+  margin-top: 4rem;
+}
+
+.characteristics {
+
 }
 
 .inputPostfix {
@@ -121,11 +136,11 @@
 }
 
 .warehouses {
-
+  margin-top: 4rem;
 }
 
 .preOrder {
-  margin-top: 8rem;
+  margin-top: 5rem;
 
   .preOrderTitle {
     display: flex;

@@ -3,8 +3,6 @@
 import React, { PureComponent } from 'react';
 import { filter, propEq, map } from 'ramda';
 
-import { Row, Col } from 'layout';
-
 import type {
   GetAttributeType,
   AttributeValueType,
@@ -37,22 +35,19 @@ class Characteristics extends PureComponent<PropsType> {
     return (
       <div id="attributes" styleName="container">
         <div styleName="items">
-          <Row>
-            {map(
-              item => (
-                <Col key={item.id} size={12} sm={12} md={6} lg={4} xl={4}>
-                  <CharacteristicItem
-                    attribute={item}
-                    onSelect={this.handleItemChange}
-                    value={
-                      filter(propEq('attrId', item.rawId), this.props.values)[0]
-                    }
-                  />
-                </Col>
-              ),
-              customAttributes,
-            )}
-          </Row>
+          {map(
+            item => (
+              <CharacteristicItem
+                key={item.id}
+                attribute={item}
+                onSelect={this.handleItemChange}
+                value={
+                  filter(propEq('attrId', item.rawId), this.props.values)[0]
+                }
+              />
+            ),
+            customAttributes,
+          )}
         </div>
         <div styleName="errors">
           {errors &&
