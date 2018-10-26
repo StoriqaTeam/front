@@ -48,6 +48,8 @@ import type {
 
 import './Product.scss';
 
+import t from './i18n';
+
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   baseProduct: ProductType,
@@ -143,7 +145,7 @@ class Product extends Component<PropsType, StateType> {
           if (!errors && response) {
             this.props.showAlert({
               type: 'success',
-              text: 'Product added to cart!',
+              text: t.productAddedToCart,
               link: { text: '' },
             });
             this.setState({ isAddToCart: true });
@@ -154,8 +156,8 @@ class Product extends Component<PropsType, StateType> {
           log.error(error);
           this.props.showAlert({
             type: 'danger',
-            text: 'Unable to add product to cart',
-            link: { text: 'Close.' },
+            text: t.unableToAddProductToCart,
+            link: { text: t.close },
           });
         },
       });
@@ -256,10 +258,10 @@ class Product extends Component<PropsType, StateType> {
     const { baseProduct } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {
-      return <div styleName="productNotFound">Product Not Found</div>;
+      return <div styleName="productNotFound">{t.productNotFound}</div>;
     }
     if (isNil(baseProduct.store)) {
-      return <div styleName="productNotFound">Store Not Found</div>;
+      return <div styleName="productNotFound">{t.storeNotFound}</div>;
     }
     const {
       baseProduct: {
@@ -279,7 +281,7 @@ class Product extends Component<PropsType, StateType> {
       availableAttributes,
       isAddToCart,
     } = this.state;
-    const description = extractText(shortDescription, 'EN', 'No Description');
+    const description = extractText(shortDescription, 'EN', t.noDescription);
     return (
       <AppContext.Consumer>
         {({ categories }) => (
