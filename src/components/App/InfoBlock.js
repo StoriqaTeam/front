@@ -83,14 +83,6 @@ class InfoBlock extends Component<{}, StateType> {
     const { social, links } = this.state;
     return (
       <div styleName="container">
-        <p styleName="address">
-          Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong{' '}
-          <span>
-            <a href="mailto:support@storiqa.com" styleName="email">
-              support@storiqa.com
-            </a>
-          </span>
-        </p>
         <ul styleName="aboutNavBlock">
           {links.map(({ id, href, name }) => (
             <li key={id} styleName="aboutNavItem">

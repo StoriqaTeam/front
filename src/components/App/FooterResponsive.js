@@ -170,7 +170,9 @@ class FooterResponsive extends PureComponent<PropsType, StateType> {
             <Col>
               <InfoBlock />
               <div styleName="rightsBlock">
-                © Storiqa Marketplace. All rights reserved. 2018
+                © Storiqa Marketplace DBA Storiqa Global Trades Inc. (Head
+                Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong)<br />All
+                rights reserved.
               </div>
             </Col>
           </Row>

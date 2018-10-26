@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { routerShape } from 'found';
+import { join } from 'ramda';
 
 import { Button } from 'components/common/Button';
 
@@ -16,7 +17,6 @@ type PropsType = {
   isAddToCart: boolean,
   router: routerShape,
   isLoading: boolean,
-  // isDisabledBuyNowButton: boolean,
 };
 
 const ProductButtons = ({
@@ -28,8 +28,7 @@ const ProductButtons = ({
   router,
   onBuyNow,
   isLoading,
-}: // isDisabledBuyNowButton,
-PropsType) => (
+}: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
       <Button big isLoading={isLoading} onClick={onBuyNow} disabled>
@@ -53,7 +52,9 @@ PropsType) => (
       </Button>
     </div>
     {unselectedAttr && (
-      <div styleName="message">You must select an attribute</div>
+      <div styleName="message">
+        You must select an attribute(s): {join(', ', unselectedAttr)}
+      </div>
     )}
   </div>
 );

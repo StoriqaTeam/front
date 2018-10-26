@@ -327,7 +327,12 @@ class EditProduct extends Component<PropsType, StateType> {
           this.setState({ isLoading: false });
           return;
         }
-        this.handleSaveShipping();
+        this.props.showAlert({
+          type: 'success',
+          text: 'Product update!',
+          link: { text: '' },
+        });
+        // this.handleSaveShipping();
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));

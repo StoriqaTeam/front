@@ -1,13 +1,18 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'components/Icon';
 import { UploadWrapper } from 'components/Upload';
-import { uploadFile, convertSrc } from 'utils';
+import { uploadFile, log, convertSrc } from 'utils';
 
 import './Photos.scss';
+
+type StateType = {
+  isMainPhotoUploading: boolean,
+  isAdditionalPhotoUploading: boolean,
+};
 
 type PropsType = {
   onAddMainPhoto: (url: string) => void,
@@ -18,21 +23,44 @@ type PropsType = {
   isMainVariant?: boolean,
 };
 
-class Photos extends PureComponent<PropsType> {
-  handleOnUploadMainPhoto = async (e: any) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    this.props.onAddMainPhoto(result.url);
+class Photos extends Component<PropsType, StateType> {
+  state = {
+    isMainPhotoUploading: false,
+    isAdditionalPhotoUploading: false,
   };
 
-  handleOnUploadPhoto = async (e: any) => {
+  handleOnUploadMainPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) return;
-    this.props.onAddPhoto(result.url);
+    this.setState({ isMainPhotoUploading: true });
+    uploadFile(e.target.files[0])
+      .then(result => {
+        if (!result || result.url == null) {
+          log.error(result);
+          alert('Error :('); // eslint-disable-line
+        }
+        this.props.onAddMainPhoto(result.url || '');
+      })
+      .catch(alert)
+      .finally(() => {
+        this.setState({ isMainPhotoUploading: false });
+      });
+  };
+
+  handleOnUploadPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    this.setState({ isAdditionalPhotoUploading: true });
+    uploadFile(e.target.files[0])
+      .then(result => {
+        if (!result || result.url == null) {
+          log.error(result);
+          alert('Error :('); // eslint-disable-line
+        }
+        this.props.onAddPhoto(result.url || '');
+      })
+      .catch(alert)
+      .finally(() => {
+        this.setState({ isAdditionalPhotoUploading: false });
+      });
   };
 
   render() {
@@ -42,6 +70,7 @@ class Photos extends PureComponent<PropsType> {
       onRemovePhoto,
       isMainVariant,
     } = this.props;
+    const { isMainPhotoUploading, isAdditionalPhotoUploading } = this.state;
     return (
       <div styleName="container">
         <div styleName="mainPhoto">
@@ -53,6 +82,7 @@ class Photos extends PureComponent<PropsType> {
               buttonWidth={15}
               buttonIconType="camera"
               buttonLabel="Add main photo"
+              loading={isMainPhotoUploading}
               dataTest="productPhotosUploader"
             />
           </div>
@@ -84,6 +114,7 @@ class Photos extends PureComponent<PropsType> {
               buttonWidth={10}
               buttonIconType="camera"
               buttonLabel="Add photo"
+              loading={isAdditionalPhotoUploading}
               dataTest="productPhotosUploader"
             />
           </div>

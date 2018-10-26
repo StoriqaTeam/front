@@ -720,7 +720,7 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnore
     const value = pathOr('', ['form', id], this.state);
     // $FlowIgnore
-    const errors = pathOr('', ['form', 'formErrors', id], this.state);
+    const errors = pathOr('', ['formErrors', id], this.state);
     return (
       <Textarea
         id={id}
@@ -1105,21 +1105,27 @@ class Form extends Component<PropsType, StateType> {
                           onChangeShipping={onChangeShipping}
                           shippingErrors={shippingErrors}
                         />
-                        {baseProduct && (
-                          <div styleName="deliveryButton">
-                            <Button
-                              big
-                              fullWidth
-                              onClick={() => {
-                                this.handleSaveShipping(true);
-                              }}
-                              dataTest="saveShippingButton"
-                              isLoading={isLoadingShipping}
-                            >
-                              Save
-                            </Button>
-                          </div>
-                        )}
+                        <div styleName="deliveryButton">
+                          <Button
+                            big
+                            fullWidth
+                            onClick={
+                              baseProduct
+                                ? () => {
+                                    this.handleSaveShipping(true);
+                                  }
+                                : () => {
+                                    this.handleSave();
+                                  }
+                            }
+                            dataTest="saveShippingButton"
+                            isLoading={
+                              !baseProduct ? isLoading : isLoadingShipping
+                            }
+                          >
+                            Save
+                          </Button>
+                        </div>
                       </Fragment>
                     )}
                     {isLoadingPackages && (

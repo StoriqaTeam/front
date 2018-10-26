@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
 import type { Environment } from 'relay-runtime';
@@ -31,15 +31,28 @@ type PropsType = {
   router: routerShape,
 };
 
-class Menu extends PureComponent<PropsType> {
-  handleOnUpload = async (e: any): Promise<any> => {
+type StateType = {
+  isMainPhotoUploading: boolean,
+};
+
+class Menu extends Component<PropsType, StateType> {
+  state = { isMainPhotoUploading: false };
+
+  handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (result && result.url) {
-      // this.props.onLogoUpload(result.url);
-      this.handleUpdateUser(result.url);
-    }
+    this.setState({ isMainPhotoUploading: true });
+    uploadFile(e.target.files[0])
+      .then(result => {
+        if (!result || result.url == null) {
+          log.error(result);
+          alert('Error :('); // eslint-disable-line
+        }
+        this.handleUpdateUser(result.url || '');
+      })
+      .catch(alert)
+      .finally(() => {
+        this.setState({ isMainPhotoUploading: false });
+      });
   };
 
   handleUpdateUser = (avatar: string): void => {
@@ -122,6 +135,8 @@ class Menu extends PureComponent<PropsType> {
             buttonLabel="Click to upload avatar"
             overPicture={convertSrc(avatar, 'medium')}
             dataTest="storeImgUploader"
+            buttonHeight="100%"
+            loading={this.state.isMainPhotoUploading}
           />
           {avatar && (
             <div

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {setCookie} from "../src/components/Authorization/utils";
+import { setCookie } from '../src/components/Authorization/utils';
 
 const bodyParser = require('body-parser');
 const compression = require('compression');
@@ -113,7 +113,7 @@ const wrapAsync = fn => (req, res, next) => {
 
 app.use(
   wrapAsync(async (req, res) => {
-     const expirationDate = new Date();
+    const expirationDate = new Date();
     req.universalCookies.set(COOKIE_NAME, 'yes');
     // set session_id cookie if not setted :)
     const sessionIdCookie = req.universalCookies.get('SESSION_ID');
@@ -126,7 +126,10 @@ app.use(
     if (process.env.NODE_ENV === 'development') {
       const today = new Date();
       expirationDate.setDate(today.getDate() + 29);
-      req.universalCookies.set('holyshit', 'iamcool', { path: '/', expires: expirationDate });
+      req.universalCookies.set('holyshit', 'iamcool', {
+        path: '/',
+        expires: expirationDate,
+      });
     }
 
     const store = createReduxStore(new ServerProtocol(req.url));
@@ -258,7 +261,7 @@ app.use(
         const RRSnippet = process.env.REACT_APP_RRPARTNERID
           ? `<!-- Retail Rocket -->
           <script type="text/javascript">
-            var rrPartnerId = ${process.env.REACT_APP_RRPARTNERID};
+            var rrPartnerId = "${process.env.REACT_APP_RRPARTNERID}";
             var rrApi = {};
             var rrApiOnReady = rrApiOnReady || [];
             rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
@@ -288,7 +291,9 @@ app.use(
                   e.type = "text/javascript", e.async = !0, e.src = '//cdn.carrotquest.io/api.min.js', document.getElementsByTagName('head')[0].appendChild(e), window.carrotquest = {}, window.carrotquestasync = [], carrotquest.settings = {};
                   for (var n = ['connect', 'track', 'identify', 'auth', 'oth', 'onReady', 'addCallback', 'removeCallback', 'trackMessageInteraction'], a = 0; a < n.length; a++) carrotquest[n[a]] = t(n[a])
                 }
-              }(), carrotquest.connect('${process.env.REACT_APP_CARROT_QUEST_API_KEY}');
+              }(), carrotquest.connect('${
+                process.env.REACT_APP_CARROT_QUEST_API_KEY
+              }');
             </script>`
           : '';
 
