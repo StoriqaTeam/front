@@ -7,12 +7,15 @@ import { Rating } from 'components/common/Rating';
 
 import { extractText, convertSrc } from 'utils';
 
-import type { ProductType } from './types';
+import { ProductContext } from '../index';
 import ChatIcon from './svg/chat.svg';
 import HeartIcon from './svg/heart.svg';
-import { ProductContext } from './index';
+
+import type { ProductType } from '../types';
 
 import './ProductStore.scss';
+
+import t from './i18n';
 
 const ProductStore = () => (
   <ProductContext.Consumer>
@@ -37,8 +40,8 @@ const ProductStore = () => (
                 </div>
               </Link>
               <div styleName="storeDetails">
-                <p>{store.productsCount} goods</p>
-                <p>0 user reviews</p>
+                <p>{store.productsCount} {t.goods}</p>
+                <p>0 {t.userReviews}</p>
               </div>
             </div>
             <div styleName="iconsWrapper">
@@ -46,19 +49,19 @@ const ProductStore = () => (
                 <span styleName="icon">
                   <ChatIcon />
                 </span>
-                <small styleName="iconInfoText">Contact seller</small>
+                <small styleName="iconInfoText">{t.contactSeller}</small>
               </div>
               <span styleName="separator" />
               <div styleName="iconInfo">
                 <span styleName="icon">
                   <HeartIcon />
                 </span>
-                <small styleName="iconInfoText">To Favorites</small>
+                <small styleName="iconInfoText">{t.toFavorites}</small>
               </div>
             </div>
           </div>
         ) : (
-          <div className="noStore">No store</div>
+          <div className="noStore">{t.noStore}</div>
         )}
       </Fragment>
     )}
