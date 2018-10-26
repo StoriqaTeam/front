@@ -10,7 +10,7 @@ import type { SelectItemType } from 'types';
 
 import './ProductMaterial.scss';
 
-import type { WidgetOptionType } from './types';
+import type { WidgetOptionType } from '../types';
 
 type MaterialType = { id: string | number, label: string };
 
