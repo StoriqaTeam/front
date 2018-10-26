@@ -7,9 +7,11 @@ import { Icon } from 'components/Icon';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
 
-import { StoreContext, StoreHeaderBottom, StoreHeaderTabs } from './index';
+import { StoreContext, StoreHeaderBottom, StoreHeaderTabs } from '../index';
 
 import './StoreHeader.scss';
+
+import t from './i18n';
 
 const StoreHeader = () => (
   <StoreContext.Consumer>
@@ -23,7 +25,7 @@ const StoreHeader = () => (
               <Icon type="camera" size={56} />
             )}
             <aside styleName="social">
-              <h2 styleName="offscreen">Social Share</h2>
+              <h2 styleName="offscreen">{t.offscreenSocialShare}</h2>
               {process.env.BROWSER ? <SocialShare /> : null}
             </aside>
           </figure>
