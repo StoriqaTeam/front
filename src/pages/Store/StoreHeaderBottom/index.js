@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Col } from 'layout';
 
-import { StoreHeaderInfo, StoreHeaderButtons } from './index';
+import { StoreHeaderInfo, StoreHeaderButtons } from '../index';
 
 import './StoreHeaderBottom.scss';
 
