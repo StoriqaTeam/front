@@ -8,6 +8,7 @@ type InputType = {
 };
 
 type AvailableDeliveryPackageType = {
+  id: string,
   name: string,
   price: number,
   currency: string,
@@ -24,9 +25,9 @@ const fetchAvailableDeliveryPackages = (
     setTimeout(
       () =>
         resolve([
-          { name: 'UPS', price: 345, currency: 'STQ' },
-          { name: 'DHL', price: 54333, currency: 'USD' },
-          { name: 'China post', price: 1345, currency: 'BTC' },
+          { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
+          { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
+          { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
         ]),
       2000,
     );

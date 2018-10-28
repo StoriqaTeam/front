@@ -1,0 +1,95 @@
+@import '../../styles/variables.scss';
+
+.loadingWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.errorWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $color_red;
+  font-size: 1.5rem;
+}
+
+.dropdown {
+  .closed {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 24rem;
+    border: 1px solid #a7a7a7;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    height: 3rem;
+    .label {
+      font-size: 2rem;
+    }
+  }
+
+  .opened {
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    align-items: center;
+    width: 26rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: 1px solid #e8e8e8;
+    border-bottom: 0;
+    margin-left: -1rem;
+    margin-top: -1rem;
+    // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    z-index: 9999;
+    background-color: #ffffff;
+
+    .label {
+      font-size: 2rem;
+    }
+  }
+
+  .packages {
+    background-color: #ffffff;
+    width: 80rem;
+    position: absolute;
+    z-index: 999;
+    left: -12rem;
+    margin-top: 3rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 4rem;
+    border: 1px solid #e8e8e8;
+    border-radius: 0.25rem;
+
+    .row {
+      height: 8rem;
+      border: 0.5px solid #c4c4c4;
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .title {
+        display: flex;
+        align-items: center;
+        .cb {
+          margin-right: 4rem;
+        }
+      }
+    }
+
+    .buttonRow {
+      background-color: #ffffff;
+      margin-top: -1px;
+      justify-content: flex-end;
+      display: flex;
+    }
+  }
+}

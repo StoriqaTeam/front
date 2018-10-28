@@ -269,6 +269,7 @@ export default createFragmentContainer(
     fragment CartProduct_product on CartProduct {
       id
       rawId
+      baseProductId
       name {
         lang
         text
