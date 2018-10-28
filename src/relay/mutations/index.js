@@ -51,6 +51,9 @@ export {
 export { default as CancelOrderMutation } from './CancelOrderMutation';
 export { default as SendOrderMutation } from './SendOrderMutation';
 export { default as CreateOrdersMutation } from './CreateOrdersMutation';
+export {
+  default as SetOrderStatusCompleteMutation,
+} from './SetOrderStatusCompleteMutation';
 export { default as CreateWarehouseMutation } from './CreateWarehouseMutation';
 export { default as DeleteWarehouseMutation } from './DeleteWarehouseMutation';
 export { default as UpdateWarehouseMutation } from './UpdateWarehouseMutation';
