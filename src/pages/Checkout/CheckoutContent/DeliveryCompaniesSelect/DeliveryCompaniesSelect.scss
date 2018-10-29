@@ -1,0 +1,16 @@
+@import '../../styles/variables.scss';
+
+.loadingWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.errorWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $color_red;
+  font-size: 1.5rem;
+}

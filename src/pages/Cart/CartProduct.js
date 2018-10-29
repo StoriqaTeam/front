@@ -34,14 +34,18 @@ type PropsType = {
   ...CartProduct_product,
   isOpenInfo: ?boolean,
   priceUsd: ?number,
+  withDeliveryCompaniesSelect?: boolean,
 };
 
 type StateType = {
   comment: string,
 };
 
-/* eslint-disable react/no-array-index-key */
 class CartProduct extends Component<PropsType, StateType> {
+  static defaultProps = {
+    withDeliveryCompaniesSelect: false,
+  };
+
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -172,7 +176,13 @@ class CartProduct extends Component<PropsType, StateType> {
   }, 250);
 
   render() {
-    const { product, unselectable, isOpenInfo, priceUsd } = this.props;
+    const {
+      product,
+      unselectable,
+      isOpenInfo,
+      priceUsd,
+      withDeliveryCompaniesSelect,
+    } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -251,6 +261,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
                       priceUsd={priceUsd}
+                      withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
                     />
                   </div>
                 </Col>

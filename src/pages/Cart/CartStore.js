@@ -13,21 +13,18 @@ import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 
 import CartProduct from './CartProduct';
 
-// eslint-disable-next-line
-import type CartStore_store from './__generated__/CartStore_store.graphql';
+import type { CartStore_store as CartStoreType } from './__generated__/CartStore_store.graphql';
 
 import './CartStore.scss';
 
 type PropsType = {
   onlySelected: ?boolean,
   unselectable: ?boolean,
-  // eslint-disable-next-line
-  store: CartStore_store,
+  store: CartStoreType,
   isOpenInfo: ?boolean,
   priceUsd: ?number,
 };
 
-/* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
   render() {
     const {
@@ -40,7 +37,7 @@ class CartStore extends PureComponent<PropsType> {
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
-      filteredProducts = filter(whereEq({ selected: true }), products);
+      filteredProducts = filter(whereEq({ selected: true }), [...products]);
     }
     if (filteredProducts.length === 0) {
       return null;
@@ -51,6 +48,7 @@ class CartStore extends PureComponent<PropsType> {
           <Row>
             <Col size={12}>
               {filteredProducts.map((product, idx) => (
+                /* eslint-disable react/no-array-index-key */
                 <div key={idx}>
                   <CartProduct
                     product={product}
@@ -58,10 +56,11 @@ class CartStore extends PureComponent<PropsType> {
                     unselectable={unselectable}
                     isOpenInfo={isOpenInfo}
                     priceUsd={priceUsd}
+                    withDeliveryCompaniesSelect
                   />
                   <div styleName="devider" />
                 </div>
-              ))}
+              )) /* eslint-enable react/no-array-index-key */}
               <div styleName="footer">
                 <div>
                   <Container correct>

@@ -1,4 +1,6 @@
-import React from 'react';
+// @flow
+
+import React, { PureComponent } from 'react';
 import { head, map } from 'ramda';
 
 import { CurrencyPrice } from 'components/common';
@@ -23,179 +25,173 @@ type PropsType = {
   // eslint-disable-next-line
   ...CartProduct_product,
   priceUsd: ?number,
+  withDeliveryCompaniesSelect?: boolean,
 };
 
-const ProductInfo = ({
-  product,
-  onQuantityChange,
-  onChangeComment,
-  comment,
-  isOpen,
-  priceUsd,
-}: PropsType) => {
-  const attrs = map(attr => ({
-    title: head(attr.attribute.name).text,
-    value: attr.value.toString(),
-  }))(product.attributes);
-  return (
-    <ShowMore
-      isOpen={isOpen}
-      height={400}
-      dataTest={`cart-product-${product.rawId}-showMore`}
-    >
-      <Container correct>
-        <Row>
-          <Col size={12} xl={8}>
-            <Row>
-              <Col size={6} xl={12}>
-                <div styleName="contentBlock">
-                  <div styleName="product-summary-attributes">
-                    <div styleName="cart-product-title">About product</div>
-                    {product.preOrder &&
-                      product.preOrderDays && (
-                        <div styleName="preOrder">
-                          <div styleName="preOrderText">
-                            <div>Available for pre-order.</div>
-                            <div>
-                              Lead time (days):{' '}
-                              <span styleName="preOrderDays">
-                                {product.preOrderDays}
-                              </span>
+class ProductInfo extends PureComponent<PropsType> {
+  static defaultProps = {
+    withDeliveryCompaniesSelect: false,
+  };
+
+  render() {
+    const {
+      product,
+      onQuantityChange,
+      onChangeComment,
+      comment,
+      priceUsd,
+      withDeliveryCompaniesSelect,
+    } = this.props;
+    const attrs = map(
+      attr => ({
+        title: head(attr.attribute.name).text,
+        value: attr.value.toString(),
+      }),
+      product.attributes,
+    );
+    return (
+      <ShowMore
+        isOpen
+        height={400}
+        dataTest={`cart-product-${product.rawId}-showMore`}
+      >
+        <Container correct>
+          <Row>
+            <Col size={12} xl={8}>
+              <Row>
+                <Col size={6} xl={12}>
+                  <div styleName="contentBlock">
+                    <div styleName="product-summary-attributes">
+                      <div styleName="cart-product-title">About product</div>
+                      {product.preOrder &&
+                        product.preOrderDays && (
+                          <div styleName="preOrder">
+                            <div styleName="preOrderText">
+                              <div>Available for pre-order.</div>
+                              <div>
+                                Lead time (days):{' '}
+                                <span styleName="preOrderDays">
+                                  {product.preOrderDays}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    {(attrs.length > 0 && (
+                        )}
+                      {(attrs.length > 0 && (
+                        <Row>
+                          {attrs.map(attr => (
+                            <Col key={`attr-${attr.value}`} size={12} xl={6}>
+                              <CartProductAttribute {...attr} />
+                            </Col>
+                          ))}
+                        </Row>
+                      )) || <div styleName="empty" />}
+                    </div>
+                  </div>
+                </Col>
+                <Col size={6} xlHidden>
+                  <div styleName="contentBlock">
+                    <div styleName="cart-product-title">Price</div>
+                    <CartProductAttribute
+                      title="Count"
+                      value={
+                        <Stepper
+                          value={product.quantity}
+                          min={0}
+                          max={9999}
+                          onChange={newVal => onQuantityChange(newVal)}
+                        />
+                      }
+                    />
+                    <CartProductAttribute
+                      title="Subtotal"
+                      value={`${formatPrice(
+                        product.quantity * product.price || 0,
+                      )} ${currentCurrency()}`}
+                    />
+                    <CartProductAttribute
+                      title="Delivery"
+                      value={`${formatPrice(
+                        product.deliveryCost || 0,
+                      )} ${currentCurrency()}`}
+                    />
+                  </div>
+                </Col>
+                <Col size={12}>
+                  <div styleName="contentBlock">
+                    <div>
+                      <div styleName="cart-product-title">Delivery</div>
                       <Row>
-                        {attrs.map(attr => (
-                          <Col key={`attr-${attr.value}`} size={12} xl={6}>
-                            <CartProductAttribute {...attr} />
-                          </Col>
-                        ))}
+                        <Col size={11}>
+                          <div styleName="noDeliveryAvailableAlert">
+                            <div styleName="icon">
+                              {/* eslint-disable */}
+                              <img
+                                src={require('./png/attention.png')}
+                                alt="!"
+                              />
+                              {/* eslint-enable */}
+                            </div>
+                            <span styleName="error">Attention!</span>&nbsp;No
+                            shipping available for this product to your region.
+                          </div>
+                        </Col>
                       </Row>
-                    )) || <div styleName="empty" />}
-                  </div>
-                </div>
-              </Col>
-              <Col size={6} xlHidden>
-                <div styleName="contentBlock">
-                  <div styleName="cart-product-title">Price</div>
-                  <CartProductAttribute
-                    title="Count"
-                    value={
-                      <Stepper
-                        value={product.quantity}
-                        min={0}
-                        max={9999}
-                        onChange={newVal => onQuantityChange(newVal)}
-                      />
-                    }
-                  />
-                  <CartProductAttribute
-                    title="Subtotal"
-                    value={`${formatPrice(
-                      product.quantity * product.price || 0,
-                    )} ${currentCurrency()}`}
-                  />
-                  <CartProductAttribute
-                    title="Delivery"
-                    value={`${formatPrice(
-                      product.deliveryCost || 0,
-                    )} ${currentCurrency()}`}
-                  />
-                </div>
-              </Col>
-              <Col size={12}>
-                <div styleName="contentBlock">
-                  <div>
-                    {/* <div styleName="cart-product-title">
-                      Delivery and return
-                    </div>
-                    <Row>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Shiping to"
-                          value={
-                            <Select
-                              items={[{ id: 1, label: 'Everywhere' }]}
-                              activeItem={{ id: 1, label: 'Everywhere' }}
-                              forForm
-                              fullWidth
-                              onSelect={() => {}}
-                            />
-                          }
+                      <div styleName="comment">
+                        <Input
+                          fullWidth
+                          id="customerComment"
+                          onChange={onChangeComment}
+                          value={comment}
+                          label="Customer comment"
                         />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute title="Terms" value="14 days" />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Return type on return"
-                          value="Exchange or funds return"
-                        />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Delivery on return"
-                          value="Seller pays"
-                        />
-                      </Col>
-                    </Row> */}
-                    <div styleName="comment">
-                      <Input
-                        fullWidth
-                        id="customerComment"
-                        onChange={onChangeComment}
-                        value={comment}
-                        label="Customer comment"
-                      />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Col>
-            </Row>
-          </Col>
-          <Col size={4} xlVisibleOnly>
-            <div styleName="contentBlock">
-              <div styleName="cart-product-title">Price</div>
-              <CartProductAttribute
-                title="Count"
-                value={
-                  <Stepper
-                    value={product.quantity}
-                    min={0}
-                    max={9999}
-                    onChange={newVal => onQuantityChange(newVal)}
-                  />
-                }
-              />
-              <CartProductAttribute
-                title="Subtotal"
-                value={`${formatPrice(
-                  product.quantity * product.price || 0,
-                )} ${currentCurrency()}`}
-              />
-              {priceUsd && (
-                <CurrencyPrice
-                  price={product.quantity * product.price || 0}
-                  currencyPrice={priceUsd}
-                  currencyCode="USD"
-                  toFixedValue={2}
+                </Col>
+              </Row>
+            </Col>
+            <Col size={4} xlVisibleOnly>
+              <div styleName="contentBlock">
+                <div styleName="cart-product-title">Price</div>
+                <CartProductAttribute
+                  title="Count"
+                  value={
+                    <Stepper
+                      value={product.quantity}
+                      min={0}
+                      max={9999}
+                      onChange={newVal => onQuantityChange(newVal)}
+                    />
+                  }
                 />
-              )}
-              <CartProductAttribute
-                title="Delivery"
-                value={`${formatPrice(
-                  product.deliveryCost || 0,
-                )} ${currentCurrency()}`}
-              />
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </ShowMore>
-  );
-};
+                <CartProductAttribute
+                  title="Subtotal"
+                  value={`${formatPrice(
+                    product.quantity * product.price || 0,
+                  )} ${currentCurrency()}`}
+                />
+                {priceUsd && (
+                  <CurrencyPrice
+                    price={product.quantity * product.price || 0}
+                    currencyPrice={priceUsd}
+                    currencyCode="USD"
+                    toFixedValue={2}
+                  />
+                )}
+                <CartProductAttribute
+                  title="Delivery"
+                  value={`${formatPrice(
+                    product.deliveryCost || 0,
+                  )} ${currentCurrency()}`}
+                />
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </ShowMore>
+    );
+  }
+}
 
 export default ProductInfo;
