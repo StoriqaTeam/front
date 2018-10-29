@@ -37,7 +37,14 @@ class Order extends PureComponent<PropsType> {
       return null;
     }
 
-    return <OrderPage order={order} email={email} isPaymentInfoCanBeShown />;
+    return (
+      <OrderPage
+        isAbleToManageOrderForUser
+        order={order}
+        email={email}
+        isPaymentInfoCanBeShown
+      />
+    );
   }
 }
 
@@ -48,6 +55,7 @@ export default createRefetchContainer(
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       email
       order(slug: $slug) {
+        id
         slug
         storeId
         customer {

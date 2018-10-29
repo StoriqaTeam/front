@@ -28,6 +28,7 @@ import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
 import ManageOrderBlock from './ManageOrderBlock';
+import ManageOrderBlockForUser from './ManageOrderBlockForUser';
 import OpenTicketModal from './OpenTicketModal';
 import { getStatusStringFromEnum } from './utils';
 
@@ -41,6 +42,7 @@ type PropsType = {
   order: any, // TODO: use common type here.
   showAlert: (input: AddAlertInputType) => void,
   isAbleToManageOrder?: boolean,
+  isAbleToManageOrderForUser?: boolean,
   isPaymentInfoCanBeShown?: boolean,
   router: routerShape,
   match: matchShape,
@@ -193,6 +195,26 @@ class OrderPage extends Component<PropsType, StateType> {
       this.props.showAlert({
         type: 'success',
         text: 'Order successfully canceled.',
+        link: {
+          text: 'Ok',
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: 'Something is going wrong :(',
+        link: {
+          text: 'Ok',
+        },
+      });
+    }
+  };
+
+  handleOrderComplete = (success: boolean): void => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: 'Order successfully complete.',
         link: {
           text: 'Ok',
         },
@@ -405,6 +427,17 @@ class OrderPage extends Component<PropsType, StateType> {
                       orderSlug={parseInt(order.number, 10)}
                       onOrderSend={this.handleOrderSent}
                       onOrderCancel={this.handleOrderCanceled}
+                    />
+                  </div>
+                )}
+              {this.props.isAbleToManageOrderForUser &&
+                orderFromProps.state !== 'COMPLETE' && (
+                  <div styleName="manageBlock">
+                    <ManageOrderBlockForUser
+                      environment={environment}
+                      isAbleToSend={orderFromProps.state === 'DELIVERED'}
+                      orderSlug={parseInt(order.number, 10)}
+                      onOrderComplete={this.handleOrderComplete}
                     />
                   </div>
                 )}

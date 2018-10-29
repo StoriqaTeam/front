@@ -132,7 +132,7 @@ class Shipping extends Component<PropsType, StateType> {
       this.props,
     );
     return (
-      <div className="container">
+      <div>
         <LocalShipping
           currency={currency}
           localShipping={localShipping}

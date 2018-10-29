@@ -1,6 +1,7 @@
 // @flow strict
 
 import React from 'react';
+import classNames from 'classnames';
 
 import { formatPrice } from 'utils';
 
@@ -11,6 +12,8 @@ type PropTypes = {
   currencyPrice: number,
   currencyCode: string,
   toFixedValue?: number,
+  forProduct?: boolean,
+  reverse?: boolean,
 };
 
 const CurrencyPrice = ({
@@ -18,20 +21,27 @@ const CurrencyPrice = ({
   currencyPrice,
   currencyCode,
   toFixedValue,
+  forProduct,
+  reverse,
 }: PropTypes) => {
   let newPrice = price * currencyPrice;
   if (toFixedValue !== undefined) {
     newPrice = (price * currencyPrice).toFixed(toFixedValue);
   }
   return (
-    <div styleName="container">
-      {`${formatPrice(parseFloat(newPrice))} ${currencyCode}`}
+    <div styleName={classNames('container', { forProduct })}>
+      {reverse === false &&
+        `${formatPrice(parseFloat(newPrice))} ${currencyCode}`}
+      {reverse === true &&
+        `${currencyCode}${formatPrice(parseFloat(newPrice))}`}
     </div>
   );
 };
 
 CurrencyPrice.defaultProps = {
   toFixedValue: undefined,
+  forProduct: false,
+  reverse: false,
 };
 
 export default CurrencyPrice;

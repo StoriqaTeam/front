@@ -15,27 +15,21 @@ import {
 
 import { UploadWrapper } from 'components/Upload';
 import { Select } from 'components/common/Select';
+import { Icon } from 'components/Icon';
 import { uploadFile, log, convertSrc } from 'utils';
+
+import type { GetAttributeType } from 'pages/Manage/Store/Products/types';
 
 import './Characteristics.scss';
 
-type AttributeType = {
-  rawId: number,
-  id: string,
-  metaField: {
-    translatedValues: ?Array<{}>,
-    values: ?Array<string>,
-  },
+type StateType = {
+  isPhotoUploading: boolean,
 };
 
 type PropsType = {
-  attribute: AttributeType,
+  attribute: GetAttributeType,
   onSelect: Function,
-  value: { attrId: number, value: string, metaField?: string },
-};
-
-type StateType = {
-  isPhotoUploading: boolean,
+  value: { attrId: number, value: string, metaField?: ?string },
 };
 
 class CharacteristicItem extends Component<PropsType, StateType> {
@@ -44,7 +38,7 @@ class CharacteristicItem extends Component<PropsType, StateType> {
   };
 
   getSelectItems = (
-    attribute: AttributeType,
+    attribute: GetAttributeType,
   ): Array<{ id: string, label: string }> => {
     // $FlowIgnoreMe
     const values = pathOr(null, ['metaField', 'values'], attribute);
@@ -88,7 +82,6 @@ class CharacteristicItem extends Component<PropsType, StateType> {
 
   handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
-
     this.setState({ isPhotoUploading: true });
     uploadFile(e.target.files[0])
       .then(result => {
@@ -104,8 +97,14 @@ class CharacteristicItem extends Component<PropsType, StateType> {
       });
   };
 
+  handleRemoveImg = () => {
+    const { onSelect, value } = this.props;
+    onSelect(assoc('metaField', '', value));
+  };
+
   render() {
     const { attribute, value } = this.props;
+    const { isPhotoUploading } = this.state;
     if (!value) {
       log.warn('CharacteristicItem', 'value is nil');
       return null;
@@ -121,17 +120,32 @@ class CharacteristicItem extends Component<PropsType, StateType> {
     return (
       <div styleName="item">
         <div styleName="characteristicImg">
-          <UploadWrapper
-            id={attribute.id}
-            onUpload={this.handleOnUpload}
-            buttonHeight={10}
-            buttonWidth={10}
-            buttonIconType="upload"
-            overPicture={convertSrc(characteristicImg, 'small')}
-            dataTest="productCharacteristicImgUploader"
-            loading={this.state.isPhotoUploading}
-            buttonLabel=""
-          />
+          <div styleName="upload">
+            <UploadWrapper
+              id={attribute.id}
+              buttonLabel="Add photo"
+              onUpload={this.handleOnUpload}
+              buttonHeight={10}
+              buttonWidth={10}
+              buttonIconType="upload"
+              overPicture={convertSrc(characteristicImg, 'small')}
+              loading={isPhotoUploading}
+              dataTest="productCharacteristicImgUploader"
+            />
+          </div>
+          {characteristicImg && (
+            <div styleName="remove">
+              <div
+                styleName="removeButton"
+                onClick={this.handleRemoveImg}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                <Icon type="basket" size={32} />
+              </div>
+            </div>
+          )}
         </div>
         <div styleName="characteristicSelect">
           <Select

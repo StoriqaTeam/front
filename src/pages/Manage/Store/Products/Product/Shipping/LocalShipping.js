@@ -219,8 +219,14 @@ class LocalShipping extends Component<PropsType, StateType> {
           (isEmpty(localAvailablePackages) && (
             <div styleName="emptyPackegesText">No available packages</div>
           ))}
-        {localAvailablePackages &&
-          error && <div styleName="error">{error}</div>}
+        <div
+          id="localShippingError"
+          styleName={classNames('error', {
+            show: localAvailablePackages && error,
+          })}
+        >
+          {error}
+        </div>
       </div>
     );
   }

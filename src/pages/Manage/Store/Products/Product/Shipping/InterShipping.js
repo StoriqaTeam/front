@@ -171,8 +171,14 @@ class InterShipping extends Component<PropsType, StateType> {
           (isEmpty(interAvailablePackages) && (
             <div styleName="emptyPackegesText">No available packages</div>
           ))}
-        {interAvailablePackages &&
-          error && <div styleName="error">{error}</div>}
+        <div
+          id="interShippingError"
+          styleName={classNames('error', {
+            show: interAvailablePackages && error,
+          })}
+        >
+          {error}
+        </div>
       </div>
     );
   }

@@ -18,6 +18,8 @@ type StateType = {
 };
 
 type PropsType = {
+  id?: string,
+  required?: boolean,
   inputRef?: (node: ?HTMLInputElement) => void,
   onChangePrice: (value: number) => void,
   onFocus?: () => void,
@@ -28,6 +30,7 @@ type PropsType = {
   label?: string,
   align?: 'center' | 'left' | 'right',
   dataTest: string,
+  errors?: Array<string>,
 };
 
 class InputPrice extends Component<PropsType, StateType> {
@@ -107,29 +110,41 @@ class InputPrice extends Component<PropsType, StateType> {
 
   render() {
     const {
+      required,
       currency,
       onChangeCurrency,
       label,
       align,
       inputRef,
       dataTest,
+      errors,
+      id,
     } = this.props;
     const { price } = this.state;
+    const requiredLabel =
+      required === true ? (
+        <span>
+          {label} <span styleName="asterisk">*</span>
+        </span>
+      ) : (
+        label
+      );
     return (
       <AppContext.Consumer>
         {({ directories }) => (
-          <div styleName="container">
+          <div id={id !== undefined ? id : null} styleName="container">
             <div styleName="input">
               <Input
                 inputRef={inputRef}
                 fullWidth
-                label={label}
+                label={requiredLabel}
                 onChange={this.handlePriceChange}
                 onFocus={this.handlePriceFocus}
                 onBlur={this.handlePriceBlur}
                 value={price}
                 align={align}
                 dataTest={`${dataTest}Input`}
+                errors={errors}
               />
             </div>
             {!isNil(currency) && (
