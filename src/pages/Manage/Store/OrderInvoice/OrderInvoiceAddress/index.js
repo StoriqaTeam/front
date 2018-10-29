@@ -34,7 +34,7 @@ const OrderInvoiceData = ({
 }: PropsType) => (
   <div styleName="address">
     <div styleName="addressField">
-      <span>{t.postalCode}e:</span> <span>{postalCode}</span>
+      <span>{t.postalCode}:</span> <span>{postalCode}</span>
     </div>
     <div styleName="addressField">
       <span>{t.country}:</span> <span>{country}</span>
