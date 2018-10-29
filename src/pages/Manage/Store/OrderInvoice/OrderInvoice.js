@@ -29,7 +29,7 @@ type PropsType = {
 class OrderInvoice extends PureComponent<PropsType> {
   render() {
     const {
-      me: { email, order },
+      me: { order },
     } = this.props;
     const clonedOrder = !isNil(order) ? order : {};
     const invoiceData = {
@@ -38,6 +38,8 @@ class OrderInvoice extends PureComponent<PropsType> {
       trackId: !isNil(order) ? order.trackId : '',
       state: !isNil(order) ? formatStatus(order.state) : '',
     };
+    const customer = !isNil(order) ? order.customer : {};
+    const email = !isNil(customer) ? customer.email : '';
     const address = !isNil(order) ? order.addressFull : {};
     const phone = !isNil(order) ? order.receiverPhone : '';
     const currency = !isNil(order) ? order.currency : '';
@@ -78,8 +80,10 @@ export default createFragmentContainer(
   graphql`
     fragment OrderInvoice_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
-      email
       order(slug: $slug) {
+        customer {
+          email
+        }
         slug
         currency
         receiverName
