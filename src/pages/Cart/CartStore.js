@@ -23,6 +23,7 @@ type PropsType = {
   store: CartStoreType,
   isOpenInfo: ?boolean,
   priceUsd: ?number,
+  withDeliveryCompaniesSelect?: boolean,
 };
 
 class CartStore extends PureComponent<PropsType> {
@@ -33,6 +34,7 @@ class CartStore extends PureComponent<PropsType> {
       unselectable,
       isOpenInfo,
       priceUsd,
+      withDeliveryCompaniesSelect,
     } = this.props;
     const { products } = store;
     let filteredProducts = products;
@@ -56,7 +58,7 @@ class CartStore extends PureComponent<PropsType> {
                     unselectable={unselectable}
                     isOpenInfo={isOpenInfo}
                     priceUsd={priceUsd}
-                    withDeliveryCompaniesSelect
+                    withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
                   />
                   <div styleName="devider" />
                 </div>

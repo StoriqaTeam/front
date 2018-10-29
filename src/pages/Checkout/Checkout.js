@@ -361,6 +361,7 @@ class Checkout extends Component<PropsType, StateType> {
                                 key={store.__id} // eslint-disable-line
                                 store={store}
                                 totals={1000}
+                                withDeliveryCompaniesSelect
                               />
                             ))}
                           </div>

@@ -122,20 +122,23 @@ class ProductInfo extends PureComponent<PropsType> {
                     <div>
                       <div styleName="cart-product-title">Delivery</div>
                       <Row>
-                        <Col size={11}>
-                          <div styleName="noDeliveryAvailableAlert">
-                            <div styleName="icon">
-                              {/* eslint-disable */}
-                              <img
-                                src={require('./png/attention.png')}
-                                alt="!"
-                              />
-                              {/* eslint-enable */}
+                        {withDeliveryCompaniesSelect === false && (
+                          <Col size={11}>
+                            <div styleName="noDeliveryAvailableAlert">
+                              <div styleName="icon">
+                                {/* eslint-disable */}
+                                <img
+                                  src={require('./png/attention.png')}
+                                  alt="!"
+                                />
+                                {/* eslint-enable */}
+                              </div>
+                              <span styleName="error">Attention!</span>&nbsp;No
+                              shipping available for this product to your
+                              region.
                             </div>
-                            <span styleName="error">Attention!</span>&nbsp;No
-                            shipping available for this product to your region.
-                          </div>
-                        </Col>
+                          </Col>
+                        )}
                       </Row>
                       <div styleName="comment">
                         <Input
