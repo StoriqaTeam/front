@@ -11,7 +11,6 @@ import { Container, Col, Row } from 'layout';
 import { formatPrice, currentCurrency } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
-import DeliveryCompaniesSelect from './DeliveryCompaniesSelect';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -114,17 +113,16 @@ const ProductInfo = ({
                   <div>
                     <div styleName="cart-product-title">Delivery</div>
                     <Row>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Delivery company"
-                          value={
-                            <DeliveryCompaniesSelect
-                              country="RUS"
-                              baseProductId={123}
-                              onPackagesFetched={() => {}}
-                            />
-                          }
-                        />
+                      <Col size={11}>
+                        <div styleName="noDeliveryAvailableAlert">
+                          <div styleName="icon">
+                            {/* eslint-disable */}
+                            <img src={require('./png/attention.png')} alt="!" />
+                            {/* eslint-enable */}
+                          </div>
+                          <span styleName="error">Attention!</span>&nbsp;No
+                          shipping available for this product to your region.
+                        </div>
                       </Col>
                     </Row>
                     <div styleName="comment">
