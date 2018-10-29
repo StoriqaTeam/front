@@ -1,8 +1,8 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { filter, whereEq } from 'ramda';
+import { filter, whereEq, toUpper } from 'ramda';
 import { Link } from 'found';
 
 import { CurrencyPrice, Input, Button } from 'components/common';
@@ -18,6 +18,11 @@ import type CartStore_store from './__generated__/CartStore_store.graphql';
 
 import './CartStore.scss';
 
+type StateType = {
+  couponCodeValue: string,
+  couponCodeButtonDisabled: boolean,
+};
+
 type PropsType = {
   onlySelected: ?boolean,
   unselectable: ?boolean,
@@ -28,8 +33,22 @@ type PropsType = {
 };
 
 /* eslint-disable react/no-array-index-key */
-class CartStore extends PureComponent<PropsType> {
-  handleChangeCoupon = () => {};
+class CartStore extends Component<PropsType, StateType> {
+  state = {
+    couponCodeValue: '',
+    couponCodeButtonDisabled: true,
+  };
+
+  handleChangeCoupon = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const value = toUpper(e.target.value);
+    if (/[A-Z]/i.test(value)) {
+      return;
+    }
+    this.setState({
+      couponCodeValue: value,
+      couponCodeButtonDisabled: !value,
+    });
+  };
 
   handleClickCouponButton = () => {};
 
@@ -42,6 +61,7 @@ class CartStore extends PureComponent<PropsType> {
       isOpenInfo,
       priceUsd,
     } = this.props;
+    const { couponCodeValue, couponCodeButtonDisabled } = this.state;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -100,14 +120,14 @@ class CartStore extends PureComponent<PropsType> {
                       id="couponInput"
                       inline
                       fullWidth
-                      value=""
+                      value={couponCodeValue}
                       onChange={this.handleChangeCoupon}
                     />
                   </div>
                   <div styleName="couponButton">
                     <Button
                       small
-                      disabled
+                      disabled={couponCodeButtonDisabled}
                       onClick={this.handleClickCouponButton}
                       dataTest="couponButton"
                     >
@@ -117,8 +137,8 @@ class CartStore extends PureComponent<PropsType> {
                 </div>
               </Col>
               <Col size={12} sm={3}>
-                <div styleName="storeTotalWrapper">
-                  <div>
+                <div styleName="storeTotal">
+                  <div styleName="storeTotalWrapper">
                     <div styleName="label">Subtotal</div>
                     <div styleName="value">
                       {formatPrice(store.productsCost || 0)} {currentCurrency()}

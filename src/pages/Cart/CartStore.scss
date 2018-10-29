@@ -28,6 +28,7 @@
   display: flex;
 
   @media (max-width: #{$md - 1px}) {
+    justify-content: center;
     margin: 2rem 0;
   }
 
@@ -44,7 +45,8 @@
   display: flex;
 
   @media (max-width: #{$md - 1px}) {
-    margin-bottom: 2rem;
+    justify-content: center;
+    margin: 0 2rem 2rem;
   }
 
   .couponIcon {
@@ -80,10 +82,19 @@
   margin-right: -15px;
 }
 
-.storeTotalWrapper {
-  //display: flex;
-  //width: 25%;
-  //padding: 0 1rem;
+.storeTotal {
+  @media (max-width: #{$md - 1px}) {
+    text-align: center;
+  }
+
+  .storeTotalWrapper {
+    @media (max-width: #{$md - 1px}) {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: end;
+      margin-bottom: 2rem;
+    }
+  }
 }
 
 .store-name {
