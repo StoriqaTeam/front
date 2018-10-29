@@ -643,7 +643,7 @@ export default createFragmentContainer(
             }
           }
         }
-        store {
+        store(visibility: "active") {
           id
           rawId
           logo
