@@ -173,11 +173,17 @@
   }
 }
 
-
 .shipping {
   height: 5rem !important;
   line-height: 5rem !important;
 }
+
+.equivalent {
+  font-weight: bold;
+  height: 5rem !important;
+  line-height: 5rem !important;
+}
+
 .total {
   background: $color_grey_bg;
   color: $color_order_invoice;

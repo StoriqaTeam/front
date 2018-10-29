@@ -62,7 +62,11 @@ class OrderInvoice extends PureComponent<PropsType> {
             <OrderInvoiceTable>
               {/* $FlowIgnoreMe */}
               <OrderInvoiceTableRow {...clonedOrder} />
-              <InvoiceTotal total={`${total} ${currency}`} shipping="N/A" />
+              <InvoiceTotal
+                total={`${total} ${currency}`}
+                shipping="N/A"
+                currencyCode="USD"
+              />
             </OrderInvoiceTable>
           </div>
         </div>
