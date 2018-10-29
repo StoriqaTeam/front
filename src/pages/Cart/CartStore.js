@@ -41,11 +41,11 @@ class CartStore extends Component<PropsType, StateType> {
 
   handleChangeCoupon = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const value = toUpper(e.target.value);
-    if (/[A-Z]/i.test(value)) {
+    if (!/^[A-Za-z0-9]+$/.test(value)) {
       return;
     }
     this.setState({
-      couponCodeValue: value,
+      couponCodeValue: toUpper(value),
       couponCodeButtonDisabled: !value,
     });
   };
