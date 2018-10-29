@@ -171,6 +171,7 @@ class EditProduct extends Component<PropsType, StateType> {
       currency,
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
         log.debug({ response, errors });
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
@@ -178,10 +179,7 @@ class EditProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.setState({
-            formErrors: validationErrors,
-            isLoading: false,
-          });
+          this.setState({ formErrors: validationErrors });
           return;
         }
 
@@ -193,7 +191,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: `Error: "${status}"`,
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
         if (errors) {
@@ -202,7 +199,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
 
@@ -251,10 +247,11 @@ class EditProduct extends Component<PropsType, StateType> {
       });
       return;
     }
+    this.setState({ isLoading: true });
     const params: UpdateProductMutationType = {
       input: {
         clientMutationId: '',
-        id: variantData.idMainVariant,
+        id: variantData.idMainVariant || '',
         product: {
           price: variantData.price,
           vendorCode: variantData.vendorCode,
@@ -269,6 +266,7 @@ class EditProduct extends Component<PropsType, StateType> {
       },
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
@@ -287,10 +285,7 @@ class EditProduct extends Component<PropsType, StateType> {
             },
             validationErrors,
           );
-          this.setState({
-            formErrors,
-            isLoading: false,
-          });
+          this.setState({ formErrors });
           return;
         }
 
@@ -302,7 +297,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: `Error: "${statusError}"`,
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
 
@@ -315,7 +309,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
         if (errors) {
@@ -324,7 +317,6 @@ class EditProduct extends Component<PropsType, StateType> {
             text: 'Something going wrong :(',
             link: { text: 'Close.' },
           });
-          this.setState({ isLoading: false });
           return;
         }
         this.props.showAlert({
