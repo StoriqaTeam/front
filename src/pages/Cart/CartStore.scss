@@ -8,12 +8,15 @@
 }
 
 .footer {
-  padding: 2rem 0;
+  //display: flex;
+  //justify-content: space-between;
+  //align-items: center;
+  //padding: 2rem 0;
 }
 
 @media (min-width: $sm) {
   .footer {
-    padding: 4rem 2rem;
+    padding: 2rem 3rem;
   }
 }
 
@@ -21,23 +24,39 @@
   padding: 0 0 1rem 2rem;
 }
 
-.store-info {
+.storeInfo {
   display: flex;
-  flex: 0 0 50%;
-  max-width: 50%; 
 
-  @media (min-width: $sm) {
-    flex: 0 0 63%;
-    max-width: 63%; 
-  }
-
-  @media (min-width: $xl) {
-    flex: 0 0 75%;
-    max-width: 75%; 
+  @media (max-width: #{$md - 1px}) {
+    margin: 2rem 0;
   }
 
   & img {
     border-radius: 2px;
+  }
+
+  & a {
+    white-space: nowrap;
+  }
+}
+
+.coupon {
+  display: flex;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-bottom: 2rem;
+  }
+
+  .couponIcon {
+
+  }
+
+  .couponInput {
+    margin: 0 2.5rem 0 2rem;
+  }
+
+  .couponButton {
+
   }
 }
 
@@ -62,8 +81,9 @@
 }
 
 .storeTotalWrapper {
-  display: flex;
-  padding: 0 1rem;
+  //display: flex;
+  //width: 25%;
+  //padding: 0 1rem;
 }
 
 .store-name {

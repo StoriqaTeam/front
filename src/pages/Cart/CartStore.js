@@ -5,7 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { filter, whereEq } from 'ramda';
 import { Link } from 'found';
 
-import { CurrencyPrice } from 'components/common';
+import { CurrencyPrice, Input, Button } from 'components/common';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { Container, Row, Col } from 'layout';
@@ -29,7 +29,12 @@ type PropsType = {
 
 /* eslint-disable react/no-array-index-key */
 class CartStore extends PureComponent<PropsType> {
+  handleChangeCoupon = () => {};
+
+  handleClickCouponButton = () => {};
+
   render() {
+    console.log('---this.props', this.props);
     const {
       store,
       onlySelected,
@@ -47,70 +52,91 @@ class CartStore extends PureComponent<PropsType> {
     }
     return (
       <div styleName="container">
-        <Container correct>
-          <Row>
-            <Col size={12}>
-              {filteredProducts.map((product, idx) => (
-                <div key={idx}>
-                  <CartProduct
-                    product={product}
-                    onlySelected={onlySelected}
-                    unselectable={unselectable}
-                    isOpenInfo={isOpenInfo}
-                    priceUsd={priceUsd}
-                  />
-                  <div styleName="devider" />
-                </div>
-              ))}
-              <div styleName="footer">
-                <div>
-                  <Container correct>
-                    <Row>
-                      <div styleName="store-info">
-                        <Link to={`/store/${store.rawId}`}>
-                          {store.logo ? (
-                            <img
-                              src={convertSrc(store.logo, 'small')}
-                              alt="store_picture"
-                              styleName="image"
-                            />
-                          ) : (
-                            <div styleName="noLogo">
-                              <Icon type="camera" size={28} />
-                            </div>
-                          )}
-                          <div styleName="store-description">
-                            <div styleName="store-name">
-                              {getNameText(store.name, 'EN')}
-                            </div>
-                            <Rating value={store.rating} />
-                          </div>
-                        </Link>
+        {filteredProducts.map((product, idx) => (
+          <div key={idx}>
+            <CartProduct
+              product={product}
+              onlySelected={onlySelected}
+              unselectable={unselectable}
+              isOpenInfo={isOpenInfo}
+              priceUsd={priceUsd}
+            />
+            <div styleName="devider" />
+          </div>
+        ))}
+        <div styleName="footer">
+          <Container correct>
+            <Row alignItems="center">
+              <Col size={12} sm={3}>
+                <div styleName="storeInfo">
+                  <Link to={`/store/${store.rawId}`}>
+                    {store.logo ? (
+                      <img
+                        src={convertSrc(store.logo, 'small')}
+                        alt="store_picture"
+                        styleName="image"
+                      />
+                    ) : (
+                      <div styleName="noLogo">
+                        <Icon type="camera" size={28} />
                       </div>
-                      <div styleName="storeTotalWrapper">
-                        <div>
-                          <div styleName="label">Subtotal</div>
-                          <div styleName="value">
-                            {formatPrice(store.productsCost || 0)}{' '}
-                            {currentCurrency()}
-                          </div>
-                          {priceUsd && (
-                            <CurrencyPrice
-                              price={store.productsCost || 0}
-                              currencyPrice={priceUsd}
-                              currencyCode="USD"
-                              toFixedValue={2}
-                            />
-                          )}
-                        </div>
+                    )}
+                    <div styleName="store-description">
+                      <div styleName="store-name">
+                        {getNameText(store.name, 'EN')}
                       </div>
-                    </Row>
-                  </Container>
+                      <Rating value={store.rating} />
+                    </div>
+                  </Link>
                 </div>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+              </Col>
+              <Col size={12} sm={6}>
+                <div styleName="coupon">
+                  <div styleName="couponIcon">
+                    <Icon type="coupon" size={28} />
+                  </div>
+                  <div styleName="couponInput">
+                    <Input
+                      id="couponInput"
+                      inline
+                      fullWidth
+                      value=""
+                      onChange={this.handleChangeCoupon}
+                    />
+                  </div>
+                  <div styleName="couponButton">
+                    <Button
+                      small
+                      disabled
+                      onClick={this.handleClickCouponButton}
+                      dataTest="couponButton"
+                    >
+                      Apply code
+                    </Button>
+                  </div>
+                </div>
+              </Col>
+              <Col size={12} sm={3}>
+                <div styleName="storeTotalWrapper">
+                  <div>
+                    <div styleName="label">Subtotal</div>
+                    <div styleName="value">
+                      {formatPrice(store.productsCost || 0)} {currentCurrency()}
+                    </div>
+                    {priceUsd && (
+                      <CurrencyPrice
+                        price={store.productsCost || 0}
+                        currencyPrice={priceUsd}
+                        currencyCode="USD"
+                        toFixedValue={2}
+                      />
+                    )}
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     );
   }
@@ -128,6 +154,13 @@ export default createFragmentContainer(
       totalCount
       products {
         selected
+        coupon {
+          id
+          rawId
+          code
+          title
+          scope
+        }
         ...CartProduct_product
       }
       name {

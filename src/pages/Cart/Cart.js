@@ -97,6 +97,7 @@ class Cart extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),

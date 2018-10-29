@@ -269,6 +269,7 @@ class EditProduct extends Component<PropsType, StateType> {
       },
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoading: false });
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
@@ -643,7 +644,7 @@ export default createFragmentContainer(
             }
           }
         }
-        store {
+        store(visibility: "active") {
           id
           rawId
           logo
