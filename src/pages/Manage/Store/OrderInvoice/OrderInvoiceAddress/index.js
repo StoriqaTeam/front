@@ -35,7 +35,7 @@ const OrderInvoiceData = ({
   email,
   phone,
 }: PropsType) => {
-  const region = setRegion(administrativeAreaLevel1, administrativeAreaLevel2)
+  const region = setRegion(administrativeAreaLevel1, administrativeAreaLevel2);
   return (
     <div styleName="address">
       <div styleName="addressField">
