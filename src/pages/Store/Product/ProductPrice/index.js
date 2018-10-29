@@ -10,6 +10,8 @@ import { formatPrice, currentCurrency } from 'utils';
 
 import './ProductPrice.scss';
 
+import t from './i18n';
+
 type PropsType = {
   currency?: string,
   price: number,
@@ -31,26 +33,41 @@ const ProductPrice = ({
 }: PropsType) => (
   <div styleName="container">
     {discount && discount > 0 ? (
-      <span styleName="lastPrice">
-        {formatPrice(price)} {currency}
-      </span>
+      <div styleName="price">
+        <div styleName="title">
+          <strong>{t.price}</strong>
+        </div>
+        <thin styleName="lastPrice">
+          {formatPrice(price)} {currency}
+        </thin>
+      </div>
     ) : null}
     <div styleName="stq">
       <MultiCurrencyDropdown
         price={discount && discount > 0 ? price * (1 - discount) : price}
         renderPrice={(item: { price: number, currencyCode: string }) => (
           <Fragment>
-            <span styleName="price">
-              {formatPrice(item.price)} {item.currencyCode}
-            </span>
-            {!isNil(priceUsd) && (
-              <CurrencyPrice
-                price={item.price || 0}
-                currencyPrice={priceUsd}
-                currencyCode="USD"
-                toFixedValue={2}
-              />
-            )}
+            <div styleName="title">
+              <strong>{t.discountPrice}</strong>
+            </div>
+            <div styleName="discountPrice">
+              <b>
+                {formatPrice(item.price)} {item.currencyCode}
+              </b>
+              {!isNil(priceUsd) && (
+                <div styleName="currencyPrice">
+                  <span styleName="slash">/</span>
+                  <CurrencyPrice
+                    forProduct
+                    reverse
+                    price={item.price || 0}
+                    currencyPrice={priceUsd}
+                    currencyCode="$"
+                    toFixedValue={2}
+                  />
+                </div>
+              )}
+            </div>
           </Fragment>
         )}
         renderDropdown={(
@@ -77,9 +94,9 @@ const ProductPrice = ({
         )}
       />
       {Boolean(cashback) && (
-        <span styleName={classNames('cashback', { noCashback: !cashback })}>
+        <div styleName={classNames('cashback', { noCashback: !cashback })}>
           {buttonText} {`${cashback ? (cashback * 100).toFixed(0) : 0}%`}
-        </span>
+        </div>
       )}
     </div>
   </div>
@@ -87,7 +104,7 @@ const ProductPrice = ({
 
 ProductPrice.defaultProps = {
   currency: currentCurrency() || 'STQ',
-  buttonText: 'Cashback',
+  buttonText: t.cashback,
 };
 
 export default ProductPrice;

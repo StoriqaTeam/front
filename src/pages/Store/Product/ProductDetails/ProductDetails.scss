@@ -20,18 +20,6 @@
     margin-top: 2rem;
     text-align: left;
   }
-
-  & p {
-    color: $color_grey_minor;
-    font-size: 2rem;
-    font-stretch: normal;
-    font-style: normal;
-    font-weight: normal;
-    letter-spacing: -0.4px;
-    line-height: 1.5;
-    max-width: 61.75rem;
-    text-align: left;
-  }
 }
 
 .rating {
@@ -40,4 +28,16 @@
 
 .widgets {
   margin-top: 3rem;
+}
+
+.productDescription {
+  margin-top: 3rem;
+  color: $color_grey_minor;
+  max-width: 60rem;
+}
+
+.line {
+  margin-top: 4rem;
+  margin-left: -4rem;
+  border-bottom: 1px solid $color_grey_light;
 }

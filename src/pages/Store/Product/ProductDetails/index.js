@@ -168,7 +168,8 @@ class ProductDetails extends Component<PropsType, StateType> {
               <Rating value={rating} />
             </div>
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
-            <p>{productDescription}</p>
+            <p styleName="productDescription">{productDescription}</p>
+            <div styleName="line" />
             <div styleName="widgets">
               {sortByProp('id')(widgets).map(this.generateWidget)}
             </div>

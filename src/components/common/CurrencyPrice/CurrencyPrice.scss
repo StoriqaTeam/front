@@ -5,4 +5,15 @@
   line-height: 1.5rem;
   font-size: 12px;
   color: $color_grey_minor;
+
+  &.forProduct {
+    font-weight: normal;
+    font-family: $font_light;
+    color: $color_grey;
+    font-size: 24px;
+
+    &:before {
+      content: '~';
+    }
+  }
 }

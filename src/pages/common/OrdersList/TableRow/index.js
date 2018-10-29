@@ -5,6 +5,8 @@ import { withRouter, routerShape, Link } from 'found';
 
 import { Col } from 'layout';
 import { stringFromTimestamp } from 'utils/formatDate';
+import { formatPrice } from 'utils';
+
 import { getStatusStringFromEnum } from '../../OrderPage/utils';
 
 import './TableRow.scss';
@@ -96,7 +98,7 @@ class TableRow extends PureComponent<PropsType> {
           </Col>
           <Col md={2} lg={2} xl={1} mdVisible>
             <span styleName="price">
-              {rowItem.subtotal} <b>STQ</b>
+              {formatPrice(rowItem.subtotal)} <b>STQ</b>
             </span>
           </Col>
           <Col md={2} lg={3} xl={2} lgVisible>
