@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { equals, prepend, isNil } from 'ramda';
+import { prepend, isNil } from 'ramda';
 import classNames from 'classnames';
 import { isEmpty, convertSrc } from 'utils';
 
@@ -10,7 +10,7 @@ import { Icon } from 'components/Icon';
 
 import { ProductThumbnails, ProductDiscount } from './index';
 
-import { getImageMeta, makeAdditionalPhotos } from './utils';
+import { makeAdditionalPhotos } from './utils';
 
 import './ProductImage.scss';
 
@@ -18,7 +18,7 @@ import type { WidgetOptionType } from './types';
 
 type PropsType = {
   rawId: number,
-  photoMain: string,
+  photoMain: ?string,
   discount: number,
   additionalPhotos: Array<string>,
   isCartAdded: boolean,
@@ -35,26 +35,12 @@ class ProductImage extends Component<PropsType, StateType> {
     isSquared: false,
   };
 
-  componentDidMount() {
-    const { photoMain } = this.props;
-    this.setImage(photoMain);
-  }
-
-  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+  componentDidUpdate(prevProps: PropsType) {
     const { rawId } = this.props;
-    const { selected } = prevState;
-    if (selected !== this.state.selected) {
-      this.setImage(selected);
-    }
     if (rawId !== prevProps.rawId) {
       this.clearSelected();
     }
   }
-
-  setImage = async (selected: string): Promise<void> => {
-    const { height, width } = await getImageMeta(selected);
-    this.setState({ isSquared: equals(height, width) });
-  };
 
   clearSelected = (): void => {
     this.setState({
@@ -63,9 +49,7 @@ class ProductImage extends Component<PropsType, StateType> {
   };
 
   handleClick = ({ image }: WidgetOptionType): void => {
-    this.setState({ selected: image }, () => {
-      this.setImage(image);
-    });
+    this.setState({ selected: image });
   };
 
   imgsToSlider = (imgs: Array<string>): Array<{ id: string, img: string }> =>
@@ -77,6 +61,7 @@ class ProductImage extends Component<PropsType, StateType> {
     const showMobileSlider = !isNil(additionalPhotos) && !isNil(photoMain);
     return (
       <div styleName="container">
+        {discount > 0 ? <ProductDiscount discount={discount} /> : null}
         <div
           styleName={
             !isEmpty(additionalPhotos)
@@ -91,7 +76,7 @@ class ProductImage extends Component<PropsType, StateType> {
                 isReset={isEmpty(selected)}
                 onClick={this.handleClick}
                 options={makeAdditionalPhotos(
-                  prepend(photoMain, additionalPhotos || []),
+                  prepend(photoMain || '', additionalPhotos || []),
                 )}
               />
             </div>
@@ -103,8 +88,7 @@ class ProductImage extends Component<PropsType, StateType> {
           })}
         >
           <figure styleName="image">
-            {discount > 0 ? <ProductDiscount discount={discount} /> : null}
-            {!isNil(photoMain) ? (
+            {photoMain || selected ? (
               <div
                 role="img"
                 style={{
@@ -133,7 +117,9 @@ class ProductImage extends Component<PropsType, StateType> {
               infinity
               animationSpeed={500}
               slidesToShow={1}
-              items={this.imgsToSlider(additionalPhotos)}
+              items={this.imgsToSlider(
+                prepend(photoMain || '', additionalPhotos || []),
+              )}
               type="image"
               arrows
               counter

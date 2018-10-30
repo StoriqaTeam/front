@@ -64,21 +64,9 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       return;
     }
 
-    this.setState(
-      prevState => {
-        if (index === prevState.selected) {
-          return {
-            selected: null,
-          };
-        }
-        return {
-          selected: index,
-        };
-      },
-      () => {
-        this.props.onClick(option);
-      },
-    );
+    this.setState({ selected: index }, () => {
+      this.props.onClick(option);
+    });
   };
 
   render() {
@@ -99,12 +87,13 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           onClick={() => this.handleClick(option, index)}
         >
           {option.image ? (
-            <figure styleName="thumbnailContainer">
+            <figure
+              styleName={classNames('thumbnailContainer', {
+                clicked: isSelected || selected === index,
+                disabled: isDisabled,
+              })}
+            >
               <img
-                styleName={classNames({
-                  clicked: isSelected || selected === index,
-                  disabled: isDisabled,
-                })}
                 src={convertSrc(option.image, 'small')}
                 alt={option.alt || 'image alt'}
               />
