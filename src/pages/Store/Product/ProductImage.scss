@@ -1,6 +1,7 @@
 @import '../../../styles/variables';
 
 .container {
+  position: relative;
   align-items: flex-start;
   display: flex;
   justify-content: space-between;
@@ -91,11 +92,11 @@
     display: none;
   }
   display: none;
-  margin: 2rem;
+  margin: 1rem;
   overflow-y: scroll;
   padding-top: calc(100% - 15.975rem);
   position: relative;
-  width: 10rem;
+  width: 12rem;
   @media (min-width: $md) {
     display: block;
   }
