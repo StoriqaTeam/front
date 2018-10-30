@@ -261,9 +261,12 @@ const routes = (
               }
             }
           `}
-          prepareVariables={(_, { params }) => ({
-            productID: parseInt(params.productId, 10),
-          })}
+          prepareVariables={(_, { params }) => {
+            console.log('---params', params);
+            return {
+              productID: parseInt(params.productId || 0, 10),
+            };
+          }}
         />
       </Route>
 

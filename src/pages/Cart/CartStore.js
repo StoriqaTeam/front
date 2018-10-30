@@ -1,15 +1,28 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
-import { filter, whereEq, toUpper } from 'ramda';
+import { createFragmentContainer, graphql, Relay } from 'react-relay';
+import { filter, whereEq, toUpper, isEmpty, pathOr } from 'ramda';
 import { Link } from 'found';
 
 import { CurrencyPrice, Input, Button } from 'components/common';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
+import { withShowAlert } from 'components/App/AlertContext';
 import { Container, Row, Col } from 'layout';
-import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
+import {
+  formatPrice,
+  getNameText,
+  currentCurrency,
+  convertSrc,
+  log,
+  fromRelayError,
+} from 'utils';
+
+import { SetCouponInCartMutation } from 'relay/mutations';
+
+import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { MutationParamsType as SetCouponInCartMutationType } from 'relay/mutations/SetCouponInCartMutation';
 
 import CartProduct from './CartProduct';
 
@@ -21,6 +34,7 @@ import './CartStore.scss';
 type StateType = {
   couponCodeValue: string,
   couponCodeButtonDisabled: boolean,
+  isLoadingCouponButton: boolean,
 };
 
 type PropsType = {
@@ -30,6 +44,8 @@ type PropsType = {
   store: CartStore_store,
   isOpenInfo: ?boolean,
   priceUsd: ?number,
+  relay: Relay,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -37,11 +53,12 @@ class CartStore extends Component<PropsType, StateType> {
   state = {
     couponCodeValue: '',
     couponCodeButtonDisabled: true,
+    isLoadingCouponButton: false,
   };
 
   handleChangeCoupon = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const value = toUpper(e.target.value);
-    if (!/^[A-Za-z0-9]+$/.test(value)) {
+    if (!/^[A-Za-z0-9]*$/.test(value)) {
       return;
     }
     this.setState({
@@ -50,7 +67,83 @@ class CartStore extends Component<PropsType, StateType> {
     });
   };
 
-  handleClickCouponButton = () => {};
+  handleSetCoupon = () => {
+    this.setState({ isLoadingCouponButton: true });
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['store', 'rawId'], this.props);
+    const params: SetCouponInCartMutationType = {
+      input: {
+        clientMutationId: '',
+        couponCode: this.state.couponCodeValue,
+        storeId,
+      },
+      environment: this.props.relay.environment,
+      onCompleted: (response: ?Object, errors: ?Array<any>) => {
+        this.setState({ isLoadingCouponButton: false });
+        log.debug({ response, errors });
+
+        const relayErrors = fromRelayError({ source: { errors } });
+        log.debug({ relayErrors });
+
+        // $FlowIgnoreMe
+        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+        if (!isEmpty(validationErrors)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
+        if (!isEmpty(statusError)) {
+          this.props.showAlert({
+            type: 'danger',
+            text: `Error: "${statusError}"`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+
+        // $FlowIgnoreMe
+        const status400Error = pathOr('', ['400', 'status'], relayErrors);
+        if (status400Error) {
+          this.props.showAlert({
+            type: 'danger',
+            // $FlowIgnoreMe
+            text: `Error: ${status400Error}`,
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        if (errors) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          return;
+        }
+        this.props.showAlert({
+          type: 'success',
+          text: 'Сoupon applied!',
+          link: { text: '' },
+        });
+      },
+      onError: (error: Error) => {
+        this.setState(() => ({ isLoadingCouponButton: false }));
+        log.error(error);
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong.',
+          link: { text: 'Close.' },
+        });
+      },
+    };
+    SetCouponInCartMutation.commit(params);
+  };
 
   render() {
     console.log('---this.props', this.props);
@@ -61,7 +154,11 @@ class CartStore extends Component<PropsType, StateType> {
       isOpenInfo,
       priceUsd,
     } = this.props;
-    const { couponCodeValue, couponCodeButtonDisabled } = this.state;
+    const {
+      couponCodeValue,
+      couponCodeButtonDisabled,
+      isLoadingCouponButton,
+    } = this.state;
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
@@ -128,7 +225,8 @@ class CartStore extends Component<PropsType, StateType> {
                     <Button
                       small
                       disabled={couponCodeButtonDisabled}
-                      onClick={this.handleClickCouponButton}
+                      onClick={this.handleSetCoupon}
+                      isLoading={isLoadingCouponButton}
                       dataTest="couponButton"
                     >
                       Apply code
@@ -163,7 +261,7 @@ class CartStore extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  CartStore,
+  withShowAlert(CartStore),
   graphql`
     fragment CartStore_store on CartStore {
       id
