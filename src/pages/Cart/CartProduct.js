@@ -280,6 +280,11 @@ export default createFragmentContainer(
     fragment CartProduct_product on CartProduct {
       id
       rawId
+      baseProductId
+      baseProduct {
+        id
+        isShippingAvailable
+      }
       name {
         lang
         text

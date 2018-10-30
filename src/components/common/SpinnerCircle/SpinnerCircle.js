@@ -1,12 +1,17 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
 import './SpinnerCircle.scss';
 
-const SpinnerCircle = () => (
-  <div styleName="container">
-    <div styleName="spinner" />
+type PropsType = {
+  additionalStyles: { [string]: number | string | boolean },
+  containerStyles: { [string]: number | string | boolean },
+};
+
+const SpinnerCircle = (props: PropsType) => (
+  <div styleName="container" style={props.containerStyles}>
+    <div styleName="spinner" style={props.additionalStyles} />
   </div>
 );
 

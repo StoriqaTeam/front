@@ -1,17 +1,19 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { head, map } from 'ramda';
+import { head, map, find, whereEq, propOr } from 'ramda';
 
 import { CurrencyPrice } from 'components/common';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
-// import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, currentCurrency } from 'utils';
+import { formatPrice, currentCurrency, convertCountries } from 'utils';
+import { AppContext } from 'components/App';
 
 import CartProductAttribute from './CartProductAttribute';
+import { DeliveryCompaniesSelect } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect';
+import CheckoutContext from '../Checkout/CheckoutContext';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -138,6 +140,38 @@ class ProductInfo extends PureComponent<PropsType> {
                               region.
                             </div>
                           </Col>
+                        )}
+                        {withDeliveryCompaniesSelect && (
+                          <AppContext.Consumer>
+                            {({ directories }) => (
+                              <CheckoutContext.Consumer>
+                                {({ country }) => {
+                                  // $FlowIgnoreMe
+                                  const currentAddressCountry = find(
+                                    whereEq({ label: country }),
+                                    convertCountries(directories.countries),
+                                  );
+                                  const currentCountryAlpha3 = propOr(
+                                    null,
+                                    'alpha3',
+                                    currentAddressCountry,
+                                  );
+
+                                  return currentCountryAlpha3 != null ? (
+                                    <Col size={11}>
+                                      <DeliveryCompaniesSelect
+                                        baseProductId={product.baseProductId}
+                                        country={currentCountryAlpha3}
+                                        onPackagesFetched={() => {}}
+                                      />
+                                    </Col>
+                                  ) : (
+                                    <span>No country found</span>
+                                  );
+                                }}
+                              </CheckoutContext.Consumer>
+                            )}
+                          </AppContext.Consumer>
                         )}
                       </Row>
                       <div styleName="comment">
