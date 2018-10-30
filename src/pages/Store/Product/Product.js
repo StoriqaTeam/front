@@ -386,7 +386,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { me, baseProduct } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {

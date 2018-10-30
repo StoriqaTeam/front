@@ -12,8 +12,10 @@ type PropTypes = {
   currencyPrice: number,
   currencyCode: string,
   toFixedValue?: number,
-  forProduct?: boolean,
+  withLambda?: boolean,
   reverse?: boolean,
+  dark?: boolean,
+  fontSize?: number,
 };
 
 const CurrencyPrice = ({
@@ -21,15 +23,21 @@ const CurrencyPrice = ({
   currencyPrice,
   currencyCode,
   toFixedValue,
-  forProduct,
+  withLambda,
   reverse,
+  dark,
+  fontSize,
 }: PropTypes) => {
   let newPrice = price * currencyPrice;
+  //
   if (toFixedValue !== undefined) {
     newPrice = (price * currencyPrice).toFixed(toFixedValue);
   }
   return (
-    <div styleName={classNames('container', { forProduct })}>
+    <div
+      styleName={classNames('container', { withLambda, dark })}
+      style={{ fontSize }}
+    >
       {reverse === false &&
         `${formatPrice(parseFloat(newPrice))} ${currencyCode}`}
       {reverse === true &&
@@ -40,8 +48,10 @@ const CurrencyPrice = ({
 
 CurrencyPrice.defaultProps = {
   toFixedValue: undefined,
-  forProduct: false,
+  withLambda: false,
   reverse: false,
+  dark: undefined,
+  fontSize: 12,
 };
 
 export default CurrencyPrice;

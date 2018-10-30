@@ -5,7 +5,7 @@ import { createFragmentContainer, graphql, Relay } from 'react-relay';
 import { filter, whereEq, toUpper, isEmpty, pathOr } from 'ramda';
 import { Link } from 'found';
 
-import { CurrencyPrice, Input, Button } from 'components/common';
+import { Input, Button } from 'components/common';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/App/AlertContext';
@@ -43,7 +43,6 @@ type PropsType = {
   // eslint-disable-next-line
   store: CartStore_store,
   isOpenInfo: ?boolean,
-  priceUsd: ?number,
   relay: Relay,
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -146,14 +145,7 @@ class CartStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
-    const {
-      store,
-      onlySelected,
-      unselectable,
-      isOpenInfo,
-      priceUsd,
-    } = this.props;
+    const { store, onlySelected, unselectable, isOpenInfo } = this.props;
     const {
       couponCodeValue,
       couponCodeButtonDisabled,
@@ -176,7 +168,6 @@ class CartStore extends Component<PropsType, StateType> {
               onlySelected={onlySelected}
               unselectable={unselectable}
               isOpenInfo={isOpenInfo}
-              priceUsd={priceUsd}
             />
             <div styleName="devider" />
           </div>
@@ -238,17 +229,17 @@ class CartStore extends Component<PropsType, StateType> {
                 <div styleName="storeTotal">
                   <div styleName="storeTotalWrapper">
                     <div styleName="label">Subtotal</div>
+                    {Boolean(store.couponsDiscount) && (
+                      <div styleName="value">
+                        <thin styleName="through">
+                          {formatPrice(store.totalCostWithoutDiscounts || 0)}{' '}
+                          {currentCurrency()}
+                        </thin>
+                      </div>
+                    )}
                     <div styleName="value">
                       {formatPrice(store.productsCost || 0)} {currentCurrency()}
                     </div>
-                    {priceUsd && (
-                      <CurrencyPrice
-                        price={store.productsCost || 0}
-                        currencyPrice={priceUsd}
-                        currencyCode="USD"
-                        toFixedValue={2}
-                      />
-                    )}
                   </div>
                 </div>
               </Col>
@@ -270,15 +261,12 @@ export default createFragmentContainer(
       deliveryCost
       totalCost
       totalCount
+      totalCostWithoutDiscounts
+      couponsDiscount
       products {
+        id
+        rawId
         selected
-        coupon {
-          id
-          rawId
-          code
-          title
-          scope
-        }
         ...CartProduct_product
       }
       name {

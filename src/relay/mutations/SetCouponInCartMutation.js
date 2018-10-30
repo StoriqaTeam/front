@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
@@ -14,25 +14,20 @@ const mutation = graphql`
       id
       productsCost
       deliveryCost
-      totalCost
       totalCount
+      totalCost
+      totalCostWithoutDiscounts
+      couponsDiscounts
       stores {
         edges {
           node {
             id
             rawId
-            products {
-              id
-              rawId
-              coupon {
-                id
-                rawId
-                code
-                title
-                usedQuantity
-                isActive
-              }
-            }
+            productsCost
+            deliveryCost
+            totalCost
+            totalCount
+            ...CartStore_store
           }
         }
       }

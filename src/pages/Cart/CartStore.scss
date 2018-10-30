@@ -7,12 +7,7 @@
   margin-bottom: 2rem;
 }
 
-.footer {
-  //display: flex;
-  //justify-content: space-between;
-  //align-items: center;
-  //padding: 2rem 0;
-}
+.footer {}
 
 @media (min-width: $sm) {
   .footer {
@@ -49,17 +44,13 @@
     margin: 0 2rem 2rem;
   }
 
-  .couponIcon {
-
-  }
+  .couponIcon {}
 
   .couponInput {
     margin: 0 2.5rem 0 2rem;
   }
 
-  .couponButton {
-
-  }
+  .couponButton {}
 }
 
 .store-description {
@@ -115,6 +106,21 @@
 .value {
   color: $color_grey;
   font-family: $font_bold;
+
+  .through {
+    position: relative;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      top: 50%;
+      border-bottom: 1px solid $color_grey_minor;
+
+    }
+  }
 }
 
 .noLogo {
