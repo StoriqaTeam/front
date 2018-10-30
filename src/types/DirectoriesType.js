@@ -1,4 +1,5 @@
 // @flow
+
 import type {
   CategoryType,
   CurrencyType,
@@ -11,4 +12,5 @@ export type DirectoriesType = {
   currencies: Array<CurrencyType>,
   languages: Array<LanguageType>,
   orderStatuses: OrderStatusesType,
+  countries: {},
 };

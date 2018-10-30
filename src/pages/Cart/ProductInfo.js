@@ -1,7 +1,7 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import { head, map, find, whereEq, propOr } from 'ramda';
+import React, { PureComponent, Fragment } from 'react';
+import { head, map, find, whereEq, propOr, pathOr } from 'ramda';
 
 import { CurrencyPrice } from 'components/common';
 import ShowMore from 'components/ShowMore';
@@ -50,6 +50,12 @@ class ProductInfo extends PureComponent<PropsType> {
         value: attr.value.toString(),
       }),
       product.attributes,
+    );
+
+    const isShippingAvailable = pathOr(
+      false,
+      ['baseProduct', 'isShippingAvailable'],
+      product,
     );
     return (
       <ShowMore
@@ -122,58 +128,68 @@ class ProductInfo extends PureComponent<PropsType> {
                 <Col size={12}>
                   <div styleName="contentBlock">
                     <div>
-                      <div styleName="cart-product-title">Delivery</div>
-                      <Row>
-                        {withDeliveryCompaniesSelect === false && (
-                          <Col size={11}>
-                            <div styleName="noDeliveryAvailableAlert">
-                              <div styleName="icon">
-                                {/* eslint-disable */}
-                                <img
-                                  src={require('./png/attention.png')}
-                                  alt="!"
-                                />
-                                {/* eslint-enable */}
-                              </div>
-                              <span styleName="error">Attention!</span>&nbsp;No
-                              shipping available for this product to your
-                              region.
-                            </div>
-                          </Col>
+                      {withDeliveryCompaniesSelect === false &&
+                        !isShippingAvailable && (
+                          <Fragment>
+                            <div styleName="cart-product-title">Delivery</div>
+                            <Row>
+                              <Col size={11}>
+                                <div styleName="noDeliveryAvailableAlert">
+                                  <div styleName="icon">
+                                    {/* eslint-disable */}
+                                    <img
+                                      src={require('./png/attention.png')}
+                                      alt="!"
+                                    />
+                                    {/* eslint-enable */}
+                                  </div>
+                                  <span styleName="error">Attention!</span>&nbsp;No
+                                  shipping available for this product to your
+                                  region.
+                                </div>
+                              </Col>
+                            </Row>
+                          </Fragment>
                         )}
-                        {withDeliveryCompaniesSelect && (
-                          <AppContext.Consumer>
-                            {({ directories }) => (
-                              <CheckoutContext.Consumer>
-                                {({ country }) => {
-                                  // $FlowIgnoreMe
-                                  const currentAddressCountry = find(
-                                    whereEq({ label: country }),
-                                    convertCountries(directories.countries),
-                                  );
-                                  const currentCountryAlpha3 = propOr(
-                                    null,
-                                    'alpha3',
-                                    currentAddressCountry,
-                                  );
+                      {withDeliveryCompaniesSelect && (
+                        <AppContext.Consumer>
+                          {({ directories }) => (
+                            <CheckoutContext.Consumer>
+                              {({ country }) => {
+                                // $FlowIgnoreMe
+                                const currentAddressCountry = find(
+                                  whereEq({ label: country }),
+                                  convertCountries(directories.countries),
+                                );
+                                const currentCountryAlpha3 = propOr(
+                                  null,
+                                  'alpha3',
+                                  currentAddressCountry,
+                                );
 
-                                  return currentCountryAlpha3 != null ? (
-                                    <Col size={11}>
-                                      <DeliveryCompaniesSelect
-                                        baseProductId={product.baseProductId}
-                                        country={currentCountryAlpha3}
-                                        onPackagesFetched={() => {}}
-                                      />
-                                    </Col>
-                                  ) : (
-                                    <span>No country found</span>
-                                  );
-                                }}
-                              </CheckoutContext.Consumer>
-                            )}
-                          </AppContext.Consumer>
-                        )}
-                      </Row>
+                                return currentCountryAlpha3 != null ? (
+                                  <Fragment>
+                                    <div styleName="cart-product-title">
+                                      Delivery
+                                    </div>
+                                    <Row>
+                                      <Col size={11}>
+                                        <DeliveryCompaniesSelect
+                                          baseProductId={product.baseProductId}
+                                          country={currentCountryAlpha3}
+                                          onPackagesFetched={() => {}}
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </Fragment>
+                                ) : (
+                                  <span>No country found</span>
+                                );
+                              }}
+                            </CheckoutContext.Consumer>
+                          )}
+                        </AppContext.Consumer>
+                      )}
                       <div styleName="comment">
                         <Input
                           fullWidth

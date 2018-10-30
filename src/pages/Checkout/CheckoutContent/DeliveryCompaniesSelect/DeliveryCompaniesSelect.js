@@ -125,7 +125,6 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
 }
 
 DeliveryCompaniesSelect.contextTypes = {
-  directories: PropTypes.object.isRequired,
   environment: PropTypes.object.isRequired,
 };
 

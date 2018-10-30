@@ -128,6 +128,7 @@ export default createFragmentContainer(
       totalCost
       totalCount
       products {
+        id
         selected
         ...CartProduct_product
       }
