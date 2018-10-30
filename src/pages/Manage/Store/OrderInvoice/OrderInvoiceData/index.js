@@ -2,15 +2,17 @@
 
 import React from 'react';
 
+import { formatStatus } from '../utils';
+
 import '../OrderInvoice.scss';
 
 import t from './i18n';
 
 type PropsType = {
-  receiverName: string,
-  slug: string,
-  trackId: ?string,
-  state: string,
+  +receiverName: string,
+  +slug: string,
+  +trackId: ?string,
+  +state: string,
 };
 
 const OrderInvoiceData = ({
@@ -34,7 +36,7 @@ const OrderInvoiceData = ({
     </div>
     <div>
       <span styleName="customerData">{t.status}: </span>
-      {state}
+      {formatStatus(state)}
     </div>
   </div>
 );

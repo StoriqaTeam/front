@@ -16,7 +16,7 @@ import {
   InvoiceTotal,
 } from './index';
 
-import { formatStatus } from './utils';
+import { /* formatStatus, */ pluckFromOrder } from './utils';
 
 import './OrderInvoice.scss';
 
@@ -31,13 +31,9 @@ class OrderInvoice extends PureComponent<PropsType> {
     const {
       me: { order },
     } = this.props;
-    const clonedOrder = !isNil(order) ? order : {};
-    const invoiceData = {
-      receiverName: !isNil(order) ? order.receiverName : '',
-      slug: !isNil(order) ? `${order.slug}` : '',
-      trackId: !isNil(order) ? order.trackId : '',
-      state: !isNil(order) ? formatStatus(order.state) : '',
-    };
+    const fromOrder = pluckFromOrder(order);
+    const clonedOrder = !isNil(order) ? { ...order } : {};
+    const invoiceData = fromOrder(['receiverName', 'slug', 'trackId', 'state']);
     const customer = !isNil(order) ? order.customer : {};
     const email = !isNil(customer) ? customer.email : '';
     const address = !isNil(order) ? order.addressFull : {};
@@ -58,6 +54,7 @@ class OrderInvoice extends PureComponent<PropsType> {
           </div>
         </header>
         <div styleName="invoiceDetails">
+          {/* $FlowIgnoreMe */}
           <OrderInvoiceData {...invoiceData} />
           <OrderInvoiceAddress {...invoiceAddress} />
         </div>
