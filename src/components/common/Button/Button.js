@@ -26,6 +26,7 @@ type PropsTypes = {
   pink: boolean,
   fullWidth?: boolean,
   add: boolean,
+  target?: string,
 };
 
 class Button extends PureComponent<PropsTypes> {
@@ -44,6 +45,7 @@ class Button extends PureComponent<PropsTypes> {
     type: 'button',
     dataTest: 'stqButton',
     add: false,
+    target: '_self',
   };
   render() {
     const {
@@ -64,6 +66,7 @@ class Button extends PureComponent<PropsTypes> {
       pink,
       fullWidth,
       add,
+      target,
     } = this.props;
 
     const props = {
@@ -92,7 +95,12 @@ class Button extends PureComponent<PropsTypes> {
 
     if (href !== '') {
       return (
-        <a styleName={styleName} data-test={dataTest} {...props}>
+        <a
+          styleName={styleName}
+          data-test={dataTest}
+          target={target}
+          {...props}
+        >
           {children}
         </a>
       );
