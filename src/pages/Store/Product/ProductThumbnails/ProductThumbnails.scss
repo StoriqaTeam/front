@@ -6,9 +6,7 @@
   }
 
   &.scroll-y {
-    //height: calc(69.875rem - 2.375rem);
-    //overflow-x: hidden;
-    //overflow-y: scroll;
+
   }
 
   &.scroll-x {
@@ -24,22 +22,26 @@
   position: relative;
   width: 10rem;
 
-  //&:after {
-  //  content: "";
-  //  display: block;
-  //  padding-bottom: 100%;
-  //}
-
   img[src] {
-    border-radius: 0.5rem;
     height: 100%;
-    // https://css-tricks.com/almanac/properties/o/object-fit/
     object-fit: cover;
     width: 100%;
+    border-radius: 0.5rem;
   }
 
-  .clicked {
-    border: 0.25rem solid $color_blue;
+  &.clicked {
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 2px solid $color_blue;
+      border-radius: 0.5rem;
+    }
   }
 }
 
@@ -61,7 +63,7 @@
 .column {
   flex-flow: column;
   button {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 }
 

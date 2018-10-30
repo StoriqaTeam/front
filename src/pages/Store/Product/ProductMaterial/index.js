@@ -54,7 +54,7 @@ class ProductMaterial extends Component<PropsType, StateType> {
                     id: this.props.selectedValue,
                     label: this.props.selectedValue,
                   }
-                : { id: 'placeholder', label: 'Choose material' }
+                : { id: 'placeholder', label: 'Choose item' }
             }
             items={filter(
               item => contains(item.label, this.props.availableValues),

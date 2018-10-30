@@ -316,11 +316,8 @@ class OrderPage extends Component<PropsType, StateType> {
                     big
                     wireframe
                     fullWidth
-                    onClick={
-                      isPaymentInfoCanBeShown
-                        ? this.handlerOpenTicket
-                        : () => {}
-                    }
+                    href="https://storiqa.zendesk.com/hc/en-us/requests/new"
+                    target="_blank"
                   >
                     {t.openTicket}
                   </Button>
