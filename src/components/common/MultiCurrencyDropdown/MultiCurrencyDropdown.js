@@ -34,6 +34,7 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
   render() {
     return (
       <AppContext.Consumer>
+        {/* $FlowIgnoreMe */}
         {({ directories: { currencyExchange } }) => {
           const currentCurrency = getCookie('CURRENCY');
           if (!currentCurrency) {
@@ -54,6 +55,7 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
               currencyCode: item.code,
               value: this.props.price / item.value,
             }),
+            // $FlowIgnoreMe
             propOr([], 'rates', currentCurrencyRates),
           );
 
@@ -78,6 +80,7 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
                             if (this.props.onDropdownToggleClick) {
                               this.props.onDropdownToggleClick(
                                 e,
+                                // $FlowIgnoreMe
                                 values,
                                 this.state.isDropdownShown,
                               );
@@ -88,6 +91,7 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
                     },
                   )}
                 {this.state.isDropdownShown &&
+                  // $FlowIgnoreMe
                   this.props.renderDropdown(values)}
               </div>
             </Fragment>

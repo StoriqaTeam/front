@@ -68,6 +68,7 @@ class Categories extends PureComponent<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
+  // $FlowIgnoreMe
   withErrorBoundary(Page(Categories, true)),
   graphql`
     fragment Categories_search on Search

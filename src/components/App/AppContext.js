@@ -9,14 +9,29 @@ type AppContextType = {
   directories: DirectoriesType,
   environment: Environment,
   handleLogin: () => void,
-  categories: { children: [] },
+  categories: { children: [], name: [] },
 };
 const AppContext = createContext(
   ({
-    directories: {},
+    directories: {
+      countries: {
+        children: [],
+      },
+      currencies: [],
+      languages: [],
+      categories: {
+        name: [],
+        children: [],
+      },
+      // $FlowIgnoreMe
+      orderStatuses: '',
+    },
     environment: null,
     handleLogin: () => {},
-    categories: { children: [] },
+    categories: {
+      name: [],
+      children: [],
+    },
   }: AppContextType),
 );
 
