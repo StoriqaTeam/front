@@ -172,7 +172,7 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     this.setState((prevState: StateType) =>
-      assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+      assocPath(['form', id], value, prevState),
     );
   };
 
