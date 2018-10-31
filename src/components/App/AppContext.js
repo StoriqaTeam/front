@@ -3,23 +3,20 @@
 import { createContext } from 'react';
 import { Environment } from 'relay-runtime';
 
-import type { CountriesDefaultType } from 'types';
+import type { DirectoriesType } from 'types';
 
 type AppContextType = {
-  directories: {
-    countries: CountriesDefaultType,
-    [string]: { [string]: string | number | Array<*> | {} },
-    environment: Environment,
-  },
+  directories: DirectoriesType,
+  environment: Environment,
+  handleLogin: () => void,
+  categories: { children: [] },
 };
 const AppContext = createContext(
   ({
-    directories: {
-      countries: {
-        children: [],
-      },
-    },
+    directories: {},
     environment: null,
+    handleLogin: () => {},
+    categories: { children: [] },
   }: AppContextType),
 );
 

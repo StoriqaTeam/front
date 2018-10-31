@@ -260,7 +260,7 @@ class OrderPage extends Component<PropsType, StateType> {
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
-      <AppContext>
+      <AppContext.Consumer>
         {({ environment }) => (
           <div styleName="container">
             <Modal
@@ -447,7 +447,7 @@ class OrderPage extends Component<PropsType, StateType> {
             </div>
           </div>
         )}
-      </AppContext>
+      </AppContext.Consumer>
     );
   }
 }

@@ -1130,7 +1130,10 @@ class Form extends Component<PropsType, StateType> {
                     )}
                     {isLoadingPackages && (
                       <div styleName="spinner">
-                        <SpinnerCircle />
+                        <SpinnerCircle
+                          additionalStyles={{}}
+                          containerStyles={{}}
+                        />
                       </div>
                     )}
                   </div>
