@@ -1,6 +1,7 @@
 // @flow strict
 
 import React, { Component } from 'react';
+import type { Element } from 'react';
 import classNames from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -9,8 +10,8 @@ import './Textarea.scss';
 type PropsType = {
   id?: string,
   value: string,
-  label: string,
-  errors?: Array<string>,
+  label: string | Element<'span'>,
+  errors?: ?Array<string>,
   onBlur?: () => void,
   onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   fullWidth: ?boolean,

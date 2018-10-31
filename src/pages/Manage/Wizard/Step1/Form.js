@@ -13,14 +13,9 @@ import './Form.scss';
 
 import t from './i18n';
 
-type TranslatedType = {
-  lang?: string,
-  text: string,
-};
-
 type DataType = {
   name: string,
-  shortDescription: ?Array<TranslatedType>,
+  shortDescription: ?string,
   slug: ?string,
   defaultLanguage: ?string,
 };
