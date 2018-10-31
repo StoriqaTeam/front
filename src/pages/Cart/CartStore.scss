@@ -7,13 +7,11 @@
   margin-bottom: 2rem;
 }
 
-.footer {
-  padding: 2rem 0;
-}
+.footer {}
 
 @media (min-width: $sm) {
   .footer {
-    padding: 4rem 2rem;
+    padding: 2rem 3rem;
   }
 }
 
@@ -21,24 +19,38 @@
   padding: 0 0 1rem 2rem;
 }
 
-.store-info {
+.storeInfo {
   display: flex;
-  flex: 0 0 50%;
-  max-width: 50%; 
 
-  @media (min-width: $sm) {
-    flex: 0 0 63%;
-    max-width: 63%; 
-  }
-
-  @media (min-width: $xl) {
-    flex: 0 0 75%;
-    max-width: 75%; 
+  @media (max-width: #{$md - 1px}) {
+    justify-content: center;
+    margin: 2rem 0;
   }
 
   & img {
     border-radius: 2px;
   }
+
+  & a {
+    white-space: nowrap;
+  }
+}
+
+.coupon {
+  display: flex;
+
+  @media (max-width: #{$md - 1px}) {
+    justify-content: center;
+    margin: 0 2rem 2rem;
+  }
+
+  .couponIcon {}
+
+  .couponInput {
+    margin: 0 2.5rem 0 2rem;
+  }
+
+  .couponButton {}
 }
 
 .store-description {
@@ -61,9 +73,19 @@
   margin-right: -15px;
 }
 
-.storeTotalWrapper {
-  display: flex;
-  padding: 0 1rem;
+.storeTotal {
+  @media (max-width: #{$md - 1px}) {
+    text-align: center;
+  }
+
+  .storeTotalWrapper {
+    @media (max-width: #{$md - 1px}) {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: end;
+      margin-bottom: 2rem;
+    }
+  }
 }
 
 .store-name {
@@ -84,6 +106,21 @@
 .value {
   color: $color_grey;
   font-family: $font_bold;
+
+  .through {
+    position: relative;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      top: 50%;
+      border-bottom: 1px solid $color_grey_minor;
+
+    }
+  }
 }
 
 .noLogo {

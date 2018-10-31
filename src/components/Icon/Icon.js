@@ -57,6 +57,7 @@ import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
 import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
 import Status from 'components/Icon/svg/status.svg';
 import Calendar from 'components/Icon/svg/calendar.svg';
+import Coupon from 'components/Icon/svg/coupon.svg';
 
 // For product
 import MainFoto from 'components/Icon/svg/product/mainFoto.svg';
@@ -141,6 +142,7 @@ const iconsMap = {
   status: <Status />,
   calendar: <Calendar />,
   addVariant: <AddVariant />,
+  coupon: <Coupon />,
 
   // For product
   mainFoto: <MainFoto />,

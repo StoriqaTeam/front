@@ -83,13 +83,14 @@ const ProductsTableRow = ({
           )}
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
-        {product &&
-          product.cashback && (
-            <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
-          )}
+        {product && product.cashback ? (
+          <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
+        ) : (
+          '0%'
+        )}
       </Col>
       <Col size={2} sm={2} md={2} lg={2} xl={2} xlVisible>
-        {!isEmpty(attributes) && (
+        {!isEmpty(attributes) ? (
           <div styleName="characteristicItem">
             <div styleName="characteristicLabels">
               {map(attributeItem => {
@@ -115,6 +116,8 @@ const ProductsTableRow = ({
               }, attributes)}
             </div>
           </div>
+        ) : (
+          'No characteristics'
         )}
       </Col>
       <Col size={4} sm={4} md={3} lg={1} xl={1}>

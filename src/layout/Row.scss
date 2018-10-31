@@ -8,6 +8,10 @@
   &.noWrap {
     flex-wrap: nowrap;
   }
+
+  &.alignItemsCenter {
+    align-items: center;
+  }
 }
 
 .withoutGrow {

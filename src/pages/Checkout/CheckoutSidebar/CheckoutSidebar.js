@@ -1,11 +1,12 @@
 // @flow
 
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-relay';
-import { pathOr } from 'ramda';
+import { head, pathOr } from 'ramda';
 
-import { formatPrice, currentCurrency } from 'utils';
+import { formatPrice, currentCurrency, log } from 'utils';
 import { CurrencyPrice } from 'components/common';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
@@ -17,7 +18,6 @@ type PropsType = {
   isReadyToClick: Function,
   buttonText: string,
   checkoutInProcess: boolean,
-  priceUsd: ?number,
 };
 
 type StateType = {
@@ -25,6 +25,8 @@ type StateType = {
   deliveryCost: number,
   totalCount: number,
   totalCost: number,
+  couponsDiscounts: number,
+  priceUsd: ?number,
 };
 
 const TOTAL_FRAGMENT = graphql`
@@ -34,6 +36,7 @@ const TOTAL_FRAGMENT = graphql`
     deliveryCost
     totalCount
     totalCost
+    couponsDiscounts
   }
 `;
 
@@ -45,10 +48,25 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       deliveryCost: 0,
       totalCount: 0,
       totalCost: 0,
+      couponsDiscounts: 0,
+      priceUsd: null,
     };
   }
 
   componentDidMount() {
+    this.isMount = true;
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj && this.isMount) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+
     const store = this.context.environment.getStore();
     const cartId = pathOr(
       null,
@@ -71,6 +89,10 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     if (this.dispose) {
       this.dispose();
     }
+    this.isMount = false;
+    if (this.dispose) {
+      this.dispose();
+    }
   }
 
   setRef(ref: ?Object) {
@@ -81,18 +103,28 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     this.wrapperRef = ref;
   }
 
+  isMount = false;
+
   updateTotal = (data: {
     productsCost: number,
     deliveryCost: number,
     totalCost: number,
     totalCount: number,
+    couponsDiscounts: number,
   }) => {
-    const { productsCost, deliveryCost, totalCost, totalCount } = data;
+    const {
+      productsCost,
+      deliveryCost,
+      totalCost,
+      totalCount,
+      couponsDiscounts,
+    } = data;
     this.setState({
       productsCost,
       deliveryCost,
       totalCost,
       totalCount,
+      couponsDiscounts,
     });
   };
 
@@ -109,9 +141,15 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       isReadyToClick,
       buttonText,
       checkoutInProcess,
-      priceUsd,
     } = this.props;
-    const { productsCost, deliveryCost, totalCost, totalCount } = this.state;
+    const {
+      productsCost,
+      deliveryCost,
+      totalCost,
+      totalCount,
+      couponsDiscounts,
+      priceUsd,
+    } = this.state;
     return (
       <div>
         <div styleName="paperWrapper">
@@ -123,53 +161,66 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
           <div styleName="title">Subtotal</div>
           <div styleName="totalsContainer">
             <Row>
-              <Col size={12} sm={9} md={12}>
-                <Row>
-                  <Col size={12} sm={4} lg={12}>
-                    <div styleName="attributeContainer">
-                      <div styleName="label">Subtotal</div>
-                      <div styleName="value">
-                        {productsCost &&
-                          `${formatPrice(
-                            productsCost || 0,
-                          )} ${currentCurrency()}`}
-                      </div>
+              <Col size={12} sm={4} lg={12}>
+                <div styleName="attributeContainer">
+                  <div styleName="label">Subtotal</div>
+                  <div styleName="value">
+                    {productsCost &&
+                      `${formatPrice(productsCost || 0)} ${currentCurrency()}`}
+                  </div>
+                </div>
+              </Col>
+              <Col size={12} sm={4} lg={12}>
+                <div styleName="attributeContainer">
+                  <div styleName="label">Delivery</div>
+                  <div styleName="value">
+                    {deliveryCost &&
+                      `${formatPrice(deliveryCost || 0)} ${currentCurrency()}`}
+                  </div>
+                </div>
+              </Col>
+              {couponsDiscounts !== 0 && (
+                <Col size={12} sm={4} lg={12}>
+                  <div styleName="attributeContainer">
+                    <div styleName="label">Coupons discount</div>
+                    <div styleName="value">
+                      {`${formatPrice(
+                        couponsDiscounts || 0,
+                      )} ${currentCurrency()}`}
                     </div>
-                  </Col>
-                  <Col size={12} sm={4} lg={12}>
-                    <div styleName="attributeContainer">
-                      <div styleName="label">Delivery</div>
-                      <div styleName="value">
-                        {deliveryCost &&
-                          `${formatPrice(
-                            deliveryCost || 0,
-                          )} ${currentCurrency()}`}
-                      </div>
+                  </div>
+                </Col>
+              )}
+              <Col size={12} sm={4} lg={12}>
+                <div styleName="attributeContainer">
+                  <div styleName="label">
+                    Total{' '}
+                    <span styleName="subLabel">
+                      ({totalCount && totalCount} items)
+                    </span>
+                  </div>
+                  <div styleName="totalCost">
+                    <div styleName="value bold">
+                      {totalCost &&
+                        `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
                     </div>
-                  </Col>
-                  <Col size={12} sm={4} lg={12}>
-                    <div styleName="attributeContainer">
-                      <div styleName="label">
-                        Total{' '}
-                        <span styleName="subLabel">
-                          ({totalCount && totalCount} items)
-                        </span>
-                      </div>
-                      <div styleName="value bold">
-                        {totalCost &&
-                          `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
-                      </div>
-                      {priceUsd && (
+                    {priceUsd && (
+                      <div styleName="usdPrice">
+                        <div styleName="slash">/</div>
                         <CurrencyPrice
+                          withLambda
+                          reverse
+                          fontSize={18}
+                          dark
                           price={totalCost || 0}
                           currencyPrice={priceUsd}
-                          currencyCode="USD"
+                          currencyCode="$"
                           toFixedValue={2}
                         />
-                      )}
-                    </div>
-                  </Col>
-                </Row>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </Col>
             </Row>
           </div>

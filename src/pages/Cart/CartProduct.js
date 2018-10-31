@@ -33,7 +33,6 @@ type PropsType = {
   // eslint-disable-next-line
   ...CartProduct_product,
   isOpenInfo: ?boolean,
-  priceUsd: ?number,
 };
 
 type StateType = {
@@ -172,7 +171,7 @@ class CartProduct extends Component<PropsType, StateType> {
   }, 250);
 
   render() {
-    const { product, unselectable, isOpenInfo, priceUsd } = this.props;
+    const { product, unselectable, isOpenInfo } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -250,7 +249,6 @@ class CartProduct extends Component<PropsType, StateType> {
                       onChangeComment={this.handleOnChangeComment}
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
-                      priceUsd={priceUsd}
                     />
                   </div>
                 </Col>
@@ -269,6 +267,9 @@ export default createFragmentContainer(
     fragment CartProduct_product on CartProduct {
       id
       rawId
+      subtotal
+      subtotalWithoutDiscounts
+      couponDiscount
       name {
         lang
         text
@@ -301,6 +302,14 @@ export default createFragmentContainer(
             }
           }
         }
+      }
+      coupon {
+        id
+        rawId
+        code
+        title
+        scope
+        percent
       }
     }
   `,

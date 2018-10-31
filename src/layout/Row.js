@@ -14,6 +14,7 @@ type PropsType = {
   reverseLg?: boolean,
   reverseXl?: boolean,
   noWrap?: boolean,
+  alignItems?: string,
 };
 
 const Row = ({
@@ -24,6 +25,7 @@ const Row = ({
   reverseLg,
   reverseXl,
   noWrap,
+  alignItems,
 }: PropsType) => (
   <div
     styleName={classNames('container', {
@@ -32,8 +34,8 @@ const Row = ({
       reverseMd,
       reverseLg,
       reverseXl,
-      //
       noWrap,
+      alignItemsCenter: alignItems === 'center',
     })}
   >
     {children}
@@ -47,6 +49,7 @@ Row.defaultProps = {
   reverseLg: false,
   reverseXl: false,
   noWrap: false,
+  alignItems: undefined,
 };
 
 export default Row;

@@ -3,17 +3,18 @@
 .container {
   margin-top: 0.5rem;
   line-height: 1.5rem;
-  font-size: 12px;
   color: $color_grey_minor;
 
-  &.forProduct {
+  &.withLambda {
     font-weight: normal;
     font-family: $font_light;
-    color: $color_grey;
-    font-size: 24px;
 
     &:before {
       content: '~';
     }
+  }
+
+  &.dark {
+    color: $color_grey;
   }
 }
