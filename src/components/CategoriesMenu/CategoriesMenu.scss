@@ -4,7 +4,7 @@
   position: relative;
   display: none;
   margin-top: 2rem;
-  z-index: 3;
+  z-index: 10;
 
   @media (min-width: $lg) {
     display: flex;
