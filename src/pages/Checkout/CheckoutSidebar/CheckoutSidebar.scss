@@ -83,8 +83,26 @@
 
   }
   .bold {
-    font-size: 2.5rem;
+    font-size: 20px;
     font-family: $font_bold;
+  }
+
+  .totalCost {
+    display: flex;
+    align-items: baseline;
+
+    .usdPrice {
+      display: flex;
+      align-items: baseline;
+      margin-left: 1rem;
+
+      .slash {
+        font-size: 18px;
+        line-height: 1.5rem;
+        font-weight: normal;
+        font-family: $font_light;
+      }
+    }
   }
 }
 

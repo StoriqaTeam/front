@@ -3,7 +3,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { head, map, find, whereEq, propOr, pathOr } from 'ramda';
 
-import { CurrencyPrice } from 'components/common';
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
@@ -26,7 +25,6 @@ type PropsType = {
   comment: string,
   // eslint-disable-next-line
   ...CartProduct_product,
-  priceUsd: ?number,
   withDeliveryCompaniesSelect?: boolean,
 };
 
@@ -41,9 +39,9 @@ class ProductInfo extends PureComponent<PropsType> {
       onQuantityChange,
       onChangeComment,
       comment,
-      priceUsd,
       withDeliveryCompaniesSelect,
     } = this.props;
+
     const attrs = map(
       attr => ({
         title: head(attr.attribute.name).text,
@@ -114,7 +112,7 @@ class ProductInfo extends PureComponent<PropsType> {
                     <CartProductAttribute
                       title="Subtotal"
                       value={`${formatPrice(
-                        product.quantity * product.price || 0,
+                        product.subtotal || 0,
                       )} ${currentCurrency()}`}
                     />
                     <CartProductAttribute
@@ -123,6 +121,14 @@ class ProductInfo extends PureComponent<PropsType> {
                         product.deliveryCost || 0,
                       )} ${currentCurrency()}`}
                     />
+                    {product.couponDiscount !== 0 && (
+                      <CartProductAttribute
+                        title="Coupon discount"
+                        value={`${formatPrice(
+                          product.couponDiscount || 0,
+                        )} ${currentCurrency()}`}
+                      />
+                    )}
                   </div>
                 </Col>
                 <Col size={12}>
@@ -221,23 +227,23 @@ class ProductInfo extends PureComponent<PropsType> {
                 <CartProductAttribute
                   title="Subtotal"
                   value={`${formatPrice(
-                    product.quantity * product.price || 0,
+                    product.subtotal || 0,
                   )} ${currentCurrency()}`}
                 />
-                {priceUsd && (
-                  <CurrencyPrice
-                    price={product.quantity * product.price || 0}
-                    currencyPrice={priceUsd}
-                    currencyCode="USD"
-                    toFixedValue={2}
-                  />
-                )}
                 <CartProductAttribute
                   title="Delivery"
                   value={`${formatPrice(
                     product.deliveryCost || 0,
                   )} ${currentCurrency()}`}
                 />
+                {product.couponDiscount !== 0 && (
+                  <CartProductAttribute
+                    title="Coupon discount"
+                    value={`${formatPrice(
+                      product.couponDiscount || 0,
+                    )} ${currentCurrency()}`}
+                  />
+                )}
               </div>
             </Col>
           </Row>

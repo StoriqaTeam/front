@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { pathOr, isEmpty, map, addIndex } from 'ramda';
+import { pathOr, isEmpty, map, addIndex, filter } from 'ramda';
 import { graphql, createRefetchContainer } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 
@@ -195,7 +195,10 @@ class StorageProducts extends Component<PropsType, StateType> {
     const products = map(item => {
       const productId = pathOr({}, ['node', 'productId'], item);
       const quantity = pathOr({}, ['node', 'quantity'], item);
-      const product = pathOr({}, ['node', 'product'], item);
+      const product = pathOr(null, ['node', 'product'], item);
+      if (!product) {
+        return {};
+      }
       const { photoMain, price } = product;
       const name = getNameText(
         pathOr(null, ['baseProduct', 'name'], product),
@@ -241,6 +244,7 @@ class StorageProducts extends Component<PropsType, StateType> {
       ['warehouse', 'products', 'pageInfo', 'currentPage'],
       me,
     );
+    const filteredProducts = filter(item => !isEmpty(item), products);
     return (
       <div styleName="container">
         <div styleName="searchInput">
@@ -257,7 +261,7 @@ class StorageProducts extends Component<PropsType, StateType> {
           <strong>{storageName}</strong>
         </div>
         <StorageProductsTableHeader />
-        {!isEmpty(products) ? (
+        {!isEmpty(filteredProducts) ? (
           <Fragment>
             {map(
               item => (

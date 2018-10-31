@@ -18,6 +18,8 @@
   text-align: center;
   top: initial;
   width: 8rem;
+  z-index: 1;
+
   @media (min-width: $lg) {
     border-bottom: 1px solid $color_white;
     border-left: 1px solid $color_white;

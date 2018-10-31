@@ -33,7 +33,6 @@ type PropsType = {
   // eslint-disable-next-line
   ...CartProduct_product,
   isOpenInfo: ?boolean,
-  priceUsd: ?number,
   withDeliveryCompaniesSelect?: boolean,
 };
 
@@ -180,7 +179,6 @@ class CartProduct extends Component<PropsType, StateType> {
       product,
       unselectable,
       isOpenInfo,
-      priceUsd,
       withDeliveryCompaniesSelect,
     } = this.props;
     if (!product) return null;
@@ -260,7 +258,6 @@ class CartProduct extends Component<PropsType, StateType> {
                       onChangeComment={this.handleOnChangeComment}
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
-                      priceUsd={priceUsd}
                       withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
                     />
                   </div>
@@ -285,6 +282,9 @@ export default createFragmentContainer(
         isShippingAvailable
       }
       baseProductId
+      subtotal
+      subtotalWithoutDiscounts
+      couponDiscount
       name {
         lang
         text
@@ -317,6 +317,14 @@ export default createFragmentContainer(
             }
           }
         }
+      }
+      coupon {
+        id
+        rawId
+        code
+        title
+        scope
+        percent
       }
     }
   `,
