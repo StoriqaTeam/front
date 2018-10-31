@@ -171,9 +171,8 @@ class Form extends Component<PropsType, StateType> {
   handleTextareaChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    const text = id === 'longDescription' ? value : value.replace(/\s\s/, ' ');
     this.setState((prevState: StateType) =>
-      assocPath(['form', id], text, prevState),
+      assocPath(['form', id], value, prevState),
     );
   };
 
