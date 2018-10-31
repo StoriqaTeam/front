@@ -48,26 +48,21 @@ const fetchAvailableDeliveryPackages = (
     userCountry: input.destinationCountry,
     baseProductId: input.baseProductId,
   }).then(response => {
-    if (true || response.availableShippingForUser) {
-      return Promise.resolve([
-        { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
-        { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
-        { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
-      ]);
-    }
-    return Promise.reject(new Error('Unable to fetch packages'));
+    log.debug(response);
+    return Promise.resolve([
+      { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
+      { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
+      { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
+    ]);
+    // if (response.availableShippingForUser) {
+    //   return Promise.resolve([
+    //     { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
+    //     { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
+    //     { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
+    //   ]);
+    // }
+    // return Promise.reject(new Error('Unable to fetch packages'));
   });
-  // return new Promise(resolve => {
-  //   setTimeout(
-  //     () =>
-  //       resolve([
-  //         { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
-  //         { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
-  //         { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
-  //       ]),
-  //     2000,
-  //   );
-  // });
 };
 
 export { fetchAvailableDeliveryPackages };

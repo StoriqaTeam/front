@@ -290,8 +290,6 @@ class Checkout extends Component<PropsType, StateType> {
       // $FlowIgnore
     )(this.props);
 
-    log.debug(orderInput);
-
     const emptyCart = stores.length === 0;
     return (
       <CheckoutContext.Provider
