@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
@@ -22,13 +22,12 @@ type StateType = {
 };
 
 class Textarea extends Component<PropsType, StateType> {
-  state = {
-    labelFloat: false,
-    isFocus: false,
-  };
-
-  componentWillMount() {
-    this.setState({ labelFloat: Boolean(this.props.value) });
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      labelFloat: Boolean(this.props.value),
+      isFocus: false,
+    };
   }
 
   handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
