@@ -16,7 +16,7 @@ const mutation = graphql`
     createProduct(input: $input) {
       id
       rawId
-      baseProduct {
+      baseProduct(visibility: "active") {
         id
         store {
           warehouses {

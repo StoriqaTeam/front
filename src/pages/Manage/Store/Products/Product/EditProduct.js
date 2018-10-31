@@ -255,10 +255,10 @@ class EditProduct extends Component<PropsType, StateType> {
         product: {
           price: variantData.price,
           vendorCode: variantData.vendorCode,
-          photoMain: variantData.photoMain,
+          photoMain: variantData.photoMain || '',
           additionalPhotos: variantData.photos,
-          cashback: variantData.cashback ? variantData.cashback / 100 : null,
-          discount: variantData.discount ? variantData.discount / 100 : null,
+          cashback: variantData.cashback ? variantData.cashback / 100 : 0,
+          discount: variantData.discount ? variantData.discount / 100 : 0,
           preOrder: variantData.preOrder,
           preOrderDays: Number(variantData.preOrderDays),
         },

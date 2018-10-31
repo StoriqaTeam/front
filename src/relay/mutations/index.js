@@ -71,3 +71,4 @@ export { default as BuyNowMutation } from './BuyNowMutation';
 export {
   default as CreateBaseProductWithVariantsMutation,
 } from './CreateBaseProductWithVariantsMutation';
+export { default as SetCouponInCartMutation } from './SetCouponInCartMutation';

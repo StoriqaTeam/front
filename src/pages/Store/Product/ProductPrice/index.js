@@ -58,7 +58,9 @@ const ProductPrice = ({
                 <div styleName="currencyPrice">
                   <span styleName="slash">/</span>
                   <CurrencyPrice
-                    forProduct
+                    withLambda
+                    dark
+                    fontSize={24}
                     reverse
                     price={item.price || 0}
                     currencyPrice={priceUsd}

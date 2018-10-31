@@ -625,11 +625,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       .then((response: CreateProductWithAttributesMutationResponseType) => {
         log.debug({ response });
         // $FlowIgnoreMe
-        const warehouseId = pathOr(
+        let warehouseId = pathOr(
           null,
           ['createProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
           response,
         );
+        if (!warehouseId) {
+          // $FlowIgnoreMe
+          warehouseId = pathOr(
+            null,
+            ['createProduct', 'stocks', 0, 'warehouseId'],
+            response,
+          );
+        }
         // $FlowIgnoreMe
         const productId = pathOr(null, ['createProduct', 'rawId'], response);
 
