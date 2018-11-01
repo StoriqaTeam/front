@@ -1,6 +1,6 @@
 // @flow strict
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import { map } from 'ramda';
 
 import { Icon } from 'components/Icon';
@@ -24,9 +24,31 @@ type StateType = {
   //
 };
 
-class Dropdown extends Component<PropsType, StateType> {
+class Dropdown extends React.Component<PropsType, StateType> {
   state = {
     //
+  };
+
+  componentWillMount() {
+    // $FlowIgnoreMe
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    // $FlowIgnoreMe
+    document.removeEventListener('mousedown', this.handleClick, false);
+  }
+
+  node: ?HTMLDivElement;
+
+  handleClick = (e: SyntheticInputEvent<*>) => {
+    if (this.node && this.node.contains(e.target)) {
+      return;
+    }
+
+    if (this.props.isOpen) {
+      this.props.toggleExpand();
+    }
   };
 
   render() {
@@ -41,7 +63,11 @@ class Dropdown extends Component<PropsType, StateType> {
     return (
       <div styleName="dropdown">
         {isOpen && (
-          <div>
+          <div
+            ref={ref => {
+              this.node = ref;
+            }}
+          >
             <div styleName="opened">
               <div styleName="label">
                 {selectedPackage != null
