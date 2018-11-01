@@ -184,7 +184,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                   <div styleName="selectAddressContainer">
                     <RadioButton
                       id="existingAddressCheckbox"
-                      label="choose your address"
+                      label="Choose your address"
                       isChecked={isAddressSelect}
                       onChange={this.handleOnChangeAddressType}
                     />

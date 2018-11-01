@@ -1,13 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
-import { pipe, path, pathOr, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 
 import { withShowAlert } from 'components/App/AlertContext';
-import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import {
@@ -18,61 +15,28 @@ import {
 } from 'relay/mutations';
 import { log, convertSrc } from 'utils';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
-
 import ProductInfo from './ProductInfo';
 
-// eslint-disable-next-line
-import type CartProduct_product from './__generated__/CartProduct_product.graphql';
+import type { CalculateBuyNow } from '../BuyNow';
 
 import './CartProduct.scss';
-
-type PropsType = {
-  unselectable: ?boolean,
-  showAlert: (input: AddAlertInputType) => void,
-  // eslint-disable-next-line
-  ...CartProduct_product,
-  isOpenInfo: ?boolean,
-};
 
 type StateType = {
   comment: string,
 };
 
-/* eslint-disable react/no-array-index-key */
-class CartProduct extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      comment: props.product && props.product.comment,
-    };
-  }
+type PropsType = {
+  product: any,
+  productName: string,
+  buyNowData: CalculateBuyNow,
+  onChangeCount: (quantity: number) => void,
+  onDeleteProduct: () => void,
+};
 
-  handleDelete() {
-    const id = this.props.product.rawId;
-    DeleteFromCartMutation.commit({
-      input: { clientMutationId: '', productId: id },
-      environment: this.context.environment,
-      onCompleted: (response, errors) => {
-        log.debug('Success for DeleteFromCart mutation');
-        if (response) {
-          log.debug('Response: ', response);
-        }
-        if (errors) {
-          log.debug('Errors: ', errors);
-        }
-      },
-      onError: error => {
-        log.error('Error in DeleteFromCart mutation');
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Unable to delete product quantity in cart',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  }
+class CartProduct extends Component<PropsType, StateType> {
+  state = {
+    comment: '',
+  };
 
   handleSelectChange() {
     const { rawId: productId, id: nodeId } = this.props.product;
@@ -171,16 +135,15 @@ class CartProduct extends Component<PropsType, StateType> {
   }, 250);
 
   render() {
-    console.log('---this.props', this.props);
-    const { product, unselectable, isOpenInfo } = this.props;
+    const {
+      product,
+      productName,
+      buyNowData,
+      onChangeCount,
+      onDeleteProduct,
+    } = this.props;
     if (!product) return null;
-    const name: ?string = pipe(
-      pathOr([], ['name']),
-      head,
-      defaultTo({}),
-      path(['text']),
-    )(product);
-    const { photoMain, selected } = product;
+    const { photoMain } = product;
     return (
       <div styleName="container">
         <Container correct>
@@ -189,16 +152,6 @@ class CartProduct extends Component<PropsType, StateType> {
               <Row>
                 <Col size={4} sm={12}>
                   <div styleName="left-container">
-                    {!unselectable && (
-                      <div styleName="checkbox">
-                        <Checkbox
-                          id={`Cartproduct_${product.rawId}`}
-                          label={false}
-                          isChecked={selected}
-                          onChange={() => this.handleSelectChange()}
-                        />
-                      </div>
-                    )}
                     <div
                       styleName="picture"
                       style={{
@@ -211,13 +164,13 @@ class CartProduct extends Component<PropsType, StateType> {
                   </div>
                 </Col>
                 <Col size={6} smHidden>
-                  <div styleName="product-summary-header">{name}</div>
+                  <div styleName="product-summary-header">{productName}</div>
                 </Col>
                 <Col size={2} smHidden>
                   <div styleName="recycleContainer">
                     <button
                       styleName="recycle"
-                      onClick={() => this.handleDelete()}
+                      onClick={onDeleteProduct}
                       data-test="cartProductDeleteButton"
                     >
                       <Icon type="basket" size={32} />
@@ -229,13 +182,13 @@ class CartProduct extends Component<PropsType, StateType> {
             <Col size={12} sm={9}>
               <Row withoutGrow>
                 <Col size={10} sm={11} hidden smVisible>
-                  <div styleName="product-summary-header">{name}</div>
+                  <div styleName="product-summary-header">{productName}</div>
                 </Col>
                 <Col size={2} sm={1} hidden smVisible>
                   <div styleName="recycleContainer">
                     <button
                       styleName="recycle"
-                      onClick={() => this.handleDelete()}
+                      onClick={onDeleteProduct}
                       data-test="cartProductDeleteButton"
                     >
                       <Icon type="basket" size={32} />
@@ -249,7 +202,8 @@ class CartProduct extends Component<PropsType, StateType> {
                       onQuantityChange={this.handleQuantityChange}
                       onChangeComment={this.handleOnChangeComment}
                       comment={this.state.comment}
-                      isOpen={isOpenInfo}
+                      buyNowData={buyNowData}
+                      onChangeCount={onChangeCount}
                     />
                   </div>
                 </Col>
@@ -262,59 +216,7 @@ class CartProduct extends Component<PropsType, StateType> {
   }
 }
 
-export default createFragmentContainer(
-  withShowAlert(CartProduct),
-  graphql`
-    fragment CartProduct_product on CartProduct {
-      id
-      rawId
-      subtotal
-      subtotalWithoutDiscounts
-      couponDiscount
-      name {
-        lang
-        text
-      }
-      photoMain
-      price
-      preOrder
-      preOrderDays
-      quantity
-      comment
-      selected
-      deliveryCost
-      attributes {
-        value
-        metaField
-        attribute {
-          name {
-            lang
-            text
-          }
-          valueType
-          metaField {
-            values
-            uiElement
-            translatedValues {
-              translations {
-                lang
-                text
-              }
-            }
-          }
-        }
-      }
-      coupon {
-        id
-        rawId
-        code
-        title
-        scope
-        percent
-      }
-    }
-  `,
-);
+export default withShowAlert(CartProduct);
 
 CartProduct.contextTypes = {
   environment: PropTypes.object.isRequired,

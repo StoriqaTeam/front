@@ -123,11 +123,10 @@ class Authorization extends Component<PropsType, StateType> {
   componentDidMount() {
     const {
       match: {
-        location: {
-          query: { from },
-        },
+        location: { search },
       },
     } = this.props;
+    const from = search.replace(/\?from=/gi, '');
     if (from && from !== '') {
       setPathForRedirectAfterLogin(from);
     }

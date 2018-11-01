@@ -17,6 +17,9 @@ type PropsType = {
   isAddToCart: boolean,
   router: routerShape,
   isLoading: boolean,
+  baseProductRawId: number,
+  variantRawId: number,
+  cartQuantity: number,
 };
 
 const ProductButtons = ({
@@ -28,10 +31,17 @@ const ProductButtons = ({
   router,
   onBuyNow,
   isLoading,
+  baseProductRawId,
+  variantRawId,
+  cartQuantity,
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
-      <Button big isLoading={isLoading} onClick={onBuyNow} disabled>
+      <Button
+        big
+        isLoading={isLoading}
+        onClick={() => {router.push(`/buy-now?product=${baseProductRawId}&variant=${variantRawId}&quantity=${cartQuantity}`)}}
+      >
         Buy now
       </Button>
       <Button

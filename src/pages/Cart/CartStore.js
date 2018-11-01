@@ -108,7 +108,7 @@ class CartStore extends Component<PropsType, StateType> {
 
         // $FlowIgnoreMe
         const status400Error = pathOr(
-          'Unknown error.',
+          null,
           ['400', 'status'],
           relayErrors,
         );
@@ -167,6 +167,7 @@ class CartStore extends Component<PropsType, StateType> {
       <div styleName="container">
         {filteredProducts.map((product, idx) => (
           <div key={idx}>
+            {console.log('---product', product)}
             <CartProduct
               product={product}
               onlySelected={onlySelected}

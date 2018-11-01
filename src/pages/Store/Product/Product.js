@@ -396,6 +396,7 @@ class Product extends Component<PropsType, StateType> {
     }
     const {
       baseProduct: {
+        rawId,
         name,
         categoryId,
         shortDescription,
@@ -405,6 +406,7 @@ class Product extends Component<PropsType, StateType> {
       },
       router,
     } = this.props;
+    console.log('---this.props', this.props);
     const {
       widgets,
       productVariant,
@@ -414,6 +416,7 @@ class Product extends Component<PropsType, StateType> {
       isLoading,
       cartQuantity,
     } = this.state;
+    console.log('---productVariant', productVariant);
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
       <AppContext.Consumer>
@@ -471,6 +474,9 @@ class Product extends Component<PropsType, StateType> {
                           router={router}
                           isLoading={isLoading}
                           isDisabledBuyNowButton={!me}
+                          baseProductRawId={rawId}
+                          variantRawId={productVariant.rawId}
+                          cartQuantity={cartQuantity}
                         />
                         <div styleName="line" />
                         <ProductStore />
@@ -493,6 +499,7 @@ export default createFragmentContainer(
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
+      rawId
       categoryId
       name {
         text

@@ -1,17 +1,19 @@
-@import "../../styles/variables.scss";
+@import "../../../styles/variables.scss";
 
 .container {
-  color: $color_grey;
+  margin: 2rem 0;
+  //padding: 4rem;
+  //color: $color_grey;
   background-color: $color-white;
-  border: 1px solid $color_grey_trivial;
-  margin-bottom: 2rem;
+  //border: 1px solid $color_grey_trivial;
+  //margin-bottom: 2rem;
 }
 
 .footer {}
 
 @media (min-width: $sm) {
   .footer {
-    padding: 1rem 2rem;
+    padding: 2rem;
   }
 }
 
