@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { withRouter } from 'found';
+import { withRouter, routerShape } from 'found';
 import classNames from 'classnames';
 import { map } from 'ramda';
 
@@ -17,6 +17,7 @@ type StateType = {
 
 type PropsType = {
   lang: string,
+  router: routerShape,
 };
 
 const faqsEn: Array<{ id: string, text: string, desc: string }> = [
@@ -105,7 +106,7 @@ class StartSellingFAQ extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { lang } = this.props;
+    const { lang, router } = this.props;
     const { itemId } = this.state;
     return (
       <div styleName="container">
@@ -177,11 +178,8 @@ class StartSellingFAQ extends Component<PropsType, StateType> {
                 text={
                   lang === 'ru' ? 'Создать магазин' : 'Start selling on Storiqa'
                 }
-                href={
-                  lang === 'ru'
-                    ? 'https://goo.gl/forms/WK4wj1cQuyNA32wc2'
-                    : 'https://goo.gl/forms/MS8FAQ9nD2HOzlku1'
-                }
+                onClick={() => router.push('/manage/wizard')}
+                href=""
               />
             </div>
           </Col>
