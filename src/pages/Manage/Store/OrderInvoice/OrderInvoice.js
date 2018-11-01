@@ -32,8 +32,7 @@ class OrderInvoice extends PureComponent<PropsType> {
     const fromOrder = pluckFromOrder(order);
     const clonedOrder = !isNil(order) ? { ...order } : {};
     const invoiceData = fromOrder(['receiverName', 'slug', 'trackId', 'state']);
-    const customer = !isNil(order) ? order.customer : {};
-    const email = !isNil(customer) ? customer.email : '';
+    const email = !isNil(order) ? order.receiverEmail : '';
     const address = !isNil(order) ? order.addressFull : {};
     const phone = !isNil(order) ? order.receiverPhone : '';
     const currency = !isNil(order) ? order.currency : '';
@@ -85,6 +84,7 @@ export default createFragmentContainer(
         currency
         receiverName
         receiverPhone
+        receiverEmail
         trackId
         state
         quantity
