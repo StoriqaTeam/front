@@ -3,7 +3,18 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
+import {
+  pipe,
+  pathOr,
+  path,
+  map,
+  prop,
+  isEmpty,
+  flatten,
+  find,
+  whereEq,
+  isNil,
+} from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { log } from 'utils';
@@ -116,7 +127,6 @@ class Checkout extends Component<PropsType, StateType> {
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
         this.setState(() => ({
           isAddressSelect: true,
           isNewAddress: false,
@@ -198,9 +208,7 @@ class Checkout extends Component<PropsType, StateType> {
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
-          log.debug('Success for DeleteFromCart mutation');
           if (response && response.createOrders) {
-            log.debug('Response: ', response);
             this.props.showAlert({
               type: 'success',
               text: 'Orders successfully created',
@@ -219,7 +227,6 @@ class Checkout extends Component<PropsType, StateType> {
             });
             this.setState({ checkoutInProcess: false });
           } else {
-            log.debug('Errors: ', errors);
             this.props.showAlert({
               type: 'danger',
               text: 'Error :(',
@@ -249,8 +256,29 @@ class Checkout extends Component<PropsType, StateType> {
     }
 
     const {
-      cart: { totalCount },
+      cart: { totalCount, stores },
     } = this.props;
+
+    if (stores && stores.edges instanceof Array) {
+      const products = flatten(
+        map(item => {
+          if (item.node && item.node.products instanceof Array) {
+            return item.node.products;
+          }
+          return [];
+        }, stores.edges),
+      );
+
+      const isProductsWithoutPackageExist = find(
+        whereEq({ companyPackage: null }),
+        products,
+      );
+
+      if (this.state.step === 2) {
+        return isNil(isProductsWithoutPackageExist);
+      }
+    }
+
     const {
       step,
       orderInput: {
@@ -456,11 +484,18 @@ export default createPaginationContainer(
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {
+            id
             productsCost
             deliveryCost
             totalCost
             totalCount
             ...CartStore_store
+            products {
+              id
+              companyPackage {
+                id
+              }
+            }
           }
         }
       }

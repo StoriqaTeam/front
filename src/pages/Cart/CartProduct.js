@@ -326,6 +326,9 @@ export default createFragmentContainer(
         scope
         percent
       }
+      companyPackage {
+        id
+      }
     }
   `,
 );

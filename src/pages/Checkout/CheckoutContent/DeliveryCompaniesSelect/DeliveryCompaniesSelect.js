@@ -17,6 +17,7 @@ type PropsType = {
   country: string,
   baseProductId: number,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
+  onPackageSelect: (pkg: ?AvailableDeliveryPackageType) => void,
 };
 
 type StateType = {
@@ -115,7 +116,9 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
                 }
               }}
               onAccept={() => {
-                this.setState({ isDropdownOpened: false });
+                this.setState({ isDropdownOpened: false }, () => {
+                  this.props.onPackageSelect(this.state.selectedPackage);
+                });
               }}
             />
           )}

@@ -2,6 +2,7 @@
 
 import { fetchQuery, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import { map, reject, isNil, addIndex } from 'ramda';
 
 import { log } from 'utils';
 
@@ -34,7 +35,6 @@ const AVAILABLE_PACKAGES_FOR_USER = graphql`
         name
         price
         companyPackageRawId
-        logo
       }
     }
   }
@@ -48,20 +48,32 @@ const fetchAvailableDeliveryPackages = (
     userCountry: input.destinationCountry,
     baseProductId: input.baseProductId,
   }).then(response => {
-    log.debug(response);
-    return Promise.resolve([
-      { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
-      { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
-      { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
-    ]);
-    // if (response.availableShippingForUser) {
-    //   return Promise.resolve([
-    //     { id: '1', name: 'UPS', price: 345, currency: 'STQ' },
-    //     { id: '2', name: 'DHL', price: 54333, currency: 'USD' },
-    //     { id: '3', name: 'China post', price: 1345, currency: 'BTC' },
-    //   ]);
-    // }
-    // return Promise.reject(new Error('Unable to fetch packages'));
+    log.debug('fetchAvailableDeliveryPackages', { response });
+
+    let availablePackages: Array<AvailableDeliveryPackageType | null> = [];
+    if (
+      response &&
+      response.availableShippingForUser &&
+      response.availableShippingForUser.packages instanceof Array
+    ) {
+      const mapIndexed = addIndex(map);
+      availablePackages = mapIndexed((item, idx) => {
+        const { companyPackageRawId: id, name, price } = item;
+        if (!isNil(id) && !isNil(name) && !isNil(price)) {
+          return {
+            id: `${id}_${idx}`,
+            name,
+            price,
+            currency: 'STQ',
+          };
+        }
+        return null;
+      }, response.availableShippingForUser.packages);
+
+      return Promise.resolve(reject(isNil, availablePackages));
+    }
+
+    return Promise.reject(new Error('Unable to fetch packages'));
   });
 };
 

@@ -7,7 +7,7 @@ import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, currentCurrency, convertCountries } from 'utils';
+import { formatPrice, currentCurrency, convertCountries, log } from 'utils';
 import { AppContext } from 'components/App';
 
 import CartProductAttribute from './CartProductAttribute';
@@ -16,6 +16,7 @@ import CheckoutContext from '../Checkout/CheckoutContext';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
+import type { AvailableDeliveryPackageType } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 
 import './ProductInfo.scss';
 
@@ -31,6 +32,10 @@ type PropsType = {
 class ProductInfo extends PureComponent<PropsType> {
   static defaultProps = {
     withDeliveryCompaniesSelect: false,
+  };
+
+  handlePackageSelect = (pkg: ?AvailableDeliveryPackageType) => {
+    log.debug('ProductInfo.handlePackageSelect', { pkg });
   };
 
   render() {
@@ -184,6 +189,9 @@ class ProductInfo extends PureComponent<PropsType> {
                                           baseProductId={product.baseProductId}
                                           country={currentCountryAlpha3}
                                           onPackagesFetched={() => {}}
+                                          onPackageSelect={
+                                            this.handlePackageSelect
+                                          }
                                         />
                                       </Col>
                                     </Row>
