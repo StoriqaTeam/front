@@ -16,7 +16,7 @@ import {
   InvoiceTotal,
 } from './index';
 
-import { /* formatStatus, */ pluckFromOrder } from './utils';
+import { pluckFromOrder } from './utils';
 
 import './OrderInvoice.scss';
 
