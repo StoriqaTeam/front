@@ -43,7 +43,7 @@ const OrderInvoiceData = ({
         <span>Country #:</span> <span>{country}</span>
       </div>
       <div styleName="addressField">
-        <span>Region:</span> <span> {administrativeAreaLevel1}</span>
+        <span>Region:</span> <span> {region}</span>
       </div>
       <div styleName="addressField">
         <span>City:</span> <span>{locality}</span>
