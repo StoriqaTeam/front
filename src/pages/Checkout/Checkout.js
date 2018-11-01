@@ -259,7 +259,7 @@ class Checkout extends Component<PropsType, StateType> {
       cart: { totalCount, stores },
     } = this.props;
 
-    if (stores && stores.edges instanceof Array) {
+    if (this.state.step === 2 && stores && stores.edges instanceof Array) {
       const products = flatten(
         map(item => {
           if (item.node && item.node.products instanceof Array) {
@@ -274,9 +274,7 @@ class Checkout extends Component<PropsType, StateType> {
         products,
       );
 
-      if (this.state.step === 2) {
-        return isNil(isProductsWithoutPackageExist);
-      }
+      return isNil(isProductsWithoutPackageExist);
     }
 
     const {
