@@ -65,6 +65,6 @@ const OrderInvoiceData = ({
       </div>
     </div>
   );
-}
+};
 
 export default OrderInvoiceData;

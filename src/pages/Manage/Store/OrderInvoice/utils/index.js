@@ -1,7 +1,6 @@
 // @flow strict
 import { isNil } from 'ramda';
 
-
 export const formatStatus = (str: string): string =>
   str.replace(/[\W_]+/g, ' ').toLowerCase();
 
