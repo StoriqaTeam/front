@@ -1,8 +1,9 @@
-@import "../../styles/variables.scss";
+@import "../../../styles/variables.scss";
 
 .container {
   color: $color_grey;
   padding: 2rem 0;
+  border-bottom: 1px solid $color_grey_trivial;
 }
 
 @media (min-width: $sm) {
@@ -14,10 +15,6 @@
 .left-container {
   display: flex;
   align-items: flex-start;
-}
-
-.checkbox {
-  margin-right: 2rem;
 }
 
 .picture {
@@ -48,7 +45,7 @@
 }
 
 .productInfoWrapper {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .product-summary-header {

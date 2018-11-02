@@ -1,19 +1,27 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
+import type { AddressFullType } from 'types';
+
 import './CheckoutProducts.scss';
-import AddressInfo from './AddressInfo';
+import AddressInfo from '../AddressInfo';
 
 type PropsType = {
-  orderInput: any,
-  me: any,
-  onChangeStep: Function,
+  addressFull: AddressFullType,
+  receiverName: string,
+  email: string,
+  replaceAddress: () => void,
 };
 
-const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
+const CheckoutProducts = ({
+  addressFull,
+  receiverName,
+  email,
+  replaceAddress,
+}: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
@@ -27,7 +35,7 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                     <Button
                       big
                       contour
-                      onClick={onChangeStep(1)}
+                      onClick={replaceAddress}
                       type="button"
                       dataTest="changeAddress"
                     >
@@ -38,15 +46,12 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
               </div>
             </Col>
             <Col size={12}>
-              {orderInput.addressFull.value && (
+              {addressFull.value && (
                 <div styleName="addressInfoWrapper">
                   <AddressInfo
-                    addressFull={orderInput.addressFull}
-                    receiverName={
-                      orderInput.receiverName ||
-                      `${me.firstName} ${me.lastName}`
-                    }
-                    email={me.email}
+                    addressFull={addressFull}
+                    receiverName={receiverName}
+                    email={email}
                   />
                 </div>
               )}
@@ -57,7 +62,7 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                   big
                   contour
                   whireframe
-                  onClick={onChangeStep(1)}
+                  onClick={replaceAddress}
                   type="button"
                   dataTest="changeAddress"
                 >

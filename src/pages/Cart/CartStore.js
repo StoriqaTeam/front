@@ -107,11 +107,7 @@ class CartStore extends Component<PropsType, StateType> {
         }
 
         // $FlowIgnoreMe
-        const status400Error = pathOr(
-          'Unknown error.',
-          ['400', 'status'],
-          relayErrors,
-        );
+        const status400Error = pathOr(null, ['400', 'status'], relayErrors);
         if (status400Error) {
           this.props.showAlert({
             type: 'danger',

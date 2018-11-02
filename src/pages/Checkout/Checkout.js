@@ -3,8 +3,20 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
+import {
+  pipe,
+  pathOr,
+  path,
+  map,
+  prop,
+  isEmpty,
+  filter,
+  contains,
+  head,
+  keys,
+} from 'ramda';
 import { routerShape, withRouter } from 'found';
+import { validate } from '@storiqa/shared';
 
 import { log } from 'utils';
 import {
@@ -15,6 +27,7 @@ import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/App/AlertContext';
 import { StickyBar } from 'components/StickyBar';
+import smoothscroll from 'libs/smoothscroll';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/App/AlertContext';
@@ -57,6 +70,8 @@ type StateType = {
   },
   invoiceId: ?string,
   checkoutInProcess: boolean,
+  errors: { [string]: Array<string> },
+  scrollArr: Array<string>,
 };
 
 const emptyAddress = {
@@ -91,6 +106,8 @@ class Checkout extends Component<PropsType, StateType> {
       },
       invoiceId: null,
       checkoutInProcess: false,
+      errors: {},
+      scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
     };
   }
 
@@ -156,6 +173,39 @@ class Checkout extends Component<PropsType, StateType> {
       this.createAddress();
     }
     this.setState({ step });
+  };
+
+  goToCheckout = () => {
+    this.setState({ errors: {} });
+    const preValidationErrors = this.validate();
+    if (!isEmpty(preValidationErrors)) {
+      this.setState({ errors: preValidationErrors });
+      return;
+    }
+    this.setState({ step: 2 });
+  };
+
+  validate = () => {
+    const { addressFull } = this.state.orderInput;
+    let { errors } = validate(
+      {
+        receiverName: [[val => Boolean(val), 'Receiver name is required']],
+        receiverPhone: [[val => Boolean(val), 'Receiver phone is required']],
+      },
+      this.state.orderInput,
+    );
+    if (!addressFull.country || !addressFull.postalCode || !addressFull.value) {
+      errors = {
+        ...errors,
+        deliveryAddress: ['Country, address and postal code are required'],
+      };
+    }
+    if (errors && !isEmpty(errors)) {
+      const { scrollArr } = this.state;
+      const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
+      smoothscroll.scrollTo(head(oneArr));
+    }
+    return errors || {};
   };
 
   handleOnChangeOrderInput = orderInput => {
@@ -247,23 +297,11 @@ class Checkout extends Component<PropsType, StateType> {
     if (!this.props.cart) {
       return false;
     }
-
     const {
       cart: { totalCount },
     } = this.props;
-    const {
-      step,
-      orderInput: {
-        addressFull: { country, postalCode },
-        receiverName,
-        receiverPhone,
-      },
-    } = this.state;
-    const emptyString = (str: string): boolean => /^\s*$/.test(str);
-    if (step === 1 && (emptyString(receiverName) || !receiverPhone)) {
-      return false;
-    }
-    if (!country || !postalCode || (totalCount === 0 && step === 2)) {
+    const { step } = this.state;
+    if (totalCount === 0 && step === 2) {
       return false;
     }
     return true;
@@ -283,6 +321,7 @@ class Checkout extends Component<PropsType, StateType> {
       isNewAddress,
       saveAsNewAddress,
       orderInput,
+      errors,
     } = this.state;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
@@ -340,6 +379,7 @@ class Checkout extends Component<PropsType, StateType> {
                               deliveryAddresses={deliveryAddresses || []}
                               orderInput={orderInput}
                               onChangeOrderInput={this.handleOnChangeOrderInput}
+                              errors={errors}
                             />
                           </div>
                         </div>
@@ -380,13 +420,12 @@ class Checkout extends Component<PropsType, StateType> {
                       <Col size={12} lg={4} xl={3}>
                         <StickyBar>
                           <CheckoutSidebar
+                            step={step}
                             buttonText={step === 1 ? 'Next' : 'Checkout'}
-                            onClick={
-                              (step === 1 && this.handleChangeStep(2)) ||
-                              this.handleCheckout
-                            }
                             isReadyToClick={this.checkReadyToCheckout()}
                             checkoutInProcess={this.state.checkoutInProcess}
+                            onCheckout={this.handleCheckout}
+                            goToCheckout={this.goToCheckout}
                           />
                         </StickyBar>
                       </Col>

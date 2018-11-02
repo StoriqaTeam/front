@@ -1,0 +1,151 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  padding: 3rem 3rem;
+  color: $color_grey;
+  background-color: $color-white;
+  border-left: 1px solid $color_grey_trivial;
+  border-right: 1px solid $color_grey_trivial;
+  width: 100%;
+}
+
+.cart-total-title {
+  font-family: $font_medium;
+  text-transform: uppercase;
+  padding: 0rem 4rem 2rem 4rem;
+}
+
+.checkout {
+  margin-top: 0.5rem;
+
+  button {
+    width: 100%;
+  }
+}
+
+.payments-container {
+  background-color: $color_grey_trivial;
+  padding: 2rem 4rem;
+}
+
+.title {
+  color: $color_grey;
+  font-family: $font_medium;
+  font-size: 1.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.value {
+  font-family: $font_regular;
+  color: $color_grey;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-top: 0.5rem;
+}
+
+.payment-option-icon {
+  position: absolute;
+  right: 0;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  svg {
+    height: 2rem;
+  }
+  img {
+    height: 2rem;
+  }
+}
+
+.payments-group {
+  padding-top: 2rem;
+}
+
+.totalsContainer {
+  padding-top: 2.5rem;
+}
+
+.attributeContainer {
+  margin-bottom: 1rem;
+  .label {
+    font-size: 1.75rem;
+    color: $color_grey_minor;
+    .subLabel {
+      color: $color_green;
+    }
+  }
+  .value {
+
+  }
+  .bold {
+    font-size: 20px;
+    font-family: $font_bold;
+  }
+
+  .totalCost {
+    display: flex;
+    align-items: baseline;
+
+    .usdPrice {
+      display: flex;
+      align-items: baseline;
+      margin-left: 1rem;
+
+      .slash {
+        font-size: 18px;
+        line-height: 1.5rem;
+        font-weight: normal;
+        font-family: $font_light;
+      }
+    }
+  }
+}
+
+.paperWrapper {
+  display: flex;
+  flex-direction: row;
+  height: 1rem;
+
+  .corner {
+    width: 0.5rem;
+    height: 100%;
+    background-color: $color_white;
+
+    &.tl {
+      border-left: 1px solid $color_grey_trivial;
+      border-top: 1px solid $color_grey_trivial;
+    }
+    &.tr {
+      border-right: 1px solid $color_grey_trivial;
+      border-top: 1px solid $color_grey_trivial;
+    }
+    &.br {
+      border-right: 1px solid $color_grey_trivial;
+      border-bottom: 1px solid $color_grey_trivial;
+    }
+    &.bl {
+      border-left: 1px solid $color_grey_trivial;
+      border-bottom: 1px solid $color_grey_trivial;
+    }
+  }
+  .paper {
+    display: flex;
+    flex: 1;
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-image: url('./png/particle.png');
+
+    &.bottom {
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+}
