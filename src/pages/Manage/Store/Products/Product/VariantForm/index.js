@@ -587,7 +587,7 @@ class VariantForm extends Component<PropsType, StateType> {
             value={vendorCode || ''}
             onChange={this.handleVendorCodeChange}
             errors={formErrors && formErrors.vendorCode}
-            dataTest="variantVendorcodeInput"
+            dataTest="vendorCode"
           />
         </div>
         <div styleName="title titlePricing">
@@ -602,7 +602,7 @@ class VariantForm extends Component<PropsType, StateType> {
             price={parseFloat(price) || 0}
             currency={currency}
             errors={formErrors && formErrors.price}
-            dataTest="variantPriceInput"
+            dataTest="price"
           />
         </div>
         <div styleName="formItem">
@@ -611,7 +611,7 @@ class VariantForm extends Component<PropsType, StateType> {
             label="Cashback"
             onChange={this.handlePercentChange('cashback')}
             value={!isNil(cashback) ? `${cashback}` : ''}
-            dataTest="variantCashbackInput"
+            dataTest="Cashback"
           />
           <span styleName="inputPostfix">Percent</span>
         </div>
@@ -621,7 +621,7 @@ class VariantForm extends Component<PropsType, StateType> {
             label="Discount"
             onChange={this.handlePercentChange('discount')}
             value={!isNil(discount) ? `${discount}` : ''}
-            dataTest="variantDiscountInput"
+            dataTest="Discount"
           />
           <span styleName="inputPostfix">Percent</span>
         </div>
