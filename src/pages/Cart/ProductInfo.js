@@ -1,17 +1,25 @@
-import React from 'react';
-import { head, map } from 'ramda';
+// @flow
+
+import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { head, map, find, whereEq, propOr, pathOr, isNil, is } from 'ramda';
 
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
-// import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, currentCurrency } from 'utils';
+import { formatPrice, currentCurrency, convertCountries, log } from 'utils';
+import { AppContext } from 'components/App';
 
 import CartProductAttribute from './CartProductAttribute';
+import { DeliveryCompaniesSelect } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect';
+import CheckoutContext from '../Checkout/CheckoutContext';
+import setDeliveryPackageInCartMutation from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/mutations/SetDeliveryPackageInCart';
+import removeDeliveryMethodForProductMutation from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/mutations/RemoveDeliveryMethodForProduct';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
+import type { AvailableDeliveryPackageType } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 
 import './ProductInfo.scss';
 
@@ -21,186 +29,310 @@ type PropsType = {
   comment: string,
   // eslint-disable-next-line
   ...CartProduct_product,
+  withDeliveryCompaniesSelect?: boolean,
 };
 
-const ProductInfo = ({
-  product,
-  onQuantityChange,
-  onChangeComment,
-  comment,
-  isOpen,
-}: PropsType) => {
-  const attrs = map(attr => ({
-    title: head(attr.attribute.name).text,
-    value: attr.value.toString(),
-  }))(product.attributes);
-  return (
-    <ShowMore
-      isOpen={isOpen}
-      height={400}
-      dataTest={`cart-product-${product.rawId}-showMore`}
-    >
-      <Container correct>
-        <Row>
-          <Col size={12} xl={8}>
-            <Row>
-              <Col size={6} xl={12}>
-                <div styleName="contentBlock">
-                  <div styleName="product-summary-attributes">
-                    <div styleName="cart-product-title">About product</div>
-                    {product.preOrder &&
-                      product.preOrderDays && (
-                        <div styleName="preOrder">
-                          <div styleName="preOrderText">
-                            <div>Available for pre-order.</div>
-                            <div>
-                              Lead time (days):{' '}
-                              <span styleName="preOrderDays">
-                                {product.preOrderDays}
-                              </span>
+class ProductInfo extends PureComponent<PropsType> {
+  static defaultProps = {
+    withDeliveryCompaniesSelect: false,
+  };
+
+  handlePackageSelect = (pkg: ?AvailableDeliveryPackageType) => {
+    log.debug('ProductInfo.handlePackageSelect', { pkg });
+    log.debug('product', this.props.product);
+
+    const productId = pathOr(null, ['rawId'], this.props.product);
+    log.debug({ productId });
+    log.debug({
+      '!isNil(pkg)': !isNil(pkg),
+      '!isNil(productId)': !isNil(productId),
+      'is(Number,productId)': is(Number, productId),
+    });
+    if (!isNil(pkg) && !isNil(productId) && is(Number, productId)) {
+      setDeliveryPackageInCartMutation({
+        environment: this.context.environment,
+        variables: {
+          input: {
+            clientMutationId: '',
+            productId: parseInt(productId, 10),
+            companyPackageId: pkg.companyPackageRawId,
+          },
+        },
+      }).then(response => {
+        log.debug('mutation response', { response });
+      });
+    }
+  };
+
+  handlePackageFetching = (packages: Array<AvailableDeliveryPackageType>) => {
+    const productCompanyPackageRawId: ?number = pathOr(null)([
+      'product',
+      'companyPackage',
+      'rawId',
+    ])(this.props);
+    log.debug('handlePackageFetching', {
+      packages,
+      selected: productCompanyPackageRawId,
+    });
+
+    const currentProductRawId: ?number = pathOr(null, ['product', 'rawId'])(
+      this.props,
+    );
+
+    if (productCompanyPackageRawId != null) {
+      const isProductPackageExists = !isNil(
+        find(
+          whereEq({ companyPackageRawId: productCompanyPackageRawId }),
+          packages,
+        ),
+      );
+      if (!isProductPackageExists && currentProductRawId) {
+        removeDeliveryMethodForProductMutation({
+          environment: this.context.environment,
+          variables: {
+            input: {
+              clientMutationId: '',
+              productId: currentProductRawId,
+            },
+          },
+        });
+      }
+    }
+  };
+
+  render() {
+    const {
+      product,
+      onQuantityChange,
+      onChangeComment,
+      comment,
+      withDeliveryCompaniesSelect,
+    } = this.props;
+
+    const attrs = map(
+      attr => ({
+        title: head(attr.attribute.name).text,
+        value: attr.value.toString(),
+      }),
+      product.attributes,
+    );
+
+    const isShippingAvailable = pathOr(
+      false,
+      ['baseProduct', 'isShippingAvailable'],
+      product,
+    );
+    return (
+      <ShowMore
+        isOpen
+        height={400}
+        dataTest={`cart-product-${product.rawId}-showMore`}
+      >
+        <Container correct>
+          <Row>
+            <Col size={12} xl={8}>
+              <Row>
+                <Col size={6} xl={12}>
+                  <div styleName="contentBlock">
+                    <div styleName="product-summary-attributes">
+                      <div styleName="cart-product-title">About product</div>
+                      {product.preOrder &&
+                        product.preOrderDays && (
+                          <div styleName="preOrder">
+                            <div styleName="preOrderText">
+                              <div>Available for pre-order.</div>
+                              <div>
+                                Lead time (days):{' '}
+                                <span styleName="preOrderDays">
+                                  {product.preOrderDays}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    {(attrs.length > 0 && (
-                      <Row>
-                        {attrs.map(attr => (
-                          <Col key={`attr-${attr.value}`} size={12} xl={6}>
-                            <CartProductAttribute {...attr} />
-                          </Col>
-                        ))}
-                      </Row>
-                    )) || <div styleName="empty" />}
+                        )}
+                      {(attrs.length > 0 && (
+                        <Row>
+                          {attrs.map(attr => (
+                            <Col key={`attr-${attr.value}`} size={12} xl={6}>
+                              <CartProductAttribute {...attr} />
+                            </Col>
+                          ))}
+                        </Row>
+                      )) || <div styleName="empty" />}
+                    </div>
                   </div>
-                </div>
-              </Col>
-              <Col size={6} xlHidden>
-                <div styleName="contentBlock">
-                  <div styleName="cart-product-title">Price</div>
-                  <CartProductAttribute
-                    title="Count"
-                    value={
-                      <Stepper
-                        value={product.quantity}
-                        min={0}
-                        max={9999}
-                        onChange={newVal => onQuantityChange(newVal)}
-                      />
-                    }
-                  />
-                  <CartProductAttribute
-                    title="Subtotal"
-                    value={`${formatPrice(
-                      product.subtotal || 0,
-                    )} ${currentCurrency()}`}
-                  />
-                  <CartProductAttribute
-                    title="Delivery"
-                    value={`${formatPrice(
-                      product.deliveryCost || 0,
-                    )} ${currentCurrency()}`}
-                  />
-                  {product.couponDiscount !== 0 && (
+                </Col>
+                <Col size={6} xlHidden>
+                  <div styleName="contentBlock">
+                    <div styleName="cart-product-title">Price</div>
                     <CartProductAttribute
-                      title="Coupon discount"
+                      title="Count"
+                      value={
+                        <Stepper
+                          value={product.quantity}
+                          min={0}
+                          max={9999}
+                          onChange={newVal => onQuantityChange(newVal)}
+                        />
+                      }
+                    />
+                    <CartProductAttribute
+                      title="Subtotal"
                       value={`${formatPrice(
-                        product.couponDiscount || 0,
+                        product.subtotal || 0,
                       )} ${currentCurrency()}`}
                     />
-                  )}
-                </div>
-              </Col>
-              <Col size={12}>
-                <div styleName="contentBlock">
-                  <div>
-                    {/* <div styleName="cart-product-title">
-                      Delivery and return
-                    </div>
-                    <Row>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Shiping to"
-                          value={
-                            <Select
-                              items={[{ id: 1, label: 'Everywhere' }]}
-                              activeItem={{ id: 1, label: 'Everywhere' }}
-                              forForm
-                              fullWidth
-                              onSelect={() => {}}
-                            />
-                          }
-                        />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute title="Terms" value="14 days" />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Return type on return"
-                          value="Exchange or funds return"
-                        />
-                      </Col>
-                      <Col size={6}>
-                        <CartProductAttribute
-                          title="Delivery on return"
-                          value="Seller pays"
-                        />
-                      </Col>
-                    </Row> */}
-                    <div styleName="comment">
-                      <Input
-                        fullWidth
-                        id="customerComment"
-                        onChange={onChangeComment}
-                        value={comment}
-                        label="Customer comment"
+                    <CartProductAttribute
+                      title="Delivery"
+                      value={`${formatPrice(
+                        product.deliveryCost || 0,
+                      )} ${currentCurrency()}`}
+                    />
+                    {product.couponDiscount !== 0 && (
+                      <CartProductAttribute
+                        title="Coupon discount"
+                        value={`${formatPrice(
+                          product.couponDiscount || 0,
+                        )} ${currentCurrency()}`}
                       />
+                    )}
+                  </div>
+                </Col>
+                <Col size={12}>
+                  <div styleName="contentBlock">
+                    <div>
+                      {withDeliveryCompaniesSelect === false &&
+                        !isShippingAvailable && (
+                          <Fragment>
+                            <div styleName="cart-product-title">Delivery</div>
+                            <Row>
+                              <Col size={11}>
+                                <div styleName="noDeliveryAvailableAlert">
+                                  <div styleName="icon">
+                                    {/* eslint-disable */}
+                                    <img
+                                      src={require('./png/attention.png')}
+                                      alt="!"
+                                    />
+                                    {/* eslint-enable */}
+                                  </div>
+                                  <span styleName="error">Attention!</span>&nbsp;No
+                                  shipping available for this product to your
+                                  region.
+                                </div>
+                              </Col>
+                            </Row>
+                          </Fragment>
+                        )}
+                      {withDeliveryCompaniesSelect && (
+                        <AppContext.Consumer>
+                          {({ directories }) => (
+                            <CheckoutContext.Consumer>
+                              {({ country }) => {
+                                // $FlowIgnoreMe
+                                const currentAddressCountry = find(
+                                  whereEq({ label: country }),
+                                  convertCountries(directories.countries),
+                                );
+                                const currentCountryAlpha3 = propOr(
+                                  null,
+                                  'alpha3',
+                                  currentAddressCountry,
+                                );
+
+                                return currentCountryAlpha3 != null ? (
+                                  <Fragment>
+                                    <div styleName="cart-product-title">
+                                      Delivery
+                                    </div>
+                                    <Row>
+                                      <Col size={11}>
+                                        <DeliveryCompaniesSelect
+                                          baseProductId={product.baseProductId}
+                                          country={currentCountryAlpha3}
+                                          onPackagesFetched={
+                                            this.handlePackageFetching
+                                          }
+                                          onPackageSelect={
+                                            this.handlePackageSelect
+                                          }
+                                          // $FlowIgnoreMe
+                                          selectedCompanyPackageRawId={pathOr(
+                                            null,
+                                            ['companyPackage', 'rawId'],
+                                            product,
+                                          )}
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </Fragment>
+                                ) : (
+                                  <span>No country found</span>
+                                );
+                              }}
+                            </CheckoutContext.Consumer>
+                          )}
+                        </AppContext.Consumer>
+                      )}
+                      <div styleName="comment">
+                        <Input
+                          fullWidth
+                          id="customerComment"
+                          onChange={onChangeComment}
+                          value={comment}
+                          label="Customer comment"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Col>
-            </Row>
-          </Col>
-          <Col size={4} xlVisibleOnly>
-            <div styleName="contentBlock">
-              <div styleName="cart-product-title">Price</div>
-              <CartProductAttribute
-                title="Count"
-                value={
-                  <Stepper
-                    value={product.quantity}
-                    min={0}
-                    max={9999}
-                    onChange={newVal => onQuantityChange(newVal)}
-                  />
-                }
-              />
-              <CartProductAttribute
-                title="Subtotal"
-                value={`${formatPrice(
-                  product.subtotal || 0,
-                )} ${currentCurrency()}`}
-              />
-              <CartProductAttribute
-                title="Delivery"
-                value={`${formatPrice(
-                  product.deliveryCost || 0,
-                )} ${currentCurrency()}`}
-              />
-              {product.couponDiscount !== 0 && (
+                </Col>
+              </Row>
+            </Col>
+            <Col size={4} xlVisibleOnly>
+              <div styleName="contentBlock">
+                <div styleName="cart-product-title">Price</div>
                 <CartProductAttribute
-                  title="Coupon discount"
+                  title="Count"
+                  value={
+                    <Stepper
+                      value={product.quantity}
+                      min={0}
+                      max={9999}
+                      onChange={newVal => onQuantityChange(newVal)}
+                    />
+                  }
+                />
+                <CartProductAttribute
+                  title="Subtotal"
                   value={`${formatPrice(
-                    product.couponDiscount || 0,
+                    product.subtotal || 0,
                   )} ${currentCurrency()}`}
                 />
-              )}
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </ShowMore>
-  );
+                <CartProductAttribute
+                  title="Delivery"
+                  value={`${formatPrice(
+                    product.deliveryCost || 0,
+                  )} ${currentCurrency()}`}
+                />
+                {product.couponDiscount !== 0 && (
+                  <CartProductAttribute
+                    title="Coupon discount"
+                    value={`${formatPrice(
+                      product.couponDiscount || 0,
+                    )} ${currentCurrency()}`}
+                  />
+                )}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </ShowMore>
+    );
+  }
+}
+
+ProductInfo.contextTypes = {
+  environment: PropTypes.object.isRequired,
 };
 
 export default ProductInfo;

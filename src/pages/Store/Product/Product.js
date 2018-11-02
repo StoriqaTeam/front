@@ -429,6 +429,7 @@ class Product extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
+  // $FlowIgnoreMe
   withShowAlert(withErrorBoundary(Page(Product, true))),
   graphql`
     fragment Product_baseProduct on BaseProduct {

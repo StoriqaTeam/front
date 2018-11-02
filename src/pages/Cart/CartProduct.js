@@ -33,14 +33,18 @@ type PropsType = {
   // eslint-disable-next-line
   ...CartProduct_product,
   isOpenInfo: ?boolean,
+  withDeliveryCompaniesSelect?: boolean,
 };
 
 type StateType = {
   comment: string,
 };
 
-/* eslint-disable react/no-array-index-key */
 class CartProduct extends Component<PropsType, StateType> {
+  static defaultProps = {
+    withDeliveryCompaniesSelect: false,
+  };
+
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -171,7 +175,12 @@ class CartProduct extends Component<PropsType, StateType> {
   }, 250);
 
   render() {
-    const { product, unselectable, isOpenInfo } = this.props;
+    const {
+      product,
+      unselectable,
+      isOpenInfo,
+      withDeliveryCompaniesSelect,
+    } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
       pathOr([], ['name']),
@@ -179,6 +188,7 @@ class CartProduct extends Component<PropsType, StateType> {
       defaultTo({}),
       path(['text']),
     )(product);
+    log.debug('CartProduct', this.props);
     const { photoMain, selected } = product;
     return (
       <div styleName="container">
@@ -249,6 +259,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       onChangeComment={this.handleOnChangeComment}
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
+                      withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
                     />
                   </div>
                 </Col>
@@ -267,6 +278,11 @@ export default createFragmentContainer(
     fragment CartProduct_product on CartProduct {
       id
       rawId
+      baseProduct(visibility: "active") {
+        id
+        isShippingAvailable
+      }
+      baseProductId
       subtotal
       subtotalWithoutDiscounts
       couponDiscount
@@ -310,6 +326,10 @@ export default createFragmentContainer(
         title
         scope
         percent
+      }
+      companyPackage {
+        id
+        rawId
       }
     }
   `,

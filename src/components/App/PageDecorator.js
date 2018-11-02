@@ -103,7 +103,10 @@ export default (
                     />
                   ) : (
                     <Header
+                      currentLocale="en"
+                      setLang={() => {}}
                       user={this.props.me}
+                      // $FlowIgnoreMe
                       searchValue={pathOr(
                         '',
                         ['match', 'location', 'query', 'search'],

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr, isNil } from 'ramda';
+import { pathOr, isNil, map } from 'ramda';
 import classNames from 'classnames';
 
 import { AppContext } from 'components/App';
@@ -188,7 +188,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               <BurgerMenu />
               <HeaderTop
                 userData={userData}
-                currencies={directories.currencies}
+                currencies={map(
+                  // $FlowIgnoreMe
+                  item => `${item}`,
+                  directories.currencies || [],
+                )}
                 isShopCreated={isShopCreated}
                 setLang={setLang}
               />

@@ -4,7 +4,20 @@
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
 import PropTypes from 'prop-types';
-import { pipe, pathOr, path, map, prop, isEmpty } from 'ramda';
+import {
+  pipe,
+  pathOr,
+  path,
+  map,
+  prop,
+  isEmpty,
+  flatten,
+  filter,
+  whereEq,
+  find,
+  isNil,
+  anyPass,
+} from 'ramda';
 import { routerShape, withRouter } from 'found';
 
 import { Page } from 'components/App';
@@ -16,7 +29,7 @@ import CartEmpty from './CartEmpty';
 import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
-import type Cart_cart from './__generated__/Cart_cart.graphql';
+import type { Cart_cart } from './__generated__/Cart_cart.graphql';
 
 import './Cart.scss';
 
@@ -69,6 +82,20 @@ class Cart extends Component<PropsType, StateType> {
     );
   }
 
+  isAllSelectedProductsHaveShipping = (): boolean => {
+    const storeEdges = this.props.cart ? this.props.cart.stores.edges : [];
+    const stores = map(prop('node'), [...storeEdges]);
+    // $FlowIgnoreMe
+    const products = flatten(map(prop('products'), stores));
+    const selectedProducts = filter(whereEq({ selected: true }), products);
+    const productsWithoutShipping = find(
+      item => item.baseProduct.isShippingAvailable === false,
+      selectedProducts,
+    );
+
+    return anyPass([isEmpty, isNil])(productsWithoutShipping);
+  };
+
   handleToCheckout = () => {
     this.props.router.push('/checkout');
   };
@@ -77,10 +104,11 @@ class Cart extends Component<PropsType, StateType> {
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
+      // $FlowIgnoreMe
     )(this.props);
-    const {
-      cart: { totalCount },
-    } = this.props;
+
+    // $FlowIgnoreMe
+    const totalCount = pathOr(0, ['cart', 'totalCount'], this.props);
     const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
       <div styleName="container">
@@ -121,7 +149,10 @@ class Cart extends Component<PropsType, StateType> {
                           <CheckoutSidebar
                             buttonText="Checkout"
                             onClick={this.handleToCheckout}
-                            isReadyToClick={totalCount > 0}
+                            isReadyToClick={
+                              totalCount > 0 &&
+                              this.isAllSelectedProductsHaveShipping()
+                            }
                           />
                         </StickyBar>
                       </div>
@@ -159,11 +190,20 @@ export default createPaginationContainer(
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {
+            id
+            ...CartStore_store
             productsCost
             deliveryCost
             totalCost
             totalCount
-            ...CartStore_store
+            products {
+              id
+              selected
+              baseProduct(visibility: "active") {
+                id
+                isShippingAvailable
+              }
+            }
           }
         }
       }

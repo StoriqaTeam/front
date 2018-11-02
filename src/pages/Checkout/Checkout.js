@@ -10,6 +10,10 @@ import {
   map,
   prop,
   isEmpty,
+  flatten,
+  find,
+  whereEq,
+  isNil,
   filter,
   contains,
   head,
@@ -43,9 +47,9 @@ import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
 import { PaymentInfo } from './PaymentInfo';
-
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
+import CheckoutContext from './CheckoutContext';
 
 import './Checkout.scss';
 
@@ -133,7 +137,6 @@ class Checkout extends Component<PropsType, StateType> {
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
         this.setState(() => ({
           isAddressSelect: true,
           isNewAddress: false,
@@ -248,9 +251,7 @@ class Checkout extends Component<PropsType, StateType> {
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
-          log.debug('Success for DeleteFromCart mutation');
           if (response && response.createOrders) {
-            log.debug('Response: ', response);
             this.props.showAlert({
               type: 'success',
               text: 'Orders successfully created',
@@ -269,7 +270,6 @@ class Checkout extends Component<PropsType, StateType> {
             });
             this.setState({ checkoutInProcess: false });
           } else {
-            log.debug('Errors: ', errors);
             this.props.showAlert({
               type: 'danger',
               text: 'Error :(',
@@ -297,10 +297,33 @@ class Checkout extends Component<PropsType, StateType> {
     if (!this.props.cart) {
       return false;
     }
+
     const {
-      cart: { totalCount },
+      cart: { totalCount, stores },
     } = this.props;
     const { step } = this.state;
+
+    // check that all products have selected delivery packages
+    if (step === 2 && stores && stores.edges instanceof Array) {
+      const products = flatten(
+        map(item => {
+          if (item.node && item.node.products instanceof Array) {
+            return item.node.products;
+          }
+          return [];
+        }, stores.edges),
+      );
+
+      const isProductsWithoutPackageExist = find(
+        whereEq({ companyPackage: null }),
+        products,
+      );
+
+      if (!isNil(isProductsWithoutPackageExist)) {
+        return false;
+      }
+    }
+
     if (totalCount === 0 && step === 2) {
       return false;
     }
@@ -331,111 +354,125 @@ class Checkout extends Component<PropsType, StateType> {
 
     const emptyCart = stores.length === 0;
     return (
-      <div styleName="mainContainer">
-        <Container withoutGrow>
-          <Row withoutGrow>
-            {(!emptyCart || step === 3) && (
+      <CheckoutContext.Provider
+        value={{
+          // $FlowIgnore
+          country: pathOr(
+            null,
+            ['addressFull', 'country'],
+            this.state.orderInput,
+          ),
+        }}
+      >
+        <div styleName="mainContainer">
+          <Container withoutGrow>
+            <Row withoutGrow>
+              {(!emptyCart || step === 3) && (
+                <Col size={12}>
+                  <div styleName="headerWrapper">
+                    <CheckoutHeader
+                      currentStep={step}
+                      isReadyToNext={this.checkReadyToCheckout()}
+                      onChangeStep={this.handleChangeStep}
+                    />
+                  </div>
+                </Col>
+              )}
               <Col size={12}>
-                <div styleName="headerWrapper">
-                  <CheckoutHeader
-                    currentStep={step}
-                    isReadyToNext={this.checkReadyToCheckout()}
-                    onChangeStep={this.handleChangeStep}
-                  />
-                </div>
-              </Col>
-            )}
-            <Col size={12}>
-              <div ref={ref => this.setStoresRef(ref)}>
-                <Row withoutGrow>
-                  {emptyCart && step !== 3 ? (
-                    <Col size={12}>
-                      <div styleName="wrapper">
-                        <div styleName="storeContainer">
-                          <CartEmpty />
-                        </div>
-                      </div>
-                    </Col>
-                  ) : (
-                    <Col
-                      size={12}
-                      lg={step !== 3 ? 8 : 12}
-                      xl={step !== 3 ? 9 : 12}
-                    >
-                      {step === 1 && (
+                <div ref={ref => this.setStoresRef(ref)}>
+                  <Row withoutGrow>
+                    {emptyCart && step !== 3 ? (
+                      <Col size={12}>
                         <div styleName="wrapper">
-                          <div styleName="container addressContainer">
-                            <CheckoutAddress
-                              me={me}
-                              isAddressSelect={isAddressSelect}
-                              isNewAddress={isNewAddress}
-                              saveAsNewAddress={saveAsNewAddress}
-                              onChangeSaveCheckbox={
-                                this.handleChangeSaveCheckbox
-                              }
-                              onChangeAddressType={
-                                this.handleOnChangeAddressType
-                              }
-                              deliveryAddresses={deliveryAddresses || []}
-                              orderInput={orderInput}
-                              onChangeOrderInput={this.handleOnChangeOrderInput}
-                              errors={errors}
-                            />
-                          </div>
-                        </div>
-                      )}
-                      {step === 2 && (
-                        <div styleName="wrapper">
-                          <div styleName="container">
-                            <CheckoutProducts
-                              me={me}
-                              orderInput={orderInput}
-                              onChangeStep={this.handleChangeStep}
-                            />
-                          </div>
                           <div styleName="storeContainer">
-                            {stores.map(store => (
-                              <CartStore
-                                onlySelected
-                                unselectable
-                                key={store.__id} // eslint-disable-line
-                                store={store}
-                                totals={1000}
-                              />
-                            ))}
+                            <CartEmpty />
                           </div>
                         </div>
-                      )}
-                      {step === 3 &&
-                        this.state.invoiceId && (
-                          <PaymentInfo
-                            invoiceId={this.state.invoiceId}
-                            me={this.props.me}
-                          />
+                      </Col>
+                    ) : (
+                      <Col
+                        size={12}
+                        lg={step !== 3 ? 8 : 12}
+                        xl={step !== 3 ? 9 : 12}
+                      >
+                        {step === 1 && (
+                          <div styleName="wrapper">
+                            <div styleName="container addressContainer">
+                              <CheckoutAddress
+                                me={me}
+                                isAddressSelect={isAddressSelect}
+                                isNewAddress={isNewAddress}
+                                saveAsNewAddress={saveAsNewAddress}
+                                onChangeSaveCheckbox={
+                                  this.handleChangeSaveCheckbox
+                                }
+                                onChangeAddressType={
+                                  this.handleOnChangeAddressType
+                                }
+                                deliveryAddresses={deliveryAddresses || []}
+                                orderInput={orderInput}
+                                onChangeOrderInput={
+                                  this.handleOnChangeOrderInput
+                                }
+                                errors={errors}
+                              />
+                            </div>
+                          </div>
                         )}
-                    </Col>
-                  )}
-                  {!emptyCart &&
-                    step !== 3 && (
-                      <Col size={12} lg={4} xl={3}>
-                        <StickyBar>
-                          <CheckoutSidebar
-                            step={step}
-                            buttonText={step === 1 ? 'Next' : 'Checkout'}
-                            isReadyToClick={this.checkReadyToCheckout()}
-                            checkoutInProcess={this.state.checkoutInProcess}
-                            onCheckout={this.handleCheckout}
-                            goToCheckout={this.goToCheckout}
-                          />
-                        </StickyBar>
+                        {step === 2 && (
+                          <div styleName="wrapper">
+                            <div styleName="container">
+                              <CheckoutProducts
+                                me={me}
+                                orderInput={orderInput}
+                                onChangeStep={this.handleChangeStep}
+                              />
+                            </div>
+                            <div styleName="storeContainer">
+                              {stores.map(store => (
+                                <CartStore
+                                  onlySelected
+                                  unselectable
+                                  key={store.__id} // eslint-disable-line
+                                  store={store}
+                                  totals={1000}
+                                  withDeliveryCompaniesSelect
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {step === 3 &&
+                          this.state.invoiceId && (
+                            <PaymentInfo
+                              invoiceId={this.state.invoiceId}
+                              me={this.props.me}
+                            />
+                          )}
                       </Col>
                     )}
-                </Row>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+                    {!emptyCart &&
+                      step !== 3 && (
+                        <Col size={12} lg={4} xl={3}>
+                          <StickyBar>
+                            <CheckoutSidebar
+                              step={step}
+                              buttonText={step === 1 ? 'Next' : 'Checkout'}
+                              isReadyToClick={this.checkReadyToCheckout()}
+                              checkoutInProcess={this.state.checkoutInProcess}
+                              onCheckout={this.handleCheckout}
+                              goToCheckout={this.goToCheckout}
+                            />
+                          </StickyBar>
+                        </Col>
+                      )}
+                  </Row>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </CheckoutContext.Provider>
     );
   }
 }
@@ -481,11 +518,19 @@ export default createPaginationContainer(
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {
           node {
+            id
             productsCost
             deliveryCost
             totalCost
             totalCount
             ...CartStore_store
+            products {
+              id
+              companyPackage {
+                id
+                rawId
+              }
+            }
           }
         }
       }

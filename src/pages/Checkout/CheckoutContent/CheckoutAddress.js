@@ -53,11 +53,19 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
     const selectedAddress =
       find(propEq('id', '0'))(addresses) || head(addresses);
 
-    this.handleOnSelectAddress(selectedAddress);
     this.state = {
       addresses,
       selectedAddress,
     };
+  }
+
+  componentDidMount() {
+    const { deliveryAddresses } = this.props;
+    const addresses = addressesToSelect(deliveryAddresses);
+    const selectedAddress =
+      find(propEq('id', '0'))(addresses) || head(addresses);
+
+    this.handleOnSelectAddress(selectedAddress);
   }
 
   componentDidUpdate(prevProps: PropsType) {

@@ -1,5 +1,11 @@
-// @flow
-export type CurrencyType = {
-  key: number,
-  name: 'rouble' | 'euro' | 'dollar' | 'bitcoin' | 'ethereum' | 'stq',
-};
+// @flow strict
+
+type CurrencyEnumType =
+  | 'rouble'
+  | 'euro'
+  | 'dollar'
+  | 'bitcoin'
+  | 'ethereum'
+  | 'stq';
+
+export type CurrencyType = Array<CurrencyEnumType>;

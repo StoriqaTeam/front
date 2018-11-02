@@ -123,6 +123,7 @@ class App extends Component<PropsType, StateType> {
     const directories = this.makeDirectories();
     return (
       <AppContext.Provider
+        // $FlowIgnoreMe
         value={{ categories, environment, directories, handleLogin }}
       >
         <Fragment>
