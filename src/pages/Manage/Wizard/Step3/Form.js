@@ -82,7 +82,7 @@ class ThirdForm extends PureComponent<PropsType> {
     });
   };
 
-  handleChangeProductState = (e: any) => {
+  handleChangeProductState = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { data } = this.props;
     const { name } = e.target;
     let { value } = e.target;
@@ -93,6 +93,9 @@ class ThirdForm extends PureComponent<PropsType> {
       if (value === '') {
         value = '0';
       }
+    }
+    if (parseInt(value, 10) < 0) {
+      value = '0';
     }
     this.props.onChange({
       ...data,

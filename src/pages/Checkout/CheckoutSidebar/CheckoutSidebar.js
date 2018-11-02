@@ -14,10 +14,13 @@ import { Row, Col } from 'layout';
 import './CheckoutSidebar.scss';
 
 type PropsType = {
-  onClick: Function,
+  onClick: () => void,
+  onCheckout: () => void,
   isReadyToClick: Function,
   buttonText: string,
   checkoutInProcess: boolean,
+  goToCheckout: () => void,
+  step?: number,
 };
 
 type StateType = {
@@ -138,9 +141,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   render() {
     const {
       onClick,
+      onCheckout,
       isReadyToClick,
       buttonText,
       checkoutInProcess,
+      goToCheckout,
+      step,
     } = this.props;
     const {
       productsCost,
@@ -150,6 +156,13 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       couponsDiscounts,
       priceUsd,
     } = this.state;
+
+    let onClickFunction = onClick;
+
+    if (step) {
+      onClickFunction = step === 1 ? goToCheckout : onCheckout;
+    }
+
     return (
       <div>
         <div styleName="paperWrapper">
@@ -230,7 +243,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
               disabled={checkoutInProcess || !isReadyToClick}
               isLoading={checkoutInProcess}
               big
-              onClick={onClick}
+              onClick={onClickFunction}
               dataTest="checkoutNext"
             >
               {buttonText}

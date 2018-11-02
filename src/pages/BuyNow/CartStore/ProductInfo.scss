@@ -1,0 +1,115 @@
+@import "../../../styles/variables.scss";
+
+.container {
+    color: $color_grey;
+  }
+  
+  @media (min-width: $sm) {
+    .container {
+      padding: 4rem 2rem;
+    }
+  }
+  
+  .left-container {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .checkbox {
+    margin-right: 2rem;
+  }
+  
+  .picture {
+    width: 100%;
+    max-width: 16.25rem;
+    height: 16.25rem;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .header {
+    padding: 0 0 1rem 2rem;
+  }
+  
+  .half-width {
+    width: 50%;
+    display: inline-block;
+  }
+  
+  .product-params {
+    width: 34%;
+    padding-left: 4rem;
+  }
+  
+  .product-summary-header {
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    font-family: $font_medium;
+  }
+  
+  .product-summary-attributes {
+    font-family: $font_regular;
+    margin-bottom: 2rem;
+  }
+  
+  .contentBlock {
+    //margin-top: 2rem;
+  }
+  
+  .cart-product-title {
+    font-family: $font_medium;
+    font-size: 1.75rem;
+    text-transform: uppercase;
+    padding-bottom: 1.75rem;
+  }
+  
+  .total-container {
+    width: 40em;
+    border: 1px solid $color_grey_trivial;
+  }
+  
+  .comment {
+    .title {
+      color: $color_grey_minor;
+      font-family: $font_regular;
+      font-size: 1.75rem;
+      margin-bottom: -3rem;
+    }
+  }
+  
+  .recycleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  
+  .recycle {
+    & svg {
+      fill: $color_grey_light;
+      transition: $transition_all_ease;
+    }
+  
+    &:hover {
+      & svg {
+        fill: $color_grey;
+      }
+    }
+  }
+
+.empty {
+  width: 1.35rem;
+  height: 2px;
+  background-color: $color_grey;
+}
+
+.preOrder {
+  margin-bottom: 1.75rem;
+
+  .preOrderText {
+    color: $color_grey_minor;
+
+    .preOrderDays {
+      color: $color_green;
+    }
+  }
+}

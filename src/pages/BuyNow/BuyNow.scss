@@ -1,0 +1,104 @@
+@import "../../styles/variables.scss";
+
+.container {
+  margin-top: 2rem;
+}
+
+.headerWrapper {
+  @media (max-width: #{$md - 1px}) {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+}
+
+.body {
+  margin-left: -2rem;
+  margin-right: -2rem;
+
+  @media (min-width: $md) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.addressWrap {
+  width: 100%;
+  background-color: #FFFFFF;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+
+  .title {
+    text-transform: uppercase;
+    font-family: $font_medium;
+    font-size: 1.75rem;
+  }
+
+  .address {
+    padding: 2rem;
+
+    .receiverItem {
+      width: 26rem;
+
+      & + .receiverItem {
+        margin-top: 3rem;
+      }
+
+      .red {
+        color: $color_red;
+      }
+    }
+
+    .selectItem {
+      padding-top: 4rem;
+      margin-bottom: 1rem;
+
+      .select {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        padding-left: 3rem;
+        color: $color_grey_minor;
+        font-size: 1.75rem;
+      }
+    }
+
+    .addressFormWrap {
+      @media (max-width: #{$xl - 1px}) {
+        margin-top: 2rem;
+      }
+
+      .addressForm {
+        position: relative;
+        margin-top: 4rem;
+      }
+
+      .saveAddressCheckbox {
+        margin-top: 5rem;
+      }
+
+      .addressError {
+        position: absolute;
+        margin-top: 1rem;
+        font-size: 12px;
+        color: $color_red;
+        line-height: 2rem;
+      }
+    }
+  }
+
+  .addressInfo {
+    margin-top: 2rem;
+    padding: 0 2rem;
+  }
+}
+
+.otherWrap {
+  min-height: 43rem;
+
+  .products {
+
+  }
+
+  .store {
+
+  }
+}
