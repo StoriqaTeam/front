@@ -34,6 +34,7 @@ class Tabs extends PureComponent<PropsType> {
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
+                data-test={`${item.id}Tab`}
               >
                 {item.label}
               </div>
