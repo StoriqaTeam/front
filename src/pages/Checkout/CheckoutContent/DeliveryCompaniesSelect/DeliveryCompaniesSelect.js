@@ -16,6 +16,7 @@ import './DeliveryCompaniesSelect.scss';
 type PropsType = {
   country: string,
   baseProductId: number,
+  selectedCompanyPackageRawId: ?number,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
   onPackageSelect: (pkg: ?AvailableDeliveryPackageType) => void,
 };
@@ -25,7 +26,7 @@ type StateType = {
   isFetchingError: boolean,
   packages: Array<AvailableDeliveryPackageType>,
   isDropdownOpened: boolean,
-  selectedPackage: ?AvailableDeliveryPackageType,
+  selectedPackage: ?AvailableDeliveryPackageType, // using for temp handling
 };
 
 const Loading = () => (
@@ -90,7 +91,18 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { isFetching, isFetchingError, selectedPackage } = this.state;
+    const {
+      isFetching,
+      isFetchingError,
+      selectedPackage,
+      packages,
+    } = this.state;
+
+    const selectedPkg = find(
+      whereEq({ companyPackageRawId: this.props.selectedCompanyPackageRawId }),
+      packages,
+    );
+
     return (
       <div styleName="container">
         {isFetching && <Loading />}
@@ -99,7 +111,7 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
           !isFetchingError && (
             <Dropdown
               packages={this.state.packages}
-              selectedPackage={selectedPackage}
+              selectedPackage={selectedPackage || selectedPkg}
               isOpen={this.state.isDropdownOpened}
               toggleExpand={() => {
                 this.setState(prevState => ({
@@ -118,6 +130,7 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
               onAccept={() => {
                 this.setState({ isDropdownOpened: false }, () => {
                   this.props.onPackageSelect(this.state.selectedPackage);
+                  this.setState({ selectedPackage: null });
                 });
               }}
             />

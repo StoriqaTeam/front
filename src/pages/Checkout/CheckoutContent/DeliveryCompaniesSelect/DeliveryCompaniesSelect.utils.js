@@ -2,7 +2,7 @@
 
 import { fetchQuery, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
-import { map, reject, isNil, addIndex } from 'ramda';
+import { map, reject, isNil } from 'ramda';
 
 import { log } from 'utils';
 
@@ -14,6 +14,7 @@ type InputType = {
 
 type AvailableDeliveryPackageType = {
   id: string,
+  companyPackageRawId: number,
   name: string,
   price: number,
   currency: string,
@@ -32,6 +33,7 @@ const AVAILABLE_PACKAGES_FOR_USER = graphql`
       baseProductId: $baseProductId
     ) {
       packages {
+        id
         name
         price
         companyPackageRawId
@@ -56,12 +58,12 @@ const fetchAvailableDeliveryPackages = (
       response.availableShippingForUser &&
       response.availableShippingForUser.packages instanceof Array
     ) {
-      const mapIndexed = addIndex(map);
-      availablePackages = mapIndexed((item, idx) => {
-        const { companyPackageRawId: id, name, price } = item;
+      availablePackages = map(item => {
+        const { id, companyPackageRawId, name, price } = item;
         if (!isNil(id) && !isNil(name) && !isNil(price)) {
           return {
-            id: `${id}_${idx}`,
+            id,
+            companyPackageRawId,
             name,
             price,
             currency: 'STQ',

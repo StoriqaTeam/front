@@ -188,8 +188,11 @@ class HeaderResponsive extends Component<PropsType, StateType> {
               <BurgerMenu />
               <HeaderTop
                 userData={userData}
-                // $FlowIgnoreMe
-                currencies={map(item => `${item}`, directories.currencies)}
+                currencies={map(
+                  // $FlowIgnoreMe
+                  item => `${item}`,
+                  directories.currencies || [],
+                )}
                 isShopCreated={isShopCreated}
                 setLang={setLang}
               />

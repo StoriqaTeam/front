@@ -1,7 +1,8 @@
 // @flow
 
 import React, { PureComponent, Fragment } from 'react';
-import { head, map, find, whereEq, propOr, pathOr } from 'ramda';
+import PropTypes from 'prop-types';
+import { head, map, find, whereEq, propOr, pathOr, isNil, is } from 'ramda';
 
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
@@ -13,6 +14,8 @@ import { AppContext } from 'components/App';
 import CartProductAttribute from './CartProductAttribute';
 import { DeliveryCompaniesSelect } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect';
 import CheckoutContext from '../Checkout/CheckoutContext';
+import setDeliveryPackageInCartMutation from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/mutations/SetDeliveryPackageInCart';
+import removeDeliveryMethodForProductMutation from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/mutations/RemoveDeliveryMethodForProduct';
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
@@ -36,6 +39,65 @@ class ProductInfo extends PureComponent<PropsType> {
 
   handlePackageSelect = (pkg: ?AvailableDeliveryPackageType) => {
     log.debug('ProductInfo.handlePackageSelect', { pkg });
+    log.debug('product', this.props.product);
+
+    const productId = pathOr(null, ['rawId'], this.props.product);
+    log.debug({ productId });
+    log.debug({
+      '!isNil(pkg)': !isNil(pkg),
+      '!isNil(productId)': !isNil(productId),
+      'is(Number,productId)': is(Number, productId),
+    });
+    if (!isNil(pkg) && !isNil(productId) && is(Number, productId)) {
+      setDeliveryPackageInCartMutation({
+        environment: this.context.environment,
+        variables: {
+          input: {
+            clientMutationId: '',
+            productId: parseInt(productId, 10),
+            companyPackageId: pkg.companyPackageRawId,
+          },
+        },
+      }).then(response => {
+        log.debug('mutation response', { response });
+      });
+    }
+  };
+
+  handlePackageFetching = (packages: Array<AvailableDeliveryPackageType>) => {
+    const productCompanyPackageRawId: ?number = pathOr(null)([
+      'product',
+      'companyPackage',
+      'rawId',
+    ])(this.props);
+    log.debug('handlePackageFetching', {
+      packages,
+      selected: productCompanyPackageRawId,
+    });
+
+    const currentProductRawId: ?number = pathOr(null, ['product', 'rawId'])(
+      this.props,
+    );
+
+    if (productCompanyPackageRawId != null) {
+      const isProductPackageExists = !isNil(
+        find(
+          whereEq({ companyPackageRawId: productCompanyPackageRawId }),
+          packages,
+        ),
+      );
+      if (!isProductPackageExists && currentProductRawId) {
+        removeDeliveryMethodForProductMutation({
+          environment: this.context.environment,
+          variables: {
+            input: {
+              clientMutationId: '',
+              productId: currentProductRawId,
+            },
+          },
+        });
+      }
+    }
   };
 
   render() {
@@ -188,10 +250,18 @@ class ProductInfo extends PureComponent<PropsType> {
                                         <DeliveryCompaniesSelect
                                           baseProductId={product.baseProductId}
                                           country={currentCountryAlpha3}
-                                          onPackagesFetched={() => {}}
+                                          onPackagesFetched={
+                                            this.handlePackageFetching
+                                          }
                                           onPackageSelect={
                                             this.handlePackageSelect
                                           }
+                                          // $FlowIgnoreMe
+                                          selectedCompanyPackageRawId={pathOr(
+                                            null,
+                                            ['companyPackage', 'rawId'],
+                                            product,
+                                          )}
                                         />
                                       </Col>
                                     </Row>
@@ -260,5 +330,9 @@ class ProductInfo extends PureComponent<PropsType> {
     );
   }
 }
+
+ProductInfo.contextTypes = {
+  environment: PropTypes.object.isRequired,
+};
 
 export default ProductInfo;

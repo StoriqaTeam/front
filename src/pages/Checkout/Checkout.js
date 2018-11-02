@@ -495,6 +495,7 @@ export default createPaginationContainer(
               id
               companyPackage {
                 id
+                rawId
               }
             }
           }

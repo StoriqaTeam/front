@@ -188,6 +188,7 @@ class CartProduct extends Component<PropsType, StateType> {
       defaultTo({}),
       path(['text']),
     )(product);
+    log.debug('CartProduct', this.props);
     const { photoMain, selected } = product;
     return (
       <div styleName="container">
@@ -328,6 +329,7 @@ export default createFragmentContainer(
       }
       companyPackage {
         id
+        rawId
       }
     }
   `,
