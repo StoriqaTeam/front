@@ -171,7 +171,6 @@ class CartProduct extends Component<PropsType, StateType> {
   }, 250);
 
   render() {
-    console.log('---this.props', this.props);
     const { product, unselectable, isOpenInfo } = this.props;
     if (!product) return null;
     const name: ?string = pipe(

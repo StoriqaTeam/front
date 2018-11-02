@@ -14,7 +14,6 @@ import {
   propEq,
   has,
   prop,
-  find,
   pathOr,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
@@ -24,13 +23,12 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
-import { IncrementInCartMutation, BuyNowMutation } from 'relay/mutations';
+import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
 
 import type { AddressFullType } from 'types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import type { MutationParamsType } from 'relay/mutations/BuyNowMutation';
 
 import {
   makeWidgets,
@@ -211,93 +209,6 @@ class Product extends Component<PropsType, StateType> {
     }
   };
 
-  handleBuyNow = (productId: number) => {
-    this.setState({ unselectedAttr: null });
-    const { widgets, selectedAttributes } = this.state;
-    const unselectedAttr = isNoSelected(
-      sortByProp('id')(widgets),
-      selectedAttributes,
-    );
-
-    if (isEmpty(widgets) || !unselectedAttr) {
-      const { me } = this.props;
-      const deliveryAddressesFull = me.deliveryAddressesFull || [];
-      const receiverName = `${me.firstName} ${me.lastName}`;
-      const receiverPhone = me.phone;
-      this.setState({ isLoading: true });
-      if (isEmpty(deliveryAddressesFull) || !receiverName || !receiverPhone) {
-        this.handleAddToCart(productId, true);
-        return;
-      }
-      const deliveryAddressFull =
-        find(propEq('isPriority', true))(deliveryAddressesFull) ||
-        deliveryAddressesFull[0];
-      const addressFull = deliveryAddressFull.address;
-
-      const params: MutationParamsType = {
-        input: {
-          clientMutationId: '',
-          productId,
-          quantity: 1,
-          addressFull,
-          receiverName,
-          receiverPhone,
-          currency: 'STQ',
-        },
-        environment: this.props.relay.environment,
-        onCompleted: (response, errors) => {
-          this.setState({ isLoading: false });
-          log.debug('Success for BuyNowMutation');
-          if (response && response.buyNow) {
-            log.debug('Response: ', response);
-            this.props.showAlert({
-              type: 'success',
-              text: 'Orders successfully created',
-              link: { text: 'Close.' },
-            });
-            const responseOrders = pathOr(
-              null,
-              ['invoice', 'orders'],
-              response.buyNow,
-            );
-            const order = responseOrders[0];
-            this.props.router.push(
-              `/profile/orders/${order.slug}/payment-info`,
-            );
-          } else if (!errors) {
-            this.props.showAlert({
-              type: 'danger',
-              text: 'Error :(',
-              link: { text: 'Close.' },
-            });
-            // this.setState({ checkoutInProcess: false });
-          } else {
-            log.debug('Errors: ', errors);
-            this.props.showAlert({
-              type: 'danger',
-              text: 'Error :(',
-              link: { text: 'Close.' },
-            });
-          }
-        },
-        onError: error => {
-          this.setState({ isLoading: false });
-          log.error('Error in BuyNowMutation');
-          log.error(error);
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something went wrong :(',
-            link: { text: 'Close.' },
-          });
-        },
-      };
-      BuyNowMutation.commit(params);
-    } else {
-      this.setState({ unselectedAttr });
-      smoothscroll.scrollTo(head(unselectedAttr));
-    }
-  };
-
   handleWidget = (item: {
     attributeId: string,
     attributeValue: string,
@@ -385,6 +296,37 @@ class Product extends Component<PropsType, StateType> {
     );
   };
 
+  handleBuyNow = () => {
+    this.setState({ unselectedAttr: null });
+    const {
+      widgets,
+      selectedAttributes,
+      cartQuantity,
+      productVariant,
+    } = this.state;
+    const unselectedAttr = isNoSelected(
+      sortByProp('id')(widgets),
+      selectedAttributes,
+    );
+
+    if (isEmpty(widgets) || !unselectedAttr) {
+      // $FlowIgnore
+      const baseProductRawId = pathOr(
+        null,
+        ['baseProduct', 'rawId'],
+        this.props,
+      );
+      this.props.router.push(
+        `/buy-now?product=${baseProductRawId}&variant=${
+          productVariant.rawId
+        }&quantity=${cartQuantity}`,
+      );
+    } else {
+      this.setState({ unselectedAttr });
+      smoothscroll.scrollTo(head(unselectedAttr));
+    }
+  };
+
   render() {
     const { me, baseProduct } = this.props;
     const { unselectedAttr } = this.state;
@@ -396,7 +338,6 @@ class Product extends Component<PropsType, StateType> {
     }
     const {
       baseProduct: {
-        rawId,
         name,
         categoryId,
         shortDescription,
@@ -406,7 +347,6 @@ class Product extends Component<PropsType, StateType> {
       },
       router,
     } = this.props;
-    console.log('---this.props', this.props);
     const {
       widgets,
       productVariant,
@@ -416,7 +356,6 @@ class Product extends Component<PropsType, StateType> {
       isLoading,
       cartQuantity,
     } = this.state;
-    console.log('---productVariant', productVariant);
     const description = extractText(shortDescription, 'EN', 'No Description');
     return (
       <AppContext.Consumer>
@@ -463,9 +402,7 @@ class Product extends Component<PropsType, StateType> {
                           onAddToCart={() =>
                             this.handleAddToCart(productVariant.rawId)
                           }
-                          onBuyNow={() =>
-                            this.handleBuyNow(productVariant.rawId)
-                          }
+                          onBuyNow={this.handleBuyNow}
                           unselectedAttr={unselectedAttr}
                           quantity={productVariant.quantity}
                           preOrder={productVariant.preOrder}
@@ -474,9 +411,6 @@ class Product extends Component<PropsType, StateType> {
                           router={router}
                           isLoading={isLoading}
                           isDisabledBuyNowButton={!me}
-                          baseProductRawId={rawId}
-                          variantRawId={productVariant.rawId}
-                          cartQuantity={cartQuantity}
                         />
                         <div styleName="line" />
                         <ProductStore />

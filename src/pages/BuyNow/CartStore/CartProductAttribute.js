@@ -1,12 +1,13 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
+import type { Node } from 'react';
 
 import './CartProductAttribute.scss';
 
 type PropsType = {
-  title: string | any,
-  value: string | any,
+  title: string,
+  value: Node,
 };
 
 class CartProductAttribute extends PureComponent<PropsType> {

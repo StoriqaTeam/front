@@ -107,11 +107,7 @@ class CartStore extends Component<PropsType, StateType> {
         }
 
         // $FlowIgnoreMe
-        const status400Error = pathOr(
-          null,
-          ['400', 'status'],
-          relayErrors,
-        );
+        const status400Error = pathOr(null, ['400', 'status'], relayErrors);
         if (status400Error) {
           this.props.showAlert({
             type: 'danger',
@@ -167,7 +163,6 @@ class CartStore extends Component<PropsType, StateType> {
       <div styleName="container">
         {filteredProducts.map((product, idx) => (
           <div key={idx}>
-            {console.log('---product', product)}
             <CartProduct
               product={product}
               onlySelected={onlySelected}

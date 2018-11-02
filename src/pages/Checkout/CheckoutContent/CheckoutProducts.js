@@ -15,7 +15,6 @@ type PropsType = {
 
 const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
   <Row>
-    {console.log('---orderInput, me, onChangeStep', orderInput, me, onChangeStep)}
     <Col size={12}>
       <div styleName="container">
         <div styleName="infoContainer">

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { Button } from 'components/common/Button';
@@ -13,10 +13,15 @@ type PropsType = {
   addressFull: AddressFullType,
   receiverName: string,
   email: string,
-  onChangeStep: (step: number) => void,
+  replaceAddress: () => void,
 };
 
-const CheckoutProducts = ({ addressFull, receiverName, email, onChangeStep }: PropsType) => (
+const CheckoutProducts = ({
+  addressFull,
+  receiverName,
+  email,
+  replaceAddress,
+}: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
@@ -30,7 +35,7 @@ const CheckoutProducts = ({ addressFull, receiverName, email, onChangeStep }: Pr
                     <Button
                       big
                       contour
-                      onClick={() => {onChangeStep(1)}}
+                      onClick={replaceAddress}
                       type="button"
                       dataTest="changeAddress"
                     >
@@ -57,7 +62,7 @@ const CheckoutProducts = ({ addressFull, receiverName, email, onChangeStep }: Pr
                   big
                   contour
                   whireframe
-                  onClick={() => {onChangeStep(1)}}
+                  onClick={replaceAddress}
                   type="button"
                   dataTest="changeAddress"
                 >

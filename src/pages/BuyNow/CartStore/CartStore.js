@@ -1,32 +1,61 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
 
-import { Input, Button } from 'components/common';
-import { Rating } from 'components/common/Rating';
+import { Input, Button, Rating } from 'components/common';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/App/AlertContext';
 import { Container, Row, Col } from 'layout';
-import {
-  formatPrice,
-  getNameText,
-  currentCurrency,
-  convertSrc,
-} from 'utils';
+import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 
 import CartProduct from './CartProduct';
-import type { CalculateBuyNow } from '../BuyNow';
+import type { CalculateBuyNowType } from '../BuyNow';
 
 import './CartStore.scss';
 
+export type ProductType = {
+  id: string,
+  rawId: number,
+  additionalPhotos: Array<string>,
+  attributes: Array<{
+    attribute: {
+      id: string,
+      metaField: {
+        uiElement: string,
+        values: Array<string>,
+      },
+      name: Array<{
+        text: string,
+        lang: string,
+      }>,
+    },
+    metaField: ?string,
+    value: string,
+  }>,
+  cashback: ?number,
+  discount: ?number,
+  photoMain: ?string,
+  preOrder: boolean,
+  preOrderDays: number,
+  price: number,
+  quantity: number,
+};
+
 type PropsType = {
   baseProductId: number,
-  storeId: number,
-  product: any,
+  product: ProductType,
   productName: string,
-  store: any,
-  buyNowData: CalculateBuyNow,
+  store: {
+    rawId: number,
+    logo: ?string,
+    name: Array<{
+      text: string,
+      lang: string,
+    }>,
+    rating: number,
+  },
+  buyNowData: CalculateBuyNowType,
   onChangeCount: (quantity: number) => void,
   couponCodeValue: string,
   couponCodeButtonDisabled: boolean,
@@ -51,14 +80,12 @@ class CartStore extends PureComponent<PropsType> {
       handleSetCoupon,
       onDeleteProduct,
       baseProductId,
-      storeId,
     } = this.props;
     return (
       <div styleName="container">
         <div>
           <CartProduct
             baseProductId={baseProductId}
-            storeId={storeId}
             product={product}
             productName={productName}
             buyNowData={buyNowData}
@@ -72,7 +99,7 @@ class CartStore extends PureComponent<PropsType> {
               <Col size={12} sm={3}>
                 <div styleName="storeInfo">
                   <Link to={`/store/${store.rawId}`}>
-                    {store.logo ? (
+                    {store.logo !== '' && store.logo !== null ? (
                       <img
                         src={convertSrc(store.logo, 'small')}
                         alt="store_picture"
@@ -126,13 +153,16 @@ class CartStore extends PureComponent<PropsType> {
                     {Boolean(buyNowData.couponsDiscounts) && (
                       <div styleName="value">
                         <thin styleName="through">
-                          {formatPrice(buyNowData.totalCostWithoutDiscounts || 0)}{' '}
+                          {formatPrice(
+                            buyNowData.totalCostWithoutDiscounts || 0,
+                          )}{' '}
                           {currentCurrency()}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(buyNowData.totalCost || 0)} {currentCurrency()}
+                      {formatPrice(buyNowData.totalCost || 0)}{' '}
+                      {currentCurrency()}
                     </div>
                   </div>
                 </div>

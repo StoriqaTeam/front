@@ -1,23 +1,17 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
 
 import { withShowAlert } from 'components/App/AlertContext';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
-import {
-  SetQuantityInCartMutation,
-  SetSelectionInCartMutation,
-  DeleteFromCartMutation,
-  SetCommentInCartMutation,
-} from 'relay/mutations';
-import { log, convertSrc } from 'utils';
+import { convertSrc } from 'utils';
 
 import ProductInfo from './ProductInfo';
 
-import type { CalculateBuyNow } from '../BuyNow';
+import type { CalculateBuyNowType } from '../BuyNow';
+import type { ProductType } from './CartStore';
 
 import './CartProduct.scss';
 
@@ -26,9 +20,9 @@ type StateType = {
 };
 
 type PropsType = {
-  product: any,
+  product: ProductType,
   productName: string,
-  buyNowData: CalculateBuyNow,
+  buyNowData: CalculateBuyNowType,
   onChangeCount: (quantity: number) => void,
   onDeleteProduct: () => void,
 };
@@ -37,102 +31,6 @@ class CartProduct extends Component<PropsType, StateType> {
   state = {
     comment: '',
   };
-
-  handleSelectChange() {
-    const { rawId: productId, id: nodeId } = this.props.product;
-    SetSelectionInCartMutation.commit({
-      input: {
-        clientMutationId: '',
-        productId,
-        value: !this.props.product.selected,
-      },
-      nodeId,
-      environment: this.context.environment,
-      onCompleted: (response, errors) => {
-        log.debug('Success for SetSelectionInCart mutation');
-        if (response) {
-          log.debug('Response: ', response);
-        }
-        if (errors) {
-          log.debug('Errors: ', errors);
-        }
-      },
-      onError: error => {
-        log.error('Error in SetSelectionInCart mutation');
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Unable to set product selection in cart',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  }
-
-  handleQuantityChange = newVal => {
-    const { rawId: productId, id: nodeId } = this.props.product;
-    const { storeId } = this.props;
-    SetQuantityInCartMutation.commit({
-      input: { clientMutationId: '', productId, value: newVal },
-      nodeId,
-      storeId,
-      environment: this.context.environment,
-      onCompleted: (response, errors) => {
-        log.debug('Success for SetQuantityInCart mutation');
-        if (response) {
-          log.debug('Response: ', response);
-        }
-        if (errors) {
-          log.debug('Errors: ', errors);
-        }
-      },
-      onError: error => {
-        log.error('Error in SetQuantityInCart mutation');
-        log.error(error);
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Unable to set product quantity in cart',
-          link: { text: 'Close.' },
-        });
-      },
-    });
-  };
-
-  handleOnChangeComment = (e: any) => {
-    const { rawId: productId } = this.props.product;
-    const {
-      target: { value },
-    } = e;
-    this.setState({ comment: value });
-    this.handleOnSaveComment(productId, value);
-  };
-
-  handleOnSaveComment = debounce((productId, value) => {
-    if (value) {
-      SetCommentInCartMutation.commit({
-        input: { clientMutationId: '', productId, value },
-        environment: this.context.environment,
-        onCompleted: (response, errors) => {
-          log.debug('Success for SetCommentInCart mutation');
-          if (response) {
-            log.debug('Response: ', response);
-          }
-          if (errors) {
-            log.debug('Errors: ', errors);
-          }
-        },
-        onError: error => {
-          log.error('Error in SetCommentInCart mutation');
-          log.error(error);
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Unable to set comment for product',
-            link: { text: 'Close.' },
-          });
-        },
-      });
-    }
-  }, 250);
 
   render() {
     const {
@@ -199,8 +97,6 @@ class CartProduct extends Component<PropsType, StateType> {
                   <div styleName="productInfoWrapper">
                     <ProductInfo
                       product={product}
-                      onQuantityChange={this.handleQuantityChange}
-                      onChangeComment={this.handleOnChangeComment}
                       comment={this.state.comment}
                       buyNowData={buyNowData}
                       onChangeCount={onChangeCount}

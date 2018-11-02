@@ -4,8 +4,16 @@ import { fetchQuery, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const BUYNOW_QUERY = graphql`
-  query fetchBuyNow_Query($productId: Int!, $quantity: Int!, $couponCode: String) {
-    calculateBuyNow(productId: $productId, quantity: $quantity, couponCode: $couponCode) {
+  query fetchBuyNow_Query(
+    $productId: Int!
+    $quantity: Int!
+    $couponCode: String
+  ) {
+    calculateBuyNow(
+      productId: $productId
+      quantity: $quantity
+      couponCode: $couponCode
+    ) {
       product {
         id
         rawId

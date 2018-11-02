@@ -212,11 +212,16 @@ const routes = (
           }
         }}
         query={graphql`
-          query routes_BuyNow_Query($productID: Int!, $variantId: Int!, $quantity: Int!) {
+          query routes_BuyNow_Query(
+            $productID: Int!
+            $variantId: Int!
+            $quantity: Int!
+          ) {
             me {
               id
               rawId
               phone
+              email
               firstName
               lastName
               deliveryAddressesFull {
@@ -253,9 +258,7 @@ const routes = (
           }
         `}
         prepareVariables={(...args) => {
-          console.log('---args', args);
           const queryObj = pathOr('', ['query'], last(args).location);
-          console.log('---queryObj', queryObj);
           return {
             productID: parseFloat(queryObj.product || 0),
             variantId: parseFloat(queryObj.variant),

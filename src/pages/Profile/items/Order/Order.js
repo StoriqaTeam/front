@@ -32,7 +32,6 @@ class Order extends PureComponent<PropsType> {
 
   render() {
     const { order } = this.props.me;
-    console.log('---order', order);
     const { email } = this.props.me;
     if (!order) {
       return null;

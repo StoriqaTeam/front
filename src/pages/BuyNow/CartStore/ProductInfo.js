@@ -1,46 +1,34 @@
-import React from 'react';
-import { head, map } from 'ramda';
+// @flow strict
 
-import ShowMore from 'components/ShowMore';
+import React from 'react';
+import { map } from 'ramda';
+
 import Stepper from 'components/Stepper';
-import { Input } from 'components/common/Input';
-// import { Select } from 'components/common/Select';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, currentCurrency } from 'utils';
+import { formatPrice, currentCurrency, getNameText } from 'utils';
 
 import CartProductAttribute from './CartProductAttribute';
 
-// eslint-disable-next-line
-import type CartProduct_product from './__generated__/CartProduct_product.graphql';
-import type { CalculateBuyNow } from '../BuyNow';
+import type { CalculateBuyNowType } from '../BuyNow';
+import type { ProductType } from './CartStore';
 
 import './ProductInfo.scss';
 
 type PropsType = {
-  buyNowData: {},
-  onQuantityChange: Function,
-  onChangeComment: Function,
-  comment: string,
-  // eslint-disable-next-line
-  ...CartProduct_product,
-  buyNowData: CalculateBuyNow,
+  product: ProductType,
+  // comment: string,
+  buyNowData: CalculateBuyNowType,
   onChangeCount: (quantity: number) => void,
 };
 
-const ProductInfo = ({
-  product,
-  onQuantityChange,
-  onChangeComment,
-  comment,
-  isOpen,
-  buyNowData,
-  onChangeCount,
-}: PropsType) => {
-  //
-  const attrs = map(attr => ({
-    title: head(attr.attribute.name).text,
-    value: attr.value.toString(),
-  }))(product.attributes);
+const ProductInfo = ({ product, buyNowData, onChangeCount }: PropsType) => {
+  const attrs = map(
+    attr => ({
+      title: getNameText(attr.attribute.name, 'EN'),
+      value: attr.value.toString(),
+    }),
+    product.attributes,
+  );
   return (
     <Container correct>
       <Row>
@@ -50,19 +38,19 @@ const ProductInfo = ({
               <div styleName="contentBlock">
                 <div styleName="product-summary-attributes">
                   {product.preOrder &&
-                  product.preOrderDays && (
-                    <div styleName="preOrder">
-                      <div styleName="preOrderText">
-                        <div>Available for pre-order.</div>
-                        <div>
-                          Lead time (days):{' '}
-                          <span styleName="preOrderDays">
-                                {product.preOrderDays}
-                              </span>
+                    product.preOrderDays && (
+                      <div styleName="preOrder">
+                        <div styleName="preOrderText">
+                          <div>Available for pre-order.</div>
+                          <div>
+                            Lead time (days):{' '}
+                            <span styleName="preOrderDays">
+                              {product.preOrderDays}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                   {(attrs.length > 0 && (
                     <Row>
                       {attrs.map(attr => (
@@ -82,9 +70,9 @@ const ProductInfo = ({
                   title="Count"
                   value={
                     <Stepper
-                      value={product.quantity}
+                      value={buyNowData.totalCount}
                       min={0}
-                      max={9999}
+                      max={product.quantity}
                       onChange={onChangeCount}
                     />
                   }
@@ -92,20 +80,20 @@ const ProductInfo = ({
                 <CartProductAttribute
                   title="Subtotal"
                   value={`${formatPrice(
-                    product.subtotal || 0,
+                    buyNowData.totalCost || 0,
                   )} ${currentCurrency()}`}
                 />
                 <CartProductAttribute
                   title="Delivery"
                   value={`${formatPrice(
-                    product.deliveryCost || 0,
+                    buyNowData.deliveryCost || 0,
                   )} ${currentCurrency()}`}
                 />
-                {product.couponDiscount !== 0 && (
+                {buyNowData.couponsDiscounts !== 0 && (
                   <CartProductAttribute
                     title="Coupon discount"
                     value={`${formatPrice(
-                      product.couponDiscount || 0,
+                      buyNowData.couponsDiscounts || 0,
                     )} ${currentCurrency()}`}
                   />
                 )}
@@ -137,7 +125,7 @@ const ProductInfo = ({
                 <Stepper
                   value={buyNowData.totalCount}
                   min={0}
-                  max={9999}
+                  max={product.quantity}
                   onChange={onChangeCount}
                 />
               }
