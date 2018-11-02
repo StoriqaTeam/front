@@ -110,6 +110,7 @@ export default createRefetchContainer(
         trackId
         quantity
         subtotal
+        totalAmount
         state
         paymentStatus
         history {

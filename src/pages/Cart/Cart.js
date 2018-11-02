@@ -59,6 +59,10 @@ class Cart extends Component<PropsType, StateType> {
     totals: {},
   };
 
+  componentDidMount() {
+    window.scroll({ top: 0 });
+  }
+
   setStoresRef(ref) {
     if (ref && !this.state.storesRef) {
       this.setState({ storesRef: ref });

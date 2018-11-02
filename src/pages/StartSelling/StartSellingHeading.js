@@ -1,7 +1,7 @@
 // flow@
 
 import React from 'react';
-import { withRouter } from 'found';
+import { withRouter, routerShape } from 'found';
 import { Container, Row } from 'layout';
 
 import { StartSellingButton } from './index';
@@ -10,9 +10,10 @@ import './StartSellingHeading.scss';
 
 type PropsType = {
   lang: string,
+  router: routerShape,
 };
 
-const StartSellingHeading = ({ lang }: PropsType) => (
+const StartSellingHeading = ({ lang, router }: PropsType) => (
   <Container>
     <Row>
       <div styleName="container">
@@ -36,17 +37,16 @@ const StartSellingHeading = ({ lang }: PropsType) => (
             __html:
               lang === 'ru'
                 ? 'Первые 50&nbsp;магазинов получат до&nbsp;5&nbsp;000$ на&nbsp;промо их&nbsp;товаров в&nbsp;Юго&#8209;Восточной Азии.'
-                : 'Act Now! FIrst 50 registered sellers get&nbsp;up to&nbsp;$5000 in&nbsp;credits to&nbsp;promote their shop online. ',
+                : 'Act Now! First 50 registered sellers get&nbsp;up to&nbsp;$5000 in&nbsp;credits to&nbsp;promote their shop online. ',
           }}
         />
         <div styleName="button">
           <StartSellingButton
-            href={
-              lang === 'ru'
-                ? 'https://goo.gl/forms/WK4wj1cQuyNA32wc2'
-                : 'https://goo.gl/forms/MS8FAQ9nD2HOzlku1'
-            }
+            href=""
             text={lang === 'ru' ? 'Создать магазин' : 'Start Selling'}
+            onClick={() => {
+              router.push('/manage/wizard');
+            }}
           />
         </div>
       </div>

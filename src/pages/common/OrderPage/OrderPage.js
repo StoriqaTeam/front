@@ -59,6 +59,7 @@ type OrderDTOType = {
   trackId: string,
   quantity: number,
   subtotal: number,
+  totalAmount: number,
   status: string,
   paymentStatus: string,
   statusHistory: Array<OrderStatusType>,
@@ -141,6 +142,7 @@ class OrderPage extends Component<PropsType, StateType> {
       trackId: order.trackId || '—',
       quantity: order.quantity,
       subtotal: order.subtotal,
+      totalAmount: order.totalAmount,
       status: order.state,
       paymentStatus: order.paymentStatus ? 'Paid' : 'Not paid',
       statusHistory: map(historyEdge => {
@@ -408,7 +410,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     <Col size={12} lg={7}>
                       <TextWithLabel
                         label="Subtotal"
-                        text={`${formatPrice(order.subtotal)} STQ`}
+                        text={`${formatPrice(order.totalAmount)} STQ`}
                       />
                     </Col>
                   </Row>

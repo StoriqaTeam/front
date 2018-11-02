@@ -33,6 +33,7 @@ type PropsType = {
   isAddressSelect: boolean,
   isNewAddress: boolean,
   saveAsNewAddress: boolean,
+  errors: { [string]: Array<string> },
 };
 
 type StateType = {
@@ -149,6 +150,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
       saveAsNewAddress,
       orderInput,
       onChangeSaveCheckbox,
+      errors,
     } = this.props;
     const { addressFull } = orderInput;
     const { addresses, selectedAddress } = this.state;
@@ -173,6 +175,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                       onChange={this.handleChangeReceiver}
                       value={orderInput.receiverName}
                       limit={50}
+                      errors={errors.receiverName}
                     />
                   </div>
                   <div styleName="receiverContainer">
@@ -187,12 +190,13 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                       onChange={this.handleChangePhone}
                       value={orderInput.receiverPhone}
                       limit={50}
+                      errors={errors.receiverPhone}
                     />
                   </div>
                   <div styleName="selectAddressContainer">
                     <RadioButton
                       id="existingAddressCheckbox"
-                      label="choose your address"
+                      label="Choose your address"
                       isChecked={isAddressSelect}
                       onChange={this.handleOnChangeAddressType}
                     />
@@ -234,7 +238,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                       onChange={this.handleOnChangeAddressType}
                     />
                     {isNewAddress && (
-                      <div styleName="formWrapper">
+                      <div id="deliveryAddress" styleName="formWrapper">
                         <AddressForm
                           isOpen
                           onChangeData={this.handleChangeData}
@@ -242,6 +246,11 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                           address={addressFull ? addressFull.value : null}
                           addressFull={addressFull}
                         />
+                        <div styleName="addressError">
+                          {errors.deliveryAddress
+                            ? head(errors.deliveryAddress)
+                            : ''}
+                        </div>
                         <div styleName="saveAddressWrapper">
                           <Checkbox
                             id="saveAddressCheckbox"

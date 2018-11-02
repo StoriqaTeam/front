@@ -1,0 +1,131 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  margin: 2rem 0;
+  background-color: $color-white;
+}
+
+.footer {}
+
+@media (min-width: $sm) {
+  .footer {
+    padding: 2rem;
+  }
+}
+
+.header {
+  padding: 0 0 1rem 2rem;
+}
+
+.storeInfo {
+  display: flex;
+
+  @media (max-width: #{$md - 1px}) {
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  & img {
+    border-radius: 2px;
+  }
+
+  & a {
+    white-space: nowrap;
+  }
+}
+
+.coupon {
+  display: flex;
+
+  @media (max-width: #{$md - 1px}) {
+    justify-content: center;
+    margin: 0 2rem 2rem;
+  }
+
+  .couponIcon {}
+
+  .couponInput {
+    margin: 0 2.5rem 0 2rem;
+  }
+
+  .couponButton {}
+}
+
+.store-description {
+  display: inline-block;
+  margin-left: 1rem;
+  font-family: $font_regular;
+  position: relative;
+  font-size: 16px;
+}
+
+.image {
+  width: 5.25rem;
+  height: 5.25rem;
+}
+
+.devider {
+  height: 1px;
+  background-color: $color_grey_trivial;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.storeTotal {
+  @media (max-width: #{$md - 1px}) {
+    text-align: center;
+  }
+
+  .storeTotalWrapper {
+    @media (max-width: #{$md - 1px}) {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: end;
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+.store-name {
+  font-family: $font_regular;
+  color: $color_black;
+  margin-bottom: 0.5rem;
+}
+
+.store-total-header {
+  text-transform: uppercase;
+}
+
+.label {
+  font-size: 1.75rem;
+  color: $color_grey_minor;
+}
+
+.value {
+  color: $color_grey;
+  font-family: $font_bold;
+
+  .through {
+    position: relative;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      top: 50%;
+      border-bottom: 1px solid $color_grey_minor;
+
+    }
+  }
+}
+
+.noLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.25rem;
+  height: 5.25rem;
+  background-color: $color_grey_trivial;
+}
