@@ -6,7 +6,7 @@
     justify-content: space-between;
     align-items: center;
     width: 24rem;
-    border: 1px solid $color_grey_minor;
+    border: 1px solid $color_grey_light;
     border-top: 0;
     border-left: 0;
     border-right: 0;
@@ -31,7 +31,7 @@
     margin-top: -1rem;
     border-radius: 0.25rem;
     z-index: 9999;
-    background-color: #ffffff;
+    background-color: $color_white;
 
     .label {
       font-size: 2rem;
@@ -39,21 +39,19 @@
   }
 
   .packages {
-    background-color: #ffffff;
+    background-color: $color_white;
     width: 80rem;
     position: absolute;
     z-index: 999;
     left: -12rem;
     margin-top: 3rem;
-    padding-left: 4rem;
-    padding-right: 4rem;
-    padding-bottom: 4rem;
-    border: 1px solid #e8e8e8;
+    padding: 0 3rem 3rem;
+    border: 1px solid $color_grey_light;
     border-radius: 0.25rem;
 
     .row {
       height: 8rem;
-      border: 0.5px solid #c4c4c4;
+      border: 0.5px solid $color_grey_light;
       border-top: 0;
       border-right: 0;
       border-left: 0;
@@ -70,7 +68,7 @@
     }
 
     .buttonRow {
-      background-color: #ffffff;
+      background-color: $color_white;
       margin-top: -1px;
       justify-content: flex-end;
       display: flex;

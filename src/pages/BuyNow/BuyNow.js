@@ -863,6 +863,9 @@ class BuyNow extends Component<PropsType, StateType> {
                   goToCheckout={this.goToCheckout}
                   isLoadingCheckout={isLoadingCheckout}
                   onCheckout={this.handleCheckout}
+                  companyPackageRawId={
+                    deliveryPackage ? deliveryPackage.companyPackageRawId : null
+                  }
                 />
               </StickyBar>
             </Col>
