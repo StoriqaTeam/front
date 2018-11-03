@@ -76,4 +76,10 @@
       display: flex;
     }
   }
+
+  .error {
+    color: $color_pink;
+    font-size: 12px;
+    margin-right: 2rem;
+  }
 }
