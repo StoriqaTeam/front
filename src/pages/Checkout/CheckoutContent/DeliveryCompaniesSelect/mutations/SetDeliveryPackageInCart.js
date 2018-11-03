@@ -26,6 +26,8 @@ const mutation = graphql`
             id
             products {
               id
+              subtotal
+              deliveryCost
               companyPackage {
                 id
                 rawId
