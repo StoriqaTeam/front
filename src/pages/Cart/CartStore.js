@@ -245,7 +245,7 @@ class CartStore extends Component<PropsType, StateType> {
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(store.productsCost || 0)} {currentCurrency()}
+                      {formatPrice(store.totalCost || 0)} {currentCurrency()}
                     </div>
                   </div>
                 </div>

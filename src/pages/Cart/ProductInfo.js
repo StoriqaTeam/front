@@ -305,7 +305,7 @@ class ProductInfo extends PureComponent<PropsType> {
                 <CartProductAttribute
                   title="Subtotal"
                   value={`${formatPrice(
-                    product.subtotal || 0,
+                    product.subtotalWithoutDiscounts || 0,
                   )} ${currentCurrency()}`}
                 />
                 <CartProductAttribute
@@ -317,7 +317,7 @@ class ProductInfo extends PureComponent<PropsType> {
                 {product.couponDiscount !== 0 && (
                   <CartProductAttribute
                     title="Coupon discount"
-                    value={`${formatPrice(
+                    value={`−${formatPrice(
                       product.couponDiscount || 0,
                     )} ${currentCurrency()}`}
                   />
