@@ -57,6 +57,27 @@ const mutation = graphql`
           }
         }
       }
+      stocks {
+        id
+        productId
+        warehouseId
+        warehouse {
+          name
+          addressFull {
+            country
+            countryCode
+            administrativeAreaLevel1
+            administrativeAreaLevel2
+            political
+            postalCode
+            streetNumber
+            value
+            route
+            locality
+          }
+        }
+        quantity
+      }
     }
   }
 `;

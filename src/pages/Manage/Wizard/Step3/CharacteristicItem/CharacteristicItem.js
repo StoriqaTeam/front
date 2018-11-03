@@ -40,6 +40,10 @@ type StateType = {
 };
 
 class CharacteristicItem extends Component<PropsType, StateType> {
+  state = {
+    isMainPhotoUploading: false,
+  };
+
   getSelectItems = (
     attribute: AttributeType,
   ): Array<{ id: string, label: string }> => {

@@ -571,6 +571,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       this.props,
     );
 
+    this.setState({ isSavingInProgress: true });
+
     CreateBaseProductMutation.promise(
       {
         ...preparedData,
@@ -655,8 +657,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.clearValidationErrors();
         this.handleOnClearProductState();
         callback();
+        this.setState({ isSavingInProgress: false });
       })
       .catch((errors: Array<any>) => {
+        this.setState({ isSavingInProgress: false });
         const relayErrors = fromRelayError({ source: { errors } });
         if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
@@ -687,6 +691,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       omit(['product', 'attributes'], baseProduct),
     );
 
+    this.setState({ isSavingInProgress: true });
+
     UpdateBaseProductMutation.promise(
       {
         ...preparedData,
@@ -715,11 +721,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       .then(
         (updateProductMutationResponse: UpdateProductMutationResponseType) => {
           // $FlowIgnoreMe
-          const warehouseId = pathOr(
+          let warehouseId = pathOr(
             null,
             ['updateProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
             updateProductMutationResponse,
           );
+          if (!warehouseId) {
+            // $FlowIgnoreMe
+            warehouseId = pathOr(
+              null,
+              ['updateProduct', 'stocks', 0, 'warehouseId'],
+              updateProductMutationResponse,
+            );
+          }
           // $FlowIgnoreMe
           const productId = pathOr(
             null,
@@ -748,9 +762,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           text: 'Product updated!',
           link: { text: 'Close.' },
         });
+        this.setState({ isSavingInProgress: false });
         callback();
       })
       .catch((errors: Array<any>) => {
+        this.setState({ isSavingInProgress: false });
         const relayErrors = fromRelayError({ source: { errors } });
         if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
@@ -889,7 +905,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   renderForm = () => {
-    const { step } = this.state;
+    const { step, isSavingInProgress } = this.state;
     // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     // $FlowIgnoreMe
@@ -927,6 +943,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             onDelete={this.handleOnDeleteProduct}
             errors={this.state.validationErrors}
             onChangeEditingProduct={this.handleOnChangeEditingProduct}
+            isSavingInProgress={isSavingInProgress}
           />
         );
       default:
