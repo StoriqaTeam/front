@@ -46,7 +46,9 @@ const ProductPrice = ({
         renderPrice={(item: { price: number, currencyCode: string }) => (
           <Fragment>
             <div styleName="title">
-              <strong>Discount price</strong>
+              <strong>
+                {discount && discount > 0 ? 'Discount price' : 'Price'}
+              </strong>
             </div>
             <div styleName="discountPrice">
               <b>
