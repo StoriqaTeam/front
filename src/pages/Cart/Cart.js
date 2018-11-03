@@ -186,6 +186,7 @@ export default createPaginationContainer(
       totalCount
       totalCost
       totalCostWithoutDiscounts
+      productsCostWithoutDiscounts
       couponsDiscounts
       stores(first: $first, after: $after) @connection(key: "Cart_stores") {
         edges {

@@ -24,8 +24,16 @@ const mutation = graphql`
         edges {
           node {
             id
+            productsCost
+            deliveryCost
+            totalCost
+            totalCount
+            totalCostWithoutDiscounts
+            couponsDiscount
             products {
               id
+              subtotal
+              deliveryCost
               companyPackage {
                 id
                 rawId
