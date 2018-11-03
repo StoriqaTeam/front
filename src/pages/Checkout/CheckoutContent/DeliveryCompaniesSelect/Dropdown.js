@@ -17,7 +17,7 @@ type PropsType = {
   isError: boolean,
   packages: Array<AvailableDeliveryPackageType>,
   selectedPackage: ?AvailableDeliveryPackageType,
-  toggleExpand: () => void,
+  toggleExpand: (e: SyntheticEvent<HTMLDivElement>) => void,
   onPackageSelect: (id: string) => void,
   onAccept: () => void,
 };
@@ -43,13 +43,14 @@ class Dropdown extends React.Component<PropsType, StateType> {
 
   node: ?HTMLDivElement;
 
-  handleClick = (e: SyntheticInputEvent<*>) => {
+  handleClick = (e: SyntheticEvent<HTMLDivElement>) => {
+    // $FlowIgnore
     if (this.node && this.node.contains(e.target)) {
       return;
     }
 
     if (this.props.isOpen) {
-      this.props.toggleExpand();
+      this.props.toggleExpand(e);
     }
   };
 
@@ -76,9 +77,9 @@ class Dropdown extends React.Component<PropsType, StateType> {
                   ? selectedPackage.name
                   : 'Choose company'}
               </div>
-              <button onClick={toggleExpand}>
+              <span>
                 <Icon type="arrowExpand" />
-              </button>
+              </span>
             </div>
             <div styleName="packages">
               {map(
@@ -92,11 +93,11 @@ class Dropdown extends React.Component<PropsType, StateType> {
                           isChecked={
                             selectedPackage && item.id === selectedPackage.id
                           }
+                          label={item.name}
                         />
                       </div>
-                      {item.name}
                     </div>
-                    <span>
+                    <span styleName="price">
                       {item.price} {item.currency}
                     </span>
                   </div>
@@ -115,7 +116,13 @@ class Dropdown extends React.Component<PropsType, StateType> {
           </div>
         )}
         {!isOpen && (
-          <div styleName="closed">
+          <div
+            styleName="closed"
+            onClick={toggleExpand}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="0"
+          >
             <div styleName="label">
               {selectedPackage != null
                 ? selectedPackage.name

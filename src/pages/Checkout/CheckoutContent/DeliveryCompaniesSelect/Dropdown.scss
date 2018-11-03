@@ -11,8 +11,10 @@
     border-left: 0;
     border-right: 0;
     height: 3rem;
+    cursor: pointer;
+
     .label {
-      font-size: 2rem;
+      font-size: 14px;
     }
   }
 
@@ -34,13 +36,17 @@
     background-color: $color_white;
 
     .label {
-      font-size: 2rem;
+      font-size: 14px;
+      width: 100%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 
   .packages {
     background-color: $color_white;
-    width: 80rem;
+    width: 50rem;
     position: absolute;
     z-index: 999;
     left: -12rem;
@@ -49,8 +55,13 @@
     border: 1px solid $color_grey_light;
     border-radius: 0.25rem;
 
+    @media (max-width: #{$sm - 1px}) {
+      left: 0;
+      width: 38rem;
+    }
+
     .row {
-      height: 8rem;
+      padding: 2rem 0px;
       border: 0.5px solid $color_grey_light;
       border-top: 0;
       border-right: 0;
@@ -58,11 +69,31 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      @media (max-width: #{$sm - 1px}) {
+        display: block;
+      }
+
       .title {
         display: flex;
         align-items: center;
+        margin-top: 0.875rem;
         .cb {
-          margin-right: 4rem;
+          padding-right: 2rem;
+        }
+      }
+
+      .price {
+        min-width: 11rem;
+        white-space: nowrap;
+        text-align: right;
+        margin-top: 0.5rem;
+
+        @media (max-width: #{$sm - 1px}) {
+          text-align: left;
+          display: inline-block;
+          margin-left: 3.5rem;
+          margin-top: 1rem;
         }
       }
     }
@@ -72,6 +103,10 @@
       margin-top: -1px;
       justify-content: flex-end;
       display: flex;
+
+      @media (max-width: #{$sm - 1px}) {
+        justify-content: flex-start;
+      }
     }
   }
 

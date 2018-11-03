@@ -326,7 +326,9 @@ class BuyNow extends Component<PropsType, StateType> {
     if (errors && !isEmpty(errors)) {
       const { scrollArr } = this.state;
       const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
-      smoothscroll.scrollTo(head(oneArr));
+      if (!isEmpty(oneArr) && head(oneArr)) {
+        smoothscroll.scrollTo(head(oneArr));
+      }
     }
     return errors || {};
   };

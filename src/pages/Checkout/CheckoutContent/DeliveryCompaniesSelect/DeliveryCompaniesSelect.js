@@ -121,10 +121,26 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
                   isOpen={this.state.isDropdownOpened}
                   isLoading={this.state.isLoading}
                   isError={this.state.isError}
-                  toggleExpand={() => {
-                    this.setState(prevState => ({
-                      isDropdownOpened: !prevState.isDropdownOpened,
-                    }));
+                  toggleExpand={(e: SyntheticEvent<HTMLDivElement>) => {
+                    e.stopPropagation();
+                    const { selectedCompanyPackageRawId } = this.props;
+                    this.setState(prevState => {
+                      if (prevState.isDropdownOpened) {
+                        return {
+                          selectedPackage:
+                            selectedCompanyPackageRawId == null
+                              ? null
+                              : find(
+                                  whereEq({ selectedCompanyPackageRawId }),
+                                  this.state.packages,
+                                ),
+                          isDropdownOpened: !prevState.isDropdownOpened,
+                        };
+                      }
+                      return {
+                        isDropdownOpened: !prevState.isDropdownOpened,
+                      };
+                    });
                   }}
                   onPackageSelect={(id: string) => {
                     if (selectedPackage && selectedPackage.id === id) {
