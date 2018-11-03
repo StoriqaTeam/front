@@ -13,11 +13,9 @@ const mutation = graphql`
     $input: ProductQuantityInput!
   ) {
     setProductQuantityInWarehouse(input: $input) {
-      id
       warehouseId
       quantity
       product {
-        id
         quantity
       }
     }

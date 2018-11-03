@@ -246,7 +246,7 @@ class Form extends Component<PropsType, StateType> {
   }
 
   componentDidUpdate(prevProps: PropsType) {
-    const { shippingData, customAttributes } = this.props;
+    const { shippingData, customAttributes, baseProduct } = this.props;
     if (
       JSON.stringify(shippingData) !== JSON.stringify(prevProps.shippingData)
     ) {
@@ -273,7 +273,13 @@ class Form extends Component<PropsType, StateType> {
       ['match', 'location', 'pathname'],
       prevProps,
     );
-    if (pathname !== prevPathname) {
+    if (
+      pathname !== prevPathname ||
+      (baseProduct &&
+        prevProps.baseProduct &&
+        JSON.stringify(prevProps.baseProduct.products) !==
+          JSON.stringify(baseProduct.products))
+    ) {
       // $FlowIgnore
       const variantId = pathOr(
         null,
