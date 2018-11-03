@@ -767,7 +767,6 @@ class Form extends Component<PropsType, StateType> {
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
-    // $FlowIgnore
     const filteredVariants = map(item => item.node, variants) || [];
     const mainVariant = isEmpty(filteredVariants)
       ? null
