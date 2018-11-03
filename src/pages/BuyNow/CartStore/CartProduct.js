@@ -30,7 +30,7 @@ type PropsType = {
   country: string,
   isShippingAvailable: boolean,
   baseProductId: number,
-  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => void,
+  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
 };
 

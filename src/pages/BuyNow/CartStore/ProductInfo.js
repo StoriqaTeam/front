@@ -31,17 +31,13 @@ type PropsType = {
   country: string,
   isShippingAvailable: boolean,
   baseProductId: number,
-  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => void,
+  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
 };
 
 class ProductInfo extends PureComponent<PropsType> {
   static defaultProps = {
     withDeliveryCompaniesSelect: false,
-  };
-
-  handlePackageSelect = (pkg: ?AvailableDeliveryPackageType) => {
-    this.props.onChangeDelivery(pkg);
   };
 
   render() {
@@ -53,6 +49,7 @@ class ProductInfo extends PureComponent<PropsType> {
       isShippingAvailable,
       baseProductId,
       deliveryPackage,
+      onChangeDelivery,
     } = this.props;
 
     const attrs = map(
@@ -174,7 +171,7 @@ class ProductInfo extends PureComponent<PropsType> {
                                       baseProductId={baseProductId}
                                       country={currentCountryAlpha3}
                                       onPackagesFetched={() => {}}
-                                      onPackageSelect={this.handlePackageSelect}
+                                      onPackageSelect={onChangeDelivery}
                                       selectedCompanyPackageRawId={
                                         deliveryPackage
                                           ? deliveryPackage.companyPackageRawId
