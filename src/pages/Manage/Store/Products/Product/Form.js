@@ -562,7 +562,7 @@ class Form extends Component<PropsType, StateType> {
       return;
     } else if (value > 100) {
       this.setState((prevState: StateType) =>
-        assocPath(['form', id], 99, prevState),
+        assocPath(['form', id], 100, prevState),
       );
       return;
     } else if (Number.isNaN(parseFloat(value))) {

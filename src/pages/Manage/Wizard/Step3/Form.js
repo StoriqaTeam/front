@@ -89,7 +89,7 @@ class ThirdForm extends PureComponent<PropsType> {
     let { value } = e.target;
     if (name === 'cashback') {
       if (parseInt(value, 10) > 100) {
-        value = '99';
+        value = '100';
       }
       if (value === '') {
         value = '0';

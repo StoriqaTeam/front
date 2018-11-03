@@ -130,8 +130,9 @@
   font-size: 12px;
   display: flex;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: $color_grey_trivial;
   border-radius: 1rem;
+  padding: 1rem;
 }
 
 .error {

@@ -20,6 +20,7 @@ type PropsType = {
   isLoadingCheckout: boolean,
   buyNowData: CalculateBuyNowType,
   onCheckout: () => void,
+  companyPackageRawId: ?number,
 };
 
 type StateType = {
@@ -62,6 +63,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       isLoadingCheckout,
       buyNowData,
       onCheckout,
+      companyPackageRawId,
     } = this.props;
     const { priceUsd } = this.state;
     return (
@@ -145,7 +147,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
             <Button
               id="cartTotalCheckout"
               disabled={
-                isLoadingCheckout || (step === 2 && buyNowData.totalCost === 0)
+                isLoadingCheckout ||
+                (step === 2 &&
+                  (buyNowData.totalCost === 0 || !companyPackageRawId))
               }
               isLoading={isLoadingCheckout}
               big

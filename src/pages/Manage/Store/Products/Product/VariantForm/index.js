@@ -182,7 +182,7 @@ class VariantForm extends Component<PropsType, StateType> {
       this.setState({ [id]: 0 });
       return;
     } else if (parseFloat(value) > 100) {
-      this.setState({ [id]: 99 });
+      this.setState({ [id]: 100 });
       return;
     } else if (Number.isNaN(parseFloat(value))) {
       return;
