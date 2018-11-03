@@ -1,7 +1,7 @@
 // @flow strict
 
-import React, { Component } from 'react';
-import { find, whereEq } from 'ramda';
+import React, { Component, Fragment } from 'react';
+import { find, whereEq, isEmpty } from 'ramda';
 import PropTypes from 'prop-types';
 
 import { SpinnerCircle, Button } from 'components/common';
@@ -109,31 +109,40 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
         {isFetchingError && <FetchError onRetryClick={this.fetchData} />}
         {!isFetching &&
           !isFetchingError && (
-            <Dropdown
-              packages={this.state.packages}
-              selectedPackage={selectedPackage || selectedPkg}
-              isOpen={this.state.isDropdownOpened}
-              toggleExpand={() => {
-                this.setState(prevState => ({
-                  isDropdownOpened: !prevState.isDropdownOpened,
-                }));
-              }}
-              onPackageSelect={(id: string) => {
-                if (selectedPackage && selectedPackage.id === id) {
-                  this.setState({ selectedPackage: null });
-                } else {
-                  this.setState({
-                    selectedPackage: find(whereEq({ id }), this.state.packages),
-                  });
-                }
-              }}
-              onAccept={() => {
-                this.setState({ isDropdownOpened: false }, () => {
-                  this.props.onPackageSelect(this.state.selectedPackage);
-                  this.setState({ selectedPackage: null });
-                });
-              }}
-            />
+            <Fragment>
+              {!isEmpty(packages) ? (
+                <Dropdown
+                  packages={this.state.packages}
+                  selectedPackage={selectedPackage || selectedPkg}
+                  isOpen={this.state.isDropdownOpened}
+                  toggleExpand={() => {
+                    this.setState(prevState => ({
+                      isDropdownOpened: !prevState.isDropdownOpened,
+                    }));
+                  }}
+                  onPackageSelect={(id: string) => {
+                    if (selectedPackage && selectedPackage.id === id) {
+                      this.setState({ selectedPackage: null });
+                    } else {
+                      this.setState({
+                        selectedPackage: find(
+                          whereEq({ id }),
+                          this.state.packages,
+                        ),
+                      });
+                    }
+                  }}
+                  onAccept={() => {
+                    this.setState({ isDropdownOpened: false }, () => {
+                      this.props.onPackageSelect(this.state.selectedPackage);
+                      this.setState({ selectedPackage: null });
+                    });
+                  }}
+                />
+              ) : (
+                <span>Seller does not ship to selected country</span>
+              )}
+            </Fragment>
           )}
       </div>
     );

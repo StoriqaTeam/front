@@ -28,6 +28,7 @@ const mutation = graphql`
               id
               companyPackage {
                 id
+                rawId
               }
             }
           }
