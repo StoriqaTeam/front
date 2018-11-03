@@ -56,6 +56,7 @@ type PropsType = {
   onClearProductState: () => void,
   formStateData: BaseProductNodeType,
   onChangeEditingProduct: (val: boolean) => void,
+  isSavingInProgress: boolean,
 };
 
 type StateType = {
@@ -192,7 +193,14 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const { formStateData, onChange, products, onUpload, onSave } = this.props;
+    const {
+      formStateData,
+      onChange,
+      products,
+      onUpload,
+      onSave,
+      isSavingInProgress,
+    } = this.props;
     const { showForm, deleteId } = this.state;
     const productsArr = map(item => item.node, products);
     const filteredProductsArr = filter(item => {
@@ -210,6 +218,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           onUpload={onUpload}
           onSave={onSave}
           onClose={this.handleOnCloseModal}
+          isSavingInProgress={isSavingInProgress}
         />
       );
     }
