@@ -80,7 +80,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="label">Subtotal</div>
                   <div styleName="value">
                     {`${formatPrice(
-                      buyNowData.totalCost || 0,
+                      buyNowData.subtotalWithoutDiscounts || 0,
                     )} ${currentCurrency()}`}
                   </div>
                 </div>
@@ -100,7 +100,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="attributeContainer">
                     <div styleName="label">Coupons discount</div>
                     <div styleName="value">
-                      {`${formatPrice(
+                      {`−${formatPrice(
                         buyNowData.couponsDiscounts || 0,
                       )} ${currentCurrency()}`}
                     </div>

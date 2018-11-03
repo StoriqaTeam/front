@@ -309,6 +309,16 @@ class Product extends Component<PropsType, StateType> {
       selectedAttributes,
     );
 
+    let quantity = cartQuantity;
+
+    if (
+      productVariant.quantity === 0 &&
+      productVariant.preOrder &&
+      productVariant.preOrderDays > 0
+    ) {
+      quantity = 1;
+    }
+
     if (isEmpty(widgets) || !unselectedAttr) {
       // $FlowIgnore
       const baseProductRawId = pathOr(
@@ -319,7 +329,7 @@ class Product extends Component<PropsType, StateType> {
       this.props.router.push(
         `/buy-now?product=${baseProductRawId}&variant=${
           productVariant.rawId
-        }&quantity=${cartQuantity}`,
+        }&quantity=${quantity}`,
       );
     } else {
       this.setState({ unselectedAttr });

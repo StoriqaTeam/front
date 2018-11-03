@@ -8,11 +8,13 @@ const BUYNOW_QUERY = graphql`
     $productId: Int!
     $quantity: Int!
     $couponCode: String
+    $companyPackageId: Int
   ) {
     calculateBuyNow(
       productId: $productId
       quantity: $quantity
       couponCode: $couponCode
+      companyPackageId: $companyPackageId
     ) {
       product {
         id
@@ -22,6 +24,10 @@ const BUYNOW_QUERY = graphql`
       totalCost
       totalCostWithoutDiscounts
       totalCount
+      deliveryCost
+      subtotal
+      subtotalWithoutDiscounts
+      price
     }
   }
 `;
@@ -31,7 +37,8 @@ const fetchBuyNow = (
   variables: {
     productId: number,
     quantity: number,
-    couponCode?: string,
+    couponCode?: ?string,
+    companyPackageId?: ?number,
   },
 ) => fetchQuery(environment, BUYNOW_QUERY, variables);
 

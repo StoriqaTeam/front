@@ -113,3 +113,28 @@
     }
   }
 }
+
+.contentBlock {
+
+}
+
+.cartProductTitle {
+  font-family: $font_medium;
+  font-size: 1.75rem;
+  text-transform: uppercase;
+  padding-bottom: 1.75rem;
+}
+
+.noDeliveryAvailableAlert {
+  height: 4rem;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  background-color: #f2f2f2;
+  border-radius: 1rem;
+}
+
+.error {
+  color: $color_pink;
+}
+
