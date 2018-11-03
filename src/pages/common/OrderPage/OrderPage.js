@@ -65,6 +65,8 @@ type OrderDTOType = {
   statusHistory: Array<OrderStatusType>,
   customerName: string,
   customerAddress: string,
+  deliveryPrice: number,
+  couponPrice: ?number,
 };
 
 class OrderPage extends Component<PropsType, StateType> {
@@ -143,6 +145,8 @@ class OrderPage extends Component<PropsType, StateType> {
       quantity: order.quantity,
       subtotal: order.subtotal,
       totalAmount: order.totalAmount,
+      deliveryPrice: order.deliveryPrice,
+      couponPrice: order.couponDiscount,
       status: order.state,
       paymentStatus: order.paymentStatus ? 'Paid' : 'Not paid',
       statusHistory: map(historyEdge => {
@@ -392,13 +396,28 @@ class OrderPage extends Component<PropsType, StateType> {
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
-                      <TextWithLabel label="Delivery" text={order.delivery} />
+                      <TextWithLabel
+                        label="Delivery"
+                        text={`${order.deliveryPrice} STQ`}
+                      />
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel label="Track ID" text={order.trackId} />
                     </Col>
                   </Row>
                 </div>
+                {order.couponPrice && (
+                  <div styleName="infoBlockItem">
+                    <Row>
+                      <Col size={12} lg={5}>
+                        <TextWithLabel
+                          label="Coupon discount"
+                          text={`−${order.couponPrice} STQ`}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                )}
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
