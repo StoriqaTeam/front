@@ -120,7 +120,9 @@ class Form extends Component<PropsType, StateType> {
         item => contains(item, keys(nextFormErrors)),
         scrollArr,
       );
-      smoothscroll.scrollTo(head(oneArr));
+      if (!isEmpty(oneArr) && head(oneArr)) {
+        smoothscroll.scrollTo(head(oneArr));
+      }
       return {
         ...prevState,
         formErrors: nextFormErrors,
@@ -317,7 +319,9 @@ class Form extends Component<PropsType, StateType> {
   scrollToError = (errors: FormErrorsType) => {
     const { scrollArr } = this.state;
     const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
-    smoothscroll.scrollTo(head(oneArr));
+    if (!isEmpty(oneArr) && head(oneArr)) {
+      smoothscroll.scrollTo(head(oneArr));
+    }
   };
 
   resetAttrValues = (
@@ -1063,10 +1067,12 @@ class Form extends Component<PropsType, StateType> {
                             Add variant
                           </Button>
                         </div>
-                        <div styleName="variantsWarnText">
-                          You can’t add variant until create and save base
-                          product.
-                        </div>
+                        {!baseProduct && (
+                          <div styleName="variantsWarnText">
+                            You can’t add variant until create and save base
+                            product.
+                          </div>
+                        )}
                       </div>
                     )}
                     {restVariants &&

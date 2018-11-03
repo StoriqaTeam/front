@@ -205,7 +205,9 @@ class Product extends Component<PropsType, StateType> {
       });
     } else {
       this.setState({ unselectedAttr });
-      smoothscroll.scrollTo(head(unselectedAttr));
+      if (!isEmpty(unselectedAttr) && head(unselectedAttr)) {
+        smoothscroll.scrollTo(head(unselectedAttr));
+      }
     }
   };
 
@@ -333,7 +335,9 @@ class Product extends Component<PropsType, StateType> {
       );
     } else {
       this.setState({ unselectedAttr });
-      smoothscroll.scrollTo(head(unselectedAttr));
+      if (!isEmpty(unselectedAttr) && head(unselectedAttr)) {
+        smoothscroll.scrollTo(head(unselectedAttr));
+      }
     }
   };
 
