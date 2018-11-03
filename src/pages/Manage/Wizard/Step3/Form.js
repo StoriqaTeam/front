@@ -37,6 +37,7 @@ type PropsType = {
   onUpload: (type: string, e: any) => Promise<*>,
   onSave: (callback: () => void) => void,
   onClose: () => void,
+  isSavingInProgress: boolean,
 };
 
 const photoIcons = [
@@ -166,7 +167,7 @@ class ThirdForm extends PureComponent<PropsType> {
       catObj.getAttributes &&
       !isEmpty(catObj.getAttributes) && (
         <div styleName="section correctMargin">
-          <div styleName="sectionName">Properties</div>
+          <div styleName="sectionName">CHARACTERISCICS</div>
           <AttributesForm
             attributes={catObj.getAttributes}
             values={attributes}
@@ -178,7 +179,7 @@ class ThirdForm extends PureComponent<PropsType> {
   };
 
   render() {
-    const { data, onSave, onClose, onUpload } = this.props;
+    const { data, onSave, onClose, onUpload, isSavingInProgress } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
     return (
@@ -437,6 +438,7 @@ class ThirdForm extends PureComponent<PropsType> {
                         big
                         disabled={this.checkForSave()}
                         fullWidth
+                        isLoading={isSavingInProgress}
                       >
                         <span>Save</span>
                       </Button>
