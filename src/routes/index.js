@@ -254,6 +254,10 @@ const routes = (
               totalCost
               totalCostWithoutDiscounts
               totalCount
+              deliveryCost
+              subtotal
+              subtotalWithoutDiscounts
+              price
             }
           }
         `}

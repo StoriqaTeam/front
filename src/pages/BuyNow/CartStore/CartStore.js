@@ -9,6 +9,8 @@ import { withShowAlert } from 'components/App/AlertContext';
 import { Container, Row, Col } from 'layout';
 import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 
+import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
+
 import CartProduct from './CartProduct';
 import type { CalculateBuyNowType } from '../BuyNow';
 
@@ -63,6 +65,10 @@ type PropsType = {
   handleChangeCoupon: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   handleSetCoupon: () => void,
   onDeleteProduct: () => void,
+  country: string,
+  isShippingAvailable: boolean,
+  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => void,
+  deliveryPackage: ?AvailableDeliveryPackageType,
 };
 
 class CartStore extends PureComponent<PropsType> {
@@ -80,6 +86,10 @@ class CartStore extends PureComponent<PropsType> {
       handleSetCoupon,
       onDeleteProduct,
       baseProductId,
+      country,
+      isShippingAvailable,
+      onChangeDelivery,
+      deliveryPackage,
     } = this.props;
     return (
       <div styleName="container">
@@ -91,6 +101,10 @@ class CartStore extends PureComponent<PropsType> {
             buyNowData={buyNowData}
             onChangeCount={onChangeCount}
             onDeleteProduct={onDeleteProduct}
+            country={country}
+            isShippingAvailable={isShippingAvailable}
+            onChangeDelivery={onChangeDelivery}
+            deliveryPackage={deliveryPackage}
           />
         </div>
         <div styleName="footer">

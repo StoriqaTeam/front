@@ -8,6 +8,8 @@ import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import { convertSrc } from 'utils';
 
+import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
+
 import ProductInfo from './ProductInfo';
 
 import type { CalculateBuyNowType } from '../BuyNow';
@@ -25,6 +27,11 @@ type PropsType = {
   buyNowData: CalculateBuyNowType,
   onChangeCount: (quantity: number) => void,
   onDeleteProduct: () => void,
+  country: string,
+  isShippingAvailable: boolean,
+  baseProductId: number,
+  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => void,
+  deliveryPackage: ?AvailableDeliveryPackageType,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -39,6 +46,11 @@ class CartProduct extends Component<PropsType, StateType> {
       buyNowData,
       onChangeCount,
       onDeleteProduct,
+      country,
+      isShippingAvailable,
+      baseProductId,
+      onChangeDelivery,
+      deliveryPackage,
     } = this.props;
     if (!product) return null;
     const { photoMain } = product;
@@ -100,6 +112,11 @@ class CartProduct extends Component<PropsType, StateType> {
                       comment={this.state.comment}
                       buyNowData={buyNowData}
                       onChangeCount={onChangeCount}
+                      country={country}
+                      isShippingAvailable={isShippingAvailable}
+                      baseProductId={baseProductId}
+                      onChangeDelivery={onChangeDelivery}
+                      deliveryPackage={deliveryPackage}
                     />
                   </div>
                 </Col>
