@@ -13,6 +13,8 @@ import './Dropdown.scss';
 
 type PropsType = {
   isOpen: boolean,
+  isLoading: boolean,
+  isError: boolean,
   packages: Array<AvailableDeliveryPackageType>,
   selectedPackage: ?AvailableDeliveryPackageType,
   toggleExpand: () => void,
@@ -102,7 +104,10 @@ class Dropdown extends React.Component<PropsType, StateType> {
                 packages,
               )}
               <div styleName="buttonRow">
-                <Button big onClick={onAccept}>
+                {this.props.isError && (
+                  <span styleName="error">Error :( Please try again</span>
+                )}
+                <Button big onClick={onAccept} isLoading={this.props.isLoading}>
                   Accept
                 </Button>
               </div>

@@ -67,7 +67,7 @@ type PropsType = {
   onDeleteProduct: () => void,
   country: string,
   isShippingAvailable: boolean,
-  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => void,
+  onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
 };
 

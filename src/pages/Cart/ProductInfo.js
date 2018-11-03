@@ -37,7 +37,9 @@ class ProductInfo extends PureComponent<PropsType> {
     withDeliveryCompaniesSelect: false,
   };
 
-  handlePackageSelect = (pkg: ?AvailableDeliveryPackageType) => {
+  handlePackageSelect = (
+    pkg: ?AvailableDeliveryPackageType,
+  ): Promise<boolean> => {
     log.debug('ProductInfo.handlePackageSelect', { pkg });
     log.debug('product', this.props.product);
 
@@ -49,7 +51,7 @@ class ProductInfo extends PureComponent<PropsType> {
       'is(Number,productId)': is(Number, productId),
     });
     if (!isNil(pkg) && !isNil(productId) && is(Number, productId)) {
-      setDeliveryPackageInCartMutation({
+      return setDeliveryPackageInCartMutation({
         environment: this.context.environment,
         variables: {
           input: {
@@ -58,10 +60,14 @@ class ProductInfo extends PureComponent<PropsType> {
             companyPackageId: pkg.companyPackageRawId,
           },
         },
-      }).then(response => {
-        log.debug('mutation response', { response });
-      });
+      })
+        .then(response => {
+          log.debug('mutation response', { response });
+          return Promise.resolve(true);
+        })
+        .catch(err => Promise.reject(err));
     }
+    return Promise.resolve(true);
   };
 
   handlePackageFetching = (packages: Array<AvailableDeliveryPackageType>) => {
@@ -177,9 +183,9 @@ class ProductInfo extends PureComponent<PropsType> {
                       }
                     />
                     <CartProductAttribute
-                      title="Subtotal"
+                      title="Price"
                       value={`${formatPrice(
-                        product.subtotal || 0,
+                        product.subtotalWithoutDiscounts || 0,
                       )} ${currentCurrency()}`}
                     />
                     <CartProductAttribute
@@ -295,7 +301,7 @@ class ProductInfo extends PureComponent<PropsType> {
                   }
                 />
                 <CartProductAttribute
-                  title="Subtotal"
+                  title="Price"
                   value={`${formatPrice(
                     product.subtotalWithoutDiscounts || 0,
                   )} ${currentCurrency()}`}

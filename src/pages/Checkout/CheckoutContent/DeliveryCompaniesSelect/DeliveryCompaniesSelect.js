@@ -18,7 +18,7 @@ type PropsType = {
   baseProductId: number,
   selectedCompanyPackageRawId: ?number,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
-  onPackageSelect: (pkg: ?AvailableDeliveryPackageType) => void,
+  onPackageSelect: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
 };
 
 type StateType = {
@@ -27,6 +27,8 @@ type StateType = {
   packages: Array<AvailableDeliveryPackageType>,
   isDropdownOpened: boolean,
   selectedPackage: ?AvailableDeliveryPackageType, // using for temp handling
+  isLoading: boolean,
+  isError: boolean,
 };
 
 const Loading = () => (
@@ -57,6 +59,8 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
     packages: [],
     isDropdownOpened: false,
     selectedPackage: null,
+    isLoading: false,
+    isError: false,
   };
 
   componentDidMount() {
@@ -115,6 +119,8 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
                   packages={this.state.packages}
                   selectedPackage={selectedPackage || selectedPkg}
                   isOpen={this.state.isDropdownOpened}
+                  isLoading={this.state.isLoading}
+                  isError={this.state.isError}
                   toggleExpand={() => {
                     this.setState(prevState => ({
                       isDropdownOpened: !prevState.isDropdownOpened,
@@ -133,9 +139,19 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
                     }
                   }}
                   onAccept={() => {
-                    this.setState({ isDropdownOpened: false }, () => {
-                      this.props.onPackageSelect(this.state.selectedPackage);
-                      this.setState({ selectedPackage: null });
+                    this.setState({ isLoading: true, isError: false }, () => {
+                      this.props
+                        .onPackageSelect(this.state.selectedPackage)
+                        .catch(() => {
+                          this.setState({ isError: true });
+                        })
+                        .finally(() => {
+                          this.setState({
+                            isLoading: false,
+                            isDropdownOpened: false,
+                            selectedPackage: null,
+                          });
+                        });
                     });
                   }}
                 />

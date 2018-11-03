@@ -586,9 +586,11 @@ class BuyNow extends Component<PropsType, StateType> {
     this.props.router.push(`/store/${storeId}/products/${queryParams.product}`);
   };
 
-  handleChangeDelivery = (pkg: ?AvailableDeliveryPackageType) => {
+  handleChangeDelivery = (
+    pkg: ?AvailableDeliveryPackageType,
+  ): Promise<boolean> => {
     if (!pkg) {
-      return;
+      return Promise.resolve(true);
     }
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -599,7 +601,7 @@ class BuyNow extends Component<PropsType, StateType> {
       couponCode: successCouponCodeValue || null,
       companyPackageId: pkg.companyPackageRawId,
     };
-    fetchBuyNow(this.props.relay.environment, variables)
+    return fetchBuyNow(this.props.relay.environment, variables)
       .then(({ calculateBuyNow }) => {
         if (!calculateBuyNow) {
           throw new Error();
@@ -632,6 +634,7 @@ class BuyNow extends Component<PropsType, StateType> {
             });
           },
         );
+        return Promise.resolve(true);
       })
       .catch(() => {
         this.props.showAlert({
@@ -639,7 +642,7 @@ class BuyNow extends Component<PropsType, StateType> {
           text: 'Something going wrong :(',
           link: { text: 'Close.' },
         });
-        this.setState({ isLoadingCouponButton: false });
+        return Promise.reject();
       });
   };
 
