@@ -21,7 +21,6 @@ import {
   propEq,
   drop,
   length,
-  reverse,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
@@ -149,7 +148,7 @@ class Form extends Component<PropsType, StateType> {
       } = baseProduct;
       // $FlowIgnore
       const allVariants = pathOr([], ['products', 'edges'], baseProduct);
-      const filteredVariants = reverse(map(item => item.node, allVariants));
+      const filteredVariants = map(item => item.node, allVariants);
       const mainVariant = head(filteredVariants);
       const {
         id,
@@ -769,7 +768,7 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
     // $FlowIgnore
-    const filteredVariants = reverse(map(item => item.node, variants) || []);
+    const filteredVariants = map(item => item.node, variants) || [];
     const mainVariant = isEmpty(filteredVariants)
       ? null
       : // $FlowIgnore
