@@ -5,6 +5,8 @@ import React, { Component, Fragment } from 'react';
 import { SliderContainer } from 'components/Slider';
 import { CardProduct } from 'components/CardProduct';
 import { Banner } from 'components/Banner';
+import BannerLoading from 'components/Banner/BannerLoading';
+import ImageLoader from 'libs/react-image-loader';
 
 import './Slider.scss';
 
@@ -51,7 +53,25 @@ class Slider extends Component<PropsTypes, StateTypes> {
             <Fragment key={item.rawId || item.id}>
               {type === 'products' && <CardProduct item={item} />}
               {type === 'banners' && <Banner item={item} />}
-              {type === 'image' && <img src={item.img} alt="" />}
+              {type === 'image' && (
+                <ImageLoader
+                  fit
+                  src={item.img}
+                  loader={
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <BannerLoading />
+                    </div>
+                  }
+                />
+              )}
             </Fragment>
           ))}
         </SliderContainer>

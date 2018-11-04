@@ -68,3 +68,9 @@
   color: $color_red;
   line-height: 2rem;
 }
+
+.newAddressWrap {
+  @media (max-width: #{$xl - 1px}) {
+    margin-top: 2rem;
+  }
+}

@@ -183,6 +183,7 @@ class Img extends Component {
       return fit
         ? this.props.container(
             <div
+              role="img"
               style={{
                 backgroundImage: `url(${src})`,
                 position: 'absolute',

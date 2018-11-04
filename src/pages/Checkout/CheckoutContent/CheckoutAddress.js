@@ -230,7 +230,7 @@ class CheckoutContent extends React.Component<PropsType, StateType> {
                   )}
                 </Col>
                 <Col size={12} sm={9} md={8} xl={12}>
-                  <div>
+                  <div styleName="newAddressWrap">
                     <RadioButton
                       id="newAddressCheckbox"
                       label="Or fill fields below and save as address"
