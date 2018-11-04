@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { isEmpty, isNil, contains } from 'ramda';
 import classNames from 'classnames';
 
+import BannerLoading from 'components/Banner/BannerLoading';
+import ImageLoader from 'libs/react-image-loader';
 import { convertSrc } from 'utils';
 
 import { Icon } from 'components/Icon';
@@ -93,9 +95,10 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 disabled: isDisabled,
               })}
             >
-              <img
+              <ImageLoader
+                fit
                 src={convertSrc(option.image, 'small')}
-                alt={option.alt || 'image alt'}
+                loader={<BannerLoading />}
               />
             </figure>
           ) : (
