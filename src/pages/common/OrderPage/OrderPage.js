@@ -398,7 +398,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     <Col size={12} lg={5}>
                       <TextWithLabel
                         label="Delivery"
-                        text={`${order.deliveryPrice} STQ`}
+                        text={`${formatPrice(order.deliveryPrice)} STQ`}
                       />
                     </Col>
                     <Col size={12} lg={7}>
@@ -412,7 +412,7 @@ class OrderPage extends Component<PropsType, StateType> {
                       <Col size={12} lg={5}>
                         <TextWithLabel
                           label="Coupon discount"
-                          text={`−${order.couponPrice} STQ`}
+                          text={`−${formatPrice(order.couponPrice)} STQ`}
                         />
                       </Col>
                     </Row>

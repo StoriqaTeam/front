@@ -18,6 +18,7 @@ type AvailableDeliveryPackageType = {
   name: string,
   price: number,
   currency: string,
+  shippingId: number,
 };
 export type { AvailableDeliveryPackageType };
 
@@ -37,6 +38,7 @@ const AVAILABLE_PACKAGES_FOR_USER = graphql`
         name
         price
         companyPackageRawId
+        shippingId
       }
     }
   }
@@ -59,13 +61,14 @@ const fetchAvailableDeliveryPackages = (
       response.availableShippingForUser.packages instanceof Array
     ) {
       availablePackages = map(item => {
-        const { id, companyPackageRawId, name, price } = item;
+        const { id, companyPackageRawId, name, price, shippingId } = item;
         if (!isNil(id) && !isNil(name) && !isNil(price)) {
           return {
             id,
             companyPackageRawId,
             name,
             price,
+            shippingId,
             currency: 'STQ',
           };
         }

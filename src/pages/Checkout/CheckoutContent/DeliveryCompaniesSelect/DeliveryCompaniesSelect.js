@@ -16,7 +16,7 @@ import './DeliveryCompaniesSelect.scss';
 type PropsType = {
   country: string,
   baseProductId: number,
-  selectedCompanyPackageRawId: ?number,
+  selectedCompanyShippingRawId: ?number,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
   onPackageSelect: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
 };
@@ -103,7 +103,7 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
     } = this.state;
 
     const selectedPkg = find(
-      whereEq({ companyPackageRawId: this.props.selectedCompanyPackageRawId }),
+      whereEq({ shippingId: this.props.selectedCompanyShippingRawId }),
       packages,
     );
 
@@ -123,15 +123,15 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
                   isError={this.state.isError}
                   toggleExpand={(e: SyntheticEvent<HTMLDivElement>) => {
                     e.stopPropagation();
-                    const { selectedCompanyPackageRawId } = this.props;
+                    const { selectedCompanyShippingRawId } = this.props;
                     this.setState(prevState => {
                       if (prevState.isDropdownOpened) {
                         return {
                           selectedPackage:
-                            selectedCompanyPackageRawId == null
+                            selectedCompanyShippingRawId == null
                               ? null
                               : find(
-                                  whereEq({ selectedCompanyPackageRawId }),
+                                  whereEq({ selectedCompanyShippingRawId }),
                                   this.state.packages,
                                 ),
                           isDropdownOpened: !prevState.isDropdownOpened,

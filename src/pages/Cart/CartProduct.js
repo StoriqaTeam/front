@@ -331,6 +331,10 @@ export default createFragmentContainer(
         id
         rawId
       }
+      selectPackage {
+        id
+        shippingId
+      }
     }
   `,
 );
