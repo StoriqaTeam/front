@@ -26,6 +26,7 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
+    const startTimestamp = Date();
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
     const currency = this.getCurrencyCodeFromCookies();
@@ -55,9 +56,26 @@ class FetcherBase {
         withCredentials: true,
       });
       log.debug('GraphQL response', { response: response.data });
+
+      if (!process.env.BROWSER) {
+        // eslint-disable-next-line
+        require('utils/graylog').info('GraphQL', {
+          url: this.url,
+          operationName: operation.name,
+          operationText: operation.text,
+          variables: JSON.stringify(variables),
+          response: JSON.stringify(response.data, null, 2),
+          timestampStart: startTimestamp,
+          timestampEnd: Date(),
+        });
+      }
       return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
+      if (!process.env.BROWSER) {
+        // eslint-disable-next-line
+        require('utils/graylog').error('GraphQL fetching error: ', e);
+      }
       return { data: null, errors: ['No data returned from gateway'] };
     }
   }

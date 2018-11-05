@@ -12,6 +12,7 @@
     "express": "4.16.2",
     "found": "0.3.8",
     "found-relay": "0.3.0-alpha.12",
+    "gelf-pro": "1.2.2",
     "jwt-decode": "2.2.0",
     "lodash.debounce": "4.0.8",
     "moment": "2.22.2",
