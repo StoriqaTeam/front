@@ -69,7 +69,7 @@ class Form extends Component<PropsType, StateType> {
       return;
     }
     this.setState({
-      name: value.replace(/\s\s/, ' '),
+      name: value,
     });
   };
 

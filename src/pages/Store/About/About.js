@@ -21,7 +21,9 @@ class About extends PureComponent<PropsType> {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');
     const longDescription = getNameText(shop.longDescription, 'EN');
-    const modifLongDescription = longDescription || null;
+    const modifLongDescription = longDescription
+      ? longDescription.replace(/\n/g, '<hr />')
+      : null;
     // $FlowIgnoreMe
     const address = addressToString(shop.addressFull);
     return (
@@ -48,10 +50,16 @@ class About extends PureComponent<PropsType> {
                 <div styleName="subtitle">Description</div>
                 <div
                   styleName="description"
-                  /* eslint-disable */
+                  // eslint-disable-next-line
                   dangerouslySetInnerHTML={{
-                    /* eslint-enable */
-                    __html: xss(modifLongDescription),
+                    __html: xss(`${modifLongDescription}`, {
+                      whiteList: {
+                        img: ['src', 'style', 'sizes', 'srcset'],
+                        br: [],
+                        hr: [],
+                        div: ['style'],
+                      },
+                    }),
                   }}
                 />
               </div>
