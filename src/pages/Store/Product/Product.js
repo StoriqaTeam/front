@@ -265,7 +265,7 @@ class Product extends Component<PropsType, StateType> {
       longDescription,
       'EN',
       'No Long Description',
-    );
+    ).replace(/\n/g, '<hr />');
     const tabs: Array<TabType> = [
       {
         id: '0',
@@ -279,6 +279,7 @@ class Product extends Component<PropsType, StateType> {
                 whiteList: {
                   img: ['src', 'style', 'sizes', 'srcset'],
                   br: [],
+                  hr: [],
                   div: ['style'],
                 },
               }),
