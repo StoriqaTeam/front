@@ -236,7 +236,7 @@ export default (OriginalComponent: any) =>
         (slidesToShow === 1 && type === 'banners') ||
         totalSlidesAmount <= slidesToShow + 1
       ) {
-        this.setState({ children, num: 0 });
+        this.setState({ children });
       } else {
         this.setState(
           prevState => {
