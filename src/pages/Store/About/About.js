@@ -21,9 +21,7 @@ class About extends PureComponent<PropsType> {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');
     const longDescription = getNameText(shop.longDescription, 'EN');
-    const modifLongDescription = longDescription
-      ? longDescription.replace(/\n/g, '<hr />')
-      : null;
+    const modifLongDescription = longDescription || null;
     // $FlowIgnoreMe
     const address = addressToString(shop.addressFull);
     return (
