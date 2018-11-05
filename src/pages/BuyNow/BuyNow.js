@@ -344,6 +344,7 @@ class BuyNow extends Component<PropsType, StateType> {
       receiverName,
       phone,
       successCouponCodeValue,
+      deliveryPackage,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -355,6 +356,9 @@ class BuyNow extends Component<PropsType, StateType> {
       receiverName,
       receiverPhone: phone,
       currency: currentCurrency(),
+      companyPackageId: deliveryPackage
+        ? deliveryPackage.companyPackageRawId
+        : null,
     };
     if (successCouponCodeValue) {
       input = { ...input, couponCode: successCouponCodeValue };

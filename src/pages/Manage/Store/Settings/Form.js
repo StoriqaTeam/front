@@ -160,7 +160,7 @@ class Form extends Component<PropsType, StateType> {
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState((prevState: StateType) =>
-        assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+        assocPath(['form', id], value, prevState),
       );
       if (this.props.handleNewStoreNameChange && id === 'name') {
         this.props.handleNewStoreNameChange(value);

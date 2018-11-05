@@ -279,6 +279,7 @@ class Product extends Component<PropsType, StateType> {
                 whiteList: {
                   img: ['src', 'style', 'sizes', 'srcset'],
                   br: [],
+                  hr: [],
                   div: ['style'],
                 },
               }),
