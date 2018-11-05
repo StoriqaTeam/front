@@ -356,9 +356,7 @@ class BuyNow extends Component<PropsType, StateType> {
       receiverName,
       receiverPhone: phone,
       currency: currentCurrency(),
-      companyPackageId: deliveryPackage
-        ? deliveryPackage.companyPackageRawId
-        : null,
+      shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
     if (successCouponCodeValue) {
       input = { ...input, couponCode: successCouponCodeValue };
@@ -463,9 +461,7 @@ class BuyNow extends Component<PropsType, StateType> {
       productId: parseFloat(queryParams.variant),
       quantity,
       couponCode: successCouponCodeValue || null,
-      companyPackageId: deliveryPackage
-        ? deliveryPackage.companyPackageRawId
-        : null,
+      shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
     fetchBuyNow(this.props.relay.environment, variables)
       .then(({ calculateBuyNow }) => {
@@ -532,9 +528,7 @@ class BuyNow extends Component<PropsType, StateType> {
       productId: parseFloat(queryParams.variant),
       quantity: parseFloat(queryParams.quantity),
       couponCode: couponCodeValue,
-      companyPackageId: deliveryPackage
-        ? deliveryPackage.companyPackageRawId
-        : null,
+      shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
     fetchBuyNow(this.props.relay.environment, variables)
       .then(({ calculateBuyNow }) => {
@@ -605,7 +599,7 @@ class BuyNow extends Component<PropsType, StateType> {
       productId: parseFloat(queryParams.variant),
       quantity: parseFloat(queryParams.quantity),
       couponCode: successCouponCodeValue || null,
-      companyPackageId: pkg.companyPackageRawId,
+      shippingId: pkg.shippingId,
     };
     return fetchBuyNow(this.props.relay.environment, variables)
       .then(({ calculateBuyNow }) => {
@@ -869,8 +863,8 @@ class BuyNow extends Component<PropsType, StateType> {
                   goToCheckout={this.goToCheckout}
                   isLoadingCheckout={isLoadingCheckout}
                   onCheckout={this.handleCheckout}
-                  companyPackageRawId={
-                    deliveryPackage ? deliveryPackage.companyPackageRawId : null
+                  shippingId={
+                    deliveryPackage ? deliveryPackage.shippingId : null
                   }
                 />
               </StickyBar>

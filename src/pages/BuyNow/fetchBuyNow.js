@@ -8,13 +8,13 @@ const BUYNOW_QUERY = graphql`
     $productId: Int!
     $quantity: Int!
     $couponCode: String
-    $companyPackageId: Int
+    $shippingId: Int
   ) {
     calculateBuyNow(
       productId: $productId
       quantity: $quantity
       couponCode: $couponCode
-      companyPackageId: $companyPackageId
+      shippingId: $shippingId
     ) {
       product {
         id
@@ -38,7 +38,7 @@ const fetchBuyNow = (
     productId: number,
     quantity: number,
     couponCode?: ?string,
-    companyPackageId?: ?number,
+    shippingId?: ?number,
   },
 ) => fetchQuery(environment, BUYNOW_QUERY, variables);
 

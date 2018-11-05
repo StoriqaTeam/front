@@ -38,6 +38,10 @@ const mutation = graphql`
                 id
                 rawId
               }
+              selectPackage {
+                id
+                shippingId
+              }
             }
           }
         }

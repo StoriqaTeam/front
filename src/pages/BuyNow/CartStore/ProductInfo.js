@@ -172,9 +172,9 @@ class ProductInfo extends PureComponent<PropsType> {
                                       country={currentCountryAlpha3}
                                       onPackagesFetched={() => {}}
                                       onPackageSelect={onChangeDelivery}
-                                      selectedCompanyPackageRawId={
+                                      selectedCompanyShippingRawId={
                                         deliveryPackage
-                                          ? deliveryPackage.companyPackageRawId
+                                          ? deliveryPackage.shippingId
                                           : null
                                       }
                                     />

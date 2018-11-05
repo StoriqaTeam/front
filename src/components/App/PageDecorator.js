@@ -34,17 +34,27 @@ export default (
       const cookieLocale = getCookie('locale');
       if (!cookieLocale) {
         if (process.env.BROWSER) {
-          const browserLang = window.navigator
-            ? window.navigator.language ||
-              window.navigator.systemLanguage ||
-              window.navigator.userLanguage
-            : null;
-          const browserLocale = browserLang
-            ? browserLang.substr(0, 2).toLowerCase()
-            : 'en';
+          // const browserLang = window.navigator
+          //   ? window.navigator.language ||
+          //     window.navigator.systemLanguage ||
+          //     window.navigator.userLanguage
+          //   : null;
+          // const browserLocale = browserLang
+          //   ? browserLang.substr(0, 2).toLowerCase()
+          //   : 'en';
+          // setCookie(
+          //   'locale',
+          //   browserLocale,
+          //   moment()
+          //     .utc()
+          //     .add(30, 'd')
+          //     .toDate(),
+          // );
+
+          // убрать потом
           setCookie(
             'locale',
-            browserLocale,
+            'en',
             moment()
               .utc()
               .add(30, 'd')
