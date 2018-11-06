@@ -8,9 +8,6 @@ export { default as CreateStoreMutation } from './CreateStoreMutation';
 export { default as UpdateStoreMutation } from './UpdateStoreMutation'; // contacts
 export { default as UpdateStoreMainMutation } from './UpdateStoreMainMutation'; // main info
 export {
-  default as CreateBaseProductMutation,
-} from './CreateBaseProductMutation';
-export {
   default as UpdateBaseProductMutation,
 } from './UpdateBaseProductMutation';
 export {
