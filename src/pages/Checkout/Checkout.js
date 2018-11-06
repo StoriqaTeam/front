@@ -532,6 +532,10 @@ export default createPaginationContainer(
                 id
                 rawId
               }
+              selectPackage {
+                id
+                shippingId
+              }
             }
           }
         }
