@@ -58,6 +58,7 @@ class ProductInfo extends PureComponent<PropsType> {
             clientMutationId: '',
             productId: parseInt(productId, 10),
             companyPackageId: pkg.companyPackageRawId,
+            shippingId: pkg.shippingId,
           },
         },
       })
@@ -255,9 +256,9 @@ class ProductInfo extends PureComponent<PropsType> {
                                             this.handlePackageSelect
                                           }
                                           // $FlowIgnoreMe
-                                          selectedCompanyPackageRawId={pathOr(
+                                          selectedCompanyShippingRawId={pathOr(
                                             null,
-                                            ['companyPackage', 'rawId'],
+                                            ['selectPackage', 'shippingId'],
                                             product,
                                           )}
                                         />

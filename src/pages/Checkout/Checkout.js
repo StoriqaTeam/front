@@ -317,7 +317,7 @@ class Checkout extends Component<PropsType, StateType> {
       );
 
       const isProductsWithoutPackageExist = find(
-        whereEq({ companyPackage: null }),
+        whereEq({ selectPackage: null }),
         products,
       );
 

@@ -10,7 +10,7 @@ const HeaderDisclaimer = () => (
       <div>
         <strong>
           Dear users! Currently Storiqa is&nbsp;working
-          in&nbsp;the&nbsp;demo&nbsp;testing&nbsp;mode.
+          in&nbsp;the&nbsp;testing&nbsp;mode.
         </strong>
       </div>
       <div>

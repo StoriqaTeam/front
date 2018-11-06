@@ -9,6 +9,7 @@ import { map, pathOr } from 'ramda';
 import classNames from 'classnames';
 import { routerShape, withRouter } from 'found';
 
+import { formatPrice } from 'utils';
 import { RecalcInvoiceAmountMutation } from 'relay/mutations';
 
 import type {
@@ -260,7 +261,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     <div styleName="addressTitle">Address</div>
                     <div styleName="address">{wallet}</div>
                     <div styleName="amountTitle">Amount</div>
-                    <div styleName="amount">{amount} STQ</div>
+                    <div styleName="amount">{formatPrice(amount)} STQ</div>
                     {
                       <div styleName="reserveInfo">
                         Current price reserved for{' '}
