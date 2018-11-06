@@ -136,7 +136,6 @@ class CharacteristicItem extends Component<PropsType, StateType> {
           {characteristicImg && (
             <div styleName="remove">
               <div
-                styleName="removeButton"
                 onClick={this.handleRemoveImg}
                 onKeyDown={() => {}}
                 role="button"
