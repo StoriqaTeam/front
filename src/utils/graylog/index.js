@@ -8,6 +8,7 @@ const logger = graylog.setConfig({
   fields: {
     cluster: `${process.env.GRAYLOG_CLUSTER || 'localhost'}`,
     type: 'ssr',
+    source_type: 'frontend',
   },
   adapterName: 'tcp',
   adapterOptions: {
