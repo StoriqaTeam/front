@@ -115,19 +115,18 @@ class Storages extends PureComponent<PropsType> {
           <div styleName="subtitle">
             <strong>Items list</strong>
           </div>
-          {storages &&
-            length(storages) > 1 && (
-              <div styleName="addButton">
-                <Button
-                  wireframe
-                  big
-                  onClick={this.createStorage}
-                  dataTest="createStorageButton"
-                >
-                  Add storage
-                </Button>
-              </div>
-            )}
+          {length(storages) === 0 && (
+            <div styleName="addButton">
+              <Button
+                wireframe
+                big
+                onClick={this.createStorage}
+                dataTest="createStorageButton"
+              >
+                Add storage
+              </Button>
+            </div>
+          )}
         </header>
         <div>
           <StoragesHeader />
