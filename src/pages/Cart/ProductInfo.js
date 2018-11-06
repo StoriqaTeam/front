@@ -72,26 +72,23 @@ class ProductInfo extends PureComponent<PropsType> {
   };
 
   handlePackageFetching = (packages: Array<AvailableDeliveryPackageType>) => {
-    const productCompanyPackageRawId: ?number = pathOr(null)([
+    const shippingId: ?number = pathOr(null)([
       'product',
-      'companyPackage',
-      'rawId',
+      'selectPackage',
+      'shippingId',
     ])(this.props);
     log.debug('handlePackageFetching', {
       packages,
-      selected: productCompanyPackageRawId,
+      selected: shippingId,
     });
 
     const currentProductRawId: ?number = pathOr(null, ['product', 'rawId'])(
       this.props,
     );
 
-    if (productCompanyPackageRawId != null) {
+    if (shippingId != null) {
       const isProductPackageExists = !isNil(
-        find(
-          whereEq({ companyPackageRawId: productCompanyPackageRawId }),
-          packages,
-        ),
+        find(whereEq({ shippingId }), packages),
       );
       if (!isProductPackageExists && currentProductRawId) {
         removeDeliveryMethodForProductMutation({
