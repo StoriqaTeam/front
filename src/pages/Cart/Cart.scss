@@ -1,5 +1,10 @@
 @import "../../styles/variables.scss";
 
+.container {
+  margin: 2rem 0 4rem;
+  overflow: hidden;
+}
+
 .wrapper {
   margin-left: -15px;
   margin-right: -15px;
@@ -27,8 +32,3 @@
   font-family: $font_medium;
 }
 
-// old styles
-
-.container {
-  margin: 2rem 0 4rem;
-}
