@@ -55,8 +55,8 @@ class SignIn extends Component<PropsType, StateType> {
 
   makeInputs = (): Array<SignUpInputType> => {
     const inputs: Array<InputConfig> = [
-      { label: 'Email', type: 'email' },
-      { label: 'Password', type: 'password' },
+      { label: t.labelEmail, type: 'email' },
+      { label: t.labelPassword, type: 'password' },
     ];
     const makeInputFn = map(makeInput(this.props));
     const setFocus = adjust(assoc('thisFocus', true), 0);
