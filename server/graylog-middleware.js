@@ -1,4 +1,3 @@
-const graylogger = require('utils/graylog');
 const { split, reject, startsWith, pipe, join, pathOr } = require('ramda');
 
 // returns `{ message: string, payload: object }`
@@ -25,7 +24,11 @@ const requestInfoFormatter = req => ({
 const middleware = (req, res, next) => {
   const reqData = requestInfoFormatter(req);
 
-  graylogger.info(reqData.message, reqData.payload);
+  // eslint-disable-next-line
+  if (require('utils/graylog').info) {
+    // eslint-disable-next-line
+    require('utils/graylog').info(reqData.message, reqData.payload);
+  }
 
   next();
 };
