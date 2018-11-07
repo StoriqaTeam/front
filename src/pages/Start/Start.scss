@@ -19,6 +19,7 @@
 
 .bannerSliderItem {
   min-height: 22rem;
+  margin-top: -2rem;
 
   @media (min-width: $md) {
     min-height: 24rem;
@@ -49,5 +50,33 @@
   padding: 0 2rem;
   img {
     width: 100%;
+  }
+}
+
+.sellingImage {
+  position: relative;
+  display: block;
+  min-height: 22rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  @media (min-width: $md) {
+    min-height: 24rem;
+  }
+
+  @media (min-width: $lg) {
+    min-height: 29rem;
+  }
+
+  @media (min-width: $xl) {
+    min-height: 40rem;
+  }
+
+  .loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 }

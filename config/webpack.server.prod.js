@@ -72,6 +72,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.BROWSER': JSON.stringify(false),
+      'process.env.GRAYLOG_CLUSTER': JSON.stringify(
+        process.env.GRAYLOG_CLUSTER,
+      ),
       ...env.stringified,
     }),
     new webpack.optimize.UglifyJsPlugin(),
