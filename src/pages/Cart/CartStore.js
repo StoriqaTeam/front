@@ -168,7 +168,7 @@ class CartStore extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         {filteredProducts.map((product, idx) => (
-          <div key={idx}>
+          <div key={idx} styleName="devider">
             <CartProduct
               product={product}
               onlySelected={onlySelected}
@@ -176,7 +176,6 @@ class CartStore extends Component<PropsType, StateType> {
               isOpenInfo={isOpenInfo}
               withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
             />
-            <div styleName="devider" />
           </div>
         ))}
         <div styleName="footer">
