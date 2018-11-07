@@ -76,7 +76,7 @@ class FetcherBase {
       return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
-      grayLogger.error('GraphQL fetching error: ', {
+      grayLogger.error('GraphQL fetching error', {
         uid,
         error: e,
       });
