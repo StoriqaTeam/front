@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import { assoc, pathOr } from 'ramda';
+import { assoc, pathOr, slice, omit } from 'ramda';
+import uidGenerator from 'gen-uid';
 
 import isTokenExpired from 'utils/token';
 import { log, removeCookie, getCookie } from 'utils';
+import grayLogger from 'utils/graylog';
 
 class FetcherBase {
   constructor(url) {
@@ -26,6 +28,8 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
+    const uid = uidGenerator.v4();
+    log.debug({ uid });
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
     const currency = this.getCurrencyCodeFromCookies();
@@ -45,6 +49,14 @@ class FetcherBase {
     }
 
     log.debug('\nRequest headers:\n', { headers }, '\n');
+    grayLogger.info('GraphQL request', {
+      uid,
+      url: this.url,
+      operationName: operation.name,
+      operationText: slice(0, 32000, operation.text),
+      operationVariables: JSON.stringify(variables),
+      headers: JSON.stringify(omit(['Authorization'], headers), null, 2),
+    });
 
     try {
       const response = await axios({
@@ -55,9 +67,19 @@ class FetcherBase {
         withCredentials: true,
       });
       log.debug('GraphQL response', { response: response.data });
+
+      grayLogger.info('GraphQL response', {
+        uid,
+        response: slice(0, 32000, JSON.stringify(response.data, null, 2)),
+      });
+
       return response.data;
     } catch (e) {
       log.error('GraphQL fetching error: ', { error: e });
+      grayLogger.error('GraphQL fetching error: ', {
+        uid,
+        error: e,
+      });
       return { data: null, errors: ['No data returned from gateway'] };
     }
   }
