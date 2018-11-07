@@ -9,7 +9,7 @@ const requestInfoFormatter = req => ({
       {
         ...req.headers,
         cookie: pipe(
-          pathOr([], ['headers', 'cookie']),
+          pathOr('', ['headers', 'cookie']),
           split('; '),
           reject(startsWith('__jwt')),
           join('; '),
