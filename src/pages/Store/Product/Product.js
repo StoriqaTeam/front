@@ -14,7 +14,6 @@ import {
   propEq,
   has,
   prop,
-  find,
   pathOr,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
@@ -24,13 +23,12 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
-import { IncrementInCartMutation, BuyNowMutation } from 'relay/mutations';
+import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/App/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
 
 import type { AddressFullType } from 'types';
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import type { MutationParamsType } from 'relay/mutations/BuyNowMutation';
 
 import {
   makeWidgets,
@@ -209,94 +207,9 @@ class Product extends Component<PropsType, StateType> {
       });
     } else {
       this.setState({ unselectedAttr });
-      smoothscroll.scrollTo(head(unselectedAttr));
-    }
-  };
-
-  handleBuyNow = (productId: number) => {
-    this.setState({ unselectedAttr: null });
-    const { widgets, selectedAttributes } = this.state;
-    const unselectedAttr = isNoSelected(
-      sortByProp('id')(widgets),
-      selectedAttributes,
-    );
-
-    if (isEmpty(widgets) || !unselectedAttr) {
-      const { me } = this.props;
-      const deliveryAddressesFull = me.deliveryAddressesFull || [];
-      const receiverName = `${me.firstName} ${me.lastName}`;
-      const receiverPhone = me.phone;
-      this.setState({ isLoading: true });
-      if (isEmpty(deliveryAddressesFull) || !receiverName || !receiverPhone) {
-        this.handleAddToCart(productId, true);
-        return;
+      if (!isEmpty(unselectedAttr) && head(unselectedAttr)) {
+        smoothscroll.scrollTo(head(unselectedAttr));
       }
-      const deliveryAddressFull =
-        find(propEq('isPriority', true))(deliveryAddressesFull) ||
-        deliveryAddressesFull[0];
-      const addressFull = deliveryAddressFull.address;
-
-      const params: MutationParamsType = {
-        input: {
-          clientMutationId: '',
-          productId,
-          quantity: 1,
-          addressFull,
-          receiverName,
-          receiverPhone,
-          currency: 'STQ',
-        },
-        environment: this.props.relay.environment,
-        onCompleted: (response, errors) => {
-          this.setState({ isLoading: false });
-          log.debug('Success for BuyNowMutation');
-          if (response && response.buyNow) {
-            log.debug('Response: ', response);
-            this.props.showAlert({
-              type: 'success',
-              text: 'Orders successfully created',
-              link: { text: 'Close.' },
-            });
-            const responseOrders = pathOr(
-              null,
-              ['invoice', 'orders'],
-              response.buyNow,
-            );
-            const order = responseOrders[0];
-            this.props.router.push(
-              `/profile/orders/${order.slug}/payment-info`,
-            );
-          } else if (!errors) {
-            this.props.showAlert({
-              type: 'danger',
-              text: 'Error :(',
-              link: { text: 'Close.' },
-            });
-            // this.setState({ checkoutInProcess: false });
-          } else {
-            log.debug('Errors: ', errors);
-            this.props.showAlert({
-              type: 'danger',
-              text: 'Error :(',
-              link: { text: 'Close.' },
-            });
-          }
-        },
-        onError: error => {
-          this.setState({ isLoading: false });
-          log.error('Error in BuyNowMutation');
-          log.error(error);
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something went wrong :(',
-            link: { text: 'Close.' },
-          });
-        },
-      };
-      BuyNowMutation.commit(params);
-    } else {
-      this.setState({ unselectedAttr });
-      smoothscroll.scrollTo(head(unselectedAttr));
     }
   };
 
@@ -368,6 +281,7 @@ class Product extends Component<PropsType, StateType> {
                 whiteList: {
                   img: ['src', 'style', 'sizes', 'srcset'],
                   br: [],
+                  hr: [],
                   div: ['style'],
                 },
               }),
@@ -385,6 +299,49 @@ class Product extends Component<PropsType, StateType> {
         ))}
       </Tabs>
     );
+  };
+
+  handleBuyNow = () => {
+    this.setState({ unselectedAttr: null });
+    const {
+      widgets,
+      selectedAttributes,
+      cartQuantity,
+      productVariant,
+    } = this.state;
+    const unselectedAttr = isNoSelected(
+      sortByProp('id')(widgets),
+      selectedAttributes,
+    );
+
+    let quantity = cartQuantity;
+
+    if (
+      productVariant.quantity === 0 &&
+      productVariant.preOrder &&
+      productVariant.preOrderDays > 0
+    ) {
+      quantity = 1;
+    }
+
+    if (isEmpty(widgets) || !unselectedAttr) {
+      // $FlowIgnore
+      const baseProductRawId = pathOr(
+        null,
+        ['baseProduct', 'rawId'],
+        this.props,
+      );
+      this.props.router.push(
+        `/buy-now?product=${baseProductRawId}&variant=${
+          productVariant.rawId
+        }&quantity=${quantity}`,
+      );
+    } else {
+      this.setState({ unselectedAttr });
+      if (!isEmpty(unselectedAttr) && head(unselectedAttr)) {
+        smoothscroll.scrollTo(head(unselectedAttr));
+      }
+    }
   };
 
   render() {
@@ -462,9 +419,7 @@ class Product extends Component<PropsType, StateType> {
                           onAddToCart={() =>
                             this.handleAddToCart(productVariant.rawId)
                           }
-                          onBuyNow={() =>
-                            this.handleBuyNow(productVariant.rawId)
-                          }
+                          onBuyNow={this.handleBuyNow}
                           unselectedAttr={unselectedAttr}
                           quantity={productVariant.quantity}
                           preOrder={productVariant.preOrder}
@@ -491,10 +446,12 @@ class Product extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
+  // $FlowIgnoreMe
   withShowAlert(withErrorBoundary(Page(Product))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       id
+      rawId
       categoryId
       name {
         text

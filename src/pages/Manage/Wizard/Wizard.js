@@ -13,6 +13,7 @@ import {
   complement,
   head,
   isEmpty,
+  map,
 } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
@@ -26,20 +27,18 @@ import {
   UpdateWizardMutation,
   CreateStoreMutation,
   UpdateStoreMutation,
-  CreateBaseProductMutation,
   UpdateBaseProductMutation,
-  CreateProductWithAttributesMutation,
+  CreateBaseProductWithVariantsMutation,
   UpdateProductMutation,
   DeactivateBaseProductMutation,
   DeleteWizardMutation,
   CreateWarehouseMutation,
   SetProductQuantityInWarehouseMutation,
 } from 'relay/mutations';
-import { errorsHandler, log, fromRelayError, uploadFile } from 'utils';
+import { errorsHandler, log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/App/AlertContext';
-import type { CreateBaseProductMutationResponseType } from 'relay/mutations/CreateBaseProductMutation';
-import type { CreateProductWithAttributesMutationResponseType } from 'relay/mutations/CreateProductWithAttributesMutation';
+import type { MutationParamsType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { UpdateProductMutationResponseType } from 'relay/mutations/UpdateProductMutation';
 
 import { transformTranslated } from './utils';
@@ -561,11 +560,20 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   // Product handlers
   createBaseProduct = (callback: () => void) => {
     const { baseProduct } = this.state;
-    const preparedData = transformTranslated(
+    const preparedDataForBaseProduct = transformTranslated(
       'EN',
       ['name', 'shortDescription'],
-      omit(['product', 'attributes'], baseProduct),
+      omit(['id', 'product', 'attributes'], baseProduct),
     );
+
+    const prepareDataForProduct = {
+      product: {
+        ...omit(['id', 'quantity', 'baseProductId'], baseProduct.product),
+        cashback: (baseProduct.product.cashback || 0) / 100,
+      },
+      attributes: baseProduct.attributes,
+    };
+
     // $FlowIgnoreMe
     const parentID = pathOr(
       null,
@@ -573,73 +581,62 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       this.props,
     );
 
-    CreateBaseProductMutation.promise(
+    this.setState({ isSavingInProgress: true });
+
+    CreateBaseProductWithVariantsMutation.promise(
       {
-        ...preparedData,
-        parentID,
+        clientMutationId: '',
+        ...preparedDataForBaseProduct,
+        selectedAttributes: map(item => item.attrId, baseProduct.attributes),
+        variants: [
+          {
+            clientMutationId: '',
+            ...prepareDataForProduct,
+          },
+        ],
       },
+      parentID,
       this.context.environment,
     )
-      .then(
-        (
-          createBaseProductMutationResponse: CreateBaseProductMutationResponseType,
-        ) => {
-          // $FlowIgnoreMe
-          const baseProductId = pathOr(
-            null,
-            ['createBaseProduct', 'rawId'],
-            createBaseProductMutationResponse,
-          );
-          // $FlowIgnoreMe
-          const baseProductID = pathOr(
-            null,
-            ['createBaseProduct', 'id'],
-            createBaseProductMutationResponse,
-          );
-          if (!baseProductId || !baseProductID) {
-            throw new Error(t.cantCreateVariantWithoutBaseProductId);
-          }
-          this.clearValidationErrors();
-          // create variant after create base product
-          const prepareDataForProduct = {
-            product: {
-              ...omit(['id', 'quantity'], baseProduct.product),
-              cashback: (baseProduct.product.cashback || 0) / 100,
-              baseProductId,
-            },
-            attributes: baseProduct.attributes,
-          };
-
-          return CreateProductWithAttributesMutation.promise(
-            {
-              input: {
-                clientMutationId: '',
-                ...prepareDataForProduct,
-              },
-              parentID: baseProductID,
-            },
-            this.context.environment,
-          );
-        },
-      )
-      .then((response: CreateProductWithAttributesMutationResponseType) => {
+      .then((response: CreateBaseProductWithVariantsMutationType) => {
         log.debug({ response });
+        // $FlowIgnoreMe
+        const productId = pathOr(
+          null,
+          [
+            'createBaseProductWithVariants',
+            'products',
+            'edges',
+            0,
+            'node',
+            'rawId',
+          ],
+          response,
+        );
+
         // $FlowIgnoreMe
         let warehouseId = pathOr(
           null,
-          ['createProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
+          ['createBaseProductWithVariants', 'store', 'warehouses', 0, 'id'],
           response,
         );
         if (!warehouseId) {
           // $FlowIgnoreMe
           warehouseId = pathOr(
             null,
-            ['createProduct', 'stocks', 0, 'warehouseId'],
+            [
+              'createBaseProductWithVariants',
+              'products',
+              'edges',
+              0,
+              'node',
+              'stocks',
+              0,
+              'warehouseId',
+            ],
             response,
           );
         }
-        // $FlowIgnoreMe
-        const productId = pathOr(null, ['createProduct', 'rawId'], response);
 
         return SetProductQuantityInWarehouseMutation.promise(
           {
@@ -657,8 +654,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         this.clearValidationErrors();
         this.handleOnClearProductState();
         callback();
+        this.setState({ isSavingInProgress: false });
       })
       .catch((errors: Array<any>) => {
+        this.setState({ isSavingInProgress: false });
         const relayErrors = fromRelayError({ source: { errors } });
         if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
@@ -689,6 +688,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       omit(['product', 'attributes'], baseProduct),
     );
 
+    this.setState({ isSavingInProgress: true });
+
     UpdateBaseProductMutation.promise(
       {
         ...preparedData,
@@ -717,11 +718,19 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       .then(
         (updateProductMutationResponse: UpdateProductMutationResponseType) => {
           // $FlowIgnoreMe
-          const warehouseId = pathOr(
+          let warehouseId = pathOr(
             null,
             ['updateProduct', 'baseProduct', 'store', 'warehouses', 0, 'id'],
             updateProductMutationResponse,
           );
+          if (!warehouseId) {
+            // $FlowIgnoreMe
+            warehouseId = pathOr(
+              null,
+              ['updateProduct', 'stocks', 0, 'warehouseId'],
+              updateProductMutationResponse,
+            );
+          }
           // $FlowIgnoreMe
           const productId = pathOr(
             null,
@@ -750,9 +759,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           text: t.productUpdated,
           link: { text: t.close },
         });
+        this.setState({ isSavingInProgress: false });
         callback();
       })
       .catch((errors: Array<any>) => {
+        this.setState({ isSavingInProgress: false });
         const relayErrors = fromRelayError({ source: { errors } });
         if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
@@ -845,40 +856,25 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = async (type: string, e: any) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    const result = await uploadFile(file);
-    if (!result.url) {
-      this.props.showAlert({
-        text: t.cantUploadPhoto,
-        type: 'success',
-        link: { text: '' },
-      });
+  handleOnUploadPhoto = (type: string, url: string) => {
+    if (type === 'main') {
+      this.setState(prevState =>
+        assocPath(['baseProduct', 'product', 'photoMain'], url, prevState),
+      );
       return;
     }
-    if (type === 'photoMain') {
-      this.setState(prevState =>
-        assocPath(
-          ['baseProduct', 'product', 'photoMain'],
-          result.url,
-          prevState,
-        ),
-      );
-    } else {
-      const additionalPhotos =
-        path(['baseProduct', 'product', 'additionalPhotos'], this.state) || [];
-      this.setState(prevState => ({
-        ...prevState,
-        baseProduct: {
-          ...prevState.baseProduct,
-          product: {
-            ...prevState.baseProduct.product,
-            additionalPhotos: [...additionalPhotos, result.url || ''],
-          },
+    const additionalPhotos =
+      path(['baseProduct', 'product', 'additionalPhotos'], this.state) || [];
+    this.setState(prevState => ({
+      ...prevState,
+      baseProduct: {
+        ...prevState.baseProduct,
+        product: {
+          ...prevState.baseProduct.product,
+          additionalPhotos: [...additionalPhotos, url || ''],
         },
-      }));
-    }
+      },
+    }));
   };
 
   handleOnSaveProduct = (callback: () => void) => {
@@ -891,7 +887,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   renderForm = () => {
-    const { step } = this.state;
+    const { step, isSavingInProgress } = this.state;
     // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
     // $FlowIgnoreMe
@@ -922,13 +918,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           <Step3
             formStateData={this.state.baseProduct}
             products={baseProducts ? baseProducts.edges : []}
-            onUpload={this.handleOnUploadPhoto}
+            onUploadPhoto={this.handleOnUploadPhoto}
             onChange={this.handleOnChangeProductForm}
             onClearProductState={this.handleOnClearProductState}
             onSave={this.handleOnSaveProduct}
             onDelete={this.handleOnDeleteProduct}
             errors={this.state.validationErrors}
             onChangeEditingProduct={this.handleOnChangeEditingProduct}
+            isSavingInProgress={isSavingInProgress}
           />
         );
       default:

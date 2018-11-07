@@ -12,6 +12,10 @@
 
 .receiverContainer {
   width: 26rem;
+
+  & + .receiverContainer {
+    margin-top: 3rem;
+  }
 }
 
 .label {
@@ -22,6 +26,7 @@
 .selectAddressContainer {
   padding-top: 3rem;
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .selectWrapper {
@@ -33,10 +38,11 @@
 }
 
 .saveAddressWrapper {
-  margin-top: 4rem;
+  margin-top: 5rem;
 }
 
 .formWrapper {
+  position: relative;
   margin-top: 4rem;
 }
 
@@ -48,9 +54,23 @@
 
 .addressInfoContainer {
   margin-top: 2rem;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .red {
   color: $color_red;
+}
+
+.addressError {
+  position: absolute;
+  margin-top: 1rem;
+  font-size: 12px;
+  color: $color_red;
+  line-height: 2rem;
+}
+
+.newAddressWrap {
+  @media (max-width: #{$xl - 1px}) {
+    margin-top: 2rem;
+  }
 }

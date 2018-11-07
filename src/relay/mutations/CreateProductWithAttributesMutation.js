@@ -117,7 +117,7 @@ const commit = (params: MutationParamsType) =>
         newProduct,
         'ProductsEdge',
       );
-      ConnectionHandler.insertEdgeBefore(conn, edge);
+      ConnectionHandler.insertEdgeAfter(conn, edge);
     },
   });
 

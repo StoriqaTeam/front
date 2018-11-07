@@ -12,7 +12,11 @@ type TranslationDicType = {|
   count: string,
   subtotal: string,
   delivery: string,
+  couponDiscount: string,
   labelCostumerComment: string,
+  attention: string,
+  noShippingAvailable: string,
+  noCountryFound: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -25,7 +29,12 @@ const translations: TranslationsBundleType = {
     count: 'Count',
     subtotal: 'Subtotal',
     delivery: 'Delivery',
+    couponDiscount: 'Coupon discount',
     labelCostumerComment: 'Customer comment',
+    attention: 'Attention!',
+    noShippingAvailable:
+      'No shipping available for this product to your region.',
+    noCountryFound: 'No country found',
   },
 };
 

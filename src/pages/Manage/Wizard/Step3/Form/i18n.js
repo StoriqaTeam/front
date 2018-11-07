@@ -20,7 +20,7 @@ type TranslationDicType = {|
   iconShowInUse: string,
   iconShowSizes: string,
   iconShowVariety: string,
-  properties: string,
+  characteristics: string,
   generalSettingsAndPricing: string,
   price: string,
   vendorCode: string,
@@ -28,6 +28,7 @@ type TranslationDicType = {|
   labelQuantity: string,
   save: string,
   cancel: string,
+  productPhotos: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -50,7 +51,7 @@ const translations: TranslationsBundleType = {
     iconShowInUse: 'Show in use',
     iconShowSizes: 'Show sizes',
     iconShowVariety: 'Show variety',
-    properties: 'Properties',
+    characteristics: 'Characteristics',
     generalSettingsAndPricing: 'General settings and pricing',
     price: 'Price',
     vendorCode: 'Vendor Code',
@@ -58,6 +59,7 @@ const translations: TranslationsBundleType = {
     labelQuantity: 'Quantity',
     save: 'Save',
     cancel: 'Cancel',
+    productPhotos: 'PRODUCT PHOTOS',
   },
 };
 

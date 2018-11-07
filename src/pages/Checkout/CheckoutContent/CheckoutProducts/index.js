@@ -20,26 +20,23 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
   <Row>
     <Col size={12}>
       <div styleName="container">
-        <div styleName="title">{t.summary}</div>
         <div styleName="infoContainer">
           <Row>
-            <Col size={3}>
-              <div styleName="centeredTitle">
-                <div>{t.address}</div>
-              </div>
-            </Col>
-            <Col size={9} smVisible>
-              <div styleName="wrapperAddressButton">
-                <div styleName="containerAddressButton">
-                  <Button
-                    big
-                    contour
-                    onClick={onChangeStep(1)}
-                    type="button"
-                    dataTest="changeAddress"
-                  >
-                    <span>{t.replaceAddress}</span>
-                  </Button>
+            <Col size={12} smVisible>
+              <div styleName="header">
+                <div styleName="title">{t.summary}</div>
+                <div styleName="wrapperAddressButton">
+                  <div styleName="containerAddressButton">
+                    <Button
+                      big
+                      contour
+                      onClick={onChangeStep(1)}
+                      type="button"
+                      dataTest="changeAddress"
+                    >
+                      <span>{t.replaceAddress}</span>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Col>

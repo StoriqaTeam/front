@@ -210,7 +210,7 @@ class PersonalData extends Component<PropsType, StateType> {
     }
     if (value.length <= 50) {
       this.setState((prevState: StateType) =>
-        assocPath(['data', id], value.replace(/\s\s/, ' '), prevState),
+        assocPath(['data', id], value, prevState),
       );
     }
   };

@@ -14,7 +14,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    disclainer: 'Dear users! Currently Storiqa is working in the demo mode.',
+    disclainer: 'Dear users! Currently Storiqa is working in the testing mode.',
     questions:
       'If you have any questions or problems, please follow the link below.',
     support: 'Support',

@@ -124,11 +124,10 @@ class Authorization extends Component<PropsType, StateType> {
   componentDidMount() {
     const {
       match: {
-        location: {
-          query: { from },
-        },
+        location: { search },
       },
     } = this.props;
+    const from = search.replace(/\?from=/gi, '');
     if (from && from !== '') {
       setPathForRedirectAfterLogin(from);
     }
@@ -219,13 +218,12 @@ class Authorization extends Component<PropsType, StateType> {
     this.setState({ isLoading: true, errors: null });
     const {
       match: {
-        location: {
-          query: { from },
-        },
+        location: { search },
       },
       environment,
       showAlert,
     } = this.props;
+    const from = search.replace(/\?from=/gi, '');
     const { email, password } = this.state;
     getJWTByEmailMutation({
       environment,

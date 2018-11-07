@@ -86,10 +86,14 @@ class Orders extends Component<PropsType, StateType> {
       },
       delivery: order.deliveryCompany,
       item: {
-        id: order.product ? order.product.baseProduct.rawId : null,
-        title: order.product
-          ? order.product.baseProduct.name[0].text
-          : t.theProductWasDeleted,
+        id:
+          order.product && order.product.baseProduct
+            ? order.product.baseProduct.rawId
+            : null,
+        title:
+          order.product && order.product.baseProduct
+            ? order.product.baseProduct.name[0].text
+            : t.theProductWasDeleted,
       },
       price: order.price,
       payment: order.paymentStatus ? t.paid : t.notPaid,

@@ -127,12 +127,16 @@ class Index extends Component<PropsType, StateType> {
                 activeItem={activeAttribute}
                 items={selectableAttributes}
                 onSelect={this.handleOnSelect}
-                dataTest="productCustomAttributtesSelect"
+                dataTest="customAttributtesSelect"
                 fullWidth
               />
             </div>
             {activeAttribute && (
-              <button styleName="button" onClick={this.handleCreateAttribute}>
+              <button
+                styleName="button"
+                onClick={this.handleCreateAttribute}
+                data-test="customAttributtesAddButton"
+              >
                 <div styleName="buttonIcon">
                   <Icon inline type="plus" size={20} />
                 </div>
@@ -160,6 +164,7 @@ class Index extends Component<PropsType, StateType> {
                     onClick={() => {
                       this.handleRemoveAttribute(item.id);
                     }}
+                    data-test="customAttributtesRemoveButton"
                   >
                     <Icon inline type="cross" size={12} />
                   </button>

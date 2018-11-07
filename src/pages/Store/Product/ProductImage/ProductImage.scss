@@ -40,9 +40,6 @@
 
 .imageSlider {
   display: block;
-  height: 0;
-  overflow: hidden;
-  padding-bottom: 56.25%;
   width: 100%;
   @media (min-width: $md) {
     display: none;
@@ -56,12 +53,16 @@
   background-color: #f7f7f7;
 
   div[role='img'] {
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 100%;
+    background-size: contain !important;
   }
+
+  //div[role='img'] {
+  //  height: 100%;
+  //  position: absolute;
+  //  right: 0;
+  //  top: 0;
+  //  width: 100%;
+  //}
 }
 
 .imageBlur {
@@ -119,4 +120,12 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }

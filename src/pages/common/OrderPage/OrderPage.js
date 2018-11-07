@@ -61,11 +61,14 @@ type OrderDTOType = {
   trackId: string,
   quantity: number,
   subtotal: number,
+  totalAmount: number,
   status: string,
   paymentStatus: string,
   statusHistory: Array<OrderStatusType>,
   customerName: string,
   customerAddress: string,
+  deliveryPrice: number,
+  couponPrice: ?number,
 };
 
 class OrderPage extends Component<PropsType, StateType> {
@@ -143,6 +146,9 @@ class OrderPage extends Component<PropsType, StateType> {
       trackId: order.trackId || '—',
       quantity: order.quantity,
       subtotal: order.subtotal,
+      totalAmount: order.totalAmount,
+      deliveryPrice: order.deliveryPrice,
+      couponPrice: order.couponDiscount,
       status: order.state,
       paymentStatus: order.paymentStatus ? t.paid : t.notPaid,
       statusHistory: map(historyEdge => {
@@ -262,7 +268,7 @@ class OrderPage extends Component<PropsType, StateType> {
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (
-      <AppContext>
+      <AppContext.Consumer>
         {({ environment }) => (
           <div styleName="container">
             <Modal
@@ -396,7 +402,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     <Col size={12} lg={5}>
                       <TextWithLabel
                         label={t.labelDelivery}
-                        text={order.delivery}
+                        text={`${formatPrice(order.deliveryPrice)} STQ`}
                       />
                     </Col>
                     <Col size={12} lg={7}>
@@ -407,6 +413,18 @@ class OrderPage extends Component<PropsType, StateType> {
                     </Col>
                   </Row>
                 </div>
+                {order.couponPrice && (
+                  <div styleName="infoBlockItem">
+                    <Row>
+                      <Col size={12} lg={5}>
+                        <TextWithLabel
+                          label={t.labelCouponDiscount}
+                          text={`−${formatPrice(order.couponPrice)} STQ`}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                )}
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
@@ -418,7 +436,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     <Col size={12} lg={7}>
                       <TextWithLabel
                         label={t.labelSubtotal}
-                        text={`${formatPrice(order.subtotal)} STQ`}
+                        text={`${formatPrice(order.totalAmount)} STQ`}
                       />
                     </Col>
                   </Row>
@@ -454,7 +472,7 @@ class OrderPage extends Component<PropsType, StateType> {
             </div>
           </div>
         )}
-      </AppContext>
+      </AppContext.Consumer>
     );
   }
 }

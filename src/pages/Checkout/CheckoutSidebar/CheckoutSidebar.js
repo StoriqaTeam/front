@@ -1,6 +1,7 @@
-// @flow
+// @flow strict
 
 import React from 'react';
+// $FlowIgnoreMe
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-relay';
@@ -16,14 +17,17 @@ import './CheckoutSidebar.scss';
 import t from './i18n';
 
 type PropsType = {
-  onClick: Function,
-  isReadyToClick: Function,
+  onClick: () => void,
+  onCheckout: () => void,
+  isReadyToClick: () => boolean,
   buttonText: string,
   checkoutInProcess: boolean,
+  goToCheckout: () => void,
+  step?: number,
 };
 
 type StateType = {
-  productsCost: number,
+  productsCostWithoutDiscounts: number,
   deliveryCost: number,
   totalCount: number,
   totalCost: number,
@@ -34,7 +38,7 @@ type StateType = {
 const TOTAL_FRAGMENT = graphql`
   fragment CheckoutSidebarTotalLocalFragment on Cart {
     id
-    productsCost
+    productsCostWithoutDiscounts
     deliveryCost
     totalCount
     totalCost
@@ -46,7 +50,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      productsCost: 0,
+      productsCostWithoutDiscounts: 0,
       deliveryCost: 0,
       totalCount: 0,
       totalCost: 0,
@@ -97,10 +101,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     }
   }
 
+  // $FlowIgnoreMe
   setRef(ref: ?Object) {
     this.ref = ref;
   }
 
+  // $FlowIgnoreMe
   setWrapperRef(ref: ?Object) {
     this.wrapperRef = ref;
   }
@@ -108,21 +114,21 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   isMount = false;
 
   updateTotal = (data: {
-    productsCost: number,
+    productsCostWithoutDiscounts: number,
     deliveryCost: number,
     totalCost: number,
     totalCount: number,
     couponsDiscounts: number,
   }) => {
     const {
-      productsCost,
+      productsCostWithoutDiscounts,
       deliveryCost,
       totalCost,
       totalCount,
       couponsDiscounts,
     } = data;
     this.setState({
-      productsCost,
+      productsCostWithoutDiscounts,
       deliveryCost,
       totalCost,
       totalCount,
@@ -130,8 +136,10 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     });
   };
 
+  // $FlowIgnoreMe
   dispose: Function;
   ref: ?{ className: string };
+  // $FlowIgnoreMe
   wrapperRef: any;
   scrolling: boolean;
   handleScroll: () => void;
@@ -140,18 +148,28 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   render() {
     const {
       onClick,
+      onCheckout,
       isReadyToClick,
       buttonText,
       checkoutInProcess,
+      goToCheckout,
+      step,
     } = this.props;
     const {
-      productsCost,
+      productsCostWithoutDiscounts,
       deliveryCost,
       totalCost,
       totalCount,
       couponsDiscounts,
       priceUsd,
     } = this.state;
+
+    let onClickFunction = onClick;
+
+    if (step != null) {
+      onClickFunction = step === 1 ? goToCheckout : onCheckout;
+    }
+
     return (
       <div>
         <div styleName="paperWrapper">
@@ -167,8 +185,10 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                 <div styleName="attributeContainer">
                   <div styleName="label">{t.subtotal}</div>
                   <div styleName="value">
-                    {productsCost &&
-                      `${formatPrice(productsCost || 0)} ${currentCurrency()}`}
+                    {productsCostWithoutDiscounts &&
+                      `${formatPrice(
+                        productsCostWithoutDiscounts || 0,
+                      )} ${currentCurrency()}`}
                   </div>
                 </div>
               </Col>
@@ -186,7 +206,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="attributeContainer">
                     <div styleName="label">{t.couponsDiscount}</div>
                     <div styleName="value">
-                      {`${formatPrice(
+                      {`−${formatPrice(
                         couponsDiscounts || 0,
                       )} ${currentCurrency()}`}
                     </div>
@@ -206,7 +226,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                       {totalCost &&
                         `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
                     </div>
-                    {priceUsd && (
+                    {priceUsd != null && (
                       <div styleName="usdPrice">
                         <div styleName="slash">/</div>
                         <CurrencyPrice
@@ -232,7 +252,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
               disabled={checkoutInProcess || !isReadyToClick}
               isLoading={checkoutInProcess}
               big
-              onClick={onClick}
+              onClick={onClickFunction}
               dataTest="checkoutNext"
             >
               {buttonText}

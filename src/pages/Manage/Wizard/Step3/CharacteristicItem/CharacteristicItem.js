@@ -14,6 +14,7 @@ import {
 } from 'ramda';
 
 import { UploadWrapper } from 'components/Upload';
+import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { uploadFile, convertSrc } from 'utils';
 
@@ -40,6 +41,10 @@ type StateType = {
 };
 
 class CharacteristicItem extends Component<PropsType, StateType> {
+  state = {
+    isMainPhotoUploading: false,
+  };
+
   getSelectItems = (
     attribute: AttributeType,
   ): Array<{ id: string, label: string }> => {
@@ -100,6 +105,10 @@ class CharacteristicItem extends Component<PropsType, StateType> {
       });
   };
 
+  handleRemoveImg = () => {
+    this.props.onSelect(assoc('metaField', '', this.props.value));
+  };
+
   render() {
     const { attribute, value } = this.props;
     const items = this.getSelectItems(attribute);
@@ -128,6 +137,18 @@ class CharacteristicItem extends Component<PropsType, StateType> {
             buttonLabel=""
             loading={this.state.isMainPhotoUploading}
           />
+          {characteristicImg && (
+            <div styleName="remove">
+              <div
+                onClick={this.handleRemoveImg}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                <Icon type="basket" size={32} />
+              </div>
+            </div>
+          )}
         </div>
         <div styleName="characteristicSelect">
           <Select

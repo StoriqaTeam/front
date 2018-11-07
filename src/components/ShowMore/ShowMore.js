@@ -49,7 +49,13 @@ class ShowMore extends Component<PropsType, StateType> {
           </div>
           <div styleName="text">{title}</div>
         </button>
-        <div styleName="content" style={{ maxHeight: `${height}rem` }}>
+        <div
+          styleName="content"
+          style={{
+            maxHeight: `${height}rem`,
+            overflow: this.state.on ? 'unset' : 'hidden',
+          }}
+        >
           {this.props.children}
         </div>
       </div>

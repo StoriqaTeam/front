@@ -35,6 +35,7 @@ type PropsType = {
   isAddressSelect: boolean,
   isNewAddress: boolean,
   saveAsNewAddress: boolean,
+  errors: { [string]: Array<string> },
 };
 
 type StateType = {
@@ -54,11 +55,19 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
     const selectedAddress =
       find(propEq('id', '0'))(addresses) || head(addresses);
 
-    this.handleOnSelectAddress(selectedAddress);
     this.state = {
       addresses,
       selectedAddress,
     };
+  }
+
+  componentDidMount() {
+    const { deliveryAddresses } = this.props;
+    const addresses = addressesToSelect(deliveryAddresses);
+    const selectedAddress =
+      find(propEq('id', '0'))(addresses) || head(addresses);
+
+    this.handleOnSelectAddress(selectedAddress);
   }
 
   componentDidUpdate(prevProps: PropsType) {
@@ -143,6 +152,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
       saveAsNewAddress,
       orderInput,
       onChangeSaveCheckbox,
+      errors,
     } = this.props;
     const { addressFull } = orderInput;
     const { addresses, selectedAddress } = this.state;
@@ -167,6 +177,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                       onChange={this.handleChangeReceiver}
                       value={orderInput.receiverName}
                       limit={50}
+                      errors={errors.receiverName}
                     />
                   </div>
                   <div styleName="receiverContainer">
@@ -182,6 +193,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                       onChange={this.handleChangePhone}
                       value={orderInput.receiverPhone}
                       limit={50}
+                      errors={errors.receiverPhone}
                     />
                   </div>
                   <div styleName="selectAddressContainer">
@@ -221,7 +233,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                   )}
                 </Col>
                 <Col size={12} sm={9} md={8} xl={12}>
-                  <div>
+                  <div styleName="newAddressWrap">
                     <RadioButton
                       id="newAddressCheckbox"
                       label={t.labelOrFillFields}
@@ -229,7 +241,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                       onChange={this.handleOnChangeAddressType}
                     />
                     {isNewAddress && (
-                      <div styleName="formWrapper">
+                      <div id="deliveryAddress" styleName="formWrapper">
                         <AddressForm
                           isOpen
                           onChangeData={this.handleChangeData}
@@ -237,6 +249,11 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                           address={addressFull ? addressFull.value : null}
                           addressFull={addressFull}
                         />
+                        <div styleName="addressError">
+                          {errors.deliveryAddress
+                            ? head(errors.deliveryAddress)
+                            : ''}
+                        </div>
                         <div styleName="saveAddressWrapper">
                           <Checkbox
                             id="saveAddressCheckbox"

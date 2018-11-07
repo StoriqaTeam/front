@@ -117,9 +117,7 @@ class Contacts extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(
-        assocPath(['form', id], value.replace(/\s\s/, ' '), this.state),
-      );
+      this.setState(assocPath(['form', id], value, this.state));
     }
   };
 

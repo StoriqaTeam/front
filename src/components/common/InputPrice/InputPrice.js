@@ -157,6 +157,7 @@ class InputPrice extends Component<PropsType, StateType> {
                   <CurrencySelect
                     currency={currency}
                     onChangeCurrency={onChangeCurrency}
+                    // $FlowIgnoreMe
                     currencies={directories.currencies}
                     dataTest={`${dataTest}CurrencySelect`}
                   />

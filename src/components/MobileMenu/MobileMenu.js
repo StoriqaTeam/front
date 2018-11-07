@@ -70,6 +70,7 @@ class MobileMenu extends Component<PropsType, StateType> {
             styleName={`container ${isOpen ? 'toggled' : ''}`}
           >
             <SidebarMenu
+              // $FlowIgnoreMe
               categories={buildMobileCategories(categories)}
               isOpen
               onClick={this.handleCategoryClick}

@@ -106,6 +106,9 @@ export default createRefetchContainer(
           subtotal
           state
           paymentStatus
+          totalAmount
+          deliveryPrice
+          couponDiscount
           history {
             edges {
               node {

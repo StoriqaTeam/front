@@ -33,7 +33,12 @@ const ProductButtons = ({
 }: PropsType) => (
   <div styleName="container">
     <div styleName="buttons">
-      <Button big isLoading={isLoading} onClick={onBuyNow} disabled>
+      <Button
+        big
+        isLoading={isLoading}
+        disabled={!quantity && !preOrder}
+        onClick={onBuyNow}
+      >
         {t.buyNow}
       </Button>
       <Button

@@ -105,42 +105,42 @@ class CardProduct extends PureComponent<PropsType> {
                 isSearchPage,
               })}
             >
-              {discountedPrice && (
-                <MultiCurrencyDropdown
-                  elementStyleName="priceDropdown"
-                  price={discountedPrice}
-                  renderPrice={(priceItem: {
-                    price: number,
-                    currencyCode: string,
-                  }) => (
-                    <div styleName="priceDropdown">
-                      <div styleName="actualPrice">
-                        {`${formatPrice(priceItem.price)} ${
-                          priceItem.currencyCode
-                        }`}
-                      </div>
-                      {priceUsd && (
-                        <CurrencyPrice
-                          price={priceItem.price || 0}
-                          currencyPrice={priceUsd}
-                          currencyCode="USD"
-                          toFixedValue={2}
-                        />
-                      )}
+              <MultiCurrencyDropdown
+                elementStyleName="priceDropdown"
+                price={discountedPrice}
+                renderPrice={(priceItem: {
+                  price: number,
+                  currencyCode: string,
+                }) => (
+                  <div styleName="priceDropdown">
+                    <div styleName="actualPrice">
+                      {discountedPrice === 0
+                        ? 'FREE'
+                        : `${formatPrice(priceItem.price)} ${
+                            priceItem.currencyCode
+                          }`}
                     </div>
-                  )}
-                  renderDropdown={(
-                    rates: Array<{ currencyCode: string, value: number }>,
-                  ) => <CardProductDropdown rates={rates} />}
-                  renderDropdownToggle={(isDropdownOpened: boolean) => (
-                    <button
-                      styleName={`toggleRatesDropdown${
-                        isDropdownOpened ? 'Closed' : 'Opened'
-                      }`}
-                    />
-                  )}
-                />
-              )}
+                    {priceUsd && (
+                      <CurrencyPrice
+                        price={priceItem.price || 0}
+                        currencyPrice={priceUsd}
+                        currencyCode="USD"
+                        toFixedValue={2}
+                      />
+                    )}
+                  </div>
+                )}
+                renderDropdown={(
+                  rates: Array<{ currencyCode: string, value: number }>,
+                ) => <CardProductDropdown rates={rates} />}
+                renderDropdownToggle={(isDropdownOpened: boolean) => (
+                  <button
+                    styleName={`toggleRatesDropdown${
+                      isDropdownOpened ? 'Closed' : 'Opened'
+                    }`}
+                  />
+                )}
+              />
               {Boolean(cashbackValue) && (
                 <CardProductCashback cashbackValue={cashbackValue} />
               )}

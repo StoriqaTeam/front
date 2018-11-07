@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
@@ -6,21 +6,21 @@ import './StartSellingButton.scss';
 
 type PropsType = {
   text: string,
-  href: string,
+  onClick: () => void,
 };
 
-const StartSellingButton = ({ text, href }: PropsType) => (
-  <a
+const StartSellingButton = ({ text, onClick }: PropsType) => (
+  <div
     role="button"
     tabIndex="-1"
     onKeyPress={() => {}}
-    href={href}
+    onClick={onClick}
     styleName="container"
     data-test="startSelling"
     target="blank_"
   >
-    <span styleName="text">{text}</span>
-  </a>
+    <p styleName="text">{text}</p>
+  </div>
 );
 
 export default StartSellingButton;

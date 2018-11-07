@@ -21,7 +21,6 @@ import {
   propEq,
   drop,
   length,
-  reverse,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
@@ -121,7 +120,9 @@ class Form extends Component<PropsType, StateType> {
         item => contains(item, keys(nextFormErrors)),
         scrollArr,
       );
-      smoothscroll.scrollTo(head(oneArr));
+      if (!isEmpty(oneArr) && head(oneArr)) {
+        smoothscroll.scrollTo(head(oneArr));
+      }
       return {
         ...prevState,
         formErrors: nextFormErrors,
@@ -149,7 +150,7 @@ class Form extends Component<PropsType, StateType> {
       } = baseProduct;
       // $FlowIgnore
       const allVariants = pathOr([], ['products', 'edges'], baseProduct);
-      const filteredVariants = reverse(map(item => item.node, allVariants));
+      const filteredVariants = map(item => item.node, allVariants);
       const mainVariant = head(filteredVariants);
       const {
         id,
@@ -246,7 +247,7 @@ class Form extends Component<PropsType, StateType> {
   }
 
   componentDidUpdate(prevProps: PropsType) {
-    const { shippingData, customAttributes } = this.props;
+    const { shippingData, customAttributes, baseProduct } = this.props;
     if (
       JSON.stringify(shippingData) !== JSON.stringify(prevProps.shippingData)
     ) {
@@ -273,7 +274,13 @@ class Form extends Component<PropsType, StateType> {
       ['match', 'location', 'pathname'],
       prevProps,
     );
-    if (pathname !== prevPathname) {
+    if (
+      pathname !== prevPathname ||
+      (baseProduct &&
+        prevProps.baseProduct &&
+        JSON.stringify(prevProps.baseProduct.products) !==
+          JSON.stringify(baseProduct.products))
+    ) {
       // $FlowIgnore
       const variantId = pathOr(
         null,
@@ -312,7 +319,9 @@ class Form extends Component<PropsType, StateType> {
   scrollToError = (errors: FormErrorsType) => {
     const { scrollArr } = this.state;
     const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
-    smoothscroll.scrollTo(head(oneArr));
+    if (!isEmpty(oneArr) && head(oneArr)) {
+      smoothscroll.scrollTo(head(oneArr));
+    }
   };
 
   resetAttrValues = (
@@ -465,7 +474,7 @@ class Form extends Component<PropsType, StateType> {
     const { value } = e.target;
     if (value.length <= 50) {
       this.setState((prevState: StateType) =>
-        assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+        assocPath(['form', id], value, prevState),
       );
     }
   };
@@ -474,7 +483,7 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
     this.setState((prevState: StateType) =>
-      assocPath(['form', id], value.replace(/\s\s/, ' '), prevState),
+      assocPath(['form', id], value, prevState),
     );
   };
 
@@ -557,7 +566,7 @@ class Form extends Component<PropsType, StateType> {
       return;
     } else if (value > 100) {
       this.setState((prevState: StateType) =>
-        assocPath(['form', id], 99, prevState),
+        assocPath(['form', id], 100, prevState),
       );
       return;
     } else if (Number.isNaN(parseFloat(value))) {
@@ -762,8 +771,7 @@ class Form extends Component<PropsType, StateType> {
     const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
-    // $FlowIgnore
-    const filteredVariants = reverse(map(item => item.node, variants) || []);
+    const filteredVariants = map(item => item.node, variants) || [];
     const mainVariant = isEmpty(filteredVariants)
       ? null
       : // $FlowIgnore
@@ -1059,10 +1067,12 @@ class Form extends Component<PropsType, StateType> {
                             Add variant
                           </Button>
                         </div>
-                        <div styleName="variantsWarnText">
-                          You can’t add variant until create and save base
-                          product.
-                        </div>
+                        {!baseProduct && (
+                          <div styleName="variantsWarnText">
+                            You can’t add variant until create and save base
+                            product.
+                          </div>
+                        )}
                       </div>
                     )}
                     {restVariants &&
@@ -1130,7 +1140,10 @@ class Form extends Component<PropsType, StateType> {
                     )}
                     {isLoadingPackages && (
                       <div styleName="spinner">
-                        <SpinnerCircle />
+                        <SpinnerCircle
+                          additionalStyles={{}}
+                          containerStyles={{}}
+                        />
                       </div>
                     )}
                   </div>

@@ -158,6 +158,7 @@ class Stores extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
+  // $FlowIgnoreMe
   withErrorBoundary(Page(Stores)),
   graphql`
     fragment Stores_search on Search

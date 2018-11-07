@@ -5,11 +5,8 @@
   padding: 2rem;
 
   .infoContainer {
-    margin-top: 3rem;
-
     .addressInfoWrapper {
-      margin-top: 1rem;
-      margin-bottom: -2rem;
+      margin-top: 2rem;
     }
   }
 }
@@ -18,6 +15,12 @@
   .container {
     padding: 3rem;
   }
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
 .wrapperAddressButton {
@@ -38,16 +41,10 @@
 .title {
   text-transform: uppercase;
   font-family: $font_medium;
-  font-size: 1.75rem;
+  font-size: 14px;
+  line-height: 1rem;
 }
 
 .subtitle {
   font-size: 2rem;
-}
-
-.centeredTitle {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
 }

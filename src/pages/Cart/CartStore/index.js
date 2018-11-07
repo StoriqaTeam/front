@@ -26,8 +26,7 @@ import type { MutationParamsType as SetCouponInCartMutationType } from 'relay/mu
 
 import CartProduct from '../CartProduct';
 
-// eslint-disable-next-line
-import type CartStore_store from './__generated__/CartStore_store.graphql';
+import type { CartStore_store as CartStoreType } from './__generated__/CartStore_store.graphql';
 
 import './CartStore.scss';
 
@@ -42,9 +41,9 @@ type StateType = {
 type PropsType = {
   onlySelected: ?boolean,
   unselectable: ?boolean,
-  // eslint-disable-next-line
-  store: CartStore_store,
+  store: CartStoreType,
   isOpenInfo: ?boolean,
+  withDeliveryCompaniesSelect?: boolean,
   relay: Relay,
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -109,11 +108,7 @@ class CartStore extends Component<PropsType, StateType> {
         }
 
         // $FlowIgnoreMe
-        const status400Error = pathOr(
-          t.unknownError,
-          ['400', 'status'],
-          relayErrors,
-        );
+        const status400Error = pathOr(null, ['400', 'status'], relayErrors);
         if (status400Error) {
           this.props.showAlert({
             type: 'danger',
@@ -151,7 +146,14 @@ class CartStore extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { store, onlySelected, unselectable, isOpenInfo } = this.props;
+    const {
+      store,
+      onlySelected,
+      unselectable,
+      isOpenInfo,
+      withDeliveryCompaniesSelect,
+    } = this.props;
+
     const {
       couponCodeValue,
       couponCodeButtonDisabled,
@@ -160,7 +162,7 @@ class CartStore extends Component<PropsType, StateType> {
     const { products } = store;
     let filteredProducts = products;
     if (onlySelected) {
-      filteredProducts = filter(whereEq({ selected: true }), products);
+      filteredProducts = filter(whereEq({ selected: true }), [...products]);
     }
     if (filteredProducts.length === 0) {
       return null;
@@ -174,6 +176,7 @@ class CartStore extends Component<PropsType, StateType> {
               onlySelected={onlySelected}
               unselectable={unselectable}
               isOpenInfo={isOpenInfo}
+              withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
             />
             <div styleName="devider" />
           </div>
@@ -244,7 +247,7 @@ class CartStore extends Component<PropsType, StateType> {
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(store.productsCost || 0)} {currentCurrency()}
+                      {formatPrice(store.totalCost || 0)} {currentCurrency()}
                     </div>
                   </div>
                 </div>

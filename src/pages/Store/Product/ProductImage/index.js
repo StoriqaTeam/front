@@ -7,6 +7,8 @@ import { isEmpty, convertSrc } from 'utils';
 
 import { Slider } from 'components/Slider';
 import { Icon } from 'components/Icon';
+import BannerLoading from 'components/Banner/BannerLoading';
+import ImageLoader from 'libs/react-image-loader';
 
 import { ProductThumbnails, ProductDiscount } from '../index';
 
@@ -26,13 +28,11 @@ type PropsType = {
 
 type StateType = {
   selected: string,
-  isSquared: boolean,
 };
 
 class ProductImage extends Component<PropsType, StateType> {
   state = {
     selected: '',
-    isSquared: false,
   };
 
   componentDidUpdate(prevProps: PropsType) {
@@ -57,7 +57,7 @@ class ProductImage extends Component<PropsType, StateType> {
 
   render() {
     const { photoMain, additionalPhotos, discount } = this.props;
-    const { selected, isSquared } = this.state;
+    const { selected } = this.state;
     const showMobileSlider = !isNil(additionalPhotos) && !isNil(photoMain);
     return (
       <div styleName="container">
@@ -89,20 +89,18 @@ class ProductImage extends Component<PropsType, StateType> {
         >
           <figure styleName="image">
             {photoMain || selected ? (
-              <div
-                role="img"
-                style={{
-                  backgroundImage: `url(${
-                    !isEmpty(selected)
-                      ? convertSrc(selected, 'large')
-                      : convertSrc(photoMain, 'large')
-                  })`,
-                  backgroundSize: 'contain',
-                  backgroundPosition: `${isSquared ? 'center top' : 'center'}`,
-                  backgroundRepeat: 'no-repeat',
-                  height: '100%',
-                  width: '100%',
-                }}
+              <ImageLoader
+                fit
+                src={
+                  !isEmpty(selected)
+                    ? convertSrc(selected, 'large')
+                    : convertSrc(photoMain, 'large')
+                }
+                loader={
+                  <div styleName="loader">
+                    <BannerLoading />
+                  </div>
+                }
               />
             ) : (
               <div styleName="noImage">

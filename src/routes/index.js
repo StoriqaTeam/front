@@ -28,6 +28,7 @@ import { Product as ProductCard } from 'pages/Store/Product';
 import Categories from 'pages/Search/Categories';
 import Cart from 'pages/Cart';
 import Checkout from 'pages/Checkout';
+import { BuyNow } from 'pages/BuyNow';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import { Logout } from 'pages/Logout';
@@ -192,6 +193,82 @@ const routes = (
             }
           }
         `}
+      />
+
+      <Route
+        path="/buy-now"
+        Component={BuyNow}
+        render={({ props, Component }) => {
+          if (props && !props.me) {
+            const {
+              location: { pathname, search },
+            } = props;
+            removeCookie('__jwt');
+            throw new RedirectException(`/login?from=${pathname}${search}`);
+          } else if (props && Component) {
+            return <Component {...props} />;
+          } else {
+            return undefined;
+          }
+        }}
+        query={graphql`
+          query routes_BuyNow_Query(
+            $productID: Int!
+            $variantId: Int!
+            $quantity: Int!
+          ) {
+            me {
+              id
+              rawId
+              phone
+              email
+              firstName
+              lastName
+              deliveryAddressesFull {
+                id
+                address {
+                  country
+                  countryCode
+                  value
+                  administrativeAreaLevel1
+                  administrativeAreaLevel2
+                  locality
+                  political
+                  postalCode
+                  route
+                  streetNumber
+                  placeId
+                }
+                isPriority
+              }
+            }
+            baseProduct(id: $productID) {
+              ...BuyNow_baseProduct
+            }
+            calculateBuyNow(productId: $variantId, quantity: $quantity) {
+              product {
+                id
+                rawId
+              }
+              couponsDiscounts
+              totalCost
+              totalCostWithoutDiscounts
+              totalCount
+              deliveryCost
+              subtotal
+              subtotalWithoutDiscounts
+              price
+            }
+          }
+        `}
+        prepareVariables={(...args) => {
+          const queryObj = pathOr('', ['query'], last(args).location);
+          return {
+            productID: parseFloat(queryObj.product || 0),
+            variantId: parseFloat(queryObj.variant),
+            quantity: parseFloat(queryObj.quantity),
+          };
+        }}
       />
 
       <Route

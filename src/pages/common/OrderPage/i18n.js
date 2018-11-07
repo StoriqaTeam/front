@@ -29,6 +29,7 @@ type TranslationDicType = {|
   labelTrackID: string,
   labelQuantity: string,
   labelSubtotal: string,
+  labelCouponDiscount: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -58,6 +59,7 @@ const translations: TranslationsBundleType = {
     labelTrackID: 'Track ID',
     labelQuantity: 'Quantity',
     labelSubtotal: 'Subtotal',
+    labelCouponDiscount: 'Coupon discount',
   },
 };
 

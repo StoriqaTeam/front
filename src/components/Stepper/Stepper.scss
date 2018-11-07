@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
   display: flex;
@@ -11,7 +11,6 @@
   text-align: center;
 }
 
-
 .button {
   height: 3rem;
   width: 3rem;
@@ -19,6 +18,7 @@
   border: 1px solid $color_grey_light;
   display: flex;
   justify-content: center;
+  align-items: center;
   transition: $transition_all_ease;
 
   &:hover {

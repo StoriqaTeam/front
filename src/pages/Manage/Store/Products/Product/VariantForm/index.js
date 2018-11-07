@@ -182,7 +182,7 @@ class VariantForm extends Component<PropsType, StateType> {
       this.setState({ [id]: 0 });
       return;
     } else if (parseFloat(value) > 100) {
-      this.setState({ [id]: 99 });
+      this.setState({ [id]: 100 });
       return;
     } else if (Number.isNaN(parseFloat(value))) {
       return;
@@ -314,7 +314,9 @@ class VariantForm extends Component<PropsType, StateType> {
   scrollToError = (errors: FormErrorsType) => {
     const { scrollArr } = this.state;
     const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
-    smoothscroll.scrollTo(head(oneArr));
+    if (!isEmpty(oneArr) && head(oneArr)) {
+      smoothscroll.scrollTo(head(oneArr));
+    }
   };
 
   handleCreateVariant = () => {
@@ -587,7 +589,7 @@ class VariantForm extends Component<PropsType, StateType> {
             value={vendorCode || ''}
             onChange={this.handleVendorCodeChange}
             errors={formErrors && formErrors.vendorCode}
-            dataTest="variantVendorcodeInput"
+            dataTest="vendorCode"
           />
         </div>
         <div styleName="title titlePricing">
@@ -602,7 +604,7 @@ class VariantForm extends Component<PropsType, StateType> {
             price={parseFloat(price) || 0}
             currency={currency}
             errors={formErrors && formErrors.price}
-            dataTest="variantPriceInput"
+            dataTest="price"
           />
         </div>
         <div styleName="formItem">
@@ -611,7 +613,7 @@ class VariantForm extends Component<PropsType, StateType> {
             label="Cashback"
             onChange={this.handlePercentChange('cashback')}
             value={!isNil(cashback) ? `${cashback}` : ''}
-            dataTest="variantCashbackInput"
+            dataTest="Cashback"
           />
           <span styleName="inputPostfix">Percent</span>
         </div>
@@ -621,7 +623,7 @@ class VariantForm extends Component<PropsType, StateType> {
             label="Discount"
             onChange={this.handlePercentChange('discount')}
             value={!isNil(discount) ? `${discount}` : ''}
-            dataTest="variantDiscountInput"
+            dataTest="Discount"
           />
           <span styleName="inputPostfix">Percent</span>
         </div>

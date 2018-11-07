@@ -31,8 +31,7 @@ class Order extends PureComponent<PropsType> {
   }
 
   render() {
-    const { order } = this.props.me;
-    const { email } = this.props.me;
+    const { order, email } = this.props.me;
     if (!order) {
       return null;
     }
@@ -110,6 +109,9 @@ export default createRefetchContainer(
         trackId
         quantity
         subtotal
+        totalAmount
+        deliveryPrice
+        couponDiscount
         state
         paymentStatus
         history {
