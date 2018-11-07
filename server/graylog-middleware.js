@@ -1,4 +1,12 @@
-const { split, reject, startsWith, pipe, join, pathOr } = require('ramda');
+const {
+  split,
+  reject,
+  startsWith,
+  pipe,
+  join,
+  pathOr,
+  find,
+} = require('ramda');
 
 // returns `{ message: string, payload: object }`
 const requestInfoFormatter = req => ({
@@ -21,7 +29,20 @@ const requestInfoFormatter = req => ({
   },
 });
 
+const ignoredPaths = [
+  '/static',
+  '/favicon.ico',
+  '/manifest.json',
+  '/styles',
+  '/main',
+];
+
 const middleware = (req, res, next) => {
+  if (find(item => startsWith(item, req.originalUrl), ignoredPaths)) {
+    next();
+    return;
+  }
+
   const reqData = requestInfoFormatter(req);
 
   // IDK why `require('utils/graylog)` doesn't work
