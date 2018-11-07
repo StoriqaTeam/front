@@ -24,11 +24,25 @@ const requestInfoFormatter = req => ({
 const middleware = (req, res, next) => {
   const reqData = requestInfoFormatter(req);
 
+  // IDK why `require('utils/graylog)` doesn't work
   // eslint-disable-next-line
-  if (require('utils/graylog').info) {
-    // eslint-disable-next-line
-    require('utils/graylog').info(reqData.message, reqData.payload);
-  }
+  require('gelf-pro')
+    .setConfig({
+      host: 'graylog-tcp.internal.stq.cloud',
+      fields: {
+        cluster: `${process.env.GRAYLOG_CLUSTER || 'localhost'}`,
+        type: 'ssr',
+        source_type: 'frontend',
+      },
+      adapterName: 'tcp',
+      adapterOptions: {
+        host: 'graylog-tcp.internal.stq.cloud',
+        port: 12201,
+        family: 4,
+        timeout: 1000,
+      },
+    })
+    .info(reqData.message, reqData.payload);
 
   next();
 };
