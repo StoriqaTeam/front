@@ -120,7 +120,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
                 image: type === 'image',
               })}
               style={{
-                width: `${slideWidth}%`,
+                flex: `0 0 ${slideWidth}%`,
               }}
               key={`slider_${idx}_key`}
             >

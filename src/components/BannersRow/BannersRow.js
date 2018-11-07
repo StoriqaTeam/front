@@ -10,7 +10,9 @@ import './BannersRow.scss';
 
 type PropsTypes = {
   items: Array<{
-    id: any,
+    id: string,
+    img: string,
+    link: string,
   }>,
   count?: number,
 };

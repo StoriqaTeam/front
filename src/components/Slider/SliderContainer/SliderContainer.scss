@@ -9,17 +9,18 @@
   position: relative;
   top: 0;
   left: 0;
-  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .item {
   position: relative;
-  display: inline-block;
-  vertical-align: bottom;
+
   img {
     width: 100%;
     object-fit: contain;
   }
+
   &.image {
     padding-bottom: 56.25%;
     height: 0;
@@ -48,6 +49,7 @@
 
 .fadeItem {
   position: relative;
+  width: 100%;
   z-index: 2;
   opacity: 0;
   transition: $transition_all_ease_out_quad_10;

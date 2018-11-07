@@ -1,5 +1,12 @@
-const graylogger = require('utils/graylog');
-const { split, reject, startsWith, pipe, join, pathOr } = require('ramda');
+const {
+  split,
+  reject,
+  startsWith,
+  pipe,
+  join,
+  pathOr,
+  find,
+} = require('ramda');
 
 // returns `{ message: string, payload: object }`
 const requestInfoFormatter = req => ({
@@ -22,10 +29,41 @@ const requestInfoFormatter = req => ({
   },
 });
 
+const ignoredPaths = [
+  '/static',
+  '/favicon.ico',
+  '/manifest.json',
+  '/styles',
+  '/main',
+];
+
 const middleware = (req, res, next) => {
+  if (find(item => startsWith(item, req.originalUrl), ignoredPaths)) {
+    next();
+    return;
+  }
+
   const reqData = requestInfoFormatter(req);
 
-  graylogger.info(reqData.message, reqData.payload);
+  // IDK why `require('utils/graylog)` doesn't work
+  // eslint-disable-next-line
+  require('gelf-pro')
+    .setConfig({
+      host: 'graylog-tcp.internal.stq.cloud',
+      fields: {
+        cluster: `${process.env.GRAYLOG_CLUSTER || 'localhost'}`,
+        type: 'ssr',
+        source_type: 'frontend',
+      },
+      adapterName: 'tcp',
+      adapterOptions: {
+        host: 'graylog-tcp.internal.stq.cloud',
+        port: 12201,
+        family: 4,
+        timeout: 1000,
+      },
+    })
+    .info(reqData.message, reqData.payload);
 
   next();
 };
