@@ -34,17 +34,19 @@ import type { CreateUserMutationResponse } from 'relay/mutations/__generated__/C
 import type { ApplyPasswordResetMutationResponse } from 'relay/mutations/__generated__/ApplyPasswordResetMutation.graphql';
 import type { ResendEmailVerificationLinkMutationResponse } from 'relay/mutations/__generated__/ResendEmailVerificationLinkMutation.graphql';
 import type { ResponseErrorType } from 'utils/fromRelayError';
-import { setPathForRedirectAfterLogin } from './utils';
-
 import type { GetJWTByEmailMutationResponse } from './mutations/__generated__/GetJWTByEmailMutation.graphql';
+import type { ErrorsType } from './types';
+
 import {
   getJWTByEmailMutation,
   requestPasswordResetMutation,
 } from './mutations';
 
+import { setPathForRedirectAfterLogin } from './utils';
+
 import './Authorization.scss';
 
-import type { ErrorsType } from './types';
+import t from './i18n';
 
 type PropsType = {
   environment: Environment,
@@ -81,11 +83,11 @@ type StateType = {
 const headerTabsItems = [
   {
     id: '0',
-    name: 'Sign Up',
+    name: t.signUp,
   },
   {
     id: '1',
-    name: 'Sign In',
+    name: t.signIn,
   },
 ];
 
@@ -142,7 +144,7 @@ class Authorization extends Component<PropsType, StateType> {
   setModalTitle = (): string => {
     const { isSignUp, isResetPassword } = this.props;
     if (isResetPassword) {
-      return 'Recover Password';
+      return t.recoverPassword;
     }
     return headerTabsItems[isSignUp ? 0 : 1].name;
   };
@@ -186,7 +188,7 @@ class Authorization extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Registration successful, please confirm your email and login.',
+          text: t.registrationSuccessful,
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
@@ -351,7 +353,7 @@ class Authorization extends Component<PropsType, StateType> {
         const { onCloseModal } = this.props;
         this.props.showAlert({
           type: 'success',
-          text: 'Please verify your email',
+          text: t.pleaseVerifyYourEmail,
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
@@ -405,7 +407,7 @@ class Authorization extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Password Reset Successfully',
+          text: t.passwordResetSuccessfully,
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
@@ -419,7 +421,7 @@ class Authorization extends Component<PropsType, StateType> {
           errorsHandler(relayErrors, this.props.showAlert, () =>
             this.setState({
               isLoading: false,
-              errors: { email: ['Email Not Found'] },
+              errors: { email: [t.emailNotFound] },
             }),
           );
         }
@@ -454,7 +456,7 @@ class Authorization extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Verification Email Sent Successfully',
+          text: t.verificationEmailSentSuccessfully,
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
@@ -478,7 +480,7 @@ class Authorization extends Component<PropsType, StateType> {
 
   handleRecoverPassword = (): void => {
     this.setState({
-      modalTitle: 'Reset Password',
+      modalTitle: t.resetPassword,
       isRecoverPassword: true,
       email: '',
       password: '',
@@ -569,7 +571,7 @@ class Authorization extends Component<PropsType, StateType> {
 
   render() {
     const { onCloseModal, isResetPassword, isLogin } = this.props;
-    const text = 'Please Type new password';
+    const text = t.pleaseTypeNewPassword;
     const description = isResetPassword ? text : '';
     const {
       isLoading,
