@@ -292,7 +292,7 @@ class ProductInfo extends PureComponent<PropsType> {
               <div styleName="contentBlock">
                 <div styleName="cart-product-title">{t.price}</div>
                 <CartProductAttribute
-                  title={t.price}
+                  title={t.count}
                   value={
                     <Stepper
                       value={product.quantity}

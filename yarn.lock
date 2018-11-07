@@ -4625,7 +4625,11 @@ gelf-pro@1.2.2:
     async "2.6.0"
     lodash "4.17.5"
 
+<<<<<<< HEAD
 gen-uid@0.0.2:
+=======
+gen-uid@^0.0.2:
+>>>>>>> master
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/gen-uid/-/gen-uid-0.0.2.tgz#dea3cd22c37b78139be521dfb2f51ecebab39138"
 

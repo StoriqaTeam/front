@@ -47,6 +47,8 @@ import fetchBuyNow from './fetchBuyNow';
 
 import './BuyNow.scss';
 
+import t from './i18n';
+
 const emptyAddressFull = {
   value: '',
   country: '',
@@ -308,8 +310,8 @@ class BuyNow extends Component<PropsType, StateType> {
     const { deliveryAddress } = this.state;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        phone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.receiverNameIsRequired]],
+        phone: [[val => Boolean(val), t.receiverPhoneIsRequired]],
       },
       this.state,
     );
@@ -320,7 +322,7 @@ class BuyNow extends Component<PropsType, StateType> {
     ) {
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [t.countryAddressAndPostalCodeAreRequired],
       };
     }
     if (errors && !isEmpty(errors)) {
@@ -371,8 +373,8 @@ class BuyNow extends Component<PropsType, StateType> {
           log.debug('Response: ', response);
           this.props.showAlert({
             type: 'success',
-            text: 'Orders successfully created',
-            link: { text: 'Close.' },
+            text: t.orderSuccessfullyCreated,
+            link: { text: t.close },
           });
           const responseOrders = pathOr(
             null,
@@ -384,15 +386,15 @@ class BuyNow extends Component<PropsType, StateType> {
         } else if (!errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Error :(',
-            link: { text: 'Close.' },
+            text: t.error,
+            link: { text: t.close },
           });
         } else {
           log.debug('Errors: ', errors);
           this.props.showAlert({
             type: 'danger',
-            text: 'Error :(',
-            link: { text: 'Close.' },
+            text: t.error,
+            link: { text: t.close },
           });
         }
       },
@@ -402,8 +404,8 @@ class BuyNow extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something went wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -426,14 +428,14 @@ class BuyNow extends Component<PropsType, StateType> {
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong. New address was not created.',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrongNewAddressWasNotCreated,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Address created!',
+          text: t.addressCreated,
           link: { text: '' },
         });
       },
@@ -441,8 +443,8 @@ class BuyNow extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong. New address was not created.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrongNewAddressWasNotCreated,
+          link: { text: t.close },
         });
       },
     };
@@ -497,8 +499,8 @@ class BuyNow extends Component<PropsType, StateType> {
       .catch(() => {
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
         this.setState({ changeCountLoading: false });
       });
@@ -533,10 +535,10 @@ class BuyNow extends Component<PropsType, StateType> {
     fetchBuyNow(this.props.relay.environment, variables)
       .then(({ calculateBuyNow }) => {
         if (!calculateBuyNow) {
-          throw new Error('coupon not found');
+          throw new Error(t.couponNotFound);
         }
         if (couponCodeValue === successCouponCodeValue) {
-          throw new Error('coupon already applied');
+          throw new Error(t.couponAlreadyApplied);
         }
         const {
           couponsDiscounts,
@@ -562,7 +564,7 @@ class BuyNow extends Component<PropsType, StateType> {
           () => {
             this.props.showAlert({
               type: 'success',
-              text: 'Сoupon applied!',
+              text: t.couponApplied,
               link: { text: '' },
             });
           },
@@ -572,7 +574,7 @@ class BuyNow extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'danger',
           text: `${error}`,
-          link: { text: 'Close.' },
+          link: { text: t.close },
         });
         this.setState({ isLoadingCouponButton: false });
       });
@@ -629,7 +631,7 @@ class BuyNow extends Component<PropsType, StateType> {
           () => {
             this.props.showAlert({
               type: 'success',
-              text: 'Delivery applied!',
+              text: t.deliveryApplied,
               link: { text: '' },
             });
           },
@@ -639,8 +641,8 @@ class BuyNow extends Component<PropsType, StateType> {
       .catch(() => {
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
         return Promise.reject();
       });
@@ -696,14 +698,14 @@ class BuyNow extends Component<PropsType, StateType> {
                           <div styleName="address">
                             <Row>
                               <Col size={12}>
-                                <div styleName="title">Delivery info</div>
+                                <div styleName="title">{t.deliveryInfo}</div>
                                 <div styleName="receiverItem">
                                   <Input
                                     fullWidth
                                     id="receiverName"
                                     label={
                                       <span>
-                                        Receiver name{' '}
+                                        {t.labelReceiverName}{' '}
                                         <span styleName="red">*</span>
                                       </span>
                                     }
@@ -719,7 +721,7 @@ class BuyNow extends Component<PropsType, StateType> {
                                     id="phone"
                                     label={
                                       <span>
-                                        Receiver phone{' '}
+                                        {t.labelReceiverPhone}{' '}
                                         <span styleName="red">*</span>
                                       </span>
                                     }
@@ -732,14 +734,14 @@ class BuyNow extends Component<PropsType, StateType> {
                                 <div styleName="selectItem">
                                   <RadioButton
                                     id="existingAddressCheckbox"
-                                    label="Choose your address"
+                                    label={t.labelChooseYourAddress}
                                     isChecked={selectedAddress !== null}
                                     onChange={this.handleOnChangeAddressType}
                                   />
                                   {selectedAddress !== null && (
                                     <div styleName="select">
                                       <Select
-                                        label="Address"
+                                        label={t.labelAddress}
                                         items={addresses}
                                         activeItem={selectedAddress}
                                         onSelect={this.handleOnSelectAddress}
@@ -764,7 +766,9 @@ class BuyNow extends Component<PropsType, StateType> {
                                 <div styleName="addressFormWrap">
                                   <RadioButton
                                     id="newAddressCheckbox"
-                                    label="Or fill fields below and save as address"
+                                    label={
+                                      t.labelOrFillFieldsBelowAndSaveAsAddress
+                                    }
                                     isChecked={selectedAddress === null}
                                     onChange={this.handleOnChangeAddressType}
                                   />
@@ -790,7 +794,7 @@ class BuyNow extends Component<PropsType, StateType> {
                                       <div styleName="saveAddressCheckbox">
                                         <Checkbox
                                           id="saveAddressCheckbox"
-                                          label="Save as a new address"
+                                          label={t.labelSaveAsANewAddress}
                                           isChecked={saveAsNewAddress}
                                           onChange={
                                             this.handleChangeSaveCheckbox
