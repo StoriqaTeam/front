@@ -15,8 +15,6 @@
 
 .item {
   position: relative;
-  //display: inline-block;
-  //vertical-align: bottom;
 
   img {
     width: 100%;
@@ -28,15 +26,6 @@
     height: 0;
     overflow: hidden;
   }
-
-  //&:after {
-  //  content: '';
-  //  display: block;
-  //  height: 100%;
-  //  position: absolute;
-  //  top: 0;
-  //  z-index: -1;
-  //}
 }
 
 .counter {
@@ -60,6 +49,7 @@
 
 .fadeItem {
   position: relative;
+  width: 100%;
   z-index: 2;
   opacity: 0;
   transition: $transition_all_ease_out_quad_10;
