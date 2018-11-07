@@ -5,7 +5,6 @@ import { graphql } from 'react-relay';
 import { pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 
-import { setWindowTag } from 'utils';
 import type { Node } from 'react';
 
 import type UserDataType from './__generated__/UserData_me.graphql';
@@ -70,22 +69,11 @@ class UserData extends Component<PropsType, StateType> {
     const { dispose } = store.subscribe(snapshot, snap => {
       const newTotalCount = this.getTotalCount(snap);
       this.setTotalCount(newTotalCount);
-      // tmp code
-      setWindowTag('cartCount', newTotalCount);
-      // end tmp code
     });
     const totalCount = this.getTotalCount(snapshot);
     this.dispose = dispose;
     this.state.totalCount = totalCount;
-    // tmp code
-    setWindowTag('cartCount', totalCount);
-    // end tmp code
     const meId = getStoreData('me');
-    if (!meId) {
-      // tmp code
-      setWindowTag('user', null);
-      // end tmp code
-    }
     if (meId) {
       const queryUser = HEADER_FRAGMENT.me();
       const snapshotUser = store.lookup({
@@ -94,16 +82,10 @@ class UserData extends Component<PropsType, StateType> {
       });
       const { dispose: disposeUser } = store.subscribe(snapshotUser, snap => {
         this.setUserData(snap.data);
-        // tmp code
-        setWindowTag('user', snap.data);
-        // end tmp code
       });
       this.disposeUser = disposeUser;
       this.state.userData = snapshotUser.data;
       this.state.isShopCreated = this.checkIfStoreCreated(snapshotUser.data);
-      // tmp code
-      setWindowTag('user', snapshotUser.data);
-      // end tmp code
     }
   }
 

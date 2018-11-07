@@ -19,7 +19,6 @@ import {
   log,
   fromRelayError,
   convertSrc,
-  setWindowTag,
 } from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
@@ -99,15 +98,9 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
       });
       const { dispose: disposeUser } = store.subscribe(snapshotUser, s => {
         this.setState({ storeData: s.data });
-        // tmp code
-        setWindowTag('user', s.data);
-        // end tmp code
       });
       this.disposeUser = disposeUser;
       this.setState({ storeData: snapshotUser.data });
-      // tmp code
-      setWindowTag('user', snapshotUser.data);
-      // end tmp code
     }
   }
 

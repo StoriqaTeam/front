@@ -98,40 +98,22 @@ export default (
                   {process.env.NODE_ENV === 'production' && (
                     <HeaderDisclaimer />
                   )}
-                  {responsive ? (
-                    <HeaderResponsive
-                      isShopCreated={isShopCreated}
-                      userData={userData}
-                      totalCount={totalCount}
-                      searchValue={pathOr(
-                        '',
-                        ['match', 'location', 'query', 'search'],
-                        this.props,
-                      )}
-                      withoutCategories={withoutCategories}
-                      setLang={this.setLang}
-                    />
-                  ) : (
-                    <Header
-                      currentLocale="en"
-                      setLang={() => {}}
-                      user={this.props.me}
-                      // $FlowIgnoreMe
-                      searchValue={pathOr(
-                        '',
-                        ['match', 'location', 'query', 'search'],
-                        this.props,
-                      )}
-                    />
-                  )}
+                  <HeaderResponsive
+                    isShopCreated={isShopCreated}
+                    userData={userData}
+                    totalCount={totalCount}
+                    searchValue={pathOr(
+                      '',
+                      ['match', 'location', 'query', 'search'],
+                      this.props,
+                    )}
+                    withoutCategories={withoutCategories}
+                    setLang={this.setLang}
+                  />
                   <Main>
                     <OriginalComponent {...this.props} />
                   </Main>
-                  {responsive ? (
-                    <FooterResponsive isShopCreated={isShopCreated} />
-                  ) : (
-                    <Footer />
-                  )}
+                  <FooterResponsive isShopCreated={isShopCreated} />
                 </div>
               )}
             </UserData>
