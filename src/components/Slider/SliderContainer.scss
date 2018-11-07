@@ -9,22 +9,34 @@
   position: relative;
   top: 0;
   left: 0;
-  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .item {
   position: relative;
-  display: inline-block;
-  vertical-align: bottom;
+  //display: inline-block;
+  //vertical-align: bottom;
+
   img {
     width: 100%;
     object-fit: contain;
   }
+
   &.image {
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
   }
+
+  //&:after {
+  //  content: '';
+  //  display: block;
+  //  height: 100%;
+  //  position: absolute;
+  //  top: 0;
+  //  z-index: -1;
+  //}
 }
 
 .counter {
