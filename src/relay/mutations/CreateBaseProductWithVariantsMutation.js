@@ -1,7 +1,7 @@
 // @flow
 
 import { graphql, commitMutation } from 'react-relay';
-import { Environment } from 'relay-runtime';
+import { ConnectionHandler, Environment } from 'relay-runtime';
 
 import type {
   CreateBaseProductWithVariantsMutationVariables,
@@ -91,12 +91,19 @@ const mutation = graphql`
           }
         }
       }
+      store(visibility: "active") {
+        id
+        warehouses {
+          id
+        }
+      }
     }
   }
 `;
 
 export type MutationParamsType = {
   ...CreateBaseProductWithVariantsMutationVariables,
+  parentID?: string,
   environment: Environment,
   onCompleted: ?(
     response: ?CreateBaseProductWithVariantsMutationResponse,
@@ -104,6 +111,26 @@ export type MutationParamsType = {
   ) => void,
   onError: ?(error: Error) => void,
 };
+
+type CurrencyType =
+  | 'BTC'
+  | 'ETH'
+  | 'EUR'
+  | 'RUB'
+  | 'STQ'
+  | 'USD'
+  | '%future added value';
+type LanguageType =
+  | 'CH'
+  | 'DE'
+  | 'EN'
+  | 'ES'
+  | 'FR'
+  | 'JA'
+  | 'KO'
+  | 'PO'
+  | 'RU'
+  | '%future added value';
 
 const commit = (params: MutationParamsType) =>
   commitMutation(params.environment, {
@@ -113,6 +140,86 @@ const commit = (params: MutationParamsType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    updater: relayStore => {
+      if (params.parentID) {
+        const storeProxy = relayStore.get(params.parentID);
+        const conn = ConnectionHandler.getConnection(
+          storeProxy,
+          'Wizard_baseProducts',
+        );
+        const newProduct = relayStore.getRootField(
+          'createBaseProductWithVariants',
+        );
+        const edge = ConnectionHandler.createEdge(
+          relayStore,
+          conn,
+          newProduct,
+          'BaseProductsEdge',
+        );
+        ConnectionHandler.insertEdgeAfter(conn, edge);
+      }
+    },
   });
 
-export default { commit };
+const promise = (
+  input: {
+    clientMutationId: string,
+    name: $ReadOnlyArray<{ lang: LanguageType, text: string }>,
+    storeId: number,
+    shortDescription: $ReadOnlyArray<{ lang: LanguageType, text: string }>,
+    longDescription?: ?$ReadOnlyArray<{ lang: LanguageType, text: string }>,
+    seoTitle?: ?$ReadOnlyArray<{ lang: LanguageType, text: string }>,
+    seoDescription?: ?$ReadOnlyArray<{ lang: LanguageType, text: string }>,
+    currency: CurrencyType,
+    categoryId: number,
+    slug?: ?string,
+    selectedAttributes: $ReadOnlyArray<number>,
+    variants: $ReadOnlyArray<{
+      clientMutationId: string,
+      product: {
+        baseProductId?: ?number,
+        price: number,
+        vendorCode: string,
+        photoMain: ?string,
+        additionalPhotos?: ?$ReadOnlyArray<string>,
+        cashback?: ?number,
+        discount?: ?number,
+        preOrder?: ?boolean,
+        preOrderDays?: ?number,
+      },
+      attributes: $ReadOnlyArray<{
+        value: string,
+        attrId: number,
+        metaField?: ?string,
+      }>,
+    }>,
+  },
+  parentID?: string,
+  environment: Environment,
+): Promise<CreateBaseProductWithVariantsMutationResponse> =>
+  new Promise((resolve, reject) => {
+    commit({
+      input,
+      environment,
+      parentID,
+      onCompleted: (
+        response: ?CreateBaseProductWithVariantsMutationResponse,
+        errors: ?Array<Error>,
+      ) => {
+        if (response) {
+          resolve(response);
+        } else if (errors) {
+          reject(errors);
+        } else {
+          // eslint-disable-next-line
+          reject([new Error('Unknown error')]);
+        }
+      },
+      onError: (error: Error) => {
+        // eslint-disable-next-line
+        reject([error]);
+      },
+    });
+  });
+
+export default { commit, promise };

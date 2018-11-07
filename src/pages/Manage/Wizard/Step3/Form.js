@@ -3,18 +3,17 @@
 import React, { PureComponent } from 'react';
 import { map, pathOr, whereEq, filter, isEmpty } from 'ramda';
 
-import { findCategory, convertSrc } from 'utils';
+import { findCategory } from 'utils';
 import { Input } from 'components/common/Input';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
 import { Button } from 'components/common/Button';
-import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import { Select } from 'components/common/Select';
+import Photos from 'pages/Manage/Store/Products/Product/Photos';
 
 import AttributesForm from './AttributesForm';
-import ProductsUploader from './ProductsUploader';
 
 import type { AttrValueType } from './AttributesForm';
 import type { BaseProductNodeType } from '../Wizard';
@@ -34,7 +33,7 @@ type PropsType = {
     [name: string]: any,
   }) => void,
   data: BaseProductNodeType,
-  onUpload: (type: string, e: any) => Promise<*>,
+  onUploadPhoto: (type: string, url: string) => void,
   onSave: (callback: () => void) => void,
   onClose: () => void,
   isSavingInProgress: boolean,
@@ -112,28 +111,6 @@ class ThirdForm extends PureComponent<PropsType> {
     onChange({ attributes: attrs });
   };
 
-  handleRemoveAddtionalPhoto = (url: string) => {
-    const { onChange, data } = this.props;
-    onChange({
-      product: {
-        ...data.product,
-        additionalPhotos: [
-          ...filter(u => u !== url, data.product.additionalPhotos),
-        ],
-      },
-    });
-  };
-
-  handleOnRemoveMainPhoto = () => {
-    const { onChange, data } = this.props;
-    onChange({
-      product: {
-        ...data.product,
-        photoMain: '',
-      },
-    });
-  };
-
   prepareValuesForAttributes = (
     attributes: Array<{ value: string, attribute: { rawId: number } }>,
   ) =>
@@ -154,6 +131,35 @@ class ThirdForm extends PureComponent<PropsType> {
       return true;
     }
     return false;
+  };
+
+  handleAddMainPhoto = (url: string) => {
+    this.props.onUploadPhoto('main', url);
+  };
+
+  handleAddPhoto = (url: string) => {
+    this.props.onUploadPhoto('additional', url);
+  };
+
+  handleRemovePhoto = (url: string) => {
+    const { onChange, data } = this.props;
+    const { photoMain, additionalPhotos } = data.product;
+    if (url === photoMain) {
+      onChange({
+        product: {
+          ...data.product,
+          photoMain: '',
+        },
+      });
+      return;
+    }
+
+    onChange({
+      product: {
+        ...data.product,
+        additionalPhotos: filter(item => item !== url, additionalPhotos || []),
+      },
+    });
   };
 
   renderAttributes = () => {
@@ -179,7 +185,7 @@ class ThirdForm extends PureComponent<PropsType> {
   };
 
   render() {
-    const { data, onSave, onClose, onUpload, isSavingInProgress } = this.props;
+    const { data, onSave, onClose, isSavingInProgress } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
     return (
@@ -227,76 +233,18 @@ class ThirdForm extends PureComponent<PropsType> {
                     </div>
                   </div>
                   <div styleName="section correctMargin">
-                    <div styleName="sectionName">Product main photo</div>
+                    <div styleName="sectionName">PRODUCT PHOTOS</div>
                     <div styleName="uploadersWrapper">
-                      <div styleName="uploadedPhotoList">
-                        {(data.product.photoMain && (
-                          <div
-                            styleName="uploadItem"
-                            onClick={this.handleOnRemoveMainPhoto}
-                            onKeyDown={() => {}}
-                            role="button"
-                            tabIndex="0"
-                          >
-                            <div
-                              styleName="imageBG"
-                              style={{
-                                backgroundImage: `url(${convertSrc(
-                                  data.product.photoMain,
-                                  'small',
-                                )})`,
-                              }}
-                              alt="mainPhoto"
-                            />
-                            <div styleName="itemHover">
-                              <Icon type="basket" size={40} />
-                            </div>
-                          </div>
-                        )) || (
-                          <Row>
-                            <Col size={12} mdHidden>
-                              <UploadWrapper
-                                id="upload_photo"
-                                onUpload={e => {
-                                  onUpload('photoMain', e);
-                                }}
-                                buttonHeight={10}
-                                buttonWidth={10}
-                                fullWidth
-                                noIndents
-                                buttonIconType="camera"
-                                buttonIconSize={20}
-                                buttonLabel="Add photo"
-                                dataTest="productPhotosUploader"
-                              />
-                            </Col>
-                            <Col size={12} mdVisible>
-                              <UploadWrapper
-                                id="upload_photo"
-                                onUpload={e => {
-                                  onUpload('photoMain', e);
-                                }}
-                                buttonHeight={10}
-                                buttonWidth={10}
-                                noIndents
-                                buttonIconType="camera"
-                                buttonIconSize={20}
-                                buttonLabel="Add photo"
-                                dataTest="productPhotosUploader"
-                              />
-                            </Col>
-                          </Row>
-                        )}
-                      </div>
+                      <Photos
+                        photos={data.product.additionalPhotos || []}
+                        photoMain={data.product.photoMain}
+                        onAddMainPhoto={this.handleAddMainPhoto}
+                        onAddPhoto={this.handleAddPhoto}
+                        onRemovePhoto={this.handleRemovePhoto}
+                      />
                     </div>
                   </div>
                   <div styleName="section">
-                    <div styleName="sectionName">Product photo gallery</div>
-                    <ProductsUploader
-                      onRemove={this.handleRemoveAddtionalPhoto}
-                      onUpload={onUpload}
-                      additionalPhotos={data.product.additionalPhotos || []}
-                    />
                     <div styleName="uploadDescriptionContainer">
                       <div styleName="description">
                         * For better product appearance follow recomendations
@@ -363,6 +311,7 @@ class ThirdForm extends PureComponent<PropsType> {
                                 forForm
                                 containerStyle={{
                                   marginTop: '3rem',
+                                  width: '100%',
                                 }}
                                 onSelect={() => {}}
                                 dataTest="step3Currency"
@@ -401,7 +350,6 @@ class ThirdForm extends PureComponent<PropsType> {
                                 onChange={this.handleChangeProductState}
                                 fullWidth
                                 type="number"
-                                min="0"
                                 postfix="%"
                               />
                             </div>
