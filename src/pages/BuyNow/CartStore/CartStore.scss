@@ -27,6 +27,7 @@
 
   & img {
     border-radius: 2px;
+    vertical-align: middle;
   }
 
   & a {
@@ -57,6 +58,7 @@
   font-family: $font_regular;
   position: relative;
   font-size: 16px;
+  vertical-align: middle;
 }
 
 .image {
