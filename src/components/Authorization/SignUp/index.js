@@ -12,7 +12,12 @@ import '../Authorization.scss';
 
 import t from './i18n';
 
-import type { SignUpInputType, InputOnChangeType, ErrorsType } from '../types';
+import type {
+  SignUpInputType,
+  InputOnChangeType,
+  ErrorsType,
+  InputConfig,
+} from '../types';
 
 type PropsType = {
   email: string,
@@ -43,11 +48,23 @@ class SignUp extends PureComponent<PropsType, StateType> {
   };
 
   makeInputs = (): Array<SignUpInputType> => {
-    const inputs: Array<string> = [
-      'First Name',
-      'Last Name',
-      'Email',
-      'Password',
+    const inputs: Array<InputConfig> = [
+      {
+        label: 'First Name',
+        type: 'text',
+      },
+      {
+        label: 'Last Name',
+        type: 'text',
+      },
+      {
+        label: 'Email',
+        type: 'email',
+      },
+      {
+        label: 'Password',
+        type: 'password',
+      },
     ];
     const makeInputFn = map(makeInput(this.props));
     const setFocus = adjust(assoc('thisFocus', true), 0);

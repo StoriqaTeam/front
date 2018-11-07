@@ -10,7 +10,12 @@ import { makeInput } from '../utils';
 
 import '../Authorization.scss';
 
-import type { SignUpInputType, InputOnChangeType, ErrorsType } from '../types';
+import type {
+  SignUpInputType,
+  InputOnChangeType,
+  ErrorsType,
+  InputConfig,
+} from '../types';
 
 import t from './i18n';
 
@@ -49,7 +54,10 @@ class SignIn extends Component<PropsType, StateType> {
   };
 
   makeInputs = (): Array<SignUpInputType> => {
-    const inputs: Array<string> = ['Email', 'Password'];
+    const inputs: Array<InputConfig> = [
+      { label: 'Email', type: 'email' },
+      { label: 'Password', type: 'password' },
+    ];
     const makeInputFn = map(makeInput(this.props));
     const setFocus = adjust(assoc('thisFocus', true), 0);
     const setResendEmail = adjust(this.setResendEmail, 0);
