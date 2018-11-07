@@ -40,6 +40,10 @@ _https://localhost:3443/_
 
 `yarn checkImage`
 
+#### Env var for graylog cluster name:
+
+`GRAYLOG_CLUSTER`
+
 ---
 
 ### E2E-тесты

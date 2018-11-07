@@ -266,7 +266,7 @@ class Product extends Component<PropsType, StateType> {
     const modifLongDescription = extractText(
       longDescription,
       'EN',
-      'No Long Description',
+      t.noLongDescription,
     ).replace(/\n/g, '<hr />');
     const tabs: Array<TabType> = [
       {

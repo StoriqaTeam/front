@@ -9,6 +9,11 @@ const path = require('path');
 const fs = require('fs');
 const cookiesMiddleware = require('universal-cookie-express');
 const Raven = require('raven');
+const {
+  middleware: graylogMiddleware,
+  requestInfoFormatter,
+} = require('./graylog-middleware');
+const graylogger = require('utils/graylog');
 
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -63,6 +68,11 @@ app.use(cookiesMiddleware());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+if (process.env.NODE_ENV === 'production') {
+  // graylogger
+  app.use(graylogMiddleware);
+}
+
 // Serve static assets
 if (process.env.NODE_ENV === 'production') {
   app.use('/static', express.static('./build/static'));
@@ -102,11 +112,21 @@ const wrapAsync = fn => (req, res, next) => {
     // Make sure to `.catch()` any errors and pass them along to the `next()`
     // middleware in the chain, in this case the error handler.
     fn(req, res, next).catch(e => {
-      console.log(e);
+      console.error(e);
+      if (process.env.NODE_ENV === 'production') {
+        const data = requestInfoFormatter(req);
+        graylogger.error(data.message, { ...data.payload, error: e });
+      }
+
       res.redirect('/error');
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    if (process.env.NODE_ENV === 'production') {
+      const data = requestInfoFormatter(req);
+      graylogger.error(data.message, { ...data.payload, error: e });
+    }
+
     res.redirect('/error');
   }
 };

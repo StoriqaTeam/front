@@ -11,6 +11,7 @@ type TranslationDicType = {|
   productNotFound: string,
   storeNotFound: string,
   noDescription: string,
+  noLongDescription: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -22,6 +23,7 @@ const translations: TranslationsBundleType = {
     productNotFound: 'Product Not Found',
     storeNotFound: 'Store Not Found',
     noDescription: 'No Description',
+    noLongDescription: 'No Long Description',
   },
 };
 

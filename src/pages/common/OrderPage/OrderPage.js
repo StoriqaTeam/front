@@ -222,7 +222,7 @@ class OrderPage extends Component<PropsType, StateType> {
     if (success) {
       this.props.showAlert({
         type: 'success',
-        text: 'Order successfully complete.',
+        text: t.orderSuccessfullyComplete,
         link: {
           text: 'Ok',
         },
@@ -230,7 +230,7 @@ class OrderPage extends Component<PropsType, StateType> {
     } else {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something is going wrong :(',
+        text: t.somethingIsGoingWrong,
         link: {
           text: 'Ok',
         },
