@@ -4618,12 +4618,16 @@ gaze@^1.0.0:
   dependencies:
     globule "^1.0.0"
 
-gelf-pro@^1.2.2:
+gelf-pro@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/gelf-pro/-/gelf-pro-1.2.2.tgz#a690a4f21dd1d42b2e21c28e7e2fffcacddac202"
   dependencies:
     async "2.6.0"
     lodash "4.17.5"
+
+gen-uid@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/gen-uid/-/gen-uid-0.0.2.tgz#dea3cd22c37b78139be521dfb2f51ecebab39138"
 
 generate-function@^2.0.0:
   version "2.3.1"
