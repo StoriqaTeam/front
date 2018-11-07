@@ -50,19 +50,19 @@ class SignUp extends PureComponent<PropsType, StateType> {
   makeInputs = (): Array<SignUpInputType> => {
     const inputs: Array<InputConfig> = [
       {
-        label: 'First Name',
+        label: t.labelFirstName,
         type: 'text',
       },
       {
-        label: 'Last Name',
+        label: t.labelLastName,
         type: 'text',
       },
       {
-        label: 'Email',
+        label: t.labelEmail,
         type: 'email',
       },
       {
-        label: 'Password',
+        label: t.labelPassword,
         type: 'password',
       },
     ];
