@@ -35,6 +35,7 @@ const ignoredPaths = [
   '/manifest.json',
   '/styles',
   '/main',
+  '/healthcheck',
 ];
 
 const middleware = (req, res, next) => {
