@@ -169,7 +169,7 @@ const routes = (
         path="/checkout"
         Component={Checkout}
         render={({ props, Component, resolving }) => {
-          if (Component && resolving && props && !props.me) {
+          if (Component && resolving === true && props && !props.me) {
             const {
               location: { pathname },
             } = props;
@@ -199,7 +199,7 @@ const routes = (
         path="/buy-now"
         Component={BuyNow}
         render={({ props, Component, resolving }) => {
-          if (Component && resolving && props && !props.me) {
+          if (Component && resolving === true && props && !props.me) {
             const {
               location: { pathname, search },
             } = props;
