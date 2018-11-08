@@ -79,6 +79,7 @@ class NewProduct extends Component<PropsType, StateType> {
       fetchPackages(this.props.environment, variables)
         .then(({ availablePackages }) => {
           this.setState({ availablePackages: availablePackages || null });
+          return true;
         })
         .catch(() => {
           this.setState({ availablePackages: null });

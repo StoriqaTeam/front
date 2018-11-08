@@ -7,15 +7,18 @@ let error: Function = () => {};
 
 /* eslint-disable */
 if (process.env.NODE_ENV === 'development') {
-  debug = console.log;
-  info = console.info;
-  warn = console.warn;
-  error = console.error;
-} else if (process.env.NODE_ENV === 'production') {
-  debug = console.log;
-  info = console.info;
-  warn = console.warn;
-  error = console.error;
+  debug = (...args) => {
+    console.log(Date.now(), ...args);
+  };
+  info = (...args) => {
+    console.info(Date.now(), ...args);
+  };
+  warn = (...args) => {
+    console.warn(Date.now(), ...args);
+  };
+  error = (...args) => {
+    console.error(Date.now(), ...args);
+  };
 }
 /* eslint-enable */
 

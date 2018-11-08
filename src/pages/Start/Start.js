@@ -46,6 +46,7 @@ class Start extends Component<PropsTypes, StateTypes> {
         if (dataObj && this.isMount) {
           this.setState({ priceUsd: Number(dataObj.price_usd) });
         }
+        return true;
       })
       .catch(error => {
         log.debug(error);

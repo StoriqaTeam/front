@@ -367,6 +367,7 @@ class Authorization extends Component<PropsType, StateType> {
         if (onCloseModal) {
           onCloseModal();
         }
+        return undefined;
       })
       .catch((errs: ResponseErrorType): void => {
         const relayErrors = fromRelayError({ source: { errors: [errs] } });

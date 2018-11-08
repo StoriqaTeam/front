@@ -1,10 +1,14 @@
 {
   "parser": "babel-eslint",
+  "plugins": [
+    "promise"
+  ],
   "extends": [
     "react-app",
     "airbnb",
     "prettier/react",
-    "prettier"
+    "prettier",
+    "plugin:promise/recommended"
   ],
   "rules": {
     "arrow-parens": [
