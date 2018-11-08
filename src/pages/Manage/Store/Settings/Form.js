@@ -263,11 +263,12 @@ class Form extends Component<PropsType, StateType> {
           alert('Error :('); // eslint-disable-line
         }
         this.setState(assocPath(['form', 'cover'], result.url, this.state));
+        return true;
       })
-      .catch(alert)
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
-      });
+      })
+      .catch(alert);
   };
 
   handleDeleteCover = () => {

@@ -78,6 +78,7 @@ class OpenTicketModal extends Component<PropsType, StateType> {
             text: 'Ok',
           },
         });
+        return true;
       })
       .catch(() => {
         this.setState({ isLoading: false });

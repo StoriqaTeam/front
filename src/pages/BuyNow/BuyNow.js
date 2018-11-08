@@ -493,6 +493,7 @@ class BuyNow extends Component<PropsType, StateType> {
             );
           },
         );
+        return true;
       })
       .catch(() => {
         this.props.showAlert({
@@ -567,6 +568,7 @@ class BuyNow extends Component<PropsType, StateType> {
             });
           },
         );
+        return true;
       })
       .catch((error: string) => {
         this.props.showAlert({

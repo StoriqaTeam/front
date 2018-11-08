@@ -129,11 +129,12 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
           alert('Error :('); // eslint-disable-line
         }
         this.handleLogoUpload(result.url || '');
+        return true;
       })
-      .catch(alert)
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
-      });
+      })
+      .catch(alert);
   };
 
   handleLogoUpload = (url: string) => {

@@ -5,6 +5,7 @@ import { find, whereEq, isEmpty } from 'ramda';
 import PropTypes from 'prop-types';
 
 import { SpinnerCircle, Button } from 'components/common';
+import { log } from 'utils';
 
 import { fetchAvailableDeliveryPackages } from './DeliveryCompaniesSelect.utils';
 import Dropdown from './Dropdown';
@@ -85,12 +86,14 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
         this.setState({ packages }, () => {
           this.props.onPackagesFetched(packages);
         });
-      })
-      .catch(() => {
-        this.setState({ isFetchingError: true });
+        return true;
       })
       .finally(() => {
         this.setState({ isFetching: false });
+      })
+      .catch(error => {
+        this.setState({ isFetchingError: true });
+        log.error(error);
       });
   };
 
@@ -158,15 +161,15 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
                     this.setState({ isLoading: true, isError: false }, () => {
                       this.props
                         .onPackageSelect(this.state.selectedPackage)
-                        .catch(() => {
-                          this.setState({ isError: true });
-                        })
                         .finally(() => {
                           this.setState({
                             isLoading: false,
                             isDropdownOpened: false,
                             selectedPackage: null,
                           });
+                        })
+                        .catch(() => {
+                          this.setState({ isError: true });
                         });
                     });
                   }}
