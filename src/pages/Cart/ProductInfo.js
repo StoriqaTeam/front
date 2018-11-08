@@ -8,7 +8,7 @@ import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, currentCurrency, convertCountries, log } from 'utils';
+import { formatPrice, currentCurrency, convertCountries } from 'utils';
 import { AppContext } from 'components/App';
 
 import CartProductAttribute from './CartProductAttribute';
@@ -40,16 +40,7 @@ class ProductInfo extends PureComponent<PropsType> {
   handlePackageSelect = (
     pkg: ?AvailableDeliveryPackageType,
   ): Promise<boolean> => {
-    log.debug('ProductInfo.handlePackageSelect', { pkg });
-    log.debug('product', this.props.product);
-
     const productId = pathOr(null, ['rawId'], this.props.product);
-    log.debug({ productId });
-    log.debug({
-      '!isNil(pkg)': !isNil(pkg),
-      '!isNil(productId)': !isNil(productId),
-      'is(Number,productId)': is(Number, productId),
-    });
     if (!isNil(pkg) && !isNil(productId) && is(Number, productId)) {
       return setDeliveryPackageInCartMutation({
         environment: this.context.environment,
@@ -62,10 +53,7 @@ class ProductInfo extends PureComponent<PropsType> {
           },
         },
       })
-        .then(response => {
-          log.debug('mutation response', { response });
-          return Promise.resolve(true);
-        })
+        .then(() => Promise.resolve(true))
         .catch(err => Promise.reject(err));
     }
     return Promise.resolve(true);
@@ -77,10 +65,6 @@ class ProductInfo extends PureComponent<PropsType> {
       'selectPackage',
       'shippingId',
     ])(this.props);
-    log.debug('handlePackageFetching', {
-      packages,
-      selected: shippingId,
-    });
 
     const currentProductRawId: ?number = pathOr(null, ['product', 'rawId'])(
       this.props,
