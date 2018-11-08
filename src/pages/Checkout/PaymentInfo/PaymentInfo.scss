@@ -8,6 +8,7 @@
   align-items: center;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .title {
@@ -278,4 +279,11 @@
       margin-left: 4rem;
     }
   }
+}
+
+.notification {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }

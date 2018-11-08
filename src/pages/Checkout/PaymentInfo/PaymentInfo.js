@@ -12,6 +12,8 @@ import { routerShape, withRouter } from 'found';
 import { formatPrice } from 'utils';
 import { RecalcInvoiceAmountMutation } from 'relay/mutations';
 
+import { NotificationBlock } from 'components/NotificationBlock';
+
 import type {
   RecalcInvoiceAmountMutationVariablesType,
   RecalcInvoiceAmountMutationResponseType,
@@ -24,6 +26,8 @@ import type {
 } from './__generated__/PaymentInfo_me.graphql';
 
 import './PaymentInfo.scss';
+
+import t from './i18n';
 
 type PropsType = {
   invoiceId: string,
@@ -38,12 +42,14 @@ type PropsType = {
 type StateType = {
   timerValue: string,
   isFirstRefetch: boolean,
+  isNotificationActive: boolean,
 };
 
 class PaymentInfo extends PureComponent<PropsType, StateType> {
   state = {
     timerValue: '',
     isFirstRefetch: true,
+    isNotificationActive: true,
   };
 
   componentDidMount() {
@@ -169,8 +175,12 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     }
   };
 
+  handleHideNotification = (): void => {
+    this.setState({ isNotificationActive: false });
+  };
+
   render() {
-    const { isFirstRefetch } = this.state;
+    const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
       return (
         <div styleName="container">
@@ -335,6 +345,19 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
             Don’t you have one yet? <span>Download</span>
           </div>
         </div>
+        {isNotificationActive ? (
+          <div styleName="notification">
+            <NotificationBlock
+              type="danger"
+              title={t.attention}
+              longText
+              text={t.exchangeNotification}
+              link={{ text: t.ok }}
+              onClick={this.handleHideNotification}
+              hideCloseButton
+            />
+          </div>
+        ) : null}
       </div>
     );
   }
