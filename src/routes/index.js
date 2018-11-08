@@ -168,8 +168,8 @@ const routes = (
       <Route
         path="/checkout"
         Component={Checkout}
-        render={({ props, Component }) => {
-          if (props && !props.me) {
+        render={({ props, Component, resolving }) => {
+          if (Component && resolving === true && props && !props.me) {
             const {
               location: { pathname },
             } = props;
@@ -198,8 +198,8 @@ const routes = (
       <Route
         path="/buy-now"
         Component={BuyNow}
-        render={({ props, Component }) => {
-          if (props && !props.me) {
+        render={({ props, Component, resolving }) => {
+          if (Component && resolving === true && props && !props.me) {
             const {
               location: { pathname, search },
             } = props;
@@ -393,8 +393,8 @@ const routes = (
             }
           }
         `}
-        render={({ props }) => {
-          if (props && !props.me) {
+        render={({ props, Component, resolving }) => {
+          if (Component && props && !props.me && resolving === true) {
             const {
               location: { pathname },
             } = props;

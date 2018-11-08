@@ -2,10 +2,8 @@
 
 // eslint-disable-next-line
 let logger = {
-  // eslint-disable-next-line
-  info: console.log,
-  // eslint-disable-next-line
-  error: console.error,
+  info: () => {},
+  error: () => {},
 };
 
 if (!process.env.BROWSER && process.env.NODE_ENV === 'production') {

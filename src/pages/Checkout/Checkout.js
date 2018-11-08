@@ -316,9 +316,11 @@ class Checkout extends Component<PropsType, StateType> {
         }, stores.edges),
       );
 
+      const selectedProducts = filter(whereEq({ selected: true }), products);
+
       const isProductsWithoutPackageExist = find(
         whereEq({ selectPackage: null }),
-        products,
+        selectedProducts,
       );
 
       if (!isNil(isProductsWithoutPackageExist)) {
@@ -536,6 +538,7 @@ export default createPaginationContainer(
                 id
                 shippingId
               }
+              selected
             }
           }
         }
