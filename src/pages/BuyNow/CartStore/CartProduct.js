@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import { convertSrc } from 'utils';

@@ -8,7 +8,7 @@ import { Link } from 'found';
 import { Input, Button } from 'components/common';
 import { Rating } from 'components/common/Rating';
 import { Icon } from 'components/Icon';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Container, Row, Col } from 'layout';
 import {
   formatPrice,
@@ -21,7 +21,7 @@ import {
 
 import { SetCouponInCartMutation } from 'relay/mutations';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as SetCouponInCartMutationType } from 'relay/mutations/SetCouponInCartMutation';
 
 import CartProduct from './CartProduct';

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -15,7 +15,7 @@ import { AddressForm } from 'components/AddressAutocomplete';
 import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMutation';
 import type { Contacts_me as ContactsMeType } from './__generated__/Contacts_me.graphql';
 

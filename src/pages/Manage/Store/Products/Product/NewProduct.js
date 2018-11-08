@@ -14,7 +14,7 @@ import {
   CreateBaseProductWithVariantsMutation,
   UpsertShippingMutation,
 } from 'relay/mutations';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { renameKeys } from 'utils/ramda';
 
 import type {
@@ -22,7 +22,7 @@ import type {
   CustomAttributeType,
   FormType,
 } from 'pages/Manage/Store/Products/types';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { MutationParamsType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';

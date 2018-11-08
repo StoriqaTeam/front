@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, map, isEmpty } from 'ramda';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import type { SelectItemType } from 'types';
 

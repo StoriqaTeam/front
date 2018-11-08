@@ -20,9 +20,9 @@ import { Input } from 'components/common/Input';
 import { Select } from 'components/common/Select';
 import { BirthdateSelect } from 'components/common/BirthdateSelect';
 import { SpinnerButton } from 'components/common/SpinnerButton';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { log, fromRelayError } from 'utils';
 import { renameKeys } from 'utils/ramda';

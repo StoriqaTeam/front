@@ -24,11 +24,11 @@ import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { extractText, isEmpty, log } from 'utils';
 
 import type { AddressFullType } from 'types';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import {
   makeWidgets,
