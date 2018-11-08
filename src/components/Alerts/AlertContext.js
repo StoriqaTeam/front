@@ -1,6 +1,7 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
+import type { ComponentType } from 'react';
 
 import type { AlertType } from 'components/Alerts/types';
 
@@ -19,7 +20,7 @@ const {
   Consumer: AlertContextConsumer,
 } = React.createContext({ addAlert: () => {} });
 
-const withShowAlert = (Component: React.ComponentType<any>) =>
+const withShowAlert = (Component: ComponentType<any>) =>
   class extends React.PureComponent<{}> {
     render() {
       return (
