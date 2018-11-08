@@ -233,7 +233,7 @@ app.use(
           isJSON: true,
         })}
       </script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&libraries=places" type="text/javascript"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&libraries=places&language=en" type="text/javascript"></script>
       <script src="/static/js/bundle.js"></script>
       </body>  
       </html>
