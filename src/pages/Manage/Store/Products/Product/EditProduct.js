@@ -110,6 +110,7 @@ class EditProduct extends Component<PropsType, StateType> {
             availablePackages: availablePackages || null,
             isLoadingPackages: false,
           });
+          return true;
         })
         .catch(() => {
           this.setState({

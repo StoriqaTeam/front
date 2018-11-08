@@ -651,8 +651,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       .then(() => {
         this.clearValidationErrors();
         this.handleOnClearProductState();
-        callback();
         this.setState({ isSavingInProgress: false });
+        callback(); // eslint-disable-line
+        return true;
       })
       .catch((errors: Array<any>) => {
         this.setState({ isSavingInProgress: false });
@@ -758,7 +759,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           link: { text: 'Close.' },
         });
         this.setState({ isSavingInProgress: false });
-        callback();
+        callback(); // eslint-disable-line
+        return true;
       })
       .catch((errors: Array<any>) => {
         this.setState({ isSavingInProgress: false });
