@@ -30,6 +30,7 @@ type StateType = {
   orderFromDate: ?string,
   orderToDate: ?string,
   orderStatus: ?string,
+  isLoadingPagination: boolean,
 };
 
 class StoreOrders extends Component<PropsType, StateType> {
@@ -39,6 +40,7 @@ class StoreOrders extends Component<PropsType, StateType> {
     orderFromDate: null,
     orderToDate: null,
     orderStatus: null,
+    isLoadingPagination: false,
   };
 
   componentDidMount() {
@@ -46,6 +48,7 @@ class StoreOrders extends Component<PropsType, StateType> {
   }
 
   loadPage = (pageNumber: number) => {
+    this.setState({ isLoadingPagination: true });
     this.props.relay.refetch(
       {
         currentPage: pageNumber,
@@ -68,7 +71,9 @@ class StoreOrders extends Component<PropsType, StateType> {
         },
       },
       null,
-      () => {},
+      () => {
+        this.setState({ isLoadingPagination: false });
+      },
       { force: true },
     );
   };
@@ -128,6 +133,7 @@ class StoreOrders extends Component<PropsType, StateType> {
   render() {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
+    const { isLoadingPagination } = this.state;
     const edges = map(
       prop('node'),
       // $FlowIgnoreMe
@@ -160,6 +166,7 @@ class StoreOrders extends Component<PropsType, StateType> {
         onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
         onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}
         onOrderToDateFilterChanged={this.handleOrderToDateFilterChanged}
+        isLoadingPagination={isLoadingPagination}
       />
     );
   }
