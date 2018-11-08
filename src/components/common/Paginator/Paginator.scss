@@ -8,13 +8,21 @@
   justify-content: center;
 }
 
-.item {
+.item, .dots, .arrow {
+  position: relative;
   width: 3rem;
   height: 3rem;
+  text-align: center;
+  color: $color_grey;
 }
 
 .current {
   background-color: $color_blue;
   border-radius: 0.5rem;
-  color: white;
+  color: $color_white;
+  transition: $transition_all_ease;
+}
+
+.clicked {
+  color: $color_grey_minor;
 }
