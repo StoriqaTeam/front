@@ -6,7 +6,7 @@ import { map, addIndex, find, whereEq, slice } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
-import t from './i18n';
+import t from '../i18n';
 
 import './AccordionBlock.scss';
 

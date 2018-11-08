@@ -21,9 +21,9 @@ import debounce from 'lodash.debounce';
 import { AutocompleteInput } from 'components/common/AutocompleteInput';
 import { renameCamelCase } from 'utils';
 
-import googleApiWrapper from './GoogleAPIWrapper';
-import AddressResultForm from './AddressResultForm';
-import { getCountryByName, getIndexedCountries } from './utils';
+import googleApiWrapper from '../GoogleAPIWrapper';
+import AddressResultForm from '../AddressResultForm';
+import { getCountryByName, getIndexedCountries } from '../utils';
 
 import './AddressForm.scss';
 

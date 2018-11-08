@@ -5,6 +5,8 @@ import { Input } from 'components/common/Input';
 
 import './AddressResultForm.scss';
 
+import t from './i18n';
+
 type PropsType = {
   address: any,
   onChangeForm: (type: string) => (e: any) => void,
@@ -17,7 +19,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="streetNumber"
-          label="Apt / Suite / Other"
+          label={t.labelAptSuiteOther}
           onChange={onChangeForm('streetNumber')}
           value={address ? address.streetNumber : ''}
           limit={50}
@@ -27,7 +29,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="route"
-          label="Street address"
+          label={t.labelStreetAddress}
           onChange={onChangeForm('route')}
           value={address ? address.route : ''}
           limit={50}
@@ -39,7 +41,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="locality"
-          label="Locality"
+          label={t.labelLocality}
           onChange={onChangeForm('locality')}
           value={address ? address.locality : ''}
           limit={50}
@@ -49,7 +51,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="administrativeAreaLevel2"
-          label="Region / State"
+          label={t.labelRegionState}
           onChange={onChangeForm('administrativeAreaLevel2')}
           value={address ? address.administrativeAreaLevel2 : ''}
           limit={50}
@@ -61,7 +63,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="administrativeAreaLevel1"
-          label="Area / District"
+          label={t.labelAreaDistrict}
           onChange={onChangeForm('administrativeAreaLevel1')}
           value={address ? address.administrativeAreaLevel1 : ''}
           limit={50}
@@ -71,7 +73,7 @@ const AddressResultForm = ({ address, onChangeForm }: PropsType) => (
         <Input
           fullWidth
           id="postalCode"
-          label="Postal Code"
+          label={t.labelPostalCode}
           onChange={onChangeForm('postalCode')}
           value={address ? address.postalCode : ''}
           limit={50}
