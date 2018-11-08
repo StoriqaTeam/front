@@ -22,6 +22,7 @@ type PropsType = {
   onOrderStatusFilterChanged: (?string) => void,
   onOrderFromDateFilterChanged: string => void,
   onOrderToDateFilterChanged: string => void,
+  isLoadingPagination: boolean,
 };
 
 class OrdersList extends PureComponent<PropsType> {
@@ -56,6 +57,7 @@ class OrdersList extends PureComponent<PropsType> {
           pagesCount={this.props.pagesCount}
           currentPage={this.props.currentPage}
           onPageSelect={this.props.onPageSelect}
+          isLoading={this.props.isLoadingPagination}
         />
       </div>
     );

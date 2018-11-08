@@ -36,6 +36,7 @@ type StateType = {
   orderFromDate: ?string,
   orderToDate: ?string,
   orderStatus: ?string,
+  isLoadingPagination: boolean,
 };
 
 class Orders extends Component<PropsType, StateType> {
@@ -45,6 +46,7 @@ class Orders extends Component<PropsType, StateType> {
     orderFromDate: null,
     orderToDate: null,
     orderStatus: null,
+    isLoadingPagination: false,
   };
 
   componentDidMount() {
@@ -52,6 +54,7 @@ class Orders extends Component<PropsType, StateType> {
   }
 
   loadPage = (pageNumber: number) => {
+    this.setState({ isLoadingPagination: true });
     this.props.relay.refetch(
       {
         currentPage: pageNumber,
@@ -68,7 +71,9 @@ class Orders extends Component<PropsType, StateType> {
         },
       },
       null,
-      () => {},
+      () => {
+        this.setState({ isLoadingPagination: false });
+      },
       { force: true },
     );
   };
@@ -129,6 +134,7 @@ class Orders extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const edges = pathOr([], ['me', 'orders', 'edges'], this.props);
     const orderDTOs = map(item => this.orderToDTO(item.node), edges);
+    const { isLoadingPagination } = this.state;
 
     // $FlowIgnoreMe
     const pagesCount = pathOr(
@@ -150,6 +156,7 @@ class Orders extends Component<PropsType, StateType> {
           pagesCount={pagesCount}
           currentPage={currentPage}
           onPageSelect={this.loadPage}
+          isLoadingPagination={isLoadingPagination}
           linkFactory={item => `/profile/orders/${item.number}`}
           onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
           onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}

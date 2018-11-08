@@ -37,6 +37,7 @@ type StateType = {
   autocompleteValue: string,
   searchTermValue: string,
   autocompleteItems: Array<{ id: string, label: string }>,
+  isLoadingPagination: boolean,
 };
 
 class StorageProducts extends Component<PropsType, StateType> {
@@ -45,6 +46,7 @@ class StorageProducts extends Component<PropsType, StateType> {
     autocompleteValue: '',
     searchTermValue: '',
     autocompleteItems: [],
+    isLoadingPagination: false,
   };
   handleSave = (productId: number, quantity: number): void => {
     // $FlowIgnoreMe
@@ -96,6 +98,7 @@ class StorageProducts extends Component<PropsType, StateType> {
   };
 
   loadPage = (pageNumber: number) => {
+    this.setState({ isLoadingPagination: true });
     // $FlowIgnoreMe
     const storageSlug = pathOr(
       {},
@@ -114,7 +117,9 @@ class StorageProducts extends Component<PropsType, StateType> {
         autocompleteValue: this.state.autocompleteValue,
       },
       null,
-      () => {},
+      () => {
+        this.setState({ isLoadingPagination: false });
+      },
       { force: true },
     );
   };
@@ -189,7 +194,7 @@ class StorageProducts extends Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { autocompleteItems } = this.state;
+    const { autocompleteItems, isLoadingPagination } = this.state;
     // $FlowIgnoreMe
     const storageName = pathOr('Unnamed', ['warehouse', 'name'], me);
     const products = map(item => {
@@ -281,6 +286,7 @@ class StorageProducts extends Component<PropsType, StateType> {
           pagesCount={pagesCount}
           currentPage={currentPage}
           onPageSelect={this.loadPage}
+          isLoading={isLoadingPagination}
         />
       </div>
     );
