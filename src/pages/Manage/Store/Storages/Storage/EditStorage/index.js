@@ -146,7 +146,7 @@ EditStorage.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(EditStorage, 'Storages', 'Edit storage'))),
+  withShowAlert(Page(ManageStore(EditStorage, 'Storages'))),
   graphql`
     fragment EditStorage_me on User
       @argumentDefinitions(storageSlug: { type: "String!" }) {

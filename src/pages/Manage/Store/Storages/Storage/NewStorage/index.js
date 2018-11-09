@@ -153,5 +153,5 @@ NewStorage.contextTypes = {
 };
 
 export default withShowAlert(
-  Page(ManageStore(NewStorage, 'Storages', 'Add new storage')),
+  Page(ManageStore(NewStorage, 'Storages',)),
 );
