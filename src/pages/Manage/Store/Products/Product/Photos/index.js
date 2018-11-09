@@ -39,11 +39,12 @@ class Photos extends Component<PropsType, StateType> {
           alert('Error :('); // eslint-disable-line
         }
         this.props.onAddMainPhoto(result.url || '');
+        return true;
       })
-      .catch(alert)
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
-      });
+      })
+      .catch(alert);
   };
 
   handleOnUploadPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
@@ -56,11 +57,12 @@ class Photos extends Component<PropsType, StateType> {
           alert('Error :('); // eslint-disable-line
         }
         this.props.onAddPhoto(result.url || '');
+        return true;
       })
-      .catch(alert)
       .finally(() => {
         this.setState({ isAdditionalPhotoUploading: false });
-      });
+      })
+      .catch(alert);
   };
 
   render() {

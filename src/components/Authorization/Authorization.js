@@ -29,9 +29,9 @@ import {
   ResendEmailVerificationLinkMutation,
 } from 'relay/mutations';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { CreateUserMutationResponse } from 'relay/mutations/__generated__/CreateUserMutation.graphql';
 import type { GetJWTByEmailMutationResponse } from 'relay/mutations/__generated__/GetJWTByEmailMutation.graphql';
 import type { ApplyPasswordResetMutationResponse } from 'relay/mutations/__generated__/ApplyPasswordResetMutation.graphql';
@@ -367,6 +367,7 @@ class Authorization extends Component<PropsType, StateType> {
         if (onCloseModal) {
           onCloseModal();
         }
+        return undefined;
       })
       .catch((errs: ResponseErrorType): void => {
         const relayErrors = fromRelayError({ source: { errors: [errs] } });

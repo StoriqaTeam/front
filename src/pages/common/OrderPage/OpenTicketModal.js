@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { Input, Textarea, Button } from 'components/common';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './OpenTicketModal.scss';
 
@@ -78,6 +78,7 @@ class OpenTicketModal extends Component<PropsType, StateType> {
             text: 'Ok',
           },
         });
+        return true;
       })
       .catch(() => {
         this.setState({ isLoading: false });

@@ -7,11 +7,11 @@ import type { Environment } from 'relay-runtime';
 import { pick, filter, propEq, concat, complement } from 'ramda';
 
 import { AlertsContainer } from 'components/Alerts';
-import { AlertContextProvider } from 'components/App/AlertContext';
+import { AlertContextProvider } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 
 import type { AlertPropsType } from 'components/Alerts/types';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import type {
   CategoryType,

@@ -20,7 +20,7 @@ import {
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
 import { Modal } from 'components/Modal';
 import { Button } from 'components/common/Button';
@@ -39,7 +39,7 @@ import {
 } from 'relay/mutations';
 import { errorsHandler, log, fromRelayError } from 'utils';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationResponseType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { UpdateProductMutationResponseType } from 'relay/mutations/UpdateProductMutation';
 
@@ -681,8 +681,9 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       .then(() => {
         this.clearValidationErrors();
         this.handleOnClearProductState();
-        callback();
         this.setState({ isSavingInProgress: false });
+        callback(); // eslint-disable-line
+        return true;
       })
       .catch((errors: any) => {
         this.setState({ isSavingInProgress: false });
@@ -790,7 +791,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           link: { text: 'Close.' },
         });
         this.setState({ isSavingInProgress: false });
-        callback();
+        callback(); // eslint-disable-line
+        return true;
       })
       .catch((errors: Array<any>) => {
         this.setState({ isSavingInProgress: false });

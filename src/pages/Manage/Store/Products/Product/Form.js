@@ -38,7 +38,7 @@ import { CategorySelector } from 'components/CategorySelector';
 import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 
@@ -53,7 +53,7 @@ import type {
   GetAttributeType,
 } from 'pages/Manage/Store/Products/types';
 import type { SelectItemType, CategoryType } from 'types';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { Shipping } from './Shipping';
 import Variants from './Variants';

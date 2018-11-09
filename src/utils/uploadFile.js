@@ -33,10 +33,16 @@ const uploadFile = (file: File): Promise<{ url?: string, error?: string }> => {
     },
   }).then(response => {
     if (!response.ok) {
-      response.json().then(log.error);
+      // muted because it used only for logging
+      /* eslint-disable promise/no-nesting */
+      response
+        .json()
+        .then(log.error)
+        .catch(log.error);
       return Promise.reject(
         new Error('There is a problem with uploading the photo'),
       );
+      /* eslint-enable promise/no-nesting */
     }
 
     return response.json();

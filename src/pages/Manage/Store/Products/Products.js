@@ -9,10 +9,10 @@ import { graphql, createPaginationContainer, Relay } from 'react-relay';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { getNameText, log, fromRelayError } from 'utils';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Button } from 'components/common/Button';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { DeactivateBaseProductMutation } from 'relay/mutations';
 

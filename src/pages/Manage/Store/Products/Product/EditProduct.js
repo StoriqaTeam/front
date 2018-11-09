@@ -25,7 +25,7 @@ import {
   UpdateProductMutation,
   UpsertShippingMutation,
 } from 'relay/mutations';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import type {
   FormErrorsType,
@@ -33,7 +33,7 @@ import type {
   FormType,
   VariantType,
 } from 'pages/Manage/Store/Products/types';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
@@ -110,6 +110,7 @@ class EditProduct extends Component<PropsType, StateType> {
             availablePackages: availablePackages || null,
             isLoadingPackages: false,
           });
+          return true;
         })
         .catch(() => {
           this.setState({

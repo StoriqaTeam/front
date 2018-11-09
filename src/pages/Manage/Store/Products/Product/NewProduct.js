@@ -14,7 +14,7 @@ import {
   CreateBaseProductWithVariantsMutation,
   UpsertShippingMutation,
 } from 'relay/mutations';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { renameKeys } from 'utils/ramda';
 
 import type {
@@ -23,9 +23,9 @@ import type {
   FormType,
 } from 'pages/Manage/Store/Products/types';
 import type { FromRelayErrorType } from 'utils/fromRelayError';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
-import type { MutationResponseType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
+import type { MutationResponseType as CreateBaseProductWithVariantsResponseType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
@@ -80,6 +80,7 @@ class NewProduct extends Component<PropsType, StateType> {
       fetchPackages(this.props.environment, variables)
         .then(({ availablePackages }) => {
           this.setState({ availablePackages: availablePackages || null });
+          return true;
         })
         .catch(() => {
           this.setState({ availablePackages: null });
@@ -161,7 +162,7 @@ class NewProduct extends Component<PropsType, StateType> {
         },
       },
     })
-      .then((response: CreateBaseProductWithVariantsMutationType) => {
+      .then((response: CreateBaseProductWithVariantsResponseType) => {
         this.setState(() => ({ isLoading: false }));
         log.debug({ response });
 
@@ -173,7 +174,9 @@ class NewProduct extends Component<PropsType, StateType> {
             storeId: storeRawId,
             isAddVariant,
           });
+          return true;
         }
+        return true;
       })
       .catch((error: FromRelayErrorType) => {
         this.setState(() => ({ isLoading: false }));

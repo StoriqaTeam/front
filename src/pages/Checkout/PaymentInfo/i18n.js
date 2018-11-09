@@ -6,12 +6,19 @@ import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
   order: string,
+  exchangeNotification: string,
+  attention: string,
+  ok: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
     order: 'Order',
+    exchangeNotification:
+      "Cashback will be sent to the address used for a payment. Don't use exchanges addresses as we can\t guarantee cashback receipt in this case.",
+    attention: 'Attention!',
+    ok: 'ok',
   },
 };
 

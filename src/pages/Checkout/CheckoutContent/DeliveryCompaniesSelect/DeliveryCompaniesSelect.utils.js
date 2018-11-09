@@ -52,8 +52,6 @@ const fetchAvailableDeliveryPackages = (
     userCountry: input.destinationCountry,
     baseProductId: input.baseProductId,
   }).then(response => {
-    log.debug('fetchAvailableDeliveryPackages', { response });
-
     let availablePackages: Array<AvailableDeliveryPackageType | null> = [];
     if (
       response &&
