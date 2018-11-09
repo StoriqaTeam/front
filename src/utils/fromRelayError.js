@@ -35,11 +35,13 @@ type RelayDefaultErrorType = {
   details: string,
 };
 
+export type FromRelayErrorType = {
+  data: RelayAPIErrorType | RelayDefaultErrorType,
+};
+
 type RelayErrorType = {
   source?: ?{
-    errors?: ?Array<{
-      data: RelayAPIErrorType | RelayDefaultErrorType,
-    }>,
+    errors?: ?Array<FromRelayErrorType>,
   },
 };
 

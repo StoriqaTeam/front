@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
+import { ConnectionHandler } from 'relay-runtime';
 import {
   assocPath,
   path,
@@ -14,6 +15,7 @@ import {
   head,
   isEmpty,
   map,
+  type,
 } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
@@ -38,7 +40,7 @@ import {
 import { errorsHandler, log, fromRelayError } from 'utils';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
-import type { MutationParamsType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
+import type { MutationResponseType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { UpdateProductMutationResponseType } from 'relay/mutations/UpdateProductMutation';
 
 import { transformTranslated } from './utils';
@@ -583,21 +585,41 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
     this.setState({ isSavingInProgress: true });
 
-    CreateBaseProductWithVariantsMutation.promise(
-      {
-        clientMutationId: '',
-        ...preparedDataForBaseProduct,
-        selectedAttributes: map(item => item.attrId, baseProduct.attributes),
-        variants: [
-          {
-            clientMutationId: '',
-            ...prepareDataForProduct,
-          },
-        ],
+    CreateBaseProductWithVariantsMutation({
+      environment: this.context.environment,
+      variables: {
+        input: {
+          clientMutationId: '',
+          ...preparedDataForBaseProduct,
+          selectedAttributes: map(item => item.attrId, baseProduct.attributes),
+          variants: [
+            {
+              clientMutationId: '',
+              ...prepareDataForProduct,
+            },
+          ],
+        },
       },
-      parentID,
-      this.context.environment,
-    )
+      updater: relayStore => {
+        if (parentID) {
+          const storeProxy = relayStore.get(parentID);
+          const conn = ConnectionHandler.getConnection(
+            storeProxy,
+            'Wizard_baseProducts',
+          );
+          const newProduct = relayStore.getRootField(
+            'createBaseProductWithVariants',
+          );
+          const edge = ConnectionHandler.createEdge(
+            relayStore,
+            conn,
+            newProduct,
+            'BaseProductsEdge',
+          );
+          ConnectionHandler.insertEdgeAfter(conn, edge);
+        }
+      },
+    })
       .then((response: CreateBaseProductWithVariantsMutationType) => {
         log.debug({ response });
         // $FlowIgnoreMe
@@ -614,9 +636,17 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           response,
         );
 
-        // $FlowIgnoreMe
+        if (!productId) {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+        }
+
         let warehouseId = pathOr(
           null,
+          // $FlowIgnoreMe
           ['createBaseProductWithVariants', 'store', 'warehouses', 0, 'id'],
           response,
         );
@@ -657,9 +687,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         callback(); // eslint-disable-line
         return true;
       })
-      .catch((errors: Array<any>) => {
+      .catch((errors: any) => {
         this.setState({ isSavingInProgress: false });
-        const relayErrors = fromRelayError({ source: { errors } });
+        const relayErrors = fromRelayError({
+          source: { errors: type(errors) === 'Array' ? errors : [errors] },
+        });
         if (relayErrors && !isEmpty(relayErrors)) {
           errorsHandler(
             relayErrors,
@@ -858,8 +890,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = (type: string, url: string) => {
-    if (type === 'main') {
+  handleOnUploadPhoto = (imgType: string, url: string) => {
+    if (imgType === 'main') {
       this.setState(prevState =>
         assocPath(['baseProduct', 'product', 'photoMain'], url, prevState),
       );
