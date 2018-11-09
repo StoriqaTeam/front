@@ -22,9 +22,10 @@ import type {
   CustomAttributeType,
   FormType,
 } from 'pages/Manage/Store/Products/types';
+import type { FromRelayErrorType } from 'utils/fromRelayError';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
-import type { MutationParamsType as CreateBaseProductWithVariantsMutationType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
+import type { MutationResponseType as CreateBaseProductWithVariantsResponseType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
@@ -122,47 +123,64 @@ class NewProduct extends Component<PropsType, StateType> {
     const storeRawId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     this.setState(() => ({ isLoading: true }));
 
-    const params: CreateBaseProductWithVariantsMutationType = {
-      input: {
-        clientMutationId: '',
-        name: [{ lang: 'EN', text: name }],
-        storeId: parseInt(storeRawId, 10),
-        shortDescription: [{ lang: 'EN', text: shortDescription }],
-        longDescription: [{ lang: 'EN', text: longDescription }],
-        seoTitle:
-          !seoTitle || seoTitle.length === 0
-            ? null
-            : [{ lang: 'EN', text: seoTitle }],
-        seoDescription:
-          !seoDescription || seoDescription.length === 0
-            ? null
-            : [{ lang: 'EN', text: seoDescription }],
-        // $FlowIgnoreMe
-        currency,
-        categoryId,
-        selectedAttributes: map(item => item.rawId, customAttributes),
-        variants: [
-          {
-            clientMutationId: '',
-            product: {
-              price: form.price,
-              vendorCode: form.vendorCode,
-              photoMain: form.photoMain,
-              additionalPhotos: form.photos,
-              cashback: form.cashback ? form.cashback / 100 : 0,
-              discount: form.discount ? form.discount / 100 : 0,
-              preOrder: form.preOrder,
-              preOrderDays: Number(form.preOrderDays),
-            },
-            attributes: form.attributeValues,
-          },
-        ],
-      },
+    CreateBaseProductWithVariantsMutation({
       environment,
-      onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        log.debug({ response, errors });
+      variables: {
+        input: {
+          clientMutationId: '',
+          name: [{ lang: 'EN', text: name }],
+          storeId: parseInt(storeRawId, 10),
+          shortDescription: [{ lang: 'EN', text: shortDescription }],
+          longDescription: [{ lang: 'EN', text: longDescription }],
+          seoTitle:
+            !seoTitle || seoTitle.length === 0
+              ? null
+              : [{ lang: 'EN', text: seoTitle }],
+          seoDescription:
+            !seoDescription || seoDescription.length === 0
+              ? null
+              : [{ lang: 'EN', text: seoDescription }],
+          currency,
+          categoryId,
+          selectedAttributes: map(item => item.rawId, customAttributes),
+          variants: [
+            {
+              clientMutationId: '',
+              product: {
+                price: form.price,
+                vendorCode: form.vendorCode,
+                photoMain: form.photoMain,
+                additionalPhotos: form.photos,
+                cashback: form.cashback ? form.cashback / 100 : 0,
+                discount: form.discount ? form.discount / 100 : 0,
+                preOrder: form.preOrder,
+                preOrderDays: Number(form.preOrderDays),
+              },
+              attributes: form.attributeValues,
+            },
+          ],
+        },
+      },
+    })
+      .then((response: CreateBaseProductWithVariantsResponseType) => {
+        this.setState(() => ({ isLoading: false }));
+        log.debug({ response });
 
-        const relayErrors = fromRelayError({ source: { errors } });
+        if (response) {
+          const { createBaseProductWithVariants } = response;
+          const baseProductRawId = createBaseProductWithVariants.rawId;
+          this.handleSaveShipping({
+            baseProductRawId,
+            storeId: storeRawId,
+            isAddVariant,
+          });
+          return true;
+        }
+        return true;
+      })
+      .catch((error: FromRelayErrorType) => {
+        this.setState(() => ({ isLoading: false }));
+        const relayErrors = fromRelayError({ source: { errors: [error] } });
         log.debug({ relayErrors });
 
         // $FlowIgnoreMe
@@ -209,36 +227,12 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ isLoading: false });
           return;
         }
-        if (errors) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
-          });
-          this.setState({ isLoading: false });
-          return;
-        }
-        if (response) {
-          const { createBaseProductWithVariants } = response;
-          const baseProductRawId = createBaseProductWithVariants.rawId;
-          this.handleSaveShipping({
-            baseProductRawId,
-            storeId: storeRawId,
-            isAddVariant,
-          });
-        }
-      },
-      onError: (error: Error) => {
-        this.setState({ isLoading: false });
-        log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
+          text: 'Something going wrong :(',
           link: { text: 'Close.' },
         });
-      },
-    };
-    CreateBaseProductWithVariantsMutation.commit(params);
+      });
   };
 
   handleSaveShipping = (props: {
