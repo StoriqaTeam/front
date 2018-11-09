@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { pathOr, toUpper, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -13,7 +13,7 @@ import { log, fromRelayError } from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { EditStore_me as EditStoreMeType } from './__generated__/EditStore_me.graphql';
 
 import Form from '../Form';

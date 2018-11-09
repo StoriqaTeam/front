@@ -98,11 +98,12 @@ class CharacteristicItem extends Component<PropsType, StateType> {
           alert('Error :('); // eslint-disable-line
         }
         this.props.onSelect(assoc('metaField', result.url, this.props.value));
+        return true;
       })
-      .catch(alert)
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
-      });
+      })
+      .catch(alert);
   };
 
   handleRemoveImg = () => {

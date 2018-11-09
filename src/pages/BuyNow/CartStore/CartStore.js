@@ -5,7 +5,7 @@ import { Link } from 'found';
 
 import { Input, Button, Rating } from 'components/common';
 import { Icon } from 'components/Icon';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Container, Row, Col } from 'layout';
 import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 

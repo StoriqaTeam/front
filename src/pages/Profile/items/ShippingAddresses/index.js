@@ -9,9 +9,9 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
 import { Button } from 'components/common/Button';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { log, fromRelayError } from 'utils';
 import {

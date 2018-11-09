@@ -14,13 +14,13 @@ import {
 } from 'ramda';
 import { routerShape } from 'found';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { log, errorsHandler, fromRelayError, setCookie } from 'utils';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
 import type { ResponseErrorType } from 'utils/fromRelayError';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { getJWTByProviderMutation } from './mutations';
 

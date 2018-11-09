@@ -29,12 +29,12 @@ import {
 } from 'relay/mutations';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { StickyBar } from 'components/StickyBar';
 import smoothscroll from 'libs/smoothscroll';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
 
 // eslint-disable-next-line

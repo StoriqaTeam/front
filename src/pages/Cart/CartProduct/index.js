@@ -6,7 +6,7 @@ import { pipe, path, pathOr, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
@@ -18,7 +18,7 @@ import {
 } from 'relay/mutations';
 import { log, convertSrc } from 'utils';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import ProductInfo from '../ProductInfo';
 

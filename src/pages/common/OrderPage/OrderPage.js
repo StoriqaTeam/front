@@ -15,11 +15,11 @@ import {
   fullDateFromTimestamp,
   shortDateFromTimestamp,
 } from 'utils/formatDate';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import type { ProductDTOType } from 'pages/common/OrderPage/ProductBlock';
 import type { OrderStatusType } from 'pages/common/OrderPage/StatusList';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import { addressToString, formatPrice, getNameText } from 'utils';
 
 import { AppContext } from 'components/App';

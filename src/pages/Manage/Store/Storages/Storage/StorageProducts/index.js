@@ -6,7 +6,7 @@ import { graphql, createRefetchContainer } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 
 import { Paginator } from 'components/common/Paginator';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { Autocomplete } from 'components/common/Autocomplete';
@@ -14,7 +14,7 @@ import { log, fromRelayError, getNameText } from 'utils';
 
 import { SetProductQuantityInWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/SetProductQuantityInWarehouseMutation';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { StorageProducts_me as StorageProductsMeType } from './__generated__/StorageProducts_me.graphql';
 
 import { StorageProductsTableHeader, StorageProductsTableRow } from '../index';

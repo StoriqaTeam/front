@@ -6,7 +6,7 @@ import { pathOr, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
@@ -14,7 +14,7 @@ import { log, fromRelayError } from 'utils';
 import { UpdateWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateWarehouseMutation';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { FormErrorsType } from 'types';
 import Form from '../Form';
 

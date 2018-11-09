@@ -18,7 +18,7 @@ import { routerShape } from 'found';
 import { validate } from '@storiqa/shared';
 
 import { Page } from 'components/App';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Container, Row, Col } from 'layout';
 import { Input, RadioButton, Select, Checkbox } from 'components/common';
 import { AddressForm } from 'components/AddressAutocomplete';
@@ -30,7 +30,7 @@ import {
   CreateUserDeliveryAddressFullMutation,
 } from 'relay/mutations';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { AddressFullType, SelectItemType } from 'types';
 import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
@@ -495,6 +495,7 @@ class BuyNow extends Component<PropsType, StateType> {
             );
           },
         );
+        return true;
       })
       .catch(() => {
         this.props.showAlert({
@@ -569,6 +570,7 @@ class BuyNow extends Component<PropsType, StateType> {
             });
           },
         );
+        return true;
       })
       .catch((error: string) => {
         this.props.showAlert({

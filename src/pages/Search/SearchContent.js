@@ -46,6 +46,7 @@ class SearchContent extends Component<PropsType, StateType> {
         if (dataObj && this.isMount) {
           this.setState({ priceUsd: Number(dataObj.price_usd) });
         }
+        return true;
       })
       .catch(error => {
         log.debug(error);

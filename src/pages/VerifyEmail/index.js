@@ -10,9 +10,9 @@ import { VerifyEmailMutation } from 'relay/mutations';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Spinner } from 'components/common/Spinner';
 import { log } from 'utils';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { VerifyEmailMutationParamsType } from 'relay/mutations/VerifyEmailMutation';
 import type { VerifyEmailMutationResponse } from 'relay/mutations/__generated__/VerifyEmailMutation.graphql';
 

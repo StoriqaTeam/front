@@ -4,14 +4,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, map, pathOr } from 'ramda';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
 import { log, fromRelayError, addressToString } from 'utils';
 
 import { SetProductQuantityInWarehouseMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/SetProductQuantityInWarehouseMutation';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Warehouses.scss';
 

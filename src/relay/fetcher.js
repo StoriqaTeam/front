@@ -29,7 +29,6 @@ class FetcherBase {
 
   async fetch(operation, variables) {
     const uid = uidGenerator.v4();
-    log.debug({ uid });
     log.debug('GraphQL request', { url: this.url, operation, variables });
     const jwt = this.getJWTFromCookies();
     const currency = this.getCurrencyCodeFromCookies();
@@ -48,7 +47,6 @@ class FetcherBase {
       headers = assoc('Cookie', 'holyshit=iamcool', headers);
     }
 
-    log.debug('\nRequest headers:\n', { headers }, '\n');
     grayLogger.info('GraphQL request', {
       uid,
       url: this.url,

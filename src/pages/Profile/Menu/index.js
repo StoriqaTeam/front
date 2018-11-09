@@ -50,11 +50,12 @@ class Menu extends Component<PropsType, StateType> {
           alert('Error :('); // eslint-disable-line
         }
         this.handleUpdateUser(result.url || '');
+        return true;
       })
-      .catch(alert)
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
-      });
+      })
+      .catch(alert);
   };
 
   handleUpdateUser = (avatar: string): void => {

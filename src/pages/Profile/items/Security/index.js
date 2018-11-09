@@ -19,9 +19,9 @@ import { Input } from 'components/common/Input';
 import { SpinnerButton } from 'components/common/SpinnerButton';
 import { Icon } from 'components/Icon';
 import { PasswordHints } from 'components/PasswordHints';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { log, fromRelayError } from 'utils';
 import { renameKeys } from 'utils/ramda';
