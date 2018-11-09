@@ -1,12 +1,30 @@
 [
   {
     "id": "1",
-    "img": "https://s3.amazonaws.com/storiqa-dev/img-AYQfG1KxAhkC.png",
-    "link": "/categories?search=wallet&category=31"
+    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-4etdonQBBUYC.png",
+    "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-obR6DnoDYvYC.png",
+    "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-hY0aQQctpMYC.png",
+    "link": "/categories?search=&category=28"
   },
   {
     "id": "2",
-    "img": "https://s3.amazonaws.com/storiqa-dev/img-9yhQ3e0ad0gC.png",
-    "link": "/categories?search=&category=28"
+    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-ZZih6Bkjcb0C.png",
+    "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-IqACCvTFAWwC.png",
+    "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-uwEMlXg5tG4C.png",
+    "link": "/categories?search=&category=29"
+  },
+  {
+    "id": "3",
+    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-UDXr4o2cmboC.png",
+    "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-efROmBUI5lUC.png",
+    "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-vUIVsBU16XwC.png",
+    "link": "/categories?search=&category=29"
+  },
+  {
+    "id": "4",
+    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-laxWUxqiKwEC.png",
+    "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-MntKyjI5TK8C.png",
+    "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-sU1OrNo9Ph0C.png",
+    "link": ""
   }
 ]
