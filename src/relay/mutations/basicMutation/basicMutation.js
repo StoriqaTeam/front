@@ -10,6 +10,7 @@ type MutationType<V, R> = (params: {|
   environment: Environment,
   variables: V,
   optimisticResponse?: R,
+  updater?: {},
 |}) => Promise<R>;
 
 export type { MutationType };
@@ -21,6 +22,7 @@ const basicMutation = <V: {}, R: {}>(
   environment: Environment,
   variables: V,
   optimisticResponse?: R,
+  updater?: {},
 }) => {
   if (!params.environment || params.variables == null) {
     return Promise.reject(
@@ -54,6 +56,7 @@ const basicMutation = <V: {}, R: {}>(
         reject(error);
       },
       optimisticResponse: params.optimisticResponse,
+      updater: params.updater,
     });
   });
 };
