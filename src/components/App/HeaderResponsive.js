@@ -12,12 +12,12 @@ import { MobileMenu } from 'components/MobileMenu';
 import { Modal } from 'components/Modal';
 import { SearchInput } from 'components/SearchInput';
 import { CategoriesMenu } from 'components/CategoriesMenu';
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import { Container } from 'layout';
 
 import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { getCookie } from 'utils/cookiesOp';
 

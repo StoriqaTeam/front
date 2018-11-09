@@ -7,7 +7,7 @@ import { Environment } from 'relay-runtime';
 import { log, fromRelayError } from 'utils';
 import { DeactivateProductMutation } from 'relay/mutations';
 
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { ProductType } from 'pages/Manage/Store/Products/types';
 import type { MutationParamsType } from 'relay/mutations/DeactivateProductMutation';
 

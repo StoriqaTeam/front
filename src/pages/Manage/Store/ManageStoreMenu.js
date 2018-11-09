@@ -7,7 +7,7 @@ import { isEmpty, isNil, pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 import { graphql } from 'react-relay';
 
-import { withShowAlert } from 'components/App/AlertContext';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { Collapse } from 'components/Collapse';
@@ -24,7 +24,7 @@ import {
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
-import type { AddAlertInputType } from 'components/App/AlertContext';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { TranslationType } from 'types';
 
 import menuItems from './menuItems.json';
