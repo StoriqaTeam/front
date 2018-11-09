@@ -1,3 +1,5 @@
+// @flow strict
+
 import React from 'react';
 
 import { Icon } from 'components/Icon';
@@ -6,24 +8,18 @@ import { Col } from 'layout';
 
 import { addressToString } from 'utils';
 
+import type { AddressFullType } from 'types';
+
 import './StoragesRow.scss';
 
 import t from './i18n';
 
-type AddressFullType = {
-  administrativeAreaLevel1: ?string,
-  administrativeAreaLevel2: ?string,
-  country: string,
-  locality: ?string,
-  political: ?string,
-  postalCode: string,
-  route: ?string,
-  streetNumber: ?string,
-  value: ?string,
-};
-
 type PropsType = {
-  onEdit: () => void,
+  onEdit: (
+    string,
+    boolean,
+    SyntheticEvent<HTMLDivElement | HTMLButtonElement>,
+  ) => void,
   // onDelete: () => void,
   handleCheckboxClick: (id: string | number) => void,
   id: string,
@@ -44,7 +40,7 @@ const StoragesRow = ({
   <div
     key={id}
     styleName="container"
-    onClick={(e: any) => {
+    onClick={(e: SyntheticEvent<HTMLDivElement>) => {
       e.stopPropagation();
       onEdit(slug, false, e);
     }}
@@ -70,7 +66,7 @@ const StoragesRow = ({
       <div styleName="buttonsWrapper">
         <button
           styleName="editButton"
-          onClick={(e: any) => {
+          onClick={(e: SyntheticEvent<HTMLButtonElement>) => {
             onEdit(slug, true, e);
           }}
           data-test="editStorageDataButton"
