@@ -1,7 +1,8 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
-import { toLower, pathOr } from 'ramda';
+import type { ComponentType } from 'react';
+import { toLower, pathOr, isNil } from 'ramda';
 import classNames from 'classnames';
 
 import { Container, Row, Col } from 'layout';
@@ -18,18 +19,24 @@ type StateType = {
   newStoreLogo: ?string,
 };
 
-export default (OriginalComponent: any, title: string, isNewStore?: boolean) =>
+export default (
+  OriginalComponent: ComponentType<*>,
+  title: string,
+  isNewStore?: boolean,
+) =>
   class Manage extends PureComponent<{}, StateType> {
     state: StateType = {
       newStoreName: null,
       newStoreLogo: null,
     };
 
-    handleOnUpload = async (e: any) => {
+    handleOnUpload = async (
+      e: SyntheticInputEvent<HTMLInputElement>,
+    ): Promise<void> => {
       e.preventDefault();
       const file = e.target.files[0];
       const result = await uploadFile(file);
-      if (!result.url) return;
+      if (!isNil(result.url)) return;
       this.setState({ newStoreLogo: result.url });
     };
 
@@ -37,7 +44,7 @@ export default (OriginalComponent: any, title: string, isNewStore?: boolean) =>
       this.setState({ newStoreLogo: null });
     };
 
-    handleNewStoreNameChange = (value: string) => {
+    handleNewStoreNameChange = (value: string): void => {
       this.setState({ newStoreName: value });
     };
 
@@ -48,7 +55,7 @@ export default (OriginalComponent: any, title: string, isNewStore?: boolean) =>
       };
       let formProps = { ...this.props };
 
-      if (isNewStore) {
+      if (!isNil(isNewStore)) {
         menuProps = {
           ...menuProps,
           newStoreLogo,
