@@ -1,2 +1,2 @@
-// eslint-disable-next-line
+// @flow strict
 export { default as Checkbox } from './Checkbox';
