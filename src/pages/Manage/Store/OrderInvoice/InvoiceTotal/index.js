@@ -36,6 +36,7 @@ class InvoiceTotal extends Component<PropsType, StateType> {
           ).toFixed(2);
           this.setState({ priceUsd });
         }
+        return data;
       })
       .catch(error => {
         log.debug(error);

@@ -71,6 +71,7 @@ class OAuthCallback extends PureComponent<PropsType> {
           log.debug({ response });
           // $FlowIgnoreMe
           const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
+          // eslint-disable-next-line
           if (jwt) {
             const today = new Date();
             const expirationDate = new Date();
@@ -84,6 +85,7 @@ class OAuthCallback extends PureComponent<PropsType> {
               window.location.href = '/'; // TODO: use refetch or store update
             }
           }
+          // throw new Error('no JWT');
         })
         .catch((errs: ResponseErrorType) => {
           log.error(errs);

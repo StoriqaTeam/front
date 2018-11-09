@@ -261,6 +261,7 @@ class Authorization extends Component<PropsType, StateType> {
             }
           }
         }
+        return response;
       })
       .catch((errs: ResponseErrorType): void => {
         const relayErrors = fromRelayError({ source: { errors: [errs] } });
