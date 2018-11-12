@@ -16,6 +16,7 @@ import { BannersRow } from 'components/BannersRow';
 import { GoodsSlider } from 'components/GoodsSlider';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
+import Goods from './Goods';
 
 import type { Start_mainPage as StartMainPage } from './__generated__/Start_mainPage.graphql';
 
@@ -167,7 +168,7 @@ class Start extends Component<PropsTypes, StateTypes> {
         <div styleName="item goodSliderItem">
           {viewedProducts &&
             viewedProducts.length > 0 && (
-              <GoodsSlider
+              <Goods
                 items={viewedProducts}
                 title="Most Popular"
                 seeAllUrl="/categories?search=&sortBy=VIEWS"
