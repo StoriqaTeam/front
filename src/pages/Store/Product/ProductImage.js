@@ -7,6 +7,7 @@ import { isEmpty, convertSrc } from 'utils';
 
 import { Slider } from 'components/Slider';
 import { Icon } from 'components/Icon';
+import { ImageZoom } from 'components/ImageZoom';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
@@ -87,27 +88,43 @@ class ProductImage extends Component<PropsType, StateType> {
             hasMobileSlider: showMobileSlider,
           })}
         >
-          <figure styleName="image">
+          <div styleName="imageContainer">
             {photoMain || selected ? (
-              <ImageLoader
-                fit
-                src={
-                  !isEmpty(selected)
-                    ? convertSrc(selected, 'large')
-                    : convertSrc(photoMain, 'large')
-                }
-                loader={
-                  <div styleName="loader">
-                    <BannerLoading />
-                  </div>
-                }
-              />
+              <ImageZoom>
+                {({ onMouseMove, backgroundPosition, backgroundImage }) => (
+                  <figure
+                    styleName="image"
+                    style={{
+                      backgroundPosition,
+                      backgroundImage,
+                      transition: 'opacity 0.3s ease-out',
+                      backgroundSize: '220%',
+                    }}
+                  >
+                    <ImageLoader
+                      fit
+                      src={
+                        !isEmpty(selected)
+                          ? convertSrc(selected, 'large')
+                          : convertSrc(photoMain, 'large')
+                      }
+                      loader={
+                        <div styleName="loader">
+                          <BannerLoading />
+                        </div>
+                      }
+                      onMouseMove={onMouseMove}
+                      onFocus={() => {}}
+                    />
+                  </figure>
+                )}
+              </ImageZoom>
             ) : (
               <div styleName="noImage">
                 <Icon type="camera" size={80} />
               </div>
             )}
-          </figure>
+          </div>
         </div>
         {showMobileSlider ? (
           <div styleName="imageSlider">
