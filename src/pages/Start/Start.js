@@ -86,9 +86,13 @@ class Start extends Component<PropsTypes, StateTypes> {
     const storiqaShopId = process.env.REACT_APP_STORIQA_SHOP_ID || null;
     const bannersSliderWithMerge = prepend(
       {
-        id: '0',
+        id: 0,
         img:
-          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-OZnA7dnYf7EC.png',
+          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-wsBa5BAPUuAC.png',
+        middleImg:
+          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BbAvBDp0mhoC.png',
+        shortImg:
+          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-FK7o1iFeHU8C.png',
         link: `/store/${Number(storiqaShopId)}`,
       },
       bannersSlider,
@@ -104,62 +108,38 @@ class Start extends Component<PropsTypes, StateTypes> {
           <Fragment>
             <MediaQuery maxWidth={575}>
               <BannersSlider
-                items={
-                  !storiqaShopId
-                    ? map(
-                        item => ({
-                          id: `${item.id - 1}`,
-                          img: convertSrc(item.img, 'medium'),
-                          link: item.link,
-                        }),
-                        bannersSlider,
-                      )
-                    : map(
-                        item => ({
-                          ...item,
-                          img: convertSrc(item.img, 'medium'),
-                        }),
-                        bannersSliderWithMerge,
-                      )
-                }
+                items={map(
+                  item => ({
+                    id: storiqaShopId ? item.id : `${item.id - 1}`,
+                    img: convertSrc(item.shortImg, 'medium'),
+                    link: item.link,
+                  }),
+                  storiqaShopId ? bannersSliderWithMerge : bannersSlider,
+                )}
               />
             </MediaQuery>
             <MediaQuery maxWidth={991} minWidth={576}>
               <BannersSlider
-                items={
-                  !storiqaShopId
-                    ? map(
-                        item => ({
-                          id: `${item.id - 1}`,
-                          img: convertSrc(item.img, 'large'),
-                          link: item.link,
-                        }),
-                        bannersSlider,
-                      )
-                    : map(
-                        item => ({
-                          ...item,
-                          img: convertSrc(item.img, 'large'),
-                        }),
-                        bannersSliderWithMerge,
-                      )
-                }
+                items={map(
+                  item => ({
+                    id: storiqaShopId ? item.id : `${item.id - 1}`,
+                    img: convertSrc(item.middleImg, 'large'),
+                    link: item.link,
+                  }),
+                  storiqaShopId ? bannersSliderWithMerge : bannersSlider,
+                )}
               />
             </MediaQuery>
             <MediaQuery minWidth={992}>
               <BannersSlider
-                items={
-                  !storiqaShopId
-                    ? map(
-                        item => ({
-                          id: `${item.id - 1}`,
-                          img: item.img,
-                          link: item.link,
-                        }),
-                        bannersSlider,
-                      )
-                    : bannersSliderWithMerge
-                }
+                items={map(
+                  item => ({
+                    id: storiqaShopId ? item.id : `${item.id - 1}`,
+                    img: item.img,
+                    link: item.link,
+                  }),
+                  storiqaShopId ? bannersSliderWithMerge : bannersSlider,
+                )}
               />
             </MediaQuery>
           </Fragment>
