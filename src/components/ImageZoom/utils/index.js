@@ -13,14 +13,7 @@ import {
   propSatisfies,
 } from 'ramda';
 
-import type { ZoomEventType } from '../types';
-
-type CoordinateType = {
-  pageX: number,
-  pageY: number,
-};
-
-type ZoomFnType = ZoomEventType => CoordinateType;
+import type { ZoomEventType, ZoomFnType } from '../types';
 
 const coords = ['X', 'Y'];
 
