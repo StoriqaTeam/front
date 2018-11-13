@@ -13,3 +13,11 @@ export const grabImage = ({ currentTarget }: OnMouseMoveEventType): string => {
     path(['style', 'backgroundImage']),
   )(currentTarget);
 };
+
+export const calcPosition = (evt: OnMouseMoveEventType): string => {
+  const { currentTarget, pageX, pageY } = evt;
+  const { left, top, width, height } = currentTarget.getBoundingClientRect();
+  const x = (pageX - left) / width * 100;
+  const y = (pageY - top) / height * 100;
+  return `${x}% ${y}%`;
+};
