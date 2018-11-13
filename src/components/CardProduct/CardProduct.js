@@ -88,62 +88,63 @@ class CardProduct extends PureComponent<PropsType> {
             )}
           </div>
           <div styleName="bottom">
-            <div styleName="icon">{false && <Icon type="qa" size={20} />}</div>
             <div>
               <Rating value={rating} />
               {name && <div styleName="title">{getNameText(name, lang)}</div>}
             </div>
-            <div styleName="undiscountedPrice">
-              {Boolean(discount) && (
-                <span>
-                  {formatPrice(price)} {currentCurrency()}
-                </span>
-              )}
-            </div>
-            <div
-              styleName={classNames('price', {
-                isSearchPage,
-              })}
-            >
-              <MultiCurrencyDropdown
-                elementStyleName="priceDropdown"
-                price={discountedPrice}
-                renderPrice={(priceItem: {
-                  price: number,
-                  currencyCode: string,
-                }) => (
-                  <div styleName="priceDropdown">
-                    <div styleName="actualPrice">
-                      {discountedPrice === 0
-                        ? 'FREE'
-                        : `${formatPrice(priceItem.price)} ${
-                            priceItem.currencyCode
-                          }`}
+            <div styleName="priceWrap">
+              <div
+                styleName={classNames('price', {
+                  isSearchPage,
+                })}
+              >
+                <div styleName="undiscountedPrice">
+                  {Boolean(discount) && (
+                    <span>
+                      {formatPrice(price)} {currentCurrency()}
+                    </span>
+                  )}
+                </div>
+                <MultiCurrencyDropdown
+                  elementStyleName="priceDropdown"
+                  price={discountedPrice}
+                  renderPrice={(priceItem: {
+                    price: number,
+                    currencyCode: string,
+                  }) => (
+                    <div styleName="priceDropdown">
+                      <div styleName="actualPrice">
+                        {discountedPrice === 0
+                          ? 'FREE'
+                          : `${formatPrice(priceItem.price)} ${
+                              priceItem.currencyCode
+                            }`}
+                      </div>
+                      {priceUsd && (
+                        <CurrencyPrice
+                          price={priceItem.price || 0}
+                          currencyPrice={priceUsd}
+                          currencyCode="USD"
+                          toFixedValue={2}
+                        />
+                      )}
                     </div>
-                    {priceUsd && (
-                      <CurrencyPrice
-                        price={priceItem.price || 0}
-                        currencyPrice={priceUsd}
-                        currencyCode="USD"
-                        toFixedValue={2}
-                      />
-                    )}
-                  </div>
+                  )}
+                  renderDropdown={(
+                    rates: Array<{ currencyCode: string, value: number }>,
+                  ) => <CardProductDropdown rates={rates} />}
+                  renderDropdownToggle={(isDropdownOpened: boolean) => (
+                    <button
+                      styleName={`toggleRatesDropdown${
+                        isDropdownOpened ? 'Closed' : 'Opened'
+                      }`}
+                    />
+                  )}
+                />
+                {Boolean(cashbackValue) && (
+                  <CardProductCashback cashbackValue={cashbackValue} />
                 )}
-                renderDropdown={(
-                  rates: Array<{ currencyCode: string, value: number }>,
-                ) => <CardProductDropdown rates={rates} />}
-                renderDropdownToggle={(isDropdownOpened: boolean) => (
-                  <button
-                    styleName={`toggleRatesDropdown${
-                      isDropdownOpened ? 'Closed' : 'Opened'
-                    }`}
-                  />
-                )}
-              />
-              {Boolean(cashbackValue) && (
-                <CardProductCashback cashbackValue={cashbackValue} />
-              )}
+              </div>
             </div>
           </div>
         </Link>

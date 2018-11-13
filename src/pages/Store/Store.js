@@ -29,16 +29,16 @@ const tabs = [
     isNew: false,
     link: '/items',
   },
-  {
-    id: 'reviews',
-    title: 'Reviews',
-    isNew: false,
-  },
-  {
-    id: 'actions',
-    title: 'Actions',
-    isNew: true,
-  },
+  // {
+  //   id: 'reviews',
+  //   title: 'Reviews',
+  //   isNew: false,
+  // },
+  // {
+  //   id: 'actions',
+  //   title: 'Actions',
+  //   isNew: true,
+  // },
   {
     id: 'about',
     title: 'About',

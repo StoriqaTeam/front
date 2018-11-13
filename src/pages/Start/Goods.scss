@@ -1,11 +1,16 @@
 @import "../../styles/variables";
 
 .container {
-  margin-top: 2rem;
+  //margin-top: 2rem;
 }
 
 .header {
-
+  &:after {
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+  }
 }
 
 .title {
@@ -47,5 +52,68 @@
 
   &:hover {
     color: $color_blue;
+  }
+}
+
+.goods {
+  position: relative;
+  //display: flex;
+  //flex-wrap: wrap;
+  //margin: 0 -1rem;
+}
+
+.nowrapGoods {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin: 0 -1rem;
+
+  .good {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+.section {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  //max-height: 0;
+  margin: 0 -1rem;
+
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition: $transition_all_ease_out_quad_10;
+
+  &.view {
+    visibility: visible;
+    opacity: 1;
+    //height: auto;
+    //max-height: none;
+    overflow: auto;
+    transition: $transition_all_ease_out_quad_10;
+  }
+}
+
+.good {
+  //height: 0;
+  //max-height: 0;
+  //overflow: hidden;
+  //visibility: hidden;
+  //opacity: 0;
+  //width: 25%;
+  //transform: scale(0.95);
+  transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &.view {
+    visibility: visible;
+    opacity: 1;
+    //height: auto;
+    max-height: none;
+    overflow: auto;
+    transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    //transform: scale(1);
   }
 }
