@@ -15,23 +15,33 @@ import {
 
 import type { ZoomEventType } from '../types';
 
-const mapToCoords = fn => map(fn)(['X', 'Y']);
+type CoordinateType = {
+  pageX: number,
+  pageY: number,
+};
 
-const page = coord => `page${coord}`;
+type ZoomFnType = ZoomEventType => CoordinateType;
+
+const coords = ['X', 'Y'];
+
+const mapToCoords = fn => map(fn)(coords);
+
+const page = (coord: string): string => `page${coord}`;
 
 /**
  * @desc gets the pageX/Y properties from MouseEvent or TouchEvent
  */
-const getPageCoords = (evt: ZoomEventType) => {
-  const coords = ['X', 'Y'];
+const getPageCoords: ZoomFnType = evt => {
+  const pageProp = (coord: string) =>
+    propSatisfies(complement(isNil), page(coord));
 
-  const pageProp = coord => propSatisfies(complement(isNil), page(coord));
+  const hasPage: (evt: ZoomEventType) => boolean = allPass(
+    mapToCoords(pageProp),
+  );
 
-  const hasPage = allPass(mapToCoords(pageProp));
+  const getPage: ZoomFnType = e => pick(map(page)(coords))(e);
 
-  const getPage = e => pick(map(page)(coords))(e);
-
-  const getPageTouch = e => {
+  const getPageTouch: ZoomFnType = e => {
     const touchItem = path(['changedTouches', '0'])(e);
     return getPage(touchItem);
   };
