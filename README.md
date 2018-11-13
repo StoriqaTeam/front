@@ -8,10 +8,6 @@ For MacOS:
 
 2.  For Firefox go to `about:preferences#privacy`. Scroll down to `View certificates`. Then on authorities click `import` and add `rootCA.pem`.
 
-#### Docker:
-
-`yarn docker`
-
 #### "Вручную"
 
 установите зависимости: `yarn`
