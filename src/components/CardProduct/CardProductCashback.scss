@@ -2,10 +2,14 @@
 
 .cashbackWrapper {
   display: block;
-  margin-top: 1rem;
+  //margin-top: 1rem;
 
   @media (min-width: $md) {
-    display: flex;
+    //display: flex;
+  }
+
+  @media (max-width: #{$lg - 1px}) {
+    margin-top: 0.5rem;
   }
 }
 
