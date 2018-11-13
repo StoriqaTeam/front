@@ -48,7 +48,19 @@ _https://localhost:3443/_
 
 ### E2E-тесты
 
-#### `yarn cypress:docker`
+#### Run in headless mode in docker container
+
+`yarn cypress:docker`
+
+#### Run locally
+
+Install `cypress` globally:
+
+`yarn global add cypress@3.1.1`
+
+then run
+
+`yarn cypress:dev`
 
 ---
 
