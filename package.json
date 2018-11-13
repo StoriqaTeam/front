@@ -145,7 +145,7 @@
     "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
     "buildTranslations": "NODE_ENV=development yarn babel-node ./scripts/i18n/buildTranslations.js",
     "validateTranslations": "NODE_ENV=development yarn babel-node ./scripts/i18n/validateTranslations.js",
-    "cypress:dev": "CYPRESS_baseUrl=https://localhost:3443 yarn cypress open",
+    "cypress:dev": "CYPRESS_baseUrl=https://localhost:3443 $(yarn global bin)/cypress open",
     "cypress:docker": "docker run -i --rm -v $PWD/cypress.json:/app/cypress.json -v $PWD/cypress:/app/cypress storiqateam/front_cypress"
   },
   "jest": {
