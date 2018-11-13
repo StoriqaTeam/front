@@ -138,6 +138,11 @@
   width: 100%;
   background-repeat: no-repeat;
   transition: all 0.3s ease-in;
+  /*
+   * @link https://stackoverflow.com/questions/16348031/disable-scrolling-when-touch-moving-certain-element
+   */
+  touch-action: none;
+
   & > * {
     transition: opacity 0.3s ease-in;
     opacity: 1;

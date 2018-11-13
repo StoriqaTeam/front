@@ -1,5 +1,9 @@
 // @flow strict
 
-export type OnMouseMoveEventType = SyntheticMouseEvent<
-  HTMLImageElement | HTMLDivElement,
->;
+type ZoomElementType = HTMLImageElement | HTMLDivElement;
+
+type OnMouseMoveEventType = SyntheticMouseEvent<ZoomElementType>;
+
+type OnTouchMoveEventType = SyntheticTouchEvent<ZoomElementType>;
+
+export type ZoomEventType = OnMouseMoveEventType | OnTouchMoveEventType;

@@ -91,7 +91,12 @@ class ProductImage extends Component<PropsType, StateType> {
           <div styleName="imageContainer">
             {photoMain || selected ? (
               <ImageZoom>
-                {({ onMouseMove, backgroundPosition, backgroundImage }) => (
+                {({
+                  onMouseMove,
+                  onTouchMove,
+                  backgroundPosition,
+                  backgroundImage,
+                }) => (
                   <figure
                     styleName="image"
                     style={{
@@ -114,6 +119,7 @@ class ProductImage extends Component<PropsType, StateType> {
                         </div>
                       }
                       onMouseMove={onMouseMove}
+                      onTouchMove={onTouchMove}
                       onFocus={() => {}}
                     />
                   </figure>
