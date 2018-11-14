@@ -2,5 +2,6 @@
     "baseUrl": "https://stage.stq.cloud",
     "viewportWidth": 1360,
     "viewportHeight": 1024,
-    "video": false
+    "video": false,
+    "chromeWebSecurity": false
 }

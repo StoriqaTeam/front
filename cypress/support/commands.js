@@ -23,3 +23,33 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (login, password) => {
+  cy
+    .request({
+      method: 'POST',
+      url: 'https://nightly.stq.cloud/graphql',
+      headers: { 'Content-Type': 'application/json', Currency: 'STQ' },
+      body: {
+        query:
+          'mutation LoginMutation($input: CreateJWTEmailInput!) {getJWTByEmail(input: $input) {token}}',
+        variables: {
+          input: {
+            clientMutationId: '',
+            email: login,
+            password,
+          },
+        },
+      },
+    })
+    .then(({ body }) => {
+      cy.setCookie(
+        '__jwt',
+        encodeURIComponent(`{"value":"${body.data.getJWTByEmail.token}"}`),
+        {
+          domain: 'nightly.stq.cloud',
+          expiry: 2173336185,
+        },
+      );
+    });
+});
