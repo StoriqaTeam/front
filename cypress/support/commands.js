@@ -28,7 +28,7 @@ Cypress.Commands.add('login', (login, password) => {
   cy
     .request({
       method: 'POST',
-      url: 'https://nightly.stq.cloud/graphql',
+      url: Cypress.env('graphql'),
       headers: { 'Content-Type': 'application/json', Currency: 'STQ' },
       body: {
         query:
@@ -46,10 +46,6 @@ Cypress.Commands.add('login', (login, password) => {
       cy.setCookie(
         '__jwt',
         encodeURIComponent(`{"value":"${body.data.getJWTByEmail.token}"}`),
-        {
-          domain: 'nightly.stq.cloud',
-          expiry: 2173336185,
-        },
       );
     });
 });
