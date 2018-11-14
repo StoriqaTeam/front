@@ -28,16 +28,12 @@ const getPageCoords: ZoomFnType = evt => {
   const pageProp = (coord: string) =>
     propSatisfies(complement(isNil), page(coord));
 
-  const hasPage: (evt: ZoomEventType) => boolean = allPass(
-    mapToCoords(pageProp),
-  );
+  const hasPage: ZoomEventType => boolean = allPass(mapToCoords(pageProp));
 
   const getPage: ZoomFnType = e => pick(map(page)(coords))(e);
 
-  const getPageTouch: ZoomFnType = e => {
-    const touchItem = path(['changedTouches', '0'])(e);
-    return getPage(touchItem);
-  };
+  const getPageTouch: ZoomFnType = e =>
+    compose(getPage, path(['changedTouches', '0']))(e);
 
   return ifElse(hasPage, getPage, getPageTouch)(evt);
 };
