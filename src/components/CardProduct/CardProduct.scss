@@ -77,31 +77,40 @@
   overflow: hidden;
   transition: $transition_all_ease;
   white-space: normal;
+}
 
-  @media (min-width: $md) {
-    height: 6rem;
-    line-height: 2.75rem;
-  }
-
-  @media (min-width: $xl) {
-    font-family: $font_medium;
-    text-transform: uppercase;
-  }
+.priceWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 7rem;
 }
 
 .undiscountedPrice {
+  position: absolute;
+  top: -2rem;
+  left: 0;
   color: $color_grey_minor;
   font-size: 12px;
   line-height: 2.5rem;
   height: 2.5rem;
   text-decoration: line-through;
-
-  @media (min-width: $md) {
-    font-size: 14px;
-  }
 }
 
-.priceDropdown {}
+.priceDropdown {
+  @media (max-width: #{$lg - 1px}) {
+    display: flex;
+
+    .actualPrice {
+      &:after {
+        content: '/~';
+        margin-left: 0.5rem;
+        font-size: 12px;
+        color: $color_grey_minor;
+      }
+    }
+  }
+}
 
 .toggleRatesDropdownClosed {
   height: 18px;
@@ -131,11 +140,6 @@
     align-items: flex-start;
   }
 
-  > div:nth-child(1) {
-    display: flex;
-    position: relative;
-  }
-
   &.isSearchPage {}
 }
 
@@ -146,6 +150,6 @@
   color: $color_black;
 
   @media (min-width: $md) {
-    font-size: 16px;
+    //font-size: 16px;
   }
 }

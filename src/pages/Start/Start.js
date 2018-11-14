@@ -13,9 +13,9 @@ import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
-import { GoodsSlider } from 'components/GoodsSlider';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
+import Goods from './Goods';
 
 import type { Start_mainPage as StartMainPage } from './__generated__/Start_mainPage.graphql';
 
@@ -144,10 +144,10 @@ class Start extends Component<PropsTypes, StateTypes> {
             </MediaQuery>
           </Fragment>
         </div>
-        <div styleName="item goodSliderItem">
+        <div styleName="item goodsItem">
           {viewedProducts &&
             viewedProducts.length > 0 && (
-              <GoodsSlider
+              <Goods
                 items={viewedProducts}
                 title="Most Popular"
                 seeAllUrl="/categories?search=&sortBy=VIEWS"
@@ -179,10 +179,10 @@ class Start extends Component<PropsTypes, StateTypes> {
             </MediaQuery>
           </a>
         </div>
-        <div styleName="item goodSliderItem">
+        <div styleName="item goodsItem">
           {discountProducts &&
             discountProducts.length > 0 && (
-              <GoodsSlider
+              <Goods
                 items={discountProducts}
                 title="Sale"
                 seeAllUrl="/categories?search=&sortBy=DISCOUNT"

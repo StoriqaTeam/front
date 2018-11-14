@@ -147,13 +147,19 @@ class HeaderTop extends PureComponent<PropsType> {
         <div styleName="item">
           <Select
             activeItem={activeLocaleItem}
-            items={[{ id: 'en', label: 'ENG' }, { id: 'ru', label: 'RUS' }]}
+            items={[{ id: 'en', label: 'ENG' }]}
             onSelect={this.handleChangeLocale}
             dataTest="headerLanguagesSelect"
           />
         </div>
         <div>
-          <a href="_">{t.help}</a>
+          <a
+            href="https://storiqa.zendesk.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {t.help}
+          </a>
         </div>
         <div>
           {isShopCreated ? null : <a href="/start-selling">{t.startSelling}</a>}

@@ -21,7 +21,6 @@ const StoreHeaderTabs = ({ tabs, storeId, active }: PropsType) => (
             <Link
               to={`/store/${storeId}${tab.link}`}
               key={tab.id}
-              //
               styleName={classNames('tab', { active: active === tab.id })}
             >
               <strong styleName="text">
