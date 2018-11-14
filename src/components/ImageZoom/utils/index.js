@@ -13,6 +13,8 @@ import {
   propSatisfies,
 } from 'ramda';
 
+import { isMobileBrowser } from 'utils';
+
 import type { ZoomEventType, ZoomFnType } from '../types';
 
 const coords = ['X', 'Y'];
@@ -55,6 +57,10 @@ export const grabImage = ({ currentTarget }: ZoomEventType): string => {
  * @desc calculates the position where the user is 'mouse hovering' or 'touching'
  */
 export const calcPosition = (evt: ZoomEventType): string => {
+  // avoid page scrolling when user touches the screen
+  if (isMobileBrowser()) {
+    evt.preventDefault();  
+  }
   const { pageX, pageY } = getPageCoords(evt);
   const { currentTarget } = evt;
   const { left, top, width, height } = currentTarget.getBoundingClientRect();
