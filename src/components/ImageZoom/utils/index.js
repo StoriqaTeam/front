@@ -59,7 +59,7 @@ export const grabImage = ({ currentTarget }: ZoomEventType): string => {
 export const calcPosition = (evt: ZoomEventType): string => {
   // avoid page scrolling when user touches the screen
   if (isMobileBrowser()) {
-    evt.preventDefault();  
+    evt.preventDefault();
   }
   const { pageX, pageY } = getPageCoords(evt);
   const { currentTarget } = evt;

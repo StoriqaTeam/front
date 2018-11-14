@@ -19,6 +19,14 @@ import './ProductImage.scss';
 
 import type { WidgetOptionType } from './types';
 
+type EventElement = HTMLImageElement | HTMLDivElement;
+
+type ZoomEventsType = {
+  onMouseMove: (SyntheticMouseEvent<EventElement>) => void,
+  onTouchMove: (SyntheticTouchEvent<EventElement>) => void,
+  onTouchStart: (SyntheticTouchEvent<EventElement>) => void,
+};
+
 type PropsType = {
   rawId: number,
   photoMain: ?string,
@@ -56,7 +64,11 @@ class ProductImage extends Component<PropsType, StateType> {
   imgsToSlider = (imgs: Array<string>): Array<{ id: string, img: string }> =>
     imgs.map(img => ({ id: img, img }));
 
-  makeImageProps = ({ onMouseMove, onTouchMove }) => {
+  makeImageProps = ({
+    onMouseMove,
+    onTouchMove,
+    onTouchStart,
+  }: ZoomEventsType) => {
     const { photoMain } = this.props;
     const { selected } = this.state;
     const src = !isEmpty(selected)
@@ -75,7 +87,7 @@ class ProductImage extends Component<PropsType, StateType> {
     };
 
     return isMobileBrowser()
-      ? { ...imgProps, onTouchMove }
+      ? { ...imgProps, onTouchMove, onTouchStart }
       : { ...imgProps, onMouseMove };
   };
 
@@ -117,6 +129,7 @@ class ProductImage extends Component<PropsType, StateType> {
                 {({
                   onMouseMove,
                   onTouchMove,
+                  onTouchStart,
                   backgroundPosition,
                   backgroundImage,
                 }) => (
@@ -130,7 +143,11 @@ class ProductImage extends Component<PropsType, StateType> {
                     }}
                   >
                     <ImageLoader
-                      {...this.makeImageProps({ onMouseMove, onTouchMove })}
+                      {...this.makeImageProps({
+                        onMouseMove,
+                        onTouchMove,
+                        onTouchStart,
+                      })}
                     />
                   </figure>
                 )}
