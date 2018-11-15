@@ -9,7 +9,7 @@ type PropsType = {
   id: string,
   label: string | boolean,
   isChecked: boolean,
-  onChange: (string) => void,
+  onChange: string => void,
   radioStyle: boolean,
 };
 

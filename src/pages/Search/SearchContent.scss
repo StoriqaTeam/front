@@ -70,6 +70,10 @@
   @media (max-width: #{$md - 1px}) {
     width: 50%;
   }
+
+  @media (max-width: #{$sm - 1px}) {
+    width: 100%;
+  }
 }
 
 .button {

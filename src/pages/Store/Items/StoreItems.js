@@ -123,7 +123,7 @@ class StoreItems extends Component<PropsType, StateType> {
           {products && !isEmpty(products) ? (
             map(
               item => (
-                <Col key={item.rawId} size={6} md={4} xl={3}>
+                <Col key={item.rawId} size={12} sm={6} md={4} xl={3}>
                   <div key={item.id} styleName="cardWrapper">
                     <CardProduct item={{ ...item, priceUsd }} />
                   </div>

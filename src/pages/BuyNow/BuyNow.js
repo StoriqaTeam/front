@@ -96,6 +96,7 @@ type StateType = {
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
+  isLoadingReplaceAddressButton: boolean,
 };
 
 type PropsType = {
@@ -155,6 +156,7 @@ class BuyNow extends Component<PropsType, StateType> {
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
+      isLoadingReplaceAddressButton: false,
     };
   }
 
@@ -336,7 +338,46 @@ class BuyNow extends Component<PropsType, StateType> {
   };
 
   replaceAddress = () => {
-    this.setState({ step: 1 });
+    this.setState({ isLoadingReplaceAddressButton: true });
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+    const variables = {
+      productId: parseFloat(queryParams.variant),
+      quantity: parseFloat(queryParams.quantity),
+    };
+    fetchBuyNow(this.props.relay.environment, variables)
+      .then(({ calculateBuyNow }) => {
+        const {
+          couponsDiscounts,
+          totalCost,
+          totalCostWithoutDiscounts,
+          totalCount,
+          deliveryCost,
+          subtotalWithoutDiscounts,
+        } = calculateBuyNow;
+        this.setState({
+          step: 1,
+          deliveryPackage: null,
+          isLoadingReplaceAddressButton: false,
+          buyNowData: {
+            couponsDiscounts,
+            totalCost,
+            totalCostWithoutDiscounts,
+            totalCount,
+            deliveryCost,
+            subtotalWithoutDiscounts,
+          },
+        });
+        return true;
+      })
+      .catch(() => {
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
+        this.setState({ isLoadingReplaceAddressButton: false });
+      });
   };
 
   handleCheckout = () => {
@@ -667,6 +708,7 @@ class BuyNow extends Component<PropsType, StateType> {
       isLoadingCheckout,
       errors,
       deliveryPackage,
+      isLoadingReplaceAddressButton,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -835,6 +877,9 @@ class BuyNow extends Component<PropsType, StateType> {
                         receiverName={receiverName}
                         email={me.email}
                         replaceAddress={this.replaceAddress}
+                        isLoadingReplaceAddressButton={
+                          isLoadingReplaceAddressButton
+                        }
                       />
                     </div>
                     <div styleName="store">
