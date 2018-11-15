@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe('Index page', function() {
   beforeEach(() => {
     cy.setCookie('holyshit', 'iamcool');

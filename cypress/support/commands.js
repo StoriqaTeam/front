@@ -42,10 +42,8 @@ Cypress.Commands.add('login', (login, password) => {
         },
       },
     })
-    .then(({ body }) => {
-      cy.setCookie(
-        '__jwt',
-        encodeURIComponent(`{"value":"${body.data.getJWTByEmail.token}"}`),
-      );
+    .its('body.data.getJWTByEmail.token')
+    .then(token => {
+      cy.setCookie('__jwt', encodeURIComponent(`{"value":"${token}"}`));
     });
 });
