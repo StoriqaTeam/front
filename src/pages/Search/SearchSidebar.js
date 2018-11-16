@@ -436,7 +436,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
             activeId={categoryId ? parseInt(categoryId, 10) : null}
           />
         )}
-        {minValue !== maxValue && (
+        {parseFloat(minValue) !== parseFloat(maxValue) && (
           <Fragment>
             <div styleName="blockTitle">{`Price (${currentCurrency()})`}</div>
             <RangeSlider
