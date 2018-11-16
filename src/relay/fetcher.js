@@ -27,6 +27,11 @@ class FetcherBase {
     throw new Error('should be implemented in subclasses');
   }
 
+  // eslint-disable-next-line
+  getCorrelationToken() {
+    throw new Error('should be implemented in subclasses');
+  }
+
   async fetch(operation, variables) {
     const uid = uidGenerator.v4();
     log.debug('GraphQL request', { url: this.url, operation, variables });
@@ -39,6 +44,10 @@ class FetcherBase {
     }
 
     headers = assoc('Currency', currency || 'STQ', headers);
+
+    if (this.getCorrelationToken()) {
+      headers = assoc('correlation-token', this.getCorrelationToken(), headers);
+    }
 
     const sessionId = this.getSessionIdFromCookies();
     headers = assoc('Session-Id', sessionId, headers);
@@ -84,13 +93,14 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url, jwt, sessionId, currencyCode) {
+  constructor(url, jwt, sessionId, currencyCode, correlationToken) {
     super(url);
 
     this.jwt = jwt;
     this.sessionId = sessionId;
     this.currencyCode = currencyCode;
     this.payloads = [];
+    this.correlationToken = correlationToken;
   }
 
   getJWTFromCookies() {
@@ -103,6 +113,10 @@ export class ServerFetcher extends FetcherBase {
 
   getCurrencyCodeFromCookies() {
     return this.currencyCode;
+  }
+
+  getCorrelationToken() {
+    return this.correlationToken;
   }
 
   async fetch(...args) {
@@ -145,6 +159,11 @@ export class ClientFetcher extends FetcherBase {
     const cookies = new Cookies();
     const currency = cookies.get('CURRENCY');
     return currency || 'STQ';
+  }
+
+  // eslint-disable-next-line
+  getCorrelationToken() {
+    return null;
   }
 
   async fetch(...args) {

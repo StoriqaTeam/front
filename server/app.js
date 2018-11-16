@@ -171,6 +171,7 @@ app.use(
       jwt,
       req.universalCookies.get('SESSION_ID'),
       currency,
+      req.headers && req.headers['correlation-token'],
     );
 
     store.dispatch(FarceActions.init());
