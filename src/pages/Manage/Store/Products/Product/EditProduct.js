@@ -17,6 +17,7 @@ import {
 } from 'ramda';
 
 import { AppContext, Page } from 'components/App';
+import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 import { renameKeys } from 'utils/ramda';
@@ -535,7 +536,10 @@ EditProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(EditProduct, 'Goods'), true)),
+  withShowAlert(
+    // $FlowIgnore
+    withErrorBoundary(Page(ManageStore(EditProduct, 'Goods'), true)),
+  ),
   graphql`
     fragment EditProduct_me on User
       @argumentDefinitions(productId: { type: "Int!" }) {
