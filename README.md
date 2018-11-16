@@ -8,10 +8,6 @@ For MacOS:
 
 2.  For Firefox go to `about:preferences#privacy`. Scroll down to `View certificates`. Then on authorities click `import` and add `rootCA.pem`.
 
-#### Docker:
-
-`yarn docker`
-
 #### "Вручную"
 
 установите зависимости: `yarn`
@@ -48,11 +44,19 @@ _https://localhost:3443/_
 
 ### E2E-тесты
 
-#### `yarn server:test`
+#### Run in headless mode in docker container
 
-#### `yarn server:graphql:test`
+`yarn cypress:docker`
 
-#### when backend and frontend are completed running `yarn cypress:open`
+#### Run locally
+
+Install `cypress` globally:
+
+`yarn global add cypress@3.1.1`
+
+then run
+
+`yarn cypress:dev`
 
 ---
 
