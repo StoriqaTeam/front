@@ -17,7 +17,7 @@ type PropsType = {
   onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   onBlur: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   onFocus: (e: SyntheticInputEvent<HTMLInputElement>) => void,
-  onKeyDown: () => void,
+  onKeyDown: (e: SyntheticKeyboardEvent<HTMLInputElement>) => void,
   onClick: () => void,
   icon: string,
   isUrl: boolean,
