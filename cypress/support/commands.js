@@ -23,3 +23,9 @@ Cypress.Commands.add('login', (login, password) => {
       cy.setCookie('__jwt', encodeURIComponent(`{"value":"${token}"}`));
     });
 });
+
+Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+  cy.setCookie('holyshit', 'iamcool').then(() => {
+    originalFn(url, options);
+  });
+});

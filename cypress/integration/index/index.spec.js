@@ -1,10 +1,6 @@
 /// <reference types="cypress" />
 
 describe('Index page', function() {
-  beforeEach(() => {
-    cy.setCookie('holyshit', 'iamcool');
-  });
-
   context('Not logged in', () => {
     beforeEach(() => {
       cy.visit('/');
