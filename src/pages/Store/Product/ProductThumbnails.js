@@ -97,7 +97,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
             >
               <ImageLoader
                 fit
-                src={convertSrc(option.image, 'small')}
+                src={convertSrc(option.image, 'medium')}
                 loader={<BannerLoading />}
               />
             </figure>
