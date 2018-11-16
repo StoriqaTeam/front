@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { prepend, isNil } from 'ramda';
 import classNames from 'classnames';
-import { isEmpty, convertSrc } from 'utils';
+import { isEmpty, convertSrc, isMobileBrowser } from 'utils';
 
 import { Slider } from 'components/Slider';
 import { Icon } from 'components/Icon';
@@ -18,6 +18,14 @@ import { makeAdditionalPhotos } from './utils';
 import './ProductImage.scss';
 
 import type { WidgetOptionType } from './types';
+
+type EventElement = HTMLImageElement | HTMLDivElement;
+
+type ZoomEventsType = {
+  onMouseMove: (SyntheticMouseEvent<EventElement>) => void,
+  onTouchMove: (SyntheticTouchEvent<EventElement>) => void,
+  onTouchStart: (SyntheticTouchEvent<EventElement>) => void,
+};
 
 type PropsType = {
   rawId: number,
@@ -55,6 +63,33 @@ class ProductImage extends Component<PropsType, StateType> {
 
   imgsToSlider = (imgs: Array<string>): Array<{ id: string, img: string }> =>
     imgs.map(img => ({ id: img, img }));
+
+  makeImageProps = ({
+    onMouseMove,
+    onTouchMove,
+    onTouchStart,
+  }: ZoomEventsType) => {
+    const { photoMain } = this.props;
+    const { selected } = this.state;
+    const src = !isEmpty(selected)
+      ? convertSrc(selected, 'large')
+      : convertSrc(photoMain, 'large');
+    const loader = (
+      <div styleName="loader">
+        <BannerLoading />
+      </div>
+    );
+    const imgProps = {
+      fit: true,
+      src,
+      loader,
+      onFocus: () => {},
+    };
+
+    return isMobileBrowser()
+      ? { ...imgProps, onTouchMove, onTouchStart }
+      : { ...imgProps, onMouseMove };
+  };
 
   render() {
     const { photoMain, additionalPhotos, discount } = this.props;
@@ -94,6 +129,7 @@ class ProductImage extends Component<PropsType, StateType> {
                 {({
                   onMouseMove,
                   onTouchMove,
+                  onTouchStart,
                   backgroundPosition,
                   backgroundImage,
                 }) => (
@@ -107,20 +143,11 @@ class ProductImage extends Component<PropsType, StateType> {
                     }}
                   >
                     <ImageLoader
-                      fit
-                      src={
-                        !isEmpty(selected)
-                          ? convertSrc(selected, 'large')
-                          : convertSrc(photoMain, 'large')
-                      }
-                      loader={
-                        <div styleName="loader">
-                          <BannerLoading />
-                        </div>
-                      }
-                      onMouseMove={onMouseMove}
-                      onTouchMove={onTouchMove}
-                      onFocus={() => {}}
+                      {...this.makeImageProps({
+                        onMouseMove,
+                        onTouchMove,
+                        onTouchStart,
+                      })}
                     />
                   </figure>
                 )}
