@@ -47,13 +47,13 @@
   }
 }
 
-.image {
+.imageContainer {
   padding-top: 100%;
   position: relative;
   background-color: #f7f7f7;
 
   div[role='img'] {
-    background-size: contain !important;
+    background-size: cover !important;
   }
 
   //div[role='img'] {
@@ -129,3 +129,27 @@
   right: 0;
   bottom: 0;
 }
+
+.image {
+  left: 0;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease-in;
+  /*
+   * @link https://stackoverflow.com/questions/16348031/disable-scrolling-when-touch-moving-certain-element
+   */
+  touch-action: none;
+
+  & > * {
+    transition: opacity 0.3s ease-in;
+    opacity: 1;
+  }
+  &:hover > * {
+    transition: opacity 0.3s ease-in;
+    opacity: 0;
+  }
+}
+

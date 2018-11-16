@@ -31,3 +31,4 @@ export {
 export { default as findSelectedFromList } from './findSelectedFromList';
 export { default as currentCurrency } from './currentCurrency';
 export { default as convertCountries } from './convertCountries';
+export { default as isMobileBrowser } from './isMobileBrowser';
