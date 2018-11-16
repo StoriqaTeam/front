@@ -96,9 +96,16 @@ class ThirdForm extends PureComponent<PropsType> {
         value = '0';
       }
     }
-    if (parseInt(value, 10) < 0) {
+    const lastValue = `${data.product[name]}`;
+
+    if (parseInt(value, 10) < 0 || value.length === 0) {
       value = '0';
     }
+
+    if (isEmpty(value)) {
+      value = lastValue;
+    }
+
     this.props.onChange({
       ...data,
       product: {
@@ -135,15 +142,15 @@ class ThirdForm extends PureComponent<PropsType> {
     return false;
   };
 
-  handleAddMainPhoto = (url: string) => {
+  handleAddMainPhoto = (url: string): void => {
     this.props.onUploadPhoto('main', url);
   };
 
-  handleAddPhoto = (url: string) => {
+  handleAddPhoto = (url: string): void => {
     this.props.onUploadPhoto('additional', url);
   };
 
-  handleRemovePhoto = (url: string) => {
+  handleRemovePhoto = (url: string): void => {
     const { onChange, data } = this.props;
     const { photoMain, additionalPhotos } = data.product;
     if (url === photoMain) {
@@ -299,7 +306,6 @@ class ThirdForm extends PureComponent<PropsType> {
                                 min="0"
                                 onChange={this.handleChangeProductState}
                                 fullWidth
-                                type="number"
                               />
                             </div>
                           </Col>
