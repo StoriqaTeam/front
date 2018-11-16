@@ -13,6 +13,7 @@ type PropsType = {
     backgroundPosition: string,
     onMouseMove: ZoomEventType => void,
     onTouchMove: ZoomEventType => void,
+    onTouchStart: ZoomEventType => void,
   }) => Node,
 };
 
@@ -38,6 +39,8 @@ class ImageZoom extends Component<PropsType, StateType> {
 
   handleTouchMove = (evt: ZoomEventType): void => this.setZoom(evt);
 
+  handleTouchStart = (evt: ZoomEventType): void => this.setZoom(evt);
+
   render() {
     const { backgroundImage, backgroundPosition } = this.state;
     return this.props.children({
@@ -45,6 +48,7 @@ class ImageZoom extends Component<PropsType, StateType> {
       backgroundPosition,
       onMouseMove: this.handleMouseMove,
       onTouchMove: this.handleTouchMove,
+      onTouchStart: this.handleTouchStart,
     });
   }
 }
