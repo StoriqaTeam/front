@@ -38,12 +38,14 @@ import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
-import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
+import type { AvailablePackagesType, FullShippingType } from '../Shipping/types';
 
-import fetchPackages from './fetchPackages';
-import Form from './Form';
+import fetchPackages from '../fetchPackages';
+import Form from '../Form';
 
-import './Product.scss';
+import '../Product.scss';
+
+import t from './i18n';
 
 type PropsType = {
   me: EditProductMeType,
@@ -120,8 +122,8 @@ class EditProduct extends Component<PropsType, StateType> {
           });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
         });
     } else {
@@ -143,8 +145,8 @@ class EditProduct extends Component<PropsType, StateType> {
     if (!baseProduct || !baseProduct.id) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -190,16 +192,16 @@ class EditProduct extends Component<PropsType, StateType> {
         if (status) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${status}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${status}"`,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
@@ -233,8 +235,8 @@ class EditProduct extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     });
@@ -244,8 +246,8 @@ class EditProduct extends Component<PropsType, StateType> {
     if (!variantData.idMainVariant) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -296,8 +298,8 @@ class EditProduct extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -308,22 +310,22 @@ class EditProduct extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Product update!',
+          text: t.productUpdated,
           link: { text: '' },
         });
       },
@@ -332,8 +334,8 @@ class EditProduct extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -345,8 +347,8 @@ class EditProduct extends Component<PropsType, StateType> {
     if (!shippingData) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong.',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -397,8 +399,8 @@ class EditProduct extends Component<PropsType, StateType> {
         if (!isEmpty(validationErrors)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
+            text: t.validationError,
+            link: { text: t.close },
           });
           return;
         }
@@ -408,8 +410,8 @@ class EditProduct extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -420,30 +422,30 @@ class EditProduct extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         if (onlyShippingSave) {
           this.props.showAlert({
             type: 'success',
-            text: 'Delivery update!',
+            text: t.deliveryUpdated,
             link: { text: '' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Delivery update!',
+          text: t.deliveryUpdated,
           link: { text: '' },
         });
       },
@@ -455,8 +457,8 @@ class EditProduct extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -497,7 +499,7 @@ class EditProduct extends Component<PropsType, StateType> {
     if (me && me.baseProduct) {
       ({ baseProduct } = me);
     } else {
-      return <span>Product not found</span>;
+      return <span>{t.productNotFound}</span>;
     }
     return (
       <AppContext.Consumer>
