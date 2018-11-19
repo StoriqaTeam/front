@@ -6,9 +6,10 @@ import { join, length, take, pathOr } from 'ramda';
 import { Icon } from 'components/Icon';
 
 import { formatPrice } from 'utils';
-import { convertCountriesToArrLabels } from './utils';
 
-import type { FilledCompanyType } from './types';
+import { convertCountriesToArrLabels } from '../utils';
+
+import type { FilledCompanyType } from '../types';
 
 import './CompanyItem.scss';
 

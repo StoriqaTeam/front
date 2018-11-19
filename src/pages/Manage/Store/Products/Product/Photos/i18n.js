@@ -14,7 +14,7 @@ const translations: TranslationsBundleType = {
   en: {
     labelAddMainPhoto: 'Add main photo',
     labelAddPhoto: 'Add photo',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
