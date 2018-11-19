@@ -14,13 +14,15 @@ import type {
   ServiceType,
   CompanyType,
   AvailablePackageType,
-} from './types';
+} from '../types';
 
-import FixPriceForm from './FixPriceForm';
-import CompanyItem from './CompanyItem';
-import handlerShipping from './handlerLocalShippingDecorator';
+import FixPriceForm from '../FixPriceForm';
+import CompanyItem from '../CompanyItem';
+import handlerShipping from '../handlerLocalShippingDecorator';
 
 import './LocalShipping.scss';
+
+import t from './i18n';
 
 type StateType = {
   isSelectedPickup: boolean,
@@ -133,14 +135,14 @@ class LocalShipping extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>Local shipping</strong>
+          <strong>{t.localShipping}</strong>
         </div>
         <div styleName="checkBoxes">
           <div styleName="checkBox">
             <RadioButton
               inline
               id="withoutLocalShipping"
-              label="Without local delivery"
+              label={t.withoutLocalDelivery}
               isChecked={isSelectedWithout}
               onChange={this.handleOnChangeRadioButton}
             />
@@ -149,7 +151,7 @@ class LocalShipping extends Component<PropsType, StateType> {
             <RadioButton
               inline
               id="localShippingFixPrice"
-              label="Fixed, single price for all"
+              label={t.fixedSinglePriceForAll}
               isChecked={isSelectedFixPrice}
               onChange={this.handleOnChangeRadioButton}
             />
@@ -217,7 +219,7 @@ class LocalShipping extends Component<PropsType, StateType> {
         </div>
         {!localAvailablePackages ||
           (isEmpty(localAvailablePackages) && (
-            <div styleName="emptyPackegesText">No available packages</div>
+            <div styleName="emptyPackegesText">{t.noAvailablePackages}</div>
           ))}
         <div
           id="localShippingError"
