@@ -157,6 +157,7 @@ class AttributeControll extends React.Component<PropsType, StateType> {
               width: '100%',
               height: '3rem',
               marginBottom: '1rem',
+              marginTop: '0.5rem',
             }}
             dataTest="attributeControlSelect"
           />
