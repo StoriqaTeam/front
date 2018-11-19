@@ -2,34 +2,42 @@
 
 import React, { Component } from 'react';
 import type { Node, ComponentType } from 'react';
-import { prepend, map, difference, filter, isEmpty, addIndex } from 'ramda';
-
-import type { SelectItemType } from 'types';
+import {
+  prepend,
+  map,
+  filter,
+  isEmpty,
+  forEach,
+  contains,
+  head,
+  addIndex,
+} from 'ramda';
 
 import {
-  convertLocalAvailablePackages,
   getServiceLogo,
+  convertInterAvailablePackages,
+  convertCountriesToArrCodes,
   getServiceRawId,
   getService,
-} from './utils';
+  convertCountriesForSelect,
+  getCountries,
+} from '../utils';
 
 import type {
   CompanyType,
   FilledCompanyType,
+  InterServiceType,
   ShippingChangeDataType,
   ServiceType,
   ShippingType,
   AvailablePackageType,
-  PickupShippingType,
-} from './types';
+} from '../types';
 
 type PropsType = {
   children?: Node,
-  currency: SelectItemType,
-  localShipping: Array<ShippingType>,
-  localAvailablePackages: Array<AvailablePackageType>,
+  interShipping: Array<ShippingType>,
+  interAvailablePackages: Array<AvailablePackageType>,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
-  pickupShipping: PickupShippingType,
   error: ?string,
 };
 
@@ -44,10 +52,10 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
     constructor(props: PropsType) {
       super(props);
-      const { localShipping, onChangeShippingData, pickupShipping } = props;
+      const { interShipping, onChangeShippingData } = props;
       const companies = addIndex(map)(
         (item, idx) => this.makeCompany(item, idx),
-        localShipping,
+        interShipping,
       );
       const checkedCompanies = filter(
         item => item.companyPackageRawId !== -1,
@@ -55,9 +63,8 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
       );
       const shippingData = {
         companies: checkedCompanies,
-        withoutLocal: Boolean(
-          isEmpty(checkedCompanies) && pickupShipping && !pickupShipping.pickup,
-        ),
+        inter: true,
+        withoutInter: Boolean(isEmpty(checkedCompanies)),
       };
       onChangeShippingData(shippingData);
 
@@ -72,12 +79,48 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
 
     setRemainingServices = (
       companies: Array<FilledCompanyType>,
-    ): Array<ServiceType> =>
-      difference(
-        convertLocalAvailablePackages(this.props.localAvailablePackages),
-        // $FlowIgnore
-        map(item => item.service, companies),
+    ): Array<InterServiceType> => {
+      let defaultServices = convertInterAvailablePackages(
+        this.props.interAvailablePackages,
       );
+      forEach(company => {
+        defaultServices = map(service => {
+          if (company.service && company.service.id === service.id) {
+            const { countries } = service;
+            const companyCountriesArr = convertCountriesToArrCodes({
+              countries: company.countries,
+            });
+
+            const newContinentsChildren = map(continent => {
+              const newCountriesChildren = filter(
+                country => !contains(country.alpha3, companyCountriesArr),
+                continent.children,
+              );
+              return { ...continent, children: newCountriesChildren };
+            }, countries ? countries.children : []);
+            const filteredNewContinentsChildren = filter(
+              item => !isEmpty(item.children),
+              newContinentsChildren,
+            );
+
+            return {
+              ...service,
+              countries: {
+                ...countries,
+                children: filteredNewContinentsChildren,
+              },
+            };
+          }
+          return service;
+        }, defaultServices);
+      }, companies);
+
+      const filteredDefaultServices = filter(
+        item => !isEmpty(item.countries ? item.countries.children : []),
+        defaultServices,
+      );
+      return filteredDefaultServices;
+    };
 
     handleOnSaveCompany = (company: CompanyType) => {
       if (company.id !== undefined) {
@@ -88,11 +131,11 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
               ...company,
               companyPackageRawId: getServiceRawId({
                 id: company.service && company.service.id,
-                packages: this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               logo: getServiceLogo({
                 id: company.service && company.service.id,
-                packages: this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               service: service
                 ? {
@@ -116,7 +159,7 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
           () => {
             this.props.onChangeShippingData({
               companies: this.state.companies,
-              inter: false,
+              inter: true,
             });
           },
         );
@@ -129,11 +172,11 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
               id: `${Date.now()}`,
               companyPackageRawId: getServiceRawId({
                 id: company.service && company.service.id,
-                packages: this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               logo: getServiceLogo({
                 id: company.service && company.service.id,
-                packages: this.props.localAvailablePackages,
+                packages: this.props.interAvailablePackages,
               }),
               service: service
                 ? {
@@ -154,7 +197,7 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
           () => {
             this.props.onChangeShippingData({
               companies: this.state.companies,
-              inter: false,
+              inter: true,
             });
           },
         );
@@ -178,7 +221,7 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
         () => {
           this.props.onChangeShippingData({
             companies: this.state.companies,
-            inter: false,
+            inter: true,
           });
         },
       );
@@ -203,37 +246,46 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
     };
 
     makeCompany = (data: ShippingType, idx: number): FilledCompanyType => {
-      const { localAvailablePackages, currency } = this.props;
+      const { interAvailablePackages } = this.props;
       const service = getService({
         id: data.companyPackageId,
-        packages: localAvailablePackages,
+        packages: interAvailablePackages,
       });
 
-      const company = {
+      let company = {
         id: `${Date.now()}-${idx}`,
         companyPackageRawId: getServiceRawId({
           id: service && service.id,
-          packages: localAvailablePackages,
+          packages: interAvailablePackages,
         }),
-        currency,
         price: data.price,
         logo: getServiceLogo({
           id: service && service.id,
-          packages: localAvailablePackages,
+          packages: interAvailablePackages,
         }),
         service,
       };
+
+      const countries = convertCountriesForSelect({
+        countries: getCountries({
+          id: data.companyPackageId,
+          packages: interAvailablePackages,
+        }),
+        checkedCountries: convertCountriesToArrCodes({
+          countries: data.deliveriesTo ? head(data.deliveriesTo) : null,
+          isSelectedAll: true,
+        }),
+      });
+      company = { ...company, countries };
 
       return company;
     };
 
     render() {
       const {
-        currency,
         error,
-        localAvailablePackages,
-        localShipping,
-        pickupShipping,
+        interAvailablePackages,
+        interShipping,
         onChangeShippingData,
       } = this.props;
       const {
@@ -244,7 +296,6 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
       } = this.state;
       return (
         <OriginalComponent
-          currency={currency}
           error={error}
           companies={companies}
           editableItemId={editableItemId}
@@ -255,9 +306,8 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
           onRemoveCompany={this.handleOnRemoveCompany}
           onSetEditableItem={this.handleOnSetEditableItem}
           onRemoveEditableItem={this.handleOnRemoveEditableItem}
-          localAvailablePackages={localAvailablePackages}
-          localShipping={localShipping}
-          pickupShipping={pickupShipping}
+          interAvailablePackages={interAvailablePackages}
+          interShipping={interShipping}
         >
           {this.props.children}
         </OriginalComponent>
