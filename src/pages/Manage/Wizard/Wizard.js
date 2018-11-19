@@ -982,6 +982,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['me', 'wizardStore', 'store', 'baseProducts'],
       this.props,
     );
+    // $FlowIgnoreMe
+    const addressFull = pathOr(
+      null,
+      ['me', 'wizardStore', 'addressFull'],
+      this.props,
+    );
     const isNotEmpty = complement((i: any) => !i);
     const stepOneChecker = where({
       name: isNotEmpty,
@@ -1004,7 +1010,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       if (step === 1 && isStepOnePopulated && isValid) {
         return true;
       }
-      if (step === 2 && isStepTwoPopulated && isValid) {
+      if (
+        step === 2 &&
+        isStepTwoPopulated &&
+        isValid &&
+        addressFull &&
+        addressFull.country
+      ) {
         return true;
       }
       if (step === 3 && isStepThreePopulated && isValid) {
