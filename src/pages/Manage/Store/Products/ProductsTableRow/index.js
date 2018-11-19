@@ -1,6 +1,6 @@
-// @flow
+// @flow strict
 import React from 'react';
-import { isEmpty, map, pathOr } from 'ramda';
+import { isEmpty, map, pathOr, isNil } from 'ramda';
 // $FlowIgnoreMe
 import ImageLoader from 'libs/react-image-loader';
 
@@ -28,9 +28,9 @@ type PropsType = {
       price: ?number,
     },
   },
-  onEdit: any => any,
-  onCheckbox: any => any,
-  onDelete: (any, any) => any,
+  onEdit: number => void,
+  onCheckbox: string => void,
+  onDelete: (string, SyntheticEvent<HTMLButtonElement>) => void,
 };
 
 const ProductsTableRow = ({
@@ -58,7 +58,7 @@ const ProductsTableRow = ({
       </div>
       <Col size={4} sm={4} md={2} lg={2} xl={1}>
         <div styleName="foto">
-          {!product || !product.photoMain ? (
+          {!product || isNil(product.photoMain) ? (
             <Icon type="camera" size={40} />
           ) : (
             <ImageLoader
@@ -81,12 +81,12 @@ const ProductsTableRow = ({
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
         {product &&
-          product.price && (
+          !isNil(product.price) && (
             <span>{`${formatPrice(product.price)} ${currentCurrency()}`}</span>
           )}
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
-        {product && product.cashback ? (
+        {product && !isNil(product.cashback) ? (
           <span>{`${(product.cashback * 100).toFixed(0)}%`}</span>
         ) : (
           '0%'
@@ -130,7 +130,7 @@ const ProductsTableRow = ({
           </button>
           <button
             styleName="deleteButton"
-            onClick={(e: any) => {
+            onClick={(e: SyntheticEvent<HTMLButtonElement>) => {
               onDelete(item.id, e);
             }}
             data-test="deleteProductButton"
