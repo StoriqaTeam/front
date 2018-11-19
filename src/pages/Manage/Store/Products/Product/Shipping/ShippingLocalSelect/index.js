@@ -6,7 +6,9 @@ import { map, find, propEq } from 'ramda';
 import { Select } from 'components/common';
 
 import type { SelectItemType } from 'types';
-import type { ShippingCountriesType, ServiceType } from './types';
+import type { ShippingCountriesType, ServiceType } from '../types';
+
+import t from './i18n';
 
 type StateType = {
   services: Array<SelectItemType>,
@@ -50,7 +52,7 @@ class ShippingLocalSelect extends Component<PropsType, StateType> {
       <Select
         forForm
         fullWidth
-        label="Service"
+        label={t.service}
         items={services}
         activeItem={service}
         onSelect={this.handleOnSelectService}
