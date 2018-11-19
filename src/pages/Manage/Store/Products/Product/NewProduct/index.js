@@ -26,13 +26,16 @@ import type { FromRelayErrorType } from 'utils/fromRelayError';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { MutationResponseType as CreateBaseProductWithVariantsResponseType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
+
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
-import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
+import type { AvailablePackagesType, FullShippingType } from '../Shipping/types';
 
-import fetchPackages from './fetchPackages';
-import Form from './Form';
+import fetchPackages from '../fetchPackages';
+import Form from '../Form';
 
-import './Product.scss';
+import '../Product.scss';
+
+import t from './i18n';
 
 type PropsType = {
   me: NewProductMeType,
@@ -86,8 +89,8 @@ class NewProduct extends Component<PropsType, StateType> {
           this.setState({ availablePackages: null });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong with shipping :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrongWithShipping,
+            link: { text: t.close },
           });
         });
     }
@@ -112,8 +115,8 @@ class NewProduct extends Component<PropsType, StateType> {
     if (!categoryId) {
       this.props.showAlert({
         type: 'danger',
-        text: 'No category :(',
-        link: { text: 'Close.' },
+        text: t.noCategory,
+        link: { text: t.close },
       });
       return;
     }
@@ -208,8 +211,8 @@ class NewProduct extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           this.setState({ isLoading: false });
           return;
@@ -221,16 +224,16 @@ class NewProduct extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           this.setState({ isLoading: false });
           return;
         }
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       });
   };
@@ -245,8 +248,8 @@ class NewProduct extends Component<PropsType, StateType> {
     if (!shippingData) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong.',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -279,8 +282,8 @@ class NewProduct extends Component<PropsType, StateType> {
         if (!isEmpty(validationErrors)) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Validation Error!',
-            link: { text: 'Close.' },
+            text: t.validationError,
+            link: { text: t.close },
           });
           return;
         }
@@ -290,8 +293,8 @@ class NewProduct extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -302,22 +305,22 @@ class NewProduct extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Product created!',
+          text: t.productCreated,
           link: { text: '' },
         });
         this.props.router.push(
@@ -331,8 +334,8 @@ class NewProduct extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };

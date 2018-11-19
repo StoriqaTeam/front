@@ -38,7 +38,10 @@ import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
-import type { AvailablePackagesType, FullShippingType } from '../Shipping/types';
+import type {
+  AvailablePackagesType,
+  FullShippingType,
+} from '../Shipping/types';
 
 import fetchPackages from '../fetchPackages';
 import Form from '../Form';
