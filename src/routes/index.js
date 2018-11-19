@@ -353,6 +353,7 @@ const routes = (
               id
               wizardStore {
                 id
+                rawId
                 completed
                 storeId
               }
