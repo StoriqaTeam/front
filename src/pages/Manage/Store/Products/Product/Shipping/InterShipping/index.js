@@ -21,6 +21,8 @@ import handlerShipping from '../handlerInterShippingDecorator';
 
 import './InterShipping.scss';
 
+import t from './i18n';
+
 type StateType = {
   isSelectedWithout: boolean,
   isSelectedFixPrice: boolean,
@@ -101,14 +103,14 @@ class InterShipping extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>International shipping</strong>
+          <strong>{t.internationalShipping}</strong>
         </div>
         <div styleName="radioButtons">
           <div styleName="radioButton">
             <RadioButton
               inline
               id="interShippingWithout"
-              label="Without international delivery"
+              label={t.withoutInternationalDelivery}
               isChecked={isSelectedWithout}
               onChange={this.handleOnChangeRadioButton}
             />
@@ -119,7 +121,7 @@ class InterShipping extends Component<PropsType, StateType> {
                 <RadioButton
                   inline
                   id="interShippingFixPrice"
-                  label="Fixed, single price for all"
+                  label={t.fixedSinglePriceForAll}
                   isChecked={isSelectedFixPrice}
                   onChange={this.handleOnChangeRadioButton}
                 />
@@ -169,7 +171,7 @@ class InterShipping extends Component<PropsType, StateType> {
         </div>
         {!interAvailablePackages ||
           (isEmpty(interAvailablePackages) && (
-            <div styleName="emptyPackegesText">No available packages</div>
+            <div styleName="emptyPackegesText">{t.noAvailablePackages}</div>
           ))}
         <div
           id="interShippingError"
