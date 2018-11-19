@@ -16,7 +16,7 @@ const translations: TranslationsBundleType = {
     save: 'Save',
     addCompany: 'Add company',
     cancel: 'Cancel',
-  }
+  },
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {

@@ -13,11 +13,11 @@ import type {
   FilledCompanyType,
   InterServiceType,
   ShippingType,
-} from './types';
+} from '../types';
 
-import FixPriceForm from './FixPriceForm';
-import CompanyItem from './CompanyItem';
-import handlerShipping from './handlerInterShippingDecorator';
+import FixPriceForm from '../FixPriceForm';
+import CompanyItem from '../CompanyItem';
+import handlerShipping from '../handlerInterShippingDecorator';
 
 import './InterShipping.scss';
 
