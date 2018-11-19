@@ -55,18 +55,23 @@ import type {
 import type { SelectItemType, CategoryType } from 'types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
-import { Shipping } from './Shipping';
-import Variants from './Variants';
-import Photos from './Photos';
-import Warehouses from './Warehouses';
-import Tabs from './Tabs';
-import Characteristics from './Characteristics';
-import VariantForm from './VariantForm';
-import AdditionalAttributes from './AdditionalAttributes';
+import { Shipping } from '../Shipping';
+import Variants from '../Variants';
+import Photos from '../Photos';
+import Warehouses from '../Warehouses';
+import Tabs from '../Tabs';
+import Characteristics from '../Characteristics';
+import VariantForm from '../VariantForm';
+import AdditionalAttributes from '../AdditionalAttributes';
 
-import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
+import type {
+  AvailablePackagesType,
+  FullShippingType,
+} from '../Shipping/types';
 
-import './Product.scss';
+import '../Product.scss';
+
+import t from './i18n';
 
 type PropsType = {
   baseProduct: ?BaseProductType,
@@ -235,11 +240,11 @@ class Form extends Component<PropsType, StateType> {
       tabs: [
         {
           id: 'variants',
-          label: 'Variants',
+          label: t.labelVariants,
         },
         {
           id: 'delivery',
-          label: 'Delivery',
+          label: t.labelDelivery,
         },
       ],
       variantForForm,
@@ -391,16 +396,12 @@ class Form extends Component<PropsType, StateType> {
   validate = () => {
     const { errors } = validate(
       {
-        name: [[val => Boolean(val), 'Name is required']],
-        shortDescription: [
-          [val => Boolean(val), 'Short description is required'],
-        ],
-        longDescription: [
-          [val => Boolean(val), 'Long description is required'],
-        ],
-        categoryId: [[val => Boolean(val), 'Category is required']],
-        vendorCode: [[val => Boolean(val), 'Vendor code is required']],
-        price: [[val => Boolean(val), 'Price is required']],
+        name: [[val => Boolean(val), t.nameIsRequired]],
+        shortDescription: [[val => Boolean(val), t.shortDescriptionIsRequired]],
+        longDescription: [[val => Boolean(val), t.longDescriptionIsRequired]],
+        categoryId: [[val => Boolean(val), t.categoryIsRequired]],
+        vendorCode: [[val => Boolean(val), t.vendorCodeIsRequired]],
+        price: [[val => Boolean(val), t.priceIsRequired]],
       },
       this.state.form,
     );
@@ -421,7 +422,7 @@ class Form extends Component<PropsType, StateType> {
     ) {
       shippingErrors = assoc(
         'local',
-        'Add at least one delivery service or pickup',
+        t.addAtLeastOneDeliveryServiceOrPickup,
         shippingErrors,
       );
     }
@@ -432,7 +433,7 @@ class Form extends Component<PropsType, StateType> {
     ) {
       shippingErrors = assoc(
         'inter',
-        'Add at least one delivery service',
+        t.addAtLeastOneDeliveryDelivery,
         shippingErrors,
       );
     }
@@ -831,7 +832,7 @@ class Form extends Component<PropsType, StateType> {
             )}
             <div styleName="form">
               <div styleName="title">
-                <strong>Product photos</strong>
+                <strong>{t.productPhotos}</strong>
               </div>
               <Photos
                 photos={photos}
@@ -841,12 +842,12 @@ class Form extends Component<PropsType, StateType> {
                 onRemovePhoto={this.handleRemovePhoto}
               />
               <div styleName="title titleGeneral">
-                <strong>General settings</strong>
+                <strong>{t.generalSettings}</strong>
               </div>
               <div styleName="formItem">
                 {this.renderInput({
                   id: 'name',
-                  label: 'Product name',
+                  label: t.labelProductName,
                   limit: 50,
                   required: true,
                 })}
@@ -854,21 +855,21 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem textArea">
                 {this.renderTextarea({
                   id: 'shortDescription',
-                  label: 'Short description',
+                  label: t.labelShortDescription,
                   required: true,
                 })}
               </div>
               <div styleName="formItem textArea">
                 {this.renderTextarea({
                   id: 'longDescription',
-                  label: 'Long description',
+                  label: t.labelLongDescription,
                   required: true,
                 })}
               </div>
               <div styleName="formItem">
                 <Select
                   forForm
-                  label="Currency"
+                  label={t.labelCurrency}
                   activeItem={currency}
                   items={currencies}
                   onSelect={this.handleOnSelectCurrency}
@@ -879,7 +880,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 {this.renderInput({
                   id: 'vendorCode',
-                  label: 'Vendor code',
+                  label: t.labelVendorCode,
                   limit: 50,
                   required: true,
                 })}
@@ -887,14 +888,14 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 {this.renderInput({
                   id: 'seoTitle',
-                  label: 'SEO title',
+                  label: t.labelSEOTitle,
                   limit: 50,
                 })}
               </div>
               <div styleName="formItem textArea">
                 {this.renderTextarea({
                   id: 'seoDescription',
-                  label: 'SEO description',
+                  label: t.labelSEODescription,
                 })}
               </div>
               <div styleName="categorySelector">
@@ -913,13 +914,13 @@ class Form extends Component<PropsType, StateType> {
                   )}
               </div>
               <div styleName="title titlePricing">
-                <strong>PRICING</strong>
+                <strong>{t.pricing}</strong>
               </div>
               <div styleName="formItem">
                 <InputPrice
                   id="price"
                   required
-                  label="Price"
+                  label={t.labelPrice}
                   onChangePrice={this.handlePriceChange}
                   price={parseFloat(price) || 0}
                   currency={
@@ -937,22 +938,22 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   fullWidth
-                  label="Cashback"
+                  label={t.labelCashback}
                   onChange={this.handlePercentChange('cashback')}
                   value={!isNil(cashback) ? `${cashback}` : ''}
                   dataTest="variantCashbackInput"
                 />
-                <span styleName="inputPostfix">Percent</span>
+                <span styleName="inputPostfix">{t.percent}</span>
               </div>
               <div styleName="formItem">
                 <Input
                   fullWidth
-                  label="Discount"
+                  label={t.labelDiscount}
                   onChange={this.handlePercentChange('discount')}
                   value={!isNil(discount) ? `${discount}` : ''}
                   dataTest="variantDiscountInput"
                 />
-                <span styleName="inputPostfix">Percent</span>
+                <span styleName="inputPostfix">{t.percent}</span>
               </div>
               {defaultAttributes &&
                 !isEmpty(defaultAttributes) &&
@@ -960,7 +961,7 @@ class Form extends Component<PropsType, StateType> {
                   (!isEmpty(customAttributes) && baseProduct)) && (
                   <Fragment>
                     <div styleName="title titleCharacteriscics">
-                      <strong>Characteriscics</strong>
+                      <strong>{t.characteristics}</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
                       <AdditionalAttributes
@@ -987,7 +988,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="preOrder">
                 <div styleName="preOrderTitle">
                   <div styleName="title">
-                    <strong>Available for pre-order</strong>
+                    <strong>{t.availableForPreOrder}</strong>
                   </div>
                   <div styleName="preOrderCheckbox">
                     <Checkbox
@@ -1004,7 +1005,7 @@ class Form extends Component<PropsType, StateType> {
                       this.preOrderDaysInput = node;
                     }}
                     fullWidth
-                    label="Lead time (days)"
+                    label={t.labelLeadTime}
                     onChange={this.handleOnChangePreOrderDays}
                     onBlur={this.handleOnBlurPreOrderDays}
                     value={preOrderDays || ''}
@@ -1025,7 +1026,7 @@ class Form extends Component<PropsType, StateType> {
                   dataTest="saveProductButton"
                   isLoading={isLoading}
                 >
-                  {baseProduct ? 'Update product' : 'Create product'}
+                  {baseProduct ? t.updateProduct : t.createProduct}
                 </Button>
               </div>
             </div>
@@ -1047,8 +1048,8 @@ class Form extends Component<PropsType, StateType> {
                           <Icon type="addVariant" size={80} />
                         </div>
                         <div styleName="variantsText">
-                          Currently you have no variants for you product.<br />
-                          Add variants if you need some.
+                          {t.currentlyYouHaveNoVariantsForYouProduct}.<br />
+                          {t.addVariantsIfYouNeedSome}
                         </div>
                         <div styleName="variantsButton">
                           <Button
@@ -1064,13 +1065,12 @@ class Form extends Component<PropsType, StateType> {
                             }
                             dataTest="addVariantButton"
                           >
-                            Add variant
+                            {t.addVariant}
                           </Button>
                         </div>
                         {!baseProduct && (
                           <div styleName="variantsWarnText">
-                            You can’t add variant until create and save base
-                            product.
+                            {t.youCantAddVariantUntilCreateAndSaveBaseProduct}
                           </div>
                         )}
                       </div>
@@ -1093,7 +1093,7 @@ class Form extends Component<PropsType, StateType> {
                               onClick={this.addNewVariant}
                               dataTest="addVariantButton"
                             >
-                              Add variant
+                              {t.addVariant}
                             </Button>
                           </div>
                         </div>
@@ -1133,7 +1133,7 @@ class Form extends Component<PropsType, StateType> {
                               !baseProduct ? isLoading : isLoadingShipping
                             }
                           >
-                            Save
+                            {t.save}
                           </Button>
                         </div>
                       </Fragment>

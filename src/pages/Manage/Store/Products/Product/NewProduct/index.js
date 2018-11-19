@@ -28,7 +28,10 @@ import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mut
 import type { MutationResponseType as CreateBaseProductWithVariantsResponseType } from 'relay/mutations/CreateBaseProductWithVariantsMutation';
 
 import type { NewProduct_me as NewProductMeType } from './__generated__/NewProduct_me.graphql';
-import type { AvailablePackagesType, FullShippingType } from '../Shipping/types';
+import type {
+  AvailablePackagesType,
+  FullShippingType,
+} from '../Shipping/types';
 
 import fetchPackages from '../fetchPackages';
 import Form from '../Form';
