@@ -22,6 +22,8 @@ import type {
 
 import './FixPriceForm.scss';
 
+import t from './i18n';
+
 type StateType = {
   price: number,
   service: ?ServiceType,
@@ -180,7 +182,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             }
             dataTest={`shipping${company ? 'Save' : 'Add'}CompanyButton`}
           >
-            {company ? 'Save' : 'Add company'}
+            {company ? t.save : t.addCompany}
           </Button>
           {company && (
             <button
@@ -188,7 +190,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
               onClick={onRemoveEditableItem}
               data-test="shippingEditFormCancel"
             >
-              Cancel
+              {t.cancel}
             </button>
           )}
         </div>
