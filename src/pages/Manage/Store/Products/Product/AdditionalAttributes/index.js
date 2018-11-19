@@ -14,6 +14,8 @@ import type { GetAttributeType } from 'pages/Manage/Store/Products/types';
 
 import './AdditionalAttributes.scss';
 
+import t from './i18n';
+
 type PropsType = {
   attributes: Array<GetAttributeType>,
   onCreateAttribute: (attribute: GetAttributeType) => void,
@@ -123,7 +125,7 @@ class Index extends Component<PropsType, StateType> {
             >
               <Select
                 forForm
-                label="Additional characteristics"
+                label={t.additionalCharacteristics}
                 activeItem={activeAttribute}
                 items={selectableAttributes}
                 onSelect={this.handleOnSelect}
@@ -140,13 +142,13 @@ class Index extends Component<PropsType, StateType> {
                 <div styleName="buttonIcon">
                   <Icon inline type="plus" size={20} />
                 </div>
-                <div styleName="buttonText">Add</div>
+                <div styleName="buttonText">{t.add}</div>
               </button>
             )}
           </div>
         )}
         {onlyView && (
-          <div styleName="onlyViewTitle">Additional characteristics</div>
+          <div styleName="onlyViewTitle">{t.additionalCharacteristics}</div>
         )}
         <div styleName="customAttributes">
           {map(
