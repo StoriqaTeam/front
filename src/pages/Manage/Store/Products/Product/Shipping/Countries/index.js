@@ -7,13 +7,13 @@ import classNames from 'classnames';
 import { Checkbox } from 'components/common';
 import { Icon } from 'components/Icon';
 
-import { convertCountriesForSelect, convertCountriesToArrCodes } from './utils';
+import { convertCountriesForSelect, convertCountriesToArrCodes } from '../utils';
 
 import type {
   ShippingCountriesType,
   FilledCompanyType,
   CountryType,
-} from './types';
+} from '../types';
 
 import './Countries.scss';
 
