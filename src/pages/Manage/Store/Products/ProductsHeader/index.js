@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
@@ -6,18 +6,20 @@ import { Button } from 'components/common/Button';
 
 import './ProductsHeader.scss';
 
+import t from './i18n';
+
 type PropsType = {
-  onAdd: () => any,
+  onAdd: () => void,
 };
 
 const ProductsHeader = ({ onAdd }: PropsType) => (
   <header styleName="container">
     <h3 styleName="subtitle">
-      <strong>Goods list</strong>
+      <strong>{t.goodsList}</strong>
     </h3>
     <div styleName="addItem">
       <Button wireframe big onClick={onAdd} dataTest="addProductButton">
-        Add item
+        {t.addItem}
       </Button>
     </div>
   </header>
