@@ -9,6 +9,8 @@ import { uploadFile, log, convertSrc } from 'utils';
 
 import './Photos.scss';
 
+import t from './i18n';
+
 type StateType = {
   isMainPhotoUploading: boolean,
   isAdditionalPhotoUploading: boolean,
@@ -83,7 +85,7 @@ class Photos extends Component<PropsType, StateType> {
               buttonHeight={15}
               buttonWidth={15}
               buttonIconType="camera"
-              buttonLabel="Add main photo"
+              buttonLabel={t.labelAddMainPhoto}
               loading={isMainPhotoUploading}
               dataTest="productPhotosUploader"
             />
@@ -115,7 +117,7 @@ class Photos extends Component<PropsType, StateType> {
               buttonHeight={10}
               buttonWidth={10}
               buttonIconType="camera"
-              buttonLabel="Add photo"
+              buttonLabel={t.labelAddPhoto}
               loading={isAdditionalPhotoUploading}
               dataTest="productPhotosUploader"
             />

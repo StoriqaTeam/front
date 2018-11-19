@@ -5,14 +5,16 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
+  labelAddMainPhoto: string,
   labelAddPhoto: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
+    labelAddMainPhoto: 'Add main photo',
     labelAddPhoto: 'Add photo',
-  },
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
