@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { isEmpty, map, pathOr } from 'ramda';
+// $FlowIgnoreMe
 import ImageLoader from 'libs/react-image-loader';
 
 import { Checkbox } from 'components/common/Checkbox';
@@ -11,6 +12,8 @@ import { Col } from 'layout';
 import { convertSrc, formatPrice, getNameText, currentCurrency } from 'utils';
 
 import './ProductsTableRow.scss';
+
+import t from './i18n';
 
 type PropsType = {
   item: {
@@ -117,7 +120,7 @@ const ProductsTableRow = ({
             </div>
           </div>
         ) : (
-          'No characteristics'
+          t.noCharacteristic
         )}
       </Col>
       <Col size={4} sm={4} md={3} lg={1} xl={1}>
