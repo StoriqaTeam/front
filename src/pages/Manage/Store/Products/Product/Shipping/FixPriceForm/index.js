@@ -5,20 +5,20 @@ import classNames from 'classnames';
 import { head, assoc, isEmpty, find, propEq } from 'ramda';
 
 import { InputPrice, Button } from 'components/common';
-import Countries from './Countries';
-import ShippingLocalSelect from './ShippingLocalSelect';
-import ShippingInterSelect from './ShippingInterSelect';
+import Countries from '../Countries';
+import ShippingLocalSelect from '../ShippingLocalSelect';
+import ShippingInterSelect from '../ShippingInterSelect';
 import {
   convertCountriesToArrCodes,
   convertCountriesToStringLabels,
-} from './utils';
+} from '../utils';
 
 import type {
   ServiceType,
   CompanyType,
   ShippingCountriesType,
   FilledCompanyType,
-} from './types';
+} from '../types';
 
 import './FixPriceForm.scss';
 
