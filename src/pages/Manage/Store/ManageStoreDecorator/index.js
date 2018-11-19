@@ -10,7 +10,7 @@ import { AppContext } from 'components/App';
 
 import { uploadFile } from 'utils';
 
-import Menu from './ManageStoreMenu';
+import Menu from '../ManageStoreMenu';
 
 import './ManageStoreDecorator.scss';
 

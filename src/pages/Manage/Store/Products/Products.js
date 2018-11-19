@@ -22,6 +22,8 @@ import { ProductsHeader, ProductsTableHeader, ProductsTableRow } from './index';
 
 import './Products.scss';
 
+import t from './i18n';
+
 type PropsType = {
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
@@ -74,8 +76,8 @@ class Products extends PureComponent<PropsType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -86,14 +88,14 @@ class Products extends PureComponent<PropsType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Deleted!',
+          text: t.deleted,
           link: { text: '' },
         });
       },
@@ -101,8 +103,8 @@ class Products extends PureComponent<PropsType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     });
@@ -136,7 +138,7 @@ class Products extends PureComponent<PropsType> {
         <ProductsHeader onAdd={this.addProduct} />
         <ProductsTableHeader />
         {isEmpty(products) ? (
-          <div styleName="emptyProductsBlock">No products</div>
+          <div styleName="emptyProductsBlock">{t.noProducts}</div>
         ) : (
           map(
             item => (
@@ -159,7 +161,7 @@ class Products extends PureComponent<PropsType> {
               onClick={this.productsRefetch}
               dataTest="storeProductsLoadMoreButton"
             >
-              Load more
+              {t.loadMore}
             </Button>
           </div>
         )}
