@@ -5,16 +5,22 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  goodsList: string,
-  addItem: string,
+  name: string,
+  category: string,
+  price: string,
+  cashback: string,
+  characteristics: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    goodsList: 'Goods List',
-    addItem: 'Add item',
-  },
+    name: 'Name',
+    category: 'Category',
+    price: 'Price',
+    cashback: 'Cashback',
+    characteristics: 'Characteristics',
+  }
 };
 
 const validate = (json: {}, verbose: boolean = false): boolean => {
