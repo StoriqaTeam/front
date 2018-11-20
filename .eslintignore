@@ -1,4 +1,5 @@
 config/*.js
+build-config/*.js
 scripts/*.js
 libs/*.js
 flow-typed/
