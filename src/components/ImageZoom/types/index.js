@@ -8,9 +8,11 @@ type OnTouchMoveEventType = SyntheticTouchEvent<ZoomElementType>;
 
 export type ZoomEventType = OnMouseMoveEventType | OnTouchMoveEventType;
 
-export type CoordinateType = {
-  pageX: number,
+export type OffsetType = $Shape<{
+  offsetY: number,
+  offsetX: number,
   pageY: number,
-};
+  pageX: number,
+}>;
 
-export type ZoomFnType = ZoomEventType => CoordinateType;
+export type ZoomFnType = ZoomEventType => OffsetType;
