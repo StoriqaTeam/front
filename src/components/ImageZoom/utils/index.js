@@ -21,23 +21,26 @@ const coords = ['X', 'Y'];
 
 const mapToCoords = fn => map(fn)(coords);
 
+const offset = (coord: string): string => `offset${coord}`;
 const page = (coord: string): string => `page${coord}`;
 
 /**
  * @desc gets the pageX/Y properties from MouseEvent or TouchEvent
  */
 const getPageCoords: ZoomFnType = evt => {
-  const pageProp = (coord: string) =>
-    propSatisfies(complement(isNil), page(coord));
+  const offsetProp = (coord: string) =>
+    propSatisfies(complement(isNil), offset(coord));
 
-  const hasPage: ZoomEventType => boolean = allPass(mapToCoords(pageProp));
+  const hasOffset: ZoomEventType => boolean = allPass(mapToCoords(offsetProp));
 
+  // TODO: apply transducer
+  const getOffset: ZoomFnType = e => pick(map(offset)(coords))(e);
   const getPage: ZoomFnType = e => pick(map(page)(coords))(e);
 
-  const getPageTouch: ZoomFnType = e =>
+  const getOffsetTouch: ZoomFnType = e =>
     compose(getPage, path(['changedTouches', '0']))(e);
 
-  return ifElse(hasPage, getPage, getPageTouch)(evt);
+  return ifElse(hasOffset, getOffset, getOffsetTouch)(evt.nativeEvent);
 };
 
 /**
@@ -57,14 +60,14 @@ export const grabImage = ({ currentTarget }: ZoomEventType): string => {
  * @desc calculates the position where the user is 'mouse hovering' or 'touching'
  */
 export const calcPosition = (evt: ZoomEventType): string => {
+  const elm = evt.currentTarget;
   // avoid page scrolling when user touches the screen
   if (isMobileBrowser()) {
     evt.preventDefault();
   }
-  const { pageX, pageY } = getPageCoords(evt);
-  const { currentTarget } = evt;
-  const { left, top, width, height } = currentTarget.getBoundingClientRect();
-  const x = (pageX - left) / width * 100;
-  const y = (pageY - top) / height * 100;
+  const result = getPageCoords(evt);
+  const x = (result.offsetX || result.pageX) / elm.offsetWidth * 100;
+  const y = (result.offsetY || result.pageY) / elm.offsetHeight * 100;
+
   return `${x}% ${y}%`;
 };
