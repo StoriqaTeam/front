@@ -766,7 +766,7 @@ const routes = (
         Component={Store}
         query={graphql`
           query routes_Store_Query($storeId: Int!) {
-            store(id: $storeId) {
+            store(id: $storeId, visibility: "active") {
               id
               rawId
               logo
