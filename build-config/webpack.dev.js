@@ -1,10 +1,15 @@
+const path = require('path');
+const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 // const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 // const { DllBundlesPlugin } = require('webpack-dll-bundles-plugin');
 
 const paths = require('./paths');
 
 const commonConfig = require('./webpack.common');
+
 
 module.exports = webpackMerge(commonConfig, {
 
@@ -38,10 +43,22 @@ module.exports = webpackMerge(commonConfig, {
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: 'static/js/[name].chunk.js',
       // This is the URL that app is served from. We use "/" in development.
-      publicPath: publicPath,
+      publicPath: '/',
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: info =>
         path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
+    plugins: [
+      // for HMR
+      new webpack.HotModuleReplacementPlugin(),
+      // for HMR
+      new webpack.NoEmitOnErrorsPlugin(),
+
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: 'style.css',
+      })
+    ],
 
   });

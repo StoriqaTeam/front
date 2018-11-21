@@ -1,10 +1,20 @@
+const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const postcssPresetEnv = require('postcss-preset-env');
+// const ReactDevUtils = require('react-dev-utils-for-webpack4');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+
 // const atImport = require('postcss-import');
 
+const getClientEnvironment = require('./env');
+
+const publicUrl = '';
+// Get environment variables to inject into our app.
+const env = getClientEnvironment(publicUrl);
 const paths = require('./paths');
 
 module.exports = {
@@ -79,8 +89,14 @@ module.exports = {
           },
           {
             loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: true,
+              sourceMap: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+            },
           },
-          'sass-loader',
+         
           {
             loader: 'postcss-loader',
             options: {
@@ -89,6 +105,7 @@ module.exports = {
               ],
             },
           },
+           'sass-loader',
         ],
       },
       {
@@ -112,6 +129,21 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    // Makes some environment variables available in index.html.
+    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+    // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    // In development, this will be an empty string.
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
+    // Makes some environment variables available to the JS code, for example:
+    // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
+    // It is absolutely essential that NODE_ENV was set to production here.
+    // Otherwise React will be compiled in the very slow development mode.
+    new webpack.DefinePlugin({
+      ...env.stringified,
+      'process.env.BROWSER': JSON.stringify(true),
+    }),
+  ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {
