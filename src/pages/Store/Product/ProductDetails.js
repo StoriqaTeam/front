@@ -18,6 +18,7 @@ import {
   ProductQuantity,
   ProductSize,
   ProductThumbnails,
+  Delivery,
 } from './index';
 
 import { sortByProp } from './utils';
@@ -159,6 +160,7 @@ class ProductDetails extends Component<PropsType, StateType> {
       onChangeQuantity,
       cartQuantity,
     } = this.props;
+    console.log('---this.props', this.props);
     const { priceUsd } = this.state;
     return (
       <ProductContext.Consumer>
@@ -170,6 +172,7 @@ class ProductDetails extends Component<PropsType, StateType> {
             </div>
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
             <p styleName="productDescription">{productDescription}</p>
+            <Delivery {...this.props} />
             <div styleName="line" />
             <div styleName="widgets">
               {sortByProp('id')(widgets).map(this.generateWidget)}

@@ -388,6 +388,7 @@ class EditProduct extends Component<PropsType, StateType> {
           isLoadingShipping: false,
         });
         log.debug({ response, errors });
+        console.log('---response, errors', response, errors);
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });

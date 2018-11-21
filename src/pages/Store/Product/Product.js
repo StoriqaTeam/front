@@ -343,6 +343,7 @@ class Product extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
     const { me, baseProduct } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {
@@ -412,6 +413,7 @@ class Product extends Component<PropsType, StateType> {
                         productVariant={productVariant}
                         cartQuantity={cartQuantity}
                         onChangeQuantity={this.handleChangeQuantity}
+                        {...this.props}
                       >
                         <ProductButtons
                           onAddToCart={() =>
@@ -448,6 +450,8 @@ export default createFragmentContainer(
   withShowAlert(withErrorBoundary(Page(Product, true))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
+      ...Delivery_baseProduct
+      isShippingAvailable
       id
       rawId
       categoryId
