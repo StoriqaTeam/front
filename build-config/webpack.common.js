@@ -17,6 +17,11 @@ const publicUrl = '';
 const env = getClientEnvironment(publicUrl);
 const paths = require('./paths');
 
+const handler = (percentage, message, ...args) => {
+  // e.g. Output each progress message directly to the console:
+  console.info(percentage, message, ...args);
+};
+
 module.exports = {
 
   resolve: {
@@ -70,17 +75,17 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-          },
-        ],
-      },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     {
+      //       loader: 'style-loader',
+      //     },
+      //     {
+      //       loader: 'css-loader',
+      //     },
+      //   ],
+      // },
       {
         test: /\.(s*)css$/,
         use: [
@@ -130,6 +135,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.ProgressPlugin(handler),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
