@@ -26,7 +26,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
       <p>
         {t.checkHere}{' '}
         <a
-          href="https://beta.storiqa.com/terms_of_use.pdf"
+          href="/terms_of_use.pdf"
           target="_blank"
           rel="noopener noreferrer"
           styleName="link"
@@ -35,7 +35,7 @@ const Policy = ({ isPrivacyChecked, isTermsChecked, onCheck }: PropsType) => (
         </a>{' '}
         {t.and}{' '}
         <a
-          href="https://beta.storiqa.com/privacy_policy.pdf"
+          href="/privacy_policy.pdf"
           target="_blank"
           rel="noopener noreferrer"
           styleName="link"

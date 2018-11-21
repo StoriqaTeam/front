@@ -66,8 +66,8 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '1',
-        href: 'https://beta.storiqa.com/privacy_policy.pdf',
-        name: t.privacyPolicy,
+        href: '/privacy_policy.pdf',
+        name: 'Privacy Policy',
       },
       {
         id: '2',
@@ -76,8 +76,8 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '3',
-        href: 'https://beta.storiqa.com/terms_of_use.pdf',
-        name: t.termsOfUse,
+        href: '/terms_of_use.pdf',
+        name: 'Terms of Use',
       },
     ],
   };
