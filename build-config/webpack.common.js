@@ -2,28 +2,38 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 const postcssPresetEnv = require('postcss-preset-env');
-// const ReactDevUtils = require('react-dev-utils-for-webpack4');
+
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
-// const atImport = require('postcss-import');
+const atImport = require('postcss-import');
 
+const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
 const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
-const paths = require('./paths');
 
 const handler = (percentage, message, ...args) => {
   // e.g. Output each progress message directly to the console:
   console.info(percentage, message, ...args);
 };
 
-module.exports = {
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(
+  require('./webpack-isomorphic-tools-configuration'),
+).development(process.env.NODE_ENV !== 'production');
 
+const devMode = process.env.NODE_ENV !== 'production'
+
+module.exports = {
+  
+  mode: 'none',
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
     // We placed these paths second because we want `node_modules` to "win"
@@ -56,84 +66,129 @@ module.exports = {
   },
 
   module: {
+    strictExportPresence: true,
     // rules for modules (configure loaders, parser options, etc.)
     rules: [
+      // TODO: Disable require.ensure as it's not a standard language feature.
+      // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
+      // { parser: { requireEnsure: false } },
+
+      // First, run the linter.
+      // It's important to do this before Babel processes the JS.
       {
-        test: /\.jsx?$/, // both .js and .jsx
-        loader: 'eslint-loader',
+        test: /\.(js|jsx|mjs)$/,
         enforce: 'pre',
-        options: {
-          fix: false,
-        },
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: [/node_modules/],
         use: [
           {
-            loader: 'babel-loader',
+            options: {
+              formatter: eslintFormatter,
+              eslintPath: require.resolve('eslint'),
+              emitWarning: true,
+            },
+            loader: require.resolve('eslint-loader'),
           },
         ],
+        include: paths.appSrc,
       },
-      // {
-      //   test: /\.css$/,
-      //   use: [
-      //     {
-      //       loader: 'style-loader',
-      //     },
-      //     {
-      //       loader: 'css-loader',
-      //     },
-      //   ],
-      // },
       {
-        test: /\.(s*)css$/,
-        use: [
+        // "oneOf" will traverse all following loaders until one will
+        // match the requirements. When no loader matches it will fall
+        // back to the "file" loader at the end of the loader list.
+        oneOf: [
+          // "url" loader works like "file" loader except that it embeds assets
+          // smaller than specified limit in bytes as data URLs to avoid requests.
+          // A missing `test` is equivalent to a match.
           {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
+            test: webpackIsomorphicToolsPlugin.regularExpression('images'),
+            loader: require.resolve('url-loader'),
             options: {
-              importLoaders: 1,
-              modules: true,
-              sourceMap: true,
-              localIdentName: '[name]__[local]___[hash:base64:5]',
+              limit: 10000,
+              name: 'static/media/[name].[hash:8].[ext]',
             },
           },
-         
+          // Process JS with Babel.
           {
-            loader: 'postcss-loader',
+            test: /\.(js|jsx|mjs)$/,
+            include: paths.appSrc,
+            exclude: [/node_modules/],
+            loader: require.resolve('babel-loader'),
             options: {
-              plugins: [
-                postcssPresetEnv(),
-              ],
+              // This is a feature of `babel-loader` for webpack (not Babel itself).
+              // It enables caching results in ./node_modules/.cache/babel-loader/
+              // directory for faster rebuilds.
+              cacheDirectory: true,
             },
           },
-           'sass-loader',
-        ],
-      },
-      {
-        test: /\.(png|jpe?g|gif)$/,
-        use: [
           {
-            loader: 'file-loader?name=assets/img/[name].[ext]',
+            test: /\.(sa|sc|c)ss$/,
+            use: [
+              {
+                loader: 'style-loader', 
+                options: {
+                  insertInto: () => {
+                    console.log('============ INSERT INTO ===================')
+                    return document.querySelector("head")
+                  },
+                },
+              },
+              {
+                loader: 'css-loader', // translates CSS into CommonJS
+                options: {
+                  importLoaders: 1,
+                  modules: true,
+                  sourceMap: true,
+                  localIdentName: '[name]__[local]___[hash:base64:5]',
+                },
+              },
+              {
+                loader: 'postcss-loader',
+                options: {
+                  plugins: [
+                  
+                    postcssPresetEnv(),
+                    atImport(),
+                  ],
+                },
+              },
+              {
+                loader: 'sass-loader',
+              }
+            ],
+          },
+          // "file" loader makes sure those assets get served by WebpackDevServer.
+          // When you `import` an asset, you get its (virtual) filename.
+          // In production, they would get copied to the `build` folder.
+          // This loader doesn't use a "test" so it will catch all modules
+          // that fall through the other loaders.
+          {
+            // Exclude `js` files to keep "css" loader working as it injects
+            // it's runtime that would otherwise processed through "file" loader.
+            // Also exclude `html` and `json` extensions so they get processed
+            // by webpacks internal loaders.
+            exclude: [/\.js$/, /\.html$/, /\.json$/],
+            loader: 'file-loader',
+            options: {
+              name: 'static/media/[name].[hash:8].[ext]',
+            },
           },
         ],
       },
-      {
-        test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/', // where the fonts will go
-            // publicPath: '../' // override the default path
-          },
-        }],
-      },
+      // ** STOP ** Are you adding a new loader?
+      // Make sure to add the new loader(s) before the "file" loader.
     ],
   },
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       styles: {
+  //         name: 'styles',
+  //         test: /\.css$/,
+  //         chunks: 'all',
+  //         enforce: true
+  //       }
+  //     }
+  //   }
+  // },
   plugins: [
     new webpack.ProgressPlugin(handler),
     // Makes some environment variables available in index.html.
@@ -149,6 +204,13 @@ module.exports = {
       ...env.stringified,
       'process.env.BROWSER': JSON.stringify(true),
     }),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: '[name].css',
+      // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+    }),
+    webpackIsomorphicToolsPlugin,
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

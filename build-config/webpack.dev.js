@@ -10,12 +10,11 @@ const paths = require('./paths');
 
 const commonConfig = require('./webpack.common');
 
-
 module.exports = webpackMerge(commonConfig, {
 
-    mode: 'development',
-
-    context: require('path').resolve(__dirname, '..'),
+    mode: 'none',
+    
+    //context: require('path').resolve(__dirname, '..'),
     // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
     // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
     devtool: 'cheap-module-source-map',
@@ -53,13 +52,6 @@ module.exports = webpackMerge(commonConfig, {
       new webpack.HotModuleReplacementPlugin(),
       // for HMR
       new webpack.NoEmitOnErrorsPlugin(),
-
-      new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // both options are optional
-        filename: '[name].css',
-        chunkFilename: '[id].css',
-      }),
     ],
 
   });
