@@ -7,7 +7,7 @@ import { Icon } from 'components/Icon';
 import { Checkbox } from 'components/common/Checkbox';
 import { Button } from 'components/common';
 
-import type { AvailableDeliveryPackageType } from './DeliveryCompaniesSelect.utils';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 
 import './Dropdown.scss';
 

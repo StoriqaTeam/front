@@ -15,6 +15,7 @@ import {
   has,
   prop,
   pathOr,
+  find,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
@@ -25,9 +26,10 @@ import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
 import { IncrementInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { extractText, isEmpty, log } from 'utils';
+import { extractText, isEmpty, log, convertCountries } from 'utils';
 
-import type { AddressFullType } from 'types';
+import setDeliveryPackageInCartMutation from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/mutations/SetDeliveryPackageInCart';
+
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import {
@@ -56,6 +58,8 @@ import type {
   WidgetType,
   TabType,
   TranslationType,
+  DeliveryAddress,
+  DeliveryDataType,
 } from './types';
 
 import './Product.scss';
@@ -67,11 +71,7 @@ type PropsType = {
     phone: ?string,
     firstName: string,
     lastName: string,
-    deliveryAddressesFull: ?Array<{
-      id: string,
-      address: AddressFullType,
-      isPriority: boolean,
-    }>,
+    deliveryAddressesFull: ?Array<DeliveryAddress>,
   },
   showAlert: (input: AddAlertInputType) => void,
   baseProduct: ProductType,
@@ -94,6 +94,7 @@ type StateType = {
   isAddToCart: boolean,
   isLoading: boolean,
   cartQuantity: number,
+  deliveryData: DeliveryDataType,
 };
 
 class Product extends Component<PropsType, StateType> {
@@ -144,6 +145,11 @@ class Product extends Component<PropsType, StateType> {
       isAddToCart: false,
       isLoading: false,
       cartQuantity: 1,
+      deliveryData: {
+        deliveryPackage: null,
+        country: null,
+        deliveryPackages: [],
+      },
     };
   }
 
@@ -155,9 +161,18 @@ class Product extends Component<PropsType, StateType> {
     this.setState({ cartQuantity: quantity });
   };
 
-  handleAddToCart = (id: number, isBuyNow?: boolean) => {
+  handleChangeDeliveryData = (deliveryData: DeliveryDataType) => {
+    this.setState({ deliveryData });
+  };
+
+  handleAddToCart = (id: number) => {
     this.setState({ unselectedAttr: null });
-    const { widgets, selectedAttributes, cartQuantity } = this.state;
+    const {
+      widgets,
+      selectedAttributes,
+      cartQuantity,
+      deliveryData,
+    } = this.state;
     const unselectedAttr = isNoSelected(
       sortByProp('id')(widgets),
       selectedAttributes,
@@ -185,12 +200,26 @@ class Product extends Component<PropsType, StateType> {
               text: 'Product added to cart!',
               link: { text: '' },
             });
-            this.setState({ isAddToCart: true }, () => {
-              if (isBuyNow) {
-                this.setState({ isLoading: false });
-                this.props.router.push('/checkout');
-              }
-            });
+            this.setState({ isAddToCart: true });
+
+            const shippingId = deliveryData.deliveryPackage
+              ? deliveryData.deliveryPackage.shippingId
+              : null;
+
+            if (shippingId) {
+              setDeliveryPackageInCartMutation({
+                environment: this.context.environment,
+                variables: {
+                  input: {
+                    clientMutationId: '',
+                    productId: id,
+                    shippingId,
+                  },
+                },
+              })
+                .then(() => Promise.resolve(true))
+                .catch(err => Promise.reject(err));
+            }
           }
         },
         onError: error => {
@@ -306,6 +335,7 @@ class Product extends Component<PropsType, StateType> {
       selectedAttributes,
       cartQuantity,
       productVariant,
+      deliveryData,
     } = this.state;
     const unselectedAttr = isNoSelected(
       sortByProp('id')(widgets),
@@ -332,7 +362,11 @@ class Product extends Component<PropsType, StateType> {
       this.props.router.push(
         `/buy-now?product=${baseProductRawId}&variant=${
           productVariant.rawId
-        }&quantity=${quantity}`,
+        }&quantity=${quantity}${
+          deliveryData.deliveryPackage
+            ? `&delivery=${deliveryData.deliveryPackage.shippingId}`
+            : ''
+        }`,
       );
     } else {
       this.setState({ unselectedAttr });
@@ -343,8 +377,7 @@ class Product extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
-    const { me, baseProduct } = this.props;
+    const { me, baseProduct, router } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {
       return <div styleName="productNotFound">Product Not Found</div>;
@@ -353,16 +386,13 @@ class Product extends Component<PropsType, StateType> {
       return <div styleName="productNotFound">Store Not Found</div>;
     }
     const {
-      baseProduct: {
-        name,
-        categoryId,
-        shortDescription,
-        longDescription,
-        rating,
-        store,
-      },
-      router,
-    } = this.props;
+      name,
+      categoryId,
+      shortDescription,
+      longDescription,
+      rating,
+      store,
+    } = baseProduct;
     const {
       widgets,
       productVariant,
@@ -371,11 +401,21 @@ class Product extends Component<PropsType, StateType> {
       isAddToCart,
       isLoading,
       cartQuantity,
+      deliveryData,
     } = this.state;
     const description = extractText(shortDescription, 'EN', 'No Description');
+    let userAddress = null;
+    if (me) {
+      const { deliveryAddressesFull } = me;
+      if (deliveryAddressesFull && !isEmpty(deliveryAddressesFull)) {
+        userAddress =
+          find(propEq('isPriority', true))(deliveryAddressesFull) ||
+          head(deliveryAddressesFull);
+      }
+    }
     return (
       <AppContext.Consumer>
-        {({ categories }) => (
+        {({ categories, directories }) => (
           <ProductContext.Provider value={{ store, productVariant, rating }}>
             <div styleName="container">
               {has('children')(categories) && !isNil(categories.children) ? (
@@ -413,7 +453,11 @@ class Product extends Component<PropsType, StateType> {
                         productVariant={productVariant}
                         cartQuantity={cartQuantity}
                         onChangeQuantity={this.handleChangeQuantity}
-                        {...this.props}
+                        userAddress={userAddress}
+                        baseProductRawId={baseProduct.rawId}
+                        countries={convertCountries(directories.countries)}
+                        onChangeDeliveryData={this.handleChangeDeliveryData}
+                        deliveryData={deliveryData}
                       >
                         <ProductButtons
                           onAddToCart={() =>
@@ -450,7 +494,6 @@ export default createFragmentContainer(
   withShowAlert(withErrorBoundary(Page(Product, true))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
-      ...Delivery_baseProduct
       isShippingAvailable
       id
       rawId
