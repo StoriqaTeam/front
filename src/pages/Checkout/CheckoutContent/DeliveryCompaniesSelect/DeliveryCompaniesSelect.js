@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import { SpinnerCircle, Button } from 'components/common';
 import { log } from 'utils';
 
-import { fetchAvailableDeliveryPackages } from './DeliveryCompaniesSelect.utils';
-import Dropdown from './Dropdown';
+import { fetchAvailableShippingForUser } from 'relay/queries';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 
-import type { AvailableDeliveryPackageType } from './DeliveryCompaniesSelect.utils';
+import Dropdown from './Dropdown';
 
 import './DeliveryCompaniesSelect.scss';
 
@@ -77,7 +77,7 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
 
   fetchData = () => {
     this.setState({ isFetching: true, isFetchingError: false });
-    fetchAvailableDeliveryPackages({
+    fetchAvailableShippingForUser({
       destinationCountry: this.props.country,
       baseProductId: this.props.baseProductId,
       environment: this.context.environment,

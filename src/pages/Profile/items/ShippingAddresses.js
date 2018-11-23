@@ -33,6 +33,7 @@ type DeliveryAddressesFullType = {
   userId: number,
   address: {
     country: string,
+    countryCode: string,
     administrativeAreaLevel1: ?string,
     administrativeAreaLevel2: ?string,
     political: ?string,
@@ -59,6 +60,7 @@ type FormType = {
   administrativeAreaLevel1: ?string,
   administrativeAreaLevel2: ?string,
   country: string,
+  countryCode: string,
   locality: ?string,
   political: ?string,
   postalCode: string,
@@ -79,6 +81,7 @@ const resetForm = {
   administrativeAreaLevel1: '',
   administrativeAreaLevel2: '',
   country: '',
+  countryCode: '',
   locality: '',
   political: '',
   postalCode: '',
@@ -102,6 +105,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     const { form } = this.state;
     const {
       country,
+      countryCode,
       administrativeAreaLevel1,
       administrativeAreaLevel2,
       political,
@@ -115,7 +119,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
 
     const availabilityErrors = {};
 
-    if (!country || !postalCode) {
+    if (!country || !postalCode || !countryCode) {
       if (!country)
         assoc('country', 'Country is required parameter', availabilityErrors);
       if (!postalCode)
@@ -138,6 +142,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
       clientMutationId: '',
       addressFull: {
         country,
+        countryCode,
         administrativeAreaLevel1: administrativeAreaLevel1 || null,
         administrativeAreaLevel2: administrativeAreaLevel2 || null,
         political: political || null,
@@ -496,6 +501,7 @@ export default createFragmentContainer(
         isPriority
         address {
           country
+          countryCode
           administrativeAreaLevel1
           administrativeAreaLevel2
           political

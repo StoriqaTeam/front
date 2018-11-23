@@ -255,7 +255,10 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                 filteredProductsArr,
               )}
           </Row>
-          <Modal showModal={deleteId} onClose={this.handleOnCloseDelete}>
+          <Modal
+            showModal={Boolean(deleteId)}
+            onClose={this.handleOnCloseDelete}
+          >
             <div styleName="deleteWrapper">
               <div styleName="deleteContent">
                 <div styleName="title">Delete your product?</div>

@@ -9,7 +9,7 @@ import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Container, Row, Col } from 'layout';
 import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
 
-import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 
 import CartProduct from './CartProduct';
 import type { CalculateBuyNowType } from '../BuyNow';
@@ -69,6 +69,7 @@ type PropsType = {
   isShippingAvailable: boolean,
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
+  shippingId: ?number,
 };
 
 class CartStore extends PureComponent<PropsType> {
@@ -90,6 +91,7 @@ class CartStore extends PureComponent<PropsType> {
       isShippingAvailable,
       onChangeDelivery,
       deliveryPackage,
+      shippingId,
     } = this.props;
     return (
       <div styleName="container">
@@ -105,6 +107,7 @@ class CartStore extends PureComponent<PropsType> {
             isShippingAvailable={isShippingAvailable}
             onChangeDelivery={onChangeDelivery}
             deliveryPackage={deliveryPackage}
+            shippingId={shippingId}
           />
         </div>
         <div styleName="footer">

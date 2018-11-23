@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+import type { AddressFullType, SelectItemType } from 'types';
+
 export type TranslationType = {
   lang: string,
   text: string,
@@ -109,4 +111,26 @@ export type TabType = {
   id: string,
   label: string,
   content: React.Node | React.Component<{}, {}> | string,
+};
+
+export type DeliveryAddress = {
+  id: string,
+  address: AddressFullType,
+  isPriority: boolean,
+};
+
+export type PackageType = {
+  companyPackageRawId: number,
+  currency: string,
+  id: string,
+  name: string,
+  logo: ?string,
+  price: number,
+  shippingId: number,
+};
+
+export type DeliveryDataType = {
+  deliveryPackage: ?PackageType,
+  country: ?SelectItemType,
+  deliveryPackages: Array<PackageType>,
 };
