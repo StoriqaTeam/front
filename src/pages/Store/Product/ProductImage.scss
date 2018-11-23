@@ -104,11 +104,7 @@
 }
 
 .noThumbnailsWrapper {
-  max-width: 12rem;
   display: none;
-  @media (min-width: $lg) {
-    display: block;
-  }
 }
 
 .noImage {
