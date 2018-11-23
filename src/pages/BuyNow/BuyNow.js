@@ -32,9 +32,9 @@ import {
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { AddressFullType, SelectItemType } from 'types';
-import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
 import type { MutationParamsType as BuyNowMutationParamsType } from 'relay/mutations/BuyNowMutation';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 import type { BuyNow_baseProduct as BuyNowBaseProductType } from './__generated__/BuyNow_baseProduct.graphql';
 
 import Header from './Header';
@@ -95,6 +95,7 @@ type StateType = {
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
   isLoadingReplaceAddressButton: boolean,
+  shippingId: ?number,
 };
 
 type PropsType = {
@@ -128,6 +129,8 @@ class BuyNow extends Component<PropsType, StateType> {
     const { deliveryAddressesFull } = me;
     const addresses = addressesToSelect(deliveryAddressesFull);
     const selectedAddress = this.getDefaultSelectedDeliveryAddress();
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
 
     this.state = {
       step: 1,
@@ -155,6 +158,7 @@ class BuyNow extends Component<PropsType, StateType> {
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
       isLoadingReplaceAddressButton: false,
+      shippingId: parseFloat(queryParams.delivery) || null,
     };
   }
 
@@ -707,6 +711,7 @@ class BuyNow extends Component<PropsType, StateType> {
       errors,
       deliveryPackage,
       isLoadingReplaceAddressButton,
+      shippingId,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -896,6 +901,7 @@ class BuyNow extends Component<PropsType, StateType> {
                         baseProductId={baseProduct.rawId}
                         onChangeDelivery={this.handleChangeDelivery}
                         deliveryPackage={deliveryPackage}
+                        shippingId={shippingId}
                       />
                     </div>
                   </div>

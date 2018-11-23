@@ -17,6 +17,7 @@ type AvailableDeliveryPackageType = {
   companyPackageRawId: number,
   name: string,
   price: number,
+  logo: ?string,
   currency: string,
   shippingId: number,
 };
@@ -25,7 +26,7 @@ export type { AvailableDeliveryPackageType };
 type ReturnType = Array<AvailableDeliveryPackageType>;
 
 const AVAILABLE_PACKAGES_FOR_USER = graphql`
-  query DeliveryCompaniesSelect_Query(
+  query fetchAvailableShippingForUser_Query(
     $userCountry: String!
     $baseProductId: Int!
   ) {
@@ -37,6 +38,7 @@ const AVAILABLE_PACKAGES_FOR_USER = graphql`
         id
         name
         price
+        logo
         companyPackageRawId
         shippingId
       }
@@ -44,7 +46,7 @@ const AVAILABLE_PACKAGES_FOR_USER = graphql`
   }
 `;
 
-const fetchAvailableDeliveryPackages = (
+const fetchAvailableShippingForUser = (
   input: InputType,
 ): Promise<ReturnType> => {
   log.debug();
@@ -59,13 +61,14 @@ const fetchAvailableDeliveryPackages = (
       response.availableShippingForUser.packages instanceof Array
     ) {
       availablePackages = map(item => {
-        const { id, companyPackageRawId, name, price, shippingId } = item;
+        const { id, companyPackageRawId, name, price, shippingId, logo } = item;
         if (!isNil(id) && !isNil(name) && !isNil(price)) {
           return {
             id,
             companyPackageRawId,
             name,
             price,
+            logo,
             shippingId,
             currency: 'STQ',
           };
@@ -80,4 +83,4 @@ const fetchAvailableDeliveryPackages = (
   });
 };
 
-export { fetchAvailableDeliveryPackages };
+export default fetchAvailableShippingForUser;
