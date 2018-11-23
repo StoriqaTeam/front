@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 // const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 // const { DllBundlesPlugin } = require('webpack-dll-bundles-plugin');
@@ -52,6 +54,15 @@ module.exports = webpackMerge(commonConfig, {
       new webpack.HotModuleReplacementPlugin(),
       // for HMR
       new webpack.NoEmitOnErrorsPlugin(),
+       // Watcher doesn't work well if you mistype casing in a path so we use
+      // a plugin that prints an error when you attempt to do this.
+      // See https://github.com/facebookincubator/create-react-app/issues/240
+      new CaseSensitivePathsPlugin(),
+      // If you require a missing module and then `npm install` it, you still have
+      // to restart the development server for Webpack to discover it. This plugin
+      // makes the discovery automatic so you don't have to restart.
+      // See https://github.com/facebookincubator/create-react-app/issues/186
+      new WatchMissingNodeModulesPlugin(paths.appNodeModules),
     ],
 
   });

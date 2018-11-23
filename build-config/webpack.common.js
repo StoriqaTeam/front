@@ -185,6 +185,13 @@ module.exports = {
       ...env.stringified,
       'process.env.BROWSER': JSON.stringify(true),
     }),
+    // Moment.js is an extremely popular library that bundles large locale files
+    // by default due to how Webpack interprets its code. This is a practical
+    // solution that requires the user to opt into importing specific locales.
+    // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
+    // You can remove this if you don't use Moment.js:
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // extract styles in a single file
     new MiniCssExtractPlugin({
       filename: 'styles.css',
     }),
