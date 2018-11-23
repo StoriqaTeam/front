@@ -95,7 +95,7 @@ export default (
             <UserData environment={environment}>
               {({ isShopCreated, userData, totalCount }) => (
                 <div styleName="container">
-                  {process.env.NODE_ENV === 'production' && (
+                  {process.env.NODE_ENV !== 'production' && (
                     <HeaderDisclaimer />
                   )}
                   {responsive ? (
