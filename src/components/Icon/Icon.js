@@ -92,11 +92,11 @@ const iconsMap = {
   burgerMenu: <BurgerMenu />,
   camera: <Camera />,
   cameraPlus: <CameraPlus />,
+  //
   cart: <Cart />,
   cats: <Cats />,
   chat: <Chat />,
   closeArrow: <CloseArrow />,
-  //
   controls: <Controls />,
   cross: <Cross />,
   crossWhite: <CrossWhite />,
