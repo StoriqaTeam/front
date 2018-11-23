@@ -123,16 +123,10 @@ module.exports = {
             test: /\.(sa|sc|c)ss$/,
             use: [
               {
-                loader: 'style-loader', 
-                options: {
-                  insertInto: () => {
-                    console.log('============ INSERT INTO ===================')
-                    return document.querySelector("head")
-                  },
-                },
+                loader: MiniCssExtractPlugin.loader,
               },
               {
-                loader: 'css-loader', // translates CSS into CommonJS
+                loader: 'css-loader',
                 options: {
                   importLoaders: 1,
                   modules: true,
@@ -144,7 +138,6 @@ module.exports = {
                 loader: 'postcss-loader',
                 options: {
                   plugins: [
-                  
                     postcssPresetEnv(),
                     atImport(),
                   ],
@@ -177,18 +170,6 @@ module.exports = {
       // Make sure to add the new loader(s) before the "file" loader.
     ],
   },
-  // optimization: {
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       styles: {
-  //         name: 'styles',
-  //         test: /\.css$/,
-  //         chunks: 'all',
-  //         enforce: true
-  //       }
-  //     }
-  //   }
-  // },
   plugins: [
     new webpack.ProgressPlugin(handler),
     // Makes some environment variables available in index.html.
@@ -205,10 +186,7 @@ module.exports = {
       'process.env.BROWSER': JSON.stringify(true),
     }),
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: '[name].css',
-      // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      filename: 'styles.css',
     }),
     webpackIsomorphicToolsPlugin,
   ],
