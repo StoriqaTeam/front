@@ -14,7 +14,7 @@ const commonConfig = require('./webpack.common');
 
 module.exports = webpackMerge(commonConfig, {
 
-    mode: 'none',
+    mode: 'development',
     
     //context: require('path').resolve(__dirname, '..'),
     // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
