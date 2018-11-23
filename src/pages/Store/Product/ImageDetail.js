@@ -1,6 +1,8 @@
-// @flow
+// @flow strict
 
 import React from 'react';
+
+import { isMobileBrowser } from 'utils';
 
 import Zoom from './svg/zoom.svg';
 
@@ -10,7 +12,9 @@ const ImageDetail = () => (
   <p styleName="container">
     <span styleName="zoom">
       <Zoom />
-    </span>Move your mouse to see the details
+    </span>
+    {isMobileBrowser() ? 'Touch and drag' : 'Move your mouse'} to see the
+    details
   </p>
 );
 
