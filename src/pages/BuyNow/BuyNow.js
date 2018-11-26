@@ -917,7 +917,7 @@ class BuyNow extends Component<PropsType, StateType> {
                   isLoadingCheckout={isLoadingCheckout}
                   onCheckout={this.handleCheckout}
                   shippingId={
-                    deliveryPackage ? deliveryPackage.shippingId : null
+                    deliveryPackage ? deliveryPackage.shippingId : shippingId
                   }
                 />
               </StickyBar>
