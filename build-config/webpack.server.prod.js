@@ -8,8 +8,9 @@ const publicPath = paths.servedPath;
 const publicUrl = publicPath.slice(0, -1);
 const env = getClientEnvironment(publicUrl);
 
-/* eslint-disable */
-module.exports = {
+const webpackMerge = require('webpack-merge');
+
+module.exports = webpackMerge({
   mode: 'production',
   devtool: 'source-map',
   target: 'node',
@@ -47,7 +48,7 @@ module.exports = {
             test: /\.scss$/,
             use: [
               {
-                loader: 'css-loader', // translates CSS into CommonJS
+                loader: 'css-loader',
                 options: {
                   importLoaders: 1,
                   modules: true,
@@ -79,5 +80,5 @@ module.exports = {
       ...env.stringified,
     }),
   ],
-};
+});
 /* eslint-enable */
