@@ -66,7 +66,6 @@ module.exports = {
   },
 
   module: {
-    strictExportPresence: true,
     // rules for modules (configure loaders, parser options, etc.)
     rules: [
       // TODO: Disable require.ensure as it's not a standard language feature.
