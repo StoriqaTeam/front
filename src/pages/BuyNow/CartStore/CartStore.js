@@ -69,7 +69,7 @@ type PropsType = {
   isShippingAvailable: boolean,
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
-  shippingId: ?number,
+  onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
 };
 
 class CartStore extends PureComponent<PropsType> {
@@ -91,7 +91,7 @@ class CartStore extends PureComponent<PropsType> {
       isShippingAvailable,
       onChangeDelivery,
       deliveryPackage,
-      shippingId,
+      onPackagesFetched,
     } = this.props;
     return (
       <div styleName="container">
@@ -107,7 +107,7 @@ class CartStore extends PureComponent<PropsType> {
             isShippingAvailable={isShippingAvailable}
             onChangeDelivery={onChangeDelivery}
             deliveryPackage={deliveryPackage}
-            shippingId={shippingId}
+            onPackagesFetched={onPackagesFetched}
           />
         </div>
         <div styleName="footer">

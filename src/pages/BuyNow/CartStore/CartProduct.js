@@ -32,7 +32,7 @@ type PropsType = {
   baseProductId: number,
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
-  shippingId: ?number,
+  onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -52,7 +52,7 @@ class CartProduct extends Component<PropsType, StateType> {
       baseProductId,
       onChangeDelivery,
       deliveryPackage,
-      shippingId,
+      onPackagesFetched,
     } = this.props;
     if (!product) return null;
     const { photoMain } = product;
@@ -119,7 +119,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       baseProductId={baseProductId}
                       onChangeDelivery={onChangeDelivery}
                       deliveryPackage={deliveryPackage}
-                      shippingId={shippingId}
+                      onPackagesFetched={onPackagesFetched}
                     />
                   </div>
                 </Col>

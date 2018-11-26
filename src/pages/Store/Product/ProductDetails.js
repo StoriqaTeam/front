@@ -182,6 +182,7 @@ class ProductDetails extends Component<PropsType, StateType> {
             </div>
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
             <p styleName="productDescription">{productDescription}</p>
+            <div styleName="line" />
             {
               <Delivery
                 userAddress={userAddress}
@@ -191,7 +192,6 @@ class ProductDetails extends Component<PropsType, StateType> {
                 deliveryData={deliveryData}
               />
             }
-            <div styleName="line" />
             <div styleName="widgets">
               {sortByProp('id')(widgets).map(this.generateWidget)}
             </div>

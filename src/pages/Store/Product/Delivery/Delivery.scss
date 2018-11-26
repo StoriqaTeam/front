@@ -5,7 +5,7 @@
 }
 
 .title {
-  margin-top: 2rem;
+  margin-top: 3rem;
   font-size: 14px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -34,7 +34,7 @@
 }
 
 .modal {
-  padding: 2rem 4rem 4rem;
+  padding: 0 4rem 4rem;
   width: 82rem;
 
   @media (max-width: #{$md - 1px}) {
