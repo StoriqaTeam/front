@@ -95,7 +95,6 @@ type StateType = {
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
   isLoadingReplaceAddressButton: boolean,
-  shippingId: ?number,
 };
 
 type PropsType = {
@@ -129,8 +128,6 @@ class BuyNow extends Component<PropsType, StateType> {
     const { deliveryAddressesFull } = me;
     const addresses = addressesToSelect(deliveryAddressesFull);
     const selectedAddress = this.getDefaultSelectedDeliveryAddress();
-    // $FlowIgnore
-    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
 
     this.state = {
       step: 1,
@@ -158,7 +155,6 @@ class BuyNow extends Component<PropsType, StateType> {
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
       isLoadingReplaceAddressButton: false,
-      shippingId: parseFloat(queryParams.delivery) || null,
     };
   }
 
@@ -179,6 +175,10 @@ class BuyNow extends Component<PropsType, StateType> {
       parseFloat(queryParams.quantity) > variant.quantity
     ) {
       this.handleChangeCount(variant.quantity);
+    }
+
+    if (queryParams.delivery) {
+      // this.handleChangeDelivery(queryParams.delivery);
     }
   }
 
@@ -693,6 +693,17 @@ class BuyNow extends Component<PropsType, StateType> {
       });
   };
 
+  handlePackagesFetched = (packages: Array<AvailableDeliveryPackageType>) => {
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+    if (queryParams.delivery) {
+      const deliveryPackage = find(
+        propEq('shippingId', parseFloat(queryParams.delivery)),
+      )(packages);
+      this.setState({ deliveryPackage: deliveryPackage || null });
+    }
+  };
+
   render() {
     const { me, baseProduct } = this.props;
     const {
@@ -711,7 +722,6 @@ class BuyNow extends Component<PropsType, StateType> {
       errors,
       deliveryPackage,
       isLoadingReplaceAddressButton,
-      shippingId,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -901,7 +911,7 @@ class BuyNow extends Component<PropsType, StateType> {
                         baseProductId={baseProduct.rawId}
                         onChangeDelivery={this.handleChangeDelivery}
                         deliveryPackage={deliveryPackage}
-                        shippingId={shippingId}
+                        onPackagesFetched={this.handlePackagesFetched}
                       />
                     </div>
                   </div>
@@ -917,7 +927,7 @@ class BuyNow extends Component<PropsType, StateType> {
                   isLoadingCheckout={isLoadingCheckout}
                   onCheckout={this.handleCheckout}
                   shippingId={
-                    deliveryPackage ? deliveryPackage.shippingId : shippingId
+                    deliveryPackage ? deliveryPackage.shippingId : null
                   }
                 />
               </StickyBar>

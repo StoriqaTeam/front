@@ -40,7 +40,7 @@ const CheckoutProducts = ({
                       onClick={replaceAddress}
                       type="button"
                       dataTest="changeAddress"
-                      isLOading={isLoadingReplaceAddressButton}
+                      isLoading={isLoadingReplaceAddressButton}
                     >
                       <span>Replace address</span>
                     </Button>

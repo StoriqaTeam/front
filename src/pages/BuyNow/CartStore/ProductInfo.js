@@ -33,7 +33,7 @@ type PropsType = {
   baseProductId: number,
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
-  shippingId: ?number,
+  onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
 };
 
 class ProductInfo extends PureComponent<PropsType> {
@@ -51,7 +51,7 @@ class ProductInfo extends PureComponent<PropsType> {
       baseProductId,
       deliveryPackage,
       onChangeDelivery,
-      shippingId,
+      onPackagesFetched,
     } = this.props;
 
     const attrs = map(
@@ -173,12 +173,12 @@ class ProductInfo extends PureComponent<PropsType> {
                                       baseProductId={baseProductId}
                                       // $FlowIgnoreMe
                                       country={currentCountryAlpha3}
-                                      onPackagesFetched={() => {}}
+                                      onPackagesFetched={onPackagesFetched}
                                       onPackageSelect={onChangeDelivery}
                                       selectedCompanyShippingRawId={
                                         deliveryPackage
                                           ? deliveryPackage.shippingId
-                                          : shippingId
+                                          : null
                                       }
                                     />
                                   </Col>
