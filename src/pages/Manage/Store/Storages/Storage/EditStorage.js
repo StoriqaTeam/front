@@ -97,7 +97,7 @@ class EditStorage extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Storage update!',
+          text: 'Storage updated!',
           link: { text: '' },
         });
         this.props.router.push(`/manage/store/${storeId}/storages`);
