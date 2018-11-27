@@ -24,11 +24,9 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
 import { SocialShare } from 'components/SocialShare';
 import { Col, Row } from 'layout';
-import { IncrementInCartMutation } from 'relay/mutations';
+import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { extractText, isEmpty, log, convertCountries } from 'utils';
-
-import setDeliveryPackageInCartMutation from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/mutations/SetDeliveryPackageInCart';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -179,11 +177,16 @@ class Product extends Component<PropsType, StateType> {
     );
 
     if (isEmpty(widgets) || !unselectedAttr) {
-      IncrementInCartMutation.commit({
+      const shippingId = deliveryData.deliveryPackage
+        ? deliveryData.deliveryPackage.shippingId
+        : null;
+
+      AddInCartMutation.commit({
         input: {
           clientMutationId: '',
           productId: id,
           value: cartQuantity,
+          shippingId,
         },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
@@ -201,25 +204,6 @@ class Product extends Component<PropsType, StateType> {
               link: { text: '' },
             });
             this.setState({ isAddToCart: true });
-
-            const shippingId = deliveryData.deliveryPackage
-              ? deliveryData.deliveryPackage.shippingId
-              : null;
-
-            if (shippingId) {
-              setDeliveryPackageInCartMutation({
-                environment: this.context.environment,
-                variables: {
-                  input: {
-                    clientMutationId: '',
-                    productId: id,
-                    shippingId,
-                  },
-                },
-              })
-                .then(() => Promise.resolve(true))
-                .catch(err => Promise.reject(err));
-            }
           }
         },
         onError: error => {
