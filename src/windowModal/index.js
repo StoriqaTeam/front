@@ -144,7 +144,7 @@ class WindowModal extends React.Component<{}, StateType> {
         I agree to my personal data being stored and used.
         <a
           styleName="policy"
-          href="https://crowdsale.storiqa.com/static/docs/privacy_policy.pdf"
+          href="https://token.storiqa.com/static/docs/privacy_policy.pdf"
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -9,7 +9,8 @@ import { log } from 'utils';
 
 import { Rating } from 'components/common/Rating';
 
-import type { WidgetType } from './types';
+import type { CountryType } from 'types';
+import type { WidgetType, DeliveryAddress, DeliveryDataType } from './types';
 
 import {
   ProductContext,
@@ -18,6 +19,7 @@ import {
   ProductQuantity,
   ProductSize,
   ProductThumbnails,
+  Delivery,
 } from './index';
 
 import { sortByProp } from './utils';
@@ -41,6 +43,11 @@ type PropsType = {
   unselectedAttr: Array<string>,
   onChangeQuantity: (quantity: number) => void,
   cartQuantity: number,
+  userAddress: ?DeliveryAddress,
+  baseProductRawId: number,
+  countries: Array<CountryType>,
+  onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
+  deliveryData: DeliveryDataType,
 };
 
 class ProductDetails extends Component<PropsType, StateType> {
@@ -158,6 +165,11 @@ class ProductDetails extends Component<PropsType, StateType> {
       children,
       onChangeQuantity,
       cartQuantity,
+      userAddress,
+      baseProductRawId,
+      countries,
+      onChangeDeliveryData,
+      deliveryData,
     } = this.props;
     const { priceUsd } = this.state;
     return (
@@ -171,6 +183,15 @@ class ProductDetails extends Component<PropsType, StateType> {
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
             <p styleName="productDescription">{productDescription}</p>
             <div styleName="line" />
+            {
+              <Delivery
+                userAddress={userAddress}
+                baseProductRawId={baseProductRawId}
+                countries={countries}
+                onChangeDeliveryData={onChangeDeliveryData}
+                deliveryData={deliveryData}
+              />
+            }
             <div styleName="widgets">
               {sortByProp('id')(widgets).map(this.generateWidget)}
             </div>

@@ -8,7 +8,7 @@ html
     div#root(style={height: '100%'})
       #{html}
     div#global-modal-root
-    div#alerts-root(style={right: 0,top: 0,left: 0,position: fixed,'z-index': 10000})
+    div#alerts-root(style={right: 0,top: 0,left: 0,position: 'fixed','z-index': 10000})
     script.
       window.__RELAY_PAYLOADS__ = !{relayPayloads}
       window.__PRELOADED_STATE__= !{reduxState}

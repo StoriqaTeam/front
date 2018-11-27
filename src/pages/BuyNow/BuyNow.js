@@ -32,9 +32,9 @@ import {
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { AddressFullType, SelectItemType } from 'types';
-import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
 import type { MutationParamsType as BuyNowMutationParamsType } from 'relay/mutations/BuyNowMutation';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 import type { BuyNow_baseProduct as BuyNowBaseProductType } from './__generated__/BuyNow_baseProduct.graphql';
 
 import Header from './Header';
@@ -175,6 +175,10 @@ class BuyNow extends Component<PropsType, StateType> {
       parseFloat(queryParams.quantity) > variant.quantity
     ) {
       this.handleChangeCount(variant.quantity);
+    }
+
+    if (queryParams.delivery) {
+      // this.handleChangeDelivery(queryParams.delivery);
     }
   }
 
@@ -689,6 +693,17 @@ class BuyNow extends Component<PropsType, StateType> {
       });
   };
 
+  handlePackagesFetched = (packages: Array<AvailableDeliveryPackageType>) => {
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+    if (queryParams.delivery) {
+      const deliveryPackage = find(
+        propEq('shippingId', parseFloat(queryParams.delivery)),
+      )(packages);
+      this.setState({ deliveryPackage: deliveryPackage || null });
+    }
+  };
+
   render() {
     const { me, baseProduct } = this.props;
     const {
@@ -896,6 +911,7 @@ class BuyNow extends Component<PropsType, StateType> {
                         baseProductId={baseProduct.rawId}
                         onChangeDelivery={this.handleChangeDelivery}
                         deliveryPackage={deliveryPackage}
+                        onPackagesFetched={this.handlePackagesFetched}
                       />
                     </div>
                   </div>

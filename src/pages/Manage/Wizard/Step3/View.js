@@ -102,7 +102,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       product: {
         ...omit(['attributes'], productDataFromItem),
         cashback: Math.round((productDataFromItem.cashback || 0) * 100),
-        price: parseInt(productDataFromItem.price, 10),
+        price: parseFloat(productDataFromItem.price),
       },
       attributes: this.prepareAttributesValues(productDataFromItem.attributes),
       categoryId: item.category && item.category.rawId,
@@ -255,7 +255,10 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                 filteredProductsArr,
               )}
           </Row>
-          <Modal showModal={deleteId} onClose={this.handleOnCloseDelete}>
+          <Modal
+            showModal={Boolean(deleteId)}
+            onClose={this.handleOnCloseDelete}
+          >
             <div styleName="deleteWrapper">
               <div styleName="deleteContent">
                 <div styleName="title">Delete your product?</div>

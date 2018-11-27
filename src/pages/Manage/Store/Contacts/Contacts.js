@@ -112,10 +112,13 @@ class Contacts extends Component<PropsType, StateType> {
     });
   }
 
-  handleInputChange = (id: string) => (e: any) => {
+  handleInputChange = (id: string) => (
+    e: SyntheticInputEvent<HTMLInputElement>,
+  ) => {
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value, this.state));
+      const val = id === 'phone' ? value.replace(/\s/g, '') : value;
+      this.setState(assocPath(['form', id], val, this.state));
     }
   };
 

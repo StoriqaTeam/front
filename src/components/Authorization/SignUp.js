@@ -51,7 +51,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
     return pipe(makeInputFn, setFocus)(inputs);
   };
   render() {
-    const { onRegistrationClick } = this.props;
+    const { onRegistrationClick, formValid } = this.props;
     const { isPrivacyChecked, isTermsChecked } = this.state;
     return (
       <div styleName="signUp">
@@ -71,7 +71,7 @@ class SignUp extends PureComponent<PropsType, StateType> {
               onClick={onRegistrationClick}
               type="button"
               dataTest="signUpButton"
-              disabled={!(isPrivacyChecked && isTermsChecked)}
+              disabled={!(formValid && (isPrivacyChecked && isTermsChecked))}
               fullWidth
             >
               <span>Sign Up</span>

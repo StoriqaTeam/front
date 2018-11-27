@@ -29,7 +29,36 @@ class SocialShare extends Component<PropsType> {
     noBorder: false,
     noBorderX: false,
   };
-  handleShare = () => {};
+
+  convertUrl = (url: string, type: 'fb' | 'in' | 'tw' | null) => {
+    switch (type) {
+      case 'fb':
+        if (url.search(/facebook/) === -1) {
+          const newUrl = `facebook.com/${url}`.replace(/\/\//g, '/');
+          return `https://${newUrl}`;
+        }
+        break;
+      case 'in':
+        if (url.search(/instagram/) === -1) {
+          const newUrl = `instagram.com/${url}`.replace(/\/\//g, '/');
+          return `https://${newUrl}`;
+        }
+        break;
+      case 'tw':
+        if (url.search(/twitter/) === -1) {
+          const newUrl = `twitter.com/${url}`.replace(/\/\//g, '/');
+          return `https://${newUrl}`;
+        }
+        break;
+      default:
+        break;
+    }
+    if (url.search(/^https?/) === -1) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
   render() {
     const {
       big,
@@ -50,7 +79,7 @@ class SocialShare extends Component<PropsType> {
                 styleName="link"
                 rel="noopener noreferrer"
                 target="_blank"
-                href={facebookUrl}
+                href={this.convertUrl(facebookUrl || '', 'fb')}
               >
                 <Facebook />
               </a>
@@ -60,7 +89,7 @@ class SocialShare extends Component<PropsType> {
                 styleName="link"
                 rel="noopener noreferrer"
                 target="_blank"
-                href={pinterestUrl}
+                href={this.convertUrl(pinterestUrl || '', null)}
               >
                 <Pinterest />
               </a>
@@ -70,7 +99,7 @@ class SocialShare extends Component<PropsType> {
                 styleName="link"
                 rel="noopener noreferrer"
                 target="_blank"
-                href={twitterUrl}
+                href={this.convertUrl(twitterUrl || '', 'tw')}
               >
                 <Twitter />
               </a>
@@ -80,7 +109,7 @@ class SocialShare extends Component<PropsType> {
                 styleName="link"
                 rel="noopener noreferrer"
                 target="_blank"
-                href={instagramUrl}
+                href={this.convertUrl(instagramUrl || '', 'in')}
               >
                 <Instagram />
               </a>
@@ -90,7 +119,7 @@ class SocialShare extends Component<PropsType> {
                 styleName="link"
                 rel="noopener noreferrer"
                 target="_blank"
-                href={vkontakteUrl}
+                href={this.convertUrl(vkontakteUrl || '', null)}
               >
                 <VK />
               </a>

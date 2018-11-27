@@ -11,6 +11,8 @@ import { Container, Col, Row } from 'layout';
 import { formatPrice, currentCurrency, convertCountries } from 'utils';
 import { AppContext } from 'components/App';
 
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+
 import CartProductAttribute from './CartProductAttribute';
 import { DeliveryCompaniesSelect } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect';
 import CheckoutContext from '../Checkout/CheckoutContext';
@@ -19,7 +21,6 @@ import removeDeliveryMethodForProductMutation from '../Checkout/CheckoutContent/
 
 // eslint-disable-next-line
 import type CartProduct_product from './__generated__/CartProduct_product.graphql';
-import type { AvailableDeliveryPackageType } from '../Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 
 import './ProductInfo.scss';
 
@@ -209,11 +210,11 @@ class ProductInfo extends PureComponent<PropsType> {
                           {({ directories }) => (
                             <CheckoutContext.Consumer>
                               {({ country }) => {
-                                // $FlowIgnoreMe
                                 const currentAddressCountry = find(
                                   whereEq({ label: country }),
                                   convertCountries(directories.countries),
                                 );
+                                // $FlowIgnoreMe
                                 const currentCountryAlpha3 = propOr(
                                   null,
                                   'alpha3',
@@ -229,6 +230,7 @@ class ProductInfo extends PureComponent<PropsType> {
                                       <Col size={11}>
                                         <DeliveryCompaniesSelect
                                           baseProductId={product.baseProductId}
+                                          // $FlowIgnoreMe
                                           country={currentCountryAlpha3}
                                           onPackagesFetched={
                                             this.handlePackageFetching
