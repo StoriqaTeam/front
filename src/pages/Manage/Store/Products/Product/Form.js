@@ -39,7 +39,12 @@ import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { getNameText, findCategory, convertCurrenciesForSelect } from 'utils';
+import {
+  getNameText,
+  findCategory,
+  convertCurrenciesForSelect,
+  log,
+} from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 
 import type {
@@ -63,6 +68,7 @@ import Tabs from './Tabs';
 import Characteristics from './Characteristics';
 import VariantForm from './VariantForm';
 import AdditionalAttributes from './AdditionalAttributes';
+import sendProductToModerationMutation from './mutations/SendProductToModerationMutation';
 
 import type { AvailablePackagesType, FullShippingType } from './Shipping/types';
 
@@ -108,6 +114,7 @@ type StateType = {
     label: string,
   }>,
   variantForForm: ?ProductType | 'new',
+  isSendingToModeration: boolean,
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -243,6 +250,7 @@ class Form extends Component<PropsType, StateType> {
         },
       ],
       variantForForm,
+      isSendingToModeration: false,
     };
   }
 
@@ -467,6 +475,33 @@ class Form extends Component<PropsType, StateType> {
       { ...form, currency: currency ? currency.id : null },
       isAddVariant,
     );
+  };
+
+  sendToModeration = () => {
+    if (
+      this.props.baseProduct != null &&
+      this.props.baseProduct.rawId != null
+    ) {
+      this.setState({ isSendingToModeration: true });
+      sendProductToModerationMutation({
+        environment: this.props.environment,
+        variables: {
+          id: this.props.baseProduct.rawId || -1,
+        },
+      })
+        .then(() => {
+          this.props.showAlert({
+            type: 'success',
+            text: 'Product has been sent to moderation',
+            link: { text: 'Close' },
+          });
+          return true;
+        })
+        .finally(() => {
+          this.setState({ isSendingToModeration: false });
+        })
+        .catch(log.error);
+    }
   };
 
   handleInputChange = (id: string) => (e: any) => {
@@ -766,6 +801,7 @@ class Form extends Component<PropsType, StateType> {
       activeTab,
       tabs,
       variantForForm,
+      isSendingToModeration,
     } = this.state;
 
     const status = baseProduct ? baseProduct.status : 'Draft';
@@ -1015,18 +1051,38 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="warehouses">
                 {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
               </div>
-              <div styleName="button">
-                <Button
-                  big
-                  fullWidth
-                  onClick={() => {
-                    this.handleSave();
-                  }}
-                  dataTest="saveProductButton"
-                  isLoading={isLoading}
-                >
-                  {baseProduct ? 'Update product' : 'Create product'}
-                </Button>
+              <div styleName="buttonsWrapper">
+                {baseProduct &&
+                  (baseProduct.status === 'DRAFT' ||
+                    baseProduct.status === 'PUBLISHED') && (
+                    <div styleName="button">
+                      <Button
+                        big
+                        fullWidth
+                        onClick={() => {
+                          this.handleSave();
+                        }}
+                        dataTest="saveProductButton"
+                        isLoading={isLoading || isSendingToModeration}
+                      >
+                        {baseProduct ? 'Update product' : 'Create product'}
+                      </Button>
+                    </div>
+                  )}
+                {baseProduct &&
+                  baseProduct.status === 'DRAFT' && (
+                    <div styleName="button">
+                      <Button
+                        big
+                        fullWidth
+                        onClick={this.sendToModeration}
+                        dataTest="saveProductButton"
+                        isLoading={isSendingToModeration || isLoading}
+                      >
+                        Send to moderation
+                      </Button>
+                    </div>
+                  )}
               </div>
             </div>
             <div id="tabs" styleName="tabs">
