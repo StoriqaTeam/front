@@ -1072,7 +1072,7 @@ class Form extends Component<PropsType, StateType> {
                           <Icon type="addVariant" size={80} />
                         </div>
                         <div styleName="variantsText">
-                          Currently you have no variants for you product.<br />
+                          Currently you have no variants for your product.<br />
                           Add variants if you need some.
                         </div>
                         <div styleName="variantsButton">
