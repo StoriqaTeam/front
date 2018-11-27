@@ -323,7 +323,7 @@ class EditProduct extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Product update!',
+          text: 'Product updated!',
           link: { text: '' },
         });
       },
@@ -436,14 +436,14 @@ class EditProduct extends Component<PropsType, StateType> {
         if (onlyShippingSave) {
           this.props.showAlert({
             type: 'success',
-            text: 'Delivery update!',
+            text: 'Delivery updated!',
             link: { text: '' },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Delivery update!',
+          text: 'Delivery updated!',
           link: { text: '' },
         });
       },
