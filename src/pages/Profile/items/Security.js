@@ -170,7 +170,7 @@ class Security extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Password successfully update!',
+          text: 'Password successfully updated!',
           link: { text: '' },
         });
         this.setState(() => ({

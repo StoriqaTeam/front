@@ -166,7 +166,7 @@ class PersonalData extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'User update!',
+          text: 'User updated!',
           link: { text: '' },
         });
       },
