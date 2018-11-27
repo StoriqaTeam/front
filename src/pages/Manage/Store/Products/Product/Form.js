@@ -246,6 +246,12 @@ class Form extends Component<PropsType, StateType> {
     };
   }
 
+  componentDidMount() {
+    if (process.env.BROWSER) {
+      window.addEventListener('click', this.handleClick);
+    }
+  }
+
   componentDidUpdate(prevProps: PropsType) {
     const { shippingData, customAttributes, baseProduct } = this.props;
     if (
@@ -288,6 +294,12 @@ class Form extends Component<PropsType, StateType> {
         this.props,
       );
       this.updateVariantForForm(this.getVariantForForm(variantId));
+    }
+  }
+
+  componentWillUnmount() {
+    if (process.env.BROWSER) {
+      window.removeEventListener('click', this.handleClick);
     }
   }
 
@@ -589,6 +601,16 @@ class Form extends Component<PropsType, StateType> {
 
   preOrderDaysInput: ?HTMLInputElement;
 
+  handleClick = (e: SyntheticInputEvent<>) => {
+    const isPreOrderDaysInput = this.preOrderDaysInput && this.preOrderDaysInput.contains(e.target);
+
+    if (!isPreOrderDaysInput && !this.state.form.preOrderDays) {
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'preOrder'], false, prevState),
+      );
+    }
+  };
+
   handleOnChangePreOrderDays = (e: any) => {
     let {
       target: { value },
@@ -608,27 +630,23 @@ class Form extends Component<PropsType, StateType> {
       target: { value },
     } = e;
     if (!value || value === '0') {
-      this.setState((prevState: StateType) =>
-        assocPath(
-          ['form', 'preOrderDays'],
-          '',
-          assocPath(['form', 'preOrder'], false, prevState),
-        ),
-      );
+      this.setState((prevState: StateType) => assocPath(['form', 'preOrderDays'], '', prevState));
     }
   };
 
   handleOnChangePreOrder = () => {
-    this.setState((prevState: StateType) =>
-      assocPath(['form', 'preOrder'], !prevState.form.preOrder, prevState),
-    );
-    if (
-      this.preOrderDaysInput &&
-      !this.state.form.preOrder &&
-      !this.state.form.preOrderDays
-    ) {
-      this.preOrderDaysInput.focus();
-    }
+    this.setState((prevState: StateType) => {
+      if (this.preOrderDaysInput) {
+        if (!prevState.form.preOrder) {
+          this.preOrderDaysInput.focus();
+        }
+        if (prevState.form.preOrder) {
+          this.preOrderDaysInput.blur();
+        }
+      }
+
+      return assocPath(['form', 'preOrder'], !prevState.form.preOrder, prevState);
+    });
   };
 
   handleChangeTab = (activeTab: string) => {
