@@ -602,7 +602,8 @@ class Form extends Component<PropsType, StateType> {
   preOrderDaysInput: ?HTMLInputElement;
 
   handleClick = (e: SyntheticInputEvent<>) => {
-    const isPreOrderDaysInput = this.preOrderDaysInput && this.preOrderDaysInput.contains(e.target);
+    const isPreOrderDaysInput =
+      this.preOrderDaysInput && this.preOrderDaysInput.contains(e.target);
 
     if (!isPreOrderDaysInput && !this.state.form.preOrderDays) {
       this.setState((prevState: StateType) =>
@@ -630,7 +631,9 @@ class Form extends Component<PropsType, StateType> {
       target: { value },
     } = e;
     if (!value || value === '0') {
-      this.setState((prevState: StateType) => assocPath(['form', 'preOrderDays'], '', prevState));
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'preOrderDays'], '', prevState),
+      );
     }
   };
 
@@ -645,7 +648,11 @@ class Form extends Component<PropsType, StateType> {
         }
       }
 
-      return assocPath(['form', 'preOrder'], !prevState.form.preOrder, prevState);
+      return assocPath(
+        ['form', 'preOrder'],
+        !prevState.form.preOrder,
+        prevState,
+      );
     });
   };
 
