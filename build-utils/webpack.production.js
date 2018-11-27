@@ -6,7 +6,6 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const commonConfig = require('./webpack.common');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -31,7 +30,10 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
-module.exports = webpackMerge(commonConfig, {
+module.exports = () => {
+  const commonConfig = require('./webpack.common')();
+
+  return webpackMerge(commonConfig, {
     mode: 'production',
     // Don't attempt to continue if there are any errors.
     bail: true,
@@ -116,3 +118,4 @@ module.exports = webpackMerge(commonConfig, {
     ],
 
   });
+};

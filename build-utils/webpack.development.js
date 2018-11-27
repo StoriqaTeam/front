@@ -10,9 +10,10 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 
 const paths = require('./paths');
 
-const commonConfig = require('./webpack.common');
+module.exports = (mode) => {
+  const commonConfig = require('./webpack.common')();
 
-module.exports = webpackMerge(commonConfig, {
+  return webpackMerge(commonConfig, {
 
     mode: 'development',
     
@@ -66,3 +67,4 @@ module.exports = webpackMerge(commonConfig, {
     ],
 
   });
+};
