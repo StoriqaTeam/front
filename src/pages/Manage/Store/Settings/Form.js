@@ -32,7 +32,6 @@ import { uploadFile, convertSrc } from 'utils';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
-
 import './Form.scss';
 
 type StateType = {
