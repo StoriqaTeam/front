@@ -39,6 +39,18 @@ import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
 
+// const shouldUpdateScrollByRoute = (prevRenderArgs, { routes }) => {
+//   if (routes.some(route => route.ignoreScrollBehavior)) {
+//     return false;
+//   }
+
+//   if (routes.some(route => route.scrollToTop)) {
+//     return [0, 0];
+//   }
+
+//   return true;
+// };
+
 const routes = (
   <Route>
     <Route
