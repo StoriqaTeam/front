@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import '../../../../styles/variables';
 
 .container {
   display: flex;
@@ -21,6 +21,22 @@
 
 .maxWidthTextArea {
   max-width: 96rem;
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.storeStatus {
+  span {
+    background-color: green;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
 }
 
 .coverUploadWrap {
@@ -88,7 +104,24 @@
   }
 }
 
+.buttonsPanel {
+  display: flex;
+  .formItem + .moderationButton {
+    margin-left: 2rem;
+  }
+}
+
 .saveButton {
+  margin-top: 2rem;
+  button {
+    width: 100%;
+    @media (min-width: $md) {
+      width: 22.5rem;
+    }
+  }
+}
+
+.moderationButton {
   margin-top: 2rem;
   button {
     width: 100%;

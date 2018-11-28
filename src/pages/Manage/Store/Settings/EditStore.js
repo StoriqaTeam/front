@@ -12,10 +12,13 @@ import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
 
 import { UpdateStoreMainMutation } from 'relay/mutations';
+
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
-import type { EditStore_me as EditStoreMeType } from './__generated__/EditStore_me.graphql';
 
+import draftStoreFromUserMutation from './mutations/DraftStoreFromUserMutation';
+import sendStoreToModerationByUserMutation from './mutations/SendStoreToModerationByUserMutation';
+import type { EditStore_me as EditStoreMeType } from './__generated__/EditStore_me.graphql';
 import Form from './Form';
 
 type PropsType = {
@@ -35,7 +38,7 @@ class EditStore extends Component<PropsType, StateType> {
     isLoading: false,
   };
 
-  handleSave = ({ form, optionLanguage }) => {
+  handleSave = ({ form, optionLanguage, status }) => {
     const { logoUrl } = this.state;
     const { environment } = this.context;
     const {
@@ -88,11 +91,38 @@ class EditStore extends Component<PropsType, StateType> {
           });
           return;
         }
-        this.props.showAlert({
-          type: 'success',
-          text: 'Saved!',
-          link: { text: '' },
-        });
+
+        // change status to DRAFT after saving published store
+        if (status === 'PUBLISHED') {
+          draftStoreFromUserMutation({
+            environment,
+            variables: {
+              id: form.rawId,
+            },
+          })
+            .then(() => {
+              this.props.showAlert({
+                type: 'success',
+                text: 'Saved!',
+                link: { text: '' },
+              });
+              return true;
+            })
+            .catch(error => {
+              log.error(error);
+              this.props.showAlert({
+                type: 'danger',
+                text: `Error when updating store status`,
+                link: { text: 'Close.' },
+              });
+            });
+        } else {
+          this.props.showAlert({
+            type: 'success',
+            text: 'Saved!',
+            link: { text: '' },
+          });
+        }
       },
       onError: (error: Error) => {
         log.debug({ error });
@@ -117,6 +147,40 @@ class EditStore extends Component<PropsType, StateType> {
     UpdateStoreMainMutation.commit(params);
   };
 
+  handleSendToModeration = () => {
+    if (this.props.me && this.props.me.myStore) {
+      this.setState({ isLoading: true });
+      sendStoreToModerationByUserMutation({
+        environment: this.context.environment,
+        variables: {
+          // $FlowIgnoreMe
+          id: this.props.me.myStore.rawId,
+        },
+      })
+        .then(() => {
+          this.props.showAlert({
+            type: 'success',
+            text: 'Store has been sent to moderation',
+            link: { text: 'Close' },
+          });
+          return true;
+        })
+        .finally(() => {
+          this.setState({ isLoading: false });
+        })
+        .catch(error => {
+          const errMsg = pathOr('Something went wrong', ['data', 'details'])(
+            error,
+          );
+          this.props.showAlert({
+            type: 'danger',
+            text: errMsg,
+            link: { text: 'Close.' },
+          });
+        });
+    }
+  };
+
   render() {
     const { isLoading } = this.state;
     // $FlowIgnoreMe
@@ -128,6 +192,7 @@ class EditStore extends Component<PropsType, StateType> {
       <Form
         store={store}
         onSave={this.handleSave}
+        onClickOnSendToModeration={this.handleSendToModeration}
         isLoading={isLoading}
         serverValidationErrors={this.state.serverValidationErrors}
       />
@@ -139,6 +204,7 @@ export default createFragmentContainer(
   Page(withShowAlert(ManageStore(EditStore, 'Settings')), true),
   graphql`
     fragment EditStore_me on User {
+      id
       myStore {
         id
         rawId
@@ -151,6 +217,7 @@ export default createFragmentContainer(
         slogan
         defaultLanguage
         slug
+        status
         shortDescription {
           lang
           text

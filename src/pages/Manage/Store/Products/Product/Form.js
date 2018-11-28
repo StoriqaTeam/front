@@ -498,7 +498,8 @@ class Form extends Component<PropsType, StateType> {
       sendProductToModerationMutation({
         environment: this.props.environment,
         variables: {
-          id: this.props.baseProduct.rawId || -1,
+          // $FlowIgnoreMe i have no idea why
+          id: this.props.baseProduct.rawId,
         },
       })
         .then(() => {
