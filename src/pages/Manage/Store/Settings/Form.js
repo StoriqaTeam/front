@@ -30,6 +30,9 @@ import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import { uploadFile, convertSrc } from 'utils';
 
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
+
+
 import './Form.scss';
 
 type StateType = {
@@ -66,6 +69,7 @@ type PropsType = {
     [string]: ?any,
   },
   handleNewStoreNameChange: (value: string) => void,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 // TODO: extract to shared lib
