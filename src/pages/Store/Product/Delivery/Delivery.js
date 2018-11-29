@@ -21,7 +21,7 @@ type StateType = {
   isFetching: boolean,
   showModal: boolean,
   country: ?SelectItemType,
-  deliveryPackages: Array<PackageType>,
+  deliveryPackages: ?Array<PackageType>,
   deliveryPackage: ?PackageType,
 };
 
@@ -39,7 +39,7 @@ class Delivery extends Component<PropsType, StateType> {
     showModal: false,
     country: null,
     deliveryPackage: null,
-    deliveryPackages: [],
+    deliveryPackages: null,
   };
 
   componentDidMount() {
@@ -71,6 +71,7 @@ class Delivery extends Component<PropsType, StateType> {
         .get('https://api.sypexgeo.net/json/')
         .then(({ data }) => {
           if (!data || !data.country) {
+            this.setState({ isFetching: false });
             return true;
           }
           const country = find(propEq('alpha2', data.country.iso))(
@@ -99,7 +100,7 @@ class Delivery extends Component<PropsType, StateType> {
           this.props.countries,
         );
         let deliveryPackage = null;
-        if (length(deliveryPackages) === 1) {
+        if (deliveryPackages && length(deliveryPackages) === 1) {
           deliveryPackage = head(deliveryPackages);
         }
         this.setState({
@@ -142,7 +143,7 @@ class Delivery extends Component<PropsType, StateType> {
       showModal: false,
       country: null,
       deliveryPackage: null,
-      deliveryPackages: [],
+      deliveryPackages: null,
     });
   };
 
@@ -165,7 +166,7 @@ class Delivery extends Component<PropsType, StateType> {
         }
         this.setState({
           deliveryPackage: null,
-          deliveryPackages: [],
+          deliveryPackages: null,
         });
       },
     );
@@ -192,7 +193,7 @@ class Delivery extends Component<PropsType, StateType> {
       this.props.onChangeDeliveryData({
         deliveryPackage: this.state.deliveryPackage,
         country: this.state.country,
-        deliveryPackages: this.state.deliveryPackages,
+        deliveryPackages: this.state.deliveryPackages || [],
       });
     });
   };
@@ -265,54 +266,56 @@ class Delivery extends Component<PropsType, StateType> {
                 />
               </div>
             )}
-            {
-              <div>
+            <div>
+              {country && (
                 <div styleName="title">
                   <strong>Delivery method</strong>
                 </div>
-                {country && (!deliveryPackages || isEmpty(deliveryPackages)) ? (
-                  <div styleName="notShippingText">
-                    Seller does not ship to selected country
-                  </div>
-                ) : (
-                  <div>
+              )}
+              {country && deliveryPackages && isEmpty(deliveryPackages) ? (
+                <div styleName="notShippingText">
+                  Seller does not ship to selected country
+                </div>
+              ) : (
+                <div>
+                  {country && (
                     <div styleName="table">
                       <div styleName="tableHeader">
                         <div styleName="td tdCompany">Transport company</div>
                         <div styleName="td tdPrice">Price</div>
                       </div>
                     </div>
-                    {map(
-                      item => (
-                        <div key={item.id} styleName="deliveryPackage">
-                          <div styleName="td tdCompany">
-                            <RadioButton
-                              id={`productDelivery-${item.id}`}
-                              isChecked={
-                                !isNil(deliveryPackage) &&
-                                deliveryPackage.id === item.id
-                              }
-                              onChange={() => {
-                                this.handleOnSelectPackage(item);
-                              }}
-                            />
-                            {item.logo !== null &&
-                              item.logo !== '' && (
-                                <img src={item.logo} alt="" styleName="logo" />
-                              )}
-                            <span>{item.name}</span>
-                          </div>
-                          <div styleName="td tdPrice">{`${item.price} ${
-                            item.currency
-                          }`}</div>
+                  )}
+                  {map(
+                    item => (
+                      <div key={item.id} styleName="deliveryPackage">
+                        <div styleName="td tdCompany">
+                          <RadioButton
+                            id={`productDelivery-${item.id}`}
+                            isChecked={
+                              !isNil(deliveryPackage) &&
+                              deliveryPackage.id === item.id
+                            }
+                            onChange={() => {
+                              this.handleOnSelectPackage(item);
+                            }}
+                          />
+                          {item.logo !== null &&
+                            item.logo !== '' && (
+                              <img src={item.logo} alt="" styleName="logo" />
+                            )}
+                          <span>{item.name}</span>
                         </div>
-                      ),
-                      deliveryPackages,
-                    )}
-                  </div>
-                )}
-              </div>
-            }
+                        <div styleName="td tdPrice">{`${item.price} ${
+                          item.currency
+                        }`}</div>
+                      </div>
+                    ),
+                    deliveryPackages || [],
+                  )}
+                </div>
+              )}
+            </div>
             <div styleName="button">
               <Button
                 big
