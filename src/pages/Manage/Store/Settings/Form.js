@@ -26,8 +26,11 @@ import { InputSlug } from 'components/common/InputSlug';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import { uploadFile, convertSrc } from 'utils';
+
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Form.scss';
 
@@ -69,6 +72,7 @@ type PropsType = {
     [string]: ?any,
   },
   handleNewStoreNameChange: (value: string) => void,
+  showAlert: (input: AddAlertInputType) => void,
   onClickOnSendToModeration: () => void,
 };
 
@@ -291,7 +295,13 @@ class Form extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: 'Close.' },
+        });
+      });
   };
 
   handleDeleteCover = () => {
@@ -490,4 +500,4 @@ Form.contextTypes = {
 };
 
 // $FlowIgnoreMe
-export default withErrorBoundary(Form);
+export default withErrorBoundary(withShowAlert(Form));

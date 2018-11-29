@@ -11,6 +11,7 @@ import './ProductButtons.scss';
 type PropsType = {
   onAddToCart: () => void,
   onBuyNow: () => void,
+  onAddToCartTracker: () => void,
   unselectedAttr: ?Array<string>,
   quantity: number,
   preOrder: boolean,
@@ -27,6 +28,7 @@ const ProductButtons = ({
   isAddToCart,
   router,
   onBuyNow,
+  onAddToCartTracker,
   isLoading,
 }: PropsType) => (
   <div styleName="container">
@@ -36,6 +38,8 @@ const ProductButtons = ({
         isLoading={isLoading}
         disabled={!quantity && !preOrder}
         onClick={onBuyNow}
+        onMouseDown={onAddToCartTracker}
+        dataTest="product-BuyNow"
       >
         Buy now
       </Button>
@@ -51,6 +55,7 @@ const ProductButtons = ({
                 router.push('/cart');
               }
         }
+        onMouseDown={onAddToCartTracker}
         dataTest="product-addToCart"
       >
         {!isAddToCart ? 'Add to cart' : 'View cart'}
