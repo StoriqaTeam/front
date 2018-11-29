@@ -302,14 +302,13 @@ class ThirdForm extends PureComponent<PropsType> {
                             <div styleName="formItem">
                               <InputPrice
                                 id="price"
+                                label={t.price}
                                 required
                                 onChangePrice={this.handleChangePrice}
                                 price={
                                   !data.product.price ? 0 : data.product.price
                                 }
-                                label={t.price}
                                 min="0"
-                                onChange={this.handleChangeProductState}
                                 fullWidth
                                 dataTest="wizardProductPriceInput"
                               />
