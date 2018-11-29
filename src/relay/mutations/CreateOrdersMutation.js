@@ -34,7 +34,11 @@ const mutation = graphql`
           amount
         }
         orders {
+          id
           slug
+          productId
+          quantity
+          price
         }
       }
     }

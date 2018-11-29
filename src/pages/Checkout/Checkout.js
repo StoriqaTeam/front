@@ -32,6 +32,7 @@ import { Container, Row, Col } from 'layout';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { StickyBar } from 'components/StickyBar';
 import smoothscroll from 'libs/smoothscroll';
+import { transactionTracker } from 'rrHalper';
 
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -264,6 +265,28 @@ class Checkout extends Component<PropsType, StateType> {
               checkoutInProcess: false,
             });
             this.handleChangeStep(3)();
+
+            const { invoice } = response.createOrders;
+
+            if (
+              process.env.BROWSER &&
+              process.env.REACT_APP_RRPARTNERID &&
+              invoice
+            ) {
+              const items = map(
+                item => ({
+                  id: item.productId,
+                  qnt: item.quantity,
+                  price: item.price,
+                }),
+                [...invoice.orders],
+              );
+
+              transactionTracker({
+                transactionId: invoice.id,
+                items,
+              });
+            }
           } else if (!errors) {
             this.props.showAlert({
               type: 'danger',
