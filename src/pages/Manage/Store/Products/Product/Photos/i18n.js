@@ -7,6 +7,7 @@ import type { Translation } from 'translation/utils';
 type TranslationDicType = {|
   labelAddMainPhoto: string,
   labelAddPhoto: string,
+  close: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -14,6 +15,7 @@ const translations: TranslationsBundleType = {
   en: {
     labelAddMainPhoto: 'Add main photo',
     labelAddPhoto: 'Add photo',
+    close: 'Close.',
   },
 };
 

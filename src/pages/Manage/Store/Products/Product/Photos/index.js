@@ -54,7 +54,7 @@ class Photos extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'danger',
           text: error.message,
-          link: { text: 'Close.' },
+          link: { text: t.close },
         });
       });
   };
