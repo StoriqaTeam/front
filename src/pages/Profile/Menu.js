@@ -9,11 +9,13 @@ import { Collapse } from 'components/Collapse';
 import { Icon } from 'components/Icon';
 import { MobileUpload } from 'components/MobileUpload';
 import { UploadWrapper } from 'components/Upload';
+import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import { uploadFile, log, fromRelayError, convertSrc } from 'utils';
 
 import { UpdateUserMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateUserMutation';
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import type { CollapseItemType } from 'types';
 
@@ -29,6 +31,7 @@ type PropsType = {
   menuItems: Array<CollapseItemType>,
   provider: ?string,
   router: routerShape,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 type StateType = {
@@ -53,7 +56,13 @@ class Menu extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: 'Close.' },
+        });
+      });
   };
 
   handleUpdateUser = (avatar: string): void => {
@@ -179,4 +188,4 @@ class Menu extends Component<PropsType, StateType> {
   }
 }
 
-export default withRouter(Menu);
+export default withRouter(withShowAlert(Menu));
