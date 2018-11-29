@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { createHistoryEnhancer, queryMiddleware } from 'farce/lib';
+import { createHistoryEnhancer, queryMiddleware } from 'farce/lib'; // eslint-disable-line
 import {
   createMatchEnhancer,
   Matcher,
