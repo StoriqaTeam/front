@@ -14,7 +14,6 @@ type PropsType = {
   receiverName: string,
   email: string,
   replaceAddress: () => void,
-  isLoadingReplaceAddressButton: boolean,
 };
 
 const CheckoutProducts = ({
@@ -22,7 +21,6 @@ const CheckoutProducts = ({
   receiverName,
   email,
   replaceAddress,
-  isLoadingReplaceAddressButton,
 }: PropsType) => (
   <Row>
     <Col size={12}>
@@ -40,7 +38,6 @@ const CheckoutProducts = ({
                       onClick={replaceAddress}
                       type="button"
                       dataTest="changeAddress"
-                      isLoading={isLoadingReplaceAddressButton}
                     >
                       <span>Replace address</span>
                     </Button>

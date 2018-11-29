@@ -11,6 +11,7 @@ import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Spinner } from 'components/common/Spinner';
 import { log } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import { setEmailTracker } from 'rrHalper';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { VerifyEmailMutationParamsType } from 'relay/mutations/VerifyEmailMutation';
@@ -59,6 +60,14 @@ class VerifyEmail extends Component<PropsType, StateType> {
             link: { text: '' },
           });
           this.props.router.replace('/');
+          const { email } = response.verifyEmail;
+          if (
+            process.env.BROWSER &&
+            process.env.REACT_APP_RRPARTNERID &&
+            email
+          ) {
+            setEmailTracker(email);
+          }
         } else if (errors && errors.length > 0) {
           // $FlowIgnoreMe
           const errorMessage = pathOr(

@@ -12,6 +12,7 @@ type PropsTypes = {
   children: Node,
   type: string,
   onClick: () => void,
+  onMouseDown?: () => void,
   disabled: boolean,
   iconic: boolean,
   href: string,
@@ -51,6 +52,7 @@ class Button extends PureComponent<PropsTypes> {
     const {
       type,
       onClick,
+      onMouseDown,
       disabled,
       children,
       iconic,
@@ -73,6 +75,7 @@ class Button extends PureComponent<PropsTypes> {
       type,
       disabled,
       onClick,
+      onMouseDown,
       href,
       children,
     };
