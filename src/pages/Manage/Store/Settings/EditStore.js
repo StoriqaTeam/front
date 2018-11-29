@@ -16,7 +16,7 @@ import { UpdateStoreMainMutation } from 'relay/mutations';
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
-import draftStoreFromUserMutation from './mutations/DraftStoreFromUserMutation';
+// import draftStoreFromUserMutation from './mutations/DraftStoreFromUserMutation';
 import sendStoreToModerationByUserMutation from './mutations/SendStoreToModerationByUserMutation';
 import type { EditStore_me as EditStoreMeType } from './__generated__/EditStore_me.graphql';
 import Form from './Form';
@@ -38,7 +38,7 @@ class EditStore extends Component<PropsType, StateType> {
     isLoading: false,
   };
 
-  handleSave = ({ form, optionLanguage, status }) => {
+  handleSave = ({ form, optionLanguage }) => {
     const { logoUrl } = this.state;
     const { environment } = this.context;
     const {
@@ -93,7 +93,7 @@ class EditStore extends Component<PropsType, StateType> {
         }
 
         // change status to DRAFT after saving published store
-        if (status === 'PUBLISHED') {
+        /* if (status === 'PUBLISHED') {
           draftStoreFromUserMutation({
             environment,
             variables: {
@@ -122,7 +122,13 @@ class EditStore extends Component<PropsType, StateType> {
             text: 'Saved!',
             link: { text: '' },
           });
-        }
+        } */
+
+        this.props.showAlert({
+          type: 'success',
+          text: 'Saved!',
+          link: { text: '' },
+        });
       },
       onError: (error: Error) => {
         log.debug({ error });

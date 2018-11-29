@@ -1078,23 +1078,24 @@ class Form extends Component<PropsType, StateType> {
                 {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
               </div>
               <div styleName="buttonsWrapper">
-                {baseProduct &&
+                {(!baseProduct ||
                   (baseProduct.status === 'DRAFT' ||
-                    baseProduct.status === 'PUBLISHED') && (
-                    <div styleName="button">
-                      <Button
-                        big
-                        fullWidth
-                        onClick={() => {
-                          this.handleSave();
-                        }}
-                        dataTest="saveProductButton"
-                        isLoading={isLoading || isSendingToModeration}
-                      >
-                        {baseProduct ? 'Update product' : 'Create product'}
-                      </Button>
-                    </div>
-                  )}
+                    baseProduct.status === 'PUBLISHED' ||
+                    baseProduct.status === 'DECLINE')) && (
+                  <div styleName="button">
+                    <Button
+                      big
+                      fullWidth
+                      onClick={() => {
+                        this.handleSave();
+                      }}
+                      dataTest="saveProductButton"
+                      isLoading={isLoading || isSendingToModeration}
+                    >
+                      {baseProduct ? 'Update product' : 'Create product'}
+                    </Button>
+                  </div>
+                )}
                 {baseProduct &&
                   baseProduct.status === 'DRAFT' && (
                     <div styleName="button">

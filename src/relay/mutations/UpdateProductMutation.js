@@ -29,6 +29,8 @@ const mutation = graphql`
       preOrderDays
       baseProduct {
         id
+        rawId
+        status
         store {
           id
           warehouses {
