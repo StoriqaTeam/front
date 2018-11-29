@@ -129,7 +129,7 @@ export type BaseProductType = {
   seoDescription: LangTextType,
   seoTitle: LangTextType,
   shortDescription: LangTextType,
-  status: 'DRAFT' | 'MODERATION' | 'DECLINE' | 'PUBLISHED',
+  status: 'DRAFT' | 'MODERATION' | 'DECLINE' | 'PUBLISHED' | 'BLOCKED',
   store: {
     id: string,
     rawId: number,
