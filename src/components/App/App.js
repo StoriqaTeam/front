@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
 import { pick, filter, propEq, concat, complement } from 'ramda';
+import { withRouter, matchShape } from 'found';
 
 import { AlertsContainer } from 'components/Alerts';
 import { AlertContextProvider } from 'components/Alerts/AlertContext';
@@ -44,10 +45,11 @@ type PropsType = {
     refetch: Function,
   },
   countries: any,
+  match: matchShape,
 };
 
 class App extends Component<PropsType, StateType> {
-  state: StateType = {
+  state = {
     alerts: [],
   };
 
@@ -62,6 +64,51 @@ class App extends Component<PropsType, StateType> {
       },
     };
   }
+
+  componentDidUpdate(prevProps) {
+    const {
+      match: {
+        location: { pathname },
+      },
+    } = this.props;
+    const {
+      match: { location },
+    } = prevProps;
+    // ONLY scroll when paths are different
+    if (pathname !== location.pathname) {
+      if (process.env.BROWSER) {
+        window.scrollTo(0, 0);
+      }
+    }
+  }
+
+  addAlert = (alert: AddAlertInputType): void => {
+    this.setState(prevState => ({
+      alerts: concat(
+        [
+          {
+            ...alert,
+            onClose: this.handleAlertClose,
+            createdAtTimestamp: Date.now() + Math.random() * 1000,
+          },
+        ],
+        prevState.alerts,
+      ),
+    }));
+  };
+
+  handleLogin = (): void => {
+    this.props.relay.refetch({}, null, () => {}, { force: true });
+  };
+
+  handleAlertClose = (timestamp: number): void => {
+    this.setState(prevState => ({
+      alerts: filter(
+        complement(propEq('createdAtTimestamp', timestamp)),
+        prevState.alerts,
+      ),
+    }));
+  };
 
   makeDirectories = (): DirectoriesType => {
     const {
@@ -80,34 +127,6 @@ class App extends Component<PropsType, StateType> {
       currencyExchange,
       countries,
     };
-  };
-
-  handleLogin = (): void => {
-    this.props.relay.refetch({}, null, () => {}, { force: true });
-  };
-
-  handleAlertClose = (timestamp: number): void => {
-    this.setState(prevState => ({
-      alerts: filter(
-        complement(propEq('createdAtTimestamp', timestamp)),
-        prevState.alerts,
-      ),
-    }));
-  };
-
-  addAlert = (alert: AddAlertInputType): void => {
-    this.setState(prevState => ({
-      alerts: concat(
-        [
-          {
-            ...alert,
-            onClose: this.handleAlertClose,
-            createdAtTimestamp: Date.now() + Math.random() * 1000,
-          },
-        ],
-        prevState.alerts,
-      ),
-    }));
   };
 
   render() {
@@ -150,7 +169,7 @@ App.childContextTypes = {
 };
 
 export default createRefetchContainer(
-  App,
+  withRouter(App),
   graphql`
     fragment App_me on User {
       ...Profile_me
