@@ -14,21 +14,21 @@
   flex-direction: column;
   margin-bottom: 2.75rem;
   max-width: 100%;
+
   @media (min-width: $md) {
     justify-content: space-between;
     flex-direction: row;
     margin-bottom: 0;
-    max-width: 75%;
+    //max-width: 75%;
   }
 }
 
 .iconsWrapper {
-  border-bottom: 1px solid $color_grey_trivial;
   border-top: 1px solid $color_grey_trivial;
   display: flex;
   justify-content: space-between;
-  margin-left: -3rem;
-  margin-right: -3rem;
+  margin-left: -4rem;
+  margin-right: -4rem;
   max-width: initial;
 
   @media (min-width: $md) {
@@ -54,6 +54,8 @@
   p {
     margin-left: 6.525rem;
     text-align: left;
+    color: $color_grey_minor;
+
     @media (min-width: $md) {
       margin-left: 0;
       text-align: right;

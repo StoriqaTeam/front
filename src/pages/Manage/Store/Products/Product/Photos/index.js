@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 import { Icon } from 'components/Icon';
 import { UploadWrapper } from 'components/Upload';
 import { uploadFile, log, convertSrc } from 'utils';
+import { withShowAlert } from 'components/Alerts/AlertContext';
+
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Photos.scss';
 
@@ -23,6 +26,7 @@ type PropsType = {
   photoMain: ?string,
   photos: ?Array<string>,
   isMainVariant?: boolean,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 class Photos extends Component<PropsType, StateType> {
@@ -46,7 +50,13 @@ class Photos extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: 'Close.' },
+        });
+      });
   };
 
   handleOnUploadPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
@@ -64,7 +74,13 @@ class Photos extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isAdditionalPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: 'Close.' },
+        });
+      });
   };
 
   render() {
@@ -155,4 +171,4 @@ Photos.contextTypes = {
   directories: PropTypes.object,
 };
 
-export default Photos;
+export default withShowAlert(Photos);

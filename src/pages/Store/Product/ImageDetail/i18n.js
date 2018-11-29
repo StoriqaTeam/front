@@ -5,13 +5,17 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  moveYourMouseToSeeTheDetails: string,
+  touchAndDrag: string,
+  toSeeTheDetails: string,
+  moveYourMouse: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    moveYourMouseToSeeTheDetails: 'Move your mouse to see the details',
+    touchAndDrag: 'Touch and drag',
+    toSeeTheDetails: 'to see the details',
+    moveYourMouse: 'Move your mouse',
   },
 };
 

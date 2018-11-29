@@ -1,10 +1,10 @@
 @import "../../../../styles/variables";
 
 .container {
-  padding: 1rem 4rem 4rem;
+  padding: 1rem 4rem 2rem;
 
-  @media (min-width: $md) {
-    padding-right: 0;
+  @media (max-width: #{$md - 1px}) {
+    padding-bottom: 0;
   }
 
   & h2 {
@@ -37,7 +37,10 @@
 }
 
 .line {
-  margin-top: 4rem;
-  margin-left: -4rem;
-  border-bottom: 1px solid $color_grey_light;
+  margin: 3rem -4rem 0;
+  border-bottom: 1px solid $color_grey_trivial;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-right: -4rem;
+  }
 }

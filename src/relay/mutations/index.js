@@ -11,6 +11,7 @@ export {
 } from './CreateProductWithAttributesMutation';
 export { default as UpdateProductMutation } from './UpdateProductMutation';
 export { default as IncrementInCartMutation } from './IncrementInCartMutation';
+export { default as AddInCartMutation } from './AddInCart';
 export {
   default as SetQuantityInCartMutation,
 } from './SetQuantityInCartMutation';

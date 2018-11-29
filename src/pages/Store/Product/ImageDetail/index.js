@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import { isMobileBrowser } from 'utils';
+
 import Zoom from './svg/zoom.svg';
 
 import './ImageDetail.scss';
@@ -13,7 +15,7 @@ const ImageDetail = () => (
     <span styleName="zoom">
       <Zoom />
     </span>
-    {t.moveYourMouseToSeeTheDetails}
+    {isMobileBrowser() ? t.touchAndDrag : t.moveYourMouse} {t.toSeeTheDetails}
   </p>
 );
 

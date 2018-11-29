@@ -161,21 +161,21 @@ class Start extends Component<PropsTypes, StateTypes> {
             <MediaQuery maxWidth={575}>
               <ImageLoader
                 fit
-                src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC-medium.png"
+                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-0zS95RW1dtwC-medium.png"
                 loader={loader}
               />
             </MediaQuery>
             <MediaQuery maxWidth={991} minWidth={576}>
               <ImageLoader
                 fit
-                src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC-large.png"
+                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-P5haU9sN9IQC-large.png"
                 loader={loader}
               />
             </MediaQuery>
             <MediaQuery minWidth={992}>
               <ImageLoader
                 fit
-                src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC.png"
+                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-P5haU9sN9IQC.png"
                 loader={loader}
               />
             </MediaQuery>

@@ -13,7 +13,7 @@ import {
   getNameText,
   convertCountries,
 } from 'utils';
-import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -33,6 +33,7 @@ type PropsType = {
   baseProductId: number,
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
+  onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
 };
 
 class ProductInfo extends PureComponent<PropsType> {
@@ -50,6 +51,7 @@ class ProductInfo extends PureComponent<PropsType> {
       baseProductId,
       deliveryPackage,
       onChangeDelivery,
+      onPackagesFetched,
     } = this.props;
 
     const attrs = map(
@@ -150,11 +152,11 @@ class ProductInfo extends PureComponent<PropsType> {
                     {isShippingAvailable && (
                       <AppContext.Consumer>
                         {({ directories }) => {
-                          // $FlowIgnoreMe
                           const currentAddressCountry = find(
                             whereEq({ label: country }),
                             convertCountries(directories.countries),
                           );
+                          // $FlowIgnoreMe
                           const currentCountryAlpha3 = propOr(
                             null,
                             'alpha3',
@@ -169,8 +171,9 @@ class ProductInfo extends PureComponent<PropsType> {
                                   <Col size={11}>
                                     <DeliveryCompaniesSelect
                                       baseProductId={baseProductId}
+                                      // $FlowIgnoreMe
                                       country={currentCountryAlpha3}
-                                      onPackagesFetched={() => {}}
+                                      onPackagesFetched={onPackagesFetched}
                                       onPackageSelect={onChangeDelivery}
                                       selectedCompanyShippingRawId={
                                         deliveryPackage

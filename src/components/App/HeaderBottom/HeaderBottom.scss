@@ -24,12 +24,9 @@ $burger_menu_size: 7.5rem;
 .logo {
   display: flex;
   justify-content: flex-start;
-  padding-top: 1.2rem;
-  @media (min-width: $md) {
-    padding-top: 0.8rem;
-  }
+  padding-top: 0.5rem;
   @media (min-width: $lg) {
-    padding-top: 0;
+    padding-top: 0.8rem;
   }
 }
 

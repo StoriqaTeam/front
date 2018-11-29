@@ -12,10 +12,10 @@ import Portal from './Portal';
 import './Modal.scss';
 
 type PropsTypes = {
-  children: any,
+  children?: any,
   showModal: ?boolean,
   onClose: Function,
-  render?: () => Node,
+  render?: ?() => Node,
 };
 
 type StateTypes = {

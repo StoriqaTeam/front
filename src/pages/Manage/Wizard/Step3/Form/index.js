@@ -4,13 +4,11 @@ import React, { PureComponent } from 'react';
 import { map, pathOr, whereEq, filter, isEmpty } from 'ramda';
 
 import { findCategory } from 'utils';
-import { Input } from 'components/common/Input';
+import { InputPrice, Input, Button, Select } from 'components/common';
 import { Textarea } from 'components/common/Textarea';
 import { CategorySelector } from 'components/CategorySelector';
-import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
-import { Select } from 'components/common/Select';
 import Photos from 'pages/Manage/Store/Products/Product/Photos';
 
 import AttributesForm from '../AttributesForm';
@@ -111,6 +109,17 @@ class ThirdForm extends PureComponent<PropsType> {
       product: {
         ...data.product,
         [name]: name === 'vendorCode' ? value : parseInt(value, 10),
+      },
+    });
+  };
+
+  handleChangePrice = (price: number) => {
+    const { data } = this.props;
+    this.props.onChange({
+      ...data,
+      product: {
+        ...data.product,
+        price,
       },
     });
   };
@@ -291,21 +300,18 @@ class ThirdForm extends PureComponent<PropsType> {
                         <Row>
                           <Col size={12} md={6}>
                             <div styleName="formItem">
-                              <Input
+                              <InputPrice
                                 id="price"
-                                value={
-                                  data.product.price == null
-                                    ? ''
-                                    : `${data.product.price}`
+                                required
+                                onChangePrice={this.handleChangePrice}
+                                price={
+                                  !data.product.price ? 0 : data.product.price
                                 }
-                                label={
-                                  <span>
-                                    {t.price} <span styleName="red">*</span>
-                                  </span>
-                                }
+                                label={t.price}
                                 min="0"
                                 onChange={this.handleChangeProductState}
                                 fullWidth
+                                dataTest="wizardProductPriceInput"
                               />
                             </div>
                           </Col>

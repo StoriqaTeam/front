@@ -136,7 +136,13 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: 'Close.' },
+        });
+      });
   };
 
   handleLogoUpload = (url: string) => {

@@ -2,12 +2,13 @@
 
 .container {
   color: $color_grey_minor;
+  display: none;
   font-size: 13px;
   letter-spacing: 0.1px;
   padding: 1rem;
   text-align: center;
   @media (min-width: $md) {
-    padding: 1rem 0 1rem 14rem;
+    display: block;
   }
 }
 
