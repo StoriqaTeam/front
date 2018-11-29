@@ -511,6 +511,7 @@ const routes = (
               query={graphql`
                 query routes_ManageStore_Query {
                   me {
+                    id
                     ...EditStore_me
                   }
                   ...InputSlug_storeSlugExists

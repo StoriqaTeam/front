@@ -28,6 +28,7 @@ const mutation = graphql`
       slug
       slogan
       logo
+      status
     }
   }
 `;
