@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Component } from 'react';
-import { addIndex, map, length, splitEvery } from 'ramda';
+import React, { Component, Fragment } from 'react';
+import { addIndex, map, length, splitEvery, filter, isEmpty } from 'ramda';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -101,7 +101,7 @@ class Goods extends Component<PropsType, StateType> {
                     <CardProduct item={good} />
                   </div>
                 ),
-                item,
+                length(item) === count ? item : [],
               )}
             </div>
           ),
@@ -111,29 +111,45 @@ class Goods extends Component<PropsType, StateType> {
     );
   };
 
-  renderNav = (count: number) => (
-    <div styleName="nav">
-      <button
-        styleName="button"
-        onClick={() => {
-          this.handleView('prev', count);
-        }}
-      >
-        <Icon type="prev" size={32} />
-      </button>
-      <button
-        styleName="button"
-        onClick={() => {
-          this.handleView('next', count);
-        }}
-      >
-        <Icon type="next" size={32} />
-      </button>
-    </div>
-  );
+  renderNav = (count: number) => {
+    const { items, title, seeAllUrl } = this.props;
+    if (
+      isEmpty(filter(item => length(item) === count, splitEvery(count, items)))
+    ) {
+      return null;
+    }
+    return (
+      <Fragment>
+        <div styleName="title">{title}</div>
+        <div styleName="nav">
+          <button
+            styleName="button"
+            onClick={() => {
+              this.handleView('prev', count);
+            }}
+          >
+            <Icon type="prev" size={32} />
+          </button>
+          <button
+            styleName="button"
+            onClick={() => {
+              this.handleView('next', count);
+            }}
+          >
+            <Icon type="next" size={32} />
+          </button>
+        </div>
+        {seeAllUrl && (
+          <a styleName="reveal" href={seeAllUrl} data-test="seeAllLink">
+            See all
+          </a>
+        )}
+      </Fragment>
+    );
+  };
 
   render() {
-    const { title, items, seeAllUrl } = this.props;
+    const { items } = this.props;
     const { viewNumber } = this.state;
     let nodeData = null;
     if (this.sectionsRef) {
@@ -143,7 +159,6 @@ class Goods extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="header">
-          <div styleName="title">{title}</div>
           <MediaQuery maxWidth={767} minWidth={576}>
             {this.renderNav(4)}
           </MediaQuery>
@@ -151,11 +166,6 @@ class Goods extends Component<PropsType, StateType> {
             {this.renderNav(6)}
           </MediaQuery>
           <MediaQuery minWidth={1200}>{this.renderNav(8)}</MediaQuery>
-          {seeAllUrl && (
-            <a styleName="reveal" href={seeAllUrl} data-test="seeAllLink">
-              See all
-            </a>
-          )}
         </div>
         <MediaQuery maxWidth={575}>
           <div styleName="nowrapGoods">
