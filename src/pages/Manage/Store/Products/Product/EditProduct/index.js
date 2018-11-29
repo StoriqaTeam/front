@@ -37,6 +37,7 @@ import type {
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as UpdateProductMutationType } from 'relay/mutations/UpdateProductMutation';
 import type { MutationParamsType as UpsertShippingMutationType } from 'relay/mutations/UpsertShippingMutation';
+
 import type { EditProduct_me as EditProductMeType } from './__generated__/EditProduct_me.graphql';
 import type {
   AvailablePackagesType,
@@ -45,6 +46,8 @@ import type {
 
 import fetchPackages from '../fetchPackages';
 import Form from '../Form';
+
+// import sendProductToDraftMutation from './mutations/SendProductToDraftMutation';
 
 import '../Product.scss';
 
@@ -326,6 +329,25 @@ class EditProduct extends Component<PropsType, StateType> {
           });
           return;
         }
+
+        // change state to DRAFT after saving product with PUBLISHED state
+        /* const status = pathOr(null, ['updateProduct', 'baseProduct', 'status'])(
+          response,
+        );
+        const baseProductId = pathOr(null, [
+          'updateProduct',
+          'baseProduct',
+          'rawId',
+        ])(response);
+        if (baseProductId && status === 'PUBLISHED') {
+          sendProductToDraftMutation({
+            environment: this.props.environment,
+            variables: {
+              ids: [baseProductId],
+            },
+          });
+        } */
+
         this.props.showAlert({
           type: 'success',
           text: t.productUpdated,

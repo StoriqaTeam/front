@@ -10,6 +10,7 @@ type TranslationDicType = {|
   saved: string,
   somethingGoingWrong: string,
   storeNotFound: string,
+  storeHasBeenSentToModeration: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -20,6 +21,7 @@ const translations: TranslationsBundleType = {
     saved: 'Saved!',
     somethingGoingWrong: 'Something going wrong :(',
     storeNotFound: 'Store not found :(',
+    storeHasBeenSentToModeration: 'Store not found :(',
   },
 };
 

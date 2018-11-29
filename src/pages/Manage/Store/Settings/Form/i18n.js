@@ -20,6 +20,7 @@ type TranslationDicType = {|
   labelLongDescription: string,
   save: string,
   close: string,
+  sendToModeration: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -40,6 +41,7 @@ const translations: TranslationsBundleType = {
     labelLongDescription: 'Long Description',
     save: 'Save',
     close: 'Close.',
+    sendToModeration: 'Send to moderation',
   },
 };
 

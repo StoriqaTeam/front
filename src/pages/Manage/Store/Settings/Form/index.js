@@ -38,6 +38,7 @@ import t from './i18n';
 
 type StateType = {
   form: {
+    rawId: number,
     name: string,
     defaultLanguage: string,
     longDescription: string,
@@ -52,6 +53,7 @@ type StateType = {
   langItems: ?Array<{ id: string, label: string }>,
   optionLanguage: string,
   realSlug: ?string,
+  status: string,
   isMainPhotoUploading: boolean,
 };
 
@@ -59,18 +61,21 @@ type PropsType = {
   onSave: Function,
   isLoading: boolean,
   store?: {
+    rawId: number,
     name?: Array<{ lang: string, text: string }>,
     longDescription?: Array<{ lang: string, text: string }>,
     defaultLanguage: ?string,
     slug: ?string,
     slogan: ?string,
     cover: ?string,
+    status: string,
   },
   serverValidationErrors: {
     [string]: ?any,
   },
   handleNewStoreNameChange: (value: string) => void,
   showAlert: (input: AddAlertInputType) => void,
+  onClickOnSendToModeration: () => void,
 };
 
 // TODO: extract to shared lib
@@ -103,12 +108,14 @@ class Form extends Component<PropsType, StateType> {
           slug: store.slug || '',
           cover: store.cover || '',
           slogan: store.slogan || '',
+          rawId: store.rawId,
         },
         langItems: null,
         optionLanguage: 'EN',
         formErrors: {},
         realSlug: store.slug,
         isMainPhotoUploading: false,
+        status: store.status,
       };
     }
   }
@@ -122,12 +129,14 @@ class Form extends Component<PropsType, StateType> {
       slug: '',
       cover: '',
       slogan: '',
+      rawId: -1,
     },
     langItems: null,
     optionLanguage: 'EN',
     formErrors: {},
     realSlug: null,
     isMainPhotoUploading: false,
+    status: '',
   };
 
   componentWillMount() {
@@ -149,6 +158,8 @@ class Form extends Component<PropsType, StateType> {
     const nextFormErrors = nextProps.serverValidationErrors;
     if (isEmpty(currentFormErrors) && !isEmpty(nextFormErrors)) {
       this.setState({ formErrors: nextFormErrors });
+    } else if (nextProps.store) {
+      this.setState({ status: nextProps.store.status });
     }
   }
 
@@ -183,6 +194,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleSave = () => {
+    if (!this.isSaveAvailable()) {
+      return;
+    }
+
     const { currentUser } = this.context;
     const { optionLanguage } = this.state;
 
@@ -192,6 +207,7 @@ class Form extends Component<PropsType, StateType> {
 
     const {
       form: {
+        rawId,
         name,
         defaultLanguage,
         longDescription,
@@ -200,6 +216,7 @@ class Form extends Component<PropsType, StateType> {
         cover,
         slogan,
       },
+      status,
     } = this.state;
 
     // TODO: вынести в либу спеки
@@ -241,6 +258,7 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ formErrors: {} });
     this.props.onSave({
       form: {
+        rawId,
         name,
         defaultLanguage,
         longDescription,
@@ -250,11 +268,16 @@ class Form extends Component<PropsType, StateType> {
         slogan,
       },
       optionLanguage,
+      status,
     });
   };
 
   handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
+
+    if (!this.isSaveAvailable()) {
+      return;
+    }
 
     this.setState({ isMainPhotoUploading: true });
     uploadFile(e.target.files[0])
@@ -306,6 +329,7 @@ class Form extends Component<PropsType, StateType> {
     <div styleName="formItem maxWidthInput">
       <Input
         id={id}
+        // $FlowIgnoreMe
         value={propOr('', id, this.state.form)}
         label={label}
         onChange={this.handleInputChange(id)}
@@ -320,6 +344,7 @@ class Form extends Component<PropsType, StateType> {
     <div styleName="formItem maxWidthTextArea">
       <Textarea
         id={id}
+        // $FlowIgnoreMe
         value={propOr('', id, this.state.form)}
         label={label}
         onChange={this.handleTextareaChange(id)}
@@ -329,11 +354,19 @@ class Form extends Component<PropsType, StateType> {
     </div>
   );
 
+  isSaveAvailable = () =>
+    this.state.status === 'DRAFT' ||
+    this.state.status === 'DECLINE' ||
+    this.state.status === 'PUBLISHED';
+
+  isAbleSendToModeration = () => this.state.status === 'DRAFT';
+
   render() {
     const {
       langItems,
       form: { defaultLanguage, cover },
       formErrors,
+      status,
     } = this.state;
     const { isLoading } = this.props;
     const { realSlug } = this.state;
@@ -345,41 +378,46 @@ class Form extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="form">
-          {!cover ? (
-            <div styleName="coverUploadWrap">
-              <div styleName="uploadButton">
-                <UploadWrapper
-                  id="cover-store"
-                  onUpload={this.handleOnUpload}
-                  customUnit
-                  buttonHeight="10rem"
-                  buttonWidth="100%"
-                  buttonIconSize={32}
-                  buttonIconType="upload"
-                  dataTest="storeCoverUploader"
-                  buttonLabel=""
-                  loading={this.state.isMainPhotoUploading}
-                />
-              </div>
-              <div>
-                <div>{t.uploadMainPhoto}</div>
-                <div styleName="uploadRec">
-                  {t.stronglyRecommendToUpload}
-                  <br />
-                  {t.size1360x350}
+          <div styleName="formHeader">
+            {!cover ? (
+              <div styleName="coverUploadWrap">
+                <div styleName="uploadButton">
+                  <UploadWrapper
+                    id="cover-store"
+                    onUpload={this.handleOnUpload}
+                    customUnit
+                    buttonHeight="10rem"
+                    buttonWidth="100%"
+                    buttonIconSize={32}
+                    buttonIconType="upload"
+                    dataTest="storeCoverUploader"
+                    buttonLabel=""
+                    loading={this.state.isMainPhotoUploading}
+                  />
+                </div>
+                <div>
+                  <div>{t.uploadMainPhoto}</div>
+                  <div styleName="uploadRec">
+                    {t.stronglyRecommendToUpload}
+                    <br />
+                    {t.size1360x350}
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div styleName="cover">
-              <button styleName="trash" onClick={this.handleDeleteCover}>
-                <Icon type="basket" size={28} />
-              </button>
-              <div styleName="image">
-                <img src={convertSrc(cover, 'medium')} alt={t.altStoreCover} />
+            ) : (
+              <div styleName="cover">
+                <button styleName="trash" onClick={this.handleDeleteCover}>
+                  <Icon type="basket" size={28} />
+                </button>
+                <div styleName="image">
+                  <img src={convertSrc(cover, 'medium')} alt="Store cover" />
+                </div>
               </div>
+            )}
+            <div styleName="storeStatus">
+              <span>{status}</span>
             </div>
-          )}
+          </div>
           {this.renderInput({
             id: 'name',
             label: t.labelStoreName,
@@ -420,16 +458,31 @@ class Form extends Component<PropsType, StateType> {
             id: 'longDescription',
             label: t.labelLongDescription,
           })}
-          <div styleName="formItem">
-            <div styleName="saveButton">
-              <SpinnerButton
-                onClick={this.handleSave}
-                isLoading={isLoading}
-                dataTest="saveButton"
-              >
-                {t.save}
-              </SpinnerButton>
-            </div>
+          <div styleName="buttonsPanel">
+            {this.isSaveAvailable() && (
+              <div styleName="formItem">
+                <div styleName="saveButton">
+                  <SpinnerButton
+                    onClick={this.handleSave}
+                    isLoading={isLoading}
+                    dataTest="saveButton"
+                  >
+                    {t.save}
+                  </SpinnerButton>
+                </div>
+              </div>
+            )}
+            {this.isAbleSendToModeration() && (
+              <div styleName="moderationButton">
+                <SpinnerButton
+                  onClick={this.props.onClickOnSendToModeration}
+                  isLoading={isLoading}
+                  dataTest="sendToModerationButton"
+                >
+                  {t.sendToModeration}
+                </SpinnerButton>
+              </div>
+            )}
           </div>
         </div>
       </div>

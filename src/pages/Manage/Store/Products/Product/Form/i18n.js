@@ -39,6 +39,7 @@ type TranslationDicType = {|
   addVariant: string,
   youCantAddVariantUntilCreateAndSaveBaseProduct: string,
   save: string,
+  sendToModeration: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -81,6 +82,7 @@ const translations: TranslationsBundleType = {
     youCantAddVariantUntilCreateAndSaveBaseProduct:
       "You can't add variant until create and save base product.",
     save: 'Save',
+    sendToModeration: ' Send to moderation',
   },
 };
 
