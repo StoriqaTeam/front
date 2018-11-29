@@ -6,8 +6,8 @@ import { Environment } from 'relay-runtime';
 const AVAILABLEPACKAGES_QUERY = graphql`
   query fetchPackages_Query(
     $countryCode: String!
-    $size: Float!
-    $weight: Float!
+    $size: Int!
+    $weight: Int!
   ) {
     availablePackages(countryCode: $countryCode, size: $size, weight: $weight) {
       local {

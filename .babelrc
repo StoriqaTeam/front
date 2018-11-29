@@ -4,8 +4,8 @@
       "@babel/preset-env", { "modules": false }
     ],
     "@babel/flow",
-    "@babel/preset-react",
-    "react-app"
+    "@babel/preset-react"
+   
   ],
   "plugins": [
     [
