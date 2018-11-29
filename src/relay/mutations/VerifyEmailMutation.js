@@ -12,6 +12,7 @@ const mutation = graphql`
   mutation VerifyEmailMutation($input: VerifyEmailApply!) {
     verifyEmail(input: $input) {
       success
+      email
     }
   }
 `;

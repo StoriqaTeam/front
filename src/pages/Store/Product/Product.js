@@ -27,6 +27,7 @@ import { Col, Row } from 'layout';
 import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { extractText, isEmpty, log, convertCountries } from 'utils';
+import { productViewTracker, addToCartTracker } from 'rrHalper';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -153,6 +154,15 @@ class Product extends Component<PropsType, StateType> {
 
   componentDidMount() {
     window.scrollTo(0, 0);
+    const { baseProduct } = this.props;
+    if (
+      process.env.BROWSER &&
+      process.env.REACT_APP_RRPARTNERID &&
+      baseProduct &&
+      baseProduct.rawId
+    ) {
+      productViewTracker(baseProduct.rawId);
+    }
   }
 
   handleChangeQuantity = (quantity: number) => {
@@ -360,6 +370,18 @@ class Product extends Component<PropsType, StateType> {
     }
   };
 
+  handleAddToCartTracker = () => {
+    const { productVariant } = this.state;
+    if (
+      process.env.BROWSER &&
+      process.env.REACT_APP_RRPARTNERID &&
+      productVariant &&
+      productVariant.rawId
+    ) {
+      addToCartTracker(productVariant.rawId);
+    }
+  };
+
   render() {
     const { me, baseProduct, router } = this.props;
     const { unselectedAttr } = this.state;
@@ -448,6 +470,7 @@ class Product extends Component<PropsType, StateType> {
                             this.handleAddToCart(productVariant.rawId)
                           }
                           onBuyNow={this.handleBuyNow}
+                          onAddToCartTracker={this.handleAddToCartTracker}
                           unselectedAttr={unselectedAttr}
                           quantity={productVariant.quantity}
                           preOrder={productVariant.preOrder}
