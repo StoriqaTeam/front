@@ -350,6 +350,10 @@ class Product extends Component<PropsType, StateType> {
           deliveryData.deliveryPackage
             ? `&delivery=${deliveryData.deliveryPackage.shippingId}`
             : ''
+        }${
+          deliveryData.deliveryPackage && deliveryData.country
+            ? `&country=${deliveryData.country.id}`
+            : ''
         }`,
       );
     } else {
