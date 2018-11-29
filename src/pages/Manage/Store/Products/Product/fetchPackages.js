@@ -4,11 +4,7 @@ import { fetchQuery, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
 const AVAILABLEPACKAGES_QUERY = graphql`
-  query fetchPackages_Query(
-    $countryCode: String!
-    $size: Int!
-    $weight: Int!
-  ) {
+  query fetchPackages_Query($countryCode: String!, $size: Int!, $weight: Int!) {
     availablePackages(countryCode: $countryCode, size: $size, weight: $weight) {
       local {
         companyPackageId
