@@ -13,6 +13,7 @@ import t from './i18n';
 type PropsType = {
   onAddToCart: () => void,
   onBuyNow: () => void,
+  onAddToCartTracker: () => void,
   unselectedAttr: ?Array<string>,
   quantity: number,
   preOrder: boolean,
@@ -29,6 +30,7 @@ const ProductButtons = ({
   isAddToCart,
   router,
   onBuyNow,
+  onAddToCartTracker,
   isLoading,
 }: PropsType) => (
   <div styleName="container">
@@ -38,6 +40,8 @@ const ProductButtons = ({
         isLoading={isLoading}
         disabled={!quantity && !preOrder}
         onClick={onBuyNow}
+        onMouseDown={onAddToCartTracker}
+        dataTest="product-BuyNow"
       >
         {t.buyNow}
       </Button>
@@ -53,6 +57,7 @@ const ProductButtons = ({
                 router.push('/cart');
               }
         }
+        onMouseDown={onAddToCartTracker}
         dataTest="product-addToCart"
       >
         {!isAddToCart ? t.addToCart : t.viewCart}
