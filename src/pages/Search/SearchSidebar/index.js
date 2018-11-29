@@ -30,7 +30,7 @@ import { RangeSlider } from 'components/Ranger';
 import { AttributeControl } from 'components/AttributeControl';
 import { Icon } from 'components/Icon';
 
-import type { Categories_search as CategoriesSearch } from '../__generated__/Categories_search.graphql';
+import type { Categories_search as CategoriesSearch } from '../Categories/__generated__/Categories_search.graphql';
 
 import './SearchSidebar.scss';
 

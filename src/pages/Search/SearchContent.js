@@ -13,7 +13,7 @@ import { CardProduct } from 'components/CardProduct';
 import { Icon } from 'components/Icon';
 import { SearchNoResults } from 'components/SearchNoResults';
 
-import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
+import type { Categories_search as CategoriesSearch } from './Categories/__generated__/Categories_search.graphql';
 
 import './SearchContent.scss';
 
