@@ -13,6 +13,8 @@ import {
   isEmpty,
   contains,
   keys,
+  isNil,
+  assoc,
 } from 'ramda';
 import { routerShape } from 'found';
 import { validate } from '@storiqa/shared';
@@ -96,7 +98,6 @@ type StateType = {
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
-  isLoadingReplaceAddressButton: boolean,
 };
 
 type PropsType = {
@@ -156,7 +157,6 @@ class BuyNow extends Component<PropsType, StateType> {
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
-      isLoadingReplaceAddressButton: false,
     };
   }
 
@@ -204,8 +204,21 @@ class BuyNow extends Component<PropsType, StateType> {
   getDefaultSelectedDeliveryAddress = () => {
     const { me } = this.props;
     const { deliveryAddressesFull } = me;
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+
+    const countriesFromQuery = filter(
+      item => item.address.countryCode === queryParams.country,
+      deliveryAddressesFull || [],
+    );
+    const countryFromQuery = isEmpty(countriesFromQuery)
+      ? null
+      : head(countriesFromQuery);
     const addresses = addressesToSelect(deliveryAddressesFull);
-    return find(propEq('id', '0'))(addresses) || head(addresses) || null;
+
+    return !isNil(countryFromQuery)
+      ? find(propEq('id', countryFromQuery.id))(addresses)
+      : find(propEq('id', '0'))(addresses) || head(addresses) || null;
   };
 
   getDeliveryAddress = (selectedAddress: ?SelectItemType): AddressFullType => {
@@ -309,47 +322,20 @@ class BuyNow extends Component<PropsType, StateType> {
     if (saveAsNewAddress && !selectedAddress) {
       this.createAddress();
     }
-    this.setState({ step: 2 });
-  };
-
-  validate = () => {
     const { deliveryAddress } = this.state;
-    let { errors } = validate(
-      {
-        receiverName: [[val => Boolean(val), t.receiverNameIsRequired]],
-        phone: [[val => Boolean(val), t.receiverPhoneIsRequired]],
-      },
-      this.state,
-    );
-    if (
-      !deliveryAddress.country ||
-      !deliveryAddress.postalCode ||
-      !deliveryAddress.value
-    ) {
-      errors = {
-        ...errors,
-        deliveryAddress: [t.countryAddressAndPostalCodeAreRequired],
-      };
-    }
-    if (errors && !isEmpty(errors)) {
-      const { scrollArr } = this.state;
-      const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
-      if (!isEmpty(oneArr) && head(oneArr)) {
-        smoothscroll.scrollTo(head(oneArr));
-      }
-    }
-    return errors || {};
-  };
-
-  replaceAddress = () => {
-    this.setState({ isLoadingReplaceAddressButton: true });
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+    this.setState({ isLoadingCheckout: true });
     const variables = {
       productId: parseFloat(queryParams.variant),
       quantity: parseFloat(queryParams.quantity),
     };
-    fetchBuyNow(this.props.relay.environment, variables)
+    fetchBuyNow(
+      this.props.relay.environment,
+      deliveryAddress && deliveryAddress.countryCode === queryParams.country
+        ? assoc('shippingId', parseFloat(queryParams.delivery), variables)
+        : variables,
+    )
       .then(({ calculateBuyNow }) => {
         const {
           couponsDiscounts,
@@ -360,9 +346,8 @@ class BuyNow extends Component<PropsType, StateType> {
           subtotalWithoutDiscounts,
         } = calculateBuyNow;
         this.setState({
-          step: 1,
-          deliveryPackage: null,
-          isLoadingReplaceAddressButton: false,
+          step: 2,
+          isLoadingCheckout: false,
           buyNowData: {
             couponsDiscounts,
             totalCost,
@@ -380,8 +365,41 @@ class BuyNow extends Component<PropsType, StateType> {
           text: 'Something going wrong :(',
           link: { text: 'Close.' },
         });
-        this.setState({ isLoadingReplaceAddressButton: false });
+        this.setState({ isLoadingCheckout: false });
       });
+  };
+
+  validate = () => {
+    const { deliveryAddress } = this.state;
+    let { errors } = validate(
+      {
+        receiverName: [[val => Boolean(val), 'Receiver name is required']],
+        phone: [[val => Boolean(val), 'Receiver phone is required']],
+      },
+      this.state,
+    );
+    if (
+      !deliveryAddress.country ||
+      !deliveryAddress.postalCode ||
+      !deliveryAddress.value
+    ) {
+      errors = {
+        ...errors,
+        deliveryAddress: ['Country, address and postal code are required'],
+      };
+    }
+    if (errors && !isEmpty(errors)) {
+      const { scrollArr } = this.state;
+      const oneArr = filter(item => contains(item, keys(errors)), scrollArr);
+      if (!isEmpty(oneArr) && head(oneArr)) {
+        smoothscroll.scrollTo(head(oneArr));
+      }
+    }
+    return errors || {};
+  };
+
+  replaceAddress = () => {
+    this.setState({ step: 1 });
   };
 
   handleCheckout = () => {
@@ -723,7 +741,6 @@ class BuyNow extends Component<PropsType, StateType> {
       isLoadingCheckout,
       errors,
       deliveryPackage,
-      isLoadingReplaceAddressButton,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -892,9 +909,6 @@ class BuyNow extends Component<PropsType, StateType> {
                         receiverName={receiverName}
                         email={me.email}
                         replaceAddress={this.replaceAddress}
-                        isLoadingReplaceAddressButton={
-                          isLoadingReplaceAddressButton
-                        }
                       />
                     </div>
                     <div styleName="store">
