@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 
@@ -7,6 +7,8 @@ import { Icon } from 'components/Icon';
 import StepLabel from './StepLabel';
 
 import './CheckoutHeader.scss';
+
+import t from './i18n';
 
 type PropsType = {
   currentStep: number,
@@ -22,7 +24,7 @@ const CheckoutHeader = ({
   <div styleName="stepperContainer">
     <StepLabel
       step={1}
-      text="Delivery info"
+      text={t.deliveryInfo}
       currentStep={currentStep}
       isReadyToNext={isReadyToNext}
       onChangeStep={onChangeStep}
@@ -30,7 +32,7 @@ const CheckoutHeader = ({
     <Icon type="arrowRight" />
     <StepLabel
       step={2}
-      text="Summary"
+      text={t.summary}
       currentStep={currentStep}
       isReadyToNext={isReadyToNext}
       onChangeStep={onChangeStep}
@@ -38,7 +40,7 @@ const CheckoutHeader = ({
     <Icon type="arrowRight" />
     <StepLabel
       step={3}
-      text="Payment info"
+      text={t.paymentInfo}
       currentStep={currentStep}
       isReadyToNext={isReadyToNext}
       onChangeStep={onChangeStep}

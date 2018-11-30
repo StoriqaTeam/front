@@ -1,11 +1,14 @@
+// @flow strict
 import React, { Component } from 'react';
 import { Icon } from 'components/Icon';
 
 import './MobileListItems.scss';
 
+type ItemType = { id: string, label: string };
+
 type PropsType = {
-  items: Array<{ id: string, label: string }>,
-  onClick: any => any,
+  items: Array<ItemType>,
+  onClick: ItemType => void,
   idName: string,
 };
 
@@ -21,7 +24,7 @@ class MobileListItems extends Component<PropsType, StateType> {
   state = {
     selected: null,
   };
-  handleSelected = (selected: number, item): void => {
+  handleSelected = (selected: number, item: ItemType): void => {
     const { onClick } = this.props;
     this.setState(
       {

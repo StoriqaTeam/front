@@ -1,0 +1,57 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  margin-bottom: 1rem;
+  padding: 1rem 1rem 0;
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+.title {
+  color: $color_grey;
+  float: left;
+  font-size: 20px;
+  line-height: 4rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.nav {
+  height: 4rem;
+  margin-left: 4rem;
+  float: right;
+}
+
+.button {
+  cursor: pointer;
+
+  & + .button {
+    margin-left: 0.75rem;
+  }
+
+  & svg {transition: $transition_all_ease;}
+  &:hover svg {fill: $color_blue;}
+}
+
+.reveal, .settings {
+  color: $color_grey_minor;
+  font-size: 16px;
+  line-height: 4rem;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  float: right;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue;
+  }
+}
+
+.reveal {
+  margin-left: 3rem;
+}

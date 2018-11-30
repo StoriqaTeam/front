@@ -1,0 +1,23 @@
+@import "../../../../styles/variables";
+
+.container {
+  color: $color_grey_minor;
+  display: none;
+  font-size: 13px;
+  letter-spacing: 0.1px;
+  padding: 1rem;
+  text-align: center;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.zoom {
+  svg {
+    height: 2.125rem;
+    position: relative;
+    right: 0.375rem;
+    top: 0.375rem;
+    width: 2.125rem;
+  }
+}

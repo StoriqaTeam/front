@@ -14,6 +14,8 @@ import { Row, Col } from 'layout';
 
 import './CheckoutSidebar.scss';
 
+import t from './i18n';
+
 type PropsType = {
   onClick: () => void,
   onCheckout: () => void,
@@ -177,12 +179,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
           <div styleName="corner tr" />
         </div>
         <div styleName="container">
-          <div styleName="title">Subtotal</div>
+          <div styleName="title">{t.subtotal}</div>
           <div styleName="totalsContainer">
             <Row>
               <Col size={12} sm={4} lg={12}>
                 <div styleName="attributeContainer">
-                  <div styleName="label">Subtotal</div>
+                  <div styleName="label">{t.subtotal}</div>
                   <div styleName="value">
                     {productsCostWithoutDiscounts &&
                       `${formatPrice(
@@ -193,7 +195,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
               </Col>
               <Col size={12} sm={4} lg={12}>
                 <div styleName="attributeContainer">
-                  <div styleName="label">Delivery</div>
+                  <div styleName="label">{t.delivery}</div>
                   <div styleName="value">
                     {deliveryCost &&
                       `${formatPrice(deliveryCost || 0)} ${currentCurrency()}`}
@@ -203,7 +205,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
               {couponsDiscounts !== 0 && (
                 <Col size={12} sm={4} lg={12}>
                   <div styleName="attributeContainer">
-                    <div styleName="label">Coupons discount</div>
+                    <div styleName="label">{t.couponsDiscount}</div>
                     <div styleName="value">
                       {`−${formatPrice(
                         couponsDiscounts || 0,
@@ -215,9 +217,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
               <Col size={12} sm={4} lg={12}>
                 <div styleName="attributeContainer">
                   <div styleName="label">
-                    Total{' '}
+                    {t.total}{' '}
                     <span styleName="subLabel">
-                      ({totalCount && totalCount} items)
+                      ({totalCount && totalCount} {t.items})
                     </span>
                   </div>
                   <div styleName="totalCost">

@@ -23,4 +23,4 @@ const Login = () => (
   </AppContext.Consumer>
 );
 
-export default Page(Login, true);
+export default Page(Login, { withoutCategories: true });

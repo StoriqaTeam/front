@@ -1,0 +1,81 @@
+@import "../../../../styles/variables";
+
+.container {
+  display: inline-block;
+  margin-right: 2rem;
+}
+
+.title {
+  color: $color_grey;
+  font-size: 1.75rem;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 2.625rem;
+  letter-spacing: 1.2px;
+  line-height: normal;
+  margin: 1.875rem 0;
+  text-align: left;
+  text-transform: uppercase;
+
+  &.isOnSelected {
+    color: $color_red;
+  }
+}
+
+.sizes {
+  align-items: center;
+  display: flex;
+}
+
+.size {
+  padding: 0 2rem;
+  align-self: center;
+  border: solid 1px $color_grey_trivial;
+  color: $color_grey_minor;
+  font-size: 2rem;
+  height: 5rem;
+  line-height: 4.5rem;
+  opacity: 1;
+  position: relative;
+  text-align: center;
+
+  & + .size {
+    margin-left: 1rem;
+  }
+
+  &.clicked {
+    border: 1px solid $color_blue !important;
+  }
+
+  &.clicked + button {
+    border-left: 1px solid transparent;
+  }
+
+  &.opaque:not(:first-child) {
+    border-left: 1px solid $color_grey_trivial !important;
+  }
+  // apply transparent border-right except the last one
+  &:not(:last-child) {
+    border-right: 1px solid transparent;
+  }
+
+}
+
+.disabled {
+  opacity: 0.3;
+}
+
+.separator {
+  border-right: 1px solid $color_grey_trivial !important;
+  height: 5rem;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 1px;
+
+  &.highlighted {
+    border-right: 1px solid $color_blue !important;
+  }
+
+}

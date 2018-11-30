@@ -1,0 +1,56 @@
+@import "../../../styles/variables";
+
+$sidebar_size: 25.95rem;
+
+.container {
+  background: $color_grey_bg;
+  flex: 0 0 $sidebar_size;
+  overflow-y: auto;
+  padding: 0 2rem;
+  right: -$sidebar_size;
+  transition: right 0.4s ease;
+  @media (min-width: $lg) {
+    display: block;
+    padding: 0 1rem;
+  }
+}
+
+.toggledSidebar {
+  right: 0;
+  height: 100%;
+}
+
+.blockTitle {
+  color: $color_grey_minor;
+  font-size: 14px;
+}
+
+.attrBlock {
+  margin: 2rem 0;
+}
+
+.parentCategory {
+  font-family: $font_medium;
+  font-size: 2rem;
+  line-height: 1.3;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
+
+.header {
+  border-bottom: 1px solid $color_grey_minor;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 3.25rem 1.375rem 3.25rem 0;
+
+  & h3 {
+    color: $color_blue;
+    font-size: 2.25rem;
+  }
+
+  @media (min-width: $lg) {
+    display: none;
+  }
+
+}

@@ -1,0 +1,36 @@
+@import "../../../../../styles/variables";
+
+.container {
+  border-bottom: 1px solid $color_grey_trivial;
+  display: flex;
+  margin: 0 -4rem;
+  padding: 0;
+  color: $color_grey_minor;
+  @media (min-width: $md) {
+    padding: 2rem 3rem;
+  }
+}
+
+.headerCheckbox {
+  align-items: baseline;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.checkBox {
+  margin-right: 4rem;
+}
+
+.deleteButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  & svg {
+    fill: $color_grey_minor;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}

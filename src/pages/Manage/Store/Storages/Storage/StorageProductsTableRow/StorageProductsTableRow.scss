@@ -1,0 +1,124 @@
+@import "../../../../../../styles/variables";
+
+.container {
+  align-items: center;
+  border-bottom: 1px solid $color_grey_trivial;
+  display: flex;
+  margin: 0 -2rem;
+  position: relative;
+  padding: 1rem 0;
+  cursor: pointer;
+  @media (min-width: $md) {
+    margin: 0 -4rem;
+  }
+
+  &:before {
+    background-color: transparent;
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: $transition_all_ease;
+    width: 2px;
+  }
+
+  &:hover {
+    &:before {
+      background-color: $color_blue_hover;
+    }
+
+    & .dropdownButton {
+      & svg {fill: $color_grey;}
+    }
+  }
+
+  .foto {
+    align-items: center;
+    background-color: $color_grey_trivial;
+    border-radius: 0.5rem;
+    display: flex;
+    height: 10rem;
+    justify-content: center;
+    margin-left: 1rem;
+    overflow: hidden;
+    position: relative;
+    width: 10rem;
+    @media (min-width: $md) {
+      margin-left: 1.5rem;
+    }
+  }
+
+  .characteristicItem {
+    display: flex;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .characteristicLabels {
+    color: $color_grey_minor;
+  }
+
+  .characteristicValues {
+    margin-left: 1.5rem;
+  }
+
+  @media (min-width: $md) {
+    padding: 1rem 4rem;
+  }
+}
+
+.name {
+  font-size: 2rem;
+  line-height: 20px;
+  overflow: hidden;
+  padding-left: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media (min-width: $md) {
+    padding-left: 3rem;
+  }
+}
+
+.quantity {
+  position: relative;
+  width: 6rem;
+  button {
+    right: -9rem;
+    position: absolute;
+    top: 0;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.td {
+  align-items: center;
+  color: $color_grey;
+  display: flex;
+  font-size: 14px;
+  line-height: 2.5rem;
+}
+
+.tdCheckbox {
+  display: none;
+  width: 5%;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.deleteButton, .editButton {
+  & svg {
+    fill: $color_grey_minor;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {
+    fill: $color_grey;
+  }
+}

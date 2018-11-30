@@ -21,6 +21,8 @@ import type { Start_mainPage as StartMainPage } from './__generated__/Start_main
 
 import './Start.scss';
 
+import t from './i18n';
+
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 
@@ -149,7 +151,7 @@ class Start extends Component<PropsTypes, StateTypes> {
             viewedProducts.length > 0 && (
               <Goods
                 items={viewedProducts}
-                title="Most Popular"
+                title={t.mostPopular}
                 seeAllUrl="/categories?search=&sortBy=VIEWS"
               />
             )}
@@ -184,7 +186,7 @@ class Start extends Component<PropsTypes, StateTypes> {
             discountProducts.length > 0 && (
               <Goods
                 items={discountProducts}
-                title="Sale"
+                title={t.sale}
                 seeAllUrl="/categories?search=&sortBy=DISCOUNT"
               />
             )}
@@ -225,7 +227,7 @@ Start.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(Start, true),
+  Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
       findMostViewedProducts(

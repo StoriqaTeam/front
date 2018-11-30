@@ -1,0 +1,68 @@
+@import "../../../styles/variables";
+
+.container {
+  display: none;
+  width: 100%;
+
+  @media (min-width: $md) {
+   display: block;
+  }
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.tab {
+  color: $color_grey;
+  cursor: pointer;
+  font-size: 14px;
+  height: 7.25rem;
+  line-height: 7.25rem;
+  letter-spacing: 1.2px;
+  padding: 0 3rem;
+  vertical-align: middle;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  transition: $transition_all_ease;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: transparent;
+    transition: $transition_all_ease;
+  }
+
+  &:hover, &.active {
+    color: $color_blue;
+
+    &:after {
+      background-color: $color_blue;
+    }
+  }
+}
+
+.text {
+  position: relative;
+}
+
+.new {
+  background: $color_blue;
+  border-radius: 0.25rem;
+  color: $color_white;
+  font-size: 11px;
+  padding: 0 0.5rem;
+  position: absolute;
+  text-align: center;
+  text-transform: capitalize;
+  top: -2rem;
+  line-height: 2.125rem;
+  vertical-align: middle;
+}

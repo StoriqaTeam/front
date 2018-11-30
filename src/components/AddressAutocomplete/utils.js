@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { replace, find, propEq, addIndex, map } from 'ramda';
 

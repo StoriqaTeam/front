@@ -1,0 +1,27 @@
+@import "../../../../styles/variables";
+
+.container {
+  margin-right: 9.375rem;
+}
+
+h6 {
+  color: $color_grey_minor;
+  font-size: 14px;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: -0.4px;
+  line-height: 1.71;
+  text-align: left;
+}
+
+small {
+  color: $color_grey;
+  font-size: 12px;
+  line-height: 2.5rem;
+}
+
+.columnItem {
+  height: 7.25rem;
+  width: 33rem;
+}

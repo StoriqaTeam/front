@@ -39,4 +39,4 @@ class PasswordReset extends Component<PropsType> {
   }
 }
 
-export default Page(withRouter(PasswordReset), true);
+export default Page(withRouter(PasswordReset));

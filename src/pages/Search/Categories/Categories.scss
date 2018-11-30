@@ -1,0 +1,19 @@
+@import "../../../styles/variables";
+
+.container {
+  padding: 0 0 4rem;
+
+  @media (min-width: $lg) {
+    padding: 2rem 0 4rem;
+  }
+}
+
+.sidebarWrapper {
+  display: none;
+
+  @media (min-width: $lg) {
+    display: block;
+    width: 100%;
+  }
+
+}

@@ -4,6 +4,8 @@ import React from 'react';
 
 import './PasswordHints.scss';
 
+import t from './i18n';
+
 type PropTypes = {
   lowerCase: boolean,
   upperCase: boolean,
@@ -17,13 +19,15 @@ const PasswordHints = (props: PropTypes) => {
     <aside styleName="container">
       <ul styleName="list">
         <li styleName={lowerCase ? 'valid' : 'list-item'}>
-          One lower case character
+          {t.oneLowerCaseCharacter}
         </li>
         <li styleName={upperCase ? 'valid' : 'list-item'}>
-          One upper case character
+          {t.oneUpperCaseCharacter}
         </li>
-        <li styleName={digit ? 'valid' : 'list-item'}>One number</li>
-        <li styleName={length ? 'valid' : 'list-item'}>8 characters minimum</li>
+        <li styleName={digit ? 'valid' : 'list-item'}>{t.oneNumber}</li>
+        <li styleName={length ? 'valid' : 'list-item'}>
+          {t.eightCharactersMinimun}
+        </li>
       </ul>
     </aside>
   );

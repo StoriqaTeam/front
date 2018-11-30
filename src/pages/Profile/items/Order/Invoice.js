@@ -29,7 +29,7 @@ class Invoice extends PureComponent<PropsType> {
 }
 
 export default createFragmentContainer(
-  Page(Invoice, true),
+  Page(Invoice),
   graphql`
     fragment Invoice_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {

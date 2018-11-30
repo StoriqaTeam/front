@@ -1,0 +1,46 @@
+@import "../../../../styles/variables";
+
+.container {
+  padding: 1rem 4rem 2rem;
+
+  @media (max-width: #{$md - 1px}) {
+    padding-bottom: 0;
+  }
+
+  & h2 {
+    color: $color_black;
+    font-family: $font_regular;
+    font-size: 3.75rem;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    line-height: normal;
+    margin-bottom: 0.625rem;
+    margin-top: 2rem;
+    text-align: left;
+  }
+}
+
+.rating {
+  margin-bottom: 2.375rem;
+}
+
+.widgets {
+  margin-top: 3rem;
+}
+
+.productDescription {
+  margin-top: 3rem;
+  color: $color_grey_minor;
+  max-width: 60rem;
+}
+
+.line {
+  margin: 3rem -4rem 0;
+  border-bottom: 1px solid $color_grey_trivial;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-right: -4rem;
+  }
+}

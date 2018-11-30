@@ -1,6 +1,7 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
+import type { Node, Element } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from 'components/Icon';
@@ -10,9 +11,9 @@ import './MobileSidebar.scss';
 type PropsType = {
   isOpen: boolean,
   onClose: () => void,
-  children: any,
+  children: Node,
   left: boolean,
-  title: string,
+  title: string | Element<'span'>,
 };
 
 class MobileSidebar extends Component<PropsType> {
@@ -20,13 +21,15 @@ class MobileSidebar extends Component<PropsType> {
     left: false,
     title: '',
   };
-  handleClick = (evt: any): void => {
+
+  handleClick = (evt: SyntheticInputEvent<HTMLDivElement>): void => {
     const { onClose } = this.props;
     const { id } = evt.target;
     if (id === 'overlay') {
       onClose();
     }
   };
+
   render() {
     const { isOpen, left, onClose, title } = this.props;
     return (

@@ -1,0 +1,73 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+  margin-top: 6.5rem;
+  width: 102.5rem;
+}
+
+.title {
+  font-size: 14px;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+}
+
+.headerContainer {
+  display: flex;
+  border-bottom: 1px solid $color_grey_trivial;
+  color: $color_grey_minor;
+  font-size: 14px;
+  line-height: 1.43;
+  margin-top: 3.5rem;
+  height: 4.5rem;
+  position: relative;
+}
+
+.headerDate {
+  width: 17.5rem;
+}
+
+.headerManager {
+  width: 14rem;
+  margin-left: 2rem;
+}
+
+.headerStatus {
+  width: 11rem;
+  margin-left: 2rem;
+}
+
+.headerAdditionalInfo {
+  width: 54rem;
+  margin-left: 2rem;
+}
+
+.rowContainer {
+  display: flex;
+  padding: 2rem 0;
+  align-items: flex-start;
+  position: relative;
+  border-bottom: 1px solid $color_grey_trivial;
+}
+
+.rowDate {
+  width: 17.5rem;
+}
+
+.rowManager {
+  width: 14rem;
+  margin-left: 2rem;
+}
+
+.rowStatus {
+  width: 11rem;
+  margin-left: 2rem;
+}
+
+.rowAdditionalInfo {
+  width: 54rem;
+  margin-left: 2rem;
+}
+
+.loadMoreText {
+
+}

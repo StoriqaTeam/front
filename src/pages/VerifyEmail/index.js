@@ -17,7 +17,9 @@ import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { VerifyEmailMutationParamsType } from 'relay/mutations/VerifyEmailMutation';
 import type { VerifyEmailMutationResponse } from 'relay/mutations/__generated__/VerifyEmailMutation.graphql';
 
-import './index.scss';
+import './VerifyEmail.scss';
+
+import t from './i18n';
 
 type StateType = {
   isTokenResponseAlreadyHandled: boolean, // prevent double verify
@@ -56,7 +58,7 @@ class VerifyEmail extends Component<PropsType, StateType> {
         if (response && response.verifyEmail && response.verifyEmail.success) {
           this.props.showAlert({
             type: 'success',
-            text: 'Verified successfully. Please login with your login data.',
+            text: t.verifiedSuccessfully,
             link: { text: '' },
           });
           this.props.router.replace('/');
@@ -78,8 +80,8 @@ class VerifyEmail extends Component<PropsType, StateType> {
           log.debug({ errorMessage });
           this.props.showAlert({
             type: 'danger',
-            text: errorMessage || 'Something going wrong',
-            link: { text: 'Close.' },
+            text: errorMessage || t.somethingGoingWrong,
+            link: { text: t.close },
           });
           this.props.router.replace('/');
         }
@@ -90,8 +92,8 @@ class VerifyEmail extends Component<PropsType, StateType> {
         if (error) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           this.props.router.replace('/');
         }
@@ -108,9 +110,11 @@ class VerifyEmail extends Component<PropsType, StateType> {
             <Logo />
           </div>
           <span styleName="text">
-            Loading...<br />Please wait.
+            {t.loading}
+            <br />
+            {t.pleaseWait}
           </span>
-          <span styleName="description">- Storiqa team</span>
+          <span styleName="description">- {t.storiqaTeam}</span>
           <Spinner />
         </div>
       </div>

@@ -1,6 +1,7 @@
-// @flow
+// @flow strict
 
 import React, { Component } from 'react';
+import type { Element } from 'react';
 import classNames from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -9,8 +10,8 @@ import './Textarea.scss';
 type PropsType = {
   id?: string,
   value: string,
-  label: string,
-  errors?: Array<string>,
+  label: string | Element<'span'>,
+  errors?: ?Array<string>,
   onBlur?: () => void,
   onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   fullWidth: ?boolean,
@@ -22,13 +23,12 @@ type StateType = {
 };
 
 class Textarea extends Component<PropsType, StateType> {
-  state = {
-    labelFloat: false,
-    isFocus: false,
-  };
-
-  componentWillMount() {
-    this.setState({ labelFloat: Boolean(this.props.value) });
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      labelFloat: Boolean(this.props.value),
+      isFocus: false,
+    };
   }
 
   handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {

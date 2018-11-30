@@ -1,0 +1,18 @@
+@import "../../../styles/variables.scss";
+
+.container {
+  position: relative;
+  background-color: $color_grey_bg;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  margin: 0 auto;
+  max-width: 170rem;
+  width: 100%;
+}

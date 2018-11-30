@@ -1,0 +1,130 @@
+@import "../../../styles/variables";
+@import '../../../styles/mixins';
+
+.container {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 170rem;
+  margin: 0 auto;
+  padding-top: 5.625rem;
+ }
+
+.offscreen {
+  @include offscreen;
+}
+
+.navBlockItem, .startSellingButton, .footerLogo, .footerColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.footerColumn {
+  text-align: center;
+  align-items: center;
+  margin-bottom: 3rem;
+
+  @media (min-width: $md) {
+    align-items: center;
+    text-align: left;
+  }
+
+  @media (min-width: $lg) {
+    align-items: flex-start;
+  }
+}
+
+.footerLogo {
+  align-items: center;
+
+  @media (min-width: $xl) {
+    align-items: flex-end;
+    padding-right: 5rem;
+  }
+
+}
+
+.logoDescription {
+  color: $color_grey_minor;
+  font-size: 13px;
+  line-height: 20px;
+  margin-top: 3rem;
+  max-width: 44rem;
+  text-align: center;
+  margin-bottom: 2rem;
+
+  @media (min-width: $lg) {
+    margin-bottom: 0;
+    max-width: 24rem;
+    text-align: right;
+  }
+
+}
+
+.navHeader {
+  margin-bottom: 1rem;
+  font-size: 16px;
+  color: $color_grey;
+}
+
+.navItem {
+  display: block;
+  font-size: 14px;
+  line-height: 3.5rem;
+  color: $color_grey;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.aboutNavItem + .aboutNavItem {
+  border-left: 1px solid $color_grey;
+}
+
+.aboutNavItem {
+  a {
+    font-size: 14px;
+    color: $color_grey;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.sectionColumns {
+  display: flex;
+  flex: 1 0 0;
+  justify-content: center;
+}
+
+.rightsBlock {
+  padding: 2rem 0;
+  font-size: 13px;
+  color: $color_grey_minor;
+  text-align: center;
+  @media (min-width: $md) {
+    padding: 2rem;
+  }
+}
+
+.footerTop {
+  padding-bottom: 3.25rem;
+}
+
+.startSellingButton {
+  margin-top: 2rem;
+  align-items: center;
+
+  @media (min-width: $md) {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: $xl) {
+  .startSellingButton {
+    align-items: flex-end;
+  }
+}
+

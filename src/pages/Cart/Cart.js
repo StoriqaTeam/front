@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react';
 import { createPaginationContainer, graphql } from 'react-relay';
-import PropTypes from 'prop-types';
 import {
   pipe,
   pathOr,
@@ -32,6 +31,8 @@ import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 import type { Cart_cart } from './__generated__/Cart_cart.graphql';
 
 import './Cart.scss';
+
+import t from './i18n';
 
 type PropsType = {
   // eslint-disable-next-line
@@ -115,7 +116,7 @@ class Cart extends Component<PropsType, StateType> {
         <Container withoutGrow>
           <Row withoutGrow>
             <Col size={12}>
-              <div styleName="header">My cart</div>
+              <div styleName="header">{t.myCart}</div>
               <div ref={ref => this.setStoresRef(ref)}>
                 <Row withoutGrow>
                   {emptyCart ? (
@@ -168,12 +169,8 @@ class Cart extends Component<PropsType, StateType> {
   }
 }
 
-Cart.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
-
 export default createPaginationContainer(
-  withRouter(Page(Cart, true, true)),
+  withRouter(Page(Cart, { withoutCategories: true })),
   graphql`
     fragment Cart_cart on Cart
       @argumentDefinitions(

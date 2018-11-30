@@ -12,6 +12,8 @@ import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Photos.scss';
 
+import t from './i18n';
+
 type StateType = {
   isMainPhotoUploading: boolean,
   isAdditionalPhotoUploading: boolean,
@@ -52,7 +54,7 @@ class Photos extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'danger',
           text: error.message,
-          link: { text: 'Close.' },
+          link: { text: t.close },
         });
       });
   };
@@ -99,7 +101,7 @@ class Photos extends Component<PropsType, StateType> {
               buttonHeight={15}
               buttonWidth={15}
               buttonIconType="camera"
-              buttonLabel="Add main photo"
+              buttonLabel={t.labelAddMainPhoto}
               loading={isMainPhotoUploading}
               dataTest="productPhotosUploader"
             />
@@ -131,7 +133,7 @@ class Photos extends Component<PropsType, StateType> {
               buttonHeight={10}
               buttonWidth={10}
               buttonIconType="camera"
-              buttonLabel="Add photo"
+              buttonLabel={t.labelAddPhoto}
               loading={isAdditionalPhotoUploading}
               dataTest="productPhotosUploader"
             />

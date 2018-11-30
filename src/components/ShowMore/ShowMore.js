@@ -7,6 +7,8 @@ import { Icon } from 'components/Icon';
 
 import './ShowMore.scss';
 
+import t from './i18n';
+
 type PropsType = {
   height?: ?number, // max container height in rem (needed for animation)
   children?: any,
@@ -31,7 +33,7 @@ class ShowMore extends Component<PropsType, StateType> {
   }
 
   render() {
-    const title = this.state.on ? 'Show less' : 'Show more';
+    const title = this.state.on ? t.showLess : t.showMore;
     const height = this.state.on ? this.props.height || 25 : 0;
     return (
       <div>

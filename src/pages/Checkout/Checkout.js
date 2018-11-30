@@ -54,6 +54,8 @@ import CheckoutContext from './CheckoutContext';
 
 import './Checkout.scss';
 
+import t from './i18n';
+
 type PropsType = {
   me: any,
   // eslint-disable-next-line
@@ -145,14 +147,14 @@ class Checkout extends Component<PropsType, StateType> {
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong. New address was not created.',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Address created!',
+          text: t.addressCreated,
           link: { text: '' },
         });
       },
@@ -164,8 +166,8 @@ class Checkout extends Component<PropsType, StateType> {
         }));
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong. New address was not created.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     });
@@ -257,8 +259,8 @@ class Checkout extends Component<PropsType, StateType> {
           if (response && response.createOrders) {
             this.props.showAlert({
               type: 'success',
-              text: 'Orders successfully created',
-              link: { text: 'Close.' },
+              text: t.ordersSuccessfullyCreated,
+              link: { text: t.close },
             });
             this.setState({
               invoiceId: response.createOrders.invoice.id,
@@ -290,26 +292,26 @@ class Checkout extends Component<PropsType, StateType> {
           } else if (!errors) {
             this.props.showAlert({
               type: 'danger',
-              text: 'Error :(',
-              link: { text: 'Close.' },
+              text: t.error,
+              link: { text: t.close },
             });
             this.setState({ checkoutInProcess: false });
           } else {
             this.props.showAlert({
               type: 'danger',
-              text: 'Error :(',
-              link: { text: 'Close.' },
+              text: t.error,
+              link: { text: t.close },
             });
             this.setState({ checkoutInProcess: false });
           }
         },
         onError: error => {
-          log.error('Error in DeleteFromCart mutation');
+          log.error(t.errorInDeleteFromCart);
           log.error(error);
           this.props.showAlert({
             type: 'danger',
-            text: 'Something went wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingWentWrong,
+            link: { text: t.close },
           });
           this.setState({ checkoutInProcess: false });
           this.props.router.push('/checkout');
@@ -484,7 +486,7 @@ class Checkout extends Component<PropsType, StateType> {
                           <StickyBar>
                             <CheckoutSidebar
                               step={step}
-                              buttonText={step === 1 ? 'Next' : 'Checkout'}
+                              buttonText={step === 1 ? t.next : t.checkout}
                               isReadyToClick={this.checkReadyToCheckout()}
                               checkoutInProcess={this.state.checkoutInProcess}
                               onCheckout={this.handleCheckout}
@@ -505,7 +507,7 @@ class Checkout extends Component<PropsType, StateType> {
 }
 
 export default createPaginationContainer(
-  Page(withShowAlert(withRouter(Checkout)), true, true),
+  Page(withShowAlert(withRouter(Checkout)), { withoutCategories: true }),
   graphql`
     fragment Checkout_me on User {
       ...PaymentInfo_me

@@ -1,0 +1,56 @@
+@import "../../../../../../styles/variables";
+
+.container {
+  margin-top: 2rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.wrapper {
+  margin-top: 2rem;
+  padding: 4rem;
+  background-color: $color_white;
+  flex: 1 0 auto;
+}
+
+.subtitle {
+  display: none;
+  margin-bottom: 5rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.moveButton {
+  & svg {
+    fill: $color_grey_light;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
+
+.quantityInput {
+  width: 6rem;
+  margin-right: 2rem;
+}
+
+.searchInput {
+  position: absolute;
+  top: -2rem;
+  right: 1rem;
+  width: calc(100% - 2rem);
+
+  @media (min-width: $md) {
+    top: -2rem;
+    width: 30rem;
+  }
+}
+
+.emptyProductsBlock {
+  line-height: 11rem;
+}

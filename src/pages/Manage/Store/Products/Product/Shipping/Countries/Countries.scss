@@ -1,0 +1,65 @@
+@import "../../../../../../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.continent {
+  display: inline-flex;
+}
+
+.allCheckbox {
+  margin-bottom: 2rem;
+}
+
+.checkbox {
+  margin-top: 0.375rem;
+}
+
+.label {
+  position: relative;
+  padding-right: 3.5rem;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.icon {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.5rem;
+  border-radius: 0.25rem;
+  z-index: 2;
+  transition: $transition_all_ease;
+}
+
+.rotateIcon {
+  transform: rotate(-180deg);
+  transition: $transition_all_ease;
+}
+
+.continentsCountries {
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+
+  & + .continent {
+    margin-top: 2rem;
+  }
+
+  &.show {
+    height: auto;
+    margin-top: 1.5rem;
+    opacity: 1;
+    visibility: visible;
+    transition: all .3s ease;
+  }
+}
+
+.country {
+  display: inline-block;
+  width: 21rem;
+  margin-top: 0.5rem;
+  margin-left: 3rem;
+}

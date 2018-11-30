@@ -1,9 +1,11 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { map, addIndex } from 'ramda';
 
 import AccordionBlock from './AccordionBlock';
+
+import t from './i18n';
 
 import './Accordion.scss';
 
@@ -62,7 +64,7 @@ class Accordion extends React.Component<PropsType, StateType> {
             role="button"
             tabIndex="0"
           >
-            show all
+            {t.showAll}
           </div>
         )}
       </div>

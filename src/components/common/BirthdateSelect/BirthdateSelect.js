@@ -7,6 +7,8 @@ import { Select } from 'components/common/Select';
 
 import './BirthdateSelect.scss';
 
+import t from './i18n';
+
 type ItemType = { id: string, label: string };
 
 type PropsType = {
@@ -69,32 +71,32 @@ class BirthdateSelect extends Component<PropsType, StateType> {
 
   generateMonths = (count: number, start: number) => {
     const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      t.january,
+      t.february,
+      t.march,
+      t.april,
+      t.may,
+      t.june,
+      t.july,
+      t.august,
+      t.september,
+      t.october,
+      t.november,
+      t.december,
     ];
     const briefMonthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+      t.jan,
+      t.feb,
+      t.mar,
+      t.apr,
+      t.mayS,
+      t.jun,
+      t.jul,
+      t.aug,
+      t.sep,
+      t.oct,
+      t.nov,
+      t.dec,
     ];
     const items = [...Array.from(Array(count).keys(), x => start + x)];
     const { brief } = this.props;
@@ -183,9 +185,9 @@ class BirthdateSelect extends Component<PropsType, StateType> {
       <div styleName="container">
         {!isNil(label) && <div styleName="label">{label}</div>}
         <div styleName="items">
-          {this.renderSelect('year', 'Year')}
-          {this.renderSelect('month', 'Month')}
-          {this.renderSelect('day', 'Day')}
+          {this.renderSelect('year', t.year)}
+          {this.renderSelect('month', t.month)}
+          {this.renderSelect('day', t.day)}
         </div>
         {!isNil(errors) &&
           errors.length && (

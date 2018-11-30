@@ -1,0 +1,31 @@
+@import "../../../styles/variables";
+
+.parentTitleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.parentTitle {
+  font-size: 1.75rem;
+  font-family: $font_medium;
+  color: $color_grey;
+}
+
+.childrenContainer {
+  display: block;
+  margin-left: 2rem;
+}
+
+.item {
+  font-family: $font_regular;
+  color: $color_grey;
+  font-size: 1.75rem;
+  cursor: pointer;
+}
+
+.active {
+  color: $color_blue;
+}

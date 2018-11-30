@@ -6,7 +6,7 @@ import { Paginator } from 'components/common/Paginator';
 
 import type { TableItemType } from 'pages/common/OrdersList/TableRow';
 
-import Header from './Header';
+import OrdersListHeader from './OrdersListHeader';
 import TableTitle from './TableTitle';
 import Table from './Table';
 
@@ -45,7 +45,7 @@ class OrdersList extends PureComponent<PropsType> {
   render() {
     return (
       <div styleName="container">
-        <Header
+        <OrdersListHeader
           onSearchTermFilterChanged={this.handleSearchTermFilterChanged}
           onOrderStatusFilterChanged={this.handleOrderStatusFilterChanged}
           onOrderFromDateFilterChanged={this.handleOrderFromDateFilterChanged}

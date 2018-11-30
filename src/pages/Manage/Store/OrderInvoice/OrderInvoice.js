@@ -20,6 +20,8 @@ import { pluckFromOrder } from './utils';
 
 import './OrderInvoice.scss';
 
+import t from './i18n';
+
 type PropsType = {
   me: OrderInvoiceType,
 };
@@ -43,7 +45,7 @@ class OrderInvoice extends PureComponent<PropsType> {
     return (
       <section styleName="container">
         <header styleName="header">
-          <h2 styleName="title">Invoice</h2>
+          <h2 styleName="title">{t.invoice}</h2>
           <div styleName="logo">
             <Link to="/" data-test="logoLink">
               <Icon type="logo" />
@@ -78,7 +80,6 @@ export default createFragmentContainer(
   graphql`
     fragment OrderInvoice_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
-      email
       order(slug: $slug) {
         slug
         currency

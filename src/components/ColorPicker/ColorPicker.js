@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React from 'react';
 import { map, sort, comparator, lt } from 'ramda';

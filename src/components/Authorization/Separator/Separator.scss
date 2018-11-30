@@ -1,0 +1,29 @@
+@import "../../../styles/variables";
+
+.container {
+  margin-bottom: 2rem;
+  border: 0;
+  color: black;
+  position: relative;
+  text-align: center;
+}
+
+.container:before {
+  background-color: $color_grey_trivial;
+  content: '';
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
+
+.container:after {
+  font-size: 14px;
+  background-color: $color_white;
+  color: $color_grey;
+  content: attr(text);
+  display: inline-block;
+  padding: 0 1rem;
+  position: relative;
+}

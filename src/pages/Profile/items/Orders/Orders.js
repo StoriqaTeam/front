@@ -11,6 +11,8 @@ import type { TableItemType } from 'pages/common/OrdersList/TableRow';
 
 import '../../Profile.scss';
 
+import t from './i18n';
+
 const itemsPerPage = 10;
 
 type PropsType = {
@@ -85,7 +87,7 @@ class Orders extends Component<PropsType, StateType> {
       date: order.createdAt,
       shop: {
         id: order.store ? order.store.rawId : null,
-        title: order.store ? order.store.name[0].text : 'The store was deleted',
+        title: order.store ? order.store.name[0].text : t.theStoreWasDeleted,
       },
       delivery: order.deliveryCompany,
       item: {
@@ -96,10 +98,10 @@ class Orders extends Component<PropsType, StateType> {
         title:
           order.product && order.product.baseProduct
             ? order.product.baseProduct.name[0].text
-            : 'The product was deleted',
+            : t.theProductWasDeleted,
       },
       price: order.price,
-      payment: order.paymentStatus ? 'Paid' : 'Not paid',
+      payment: order.paymentStatus ? t.paid : t.notPaid,
       status: order.state,
       subtotal: order.subtotal,
     };

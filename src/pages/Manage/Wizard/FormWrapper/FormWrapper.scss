@@ -1,0 +1,44 @@
+@import "../../../../styles/variables";
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.firstForm {
+    max-width: 54rem;
+  }
+  &.secondForm {
+    width: 54rem;
+  }
+  &.thirdForm {
+    width: 100%;
+  }
+
+  .headerTitle {
+    font-family: $font_light;
+    font-size: 3rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    @media (min-width: $md) {
+      font-size: 4.5rem;
+      margin-bottom: 2.7rem;
+    }
+  }
+
+  .headerDescription {
+    max-width: 29.75rem;
+    font-family: $font_regular;
+    font-size: 1.75rem;
+    line-height: 2.2rem;
+    color: $color_grey_minor;
+    text-align: center;
+    margin-bottom: 3rem;
+    @media (min-width: $md) {
+      font-size: 2rem;
+      line-height: 2.7rem;
+      margin-bottom: 6.5rem;
+      max-width: 54rem;
+    }
+  }
+}

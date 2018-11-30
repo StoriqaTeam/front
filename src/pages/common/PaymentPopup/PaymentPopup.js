@@ -9,6 +9,8 @@ import { SpinnerButton } from 'components/common/SpinnerButton';
 
 import './PaymentPopup.scss';
 
+import t from './i18n';
+
 type PropsType = {
   onCloseClicked: () => void,
   isShown: boolean,
@@ -74,21 +76,25 @@ class PaymentPopup extends Component<PropsType, StateType> {
             <div styleName="paymentStatusContainer">
               <div styleName="loader" />
               <span styleName="description">
-                Processing your payment.<br />Plase wait for a while.
+                {t.processingYourPayment}
+                <br />
+                {t.pleaseWaitForAwhile}
               </span>
               {/* eslint-disable */}
               <div
                 styleName="close"
                 onClick={() => this.setState({ isPaymentStatusShown: false })}
               >
-                Close
+                {t.close}
               </div>
               {/* eslint-enable */}
             </div>
           )}
-          <div styleName="title">Payment</div>
+          <div styleName="title">{t.payment}</div>
           <div styleName="description">
-            Scan QR-code within your wallet app<br />and pay in a seconds
+            {t.scanQRCodeWithinYourWalletApp}
+            <br />
+            {t.andPayInSeconds}
           </div>
           <div styleName="paymentInfoWrapper">
             <QRCode
@@ -97,12 +103,12 @@ class PaymentPopup extends Component<PropsType, StateType> {
               size={200}
             />
             <div styleName="paymentInfo">
-              <div styleName="addressTitle">Address</div>
+              <div styleName="addressTitle">{t.address}</div>
               <div styleName="address">{walletAddress}</div>
-              <div styleName="amountTitle">Amount</div>
+              <div styleName="amountTitle">{t.amount}</div>
               <div styleName="amount">{amount} STQ</div>
               <div styleName="reserveInfo">
-                Current price reserved for{' '}
+                {t.currentPriceReservedFor}{' '}
                 <span styleName="timer">{this.state.timerValue}</span>
               </div>
             </div>
@@ -112,7 +118,7 @@ class PaymentPopup extends Component<PropsType, StateType> {
               big
               onClick={() => this.setState({ isPaymentStatusShown: true })}
             >
-              I have paid
+              {t.iHavePaid}
             </SpinnerButton>
           </div>
         </div>

@@ -63,6 +63,8 @@ import type {
 
 import './Product.scss';
 
+import t from './i18n';
+
 type PropsType = {
   me: {
     id: string,
@@ -210,7 +212,7 @@ class Product extends Component<PropsType, StateType> {
           if (!errors && response) {
             this.props.showAlert({
               type: 'success',
-              text: 'Product added to cart!',
+              text: t.productAddedToCart,
               link: { text: '' },
             });
             this.setState({ isAddToCart: true });
@@ -221,8 +223,8 @@ class Product extends Component<PropsType, StateType> {
           log.error(error);
           this.props.showAlert({
             type: 'danger',
-            text: 'Unable to add product to cart',
-            link: { text: 'Close.' },
+            text: t.unableToAddProductToCart,
+            link: { text: t.close },
           });
         },
       });
@@ -287,7 +289,7 @@ class Product extends Component<PropsType, StateType> {
     const modifLongDescription = extractText(
       longDescription,
       'EN',
-      'No Long Description',
+      t.noLongDescription,
     ).replace(/\n/g, '<hr />');
     const tabs: Array<TabType> = [
       {
@@ -390,10 +392,10 @@ class Product extends Component<PropsType, StateType> {
     const { me, baseProduct, router } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {
-      return <div styleName="productNotFound">Product Not Found</div>;
+      return <div styleName="productNotFound">{t.productNotFound}</div>;
     }
     if (isNil(baseProduct.store)) {
-      return <div styleName="productNotFound">Store Not Found</div>;
+      return <div styleName="productNotFound">{t.storeNotFound}</div>;
     }
     const {
       name,
@@ -413,7 +415,7 @@ class Product extends Component<PropsType, StateType> {
       cartQuantity,
       deliveryData,
     } = this.state;
-    const description = extractText(shortDescription, 'EN', 'No Description');
+    const description = extractText(shortDescription, 'EN', t.noDescription);
     let userAddress = null;
     if (me) {
       const { deliveryAddressesFull } = me;
@@ -502,7 +504,7 @@ class Product extends Component<PropsType, StateType> {
 
 export default createFragmentContainer(
   // $FlowIgnoreMe
-  withShowAlert(withErrorBoundary(Page(Product, true))),
+  withShowAlert(withErrorBoundary(Page(Product))),
   graphql`
     fragment Product_baseProduct on BaseProduct {
       isShippingAvailable

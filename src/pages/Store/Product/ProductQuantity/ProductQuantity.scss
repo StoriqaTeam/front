@@ -1,0 +1,62 @@
+@import "../../../../styles/variables";
+
+.container {
+  margin-top: 4rem;
+}
+
+.title {
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.counter {
+  margin-top: 2rem;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  @media (min-width: $md) {
+    align-items: center;
+    flex-direction: row;
+    padding: 0;
+  }
+}
+
+.stock {
+  padding-left: 0;
+  padding-top: 1rem;
+
+  @media (min-width: $md) {
+    padding-left: 2rem;
+    padding-top: 0;
+  }
+}
+
+.inStock {
+  color: $color_green;
+  padding-left: 0;
+  padding-top: 0;
+
+  @media (min-width: $md) {
+    padding-left: 1rem;
+  }
+}
+
+.zeroQuantity {
+  color: $color_red;
+}
+
+.preOrder {
+  margin-top: 4rem;
+
+  .preOrderText {
+    margin-top: 2rem;
+    color: $color_grey_minor;
+
+    .preOrderDays {
+      color: $color_green;
+    }
+  }
+}
