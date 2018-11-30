@@ -1,0 +1,121 @@
+@import "../../../../styles/variables";
+
+.container {
+
+}
+
+.storeInfo {
+  display: flex;
+}
+
+.storeInfoWrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  margin-bottom: 2.75rem;
+  max-width: 100%;
+
+  @media (min-width: $md) {
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 0;
+    //max-width: 75%;
+  }
+}
+
+.iconsWrapper {
+  border-top: 1px solid $color_grey_trivial;
+  display: flex;
+  justify-content: space-between;
+  margin-left: -4rem;
+  margin-right: -4rem;
+  max-width: initial;
+
+  @media (min-width: $md) {
+    border-bottom: none;
+    border-top: none;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 38.125rem;
+    padding: 0;
+  }
+
+}
+
+.storeName {
+  color: $color_grey;
+  margin: 0.5rem 0 0 0;
+  font-size: 16px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.storeDetails {
+  p {
+    margin-left: 6.525rem;
+    text-align: left;
+    color: $color_grey_minor;
+
+    @media (min-width: $md) {
+      margin-left: 0;
+      text-align: right;
+    }
+  }
+}
+
+.icon {
+  svg {
+    height: 3.25rem;
+    width: 3.25rem;
+  }
+}
+
+.iconInfo {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 3.2125rem 4rem;
+  @media (min-width: $md) {
+    flex-direction: row;
+    padding: 0;
+  }
+}
+
+.iconInfoText {
+  color: $color_grey_minor;
+  font-size: 16px;
+  margin-left: 0;
+  position: relative;
+  top: -0.375rem;
+  @media (min-width: $md) {
+    margin-left: 1.625rem;
+  }
+}
+
+.chatText {
+  color: $color_grey_minor
+}
+
+.separator {
+  background-color: $color_grey_trivial;
+  height: 14rem;
+  position: relative;
+  top: 0;
+  width: 1px;
+  @media (min-width: $md) {
+    height: 3.375rem;
+    top: 1rem;
+  }
+}
+
+.image {
+  background-color: $color_grey_trivial;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 1rem;
+  height: 5.25rem;
+  margin-right: 1.375rem;
+  width: 5.25rem;
+}

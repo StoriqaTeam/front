@@ -216,6 +216,7 @@ const routes = (
             $productID: Int!
             $variantId: Int!
             $quantity: Int!
+            $shippingId: Int
           ) {
             me {
               id
@@ -245,7 +246,11 @@ const routes = (
             baseProduct(id: $productID) {
               ...BuyNow_baseProduct
             }
-            calculateBuyNow(productId: $variantId, quantity: $quantity) {
+            calculateBuyNow(
+              productId: $variantId
+              quantity: $quantity
+              shippingId: $shippingId
+            ) {
               product {
                 id
                 rawId
@@ -267,6 +272,7 @@ const routes = (
             productID: parseFloat(queryObj.product || 0),
             variantId: parseFloat(queryObj.variant),
             quantity: parseFloat(queryObj.quantity),
+            shippingId: parseFloat(queryObj.delivery),
           };
         }}
       />
@@ -333,7 +339,7 @@ const routes = (
                   isPriority
                 }
               }
-              baseProduct(id: $productID) {
+              baseProduct(id: $productID, visibility: "active") {
                 ...Product_baseProduct
               }
             }
@@ -505,6 +511,7 @@ const routes = (
               query={graphql`
                 query routes_ManageStore_Query {
                   me {
+                    id
                     ...EditStore_me
                   }
                   ...InputSlug_storeSlugExists
@@ -766,7 +773,7 @@ const routes = (
         Component={Store}
         query={graphql`
           query routes_Store_Query($storeId: Int!) {
-            store(id: $storeId) {
+            store(id: $storeId, visibility: "active") {
               id
               rawId
               logo

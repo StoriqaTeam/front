@@ -21,6 +21,8 @@ import type { Contacts_me as ContactsMeType } from './__generated__/Contacts_me.
 
 import './Contacts.scss';
 
+import t from './i18n';
+
 type NestedObject<T> = { [k: string]: T | NestedObject<T> };
 
 type addressFullType = {
@@ -112,10 +114,13 @@ class Contacts extends Component<PropsType, StateType> {
     });
   }
 
-  handleInputChange = (id: string) => (e: any) => {
+  handleInputChange = (id: string) => (
+    e: SyntheticInputEvent<HTMLInputElement>,
+  ) => {
     const { value } = e.target;
     if (value.length <= 50) {
-      this.setState(assocPath(['form', id], value, this.state));
+      const val = id === 'phone' ? value.replace(/\s/g, '') : value;
+      this.setState(assocPath(['form', id], val, this.state));
     }
   };
 
@@ -154,8 +159,8 @@ class Contacts extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -166,14 +171,14 @@ class Contacts extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Saved!',
+          text: t.saved,
           link: { text: '' },
         });
       },
@@ -181,8 +186,8 @@ class Contacts extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     });
@@ -196,8 +201,8 @@ class Contacts extends Component<PropsType, StateType> {
     if (!currentUser || !currentUser.rawId || !myStore || !myStore.id) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
+        text: t.somethingGoingWrong,
+        link: { text: t.close },
       });
       return;
     }
@@ -245,8 +250,8 @@ class Contacts extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
@@ -257,14 +262,14 @@ class Contacts extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Saved!',
+          text: t.saved,
           link: { text: '' },
         });
       },
@@ -287,16 +292,16 @@ class Contacts extends Component<PropsType, StateType> {
           log.debug('parsingError:', { parsingError });
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrong,
+            link: { text: t.close },
           });
           return;
         }
 
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -327,8 +332,8 @@ class Contacts extends Component<PropsType, StateType> {
     const { isLoading, addressFull } = this.state;
     return (
       <div styleName="container">
-        {this.renderInput({ id: 'email', label: 'Email', limit: 50 })}
-        {this.renderInput({ id: 'phone', label: 'Phone' })}
+        {this.renderInput({ id: 'email', label: t.labelEmail, limit: 50 })}
+        {this.renderInput({ id: 'phone', label: t.labelPhone })}
         {this.renderInput({
           id: 'facebookUrl',
           label: 'Facebook',
@@ -357,7 +362,7 @@ class Contacts extends Component<PropsType, StateType> {
         <div styleName="formItem">
           <div styleName="saveButton">
             <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
-              Save
+              {t.save}
             </SpinnerButton>
           </div>
         </div>
@@ -372,7 +377,7 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(Contacts, 'Contacts'), true)),
+  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
   graphql`
     fragment Contacts_me on User {
       myStore {

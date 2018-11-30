@@ -21,6 +21,8 @@ import type { Start_mainPage as StartMainPage } from './__generated__/Start_main
 
 import './Start.scss';
 
+import t from './i18n';
+
 import bannersSlider from './bannersSlider.json';
 import bannersRow from './bannersRow.json';
 
@@ -149,7 +151,7 @@ class Start extends Component<PropsTypes, StateTypes> {
             viewedProducts.length > 0 && (
               <Goods
                 items={viewedProducts}
-                title="Most Popular"
+                title={t.mostPopular}
                 seeAllUrl="/categories?search=&sortBy=VIEWS"
               />
             )}
@@ -159,21 +161,21 @@ class Start extends Component<PropsTypes, StateTypes> {
             <MediaQuery maxWidth={575}>
               <ImageLoader
                 fit
-                src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC-medium.png"
+                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-0zS95RW1dtwC-medium.png"
                 loader={loader}
               />
             </MediaQuery>
             <MediaQuery maxWidth={991} minWidth={576}>
               <ImageLoader
                 fit
-                src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC-large.png"
+                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-P5haU9sN9IQC-large.png"
                 loader={loader}
               />
             </MediaQuery>
             <MediaQuery minWidth={992}>
               <ImageLoader
                 fit
-                src="https://s3.amazonaws.com/storiqa-dev/img-zUGsPEmPu8MC.png"
+                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-P5haU9sN9IQC.png"
                 loader={loader}
               />
             </MediaQuery>
@@ -184,7 +186,7 @@ class Start extends Component<PropsTypes, StateTypes> {
             discountProducts.length > 0 && (
               <Goods
                 items={discountProducts}
-                title="Sale"
+                title={t.sale}
                 seeAllUrl="/categories?search=&sortBy=DISCOUNT"
               />
             )}
@@ -225,7 +227,7 @@ Start.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(Start, true),
+  Page(Start),
   graphql`
     fragment Start_mainPage on MainPage {
       findMostViewedProducts(

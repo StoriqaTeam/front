@@ -1,0 +1,82 @@
+@import '../../../../styles/variables.scss';
+
+.container {
+  display: flex;
+  width: 100%;
+  margin-top: 2.5rem;
+}
+
+.photoWrapper {
+  width: 10rem;
+  height: 10rem;
+}
+
+.emptyLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  background-color: $color_grey_trivial;
+}
+
+.photo {
+  width: 10rem;
+  height: 10rem;
+  display: block;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.productInfoBlock {
+  min-width: 0;
+  margin-left: 2rem;
+}
+
+.productName {
+  a {
+    font-size: 16px;
+    color: $color_grey;
+  }
+
+  .productNameText {
+    display: block;
+
+    @media (max-width: #{$sm - 1px}) {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+.productCategory {
+  a {
+    font-size: 16px;
+    margin-top: 0.4rem;
+    color: $color_grey;
+  }
+}
+
+.productPrice {
+  font-size: 16px;
+}
+
+.attributes {
+  display: flex;
+  margin-left: 4rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: none;
+  }
+
+  .names {
+    color: $color_grey_minor;
+    font-size: 14px;
+  }
+
+  .values {
+    margin-left: 2rem;
+  }
+}

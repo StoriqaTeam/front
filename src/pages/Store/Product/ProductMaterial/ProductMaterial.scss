@@ -1,0 +1,30 @@
+@import "../../../../styles/variables";
+
+.container {
+  margin-top: 4rem;
+  width: 20rem;
+}
+
+.title {
+  position: relative;
+  margin-bottom: -2.5rem;
+  color: $color_grey;
+  font-size: 14px;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 500;
+  height: 2.75rem;
+  letter-spacing: 1.2px;
+  line-height: normal;
+  text-align: left;
+  text-transform: uppercase;
+  width: 12.125rem;
+
+  &.isOnSelected {
+    color: $color_red;
+  }
+}
+
+.select {
+  max-width: 20.625rem;
+}

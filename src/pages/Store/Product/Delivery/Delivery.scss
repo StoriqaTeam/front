@@ -1,0 +1,129 @@
+@import "../../../../styles/variables";
+
+.container {
+  position: relative;
+}
+
+.title {
+  margin-top: 3rem;
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.selectDelivery {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 24rem;
+  margin-top: 1rem;
+  border: 1px solid $color_grey_light;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  font-size: 14px;
+  line-height: 3rem;
+  color: $color_grey;
+  cursor: pointer;
+
+  .icon {}
+}
+
+.deliveryPrice {
+  margin-top: 1rem;
+}
+
+.modal {
+  padding: 0 4rem 4rem;
+  width: 82rem;
+
+  @media (max-width: #{$md - 1px}) {
+    width: 63rem;
+  }
+
+  @media (max-width: #{$sm - 1px}) {
+    width: 100%;
+  }
+
+  .select {
+    width: 100%;
+    max-width: 35rem;
+    margin-bottom: 4rem;
+  }
+
+  .button {
+    width: 22.5rem;
+    margin: 0 auto;
+    padding-top: 4rem;
+  }
+
+  .table {
+    margin-top: 2rem;
+  }
+
+  .tableHeader {
+    display: flex;
+    margin-bottom: 2rem;
+    font-size: 14px;
+    color: $color_grey_minor;
+  }
+
+  .deliveryPackage {
+    display: flex;
+    margin: 0 -4rem;
+    padding: 2rem 4rem;
+    border-top: 1px solid $color_grey_trivial;
+  }
+
+  .td {}
+
+  .tdCompany {
+    display: flex;
+    align-items: center;
+    width: 60%;
+  }
+
+  .tdPrice {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    padding-left: 2rem;
+  }
+
+  .logo {
+    display: block;
+    justify-content: center;
+    width: 6.5rem;
+    height: 6.5rem;
+    margin: 0 1rem 0 3rem;
+    object-fit: contain;
+    object-position: left;
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 4rem;
+  bottom: 4rem;
+  left: 4rem;
+  right: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255,255,255,.5);
+  z-index: 20;
+}
+
+.notShippingText {
+  margin-top: 1rem;
+  font-size: 14px;
+  color: $color_pink;
+}
+
+.errorWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: $color_red;
+  font-size: 1.5rem;
+}

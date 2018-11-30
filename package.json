@@ -19,6 +19,7 @@
     "moment": "2.22.2",
     "morgan": "1.9.0",
     "prop-types": "15.6.0",
+    "pug": "2.0.3",
     "qrcode.react": "0.8.0",
     "ramda": "0.25.0",
     "raven": "2.6.3",
@@ -135,7 +136,7 @@
   },
   "peerDependencies": {
     "@storybook/addon-actions": "3.2.17",
-    "farce": "0.2.5"
+    "farce": "0.2.6"
   },
   "scripts": {
     "build": "node scripts/build.js",

@@ -1,0 +1,56 @@
+@import '../../../../styles/variables';
+
+.container {
+  color: $color_grey_minor;
+  display: flex;
+  line-height: 2.5rem;
+  font-size: 14px;
+  justify-content: flex-start;
+  margin-top: 4.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+
+  & > div[class*="Col_"] {
+    margin-right: 0;
+    @media (min-width: $xl) {
+      margin-right: 3rem;
+    }
+  }
+}
+
+.number {
+  display: none;
+  @media (min-width: $md) {
+    display: inline-block;
+  }
+
+}
+
+.poundSign {
+  display: inline-block;
+  @media (min-width: $md) {
+    display: none;
+  }
+}
+
+.border {
+  background-color: #efefef;
+  height: 0.125rem;
+  position: absolute;
+  bottom: -2rem;
+  left: -2rem;
+  right: -2rem;
+  @media (min-width: $md) {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+  @media (min-width: $xl) {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+}

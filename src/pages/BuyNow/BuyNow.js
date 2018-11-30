@@ -13,6 +13,8 @@ import {
   isEmpty,
   contains,
   keys,
+  isNil,
+  assoc,
 } from 'ramda';
 import { routerShape } from 'found';
 import { validate } from '@storiqa/shared';
@@ -32,9 +34,9 @@ import {
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { AddressFullType, SelectItemType } from 'types';
-import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
 import type { MutationParamsType as BuyNowMutationParamsType } from 'relay/mutations/BuyNowMutation';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 import type { BuyNow_baseProduct as BuyNowBaseProductType } from './__generated__/BuyNow_baseProduct.graphql';
 
 import Header from './Header';
@@ -46,6 +48,8 @@ import { addressesToSelect } from './utils';
 import fetchBuyNow from './fetchBuyNow';
 
 import './BuyNow.scss';
+
+import t from './i18n';
 
 const emptyAddressFull = {
   value: '',
@@ -94,7 +98,6 @@ type StateType = {
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
-  isLoadingReplaceAddressButton: boolean,
 };
 
 type PropsType = {
@@ -154,7 +157,6 @@ class BuyNow extends Component<PropsType, StateType> {
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
-      isLoadingReplaceAddressButton: false,
     };
   }
 
@@ -175,6 +177,10 @@ class BuyNow extends Component<PropsType, StateType> {
       parseFloat(queryParams.quantity) > variant.quantity
     ) {
       this.handleChangeCount(variant.quantity);
+    }
+
+    if (queryParams.delivery) {
+      // this.handleChangeDelivery(queryParams.delivery);
     }
   }
 
@@ -198,8 +204,21 @@ class BuyNow extends Component<PropsType, StateType> {
   getDefaultSelectedDeliveryAddress = () => {
     const { me } = this.props;
     const { deliveryAddressesFull } = me;
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+
+    const countriesFromQuery = filter(
+      item => item.address.countryCode === queryParams.country,
+      deliveryAddressesFull || [],
+    );
+    const countryFromQuery = isEmpty(countriesFromQuery)
+      ? null
+      : head(countriesFromQuery);
     const addresses = addressesToSelect(deliveryAddressesFull);
-    return find(propEq('id', '0'))(addresses) || head(addresses) || null;
+
+    return !isNil(countryFromQuery)
+      ? find(propEq('id', countryFromQuery.id))(addresses)
+      : find(propEq('id', '0'))(addresses) || head(addresses) || null;
   };
 
   getDeliveryAddress = (selectedAddress: ?SelectItemType): AddressFullType => {
@@ -303,7 +322,51 @@ class BuyNow extends Component<PropsType, StateType> {
     if (saveAsNewAddress && !selectedAddress) {
       this.createAddress();
     }
-    this.setState({ step: 2 });
+    const { deliveryAddress } = this.state;
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+    this.setState({ isLoadingCheckout: true });
+    const variables = {
+      productId: parseFloat(queryParams.variant),
+      quantity: parseFloat(queryParams.quantity),
+    };
+    fetchBuyNow(
+      this.props.relay.environment,
+      deliveryAddress && deliveryAddress.countryCode === queryParams.country
+        ? assoc('shippingId', parseFloat(queryParams.delivery), variables)
+        : variables,
+    )
+      .then(({ calculateBuyNow }) => {
+        const {
+          couponsDiscounts,
+          totalCost,
+          totalCostWithoutDiscounts,
+          totalCount,
+          deliveryCost,
+          subtotalWithoutDiscounts,
+        } = calculateBuyNow;
+        this.setState({
+          step: 2,
+          isLoadingCheckout: false,
+          buyNowData: {
+            couponsDiscounts,
+            totalCost,
+            totalCostWithoutDiscounts,
+            totalCount,
+            deliveryCost,
+            subtotalWithoutDiscounts,
+          },
+        });
+        return true;
+      })
+      .catch(() => {
+        this.props.showAlert({
+          type: 'danger',
+          text: 'Something going wrong :(',
+          link: { text: 'Close.' },
+        });
+        this.setState({ isLoadingCheckout: false });
+      });
   };
 
   validate = () => {
@@ -336,46 +399,7 @@ class BuyNow extends Component<PropsType, StateType> {
   };
 
   replaceAddress = () => {
-    this.setState({ isLoadingReplaceAddressButton: true });
-    // $FlowIgnore
-    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
-    const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
-    };
-    fetchBuyNow(this.props.relay.environment, variables)
-      .then(({ calculateBuyNow }) => {
-        const {
-          couponsDiscounts,
-          totalCost,
-          totalCostWithoutDiscounts,
-          totalCount,
-          deliveryCost,
-          subtotalWithoutDiscounts,
-        } = calculateBuyNow;
-        this.setState({
-          step: 1,
-          deliveryPackage: null,
-          isLoadingReplaceAddressButton: false,
-          buyNowData: {
-            couponsDiscounts,
-            totalCost,
-            totalCostWithoutDiscounts,
-            totalCount,
-            deliveryCost,
-            subtotalWithoutDiscounts,
-          },
-        });
-        return true;
-      })
-      .catch(() => {
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
-        });
-        this.setState({ isLoadingReplaceAddressButton: false });
-      });
+    this.setState({ step: 1 });
   };
 
   handleCheckout = () => {
@@ -412,8 +436,8 @@ class BuyNow extends Component<PropsType, StateType> {
           log.debug('Response: ', response);
           this.props.showAlert({
             type: 'success',
-            text: 'Orders successfully created',
-            link: { text: 'Close.' },
+            text: t.orderSuccessfullyCreated,
+            link: { text: t.close },
           });
           const responseOrders = pathOr(
             null,
@@ -425,15 +449,15 @@ class BuyNow extends Component<PropsType, StateType> {
         } else if (!errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Error :(',
-            link: { text: 'Close.' },
+            text: t.error,
+            link: { text: t.close },
           });
         } else {
           log.debug('Errors: ', errors);
           this.props.showAlert({
             type: 'danger',
-            text: 'Error :(',
-            link: { text: 'Close.' },
+            text: t.error,
+            link: { text: t.close },
           });
         }
       },
@@ -443,8 +467,8 @@ class BuyNow extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something went wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -467,14 +491,14 @@ class BuyNow extends Component<PropsType, StateType> {
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong. New address was not created.',
-            link: { text: 'Close.' },
+            text: t.somethingGoingWrongNewAddressWasNotCreated,
+            link: { text: t.close },
           });
           return;
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Address created!',
+          text: t.addressCreated,
           link: { text: '' },
         });
       },
@@ -482,8 +506,8 @@ class BuyNow extends Component<PropsType, StateType> {
         log.error(error);
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong. New address was not created.',
-          link: { text: 'Close.' },
+          text: t.somethingGoingWrongNewAddressWasNotCreated,
+          link: { text: t.close },
         });
       },
     };
@@ -539,8 +563,8 @@ class BuyNow extends Component<PropsType, StateType> {
       .catch(() => {
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
         this.setState({ changeCountLoading: false });
       });
@@ -575,10 +599,10 @@ class BuyNow extends Component<PropsType, StateType> {
     fetchBuyNow(this.props.relay.environment, variables)
       .then(({ calculateBuyNow }) => {
         if (!calculateBuyNow) {
-          throw new Error('coupon not found');
+          throw new Error(t.couponNotFound);
         }
         if (couponCodeValue === successCouponCodeValue) {
-          throw new Error('coupon already applied');
+          throw new Error(t.couponAlreadyApplied);
         }
         const {
           couponsDiscounts,
@@ -604,7 +628,7 @@ class BuyNow extends Component<PropsType, StateType> {
           () => {
             this.props.showAlert({
               type: 'success',
-              text: 'Сoupon applied!',
+              text: t.couponApplied,
               link: { text: '' },
             });
           },
@@ -615,7 +639,7 @@ class BuyNow extends Component<PropsType, StateType> {
         this.props.showAlert({
           type: 'danger',
           text: `${error}`,
-          link: { text: 'Close.' },
+          link: { text: t.close },
         });
         this.setState({ isLoadingCouponButton: false });
       });
@@ -672,7 +696,7 @@ class BuyNow extends Component<PropsType, StateType> {
           () => {
             this.props.showAlert({
               type: 'success',
-              text: 'Delivery applied!',
+              text: t.deliveryApplied,
               link: { text: '' },
             });
           },
@@ -682,11 +706,22 @@ class BuyNow extends Component<PropsType, StateType> {
       .catch(() => {
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
         return Promise.reject();
       });
+  };
+
+  handlePackagesFetched = (packages: Array<AvailableDeliveryPackageType>) => {
+    // $FlowIgnore
+    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
+    if (queryParams.delivery) {
+      const deliveryPackage = find(
+        propEq('shippingId', parseFloat(queryParams.delivery)),
+      )(packages);
+      this.setState({ deliveryPackage: deliveryPackage || null });
+    }
   };
 
   render() {
@@ -706,7 +741,6 @@ class BuyNow extends Component<PropsType, StateType> {
       isLoadingCheckout,
       errors,
       deliveryPackage,
-      isLoadingReplaceAddressButton,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -740,14 +774,14 @@ class BuyNow extends Component<PropsType, StateType> {
                           <div styleName="address">
                             <Row>
                               <Col size={12}>
-                                <div styleName="title">Delivery info</div>
+                                <div styleName="title">{t.deliveryInfo}</div>
                                 <div styleName="receiverItem">
                                   <Input
                                     fullWidth
                                     id="receiverName"
                                     label={
                                       <span>
-                                        Receiver name{' '}
+                                        {t.labelReceiverName}{' '}
                                         <span styleName="red">*</span>
                                       </span>
                                     }
@@ -763,7 +797,7 @@ class BuyNow extends Component<PropsType, StateType> {
                                     id="phone"
                                     label={
                                       <span>
-                                        Receiver phone{' '}
+                                        {t.labelReceiverPhone}{' '}
                                         <span styleName="red">*</span>
                                       </span>
                                     }
@@ -776,14 +810,14 @@ class BuyNow extends Component<PropsType, StateType> {
                                 <div styleName="selectItem">
                                   <RadioButton
                                     id="existingAddressCheckbox"
-                                    label="Choose your address"
+                                    label={t.labelChooseYourAddress}
                                     isChecked={selectedAddress !== null}
                                     onChange={this.handleOnChangeAddressType}
                                   />
                                   {selectedAddress !== null && (
                                     <div styleName="select">
                                       <Select
-                                        label="Address"
+                                        label={t.labelAddress}
                                         items={addresses}
                                         activeItem={selectedAddress}
                                         onSelect={this.handleOnSelectAddress}
@@ -808,7 +842,9 @@ class BuyNow extends Component<PropsType, StateType> {
                                 <div styleName="addressFormWrap">
                                   <RadioButton
                                     id="newAddressCheckbox"
-                                    label="Or fill fields below and save as address"
+                                    label={
+                                      t.labelOrFillFieldsBelowAndSaveAsAddress
+                                    }
                                     isChecked={selectedAddress === null}
                                     onChange={this.handleOnChangeAddressType}
                                   />
@@ -834,7 +870,7 @@ class BuyNow extends Component<PropsType, StateType> {
                                       <div styleName="saveAddressCheckbox">
                                         <Checkbox
                                           id="saveAddressCheckbox"
-                                          label="Save as a new address"
+                                          label={t.labelSaveAsANewAddress}
                                           isChecked={saveAsNewAddress}
                                           onChange={
                                             this.handleChangeSaveCheckbox
@@ -873,9 +909,6 @@ class BuyNow extends Component<PropsType, StateType> {
                         receiverName={receiverName}
                         email={me.email}
                         replaceAddress={this.replaceAddress}
-                        isLoadingReplaceAddressButton={
-                          isLoadingReplaceAddressButton
-                        }
                       />
                     </div>
                     <div styleName="store">
@@ -896,6 +929,7 @@ class BuyNow extends Component<PropsType, StateType> {
                         baseProductId={baseProduct.rawId}
                         onChangeDelivery={this.handleChangeDelivery}
                         deliveryPackage={deliveryPackage}
+                        onPackagesFetched={this.handlePackagesFetched}
                       />
                     </div>
                   </div>
@@ -924,7 +958,7 @@ class BuyNow extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(Page(BuyNow, true)),
+  withShowAlert(Page(BuyNow)),
   graphql`
     fragment BuyNow_baseProduct on BaseProduct {
       id

@@ -22,6 +22,8 @@ import type { GetAttributeType } from 'pages/Manage/Store/Products/types';
 
 import './Characteristics.scss';
 
+import t from './i18n';
+
 type StateType = {
   isPhotoUploading: boolean,
 };
@@ -124,7 +126,7 @@ class CharacteristicItem extends Component<PropsType, StateType> {
           <div styleName="upload">
             <UploadWrapper
               id={attribute.id}
-              buttonLabel="Add photo"
+              buttonLabel={t.labelAddPhoto}
               onUpload={this.handleOnUpload}
               buttonHeight={10}
               buttonWidth={10}

@@ -6,6 +6,8 @@ import { Icon } from 'components/Icon';
 
 import './StringLoadMore.scss';
 
+import t from './i18n';
+
 type PropsType = {
   text: string,
 };
@@ -63,7 +65,7 @@ class StringLoadMore extends Component<PropsType, StateType> {
         </span>
         {isButton && (
           <button styleName="button" onClick={this.handleOnClick}>
-            <span styleName="buttonText">Read more</span>
+            <span styleName="buttonText">{t.readMore}</span>
             <Icon inline type="arrowExpand" />
           </button>
         )}

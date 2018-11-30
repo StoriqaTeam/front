@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'found';
 import { pathOr } from 'ramda';
 
-import { FooterResponsive } from 'components/App';
+import { Footer } from 'components/App';
 import { Container, Row, Col } from 'layout';
 
 import {
@@ -36,7 +36,7 @@ class StartSelling extends PureComponent<{}> {
                 <StartSellingForSellers lang={lang} />
                 {/* <StartSellingPrices lang={lang} /> */}
                 <StartSellingFAQ lang={lang} />
-                <FooterResponsive isShopCreated />
+                <Footer isShopCreated />
               </Col>
               <Col size={1} />
             </Row>

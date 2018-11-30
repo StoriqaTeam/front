@@ -1,0 +1,79 @@
+@import "../../../styles/variables";
+
+.container {
+  background-color: $color_blue;
+}
+
+.text {
+  color: $color_white;
+  font-size: 18px;
+
+  @media (max-width: #{$md - 1px}) {
+    font-size: 14px;
+  }
+}
+
+.body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 170rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.1rem 8rem 1.1rem 2rem;
+
+  @media (max-width: #{$md - 1px}) {
+    display: block;
+  }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.link {
+  display: inline-block;
+  margin-left: 4rem;
+  padding: 0.4rem 4rem;
+  color: $color_white;
+  font-size: 16px;
+  border: 1px solid rgba(255,255,255,.26);
+  border-radius: 0.5rem;
+  transition: $transition_all_ease;
+
+  @media (max-width: #{$md - 1px}) {
+    padding: 0.3rem 3rem;
+    font-size: 14px;
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  &:hover {
+    border: 1px solid rgba(255,255,255,.7);
+  }
+}
+
+.cross {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  margin-top: -2rem;
+  padding: 1rem;
+  cursor: pointer;
+
+  @media (max-width: #{$md - 1px}) {
+    top: 3rem;
+  }
+
+  &:hover {
+    svg {
+      opacity: .9;
+    }
+  }
+
+  svg {
+    fill: $color_white;
+    opacity: .6;
+    transition: $transition_all_ease;
+  }
+}

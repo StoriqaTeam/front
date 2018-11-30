@@ -1,0 +1,37 @@
+@import "../../../../../styles/variables";
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 5rem;
+  //margin-left: -1rem;
+  //margin-right: -1rem;
+  @media (min-width: $md) {
+    flex-direction: row;
+  }
+}
+
+.subtitle {
+  display: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.addItem {
+  width: 100%;
+  @media (min-width: $md) {
+    width: initial;
+  }
+  button {
+    width: 100%;
+    @media (min-width: $md) {
+      width: 23.75rem;
+    }
+  }
+}

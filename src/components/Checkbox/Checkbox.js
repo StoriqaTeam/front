@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
@@ -7,13 +7,17 @@ import './Checkbox.scss';
 
 type PropsType = {
   id: string,
-  label: string,
+  label: string | boolean,
   isChecked: boolean,
-  onChange: Function,
-  radioStyle: ?boolean,
+  onChange: string => void,
+  radioStyle: boolean,
 };
 
 class Checkbox extends PureComponent<PropsType> {
+  static defaultProps = {
+    radioStyle: false,
+  };
+
   onChange = () => {
     const { id, onChange } = this.props;
     onChange(id);

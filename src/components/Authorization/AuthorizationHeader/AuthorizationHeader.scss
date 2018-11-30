@@ -1,0 +1,69 @@
+@import "../../../styles/variables.scss";
+
+$marginWidth: 9rem;
+$marginFullWidth: 9999rem;
+
+.container {
+  display: block;
+  margin: 0 -3.5rem 6rem -3.5rem;
+
+  @media (min-width: $md) {
+    margin: 0 #{-$marginWidth} 6rem #{-$marginWidth};
+  }
+
+  &.fullWidth {
+    margin: 0 #{-$marginFullWidth} 6rem #{-$marginFullWidth};
+  }
+}
+
+.container:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.title {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  float: left;
+}
+
+.linkTitle {
+  font-size: 12px;
+  line-height: 3rem;
+  float: right;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tabsContainer {
+  border-bottom: 2px solid $color_grey_trivial;
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 3.5rem;
+  li:first-child {
+    margin-right: 4rem;
+  }
+  @media (min-width: $md) {
+    padding: 0 $marginWidth;
+  }
+  &.fullWidth {
+    padding: 0 $marginFullWidth;
+  }
+}
+
+.tab {
+  border-bottom: 0.25rem solid transparent;
+  color: $color_grey_minor;
+  cursor: pointer;
+  font-size: 14px;
+  padding-bottom: calc(2rem + 0.25rem);
+  text-transform: uppercase;
+  &.clicked {
+    color: $color_blue;
+    border-bottom: 0.25rem solid $color_blue;
+  }
+}

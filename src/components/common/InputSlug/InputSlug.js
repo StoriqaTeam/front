@@ -10,6 +10,8 @@ import { Input } from 'components/common/Input';
 
 import './InputSlug.scss';
 
+import t from './i18n';
+
 type PropsType = {
   slug: string,
   onChange: (value: string) => void,
@@ -137,7 +139,7 @@ class InputSlug extends Component<PropsType, StateType> {
           <Input
             id="slug"
             fullWidth
-            label="Web address"
+            label={t.labelWebAddress}
             value={value}
             onChange={this.handleChange}
             onFocus={this.handleFocus}
@@ -152,7 +154,7 @@ class InputSlug extends Component<PropsType, StateType> {
                   red: storeSlugExists,
                 })}
               >
-                {storeSlugExists ? 'In use' : 'Vacant'}
+                {storeSlugExists ? t.inUse : t.vacant}
               </div>
             )}
           {isFocus &&
@@ -163,9 +165,7 @@ class InputSlug extends Component<PropsType, StateType> {
                   red: storeSlugExists,
                 })}
               >
-                {storeSlugExists
-                  ? 'Oops! Someone has already using this address.'
-                  : 'Hoorah! Name is vacant!'}
+                {storeSlugExists ? t.oops : t.hoorah}
               </div>
             )}
         </div>

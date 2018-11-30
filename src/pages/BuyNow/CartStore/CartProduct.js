@@ -8,7 +8,7 @@ import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import { convertSrc } from 'utils';
 
-import type { AvailableDeliveryPackageType } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect/DeliveryCompaniesSelect.utils';
+import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 
 import ProductInfo from './ProductInfo';
 
@@ -32,6 +32,7 @@ type PropsType = {
   baseProductId: number,
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
+  onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -51,6 +52,7 @@ class CartProduct extends Component<PropsType, StateType> {
       baseProductId,
       onChangeDelivery,
       deliveryPackage,
+      onPackagesFetched,
     } = this.props;
     if (!product) return null;
     const { photoMain } = product;
@@ -117,6 +119,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       baseProductId={baseProductId}
                       onChangeDelivery={onChangeDelivery}
                       deliveryPackage={deliveryPackage}
+                      onPackagesFetched={onPackagesFetched}
                     />
                   </div>
                 </Col>

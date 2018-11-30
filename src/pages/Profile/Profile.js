@@ -20,6 +20,8 @@ import type { Profile_me as ProfileMeType } from './__generated__/Profile_me.gra
 
 import './Profile.scss';
 
+import t from './i18n';
+
 type PropsType = {
   me: ProfileMeType,
   activeItem: string,
@@ -45,10 +47,10 @@ const profileMenuMap = {
 class Profile extends PureComponent<PropsType, StateType> {
   checkMenuItems = (): Array<{ id: string, title: string }> => {
     const menuItems = [
-      { id: 'personal-data', title: 'Personal data' },
-      { id: 'shipping-addresses', title: 'Shipping addresses' },
-      { id: 'security', title: 'Security' },
-      { id: 'orders', title: 'Orders' },
+      { id: 'personal-data', title: t.personalData },
+      { id: 'shipping-addresses', title: t.shippingAddresses },
+      { id: 'security', title: t.security },
+      { id: 'orders', title: t.orders },
       // { id: 'kyc', title: 'KYC' },
     ];
     const {
@@ -117,7 +119,7 @@ class Profile extends PureComponent<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(Profile, true),
+  Page(Profile),
   graphql`
     fragment Profile_me on User {
       ...Orders_me

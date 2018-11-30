@@ -519,7 +519,7 @@ class VariantForm extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'Variant update!',
+          text: 'Variant updated!',
           link: { text: '' },
         });
         cancelVariantForm();

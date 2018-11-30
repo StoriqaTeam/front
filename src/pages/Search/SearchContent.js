@@ -13,13 +13,11 @@ import { CardProduct } from 'components/CardProduct';
 import { Icon } from 'components/Icon';
 import { SearchNoResults } from 'components/SearchNoResults';
 
-import type { Categories_search as CategoriesSearch } from './__generated__/Categories_search.graphql';
+import type { Categories_search as CategoriesSearch } from './Categories/__generated__/Categories_search.graphql';
 
 import './SearchContent.scss';
 
-type StateType = {
-  priceUsd: ?number,
-};
+import t from './i18n';
 
 type PropsType = {
   router: routerShape,
@@ -28,6 +26,10 @@ type PropsType = {
   search: CategoriesSearch,
   productsPerRequest: number,
   onFilterMenu: () => void,
+};
+
+type StateType = {
+  priceUsd: ?number,
 };
 
 class SearchContent extends Component<PropsType, StateType> {
@@ -92,7 +94,7 @@ class SearchContent extends Component<PropsType, StateType> {
             role="button"
             tabIndex="0"
           >
-            All categories
+            {t.allCategories}
           </div>
         </div>
       );
@@ -108,7 +110,7 @@ class SearchContent extends Component<PropsType, StateType> {
           role="button"
           tabIndex="0"
         >
-          All categories
+          {t.allCategories}
         </div>
         {pathArr.length !== 0 &&
           pathArr.map(item => (
@@ -150,7 +152,7 @@ class SearchContent extends Component<PropsType, StateType> {
             tabIndex="-1"
           >
             <Icon type="controls" />
-            <span>Filters</span>
+            <span>{t.filters}</span>
           </span>
         </div>
         <div styleName="productsContainer">
@@ -175,7 +177,7 @@ class SearchContent extends Component<PropsType, StateType> {
               onClick={this.productsRefetch}
               dataTest="searchProductLoadMoreButton"
             >
-              Load more
+              {t.loadMore}
             </Button>
           </div>
         )}

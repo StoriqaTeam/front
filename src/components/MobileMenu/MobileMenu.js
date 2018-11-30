@@ -13,6 +13,8 @@ import { buildMobileCategories } from './utils';
 
 import './MobileMenu.scss';
 
+import t from './i18n';
+
 type PropsType = {
   isOpen: boolean,
   onClose: () => void,
@@ -73,7 +75,7 @@ class MobileMenu extends Component<PropsType, StateType> {
               isOpen
               onClick={this.handleCategoryClick}
               onClose={onClose}
-              title="Categories"
+              title={t.title}
             />
             <SidebarMenu
               categories={selectedCategory.children}

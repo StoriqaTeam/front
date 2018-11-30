@@ -1,0 +1,151 @@
+@import "../../../../styles/variables";
+
+.container {
+  position: relative;
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+}
+
+.expand {
+  position: absolute;
+  right: 3rem;
+  top: 3rem;
+  svg {
+    height: 3.375rem;
+    width: 3.375rem;
+  }
+}
+
+.imageWrapper {
+  overflow: hidden;
+  width: 100%;
+  &.hasMobileSlider {
+    display: none;
+    @media (min-width: $md) {
+      display: block;
+      width: calc(100% - 14rem);
+    }
+  }
+}
+
+.imageSlider {
+  display: block;
+  width: 100%;
+  @media (min-width: $md) {
+    display: none;
+    width: calc(100% - 14rem);
+  }
+}
+
+.imageContainer {
+  padding-top: 100%;
+  position: relative;
+  background-color: #f7f7f7;
+
+  div[role='img'] {
+    background-size: cover !important;
+  }
+
+  //div[role='img'] {
+  //  height: 100%;
+  //  position: absolute;
+  //  right: 0;
+  //  top: 0;
+  //  width: 100%;
+  //}
+}
+
+.imageBlur {
+  filter: blur(10px);
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.thumbnails {
+  display: none;
+  width: 14rem;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.thumbnailsContent {
+  position: absolute;
+  top: 0;
+}
+
+.thumbnailsWrapper {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  display: none;
+  margin: 2rem 2rem 0;
+  overflow-y: scroll;
+  padding-top: calc(100% - 15.975rem);
+  position: relative;
+  width: 10rem;
+  @media (min-width: $md) {
+    display: block;
+  }
+}
+
+.noThumbnailsWrapper {
+  display: none;
+}
+
+.noImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.image {
+  left: 0;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease-in;
+  /*
+   * @link https://stackoverflow.com/questions/16348031/disable-scrolling-when-touch-moving-certain-element
+   */
+  touch-action: none;
+
+  & > * {
+    transition: opacity 0.3s ease-in;
+    opacity: 1;
+  }
+  &:hover > * {
+    transition: opacity 0.3s ease-in;
+    opacity: 0;
+  }
+}
+

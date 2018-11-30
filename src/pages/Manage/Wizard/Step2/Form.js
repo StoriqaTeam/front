@@ -10,6 +10,8 @@ import FormWrapper from '../FormWrapper';
 
 import './Form.scss';
 
+import t from './i18n';
+
 const languagesDic = {
   EN: 'English',
   CH: 'Chinese',
@@ -120,15 +122,15 @@ class SecondForm extends React.Component<PropsType, StateType> {
     return (
       <FormWrapper
         secondForm
-        title="Set up store"
-        description="Define a few settings that will make your sells effective and comfortable."
+        title={t.setupStore}
+        description={t.defineFewSettings}
       >
         <div styleName="form">
           <div styleName="formItem">
             <Select
               forForm
               fullWidth
-              label="Main language"
+              label={t.labelMainLanguage}
               activeItem={findActiveItem(languagesItems)}
               items={languagesItems}
               onSelect={this.handleOnSelectLanguage}

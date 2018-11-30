@@ -34,3 +34,8 @@ export type ValidFieldType = {
 export type ErrorsType = {
   [code: string]: Array<string>,
 };
+
+export type InputConfig = {
+  label: string,
+  type: string,
+};

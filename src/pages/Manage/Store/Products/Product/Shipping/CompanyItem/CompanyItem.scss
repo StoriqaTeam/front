@@ -1,0 +1,127 @@
+@import "../../../../../../../styles/variables";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+  padding: 2rem 3rem;
+  background-color: $color_grey_bg;
+
+  @media (max-width: #{$lg - 1px}) {
+    align-items: flex-start;
+  }
+}
+
+.td {
+  font-size: 14px;
+}
+
+.logo {
+  flex: 0 0 auto;
+  width: 9rem;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.rest {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-left: 2rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    display: block;
+  }
+
+  .info {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: flex-start;
+
+    @media (max-width: #{$lg - 1px}) {
+      display: block;
+    }
+
+    .tdNamePrice {
+      display: flex;
+      align-items: flex-start;
+
+      @media (max-width: #{$sm - 1px}) {display: block;}
+
+      .name {width: 13rem;}
+
+      .price {
+        display: flex;
+        align-items: center;
+        width: 13rem;
+        padding-left: 2rem;
+
+        @media (max-width: #{$sm - 1px}) {padding-left: 0;}
+
+        .amount {}
+        .currency {margin-left: 1rem;}
+      }
+    }
+
+    .tdCountry {
+      padding-left: 2rem;
+      flex: 1 0;
+
+      @media (max-width: #{$lg - 1px}) {
+        margin-top: 2rem;
+        padding-left: 0;
+      }
+
+      .text {
+        color: $color_grey_minor;
+
+        .add {
+          color: $color_grey;
+        }
+      }
+    }
+  }
+
+  .controller {
+    flex:0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 3.25rem;
+    padding-left: 2rem;
+
+    @media (max-width: #{$lg - 1px}) {
+      justify-content: flex-start;
+      margin-top: 2rem;
+      margin-left: -1rem;
+      padding-left: 0;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      margin-top: 2rem;
+      padding-left: 0;
+    }
+
+    .editButton, .deleteButton {
+      cursor: pointer;
+
+      svg {
+        fill: $color_grey_minor;
+        transition: $transition_all_ease;
+      }
+
+      &:hover {
+        svg {
+          fill: $color_grey;
+        }
+      }
+    }
+  }
+}
+
+

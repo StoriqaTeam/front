@@ -12,6 +12,8 @@ import type { About_shop as AboutShopType } from './__generated__/About_shop.gra
 
 import './About.scss';
 
+import t from './i18n';
+
 type PropsType = {
   shop: AboutShopType,
 };
@@ -29,25 +31,25 @@ class About extends PureComponent<PropsType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>About store</strong>
+          <strong>{t.aboutStore}</strong>
         </div>
         <div styleName="body">
           <div styleName="left">
             {name && (
               <div styleName="item">
-                <div styleName="subtitle">Full shop name</div>
+                <div styleName="subtitle">{t.fullShopName}</div>
                 <div>{name}</div>
               </div>
             )}
             {address && (
               <div styleName="item">
-                <div styleName="subtitle">Location</div>
+                <div styleName="subtitle">{t.location}</div>
                 <div>{address}</div>
               </div>
             )}
             {modifLongDescription && (
               <div styleName="item">
-                <div styleName="subtitle">Description</div>
+                <div styleName="subtitle">{t.description}</div>
                 <div
                   styleName="description"
                   // eslint-disable-next-line

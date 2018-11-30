@@ -1,4 +1,4 @@
-@import "../../../../../styles/variables";
+@import '../../../../../styles/variables';
 
 .container {
   position: relative;
@@ -52,6 +52,10 @@
   margin-top: 6rem;
 }
 
+.buttonsWrapper {
+  display: flex;
+}
+
 .button {
   position: relative;
   width: 22.5rem;
@@ -62,8 +66,13 @@
   }
 }
 
+.button + .button {
+  margin-left: 2rem;
+}
+
 .label {
-  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial, sans-serif;
+  font-family: 'Open_Sans_SemiBold', 'Helvetica Neue Medium', Helvetica, Arial,
+    sans-serif;
   margin-bottom: 1rem;
   color: $color_grey_minor;
   font-size: 12px;
@@ -96,10 +105,18 @@
     text-transform: uppercase;
   }
 
-  &.draft {background-color: $color_grey_minor;}
-  &.moderation {background-color: $color_yellow;}
-  &.decline {background-color: $color_red;}
-  &.published {background-color: $color_green;}
+  &.draft {
+    background-color: $color_grey_minor;
+  }
+  &.moderation {
+    background-color: $color_yellow;
+  }
+  &.decline {
+    background-color: $color_red;
+  }
+  &.published {
+    background-color: $color_green;
+  }
 }
 
 .asterisk {
@@ -120,7 +137,6 @@
 }
 
 .characteristics {
-
 }
 
 .inputPostfix {
@@ -162,7 +178,8 @@
         align-items: center;
         padding: 4rem;
 
-        .variantsIcon {}
+        .variantsIcon {
+        }
 
         .variantsText {
           margin: 4rem 0;
@@ -170,7 +187,8 @@
           text-align: center;
         }
 
-        .variantsButton {}
+        .variantsButton {
+        }
 
         .variantsWarnText {
           margin-top: 4rem;
@@ -205,5 +223,4 @@
       overflow: hidden;
     }
   }
-
 }

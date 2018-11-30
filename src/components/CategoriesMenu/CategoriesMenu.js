@@ -9,6 +9,8 @@ import { Icon } from 'components/Icon';
 
 import './CategoriesMenu.scss';
 
+import t from './i18n';
+
 type PropsType = {
   categories: Array<{
     rawId: string,
@@ -226,7 +228,7 @@ class CategoriesMenu extends Component<PropsType, StateType> {
             data-test="allCategoriesLink"
           >
             <Icon inline type="cats" size={24} />
-            <span styleName="buttonText">All</span>
+            <span styleName="buttonText">{t.all}</span>
           </Link>
         </div>
         <ul styleName="root">{this.renderMenu(this.props.categories, true)}</ul>

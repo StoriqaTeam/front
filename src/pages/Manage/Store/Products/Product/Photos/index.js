@@ -6,8 +6,13 @@ import PropTypes from 'prop-types';
 import { Icon } from 'components/Icon';
 import { UploadWrapper } from 'components/Upload';
 import { uploadFile, log, convertSrc } from 'utils';
+import { withShowAlert } from 'components/Alerts/AlertContext';
+
+import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Photos.scss';
+
+import t from './i18n';
 
 type StateType = {
   isMainPhotoUploading: boolean,
@@ -21,6 +26,7 @@ type PropsType = {
   photoMain: ?string,
   photos: ?Array<string>,
   isMainVariant?: boolean,
+  showAlert: (input: AddAlertInputType) => void,
 };
 
 class Photos extends Component<PropsType, StateType> {
@@ -44,7 +50,13 @@ class Photos extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isMainPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: t.close },
+        });
+      });
   };
 
   handleOnUploadPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
@@ -62,7 +74,13 @@ class Photos extends Component<PropsType, StateType> {
       .finally(() => {
         this.setState({ isAdditionalPhotoUploading: false });
       })
-      .catch(alert);
+      .catch(error => {
+        this.props.showAlert({
+          type: 'danger',
+          text: error.message,
+          link: { text: 'Close.' },
+        });
+      });
   };
 
   render() {
@@ -83,7 +101,7 @@ class Photos extends Component<PropsType, StateType> {
               buttonHeight={15}
               buttonWidth={15}
               buttonIconType="camera"
-              buttonLabel="Add main photo"
+              buttonLabel={t.labelAddMainPhoto}
               loading={isMainPhotoUploading}
               dataTest="productPhotosUploader"
             />
@@ -115,7 +133,7 @@ class Photos extends Component<PropsType, StateType> {
               buttonHeight={10}
               buttonWidth={10}
               buttonIconType="camera"
-              buttonLabel="Add photo"
+              buttonLabel={t.labelAddPhoto}
               loading={isAdditionalPhotoUploading}
               dataTest="productPhotosUploader"
             />
@@ -153,4 +171,4 @@ Photos.contextTypes = {
   directories: PropTypes.object,
 };
 
-export default Photos;
+export default withShowAlert(Photos);

@@ -1,0 +1,73 @@
+@import "../../../../../styles/variables";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.uploadersWrapper {
+  overflow: auto;
+  margin-bottom: 1rem;
+
+  .uploadedPhotoList {
+    display: inline-flex;
+    padding-bottom: 1rem;
+  }
+  .uploadItem {
+    position: relative;
+    display: inline-block;
+    width: 10rem;
+    height: 10rem;
+
+    &:nth-child(2n) {
+      margin-right: 2rem;
+      margin-left: 2rem;
+    }
+    &:hover {
+      .itemHover {
+        display: flex;
+        svg {
+          fill: $color_grey_trivial;
+        }
+      }
+    }
+    .itemHover {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0,0,0,.3);
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    img {
+      width: 100%;
+    }
+    .imageBG {
+      width: 100%;
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-color: $color_grey_trivial;
+      border-radius: 0.5rem;
+    }
+    
+    .uploadedPhotoWrapper {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      background-color: $color_white;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

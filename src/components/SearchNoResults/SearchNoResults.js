@@ -1,11 +1,15 @@
-import React from 'react';
+// @flow strict
 
+import React from 'react';
+import { isNil } from 'ramda';
 import { Icon } from 'components/Icon';
 
 import './SearchNoResults.scss';
 
+import t from './i18n';
+
 type PropsType = {
-  value: ?string,
+  value?: ?string,
 };
 
 const SearchNoResults = (props: PropsType) => (
@@ -15,16 +19,20 @@ const SearchNoResults = (props: PropsType) => (
       styleName="text" /* eslint-disable */
       dangerouslySetInnerHTML={{
         /* eslint-enable */
-        __html: `Sorry, but no results${
-          props.value
-            ? ` for ‘<strong>${
-                props.value
-              }</strong>’. Check your search request for mistakes or try to find somethind else.`
+        __html: `${t.sorryButNotResults}${
+          !isNil(props.value)
+            ? ` ${t.for} ‘<strong>${props.value}</strong>’. ${
+                t.checkYourSearch
+              }`
             : ''
         }.`,
       }}
     />
   </div>
 );
+
+SearchNoResults.defaultProps = {
+  value: null,
+};
 
 export default SearchNoResults;
