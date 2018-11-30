@@ -1,0 +1,30 @@
+.header {
+  margin: 2rem;
+  height: 6rem;
+  margin-top: 4rem;
+
+  div {
+    margin-left: 21rem;
+    max-width: 19rem;
+  }
+}
+
+.body {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  padding-bottom: 4rem;
+}
+
+.text {
+  text-align: center;
+}
+
+button {
+  margin-top: 8rem;
+}
