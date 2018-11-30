@@ -38,9 +38,20 @@ import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
+import {
+  EmailConfirmed,
+  DeviceConfirmed,
+  PasswordResetDeny,
+} from 'pages/Wallet';
 
 const routes = (
   <Route>
+    <Route path="/wallet/email_confirmed" Component={EmailConfirmed} />
+    <Route path="/wallet/password_reset_deny" Component={PasswordResetDeny} />
+    <Route
+      path="/wallet/register_device_confirmed"
+      Component={DeviceConfirmed}
+    />
     <Route
       path="/"
       Component={App}
