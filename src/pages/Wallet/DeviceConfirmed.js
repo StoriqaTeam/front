@@ -23,13 +23,15 @@ const DeviceConfirmed = () => (
         Your journey to digital currencies starts here. TURE is crypto wallet
         powered by marketplace Storiqa.
       </div>
-      <Button
-        onClick={() => {
-          window.location = '/';
-        }}
-      >
-        Go to marketplace
-      </Button>
+      <div styleName="btn">
+        <Button
+          onClick={() => {
+            window.location = '/';
+          }}
+        >
+          Go to marketplace
+        </Button>
+      </div>
     </div>
     <Footer isShopCreated />
   </Container>

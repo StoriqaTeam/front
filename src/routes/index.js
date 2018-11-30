@@ -46,12 +46,9 @@ import {
 
 const routes = (
   <Route>
-    <Route path="/wallet/email_confirmed" Component={EmailConfirmed} />
-    <Route path="/wallet/password_reset_deny" Component={PasswordResetDeny} />
-    <Route
-      path="/wallet/register_device_confirmed"
-      Component={DeviceConfirmed}
-    />
+    <Route path="/ture/email_confirmed" Component={EmailConfirmed} />
+    <Route path="/ture/password_reset_deny" Component={PasswordResetDeny} />
+    <Route path="/ture/register_device_confirmed" Component={DeviceConfirmed} />
     <Route
       path="/"
       Component={App}

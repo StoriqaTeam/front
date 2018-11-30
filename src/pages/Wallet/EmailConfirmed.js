@@ -24,13 +24,15 @@ const EmailConfirmed = () => (
         Your registration is completed.This account is usable for both products
         TURE and Storiqa.
       </div>
-      <Button
-        onClick={() => {
-          window.location = '/';
-        }}
-      >
-        Go to marketplace
-      </Button>
+      <div styleName="btn">
+        <Button
+          onClick={() => {
+            window.location = '/';
+          }}
+        >
+          Go to marketplace
+        </Button>
+      </div>
     </div>
     <Footer isShopCreated />
   </Container>
