@@ -141,10 +141,12 @@
     "farce": "0.2.6"
   },
   "scripts": {
+    "webpack": "./node_modules/.bin/webpack",
+    "analyze": "export NODE_ENV=\"production\" && yarn webpack --config ./build-utils/webpack.config.js --env.mode production --env.presets analyze",
     "build": "node scripts/build.js",
     "build:clean": "rm -rf ./build && mkdir ./build",
     "server:dist:clean": "rm -rf ./dist && mkdir ./dist",
-    "server:dist:build": "yarn server:dist:clean && ./node_modules/.bin/webpack --config ./build-utils/webpack.server.production.js",
+    "server:dist:build": "yarn server:dist:clean && yarn webpack --config ./build-utils/webpack.server.production.js",
     "server": "yarn updateSchema && yarn relay && ./node_modules/.bin/babel-node ./server/index.js",
     "server:dev": "export NODE_ENV=\"development\" && export BABEL_ENV=\"development\" && export REACT_APP_HOST=\"https://localhost:3443\" && export REACT_APP_OAUTH_FACEBOOK_REDIRECT_URI=\"https://localhost:3443/oauth_callback/fb\" && export REACT_APP_OAUTH_GOOGLE_REDIRECT_URI=\"https://localhost:3443/oauth_callback/google\" && yarn server",
     "server:test": ". ./.env.test && yarn server",
