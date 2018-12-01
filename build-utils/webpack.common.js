@@ -11,8 +11,6 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
-const atImport = require('postcss-import');
-
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -138,7 +136,8 @@ module.exports = (mode) => {
                   options: {
                     plugins: [
                       postcssPresetEnv(),
-                      atImport(),
+                      require('autoprefixer'),
+                      require('precss'),
                     ],
                   },
                 },
