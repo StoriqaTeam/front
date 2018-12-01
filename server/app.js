@@ -106,7 +106,7 @@ app.use(
 );
 
 if (process.env.NODE_ENV === 'development') {
-  const webpackConfig = require('../build-utils/webpack.development')();
+  const webpackConfig = require('../build-utils/webpack.config')({ mode: process.env.NODE_ENV });
   const compiler = webpack(webpackConfig);
   app.use(webpackMiddleware(compiler, { stats: { colors: true } }));
   app.use(webpackHotMiddleware(compiler));
