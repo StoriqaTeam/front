@@ -136,6 +136,7 @@ module.exports = (mode) => {
                   options: {
                     plugins: [
                       postcssPresetEnv(),
+                      require('postcss-flexbugs-fixes'),
                       require('autoprefixer'),
                       require('precss'),
                     ],
