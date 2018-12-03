@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .header {
   margin: 2rem;
   height: 6rem;
@@ -23,6 +25,11 @@ h1 {
 
 .text {
   text-align: center;
+
+  a {
+    font-size: 16px;
+    color: $color_blue;
+  }
 }
 
 .btn {
