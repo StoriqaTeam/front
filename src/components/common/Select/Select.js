@@ -113,9 +113,12 @@ class Select extends Component<PropsType, StateType> {
   handleKeydown = (e: SyntheticKeyboardEvent<>): void => {
     if (this.state.isExpanded) {
       e.preventDefault();
-      const { items, activeItem } = this.props;
+      const { items, activeItem, onSelect } = this.props;
+      if (e.keyCode === 8) {
+        onSelect({ id: '', label: '' });
+        return;
+      }
       if (e.keyCode === 40 || e.keyCode === 38) {
-        const { onSelect } = this.props;
         const activeItemIdx = this.getIndexFromItems(activeItem);
 
         if (e.keyCode === 40) {
@@ -135,15 +138,13 @@ class Select extends Component<PropsType, StateType> {
         }
       }
 
-      if (this.state.isExpanded) {
-        this.setState(
-          (prevState: StateType) => ({
-            searchValue: `${prevState.searchValue}${e.key}`,
-          }),
-          this.handleKeyActiveItem,
-        );
-        this.resetSearchValue();
-      }
+      this.setState(
+        (prevState: StateType) => ({
+          searchValue: `${prevState.searchValue}${e.key}`,
+        }),
+        this.handleKeyActiveItem,
+      );
+      this.resetSearchValue();
 
       if (e.keyCode === 27 || e.keyCode === 13) {
         this.setState({ isExpanded: false });
@@ -166,10 +167,11 @@ class Select extends Component<PropsType, StateType> {
   };
 
   resetSearchValue = (): void => {
-    this.setState({
-      searchValue: '',
-      isExpanded: false,
-    });
+    this.setState({ searchValue: '' });
+    // this.setState({
+    //   searchValue: '',
+    //   isExpanded: false,
+    // });
   };
 
   handleAutoScroll = (idx: number, behavior: ?string): void => {

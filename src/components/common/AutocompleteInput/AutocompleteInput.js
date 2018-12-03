@@ -10,7 +10,7 @@ type PropsType = {
   value: string,
   label: string,
   onChange: (e: { target: { value: string } }) => void,
-  onBlur: () => void,
+  onBlur: (e: { target: { value: string } }) => void,
   onFocus: () => void,
   onKeyDown: () => void,
   onClick: () => void,
@@ -55,13 +55,13 @@ class AutocompleteInput extends Component<PropsType, StateType> {
     if (onFocus) onFocus();
   };
 
-  handleBlur = () => {
+  handleBlur = (e: any) => {
     const { value, onBlur } = this.props;
     this.setState({
       labelFloat: Boolean(value) && value.length > 0,
       isFocus: false,
     });
-    if (onBlur) onBlur();
+    if (onBlur) onBlur(e);
   };
 
   render() {
