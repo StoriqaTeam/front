@@ -19,7 +19,10 @@ const PasswordResetDeny = () => (
       <h1>Confirm Password Reset</h1>
       <div styleName="text">
         Sorry, but you must confirm the new password through the Ture mobile
-        app.
+        app.<br />If for any reason you cannot do it via your mobile app you can
+        reset your password at<br />
+        <a href="https://storiqa.com">https://storiqa.com</a>.
+        <br />
         <br />
         Your journey to digital currencies starts here. TURE is crypto wallet
         powered by marketplace Storiqa.
