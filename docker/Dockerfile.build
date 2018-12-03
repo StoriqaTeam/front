@@ -14,7 +14,8 @@ ENV BABEL_ENV=production
 ENV NODE_ENV=production
 
 # Getting ready
-RUN yarn -s --no-progress --non-interactive
+RUN . ./.env.production
+RUN yarn -s --non-interactive --production=false
 RUN yarn cache clean
 RUN yarn updateSchema
 RUN yarn relay

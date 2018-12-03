@@ -31,7 +31,7 @@ module.exports = webpackMerge({
         exclude: /node_modules/,
         query: {
           cacheDirectory: false,
-          presets: ['react', 'es2015', 'react-app'],
+          presets: ['@babel/preset-react'],
         },
       },
       {
