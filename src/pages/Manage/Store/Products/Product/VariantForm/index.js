@@ -629,7 +629,7 @@ class VariantForm extends Component<PropsType, StateType> {
         </div>
         {!isEmpty(customAttributes) && (
           <Fragment>
-            <div styleName="title titleCharacteriscics">
+            <div styleName="title titleCharacteristics">
               <strong>Characteristics</strong>
             </div>
             <div styleName="characteristics">
