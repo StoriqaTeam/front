@@ -179,27 +179,26 @@ class InputSlug extends Component<PropsType, StateType> {
             onBlur={this.handleBlur}
             errors={errors}
           />
-          {true &&
-            storeSlugExists !== null && (
-              <Fragment>
-                <div
-                  styleName={classNames('light', {
-                    green: !storeSlugExists,
-                    red: storeSlugExists,
-                  })}
-                >
-                  {storeSlugExists != null ? t.inUse : t.vacant}
-                </div>
-                <div
-                  styleName={classNames('hint', {
-                    green: !storeSlugExists,
-                    red: storeSlugExists,
-                  })}
-                >
-                  {storeSlugExists != null ? t.oops : t.hoorah}
-                </div>
-              </Fragment>
-            )}
+          {storeSlugExists !== null && (
+            <Fragment>
+              <div
+                styleName={classNames('light', {
+                  green: !storeSlugExists,
+                  red: storeSlugExists,
+                })}
+              >
+                {storeSlugExists != null ? t.inUse : t.vacant}
+              </div>
+              <div
+                styleName={classNames('hint', {
+                  green: !storeSlugExists,
+                  red: storeSlugExists,
+                })}
+              >
+                {storeSlugExists != null ? t.oops : t.hoorah}
+              </div>
+            </Fragment>
+          )}
           {incorrectFormat && (
             <Fragment>
               <div styleName="light red">Oops</div>
