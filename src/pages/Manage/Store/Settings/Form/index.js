@@ -364,7 +364,7 @@ class Form extends Component<PropsType, StateType> {
   render() {
     const {
       langItems,
-      form: { defaultLanguage, cover },
+      form: { defaultLanguage, cover, slug },
       formErrors,
       status,
     } = this.state;
@@ -465,6 +465,7 @@ class Form extends Component<PropsType, StateType> {
                   <SpinnerButton
                     onClick={this.handleSave}
                     isLoading={isLoading}
+                    disabled={!slug}
                     dataTest="saveButton"
                   >
                     {t.save}
@@ -477,6 +478,7 @@ class Form extends Component<PropsType, StateType> {
                 <SpinnerButton
                   onClick={this.props.onClickOnSendToModeration}
                   isLoading={isLoading}
+                  disabled={!slug}
                   dataTest="sendToModerationButton"
                 >
                   {t.sendToModeration}

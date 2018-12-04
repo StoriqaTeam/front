@@ -12,4 +12,5 @@ export { default as InfoBlock } from './InfoBlock';
 export { default as Main } from './Main';
 export { default as MobileSearchMenu } from './MobileSearchMenu';
 export { default as Page } from './PageDecorator';
+export { default as Context } from './ContextDecorator';
 export { default as UserData } from './UserData';
