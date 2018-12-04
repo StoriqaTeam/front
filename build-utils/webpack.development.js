@@ -6,8 +6,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-// const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 // const { DllBundlesPlugin } = require('webpack-dll-bundles-plugin');
 
 const paths = require('./paths');
@@ -59,11 +58,25 @@ module.exports = (mode) => {
         path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
     plugins: [
+      // new HtmlWebpackPlugin({
+      //   template: path.join(__dirname, '..', '/public/index.html'),
+      // }),
+      
+      // new webpack.DllReferencePlugin({
+      //   context: path.join(__dirname, '..'),
+      //   manifest: require('../dll/vendor-manifest.json'),
+      // }),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
       // In development, this will be an empty string.
-      new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
+     // new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
+      
+      // new AddAssetHtmlPlugin([
+      //   {
+      //     filepath: path.resolve(__dirname, '../dll/*.dll.js'),
+      //   }
+      // ]),
       // for HMR
       new webpack.HotModuleReplacementPlugin(),
       // for HMR

@@ -59,10 +59,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 const app = express();
 
-// Set template engine
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'templates'));
-
 // Support Gzip
 app.use(compression());
 
@@ -108,7 +104,10 @@ app.use(
 if (process.env.NODE_ENV === 'development') {
   const webpackConfig = require('../build-utils/webpack.config')({ mode: process.env.NODE_ENV });
   const compiler = webpack(webpackConfig);
-  app.use(webpackMiddleware(compiler, { stats: { colors: true } }));
+  app.use(webpackMiddleware(compiler, {
+    stats: { colors: true },
+    index: false,
+  }));
   app.use(webpackHotMiddleware(compiler));
 }
 
@@ -219,11 +218,29 @@ app.use(
     }
 
     if (process.env.NODE_ENV === 'development') {
-      res.render('index_dev', {
-        html: ReactDOMServer.renderToString(element),
-        relayPayloads: serialize(fetcher, { isJSON: true }),
-        reduxState: serialize(store.getState(), { isJSON: true }),
-      });
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <link rel="stylesheet" type="text/css" href="/styles.css">
+        </head>
+        <body>
+          <div id="root" style="height:100%;">
+              ${ReactDOMServer.renderToString(element)}
+          </div>
+          <div id="global-modal-root"></div>
+          <div id="alerts-root" style="right:0;top:0;left:0;position:fixed;z-index:10000;"></div>
+          <script>
+              window.__RELAY_PAYLOADS__ = ${serialize(fetcher, { isJSON: true })}
+              window.__PRELOADED_STATE__ = ${serialize(store.getState(), { isJSON: true })}
+          </script>
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&amp;libraries=places&amp;language=en" type="text/javascript"></script>
+          <script src="/static/js/bundle.js"></script>
+        </body>
+        </html>
+      `);
     } else if (process.env.NODE_ENV === 'production') {
       fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
         if (err) {
