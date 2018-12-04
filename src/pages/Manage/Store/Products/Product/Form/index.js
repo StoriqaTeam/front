@@ -1022,7 +1022,7 @@ class Form extends Component<PropsType, StateType> {
                 (!baseProduct ||
                   (!isEmpty(customAttributes) && baseProduct)) && (
                   <Fragment>
-                    <div styleName="title titleCharacteriscics">
+                    <div styleName="title titleCharacteristics">
                       <strong>{t.characteristics}</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
