@@ -168,10 +168,6 @@ class Select extends Component<PropsType, StateType> {
 
   resetSearchValue = (): void => {
     this.setState({ searchValue: '' });
-    // this.setState({
-    //   searchValue: '',
-    //   isExpanded: false,
-    // });
   };
 
   handleAutoScroll = (idx: number, behavior: ?string): void => {
