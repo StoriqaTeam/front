@@ -52,7 +52,6 @@ type StateType = {
   },
   langItems: ?Array<{ id: string, label: string }>,
   optionLanguage: string,
-  realSlug: ?string,
   status: string,
   isMainPhotoUploading: boolean,
 };
@@ -113,7 +112,6 @@ class Form extends Component<PropsType, StateType> {
         langItems: null,
         optionLanguage: 'EN',
         formErrors: {},
-        realSlug: store.slug,
         isMainPhotoUploading: false,
         status: store.status,
       };
@@ -134,7 +132,6 @@ class Form extends Component<PropsType, StateType> {
     langItems: null,
     optionLanguage: 'EN',
     formErrors: {},
-    realSlug: null,
     isMainPhotoUploading: false,
     status: '',
   };
@@ -310,10 +307,6 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  resetSlugErrors = () => {
-    this.setState({ formErrors: omit(['slug'], this.state.formErrors) });
-  };
-
   // TODO: extract to helper
   /* eslint-disable */
   renderInput = ({
@@ -365,11 +358,9 @@ class Form extends Component<PropsType, StateType> {
     const {
       langItems,
       form: { defaultLanguage, cover, slug },
-      formErrors,
       status,
     } = this.state;
     const { isLoading } = this.props;
-    const { realSlug } = this.state;
     const defaultLanguageValue = find(
       propEq('id', toLower(defaultLanguage || '')),
       langItems || [],
@@ -442,13 +433,7 @@ class Form extends Component<PropsType, StateType> {
             limit: 50,
           })}
           <div styleName="formItem maxWidthInput">
-            <InputSlug
-              errors={formErrors.slug}
-              slug={this.state.form.slug}
-              onChange={this.writeSlug}
-              realSlug={realSlug}
-              resetErrors={this.resetSlugErrors}
-            />
+            <InputSlug slug={this.state.form.slug} onChange={this.writeSlug} />
           </div>
           {this.renderTextarea({
             id: 'shortDescription',

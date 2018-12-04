@@ -16,7 +16,6 @@ import t from './i18n';
 type PropsType = {
   slug: string,
   onChange: (value: ?string) => void,
-  resetErrors: () => void,
   environment: Environment,
 };
 
@@ -26,20 +25,9 @@ type StateType = {
   storeSlugExists: ?boolean,
   incorrectFormat: boolean,
   serverError: boolean,
-  errors: ?Array<string>,
 };
 
 class InputSlug extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (JSON.stringify(nextProps.errors) !== JSON.stringify(prevState.errors)) {
-      return {
-        ...prevState,
-        errors: nextProps.errors,
-      };
-    }
-    return null;
-  }
-
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -48,7 +36,6 @@ class InputSlug extends Component<PropsType, StateType> {
       storeSlugExists: null,
       incorrectFormat: false,
       serverError: false,
-      errors: null,
     };
 
     this.checkSlug = debounce(this.checkSlug, 250);
@@ -119,10 +106,6 @@ class InputSlug extends Component<PropsType, StateType> {
       storeSlugExists: null,
       serverError: false,
     });
-    const { resetErrors } = this.props;
-    if (resetErrors) {
-      resetErrors();
-    }
     const { value } = e.target;
     const correctValue = value
       .toString()
@@ -159,13 +142,11 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      value,
-      storeSlugExists,
-      errors,
-      incorrectFormat,
-      serverError,
-    } = this.state;
+    const { value, storeSlugExists, incorrectFormat, serverError } = this.state;
+    const errors =
+      storeSlugExists === true || incorrectFormat || serverError || value === ''
+        ? []
+        : null;
     return (
       <div styleName="container">
         <div styleName="input">
