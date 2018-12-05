@@ -1,7 +1,6 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
-
 }
 
 .header {
@@ -35,8 +34,12 @@
     margin-left: 0.75rem;
   }
 
-  & svg {transition: $transition_all_ease;}
-  &:hover svg {fill: $color_blue;}
+  & svg {
+    transition: $transition_all_ease;
+  }
+  &:hover svg {
+    fill: $color_blue;
+  }
 }
 
 .reveal {
@@ -73,22 +76,14 @@
 }
 
 .section {
-  position: absolute;
   display: flex;
   flex-wrap: wrap;
   margin: 0 -1rem;
 
-  overflow: hidden;
-  visibility: hidden;
-  opacity: 0;
+  visibility: visible;
+  opacity: 1;
+  overflow: auto;
   transition: $transition_all_ease_out_quad_10;
-
-  &.view {
-    visibility: visible;
-    opacity: 1;
-    overflow: auto;
-    transition: $transition_all_ease_out_quad_10;
-  }
 }
 
 .good {
@@ -101,4 +96,10 @@
     overflow: auto;
     transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+}
+
+.loadMoreButton {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 14px;
 }
