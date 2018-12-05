@@ -101,15 +101,4 @@
       margin-left: 2rem;
     }
   }
-
-  .warnText {
-    margin-left: 2rem;
-    font-size: 14px;
-    color: $color_pink;
-
-    @media (max-width: #{$md - 1px}) {
-      margin-left: 0;
-      margin-top: 1rem;
-    }
-  }
 }
