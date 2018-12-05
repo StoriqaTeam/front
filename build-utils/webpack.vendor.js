@@ -2,6 +2,8 @@
 const webpack = require('webpack');
 const path = require('path');
 
+const pathToDLL = path.resolve(__dirname, './dll');
+
 module.exports = {
  
   mode: 'production',
@@ -44,7 +46,7 @@ module.exports = {
 
   output: {
     filename: '[name].dll.js',
-    path: path.resolve('./dll'),
+    path: pathToDLL,
     // The name of the global variable which the library's
     // require() function will be assigned to
     library: '[name]',
@@ -53,7 +55,7 @@ module.exports = {
   plugins: [
     new webpack.DllPlugin({
       // context: path.join(__dirname, '..'),
-      path: `${path.resolve('./dll')}/[name]-manifest.json`,
+      path: `${pathToDLL}/[name]-manifest.json`,
       name: '[name]`'
     }),
   ],
