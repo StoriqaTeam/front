@@ -704,10 +704,14 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleCopyVariant = (variant: ProductType) => {
-    this.setState({
-      variantForForm: { ...variant, vendorCode: vendorCodeGenerator() },
-    });
-    this.handleChangePathName('new');
+    this.setState(
+      {
+        variantForForm: { ...variant, vendorCode: vendorCodeGenerator() },
+      },
+      () => {
+        this.handleChangePathName('new');
+      },
+    );
   };
 
   cancelVariantForm = (isClose?: boolean) => {
