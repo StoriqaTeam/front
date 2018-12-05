@@ -106,7 +106,6 @@ if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(webpackConfig);
   app.use(webpackMiddleware(compiler, {
     stats: { colors: true },
-    index: false,
   }));
   app.use(webpackHotMiddleware(compiler));
 }
@@ -219,31 +218,26 @@ app.use(
 
     if (process.env.NODE_ENV === 'development') {
       const html = ReactDOMServer.renderToString(element);
-      const __RELAY_PAYLOADS__ = serialize(fetcher, { isJSON: true });
-      const __PRELOADED_STATE__ = serialize(store.getState(), { isJSON: true });
-      res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-          <link rel="stylesheet" type="text/css" href="/styles.css">
-        </head>
-        <body>
-          <div id="root" style="height:100%;">
-            ${html}
-          </div>
-          <div id="global-modal-root"></div>
-          <div id="alerts-root" style="right:0;top:0;left:0;position:fixed;z-index:10000;"></div>
+      const relayPayload = serialize(fetcher, { isJSON: true });
+      const preloadedState = serialize(store.getState(), { isJSON: true });
+     
+      fs.readFile('./build-utils/templates/index.dev.html', 'utf8', (err, htmlData) => {
+        const scripts = `
           <script>
-            window.__RELAY_PAYLOADS__ = ${__RELAY_PAYLOADS__}
-            window.__PRELOADED_STATE__ = ${__PRELOADED_STATE__}
+            window.__RELAY_PAYLOADS__ = ${relayPayload}
+            window.__PRELOADED_STATE__ = ${preloadedState}
           </script>
-          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&amp;libraries=places&amp;language=en" type="text/javascript"></script>
-          <script src="/static/js/bundle.js"></script>
-        </body>
-        </html>
-      `);
+        `;
+        const index = htmlData
+          .replace('<!-- ::APP:: -->', html)
+          .replace('<!-- ::SCRIPTS:: -->', scripts);
+        if (err) {
+          console.error('read err', err);
+          return res.status(404).end();
+        }
+        res.send(index);
+      });
+     
     } else if (process.env.NODE_ENV === 'production') {
       fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
         if (err) {

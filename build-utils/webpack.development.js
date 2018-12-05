@@ -7,6 +7,8 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+
 // const { DllBundlesPlugin } = require('webpack-dll-bundles-plugin');
 
 const paths = require('./paths');
@@ -58,10 +60,14 @@ module.exports = (mode) => {
         path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
     plugins: [
-      // new HtmlWebpackPlugin({
-      //   template: path.join(__dirname, '..', '/public/index.html'),
-      // }),
-      
+      new HtmlWebpackPlugin({
+        alwaysWriteToDisk: true,
+        template: path.resolve(__dirname, 'templates/dev.html'),
+        filename: 'index.dev.html',
+      }),
+      new HtmlWebpackHarddiskPlugin({
+        outputPath: path.resolve(__dirname, 'templates')
+      }), 
       // new webpack.DllReferencePlugin({
       //   context: path.join(__dirname, '..'),
       //   manifest: require('../dll/vendor-manifest.json'),
