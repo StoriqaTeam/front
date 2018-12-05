@@ -22,6 +22,7 @@ type PropsType = {
   environment: Environment,
   onExpandClick: (id: number) => void,
   showAlert: (input: AddAlertInputType) => void,
+  onCopyVariant: (variant: ProductType) => void,
 };
 
 class Variants extends PureComponent<PropsType> {
@@ -79,7 +80,7 @@ class Variants extends PureComponent<PropsType> {
   };
 
   render() {
-    const { variants } = this.props;
+    const { variants, onCopyVariant } = this.props;
     return (
       <div styleName="container">
         <Header onSelectAllClick={() => {}} />
@@ -91,6 +92,7 @@ class Variants extends PureComponent<PropsType> {
                 variant={item}
                 handleDeleteVariant={this.handleDeleteVariant}
                 onExpandClick={this.expandClick}
+                onCopyVariant={onCopyVariant}
               />
             ),
             variants,

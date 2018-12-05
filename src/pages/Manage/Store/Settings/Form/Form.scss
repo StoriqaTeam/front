@@ -106,6 +106,8 @@
 
 .buttonsPanel {
   display: flex;
+  margin-top: 6rem;
+
   .formItem + .moderationButton {
     margin-left: 2rem;
   }

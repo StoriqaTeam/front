@@ -44,6 +44,7 @@ import {
   findCategory,
   convertCurrenciesForSelect,
   log,
+  vendorCodeGenerator,
 } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 
@@ -702,6 +703,17 @@ class Form extends Component<PropsType, StateType> {
     this.handleChangePathName('new');
   };
 
+  handleCopyVariant = (variant: ProductType) => {
+    this.setState(
+      {
+        variantForForm: { ...variant, vendorCode: vendorCodeGenerator() },
+      },
+      () => {
+        this.handleChangePathName('new');
+      },
+    );
+  };
+
   cancelVariantForm = (isClose?: boolean) => {
     this.setState({ variantForForm: null }, () => {
       if (!isClose) {
@@ -1022,7 +1034,7 @@ class Form extends Component<PropsType, StateType> {
                 (!baseProduct ||
                   (!isEmpty(customAttributes) && baseProduct)) && (
                   <Fragment>
-                    <div styleName="title titleCharacteriscics">
+                    <div styleName="title titleCharacteristics">
                       <strong>{t.characteristics}</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
@@ -1131,7 +1143,7 @@ class Form extends Component<PropsType, StateType> {
                           <Icon type="addVariant" size={80} />
                         </div>
                         <div styleName="variantsText">
-                          {t.currentlyYouHaveNoVariantsForYouProduct}.<br />
+                          {t.currentlyYouHaveNoVariantsForYourProduct}.<br />
                           {t.addVariantsIfYouNeedSome}
                         </div>
                         <div styleName="variantsButton">
@@ -1146,15 +1158,36 @@ class Form extends Component<PropsType, StateType> {
                                     this.handleSave(true);
                                   }
                             }
+                            disabled={
+                              isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)
+                            }
                             dataTest="addVariantButton"
                           >
                             {t.addVariant}
                           </Button>
                         </div>
                         {!baseProduct && (
-                          <div styleName="variantsWarnText">
-                            {t.youCantAddVariantUntilCreateAndSaveBaseProduct}
-                          </div>
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {t.variantTabWarnMessages.youCantAddVariant}
+                              </div>
+                            )}
+                          </Fragment>
+                        )}
+                        {baseProduct && (
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {t.variantTabWarnMessages.thisCategory}
+                                <br />
+                                {t.variantTabWarnMessages.сurrentlyThisOption}
+                              </div>
+                            )}
+                          </Fragment>
                         )}
                       </div>
                     )}
@@ -1167,6 +1200,7 @@ class Form extends Component<PropsType, StateType> {
                             environment={environment}
                             onExpandClick={this.expandClick}
                             showAlert={showAlert}
+                            onCopyVariant={this.handleCopyVariant}
                           />
                           <div styleName="variantsButton">
                             <Button
@@ -1174,6 +1208,10 @@ class Form extends Component<PropsType, StateType> {
                               wireframe
                               fullWidth
                               onClick={this.addNewVariant}
+                              disabled={
+                                isEmpty(customAttributes) ||
+                                isEmpty(attributeValues)
+                              }
                               dataTest="addVariantButton"
                             >
                               {t.addVariant}

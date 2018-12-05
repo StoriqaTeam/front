@@ -629,7 +629,7 @@ class VariantForm extends Component<PropsType, StateType> {
         </div>
         {!isEmpty(customAttributes) && (
           <Fragment>
-            <div styleName="title titleCharacteriscics">
+            <div styleName="title titleCharacteristics">
               <strong>Characteristics</strong>
             </div>
             <div styleName="characteristics">
@@ -707,10 +707,6 @@ class VariantForm extends Component<PropsType, StateType> {
                 Cancel
               </Button>
             </div>
-          </div>
-          <div styleName="warnText">
-            You can’t save this variant&nbsp;- you have already have the same
-            one.
           </div>
         </div>
       </div>
