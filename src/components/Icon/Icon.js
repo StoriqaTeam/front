@@ -1,7 +1,7 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
-import { pathOr } from 'ramda';
+import { pathOr, keys } from 'ramda';
 import classNames from 'classnames';
 
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
@@ -153,6 +153,8 @@ const iconsMap = {
   showSizes: <ShowSizes />,
   showVariety: <ShowVariety />,
 };
+
+export const iconNames = keys(iconsMap);
 
 class Icon extends PureComponent<PropsTypes> {
   static defaultProps = {
