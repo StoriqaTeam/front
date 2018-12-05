@@ -1,0 +1,28 @@
+@import '../../../styles/variables.scss';
+
+.container {
+  border-radius: 0.5rem;
+  color: $color_white;
+  font-size: 12px;
+  height: 3rem;
+  line-height: 3rem;
+  padding: 0 2rem;
+  text-transform: lowercase;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+
+  &.draft {
+    background-color: $color_grey_minor;
+  }
+  &.moderation {
+    background-color: $color_yellow;
+  }
+  &.decline, &.blocked {
+    background-color: $color_red;
+  }
+  &.published {
+    background-color: $color_green;
+  }
+}

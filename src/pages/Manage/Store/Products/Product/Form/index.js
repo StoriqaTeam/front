@@ -39,6 +39,8 @@ import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import ModerationStatus from 'pages/common/ModerationStatus';
+
 import {
   getNameText,
   findCategory,
@@ -831,7 +833,6 @@ class Form extends Component<PropsType, StateType> {
       isSendingToModeration,
     } = this.state;
 
-    const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
     const filteredVariants = map(item => item.node, variants) || [];
@@ -881,15 +882,8 @@ class Form extends Component<PropsType, StateType> {
         {!variantForForm && (
           <div>
             {baseProduct && (
-              <div
-                styleName={classNames('status', {
-                  draft: status === 'DRAFT',
-                  moderation: status === 'MODERATION',
-                  decline: status === 'DECLINE',
-                  published: status === 'PUBLISHED',
-                })}
-              >
-                {status}
+              <div styleName="status">
+                <ModerationStatus status={baseProduct.status} />
               </div>
             )}
             <div styleName="form">
