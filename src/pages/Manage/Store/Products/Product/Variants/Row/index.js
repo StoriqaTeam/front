@@ -16,6 +16,7 @@ type PropsType = {
   variant: ProductType,
   handleDeleteVariant: (id: string) => void,
   onExpandClick: (id: number) => void,
+  onCopyVariant: (variant: ProductType) => void,
 };
 
 class Row extends PureComponent<PropsType> {
@@ -38,6 +39,11 @@ class Row extends PureComponent<PropsType> {
     if (id) {
       this.props.handleDeleteVariant(id);
     }
+  };
+
+  handleCopy = (variant: ProductType, e: SyntheticEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    this.props.onCopyVariant(variant);
   };
 
   render() {
@@ -153,6 +159,17 @@ class Row extends PureComponent<PropsType> {
             </div>
           </div>
           <div styleName="td tdBasket">
+            <button
+              styleName="deleteButton"
+              onClick={(e: SyntheticEvent<HTMLDivElement>) =>
+                this.handleCopy(this.props.variant, e)
+              }
+              data-test="deleteVariantButton"
+            >
+              <Icon type="copy" size={32} />
+            </button>
+          </div>
+          <div styleName="td tdCopy">
             <button
               styleName="deleteButton"
               onClick={this.handleDelete}
