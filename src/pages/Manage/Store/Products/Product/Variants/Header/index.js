@@ -52,6 +52,7 @@ const Header = (props: PropsType) => (
         <Icon inline type="sortArrows" />
       </div>
     </div>
+    <div styleName="headerItem tdCopy" />
     <div styleName="headerItem tdBasket">
       {/* <button styleName="deleteButton">
         <Icon type="basket" size={32} />
