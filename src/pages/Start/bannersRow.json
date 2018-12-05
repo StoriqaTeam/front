@@ -1,12 +1,12 @@
 [
   {
     "id": "1",
-    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-0Ambgq541R4C.png",
+    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-P8FF2teLt4oC.png",
     "link": "/store/339"
   },
   {
     "id": "2",
-    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-qoBlMkiNaA4C.png",
+    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-6ZhOyUK5BmoC.png",
     "link": "/categories?search=&category=29"
   }
 ]
