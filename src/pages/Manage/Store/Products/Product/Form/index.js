@@ -1131,7 +1131,7 @@ class Form extends Component<PropsType, StateType> {
                           <Icon type="addVariant" size={80} />
                         </div>
                         <div styleName="variantsText">
-                          {t.currentlyYouHaveNoVariantsForYouProduct}.<br />
+                          {t.currentlyYouHaveNoVariantsForYourProduct}.<br />
                           {t.addVariantsIfYouNeedSome}
                         </div>
                         <div styleName="variantsButton">
@@ -1146,15 +1146,42 @@ class Form extends Component<PropsType, StateType> {
                                     this.handleSave(true);
                                   }
                             }
+                            disabled={
+                              isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)
+                            }
                             dataTest="addVariantButton"
                           >
                             {t.addVariant}
                           </Button>
                         </div>
                         {!baseProduct && (
-                          <div styleName="variantsWarnText">
-                            {t.youCantAddVariantUntilCreateAndSaveBaseProduct}
-                          </div>
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {
+                                  t.youCantAddVariantUntilYouSetAtLeastOneItemCharacteristic
+                                }
+                              </div>
+                            )}
+                          </Fragment>
+                        )}
+                        {baseProduct && (
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {
+                                  t.thisCategoryOfGoodsDoesNotRequireAnyCharacteristics
+                                }
+                                <br />
+                                {
+                                  t.сurrentlyThisOptionIsUnavailableWhileItemEditing
+                                }
+                              </div>
+                            )}
+                          </Fragment>
                         )}
                       </div>
                     )}
@@ -1174,6 +1201,10 @@ class Form extends Component<PropsType, StateType> {
                               wireframe
                               fullWidth
                               onClick={this.addNewVariant}
+                              disabled={
+                                isEmpty(customAttributes) ||
+                                isEmpty(attributeValues)
+                              }
                               dataTest="addVariantButton"
                             >
                               {t.addVariant}

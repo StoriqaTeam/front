@@ -708,10 +708,6 @@ class VariantForm extends Component<PropsType, StateType> {
               </Button>
             </div>
           </div>
-          <div styleName="warnText">
-            You can’t save this variant&nbsp;- you have already have the same
-            one.
-          </div>
         </div>
       </div>
     );

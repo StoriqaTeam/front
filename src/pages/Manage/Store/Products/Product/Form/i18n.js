@@ -34,10 +34,12 @@ type TranslationDicType = {|
   labelLeadTime: string,
   updateProduct: string,
   createProduct: string,
-  currentlyYouHaveNoVariantsForYouProduct: string,
+  currentlyYouHaveNoVariantsForYourProduct: string,
   addVariantsIfYouNeedSome: string,
   addVariant: string,
-  youCantAddVariantUntilCreateAndSaveBaseProduct: string,
+  youCantAddVariantUntilYouSetAtLeastOneItemCharacteristic: string,
+  thisCategoryOfGoodsDoesNotRequireAnyCharacteristics: string,
+  сurrentlyThisOptionIsUnavailableWhileItemEditing: string,
   save: string,
   sendToModeration: string,
 |};
@@ -75,12 +77,16 @@ const translations: TranslationsBundleType = {
     labelLeadTime: 'Lead time (days)',
     updateProduct: 'Update product',
     createProduct: 'Create product',
-    currentlyYouHaveNoVariantsForYouProduct:
-      'Currently you have no variants for you product',
+    currentlyYouHaveNoVariantsForYourProduct:
+      'Currently you have no variants for your product',
     addVariantsIfYouNeedSome: 'Add variants if you need some.',
     addVariant: 'Add variant',
-    youCantAddVariantUntilCreateAndSaveBaseProduct:
-      "You can't add variant until create and save base product.",
+    youCantAddVariantUntilYouSetAtLeastOneItemCharacteristic:
+      'You can’t add variant until you set at least one item characteristic.',
+    thisCategoryOfGoodsDoesNotRequireAnyCharacteristics:
+      'This category of goods does not require any characteristics.',
+    сurrentlyThisOptionIsUnavailableWhileItemEditing:
+      'Currently this option is unavailable while item editing.',
     save: 'Save',
     sendToModeration: ' Send to moderation',
   },
