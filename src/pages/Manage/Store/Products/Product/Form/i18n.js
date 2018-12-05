@@ -37,11 +37,13 @@ type TranslationDicType = {|
   currentlyYouHaveNoVariantsForYourProduct: string,
   addVariantsIfYouNeedSome: string,
   addVariant: string,
-  youCantAddVariantUntilYouSetAtLeastOneItemCharacteristic: string,
-  thisCategoryOfGoodsDoesNotRequireAnyCharacteristics: string,
-  сurrentlyThisOptionIsUnavailableWhileItemEditing: string,
   save: string,
   sendToModeration: string,
+  variantTabWarnMessages: {
+    youCantAddVariant: string,
+    thisCategory: string,
+    сurrentlyThisOption: string,
+  },
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -81,14 +83,16 @@ const translations: TranslationsBundleType = {
       'Currently you have no variants for your product',
     addVariantsIfYouNeedSome: 'Add variants if you need some.',
     addVariant: 'Add variant',
-    youCantAddVariantUntilYouSetAtLeastOneItemCharacteristic:
-      'You can’t add variant until you set at least one item characteristic.',
-    thisCategoryOfGoodsDoesNotRequireAnyCharacteristics:
-      'This category of goods does not require any characteristics.',
-    сurrentlyThisOptionIsUnavailableWhileItemEditing:
-      'Currently this option is unavailable while item editing.',
     save: 'Save',
     sendToModeration: ' Send to moderation',
+    variantTabWarnMessages: {
+      youCantAddVariant:
+        'You can’t add variant until you set at least one item characteristic.',
+      thisCategory:
+        'This category of goods does not require any characteristics.',
+      сurrentlyThisOption:
+        'Currently this option is unavailable while item editing.',
+    },
   },
 };
 

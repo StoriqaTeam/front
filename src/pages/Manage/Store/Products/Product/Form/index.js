@@ -1160,9 +1160,7 @@ class Form extends Component<PropsType, StateType> {
                             {(isEmpty(customAttributes) ||
                               isEmpty(attributeValues)) && (
                               <div styleName="variantsWarnText">
-                                {
-                                  t.youCantAddVariantUntilYouSetAtLeastOneItemCharacteristic
-                                }
+                                {t.variantTabWarnMessages.youCantAddVariant}
                               </div>
                             )}
                           </Fragment>
@@ -1172,13 +1170,9 @@ class Form extends Component<PropsType, StateType> {
                             {(isEmpty(customAttributes) ||
                               isEmpty(attributeValues)) && (
                               <div styleName="variantsWarnText">
-                                {
-                                  t.thisCategoryOfGoodsDoesNotRequireAnyCharacteristics
-                                }
+                                {t.variantTabWarnMessages.thisCategory}
                                 <br />
-                                {
-                                  t.сurrentlyThisOptionIsUnavailableWhileItemEditing
-                                }
+                                {t.variantTabWarnMessages.сurrentlyThisOption}
                               </div>
                             )}
                           </Fragment>
