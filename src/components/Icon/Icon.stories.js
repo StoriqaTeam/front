@@ -1,20 +1,36 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import { Icon } from 'components/Icon';
+import { Icon, iconNames } from 'components/Icon';
+import { select, withKnobs } from '@storybook/addon-knobs';
+
+const label = 'size';
+const options = {
+  "8": "8",
+  "12": "12",    
+  "16": "16",
+  "20": "20",
+  "24": "24",    
+  "28": "28",
+  "32": "32",
+  "36": "36",
+  "40": "40",
+  "48": "48",
+  "56": "56",
+  "80": "80",
+  "120": "120",
+};
+const defaultValue = "32";
 
 storiesOf('Icons', module)
+  .addDecorator(withKnobs)
   .add('All', () => (
     <div>
-      <div><Icon type="person" size="32" /><br />person</div>
-      <div><Icon type="cart" size="32" /><br />cart</div>
-      <div><Icon type="prev" size="32" /><br />prev</div>
-      <div><Icon type="next" size="32" /><br />next</div>
-      <div><Icon type="qa" size="32" /><br />qa</div>
-      <div><Icon type="eye" size="32" /><br />eye</div>
-      <div><Icon type="eyeBlue" size="32" /><br />eyeBlue</div>
-      <div><Icon type="spiner" size="32" /><br />spiner</div>
-      <div><Icon type="facebook" size="32" /><br />facebook</div>
-      <div><Icon type="google" size="32" /><br />google</div>
+      {iconNames.map((icon) => 
+       <div><Icon type={icon} size={select(label, options, defaultValue)} /><br />{icon}</div>
+      )
+      }
     </div>
   ));
+
+  

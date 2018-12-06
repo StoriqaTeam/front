@@ -1,7 +1,7 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
-import { pathOr } from 'ramda';
+import { pathOr, keys } from 'ramda';
 import classNames from 'classnames';
 
 import ArrowExpand from 'components/Icon/svg/arrowExpand.svg';
@@ -57,6 +57,7 @@ import VerifiedShop from 'components/Icon/svg/verifiedShop.svg';
 import SearchNoResults from 'components/Icon/svg/searchNoResults.svg';
 import Status from 'components/Icon/svg/status.svg';
 import Calendar from 'components/Icon/svg/calendar.svg';
+import Copy from 'components/Icon/svg/copy.svg';
 import Coupon from 'components/Icon/svg/coupon.svg';
 
 // For product
@@ -92,7 +93,6 @@ const iconsMap = {
   burgerMenu: <BurgerMenu />,
   camera: <Camera />,
   cameraPlus: <CameraPlus />,
-  //
   cart: <Cart />,
   cats: <Cats />,
   chat: <Chat />,
@@ -142,6 +142,7 @@ const iconsMap = {
   status: <Status />,
   calendar: <Calendar />,
   addVariant: <AddVariant />,
+  copy: <Copy />,
   coupon: <Coupon />,
 
   // For product
@@ -153,6 +154,8 @@ const iconsMap = {
   showSizes: <ShowSizes />,
   showVariety: <ShowVariety />,
 };
+
+export const iconNames = keys(iconsMap);
 
 class Icon extends PureComponent<PropsTypes> {
   static defaultProps = {

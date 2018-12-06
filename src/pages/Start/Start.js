@@ -231,7 +231,7 @@ export default createFragmentContainer(
     fragment Start_mainPage on MainPage {
       findMostViewedProducts(
         searchTerm: { options: { attrFilters: [] } }
-        first: 30
+        first: 24
       ) {
         edges {
           node {
@@ -260,7 +260,7 @@ export default createFragmentContainer(
       }
       findMostDiscountProducts(
         searchTerm: { options: { attrFilters: [] } }
-        first: 30
+        first: 24
       ) {
         edges {
           node {

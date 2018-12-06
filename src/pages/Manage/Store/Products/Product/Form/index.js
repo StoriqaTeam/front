@@ -46,6 +46,7 @@ import {
   findCategory,
   convertCurrenciesForSelect,
   log,
+  vendorCodeGenerator,
 } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 
@@ -704,6 +705,17 @@ class Form extends Component<PropsType, StateType> {
     this.handleChangePathName('new');
   };
 
+  handleCopyVariant = (variant: ProductType) => {
+    this.setState(
+      {
+        variantForForm: { ...variant, vendorCode: vendorCodeGenerator() },
+      },
+      () => {
+        this.handleChangePathName('new');
+      },
+    );
+  };
+
   cancelVariantForm = (isClose?: boolean) => {
     this.setState({ variantForForm: null }, () => {
       if (!isClose) {
@@ -1182,6 +1194,7 @@ class Form extends Component<PropsType, StateType> {
                             environment={environment}
                             onExpandClick={this.expandClick}
                             showAlert={showAlert}
+                            onCopyVariant={this.handleCopyVariant}
                           />
                           <div styleName="variantsButton">
                             <Button
