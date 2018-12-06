@@ -19,10 +19,13 @@
   &.moderation {
     background-color: $color_yellow;
   }
-  &.decline, &.blocked {
-    background-color: $color_red;
+  &.decline {
+    background-color: $color_pink;
   }
   &.published {
     background-color: $color_green;
+  }
+  &.blocked {
+    background-color: $color_red;
   }
 }

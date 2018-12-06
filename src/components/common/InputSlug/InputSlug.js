@@ -168,7 +168,7 @@ class InputSlug extends Component<PropsType, StateType> {
                   red: storeSlugExists,
                 })}
               >
-                {storeSlugExists != null ? t.inUse : t.vacant}
+                {storeSlugExists === true ? t.inUse : t.vacant}
               </div>
               <div
                 styleName={classNames('hint', {
@@ -176,7 +176,7 @@ class InputSlug extends Component<PropsType, StateType> {
                   red: storeSlugExists,
                 })}
               >
-                {storeSlugExists != null ? t.oops : t.hoorah}
+                {storeSlugExists === true ? t.oops : t.hoorah}
               </div>
             </Fragment>
           )}

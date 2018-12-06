@@ -54,20 +54,41 @@
 
 .buttonsWrapper {
   display: flex;
+  align-items: center;
+  margin-top: 4rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+  }
 }
 
 .button {
   position: relative;
   width: 22.5rem;
-  margin-top: 4rem;
 
-  @media (max-width: #{$md - 1px}) {
-    margin: 3rem 0 1rem 5rem;
+  @media (max-width: #{$sm - 1px}) {
+    width: 100%;
   }
 }
 
-.button + .button {
+.moderationButton {
   margin-left: 2rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+    margin-top: 2rem;
+  }
+}
+
+.warnMessage {
+  margin-left: 2rem;
+  color: $color_pink;
+  font-size: 14px;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
 }
 
 .label {
@@ -179,6 +200,11 @@
         .variantsButton {
           width: 22.5rem;
           margin: 4rem;
+        }
+
+        .variantsWarnText {
+          margin: -2rem 0 4rem 4rem;
+          color: $color_pink;
         }
       }
     }

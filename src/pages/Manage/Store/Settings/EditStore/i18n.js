@@ -21,7 +21,7 @@ const translations: TranslationsBundleType = {
     saved: 'Saved!',
     somethingGoingWrong: 'Something going wrong :(',
     storeNotFound: 'Store not found :(',
-    storeHasBeenSentToModeration: 'Store not found :(',
+    storeHasBeenSentToModeration: 'Store has been sent to moderation',
   },
 };
 

@@ -9,9 +9,9 @@ import { withShowAlert } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
-import { Input } from 'components/common/Input';
-import { SpinnerButton } from 'components/common/SpinnerButton';
+import { Button, Input } from 'components/common';
 import { AddressForm } from 'components/AddressAutocomplete';
+import ModerationStatus from 'pages/common/ModerationStatus';
 import { UpdateStoreMutation, UpdateStoreMainMutation } from 'relay/mutations';
 import { log, fromRelayError } from 'utils';
 
@@ -308,6 +308,12 @@ class Contacts extends Component<PropsType, StateType> {
     UpdateStoreMutation.commit(params);
   };
 
+  isSaveAvailable = () => {
+    // $FlowIgnoreMe
+    const status = pathOr(null, ['me', 'myStore', 'status'], this.props);
+    return status === 'DRAFT' || status === 'DECLINE' || status === 'PUBLISHED';
+  };
+
   // TODO: extract to helper
   renderInput = (input: InputType) => {
     const { id, label, icon, limit } = input;
@@ -329,41 +335,66 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   render() {
+    // $FlowIgnoreMe
+    const status = pathOr(null, ['me', 'myStore', 'status'], this.props);
     const { isLoading, addressFull } = this.state;
     return (
       <div styleName="container">
-        {this.renderInput({ id: 'email', label: t.labelEmail, limit: 50 })}
-        {this.renderInput({ id: 'phone', label: t.labelPhone })}
-        {this.renderInput({
-          id: 'facebookUrl',
-          label: 'Facebook',
-          icon: 'facebook',
-        })}
-        {this.renderInput({
-          id: 'instagramUrl',
-          label: 'Instagram',
-          icon: 'instagram',
-        })}
-        {this.renderInput({
-          id: 'twitterUrl',
-          label: 'Twitter',
-          icon: 'twitter',
-        })}
-        <div styleName="formItem">
-          <div styleName="address">
-            <AddressForm
-              country={addressFull.country}
-              address={addressFull.value}
-              addressFull={addressFull}
-              onChangeData={this.handleChangeData}
-            />
+        <div styleName="form">
+          {status && (
+            <div styleName="storeStatus">
+              <ModerationStatus status={status} />
+            </div>
+          )}
+          <div styleName="wrap">
+            {this.renderInput({ id: 'email', label: t.labelEmail, limit: 50 })}
+            {this.renderInput({ id: 'phone', label: t.labelPhone })}
+            {this.renderInput({
+              id: 'facebookUrl',
+              label: 'Facebook',
+              icon: 'facebook',
+            })}
+            {this.renderInput({
+              id: 'instagramUrl',
+              label: 'Instagram',
+              icon: 'instagram',
+            })}
+            {this.renderInput({
+              id: 'twitterUrl',
+              label: 'Twitter',
+              icon: 'twitter',
+            })}
+            <div styleName="formItem">
+              <div styleName="address">
+                <AddressForm
+                  country={addressFull.country}
+                  address={addressFull.value}
+                  addressFull={addressFull}
+                  onChangeData={this.handleChangeData}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div styleName="formItem">
-          <div styleName="saveButton">
-            <SpinnerButton onClick={this.handleUpdate} isLoading={isLoading}>
-              {t.save}
-            </SpinnerButton>
+          <div styleName="buttonsPanel">
+            <div styleName="saveButton">
+              <Button
+                big
+                fullWidth
+                onClick={this.handleUpdate}
+                isLoading={isLoading}
+                disabled={!this.isSaveAvailable()}
+              >
+                {t.save}
+              </Button>
+            </div>
+            {status &&
+              status === 'MODERATION' && (
+                <div styleName="warnMessage">{t.storeIsOnModeration}</div>
+              )}
+            {status &&
+              status === 'BLOCKED' && (
+                <div styleName="warnMessage">{t.storeIsBlocked}</div>
+              )}
           </div>
         </div>
       </div>
@@ -383,6 +414,7 @@ export default createFragmentContainer(
       myStore {
         id
         rawId
+        status
         name {
           lang
           text

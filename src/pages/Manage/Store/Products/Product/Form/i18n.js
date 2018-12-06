@@ -44,6 +44,8 @@ type TranslationDicType = {|
     thisCategory: string,
     сurrentlyThisOption: string,
   },
+  baseProductIsOnModeration: string,
+  baseProductIsBlocked: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -93,6 +95,8 @@ const translations: TranslationsBundleType = {
       сurrentlyThisOption:
         'Currently this option is unavailable while item editing.',
     },
+    baseProductIsOnModeration: 'Product is on moderation',
+    baseProductIsBlocked: 'Product is blocked, contact the support service',
   },
 };
 

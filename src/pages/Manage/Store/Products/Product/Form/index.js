@@ -760,6 +760,12 @@ class Form extends Component<PropsType, StateType> {
     this.props.onSaveShipping(onlyShippingSave);
   };
 
+  isSaveAvailable = () => {
+    // $FlowIgnoreMe
+    const status = pathOr(null, ['baseProduct', 'status'], this.props);
+    return status === 'DRAFT' || status === 'DECLINE' || status === 'PUBLISHED';
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
@@ -1085,27 +1091,23 @@ class Form extends Component<PropsType, StateType> {
                 {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
               </div>
               <div styleName="buttonsWrapper">
-                {(!baseProduct ||
-                  (baseProduct.status === 'DRAFT' ||
-                    baseProduct.status === 'PUBLISHED' ||
-                    baseProduct.status === 'DECLINE')) && (
-                  <div styleName="button">
-                    <Button
-                      big
-                      fullWidth
-                      onClick={() => {
-                        this.handleSave();
-                      }}
-                      dataTest="saveProductButton"
-                      isLoading={isLoading || isSendingToModeration}
-                    >
-                      {baseProduct ? t.updateProduct : t.createProduct}
-                    </Button>
-                  </div>
-                )}
+                <div styleName="button">
+                  <Button
+                    big
+                    fullWidth
+                    onClick={() => {
+                      this.handleSave();
+                    }}
+                    disabled={baseProduct != null && !this.isSaveAvailable()}
+                    dataTest="saveProductButton"
+                    isLoading={isLoading || isSendingToModeration}
+                  >
+                    {baseProduct ? t.updateProduct : t.createProduct}
+                  </Button>
+                </div>
                 {baseProduct &&
                   baseProduct.status === 'DRAFT' && (
-                    <div styleName="button">
+                    <div styleName="button moderationButton">
                       <Button
                         big
                         fullWidth
@@ -1116,6 +1118,16 @@ class Form extends Component<PropsType, StateType> {
                         {t.sendToModeration}
                       </Button>
                     </div>
+                  )}
+                {baseProduct != null &&
+                  baseProduct.status === 'MODERATION' && (
+                    <div styleName="warnMessage">
+                      {t.baseProductIsOnModeration}
+                    </div>
+                  )}
+                {baseProduct != null &&
+                  baseProduct.status === 'BLOCKED' && (
+                    <div styleName="warnMessage">{t.baseProductIsBlocked}</div>
                   )}
               </div>
             </div>
@@ -1154,7 +1166,11 @@ class Form extends Component<PropsType, StateType> {
                             }
                             disabled={
                               isEmpty(customAttributes) ||
-                              isEmpty(attributeValues)
+                              isEmpty(attributeValues) ||
+                              (baseProduct != null &&
+                                baseProduct.status === 'MODERATION') ||
+                              (baseProduct != null &&
+                                baseProduct.status === 'BLOCKED')
                             }
                             dataTest="addVariantButton"
                           >
@@ -1204,13 +1220,27 @@ class Form extends Component<PropsType, StateType> {
                               onClick={this.addNewVariant}
                               disabled={
                                 isEmpty(customAttributes) ||
-                                isEmpty(attributeValues)
+                                isEmpty(attributeValues) ||
+                                (baseProduct != null &&
+                                  baseProduct.status === 'MODERATION') ||
+                                (baseProduct != null &&
+                                  baseProduct.status === 'BLOCKED')
                               }
                               dataTest="addVariantButton"
                             >
                               {t.addVariant}
                             </Button>
                           </div>
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {t.variantTabWarnMessages.thisCategory}
+                                <br />
+                                {t.variantTabWarnMessages.сurrentlyThisOption}
+                              </div>
+                            )}
+                          </Fragment>
                         </div>
                       )}
                   </div>
