@@ -347,7 +347,7 @@ const routes = (
                   isPriority
                 }
               }
-              baseProduct(id: $productID, visibility: "active") {
+              baseProduct(id: $productID) {
                 ...Product_baseProduct
               }
             }
