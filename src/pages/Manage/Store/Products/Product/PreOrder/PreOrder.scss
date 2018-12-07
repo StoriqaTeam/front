@@ -1,0 +1,25 @@
+@import "../../../../../../styles/variables";
+
+.container {
+
+}
+
+.title {
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.preOrderTitle {
+  display: flex;
+}
+
+.preOrderCheckbox {
+  margin-left: 2rem;
+}
+
+.preOrderDaysInput {
+  width: 15rem;
+}
+

@@ -19,7 +19,7 @@ import {
 import { Environment } from 'relay-runtime';
 import { validate } from '@storiqa/shared';
 
-import { Input, Button, InputPrice, Checkbox } from 'components/common';
+import { Input, Button, InputPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 
 import { log, fromRelayError } from 'utils';
@@ -47,6 +47,7 @@ import type { MutationParamsType as CreateProductWithAttributesMutationType } fr
 import Characteristics from '../Characteristics';
 import Photos from '../Photos';
 import Warehouses from '../Warehouses';
+import PreOrder from '../PreOrder';
 
 import './VariantForm.scss';
 
@@ -258,43 +259,14 @@ class VariantForm extends Component<PropsType, StateType> {
     }));
   };
 
-  preOrderDaysInput: ?HTMLInputElement;
-
-  handleOnChangePreOrderDays = (e: SyntheticInputEvent<>) => {
-    let {
-      target: { value },
-    } = e;
-    const regexp = /(^\d*$)/;
-    if (!regexp.test(value)) {
-      return;
-    }
-    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
-    this.setState({ preOrderDays: value });
-  };
-
-  handleOnBlurPreOrderDays = (e: SyntheticInputEvent<>) => {
-    const {
-      target: { value },
-    } = e;
-    if (!value || value === '0') {
-      this.setState({
-        preOrderDays: '',
-        preOrder: false,
-      });
-    }
-  };
-
-  handleOnChangePreOrder = () => {
-    this.setState((prevState: StateType) => ({
-      preOrder: !prevState.preOrder,
-    }));
-    if (
-      this.preOrderDaysInput &&
-      !this.state.preOrder &&
-      !this.state.preOrderDays
-    ) {
-      this.preOrderDaysInput.focus();
-    }
+  handleChangePreOrder = (data: {
+    preOrderDays: string,
+    preOrder: boolean,
+  }) => {
+    this.setState({
+      preOrderDays: data.preOrderDays,
+      preOrder: data.preOrder,
+    });
   };
 
   validate = () => {
@@ -642,35 +614,12 @@ class VariantForm extends Component<PropsType, StateType> {
             </div>
           </Fragment>
         )}
-        <div styleName="formItem">
-          <div styleName="preOrder">
-            <div styleName="preOrderTitle">
-              <div styleName="title">
-                <strong>Available for pre-order</strong>
-              </div>
-              <div styleName="preOrderCheckbox">
-                <Checkbox
-                  inline
-                  id="preOrderCheckbox"
-                  isChecked={preOrder}
-                  onChange={this.handleOnChangePreOrder}
-                />
-              </div>
-            </div>
-            <div styleName="preOrderDaysInput">
-              <Input
-                inputRef={node => {
-                  this.preOrderDaysInput = node;
-                }}
-                fullWidth
-                label="Lead time (days)"
-                onChange={this.handleOnChangePreOrderDays}
-                onBlur={this.handleOnBlurPreOrderDays}
-                value={preOrderDays || ''}
-                dataTest="variantPreOrderDaysInput"
-              />
-            </div>
-          </div>
+        <div styleName="preOrder">
+          <PreOrder
+            preOrderDays={preOrderDays}
+            preOrder={preOrder}
+            onChangePreOrder={this.handleChangePreOrder}
+          />
         </div>
         <div styleName="warehouses">
           {variant &&
