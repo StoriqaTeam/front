@@ -29,7 +29,7 @@ const translations: TranslationsBundleType = {
     close: 'Close.',
     save: 'Save',
     somethingGoingWrong: 'Something going wrong :(',
-    userUpdated: 'User update!',
+    userUpdated: 'User data updated!',
     personalDataSettings: 'Personal data settings',
     labelFirstName: 'First name',
     labelLastName: 'Last name',
