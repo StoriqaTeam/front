@@ -12,6 +12,8 @@ type TranslationDicType = {|
   labelEmail: string,
   labelPhone: string,
   somethingGoingWrong: string,
+  storeIsOnModeration: string,
+  storeIsBlocked: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -24,6 +26,8 @@ const translations: TranslationsBundleType = {
     labelEmail: 'Email',
     labelPhone: 'Phone',
     somethingGoingWrong: 'Something going wrong :(',
+    storeIsOnModeration: 'Store is on moderation',
+    storeIsBlocked: 'Store is blocked, contact the support service',
   },
 };
 

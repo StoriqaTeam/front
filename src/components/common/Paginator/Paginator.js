@@ -84,14 +84,15 @@ class Paginator extends Component<PropsType, StateType> {
 
     return (
       <div styleName="container">
-        {currentPage !== 1 && (
-          <button
-            onClick={() => this.handlePageSelect(parseFloat(currentPage - 1))}
-            disabled={isLoading}
-          >
-            <Icon type="prev" size={20} />
-          </button>
-        )}
+        {pagesCount !== 0 &&
+          currentPage !== 1 && (
+            <button
+              onClick={() => this.handlePageSelect(parseFloat(currentPage - 1))}
+              disabled={isLoading}
+            >
+              <Icon type="prev" size={20} />
+            </button>
+          )}
         {this.props.pagesCount > 1 &&
           addIndex(map)((item, idx) => {
             if (item === '...') {
@@ -117,14 +118,15 @@ class Paginator extends Component<PropsType, StateType> {
             );
             // $FlowIgnore
           }, items)}
-        {currentPage !== pagesCount && (
-          <button
-            onClick={() => this.handlePageSelect(parseFloat(currentPage + 1))}
-            disabled={isLoading}
-          >
-            <Icon type="next" size={20} />
-          </button>
-        )}
+        {pagesCount !== 0 &&
+          currentPage !== pagesCount && (
+            <button
+              onClick={() => this.handlePageSelect(parseFloat(currentPage + 1))}
+              disabled={isLoading}
+            >
+              <Icon type="next" size={20} />
+            </button>
+          )}
       </div>
     );
   }

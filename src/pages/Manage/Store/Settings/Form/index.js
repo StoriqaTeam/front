@@ -18,18 +18,16 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { SpinnerButton } from 'components/common/SpinnerButton';
-import { Select } from 'components/common/Select';
-import { Textarea } from 'components/common/Textarea';
-import { Input } from 'components/common/Input';
-import { InputSlug } from 'components/common/InputSlug';
+import { Button, Select, Textarea, Input, InputSlug } from 'components/common';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import ModerationStatus from 'pages/common/ModerationStatus';
 
 import { uploadFile, convertSrc } from 'utils';
 
+import type { ModerationStatusType } from 'types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Form.scss';
@@ -52,7 +50,7 @@ type StateType = {
   },
   langItems: ?Array<{ id: string, label: string }>,
   optionLanguage: string,
-  status: string,
+  status: ?ModerationStatusType,
   isMainPhotoUploading: boolean,
 };
 
@@ -67,7 +65,7 @@ type PropsType = {
     slug: ?string,
     slogan: ?string,
     cover: ?string,
-    status: string,
+    status: ModerationStatusType,
   },
   serverValidationErrors: {
     [string]: ?any,
@@ -133,7 +131,7 @@ class Form extends Component<PropsType, StateType> {
     optionLanguage: 'EN',
     formErrors: {},
     isMainPhotoUploading: false,
-    status: '',
+    status: null,
   };
 
   componentWillMount() {
@@ -369,6 +367,11 @@ class Form extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="form">
+          {status && (
+            <div styleName="storeStatus">
+              <ModerationStatus status={status} />
+            </div>
+          )}
           <div styleName="formHeader">
             {!cover ? (
               <div styleName="coverUploadWrap">
@@ -405,9 +408,6 @@ class Form extends Component<PropsType, StateType> {
                 </div>
               </div>
             )}
-            <div styleName="storeStatus">
-              <span>{status}</span>
-            </div>
           </div>
           {this.renderInput({
             id: 'name',
@@ -444,31 +444,37 @@ class Form extends Component<PropsType, StateType> {
             label: t.labelLongDescription,
           })}
           <div styleName="buttonsPanel">
-            {this.isSaveAvailable() && (
-              <div styleName="formItem">
-                <div styleName="saveButton">
-                  <SpinnerButton
-                    onClick={this.handleSave}
-                    isLoading={isLoading}
-                    disabled={!slug}
-                    dataTest="saveButton"
-                  >
-                    {t.save}
-                  </SpinnerButton>
-                </div>
-              </div>
-            )}
+            <div styleName="saveButton">
+              <Button
+                big
+                fullWidth
+                onClick={this.handleSave}
+                isLoading={isLoading}
+                disabled={!slug || !this.isSaveAvailable()}
+                dataTest="saveButton"
+              >
+                {t.save}
+              </Button>
+            </div>
             {this.isAbleSendToModeration() && (
               <div styleName="moderationButton">
-                <SpinnerButton
+                <Button
+                  big
+                  fullWidth
                   onClick={this.props.onClickOnSendToModeration}
                   isLoading={isLoading}
                   disabled={!slug}
                   dataTest="sendToModerationButton"
                 >
                   {t.sendToModeration}
-                </SpinnerButton>
+                </Button>
               </div>
+            )}
+            {this.state.status === 'MODERATION' && (
+              <div styleName="warnMessage">{t.storeIsOnModeration}</div>
+            )}
+            {this.state.status === 'BLOCKED' && (
+              <div styleName="warnMessage">{t.storeIsBlocked}</div>
             )}
           </div>
         </div>
