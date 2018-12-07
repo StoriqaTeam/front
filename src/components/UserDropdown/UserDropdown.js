@@ -24,6 +24,9 @@ type PropsTypes = {
     myStore: ?{
       rawId: number,
     },
+    wizardStore: {
+      completed: boolean,
+    },
   },
 };
 
@@ -41,6 +44,8 @@ class UserDropdown extends PureComponent<PropsTypes> {
 
     // $FlowIgnoreMe
     const myStoreId = pathOr(null, ['myStore', 'rawId'], user);
+    // $FlowIgnoreMe
+    const isWizardComplete = pathOr(false, ['wizardStore', 'completed'], user);
 
     return (
       <div styleName="container">
@@ -74,6 +79,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
               email={email}
               avatar={avatar}
               myStoreId={myStoreId}
+              isWizardComplete={isWizardComplete}
             />
           </content>
         </Dropdown>
