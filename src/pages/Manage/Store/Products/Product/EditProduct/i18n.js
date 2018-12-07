@@ -20,9 +20,9 @@ const translations: TranslationsBundleType = {
     somethingGoingWrong: 'Something going wrong :(',
     close: 'Close.',
     error: 'Error: ',
-    productUpdated: 'Product update!',
+    productUpdated: 'Product updated!',
     validationError: 'Validation Error!',
-    deliveryUpdated: 'Delivery update!',
+    deliveryUpdated: 'Delivery updated!',
     productNotFound: 'Product not found',
   },
 };
