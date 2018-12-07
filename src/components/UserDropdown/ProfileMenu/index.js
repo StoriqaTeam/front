@@ -17,6 +17,7 @@ type PropsTypes = {
   email: string,
   avatar: string,
   myStoreId: ?number,
+  isWizardComplete: boolean,
 };
 
 // TODO: need back & refactor
@@ -34,6 +35,7 @@ const ProfileMenu = ({
   email,
   avatar,
   myStoreId,
+  isWizardComplete,
 }: PropsTypes) => (
   <div styleName="menu">
     <div styleName="top">
@@ -69,11 +71,11 @@ const ProfileMenu = ({
         {t.profileSettings}
       </Link>
       <Link
-        to={getStoreLink(myStoreId)}
+        to={getStoreLink(isWizardComplete && myStoreId ? myStoreId : null)}
         styleName="item"
         data-test="header-user-menu-myShops"
       >
-        <span>{myStoreId ? t.myShop : t.startSelling}</span>
+        <span>{isWizardComplete ? t.myShop : t.startSelling}</span>
       </Link>
     </div>
     <Link
