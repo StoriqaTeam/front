@@ -458,10 +458,10 @@ class VariantForm extends Component<PropsType, StateType> {
         product: {
           price,
           vendorCode,
-          photoMain,
+          photoMain: photoMain || '',
           additionalPhotos: photos,
-          cashback: cashback ? cashback / 100 : null,
-          discount: discount ? discount / 100 : null,
+          cashback: cashback ? cashback / 100 : 0,
+          discount: discount ? discount / 100 : 0,
           preOrder,
           preOrderDays: Number(preOrderDays),
         },
