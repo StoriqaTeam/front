@@ -8,6 +8,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 // const { DllBundlesPlugin } = require('webpack-dll-bundles-plugin');
 
@@ -68,21 +69,7 @@ module.exports = (mode) => {
       new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, 'templates')
       }), 
-      // new webpack.DllReferencePlugin({
-      //   context: path.join(__dirname, '..'),
-      //   manifest: require('../dll/vendor-manifest.json'),
-      // }),
-      // Makes some environment variables available in index.html.
-      // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-      // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-      // In development, this will be an empty string.
-     // new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
-      
-      // new AddAssetHtmlPlugin([
-      //   {
-      //     filepath: path.resolve(__dirname, '../dll/*.dll.js'),
-      //   }
-      // ]),
+      new HardSourceWebpackPlugin(),
       // for HMR
       new webpack.HotModuleReplacementPlugin(),
       // for HMR
