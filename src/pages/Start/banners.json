@@ -1,0 +1,42 @@
+{
+    "main": [
+        {
+            "desktop": "https://s3.eu-west-2.amazonaws.com/storiqa/img-9fZ32gtibjcC.png",
+            "tablet": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BbAvBDp0mhoC.png",
+            "phone": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-FK7o1iFeHU8C.png",
+            "link": "/store/339"
+        },
+        {
+            "desktop": "",
+            "tablet": "",
+            "phone": "",
+            "link": ""
+        }
+    ],
+    "middle": [
+        {
+            "desktop": "",
+            "tablet": "",
+            "phone": "",
+            "link": ""
+        }
+    ],
+    "bottom": {
+        "left": [
+            {
+                "desktop": "",
+                "tablet": "",
+                "phone": "",
+                "link": ""
+            }
+        ],
+        "right": [
+            {
+                "desktop": "",
+                "tablet": "",
+                "phone": "",
+                "link": ""
+            }
+        ]
+    }
+}
