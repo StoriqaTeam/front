@@ -1,0 +1,37 @@
+@import '../../styles/variables.scss';
+
+.header {
+  margin: 2rem;
+  height: 6rem;
+  margin-top: 4rem;
+
+  div {
+    margin-left: 21rem;
+    max-width: 19rem;
+  }
+}
+
+.body {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  padding-bottom: 4rem;
+}
+
+.text {
+  text-align: center;
+
+  a {
+    font-size: 16px;
+    color: $color_blue;
+  }
+}
+
+.btn {
+  margin-top: 8rem;
+}

@@ -1,28 +1,28 @@
 [
   {
     "id": "1",
-    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-4etdonQBBUYC.png",
+    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-LTYvgXTqxYgC.png",
     "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-obR6DnoDYvYC.png",
     "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-hY0aQQctpMYC.png",
     "link": "/categories?search=&category=28"
   },
   {
     "id": "2",
-    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-ZZih6Bkjcb0C.png",
+    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-TSFVCf9aMSYC.png",
     "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-IqACCvTFAWwC.png",
     "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-uwEMlXg5tG4C.png",
     "link": "/categories?search=&category=29"
   },
   {
     "id": "3",
-    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-UDXr4o2cmboC.png",
+    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-XIMdyOA8uUQC.png",
     "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-efROmBUI5lUC.png",
     "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-vUIVsBU16XwC.png",
     "link": "/categories?search=&category=29"
   },
   {
     "id": "4",
-    "img": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-laxWUxqiKwEC.png",
+    "img": "https://s3.eu-west-2.amazonaws.com/storiqa/img-mC3lJnAH9pwC.png",
     "middleImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-MntKyjI5TK8C.png",
     "shortImg": "https://s3.us-east-1.amazonaws.com/storiqa-dev/img-sU1OrNo9Ph0C.png",
     "link": ""

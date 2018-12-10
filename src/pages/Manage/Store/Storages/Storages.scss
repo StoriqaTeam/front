@@ -3,10 +3,6 @@
 .container {
   background-color: $color_white;
   flex: 1 0 auto;
-  margin-top: 0;
-  @media (min-width: $md) {
-    margin-top: 2rem;
-  }
 }
 
 .subtitle {

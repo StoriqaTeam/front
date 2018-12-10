@@ -34,12 +34,18 @@ type TranslationDicType = {|
   labelLeadTime: string,
   updateProduct: string,
   createProduct: string,
-  currentlyYouHaveNoVariantsForYouProduct: string,
+  currentlyYouHaveNoVariantsForYourProduct: string,
   addVariantsIfYouNeedSome: string,
   addVariant: string,
-  youCantAddVariantUntilCreateAndSaveBaseProduct: string,
   save: string,
   sendToModeration: string,
+  variantTabWarnMessages: {
+    youCantAddVariant: string,
+    thisCategory: string,
+    сurrentlyThisOption: string,
+  },
+  baseProductIsOnModeration: string,
+  baseProductIsBlocked: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -75,14 +81,22 @@ const translations: TranslationsBundleType = {
     labelLeadTime: 'Lead time (days)',
     updateProduct: 'Update product',
     createProduct: 'Create product',
-    currentlyYouHaveNoVariantsForYouProduct:
-      'Currently you have no variants for you product',
+    currentlyYouHaveNoVariantsForYourProduct:
+      'Currently you have no variants for your product',
     addVariantsIfYouNeedSome: 'Add variants if you need some.',
     addVariant: 'Add variant',
-    youCantAddVariantUntilCreateAndSaveBaseProduct:
-      "You can't add variant until create and save base product.",
     save: 'Save',
     sendToModeration: ' Send to moderation',
+    variantTabWarnMessages: {
+      youCantAddVariant:
+        'You can’t add variant until you set at least one item characteristic.',
+      thisCategory:
+        'This category of goods does not require any characteristics.',
+      сurrentlyThisOption:
+        'Currently this option is unavailable while item editing.',
+    },
+    baseProductIsOnModeration: 'Product is on moderation',
+    baseProductIsBlocked: 'Product is blocked, contact the support service',
   },
 };
 

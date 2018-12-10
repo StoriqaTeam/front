@@ -79,6 +79,20 @@ type GeocoderType = {
   placeId: string,
 };
 
+const defaultAddressFull = {
+  value: '',
+  country: '',
+  countryCode: '',
+  administrativeAreaLevel1: '',
+  administrativeAreaLevel2: '',
+  locality: '',
+  political: '',
+  postalCode: '',
+  route: '',
+  streetNumber: '',
+  placeId: '',
+};
+
 class Form extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const country = find(
@@ -158,9 +172,9 @@ class Form extends Component<PropsType, StateType> {
         }
       };
       forEach(populateAddressField, result.addressComponents);
-      this.setState({ address: renameCamelCase(address) }, () =>
-        this.handleOnChangeData(),
-      );
+      this.setState({ address: renameCamelCase(address) }, () => {
+        this.handleOnChangeData();
+      });
     }
   };
 
@@ -172,6 +186,7 @@ class Form extends Component<PropsType, StateType> {
     const componentRestrictions = {
       country: countryFromResource ? countryFromResource.alpha2 : '',
     };
+    this.setState({ autocompleteValue: value });
     this.props.geocoderService.geocode(
       {
         address: `${item.mainText}, ${item.secondaryText}`,
@@ -254,12 +269,12 @@ class Form extends Component<PropsType, StateType> {
   handleOnChangeCountry = (value: ?SelectItemType) => {
     const { onUpdateForm } = this.props;
     this.setState(
-      () => ({ country: value }),
+      () => ({ country: value, address: null, autocompleteValue: '' }),
       () => {
         if (onUpdateForm) {
           onUpdateForm({ country: value ? value.label : '' });
         }
-        this.handleOnChangeData();
+        this.handleOnChangeAddress('');
       },
     );
   };
@@ -269,9 +284,9 @@ class Form extends Component<PropsType, StateType> {
     const { address, country, autocompleteValue } = this.state;
     if (onChangeData) {
       const requiredData = {
-        country: country && country.label ? country.label : null,
-        countryCode: country && country.id ? country.id : null,
-        value: autocompleteValue,
+        country: country && country.label ? country.label : '',
+        countryCode: country && country.id ? country.id : '',
+        value: autocompleteValue || '',
       };
       if (address) {
         // $FlowIgnore
@@ -295,7 +310,7 @@ class Form extends Component<PropsType, StateType> {
           ...requiredData,
         });
       } else {
-        onChangeData(requiredData);
+        onChangeData({ ...defaultAddressFull, ...requiredData });
       }
     }
   };
@@ -348,7 +363,6 @@ class Form extends Component<PropsType, StateType> {
           value={autocompleteValue}
           onChange={e => this.handleOnChangeAddress(e.target.value)}
           onSelect={(selectedValue, item) => {
-            this.handleOnChangeAddress(selectedValue);
             this.handleOnSetAddress(selectedValue, item);
           }}
         />

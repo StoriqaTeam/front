@@ -89,8 +89,7 @@ class Start extends Component<PropsTypes, StateTypes> {
     const bannersSliderWithMerge = prepend(
       {
         id: 0,
-        img:
-          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-wsBa5BAPUuAC.png',
+        img: 'https://s3.eu-west-2.amazonaws.com/storiqa/img-9fZ32gtibjcC.png',
         middleImg:
           'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BbAvBDp0mhoC.png',
         shortImg:
@@ -161,21 +160,21 @@ class Start extends Component<PropsTypes, StateTypes> {
             <MediaQuery maxWidth={575}>
               <ImageLoader
                 fit
-                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-0zS95RW1dtwC-medium.png"
+                src="https://s3.eu-west-2.amazonaws.com/storiqa/img-HbpbkBFg1U0C-medium.png"
                 loader={loader}
               />
             </MediaQuery>
             <MediaQuery maxWidth={991} minWidth={576}>
               <ImageLoader
                 fit
-                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-P5haU9sN9IQC-large.png"
+                src="https://s3.eu-west-2.amazonaws.com/storiqa/img-HbpbkBFg1U0C-large.png"
                 loader={loader}
               />
             </MediaQuery>
             <MediaQuery minWidth={992}>
               <ImageLoader
                 fit
-                src="https://s3.us-east-1.amazonaws.com/storiqa-dev/img-P5haU9sN9IQC.png"
+                src="https://s3.eu-west-2.amazonaws.com/storiqa/img-HbpbkBFg1U0C.png"
                 loader={loader}
               />
             </MediaQuery>
@@ -232,7 +231,7 @@ export default createFragmentContainer(
     fragment Start_mainPage on MainPage {
       findMostViewedProducts(
         searchTerm: { options: { attrFilters: [] } }
-        first: 30
+        first: 24
       ) {
         edges {
           node {
@@ -261,7 +260,7 @@ export default createFragmentContainer(
       }
       findMostDiscountProducts(
         searchTerm: { options: { attrFilters: [] } }
-        first: 30
+        first: 24
       ) {
         edges {
           node {

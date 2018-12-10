@@ -18,18 +18,16 @@ import {
 import { validate } from '@storiqa/shared';
 
 import { currentUserShape } from 'utils/shapes';
-import { SpinnerButton } from 'components/common/SpinnerButton';
-import { Select } from 'components/common/Select';
-import { Textarea } from 'components/common/Textarea';
-import { Input } from 'components/common/Input';
-import { InputSlug } from 'components/common/InputSlug';
+import { Button, Select, Textarea, Input, InputSlug } from 'components/common';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import ModerationStatus from 'pages/common/ModerationStatus';
 
 import { uploadFile, convertSrc } from 'utils';
 
+import type { ModerationStatusType } from 'types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Form.scss';
@@ -52,8 +50,7 @@ type StateType = {
   },
   langItems: ?Array<{ id: string, label: string }>,
   optionLanguage: string,
-  realSlug: ?string,
-  status: string,
+  status: ?ModerationStatusType,
   isMainPhotoUploading: boolean,
 };
 
@@ -68,7 +65,7 @@ type PropsType = {
     slug: ?string,
     slogan: ?string,
     cover: ?string,
-    status: string,
+    status: ModerationStatusType,
   },
   serverValidationErrors: {
     [string]: ?any,
@@ -113,7 +110,6 @@ class Form extends Component<PropsType, StateType> {
         langItems: null,
         optionLanguage: 'EN',
         formErrors: {},
-        realSlug: store.slug,
         isMainPhotoUploading: false,
         status: store.status,
       };
@@ -134,9 +130,8 @@ class Form extends Component<PropsType, StateType> {
     langItems: null,
     optionLanguage: 'EN',
     formErrors: {},
-    realSlug: null,
     isMainPhotoUploading: false,
-    status: '',
+    status: null,
   };
 
   componentWillMount() {
@@ -310,49 +305,72 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  resetSlugErrors = () => {
-    this.setState({ formErrors: omit(['slug'], this.state.formErrors) });
-  };
-
   // TODO: extract to helper
   /* eslint-disable */
   renderInput = ({
     id,
     label,
     limit,
+    required,
   }: {
     id: string,
     label: string,
     limit?: number,
-  }) => (
-    /* eslint-enable */
-    <div styleName="formItem maxWidthInput">
-      <Input
-        id={id}
-        // $FlowIgnoreMe
-        value={propOr('', id, this.state.form)}
-        label={label}
-        onChange={this.handleInputChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
-        limit={limit}
-        fullWidth
-      />
-    </div>
-  );
+    required?: boolean,
+  }) => {
+    const hereLabel = required ? (
+      <span>
+        {label} <span styleName="asterisk">*</span>
+      </span>
+    ) : (
+      label
+    );
+    return (
+      <div styleName="formItem maxWidthInput">
+        <Input
+          id={id}
+          // $FlowIgnoreMe
+          value={propOr('', id, this.state.form)}
+          label={hereLabel}
+          onChange={this.handleInputChange(id)}
+          errors={propOr(null, id, this.state.formErrors)}
+          limit={limit}
+          fullWidth
+        />
+      </div>
+    );
+  };
 
-  renderTextarea = ({ id, label }: { [string]: any }) => (
-    <div styleName="formItem maxWidthTextArea">
-      <Textarea
-        id={id}
-        // $FlowIgnoreMe
-        value={propOr('', id, this.state.form)}
-        label={label}
-        onChange={this.handleTextareaChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
-        fullWidth
-      />
-    </div>
-  );
+  renderTextarea = ({
+    id,
+    label,
+    required,
+  }: {
+    id: string,
+    label: string,
+    required?: boolean,
+  }) => {
+    const hereLabel = required ? (
+      <span>
+        {label} <span styleName="asterisk">*</span>
+      </span>
+    ) : (
+      label
+    );
+    return (
+      <div styleName="formItem maxWidthTextArea">
+        <Textarea
+          id={id}
+          // $FlowIgnoreMe
+          value={propOr('', id, this.state.form)}
+          label={hereLabel}
+          onChange={this.handleTextareaChange(id)}
+          errors={propOr(null, id, this.state.formErrors)}
+          fullWidth
+        />
+      </div>
+    );
+  };
 
   isSaveAvailable = () =>
     this.state.status === 'DRAFT' ||
@@ -364,12 +382,10 @@ class Form extends Component<PropsType, StateType> {
   render() {
     const {
       langItems,
-      form: { defaultLanguage, cover },
-      formErrors,
+      form: { defaultLanguage, cover, slug },
       status,
     } = this.state;
     const { isLoading } = this.props;
-    const { realSlug } = this.state;
     const defaultLanguageValue = find(
       propEq('id', toLower(defaultLanguage || '')),
       langItems || [],
@@ -378,6 +394,11 @@ class Form extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="form">
+          {status && (
+            <div styleName="storeStatus">
+              <ModerationStatus status={status} />
+            </div>
+          )}
           <div styleName="formHeader">
             {!cover ? (
               <div styleName="coverUploadWrap">
@@ -414,14 +435,12 @@ class Form extends Component<PropsType, StateType> {
                 </div>
               </div>
             )}
-            <div styleName="storeStatus">
-              <span>{status}</span>
-            </div>
           </div>
           {this.renderInput({
             id: 'name',
             label: t.labelStoreName,
             limit: 50,
+            required: true,
           })}
           <div styleName="formItem maxWidthInput">
             {/* $FlowIgnoreMe */}
@@ -442,46 +461,50 @@ class Form extends Component<PropsType, StateType> {
             limit: 50,
           })}
           <div styleName="formItem maxWidthInput">
-            <InputSlug
-              errors={formErrors.slug}
-              slug={this.state.form.slug}
-              onChange={this.writeSlug}
-              realSlug={realSlug}
-              resetErrors={this.resetSlugErrors}
-            />
+            <InputSlug slug={this.state.form.slug} onChange={this.writeSlug} />
           </div>
           {this.renderTextarea({
             id: 'shortDescription',
             label: t.labelShortDescription,
+            required: true,
           })}
           {this.renderTextarea({
             id: 'longDescription',
             label: t.labelLongDescription,
+            required: true,
           })}
           <div styleName="buttonsPanel">
-            {this.isSaveAvailable() && (
-              <div styleName="formItem">
-                <div styleName="saveButton">
-                  <SpinnerButton
-                    onClick={this.handleSave}
-                    isLoading={isLoading}
-                    dataTest="saveButton"
-                  >
-                    {t.save}
-                  </SpinnerButton>
-                </div>
-              </div>
-            )}
+            <div styleName="saveButton">
+              <Button
+                big
+                fullWidth
+                onClick={this.handleSave}
+                isLoading={isLoading}
+                disabled={!slug || !this.isSaveAvailable()}
+                dataTest="saveButton"
+              >
+                {t.save}
+              </Button>
+            </div>
             {this.isAbleSendToModeration() && (
               <div styleName="moderationButton">
-                <SpinnerButton
+                <Button
+                  big
+                  fullWidth
                   onClick={this.props.onClickOnSendToModeration}
                   isLoading={isLoading}
+                  disabled={!slug}
                   dataTest="sendToModerationButton"
                 >
                   {t.sendToModeration}
-                </SpinnerButton>
+                </Button>
               </div>
+            )}
+            {this.state.status === 'MODERATION' && (
+              <div styleName="warnMessage">{t.storeIsOnModeration}</div>
+            )}
+            {this.state.status === 'BLOCKED' && (
+              <div styleName="warnMessage">{t.storeIsBlocked}</div>
             )}
           </div>
         </div>

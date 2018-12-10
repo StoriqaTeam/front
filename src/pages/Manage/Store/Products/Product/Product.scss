@@ -35,7 +35,7 @@
     margin-top: 4rem;
   }
 
-  &.titleCharacteriscics {
+  &.titleCharacteristics {
     margin-top: 6rem;
   }
 }
@@ -54,20 +54,41 @@
 
 .buttonsWrapper {
   display: flex;
+  align-items: center;
+  margin-top: 4rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+  }
 }
 
 .button {
   position: relative;
   width: 22.5rem;
-  margin-top: 4rem;
 
-  @media (max-width: #{$md - 1px}) {
-    margin: 3rem 0 1rem 5rem;
+  @media (max-width: #{$sm - 1px}) {
+    width: 100%;
   }
 }
 
-.button + .button {
+.moderationButton {
   margin-left: 2rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+    margin-top: 2rem;
+  }
+}
+
+.warnMessage {
+  margin-left: 2rem;
+  color: $color_pink;
+  font-size: 14px;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
 }
 
 .label {
@@ -85,37 +106,13 @@
 }
 
 .status {
-  border-radius: 0.5rem;
-  color: $color_white;
-  font-size: 12px;
-  height: 3rem;
-  line-height: 3rem;
-  padding: 0 2rem;
   position: absolute;
   right: 2rem;
-  text-transform: lowercase;
   top: 2rem;
 
   @media (min-width: $md) {
     right: 4rem;
     top: 4rem;
-  }
-
-  &:first-letter {
-    text-transform: uppercase;
-  }
-
-  &.draft {
-    background-color: $color_grey_minor;
-  }
-  &.moderation {
-    background-color: $color_yellow;
-  }
-  &.decline {
-    background-color: $color_red;
-  }
-  &.published {
-    background-color: $color_green;
   }
 }
 
@@ -151,18 +148,6 @@
 
 .preOrder {
   margin-top: 5rem;
-
-  .preOrderTitle {
-    display: flex;
-
-    .preOrderCheckbox {
-      margin-left: 2rem;
-    }
-  }
-
-  .preOrderDaysInput {
-    width: 15rem;
-  }
 }
 
 .tabs {
@@ -203,6 +188,11 @@
         .variantsButton {
           width: 22.5rem;
           margin: 4rem;
+        }
+
+        .variantsWarnText {
+          margin: -2rem 0 4rem 4rem;
+          color: $color_pink;
         }
       }
     }

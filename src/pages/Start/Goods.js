@@ -1,13 +1,14 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import { addIndex, map, length, splitEvery, filter, isEmpty } from 'ramda';
+import React, { Component } from 'react';
+import { map, take } from 'ramda';
 import classNames from 'classnames';
+import { routerShape, withRouter } from 'found';
 
-import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
-
 import MediaQuery from 'libs/react-responsive';
+
+import { Button } from 'components/common';
 
 import './Goods.scss';
 
@@ -37,120 +38,75 @@ type PropsType = {
   items: Array<ProductType>,
   title: string,
   seeAllUrl: string,
+  router: routerShape,
 };
 
 type StateType = {
-  viewNumber: number,
+  loadedPagesCount: number,
 };
 
 class Goods extends Component<PropsType, StateType> {
   state = {
-    viewNumber: 0,
+    loadedPagesCount: 1,
   };
 
   sectionsRef = null;
 
-  handleView = (direction: string, count: number) => {
-    const { items } = this.props;
-    const blockQuantity = Math.trunc(length(items) / count - 1);
-    this.setState((prevState: StateType) => {
-      if (direction === 'prev' && prevState.viewNumber === 0) {
-        return { viewNumber: blockQuantity };
+  loadMore = () => {
+    this.setState(prevState => {
+      if (prevState.loadedPagesCount < 3) {
+        return { loadedPagesCount: prevState.loadedPagesCount + 1 };
       }
-      if (direction === 'next' && prevState.viewNumber === blockQuantity) {
-        return { viewNumber: 0 };
-      }
-      return {
-        viewNumber:
-          direction === 'prev'
-            ? prevState.viewNumber - 1
-            : prevState.viewNumber + 1,
-      };
+      return {};
     });
   };
 
-  renderGoods = (props: {
-    nodeData: ?{ height: number },
-    viewNumber: number,
-    count: number,
-  }) => {
-    const { nodeData, viewNumber, count } = props;
+  renderGoods = (props: { nodeData: ?{ height: number }, count: number }) => {
+    const { nodeData, count } = props;
+    const { loadedPagesCount } = this.state;
     return (
       <div
         styleName="goods"
         style={{ minHeight: nodeData ? `${nodeData.height / 8}rem` : '88rem' }}
       >
-        {addIndex(map)(
-          (item, idx) => (
-            <div
-              ref={node => {
-                if (idx === viewNumber) {
-                  this.sectionsRef = node;
-                }
+        <div styleName={classNames('section view')}>
+          {map(
+            good => (
+              <div
+                key={good.rawId}
+                styleName="good"
+                style={{ width: `${100 * 2 / count}%` }}
+              >
+                <CardProduct item={good} />
+              </div>
+            ),
+            take(count * loadedPagesCount, this.props.items),
+          )}
+        </div>
+        <div styleName="loadMoreButton">
+          {loadedPagesCount < 3 && (
+            <Button big load onClick={this.loadMore}>
+              Load more
+            </Button>
+          )}
+          {loadedPagesCount === 3 && (
+            <Button
+              big
+              load
+              onClick={() => {
+                this.props.router.push(this.props.seeAllUrl);
               }}
-              key={idx}
-              styleName={classNames('section', { view: idx === viewNumber })}
             >
-              {map(
-                good => (
-                  <div
-                    key={good.rawId}
-                    styleName="good"
-                    style={{ width: `${100 * 2 / count}%` }}
-                  >
-                    <CardProduct item={good} />
-                  </div>
-                ),
-                length(item) === count ? item : [],
-              )}
-            </div>
-          ),
-          splitEvery(count, this.props.items),
-        )}
+              See all
+            </Button>
+          )}
+        </div>
       </div>
     );
   };
 
-  renderNav = (count: number) => {
-    const { items, title, seeAllUrl } = this.props;
-    if (
-      isEmpty(filter(item => length(item) === count, splitEvery(count, items)))
-    ) {
-      return null;
-    }
-    return (
-      <Fragment>
-        <div styleName="title">{title}</div>
-        <div styleName="nav">
-          <button
-            styleName="button"
-            onClick={() => {
-              this.handleView('prev', count);
-            }}
-          >
-            <Icon type="prev" size={32} />
-          </button>
-          <button
-            styleName="button"
-            onClick={() => {
-              this.handleView('next', count);
-            }}
-          >
-            <Icon type="next" size={32} />
-          </button>
-        </div>
-        {seeAllUrl && (
-          <a styleName="reveal" href={seeAllUrl} data-test="seeAllLink">
-            See all
-          </a>
-        )}
-      </Fragment>
-    );
-  };
-
   render() {
-    const { items } = this.props;
-    const { viewNumber } = this.state;
+    const { items, title } = this.props;
     let nodeData = null;
     if (this.sectionsRef) {
       const node = this.sectionsRef;
@@ -159,13 +115,7 @@ class Goods extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="header">
-          <MediaQuery maxWidth={767} minWidth={576}>
-            {this.renderNav(4)}
-          </MediaQuery>
-          <MediaQuery maxWidth={1199} minWidth={768}>
-            {this.renderNav(6)}
-          </MediaQuery>
-          <MediaQuery minWidth={1200}>{this.renderNav(8)}</MediaQuery>
+          <div styleName="title">{title}</div>
         </div>
         <MediaQuery maxWidth={575}>
           <div styleName="nowrapGoods">
@@ -180,17 +130,17 @@ class Goods extends Component<PropsType, StateType> {
           </div>
         </MediaQuery>
         <MediaQuery maxWidth={767} minWidth={576}>
-          {this.renderGoods({ nodeData, viewNumber, count: 4 })}
+          {this.renderGoods({ nodeData, count: 4 })}
         </MediaQuery>
         <MediaQuery maxWidth={1199} minWidth={768}>
-          {this.renderGoods({ nodeData, viewNumber, count: 6 })}
+          {this.renderGoods({ nodeData, count: 6 })}
         </MediaQuery>
         <MediaQuery minWidth={1200}>
-          {this.renderGoods({ nodeData, viewNumber, count: 8 })}
+          {this.renderGoods({ nodeData, count: 8 })}
         </MediaQuery>
       </div>
     );
   }
 }
 
-export default Goods;
+export default withRouter(Goods);

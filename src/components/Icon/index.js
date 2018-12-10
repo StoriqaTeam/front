@@ -1,3 +1,3 @@
 // @flow strict
 // eslint-disable-next-line
-export { default as Icon } from './Icon';
+export { default as Icon, iconNames } from './Icon';

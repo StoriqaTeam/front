@@ -27,23 +27,20 @@ import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import {
-  Select,
-  SpinnerCircle,
-  Button,
-  InputPrice,
-  Checkbox,
-} from 'components/common';
+import { Select, SpinnerCircle, Button, InputPrice } from 'components/common';
 import { CategorySelector } from 'components/CategorySelector';
 import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import ModerationStatus from 'pages/common/ModerationStatus';
+
 import {
   getNameText,
   findCategory,
   convertCurrenciesForSelect,
   log,
+  vendorCodeGenerator,
 } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 
@@ -68,6 +65,7 @@ import Tabs from '../Tabs';
 import Characteristics from '../Characteristics';
 import VariantForm from '../VariantForm';
 import AdditionalAttributes from '../AdditionalAttributes';
+import PreOrder from '../PreOrder';
 import sendProductToModerationMutation from '../mutations/SendProductToModerationMutation';
 
 import type {
@@ -259,12 +257,6 @@ class Form extends Component<PropsType, StateType> {
     };
   }
 
-  componentDidMount() {
-    if (process.env.BROWSER) {
-      window.addEventListener('click', this.handleClick);
-    }
-  }
-
   componentDidUpdate(prevProps: PropsType) {
     const { shippingData, customAttributes, baseProduct } = this.props;
     if (
@@ -307,12 +299,6 @@ class Form extends Component<PropsType, StateType> {
         this.props,
       );
       this.updateVariantForForm(this.getVariantForForm(variantId));
-    }
-  }
-
-  componentWillUnmount() {
-    if (process.env.BROWSER) {
-      window.removeEventListener('click', this.handleClick);
     }
   }
 
@@ -636,63 +622,6 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  preOrderDaysInput: ?HTMLInputElement;
-
-  handleClick = (e: SyntheticInputEvent<>) => {
-    const isPreOrderDaysInput =
-      this.preOrderDaysInput && this.preOrderDaysInput.contains(e.target);
-
-    if (!isPreOrderDaysInput && !this.state.form.preOrderDays) {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', 'preOrder'], false, prevState),
-      );
-    }
-  };
-
-  handleOnChangePreOrderDays = (e: any) => {
-    let {
-      target: { value },
-    } = e;
-    const regexp = /(^\d*$)/;
-    if (!regexp.test(value)) {
-      return;
-    }
-    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
-    this.setState((prevState: StateType) =>
-      assocPath(['form', 'preOrderDays'], value, prevState),
-    );
-  };
-
-  handleOnBlurPreOrderDays = (e: any) => {
-    const {
-      target: { value },
-    } = e;
-    if (!value || value === '0') {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', 'preOrderDays'], '', prevState),
-      );
-    }
-  };
-
-  handleOnChangePreOrder = () => {
-    this.setState((prevState: StateType) => {
-      if (this.preOrderDaysInput) {
-        if (!prevState.form.preOrder) {
-          this.preOrderDaysInput.focus();
-        }
-        if (prevState.form.preOrder) {
-          this.preOrderDaysInput.blur();
-        }
-      }
-
-      return assocPath(
-        ['form', 'preOrder'],
-        !prevState.form.preOrder,
-        prevState,
-      );
-    });
-  };
-
   handleChangeTab = (activeTab: string) => {
     this.setState({ activeTab });
   };
@@ -700,6 +629,17 @@ class Form extends Component<PropsType, StateType> {
   addNewVariant = () => {
     this.setState({ variantForForm: 'new' });
     this.handleChangePathName('new');
+  };
+
+  handleCopyVariant = (variant: ProductType) => {
+    this.setState(
+      {
+        variantForForm: { ...variant, vendorCode: vendorCodeGenerator() },
+      },
+      () => {
+        this.handleChangePathName('new');
+      },
+    );
   };
 
   cancelVariantForm = (isClose?: boolean) => {
@@ -746,6 +686,25 @@ class Form extends Component<PropsType, StateType> {
     this.props.onSaveShipping(onlyShippingSave);
   };
 
+  isSaveAvailable = () => {
+    // $FlowIgnoreMe
+    const status = pathOr(null, ['baseProduct', 'status'], this.props);
+    return status === 'DRAFT' || status === 'DECLINE' || status === 'PUBLISHED';
+  };
+
+  handleChangePreOrder = (data: {
+    preOrderDays: string,
+    preOrder: boolean,
+  }) => {
+    this.setState((prevState: StateType) => ({
+      form: {
+        ...prevState.form,
+        preOrderDays: data.preOrderDays,
+        preOrder: data.preOrder,
+      },
+    }));
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
@@ -753,7 +712,7 @@ class Form extends Component<PropsType, StateType> {
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
-    const requiredLabel = required ? (
+    const hereLabel = required ? (
       <span>
         {label} <span styleName="asterisk">*</span>
       </span>
@@ -768,7 +727,7 @@ class Form extends Component<PropsType, StateType> {
       <Input
         id={id}
         value={value}
-        label={requiredLabel}
+        label={hereLabel}
         onChange={this.handleInputChange(id)}
         errors={errors}
         limit={limit}
@@ -831,7 +790,6 @@ class Form extends Component<PropsType, StateType> {
       isSendingToModeration,
     } = this.state;
 
-    const status = baseProduct ? baseProduct.status : 'Draft';
     // $FlowIgnore
     const variants = pathOr([], ['products', 'edges'], baseProduct);
     const filteredVariants = map(item => item.node, variants) || [];
@@ -881,15 +839,8 @@ class Form extends Component<PropsType, StateType> {
         {!variantForForm && (
           <div>
             {baseProduct && (
-              <div
-                styleName={classNames('status', {
-                  draft: status === 'DRAFT',
-                  moderation: status === 'MODERATION',
-                  decline: status === 'DECLINE',
-                  published: status === 'PUBLISHED',
-                })}
-              >
-                {status}
+              <div styleName="status">
+                <ModerationStatus status={baseProduct.status} />
               </div>
             )}
             <div styleName="form">
@@ -1000,6 +951,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   fullWidth
+                  id="cashback"
                   label={t.labelCashback}
                   onChange={this.handlePercentChange('cashback')}
                   value={!isNil(cashback) ? `${cashback}` : ''}
@@ -1010,6 +962,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   fullWidth
+                  id="discount"
                   label={t.labelDiscount}
                   onChange={this.handlePercentChange('discount')}
                   value={!isNil(discount) ? `${discount}` : ''}
@@ -1022,7 +975,7 @@ class Form extends Component<PropsType, StateType> {
                 (!baseProduct ||
                   (!isEmpty(customAttributes) && baseProduct)) && (
                   <Fragment>
-                    <div styleName="title titleCharacteriscics">
+                    <div styleName="title titleCharacteristics">
                       <strong>{t.characteristics}</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
@@ -1048,58 +1001,33 @@ class Form extends Component<PropsType, StateType> {
                 </div>
               )}
               <div styleName="preOrder">
-                <div styleName="preOrderTitle">
-                  <div styleName="title">
-                    <strong>{t.availableForPreOrder}</strong>
-                  </div>
-                  <div styleName="preOrderCheckbox">
-                    <Checkbox
-                      inline
-                      id="preOrderCheckbox"
-                      isChecked={preOrder}
-                      onChange={this.handleOnChangePreOrder}
-                    />
-                  </div>
-                </div>
-                <div styleName="preOrderDaysInput">
-                  <Input
-                    inputRef={node => {
-                      this.preOrderDaysInput = node;
-                    }}
-                    fullWidth
-                    label={t.labelLeadTime}
-                    onChange={this.handleOnChangePreOrderDays}
-                    onBlur={this.handleOnBlurPreOrderDays}
-                    value={preOrderDays || ''}
-                    dataTest="variantPreOrderDaysInput"
-                  />
-                </div>
+                <PreOrder
+                  preOrderDays={preOrderDays}
+                  preOrder={preOrder}
+                  onChangePreOrder={this.handleChangePreOrder}
+                />
               </div>
               <div styleName="warehouses">
                 {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
               </div>
               <div styleName="buttonsWrapper">
-                {(!baseProduct ||
-                  (baseProduct.status === 'DRAFT' ||
-                    baseProduct.status === 'PUBLISHED' ||
-                    baseProduct.status === 'DECLINE')) && (
-                  <div styleName="button">
-                    <Button
-                      big
-                      fullWidth
-                      onClick={() => {
-                        this.handleSave();
-                      }}
-                      dataTest="saveProductButton"
-                      isLoading={isLoading || isSendingToModeration}
-                    >
-                      {baseProduct ? t.updateProduct : t.createProduct}
-                    </Button>
-                  </div>
-                )}
+                <div styleName="button">
+                  <Button
+                    big
+                    fullWidth
+                    onClick={() => {
+                      this.handleSave();
+                    }}
+                    disabled={baseProduct != null && !this.isSaveAvailable()}
+                    dataTest="saveProductButton"
+                    isLoading={isLoading || isSendingToModeration}
+                  >
+                    {baseProduct ? t.updateProduct : t.createProduct}
+                  </Button>
+                </div>
                 {baseProduct &&
                   baseProduct.status === 'DRAFT' && (
-                    <div styleName="button">
+                    <div styleName="button moderationButton">
                       <Button
                         big
                         fullWidth
@@ -1110,6 +1038,16 @@ class Form extends Component<PropsType, StateType> {
                         {t.sendToModeration}
                       </Button>
                     </div>
+                  )}
+                {baseProduct != null &&
+                  baseProduct.status === 'MODERATION' && (
+                    <div styleName="warnMessage">
+                      {t.baseProductIsOnModeration}
+                    </div>
+                  )}
+                {baseProduct != null &&
+                  baseProduct.status === 'BLOCKED' && (
+                    <div styleName="warnMessage">{t.baseProductIsBlocked}</div>
                   )}
               </div>
             </div>
@@ -1131,7 +1069,7 @@ class Form extends Component<PropsType, StateType> {
                           <Icon type="addVariant" size={80} />
                         </div>
                         <div styleName="variantsText">
-                          {t.currentlyYouHaveNoVariantsForYouProduct}.<br />
+                          {t.currentlyYouHaveNoVariantsForYourProduct}.<br />
                           {t.addVariantsIfYouNeedSome}
                         </div>
                         <div styleName="variantsButton">
@@ -1146,15 +1084,40 @@ class Form extends Component<PropsType, StateType> {
                                     this.handleSave(true);
                                   }
                             }
+                            disabled={
+                              isEmpty(customAttributes) ||
+                              isEmpty(attributeValues) ||
+                              (baseProduct != null &&
+                                baseProduct.status === 'MODERATION') ||
+                              (baseProduct != null &&
+                                baseProduct.status === 'BLOCKED')
+                            }
                             dataTest="addVariantButton"
                           >
                             {t.addVariant}
                           </Button>
                         </div>
                         {!baseProduct && (
-                          <div styleName="variantsWarnText">
-                            {t.youCantAddVariantUntilCreateAndSaveBaseProduct}
-                          </div>
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {t.variantTabWarnMessages.youCantAddVariant}
+                              </div>
+                            )}
+                          </Fragment>
+                        )}
+                        {baseProduct && (
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {t.variantTabWarnMessages.thisCategory}
+                                <br />
+                                {t.variantTabWarnMessages.сurrentlyThisOption}
+                              </div>
+                            )}
+                          </Fragment>
                         )}
                       </div>
                     )}
@@ -1167,6 +1130,7 @@ class Form extends Component<PropsType, StateType> {
                             environment={environment}
                             onExpandClick={this.expandClick}
                             showAlert={showAlert}
+                            onCopyVariant={this.handleCopyVariant}
                           />
                           <div styleName="variantsButton">
                             <Button
@@ -1174,11 +1138,29 @@ class Form extends Component<PropsType, StateType> {
                               wireframe
                               fullWidth
                               onClick={this.addNewVariant}
+                              disabled={
+                                isEmpty(customAttributes) ||
+                                isEmpty(attributeValues) ||
+                                (baseProduct != null &&
+                                  baseProduct.status === 'MODERATION') ||
+                                (baseProduct != null &&
+                                  baseProduct.status === 'BLOCKED')
+                              }
                               dataTest="addVariantButton"
                             >
                               {t.addVariant}
                             </Button>
                           </div>
+                          <Fragment>
+                            {(isEmpty(customAttributes) ||
+                              isEmpty(attributeValues)) && (
+                              <div styleName="variantsWarnText">
+                                {t.variantTabWarnMessages.thisCategory}
+                                <br />
+                                {t.variantTabWarnMessages.сurrentlyThisOption}
+                              </div>
+                            )}
+                          </Fragment>
                         </div>
                       )}
                   </div>

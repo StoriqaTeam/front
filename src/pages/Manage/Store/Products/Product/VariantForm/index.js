@@ -19,7 +19,7 @@ import {
 import { Environment } from 'relay-runtime';
 import { validate } from '@storiqa/shared';
 
-import { Input, Button, InputPrice, Checkbox } from 'components/common';
+import { Input, Button, InputPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 
 import { log, fromRelayError } from 'utils';
@@ -47,8 +47,11 @@ import type { MutationParamsType as CreateProductWithAttributesMutationType } fr
 import Characteristics from '../Characteristics';
 import Photos from '../Photos';
 import Warehouses from '../Warehouses';
+import PreOrder from '../PreOrder';
 
 import './VariantForm.scss';
+
+import t from './i18n';
 
 type StateType = {
   vendorCode: ?string,
@@ -258,43 +261,14 @@ class VariantForm extends Component<PropsType, StateType> {
     }));
   };
 
-  preOrderDaysInput: ?HTMLInputElement;
-
-  handleOnChangePreOrderDays = (e: SyntheticInputEvent<>) => {
-    let {
-      target: { value },
-    } = e;
-    const regexp = /(^\d*$)/;
-    if (!regexp.test(value)) {
-      return;
-    }
-    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
-    this.setState({ preOrderDays: value });
-  };
-
-  handleOnBlurPreOrderDays = (e: SyntheticInputEvent<>) => {
-    const {
-      target: { value },
-    } = e;
-    if (!value || value === '0') {
-      this.setState({
-        preOrderDays: '',
-        preOrder: false,
-      });
-    }
-  };
-
-  handleOnChangePreOrder = () => {
-    this.setState((prevState: StateType) => ({
-      preOrder: !prevState.preOrder,
-    }));
-    if (
-      this.preOrderDaysInput &&
-      !this.state.preOrder &&
-      !this.state.preOrderDays
-    ) {
-      this.preOrderDaysInput.focus();
-    }
+  handleChangePreOrder = (data: {
+    preOrderDays: string,
+    preOrder: boolean,
+  }) => {
+    this.setState({
+      preOrderDays: data.preOrderDays,
+      preOrder: data.preOrder,
+    });
   };
 
   validate = () => {
@@ -458,10 +432,10 @@ class VariantForm extends Component<PropsType, StateType> {
         product: {
           price,
           vendorCode,
-          photoMain,
+          photoMain: photoMain || '',
           additionalPhotos: photos,
-          cashback: cashback ? cashback / 100 : null,
-          discount: discount ? discount / 100 : null,
+          cashback: cashback ? cashback / 100 : 0,
+          discount: discount ? discount / 100 : 0,
           preOrder,
           preOrderDays: Number(preOrderDays),
         },
@@ -563,7 +537,7 @@ class VariantForm extends Component<PropsType, StateType> {
           <Icon type="cross" size={16} />
         </button>
         <div styleName="title">
-          <strong>Product photos</strong>
+          <strong>{t.productPhotos}</strong>
         </div>
         <div styleName="photos">
           <Photos
@@ -575,7 +549,7 @@ class VariantForm extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="title titleGeneral">
-          <strong>General settings</strong>
+          <strong>{t.generalSettings}</strong>
         </div>
         <div styleName="formItem">
           <Input
@@ -583,7 +557,7 @@ class VariantForm extends Component<PropsType, StateType> {
             fullWidth
             label={
               <span>
-                Vendor code <span styleName="asterisk">*</span>
+                {t.vendorCode} <span styleName="asterisk">*</span>
               </span>
             }
             value={vendorCode || ''}
@@ -593,13 +567,13 @@ class VariantForm extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="title titlePricing">
-          <strong>Pricing</strong>
+          <strong>{t.pricing}</strong>
         </div>
         <div styleName="formItem">
           <InputPrice
             id="price"
             required
-            label="Price"
+            label={t.price}
             onChangePrice={this.handlePriceChange}
             price={parseFloat(price) || 0}
             currency={currency}
@@ -610,17 +584,19 @@ class VariantForm extends Component<PropsType, StateType> {
         <div styleName="formItem">
           <Input
             fullWidth
-            label="Cashback"
+            id="cashback"
+            label={t.cashback}
             onChange={this.handlePercentChange('cashback')}
             value={!isNil(cashback) ? `${cashback}` : ''}
             dataTest="Cashback"
           />
-          <span styleName="inputPostfix">Percent</span>
+          <span styleName="inputPostfix">{t.percent}</span>
         </div>
         <div styleName="formItem">
           <Input
             fullWidth
-            label="Discount"
+            id="discount"
+            label={t.discount}
             onChange={this.handlePercentChange('discount')}
             value={!isNil(discount) ? `${discount}` : ''}
             dataTest="Discount"
@@ -629,8 +605,8 @@ class VariantForm extends Component<PropsType, StateType> {
         </div>
         {!isEmpty(customAttributes) && (
           <Fragment>
-            <div styleName="title titleCharacteriscics">
-              <strong>Characteristics</strong>
+            <div styleName="title titleCharacteristics">
+              <strong>{t.characteristics}</strong>
             </div>
             <div styleName="characteristics">
               <Characteristics
@@ -642,35 +618,12 @@ class VariantForm extends Component<PropsType, StateType> {
             </div>
           </Fragment>
         )}
-        <div styleName="formItem">
-          <div styleName="preOrder">
-            <div styleName="preOrderTitle">
-              <div styleName="title">
-                <strong>Available for pre-order</strong>
-              </div>
-              <div styleName="preOrderCheckbox">
-                <Checkbox
-                  inline
-                  id="preOrderCheckbox"
-                  isChecked={preOrder}
-                  onChange={this.handleOnChangePreOrder}
-                />
-              </div>
-            </div>
-            <div styleName="preOrderDaysInput">
-              <Input
-                inputRef={node => {
-                  this.preOrderDaysInput = node;
-                }}
-                fullWidth
-                label="Lead time (days)"
-                onChange={this.handleOnChangePreOrderDays}
-                onBlur={this.handleOnBlurPreOrderDays}
-                value={preOrderDays || ''}
-                dataTest="variantPreOrderDaysInput"
-              />
-            </div>
-          </div>
+        <div styleName="preOrder">
+          <PreOrder
+            preOrderDays={preOrderDays}
+            preOrder={preOrder}
+            onChangePreOrder={this.handleChangePreOrder}
+          />
         </div>
         <div styleName="warehouses">
           {variant &&
@@ -691,7 +644,7 @@ class VariantForm extends Component<PropsType, StateType> {
                 dataTest="saveVariantButton"
                 isLoading={isLoading}
               >
-                Save
+                {t.save}
               </Button>
             </div>
             <div styleName="cancelButton">
@@ -704,13 +657,9 @@ class VariantForm extends Component<PropsType, StateType> {
                 }}
                 dataTest="cancelVariantButton"
               >
-                Cancel
+                {t.cancel}
               </Button>
             </div>
-          </div>
-          <div styleName="warnText">
-            You can’t save this variant&nbsp;- you have already have the same
-            one.
           </div>
         </div>
       </div>

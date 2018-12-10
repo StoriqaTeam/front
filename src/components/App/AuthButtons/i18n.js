@@ -14,7 +14,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     signIn: 'Sign In',
-    signUp: 'sign Up',
+    signUp: 'Sign Up',
   },
 };
 

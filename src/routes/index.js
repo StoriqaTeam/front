@@ -38,9 +38,17 @@ import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
 import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
+import {
+  EmailConfirmed,
+  DeviceConfirmed,
+  PasswordResetDeny,
+} from 'pages/Wallet';
 
 const routes = (
   <Route>
+    <Route path="/ture/email_confirmed" Component={EmailConfirmed} />
+    <Route path="/ture/password_reset_deny" Component={PasswordResetDeny} />
+    <Route path="/ture/register_device_confirmed" Component={DeviceConfirmed} />
     <Route
       path="/"
       Component={App}
@@ -339,7 +347,7 @@ const routes = (
                   isPriority
                 }
               }
-              baseProduct(id: $productID, visibility: "active") {
+              baseProduct(id: $productID) {
                 ...Product_baseProduct
               }
             }
@@ -514,7 +522,6 @@ const routes = (
                     id
                     ...EditStore_me
                   }
-                  ...InputSlug_storeSlugExists
                 }
               `}
             />

@@ -552,6 +552,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   }, 250);
 
   handleChangeForm = data => {
+    if (!data.slug) {
+      this.handleWizardError();
+      return;
+    }
     this.handleOnSaveWizard(data);
   };
 

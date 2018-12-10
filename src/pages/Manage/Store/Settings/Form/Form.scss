@@ -7,6 +7,7 @@
 }
 
 .form {
+  position: relative;
   background-color: $color_white;
   flex: 1 0 auto;
 }
@@ -29,13 +30,14 @@
 }
 
 .storeStatus {
-  span {
-    background-color: green;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
+  position: absolute;
+  right: 0rem;
+  top: 0rem;
+
+  @media (max-width: #{$md - 1px}) {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 4rem;
   }
 }
 
@@ -106,27 +108,48 @@
 
 .buttonsPanel {
   display: flex;
+  align-items: center;
+  margin-top: 6rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+  }
+
   .formItem + .moderationButton {
     margin-left: 2rem;
   }
 }
 
 .saveButton {
-  margin-top: 2rem;
-  button {
+  width: 22.5rem;
+
+  @media (max-width: #{$sm - 1px}) {
     width: 100%;
-    @media (min-width: $md) {
-      width: 22.5rem;
-    }
   }
 }
 
 .moderationButton {
-  margin-top: 2rem;
-  button {
+  width: 22.5rem;
+  margin-left: 2rem;
+
+  @media (max-width: #{$sm - 1px}) {
     width: 100%;
-    @media (min-width: $md) {
-      width: 22.5rem;
-    }
+    margin-left: 0;
+    margin-top: 2rem;
   }
+}
+
+.warnMessage {
+  margin-left: 2rem;
+  color: $color_pink;
+  font-size: 14px;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+}
+
+.asterisk {
+  color: $color_red;
 }

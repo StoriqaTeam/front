@@ -82,11 +82,11 @@ class SecondForm extends React.Component<PropsType, StateType> {
     };
   }
 
-  handleOnSelectLanguage = (item: { id: string, label: string }) => {
+  handleOnSelectLanguage = (item: ?{ id: string, label: string }) => {
     const { onChange } = this.props;
     this.setState(
       {
-        defaultLanguage: item.id,
+        defaultLanguage: item ? item.id : null,
       },
       () => {
         onChange({
