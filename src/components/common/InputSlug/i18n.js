@@ -12,7 +12,6 @@ type TranslationDicType = {|
   hoorah: string,
   incorrectFormat: string,
   serverError: string,
-  emptyError: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -25,7 +24,6 @@ const translations: TranslationsBundleType = {
     hoorah: 'Hoorah! Name is vacant!',
     incorrectFormat: 'Incorrect format',
     serverError: 'Server error',
-    emptyError: 'Web address must not be empty',
   },
 };
 

@@ -712,7 +712,7 @@ class Form extends Component<PropsType, StateType> {
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
-    const requiredLabel = required ? (
+    const hereLabel = required ? (
       <span>
         {label} <span styleName="asterisk">*</span>
       </span>
@@ -727,7 +727,7 @@ class Form extends Component<PropsType, StateType> {
       <Input
         id={id}
         value={value}
-        label={requiredLabel}
+        label={hereLabel}
         onChange={this.handleInputChange(id)}
         errors={errors}
         limit={limit}

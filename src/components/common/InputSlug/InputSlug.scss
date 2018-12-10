@@ -11,6 +11,10 @@
   .input {
     position: relative;
     width: 100%;
+
+    .asterisk {
+      color: $color_red;
+    }
   }
 }
 
