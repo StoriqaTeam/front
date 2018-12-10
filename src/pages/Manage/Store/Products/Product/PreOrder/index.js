@@ -111,7 +111,7 @@ class PreOrder extends PureComponent<PropsType, StateType> {
           <div styleName="preOrderCheckbox">
             <Checkbox
               inline
-              id="preOrderCheckbox2"
+              id="preOrderCheckbox"
               isChecked={preOrder}
               onChange={this.handleOnChangePreOrder}
             />
@@ -123,6 +123,7 @@ class PreOrder extends PureComponent<PropsType, StateType> {
               this.preOrderDaysInput = node;
             }}
             fullWidth
+            id="preOrderInput"
             label={t.labelLeadTime}
             onChange={this.handleOnChangePreOrderDays}
             onBlur={this.handleOnBlurPreOrderDays}

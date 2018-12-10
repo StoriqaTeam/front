@@ -109,6 +109,7 @@ class Input extends Component<PropsType, StateType> {
       dataTest,
       align,
     } = this.props;
+    console.log('---id', id);
     return isAutocomplete ? (
       <input
         type="text"
