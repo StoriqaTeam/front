@@ -165,7 +165,7 @@
     "test": "NODE_ENV=test BABEL_ENV=test jest",
     "storybook": ". ./.env.stable && NODE_ENV=development BABEL_ENV=development yarn updateSchema && start-storybook -p 9000 -c .storybook",
     "relay": "./node_modules/.bin/relay-compiler --src ./src --schema ./src/relay/schema.json",
-    "updateSchema": "./node_modules/.bin/babel-node scripts/updateSchema.js",
+    "updateSchema": "yarn babel-node scripts/updateSchema.js",
     "checkImage": "cp docker/Dockerfile.build Dockerfile && docker build -t fronttest . && rm Dockerfile",
     "prettier": "prettier --single-quote --trailing-comma=all --write './src/**/*.js'",
     "buildTranslations": "NODE_ENV=development yarn babel-node ./scripts/i18n/buildTranslations.js",
