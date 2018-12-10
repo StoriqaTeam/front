@@ -318,6 +318,7 @@ export default createRefetchContainer(
           searchTerm: $searchTerm
           currentPage: $currentPage
           itemsCount: $itemsCount
+          visibility: "active"
         ) {
           edges {
             node {

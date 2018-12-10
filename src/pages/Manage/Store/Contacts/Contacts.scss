@@ -3,15 +3,16 @@
 .container {
   display: flex;
   flex-direction: column;
-  max-width: 41rem;
   height: 100%;
 }
 
 .form {
+  position: relative;
   height: 100%;
-  margin-top: 2rem;
-  padding: 4rem;
-  background-color: $color_white;
+}
+
+.wrap {
+  max-width: 41rem;
 }
 
 .formItem + .formItem {
@@ -41,11 +42,43 @@
   margin-top: 3rem;
 }
 
+.buttonsPanel {
+  display: flex;
+  align-items: center;
+  margin-top: 6rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+  }
+}
+
 .saveButton {
-  button {
+  width: 22.5rem;
+
+  @media (max-width: #{$sm - 1px}) {
     width: 100%;
-    @media (min-width: $md) {
-      width: 22.5rem;
-    }
+  }
+}
+
+.storeStatus {
+  position: absolute;
+  right: 0rem;
+  top: 0rem;
+
+  @media (max-width: #{$md - 1px}) {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+}
+
+.warnMessage {
+  margin-left: 2rem;
+  color: $color_pink;
+  font-size: 14px;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+    margin-top: 1rem;
   }
 }

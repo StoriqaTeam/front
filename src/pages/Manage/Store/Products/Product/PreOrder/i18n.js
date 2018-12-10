@@ -5,29 +5,15 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  error: string,
-  close: string,
-  saved: string,
-  save: string,
-  labelEmail: string,
-  labelPhone: string,
-  somethingGoingWrong: string,
-  storeIsOnModeration: string,
-  storeIsBlocked: string,
+  labelLeadTime: string,
+  availableForPreOrder: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    error: 'Error: ',
-    close: 'Close.',
-    saved: 'Saved!',
-    save: 'Save',
-    labelEmail: 'Email',
-    labelPhone: 'Phone',
-    somethingGoingWrong: 'Something going wrong :(',
-    storeIsOnModeration: 'Store is on moderation',
-    storeIsBlocked: 'Store is blocked, contact the support service',
+    labelLeadTime: 'Lead time (days)',
+    availableForPreOrder: 'Available for pre-order',
   },
 };
 

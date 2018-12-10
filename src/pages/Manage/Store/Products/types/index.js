@@ -1,6 +1,6 @@
 // @flow strict
 
-import type { AddressFullType } from 'types';
+import type { AddressFullType, ModerationStatusType } from 'types';
 
 export type FormErrorsType = {
   [string]: Array<string>,
@@ -129,7 +129,7 @@ export type BaseProductType = {
   seoDescription: LangTextType,
   seoTitle: LangTextType,
   shortDescription: LangTextType,
-  status: 'DRAFT' | 'MODERATION' | 'DECLINE' | 'PUBLISHED' | 'BLOCKED',
+  status: ModerationStatusType,
   store: {
     id: string,
     rawId: number,

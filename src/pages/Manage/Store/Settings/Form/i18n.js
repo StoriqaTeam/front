@@ -21,6 +21,8 @@ type TranslationDicType = {|
   save: string,
   close: string,
   sendToModeration: string,
+  storeIsOnModeration: string,
+  storeIsBlocked: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -42,6 +44,8 @@ const translations: TranslationsBundleType = {
     save: 'Save',
     close: 'Close.',
     sendToModeration: 'Send to moderation',
+    storeIsOnModeration: 'Store is on moderation',
+    storeIsBlocked: 'Store is blocked, contact the support service',
   },
 };
 
