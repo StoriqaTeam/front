@@ -311,39 +311,66 @@ class Form extends Component<PropsType, StateType> {
     id,
     label,
     limit,
+    required,
   }: {
     id: string,
     label: string,
     limit?: number,
-  }) => (
-    /* eslint-enable */
-    <div styleName="formItem maxWidthInput">
-      <Input
-        id={id}
-        // $FlowIgnoreMe
-        value={propOr('', id, this.state.form)}
-        label={label}
-        onChange={this.handleInputChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
-        limit={limit}
-        fullWidth
-      />
-    </div>
-  );
+    required?: boolean,
+  }) => {
+    const hereLabel = required ? (
+      <span>
+        {label} <span styleName="asterisk">*</span>
+      </span>
+    ) : (
+      label
+    );
+    return (
+      <div styleName="formItem maxWidthInput">
+        <Input
+          id={id}
+          // $FlowIgnoreMe
+          value={propOr('', id, this.state.form)}
+          label={hereLabel}
+          onChange={this.handleInputChange(id)}
+          errors={propOr(null, id, this.state.formErrors)}
+          limit={limit}
+          fullWidth
+        />
+      </div>
+    );
+  };
 
-  renderTextarea = ({ id, label }: { [string]: any }) => (
-    <div styleName="formItem maxWidthTextArea">
-      <Textarea
-        id={id}
-        // $FlowIgnoreMe
-        value={propOr('', id, this.state.form)}
-        label={label}
-        onChange={this.handleTextareaChange(id)}
-        errors={propOr(null, id, this.state.formErrors)}
-        fullWidth
-      />
-    </div>
-  );
+  renderTextarea = ({
+    id,
+    label,
+    required,
+  }: {
+    id: string,
+    label: string,
+    required?: boolean,
+  }) => {
+    const hereLabel = required ? (
+      <span>
+        {label} <span styleName="asterisk">*</span>
+      </span>
+    ) : (
+      label
+    );
+    return (
+      <div styleName="formItem maxWidthTextArea">
+        <Textarea
+          id={id}
+          // $FlowIgnoreMe
+          value={propOr('', id, this.state.form)}
+          label={hereLabel}
+          onChange={this.handleTextareaChange(id)}
+          errors={propOr(null, id, this.state.formErrors)}
+          fullWidth
+        />
+      </div>
+    );
+  };
 
   isSaveAvailable = () =>
     this.state.status === 'DRAFT' ||
@@ -413,6 +440,7 @@ class Form extends Component<PropsType, StateType> {
             id: 'name',
             label: t.labelStoreName,
             limit: 50,
+            required: true,
           })}
           <div styleName="formItem maxWidthInput">
             {/* $FlowIgnoreMe */}
@@ -438,10 +466,12 @@ class Form extends Component<PropsType, StateType> {
           {this.renderTextarea({
             id: 'shortDescription',
             label: t.labelShortDescription,
+            required: true,
           })}
           {this.renderTextarea({
             id: 'longDescription',
             label: t.labelLongDescription,
+            required: true,
           })}
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
