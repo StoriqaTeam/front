@@ -27,13 +27,7 @@ import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
-import {
-  Select,
-  SpinnerCircle,
-  Button,
-  InputPrice,
-  Checkbox,
-} from 'components/common';
+import { Select, SpinnerCircle, Button, InputPrice } from 'components/common';
 import { CategorySelector } from 'components/CategorySelector';
 import { Icon } from 'components/Icon';
 import { Textarea } from 'components/common/Textarea';
@@ -71,6 +65,7 @@ import Tabs from '../Tabs';
 import Characteristics from '../Characteristics';
 import VariantForm from '../VariantForm';
 import AdditionalAttributes from '../AdditionalAttributes';
+import PreOrder from '../PreOrder';
 import sendProductToModerationMutation from '../mutations/SendProductToModerationMutation';
 
 import type {
@@ -262,12 +257,6 @@ class Form extends Component<PropsType, StateType> {
     };
   }
 
-  componentDidMount() {
-    if (process.env.BROWSER) {
-      window.addEventListener('click', this.handleClick);
-    }
-  }
-
   componentDidUpdate(prevProps: PropsType) {
     const { shippingData, customAttributes, baseProduct } = this.props;
     if (
@@ -310,12 +299,6 @@ class Form extends Component<PropsType, StateType> {
         this.props,
       );
       this.updateVariantForForm(this.getVariantForForm(variantId));
-    }
-  }
-
-  componentWillUnmount() {
-    if (process.env.BROWSER) {
-      window.removeEventListener('click', this.handleClick);
     }
   }
 
@@ -639,63 +622,6 @@ class Form extends Component<PropsType, StateType> {
     });
   };
 
-  preOrderDaysInput: ?HTMLInputElement;
-
-  handleClick = (e: SyntheticInputEvent<>) => {
-    const isPreOrderDaysInput =
-      this.preOrderDaysInput && this.preOrderDaysInput.contains(e.target);
-
-    if (!isPreOrderDaysInput && !this.state.form.preOrderDays) {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', 'preOrder'], false, prevState),
-      );
-    }
-  };
-
-  handleOnChangePreOrderDays = (e: any) => {
-    let {
-      target: { value },
-    } = e;
-    const regexp = /(^\d*$)/;
-    if (!regexp.test(value)) {
-      return;
-    }
-    value = value.replace(/^0+/, '0').replace(/^0+(\d)/, '$1');
-    this.setState((prevState: StateType) =>
-      assocPath(['form', 'preOrderDays'], value, prevState),
-    );
-  };
-
-  handleOnBlurPreOrderDays = (e: any) => {
-    const {
-      target: { value },
-    } = e;
-    if (!value || value === '0') {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', 'preOrderDays'], '', prevState),
-      );
-    }
-  };
-
-  handleOnChangePreOrder = () => {
-    this.setState((prevState: StateType) => {
-      if (this.preOrderDaysInput) {
-        if (!prevState.form.preOrder) {
-          this.preOrderDaysInput.focus();
-        }
-        if (prevState.form.preOrder) {
-          this.preOrderDaysInput.blur();
-        }
-      }
-
-      return assocPath(
-        ['form', 'preOrder'],
-        !prevState.form.preOrder,
-        prevState,
-      );
-    });
-  };
-
   handleChangeTab = (activeTab: string) => {
     this.setState({ activeTab });
   };
@@ -764,6 +690,19 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnoreMe
     const status = pathOr(null, ['baseProduct', 'status'], this.props);
     return status === 'DRAFT' || status === 'DECLINE' || status === 'PUBLISHED';
+  };
+
+  handleChangePreOrder = (data: {
+    preOrderDays: string,
+    preOrder: boolean,
+  }) => {
+    this.setState((prevState: StateType) => ({
+      form: {
+        ...prevState.form,
+        preOrderDays: data.preOrderDays,
+        preOrder: data.preOrder,
+      },
+    }));
   };
 
   renderInput = (props: {
@@ -1060,32 +999,11 @@ class Form extends Component<PropsType, StateType> {
                 </div>
               )}
               <div styleName="preOrder">
-                <div styleName="preOrderTitle">
-                  <div styleName="title">
-                    <strong>{t.availableForPreOrder}</strong>
-                  </div>
-                  <div styleName="preOrderCheckbox">
-                    <Checkbox
-                      inline
-                      id="preOrderCheckbox"
-                      isChecked={preOrder}
-                      onChange={this.handleOnChangePreOrder}
-                    />
-                  </div>
-                </div>
-                <div styleName="preOrderDaysInput">
-                  <Input
-                    inputRef={node => {
-                      this.preOrderDaysInput = node;
-                    }}
-                    fullWidth
-                    label={t.labelLeadTime}
-                    onChange={this.handleOnChangePreOrderDays}
-                    onBlur={this.handleOnBlurPreOrderDays}
-                    value={preOrderDays || ''}
-                    dataTest="variantPreOrderDaysInput"
-                  />
-                </div>
+                <PreOrder
+                  preOrderDays={preOrderDays}
+                  preOrder={preOrder}
+                  onChangePreOrder={this.handleChangePreOrder}
+                />
               </div>
               <div styleName="warehouses">
                 {mainVariant && <Warehouses stocks={mainVariant.stocks} />}
