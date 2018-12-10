@@ -20,6 +20,11 @@ const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
+const handler = (percentage, message, ...args) => {
+  // e.g. Output each progress message directly to the console:
+  console.info(percentage, message, ...args);
+};
+
 module.exports = (mode) => {
   const commonConfig = require('./webpack.common')();
 
@@ -61,6 +66,7 @@ module.exports = (mode) => {
         path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
     plugins: [
+      new webpack.ProgressPlugin(handler),
       new HtmlWebpackPlugin({
         alwaysWriteToDisk: true,
         template: path.resolve(__dirname, 'templates/dev.html'),
@@ -69,7 +75,7 @@ module.exports = (mode) => {
       new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, 'templates')
       }), 
-      new HardSourceWebpackPlugin(),
+      // new HardSourceWebpackPlugin(),
       // for HMR
       new webpack.HotModuleReplacementPlugin(),
       // for HMR

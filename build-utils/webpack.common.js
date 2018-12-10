@@ -15,11 +15,6 @@ const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
-const handler = (percentage, message, ...args) => {
-  // e.g. Output each progress message directly to the console:
-  console.info(percentage, message, ...args);
-};
-
 const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(
   require('./webpack-isomorphic-tools-configuration'),
 ).development(process.env.NODE_ENV !== 'production');
@@ -167,7 +162,7 @@ module.exports = (mode) => {
       ],
     },
     plugins: [
-      new webpack.ProgressPlugin(handler),
+      
       //
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
