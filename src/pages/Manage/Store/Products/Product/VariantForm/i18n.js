@@ -5,25 +5,33 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  labelWebAddress: string,
-  inUse: string,
-  vacant: string,
-  oops: string,
-  hoorah: string,
-  incorrectFormat: string,
-  serverError: string,
+  productPhotos: string,
+  generalSettings: string,
+  vendorCode: string,
+  pricing: string,
+  price: string,
+  cashback: string,
+  percent: string,
+  discount: string,
+  characteristics: string,
+  save: string,
+  cancel: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    labelWebAddress: 'Web Address',
-    inUse: 'In Use',
-    vacant: 'Vacant',
-    oops: 'Oops! Someone has already using this address.',
-    hoorah: 'Hoorah! Name is vacant!',
-    incorrectFormat: 'Incorrect format',
-    serverError: 'Server error',
+    productPhotos: 'PRODUCT PHOTOS',
+    generalSettings: 'GENERAL SETTINGS',
+    vendorCode: 'Vendor code',
+    pricing: 'Pricing',
+    price: 'Price',
+    cashback: 'Cashback',
+    percent: 'Percent',
+    discount: 'Discount',
+    characteristics: 'Characteristics',
+    save: 'Save',
+    cancel: 'Cancel',
   },
 };
 

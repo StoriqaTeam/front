@@ -712,7 +712,7 @@ class Form extends Component<PropsType, StateType> {
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
-    const requiredLabel = required ? (
+    const hereLabel = required ? (
       <span>
         {label} <span styleName="asterisk">*</span>
       </span>
@@ -727,7 +727,7 @@ class Form extends Component<PropsType, StateType> {
       <Input
         id={id}
         value={value}
-        label={requiredLabel}
+        label={hereLabel}
         onChange={this.handleInputChange(id)}
         errors={errors}
         limit={limit}
@@ -951,6 +951,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   fullWidth
+                  id="cashback"
                   label={t.labelCashback}
                   onChange={this.handlePercentChange('cashback')}
                   value={!isNil(cashback) ? `${cashback}` : ''}
@@ -961,6 +962,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 <Input
                   fullWidth
+                  id="discount"
                   label={t.labelDiscount}
                   onChange={this.handlePercentChange('discount')}
                   value={!isNil(discount) ? `${discount}` : ''}

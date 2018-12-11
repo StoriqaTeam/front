@@ -51,6 +51,8 @@ import PreOrder from '../PreOrder';
 
 import './VariantForm.scss';
 
+import t from './i18n';
+
 type StateType = {
   vendorCode: ?string,
   price: ?number,
@@ -535,7 +537,7 @@ class VariantForm extends Component<PropsType, StateType> {
           <Icon type="cross" size={16} />
         </button>
         <div styleName="title">
-          <strong>Product photos</strong>
+          <strong>{t.productPhotos}</strong>
         </div>
         <div styleName="photos">
           <Photos
@@ -547,7 +549,7 @@ class VariantForm extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="title titleGeneral">
-          <strong>General settings</strong>
+          <strong>{t.generalSettings}</strong>
         </div>
         <div styleName="formItem">
           <Input
@@ -555,7 +557,7 @@ class VariantForm extends Component<PropsType, StateType> {
             fullWidth
             label={
               <span>
-                Vendor code <span styleName="asterisk">*</span>
+                {t.vendorCode} <span styleName="asterisk">*</span>
               </span>
             }
             value={vendorCode || ''}
@@ -565,13 +567,13 @@ class VariantForm extends Component<PropsType, StateType> {
           />
         </div>
         <div styleName="title titlePricing">
-          <strong>Pricing</strong>
+          <strong>{t.pricing}</strong>
         </div>
         <div styleName="formItem">
           <InputPrice
             id="price"
             required
-            label="Price"
+            label={t.price}
             onChangePrice={this.handlePriceChange}
             price={parseFloat(price) || 0}
             currency={currency}
@@ -582,17 +584,19 @@ class VariantForm extends Component<PropsType, StateType> {
         <div styleName="formItem">
           <Input
             fullWidth
-            label="Cashback"
+            id="cashback"
+            label={t.cashback}
             onChange={this.handlePercentChange('cashback')}
             value={!isNil(cashback) ? `${cashback}` : ''}
             dataTest="Cashback"
           />
-          <span styleName="inputPostfix">Percent</span>
+          <span styleName="inputPostfix">{t.percent}</span>
         </div>
         <div styleName="formItem">
           <Input
             fullWidth
-            label="Discount"
+            id="discount"
+            label={t.discount}
             onChange={this.handlePercentChange('discount')}
             value={!isNil(discount) ? `${discount}` : ''}
             dataTest="Discount"
@@ -602,7 +606,7 @@ class VariantForm extends Component<PropsType, StateType> {
         {!isEmpty(customAttributes) && (
           <Fragment>
             <div styleName="title titleCharacteristics">
-              <strong>Characteristics</strong>
+              <strong>{t.characteristics}</strong>
             </div>
             <div styleName="characteristics">
               <Characteristics
@@ -640,7 +644,7 @@ class VariantForm extends Component<PropsType, StateType> {
                 dataTest="saveVariantButton"
                 isLoading={isLoading}
               >
-                Save
+                {t.save}
               </Button>
             </div>
             <div styleName="cancelButton">
@@ -653,7 +657,7 @@ class VariantForm extends Component<PropsType, StateType> {
                 }}
                 dataTest="cancelVariantButton"
               >
-                Cancel
+                {t.cancel}
               </Button>
             </div>
           </div>

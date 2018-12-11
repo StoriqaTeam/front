@@ -31,7 +31,7 @@ class InputSlug extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      isFocus: false,
+      isFocus: false, // eslint-disable-line
       value: props.slug,
       storeSlugExists: null,
       incorrectFormat: false,
@@ -64,7 +64,6 @@ class InputSlug extends Component<PropsType, StateType> {
       return;
     }
 
-    const { isFocus } = this.state;
     if (/-$/i.test(slugValue)) {
       this.setState(
         {
@@ -83,11 +82,17 @@ class InputSlug extends Component<PropsType, StateType> {
           return true;
         }
         if (!storeSlugExists) {
-          if (isFocus) {
-            this.setState({ storeSlugExists: false }, () => {
+          this.setState(
+            prevState => ({
+              storeSlugExists:
+                prevState.storeSlugExists !== false && prevState.isFocus
+                  ? false
+                  : null,
+            }),
+            () => {
               this.props.onChange(slugValue);
-            });
-          }
+            },
+          );
         } else {
           this.setState({ storeSlugExists: true }, () => {
             this.props.onChange(null);
@@ -130,30 +135,32 @@ class InputSlug extends Component<PropsType, StateType> {
   };
 
   handleFocus = () => {
-    this.setState({ isFocus: true });
+    this.setState({ isFocus: true }); // eslint-disable-line
   };
 
   handleBlur = () => {
     this.setState((prevState: StateType) => ({
       isFocus: false,
       storeSlugExists:
-        prevState.storeSlugExists == null ? null : prevState.storeSlugExists,
+        prevState.storeSlugExists === false ? null : prevState.storeSlugExists,
     }));
   };
 
   render() {
     const { value, storeSlugExists, incorrectFormat, serverError } = this.state;
     const errors =
-      storeSlugExists === true || incorrectFormat || serverError || value === ''
-        ? []
-        : null;
+      storeSlugExists === true || incorrectFormat || serverError ? [] : null;
     return (
       <div styleName="container">
         <div styleName="input">
           <Input
             id="slug"
             fullWidth
-            label={t.labelWebAddress}
+            label={
+              <span>
+                {t.labelWebAddress} <span styleName="asterisk">*</span>
+              </span>
+            }
             value={value}
             onChange={this.handleChange}
             onFocus={this.handleFocus}
@@ -190,12 +197,6 @@ class InputSlug extends Component<PropsType, StateType> {
             <Fragment>
               <div styleName="light red">Oops</div>
               <div styleName="hint red">{t.serverError}</div>
-            </Fragment>
-          )}
-          {value === '' && (
-            <Fragment>
-              <div styleName="light red">Oops</div>
-              <div styleName="hint red">{t.emptyError}</div>
             </Fragment>
           )}
         </div>
