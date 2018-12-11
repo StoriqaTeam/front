@@ -137,6 +137,11 @@ const wrapAsync = fn => (req, res, next) => {
 
 app.use(
   wrapAsync(async (req, res) => {
+    if (!req.universalCookies.get(process.env.REACT_APP_COUNTRY_HEADER)) {
+      req.universalCookies.set('COUNTRY_IP', req.headers ? req.headers[process.env.REACT_APP_COUNTRY_HEADER] : null, {
+        path: '/',
+      });
+    }
     const expirationDate = new Date();
     req.universalCookies.set(COOKIE_NAME, 'yes');
     // set session_id cookie if not setted :)

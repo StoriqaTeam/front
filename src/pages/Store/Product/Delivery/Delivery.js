@@ -3,13 +3,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { head, pathOr, find, propEq, map, isEmpty, isNil, length } from 'ramda';
-// $FlowIgnore
-import axios from 'axios';
 
 import { Button, Select, RadioButton, SpinnerCircle } from 'components/common';
 import { Modal } from 'components/Modal';
 import { Icon } from 'components/Icon';
-import { log } from 'utils';
+import { log, getCookie } from 'utils';
 import { fetchAvailableShippingForUser } from 'relay/queries';
 
 import type { SelectItemType, CountryType } from 'types';
@@ -42,17 +40,6 @@ class Delivery extends Component<PropsType, StateType> {
     deliveryPackages: null,
   };
 
-  componentDidMount() {
-    this.mounted = true;
-    this.fetchData();
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-  }
-
-  mounted: boolean = false;
-
   fetchData = () => {
     const { baseProductRawId } = this.props;
     // $FlowIgnore
@@ -61,31 +48,19 @@ class Delivery extends Component<PropsType, StateType> {
       ['address', 'countryCode'],
       this.props.userAddress,
     );
-    this.setState({ isFetching: true });
+    // this.setState({ isFetching: true });
 
     if (countryCode) {
       // $FlowIgnore
       this.fetchAvailableShipping(baseProductRawId, countryCode);
     } else {
-      axios
-        .get('https://api.sypexgeo.net/json/')
-        .then(({ data }) => {
-          if (!data || !data.country) {
-            this.setState({ isFetching: false });
-            return true;
-          }
-          const country = find(propEq('alpha2', data.country.iso))(
-            this.props.countries,
-          );
-          if (country && this.mounted) {
-            this.fetchAvailableShipping(baseProductRawId, country.alpha3);
-          }
-          return true;
-        })
-        .catch(error => {
-          log.debug(error);
-          this.setState({ isFetching: false });
-        });
+      const cookiesCountry = getCookie('COUNTRY_IP');
+      const country = find(propEq('alpha2', cookiesCountry))(
+        this.props.countries,
+      );
+      if (country) {
+        this.fetchAvailableShipping(baseProductRawId, country.alpha3);
+      }
     }
   };
 

@@ -1,7 +1,7 @@
 // @flow strict
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
-import { pathOr } from 'ramda';
+import { pathOr, assoc } from 'ramda';
 import { withRouter, matchShape, routerShape } from 'found';
 import type { Environment } from 'relay-runtime';
 
@@ -16,7 +16,14 @@ import {
   RecoverPassword,
   ResetPassword,
 } from 'components/Authorization';
-import { log, fromRelayError, errorsHandler, setCookie } from 'utils';
+import {
+  log,
+  fromRelayError,
+  errorsHandler,
+  setCookie,
+  getCookie,
+  getQueryRefParams,
+} from 'utils';
 // TODO: while mutations are fixed
 import {
   // $FlowIgnoreMe
@@ -141,6 +148,26 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
+  getAdditionalData = () => {
+    // $FlowIgnoreMe
+    const query = pathOr({}, ['match', 'location', 'query'], this.props);
+    let result = {
+      ...getQueryRefParams(query),
+    };
+    const country = getCookie('COUNTRY_IP');
+    if (country) {
+      result = assoc('country', country, result);
+    }
+    let referer = null;
+    if (process.env.BROWSER) {
+      referer = document.referrer || null;
+    }
+    if (referer) {
+      result = assoc('referer', referer, result);
+    }
+    return result;
+  };
+
   setModalTitle = (): string => {
     const { isSignUp, isResetPassword } = this.props;
     if (isResetPassword) {
@@ -163,6 +190,7 @@ class Authorization extends Component<PropsType, StateType> {
       firstName: firstName || null,
       lastName: lastName || null,
       password,
+      additionalData: this.getAdditionalData(),
     };
 
     const params = {
