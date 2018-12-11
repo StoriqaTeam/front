@@ -36,6 +36,11 @@
       width: calc(100% - 14rem);
     }
   }
+  &.hasThumbnails {
+    @media (min-width: $md) {
+      width: calc(100% - 14rem);
+    }
+  }
 }
 
 .imageSlider {
