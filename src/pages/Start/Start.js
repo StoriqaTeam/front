@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, map, prepend, head } from 'ramda';
+import { pathOr, map, head, isEmpty } from 'ramda';
 import axios from 'axios';
 
 import MediaQuery from 'libs/react-responsive';
@@ -23,20 +23,47 @@ import './Start.scss';
 
 import t from './i18n';
 
-import bannersSlider from './bannersSlider.json';
-import bannersRow from './bannersRow.json';
+opaque type BannerRecordType = {
+  id: string,
+  desktop: string,
+  tablet: string,
+  phone: string,
+  link: string,
+};
 
 type StateTypes = {
   priceUsd: ?number,
+  banners: {
+    main: Array<BannerRecordType>,
+    middle: Array<BannerRecordType>,
+    bottom: Array<BannerRecordType>,
+  },
 };
 
 type PropsTypes = {
   mainPage: StartMainPage,
 };
 
+const Loader = (
+  <div styleName="loader">
+    <BannerLoading />
+  </div>
+);
+
+const BannerPlaceholder = () => (
+  <div styleName="bannerPlaceholder">
+    <BannerLoading />
+  </div>
+);
+
 class Start extends Component<PropsTypes, StateTypes> {
   state = {
     priceUsd: null,
+    banners: {
+      main: [],
+      middle: [],
+      bottom: [],
+    },
   };
 
   componentDidMount() {
@@ -53,6 +80,18 @@ class Start extends Component<PropsTypes, StateTypes> {
       .catch(error => {
         log.debug(error);
       });
+
+    axios
+      .get(
+        'https://s3.eu-central-1.amazonaws.com/dumpster.stq/banners/banners.json',
+      )
+      .then(({ data }) => {
+        if (this.isMount) {
+          this.setState({ banners: data });
+        }
+        return true;
+      })
+      .catch(log.error);
   }
 
   componentWillUnmount() {
@@ -85,65 +124,58 @@ class Start extends Component<PropsTypes, StateTypes> {
       item => ({ ...item.node, priceUsd }),
       mostViewedProducts,
     );
-    const storiqaShopId = process.env.REACT_APP_STORIQA_SHOP_ID || null;
-    const bannersSliderWithMerge = prepend(
-      {
-        id: 0,
-        img: 'https://s3.eu-west-2.amazonaws.com/storiqa/img-9fZ32gtibjcC.png',
-        middleImg:
-          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-BbAvBDp0mhoC.png',
-        shortImg:
-          'https://s3.us-east-1.amazonaws.com/storiqa-dev/img-FK7o1iFeHU8C.png',
-        link: `/store/${Number(storiqaShopId)}`,
-      },
-      bannersSlider,
-    );
-    const loader = (
-      <div styleName="loader">
-        <BannerLoading />
-      </div>
-    );
+
     return (
       <div styleName="container">
         <div styleName="item bannerSliderItem">
-          <Fragment>
-            <MediaQuery maxWidth={575}>
+          <MediaQuery maxWidth={575}>
+            {isEmpty(this.state.banners.main) ? (
+              <BannerPlaceholder />
+            ) : (
               <BannersSlider
                 items={map(
                   item => ({
-                    id: storiqaShopId ? item.id : `${item.id - 1}`,
-                    img: convertSrc(item.shortImg, 'medium'),
+                    id: item.id,
+                    img: convertSrc(item.phone, 'medium'),
                     link: item.link,
                   }),
-                  storiqaShopId ? bannersSliderWithMerge : bannersSlider,
+                  this.state.banners.main,
                 )}
               />
-            </MediaQuery>
-            <MediaQuery maxWidth={991} minWidth={576}>
+            )}
+          </MediaQuery>
+          <MediaQuery maxWidth={991} minWidth={576}>
+            {isEmpty(this.state.banners.main) ? (
+              <BannerPlaceholder />
+            ) : (
               <BannersSlider
                 items={map(
                   item => ({
-                    id: storiqaShopId ? item.id : `${item.id - 1}`,
-                    img: convertSrc(item.middleImg, 'large'),
+                    id: item.id,
+                    img: convertSrc(item.tablet, 'large'),
                     link: item.link,
                   }),
-                  storiqaShopId ? bannersSliderWithMerge : bannersSlider,
+                  this.state.banners.main,
                 )}
               />
-            </MediaQuery>
-            <MediaQuery minWidth={992}>
+            )}
+          </MediaQuery>
+          <MediaQuery minWidth={992}>
+            {isEmpty(this.state.banners.main) ? (
+              <BannerPlaceholder />
+            ) : (
               <BannersSlider
                 items={map(
                   item => ({
-                    id: storiqaShopId ? item.id : `${item.id - 1}`,
-                    img: item.img,
+                    id: item.id,
+                    img: item.desktop,
                     link: item.link,
                   }),
-                  storiqaShopId ? bannersSliderWithMerge : bannersSlider,
+                  this.state.banners.main,
                 )}
               />
-            </MediaQuery>
-          </Fragment>
+            )}
+          </MediaQuery>
         </div>
         <div styleName="item goodsItem">
           {viewedProducts &&
@@ -157,27 +189,36 @@ class Start extends Component<PropsTypes, StateTypes> {
         </div>
         <div styleName="item bannerImage">
           <a href="/start-selling" styleName="sellingImage">
-            <MediaQuery maxWidth={575}>
-              <ImageLoader
-                fit
-                src="https://s3.eu-west-2.amazonaws.com/storiqa/img-HbpbkBFg1U0C-medium.png"
-                loader={loader}
-              />
-            </MediaQuery>
-            <MediaQuery maxWidth={991} minWidth={576}>
-              <ImageLoader
-                fit
-                src="https://s3.eu-west-2.amazonaws.com/storiqa/img-HbpbkBFg1U0C-large.png"
-                loader={loader}
-              />
-            </MediaQuery>
-            <MediaQuery minWidth={992}>
-              <ImageLoader
-                fit
-                src="https://s3.eu-west-2.amazonaws.com/storiqa/img-HbpbkBFg1U0C.png"
-                loader={loader}
-              />
-            </MediaQuery>
+            {this.state.banners.middle instanceof Array &&
+            this.state.banners.middle[0] != null ? (
+              <Fragment>
+                <MediaQuery maxWidth={575}>
+                  <ImageLoader
+                    fit
+                    src={this.state.banners.middle[0].phone}
+                    loader={Loader}
+                  />
+                </MediaQuery>
+                <MediaQuery maxWidth={991} minWidth={576}>
+                  <ImageLoader
+                    fit
+                    src={this.state.banners.middle[0].tablet}
+                    loader={Loader}
+                  />
+                </MediaQuery>
+                <MediaQuery minWidth={992}>
+                  <ImageLoader
+                    fit
+                    src={this.state.banners.middle[0].desktop}
+                    loader={Loader}
+                  />
+                </MediaQuery>
+              </Fragment>
+            ) : (
+              <div styleName="placeholder">
+                <BannerLoading />
+              </div>
+            )}
           </a>
         </div>
         <div styleName="item goodsItem">
@@ -190,29 +231,38 @@ class Start extends Component<PropsTypes, StateTypes> {
               />
             )}
         </div>
-        <div styleName="item bannersItem">
-          <MediaQuery maxWidth={767}>
-            <BannersRow
-              items={map(
-                item => ({ ...item, img: convertSrc(item.img, 'large') }),
-                bannersRow,
-              )}
-              count={2}
-            />
-          </MediaQuery>
-          <MediaQuery maxWidth={1199} minWidth={768}>
-            <BannersRow
-              items={map(
-                item => ({ ...item, img: convertSrc(item.img, 'medium') }),
-                bannersRow,
-              )}
-              count={2}
-            />
-          </MediaQuery>
-          <MediaQuery minWidth={1200}>
-            <BannersRow items={bannersRow} count={2} />
-          </MediaQuery>
-        </div>
+        {this.state.banners.bottom instanceof Array &&
+          !isEmpty(this.state.banners.bottom) && (
+            <div styleName="item bannersItem">
+              <MediaQuery maxWidth={767}>
+                <BannersRow
+                  items={map(
+                    item => ({ ...item, img: item.phone }),
+                    this.state.banners.bottom,
+                  )}
+                  count={2}
+                />
+              </MediaQuery>
+              <MediaQuery maxWidth={1199} minWidth={768}>
+                <BannersRow
+                  items={map(
+                    item => ({ ...item, img: item.tablet }),
+                    this.state.banners.bottom,
+                  )}
+                  count={2}
+                />
+              </MediaQuery>
+              <MediaQuery minWidth={1200}>
+                <BannersRow
+                  items={map(
+                    item => ({ ...item, img: item.desktop }),
+                    this.state.banners.bottom,
+                  )}
+                  count={2}
+                />
+              </MediaQuery>
+            </div>
+          )}
       </div>
     );
   }
