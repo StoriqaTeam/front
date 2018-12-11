@@ -7,7 +7,7 @@ import type { Translation } from 'translation/utils';
 type TranslationDicType = {|
   statusHistory: string,
   date: string,
-  user: string,
+  commiter: string,
   status: string,
   additionalInfo: string,
 |};
@@ -17,7 +17,7 @@ const translations: TranslationsBundleType = {
   en: {
     statusHistory: 'Status History',
     date: 'Date',
-    user: 'User',
+    commiter: 'Committer',
     status: 'Status',
     additionalInfo: 'Additional Info',
   },
