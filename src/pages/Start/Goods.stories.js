@@ -12,26 +12,25 @@ const value = text(label, defaultValue, groupId);
 storiesOf('Goods', module)
 .addDecorator(withKnobs)
 .add('Default', () => (
-    <Goods 
-       rawId={1111}
-       store={{
-        rawId: 2222,
-       }}
-       name={[
-        lang: "english",
-        text: "book", 
-       ]}
-       currency="stq"
-       variants={{
-           first: {
+    <Goods
+        items={[{
           rawId: 111,
-          discount: 0,
-          photoMain: "Harry Potter",
-          cashback: 0,
-          price: 1000000,
-        }
-       }}
-        rating={5}
+          storeId: 222,
+          currency: "stq",
+          name: [{
+            lang: "EN",
+            text: "Harry Potter",
+          }],
+          products: {
+            edges: [{
+               node: {cashback: 20, discount: 0, id: "good", photoMain: "book", price: 30, rawId: 444},
+            }]
+          },
+          rating: 5,
+          priceUsd: 30 
+        }]}
+        title="Harry Potter"
+        seeAllUrl="url"
     />
 ));
     
