@@ -8,8 +8,6 @@ import { Rating } from 'components/common/Rating';
 import { extractText, convertSrc } from 'utils';
 
 import { ProductContext } from '../index';
-// import ChatIcon from './svg/chat.svg';
-// import HeartIcon from './svg/heart.svg';
 
 import type { ProductType } from '../types';
 
@@ -43,24 +41,8 @@ const ProductStore = () => (
                 <p>
                   {t.items} {store.productsCount}
                 </p>
-                {/* <p>0 {t.userReviews}</p> */}
               </div>
             </div>
-            {/* <div styleName="iconsWrapper">
-              <div styleName="iconInfo">
-                <span styleName="icon">
-                  <ChatIcon />
-                </span>
-                <small styleName="iconInfoText">{t.contactSeller}</small>
-              </div>
-              <span styleName="separator" />
-              <div styleName="iconInfo">
-                <span styleName="icon">
-                  <HeartIcon />
-                </span>
-                <small styleName="iconInfoText">{t.toFavorites}</small>
-              </div>
-            </div> */}
           </div>
         ) : (
           <div className="noStore">{t.noStore}</div>
