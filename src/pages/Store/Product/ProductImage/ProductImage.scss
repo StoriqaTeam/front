@@ -140,6 +140,7 @@
   touch-action: none;
 
   & > * {
+    background-color: #ffffff; 
     transition: opacity 0.3s ease-in;
     opacity: 1;
   }

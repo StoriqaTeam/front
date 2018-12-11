@@ -137,7 +137,10 @@ class ProductImage extends Component<PropsType, StateType> {
                     styleName="image"
                     style={{
                       backgroundPosition,
-                      backgroundImage,
+                      backgroundImage:
+                        backgroundImage === '' && !isNil(photoMain)
+                          ? `url(${photoMain})`
+                          : backgroundImage,
                       transition: 'opacity 0.3s ease-out',
                       backgroundSize: '220%',
                     }}
