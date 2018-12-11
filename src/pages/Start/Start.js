@@ -23,16 +23,6 @@ import './Start.scss';
 
 import t from './i18n';
 
-// import bannersSlider from './bannersSlider.json';
-// import bannersRow from './bannersRow.json';
-import bannersNew from './banners.json';
-
-const bannersPromise = new Promise(resolve => {
-  setTimeout(() => {
-    resolve(bannersNew);
-  }, 2000);
-});
-
 opaque type BannerRecordType = {
   id: string,
   desktop: string,
@@ -91,11 +81,14 @@ class Start extends Component<PropsTypes, StateTypes> {
         log.debug(error);
       });
 
-    bannersPromise
-      .then(resp => {
-        log.debug({ banners: resp });
-        // TODO: validate
-        this.setState({ banners: resp });
+    axios
+      .get(
+        'https://s3.eu-central-1.amazonaws.com/dumpster.stq/banners/banners.json',
+      )
+      .then(({ data }) => {
+        if (this.isMount) {
+          this.setState({ banners: data });
+        }
         return true;
       })
       .catch(log.error);
@@ -108,7 +101,6 @@ class Start extends Component<PropsTypes, StateTypes> {
   isMount = false;
 
   render() {
-    log.debug({ banners: this.state.banners });
     const { mainPage } = this.props;
     const { priceUsd } = this.state;
     // $FlowIgnoreMe
@@ -198,31 +190,35 @@ class Start extends Component<PropsTypes, StateTypes> {
         <div styleName="item bannerImage">
           <a href="/start-selling" styleName="sellingImage">
             {this.state.banners.middle instanceof Array &&
-              this.state.banners.middle[0] != null && (
-                <Fragment>
-                  <MediaQuery maxWidth={575}>
-                    <ImageLoader
-                      fit
-                      src={this.state.banners.middle[0].phone}
-                      loader={Loader}
-                    />
-                  </MediaQuery>
-                  <MediaQuery maxWidth={991} minWidth={576}>
-                    <ImageLoader
-                      fit
-                      src={this.state.banners.middle[0].tablet}
-                      loader={Loader}
-                    />
-                  </MediaQuery>
-                  <MediaQuery minWidth={992}>
-                    <ImageLoader
-                      fit
-                      src={this.state.banners.middle[0].desktop}
-                      loader={Loader}
-                    />
-                  </MediaQuery>
-                </Fragment>
-              )}
+            this.state.banners.middle[0] != null ? (
+              <Fragment>
+                <MediaQuery maxWidth={575}>
+                  <ImageLoader
+                    fit
+                    src={this.state.banners.middle[0].phone}
+                    loader={Loader}
+                  />
+                </MediaQuery>
+                <MediaQuery maxWidth={991} minWidth={576}>
+                  <ImageLoader
+                    fit
+                    src={this.state.banners.middle[0].tablet}
+                    loader={Loader}
+                  />
+                </MediaQuery>
+                <MediaQuery minWidth={992}>
+                  <ImageLoader
+                    fit
+                    src={this.state.banners.middle[0].desktop}
+                    loader={Loader}
+                  />
+                </MediaQuery>
+              </Fragment>
+            ) : (
+              <div styleName="placeholder">
+                <BannerLoading />
+              </div>
+            )}
           </a>
         </div>
         <div styleName="item goodsItem">
@@ -235,35 +231,38 @@ class Start extends Component<PropsTypes, StateTypes> {
               />
             )}
         </div>
-        <div styleName="item bannersItem">
-          <MediaQuery maxWidth={767}>
-            <BannersRow
-              items={map(
-                item => ({ ...item, img: item.phone }),
-                this.state.banners.bottom,
-              )}
-              count={2}
-            />
-          </MediaQuery>
-          <MediaQuery maxWidth={1199} minWidth={768}>
-            <BannersRow
-              items={map(
-                item => ({ ...item, img: item.tablet }),
-                this.state.banners.bottom,
-              )}
-              count={2}
-            />
-          </MediaQuery>
-          <MediaQuery minWidth={1200}>
-            <BannersRow
-              items={map(
-                item => ({ ...item, img: item.desktop }),
-                this.state.banners.bottom,
-              )}
-              count={2}
-            />
-          </MediaQuery>
-        </div>
+        {this.state.banners.bottom instanceof Array &&
+          !isEmpty(this.state.banners.bottom) && (
+            <div styleName="item bannersItem">
+              <MediaQuery maxWidth={767}>
+                <BannersRow
+                  items={map(
+                    item => ({ ...item, img: item.phone }),
+                    this.state.banners.bottom,
+                  )}
+                  count={2}
+                />
+              </MediaQuery>
+              <MediaQuery maxWidth={1199} minWidth={768}>
+                <BannersRow
+                  items={map(
+                    item => ({ ...item, img: item.tablet }),
+                    this.state.banners.bottom,
+                  )}
+                  count={2}
+                />
+              </MediaQuery>
+              <MediaQuery minWidth={1200}>
+                <BannersRow
+                  items={map(
+                    item => ({ ...item, img: item.desktop }),
+                    this.state.banners.bottom,
+                  )}
+                  count={2}
+                />
+              </MediaQuery>
+            </div>
+          )}
       </div>
     );
   }

@@ -49,6 +49,20 @@
   img {
     width: 100%;
   }
+  .placeholder {
+    @media (max-width: $md - 1) {
+      height: 22rem;
+    }
+    @media (min-width: $md) {
+      height: 24rem;
+    }
+    @media (min-width: $lg) {
+      height: 29rem;
+    }
+    @media (min-width: $xl) {
+      height: 40rem;
+    }
+  }
 }
 
 .bannerPlaceholder {
@@ -56,7 +70,7 @@
   margin-left: 2rem;
   margin-right: 2rem;
   border-radius: 0.5rem;
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     height: 22rem;
   }
   @media (min-width: 768px) {
