@@ -66,6 +66,7 @@ import Characteristics from '../Characteristics';
 import VariantForm from '../VariantForm';
 import AdditionalAttributes from '../AdditionalAttributes';
 import PreOrder from '../PreOrder';
+import Metrics from '../Metrics';
 import sendProductToModerationMutation from '../mutations/SendProductToModerationMutation';
 
 import type {
@@ -947,6 +948,9 @@ class Form extends Component<PropsType, StateType> {
                   errors={formErrors && formErrors.price}
                   dataTest="variantPriceInput"
                 />
+              </div>
+              <div styleName="formItem">
+                <Metrics />
               </div>
               <div styleName="formItem">
                 <Input

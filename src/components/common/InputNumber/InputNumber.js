@@ -11,8 +11,6 @@ import type { SelectItemType } from 'types';
 
 import CurrencySelect from './CurrencySelect';
 
-import './InputPrice.scss';
-
 type StateType = {
   price: string,
 };
@@ -33,7 +31,7 @@ type PropsType = {
   errors?: Array<string>,
 };
 
-class InputPrice extends Component<PropsType, StateType> {
+class InputNumber extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const price = `${nextProps.price}`;
     if (Number(price) !== Number(prevState.price)) {
@@ -110,68 +108,23 @@ class InputPrice extends Component<PropsType, StateType> {
   };
 
   render() {
-    const {
-      required,
-      currency,
-      onChangeCurrency,
-      label,
-      align,
-      inputRef,
-      dataTest,
-      errors,
-      id,
-    } = this.props;
+    const { label, align, inputRef, dataTest, errors } = this.props;
     const { price } = this.state;
-    const requiredLabel =
-      required === true ? (
-        <span>
-          {label} <span styleName="asterisk">*</span>
-        </span>
-      ) : (
-        label
-      );
     return (
-      <AppContext.Consumer>
-        {({ directories }) => (
-          <div id={id !== undefined ? id : null} styleName="container">
-            <div styleName="input">
-              <Input
-                inputRef={inputRef}
-                fullWidth
-                label={requiredLabel}
-                onChange={this.handlePriceChange}
-                onFocus={this.handlePriceFocus}
-                onBlur={this.handlePriceBlur}
-                value={price}
-                align={align}
-                dataTest={`${dataTest}Input`}
-                errors={errors}
-              />
-            </div>
-            {!isNil(currency) && (
-              <div
-                styleName={classNames('select', {
-                  fixCurrencySelect: !onChangeCurrency,
-                })}
-              >
-                {onChangeCurrency ? (
-                  <CurrencySelect
-                    currency={currency}
-                    onChangeCurrency={onChangeCurrency}
-                    // $FlowIgnoreMe
-                    currencies={directories.currencies}
-                    dataTest={`${dataTest}CurrencySelect`}
-                  />
-                ) : (
-                  <div styleName="fixCurrency">{currency.label}</div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-      </AppContext.Consumer>
+      <Input
+        inputRef={inputRef}
+        fullWidth
+        label={label}
+        onChange={this.handlePriceChange}
+        onFocus={this.handlePriceFocus}
+        onBlur={this.handlePriceBlur}
+        value={price}
+        align={align}
+        dataTest={`${dataTest}Input`}
+        errors={errors}
+      />
     );
   }
 }
 
-export default InputPrice;
+export default InputNumber;

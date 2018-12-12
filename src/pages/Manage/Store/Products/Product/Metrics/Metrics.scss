@@ -1,0 +1,57 @@
+@import "../../../../../../styles/variables";
+
+.container {
+  //
+}
+
+.body {
+  display: flex;
+  margin-top: 3rem;
+}
+
+.weight {
+  margin-right: 2rem;
+}
+
+.label {
+  margin-bottom: -2.9rem;
+  color: $color_grey_minor;
+  font-size: 14px;
+  line-height: 2rem;
+  transform: scale(0.9);
+  transform-origin: left bottom;
+  transition: $transition_all_ease;
+
+  &.labelFloat {
+    color: $color_blue;
+  }
+}
+
+.weightInput {
+  display: flex;
+  align-items: flex-end;
+  width: 18rem;
+  margin-right: 2rem;
+}
+
+.dimensions {
+
+}
+
+.dimensionInputs {
+  display: flex;
+  align-items: flex-end;
+
+  .input {
+    width: 10rem;
+
+    & + .input {
+      margin-left: 2rem;
+    }
+  }
+}
+
+.unit {
+  margin-left: 1rem;
+  font-size: 14px;
+}
