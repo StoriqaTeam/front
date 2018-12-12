@@ -95,17 +95,16 @@ class ProductImage extends Component<PropsType, StateType> {
     const { photoMain, additionalPhotos, discount } = this.props;
     const { selected } = this.state;
     const showMobileSlider = !isNil(additionalPhotos) && !isNil(photoMain);
+    const hasThumbnails = !isEmpty(additionalPhotos);
     return (
       <div styleName="container">
         {discount > 0 ? <ProductDiscount discount={discount} /> : null}
         <div
           styleName={
-            !isEmpty(additionalPhotos)
-              ? 'thumbnailsWrapper'
-              : 'noThumbnailsWrapper'
+            hasThumbnails ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
           }
         >
-          {!isEmpty(additionalPhotos) ? (
+          {hasThumbnails ? (
             <div styleName="thumbnailsContent">
               <ProductThumbnails
                 isFirstSelected
@@ -121,6 +120,7 @@ class ProductImage extends Component<PropsType, StateType> {
         <div
           styleName={classNames('imageWrapper', {
             hasMobileSlider: showMobileSlider,
+            hasThumbnails,
           })}
         >
           <div styleName="imageContainer">
@@ -137,7 +137,10 @@ class ProductImage extends Component<PropsType, StateType> {
                     styleName="image"
                     style={{
                       backgroundPosition,
-                      backgroundImage,
+                      backgroundImage:
+                        backgroundImage === '' && !isNil(photoMain)
+                          ? `url(${photoMain})`
+                          : backgroundImage,
                       transition: 'opacity 0.3s ease-out',
                       backgroundSize: '220%',
                     }}

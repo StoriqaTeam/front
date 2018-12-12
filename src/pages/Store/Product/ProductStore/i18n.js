@@ -10,6 +10,7 @@ type TranslationDicType = {|
   contactSeller: string,
   toFavorites: string,
   noStore: string,
+  items: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -20,6 +21,7 @@ const translations: TranslationsBundleType = {
     contactSeller: 'Contact seller',
     toFavorites: 'To Favorites',
     noStore: 'No Store',
+    items: 'Items',
   },
 };
 

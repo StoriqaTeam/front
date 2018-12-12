@@ -20,7 +20,7 @@ type PropsTypes = {
     rawId: ?string,
     img: ?string,
   }>,
-  type: string,
+  type: 'products' | 'banners' | 'image',
   slidesToShow: ?number,
   seeAllUrl: ?string,
   autoplaySpeed?: number,
