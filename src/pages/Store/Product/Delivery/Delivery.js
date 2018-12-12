@@ -48,7 +48,6 @@ class Delivery extends Component<PropsType, StateType> {
       ['address', 'countryCode'],
       this.props.userAddress,
     );
-    // this.setState({ isFetching: true });
 
     if (countryCode) {
       // $FlowIgnore
