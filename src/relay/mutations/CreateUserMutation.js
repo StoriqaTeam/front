@@ -22,7 +22,11 @@ const mutation = graphql`
         key
         value
       }
-      country
+      country {
+        label
+        alpha2
+        alpha3
+      }
       referer
     }
   }

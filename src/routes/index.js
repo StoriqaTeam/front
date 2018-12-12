@@ -227,6 +227,7 @@ const routes = (
             $shippingId: Int
           ) {
             me {
+              ...UserData_me
               id
               rawId
               phone

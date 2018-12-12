@@ -136,9 +136,11 @@ class Authorization extends Component<PropsType, StateType> {
         location: { search },
       },
     } = this.props;
-    const from = search.replace(/\?from=/gi, '');
-    if (from && from !== '') {
-      setPathForRedirectAfterLogin(from);
+    if (/\?from=/i.test(search)) {
+      const from = search.replace(/\?from=/gi, '');
+      if (from && from !== '') {
+        setPathForRedirectAfterLogin(from);
+      }
     }
   }
 
