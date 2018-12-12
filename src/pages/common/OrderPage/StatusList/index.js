@@ -28,7 +28,7 @@ class StatusList extends PureComponent<PropsType> {
   renderTitle = () => (
     <div styleName="headerContainer">
       <span styleName="headerDate">{t.date}</span>
-      <span styleName="headerCommitter">{t.commiter}</span>
+      <span styleName="headerCommitter">{t.committer}</span>
       <span styleName="headerStatus">{t.status}</span>
       <span styleName="headerAdditionalInfo">{t.additionalInfo}</span>
     </div>
@@ -59,7 +59,6 @@ class StatusList extends PureComponent<PropsType> {
 
   render() {
     const { items } = this.props;
-    //
     return (
       <div styleName="container">
         <div styleName="title">

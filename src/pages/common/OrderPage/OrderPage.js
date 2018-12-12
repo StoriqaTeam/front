@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
+import { pathOr, filter, prop, propEq, head, map, sort } from 'ramda';
 import moment from 'moment';
 import { withRouter, routerShape, matchShape } from 'found';
 
