@@ -36,3 +36,4 @@ export {
 } from './convertCountriesForSelect';
 export { default as isMobileBrowser } from './isMobileBrowser';
 export { default as vendorCodeGenerator } from './vendorCodeGenerator';
+export { default as getQueryRefParams } from './getQueryRefParams';

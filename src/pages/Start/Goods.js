@@ -85,13 +85,14 @@ class Goods extends Component<PropsType, StateType> {
         </div>
         <div styleName="loadMoreButton">
           {loadedPagesCount < 3 && (
-            <Button big load onClick={this.loadMore}>
+            <Button big wireframe load onClick={this.loadMore}>
               Load more
             </Button>
           )}
           {loadedPagesCount === 3 && (
             <Button
               big
+              wireframe
               load
               onClick={() => {
                 this.props.router.push(this.props.seeAllUrl);
