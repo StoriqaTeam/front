@@ -1,41 +1,26 @@
 // @flow strict
 
 import React, { Component } from 'react';
-import { isNil } from 'ramda';
-import classNames from 'classnames';
-// $FlowIgnoreMe
-import { AppContext } from 'components/App';
+import { omit } from 'ramda';
+
 import { Input } from 'components/common/Input';
 
-import type { SelectItemType } from 'types';
-
-import CurrencySelect from './CurrencySelect';
-
 type StateType = {
-  price: string,
+  value: string,
 };
 
 type PropsType = {
-  id?: string,
-  required?: boolean,
-  inputRef?: (node: ?HTMLInputElement) => void,
-  onChangePrice: (value: number) => void,
+  onChange: (value: number) => void,
   onFocus?: () => void,
   onBlur?: () => void,
-  currency?: ?SelectItemType,
-  onChangeCurrency?: (item: ?SelectItemType) => void,
-  price: number,
-  label?: string,
-  align?: 'center' | 'left' | 'right',
-  dataTest: string,
-  errors?: Array<string>,
+  value: number,
 };
 
 class InputNumber extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const price = `${nextProps.price}`;
-    if (Number(price) !== Number(prevState.price)) {
-      return { ...prevState, price };
+    const value = `${nextProps.value}`;
+    if (Number(value) !== Number(prevState.value)) {
+      return { ...prevState, value };
     }
     return null;
   }
@@ -43,26 +28,26 @@ class InputNumber extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      price: props.price ? `${props.price}` : '0',
+      value: props.value ? `${props.value}` : '0',
     };
   }
 
-  handlePriceChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+  handleOnChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const {
       target: { value },
     } = e;
-    const { onChangePrice } = this.props;
+    const { onChange } = this.props;
     const regexp = /(^[0-9]*[.,]?[0-9]*$)/;
     if (regexp.test(value)) {
       this.setState({
-        price:
+        value:
           value
             .replace(/^0+/, '0')
             .replace(/^[.,]/, '0.')
             .replace(/^0([0-9])/, '$1')
             .replace(/,/, '.') || '0',
       });
-      onChangePrice(
+      onChange(
         Number(
           value
             .replace(/[.,]$/, '')
@@ -73,28 +58,28 @@ class InputNumber extends Component<PropsType, StateType> {
       return;
     }
     if (value === '') {
-      this.setState({ price: '0' }, () => {
-        onChangePrice(0);
+      this.setState({ value: '0' }, () => {
+        onChange(0);
       });
     }
   };
 
-  handlePriceFocus = () => {
+  handleOnFocus = () => {
     const { onFocus } = this.props;
     if (onFocus) {
       onFocus();
     }
   };
 
-  handlePriceBlur = () => {
-    const value = `${this.state.price}`;
+  handleOnBlur = () => {
+    const value = `${this.state.value}`;
     if (Number(value) === 0) {
       this.setState({
-        price: '0',
+        value: '0',
       });
     } else {
       this.setState({
-        price: value
+        value: value
           .replace(/\.$/, '')
           .replace(/^0([0-9])/, '$1')
           .replace(/\.0+$/, '')
@@ -108,20 +93,15 @@ class InputNumber extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { label, align, inputRef, dataTest, errors } = this.props;
-    const { price } = this.state;
+    const { value } = this.state;
+    const props = omit(['value', 'onChange', 'onFocus', 'onBlur'], this.props);
     return (
       <Input
-        inputRef={inputRef}
-        fullWidth
-        label={label}
-        onChange={this.handlePriceChange}
-        onFocus={this.handlePriceFocus}
-        onBlur={this.handlePriceBlur}
-        value={price}
-        align={align}
-        dataTest={`${dataTest}Input`}
-        errors={errors}
+        {...props}
+        onChange={this.handleOnChange}
+        onFocus={this.handleOnFocus}
+        onBlur={this.handleOnBlur}
+        value={value}
       />
     );
   }

@@ -6,6 +6,9 @@ import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
   metrics: string,
+  width: string,
+  length: string,
+  height: string,
   sm: string,
   g: string,
 |};
@@ -14,6 +17,9 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     metrics: 'Metrics',
+    width: 'Width',
+    length: 'Length',
+    height: 'Height',
     sm: 'sm',
     g: 'g',
   },

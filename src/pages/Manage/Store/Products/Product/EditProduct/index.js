@@ -701,6 +701,10 @@ export default createFragmentContainer(
           lang
           text
         }
+        lengthCm
+        widthCm
+        heightCm
+        weightG
       }
     }
   `,

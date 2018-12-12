@@ -7,6 +7,10 @@
 .body {
   display: flex;
   margin-top: 3rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+  }
 }
 
 .weight {
@@ -35,7 +39,9 @@
 }
 
 .dimensions {
-
+  @media (max-width: #{$sm - 1px}) {
+    margin-top: 2rem;
+  }
 }
 
 .dimensionInputs {
@@ -43,10 +49,19 @@
   align-items: flex-end;
 
   .input {
-    width: 10rem;
+    position: relative;
+    width: 11rem;
 
     & + .input {
       margin-left: 2rem;
+    }
+
+    & .sign {
+      position: absolute;
+      bottom: -3rem;
+      left: 0;
+      font-size: 12px;
+      color: $color_grey_minor;
     }
   }
 }

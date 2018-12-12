@@ -53,6 +53,7 @@ import type {
   ProductType,
   ValueForAttributeInputType,
   GetAttributeType,
+  MetricsType,
 } from 'pages/Manage/Store/Products/types';
 import type { SelectItemType, CategoryType } from 'types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -201,6 +202,12 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: !isEmpty(customAttributes)
           ? this.resetAttrValues(customAttributes, mainVariant)
           : [],
+        metrics: {
+          weightG: baseProduct.weightG || 0,
+          widthCm: baseProduct.widthCm || 0,
+          lengthCm: baseProduct.lengthCm || 0,
+          heightCm: baseProduct.heightCm || 0,
+        },
       };
     } else {
       form = {
@@ -224,6 +231,12 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: !isEmpty(customAttributes)
           ? this.resetAttrValues(customAttributes, null)
           : [],
+        metrics: {
+          weightG: 0,
+          widthCm: 0,
+          lengthCm: 0,
+          heightCm: 0,
+        },
       };
     }
     this.state = {
@@ -706,6 +719,15 @@ class Form extends Component<PropsType, StateType> {
     }));
   };
 
+  handleChangeMetrics = (metrics: MetricsType) => {
+    this.setState((prevState: StateType) => ({
+      form: {
+        ...prevState.form,
+        metrics,
+      },
+    }));
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
@@ -833,7 +855,10 @@ class Form extends Component<PropsType, StateType> {
       attributeValues,
       preOrder,
       preOrderDays,
+      metrics,
     } = form;
+
+    console.log('---metrics', metrics);
 
     return (
       <div styleName="container">
@@ -950,7 +975,10 @@ class Form extends Component<PropsType, StateType> {
                 />
               </div>
               <div styleName="formItem">
-                <Metrics />
+                <Metrics
+                  {...metrics}
+                  onChangeMetrics={this.handleChangeMetrics}
+                />
               </div>
               <div styleName="formItem">
                 <Input
