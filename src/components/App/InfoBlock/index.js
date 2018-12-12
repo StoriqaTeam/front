@@ -81,7 +81,8 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '4',
-        href: 'https://s3.eu-west-2.amazonaws.com/storiqa.com/Prohibited+or+suspicious+goods+and+services.pdf',
+        href:
+          'https://s3.eu-west-2.amazonaws.com/storiqa.com/Prohibited+or+suspicious+goods+and+services.pdf',
         name: t.prohibitedGoods,
       },
     ],

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 
