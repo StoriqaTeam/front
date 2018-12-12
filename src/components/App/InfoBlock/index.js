@@ -67,7 +67,7 @@ class InfoBlock extends Component<{}, StateType> {
       {
         id: '1',
         href: '/privacy_policy.pdf',
-        name: 'Privacy Policy',
+        name: t.privacyPolicy,
       },
       {
         id: '2',
@@ -77,7 +77,12 @@ class InfoBlock extends Component<{}, StateType> {
       {
         id: '3',
         href: '/terms_of_use.pdf',
-        name: 'Terms of Use',
+        name: t.termsOfUse,
+      },
+      {
+        id: '4',
+        href: 'https://s3.eu-west-2.amazonaws.com/storiqa.com/Prohibited+or+suspicious+goods+and+services.pdf',
+        name: t.prohibitedGoods,
       },
     ],
   };

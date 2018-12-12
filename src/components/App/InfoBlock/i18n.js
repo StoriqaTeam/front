@@ -10,6 +10,7 @@ type TranslationDicType = {|
   help: string,
   termsOfUse: string,
   address: string,
+  prohibitedGoods: string,
 |};
 
 type TranslationsBundleType = Translation<TranslationDicType>;
@@ -21,6 +22,7 @@ const translations: TranslationsBundleType = {
     help: 'Help',
     termsOfUse: 'Terms of Use',
     address: 'Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong',
+    prohibitedGoods: 'Prohibited Goods',
   },
 };
 
