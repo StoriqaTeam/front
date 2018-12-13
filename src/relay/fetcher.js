@@ -11,7 +11,10 @@ import grayLogger from 'utils/graylog';
 
 import type { CookieType } from 'utils/cookiesOp';
 
-import { isJwtExpiredErrorInResponse } from './fetcher.utils';
+import {
+  isJwtExpiredErrorInResponse,
+  isJwtRevokedInResponse,
+} from './fetcher.utils';
 
 export class FetcherBase {
   url: string;
@@ -172,6 +175,40 @@ export class FetcherBase {
           return responseWithRefreshedJWT.data;
         }
         log.debug({ newToken: newTokenResponse.data });
+      }
+
+      if (isJwtRevokedInResponse(response.data)) {
+        removeCookie('__jwt', cookies);
+        const updatedHeaders = omit(['Authorization'], headers);
+        this.logRequest({
+          url: this.url,
+          headers: updatedHeaders,
+          uid,
+          operation,
+          variables,
+        });
+        const responseWithoutJWT = await axios({
+          method: 'post',
+          url: this.url,
+          headers: updatedHeaders,
+          data: JSON.stringify({ query: operation.text, variables }),
+          withCredentials: true,
+        });
+
+        log.debug('GraphQL response', {
+          uid,
+          ...responseWithoutJWT.data,
+        });
+        grayLogger.info('GraphQL response', {
+          uid,
+          response: slice(
+            0,
+            32000,
+            JSON.stringify(responseWithoutJWT.data, null, 2),
+          ),
+        });
+
+        return responseWithoutJWT.data;
       }
 
       return response.data;
