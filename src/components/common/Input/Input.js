@@ -31,6 +31,7 @@ type PropsType = {
   inline: boolean,
   search: boolean,
   align?: 'center' | 'left' | 'right',
+  disabled?: boolean,
 };
 
 type StateType = {
@@ -108,12 +109,14 @@ class Input extends Component<PropsType, StateType> {
       type,
       dataTest,
       align,
+      disabled,
     } = this.props;
     return isAutocomplete ? (
       <input
         type="text"
         ref={inputRef}
         value={this.props.value || ''}
+        disabled={disabled || false}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
@@ -129,6 +132,7 @@ class Input extends Component<PropsType, StateType> {
         name={id}
         type={!isNil(type) ? type : 'text'}
         value={value || ''}
+        disabled={disabled || false}
         onChange={onChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
