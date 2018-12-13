@@ -35,9 +35,9 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '1',
-        type: 'pinterestGray',
+        type: 'mediumGray',
         size: 32,
-        href: 'https://www.pinterest.com/storiqa',
+        href: 'https://medium.com/storiqa',
       },
       {
         id: '2',
@@ -53,12 +53,13 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '4',
-        type: 'vkGray',
+        type: 'redditGray',
         size: 32,
-        href: 'https://vk.com/storiqa',
+        href: 'https://www.reddit.com/r/Storiqa/',
       },
     ],
     links: [
+      // eslint-disable-line
       {
         id: '0',
         href: '/',
@@ -82,23 +83,25 @@ class InfoBlock extends Component<{}, StateType> {
     ],
   };
   render() {
-    const { social, links } = this.state;
+    const { social } = this.state;
     return (
       <div styleName="container">
-        <ul styleName="aboutNavBlock">
-          {links.map(({ id, href, name }) => (
-            <li key={id} styleName="aboutNavItem">
-              <a
-                styleName="link"
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {/*
+          <ul styleName="aboutNavBlock">
+            {links.map(({ id, href, name }) => (
+              <li key={id} styleName="aboutNavItem">
+                <a
+                  styleName="link"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        */}
         <div styleName="icons">
           {social.map(({ id, href, size, type }) => (
             <a key={id} href={href} target="_blank" rel="noopener noreferrer">

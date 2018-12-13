@@ -53,10 +53,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
 
   & > * + * {
     margin-left: 2rem;
+  }
+
+  & > a {
+    transition: $transition_all_ease;
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 
 }

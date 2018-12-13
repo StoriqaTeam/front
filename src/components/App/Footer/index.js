@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { isNil } from 'ramda';
+import { routerShape, withRouter } from 'found';
 
 import { Container, Row, Col } from 'layout';
 import { Icon } from 'components/Icon';
@@ -17,6 +18,7 @@ import './Footer.scss';
 
 type PropsType = {
   isShopCreated: boolean,
+  router: routerShape,
 };
 
 type StateType = {
@@ -27,60 +29,55 @@ class Footer extends PureComponent<PropsType, StateType> {
   state = {
     columns: [
       {
-        id: t.storiqaMarket,
-        title: t.storiqaMarket,
+        id: 'goods',
+        title: t.goods,
         links: [
           {
             id: t.storiqaMarket_sales,
             name: t.storiqaMarket_sales,
-          },
-          {
-            id: t.storiqaMarket_recommended,
-            name: t.storiqaMarket_recommended,
+            appLink: '/categories?search=&sortBy=DISCOUNT',
           },
           {
             id: t.storiqaMarket_popular,
             name: t.storiqaMarket_popular,
-          },
-          {
-            id: t.storiqaMarket_reviews,
-            name: t.storiqaMarket_reviews,
+            appLink: '/categories?search=&sortBy=VIEWS',
           },
         ],
       },
       {
-        id: t.sections,
-        title: t.sections,
+        id: 'marketplace',
+        title: t.marketplace,
         links: [
           {
-            id: t.sections_showcase,
-            name: t.sections_showcase,
+            id: 'termsOfUse',
+            name: t.marketplace_termsOfUse,
+            pdfLink: '/terms_of_use.pdf',
           },
           {
-            id: t.sections_goods,
-            name: t.sections_goods,
+            id: 'privacyPolicy',
+            name: t.marketplace_privacyPolicy,
+            pdfLink: '/privacy_policy.pdf',
           },
           {
-            id: t.sections_shop,
-            name: t.sections_shop,
-          },
-          {
-            id: t.sections_storiqaCommunity,
-            name: t.sections_storiqaCommunity,
+            id: 'listOfProhibitedGoods',
+            name: t.marketplace_listOfProhibitedGoods,
+            pdfLink: '/prohibited_or_suspicious_goods_and_services.pdf',
           },
         ],
       },
       {
-        id: t.services,
+        id: 'services',
         title: t.services,
         links: [
           {
-            id: t.services_qualityAssurance,
-            name: t.services_qualityAssurance,
+            id: 'services_storiqaWallet',
+            name: t.services_storiqaWallet,
+            link: 'https://turewallet.com',
           },
           {
-            id: t.services_storiqaWallet,
-            name: t.services_storiqaWallet,
+            id: 'services_sellingGuides',
+            name: t.services_sellingGuides,
+            pdfLink: '/setting_up_store_guideline.pdf',
           },
         ],
       },
@@ -104,11 +101,28 @@ class Footer extends PureComponent<PropsType, StateType> {
           </header>
           <ul>
             {!isNil(links) &&
-              links.map(({ id, name }) => (
+              links.map(({ id, name, appLink, pdfLink, link }) => (
                 <li key={id}>
-                  <a href="/" styleName="navItem">
-                    {name}
-                  </a>
+                  {appLink != null && (
+                    <button
+                      styleName="navItem"
+                      onClick={() => {
+                        this.props.router.push(appLink);
+                      }}
+                    >
+                      {name}
+                    </button>
+                  )}
+                  {pdfLink != null && (
+                    <a href={pdfLink} target="_blank" styleName="navItem">
+                      {name}
+                    </a>
+                  )}
+                  {link != null && (
+                    <a href={link} target="_blank" styleName="navItem">
+                      {name}
+                    </a>
+                  )}
                 </li>
               ))}
           </ul>
@@ -179,4 +193,4 @@ class Footer extends PureComponent<PropsType, StateType> {
   }
 }
 
-export default Footer;
+export default withRouter(Footer);
