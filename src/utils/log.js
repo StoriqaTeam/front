@@ -13,7 +13,7 @@ const timestamp = (): string =>
 /* eslint-disable */
 if (process.env.NODE_ENV === 'development') {
   debug = (...args) => {
-    console.log(timestamp(), ...args);
+    console.log('\n', timestamp(), ...args, '\n');
   };
   info = (...args) => {
     console.info(timestamp(), ...args);
@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
     console.warn(timestamp(), ...args);
   };
   error = (...args) => {
-    console.error(timestamp(), ...args);
+    console.error('\n', timestamp(), ...args, '\n');
   };
 }
 /* eslint-enable */

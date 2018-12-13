@@ -15,7 +15,7 @@ import {
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { log, errorsHandler, fromRelayError, setCookie } from 'utils';
+import { log, errorsHandler, fromRelayError, jwt as JWT } from 'utils';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
 import type { ResponseErrorType } from 'utils/fromRelayError';
@@ -70,13 +70,10 @@ class OAuthCallback extends PureComponent<PropsType> {
         .then(response => {
           log.debug({ response });
           // $FlowIgnoreMe
-          const jwt = pathOr(null, ['getJWTByProvider', 'token'], response);
+          const jwtStr = pathOr(null, ['getJWTByProvider', 'token'], response);
           // eslint-disable-next-line
-          if (jwt) {
-            const today = new Date();
-            const expirationDate = new Date();
-            expirationDate.setDate(today.getDate() + 1);
-            setCookie('__jwt', { value: jwt }, expirationDate);
+          if (jwtStr) {
+            JWT.setJWT(jwtStr);
             const redirectPath = getPathForRedirectAfterLogin();
             if (!isNil(redirectPath)) {
               clearPathForRedirectAfterLogin();

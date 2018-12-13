@@ -3,7 +3,7 @@
 import Cookies from 'universal-cookie';
 import { pathOr } from 'ramda';
 
-import { log } from 'utils';
+import { log, jwt as JWT } from 'utils';
 
 const uploadFile = (file: ?File): Promise<{ url?: string, error?: string }> => {
   if (!file) {
@@ -21,7 +21,7 @@ const uploadFile = (file: ?File): Promise<{ url?: string, error?: string }> => {
   }
 
   const cookies = new Cookies();
-  const jwt = pathOr(null, ['value'], cookies.get('__jwt'));
+  const jwt = pathOr(null, ['value'], cookies.get(JWT.jwtCookieName));
   const body = new FormData();
   body.append('file', file);
   if (!process.env.REACT_APP_STATIC_IMAGES_ENDPOINT || !jwt) {

@@ -172,10 +172,10 @@ app.use(
     const currency = req.universalCookies.get('CURRENCY') || 'STQ';
     const fetcher = new ServerFetcher(
       url,
-      jwt,
       req.universalCookies.get('SESSION_ID'),
       currency,
       req.headers && req.headers['correlation-token'],
+      req.universalCookies,
     );
 
     store.dispatch(FarceActions.init());
