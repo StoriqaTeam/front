@@ -422,6 +422,7 @@ class Form extends Component<PropsType, StateType> {
         categoryId: [[val => Boolean(val), t.categoryIsRequired]],
         vendorCode: [[val => Boolean(val), t.vendorCodeIsRequired]],
         price: [[val => Boolean(val), t.priceIsRequired]],
+        metrics: [[val => Boolean(val), t.metricsError]],
       },
       this.state.form,
     );
@@ -950,56 +951,6 @@ class Form extends Component<PropsType, StateType> {
                     <div styleName="categoryError">{formErrors.categoryId}</div>
                   )}
               </div>
-              <div styleName="title titlePricing">
-                <strong>{t.pricing}</strong>
-              </div>
-              <div styleName="formItem">
-                <InputPrice
-                  id="price"
-                  required
-                  label={t.labelPrice}
-                  onChangePrice={this.handlePriceChange}
-                  price={parseFloat(price) || 0}
-                  currency={
-                    baseProduct
-                      ? {
-                          id: baseProduct.currency,
-                          label: baseProduct.currency,
-                        }
-                      : currency
-                  }
-                  errors={formErrors && formErrors.price}
-                  dataTest="variantPriceInput"
-                />
-              </div>
-              <div styleName="formItem">
-                <Metrics
-                  {...metrics}
-                  onChangeMetrics={this.handleChangeMetrics}
-                />
-              </div>
-              <div styleName="formItem">
-                <Input
-                  fullWidth
-                  id="cashback"
-                  label={t.labelCashback}
-                  onChange={this.handlePercentChange('cashback')}
-                  value={!isNil(cashback) ? `${cashback}` : ''}
-                  dataTest="variantCashbackInput"
-                />
-                <span styleName="inputPostfix">{t.percent}</span>
-              </div>
-              <div styleName="formItem">
-                <Input
-                  fullWidth
-                  id="discount"
-                  label={t.labelDiscount}
-                  onChange={this.handlePercentChange('discount')}
-                  value={!isNil(discount) ? `${discount}` : ''}
-                  dataTest="variantDiscountInput"
-                />
-                <span styleName="inputPostfix">{t.percent}</span>
-              </div>
               {defaultAttributes &&
                 !isEmpty(defaultAttributes) &&
                 (!baseProduct ||
@@ -1030,6 +981,56 @@ class Form extends Component<PropsType, StateType> {
                   />
                 </div>
               )}
+              <div styleName="title titlePricing">
+                <strong>{t.pricing}</strong>
+              </div>
+              <div styleName="formItem">
+                <InputPrice
+                  id="price"
+                  required
+                  label={t.labelPrice}
+                  onChangePrice={this.handlePriceChange}
+                  price={parseFloat(price) || 0}
+                  currency={
+                    baseProduct
+                      ? {
+                          id: baseProduct.currency,
+                          label: baseProduct.currency,
+                        }
+                      : currency
+                  }
+                  errors={formErrors && formErrors.price}
+                  dataTest="variantPriceInput"
+                />
+              </div>
+              <div styleName="formItem">
+                <Input
+                  fullWidth
+                  id="cashback"
+                  label={t.labelCashback}
+                  onChange={this.handlePercentChange('cashback')}
+                  value={!isNil(cashback) ? `${cashback}` : ''}
+                  dataTest="variantCashbackInput"
+                />
+                <span styleName="inputPostfix">{t.percent}</span>
+              </div>
+              <div styleName="formItem">
+                <Input
+                  fullWidth
+                  id="discount"
+                  label={t.labelDiscount}
+                  onChange={this.handlePercentChange('discount')}
+                  value={!isNil(discount) ? `${discount}` : ''}
+                  dataTest="variantDiscountInput"
+                />
+                <span styleName="inputPostfix">{t.percent}</span>
+              </div>
+              <div styleName="formItem">
+                <Metrics
+                  {...metrics}
+                  onChangeMetrics={this.handleChangeMetrics}
+                />
+              </div>
               <div styleName="preOrder">
                 <PreOrder
                   preOrderDays={preOrderDays}

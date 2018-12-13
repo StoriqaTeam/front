@@ -6,7 +6,7 @@
 
 .body {
   display: flex;
-  margin-top: 3rem;
+  margin-top: 1rem;
 
   @media (max-width: #{$sm - 1px}) {
     display: block;
