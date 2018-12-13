@@ -13,10 +13,10 @@ export type AttributeValueType = {
 };
 
 export type MetricsType = {
-  lengthCm: ?number,
-  widthCm: ?number,
-  heightCm: ?number,
-  weightG: ?number,
+  lengthCm: number,
+  widthCm: number,
+  heightCm: number,
+  weightG: number,
 };
 
 export type FormType = {

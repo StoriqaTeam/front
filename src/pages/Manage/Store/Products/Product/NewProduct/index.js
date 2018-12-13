@@ -113,6 +113,7 @@ class NewProduct extends Component<PropsType, StateType> {
       shortDescription,
       longDescription,
       currency,
+      metrics,
     } = form;
 
     if (!categoryId) {
@@ -165,6 +166,10 @@ class NewProduct extends Component<PropsType, StateType> {
               attributes: form.attributeValues,
             },
           ],
+          lengthCm: metrics.lengthCm,
+          widthCm: metrics.widthCm,
+          heightCm: metrics.heightCm,
+          weightG: metrics.weightG,
         },
       },
     })

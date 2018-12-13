@@ -858,8 +858,6 @@ class Form extends Component<PropsType, StateType> {
       metrics,
     } = form;
 
-    console.log('---metrics', metrics);
-
     return (
       <div styleName="container">
         {!variantForForm && (

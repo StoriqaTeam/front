@@ -164,6 +164,7 @@ class EditProduct extends Component<PropsType, StateType> {
       shortDescription,
       longDescription,
       currency,
+      metrics,
     } = form;
     this.setState(() => ({ isLoading: true }));
     UpdateBaseProductMutation.commit({
@@ -179,6 +180,10 @@ class EditProduct extends Component<PropsType, StateType> {
         ? [{ lang: 'EN', text: seoDescription }]
         : null,
       currency,
+      lengthCm: metrics.lengthCm,
+      widthCm: metrics.widthCm,
+      heightCm: metrics.heightCm,
+      weightG: metrics.weightG,
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });

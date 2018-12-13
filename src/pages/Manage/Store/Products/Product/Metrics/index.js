@@ -63,18 +63,25 @@ class Metrics extends PureComponent<PropsType, StateType> {
     this.setState({ isDimensionFocus: false });
   };
 
-  render() {
-    const {
-      lengthCm,
-      widthCm,
-      heightCm,
-      weightG,
-    } = this.props;
+  renderDimensionInput = (id: string, value: number) => (
+    <InputNumber
+      id={id}
+      value={value}
+      onChange={(dimensionValue: number) => {
+        this.handleOnChangeMetrics(id, dimensionValue);
+      }}
+      onFocus={this.handleOnFocusDimension}
+      onBlur={this.handleOnBlurDimension}
+      limit={3}
+      limitHidden
+      fullWidth
+    />
+  );
 
-    const {
-      isWeightFocus,
-      isDimensionFocus,
-    } = this.state;
+  render() {
+    const { lengthCm, widthCm, heightCm, weightG } = this.props;
+
+    const { isWeightFocus, isDimensionFocus } = this.state;
 
     return (
       <div styleName="container">
@@ -93,6 +100,8 @@ class Metrics extends PureComponent<PropsType, StateType> {
                 }}
                 onFocus={this.handleOnFocusWeight}
                 onBlur={this.handleOnBlurWeight}
+                limit={6}
+                limitHidden
                 fullWidth
               />
               <div styleName="unit">{t.g}</div>
@@ -106,42 +115,15 @@ class Metrics extends PureComponent<PropsType, StateType> {
             </div>
             <div styleName="dimensionInputs">
               <div styleName="input">
-                <InputNumber
-                  id="widthCm"
-                  value={widthCm}
-                  onChange={(value: number) => {
-                    this.handleOnChangeMetrics('widthCm', value);
-                  }}
-                  onFocus={this.handleOnFocusDimension}
-                  onBlur={this.handleOnBlurDimension}
-                  fullWidth
-                />
+                {this.renderDimensionInput('widthCm', widthCm)}
                 <div styleName="sign">{t.width}</div>
               </div>
               <div styleName="input">
-                <InputNumber
-                  id="lengthCm"
-                  value={lengthCm}
-                  onChange={(value: number) => {
-                    this.handleOnChangeMetrics('lengthCm', value);
-                  }}
-                  onFocus={this.handleOnFocusDimension}
-                  onBlur={this.handleOnBlurDimension}
-                  fullWidth
-                />
+                {this.renderDimensionInput('lengthCm', lengthCm)}
                 <div styleName="sign">{t.length}</div>
               </div>
               <div styleName="input">
-                <InputNumber
-                  id="heightCm"
-                  value={heightCm}
-                  onChange={(value: number) => {
-                    this.handleOnChangeMetrics('heightCm', value);
-                  }}
-                  onFocus={this.handleOnFocusDimension}
-                  onBlur={this.handleOnBlurDimension}
-                  fullWidth
-                />
+                {this.renderDimensionInput('heightCm', heightCm)}
                 <div styleName="sign">{t.height}</div>
               </div>
               <div styleName="unit">{t.sm}</div>
