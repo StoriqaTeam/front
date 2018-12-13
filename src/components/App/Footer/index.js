@@ -133,11 +133,7 @@ class Footer extends PureComponent<PropsType, StateType> {
       <div styleName="startSellingButton">
         <Button
           wireframe
-          href={
-            process.env.REACT_APP_HOST
-              ? `${process.env.REACT_APP_HOST}/start-selling`
-              : '/'
-          }
+          href="https://selling.storiqa.com/"
           dataTest="footerStartSellingButton"
         >
           {t.startSelling}
