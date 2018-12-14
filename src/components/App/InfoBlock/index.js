@@ -6,7 +6,7 @@ import { Icon } from 'components/Icon';
 
 import type { IconSizeType } from 'types';
 
-import t from './i18n';
+// import t from './i18n';
 
 import './InfoBlock.scss';
 
@@ -17,11 +17,11 @@ type StateType = {
     size: IconSizeType,
     href: string,
   }>,
-  links: Array<{
-    id: string,
-    href: string,
-    name: string,
-  }>,
+  // links: Array<{
+  //   id: string,
+  //   href: string,
+  //   name: string,
+  // }>,
 };
 
 class InfoBlock extends Component<{}, StateType> {
@@ -58,47 +58,49 @@ class InfoBlock extends Component<{}, StateType> {
         href: 'https://vk.com/storiqa',
       },
     ],
-    links: [
-      {
-        id: '0',
-        href: '/',
-        name: t.aboutStoriqa,
-      },
-      {
-        id: '1',
-        href: '/privacy_policy.pdf',
-        name: 'Privacy Policy',
-      },
-      {
-        id: '2',
-        href: '/',
-        name: t.help,
-      },
-      {
-        id: '3',
-        href: '/terms_of_use.pdf',
-        name: 'Terms of Use',
-      },
-    ],
+    // links: [
+    //   {
+    //     id: '0',
+    //     href: '/',
+    //     name: t.aboutStoriqa,
+    //   },
+    //   {
+    //     id: '1',
+    //     href: '/privacy_policy.pdf',
+    //     name: 'Privacy Policy',
+    //   },
+    //   {
+    //     id: '2',
+    //     href: '/',
+    //     name: t.help,
+    //   },
+    //   {
+    //     id: '3',
+    //     href: '/terms_of_use.pdf',
+    //     name: 'Terms of Use',
+    //   },
+    // ],
   };
   render() {
-    const { social, links } = this.state;
+    const { social } = this.state;
     return (
       <div styleName="container">
-        <ul styleName="aboutNavBlock">
-          {links.map(({ id, href, name }) => (
-            <li key={id} styleName="aboutNavItem">
-              <a
-                styleName="link"
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {/*
+          <ul styleName="aboutNavBlock">
+            {links.map(({ id, href, name }) => (
+              <li key={id} styleName="aboutNavItem">
+                <a
+                  styleName="link"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        */}
         <div styleName="icons">
           {social.map(({ id, href, size, type }) => (
             <a key={id} href={href} target="_blank" rel="noopener noreferrer">

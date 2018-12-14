@@ -1,24 +1,40 @@
+// @flow
+
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { assoc, pathOr, slice, omit } from 'ramda';
 import uidGenerator from 'gen-uid';
 
 import isTokenExpired from 'utils/token';
-import { log, removeCookie, getCookie } from 'utils';
+import { log, removeCookie, jwt as JWT } from 'utils';
 import grayLogger from 'utils/graylog';
 
-class FetcherBase {
-  constructor(url) {
+import type { CookieType } from 'utils/cookiesOp';
+
+import {
+  isJwtExpiredErrorInResponse,
+  isJwtRevokedInResponse,
+} from './fetcher.utils';
+
+export class FetcherBase {
+  url: string;
+
+  constructor(url: string) {
     this.url = url;
   }
 
   // eslint-disable-next-line
-  getJWTFromCookies() {
+  getCookies(): ?CookieType {
+    return null;
+  }
+
+  // eslint-disable-next-line
+  getJWTFromCookies(): ?string {
     throw new Error('should be implemented in subclasses');
   }
 
   // eslint-disable-next-line
-  getSessionIdFromCookies() {
+  getSessionIdFromCookies(): string {
     throw new Error('should be implemented in subclasses');
   }
 
@@ -32,18 +48,18 @@ class FetcherBase {
     throw new Error('should be implemented in subclasses');
   }
 
-  async fetch(operation, variables) {
-    const uid = uidGenerator.v4();
-    log.debug('GraphQL request', { url: this.url, operation, variables });
+  prepareHeaders = (): { [string]: string } => {
     const jwt = this.getJWTFromCookies();
     const currency = this.getCurrencyCodeFromCookies();
 
-    let headers = { 'Content-Type': 'application/json' };
+    let headers = {
+      'Content-Type': 'application/json',
+      Currency: currency || 'STQ',
+    };
+
     if (jwt) {
       headers = assoc('Authorization', `Bearer ${jwt}`, headers);
     }
-
-    headers = assoc('Currency', currency || 'STQ', headers);
 
     if (this.getCorrelationToken()) {
       headers = assoc('correlation-token', this.getCorrelationToken(), headers);
@@ -56,13 +72,38 @@ class FetcherBase {
       headers = assoc('Cookie', 'holyshit=iamcool', headers);
     }
 
+    return headers;
+  };
+
+  logRequest = (data: {
+    url: string,
+    headers: { [string]: string },
+    uid: string,
+    operation: { name: string, text: string },
+    variables: { [string]: any },
+  }) => {
+    log.debug('GraphQL request', data);
     grayLogger.info('GraphQL request', {
-      uid,
+      uid: data.uid,
       url: this.url,
-      operationName: operation.name,
-      operationText: slice(0, 32000, operation.text),
-      operationVariables: JSON.stringify(variables),
-      headers: JSON.stringify(omit(['Authorization'], headers), null, 2),
+      operationName: data.operation.name,
+      operationText: slice(0, 32000, data.operation.text),
+      operationVariables: JSON.stringify(data.variables),
+      headers: JSON.stringify(omit(['Authorization'], data.headers), null, 2),
+    });
+  };
+
+  async fetch(operation: { name: string, text: string }, variables: {}) {
+    const cookies = this.getCookies() || new Cookies();
+    const uid = uidGenerator.v4();
+    const headers = this.prepareHeaders();
+
+    this.logRequest({
+      url: this.url,
+      headers,
+      uid,
+      operation,
+      variables,
     });
 
     try {
@@ -73,12 +114,102 @@ class FetcherBase {
         data: JSON.stringify({ query: operation.text, variables }),
         withCredentials: true,
       });
-      log.debug('GraphQL response', { response: response.data });
+      log.debug('GraphQL response', { uid, ...response.data });
 
       grayLogger.info('GraphQL response', {
         uid,
         response: slice(0, 32000, JSON.stringify(response.data, null, 2)),
       });
+
+      if (isJwtExpiredErrorInResponse(response.data)) {
+        log.debug('JwtExpiredErrorInResponse');
+        const newTokenResponse = await axios({
+          method: 'post',
+          url: this.url,
+          headers,
+          data: JSON.stringify({
+            query: 'mutation RefreshJWTMutation { refreshJWT }',
+          }),
+          withCredentials: true,
+        });
+        log.debug({ newToken: newTokenResponse.data });
+        if (
+          newTokenResponse &&
+          newTokenResponse.data &&
+          newTokenResponse.data.data &&
+          newTokenResponse.data.data.refreshJWT
+        ) {
+          JWT.setJWT(newTokenResponse.data.data.refreshJWT, cookies);
+          const updatedHeaders = {
+            ...headers,
+            Authorization: `Bearer ${newTokenResponse.data.data.refreshJWT}`,
+          };
+          this.logRequest({
+            url: this.url,
+            headers: updatedHeaders,
+            uid,
+            operation,
+            variables,
+          });
+          const responseWithRefreshedJWT = await axios({
+            method: 'post',
+            url: this.url,
+            headers: updatedHeaders,
+            data: JSON.stringify({ query: operation.text, variables }),
+            withCredentials: true,
+          });
+
+          log.debug('GraphQL response', {
+            uid,
+            ...responseWithRefreshedJWT.data,
+          });
+          grayLogger.info('GraphQL response', {
+            uid,
+            response: slice(
+              0,
+              32000,
+              JSON.stringify(responseWithRefreshedJWT.data, null, 2),
+            ),
+          });
+
+          return responseWithRefreshedJWT.data;
+        }
+        log.debug({ newToken: newTokenResponse.data });
+      }
+
+      if (isJwtRevokedInResponse(response.data)) {
+        removeCookie('__jwt', cookies);
+        const updatedHeaders = omit(['Authorization'], headers);
+        this.logRequest({
+          url: this.url,
+          headers: updatedHeaders,
+          uid,
+          operation,
+          variables,
+        });
+        const responseWithoutJWT = await axios({
+          method: 'post',
+          url: this.url,
+          headers: updatedHeaders,
+          data: JSON.stringify({ query: operation.text, variables }),
+          withCredentials: true,
+        });
+
+        log.debug('GraphQL response', {
+          uid,
+          ...responseWithoutJWT.data,
+        });
+        grayLogger.info('GraphQL response', {
+          uid,
+          response: slice(
+            0,
+            32000,
+            JSON.stringify(responseWithoutJWT.data, null, 2),
+          ),
+        });
+
+        return responseWithoutJWT.data;
+      }
 
       return response.data;
     } catch (e) {
@@ -93,18 +224,36 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url, jwt, sessionId, currencyCode, correlationToken) {
+  url: string;
+  jwt: ?string;
+  sessionId: string;
+  currencyCode: string;
+  correlationToken: ?string;
+  payloads: Array<any>;
+  cookiesInstance: CookieType;
+
+  constructor(
+    url: string,
+    sessionId: string,
+    currencyCode: string,
+    correlationToken: ?string,
+    cookiesInstance: CookieType,
+  ) {
     super(url);
 
-    this.jwt = jwt;
     this.sessionId = sessionId;
     this.currencyCode = currencyCode;
     this.payloads = [];
     this.correlationToken = correlationToken;
+    this.cookiesInstance = cookiesInstance;
+  }
+
+  getCookies() {
+    return this.cookiesInstance;
   }
 
   getJWTFromCookies() {
-    return this.jwt;
+    return pathOr(null, ['value'])(this.cookiesInstance.get('__jwt'));
   }
 
   getSessionIdFromCookies() {
@@ -119,7 +268,7 @@ export class ServerFetcher extends FetcherBase {
     return this.correlationToken;
   }
 
-  async fetch(...args) {
+  async fetch(...args: any) {
     const i = this.payloads.length;
     this.payloads.push(null);
     const payload = await super.fetch(...args);
@@ -133,7 +282,9 @@ export class ServerFetcher extends FetcherBase {
 }
 
 export class ClientFetcher extends FetcherBase {
-  constructor(url, payloads) {
+  payloads: Array<any>;
+
+  constructor(url: string, payloads: Array<any>) {
     super(url);
 
     this.payloads = payloads;
@@ -141,11 +292,12 @@ export class ClientFetcher extends FetcherBase {
 
   // eslint-disable-next-line
   getJWTFromCookies() {
-    const jwt = pathOr(null, ['value'], getCookie('__jwt'));
+    const cookies = new Cookies();
+    const jwt = pathOr(null, ['value'])(cookies.get(JWT.jwtCookieName));
     if (isTokenExpired(jwt)) {
-      removeCookie('__jwt');
+      removeCookie(JWT.jwtCookieName, cookies);
     }
-    return pathOr(null, ['value'], getCookie('__jwt'));
+    return pathOr(null, ['value'])(cookies.get(JWT.jwtCookieName));
   }
 
   // eslint-disable-next-line
@@ -166,7 +318,7 @@ export class ClientFetcher extends FetcherBase {
     return null;
   }
 
-  async fetch(...args) {
+  async fetch(...args: any) {
     if (this.payloads.length) {
       return this.payloads.shift();
     }
