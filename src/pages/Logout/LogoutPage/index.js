@@ -5,7 +5,7 @@ import { routerShape, withRouter } from 'found';
 import { pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 
-import { removeCookie } from 'utils';
+import { jwt } from 'utils';
 
 import Logo from 'components/Icon/svg/logo.svg';
 
@@ -23,7 +23,7 @@ class LogoutPage extends PureComponent<PropsType> {
     if (!process.env.BROWSER) {
       return;
     }
-    removeCookie('__jwt');
+    jwt.clearJWT();
 
     const store = this.props.environment.getStore();
     const meId = pathOr(

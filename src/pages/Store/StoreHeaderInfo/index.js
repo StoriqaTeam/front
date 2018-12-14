@@ -15,8 +15,6 @@ import { StoreContext } from '../index';
 
 import './StoreHeaderInfo.scss';
 
-import t from './i18n';
-
 type StateTypes = {
   search: string,
   isOpened: boolean,
@@ -98,7 +96,6 @@ class StoreHeader extends Component<{}, StateTypes> {
                 <div styleName="rating">
                   <Rating value={rating} />
                 </div>
-                <span styleName="reviews">0 {t.reviews}</span>
               </div>
             </div>
           </div>

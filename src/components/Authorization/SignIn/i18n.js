@@ -17,7 +17,7 @@ const translations: TranslationsBundleType = {
   en: {
     labelEmail: 'Email',
     labelPassword: 'Password',
-    forgotPassword: 'ForgotPassword',
+    forgotPassword: 'Forgot password',
     signIn: 'Sign In',
     emailNotVerified: 'Email not verified',
   },
