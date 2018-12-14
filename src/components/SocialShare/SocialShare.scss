@@ -89,4 +89,7 @@
     width: 2.7rem;
   }
 
+  &.noFavorite {
+    display: none !important;
+  }
 }

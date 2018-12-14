@@ -56,6 +56,7 @@ const StoreHeader = () => (
               <h2 styleName="offscreen">{t.offscreenSocialShare}</h2>
               {process.env.BROWSER ? (
                 <SocialShare
+                  noFavorite
                   facebookUrl={facebookUrl}
                   twitterUrl={twitterUrl}
                   instagramUrl={instagramUrl}
