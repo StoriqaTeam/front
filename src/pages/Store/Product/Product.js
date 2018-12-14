@@ -512,7 +512,7 @@ export default createFragmentContainer(
         text
         lang
       }
-      store {
+      store(visibility: "active") {
         rawId
         name {
           lang
