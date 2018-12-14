@@ -93,7 +93,6 @@ class Footer extends PureComponent<PropsType, StateType> {
       <Col lg={9} xl={9}>
         <div styleName="footerLogo">
           <Icon type="logo" />
-          <p styleName="logoDescription">{t.logoDescription}</p>
         </div>
       </Col>
     );

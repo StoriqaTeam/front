@@ -21,7 +21,6 @@ type TranslationDicType = {|
   services_qualityAssurance: string,
   services_storiqaWallet: string,
   //
-  logoDescription: string,
   copyRight: string,
   allRightsReserved: string,
   startSelling: string,
@@ -48,8 +47,6 @@ const translations: TranslationsBundleType = {
     services_qualityAssurance: 'Quality Assurance',
     services_storiqaWallet: 'Storiqa Wallet',
     //
-    logoDescription:
-      'Storiqa is a global marketplace for any kind of legal goods supporting cryptocurrency payments',
     copyRight:
       '© Storiqa Marketplace DBA Storiqa Global Trades Inc. (Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong)',
     allRightsReserved: 'All rights reserved.',

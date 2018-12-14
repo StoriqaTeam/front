@@ -18,6 +18,7 @@ type TranslationDicType = {|
   labelGender: string,
   labelBirthdate: string,
   labelPhone: string,
+  labelRefLink: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -36,6 +37,7 @@ const translations: TranslationsBundleType = {
     labelGender: 'Gender',
     labelBirthdate: 'Birthday',
     labelPhone: 'Phone',
+    labelRefLink: 'Referal link',
   },
 };
 

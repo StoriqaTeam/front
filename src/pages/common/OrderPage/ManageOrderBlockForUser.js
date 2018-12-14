@@ -42,6 +42,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
       input: {
         clientMutationId: '',
         orderSlug: this.props.orderSlug,
+        committerRole: 'CUSTOMER',
       },
       onCompleted: (
         response: ?SetOrderStatusCompleteMutationResponseType,
