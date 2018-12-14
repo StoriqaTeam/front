@@ -1,4 +1,5 @@
 // @flow strict
+
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr, assoc } from 'ramda';
@@ -20,10 +21,11 @@ import {
   log,
   fromRelayError,
   errorsHandler,
-  setCookie,
   getCookie,
   getQueryRefParams,
+  jwt as JWT,
 } from 'utils';
+
 // TODO: while mutations are fixed
 import {
   // $FlowIgnoreMe
@@ -271,17 +273,17 @@ class Authorization extends Component<PropsType, StateType> {
         this.setState({ isLoading: false });
         log.debug({ response });
         // $FlowIgnoreMe
-        const jwt = pathOr(
+        const jwtStr = pathOr(
           null,
           ['getJWTByEmail', 'token'],
           Object.freeze(response),
         );
-        if (jwt) {
+        if (jwtStr) {
           const date = new Date();
           const today = date;
           const expirationDate = date;
-          expirationDate.setDate(today.getDate() + 1);
-          setCookie('__jwt', { value: jwt }, expirationDate);
+          expirationDate.setDate(today.getDate() + 14);
+          JWT.setJWT(jwtStr);
           if (this.props.handleLogin) {
             this.props.handleLogin();
             if (from && from !== '') {

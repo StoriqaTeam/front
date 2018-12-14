@@ -2,8 +2,8 @@
 
 // eslint-disable-next-line
 let logger = {
-  info: () => {},
-  error: () => {},
+  info: (title: string, meta?: { [string]: any }) => {}, // eslint-disable-line
+  error: (title: string, meta?: { [string]: any }) => {}, // eslint-disable-line
 };
 
 if (!process.env.BROWSER && process.env.NODE_ENV === 'production') {
