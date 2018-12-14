@@ -75,8 +75,9 @@ class InputPrice extends Component<PropsType, StateType> {
       return;
     }
     if (value === '') {
-      this.setState({ price: '0' });
-      onChangePrice(0);
+      this.setState({ price: '0' }, () => {
+        onChangePrice(0);
+      });
     }
   };
 
