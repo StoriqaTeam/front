@@ -12,6 +12,13 @@ export type AttributeValueType = {
   metaField?: ?string,
 };
 
+export type MetricsType = {
+  lengthCm: number,
+  widthCm: number,
+  heightCm: number,
+  weightG: number,
+};
+
 export type FormType = {
   name: string,
   seoTitle: string,
@@ -31,6 +38,7 @@ export type FormType = {
   preOrderDays: string,
   preOrder: boolean,
   attributeValues: Array<AttributeValueType>,
+  metrics: MetricsType,
 };
 
 export type VariantType = {
@@ -141,6 +149,10 @@ export type BaseProductType = {
       },
     }>,
   },
+  lengthCm: ?number,
+  widthCm: ?number,
+  heightCm: ?number,
+  weightG: ?number,
 };
 
 export type ValueForAttributeInputType = {

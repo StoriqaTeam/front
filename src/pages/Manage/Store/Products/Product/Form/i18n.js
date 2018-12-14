@@ -13,6 +13,7 @@ type TranslationDicType = {|
   categoryIsRequired: string,
   vendorCodeIsRequired: string,
   priceIsRequired: string,
+  metricsError: string,
   addAtLeastOneDeliveryServiceOrPickup: string,
   addAtLeastOneDeliveryDelivery: string,
   productPhotos: string,
@@ -59,6 +60,7 @@ const translations: TranslationsBundleType = {
     categoryIsRequired: 'Category is required',
     vendorCodeIsRequired: 'Vendor code is required',
     priceIsRequired: 'Price is required',
+    metricsError: 'Please, specify all metrics',
     addAtLeastOneDeliveryServiceOrPickup:
       'Add at least one delivery service or pickup',
     addAtLeastOneDeliveryDelivery: 'Add at least one delivery service',

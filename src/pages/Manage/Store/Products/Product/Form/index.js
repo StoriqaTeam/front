@@ -21,10 +21,12 @@ import {
   propEq,
   drop,
   length,
+  values,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
+import debounce from 'lodash.debounce';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Select, SpinnerCircle, Button, InputPrice } from 'components/common';
@@ -34,6 +36,7 @@ import { Textarea } from 'components/common/Textarea';
 import { Input } from 'components/common/Input';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
+import { Modal } from 'components/Modal';
 
 import {
   getNameText,
@@ -53,6 +56,7 @@ import type {
   ProductType,
   ValueForAttributeInputType,
   GetAttributeType,
+  MetricsType,
 } from 'pages/Manage/Store/Products/types';
 import type { SelectItemType, CategoryType } from 'types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -66,6 +70,7 @@ import Characteristics from '../Characteristics';
 import VariantForm from '../VariantForm';
 import AdditionalAttributes from '../AdditionalAttributes';
 import PreOrder from '../PreOrder';
+import Metrics from '../Metrics';
 import sendProductToModerationMutation from '../mutations/SendProductToModerationMutation';
 
 import type {
@@ -98,6 +103,7 @@ type PropsType = {
   onResetAttribute: () => void,
   onSaveShipping: (onlyShippingSave?: boolean) => void,
   showAlert: (input: AddAlertInputType) => void,
+  onFetchPackages?: (metrics: MetricsType) => void,
 };
 
 type StateType = {
@@ -118,6 +124,7 @@ type StateType = {
   }>,
   variantForForm: ?ProductType | 'new',
   isSendingToModeration: boolean,
+  isShippingPopup: boolean,
 };
 
 class Form extends Component<PropsType, StateType> {
@@ -143,7 +150,12 @@ class Form extends Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    const { baseProduct, currencies, customAttributes } = props;
+    const {
+      baseProduct,
+      currencies,
+      customAttributes,
+      onFetchPackages,
+    } = props;
     // $FlowIgnore
     const currency = pathOr('STQ', ['baseProduct', 'currency'], props);
     let form = {};
@@ -200,6 +212,12 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: !isEmpty(customAttributes)
           ? this.resetAttrValues(customAttributes, mainVariant)
           : [],
+        metrics: {
+          weightG: baseProduct.weightG || 0,
+          widthCm: baseProduct.widthCm || 0,
+          lengthCm: baseProduct.lengthCm || 0,
+          heightCm: baseProduct.heightCm || 0,
+        },
       };
     } else {
       form = {
@@ -223,6 +241,12 @@ class Form extends Component<PropsType, StateType> {
         attributeValues: !isEmpty(customAttributes)
           ? this.resetAttrValues(customAttributes, null)
           : [],
+        metrics: {
+          weightG: 0,
+          widthCm: 0,
+          lengthCm: 0,
+          heightCm: 0,
+        },
       };
     }
     this.state = {
@@ -236,10 +260,11 @@ class Form extends Component<PropsType, StateType> {
         'name',
         'shortDescription',
         'longDescription',
-        'categoryId',
         'vendorCode',
-        'price',
+        'categoryId',
         'attributes',
+        'price',
+        'metrics',
       ],
       activeTab: 'variants',
       tabs: [
@@ -254,7 +279,11 @@ class Form extends Component<PropsType, StateType> {
       ],
       variantForForm,
       isSendingToModeration: false,
+      isShippingPopup: false,
     };
+    if (onFetchPackages) {
+      this.onFetchPackages = debounce(onFetchPackages, 1000);
+    }
   }
 
   componentDidUpdate(prevProps: PropsType) {
@@ -302,9 +331,11 @@ class Form extends Component<PropsType, StateType> {
     }
   }
 
-  onChangeValues = (values: Array<AttributeValueType>) => {
+  onFetchPackages = undefined;
+
+  onChangeValues = (attributeValues: Array<AttributeValueType>) => {
     this.setState((prevState: StateType) =>
-      assocPath(['form', 'attributeValues'], values, prevState),
+      assocPath(['form', 'attributeValues'], attributeValues, prevState),
     );
   };
 
@@ -375,10 +406,10 @@ class Form extends Component<PropsType, StateType> {
         metaField: attrFromVariant.metaField,
       };
     }
-    const { values, translatedValues } = attr.metaField;
-    if (values) {
+    const { values: attributeValues, translatedValues } = attr.metaField;
+    if (attributeValues) {
       return {
-        value: head(values) || '',
+        value: head(attributeValues) || '',
       };
     } else if (translatedValues && !isEmpty(translatedValues)) {
       return {
@@ -408,6 +439,7 @@ class Form extends Component<PropsType, StateType> {
         categoryId: [[val => Boolean(val), t.categoryIsRequired]],
         vendorCode: [[val => Boolean(val), t.vendorCodeIsRequired]],
         price: [[val => Boolean(val), t.priceIsRequired]],
+        metrics: [[val => !contains(0, values(val)), t.metricsError]],
       },
       this.state.form,
     );
@@ -455,7 +487,27 @@ class Form extends Component<PropsType, StateType> {
     return shippingErrors;
   };
 
-  handleSave = (isAddVariant?: boolean) => {
+  handleUpdateProduct = () => {
+    const { baseProduct } = this.props;
+    if (!baseProduct) {
+      this.handleSave();
+      return;
+    }
+    const { form } = this.state;
+    if (
+      baseProduct.weightG !== form.metrics.weightG ||
+      baseProduct.widthCm !== form.metrics.widthCm ||
+      baseProduct.lengthCm !== form.metrics.lengthCm ||
+      baseProduct.heightCm !== form.metrics.heightCm
+    ) {
+      this.setState({ isShippingPopup: true });
+      return;
+    }
+    this.handleSave();
+  };
+
+  handleSave = (isAddVariant?: boolean, withSavingShipping?: boolean) => {
+    const { baseProduct } = this.props;
     const { form, currency } = this.state;
     this.setState({
       formErrors: {},
@@ -470,10 +522,12 @@ class Form extends Component<PropsType, StateType> {
       });
       return;
     }
-    this.props.onSave(
-      { ...form, currency: currency ? currency.id : null },
-      isAddVariant,
-    );
+    const savingData = { ...form, currency: currency ? currency.id : null };
+    if (baseProduct) {
+      this.props.onSave(savingData, withSavingShipping);
+      return;
+    }
+    this.props.onSave(savingData, isAddVariant);
   };
 
   sendToModeration = () => {
@@ -612,11 +666,11 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  handleChangeValues = (values: Array<AttributeValueType>) => {
+  handleChangeValues = (attributeValues: Array<AttributeValueType>) => {
     this.setState((prevState: StateType) => {
       const formErrors = dissoc('attributes', prevState.formErrors);
       return {
-        ...assocPath(['form', 'attributeValues'], values, prevState),
+        ...assocPath(['form', 'attributeValues'], attributeValues, prevState),
         formErrors,
       };
     });
@@ -705,6 +759,27 @@ class Form extends Component<PropsType, StateType> {
     }));
   };
 
+  handleChangeMetrics = (metrics: MetricsType) => {
+    this.setState(
+      (prevState: StateType) => ({
+        form: {
+          ...prevState.form,
+          metrics,
+        },
+        formErrors: dissoc('metrics', prevState.formErrors),
+      }),
+      () => {
+        if (this.onFetchPackages) {
+          this.onFetchPackages(metrics);
+        }
+      },
+    );
+  };
+
+  handleCloseShippingPopup = () => {
+    this.setState({ isShippingPopup: false });
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
@@ -788,6 +863,7 @@ class Form extends Component<PropsType, StateType> {
       tabs,
       variantForForm,
       isSendingToModeration,
+      isShippingPopup,
     } = this.state;
 
     // $FlowIgnore
@@ -832,6 +908,7 @@ class Form extends Component<PropsType, StateType> {
       attributeValues,
       preOrder,
       preOrderDays,
+      metrics,
     } = form;
 
     return (
@@ -926,6 +1003,36 @@ class Form extends Component<PropsType, StateType> {
                     <div styleName="categoryError">{formErrors.categoryId}</div>
                   )}
               </div>
+              {defaultAttributes &&
+                !isEmpty(defaultAttributes) &&
+                (!baseProduct ||
+                  (!isEmpty(customAttributes) && baseProduct)) && (
+                  <Fragment>
+                    <div styleName="title titleCharacteristics">
+                      <strong>{t.characteristics}</strong>
+                    </div>
+                    <div styleName="formItem additionalAttributes">
+                      <AdditionalAttributes
+                        onlyView={Boolean(baseProduct)}
+                        // $FlowIgnore
+                        attributes={defaultAttributes}
+                        customAttributes={customAttributes}
+                        onCreateAttribute={onCreateAttribute}
+                        onRemoveAttribute={onRemoveAttribute}
+                      />
+                    </div>
+                  </Fragment>
+                )}
+              {!isEmpty(customAttributes) && (
+                <div styleName="characteristics">
+                  <Characteristics
+                    customAttributes={customAttributes}
+                    values={attributeValues || []}
+                    onChange={this.handleChangeValues}
+                    errors={(formErrors && formErrors.attributes) || null}
+                  />
+                </div>
+              )}
               <div styleName="title titlePricing">
                 <strong>{t.pricing}</strong>
               </div>
@@ -970,36 +1077,16 @@ class Form extends Component<PropsType, StateType> {
                 />
                 <span styleName="inputPostfix">{t.percent}</span>
               </div>
-              {defaultAttributes &&
-                !isEmpty(defaultAttributes) &&
-                (!baseProduct ||
-                  (!isEmpty(customAttributes) && baseProduct)) && (
-                  <Fragment>
-                    <div styleName="title titleCharacteristics">
-                      <strong>{t.characteristics}</strong>
-                    </div>
-                    <div styleName="formItem additionalAttributes">
-                      <AdditionalAttributes
-                        onlyView={Boolean(baseProduct)}
-                        // $FlowIgnore
-                        attributes={defaultAttributes}
-                        customAttributes={customAttributes}
-                        onCreateAttribute={onCreateAttribute}
-                        onRemoveAttribute={onRemoveAttribute}
-                      />
-                    </div>
-                  </Fragment>
-                )}
-              {!isEmpty(customAttributes) && (
-                <div styleName="characteristics">
-                  <Characteristics
-                    customAttributes={customAttributes}
-                    values={attributeValues || []}
-                    onChange={this.handleChangeValues}
-                    errors={(formErrors && formErrors.attributes) || null}
-                  />
-                </div>
-              )}
+              <div id="metrics" styleName="metrics">
+                <Metrics
+                  {...metrics}
+                  onChangeMetrics={this.handleChangeMetrics}
+                />
+                {formErrors &&
+                  formErrors.metrics && (
+                    <div styleName="metricsError">{formErrors.metrics}</div>
+                  )}
+              </div>
               <div styleName="preOrder">
                 <PreOrder
                   preOrderDays={preOrderDays}
@@ -1015,9 +1102,13 @@ class Form extends Component<PropsType, StateType> {
                   <Button
                     big
                     fullWidth
-                    onClick={() => {
-                      this.handleSave();
-                    }}
+                    onClick={
+                      baseProduct
+                        ? this.handleUpdateProduct
+                        : () => {
+                            this.handleSave();
+                          }
+                    }
                     disabled={baseProduct != null && !this.isSaveAvailable()}
                     dataTest="saveProductButton"
                     isLoading={isLoading || isSendingToModeration}
@@ -1233,6 +1324,43 @@ class Form extends Component<PropsType, StateType> {
               />
             </div>
           )}
+        <Modal
+          showModal={isShippingPopup}
+          onClose={this.handleCloseShippingPopup}
+        >
+          <div styleName="shippingPopup">
+            <div styleName="shippingPopupWrapper">
+              <div styleName="shippingPopupDescription">
+                After saving the lists of logistics companies will be updated.
+                Do you want to continue?
+              </div>
+              <div styleName="shippingPopupButtons">
+                <Button
+                  onClick={this.handleCloseShippingPopup}
+                  dataTest=""
+                  wireframe
+                  big
+                >
+                  <span>Cancel</span>
+                </Button>
+                <div styleName="shippingPopupOkButton">
+                  <Button
+                    onClick={() => {
+                      this.setState({ isShippingPopup: false }, () => {
+                        this.handleSave(undefined, true);
+                      });
+                    }}
+                    dataTest=""
+                    big
+                    isLoading={isLoadingPackages}
+                  >
+                    <span>Ok</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }
