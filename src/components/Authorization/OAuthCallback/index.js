@@ -15,7 +15,13 @@ import {
 import { routerShape } from 'found';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { log, errorsHandler, fromRelayError, jwt as JWT } from 'utils';
+import {
+  log,
+  errorsHandler,
+  fromRelayError,
+  jwt as JWT,
+  removeCookie,
+} from 'utils';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
 import type { ResponseErrorType } from 'utils/fromRelayError';
@@ -29,6 +35,7 @@ import prepareQueryString from './OAuthCallback.utils';
 import {
   getPathForRedirectAfterLogin,
   clearPathForRedirectAfterLogin,
+  getAdditionalData,
 } from '../utils';
 
 import './OAuthCallback.scss';
@@ -64,10 +71,14 @@ class OAuthCallback extends PureComponent<PropsType> {
             provider: this.props.provider,
             token: accessToken,
             clientMutationId: '',
+            additionalData: getAdditionalData(),
           },
         },
       })
         .then(response => {
+          removeCookie('REFERAL');
+          removeCookie('REFERER');
+          removeCookie('UTM_MARKS');
           log.debug({ response });
           // $FlowIgnoreMe
           const jwtStr = pathOr(null, ['getJWTByProvider', 'token'], response);
