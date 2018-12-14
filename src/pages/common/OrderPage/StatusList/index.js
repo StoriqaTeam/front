@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { addIndex, map } from 'ramda';
+import { addIndex, map, toLower } from 'ramda';
 
 import { StringLoadMore } from 'components/StringLoadMore';
 import { timeFromTimestamp, shortDateFromTimestamp } from 'utils/formatDate';
@@ -12,7 +12,7 @@ import t from './i18n';
 
 export type OrderStatusType = {
   date: string,
-  manager: string,
+  committer: string,
   status: string,
   additionalInfo?: string,
 };
@@ -28,7 +28,7 @@ class StatusList extends PureComponent<PropsType> {
   renderTitle = () => (
     <div styleName="headerContainer">
       <span styleName="headerDate">{t.date}</span>
-      <span styleName="headerManager">{t.user}</span>
+      <span styleName="headerCommitter">{t.committer}</span>
       <span styleName="headerStatus">{t.status}</span>
       <span styleName="headerAdditionalInfo">{t.additionalInfo}</span>
     </div>
@@ -42,7 +42,7 @@ class StatusList extends PureComponent<PropsType> {
           <div styleName="rowDate">
             {this.dateStringFromTimestamp(item.date)}
           </div>
-          <div styleName="rowManager">{item.manager}</div>
+          <div styleName="rowCommitter">{toLower(item.committer)}</div>
           <div styleName="rowStatus">{item.status}</div>
           <div styleName="rowAdditionalInfo">
             {item.additionalInfo ? (

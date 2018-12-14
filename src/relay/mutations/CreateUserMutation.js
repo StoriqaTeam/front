@@ -17,6 +17,17 @@ const mutation = graphql`
       isActive
       firstName
       lastName
+      referal
+      utmMarks {
+        key
+        value
+      }
+      country {
+        label
+        alpha2
+        alpha3
+      }
+      referer
     }
   }
 `;

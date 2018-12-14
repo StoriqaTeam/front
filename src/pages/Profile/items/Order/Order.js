@@ -119,6 +119,7 @@ export default createRefetchContainer(
             node {
               state
               committedAt
+              committerRole
               user {
                 firstName
                 lastName
