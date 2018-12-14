@@ -89,7 +89,7 @@ class Metrics extends PureComponent<PropsType, StateType> {
         <div styleName="body">
           <div styleName="weight">
             <div styleName={classNames('label', { labelFloat: isWeightFocus })}>
-              Weight
+              {t.weight} <span styleName="asteriks">*</span>
             </div>
             <div styleName="weightInput">
               <InputNumber
@@ -111,7 +111,7 @@ class Metrics extends PureComponent<PropsType, StateType> {
             <div
               styleName={classNames('label', { labelFloat: isDimensionFocus })}
             >
-              Dimensions
+              {t.dimensions} <span styleName="asteriks">*</span>
             </div>
             <div styleName="dimensionInputs">
               <div styleName="input">

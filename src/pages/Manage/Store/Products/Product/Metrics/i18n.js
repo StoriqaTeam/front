@@ -11,6 +11,8 @@ type TranslationDicType = {|
   height: string,
   sm: string,
   g: string,
+  weight: string,
+  dimensions: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -22,6 +24,8 @@ const translations: TranslationsBundleType = {
     height: 'Height',
     sm: 'sm',
     g: 'g',
+    weight: 'Weight',
+    dimensions: 'Dimensions',
   },
 };
 

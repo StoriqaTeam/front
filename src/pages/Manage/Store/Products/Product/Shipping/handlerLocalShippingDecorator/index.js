@@ -42,6 +42,10 @@ type StateType = {
 
 export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
   class HandlerShippingDecorator extends Component<PropsType, StateType> {
+    // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    //
+    // }
+
     constructor(props: PropsType) {
       super(props);
       const { localShipping, onChangeShippingData, pickupShipping } = props;

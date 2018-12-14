@@ -54,6 +54,7 @@ type StateType = {
   availablePackages: ?AvailablePackagesType,
   shippingData: ?FullShippingType,
   customAttributes: Array<CustomAttributeType>,
+  isLoadingPackages: boolean,
 };
 
 class NewProduct extends Component<PropsType, StateType> {
@@ -63,9 +64,24 @@ class NewProduct extends Component<PropsType, StateType> {
     availablePackages: null,
     shippingData: null,
     customAttributes: [],
+    isLoadingPackages: false,
   };
 
   componentDidMount() {
+    this.handleFetchPackages();
+  }
+
+  handleFetchPackages = (metrics?: {
+    lengthCm: number,
+    widthCm: number,
+    heightCm: number,
+    weightG: number,
+  }) => {
+    const size = metrics
+      ? metrics.lengthCm * metrics.widthCm * metrics.heightCm
+      : 0;
+    const weight = metrics ? metrics.weightG : 0;
+    this.setState({ isLoadingPackages: true });
     // $FlowIgnore
     const warehouses = pathOr(
       null,
@@ -74,22 +90,28 @@ class NewProduct extends Component<PropsType, StateType> {
     );
     const warehouse =
       warehouses && !isEmpty(warehouses) ? head(warehouses) : null;
-    const countryCode = pathOr(null, ['addressFull', 'country'], warehouse);
+    const countryCode = pathOr(null, ['addressFull', 'countryCode'], warehouse);
 
     if (countryCode && process.env.BROWSER) {
       const variables = {
         countryCode: 'RUS',
-        size: 0,
-        weight: 0,
+        size,
+        weight,
       };
 
       fetchPackages(this.props.environment, variables)
         .then(({ availablePackages }) => {
-          this.setState({ availablePackages: availablePackages || null });
+          this.setState({
+            availablePackages: availablePackages || null,
+            isLoadingPackages: false,
+          });
           return true;
         })
         .catch(() => {
-          this.setState({ availablePackages: null });
+          this.setState({
+            availablePackages: null,
+            isLoadingPackages: false,
+          });
           this.props.showAlert({
             type: 'danger',
             text: t.somethingGoingWrongWithShipping,
@@ -97,7 +119,7 @@ class NewProduct extends Component<PropsType, StateType> {
           });
         });
     }
-  }
+  };
 
   handleSave = (
     form: FormType & { currency: string },
@@ -380,8 +402,8 @@ class NewProduct extends Component<PropsType, StateType> {
       shippingData,
       customAttributes,
       formErrors,
+      isLoadingPackages,
     } = this.state;
-
     return (
       <AppContext.Consumer>
         {({ directories }) => (
@@ -400,6 +422,9 @@ class NewProduct extends Component<PropsType, StateType> {
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
               onResetAttribute={this.handleResetAttribute}
+              isLoadingPackages={isLoadingPackages}
+              onFetchPackages={this.handleFetchPackages}
+              handleFetchPackages={this.handleFetchPackages}
             />
           </div>
         )}

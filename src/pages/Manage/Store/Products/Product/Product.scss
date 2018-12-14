@@ -214,3 +214,47 @@
     }
   }
 }
+
+.metrics {
+  position: relative;
+  margin-top: 7rem;
+
+  .metricsError {
+    position: absolute;
+    bottom: -2.5rem;
+    width: 19rem;
+    margin-top: 0.5rem;
+    line-height: 2rem;
+    color: $color_red;
+    font-size: 12px;
+  }
+}
+
+.shippingPopup {
+  padding: 10rem;
+  width: 82rem;
+
+  @media (max-width: #{$md - 1px}) {
+    padding: 4rem;
+    width: 100%;
+  }
+
+  .shippingPopupWrapper {
+    //
+  }
+
+  .shippingPopupDescription {
+    text-align: center;
+  }
+
+  .shippingPopupButtons {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+
+    .shippingPopupOkButton {
+      margin-left: 2rem;
+    }
+  }
+
+}
