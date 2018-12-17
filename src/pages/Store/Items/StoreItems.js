@@ -142,6 +142,7 @@ class StoreItems extends Component<PropsType, StateType> {
               load
               onClick={this.productsRefetch}
               dataTest="shopProductsLoadMoreButton"
+              wireframe
             >
               {t.loadMore}
             </Button>
