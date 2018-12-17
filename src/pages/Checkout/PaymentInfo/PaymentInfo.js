@@ -262,7 +262,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                 <div styleName="paymentInfoWrapper">
                   <div styleName="qr">
                     <QRCode
-                      value={`ethereum:${wallet}?gas=21000?value=${amount}`}
+                      value={`ethereum:${wallet}?amount=${amount}`}
                       renderAs="svg"
                       size={165}
                     />
