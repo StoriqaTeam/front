@@ -21,7 +21,7 @@ import {
   propEq,
   drop,
   length,
-  values,
+  // values,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
@@ -70,7 +70,7 @@ import Characteristics from '../Characteristics';
 import VariantForm from '../VariantForm';
 import AdditionalAttributes from '../AdditionalAttributes';
 import PreOrder from '../PreOrder';
-import Metrics from '../Metrics';
+// import Metrics from '../Metrics';
 import sendProductToModerationMutation from '../mutations/SendProductToModerationMutation';
 
 import type {
@@ -439,7 +439,7 @@ class Form extends Component<PropsType, StateType> {
         categoryId: [[val => Boolean(val), t.categoryIsRequired]],
         vendorCode: [[val => Boolean(val), t.vendorCodeIsRequired]],
         price: [[val => Boolean(val), t.priceIsRequired]],
-        metrics: [[val => !contains(0, values(val)), t.metricsError]],
+        // metrics: [[val => !contains(0, values(val)), t.metricsError]],
       },
       this.state.form,
     );
@@ -488,21 +488,21 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleUpdateProduct = () => {
-    const { baseProduct } = this.props;
-    if (!baseProduct) {
-      this.handleSave();
-      return;
-    }
-    const { form } = this.state;
-    if (
-      baseProduct.weightG !== form.metrics.weightG ||
-      baseProduct.widthCm !== form.metrics.widthCm ||
-      baseProduct.lengthCm !== form.metrics.lengthCm ||
-      baseProduct.heightCm !== form.metrics.heightCm
-    ) {
-      this.setState({ isShippingPopup: true });
-      return;
-    }
+    // const { baseProduct } = this.props;
+    // if (!baseProduct) {
+    //   this.handleSave();
+    //   return;
+    // }
+    // const { form } = this.state;
+    // if (
+    //   baseProduct.weightG !== form.metrics.weightG ||
+    //   baseProduct.widthCm !== form.metrics.widthCm ||
+    //   baseProduct.lengthCm !== form.metrics.lengthCm ||
+    //   baseProduct.heightCm !== form.metrics.heightCm
+    // ) {
+    //   this.setState({ isShippingPopup: true });
+    //   return;
+    // }
     this.handleSave();
   };
 
@@ -908,7 +908,7 @@ class Form extends Component<PropsType, StateType> {
       attributeValues,
       preOrder,
       preOrderDays,
-      metrics,
+      // metrics,
     } = form;
 
     return (
@@ -1077,16 +1077,18 @@ class Form extends Component<PropsType, StateType> {
                 />
                 <span styleName="inputPostfix">{t.percent}</span>
               </div>
-              <div id="metrics" styleName="metrics">
-                <Metrics
-                  {...metrics}
-                  onChangeMetrics={this.handleChangeMetrics}
-                />
-                {formErrors &&
-                  formErrors.metrics && (
-                    <div styleName="metricsError">{formErrors.metrics}</div>
-                  )}
-              </div>
+              {/*
+                <div id="metrics" styleName="metrics">
+                  <Metrics
+                    {...metrics}
+                    onChangeMetrics={this.handleChangeMetrics}
+                  />
+                  {formErrors &&
+                    formErrors.metrics && (
+                      <div styleName="metricsError">{formErrors.metrics}</div>
+                    )}
+                </div>
+              */}
               <div styleName="preOrder">
                 <PreOrder
                   preOrderDays={preOrderDays}
