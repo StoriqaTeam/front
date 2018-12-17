@@ -233,6 +233,27 @@ const makeInput = (props: {
   return pipe(setInitialShape, setValidate)(inputName);
 };
 
+const getAdditionalData = () => {
+  let result = {};
+  const country = getCookie('COUNTRY_IP');
+  if (country) {
+    result = assoc('country', country, result);
+  }
+  const referal = getCookie('REFERAL');
+  if (referal) {
+    result = assoc('referal', parseFloat(referal), result);
+  }
+  const referer = getCookie('REFERER');
+  if (referer) {
+    result = assoc('referer', referer, result);
+  }
+  const utmMarks = getCookie('UTM_MARKS');
+  if (utmMarks) {
+    result = assoc('utmMarks', utmMarks, result);
+  }
+  return result;
+};
+
 export {
   validateField,
   isCapsLock,
@@ -243,4 +264,5 @@ export {
   clearPathForRedirectAfterLogin,
   getPathForRedirectAfterLogin,
   makeInput,
+  getAdditionalData,
 };

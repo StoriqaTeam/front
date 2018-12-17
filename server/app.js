@@ -138,7 +138,7 @@ const wrapAsync = fn => (req, res, next) => {
 app.use(
   wrapAsync(async (req, res) => {
     if (!req.universalCookies.get(process.env.REACT_APP_COUNTRY_HEADER)) {
-      req.universalCookies.set('COUNTRY_IP', req.headers ? req.headers[process.env.REACT_APP_COUNTRY_HEADER] : null, {
+      req.universalCookies.set('COUNTRY_IP', req.headers ? req.headers[process.env.REACT_APP_COUNTRY_HEADER] || '' : null, {
         path: '/',
       });
     }
