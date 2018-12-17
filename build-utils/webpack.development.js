@@ -9,6 +9,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const RelayCompilerWebpackPlugin = require('relay-compiler-webpack-plugin');
 
 // const { DllBundlesPlugin } = require('webpack-dll-bundles-plugin');
 
@@ -89,6 +90,11 @@ module.exports = (mode) => {
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebookincubator/create-react-app/issues/186
       new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      // Relay-compile as step of build
+      new RelayCompilerWebpackPlugin({
+        schema: path.resolve(__dirname, '../src/relay/schema.json'),
+        src: path.resolve(__dirname, '../src'),
+      }),
     ],
 
   });
