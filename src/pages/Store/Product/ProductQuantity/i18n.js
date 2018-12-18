@@ -11,6 +11,10 @@ type TranslationDicType = {|
   preOrder: string,
   availableForPreOrder: string,
   leadTime: string,
+  numbersInWords: {
+    dozens: string,
+    hundreds: string,
+  },
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -22,6 +26,10 @@ const translations: TranslationsBundleType = {
     preOrder: 'Pre order',
     availableForPreOrder: 'Available for pre-order.',
     leadTime: 'Lead time (days):',
+    numbersInWords: {
+      dozens: 'dozens',
+      hundreds: 'hundreds',
+    },
   },
 };
 
