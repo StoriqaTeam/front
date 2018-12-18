@@ -33,7 +33,7 @@ if (process.env.BROWSER) {
   const ReduxProvider = createReduxProvider();
 
   const fetcher = new ClientFetcher(
-    process.env.REACT_APP_GRAPHQL_ENDPOINT,
+    process.env.REACT_APP_GRAPHQL_ENDPOINT || '',
     window.__RELAY_PAYLOADS__ || [], // eslint-disable-line no-underscore-dangle
   );
   const resolver = createResolver(fetcher);

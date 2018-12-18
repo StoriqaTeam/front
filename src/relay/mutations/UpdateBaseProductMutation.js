@@ -75,6 +75,10 @@ const mutation = graphql`
           }
         }
       }
+      lengthCm
+      widthCm
+      heightCm
+      weightG
     }
   }
 `;
@@ -88,6 +92,10 @@ export type UpdateBaseProductMutationVariablesType = {
   seoDescription: Array<{ lang: string, text: string }>,
   currency: string,
   categoryId: number,
+  lengthCm: number,
+  widthCm: number,
+  heightCm: number,
+  weightG: number,
 };
 
 export type { UpdateBaseProductMutationResponseType };
@@ -116,6 +124,10 @@ const commit = (params: MutationParamsType) =>
         seoDescription: params.seoDescription,
         currency: params.currency,
         categoryId: params.categoryId,
+        lengthCm: params.lengthCm,
+        widthCm: params.widthCm,
+        heightCm: params.heightCm,
+        weightG: params.weightG,
       },
     },
     onCompleted: params.onCompleted,

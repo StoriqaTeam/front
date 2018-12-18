@@ -87,7 +87,7 @@ class EditProduct extends Component<PropsType, StateType> {
       formErrors: {},
       isLoading: false,
       availablePackages: null,
-      isLoadingPackages: true,
+      isLoadingPackages: false,
       isLoadingShipping: false,
       shippingData: null,
       customAttributes: newCustomAttributes,
@@ -95,6 +95,26 @@ class EditProduct extends Component<PropsType, StateType> {
   }
 
   componentDidMount() {
+    this.handleFetchPackages();
+  }
+
+  setLoadingPackages = (value: boolean) => {
+    this.setState({ isLoadingPackages: value });
+  };
+
+  handleFetchPackages = (metrics?: {
+    lengthCm: number,
+    widthCm: number,
+    heightCm: number,
+    weightG: number,
+  }) => {
+    this.setState({ isLoadingPackages: true });
+    const size = metrics
+      ? metrics.lengthCm * metrics.widthCm * metrics.heightCm
+      : 0;
+    const weight = metrics ? metrics.weightG : 0;
+    // $FlowIgnore
+    const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
     // $FlowIgnore
     const warehouses = pathOr(
       null,
@@ -109,8 +129,8 @@ class EditProduct extends Component<PropsType, StateType> {
       this.setLoadingPackages(true);
       const variables = {
         countryCode,
-        size: 0,
-        weight: 0,
+        size: metrics ? size : baseProduct.volumeCubicCm || 0,
+        weight: metrics ? weight : baseProduct.weightG || 0,
       };
 
       fetchPackages(this.props.environment, variables)
@@ -135,17 +155,16 @@ class EditProduct extends Component<PropsType, StateType> {
     } else {
       this.handlerOffLoadingPackages();
     }
-  }
-
-  setLoadingPackages = (value: boolean) => {
-    this.setState({ isLoadingPackages: value });
   };
 
   handlerOffLoadingPackages = () => {
     this.setState({ isLoadingPackages: false });
   };
 
-  handleSave = (form: FormType & { currency: string }) => {
+  handleSave = (
+    form: FormType & { currency: string },
+    withSavingShipping?: boolean,
+  ) => {
     this.setState({ formErrors: {} });
     const baseProduct = path(['me', 'baseProduct'], this.props);
     if (!baseProduct || !baseProduct.id) {
@@ -164,6 +183,7 @@ class EditProduct extends Component<PropsType, StateType> {
       shortDescription,
       longDescription,
       currency,
+      metrics,
     } = form;
     this.setState(() => ({ isLoading: true }));
     UpdateBaseProductMutation.commit({
@@ -179,6 +199,10 @@ class EditProduct extends Component<PropsType, StateType> {
         ? [{ lang: 'EN', text: seoDescription }]
         : null,
       currency,
+      lengthCm: metrics.lengthCm,
+      widthCm: metrics.widthCm,
+      heightCm: metrics.heightCm,
+      weightG: metrics.weightG,
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });
@@ -213,19 +237,22 @@ class EditProduct extends Component<PropsType, StateType> {
         }
 
         if (form && form.rawIdMainVariant) {
-          this.handleUpdateVariant({
-            idMainVariant: form.idMainVariant,
-            rawIdMainVariant: form.rawIdMainVariant,
-            photoMain: form.photoMain,
-            photos: form.photos,
-            vendorCode: form.vendorCode,
-            price: form.price,
-            cashback: form.cashback,
-            discount: form.discount,
-            preOrderDays: form.preOrderDays,
-            preOrder: form.preOrder,
-            attributeValues: form.attributeValues,
-          });
+          this.handleUpdateVariant(
+            {
+              idMainVariant: form.idMainVariant,
+              rawIdMainVariant: form.rawIdMainVariant,
+              photoMain: form.photoMain,
+              photos: form.photos,
+              vendorCode: form.vendorCode,
+              price: form.price,
+              cashback: form.cashback,
+              discount: form.discount,
+              preOrderDays: form.preOrderDays,
+              preOrder: form.preOrder,
+              attributeValues: form.attributeValues,
+            },
+            withSavingShipping,
+          );
         }
       },
       onError: (error: Error) => {
@@ -248,7 +275,10 @@ class EditProduct extends Component<PropsType, StateType> {
     });
   };
 
-  handleUpdateVariant = (variantData: VariantType) => {
+  handleUpdateVariant = (
+    variantData: VariantType,
+    withSavingShipping?: boolean,
+  ) => {
     if (!variantData.idMainVariant) {
       this.props.showAlert({
         type: 'danger',
@@ -353,6 +383,10 @@ class EditProduct extends Component<PropsType, StateType> {
           text: t.productUpdated,
           link: { text: '' },
         });
+
+        if (withSavingShipping) {
+          this.handleSaveShipping();
+        }
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -549,6 +583,7 @@ class EditProduct extends Component<PropsType, StateType> {
               router={router}
               match={match}
               isLoadingShipping={isLoadingShipping}
+              onFetchPackages={this.handleFetchPackages}
             />
           </div>
         )}
@@ -701,6 +736,11 @@ export default createFragmentContainer(
           lang
           text
         }
+        lengthCm
+        widthCm
+        heightCm
+        weightG
+        volumeCubicCm
       }
     }
   `,

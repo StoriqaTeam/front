@@ -100,6 +100,10 @@ const mutation = graphql`
           id
         }
       }
+      lengthCm
+      widthCm
+      heightCm
+      weightG
     }
   }
 `;

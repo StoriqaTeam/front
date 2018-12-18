@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr, filter, prop, propEq, head, map, slice, sort } from 'ramda';
+import { pathOr, filter, prop, propEq, head, map, sort } from 'ramda';
 import moment from 'moment';
 import { withRouter, routerShape, matchShape } from 'found';
 
@@ -152,24 +152,12 @@ class OrderPage extends Component<PropsType, StateType> {
       status: order.state,
       paymentStatus: order.paymentStatus ? t.paid : t.notPaid,
       statusHistory: map(historyEdge => {
-        let manager = '';
-        if (historyEdge.node.user) {
-          if (historyEdge.node.user.lastName) {
-            manager = historyEdge.node.user.lastName;
-            if (historyEdge.node.user.firstName) {
-              manager = `${manager} ${slice(
-                0,
-                1,
-                historyEdge.node.user.firstName,
-              )}.`;
-            }
-          }
-        }
+        const committer = historyEdge.node.committerRole;
         return {
           date: `${shortDateFromTimestamp(
             historyEdge.node.committedAt,
           )}\n${timeFromTimestamp(historyEdge.node.committedAt)}`,
-          manager,
+          committer,
           status: getStatusStringFromEnum(historyEdge.node.state),
           additionalInfo: historyEdge.node.comment,
         };

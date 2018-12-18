@@ -5,21 +5,27 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  statusHistory: string,
-  date: string,
-  committer: string,
-  status: string,
-  additionalInfo: string,
+  metrics: string,
+  width: string,
+  length: string,
+  height: string,
+  sm: string,
+  g: string,
+  weight: string,
+  dimensions: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    statusHistory: 'Status History',
-    date: 'Date',
-    committer: 'Committer',
-    status: 'Status',
-    additionalInfo: 'Additional Info',
+    metrics: 'Metrics',
+    width: 'Width',
+    length: 'Length',
+    height: 'Height',
+    sm: 'sm',
+    g: 'g',
+    weight: 'Weight',
+    dimensions: 'Dimensions',
   },
 };
 
