@@ -16,10 +16,14 @@ import {
 } from 'ramda';
 import classNames from 'classnames';
 import { withRouter, matchShape } from 'found';
+import { Environment } from 'relay-runtime';
 
+import { Context } from 'components/App';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { urlToInput, inputToUrl } from 'utils';
+
+import fetchAutoCompleteProductName from './fetchAutoCompleteProductName';
 
 import './SearchInput.scss';
 
@@ -34,6 +38,9 @@ type PropsType = {
   onDropDown: () => void,
   isMobile: boolean,
   selectedCategory: ?{ id: string, label: string },
+  relay: {
+    environment: Environment,
+  },
 };
 
 type StateType = {
@@ -110,6 +117,21 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
+  handleInputChange2 = (e: any) => {
+    e.persist();
+    const { value } = e.target;
+    this.setState(() => ({ inputValue: value }));
+
+    fetchAutoCompleteProductName(this.props.relay.environment, { name: '' })
+      .then(data => {
+        console.log('---data', data);
+        return true;
+      })
+      .catch(() => {
+        //
+      });
+  };
+
   handleSearchDropDownSelect = (activeItem: {
     id: string,
     label: string,
@@ -167,7 +189,10 @@ class SearchInput extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.state', this.state);
+    console.log('---this.props', this.props);
     const { onDropDown, isMobile, selectedCategory } = this.props;
+    console.log('---this.state.items', this.state.items);
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
@@ -209,7 +234,7 @@ class SearchInput extends Component<PropsType, StateType> {
               </div>
             )}
             value={this.state.inputValue}
-            onChange={this.handleInputChange}
+            onChange={this.handleInputChange2}
             open={false}
           />
         </div>
