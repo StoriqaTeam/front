@@ -31,6 +31,8 @@ type PropsType = {
   inline: boolean,
   search: boolean,
   align?: 'center' | 'left' | 'right',
+  disabled?: boolean,
+  limitHidden?: boolean,
 };
 
 type StateType = {
@@ -76,7 +78,11 @@ class Input extends Component<PropsType, StateType> {
   input: ?HTMLInputElement;
 
   handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
-    const { onChange } = this.props;
+    const { onChange, limit } = this.props;
+    const { value } = e.target;
+    if (limit != null && value.length > limit) {
+      return;
+    }
     onChange(e);
   };
 
@@ -100,7 +106,6 @@ class Input extends Component<PropsType, StateType> {
 
   renderInput() {
     const {
-      onChange,
       inputRef,
       isAutocomplete,
       id,
@@ -108,13 +113,15 @@ class Input extends Component<PropsType, StateType> {
       type,
       dataTest,
       align,
+      disabled,
     } = this.props;
     return isAutocomplete ? (
       <input
         type="text"
         ref={inputRef}
-        value={this.props.value || ''}
-        onChange={onChange}
+        value={value || ''}
+        disabled={disabled || false}
+        onChange={this.handleChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
@@ -129,7 +136,8 @@ class Input extends Component<PropsType, StateType> {
         name={id}
         type={!isNil(type) ? type : 'text'}
         value={value || ''}
-        onChange={onChange}
+        disabled={disabled || false}
+        onChange={this.handleChange}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.props.onKeyDown}
@@ -152,6 +160,7 @@ class Input extends Component<PropsType, StateType> {
       postfix,
       inline,
       search,
+      limitHidden,
     } = this.props;
     const { labelFloat, isFocus } = this.state;
     return (
@@ -200,7 +209,8 @@ class Input extends Component<PropsType, StateType> {
           )}
         {isFocus &&
           !isUrl &&
-          !isNil(limit) && (
+          !isNil(limit) &&
+          limitHidden !== true && (
             <div
               styleName={classNames('valueLength', {
                 maxValueLength: value && value.length === limit,

@@ -5,7 +5,7 @@ import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
 
-import { log, removeCookie } from 'utils';
+import { log, jwt as JWT } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
@@ -181,7 +181,7 @@ const routes = (
             const {
               location: { pathname },
             } = props;
-            removeCookie('__jwt');
+            JWT.clearJWT();
             throw new RedirectException(`/login?from=${pathname}`);
           } else if (!props) {
             return null;
@@ -211,7 +211,7 @@ const routes = (
             const {
               location: { pathname, search },
             } = props;
-            removeCookie('__jwt');
+            JWT.clearJWT();
             throw new RedirectException(`/login?from=${pathname}${search}`);
           } else if (props && Component) {
             return <Component {...props} />;
@@ -227,6 +227,7 @@ const routes = (
             $shippingId: Int
           ) {
             me {
+              ...UserData_me
               id
               rawId
               phone
@@ -347,7 +348,7 @@ const routes = (
                   isPriority
                 }
               }
-              baseProduct(id: $productID) {
+              baseProduct(id: $productID, visibility: "active") {
                 ...Product_baseProduct
               }
             }
@@ -413,7 +414,7 @@ const routes = (
             const {
               location: { pathname },
             } = props;
-            removeCookie('__jwt');
+            JWT.clearJWT();
             throw new RedirectException(`/login?from=${pathname}`);
           }
         }}
@@ -755,7 +756,7 @@ const routes = (
                 const {
                   location: { pathname },
                 } = props;
-                removeCookie('__jwt');
+                JWT.clearJWT();
                 throw new RedirectException(`/login?from=${pathname}`);
               } else {
                 const isOrder = pathOr(null, ['params', 'orderId'], props);

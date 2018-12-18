@@ -20,6 +20,10 @@
   justify-content: center;
   align-items: center;
   margin: 15rem 5rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin: 10rem 2rem;
+  }
 }
 
 .body {

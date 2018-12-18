@@ -1,4 +1,5 @@
 // @flow strict
+
 import React, { Component, Fragment } from 'react';
 import type { Node } from 'react';
 import { pathOr } from 'ramda';
@@ -16,7 +17,14 @@ import {
   RecoverPassword,
   ResetPassword,
 } from 'components/Authorization';
-import { log, fromRelayError, errorsHandler, setCookie } from 'utils';
+import {
+  log,
+  fromRelayError,
+  errorsHandler,
+  removeCookie,
+  jwt as JWT,
+} from 'utils';
+
 // TODO: while mutations are fixed
 import {
   // $FlowIgnoreMe
@@ -42,7 +50,7 @@ import {
   requestPasswordResetMutation,
 } from './mutations';
 
-import { setPathForRedirectAfterLogin } from './utils';
+import { setPathForRedirectAfterLogin, getAdditionalData } from './utils';
 
 import './Authorization.scss';
 
@@ -129,9 +137,11 @@ class Authorization extends Component<PropsType, StateType> {
         location: { search },
       },
     } = this.props;
-    const from = search.replace(/\?from=/gi, '');
-    if (from && from !== '') {
-      setPathForRedirectAfterLogin(from);
+    if (/\?from=/i.test(search)) {
+      const from = search.replace(/\?from=/gi, '');
+      if (from && from !== '') {
+        setPathForRedirectAfterLogin(from);
+      }
     }
   }
 
@@ -156,13 +166,13 @@ class Authorization extends Component<PropsType, StateType> {
   handleRegistrationClick = (): void => {
     this.setState({ isLoading: true, errors: null });
     const { email, password, firstName, lastName } = this.state;
-
     const input = {
       clientMutationId: '',
       email,
       firstName: firstName || null,
       lastName: lastName || null,
       password,
+      additionalData: getAdditionalData(),
     };
 
     const params = {
@@ -192,6 +202,9 @@ class Authorization extends Component<PropsType, StateType> {
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
+        removeCookie('REFERAL');
+        removeCookie('REFERER');
+        removeCookie('UTM_MARKS');
         const { onCloseModal } = this.props;
         if (onCloseModal) {
           onCloseModal();
@@ -241,17 +254,17 @@ class Authorization extends Component<PropsType, StateType> {
         this.setState({ isLoading: false });
         log.debug({ response });
         // $FlowIgnoreMe
-        const jwt = pathOr(
+        const jwtStr = pathOr(
           null,
           ['getJWTByEmail', 'token'],
           Object.freeze(response),
         );
-        if (jwt) {
+        if (jwtStr) {
           const date = new Date();
           const today = date;
           const expirationDate = date;
-          expirationDate.setDate(today.getDate() + 1);
-          setCookie('__jwt', { value: jwt }, expirationDate);
+          expirationDate.setDate(today.getDate() + 14);
+          JWT.setJWT(jwtStr);
           if (this.props.handleLogin) {
             this.props.handleLogin();
             if (from && from !== '') {

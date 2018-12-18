@@ -98,7 +98,7 @@ class PaymentPopup extends Component<PropsType, StateType> {
           </div>
           <div styleName="paymentInfoWrapper">
             <QRCode
-              value={`ethereum:${walletAddress}[?gas=21000][?value=${amount}]`}
+              value={`ethereum:${walletAddress}amount=${amount}`}
               renderAs="svg"
               size={200}
             />

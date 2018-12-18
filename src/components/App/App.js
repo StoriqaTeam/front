@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createRefetchContainer, graphql } from 'react-relay';
 import type { Environment } from 'relay-runtime';
-import { pick, filter, propEq, concat, complement } from 'ramda';
+import { pick, filter, propEq, concat, complement, pathOr } from 'ramda';
 import { withRouter, matchShape } from 'found';
 
 import { AlertsContainer } from 'components/Alerts';
@@ -13,6 +13,8 @@ import { currentUserShape } from 'utils/shapes';
 
 import type { AlertPropsType } from 'components/Alerts/types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
+
+import { setCookie, getCookie, getQueryRefParams } from 'utils';
 
 import type {
   CategoryType,
@@ -63,6 +65,21 @@ class App extends Component<PropsType, StateType> {
         ...this.makeDirectories(),
       },
     };
+  }
+
+  componentDidMount() {
+    // $FlowIgnoreMe
+    const query = pathOr({}, ['match', 'location', 'query'], this.props);
+    const queryRefParams = getQueryRefParams(query);
+    if (process.env.BROWSER && document.referrer && !getCookie('REFERER')) {
+      setCookie('REFERER', document.referrer);
+    }
+    if (queryRefParams.referal && !getCookie('REFERAL')) {
+      setCookie('REFERAL', queryRefParams.referal);
+    }
+    if (queryRefParams.utmMarks && !getCookie('UTM_MARKS')) {
+      setCookie('UTM_MARKS', queryRefParams.utmMarks);
+    }
   }
 
   componentDidUpdate(prevProps) {

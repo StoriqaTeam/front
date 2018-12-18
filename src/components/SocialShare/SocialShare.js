@@ -15,6 +15,7 @@ import './SocialShare.scss';
 type PropsType = {
   big: boolean,
   noBorder: boolean,
+  noFavorite: boolean,
   noBorderX: boolean,
   facebookUrl?: string,
   pinterestUrl?: string,
@@ -27,6 +28,7 @@ class SocialShare extends Component<PropsType> {
   static defaultProps = {
     big: false,
     noBorder: false,
+    noFavorite: false,
     noBorderX: false,
   };
 
@@ -63,6 +65,7 @@ class SocialShare extends Component<PropsType> {
     const {
       big,
       noBorder,
+      noFavorite,
       noBorderX,
       facebookUrl,
       pinterestUrl,
@@ -127,7 +130,13 @@ class SocialShare extends Component<PropsType> {
           </Fragment>
         </div>
         {!noBorder && (
-          <div styleName={classNames('favorite', { big, noBorder })}>
+          <div
+            styleName={classNames('favorite', {
+              big,
+              noBorder,
+              noFavorite,
+            })}
+          >
             <HeartIcon />
           </div>
         )}

@@ -2,18 +2,29 @@
 
 import Cookies from 'universal-cookie';
 
-export const setCookie = (name: string, value: any, expires: any) => {
+export type CookieType = {
+  remove: (key: string, opts?: {}) => void,
+  set: (key: string, val: string, opts?: {}) => void,
+  get: (key: string) => ?any,
+};
+
+export const setCookie = (
+  name: string,
+  value: any,
+  expires: any,
+  cookiesInstance?: CookieType,
+) => {
   let options = { path: '/' };
   if (expires) {
     options = { ...options, expires };
   }
 
-  const cookies = new Cookies();
+  const cookies = cookiesInstance || new Cookies();
   cookies.set(name, value, { ...options });
 };
 
-export const removeCookie = (name: string) => {
-  const cookies = new Cookies();
+export const removeCookie = (name: string, cookiesInstance?: CookieType) => {
+  const cookies = cookiesInstance || new Cookies();
   cookies.remove(name, { path: '/' });
 };
 

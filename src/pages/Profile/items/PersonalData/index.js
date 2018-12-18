@@ -16,10 +16,8 @@ import {
 import { createFragmentContainer, graphql } from 'react-relay';
 import { validate } from '@storiqa/shared';
 
-import { Input } from 'components/common/Input';
-import { Select } from 'components/common/Select';
+import { Input, Button, Select } from 'components/common';
 import { BirthdateSelect } from 'components/common/BirthdateSelect';
-import { SpinnerButton } from 'components/common/SpinnerButton';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -45,6 +43,7 @@ type DataType = {
 type PropsType = {
   me: {
     id: string,
+    rawId: number,
     firstName: string,
     lastName: string,
     phone: ?string,
@@ -254,6 +253,8 @@ class PersonalData extends Component<PropsType, StateType> {
   render() {
     const { subtitle } = this.props;
     const { data, isLoading, formErrors } = this.state;
+    // $FlowIgnoreMe
+    const refNum = pathOr('', ['me', 'rawId'], this.props);
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
     return (
       <div styleName="personalData">
@@ -295,13 +296,31 @@ class PersonalData extends Component<PropsType, StateType> {
             label: t.labelPhone,
           })}
           <div styleName="formItem">
-            <SpinnerButton
-              onClick={this.handleSave}
-              isLoading={isLoading}
-              dataTest="saveButton"
-            >
-              {t.save}
-            </SpinnerButton>
+            <Input
+              id="ref"
+              disabled
+              value={
+                process.env.REACT_APP_HOST
+                  ? `${process.env.REACT_APP_HOST}?ref=${refNum}`
+                  : ''
+              }
+              label={t.labelRefLink}
+              onChange={() => {}}
+              fullWidth
+            />
+          </div>
+          <div styleName="formItem">
+            <div styleName="button">
+              <Button
+                big
+                fullWidth
+                onClick={this.handleSave}
+                isLoading={isLoading}
+                dataTest="saveButton"
+              >
+                {t.save}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -318,6 +337,7 @@ export default createFragmentContainer(
   graphql`
     fragment PersonalData_me on User {
       id
+      rawId
       phone
       firstName
       lastName
