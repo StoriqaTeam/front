@@ -96,5 +96,30 @@
 }
 
 .searchMenuItem {
-  height: 3rem;
+  font-size: 1.5rem;
+  padding: 0.25rem 1rem;
+  text-align: left;
+  line-height: 2rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue;
+    background-color: transparent;
+  }
+}
+
+.items {
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem 0;
+  border-radius: 0.25rem;
+  background-color: $color-white;
+  box-shadow: $shadow_1;
+  overflow: hidden;
+  cursor: default;
+  z-index: 20;
 }

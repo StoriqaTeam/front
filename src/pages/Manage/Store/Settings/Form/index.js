@@ -390,6 +390,8 @@ class Form extends Component<PropsType, StateType> {
       propEq('id', toLower(defaultLanguage || '')),
       langItems || [],
     );
+    // $FlowIgnore
+    const realSlug = pathOr('', ['store', 'slug'], this.props);
 
     return (
       <div styleName="container">
@@ -461,7 +463,11 @@ class Form extends Component<PropsType, StateType> {
             limit: 50,
           })}
           <div styleName="formItem maxWidthInput">
-            <InputSlug slug={this.state.form.slug} onChange={this.writeSlug} />
+            <InputSlug
+              slug={this.state.form.slug}
+              realSlug={realSlug}
+              onChange={this.writeSlug}
+            />
           </div>
           {this.renderTextarea({
             id: 'shortDescription',

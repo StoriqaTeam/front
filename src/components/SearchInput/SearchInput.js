@@ -18,7 +18,7 @@ import classNames from 'classnames';
 import { withRouter, matchShape } from 'found';
 import { Environment } from 'relay-runtime';
 
-import { Context } from 'components/App';
+import { ContextDecorator } from 'components/App';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { urlToInput, inputToUrl } from 'utils';
@@ -38,14 +38,12 @@ type PropsType = {
   onDropDown: () => void,
   isMobile: boolean,
   selectedCategory: ?{ id: string, label: string },
-  relay: {
-    environment: Environment,
-  },
+  environment: Environment,
 };
 
 type StateType = {
   inputValue: string,
-  items: Array<any>,
+  items: ?Array<any>,
   searchCategoryId: ?number,
   isFocus: boolean,
   activeItem: ?{ id: string, label: string },
@@ -92,11 +90,11 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   }
 
-  onFocus = (): void => {
+  handleFocus = (): void => {
     this.setState({ isFocus: true });
   };
 
-  onBlur = (): void => {
+  handleBlur = (): void => {
     this.setState({ isFocus: false });
   };
 
@@ -120,11 +118,18 @@ class SearchInput extends Component<PropsType, StateType> {
   handleInputChange2 = (e: any) => {
     e.persist();
     const { value } = e.target;
+    console.log('---value', value);
     this.setState(() => ({ inputValue: value }));
 
-    fetchAutoCompleteProductName(this.props.relay.environment, { name: '' })
-      .then(data => {
-        console.log('---data', data);
+    fetchAutoCompleteProductName(this.props.environment, { name: value })
+      .then(({ search }) => {
+        console.log('---search', search);
+        const items = [
+          { id: 1, label: 'Cute' },
+          { id: 2, label: 'Cute bag' },
+          { id: 3, label: 'Cute shirt' },
+        ];
+        this.setState({ items });
         return true;
       })
       .catch(() => {
@@ -188,10 +193,16 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
+  handleOnSetValue = (value: string, item: any) => {
+    console.log('---value, item', value, item);
+    this.setState({ inputValue: value });
+  };
+
   render() {
     console.log('---this.state', this.state);
     console.log('---this.props', this.props);
     const { onDropDown, isMobile, selectedCategory } = this.props;
+    const { isFocus } = this.state;
     console.log('---this.state.items', this.state.items);
     return (
       <div styleName="container">
@@ -208,21 +219,22 @@ class SearchInput extends Component<PropsType, StateType> {
         </div>
         <div styleName="searchInput">
           <Autocomplete
-            wrapperStyle={{ display: 'flex', width: '100%' }}
+            wrapperStyle={{ position: 'relative' }}
             renderInput={props => (
               <div styleName="inputWrapper">
                 <input
                   {...props}
                   styleName="input"
-                  onFocus={this.onFocus}
-                  onBlur={this.onBlur}
+                  onFocus={this.handleFocus}
+                  onBlur={this.handleBlur}
                   placeholder={t.iFind}
                   data-test="searchInput"
                 />
               </div>
             )}
-            items={this.state.items}
+            items={isFocus ? this.state.items : []}
             getItemValue={item => item.label}
+            renderMenu={items => <div styleName="items">{items}</div>}
             renderItem={(item, isHighlighted) => (
               <div
                 key={item.id}
@@ -235,7 +247,9 @@ class SearchInput extends Component<PropsType, StateType> {
             )}
             value={this.state.inputValue}
             onChange={this.handleInputChange2}
-            open={false}
+            onSelect={(selectedValue, item) => {
+              this.handleOnSetValue(selectedValue, item);
+            }}
           />
         </div>
         <button
@@ -250,4 +264,4 @@ class SearchInput extends Component<PropsType, StateType> {
   }
 }
 
-export default withRouter(SearchInput);
+export default withRouter(ContextDecorator(SearchInput));
