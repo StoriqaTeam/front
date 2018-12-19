@@ -23,7 +23,6 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = (mode) => {
   return {
-    mode: 'none',
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"

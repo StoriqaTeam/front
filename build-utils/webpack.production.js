@@ -58,6 +58,20 @@ module.exports = () => {
           .relative(paths.appSrc, info.absoluteResourcePath)
           .replace(/\\/g, '/'),
     },
+    optimization: {
+      runtimeChunk: false,
+      splitChunks: {
+        cacheGroups: {
+          default: false,
+          commons: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendor',
+            chunks: 'all',
+           
+          }
+        }
+      }
+    },
     plugins: [
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
