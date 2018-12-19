@@ -76,7 +76,7 @@ module.exports = (mode) => {
       new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, 'templates')
       }), 
-      // new HardSourceWebpackPlugin(),
+      new HardSourceWebpackPlugin(),
       // for HMR
       new webpack.HotModuleReplacementPlugin(),
       // for HMR
