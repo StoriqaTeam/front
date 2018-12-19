@@ -1,10 +1,12 @@
 @import "../../styles/variables";
 
 .container {
+  position: relative;
   font-family: $font_regular;
   color: $color_grey;
   display: flex;
   padding-top: 0.375rem;
+  z-index: 15;
 
   @media (min-width: 992px) {
     padding-top: 0;
@@ -103,6 +105,12 @@
   &:hover {
     color: $color_blue;
   }
+
+  .itemText {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
 
 .highlighted {
@@ -116,16 +124,15 @@
   width: 100%;
   max-height: 20.1rem;
   overflow: hidden;
-  padding: 1rem 0.5rem;
+  padding: 1rem 0.5rem 0.5rem;
   border-radius: 0.25rem;
   background-color: $color-white;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   border: 1px solid $color_grey_minor;
   border-top: 0;
-  z-index: 20;
 
-  &.hidden {
-    //display: none;
+  &.isMobile {
+    display: none;
   }
 }

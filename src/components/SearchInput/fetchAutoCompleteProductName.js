@@ -3,7 +3,7 @@
 import { fetchQuery, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
 
-const AUTOCOMPLETEPRODUCTNAME_QUERY = graphql`
+const AUTOCOMPLETE_PRODUCT_NAME_QUERY = graphql`
   query fetchAutoCompleteProductName_Query($name: String!) {
     search {
       autoCompleteProductName(name: $name) {
@@ -20,6 +20,6 @@ const fetchAutoCompleteProductName = (
   variables: {
     name: string,
   },
-) => fetchQuery(environment, AUTOCOMPLETEPRODUCTNAME_QUERY, variables);
+) => fetchQuery(environment, AUTOCOMPLETE_PRODUCT_NAME_QUERY, variables);
 
 export default fetchAutoCompleteProductName;
