@@ -28,6 +28,11 @@
     "production": {
       "plugins": [
         [
+          "ramda", {
+            "useES": true
+          }
+        ],
+        [
           "module-resolver",
           {
             "root": [
