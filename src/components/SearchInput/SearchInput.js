@@ -1,27 +1,29 @@
-// @flow
-
-// this component in development (WIP)
+// @flow strict
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import {
-  filter,
-  startsWith,
-  toUpper,
   head,
   pathOr,
   find,
   propEq,
   assocPath,
+  isEmpty,
+  // take,
+  length,
+  findIndex,
 } from 'ramda';
 import classNames from 'classnames';
-import { withRouter, matchShape } from 'found';
+import { withRouter, matchShape, routerShape } from 'found';
 import { Environment } from 'relay-runtime';
 
+import debounce from 'lodash.debounce';
 import { ContextDecorator } from 'components/App';
 import { Icon } from 'components/Icon';
 import { Select } from 'components/common/Select';
 import { urlToInput, inputToUrl } from 'utils';
+
+import type { SelectItemType } from 'types';
 
 import fetchAutoCompleteProductName from './fetchAutoCompleteProductName';
 
@@ -30,40 +32,45 @@ import './SearchInput.scss';
 import t from './i18n';
 
 type PropsType = {
-  items: ?Array<any>,
-  searchCategories: ?Array<{ id: string, label: string }>,
-  router: Object,
+  searchCategories: ?Array<SelectItemType>,
+  router: routerShape,
   searchValue: string,
   match: matchShape,
   onDropDown: () => void,
   isMobile: boolean,
-  selectedCategory: ?{ id: string, label: string },
+  selectedCategory: ?SelectItemType,
   environment: Environment,
 };
 
 type StateType = {
   inputValue: string,
-  items: ?Array<any>,
-  searchCategoryId: ?number,
+  items: ?Array<SelectItemType>,
   isFocus: boolean,
-  activeItem: ?{ id: string, label: string },
+  activeItem: ?SelectItemType,
+  arrowItem: ?SelectItemType,
 };
+
+const maxSearchAmount = 5;
 
 class SearchInput extends Component<PropsType, StateType> {
   static defaultProps = {
     onDropDown: () => {},
   };
+
   constructor(props: PropsType) {
     super(props);
     const { searchValue, searchCategories } = this.props;
     this.state = {
       inputValue: searchValue,
       items: [],
-      // eslint-disable-next-line
-      searchCategoryId: null, // it will be used when we add callback `onSearchCategoryChanged`,
       isFocus: false,
       activeItem: head(searchCategories || []),
+      arrowItem: null,
     };
+    this.handleFetchAutoCompleteProductName = debounce(
+      this.handleFetchAutoCompleteProductName,
+      1000,
+    );
   }
 
   // TODO: Life cycle-hook will DEPRECATE
@@ -90,51 +97,57 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   }
 
-  handleFocus = (): void => {
-    this.setState({ isFocus: true });
+  handleFocus = (e: SyntheticInputEvent<HTMLInputElement>): void => {
+    const { value } = e.target;
+    this.setState({ isFocus: true }, () => {
+      if (value && isEmpty(this.state.items)) {
+        this.handleFetchAutoCompleteProductName(value);
+      }
+    });
   };
 
   handleBlur = (): void => {
     this.setState({ isFocus: false });
   };
 
-  handleInputChange = (e: any): void => {
-    e.persist();
-    const { value } = e.target;
-    this.setState(() => ({ inputValue: value }));
-    if (value === '') {
-      this.setState(() => ({ items: [] }));
-    } else {
-      setTimeout(() => {
-        const result = filter(
-          item => startsWith(toUpper(value), toUpper(item.label)),
-          this.props.items || [],
-        );
-        this.setState({ items: result || [] });
-      }, 300);
+  handleFetchAutoCompleteProductName = (value: string) => {
+    if (!value) {
+      this.setState({ items: [] });
+      return;
     }
-  };
-
-  handleInputChange2 = (e: any) => {
-    e.persist();
-    const { value } = e.target;
-    console.log('---value', value);
-    this.setState(() => ({ inputValue: value }));
-
     fetchAutoCompleteProductName(this.props.environment, { name: value })
-      .then(({ search }) => {
-        console.log('---search', search);
-        const items = [
-          { id: 1, label: 'Cute' },
-          { id: 2, label: 'Cute bag' },
-          { id: 3, label: 'Cute shirt' },
-        ];
-        this.setState({ items });
+      .then(() => {
+        // console.log('---search', search);
+        // const items = [
+        //   { id: '1', label: 'Cute' },
+        //   { id: '2', label: 'Cute bag' },
+        //   { id: '3', label: 'Cute shirt' },
+        //   { id: '4', label: 'Cute shirt 4' },
+        //   { id: '5', label: 'Cute shirt 5' },
+        //   { id: '6', label: 'Cute shirt 6' },
+        //   { id: '7', label: 'Cute shirt 7' },
+        //   { id: '8', label: 'Cute shirt 8' },
+        //   { id: '9', label: 'Cute shirt 9' },
+        //   { id: '10', label: 'Cute shirt 10' },
+        //   { id: '11', label: 'Cute shirt 11' },
+        // ];
+        // this.setState({ items: take(maxSearchAmount, items) });
+        this.setState({ items: [] });
         return true;
       })
       .catch(() => {
         //
       });
+  };
+
+  handleInputChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    this.setState(
+      () => ({ inputValue: value }),
+      () => {
+        this.handleFetchAutoCompleteProductName(value);
+      },
+    );
   };
 
   handleSearchDropDownSelect = (activeItem: {
@@ -187,23 +200,54 @@ class SearchInput extends Component<PropsType, StateType> {
     }
   };
 
-  handleKeydown = (e: any): void => {
-    if (e.keyCode === 13 && this.state.isFocus) {
+  handleKeydown = (e: KeyboardEvent): void => {
+    const { isFocus, items, arrowItem } = this.state;
+    if (e.keyCode === 13 && isFocus && isEmpty(items)) {
+      if (arrowItem) {
+        this.handleOnSetValue(arrowItem.label);
+        return;
+      }
       this.handleSearch();
+    }
+    if (isFocus && items && !isEmpty(items)) {
+      if (e.keyCode === 38) {
+        this.setState((prevState: StateType) => {
+          const arrowIdx = prevState.arrowItem
+            ? findIndex(propEq('id', prevState.arrowItem.id))(items) - 1
+            : length(items) - 1;
+          return {
+            arrowItem: items[arrowIdx === -1 ? length(items) - 1 : arrowIdx],
+          };
+        });
+      }
+      if (e.keyCode === 40) {
+        this.setState((prevState: StateType) => {
+          const arrowIdx = prevState.arrowItem
+            ? findIndex(propEq('id', prevState.arrowItem.id))(items) + 1
+            : 0;
+          return {
+            arrowItem: items[arrowIdx === maxSearchAmount ? 0 : arrowIdx],
+          };
+        });
+      }
     }
   };
 
-  handleOnSetValue = (value: string, item: any) => {
-    console.log('---value, item', value, item);
-    this.setState({ inputValue: value });
+  handleOnSetValue = (value: string) => {
+    this.setState(
+      {
+        inputValue: value,
+        items: [],
+        isFocus: false,
+        arrowItem: null,
+      },
+      this.handleSearch,
+    );
   };
 
   render() {
-    console.log('---this.state', this.state);
-    console.log('---this.props', this.props);
     const { onDropDown, isMobile, selectedCategory } = this.props;
-    const { isFocus } = this.state;
-    console.log('---this.state.items', this.state.items);
+    const { isFocus, items: searchItems, inputValue, arrowItem } = this.state;
     return (
       <div styleName="container">
         <div styleName="searchCategorySelect">
@@ -225,30 +269,44 @@ class SearchInput extends Component<PropsType, StateType> {
                 <input
                   {...props}
                   styleName="input"
-                  onFocus={this.handleFocus}
-                  onBlur={this.handleBlur}
+                  onFocus={e => {
+                    props.onFocus();
+                    this.handleFocus(e);
+                  }}
+                  onBlur={() => {
+                    props.onBlur();
+                    this.handleBlur();
+                  }}
                   placeholder={t.iFind}
                   data-test="searchInput"
                 />
               </div>
             )}
-            items={isFocus ? this.state.items : []}
+            items={searchItems}
             getItemValue={item => item.label}
-            renderMenu={items => <div styleName="items">{items}</div>}
-            renderItem={(item, isHighlighted) => (
+            renderMenu={items => (
+              <div>
+                {!isEmpty(items) && (
+                  <div styleName={classNames('items', { hidden: !isFocus })}>
+                    {items}
+                  </div>
+                )}
+              </div>
+            )}
+            renderItem={item => (
               <div
                 key={item.id}
                 styleName={classNames('searchMenuItem', {
-                  highlighted: isHighlighted,
+                  highlighted: arrowItem && arrowItem.id === item.id,
                 })}
               >
                 {item.label}
               </div>
             )}
-            value={this.state.inputValue}
-            onChange={this.handleInputChange2}
-            onSelect={(selectedValue, item) => {
-              this.handleOnSetValue(selectedValue, item);
+            value={inputValue}
+            onChange={this.handleInputChange}
+            onSelect={selectedValue => {
+              this.handleOnSetValue(selectedValue);
             }}
           />
         </div>
