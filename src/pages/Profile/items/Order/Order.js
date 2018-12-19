@@ -120,10 +120,6 @@ export default createRefetchContainer(
               state
               committedAt
               committerRole
-              user {
-                firstName
-                lastName
-              }
               comment
             }
           }

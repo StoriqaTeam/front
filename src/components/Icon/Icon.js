@@ -23,6 +23,8 @@ import Eye from 'components/Icon/svg/eye.svg';
 import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
 import Facebook from 'components/Icon/svg/facebook.svg';
 import FacebookGray from 'components/Icon/svg/facebook_gray.svg';
+import MediumGray from 'components/Icon/svg/medium_gray.svg';
+import RedditGray from 'components/Icon/svg/reddit_gray.svg';
 import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
@@ -105,6 +107,8 @@ const iconsMap = {
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
   facebookGray: <FacebookGray />,
+  mediumGray: <MediumGray />,
+  redditGray: <RedditGray />,
   google: <Google />,
   heart: <Heart />,
   instagram: <Instagram />,
@@ -143,6 +147,7 @@ const iconsMap = {
   calendar: <Calendar />,
   addVariant: <AddVariant />,
   copy: <Copy />,
+  //
   coupon: <Coupon />,
 
   // For product

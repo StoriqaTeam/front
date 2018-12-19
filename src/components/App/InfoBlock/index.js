@@ -35,9 +35,9 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '1',
-        type: 'pinterestGray',
+        type: 'mediumGray',
         size: 32,
-        href: 'https://www.pinterest.com/storiqa',
+        href: 'https://medium.com/storiqa',
       },
       {
         id: '2',
@@ -53,9 +53,9 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '4',
-        type: 'vkGray',
+        type: 'redditGray',
         size: 32,
-        href: 'https://vk.com/storiqa',
+        href: 'https://www.reddit.com/r/Storiqa/',
       },
     ],
     // links: [
