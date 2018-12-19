@@ -131,14 +131,14 @@
     "style-loader": "0.23.1",
     "sw-precache-webpack-plugin": "0.11.5",
     "url-loader": "1.1.2",
-    "webpack": "4.26.0",
+    "webpack": "4.28.0",
     "webpack-bundle-analyzer": "3.0.3",
     "webpack-cli": "3.1.2",
     "webpack-dev-middleware": "3.4.0",
     "webpack-dev-server": "3.1.10",
     "webpack-hot-middleware": "2.24.3",
     "webpack-manifest-plugin": "2.0.4",
-    "webpack-merge": "4.1.4",
+    "webpack-merge": "4.1.5",
     "webpack-node-externals": "1.7.2"
   },
   "peerDependencies": {
