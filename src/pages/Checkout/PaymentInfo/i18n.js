@@ -16,7 +16,7 @@ const translations: TranslationsBundleType = {
   en: {
     order: 'Order',
     exchangeNotification:
-      "Cashback will be sent to the address used for a payment. Don't use exchanges addresses as we can\t guarantee cashback receipt in this case.",
+      "Cashback will be sent to the address used for a payment. Don't use exchanges addresses as we can't guarantee cashback receipt in this case.",
     attention: 'Attention!',
     ok: 'ok',
   },
