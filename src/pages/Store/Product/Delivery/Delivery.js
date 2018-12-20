@@ -75,13 +75,18 @@ class Delivery extends Component<PropsType, StateType> {
         if (deliveryPackages && length(deliveryPackages) === 1) {
           deliveryPackage = head(deliveryPackages);
         }
-        this.setState({
-          deliveryPackages,
-          deliveryPackage,
-          country: country
-            ? { id: country.alpha3, label: country.label }
-            : null,
-        });
+        this.setState(
+          {
+            deliveryPackages,
+            deliveryPackage,
+            country: country
+              ? { id: country.alpha3, label: country.label }
+              : null,
+          },
+          () => {
+            this.handleOnSavePackage();
+          },
+        );
         return true;
       })
       .finally(() => {
@@ -90,22 +95,6 @@ class Delivery extends Component<PropsType, StateType> {
       .catch(error => {
         log.error(error);
       });
-  };
-
-  handleOpenModal = () => {
-    if (this.state.country) {
-      return;
-    }
-    const { deliveryData } = this.props;
-    if (!deliveryData.country) {
-      this.fetchData();
-    } else {
-      this.setState({
-        country: deliveryData.country,
-        deliveryPackage: deliveryData.deliveryPackage,
-        deliveryPackages: deliveryData.deliveryPackages,
-      });
-    }
   };
 
   handleOnChangeCountry = (country: ?SelectItemType) => {
@@ -139,9 +128,14 @@ class Delivery extends Component<PropsType, StateType> {
       this.state.deliveryPackages || [],
     );
 
-    this.setState({
-      deliveryPackage,
-    });
+    this.setState(
+      {
+        deliveryPackage,
+      },
+      () => {
+        this.handleOnSavePackage();
+      },
+    );
   };
 
   handleOnSavePackage = () => {
