@@ -60,7 +60,7 @@ class HeaderDisclaimer extends Component<{}, StateType> {
             Support
           </a>
           <button styleName="cross" onClick={this.handleHiddenDisclaimer}>
-            <Icon type="cross" size={16} />
+            <Icon type="cross" size={8} />
           </button>
         </div>
       </div>
