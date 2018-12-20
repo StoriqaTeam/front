@@ -27,7 +27,6 @@ type PropsType = {
   baseProductRawId: number,
   countries: Array<CountryType>,
   onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
-  deliveryData: DeliveryDataType,
 };
 
 class Delivery extends Component<PropsType, StateType> {
@@ -221,7 +220,7 @@ class Delivery extends Component<PropsType, StateType> {
                     renderSelectItem={(item: SelectItemType) => {
                       const pkgType: ?PackageType = find(
                         whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
-                        this.state.deliveryPackages,
+                        this.state.deliveryPackages || [],
                       );
                       const isChecked =
                         deliveryPackage &&
@@ -250,7 +249,7 @@ class Delivery extends Component<PropsType, StateType> {
                                     selected: isChecked,
                                   })}
                                 >
-                                  {isChecked ? (
+                                  {isChecked === true ? (
                                     <strong>{pkgType.name}</strong>
                                   ) : (
                                     pkgType.name
