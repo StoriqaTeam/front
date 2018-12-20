@@ -17,6 +17,16 @@ type PropsType = {
   cartQuantity: number,
 };
 
+const numberToWords = (val: number): string => {
+  if (val <= 10) {
+    return `${val}`;
+  } else if (val >= 11 && val <= 100) {
+    return t.numbersInWords.dozens;
+  }
+
+  return t.numbersInWords.hundreds;
+};
+
 const ProductQuantity = (props: PropsType) => {
   const isPreOrderAvailable =
     props.quantity === 0 && props.preOrder && props.preOrderDays;
@@ -42,7 +52,7 @@ const ProductQuantity = (props: PropsType) => {
                 zeroQuantity: props.quantity === 0,
               })}
             >
-              {`${t.inStock} (${props.quantity})`}
+              {`${t.inStock} (${numberToWords(props.quantity)})`}
             </span>
           </div>
         </Fragment>

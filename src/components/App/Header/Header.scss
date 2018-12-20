@@ -55,3 +55,31 @@ $burger_menu_size: 7rem;
   position: relative;
   transition: padding-bottom 0.2s ease;
 }
+
+.searchItems {
+  position: absolute;
+  background-color: $color_white;
+  z-index: 20;
+  width: 100%;
+  background-color: $color_white;
+  padding: 1rem;
+  top: 100%;
+  margin-top: 1px;
+
+  .searchItem {
+    font-size: 14px;
+    height: 3.75rem;
+    line-height: 3.75rem;
+    padding: 0 1rem;
+    background-color: transparent;
+    transition: $transition_all_ease;
+    cursor: pointer;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &:hover {
+      color: $color_blue;
+    }
+  }
+}

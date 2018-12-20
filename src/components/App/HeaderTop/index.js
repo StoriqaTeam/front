@@ -162,7 +162,9 @@ class HeaderTop extends PureComponent<PropsType> {
           </a>
         </div>
         <div>
-          {isShopCreated ? null : <a href="/start-selling">{t.startSelling}</a>}
+          {isShopCreated ? null : (
+            <a href="https://selling.storiqa.com/">{t.startSelling}</a>
+          )}
         </div>
       </div>
     );

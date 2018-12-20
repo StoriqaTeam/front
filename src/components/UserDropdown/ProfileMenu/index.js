@@ -20,14 +20,6 @@ type PropsTypes = {
   isWizardComplete: boolean,
 };
 
-// TODO: need back & refactor
-const getStoreLink = (myStoreId: ?number) => {
-  if (myStoreId) {
-    return `/manage/store/${myStoreId}`;
-  }
-  return '/start-selling';
-};
-
 const ProfileMenu = ({
   lastName,
   firstName,
@@ -70,13 +62,19 @@ const ProfileMenu = ({
       >
         {t.profileSettings}
       </Link>
-      <Link
-        to={getStoreLink(isWizardComplete && myStoreId ? myStoreId : null)}
-        styleName="item"
-        data-test="header-user-menu-myShops"
-      >
-        <span>{isWizardComplete ? t.myShop : t.startSelling}</span>
-      </Link>
+      {isWizardComplete && myStoreId ? (
+        <Link
+          to={`/manage/store/${myStoreId}`}
+          styleName="item"
+          data-test="header-user-menu-myShops"
+        >
+          <span>{t.myShop}</span>
+        </Link>
+      ) : (
+        <a href="https://selling.storiqa.com/" styleName="item">
+          {t.startSelling}
+        </a>
+      )}
     </div>
     <Link
       styleName="logout"

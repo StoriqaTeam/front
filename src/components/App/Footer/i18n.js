@@ -5,21 +5,19 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  storiqaMarket: string,
+  goods: string,
   storiqaMarket_sales: string,
-  storiqaMarket_recommended: string,
   storiqaMarket_popular: string,
-  storiqaMarket_reviews: string,
   //
-  sections: string,
-  sections_showcase: string,
-  sections_goods: string,
-  sections_shop: string,
-  sections_storiqaCommunity: string,
+  marketplace: string,
+  marketplace_termsOfUse: string,
+  marketplace_privacyPolicy: string,
+  marketplace_listOfProhibitedGoods: string,
   //
   services: string,
-  services_qualityAssurance: string,
   services_storiqaWallet: string,
+  services_sellingGuides: string,
+  services_helpCenter: string,
   //
   copyRight: string,
   allRightsReserved: string,
@@ -31,21 +29,19 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    storiqaMarket: 'Storiqa Market',
+    goods: 'Goods',
     storiqaMarket_sales: 'Sales',
-    storiqaMarket_recommended: 'Recommended',
     storiqaMarket_popular: 'Popular',
-    storiqaMarket_reviews: 'Reviews',
     //
-    sections: 'Sections',
-    sections_showcase: 'Showcase',
-    sections_goods: 'Goods',
-    sections_shop: 'Shop',
-    sections_storiqaCommunity: 'Storiqa Community',
+    marketplace: 'Marketplace',
+    marketplace_termsOfUse: 'Terms of use',
+    marketplace_privacyPolicy: 'Privacy Policy',
+    marketplace_listOfProhibitedGoods: 'List of Prohibited Goods',
     //
     services: 'Services',
-    services_qualityAssurance: 'Quality Assurance',
     services_storiqaWallet: 'Storiqa Wallet',
+    services_sellingGuides: 'Selling guides',
+    services_helpCenter: 'Help center',
     //
     copyRight:
       '© Storiqa Marketplace DBA Storiqa Global Trades Inc. (Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong)',
