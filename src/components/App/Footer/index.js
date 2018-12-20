@@ -147,7 +147,7 @@ class Footer extends PureComponent<PropsType, StateType> {
           <div styleName="footerTop">
             <Row>
               <Col md={12} lg={4} xl={4}>
-                <div>
+                <div styleName="logo">
                   <Row>
                     <FooterLogo />
                   </Row>
