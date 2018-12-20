@@ -60,10 +60,7 @@ const mutation = graphql`
           node {
             state
             committedAt
-            user {
-              firstName
-              lastName
-            }
+            committerRole
             comment
           }
         }
