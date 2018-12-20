@@ -291,6 +291,12 @@ export default createFragmentContainer(
               lang
               text
             }
+            store {
+              name {
+                lang
+                text
+              }
+            }
             currency
             products(first: 1) {
               edges {
@@ -319,6 +325,12 @@ export default createFragmentContainer(
             name {
               lang
               text
+            }
+            store {
+              name {
+                lang
+                text
+              }
             }
             currency
             products(first: 1) {

@@ -179,6 +179,12 @@ export default createPaginationContainer(
               text
               lang
             }
+            store {
+              name {
+                text
+                lang
+              }
+            }
             category {
               rawId
             }
