@@ -4,7 +4,6 @@ import buildApp from 'components/entry';
 import { log } from 'utils';
 
 import './windowModal';
-import './index.scss';
 
 /* eslint-disable promise/no-nesting */
 
