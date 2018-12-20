@@ -42,6 +42,12 @@ type PropsType = {
     },
     rating: number,
     priceUsd: ?number,
+    store: {
+      name: Array<{
+        lang: string,
+        text: string,
+      }>,
+    },
   },
   isSearchPage: boolean,
 };
@@ -49,7 +55,16 @@ type PropsType = {
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: { rawId, storeId, name, products, currency, rating, priceUsd },
+      item: {
+        rawId,
+        storeId,
+        name,
+        products,
+        currency,
+        rating,
+        priceUsd,
+        store,
+      },
       isSearchPage,
     } = this.props;
     let discount = null;
@@ -68,6 +83,7 @@ class CardProduct extends PureComponent<PropsType> {
     const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
+    //
     return (
       <div styleName="container">
         <Link to={productLink} styleName="body" data-test={rawId}>
@@ -83,15 +99,30 @@ class CardProduct extends PureComponent<PropsType> {
               <ImageLoader
                 fit
                 src={convertSrc(photoMain || '', 'medium')}
-                loader={<BannerLoading />}
+                loader={
+                  <div styleName="bannerLoading">
+                    <BannerLoading />
+                  </div>
+                }
               />
             )}
           </div>
           <div styleName="bottom">
-            <div>
+            <div styleName="levelOne">
               <Rating value={rating} />
-              {name && <div styleName="title">{getNameText(name, lang)}</div>}
+              {Boolean(cashbackValue) && (
+                <CardProductCashback cashbackValue={cashbackValue} />
+              )}
             </div>
+            {name && (
+              <div styleName="titleWrap">
+                <div styleName="title">{getNameText(name, lang)}</div>
+                {store &&
+                  store.name && (
+                    <div styleName="store">{getNameText(store.name, lang)}</div>
+                  )}
+              </div>
+            )}
             <div styleName="priceWrap">
               <div
                 styleName={classNames('price', {
@@ -122,9 +153,14 @@ class CardProduct extends PureComponent<PropsType> {
                       </div>
                       {priceUsd && (
                         <CurrencyPrice
+                          reverse
+                          dark
+                          withTilda
+                          withSlash
                           price={priceItem.price || 0}
+                          fontSize={16}
                           currencyPrice={priceUsd}
-                          currencyCode="USD"
+                          currencyCode="$"
                           toFixedValue={2}
                         />
                       )}
@@ -141,9 +177,6 @@ class CardProduct extends PureComponent<PropsType> {
                     />
                   )}
                 />
-                {Boolean(cashbackValue) && (
-                  <CardProductCashback cashbackValue={cashbackValue} />
-                )}
               </div>
             </div>
           </div>

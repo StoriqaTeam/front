@@ -2,15 +2,6 @@
 
 .cashbackWrapper {
   display: block;
-  //margin-top: 1rem;
-
-  @media (min-width: $md) {
-    //display: flex;
-  }
-
-  @media (max-width: #{$lg - 1px}) {
-    margin-top: 0.5rem;
-  }
 }
 
 .cashback {
