@@ -9,9 +9,8 @@ import { log, jwt as JWT } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
-import { Profile } from 'pages/Profile';
 import Start from 'pages/Start/Start';
-import { NewStore, EditStore } from 'pages/Manage/Store/Settings';
+import { NewStore } from 'pages/Manage/Store/Settings';
 import { Products } from 'pages/Manage/Store/Products';
 import { Storages } from 'pages/Manage/Store/Storages';
 import { OrderInvoice } from 'pages/Manage/Store/OrderInvoice';
@@ -22,27 +21,47 @@ import {
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
-import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
-import { Product as ProductCard } from 'pages/Store/Product';
-import Categories from 'pages/Search/Categories';
-import Cart from 'pages/Cart';
 import Checkout from 'pages/Checkout';
-import { BuyNow } from 'pages/BuyNow';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import { Logout } from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
-import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
-import { StartSelling } from 'pages/StartSelling';
-import { Login } from 'pages/Login';
+import StoreAbout from 'pages/Store/About/About';
+import StoreItems from 'pages/Store/Items/StoreItems';
+import Showcase from 'pages/Store/Showcase/Showcase';
+// import { Profile } from 'pages/Profile';
+// import Categories from 'pages/Search/Categories';
+// import { StartSelling } from 'pages/StartSelling';
+// import Cart from 'pages/Cart';
+// import { BuyNow } from 'pages/BuyNow';
+// import { Login } from 'pages/Login';
+// import { Product as ProductCard } from 'pages/Store/Product';
+// import Stores from 'pages/Stores/Stores';
 import { PasswordReset } from 'pages/PasswordReset';
 import {
   EmailConfirmed,
   DeviceConfirmed,
   PasswordResetDeny,
 } from 'pages/Wallet';
+
+import loadable from '@loadable/component';
+
+const StartSelling = loadable(() =>
+  import('../pages/StartSelling/StartSelling'),
+);
+const Categories = loadable(() => import('../pages/Search/Categories'));
+const Cart = loadable(() => import('../pages/Cart'));
+const BuyNow = loadable(() => import('../pages/BuyNow/BuyNow'));
+const Login = loadable(() => import('../pages/Login/Login'));
+const ProductCard = loadable(() => import('../pages/Store/Product/Product'));
+const Profile = loadable(() => import('../pages/Profile/Profile'));
+const EditStore = loadable(() =>
+  import('../pages/Manage/Store/Settings/EditStore'),
+);
+const Stores = loadable(() => import('../pages/Stores/Stores'));
+const Store = loadable(() => import('../pages/Store/Store'));
 
 const routes = (
   <Route>

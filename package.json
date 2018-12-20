@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@loadable/component": "5.2.2",
     "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
     "axios": "0.18.0",
     "body-parser": "1.18.2",
