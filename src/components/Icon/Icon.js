@@ -29,6 +29,7 @@ import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
 import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import YoutubeGray from 'components/Icon/svg/youtube_gray.svg';
 import LeftArrowSlider from 'components/Icon/svg/leftArrowSlider.svg';
 import Login from 'components/Icon/svg/login.svg';
 import Logo from 'components/Icon/svg/logo.svg';
@@ -113,6 +114,7 @@ const iconsMap = {
   heart: <Heart />,
   instagram: <Instagram />,
   instagramGray: <InstagramGray />,
+  youtubeGray: <YoutubeGray />,
   leftArrowSlider: <LeftArrowSlider />,
   login: <Login />,
   logo: <Logo />,
@@ -147,7 +149,6 @@ const iconsMap = {
   calendar: <Calendar />,
   addVariant: <AddVariant />,
   copy: <Copy />,
-  //
   coupon: <Coupon />,
 
   // For product

@@ -31,7 +31,7 @@ class InfoBlock extends Component<{}, StateType> {
         id: '0',
         type: 'facebookGray',
         size: 32,
-        href: 'https://www.facebook.com/storiqa',
+        href: 'https://www.facebook.com/storiqa.marketplace/',
       },
       {
         id: '1',
@@ -43,7 +43,7 @@ class InfoBlock extends Component<{}, StateType> {
         id: '2',
         type: 'twitterGray',
         size: 32,
-        href: 'https://twitter.com/storiqa',
+        href: 'https://twitter.com/StoriqaMarket',
       },
       {
         id: '3',
@@ -56,6 +56,12 @@ class InfoBlock extends Component<{}, StateType> {
         type: 'redditGray',
         size: 32,
         href: 'https://www.reddit.com/r/Storiqa/',
+      },
+      {
+        id: '5',
+        type: 'youtubeGray',
+        size: 32,
+        href: 'https://www.youtube.com/channel/UCU_VW6azYd0cXFACzofUy5w',
       },
     ],
     // links: [
