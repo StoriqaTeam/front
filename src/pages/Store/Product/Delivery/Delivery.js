@@ -213,68 +213,70 @@ class Delivery extends Component<PropsType, StateType> {
                   />
                 </div>
               )}
-              {!isFetching && (
-                <Select
-                  forForm
-                  fullWidth
-                  label="Transport company"
-                  items={transportCompanies}
-                  onSelect={log.debug}
-                  activeItem={deliveryPackageSelectItem}
-                  dataTest="productDeliveryPackageSelect"
-                  renderSelectItem={(item: SelectItemType) => {
-                    const pkgType: ?PackageType = find(
-                      whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
-                      this.state.deliveryPackages,
-                    );
-                    const isChecked =
-                      deliveryPackage &&
-                      parseInt(item.id, 10) ===
-                        deliveryPackage.companyPackageRawId;
-                    return (
-                      pkgType && (
-                        /* eslint-disable */
-                        <div
-                          styleName="deliveryCompanyItem"
-                          key={pkgType.id}
-                          onClick={() => {
-                            this.handleOnSelectPackage(item);
-                          }}
-                          /* eslint-enable */
-                        >
-                          <div styleName="companyNameRow">
-                            <CheckedIcon
-                              styleName={classname('checked', {
-                                hidden: !isChecked,
-                              })}
-                            />
-                            <div styleName="companyNameWrap">
-                              <div
-                                styleName={classname('companyName', {
-                                  selected: isChecked,
+              {!isFetching &&
+                deliveryPackages instanceof Array &&
+                deliveryPackages.length > 0 && (
+                  <Select
+                    forForm
+                    fullWidth
+                    label="Transport company"
+                    items={transportCompanies}
+                    onSelect={log.debug}
+                    activeItem={deliveryPackageSelectItem}
+                    dataTest="productDeliveryPackageSelect"
+                    renderSelectItem={(item: SelectItemType) => {
+                      const pkgType: ?PackageType = find(
+                        whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
+                        this.state.deliveryPackages,
+                      );
+                      const isChecked =
+                        deliveryPackage &&
+                        parseInt(item.id, 10) ===
+                          deliveryPackage.companyPackageRawId;
+                      return (
+                        pkgType && (
+                          /* eslint-disable */
+                          <div
+                            styleName="deliveryCompanyItem"
+                            key={pkgType.id}
+                            onClick={() => {
+                              this.handleOnSelectPackage(item);
+                            }}
+                            /* eslint-enable */
+                          >
+                            <div styleName="companyNameRow">
+                              <CheckedIcon
+                                styleName={classname('checked', {
+                                  hidden: !isChecked,
                                 })}
-                              >
-                                {isChecked ? (
-                                  <strong>{pkgType.name}</strong>
-                                ) : (
-                                  pkgType.name
-                                )}
-                              </div>
-                              <div
-                                styleName={classname('price', {
-                                  selected: isChecked,
-                                })}
-                              >
-                                {`${pkgType.price} STQ`}
+                              />
+                              <div styleName="companyNameWrap">
+                                <div
+                                  styleName={classname('companyName', {
+                                    selected: isChecked,
+                                  })}
+                                >
+                                  {isChecked ? (
+                                    <strong>{pkgType.name}</strong>
+                                  ) : (
+                                    pkgType.name
+                                  )}
+                                </div>
+                                <div
+                                  styleName={classname('price', {
+                                    selected: isChecked,
+                                  })}
+                                >
+                                  {`${pkgType.price} STQ`}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    );
-                  }}
-                />
-              )}
+                        )
+                      );
+                    }}
+                  />
+                )}
             </div>
           </div>
         </div>
