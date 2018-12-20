@@ -19,7 +19,6 @@ const BannersSlider = (props: PropsTypes) => (
       items={props.items}
       slidesToShow={1}
       fade
-      autoplaySpeed={10000}
     />
   </div>
 );
