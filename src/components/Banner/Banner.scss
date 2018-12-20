@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .container {
   position: relative;
   display: block;
@@ -8,18 +10,54 @@
 
 .wrap {
   position: relative;
-  height: 22rem;
+  height: 23rem;
 
-  @media (min-width: 768px) {
-    height: 24rem;
+  &.single {
+    @media (max-width: #{$xxl - 1px}) {
+      height: 37rem;
+    }
+
+    @media (max-width: #{$xl - 1px}) {
+      height: 31rem;
+    }
+
+    @media (max-width: #{$lg - 1px}) {
+      height: 26rem;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      height: 20rem;
+    }
+
+    @media (max-width: #{$sm - 1px}) {
+      height: 27rem;
+    }
+
+    @media (min-width: $xxl) {
+      height: 40rem;
+    }
   }
 
-  @media (min-width: 992px) {
-    height: 29rem;
-  }
+  &.double {
+    @media (max-width: #{$xl - 1px}) {
+      height: 31rem;
+    }
 
-  @media (min-width: 1200px) {
-    height: 40rem;
+    @media (max-width: #{$lg - 1px}) {
+      height: 24rem;
+    }
+
+    @media (max-width: #{$md - 1px}) {
+      height: 34rem;
+    }
+
+    @media (max-width: #{$sm - 1px}) {
+      height: 26rem;
+    }
+
+    @media (min-width: $xl) {
+      height: 34rem;
+    }
   }
 }
 
