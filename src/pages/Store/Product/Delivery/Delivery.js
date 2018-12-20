@@ -2,17 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  head,
-  pathOr,
-  find,
-  propEq,
-  map,
-  isEmpty,
-  isNil,
-  length,
-  whereEq,
-} from 'ramda';
+import { head, pathOr, find, propEq, map, length, whereEq } from 'ramda';
 import classname from 'classnames';
 
 import { Select, SpinnerCircle } from 'components/common';
@@ -143,7 +133,12 @@ class Delivery extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnSelectPackage = (deliveryPackage: PackageType) => {
+  handleOnSelectPackage = (item: SelectItemType) => {
+    const deliveryPackage = find(
+      whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
+      this.state.deliveryPackages || [],
+    );
+
     this.setState({
       deliveryPackage,
     });
@@ -204,86 +199,97 @@ class Delivery extends Component<PropsType, StateType> {
           </div>
           <div styleName="chooseDeliveryCompany">
             <div styleName="select">
-              <Select
-                forForm
-                fullWidth
-                label="Transport company"
-                items={transportCompanies}
-                onSelect={log.debug}
-                activeItem={deliveryPackageSelectItem}
-                dataTest="productDeliveryPackageSelect"
-                renderSelectItem={(item: SelectItemType) => {
-                  const pkgType: ?PackageType = find(
-                    whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
-                    this.state.deliveryPackages,
-                  );
-                  console.log({ item, deliveryPackage });
-                  const isChecked =
-                    deliveryPackage &&
-                    parseInt(item.id, 10) ===
-                      deliveryPackage.companyPackageRawId;
-                  return (
-                    pkgType && (
-                      <div styleName="deliveryCompanyItem" key={pkgType.id}>
-                        <div styleName="companyNameRow">
-                          <CheckedIcon
-                            styleName={classname('checked', {
-                              hidden: !isChecked,
-                            })}
-                          />
-                          <div styleName="companyNameWrap">
-                            <div
-                              styleName={classname('companyName', {
-                                selected: isChecked,
+              {isFetching && (
+                <div styleName="loading">
+                  <SpinnerCircle
+                    additionalStyles={{
+                      width: '3rem',
+                      height: '3rem',
+                    }}
+                    containerStyles={{
+                      marginLeft: '3rem',
+                      marginTop: '3rem',
+                    }}
+                  />
+                </div>
+              )}
+              {!isFetching && (
+                <Select
+                  forForm
+                  fullWidth
+                  label="Transport company"
+                  items={transportCompanies}
+                  onSelect={log.debug}
+                  activeItem={deliveryPackageSelectItem}
+                  dataTest="productDeliveryPackageSelect"
+                  renderSelectItem={(item: SelectItemType) => {
+                    const pkgType: ?PackageType = find(
+                      whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
+                      this.state.deliveryPackages,
+                    );
+                    const isChecked =
+                      deliveryPackage &&
+                      parseInt(item.id, 10) ===
+                        deliveryPackage.companyPackageRawId;
+                    return (
+                      pkgType && (
+                        /* eslint-disable */
+                        <div
+                          styleName="deliveryCompanyItem"
+                          key={pkgType.id}
+                          onClick={() => {
+                            this.handleOnSelectPackage(item);
+                          }}
+                          /* eslint-enable */
+                        >
+                          <div styleName="companyNameRow">
+                            <CheckedIcon
+                              styleName={classname('checked', {
+                                hidden: !isChecked,
                               })}
-                            >
-                              {isChecked ? (
-                                <strong>{pkgType.name}</strong>
-                              ) : (
-                                pkgType.name
-                              )}
-                            </div>
-                            <div
-                              styleName={classname('price', {
-                                selected: isChecked,
-                              })}
-                            >
-                              {`${pkgType.price} STQ`}
+                            />
+                            <div styleName="companyNameWrap">
+                              <div
+                                styleName={classname('companyName', {
+                                  selected: isChecked,
+                                })}
+                              >
+                                {isChecked ? (
+                                  <strong>{pkgType.name}</strong>
+                                ) : (
+                                  pkgType.name
+                                )}
+                              </div>
+                              <div
+                                styleName={classname('price', {
+                                  selected: isChecked,
+                                })}
+                              >
+                                {`${pkgType.price} STQ`}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )
-                  );
-                }}
-              />
+                      )
+                    );
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
-        {isFetching && (
-          <div styleName="loading">
-            <SpinnerCircle
-              additionalStyles={{ width: '4rem', height: '4rem' }}
-              containerStyles={{
-                width: '4rem',
-                height: '4rem',
-                marginLeft: 0,
-              }}
-            />
-          </div>
-        )}
         {deliveryPackage && (
           <div key={deliveryPackage.id} styleName="deliveryPackage">
-            <div styleName="td tdCompany">
+            <div styleName="logoWrapper">
               {deliveryPackage.logo !== null &&
                 deliveryPackage.logo !== '' && (
                   <img src={deliveryPackage.logo} alt="" styleName="logo" />
                 )}
-              <span>{deliveryPackage.name}</span>
             </div>
-            <div styleName="td tdPrice">{`${deliveryPackage.price} ${
-              deliveryPackage.currency
-            }`}</div>
+            <div styleName="textWrapper">
+              <div styleName="pkgName">Price</div>
+              <div styleName="pkgPrice">{deliveryPackage.price} STQ</div>
+            </div>
           </div>
         )}
       </div>

@@ -282,7 +282,7 @@ class Select extends Component<PropsType, StateType> {
               this.items = node;
             }}
             styleName={classNames('items', {
-              hidden: false && !isExpanded,
+              hidden: !isExpanded,
               isMobile,
             })}
           >

@@ -37,6 +37,7 @@
   padding-top: 2rem;
   padding-right: 1.5rem;
   padding-bottom: 2rem;
+  cursor: pointer;
 
   .companyNameRow {
     display: flex;
@@ -115,45 +116,40 @@
 
 .deliveryPackage {
   display: flex;
-  margin: 0 -4rem;
-  padding: 2rem 4rem;
-}
+  background-color: $color_grey_trivial;
+  border-radius: 0.5rem;
+  height: 8.75rem;
+  padding: 2rem;
 
-.td {
-}
+  .logoWrapper {
+    .logo {
+      display: block;
+      justify-content: center;
+      width: 5rem;
+      height: 5rem;
+      object-fit: contain;
+      object-position: left;
+    }
+  }
 
-.tdCompany {
-  display: flex;
-  align-items: center;
-  width: 60%;
-}
+  .textWrapper {
+    margin-left: 3.25rem;
 
-.tdPrice {
-  width: 40%;
-  display: flex;
-  align-items: center;
-  padding-left: 2rem;
-}
-
-.logo {
-  display: block;
-  justify-content: center;
-  width: 6.5rem;
-  height: 6.5rem;
-  margin: 0 1rem 0 3rem;
-  object-fit: contain;
-  object-position: left;
+    .pkgName {
+      line-height: 2.5rem;
+      font-size: 14px;
+      color: $color_grey_minor;
+    }
+    .pkgPrice {
+      line-height: 2.5rem;
+      font-size: 16px;
+      color: $color_grey;
+    }
+  }
 }
 
 .loading {
   position: absolute;
-  top: 4rem;
-  bottom: 4rem;
-  left: 4rem;
-  right: 4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 20;
 }
