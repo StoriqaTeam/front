@@ -18,6 +18,8 @@ import debounce from 'lodash.debounce';
 
 import { Icon } from 'components/Icon';
 
+import type { Node } from 'react';
+
 import type { SelectItemType } from 'types';
 
 import './Select.scss';
@@ -47,6 +49,7 @@ type PropsType = {
   isBirthdate?: boolean,
   onClick: () => void,
   isMobile: boolean,
+  renderSelectItem?: (item: SelectItemType) => Node,
 };
 
 const maxItemsCount = 5;
@@ -237,6 +240,7 @@ class Select extends Component<PropsType, StateType> {
       dataTest,
       isBirthdate,
       isMobile,
+      renderSelectItem,
     } = this.props;
     const { isExpanded, items } = this.state;
     return (
@@ -278,7 +282,7 @@ class Select extends Component<PropsType, StateType> {
               this.items = node;
             }}
             styleName={classNames('items', {
-              hidden: !isExpanded,
+              hidden: false && !isExpanded,
               isMobile,
             })}
           >
@@ -295,7 +299,9 @@ class Select extends Component<PropsType, StateType> {
             >
               {items.map(item => {
                 const { id } = item;
-                return (
+                return renderSelectItem ? (
+                  renderSelectItem(item)
+                ) : (
                   <div
                     key={`${id}-${item.label}`}
                     id={id}

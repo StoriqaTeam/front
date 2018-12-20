@@ -1,7 +1,9 @@
-@import "../../../../styles/variables";
+@import '../../../../styles/variables';
 
 .container {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -9,6 +11,66 @@
   font-size: 14px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
+}
+
+.selectsWrapper {
+  display: flex;
+}
+
+.chooseCountry {
+  width: 17.25rem;
+
+  .select {
+    width: 100%;
+    max-width: 35rem;
+    margin-bottom: 4rem;
+  }
+}
+
+.chooseDeliveryCompany {
+  flex: 1;
+  margin-left: 2rem;
+}
+
+.deliveryCompanyItem {
+  padding-left: 1.5rem;
+  padding-top: 2rem;
+  padding-right: 1.5rem;
+  padding-bottom: 2rem;
+
+  .companyNameRow {
+    display: flex;
+
+    .checked {
+      margin-top: 1rem;
+
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+
+    .companyNameWrap {
+      margin-left: 1rem;
+
+      .selected {
+        color: $color_blue !important;
+      }
+
+      .companyName {
+        line-height: 3.25rem;
+        height: 3.25rem;
+        font-size: 14px;
+        font-weight: 500;
+        color: $color_grey;
+      }
+
+      .price {
+        font-size: 14px;
+        line-height: 2rem;
+        color: $color_grey;
+      }
+    }
+  }
 }
 
 .selectDelivery {
@@ -26,79 +88,61 @@
   color: $color_grey;
   cursor: pointer;
 
-  .icon {}
+  .icon {
+  }
 }
 
 .deliveryPrice {
   margin-top: 1rem;
 }
 
-.modal {
-  padding: 0 4rem 4rem;
-  width: 82rem;
+.button {
+  width: 22.5rem;
+  margin: 0 auto;
+  padding-top: 4rem;
+}
 
-  @media (max-width: #{$md - 1px}) {
-    width: 63rem;
-  }
+.table {
+  margin-top: 2rem;
+}
 
-  @media (max-width: #{$sm - 1px}) {
-    width: 100%;
-  }
+.tableHeader {
+  display: flex;
+  margin-bottom: 2rem;
+  font-size: 14px;
+  color: $color_grey_minor;
+}
 
-  .select {
-    width: 100%;
-    max-width: 35rem;
-    margin-bottom: 4rem;
-  }
+.deliveryPackage {
+  display: flex;
+  margin: 0 -4rem;
+  padding: 2rem 4rem;
+}
 
-  .button {
-    width: 22.5rem;
-    margin: 0 auto;
-    padding-top: 4rem;
-  }
+.td {
+}
 
-  .table {
-    margin-top: 2rem;
-  }
+.tdCompany {
+  display: flex;
+  align-items: center;
+  width: 60%;
+}
 
-  .tableHeader {
-    display: flex;
-    margin-bottom: 2rem;
-    font-size: 14px;
-    color: $color_grey_minor;
-  }
+.tdPrice {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem;
+}
 
-  .deliveryPackage {
-    display: flex;
-    margin: 0 -4rem;
-    padding: 2rem 4rem;
-    border-top: 1px solid $color_grey_trivial;
-  }
-
-  .td {}
-
-  .tdCompany {
-    display: flex;
-    align-items: center;
-    width: 60%;
-  }
-
-  .tdPrice {
-    width: 40%;
-    display: flex;
-    align-items: center;
-    padding-left: 2rem;
-  }
-
-  .logo {
-    display: block;
-    justify-content: center;
-    width: 6.5rem;
-    height: 6.5rem;
-    margin: 0 1rem 0 3rem;
-    object-fit: contain;
-    object-position: left;
-  }
+.logo {
+  display: block;
+  justify-content: center;
+  width: 6.5rem;
+  height: 6.5rem;
+  margin: 0 1rem 0 3rem;
+  object-fit: contain;
+  object-position: left;
 }
 
 .loading {
@@ -110,7 +154,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255,255,255,.5);
+  background-color: rgba(255, 255, 255, 0.5);
   z-index: 20;
 }
 
