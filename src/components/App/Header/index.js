@@ -1,8 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { pathOr, isNil, map } from 'ramda';
+import { pathOr, isNil, map, isEmpty, assocPath } from 'ramda';
 import classNames from 'classnames';
+import { withRouter, routerShape, matchShape } from 'found';
 
 import {
   AppContext,
@@ -18,10 +19,16 @@ import { Modal } from 'components/Modal';
 import { SearchInput } from 'components/SearchInput';
 import { CategoriesMenu } from 'components/CategoriesMenu';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import { urlToInput, inputToUrl } from 'utils';
 
 import { Container } from 'layout';
 
-import type { DirectoriesType, UserDataType, MobileCategoryType } from 'types';
+import type {
+  DirectoriesType,
+  UserDataType,
+  MobileCategoryType,
+  SelectItemType,
+} from 'types';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import { getCookie } from 'utils/cookiesOp';
@@ -40,6 +47,8 @@ type PropsType = {
   userData: ?UserDataType,
   isShopCreated: boolean,
   showAlert: AddAlertInputType => void,
+  router: routerShape,
+  match: matchShape,
 };
 
 type StateType = {
@@ -49,22 +58,41 @@ type StateType = {
   isMobileSearchOpen: boolean,
   isMobileCategoriesOpen: boolean,
   selectedCategory: ?MobileCategoryType,
+  searchValue: string,
+  searchItems: Array<SelectItemType>,
 };
+
+const searchCategories = [
+  { id: 'products', label: t.searchCategory_products },
+  { id: 'stores', label: t.searchCategory_shops },
+];
 
 class Header extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+
+    const pathname = pathOr('', ['location', 'pathname'], this.props.match);
+    const value = pathname.replace('/', '');
+
     this.state = {
       showModal: false,
       isSignUp: false,
       isMenuToggled: false,
       isMobileSearchOpen: false,
       isMobileCategoriesOpen: false,
-      selectedCategory: null,
+      selectedCategory:
+        value === 'stores' ? searchCategories[1] : searchCategories[0],
+      searchItems: [],
+      searchValue: props.searchValue,
     };
+    this.searchInputsRef = React.createRef();
   }
 
   componentDidMount() {
+    if (process.env.BROWSER) {
+      document.addEventListener('click', this.handleClick);
+    }
+
     const { showAlert } = this.props;
     const cookie = getCookie(COOKIE_NAME);
     if (isNil(cookie)) {
@@ -77,6 +105,26 @@ class Header extends Component<PropsType, StateType> {
       });
     }
   }
+
+  componentWillUnmount() {
+    if (process.env.BROWSER) {
+      document.removeEventListener('click', this.handleClick);
+    }
+  }
+
+  searchInputsRef = undefined;
+
+  handleClick = (e: any) => {
+    if (
+      this.searchInputsRef &&
+      this.searchInputsRef.current &&
+      !this.searchInputsRef.current.contains(e.target)
+    ) {
+      this.setState({
+        searchItems: [],
+      });
+    }
+  };
 
   handleOpenModal = (isSignUp: ?boolean): void => {
     this.setState({
@@ -116,6 +164,7 @@ class Header extends Component<PropsType, StateType> {
     this.setState(
       {
         selectedCategory,
+        searchItems: [],
       },
       () => {
         this.closeMobileCategories();
@@ -127,9 +176,63 @@ class Header extends Component<PropsType, StateType> {
     // $FlowIgnore
     pathOr(null, ['categories', 'children'], directories);
 
+  handleGetSearchItems = (searchItems: Array<SelectItemType>) => {
+    this.setState({ searchItems });
+  };
+
+  handleClickSearchItem = (searchItem: SelectItemType) => {
+    const { selectedCategory } = this.state;
+
+    // $FlowIgnoreMe
+    const pathname = pathOr(
+      '',
+      ['match', 'location', 'pathname'],
+      this.props,
+    ).replace('/', '');
+    // $FlowIgnoreMe
+    const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
+    const oldPreparedObj = urlToInput(queryObj);
+
+    const newPreparedObj = assocPath(
+      ['name'],
+      searchItem.label,
+      oldPreparedObj,
+    );
+    const newUrl = inputToUrl(newPreparedObj);
+    this.setState({
+      searchItems: [],
+      searchValue: searchItem.label,
+    });
+    switch (selectedCategory && selectedCategory.id) {
+      case 'stores':
+        if (pathname === 'stores') {
+          this.props.router.push(`/stores${newUrl}`);
+        } else {
+          this.props.router.push(
+            searchItem.label
+              ? `/stores?search=${searchItem.label}`
+              : '/stores?search=',
+          );
+        }
+        break;
+      case 'products':
+        if (pathname === 'categories') {
+          this.props.router.push(`/categories${newUrl}`);
+        } else {
+          this.props.router.push(
+            searchItem.label
+              ? `/categories?search=${searchItem.label}`
+              : '/categories?search=',
+          );
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
     const {
-      searchValue,
       withoutCategories,
       userData,
       totalCount,
@@ -143,11 +246,9 @@ class Header extends Component<PropsType, StateType> {
       isMenuToggled,
       isMobileSearchOpen,
       isMobileCategoriesOpen,
+      searchItems,
+      searchValue,
     } = this.state;
-    const searchCategories = [
-      { id: 'products', label: t.searchCategory_products },
-      { id: 'stores', label: t.searchCategory_shops },
-    ];
     const BurgerMenu = () => (
       <div
         onClick={this.handleMobileMenu}
@@ -182,6 +283,7 @@ class Header extends Component<PropsType, StateType> {
                 onDropDown={this.handleDropDown}
                 searchCategories={searchCategories}
                 searchValue={searchValue}
+                getSearchItems={this.handleGetSearchItems}
               />
             </MobileSearchMenu>
             <MobileMenu
@@ -233,6 +335,28 @@ class Header extends Component<PropsType, StateType> {
                 items={searchCategories}
               />
             ) : null}
+            {!isEmpty(searchItems) &&
+              !isMobileCategoriesOpen && (
+                <div ref={this.searchInputsRef} styleName="searchItems">
+                  {map(
+                    item => (
+                      <div
+                        key={item.id}
+                        styleName="searchItem"
+                        onClick={() => {
+                          this.handleClickSearchItem(item);
+                        }}
+                        onKeyDown={() => {}}
+                        role="button"
+                        tabIndex="0"
+                      >
+                        {item.label}
+                      </div>
+                    ),
+                    searchItems,
+                  )}
+                </div>
+              )}
           </header>
         )}
       </AppContext.Consumer>
@@ -240,4 +364,4 @@ class Header extends Component<PropsType, StateType> {
   }
 }
 
-export default withShowAlert(Header);
+export default withRouter(withShowAlert(Header));
