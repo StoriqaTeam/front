@@ -39,7 +39,7 @@ const CheckoutProducts = ({
                       type="button"
                       dataTest="changeAddress"
                     >
-                      <span>Replace address</span>
+                      <span>Change address</span>
                     </Button>
                   </div>
                 </div>
@@ -66,7 +66,7 @@ const CheckoutProducts = ({
                   type="button"
                   dataTest="changeAddress"
                 >
-                  <span>Replace address</span>
+                  <span>Change address</span>
                 </Button>
               </div>
             </Col>
