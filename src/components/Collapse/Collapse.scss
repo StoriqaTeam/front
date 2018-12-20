@@ -52,10 +52,17 @@
 
 .content {
   display: none;
-  padding: 0 2rem;
+  padding: 0 2rem 1rem;
 
   &.show {
     display: block;
   }
 
+}
+
+.navItem {
+  display: block;
+  font-size: 14px;
+  line-height: 3.5rem;
+  color: $color_grey;
 }

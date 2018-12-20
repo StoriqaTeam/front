@@ -52,7 +52,7 @@ class Slider extends Component<PropsTypes, StateTypes> {
           {items.map(item => (
             <Fragment key={item.rawId || item.id}>
               {type === 'products' && <CardProduct item={item} />}
-              {type === 'banners' && <Banner item={item} />}
+              {type === 'banners' && <Banner item={item} type="single" />}
               {type === 'image' && (
                 <ImageLoader
                   fit
