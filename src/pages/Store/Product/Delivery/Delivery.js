@@ -192,6 +192,7 @@ class Delivery extends Component<PropsType, StateType> {
           <div styleName="chooseCountry">
             <div styleName="select">
               <Select
+                withInput
                 forForm
                 fullWidth
                 label="Country of dellivery"
