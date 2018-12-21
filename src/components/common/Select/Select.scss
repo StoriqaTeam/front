@@ -97,6 +97,21 @@
   font-size: 11px;
 }
 
+.inputWrap {
+  position: relative;
+  z-index: 1;
+}
+
+.clickPlane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
+  z-index: 0;
+  cursor: default;
+}
+
 .forForm .wrap,
 .forSearch .wrap,
 .isBirthdate .wrap {
@@ -234,6 +249,12 @@
   left: 0;
   margin-left: 0;
   margin-top: 1.5rem;
+  //&:before {
+  //  content: '';
+  //  display: block;
+  //  background-color: transparent;
+  //  height: 2rem;
+  //}
 }
 
 .isItem .items {
@@ -244,6 +265,7 @@
   position: relative;
   overflow-y: auto;
   padding-right: 2rem;
+  z-index: 1;
 }
 
 .item {
