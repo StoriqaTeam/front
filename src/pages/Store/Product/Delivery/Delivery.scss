@@ -18,7 +18,7 @@
 }
 
 .chooseCountry {
-  width: 17.25rem;
+  flex: 0.5;
 
   .select {
     width: 100%;
@@ -28,7 +28,7 @@
 }
 
 .chooseDeliveryCompany {
-  flex: 1;
+  flex: 0.5;
   margin-left: 2rem;
 }
 
