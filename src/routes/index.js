@@ -10,27 +10,20 @@ import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
 import Start from 'pages/Start/Start';
-import { NewStore } from 'pages/Manage/Store/Settings';
-import { Products } from 'pages/Manage/Store/Products';
-import { Storages } from 'pages/Manage/Store/Storages';
-import { OrderInvoice } from 'pages/Manage/Store/OrderInvoice';
 import {
   NewStorage,
   EditStorage,
   StorageProducts,
 } from 'pages/Manage/Store/Storages/Storage';
-import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import { Logout } from 'pages/Logout';
-import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import StoreAbout from 'pages/Store/About/About';
 import StoreItems from 'pages/Store/Items/StoreItems';
 import Showcase from 'pages/Store/Showcase/Showcase';
 // import Checkout from 'pages/Checkout';
-// import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 // import { Profile } from 'pages/Profile';
 // import Categories from 'pages/Search/Categories';
 // import { StartSelling } from 'pages/StartSelling';
@@ -38,7 +31,14 @@ import Showcase from 'pages/Store/Showcase/Showcase';
 // import { BuyNow } from 'pages/BuyNow';
 // import { Login } from 'pages/Login';
 // import { Product as ProductCard } from 'pages/Store/Product';
+// import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 // import Stores from 'pages/Stores/Stores';
+// import { Contacts } from 'pages/Manage/Store/Contacts';
+// import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
+// import { NewStore } from 'pages/Manage/Store/Settings';
+// import { Products } from 'pages/Manage/Store/Products';
+// import { Storages } from 'pages/Manage/Store/Storages';
+// import { OrderInvoice } from 'pages/Manage/Store/OrderInvoice';
 import { PasswordReset } from 'pages/PasswordReset';
 import {
   EmailConfirmed,
@@ -61,6 +61,9 @@ const ProductCard = loadable(() => import('../pages/Store/Product/Product'));
 const Stores = loadable(() => import('../pages/Stores/Stores'));
 const Store = loadable(() => import('../pages/Store/Store'));
 
+const NewStore = loadable(() =>
+  import('../pages/Manage/Store/Settings/NewStore'),
+);
 const EditStore = loadable(() =>
   import('../pages/Manage/Store/Settings/EditStore'),
 );
@@ -70,6 +73,12 @@ const NewProduct = loadable(() =>
 const EditProduct = loadable(() =>
   import('../pages/Manage/Store/Products/Product/EditProduct'),
 );
+const Contacts = loadable(() => import('../pages/Manage/Store/Contacts/Contacts'));
+const StoreOrder = loadable(() => import('../pages/Manage/Store/Orders/StoreOrder'));
+const StoreOrders = loadable(() => import('../pages/Manage/Store/Orders/StoreOrders'));
+const Products = loadable(() => import('../pages/Manage/Store/Products/Products'));
+const Storages = loadable(() => import('../pages/Manage/Store/Storages/Storages'));
+const OrderInvoice = loadable(() => import('../pages/Manage/Store/OrderInvoice/OrderInvoice'));
 
 const routes = (
   <Route>
