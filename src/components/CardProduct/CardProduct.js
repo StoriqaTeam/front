@@ -94,7 +94,9 @@ class CardProduct extends PureComponent<PropsType> {
               </div>
             )}
             {!photoMain ? (
-              <Icon type="camera" size={40} />
+              <div styleName="emptyFoto">
+                <Icon type="camera" size={40} />
+              </div>
             ) : (
               <ImageLoader
                 fit
