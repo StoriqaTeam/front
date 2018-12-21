@@ -21,7 +21,6 @@ import {
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
-import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 import Checkout from 'pages/Checkout';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
@@ -31,6 +30,7 @@ import { Invoice } from 'pages/Profile/items/Order';
 import StoreAbout from 'pages/Store/About/About';
 import StoreItems from 'pages/Store/Items/StoreItems';
 import Showcase from 'pages/Store/Showcase/Showcase';
+// import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 // import { Profile } from 'pages/Profile';
 // import Categories from 'pages/Search/Categories';
 // import { StartSelling } from 'pages/StartSelling';
@@ -51,17 +51,24 @@ import loadable from '@loadable/component';
 const StartSelling = loadable(() =>
   import('../pages/StartSelling/StartSelling'),
 );
-const Categories = loadable(() => import('../pages/Search/Categories'));
 const Cart = loadable(() => import('../pages/Cart'));
 const BuyNow = loadable(() => import('../pages/BuyNow/BuyNow'));
 const Login = loadable(() => import('../pages/Login/Login'));
-const ProductCard = loadable(() => import('../pages/Store/Product/Product'));
+const Categories = loadable(() => import('../pages/Search/Categories'));
 const Profile = loadable(() => import('../pages/Profile/Profile'));
+const ProductCard = loadable(() => import('../pages/Store/Product/Product'));
+const Stores = loadable(() => import('../pages/Stores/Stores'));
+const Store = loadable(() => import('../pages/Store/Store'));
+
 const EditStore = loadable(() =>
   import('../pages/Manage/Store/Settings/EditStore'),
 );
-const Stores = loadable(() => import('../pages/Stores/Stores'));
-const Store = loadable(() => import('../pages/Store/Store'));
+const NewProduct = loadable(() =>
+  import('../pages/Manage/Store/Products/Product/NewProduct'),
+);
+const EditProduct = loadable(() =>
+  import('../pages/Manage/Store/Products/Product/EditProduct'),
+);
 
 const routes = (
   <Route>
