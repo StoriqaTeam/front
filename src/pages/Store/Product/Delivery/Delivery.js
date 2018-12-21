@@ -27,6 +27,7 @@ type PropsType = {
   baseProductRawId: number,
   countries: Array<CountryType>,
   onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
+  deliveryData: DeliveryDataType,
 };
 
 class Delivery extends Component<PropsType, StateType> {
@@ -36,6 +37,16 @@ class Delivery extends Component<PropsType, StateType> {
     deliveryPackage: null,
     deliveryPackages: null,
   };
+
+  componentDidMount() {
+    if (this.state.country) {
+      return;
+    }
+    const { deliveryData } = this.props;
+    if (!deliveryData.country) {
+      this.fetchData();
+    }
+  }
 
   fetchData = () => {
     const { baseProductRawId } = this.props;
@@ -51,6 +62,7 @@ class Delivery extends Component<PropsType, StateType> {
       this.fetchAvailableShipping(baseProductRawId, countryCode);
     } else {
       const cookiesCountry = getCookie('COUNTRY_IP');
+      log.debug({ cookiesCountry });
       const country = find(propEq('alpha2', cookiesCountry))(
         this.props.countries,
       );

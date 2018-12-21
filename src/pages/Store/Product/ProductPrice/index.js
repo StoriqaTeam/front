@@ -60,7 +60,8 @@ const ProductPrice = ({
                 <div styleName="currencyPrice">
                   <span styleName="slash">/</span>
                   <CurrencyPrice
-                    withLambda
+                    withTilda
+                    withSlash
                     dark
                     fontSize={24}
                     reverse

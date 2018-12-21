@@ -298,7 +298,7 @@ class PersonalData extends Component<PropsType, StateType> {
           <div styleName="formItem">
             <Input
               id="ref"
-              disabled
+              readonly="readonly"
               value={
                 process.env.REACT_APP_HOST
                   ? `${process.env.REACT_APP_HOST}?ref=${refNum}`

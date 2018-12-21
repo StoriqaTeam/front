@@ -8,8 +8,6 @@
 
 .body {
   box-shadow: $shadow_1;
-  display: flex;
-  flex-direction: column;
   height: 100%;
   border-radius: 0.25rem;
   position: relative;
@@ -22,6 +20,7 @@
 
 .top {
   align-items: center;
+  padding-top: 100%;
   background-color: $color_grey_trivial;
   display: flex;
   justify-content: center;
@@ -62,17 +61,31 @@
   z-index: 1;
 }
 
-.title {
+.levelOne {
+  display: flex;
+  justify-content: space-between;
+  height: 2rem;
+}
+
+.titleWrap {
+  width: 26rem;
   font-size: 16px;
-  font-family: $font_regular;
-  color: $color_grey;
+  color: $color_black;
   margin-top: 1rem;
-  margin-bottom: 1rem;
-  height: 4.6rem;
-  line-height: 2.25rem;
+  height: 8rem;
+  line-height: 2.5rem;
   overflow: hidden;
-  transition: $transition_all_ease;
-  white-space: normal;
+}
+
+.title {
+  max-height: 5rem;
+  overflow: hidden;
+}
+
+.store {
+  margin-top: 0.25rem;
+  font-size: 11px;
+  color: $color_grey;
 }
 
 .priceWrap {
@@ -84,26 +97,29 @@
 
 .undiscountedPrice {
   position: absolute;
-  top: -2rem;
+  top: -2.75rem;
   left: 0;
   color: $color_grey_minor;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 2.5rem;
   height: 2.5rem;
   text-decoration: line-through;
 }
 
 .priceDropdown {
-  @media (max-width: #{$lg - 1px}) {
-    display: flex;
+  display: flex;
+  flex-wrap: wrap;
 
-    .actualPrice {
-      &:after {
-        content: '/~';
-        margin-left: 0.5rem;
-        font-size: 12px;
-        color: $color_grey_minor;
-      }
+  .actualPrice {
+    color: $color_black;
+    font-size: 18px;
+    white-space: nowrap;
+
+    &:after {
+      content: '/';
+      font-family: $font_light;
+      margin-left: 0.5rem;
+      font-size: 16px;
     }
   }
 }
@@ -125,16 +141,7 @@
 }
 
 .price {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
   position: relative;
-  justify-content: space-between;
-
-  @media (max-width: #{$lg - 1px}) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 
   &.isSearchPage {}
 }
@@ -144,4 +151,12 @@
   font-size: 14px;
   line-height: 2.25rem;
   color: $color_black;
+}
+
+.bannerLoading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }

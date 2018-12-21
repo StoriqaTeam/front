@@ -15,7 +15,7 @@ const translations: TranslationsBundleType = {
   en: {
     summary: 'Summary',
     address: 'Address',
-    replaceAddress: 'Replace Address',
+    replaceAddress: 'Change Address',
   },
 };
 
