@@ -73,25 +73,16 @@ class SearchInput extends Component<PropsType, StateType> {
       document.addEventListener('keydown', this.handleKeydown);
     }
 
-    const { searchValue, searchCategories, selectedCategory } = props;
+    const { searchValue, searchCategories } = props;
     const pathname = pathOr('', ['location', 'pathname'], this.props.match);
     const value = pathname.replace('/', '');
-    if (value === 'stores') {
-      this.setState({
-        activeItem: searchCategories[1],
-      });
-    } else {
-      this.setState({ activeItem: searchCategories[0] });
-    }
 
     this.state = {
       inputValue: searchValue || '',
       items: [],
       isFocus: false,
       activeItem:
-        selectedCategory || value === 'stores'
-          ? searchCategories[1]
-          : searchCategories[0],
+        value === 'stores' ? searchCategories[1] : searchCategories[0],
       arrowItem: null,
     };
     this.handleFetchAutoCompleteProductName = debounce(

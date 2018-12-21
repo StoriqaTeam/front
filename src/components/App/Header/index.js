@@ -70,7 +70,6 @@ const searchCategories = [
 class Header extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-
     const pathname = pathOr('', ['location', 'pathname'], this.props.match);
     const value = pathname.replace('/', '');
 

@@ -380,6 +380,7 @@ class Form extends Component<PropsType, StateType> {
           <Select
             forForm
             fullWidth
+            withInput
             label="Country"
             items={countriesArr}
             onSelect={this.handleOnChangeCountry}
