@@ -15,7 +15,6 @@ import {
   EditStorage,
   StorageProducts,
 } from 'pages/Manage/Store/Storages/Storage';
-import { Wizard } from 'pages/Manage/Wizard';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import { Logout } from 'pages/Logout';
@@ -31,8 +30,10 @@ import Showcase from 'pages/Store/Showcase/Showcase';
 // import { BuyNow } from 'pages/BuyNow';
 // import { Login } from 'pages/Login';
 // import { Product as ProductCard } from 'pages/Store/Product';
-// import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 // import Stores from 'pages/Stores/Stores';
+
+// import { Wizard } from 'pages/Manage/Wizard';
+// import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 // import { Contacts } from 'pages/Manage/Store/Contacts';
 // import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 // import { NewStore } from 'pages/Manage/Store/Settings';
@@ -48,6 +49,9 @@ import {
 
 import loadable from '@loadable/component';
 
+/**
+ * Pages
+ */
 const StartSelling = loadable(() =>
   import('../pages/StartSelling/StartSelling'),
 );
@@ -61,6 +65,9 @@ const ProductCard = loadable(() => import('../pages/Store/Product/Product'));
 const Stores = loadable(() => import('../pages/Stores/Stores'));
 const Store = loadable(() => import('../pages/Store/Store'));
 
+/**
+ * Manage
+ */
 const NewStore = loadable(() =>
   import('../pages/Manage/Store/Settings/NewStore'),
 );
@@ -73,6 +80,7 @@ const NewProduct = loadable(() =>
 const EditProduct = loadable(() =>
   import('../pages/Manage/Store/Products/Product/EditProduct'),
 );
+const Wizard = loadable(() => import('../pages/Manage/Wizard/Wizard'));
 const Contacts = loadable(() => import('../pages/Manage/Store/Contacts/Contacts'));
 const StoreOrder = loadable(() => import('../pages/Manage/Store/Orders/StoreOrder'));
 const StoreOrders = loadable(() => import('../pages/Manage/Store/Orders/StoreOrders'));
