@@ -11,6 +11,7 @@ import {
   length,
   findIndex,
   map,
+  omit,
 } from 'ramda';
 import classNames from 'classnames';
 import { withRouter, matchShape, routerShape } from 'found';
@@ -245,10 +246,11 @@ class SearchInput extends Component<PropsType, StateType> {
     ).replace('/', '');
     // $FlowIgnoreMe
     const queryObj = pathOr('', ['match', 'location', 'query'], this.props);
-    const oldPreparedObj = urlToInput(queryObj);
-
+    const oldPreparedObj = urlToInput(omit(['maxValue', 'minValue'], queryObj));
     const newPreparedObj = assocPath(['name'], inputValue, oldPreparedObj);
-    const newUrl = inputToUrl(newPreparedObj);
+    const newUrl = inputToUrl(
+      newPreparedObj.options ? newPreparedObj : newPreparedObj,
+    );
     switch (
       (selectedCategory && selectedCategory.id) || (activeItem && activeItem.id)
     ) {

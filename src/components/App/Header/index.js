@@ -106,11 +106,33 @@ class Header extends Component<PropsType, StateType> {
     }
   }
 
+  componentDidUpdate(prevProps: PropsType) {
+    // $FlowIgnoreMe
+    const searchValue = pathOr(
+      '',
+      ['match', 'location', 'query', 'search'],
+      prevProps,
+    );
+    // $FlowIgnoreMe
+    const newSearchValue = pathOr(
+      '',
+      ['match', 'location', 'query', 'search'],
+      this.props,
+    );
+    if (newSearchValue !== searchValue) {
+      this.updateSearchValue(newSearchValue);
+    }
+  }
+
   componentWillUnmount() {
     if (process.env.BROWSER) {
       document.removeEventListener('click', this.handleClick);
     }
   }
+
+  updateSearchValue = (searchValue: string) => {
+    this.setState({ searchValue });
+  };
 
   searchInputsRef = undefined;
 

@@ -182,7 +182,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
         maxValue,
       },
       (): void => {
-        this.setRangeUrl(minValue, maxValue);
+        this.setRangeUrl(minValue, maxValue, 'replace');
       },
     );
   };
@@ -286,7 +286,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
   };
 
   handleOnRangeChange = (data: { thumb1: number, thumb2: number }) => {
-    this.setRangeUrl(data.thumb1, data.thumb2);
+    this.setRangeUrl(data.thumb1, data.thumb2, 'replace');
   };
 
   prepareAttrsToUrlStr = (id, values) => {
@@ -447,7 +447,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
               minValue={minValue}
               maxValue={maxValue}
               onChange={(data: { thumb1: number, thumb2: number }) => {
-                this.setRangeUrl(data.thumb1, data.thumb2);
+                this.setRangeUrl(data.thumb1, data.thumb2, 'replace');
               }}
             />
           </Fragment>
