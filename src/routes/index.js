@@ -21,7 +21,6 @@ import {
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
 import { Wizard } from 'pages/Manage/Wizard';
-import Checkout from 'pages/Checkout';
 import { Error, Error404 } from 'pages/Errors';
 import VerifyEmail from 'pages/VerifyEmail';
 import { Logout } from 'pages/Logout';
@@ -30,6 +29,7 @@ import { Invoice } from 'pages/Profile/items/Order';
 import StoreAbout from 'pages/Store/About/About';
 import StoreItems from 'pages/Store/Items/StoreItems';
 import Showcase from 'pages/Store/Showcase/Showcase';
+// import Checkout from 'pages/Checkout';
 // import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
 // import { Profile } from 'pages/Profile';
 // import Categories from 'pages/Search/Categories';
@@ -52,6 +52,7 @@ const StartSelling = loadable(() =>
   import('../pages/StartSelling/StartSelling'),
 );
 const Cart = loadable(() => import('../pages/Cart'));
+const Checkout = loadable(() => import('../pages/Checkout'));
 const BuyNow = loadable(() => import('../pages/BuyNow/BuyNow'));
 const Login = loadable(() => import('../pages/Login/Login'));
 const Categories = loadable(() => import('../pages/Search/Categories'));
