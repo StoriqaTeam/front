@@ -63,14 +63,13 @@ const maxItemsCount = 5;
 const itemHeight = 24;
 
 class Select extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { withEmpty } = nextProps;
-    const { items } = prevState;
-    return {
-      ...prevState,
-      items: !isNil(withEmpty) ? prepend({ id: '', label: '' }, items) : items,
-    };
-  }
+  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+  //   const { withEmpty } = nextProps;
+  //   const { items } = prevState;
+  //   return {
+  //     items: !isNil(withEmpty) ? prepend({ id: '', label: '' }, items) : items,
+  //   };
+  // }
 
   static defaultProps = {
     onClick: () => {},
@@ -84,14 +83,17 @@ class Select extends Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    const { activeItem, withInput } = props;
+    const { withEmpty, activeItem, withInput, items } = props;
+    const newItems = !isNil(withEmpty)
+      ? prepend({ id: '', label: '-' }, items)
+      : items;
 
     this.state = {
       isExpanded: false,
       items:
         withInput === true
           ? this.updateItems(activeItem ? activeItem.label : '')
-          : props.items,
+          : newItems,
       searchValue: '',
       inputValue: withInput === true && activeItem ? activeItem.label : null,
       isFocusInput: false,
@@ -117,6 +119,11 @@ class Select extends Component<PropsType, StateType> {
         this.getIndexFromItems(prevProps.activeItem, items),
       );
     }
+
+    const { withInput, activeItem } = this.props;
+    if (withInput === true && activeItem && !prevProps.activeItem) {
+      this.updateInputValue(activeItem.label);
+    }
   }
 
   componentWillUnmount() {
@@ -128,6 +135,13 @@ class Select extends Component<PropsType, StateType> {
 
   getIndexFromItems = (item: ?SelectItemType, items: Array<SelectItemType>) =>
     item ? findIndex(propEq('id', item.id))(items) : -1;
+
+  updateInputValue = (value: string) => {
+    this.setState({
+      inputValue: value,
+      items: this.updateItems(value),
+    });
+  };
 
   button: ?HTMLDivElement;
   itemsWrap: ?HTMLElement;
@@ -297,9 +311,10 @@ class Select extends Component<PropsType, StateType> {
   };
 
   handleItemClick = (e: SyntheticInputEvent<HTMLDivElement>): void => {
-    const { onSelect, items, withInput, activeItem } = this.props;
+    const { onSelect, withInput, activeItem } = this.props;
+    const { items } = this.state;
     const result = find(propEq('id', e.target.id), items);
-    if (this.props && onSelect && !isNil(result)) {
+    if (onSelect && !isNil(result)) {
       if (withInput === true) {
         this.setState({
           inputValue: result.label,
@@ -377,7 +392,6 @@ class Select extends Component<PropsType, StateType> {
       hoverItem,
       isOpenItems,
     } = this.state;
-
     return (
       <div
         ref={node => {
@@ -416,6 +430,7 @@ class Select extends Component<PropsType, StateType> {
           {withInput === true && (
             <div styleName="inputWrap">
               <Input
+                fullWidth
                 value={inputValue || ''}
                 onChange={this.handleChangeInput}
                 onFocus={this.handleFocusInput}
