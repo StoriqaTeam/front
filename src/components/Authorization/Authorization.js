@@ -355,6 +355,7 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   recoverPassword = (): void => {
+    this.setState({ isLoading: true });
     const { environment, showAlert } = this.props;
     const { email } = this.state;
     requestPasswordResetMutation({
@@ -365,6 +366,7 @@ class Authorization extends Component<PropsType, StateType> {
     })
       .then((): void => {
         const { onCloseModal } = this.props;
+        this.setState({ isLoading: false });
         this.props.showAlert({
           type: 'success',
           text: t.pleaseVerifyYourEmail,
@@ -377,6 +379,7 @@ class Authorization extends Component<PropsType, StateType> {
         return undefined;
       })
       .catch((errs: ResponseErrorType): void => {
+        this.setState({ isLoading: false });
         const relayErrors = fromRelayError({ source: { errors: [errs] } });
         if (relayErrors) {
           errorsHandler(relayErrors, showAlert, errMessages =>
@@ -390,12 +393,12 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   resetPassword = (): void => {
+    this.setState({ isLoading: true });
     const {
       environment,
       match: {
         params: { token },
       },
-      router: { push },
     } = this.props;
     const { password } = this.state;
     const params = {
@@ -426,7 +429,24 @@ class Authorization extends Component<PropsType, StateType> {
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
-        push('/login');
+        // $FlowIgnoreMe
+        const jwtStr = pathOr(
+          null,
+          ['applyPasswordReset', 'token'],
+          Object.freeze(response),
+        );
+        if (jwtStr) {
+          const date = new Date();
+          const today = date;
+          const expirationDate = date;
+          expirationDate.setDate(today.getDate() + 14);
+          // $FlowIgnoreMe
+          JWT.setJWT(jwtStr);
+          if (this.props.handleLogin) {
+            this.props.handleLogin();
+            window.location = '/';
+          }
+        }
       },
       onError: (error: Error): void => {
         const relayErrors = fromRelayError(error);
@@ -549,6 +569,10 @@ class Authorization extends Component<PropsType, StateType> {
     );
   };
 
+  handleSocialClick = () => {
+    this.setState({ isLoading: true });
+  };
+
   renderRegistration = (): Node => {
     const {
       email,
@@ -626,7 +650,9 @@ class Authorization extends Component<PropsType, StateType> {
                   <div className="separatorBlock">
                     <Separator text="or" />
                   </div>
-                  <AuthorizationSocial />
+                  <AuthorizationSocial
+                    handleSocialClick={this.handleSocialClick}
+                  />
                 </Fragment>
               )}
             </div>

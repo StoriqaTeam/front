@@ -150,6 +150,7 @@ const iconsMap = {
   addVariant: <AddVariant />,
   copy: <Copy />,
   coupon: <Coupon />,
+  //
 
   // For product
   mainFoto: <MainFoto />,

@@ -28,10 +28,16 @@ const buttons = [
   },
 ];
 
-const AuthorizationSocial = () => (
+const AuthorizationSocial = (props: { handleSocialClick: () => void }) => (
   <div styleName="container">
     {buttons.map(({ id, href, dataTest, iconType, message }) => (
-      <Button iconic key={id} href={href} dataTest={dataTest}>
+      <Button
+        iconic
+        key={id}
+        href={href}
+        dataTest={dataTest}
+        onClick={props.handleSocialClick}
+      >
         <Icon type={iconType} />
         <span>{message}</span>
       </Button>

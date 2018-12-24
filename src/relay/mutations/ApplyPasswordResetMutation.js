@@ -7,6 +7,7 @@ const mutation = graphql`
   mutation ApplyPasswordResetMutation($input: ResetApply!) {
     applyPasswordReset(input: $input) {
       success
+      token
     }
   }
 `;
