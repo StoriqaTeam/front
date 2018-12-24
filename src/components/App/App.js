@@ -197,6 +197,14 @@ export default createRefetchContainer(
       firstName
       lastName
       avatar
+      wizardStore {
+        id
+        completed
+      }
+      myStore {
+        id
+        rawId
+      }
     }
   `,
   graphql`
