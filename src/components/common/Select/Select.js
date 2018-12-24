@@ -63,14 +63,6 @@ const maxItemsCount = 5;
 const itemHeight = 24;
 
 class Select extends Component<PropsType, StateType> {
-  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-  //   const { withEmpty } = nextProps;
-  //   const { items } = prevState;
-  //   return {
-  //     items: !isNil(withEmpty) ? prepend({ id: '', label: '' }, items) : items,
-  //   };
-  // }
-
   static defaultProps = {
     onClick: () => {},
     isMobile: false,
