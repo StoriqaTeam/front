@@ -76,8 +76,14 @@
   margin-bottom: 1rem;
   margin-top: -2rem;
   text-align: right;
+
   span {
     cursor: pointer;
+    transition: $transition_all_ease;
+
+    &:hover {
+      color: $color_blue;
+    }
   }
 }
 
