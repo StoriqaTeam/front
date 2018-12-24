@@ -366,7 +366,6 @@ class Authorization extends Component<PropsType, StateType> {
     })
       .then((): void => {
         const { onCloseModal } = this.props;
-        this.setState({ isLoading: false });
         this.props.showAlert({
           type: 'success',
           text: t.pleaseVerifyYourEmail,
@@ -378,8 +377,10 @@ class Authorization extends Component<PropsType, StateType> {
         }
         return undefined;
       })
-      .catch((errs: ResponseErrorType): void => {
+      .finally(() => {
         this.setState({ isLoading: false });
+      })
+      .catch((errs: ResponseErrorType): void => {
         const relayErrors = fromRelayError({ source: { errors: [errs] } });
         if (relayErrors) {
           errorsHandler(relayErrors, showAlert, errMessages =>
