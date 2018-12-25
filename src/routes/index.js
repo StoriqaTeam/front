@@ -4,6 +4,7 @@ import React from 'react';
 import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
+import loadable from '@loadable/component';
 
 import { log, jwt as JWT } from 'utils';
 import { urlToInput } from 'utils/search';
@@ -47,7 +48,11 @@ import {
   PasswordResetDeny,
 } from 'pages/Wallet';
 
-import loadable from '@loadable/component';
+import { Loader } from 'components/Loader';
+
+const fallback = {
+  fallback: <Loader />,
+};
 
 /**
  * Pages
@@ -59,12 +64,21 @@ const Cart = loadable(() => import('../pages/Cart'));
 const Checkout = loadable(() => import('../pages/Checkout'));
 const BuyNow = loadable(() => import('../pages/BuyNow/BuyNow'));
 const Login = loadable(() => import('../pages/Login/Login'));
-const Categories = loadable(() => import('../pages/Search/Categories'));
+const Categories = loadable(
+  () => import(/* webpackPreload: true */ '../pages/Search/Categories'),
+  fallback,
+);
 const Profile = loadable(() => import('../pages/Profile/Profile'));
-const ProductCard = loadable(() => import('../pages/Store/Product/Product'));
-const Stores = loadable(() => import('../pages/Stores/Stores'));
 const Store = loadable(() => import('../pages/Store/Store'));
+const Stores = loadable(
+  () => import(/* webpackPreload: true */ '../pages/Stores/Stores'),
+  fallback,
+);
 
+const ProductCard = loadable(
+  () => import(/* webpackPrefetch: true */ '../pages/Store/Product/Product'),
+  fallback,
+);
 /**
  * Manage
  */
@@ -81,12 +95,24 @@ const EditProduct = loadable(() =>
   import('../pages/Manage/Store/Products/Product/EditProduct'),
 );
 const Wizard = loadable(() => import('../pages/Manage/Wizard/Wizard'));
-const Contacts = loadable(() => import('../pages/Manage/Store/Contacts/Contacts'));
-const StoreOrder = loadable(() => import('../pages/Manage/Store/Orders/StoreOrder'));
-const StoreOrders = loadable(() => import('../pages/Manage/Store/Orders/StoreOrders'));
-const Products = loadable(() => import('../pages/Manage/Store/Products/Products'));
-const Storages = loadable(() => import('../pages/Manage/Store/Storages/Storages'));
-const OrderInvoice = loadable(() => import('../pages/Manage/Store/OrderInvoice/OrderInvoice'));
+const Contacts = loadable(() =>
+  import('../pages/Manage/Store/Contacts/Contacts'),
+);
+const StoreOrder = loadable(() =>
+  import('../pages/Manage/Store/Orders/StoreOrder'),
+);
+const StoreOrders = loadable(() =>
+  import('../pages/Manage/Store/Orders/StoreOrders'),
+);
+const Products = loadable(() =>
+  import('../pages/Manage/Store/Products/Products'),
+);
+const Storages = loadable(() =>
+  import('../pages/Manage/Store/Storages/Storages'),
+);
+const OrderInvoice = loadable(() =>
+  import('../pages/Manage/Store/OrderInvoice/OrderInvoice'),
+);
 
 const routes = (
   <Route>

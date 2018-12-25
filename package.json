@@ -85,7 +85,7 @@
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "2.4.1",
     "cors": "2.8.4",
-    "css-loader": "2.0.1",
+    "css-loader": "2.0.2",
     "dotenv": "6.2.0",
     "eslint": "4.17.0",
     "eslint-config-airbnb": "16.1.0",
