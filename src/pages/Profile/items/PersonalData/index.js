@@ -276,7 +276,6 @@ class PersonalData extends Component<PropsType, StateType> {
   render() {
     const { subtitle } = this.props;
     const { data, isLoading, formErrors, isCopiedRef } = this.state;
-    console.log('---isCopiedRef', isCopiedRef);
     // $FlowIgnoreMe
     const refNum = pathOr('', ['me', 'rawId'], this.props);
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
