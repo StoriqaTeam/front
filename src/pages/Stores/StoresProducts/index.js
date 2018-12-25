@@ -32,7 +32,9 @@ const StoresProducts = ({ storeId, findMostViewedProducts }: PropsType) => (
               {photoMain ? (
                 <img src={convertSrc(photoMain, 'small')} alt="img" />
               ) : (
-                <Icon type="camera" size={32} />
+                <div styleName="icon">
+                  <Icon type="camera" size={32} />
+                </div>
               )}
             </div>
           </Link>

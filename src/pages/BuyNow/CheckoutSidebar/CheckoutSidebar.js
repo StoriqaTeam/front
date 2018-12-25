@@ -126,7 +126,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                       <div styleName="usdPrice">
                         <div styleName="slash">/</div>
                         <CurrencyPrice
-                          withLambda
+                          withTilda
+                          withSlash
                           reverse
                           fontSize={18}
                           dark

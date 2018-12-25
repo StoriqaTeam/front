@@ -2,22 +2,21 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { head, pathOr, find, propEq, map, isEmpty, isNil, length } from 'ramda';
+import { head, pathOr, find, propEq, map, length, whereEq } from 'ramda';
+import classname from 'classnames';
 
-import { Button, Select, RadioButton, SpinnerCircle } from 'components/common';
-import { Modal } from 'components/Modal';
-import { Icon } from 'components/Icon';
+import { Select, SpinnerCircle } from 'components/common';
 import { log, getCookie } from 'utils';
 import { fetchAvailableShippingForUser } from 'relay/queries';
 
 import type { SelectItemType, CountryType } from 'types';
 import type { DeliveryAddress, DeliveryDataType, PackageType } from '../types';
 
+import CheckedIcon from './img/checked.svg';
 import './Delivery.scss';
 
 type StateType = {
   isFetching: boolean,
-  showModal: boolean,
   country: ?SelectItemType,
   deliveryPackages: ?Array<PackageType>,
   deliveryPackage: ?PackageType,
@@ -34,11 +33,20 @@ type PropsType = {
 class Delivery extends Component<PropsType, StateType> {
   state = {
     isFetching: false,
-    showModal: false,
     country: null,
     deliveryPackage: null,
     deliveryPackages: null,
   };
+
+  componentDidMount() {
+    if (this.state.country) {
+      return;
+    }
+    const { deliveryData } = this.props;
+    if (!deliveryData.country) {
+      this.fetchData();
+    }
+  }
 
   fetchData = () => {
     const { baseProductRawId } = this.props;
@@ -54,6 +62,7 @@ class Delivery extends Component<PropsType, StateType> {
       this.fetchAvailableShipping(baseProductRawId, countryCode);
     } else {
       const cookiesCountry = getCookie('COUNTRY_IP');
+      log.debug({ cookiesCountry });
       const country = find(propEq('alpha2', cookiesCountry))(
         this.props.countries,
       );
@@ -77,13 +86,18 @@ class Delivery extends Component<PropsType, StateType> {
         if (deliveryPackages && length(deliveryPackages) === 1) {
           deliveryPackage = head(deliveryPackages);
         }
-        this.setState({
-          deliveryPackages,
-          deliveryPackage,
-          country: country
-            ? { id: country.alpha3, label: country.label }
-            : null,
-        });
+        this.setState(
+          {
+            deliveryPackages,
+            deliveryPackage,
+            country: country
+              ? { id: country.alpha3, label: country.label }
+              : null,
+          },
+          () => {
+            this.handleOnSavePackage();
+          },
+        );
         return true;
       })
       .finally(() => {
@@ -92,33 +106,6 @@ class Delivery extends Component<PropsType, StateType> {
       .catch(error => {
         log.error(error);
       });
-  };
-
-  handleOpenModal = () => {
-    this.setState({ showModal: true }, () => {
-      if (this.state.country) {
-        return;
-      }
-      const { deliveryData } = this.props;
-      if (!deliveryData.country) {
-        this.fetchData();
-      } else {
-        this.setState({
-          country: deliveryData.country,
-          deliveryPackage: deliveryData.deliveryPackage,
-          deliveryPackages: deliveryData.deliveryPackages,
-        });
-      }
-    });
-  };
-
-  handleCloseModal = () => {
-    this.setState({
-      showModal: false,
-      country: null,
-      deliveryPackage: null,
-      deliveryPackages: null,
-    });
   };
 
   handleOnChangeCountry = (country: ?SelectItemType) => {
@@ -146,41 +133,34 @@ class Delivery extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnSelectPackage = (deliveryPackage: PackageType) => {
-    this.setState({
-      deliveryPackage,
-    });
+  handleOnSelectPackage = (item: SelectItemType) => {
+    const deliveryPackage = find(
+      whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
+      this.state.deliveryPackages || [],
+    );
+
+    this.setState(
+      {
+        deliveryPackage,
+      },
+      () => {
+        this.handleOnSavePackage();
+      },
+    );
   };
 
   handleOnSavePackage = () => {
-    const { deliveryPackages } = this.state;
-    if (!deliveryPackages || isEmpty(deliveryPackages)) {
-      this.setState({
-        showModal: false,
-        // country: deliveryData.country,
-        // deliveryPackage: deliveryData.deliveryPackage,
-        // deliveryPackages: deliveryData.deliveryPackages,
-      });
-      return;
-    }
-    this.setState({ showModal: false }, () => {
-      this.props.onChangeDeliveryData({
-        deliveryPackage: this.state.deliveryPackage,
-        country: this.state.country,
-        deliveryPackages: this.state.deliveryPackages || [],
-      });
+    this.props.onChangeDeliveryData({
+      deliveryPackage: this.state.deliveryPackage,
+      country: this.state.country,
+      deliveryPackages: this.state.deliveryPackages || [],
     });
   };
 
   render() {
-    // $FlowIgnore
-    const selectedDeliveryPackage = pathOr(
-      null,
-      ['deliveryData', 'deliveryPackage'],
-      this.props,
-    );
+    log.debug(this.state);
+
     const {
-      showModal,
       country,
       deliveryPackage,
       deliveryPackages,
@@ -190,35 +170,30 @@ class Delivery extends Component<PropsType, StateType> {
       item => ({ id: item.alpha3, label: item.label }),
       this.props.countries,
     );
+    const transportCompanies = map(
+      (item: PackageType) => ({
+        id: `${item.companyPackageRawId}`,
+        label: item.name,
+      }),
+      deliveryPackages || [],
+    );
+    const deliveryPackageSelectItem: ?SelectItemType = deliveryPackage
+      ? {
+          id: `${deliveryPackage.companyPackageRawId}`,
+          label: deliveryPackage.name,
+        }
+      : null;
+
     return (
       <div styleName="container">
         <div styleName="title">
           <strong>Delivery</strong>
         </div>
-        <button styleName="selectDelivery" onClick={this.handleOpenModal}>
-          <div>
-            {selectedDeliveryPackage
-              ? selectedDeliveryPackage.name
-              : 'Choose company'}
-          </div>
-          <div styleName="icon">
-            <Icon type="arrowExpand" />
-          </div>
-        </button>
-        {selectedDeliveryPackage && (
-          <div styleName="deliveryPrice">
-            {`${selectedDeliveryPackage.price} ${
-              selectedDeliveryPackage.currency
-            }`}
-          </div>
-        )}
-        <Modal showModal={showModal} onClose={this.handleCloseModal}>
-          <div styleName="modal">
-            <div styleName="title">
-              <strong>Destination</strong>
-            </div>
+        <div styleName="selectsWrapper">
+          <div styleName="chooseCountry">
             <div styleName="select">
               <Select
+                withInput
                 forForm
                 fullWidth
                 label="Country of dellivery"
@@ -228,81 +203,104 @@ class Delivery extends Component<PropsType, StateType> {
                 dataTest="productDeliveryCountrySelect"
               />
             </div>
-            {isFetching && (
-              <div styleName="loading">
-                <SpinnerCircle
-                  additionalStyles={{ width: '4rem', height: '4rem' }}
-                  containerStyles={{
-                    width: '4rem',
-                    height: '4rem',
-                    marginLeft: 0,
-                  }}
-                />
-              </div>
-            )}
-            <div>
-              {country && (
-                <div styleName="title">
-                  <strong>Delivery method</strong>
+          </div>
+          <div styleName="chooseDeliveryCompany">
+            <div styleName="select">
+              {isFetching && (
+                <div styleName="loading">
+                  <SpinnerCircle
+                    additionalStyles={{
+                      width: '3rem',
+                      height: '3rem',
+                    }}
+                    containerStyles={{
+                      marginLeft: '3rem',
+                      marginTop: '3rem',
+                    }}
+                  />
                 </div>
               )}
-              {country && deliveryPackages && isEmpty(deliveryPackages) ? (
-                <div styleName="notShippingText">
-                  Seller does not ship to selected country
-                </div>
-              ) : (
-                <div>
-                  {country && (
-                    <div styleName="table">
-                      <div styleName="tableHeader">
-                        <div styleName="td tdCompany">Transport company</div>
-                        <div styleName="td tdPrice">Price</div>
-                      </div>
-                    </div>
-                  )}
-                  {map(
-                    item => (
-                      <div key={item.id} styleName="deliveryPackage">
-                        <div styleName="td tdCompany">
-                          <RadioButton
-                            id={`productDelivery-${item.id}`}
-                            isChecked={
-                              !isNil(deliveryPackage) &&
-                              deliveryPackage.id === item.id
-                            }
-                            onChange={() => {
+              {!isFetching &&
+                deliveryPackages instanceof Array &&
+                deliveryPackages.length > 0 && (
+                  <Select
+                    forForm
+                    fullWidth
+                    label="Transport company"
+                    items={transportCompanies}
+                    onSelect={log.debug}
+                    activeItem={deliveryPackageSelectItem}
+                    dataTest="productDeliveryPackageSelect"
+                    renderSelectItem={(item: SelectItemType) => {
+                      const pkgType: ?PackageType = find(
+                        whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
+                        this.state.deliveryPackages || [],
+                      );
+                      const isChecked =
+                        deliveryPackage &&
+                        parseInt(item.id, 10) ===
+                          deliveryPackage.companyPackageRawId;
+                      return (
+                        pkgType && (
+                          /* eslint-disable */
+                          <div
+                            styleName="deliveryCompanyItem"
+                            key={pkgType.id}
+                            onClick={() => {
                               this.handleOnSelectPackage(item);
                             }}
-                          />
-                          {item.logo !== null &&
-                            item.logo !== '' && (
-                              <img src={item.logo} alt="" styleName="logo" />
-                            )}
-                          <span>{item.name}</span>
-                        </div>
-                        <div styleName="td tdPrice">{`${item.price} ${
-                          item.currency
-                        }`}</div>
-                      </div>
-                    ),
-                    deliveryPackages || [],
-                  )}
-                </div>
-              )}
-            </div>
-            <div styleName="button">
-              <Button
-                big
-                fullWidth
-                disabled={!deliveryPackage}
-                onClick={this.handleOnSavePackage}
-                dataTest="productDeliveryConfirmButton"
-              >
-                <span>Ok</span>
-              </Button>
+                            /* eslint-enable */
+                          >
+                            <div styleName="companyNameRow">
+                              <CheckedIcon
+                                styleName={classname('checked', {
+                                  hidden: !isChecked,
+                                })}
+                              />
+                              <div styleName="companyNameWrap">
+                                <div
+                                  styleName={classname('companyName', {
+                                    selected: isChecked,
+                                  })}
+                                >
+                                  {isChecked === true ? (
+                                    <strong>{pkgType.name}</strong>
+                                  ) : (
+                                    pkgType.name
+                                  )}
+                                </div>
+                                <div
+                                  styleName={classname('price', {
+                                    selected: isChecked,
+                                  })}
+                                >
+                                  {`${pkgType.price} STQ`}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      );
+                    }}
+                  />
+                )}
             </div>
           </div>
-        </Modal>
+        </div>
+        {deliveryPackage && (
+          <div key={deliveryPackage.id} styleName="deliveryPackage">
+            <div styleName="logoWrapper">
+              {deliveryPackage.logo !== null &&
+                deliveryPackage.logo !== '' && (
+                  <img src={deliveryPackage.logo} alt="" styleName="logo" />
+                )}
+            </div>
+            <div styleName="textWrapper">
+              <div styleName="pkgName">Price</div>
+              <div styleName="pkgPrice">{deliveryPackage.price} STQ</div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

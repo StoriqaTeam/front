@@ -176,6 +176,7 @@ class SearchContent extends Component<PropsType, StateType> {
               load
               onClick={this.productsRefetch}
               dataTest="searchProductLoadMoreButton"
+              wireframe
             >
               {t.loadMore}
             </Button>

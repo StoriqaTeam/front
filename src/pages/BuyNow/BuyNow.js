@@ -46,6 +46,7 @@ import CartStore from './CartStore';
 import CheckoutSidebar from './CheckoutSidebar';
 import { addressesToSelect } from './utils';
 import fetchBuyNow from './fetchBuyNow';
+import updateUserPhoneMutation from '../Checkout/mutations/UpdateUserPhoneMutation';
 
 import './BuyNow.scss';
 
@@ -102,6 +103,7 @@ type StateType = {
 
 type PropsType = {
   me: {
+    id: string,
     firstName: string,
     lastName: string,
     phone: string,
@@ -322,6 +324,22 @@ class BuyNow extends Component<PropsType, StateType> {
     if (saveAsNewAddress && !selectedAddress) {
       this.createAddress();
     }
+
+    if (this.props.me != null && this.props.me.phone === null) {
+      updateUserPhoneMutation({
+        environment: this.props.relay.environment,
+        variables: {
+          input: {
+            clientMutationId: '',
+            id: this.props.me.id,
+            phone: this.state.phone,
+          },
+        },
+      })
+        .then(() => true)
+        .catch(log.error);
+    }
+
     const { deliveryAddress } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);

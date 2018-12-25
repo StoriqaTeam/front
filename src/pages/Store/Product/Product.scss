@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import '../../../styles/variables';
 
 .container {
   margin: 0;
@@ -59,14 +59,13 @@
 }
 
 .noWrapper {
-
 }
 
 .message {
-
 }
 
 .longDescription {
+  width: 70%;
   & hr {
     display: block;
     margin-bottom: 2rem;

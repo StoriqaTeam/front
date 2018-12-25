@@ -183,15 +183,13 @@ class ProductDetails extends Component<PropsType, StateType> {
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
             <p styleName="productDescription">{productDescription}</p>
             <div styleName="line" />
-            {
-              <Delivery
-                userAddress={userAddress}
-                baseProductRawId={baseProductRawId}
-                countries={countries}
-                onChangeDeliveryData={onChangeDeliveryData}
-                deliveryData={deliveryData}
-              />
-            }
+            <Delivery
+              userAddress={userAddress}
+              baseProductRawId={baseProductRawId}
+              countries={countries}
+              onChangeDeliveryData={onChangeDeliveryData}
+              deliveryData={deliveryData}
+            />
             <div styleName="widgets">
               {sortByProp('id')(widgets).map(this.generateWidget)}
             </div>

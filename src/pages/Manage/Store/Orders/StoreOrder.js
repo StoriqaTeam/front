@@ -53,6 +53,7 @@ export default createRefetchContainer(
         order(slug: $slug) {
           id
           slug
+          deliveryCompany
           storeId
           product {
             baseProduct {
@@ -114,10 +115,7 @@ export default createRefetchContainer(
               node {
                 state
                 committedAt
-                user {
-                  firstName
-                  lastName
-                }
+                committerRole
                 comment
               }
             }

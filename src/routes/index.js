@@ -62,28 +62,34 @@ const StartSelling = loadable(
     import(/* webpackChunkName: "StartSelling" */ '../pages/StartSelling/StartSelling'),
   fallback,
 );
-const Cart = loadable(() =>
-  import(/* webpackChunkName: "Cart" */ '../pages/Cart'),
+const Cart = loadable(
+  () => import(/* webpackChunkName: "Cart" */ '../pages/Cart'),
+  fallback,
 );
-const Checkout = loadable(() =>
-  import(/* webpackChunkName: "Checkout" */ '../pages/Checkout'),
+const Checkout = loadable(
+  () => import(/* webpackChunkName: "Checkout" */ '../pages/Checkout'),
+  fallback,
 );
-const BuyNow = loadable(() =>
-  import(/* webpackChunkName: "BuyNow" */ '../pages/BuyNow/BuyNow'),
+const BuyNow = loadable(
+  () => import(/* webpackChunkName: "BuyNow" */ '../pages/BuyNow/BuyNow'),
+  fallback,
 );
-const Login = loadable(() =>
-  import(/* webpackChunkName: "Login" */ '../pages/Login/Login'),
+const Login = loadable(
+  () => import(/* webpackChunkName: "Login" */ '../pages/Login/Login'),
+  fallback,
 );
 const Categories = loadable(
   () =>
     import(/* webpackChunkName: "Categories", webpackPreload: true */ '../pages/Search/Categories'),
   fallback,
 );
-const Profile = loadable(() =>
-  import(/* webpackChunkName: "Profile" */ '../pages/Profile/Profile'),
+const Profile = loadable(
+  () => import(/* webpackChunkName: "Profile" */ '../pages/Profile/Profile'),
+  fallback,
 );
-const Store = loadable(() =>
-  import(/* webpackChunkName: "Store" */ '../pages/Store/Store'),
+const Store = loadable(
+  () => import(/* webpackChunkName: "Store" */ '../pages/Store/Store'),
+  fallback,
 );
 const Stores = loadable(
   () =>
@@ -390,7 +396,23 @@ const routes = (
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
           const searchTerm = urlToInput(queryObj);
-          return { searchTerm: pick(['name', 'options'], searchTerm) };
+          return {
+            searchTerm: {
+              name: searchTerm.name,
+              options: pick(
+                [
+                  'attrFilters',
+                  'priceFilter',
+                  'currency',
+                  'categoryId',
+                  'storeId',
+                  'sortBy',
+                  'status',
+                ],
+                searchTerm.options || {},
+              ),
+            },
+          };
         }}
       />
       <Route

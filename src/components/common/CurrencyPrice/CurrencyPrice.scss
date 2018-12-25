@@ -4,17 +4,14 @@
   margin-top: 0.5rem;
   line-height: 1.5rem;
   color: $color_grey_minor;
-
-  &.withLambda {
-    font-weight: normal;
-    font-family: $font_light;
-
-    &:before {
-      content: '~';
-    }
-  }
+  font-weight: normal;
+  font-family: $font_light;
 
   &.dark {
     color: $color_grey;
+  }
+
+  &.black {
+    color: $color_black;
   }
 }

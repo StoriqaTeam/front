@@ -51,6 +51,7 @@ import { PaymentInfo } from './PaymentInfo';
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
 import CheckoutContext from './CheckoutContext';
+import updateUserPhoneMutation from './mutations/UpdateUserPhoneMutation';
 
 import './Checkout.scss';
 
@@ -189,6 +190,23 @@ class Checkout extends Component<PropsType, StateType> {
       return;
     }
     this.setState({ step: 2 });
+
+    const phone = pathOr(null, ['phone'])(this.props.me);
+    const userId = pathOr(null, ['id'])(this.props.me);
+    if (phone === null && userId !== null) {
+      updateUserPhoneMutation({
+        environment: this.context.environment,
+        variables: {
+          input: {
+            clientMutationId: '',
+            id: userId,
+            phone: this.state.orderInput.receiverPhone,
+          },
+        },
+      })
+        .then(() => true)
+        .catch(log.error);
+    }
   };
 
   validate = () => {
@@ -245,6 +263,7 @@ class Checkout extends Component<PropsType, StateType> {
     const {
       orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
+
     this.setState({ checkoutInProcess: true }, () => {
       CreateOrdersMutation.commit({
         input: {

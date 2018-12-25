@@ -19,6 +19,7 @@ type TranslationDicType = {|
   labelBirthdate: string,
   labelPhone: string,
   labelRefLink: string,
+  copied: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -38,6 +39,7 @@ const translations: TranslationsBundleType = {
     labelBirthdate: 'Birthday',
     labelPhone: 'Phone',
     labelRefLink: 'Referal link',
+    copied: 'Copied',
   },
 };
 

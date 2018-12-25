@@ -1,11 +1,11 @@
 @import "../../../styles/variables";
 
 .container {
-  height: 10rem;
   margin-bottom: 2rem;
 }
 
 .storeElect {
+  display: none;
   align-items: center;
   border-left: 1px solid rgba(186, 186, 186, .17);
   cursor: pointer;
@@ -15,7 +15,7 @@
   max-width: 10rem;
 
   @media (min-width: $sm) {
-    display: flex;
+    display: none;
   }
 
 }

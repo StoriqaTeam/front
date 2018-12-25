@@ -63,11 +63,11 @@ class StoresSidebar extends Component<PropsType, StateType> {
     const oldQueryObj = urlToInput(queryObj);
     const newQueryObj = assocPath(
       ['options', pathPiece],
-      item ? item[propPiece] : null,
+      item.id ? item[propPiece] : null,
       oldQueryObj,
     );
     const newUrl = inputToUrl(newQueryObj);
-    this.setState({ [stateName]: item }, () => {
+    this.setState({ [stateName]: item.id ? item : null }, () => {
       this.push(newUrl);
     });
   };

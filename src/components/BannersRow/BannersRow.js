@@ -29,7 +29,7 @@ class BannersRow extends PureComponent<PropsTypes> {
             visibleBanners.map(item => (
               <Fragment key={item.id}>
                 <Col md={12 / count}>
-                  <Banner item={item} />
+                  <Banner item={item} type="double" />
                 </Col>
               </Fragment>
             ))}

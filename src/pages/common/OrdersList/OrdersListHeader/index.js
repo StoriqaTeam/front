@@ -49,8 +49,8 @@ class OrdersListHeader extends Component<PropsType, StateType> {
     );
   };
 
-  handleOrderStatusChange = (item: ?{ id: string, label: string }) => {
-    if (!item) {
+  handleOrderStatusChange = (item: { id: string, label: string }) => {
+    if (!item.id) {
       this.setState({ orderStatus: null }, () => {
         this.props.onOrderStatusFilterChanged(null);
       });
@@ -98,6 +98,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
             value={this.state.searchTerm || ''}
             fullWidth
             search
+            dataTest="searchOrderInput"
           />
         </div>
         <div styleName="orderSelect">
@@ -107,7 +108,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
           <Select
             items={orderStatusesItems}
             activeItem={this.state.orderStatus || undefined}
-            dataTest="OrderStatusSelect"
+            dataTest="ordersStatusSelect"
             forForm
             onSelect={this.handleOrderStatusChange}
             label={t.labelOrderStatus}
@@ -126,6 +127,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
                 label={t.labelFrom}
                 handleBirthdateSelect={this.handleOrderFromDateChange}
                 birthdate={this.state.orderFromDate}
+                dataTest="ordersListDate"
               />
             </div>
             <div styleName="item">
@@ -134,6 +136,7 @@ class OrdersListHeader extends Component<PropsType, StateType> {
                 label={t.labelTo}
                 handleBirthdateSelect={this.handleOrderToDateChange}
                 birthdate={this.state.orderToDate}
+                dataTest="ordersListDate"
               />
             </div>
           </div>

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { pathOr, map, head, isEmpty } from 'ramda';
 import axios from 'axios';
+import { Link } from 'found';
 
 import MediaQuery from 'libs/react-responsive';
 import { log, convertSrc } from 'utils';
@@ -100,6 +101,41 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   isMount = false;
 
+  renderStartSellingBanner = () => (
+    <Fragment>
+      {this.state.banners.middle instanceof Array &&
+      this.state.banners.middle[0] != null ? (
+        <Fragment>
+          <MediaQuery maxWidth={575}>
+            <ImageLoader
+              fit
+              src={this.state.banners.middle[0].phone}
+              loader={Loader}
+            />
+          </MediaQuery>
+          <MediaQuery maxWidth={991} minWidth={576}>
+            <ImageLoader
+              fit
+              src={this.state.banners.middle[0].tablet}
+              loader={Loader}
+            />
+          </MediaQuery>
+          <MediaQuery minWidth={992}>
+            <ImageLoader
+              fit
+              src={this.state.banners.middle[0].desktop}
+              loader={Loader}
+            />
+          </MediaQuery>
+        </Fragment>
+      ) : (
+        <div styleName="placeholder">
+          <BannerLoading />
+        </div>
+      )}
+    </Fragment>
+  );
+
   render() {
     const { mainPage } = this.props;
     const { priceUsd } = this.state;
@@ -124,6 +160,14 @@ class Start extends Component<PropsTypes, StateTypes> {
       item => ({ ...item.node, priceUsd }),
       mostViewedProducts,
     );
+    // $FlowIgnoreMe
+    const isCompletedWizardStore = pathOr(
+      false,
+      ['me', 'wizardStore', 'completed'],
+      this.props,
+    );
+    // $FlowIgnoreMe
+    const myStoreRawId = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
 
     return (
       <div styleName="container">
@@ -188,38 +232,15 @@ class Start extends Component<PropsTypes, StateTypes> {
             )}
         </div>
         <div styleName="item bannerImage">
-          <a href="/start-selling" styleName="sellingImage">
-            {this.state.banners.middle instanceof Array &&
-            this.state.banners.middle[0] != null ? (
-              <Fragment>
-                <MediaQuery maxWidth={575}>
-                  <ImageLoader
-                    fit
-                    src={this.state.banners.middle[0].phone}
-                    loader={Loader}
-                  />
-                </MediaQuery>
-                <MediaQuery maxWidth={991} minWidth={576}>
-                  <ImageLoader
-                    fit
-                    src={this.state.banners.middle[0].tablet}
-                    loader={Loader}
-                  />
-                </MediaQuery>
-                <MediaQuery minWidth={992}>
-                  <ImageLoader
-                    fit
-                    src={this.state.banners.middle[0].desktop}
-                    loader={Loader}
-                  />
-                </MediaQuery>
-              </Fragment>
-            ) : (
-              <div styleName="placeholder">
-                <BannerLoading />
-              </div>
-            )}
-          </a>
+          {isCompletedWizardStore && myStoreRawId ? (
+            <Link to={`/manage/store/${myStoreRawId}`} styleName="sellingImage">
+              {this.renderStartSellingBanner()}
+            </Link>
+          ) : (
+            <a href="https://selling.storiqa.com" styleName="sellingImage">
+              {this.renderStartSellingBanner()}
+            </a>
+          )}
         </div>
         <div styleName="item goodsItem">
           {discountProducts &&
@@ -291,6 +312,12 @@ export default createFragmentContainer(
               lang
               text
             }
+            store {
+              name {
+                lang
+                text
+              }
+            }
             currency
             products(first: 1) {
               edges {
@@ -319,6 +346,12 @@ export default createFragmentContainer(
             name {
               lang
               text
+            }
+            store {
+              name {
+                lang
+                text
+              }
             }
             currency
             products(first: 1) {
