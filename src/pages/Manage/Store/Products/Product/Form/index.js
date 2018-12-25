@@ -1131,7 +1131,7 @@ class Form extends Component<PropsType, StateType> {
                         big
                         fullWidth
                         onClick={this.sendToModeration}
-                        dataTest="saveProductButton"
+                        dataTest="sendToModerationProductButton"
                         isLoading={isSendingToModeration || isLoading}
                       >
                         {t.sendToModeration}

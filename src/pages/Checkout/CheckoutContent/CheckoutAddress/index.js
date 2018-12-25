@@ -186,13 +186,12 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                       id="receiverPhone"
                       label={
                         <span>
-                          {t.labelReceiverPhone}
+                          {`${t.labelReceiverPhone} `}
                           <span styleName="red">*</span>
                         </span>
                       }
                       onChange={this.handleChangePhone}
                       value={orderInput.receiverPhone}
-                      limit={50}
                       errors={errors.receiverPhone}
                     />
                   </div>
