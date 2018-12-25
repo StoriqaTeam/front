@@ -337,6 +337,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
             isChecked={form.isPriority}
             onChange={this.handleCheckboxClick}
             label="Priority address"
+            dataTest="priorityAddressCheckbox"
           />
         </div>
         <div styleName="saveButtons">
@@ -359,6 +360,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
                   ? this.toggleNewAddressForm
                   : this.toggleEditAddressForm
               }
+              data-test="cancelShippingAddressButton"
             >
               {t.cancel}
             </button>

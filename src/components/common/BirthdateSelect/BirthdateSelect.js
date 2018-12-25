@@ -17,6 +17,7 @@ type PropsType = {
   handleBirthdateSelect: (value: string) => void,
   birthdate: ?string,
   errors?: ?Array<string>,
+  dataTest: string,
 };
 
 type StateType = {
@@ -174,7 +175,7 @@ class BirthdateSelect extends Component<PropsType, StateType> {
         activeItem={this.state[`${id}Value`]}
         items={this.state[`${id}s`]}
         onSelect={value => this.handleSelect(value, id)}
-        dataTest={`${id}SelectBirthdateProfile`}
+        dataTest={`${this.props.dataTest}-${id}`}
       />
     </div>
   );
