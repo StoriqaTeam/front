@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
 
 const postcssPresetEnv = require('postcss-preset-env');
 
@@ -19,9 +19,9 @@ const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(
   require('./webpack-isomorphic-tools-configuration'),
 ).development(process.env.NODE_ENV !== 'production');
 
-const devMode = process.env.NODE_ENV !== 'production'
-
+// 'static/css/[name].[contenthash:8].css'
 module.exports = (mode) => {
+  const prodMode = process.env.NODE_ENV === 'production';
   return {
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -111,7 +111,7 @@ module.exports = (mode) => {
               test: /\.(sa|sc|c)ss$/,
               use: [
                 {
-                  loader: MiniCssExtractPlugin.loader,
+                  loader: ExtractCssChunks.loader,
                 },
                 {
                   loader: 'css-loader',
@@ -177,9 +177,19 @@ module.exports = (mode) => {
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      // extract styles in a single file
-      new MiniCssExtractPlugin({
-        filename: 'styles.css',
+     
+      /**
+       * @link https://github.com/jaredpalmer/after.js/issues/118
+       */
+      new ExtractCssChunks({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: prodMode ? 'static/css/[name].[contenthash:8].css' : '[name].css',
+        chunkFilename: prodMode ? 'static/css/[id].[contenthash:8].css' : '[id].css',
+        hot: true, // if you want HMR - we try to automatically inject hot reloading but if it's not working, add it to the config
+        orderWarning: true, // Disable to remove warnings about conflicting order between imports
+        reloadAll: true, // when desperation kicks in - this is a brute force HMR flag
+        cssModules: true // if you use cssModules, this can help.
       }),
       webpackIsomorphicToolsPlugin,
     ],

@@ -111,8 +111,10 @@ const NewProduct = loadable(() =>
 const EditProduct = loadable(() =>
   import(/* webpackChunkName: "EditProduct" */ '../pages/Manage/Store/Products/Product/EditProduct'),
 );
-const Wizard = loadable(() =>
-  import(/* webpackChunkName: "Wizard" */ '../pages/Manage/Wizard/Wizard'),
+const Wizard = loadable(
+  () =>
+    import(/* webpackChunkName: "Wizard" */ '../pages/Manage/Wizard/Wizard'),
+  fallback,
 );
 const Contacts = loadable(() =>
   import(/* webpackChunkName: "Contacts" */ '../pages/Manage/Store/Contacts/Contacts'),

@@ -3,9 +3,9 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -94,10 +94,6 @@ module.exports = () => {
           minifyCSS: true,
           minifyURLs: true,
         },
-      }),
-      // extract styles in a single file
-      new MiniCssExtractPlugin({
-        filename: 'static/css/[name].[contenthash:8].css',
       }),
       new OptimizeCssAssetsPlugin({
         assetNameRegExp: /\.css$/g,
